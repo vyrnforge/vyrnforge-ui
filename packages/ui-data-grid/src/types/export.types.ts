@@ -26,6 +26,7 @@ export type DataGridExportRequest = {
   filters: DataGridFilter[];
   search: string;
   sorting: DataGridSort[];
+  sort?: DataGridSort[];
   grouping: DataGridGroupingState;
   pagination: DataGridPaginationState;
   selectedRowIds: DataGridRowId[];
@@ -42,7 +43,8 @@ export type BuildDataGridExportRequestParams<
   columnVisibility: Record<string, boolean>;
   filters: DataGridFilter[];
   search: string;
-  sorting: DataGridSort[];
+  sorting?: DataGridSort[];
+  sort?: DataGridSort[];
   grouping: DataGridGroupingState;
   pagination: DataGridPaginationState;
   selectedRowIds: DataGridRowId[];

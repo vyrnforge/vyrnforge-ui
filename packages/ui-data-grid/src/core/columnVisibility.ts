@@ -8,6 +8,7 @@ export function getVisibleColumns<RowData extends Record<string, unknown>>(
   visibility: DataGridColumnVisibilityState
 ) {
   return columns.filter(
-    (column) => column.visible !== false && visibility[column.id] !== false
+    (column) =>
+      !column.hidden && column.visible !== false && visibility[column.id] !== false
   );
 }

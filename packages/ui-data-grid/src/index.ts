@@ -1,6 +1,14 @@
 import "./styles/data-grid.css";
 
 export { UniversalDataGrid } from "./components/UniversalDataGrid";
+export { DataGridToolbar } from "./components/DataGridToolbar";
+export { DataGridSearch } from "./components/DataGridSearch";
+export { DataGridFilterBar } from "./components/DataGridFilterBar";
+export { DataGridColumnMenu } from "./components/DataGridColumnMenu";
+export { DataGridSkeletonRows } from "./components/DataGridSkeletonRows";
+export { DataGridEmptyState } from "./components/DataGridEmptyState";
+export { DataGridErrorState } from "./components/DataGridErrorState";
+export { DataGridPagination } from "./components/DataGridPagination";
 
 export { createGridState } from "./core/createGridState";
 export { applySearch } from "./core/applySearch";
@@ -23,6 +31,7 @@ export type {
 } from "./types/dataGrid.types";
 export type {
   DataGridColumnDef,
+  DataGridColumnDataType,
   DataGridColumnSizingState,
   DataGridColumnVisibilityState
 } from "./types/column.types";

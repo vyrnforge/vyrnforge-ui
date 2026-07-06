@@ -1,14 +1,18 @@
 # Dependencies
 node_modules/
 packages/*/node_modules/
+.npm/
 
 # Build output
 dist/
 packages/*/dist/
+build/
+lib/
 
 # Test and coverage output
 coverage/
 .vitest/
+.nyc_output/
 
 # Logs
 *.log
@@ -21,6 +25,8 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+.env.local
+.env.*.local
 .DS_Store
 Thumbs.db
 
@@ -29,6 +35,14 @@ Thumbs.db
 .turbo/
 .vite/
 .cache/
+.eslintcache
+.parcel-cache/
 
 # Package artifacts
 *.tgz
+
+# Editor metadata
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

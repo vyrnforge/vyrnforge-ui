@@ -18,10 +18,12 @@ export type DataGridGroupingState = string[];
 export type DataGridState = {
   search: string;
   filters: DataGridFilter[];
-  sorting: DataGridSort[];
+  sort: DataGridSort[];
+  sorting?: DataGridSort[];
   grouping: DataGridGroupingState;
   pagination: DataGridPaginationState;
   columnVisibility: DataGridColumnVisibilityState;
+  columnOrder: string[];
   columnSizing: DataGridColumnSizingState;
   selectedRowIds: DataGridRowId[];
 };
@@ -32,7 +34,7 @@ export type DataGridStateChangeHandler = (
 
 export type DataGridQueryChange = Pick<
   DataGridState,
-  "search" | "filters" | "sorting" | "grouping" | "pagination"
+  "search" | "filters" | "sort" | "grouping" | "pagination"
 >;
 
 export type UniversalDataGridProps<
@@ -42,12 +44,13 @@ export type UniversalDataGridProps<
   columns: DataGridColumnDef<RowData>[];
   rows: RowData[];
   getRowId?: (row: RowData, index: number) => DataGridRowId;
-  state?: DataGridState;
+  state?: Partial<DataGridState>;
   defaultState?: Partial<DataGridState>;
   onStateChange?: DataGridStateChangeHandler;
   loading?: boolean;
-  error?: string | null;
+  error?: string | Error | null;
   totalRows?: number;
+  title?: string;
   serverMode?: boolean;
   onQueryChange?: (query: DataGridQueryChange) => void;
   emptyMessage?: string;

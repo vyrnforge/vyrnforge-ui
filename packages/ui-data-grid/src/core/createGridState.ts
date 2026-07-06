@@ -3,13 +3,14 @@ import type { DataGridState } from "../types/dataGrid.types";
 export const defaultDataGridState: DataGridState = {
   search: "",
   filters: [],
-  sorting: [],
+  sort: [],
   grouping: [],
   pagination: {
     pageIndex: 0,
-    pageSize: 25
+    pageSize: 10
   },
   columnVisibility: {},
+  columnOrder: [],
   columnSizing: {},
   selectedRowIds: []
 };
@@ -28,9 +29,11 @@ export function createGridState(
       ...defaultDataGridState.columnVisibility,
       ...initialState?.columnVisibility
     },
+    columnOrder: initialState?.columnOrder ?? defaultDataGridState.columnOrder,
     columnSizing: {
       ...defaultDataGridState.columnSizing,
       ...initialState?.columnSizing
-    }
+    },
+    sort: initialState?.sort ?? initialState?.sorting ?? defaultDataGridState.sort
   };
 }

@@ -15,6 +15,7 @@ export function buildDataGridExportRequest<
   filters,
   search,
   sorting,
+  sort,
   grouping,
   pagination,
   selectedRowIds,
@@ -26,11 +27,15 @@ export function buildDataGridExportRequest<
     columns: columns.map((column) => ({
       id: column.id,
       header: headerToString(column.header),
-      visible: column.visible !== false && columnVisibility[column.id] !== false
+      visible:
+        !column.hidden &&
+        column.visible !== false &&
+        columnVisibility[column.id] !== false
     })),
     filters,
     search,
-    sorting,
+    sorting: sorting ?? sort ?? [],
+    sort: sort ?? sorting ?? [],
     grouping,
     pagination,
     selectedRowIds,

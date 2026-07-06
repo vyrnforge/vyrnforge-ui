@@ -4,20 +4,33 @@ export type DataGridColumnVisibilityState = Record<string, boolean>;
 
 export type DataGridColumnSizingState = Record<string, number>;
 
+export type DataGridColumnDataType =
+  | "string"
+  | "number"
+  | "date"
+  | "datetime"
+  | "boolean"
+  | "enum"
+  | "status"
+  | "custom";
+
 export type DataGridColumnDef<
   RowData extends Record<string, unknown> = Record<string, unknown>
 > = {
   id: string;
-  header: ReactNode;
-  accessorKey?: keyof RowData | string;
+  header: string;
+  accessorKey?: keyof RowData;
   accessorFn?: (row: RowData) => unknown;
-  cell?: (params: { row: RowData; value: unknown; rowIndex: number }) => ReactNode;
+  cell?: (value: unknown, row: RowData, index: number) => ReactNode;
   width?: number;
   minWidth?: number;
   maxWidth?: number;
-  searchable?: boolean;
   sortable?: boolean;
+  searchable?: boolean;
   filterable?: boolean;
+  hidden?: boolean;
   visible?: boolean;
+  align?: "left" | "center" | "right";
+  dataType?: DataGridColumnDataType;
   meta?: Record<string, unknown>;
 };

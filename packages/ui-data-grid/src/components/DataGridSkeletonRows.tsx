@@ -11,9 +11,11 @@ export function DataGridSkeletonRows({
     <>
       {Array.from({ length: rowCount }).map((_, index) => (
         <tr className="udg-skeleton-row" key={index}>
-          <td colSpan={columnCount}>
-            <span className="udg-skeleton-line" />
-          </td>
+          {Array.from({ length: columnCount }).map((__, columnIndex) => (
+            <td key={columnIndex}>
+              <span className="udg-skeleton-line" />
+            </td>
+          ))}
         </tr>
       ))}
     </>

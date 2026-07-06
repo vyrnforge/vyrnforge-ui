@@ -1,6 +1,10 @@
 export type DataGridFilterOperator =
   | "contains"
   | "equals"
+  | "gt"
+  | "gte"
+  | "lt"
+  | "lte"
   | "notEquals"
   | "startsWith"
   | "endsWith"

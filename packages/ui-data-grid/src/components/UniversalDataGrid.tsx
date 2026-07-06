@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { applyFilters } from "../core/applyFilters";
 import { applyPagination } from "../core/applyPagination";
 import { applySearch } from "../core/applySearch";
@@ -42,6 +42,7 @@ export function UniversalDataGrid<
   loading = false,
   error = null,
   totalRows,
+  title,
   serverMode = false,
   onQueryChange,
   emptyMessage,
@@ -59,25 +60,41 @@ export function UniversalDataGrid<
     [columns, gridState.columnVisibility]
   );
 
+  const orderedColumns = useMemo(() => {
+    if (gridState.columnOrder.length === 0) {
+      return visibleColumns;
+    }
+
+    const order = new Map(
+      gridState.columnOrder.map((columnId, index) => [columnId, index])
+    );
+
+    return [...visibleColumns].sort((left, right) => {
+      const leftIndex = order.get(left.id) ?? Number.MAX_SAFE_INTEGER;
+      const rightIndex = order.get(right.id) ?? Number.MAX_SAFE_INTEGER;
+      return leftIndex - rightIndex;
+    });
+  }, [gridState.columnOrder, visibleColumns]);
+
   const clientRows = useMemo(() => {
     if (serverMode) {
       return rows;
     }
 
-    const searchedRows = applySearch(rows, visibleColumns, gridState.search);
+    const searchedRows = applySearch(rows, orderedColumns, gridState.search);
     const filteredRows = applyFilters(
       searchedRows,
-      visibleColumns,
+      orderedColumns,
       gridState.filters
     );
-    return applySorting(filteredRows, visibleColumns, gridState.sorting);
+    return applySorting(filteredRows, orderedColumns, gridState.sort);
   }, [
     gridState.filters,
     gridState.search,
-    gridState.sorting,
+    gridState.sort,
+    orderedColumns,
     rows,
-    serverMode,
-    visibleColumns
+    serverMode
   ]);
 
   const renderedRows = useMemo(
@@ -88,12 +105,13 @@ export function UniversalDataGrid<
 
   const resolvedTotalRows = totalRows ?? (serverMode ? rows.length : clientRows.length);
   const rootClassName = ["udg-root", className].filter(Boolean).join(" ");
+  const hasQuery = gridState.search.trim().length > 0 || gridState.filters.length > 0;
 
   useEffect(() => {
     onQueryChange?.({
       search: gridState.search,
       filters: gridState.filters,
-      sorting: gridState.sorting,
+      sort: gridState.sort,
       grouping: gridState.grouping,
       pagination: gridState.pagination
     });
@@ -102,11 +120,11 @@ export function UniversalDataGrid<
     gridState.grouping,
     gridState.pagination,
     gridState.search,
-    gridState.sorting,
+    gridState.sort,
     onQueryChange
   ]);
 
-  const updateSearch = (search: string) => {
+  const updateSearch = useCallback((search: string) => {
     setGridState((currentState) => ({
       ...currentState,
       search,
@@ -115,20 +133,39 @@ export function UniversalDataGrid<
         pageIndex: 0
       }
     }));
-  };
+  }, [setGridState]);
 
   const updateSorting = (columnId: string) => {
     setGridState((currentState) => {
-      const currentSort = currentState.sorting.find(
+      const currentSort = currentState.sort.find(
         (sort) => sort.columnId === columnId
       );
-      const direction = currentSort?.direction === "asc" ? "desc" : "asc";
+      const nextSort =
+        currentSort?.direction === "asc"
+          ? [{ columnId, direction: "desc" as const }]
+          : currentSort?.direction === "desc"
+            ? []
+            : [{ columnId, direction: "asc" as const }];
 
       return {
         ...currentState,
-        sorting: [{ columnId, direction }]
+        sort: nextSort
       };
     });
+  };
+
+  const getSortIndicator = (columnId: string) => {
+    const sort = gridState.sort.find((candidate) => candidate.columnId === columnId);
+
+    if (sort?.direction === "asc") {
+      return " ↑";
+    }
+
+    if (sort?.direction === "desc") {
+      return " ↓";
+    }
+
+    return "";
   };
 
   return (
@@ -138,17 +175,30 @@ export function UniversalDataGrid<
       data-table-id={tableId}
       style={style}
     >
+      {title && <h2 className="udg-title">{title}</h2>}
+
       <DataGridToolbar>
         <DataGridSearch value={gridState.search} onChange={updateSearch} />
       </DataGridToolbar>
+
+      {hasQuery && (
+        <div className="udg-summary" role="status">
+          Showing {resolvedTotalRows} result{resolvedTotalRows === 1 ? "" : "s"}
+          {gridState.search && <> for "{gridState.search}"</>}
+          {gridState.filters.length > 0 && (
+            <> with {gridState.filters.length} active filter{gridState.filters.length === 1 ? "" : "s"}</>
+          )}
+        </div>
+      )}
 
       <div className="udg-table-wrap">
         <table className="udg-table">
           <thead>
             <tr>
-              {visibleColumns.map((column) => (
+              {orderedColumns.map((column) => (
                 <th
                   key={column.id}
+                  className={`udg-align-${column.align ?? "left"}`}
                   style={{
                     width: gridState.columnSizing[column.id] ?? column.width,
                     minWidth: column.minWidth,
@@ -163,6 +213,7 @@ export function UniversalDataGrid<
                     disabled={column.sortable === false}
                   >
                     {column.header}
+                    <span aria-hidden="true">{getSortIndicator(column.id)}</span>
                   </button>
                 </th>
               ))}
@@ -170,15 +221,16 @@ export function UniversalDataGrid<
           </thead>
           <tbody>
             <DataGridErrorState
-              columnCount={visibleColumns.length}
+              columnCount={orderedColumns.length}
               error={error}
             />
             {!error && loading && (
-              <DataGridSkeletonRows columnCount={visibleColumns.length} />
+              <DataGridSkeletonRows columnCount={orderedColumns.length} />
             )}
             {!error && !loading && renderedRows.length === 0 && (
               <DataGridEmptyState
-                columnCount={visibleColumns.length}
+                columnCount={orderedColumns.length}
+                hasQuery={hasQuery}
                 message={emptyMessage}
               />
             )}
@@ -189,13 +241,16 @@ export function UniversalDataGrid<
 
                 return (
                   <tr key={rowId}>
-                    {visibleColumns.map((column) => {
+                    {orderedColumns.map((column) => {
                       const value = getCellValue(row, column);
 
                       return (
-                        <td key={column.id}>
+                        <td
+                          className={`udg-align-${column.align ?? "left"}`}
+                          key={column.id}
+                        >
                           {column.cell
-                            ? column.cell({ row, value, rowIndex })
+                            ? column.cell(value, row, rowIndex)
                             : String(value ?? "")}
                         </td>
                       );

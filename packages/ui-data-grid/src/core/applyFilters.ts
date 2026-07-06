@@ -38,12 +38,16 @@ function matchesFilter(value: unknown, filter: DataGridFilter) {
       return value == null || value === "";
     case "isNotEmpty":
       return value != null && value !== "";
+    case "gt":
     case "greaterThan":
       return compareNumber(value, filter.value) > 0;
+    case "gte":
     case "greaterThanOrEqual":
       return compareNumber(value, filter.value) >= 0;
+    case "lt":
     case "lessThan":
       return compareNumber(value, filter.value) < 0;
+    case "lte":
     case "lessThanOrEqual":
       return compareNumber(value, filter.value) <= 0;
     default:

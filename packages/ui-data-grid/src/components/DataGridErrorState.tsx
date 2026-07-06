@@ -1,5 +1,5 @@
 export type DataGridErrorStateProps = {
-  error?: string | null;
+  error?: string | Error | null;
   columnCount?: number;
 };
 
@@ -11,10 +11,13 @@ export function DataGridErrorState({
     return null;
   }
 
+  const message = error instanceof Error ? error.message : error;
+
   return (
     <tr>
       <td className="udg-error" colSpan={columnCount} role="alert">
-        {error}
+        <strong>Unable to load data.</strong>
+        <span>{message}</span>
       </td>
     </tr>
   );

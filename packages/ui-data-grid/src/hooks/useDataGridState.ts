@@ -8,10 +8,15 @@ export function useDataGridState({
   defaultState,
   onStateChange
 }: {
-  state?: DataGridState;
+  state?: Partial<DataGridState>;
   defaultState?: Partial<DataGridState>;
   onStateChange?: (nextState: DataGridState) => void;
 }) {
   const initialState = useMemo(() => createGridState(defaultState), [defaultState]);
-  return useControlledState(state, initialState, onStateChange);
+  const controlledState = useMemo(
+    () => (state ? createGridState(state) : undefined),
+    [state]
+  );
+
+  return useControlledState(controlledState, initialState, onStateChange);
 }

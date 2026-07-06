@@ -1,12 +1,16 @@
 .udg-root {
   --udg-border-color: #d7dde5;
   --udg-bg: #ffffff;
-  --udg-muted-bg: #f7f9fb;
+  --udg-header-bg: #f6f8fb;
+  --udg-row-hover-bg: #f8fafc;
   --udg-text: #1f2933;
   --udg-muted-text: #637083;
+  --udg-control-bg: #ffffff;
+  --udg-control-border: #c9d2dc;
   --udg-focus: #2563eb;
   --udg-error: #b42318;
   --udg-radius: 6px;
+  --udg-density-row-height: 40px;
   --udg-space-1: 4px;
   --udg-space-2: 8px;
   --udg-space-3: 12px;
@@ -14,6 +18,15 @@
   color: var(--udg-text);
   background: var(--udg-bg);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+}
+
+.udg-title {
+  margin: 0 0 var(--udg-space-3);
+  color: var(--udg-text);
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.3;
 }
 
 .udg-toolbar {
@@ -28,55 +41,89 @@
   display: inline-flex;
 }
 
-.udg-search-input {
-  min-width: 220px;
-  border: 1px solid var(--udg-border-color);
+.udg-search-input,
+.udg-page-size select {
+  min-height: 34px;
+  border: 1px solid var(--udg-control-border);
   border-radius: var(--udg-radius);
-  padding: var(--udg-space-2) var(--udg-space-3);
   color: inherit;
-  background: var(--udg-bg);
+  background: var(--udg-control-bg);
+}
+
+.udg-search-input {
+  min-width: 240px;
+  padding: var(--udg-space-2) var(--udg-space-3);
+}
+
+.udg-page-size select {
+  padding: var(--udg-space-1) var(--udg-space-2);
 }
 
 .udg-search-input:focus,
+.udg-page-size select:focus,
 .udg-header-button:focus,
 .udg-pagination button:focus {
   outline: 2px solid var(--udg-focus);
   outline-offset: 2px;
 }
 
+.udg-summary {
+  margin-bottom: var(--udg-space-3);
+  color: var(--udg-muted-text);
+  font-size: 13px;
+}
+
 .udg-table-wrap {
+  max-width: 100%;
   overflow: auto;
   border: 1px solid var(--udg-border-color);
   border-radius: var(--udg-radius);
+  background: var(--udg-bg);
 }
 
 .udg-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 14px;
 }
 
 .udg-table th,
 .udg-table td {
+  min-height: var(--udg-density-row-height);
   border-bottom: 1px solid var(--udg-border-color);
-  padding: var(--udg-space-3);
+  padding: var(--udg-space-2) var(--udg-space-3);
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .udg-table th {
-  background: var(--udg-muted-bg);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--udg-header-bg);
   color: var(--udg-muted-text);
-  font-weight: 600;
+  font-weight: 650;
+}
+
+.udg-table tbody tr:hover {
+  background: var(--udg-row-hover-bg);
+}
+
+.udg-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .udg-header-button {
   display: inline-flex;
+  align-items: center;
+  gap: var(--udg-space-1);
   border: 0;
   padding: 0;
   color: inherit;
   background: transparent;
   font: inherit;
+  font-weight: inherit;
   cursor: pointer;
 }
 
@@ -84,13 +131,39 @@
   cursor: default;
 }
 
+.udg-align-left {
+  text-align: left;
+}
+
+.udg-align-center {
+  text-align: center;
+}
+
+.udg-align-right {
+  text-align: right;
+}
+
 .udg-empty,
 .udg-error {
+  height: 88px;
   text-align: center;
+}
+
+.udg-empty {
+  color: var(--udg-muted-text);
 }
 
 .udg-error {
   color: var(--udg-error);
+}
+
+.udg-error strong,
+.udg-error span {
+  display: block;
+}
+
+.udg-error strong {
+  margin-bottom: var(--udg-space-1);
 }
 
 .udg-skeleton-line {
@@ -103,12 +176,19 @@
 
 .udg-pagination {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: var(--udg-space-3);
   padding-top: var(--udg-space-3);
   color: var(--udg-muted-text);
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.udg-page-size {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--udg-space-2);
 }
 
 .udg-pagination-actions {
@@ -117,11 +197,12 @@
 }
 
 .udg-pagination button {
-  border: 1px solid var(--udg-border-color);
+  min-height: 34px;
+  border: 1px solid var(--udg-control-border);
   border-radius: var(--udg-radius);
   padding: var(--udg-space-2) var(--udg-space-3);
   color: var(--udg-text);
-  background: var(--udg-bg);
+  background: var(--udg-control-bg);
   cursor: pointer;
 }
 
