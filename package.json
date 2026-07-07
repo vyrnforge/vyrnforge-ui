@@ -6,9 +6,9 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "build:playground": "npm run build --workspace @dravyn/ui-data-grid && npm run build --workspace @dravyn/ui-data-grid-basic-playground",
-    "dev:playground": "npm run build --workspace @dravyn/ui-data-grid && npm run dev --workspace @dravyn/ui-data-grid-basic-playground",
+    "build": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && npm run build --workspace @dravyn/ui-data-grid-basic-playground",
+    "build:playground": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && npm run build --workspace @dravyn/ui-data-grid-basic-playground",
+    "dev:playground": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && npm run dev --workspace @dravyn/ui-data-grid-basic-playground",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
   }

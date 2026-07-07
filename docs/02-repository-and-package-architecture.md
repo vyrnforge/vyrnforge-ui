@@ -17,10 +17,20 @@ This project should be independently versioned and consumed by multiple applicat
 ```txt
 dravyn-ui/
   docs/
-    project/
-    ui/
-    data-grid/
-    component-system/
+    00-project-charter.md
+    01-naming-and-brand-system.md
+    02-repository-and-package-architecture.md
+    03-native-first-engineering-principles.md
+    04-theme-system-spec.md
+    05-component-system-roadmap.md
+    06-universal-data-grid-spec.md
+    07-data-grid-state-and-api-contract.md
+    08-data-grid-implementation-roadmap.md
+    09-build-release-upgrade-strategy.md
+    10-playground-and-documentation-strategy.md
+    11-quality-accessibility-test-strategy.md
+    12-codex-master-implementation-prompt.md
+    13-codex-repo-rebuild-prompt.md
 
   packages/
     ui-core/
@@ -51,7 +61,7 @@ Phase A
   packages/ui-data-grid only
 
 Phase B
-  add docs/ui/component-system planning docs
+  add Dravyn UI planning docs
 
 Phase C
   add packages/ui-core

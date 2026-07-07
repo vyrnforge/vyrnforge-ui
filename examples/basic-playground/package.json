@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "typecheck": "npm run build --workspace @dravyn/ui-data-grid && tsc --noEmit",
+    "typecheck": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dravyn/ui-components": "0.1.0",
+    "@dravyn/ui-core": "0.1.0",
     "@dravyn/ui-data-grid": "0.1.0",
     "react": "latest",
     "react-dom": "latest"

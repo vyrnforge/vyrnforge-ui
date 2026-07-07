@@ -13,7 +13,8 @@
       "require": "./dist/index.cjs"
     },
     "./style.css": "./dist/index.css",
-    "./index.css": "./dist/index.css"
+    "./index.css": "./dist/index.css",
+    "./styles/index.css": "./dist/index.css"
   },
   "files": [
     "dist",

@@ -1,6 +1,6 @@
 # Basic Playground
 
-This Vite React app validates that `@dravyn/ui-data-grid` can be consumed from another workspace project.
+This Vite React app validates Dravyn UI package consumption from another workspace project. It is organized as a multi-section playground for core tokens, primitive components, data-grid behavior, and product patterns.
 
 ## Run
 
@@ -18,29 +18,34 @@ npm run build:playground
 
 ## What It Validates
 
-- Local workspace package consumption with `@dravyn/ui-data-grid`.
-- Package CSS loading through `@dravyn/ui-data-grid/style.css`.
-- Uncontrolled grid state.
-- Controlled grid state through React `useState` and `onStateChange`.
-- Search, sorting, pagination, loading, empty, and error states.
-- Column examples for string, number, date, boolean, status, and custom cells.
-- Card and bordered variants.
-- Compact, standard, and comfortable densities.
-- Light, dark, enterprise, custom string, and system theme support.
-- Production-ready default light and dark theme polish.
-- Dedicated theme previews for light, dark, enterprise, and custom overrides.
-- Column visibility, drag ordering, density changes, reset dropdown actions, and localStorage persistence.
-- Column resizing, min/max width constraints, locked columns, horizontal overflow, and persisted sizes.
-- Progressive header controls and header action menus.
-- Row selection, page-level select all, row-click selection, disabled rows, controlled selected IDs, and bulk action bar callbacks.
-- Row grouping, nested grouping, group chips, expand/collapse all, grouped rows with selection, and display-row pagination.
+- Local workspace package consumption with `@dravyn/ui-core`, `@dravyn/ui-components`, and `@dravyn/ui-data-grid`.
+- Recommended CSS import order: core, components, then data grid.
+- Overview, Core, Components, Data Grid, and Patterns navigation using simple React state.
+- Shared `--dv-*` tokens across buttons, inputs, states, and data-grid fallbacks.
+- Backward-compatible grid-specific `--udg-*` override examples.
+- Light, dark, enterprise, and system theme previews.
+- Compact, standard, and comfortable density examples.
+- Grid examples for basic usage, columns, filtering, selection, grouping, resizing, themes, and stress data.
+- Pattern examples for resource lists, detail pages, settings, forms, and empty/error/loading states.
+
+## Sections
+
+- Overview: project purpose, packages, principles, and maturity.
+- Core: tokens, theme modes, density, and CSS override layering.
+- Components: buttons, typography, badges, inputs, feedback states, and layout guidance.
+- Data Grid: all `UniversalDataGrid` examples, including columns, filters, selection, grouping, resizing, themes, and stress data.
+- Patterns: realistic non-table enterprise UI composed from Dravyn primitives.
+
+Component examples are intentionally separate from grid examples. Data-grid demos live under Data Grid so the playground can review Dravyn UI as a broader foundation without hiding the existing grid surface.
 
 ## Styling
 
 Import the package CSS once in the consuming app entry file:
 
 ```tsx
-import "@dravyn/ui-data-grid/style.css";
+import "@dravyn/ui-core/styles/index.css";
+import "@dravyn/ui-components/styles/index.css";
+import "@dravyn/ui-data-grid/styles/index.css";
 ```
 
 Visual props can be passed directly to `UniversalDataGrid`:
@@ -56,7 +61,7 @@ Visual props can be passed directly to `UniversalDataGrid`:
 />
 ```
 
-Recommended built-in themes:
+Recommended built-in grid themes:
 
 - `theme="light"` for the default professional SaaS grid.
 - `theme="dark"` for calm dark slate UI.

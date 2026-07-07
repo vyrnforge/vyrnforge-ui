@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Restructured the repository as the Dravyn UI workspace.
+- Added `@dravyn/ui-core` with shared tokens, theme helpers, density CSS, and utility classes.
+- Added `@dravyn/ui-components` with native-first React primitives for actions, typography, badges, forms, and feedback states.
+- Aligned `@dravyn/ui-data-grid` theme defaults with shared `--dv-*` tokens while preserving backward-compatible `--udg-*` variables.
+- Aligned the data grid package name with `@dravyn/ui-data-grid`.
+- Made the Dravyn UI docs the primary flat documentation set under `docs/`.
+
 ## 0.1.0
 
 Initial Dravyn UI Universal Data Grid scaffold.

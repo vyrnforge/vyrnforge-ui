@@ -12,6 +12,16 @@ Import the package CSS once in the consuming app:
 import "@dravyn/ui-data-grid/style.css";
 ```
 
+When using the full Dravyn UI workspace, import shared tokens first:
+
+```tsx
+import "@dravyn/ui-core/styles/index.css";
+import "@dravyn/ui-components/styles/index.css";
+import "@dravyn/ui-data-grid/styles/index.css";
+```
+
+`@dravyn/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--dv-*` variables when `@dravyn/ui-core` CSS is present, so app-level Dravyn tokens can theme components and grid together.
+
 ## Theme System
 
 Built-in `light`, `dark`, `system`, and `enterprise` themes are production-ready starting points. Use them through props:
@@ -61,9 +71,14 @@ Recommended customization order:
 Scoped CSS overrides are also supported:
 
 ```css
+.my-app {
+  --dv-primary: #003b71;
+  --dv-radius-md: 10px;
+}
+
 .my-app .udg {
-  --udg-primary: #1d4ed8;
-  --udg-radius-md: 8px;
+  --udg-header-bg: #f8fafc;
+  --udg-row-height: 42px;
 }
 ```
 

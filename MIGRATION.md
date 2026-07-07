@@ -32,6 +32,15 @@ The Dravyn-aligned package name is:
 
 Update imports and CSS imports accordingly:
 
+Before:
+
+```tsx
+import { UniversalDataGrid } from "@your-org/ui-data-grid";
+import "@your-org/ui-data-grid/style.css";
+```
+
+After:
+
 ```tsx
 import { UniversalDataGrid } from "@dravyn/ui-data-grid";
 import "@dravyn/ui-data-grid/style.css";
