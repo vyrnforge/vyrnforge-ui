@@ -10,7 +10,7 @@ export function DataGridSkeletonRows({
   return (
     <>
       {Array.from({ length: rowCount }).map((_, index) => (
-        <tr className="udg-skeleton-row" key={index}>
+        <tr aria-hidden="true" className="udg-skeleton-row" key={index}>
           {Array.from({ length: columnCount }).map((__, columnIndex) => (
             <td key={columnIndex}>
               <span className="udg-skeleton-line" />

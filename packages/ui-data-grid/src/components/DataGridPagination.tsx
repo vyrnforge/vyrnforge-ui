@@ -1,4 +1,5 @@
 import type { DataGridPaginationState } from "../types/dataGrid.types";
+import { DataGridIcon } from "./DataGridIcon";
 
 export type DataGridPaginationProps = {
   pagination: DataGridPaginationState;
@@ -19,13 +20,14 @@ export function DataGridPagination({
   const endRow = Math.min(totalRows, (pagination.pageIndex + 1) * pagination.pageSize);
 
   return (
-    <div className="udg-pagination">
+    <div className="udg-pagination" aria-label="Pagination">
       <span className="udg-pagination-count">
         {startRow}-{endRow} of {totalRows} rows
       </span>
       <label className="udg-page-size">
         Rows per page
         <select
+          className="udg-page-size-select"
           value={pagination.pageSize}
           onChange={(event) =>
             onChange({
@@ -41,9 +43,11 @@ export function DataGridPagination({
           ))}
         </select>
       </label>
-      <span>Page {currentPage} of {pageCount}</span>
+      <span className="udg-page-status">Page {currentPage} of {pageCount}</span>
       <div className="udg-pagination-actions">
         <button
+          aria-label="Go to previous page"
+          className="udg-pagination-button"
           type="button"
           onClick={() =>
             onChange({
@@ -53,9 +57,12 @@ export function DataGridPagination({
           }
           disabled={pagination.pageIndex <= 0}
         >
-          Previous
+          <DataGridIcon name="chevronLeft" />
+          <span>Previous</span>
         </button>
         <button
+          aria-label="Go to next page"
+          className="udg-pagination-button"
           type="button"
           onClick={() =>
             onChange({
@@ -65,7 +72,8 @@ export function DataGridPagination({
           }
           disabled={pagination.pageIndex >= pageCount - 1}
         >
-          Next
+          <span>Next</span>
+          <DataGridIcon name="chevronRight" />
         </button>
       </div>
     </div>

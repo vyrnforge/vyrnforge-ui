@@ -16,8 +16,19 @@ const getColumnValue = <RowData extends Record<string, unknown>>(
   return row[column.id as keyof RowData];
 };
 
-const compareNumber = (value: unknown, filterValue: unknown) =>
-  Number(value) - Number(filterValue);
+const compareComparable = (value: unknown, filterValue: unknown) => {
+  const leftNumber = Number(value);
+  const rightNumber = Number(filterValue);
+
+  if (!Number.isNaN(leftNumber) && !Number.isNaN(rightNumber)) {
+    return leftNumber - rightNumber;
+  }
+
+  return String(value ?? "").localeCompare(String(filterValue ?? ""), undefined, {
+    numeric: true,
+    sensitivity: "base"
+  });
+};
 
 function matchesFilter(value: unknown, filter: DataGridFilter) {
   const text = String(value ?? "").toLowerCase();
@@ -40,16 +51,16 @@ function matchesFilter(value: unknown, filter: DataGridFilter) {
       return value != null && value !== "";
     case "gt":
     case "greaterThan":
-      return compareNumber(value, filter.value) > 0;
+      return compareComparable(value, filter.value) > 0;
     case "gte":
     case "greaterThanOrEqual":
-      return compareNumber(value, filter.value) >= 0;
+      return compareComparable(value, filter.value) >= 0;
     case "lt":
     case "lessThan":
-      return compareNumber(value, filter.value) < 0;
+      return compareComparable(value, filter.value) < 0;
     case "lte":
     case "lessThanOrEqual":
-      return compareNumber(value, filter.value) <= 0;
+      return compareComparable(value, filter.value) <= 0;
     default:
       return true;
   }

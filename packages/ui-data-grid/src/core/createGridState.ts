@@ -5,6 +5,7 @@ export const defaultDataGridState: DataGridState = {
   filters: [],
   sort: [],
   grouping: [],
+  expandedGroupIds: [],
   pagination: {
     pageIndex: 0,
     pageSize: 10
@@ -12,7 +13,8 @@ export const defaultDataGridState: DataGridState = {
   columnVisibility: {},
   columnOrder: [],
   columnSizing: {},
-  selectedRowIds: []
+  selectedRowIds: [],
+  density: "standard"
 };
 
 export function createGridState(
@@ -34,6 +36,12 @@ export function createGridState(
       ...defaultDataGridState.columnSizing,
       ...initialState?.columnSizing
     },
+    selectedRowIds:
+      initialState?.selectedRowIds ?? defaultDataGridState.selectedRowIds,
+    density: initialState?.density ?? defaultDataGridState.density,
+    grouping: initialState?.grouping ?? defaultDataGridState.grouping,
+    expandedGroupIds:
+      initialState?.expandedGroupIds ?? defaultDataGridState.expandedGroupIds,
     sort: initialState?.sort ?? initialState?.sorting ?? defaultDataGridState.sort
   };
 }

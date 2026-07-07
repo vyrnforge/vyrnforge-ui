@@ -1,10 +1,14 @@
 {
+  "name": "dravyn-ui",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
+    "build:playground": "npm run build --workspace @dravyn/ui-data-grid && npm run build --workspace @dravyn/ui-data-grid-basic-playground",
+    "dev:playground": "npm run build --workspace @dravyn/ui-data-grid && npm run dev --workspace @dravyn/ui-data-grid-basic-playground",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
   }

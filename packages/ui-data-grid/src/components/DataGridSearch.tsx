@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
+import { DataGridIcon } from "./DataGridIcon";
 
 export type DataGridSearchProps = {
   value: string;
@@ -30,8 +31,11 @@ export function DataGridSearch({
   return (
     <label className="udg-search">
       <span className="udg-sr-only">{placeholder}</span>
+      <DataGridIcon className="udg-search-icon" name="search" />
       <input
+        aria-label={placeholder}
         className="udg-search-input"
+        data-filled={inputValue.length > 0 ? "true" : "false"}
         placeholder={placeholder}
         type="search"
         value={inputValue}
