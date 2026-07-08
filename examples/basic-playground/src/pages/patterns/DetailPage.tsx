@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Icon, MoreButton, Text } from "@dravyn/ui-components";
 import { assets } from "../../data/assets";
 import { tickets } from "../../data/tickets";
 
@@ -17,8 +17,9 @@ export function DetailPage() {
           <Text tone="muted">{asset.id} / {asset.type} / {asset.environment}</Text>
         </div>
         <div className="inline-actions">
-          <Button variant="primary">Review</Button>
-          <Button variant="subtle">Open audit</Button>
+          <Button leftSlot={<Icon name="Check" />} variant="primary">Review</Button>
+          <Button leftSlot={<Icon name="Eye" />} variant="subtle">Open audit</Button>
+          <MoreButton />
         </div>
       </section>
 

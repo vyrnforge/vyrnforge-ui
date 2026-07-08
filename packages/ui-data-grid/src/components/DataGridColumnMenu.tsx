@@ -1,5 +1,16 @@
 import { useMemo, useState, type DragEvent } from "react";
 import {
+  Badge,
+  Button,
+  Checkbox,
+  Icon,
+  IconButton,
+  Menu,
+  SearchInput,
+  SegmentedControl,
+  ToolbarButton
+} from "@dravyn/ui-components";
+import {
   filterColumnMenuColumns,
   resolveOrderedColumns,
   resolveVisibleColumns
@@ -9,7 +20,6 @@ import type {
   DataGridColumnVisibilityState
 } from "../types/column.types";
 import type { DataGridDensity } from "../types/dataGrid.types";
-import { DataGridIcon } from "./DataGridIcon";
 
 export type DataGridColumnMenuProps<
   RowData extends Record<string, unknown> = Record<string, unknown>
@@ -40,14 +50,22 @@ const densityOptions: DataGridDensity[] = [
   "comfortable"
 ];
 
-const densityIconName: Record<
-  DataGridDensity,
-  "densityCompact" | "densityStandard" | "densityComfortable"
-> = {
-  compact: "densityCompact",
-  standard: "densityStandard",
-  comfortable: "densityComfortable"
-};
+const densityOptionsConfig = densityOptions.map((densityOption) => ({
+  value: densityOption,
+  label: densityOption[0].toUpperCase() + densityOption.slice(1),
+  icon: (
+    <Icon
+      name={
+        densityOption === "compact"
+          ? "Minus"
+          : densityOption === "comfortable"
+            ? "Plus"
+            : "Settings"
+      }
+      size="xs"
+    />
+  )
+}));
 
 const moveColumnInOrder = (
   orderedColumnIds: string[],
@@ -133,15 +151,16 @@ export function DataGridColumnMenu<
 
   return (
     <div className="udg-column-menu">
-      <button
+      <ToolbarButton
         aria-expanded={open}
         className="udg-toolbar-button"
+        icon={<Icon name="Columns" size="xs" />}
+        label="Columns"
+        size="sm"
+        tooltip="Column settings"
         type="button"
         onClick={() => setOpen((currentOpen) => !currentOpen)}
-      >
-        <DataGridIcon name="columns" />
-        <span>Columns</span>
-      </button>
+      />
 
       {open && (
         <div
@@ -151,74 +170,84 @@ export function DataGridColumnMenu<
         >
           <div className="udg-column-menu__header">
             <strong>Columns</strong>
-            <button
+            <IconButton
               aria-label="Close column settings"
               className="udg-icon-button"
+              size="xs"
+              tooltip="Close"
               type="button"
+              variant="ghost"
               onClick={() => setOpen(false)}
             >
-              <DataGridIcon name="x" />
-            </button>
+              <Icon name="Close" size="xs" />
+            </IconButton>
           </div>
 
-          <label className="udg-column-menu__search">
-            <span className="udg-sr-only">Search columns</span>
-            <input
-              placeholder="Search columns"
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.currentTarget.value)}
-            />
-          </label>
+          <SearchInput
+            aria-label="Search columns"
+            className="udg-column-menu__search-input"
+            placeholder="Search columns"
+            size="sm"
+            value={search}
+            wrapperClassName="udg-column-menu__search"
+            onChange={(event) => setSearch(event.currentTarget.value)}
+          />
 
-          <div
-            className="udg-column-menu__density udg-segmented-control"
+          <SegmentedControl
             aria-label="Density"
-            role="group"
-          >
-            {densityOptions.map((densityOption) => (
-              <button
-                aria-pressed={density === densityOption}
-                className={density === densityOption ? "is-active" : undefined}
-                key={densityOption}
-                title={`${densityOption} density`}
-                type="button"
-                onClick={() => onDensityChange(densityOption)}
-              >
-                <DataGridIcon name={densityIconName[densityOption]} />
-                <span className="udg-sr-only">{densityOption}</span>
-              </button>
-            ))}
-          </div>
+            className="udg-column-menu__density udg-segmented-control"
+            options={densityOptionsConfig.map((option) => ({
+              ...option,
+              label: option.label
+            }))}
+            size="sm"
+            value={density}
+            onChange={(nextDensity) => onDensityChange(nextDensity as DataGridDensity)}
+          />
 
           <div className="udg-column-menu__actions">
-            <button type="button" onClick={onShowAllColumns}>
+            <Button size="sm" type="button" variant="subtle" onClick={onShowAllColumns}>
               Show all
-            </button>
-            <button type="button" onClick={onHideOptionalColumns}>
+            </Button>
+            <Button size="sm" type="button" variant="subtle" onClick={onHideOptionalColumns}>
               Hide optional
-            </button>
-            <details className="udg-reset-menu">
-              <summary>
-                <DataGridIcon name="reset" />
-                <span>Reset</span>
-                <DataGridIcon name="chevronDown" />
-              </summary>
-              <div className="udg-reset-menu__panel">
-                <button type="button" onClick={onResetColumnOrder}>
-                  Reset order
-                </button>
-                <button type="button" onClick={onResetColumnSizes}>
-                  Reset sizes
-                </button>
-                <button type="button" onClick={onResetColumns}>
-                  Reset columns
-                </button>
-                <button type="button" onClick={onResetView}>
-                  Reset view
-                </button>
-              </div>
-            </details>
+            </Button>
+            <Menu
+              className="udg-reset-menu"
+              items={[
+                {
+                  id: "reset-order",
+                  label: "Reset order",
+                  onSelect: onResetColumnOrder
+                },
+                {
+                  id: "reset-sizes",
+                  label: "Reset sizes",
+                  onSelect: onResetColumnSizes
+                },
+                {
+                  id: "reset-columns",
+                  label: "Reset columns",
+                  onSelect: onResetColumns
+                },
+                {
+                  id: "reset-view",
+                  label: "Reset view",
+                  onSelect: onResetView
+                }
+              ]}
+              placement="bottom-end"
+              size="sm"
+              trigger={
+                <ToolbarButton
+                  icon={<Icon name="Reset" size="xs" />}
+                  label="Reset"
+                  size="sm"
+                  type="button"
+                  variant="subtle"
+                />
+              }
+            />
           </div>
 
           <div className="udg-column-menu__list">
@@ -264,93 +293,106 @@ export function DataGridColumnMenu<
                       setDraggedColumnId(column.id);
                     }}
                   >
-                    <DataGridIcon name="gripVertical" />
+                    <Icon name="DragHandle" size="xs" />
                   </button>
 
-                  <label className="udg-column-toggle">
-                    <input
-                      aria-label={
-                        hideable
-                          ? `Toggle ${column.header}`
-                          : `${column.header} is required and cannot be hidden`
-                      }
-                      checked={visible}
-                      disabled={!hideable}
-                      title={hideable ? undefined : "Required column"}
-                      type="checkbox"
-                      onChange={(event) =>
-                        onColumnVisibilityChange(
-                          column.id,
-                          event.currentTarget.checked
-                        )
-                      }
-                    />
-                  </label>
+                  <Checkbox
+                    aria-label={
+                      hideable
+                        ? `Toggle ${column.header}`
+                        : `${column.header} is required and cannot be hidden`
+                    }
+                    checked={visible}
+                    className="udg-column-toggle"
+                    disabled={!hideable}
+                    size="sm"
+                    title={hideable ? undefined : "Required column"}
+                    onChange={(event) =>
+                      onColumnVisibilityChange(
+                        column.id,
+                        event.currentTarget.checked
+                      )
+                    }
+                  />
 
                   <span className="udg-column-menu__label" title={column.header}>
                     {column.header}
                   </span>
 
                   {!hideable && (
-                    <span className="udg-column-menu__badge">Required</span>
+                    <Badge className="udg-column-menu__badge" size="sm">
+                      Required
+                    </Badge>
                   )}
 
                   <div className="udg-column-menu__row-actions">
-                    <button
+                    <IconButton
                       aria-label={`Move ${column.header} up`}
                       className="udg-icon-button"
                       disabled={index === 0}
-                      title="Move up"
+                      size="xs"
+                      tooltip="Move up"
                       type="button"
+                      variant="subtle"
                       onClick={() => onMoveColumn(column.id, "up")}
                     >
-                      <DataGridIcon name="arrowUp" />
-                    </button>
-                    <button
+                      <Icon name="ChevronUp" size="xs" />
+                    </IconButton>
+                    <IconButton
                       aria-label={`Move ${column.header} down`}
                       className="udg-icon-button"
                       disabled={index === orderedColumns.length - 1}
-                      title="Move down"
+                      size="xs"
+                      tooltip="Move down"
                       type="button"
+                      variant="subtle"
                       onClick={() => onMoveColumn(column.id, "down")}
                     >
-                      <DataGridIcon name="arrowDown" />
-                    </button>
-                    <details className="udg-column-menu__more">
-                      <summary aria-label={`More actions for ${column.header}`}>
-                        <DataGridIcon name="moreHorizontal" />
-                      </summary>
-                      <div className="udg-column-menu__more-panel">
-                        <button
+                      <Icon name="ChevronDown" size="xs" />
+                    </IconButton>
+                    <Menu
+                      className="udg-column-menu__more"
+                      items={[
+                        {
+                          id: "move-first",
+                          label: "Move to first",
+                          onSelect: () => onMoveColumn(column.id, "first")
+                        },
+                        {
+                          id: "move-last",
+                          label: "Move to last",
+                          onSelect: () => onMoveColumn(column.id, "last")
+                        },
+                        {
+                          id: "reset-size",
+                          label: "Reset size",
+                          onSelect: () => onResetColumnSize(column.id)
+                        },
+                        ...(hideable
+                          ? [
+                              {
+                                id: "toggle-visibility",
+                                label: visible ? "Hide column" : "Show column",
+                                onSelect: () =>
+                                  onColumnVisibilityChange(column.id, !visible)
+                              }
+                            ]
+                          : [])
+                      ]}
+                      placement="bottom-end"
+                      size="sm"
+                      trigger={
+                        <IconButton
+                          aria-label={`More actions for ${column.header}`}
+                          size="xs"
+                          tooltip="More actions"
                           type="button"
-                          onClick={() => onMoveColumn(column.id, "first")}
+                          variant="subtle"
                         >
-                          Move to first
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => onMoveColumn(column.id, "last")}
-                        >
-                          Move to last
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => onResetColumnSize(column.id)}
-                        >
-                          Reset size
-                        </button>
-                        {hideable && (
-                          <button
-                            type="button"
-                            onClick={() =>
-                              onColumnVisibilityChange(column.id, !visible)
-                            }
-                          >
-                            {visible ? "Hide column" : "Show column"}
-                          </button>
-                        )}
-                      </div>
-                    </details>
+                          <Icon name="MoreHorizontal" size="xs" />
+                        </IconButton>
+                      }
+                    />
                   </div>
                 </div>
               );

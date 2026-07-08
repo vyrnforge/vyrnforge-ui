@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Checkbox, Heading, Text } from "@dravyn/ui-components";
+import { Button, Checkbox, Heading, Icon, Text } from "@dravyn/ui-components";
 
 export function SettingsPage() {
   const [settings, setSettings] = useState({
@@ -15,7 +15,7 @@ export function SettingsPage() {
           <Heading size="md">Workspace settings</Heading>
           <Text tone="muted">Sectioned settings built from native controls and shared tokens.</Text>
         </div>
-        <Button variant="primary">Save settings</Button>
+        <Button leftSlot={<Icon name="Check" />} variant="primary">Save settings</Button>
       </div>
       <Checkbox
         checked={settings.email}

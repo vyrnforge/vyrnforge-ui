@@ -1,4 +1,4 @@
-import { Badge, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Heading, StatusBadge, Text } from "@dravyn/ui-components";
 
 const variants = ["neutral", "success", "warning", "danger", "info"] as const;
 
@@ -16,6 +16,17 @@ export function BadgesPage() {
         {variants.map((variant) => (
           <Badge key={variant} size="sm" variant={variant}>{variant} small</Badge>
         ))}
+      </div>
+      <div className="badge-row">
+        {variants.map((variant) => (
+          <Badge key={variant} tone="solid" variant={variant}>{variant} solid</Badge>
+        ))}
+      </div>
+      <div className="badge-row">
+        <StatusBadge status="active" />
+        <StatusBadge status="pending" />
+        <StatusBadge status="error" label="blocked" />
+        <StatusBadge status="custom" label="custom mapped" />
       </div>
     </section>
   );

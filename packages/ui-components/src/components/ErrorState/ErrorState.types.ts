@@ -4,4 +4,6 @@ export type ErrorStateProps = HTMLAttributes<HTMLDivElement> & {
   title: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
+  actions?: ReactNode;
+  retryAction?: ReactNode;
 };

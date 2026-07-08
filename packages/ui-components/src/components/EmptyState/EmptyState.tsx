@@ -1,10 +1,9 @@
+import { joinClassNames } from "../../utils/classNames";
 import type { EmptyStateProps } from "./EmptyState.types";
-
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
 
 export function EmptyState({
   action,
+  actions,
   className,
   description,
   title,
@@ -14,7 +13,7 @@ export function EmptyState({
     <div className={joinClassNames("dv-empty-state", className)} {...props}>
       <p className="dv-empty-state__title">{title}</p>
       {description && <p className="dv-empty-state__description">{description}</p>}
-      {action}
+      {(actions || action) && <div className="dv-state-actions">{actions ?? action}</div>}
     </div>
   );
 }

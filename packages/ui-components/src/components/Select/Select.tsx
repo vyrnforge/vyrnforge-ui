@@ -1,19 +1,20 @@
+import { forwardRef } from "react";
+import { joinClassNames } from "../../utils/classNames";
 import type { SelectProps } from "./Select.types";
 
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
-
-export function Select({
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
   children,
   className,
   invalid = false,
   options,
+  size = "md",
   ...props
-}: SelectProps) {
+}, ref) {
   return (
     <select
       aria-invalid={invalid || undefined}
-      className={joinClassNames("dv-select", className)}
+      className={joinClassNames("dv-select", `dv-select--${size}`, className)}
+      ref={ref}
       {...props}
     >
       {options
@@ -29,4 +30,4 @@ export function Select({
         : children}
     </select>
   );
-}
+});

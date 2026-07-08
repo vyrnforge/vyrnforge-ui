@@ -1,4 +1,5 @@
 import type { SelectHTMLAttributes } from "react";
+import type { TextInputSize } from "../TextInput";
 
 export type SelectOption = {
   label: string;
@@ -6,7 +7,8 @@ export type SelectOption = {
   disabled?: boolean;
 };
 
-export type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
+export type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & {
   invalid?: boolean;
   options?: SelectOption[];
+  size?: TextInputSize;
 };

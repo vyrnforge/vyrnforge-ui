@@ -1,19 +1,20 @@
+import { forwardRef } from "react";
+import { joinClassNames } from "../../utils/classNames";
 import type { TextInputProps } from "./TextInput.types";
 
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
-
-export function TextInput({
+export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInput({
   className,
   invalid = false,
+  size = "md",
   ...props
-}: TextInputProps) {
+}, ref) {
   return (
     <input
       aria-invalid={invalid || undefined}
-      className={joinClassNames("dv-input", className)}
+      className={joinClassNames("dv-input", `dv-input--${size}`, className)}
+      ref={ref}
       type="text"
       {...props}
     />
   );
-}
+});

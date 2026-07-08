@@ -5,11 +5,13 @@ import { ThemeModesPage } from "../pages/core/ThemeModesPage";
 import { DensityPage } from "../pages/core/DensityPage";
 import { CssOverridePage } from "../pages/core/CssOverridePage";
 import { ButtonsPage } from "../pages/components/ButtonsPage";
+import { ActionsPage } from "../pages/components/ActionsPage";
 import { TypographyPage } from "../pages/components/TypographyPage";
 import { BadgesPage } from "../pages/components/BadgesPage";
 import { InputsPage } from "../pages/components/InputsPage";
 import { StatesPage } from "../pages/components/StatesPage";
 import { LayoutPage } from "../pages/components/LayoutPage";
+import { OverlaysPage } from "../pages/components/OverlaysPage";
 import { BasicGridPage } from "../pages/data-grid/BasicGridPage";
 import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
 import { FilteringPage } from "../pages/data-grid/FilteringPage";
@@ -17,6 +19,7 @@ import { SelectionPage } from "../pages/data-grid/SelectionPage";
 import { GroupingPage } from "../pages/data-grid/GroupingPage";
 import { ResizingPage } from "../pages/data-grid/ResizingPage";
 import { ThemesGridPage } from "../pages/data-grid/ThemesGridPage";
+import { GridStatesPage } from "../pages/data-grid/GridStatesPage";
 import { StressGridPage } from "../pages/data-grid/StressGridPage";
 import { ResourceListPage } from "../pages/patterns/ResourceListPage";
 import { DetailPage } from "../pages/patterns/DetailPage";
@@ -83,6 +86,14 @@ export const routes: PlaygroundRoute[] = [
     Component: ButtonsPage
   },
   {
+    id: "actions",
+    label: "Actions",
+    title: "Action Controls",
+    description: "First-party icons, icon buttons, toolbar buttons, groups, and segmented controls.",
+    group: "Components",
+    Component: ActionsPage
+  },
+  {
     id: "typography",
     label: "Typography",
     title: "Typography",
@@ -118,9 +129,17 @@ export const routes: PlaygroundRoute[] = [
     id: "layout",
     label: "Layout",
     title: "Layout",
-    description: "Current layout guidance and planned layout primitives.",
+    description: "Simple Card, Panel, Stack, Inline, and Section primitives.",
     group: "Components",
     Component: LayoutPage
+  },
+  {
+    id: "overlays",
+    label: "Overlays",
+    title: "Overlays",
+    description: "Popover, menu, dropdown, tooltip, dialog, drawer, and confirmations.",
+    group: "Components",
+    Component: OverlaysPage
   },
   {
     id: "grid-basic",
@@ -177,6 +196,14 @@ export const routes: PlaygroundRoute[] = [
     description: "Light, dark, enterprise, and shared token alignment.",
     group: "Data Grid",
     Component: ThemesGridPage
+  },
+  {
+    id: "grid-states",
+    label: "Grid States",
+    title: "Grid States",
+    description: "Empty, error, and loading states rendered through the grid package.",
+    group: "Data Grid",
+    Component: GridStatesPage
   },
   {
     id: "grid-stress",

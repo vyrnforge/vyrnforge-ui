@@ -1,24 +1,27 @@
+import { forwardRef } from "react";
+import { joinClassNames } from "../../utils/classNames";
+import { Icon } from "../Icon";
 import type { SearchInputProps } from "./SearchInput.types";
 
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
-
-export function SearchInput({
+export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput({
   className,
   invalid = false,
+  size = "md",
+  wrapperClassName,
   ...props
-}: SearchInputProps) {
+}, ref) {
   return (
-    <span className="dv-search-input">
+    <span className={joinClassNames("dv-search-input", wrapperClassName)}>
       <span aria-hidden="true" className="dv-search-input__icon">
-        /
+        <Icon name="Search" size="sm" />
       </span>
       <input
         aria-invalid={invalid || undefined}
-        className={joinClassNames("dv-input", className)}
+        className={joinClassNames("dv-input", `dv-input--${size}`, className)}
+        ref={ref}
         type="search"
         {...props}
       />
     </span>
   );
-}
+});

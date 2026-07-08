@@ -15,7 +15,7 @@ Current packages:
 ```
 
 `@dravyn/ui-core` provides the shared token and theme foundation.
-`@dravyn/ui-components` provides the first native React primitives.
+`@dravyn/ui-components` provides hardened native React primitives for actions, typography, forms, feedback, simple layout, and overlays.
 `@dravyn/ui-data-grid` remains backward compatible with its `--udg-*` variables while aligning defaults to shared `--dv-*` tokens.
 
 ## Install

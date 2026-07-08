@@ -1,4 +1,13 @@
-import { Button, EmptyState, ErrorState, Heading, LoadingState, Skeleton } from "@dravyn/ui-components";
+import {
+  Button,
+  EmptyState,
+  ErrorState,
+  Heading,
+  Icon,
+  InlineMessage,
+  LoadingState,
+  Skeleton
+} from "@dravyn/ui-components";
 
 export function StatesPage() {
   return (
@@ -8,7 +17,7 @@ export function StatesPage() {
         <EmptyState
           title="No saved views"
           description="Create a view once filters and columns are ready."
-          action={<Button size="sm" variant="primary">Create view</Button>}
+          actions={<Button leftSlot={<Icon name="Plus" />} size="sm" variant="primary">Create view</Button>}
         />
       </section>
       <section className="playground-card">
@@ -16,17 +25,23 @@ export function StatesPage() {
         <ErrorState
           title="Could not load records"
           description="Retry the request or check the source connection."
-          action={<Button size="sm" variant="danger">Retry</Button>}
+          retryAction={<Button leftSlot={<Icon name="Refresh" />} size="sm" variant="danger">Retry</Button>}
         />
       </section>
       <section className="playground-card">
         <Heading size="sm">Loading</Heading>
-        <LoadingState title="Loading workspace" description="Fetching current settings." />
+        <LoadingState label="Loading workspace" description="Fetching current settings." />
         <div className="skeleton-stack">
           <Skeleton height={12} width="80%" />
           <Skeleton height={12} width="64%" />
-          <Skeleton height={32} width="100%" />
+          <Skeleton animated={false} height={32} radius={6} width="100%" />
         </div>
+      </section>
+      <section className="playground-card">
+        <Heading size="sm">Inline message</Heading>
+        <InlineMessage title="Policy updated" variant="success">
+          Inline feedback can sit inside forms, cards, and panels.
+        </InlineMessage>
       </section>
     </div>
   );

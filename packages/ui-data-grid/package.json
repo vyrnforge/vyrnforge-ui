@@ -29,6 +29,10 @@
     "react": ">=18",
     "react-dom": ">=18"
   },
+  "dependencies": {
+    "@dravyn/ui-components": "0.1.0",
+    "@dravyn/ui-core": "0.1.0"
+  },
   "devDependencies": {
     "@types/react": "latest",
     "@types/react-dom": "latest",

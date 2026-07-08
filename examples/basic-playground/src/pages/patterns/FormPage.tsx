@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Checkbox, Field, Heading, Select, Text, TextInput } from "@dravyn/ui-components";
+import { Button, Checkbox, Field, Heading, Icon, Select, Text, TextInput } from "@dravyn/ui-components";
 
 export function FormPage() {
   const [acknowledged, setAcknowledged] = useState(false);
@@ -36,8 +36,8 @@ export function FormPage() {
         onChange={(event) => setAcknowledged(event.currentTarget.checked)}
       />
       <div className="inline-actions">
-        <Button variant="primary" disabled={!acknowledged}>Submit request</Button>
-        <Button variant="subtle">Save draft</Button>
+        <Button leftSlot={<Icon name="Check" />} variant="primary" disabled={!acknowledged}>Submit request</Button>
+        <Button leftSlot={<Icon name="Edit" />} variant="subtle">Save draft</Button>
       </div>
     </section>
   );

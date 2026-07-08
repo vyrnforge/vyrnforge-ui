@@ -1,4 +1,4 @@
-import { DataGridIcon } from "./DataGridIcon";
+import { ErrorState } from "@dravyn/ui-components";
 
 export type DataGridErrorStateProps = {
   error?: string | Error | null;
@@ -18,13 +18,11 @@ export function DataGridErrorState({
   return (
     <tr>
       <td className="udg-error" colSpan={columnCount} role="alert">
-        <div className="udg-state udg-state-error">
-          <span className="udg-state-icon" aria-hidden="true">
-            <DataGridIcon name="alert" />
-          </span>
-          <strong>Unable to load data.</strong>
-          <span>{message}</span>
-        </div>
+        <ErrorState
+          className="udg-state udg-state-error"
+          description={message}
+          title="Unable to load data."
+        />
       </td>
     </tr>
   );

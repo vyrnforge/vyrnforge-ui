@@ -1,4 +1,4 @@
-import { DataGridIcon } from "./DataGridIcon";
+import { EmptyState } from "@dravyn/ui-components";
 
 export type DataGridEmptyStateProps = {
   message?: string;
@@ -18,13 +18,11 @@ export function DataGridEmptyState({
   return (
     <tr>
       <td className="udg-empty" colSpan={columnCount}>
-        <div className="udg-state udg-state-empty">
-          <span className="udg-state-icon" aria-hidden="true">
-            <DataGridIcon name="empty" />
-          </span>
-          <strong>{title}</strong>
-          <span>{resolvedMessage}</span>
-        </div>
+        <EmptyState
+          className="udg-state udg-state-empty"
+          description={resolvedMessage}
+          title={title}
+        />
       </td>
     </tr>
   );

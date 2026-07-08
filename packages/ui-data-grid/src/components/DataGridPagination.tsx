@@ -1,5 +1,5 @@
+import { Button, Icon, Select } from "@dravyn/ui-components";
 import type { DataGridPaginationState } from "../types/dataGrid.types";
-import { DataGridIcon } from "./DataGridIcon";
 
 export type DataGridPaginationProps = {
   pagination: DataGridPaginationState;
@@ -18,6 +18,10 @@ export function DataGridPagination({
   const currentPage = Math.min(pagination.pageIndex + 1, pageCount);
   const startRow = totalRows === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1;
   const endRow = Math.min(totalRows, (pagination.pageIndex + 1) * pagination.pageSize);
+  const pageSizeSelectOptions = pageSizeOptions.map((pageSize) => ({
+    label: String(pageSize),
+    value: String(pageSize)
+  }));
 
   return (
     <div className="udg-pagination" aria-label="Pagination">
@@ -26,8 +30,10 @@ export function DataGridPagination({
       </span>
       <label className="udg-page-size">
         Rows per page
-        <select
+        <Select
           className="udg-page-size-select"
+          options={pageSizeSelectOptions}
+          size="sm"
           value={pagination.pageSize}
           onChange={(event) =>
             onChange({
@@ -35,20 +41,15 @@ export function DataGridPagination({
               pageSize: Number(event.currentTarget.value)
             })
           }
-        >
-          {pageSizeOptions.map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              {pageSize}
-            </option>
-          ))}
-        </select>
+        />
       </label>
       <span className="udg-page-status">Page {currentPage} of {pageCount}</span>
       <div className="udg-pagination-actions">
-        <button
+        <Button
           aria-label="Go to previous page"
           className="udg-pagination-button"
-          type="button"
+          leadingIcon={<Icon name="ChevronLeft" size="xs" />}
+          size="sm"
           onClick={() =>
             onChange({
               ...pagination,
@@ -57,13 +58,13 @@ export function DataGridPagination({
           }
           disabled={pagination.pageIndex <= 0}
         >
-          <DataGridIcon name="chevronLeft" />
-          <span>Previous</span>
-        </button>
-        <button
+          Previous
+        </Button>
+        <Button
           aria-label="Go to next page"
           className="udg-pagination-button"
-          type="button"
+          size="sm"
+          trailingIcon={<Icon name="ChevronRight" size="xs" />}
           onClick={() =>
             onChange({
               ...pagination,
@@ -72,9 +73,8 @@ export function DataGridPagination({
           }
           disabled={pagination.pageIndex >= pageCount - 1}
         >
-          <span>Next</span>
-          <DataGridIcon name="chevronRight" />
-        </button>
+          Next
+        </Button>
       </div>
     </div>
   );

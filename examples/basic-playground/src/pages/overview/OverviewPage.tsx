@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Icon, Text } from "@dravyn/ui-components";
 
 const cards = [
   {
@@ -30,8 +30,8 @@ export function OverviewPage() {
           </Text>
         </div>
         <div className="inline-actions">
-          <Button variant="primary">Primary action</Button>
-          <Button variant="subtle">Secondary</Button>
+          <Button leftSlot={<Icon name="Plus" />} variant="primary">Primary action</Button>
+          <Button leftSlot={<Icon name="Info" />} variant="subtle">Secondary</Button>
         </div>
       </section>
 

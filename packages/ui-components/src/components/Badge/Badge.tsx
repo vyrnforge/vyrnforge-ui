@@ -1,11 +1,10 @@
+import { joinClassNames } from "../../utils/classNames";
 import type { BadgeProps } from "./Badge.types";
-
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
 
 export function Badge({
   className,
   size = "md",
+  tone = "subtle",
   variant = "neutral",
   ...props
 }: BadgeProps) {
@@ -15,6 +14,7 @@ export function Badge({
         "dv-badge",
         `dv-badge--${variant}`,
         `dv-badge--${size}`,
+        `dv-badge--${tone}`,
         className
       )}
       {...props}

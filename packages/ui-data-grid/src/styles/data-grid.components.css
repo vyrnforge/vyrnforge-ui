@@ -69,15 +69,6 @@
   flex: 0 0 16px;
 }
 
-.udg-search-icon {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  color: var(--udg-text-muted);
-  pointer-events: none;
-  transform: translateY(-50%);
-}
-
 .udg-search-input,
 .udg-column-menu__search input,
 .udg-group-menu select,
@@ -105,7 +96,6 @@
 .udg-search-input {
   width: 100%;
   min-width: 0;
-  padding: 7px 10px 7px 34px;
 }
 
 .udg-search-input::placeholder {
@@ -845,28 +835,16 @@
   text-align: center;
 }
 
-.udg-state-icon {
-  display: inline-flex;
-  width: 34px;
-  height: 34px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  color: var(--udg-primary);
-  background: var(--udg-primary-soft);
-}
-
-.udg-state-icon .udg-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.udg-state strong {
+.udg-state .dv-empty-state__title,
+.udg-state .dv-error-state__title {
+  margin: 0;
   color: var(--udg-text-strong);
   font-size: var(--udg-font-size-md);
 }
 
-.udg-state span {
+.udg-state .dv-empty-state__description,
+.udg-state .dv-error-state__description {
+  margin: 0;
   max-width: 440px;
   color: var(--udg-text-muted);
   font-size: var(--udg-font-size-sm);
@@ -877,13 +855,8 @@
   background: var(--udg-danger-soft);
 }
 
-.udg-error .udg-state-icon {
-  color: var(--udg-danger);
-  background: var(--udg-surface);
-}
-
-.udg-error .udg-state strong,
-.udg-error .udg-state span {
+.udg-error .udg-state .dv-error-state__title,
+.udg-error .udg-state .dv-error-state__description {
   color: var(--udg-danger);
 }
 
@@ -1244,8 +1217,11 @@
 }
 
 .udg-column-menu__drag .udg-icon,
+.udg-column-menu__drag .dv-icon,
 .udg-header-drag-grip .udg-icon,
+.udg-header-drag-grip .dv-icon,
 .udg-header-cell__menu-button .udg-icon,
+.udg-header-cell__menu-button .dv-icon,
 .udg-column-menu__more summary .udg-icon,
 .udg-icon-button .udg-icon {
   width: 14px;
@@ -1265,7 +1241,7 @@
   font-weight: var(--udg-font-weight-medium);
 }
 
-.udg-column-toggle input {
+.udg-column-toggle {
   width: 15px;
   height: 15px;
   margin: 0;
@@ -1273,7 +1249,7 @@
   cursor: pointer;
 }
 
-.udg-column-toggle input:disabled {
+.udg-column-toggle:disabled {
   cursor: default;
   opacity: 0.7;
 }

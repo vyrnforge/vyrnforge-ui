@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Icon, MoreButton, Text } from "@dravyn/ui-components";
 import { assets } from "../../data/assets";
 
 export function ResourceListPage() {
@@ -9,7 +9,7 @@ export function ResourceListPage() {
           <Heading size="md">Assets</Heading>
           <Text tone="muted">A compact list pattern for resources, metadata, and actions.</Text>
         </div>
-        <Button variant="primary">Register asset</Button>
+        <Button leftSlot={<Icon name="Plus" />} variant="primary">Register asset</Button>
       </div>
       <div className="resource-list">
         {assets.map((asset) => (
@@ -24,6 +24,7 @@ export function ResourceListPage() {
               </Badge>
               <span>{asset.owner}</span>
               <span>{asset.region}</span>
+              <MoreButton aria-label={`More actions for ${asset.name}`} size="xs" />
             </div>
           </article>
         ))}

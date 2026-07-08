@@ -1,26 +1,57 @@
+import { useId } from "react";
+import { joinClassNames } from "../../utils/classNames";
 import type { FieldProps } from "./Field.types";
-
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
 
 export function Field({
   children,
   className,
   description,
+  disabled = false,
+  error,
+  htmlFor,
   invalid = false,
   label,
   message,
+  required = false,
   ...props
 }: FieldProps) {
+  const generatedId = useId();
+  const descriptionId = description ? `${generatedId}-description` : undefined;
+  const messageContent = error ?? message;
+  const messageId = messageContent ? `${generatedId}-message` : undefined;
+  const isInvalid = invalid || Boolean(error);
+  const LabelComponent = htmlFor ? "label" : "div";
+
   return (
     <div
-      className={joinClassNames("dv-field", invalid && "dv-field--invalid", className)}
+      aria-describedby={[descriptionId, messageId].filter(Boolean).join(" ") || undefined}
+      className={joinClassNames(
+        "dv-field",
+        isInvalid && "dv-field--invalid",
+        disabled && "dv-field--disabled",
+        className
+      )}
+      data-disabled={disabled || undefined}
+      data-invalid={isInvalid || undefined}
       {...props}
     >
-      {label && <div className="dv-field__label">{label}</div>}
-      {description && <div className="dv-field__description">{description}</div>}
+      {label && (
+        <LabelComponent className="dv-field__label" htmlFor={htmlFor}>
+          {label}
+          {required && <span aria-hidden="true" className="dv-field__required"> *</span>}
+        </LabelComponent>
+      )}
+      {description && (
+        <div className="dv-field__description" id={descriptionId}>
+          {description}
+        </div>
+      )}
       {children}
-      {message && <div className="dv-field__message">{message}</div>}
+      {messageContent && (
+        <div className="dv-field__message" id={messageId} role={isInvalid ? "alert" : undefined}>
+          {messageContent}
+        </div>
+      )}
     </div>
   );
 }

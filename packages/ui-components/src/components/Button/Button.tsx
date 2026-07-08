@@ -1,36 +1,44 @@
+import { forwardRef } from "react";
+import { joinClassNames } from "../../utils/classNames";
 import type { ButtonProps } from "./Button.types";
 
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
-
-export function Button({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   children,
   className,
   disabled,
+  fullWidth = false,
   leadingIcon,
+  leftSlot,
   loading = false,
+  rightSlot,
   size = "md",
   trailingIcon,
   type = "button",
   variant = "default",
   ...props
-}: ButtonProps) {
+}, ref) {
+  const startSlot = leftSlot ?? leadingIcon;
+  const endSlot = rightSlot ?? trailingIcon;
+
   return (
     <button
+      aria-busy={loading || undefined}
       className={joinClassNames(
         "dv-button",
         `dv-button--${variant}`,
         `dv-button--${size}`,
+        fullWidth && "dv-button--full-width",
         className
       )}
       disabled={disabled || loading}
+      ref={ref}
       type={type}
       {...props}
     >
       {loading && <span aria-hidden="true" className="dv-button__spinner" />}
-      {!loading && leadingIcon}
-      <span>{children}</span>
-      {trailingIcon}
+      {!loading && startSlot && <span className="dv-button__slot">{startSlot}</span>}
+      {children && <span className="dv-button__label">{children}</span>}
+      {endSlot && <span className="dv-button__slot">{endSlot}</span>}
     </button>
   );
-}
+});

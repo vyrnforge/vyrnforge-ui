@@ -1,3 +1,5 @@
+import { Skeleton } from "@dravyn/ui-components";
+
 export type DataGridSkeletonRowsProps = {
   rowCount?: number;
   columnCount?: number;
@@ -13,7 +15,7 @@ export function DataGridSkeletonRows({
         <tr aria-hidden="true" className="udg-skeleton-row" key={index}>
           {Array.from({ length: columnCount }).map((__, columnIndex) => (
             <td key={columnIndex}>
-              <span className="udg-skeleton-line" />
+              <Skeleton className="udg-skeleton-line" height={14} />
             </td>
           ))}
         </tr>

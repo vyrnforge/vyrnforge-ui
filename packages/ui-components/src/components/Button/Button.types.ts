@@ -8,6 +8,9 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  fullWidth?: boolean;
+  leftSlot?: ReactNode;
+  rightSlot?: ReactNode;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
 };

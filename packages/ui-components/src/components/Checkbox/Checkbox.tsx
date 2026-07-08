@@ -1,12 +1,19 @@
+import { forwardRef } from "react";
+import { joinClassNames } from "../../utils/classNames";
 import type { CheckboxProps } from "./Checkbox.types";
 
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
-
-export function Checkbox({ className, label, ...props }: CheckboxProps) {
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox({
+  className,
+  invalid = false,
+  label,
+  size = "md",
+  ...props
+}, ref) {
   const input = (
     <input
-      className={joinClassNames("dv-checkbox", className)}
+      aria-invalid={invalid || undefined}
+      className={joinClassNames("dv-checkbox", `dv-checkbox--${size}`, className)}
+      ref={ref}
       type="checkbox"
       {...props}
     />
@@ -22,4 +29,4 @@ export function Checkbox({ className, label, ...props }: CheckboxProps) {
       <span>{label}</span>
     </label>
   );
-}
+});

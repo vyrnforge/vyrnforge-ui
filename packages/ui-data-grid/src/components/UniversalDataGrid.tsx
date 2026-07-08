@@ -7,6 +7,15 @@ import {
   type CSSProperties,
   type InputHTMLAttributes
 } from "react";
+import {
+  Badge,
+  Button,
+  Checkbox,
+  Icon,
+  IconButton,
+  Menu,
+  Select
+} from "@dravyn/ui-components";
 import { applyFilters } from "../core/applyFilters";
 import {
   buildGroupedRows,
@@ -65,7 +74,6 @@ import type { DataGridSort } from "../types/filter.types";
 import { DataGridColumnMenu } from "./DataGridColumnMenu";
 import { DataGridEmptyState } from "./DataGridEmptyState";
 import { DataGridErrorState } from "./DataGridErrorState";
-import { DataGridIcon } from "./DataGridIcon";
 import { DataGridPagination } from "./DataGridPagination";
 import { DataGridSearch } from "./DataGridSearch";
 import { DataGridSkeletonRows } from "./DataGridSkeletonRows";
@@ -86,7 +94,10 @@ const getCellValue = <RowData extends Record<string, unknown>>(
   return row[column.id as keyof RowData];
 };
 
-type IndeterminateCheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
+type IndeterminateCheckboxProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "size" | "type"
+> & {
   indeterminate?: boolean;
 };
 
@@ -102,7 +113,7 @@ function IndeterminateCheckbox({
     }
   }, [indeterminate]);
 
-  return <input ref={checkboxRef} type="checkbox" {...props} />;
+  return <Checkbox ref={checkboxRef} size="sm" {...props} />;
 }
 
 export function UniversalDataGrid<
@@ -774,14 +785,14 @@ export function UniversalDataGrid<
     const direction = getSortDirection(columnId);
 
     if (direction === "asc") {
-      return "sortAsc";
+      return "SortAsc";
     }
 
     if (direction === "desc") {
-      return "sortDesc";
+      return "SortDesc";
     }
 
-    return "sortNone";
+    return "ChevronDown";
   };
 
   return (
@@ -803,12 +814,14 @@ export function UniversalDataGrid<
           <div className="udg-group-controls">
             <details className="udg-group-menu">
               <summary className="udg-toolbar-button">
+                <Icon name="Filter" size="xs" />
                 Group
               </summary>
               <div className="udg-group-menu__panel">
                 <label>
                   <span>Group by</span>
-                  <select
+                  <Select
+                    size="sm"
                     value=""
                     onChange={(event) => {
                       addGroupingColumn(event.currentTarget.value);
@@ -823,30 +836,36 @@ export function UniversalDataGrid<
                           {column.header}
                         </option>
                       ))}
-                  </select>
+                  </Select>
                 </label>
                 <div className="udg-group-menu__actions">
-                  <button
+                  <Button
+                    size="sm"
                     type="button"
+                    variant="subtle"
                     disabled={!groupingActive}
                     onClick={expandAllGridGroups}
                   >
                     Expand all
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    size="sm"
                     type="button"
+                    variant="subtle"
                     disabled={!groupingActive}
                     onClick={collapseAllGridGroups}
                   >
                     Collapse all
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    size="sm"
                     type="button"
+                    variant="subtle"
                     disabled={!groupingActive}
                     onClick={clearGrouping}
                   >
                     Clear
-                  </button>
+                  </Button>
                 </div>
               </div>
             </details>
@@ -914,7 +933,9 @@ export function UniversalDataGrid<
       {selectionEnabled && resolvedSelectedRowIds.length > 0 && (
         <div className="udg-bulk-action-bar" role="status">
           <div className="udg-bulk-action-bar__summary">
-            <strong>{resolvedSelectedRowIds.length}</strong>
+            <Badge size="sm" variant="info">
+              {resolvedSelectedRowIds.length}
+            </Badge>
             <span>
               row{resolvedSelectedRowIds.length === 1 ? "" : "s"} selected
             </span>
@@ -927,27 +948,33 @@ export function UniversalDataGrid<
                   : action.disabled;
 
               return (
-                <button
+                <Button
                   className={[
                     "udg-bulk-action",
                     action.variant ? `udg-bulk-action--${action.variant}` : ""
                   ].filter(Boolean).join(" ")}
                   disabled={disabled}
                   key={action.id}
+                  size="sm"
                   type="button"
+                  variant={action.variant ?? "default"}
                   onClick={() => action.onClick(bulkActionContext)}
                 >
                   {action.label}
-                </button>
+                </Button>
               );
             })}
-            <button
+            <IconButton
+              aria-label="Clear selected rows"
               className="udg-bulk-action udg-bulk-action--clear"
+              size="sm"
+              tooltip="Clear selection"
               type="button"
+              variant="subtle"
               onClick={clearSelectedRows}
             >
-              Clear
-            </button>
+              <Icon name="Close" size="xs" />
+            </IconButton>
           </div>
         </div>
       )}
@@ -1099,7 +1126,7 @@ export function UniversalDataGrid<
                         setHeaderDragColumnId(column.id);
                       }}
                     >
-                      <DataGridIcon name="gripVertical" />
+                      <Icon name="DragHandle" size="xs" />
                     </button>
                     <button
                       className="udg-header-button"
@@ -1115,110 +1142,112 @@ export function UniversalDataGrid<
                         ].filter(Boolean).join(" ")}
                         aria-hidden="true"
                       >
-                        <DataGridIcon name={getSortIconName(column.id)} />
+                        <Icon name={getSortIconName(column.id)} size="xs" />
                       </span>
                     </button>
                     <div className="udg-header-cell__actions">
-                      <details
+                      <Menu
                         className="udg-header-menu"
                         open={menuOpen}
-                        onToggle={(event) =>
-                          setMenuColumnId(
-                            event.currentTarget.open ? column.id : null
-                          )
+                        onOpenChange={(nextOpen) =>
+                          setMenuColumnId(nextOpen ? column.id : null)
                         }
-                      >
-                        <summary
-                          aria-label={`Open ${column.header} column actions`}
-                          className="udg-header-cell__menu-button"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          <DataGridIcon name="moreHorizontal" />
-                        </summary>
-                        <div className="udg-header-menu__panel">
-                          <button
-                            type="button"
-                            onClick={() => {
+                        items={[
+                          {
+                            id: "sort-asc",
+                            label: "Sort ascending",
+                            onSelect: () => {
                               setColumnSort(column.id, "asc");
                               setMenuColumnId(null);
-                            }}
-                          >
-                            Sort ascending
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
+                            }
+                          },
+                          {
+                            id: "sort-desc",
+                            label: "Sort descending",
+                            onSelect: () => {
                               setColumnSort(column.id, "desc");
                               setMenuColumnId(null);
-                            }}
-                          >
-                            Sort descending
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
+                            }
+                          },
+                          {
+                            id: "clear-sort",
+                            label: "Clear sort",
+                            onSelect: () => {
                               setColumnSort(column.id, null);
                               setMenuColumnId(null);
-                            }}
-                          >
-                            Clear sort
-                          </button>
-                          {enableGrouping &&
-                            !serverMode &&
-                            column.groupable !== false && (
-                              <button
-                                type="button"
-                                disabled={normalizedGrouping.includes(column.id)}
-                                onClick={() => {
-                                  addGroupingColumn(column.id);
-                                  setMenuColumnId(null);
-                                }}
-                              >
-                                Group by this column
-                              </button>
-                            )}
-                          {column.hideable !== false && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                updateVisibility(column.id, false);
-                                setMenuColumnId(null);
-                              }}
-                            >
-                              Hide column
-                            </button>
-                          )}
-                          {column.resizable !== false && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                resetGridColumnSize(column.id);
-                                setMenuColumnId(null);
-                              }}
-                            >
-                              Reset size
-                            </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => {
+                            }
+                          },
+                          ...(enableGrouping &&
+                          !serverMode &&
+                          column.groupable !== false
+                            ? [
+                                {
+                                  id: "group",
+                                  label: "Group by this column",
+                                  disabled: normalizedGrouping.includes(column.id),
+                                  onSelect: () => {
+                                    addGroupingColumn(column.id);
+                                    setMenuColumnId(null);
+                                  }
+                                }
+                              ]
+                            : []),
+                          ...(column.hideable !== false
+                            ? [
+                                {
+                                  id: "hide",
+                                  label: "Hide column",
+                                  onSelect: () => {
+                                    updateVisibility(column.id, false);
+                                    setMenuColumnId(null);
+                                  }
+                                }
+                              ]
+                            : []),
+                          ...(column.resizable !== false
+                            ? [
+                                {
+                                  id: "reset-size",
+                                  label: "Reset size",
+                                  onSelect: () => {
+                                    resetGridColumnSize(column.id);
+                                    setMenuColumnId(null);
+                                  }
+                                }
+                              ]
+                            : []),
+                          {
+                            id: "move-left",
+                            label: "Move left",
+                            onSelect: () => {
                               moveColumn(column.id, "up");
                               setMenuColumnId(null);
-                            }}
-                          >
-                            Move left
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
+                            }
+                          },
+                          {
+                            id: "move-right",
+                            label: "Move right",
+                            onSelect: () => {
                               moveColumn(column.id, "down");
                               setMenuColumnId(null);
-                            }}
+                            }
+                          }
+                        ]}
+                        placement="bottom-end"
+                        size="sm"
+                        trigger={
+                          <IconButton
+                            aria-label={`Open ${column.header} column actions`}
+                            className="udg-header-cell__menu-button"
+                            size="xs"
+                            tooltip="Column actions"
+                            type="button"
+                            variant="ghost"
                           >
-                            Move right
-                          </button>
-                        </div>
-                      </details>
+                            <Icon name="MoreHorizontal" size="xs" />
+                          </IconButton>
+                        }
+                      />
                     </div>
                     {column.resizable !== false && (
                       <button

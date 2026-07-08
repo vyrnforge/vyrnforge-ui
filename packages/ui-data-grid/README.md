@@ -4,6 +4,8 @@ Lightweight native-first React + TypeScript Universal Data Grid package foundati
 
 This package exposes generic contracts, pure core helpers, controlled/uncontrolled state hooks, native table rendering, column management, optional view-state persistence, and base CSS variables. Redux, MUI, TanStack, exporter engines, and domain-specific UI are intentionally not part of the package.
 
+`@dravyn/ui-data-grid` now consumes shared Dravyn primitives from `@dravyn/ui-components` for common controls such as buttons, icon buttons, search inputs, selects, checkboxes, badges, menus, and feedback states. The grid remains a specialized data-management package: use `@dravyn/ui-components` for shared UI outside grids, and use `@dravyn/ui-data-grid` for grid-specific APIs, state, column behavior, selection, grouping, resizing, and persistence.
+
 ## CSS
 
 Import the package CSS once in the consuming app:
@@ -12,7 +14,7 @@ Import the package CSS once in the consuming app:
 import "@dravyn/ui-data-grid/style.css";
 ```
 
-When using the full Dravyn UI workspace, import shared tokens first:
+The data-grid stylesheet includes the shared core/component layers for standalone use. When using the full Dravyn UI workspace, the recommended explicit import order is still:
 
 ```tsx
 import "@dravyn/ui-core/styles/index.css";
@@ -21,6 +23,24 @@ import "@dravyn/ui-data-grid/styles/index.css";
 ```
 
 `@dravyn/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--dv-*` variables when `@dravyn/ui-core` CSS is present, so app-level Dravyn tokens can theme components and grid together.
+
+Override shared `--dv-*` tokens when components and grid should move together:
+
+```css
+.my-app {
+  --dv-primary: #003b71;
+  --dv-radius-md: 10px;
+}
+```
+
+Override `--udg-*` tokens when only the grid should change:
+
+```css
+.my-app .udg {
+  --udg-header-bg: #f8fafc;
+  --udg-row-height: 42px;
+}
+```
 
 ## Theme System
 
@@ -68,20 +88,6 @@ Recommended customization order:
 3. Use `themeVars` for per-instance overrides.
 4. Avoid editing package CSS directly.
 
-Scoped CSS overrides are also supported:
-
-```css
-.my-app {
-  --dv-primary: #003b71;
-  --dv-radius-md: 10px;
-}
-
-.my-app .udg {
-  --udg-header-bg: #f8fafc;
-  --udg-row-height: 42px;
-}
-```
-
 ## Column Management
 
 Columns can be hidden by default and protected from hiding:
@@ -99,7 +105,7 @@ const columns = [
 <UniversalDataGrid tableId="users" columns={columns} rows={rows} />
 ```
 
-The built-in column menu focuses on search, visibility, density, and reset actions. Rows stay compact by default; move up/down and more actions appear on hover or keyboard focus. Users can reorder columns by dragging rows in the column menu or by dragging the small grip in a table header. The reset dropdown can reset order, sizes, column visibility/order/sizing, or the full view.
+The built-in column menu uses shared Dravyn search, checkbox, segmented control, badge, icon button, and menu primitives while keeping grid-specific behavior in the grid package. It focuses on search, visibility, density, and reset actions. Rows stay compact by default; move up/down and more actions appear on hover or keyboard focus. Users can reorder columns by dragging rows in the column menu or by dragging the small grip in a table header. The reset menu can reset order, sizes, column visibility/order/sizing, or the full view.
 
 ## Filtering
 
@@ -119,7 +125,7 @@ Supported filter operators:
 - number/date/datetime: `equals`, `gt`, `gte`, `lt`, `lte`
 - boolean: `equals`
 
-Set `filterable: false` on a column to mark that column as unavailable for column-level filtering in custom integrations. Header controls appear on hover/focus and remain visible when a column is sorted. The header action menu provides sort, hide, reset size, and move left/right actions using native buttons.
+Set `filterable: false` on a column to mark that column as unavailable for column-level filtering in custom integrations. Header controls appear on hover/focus and remain visible when a column is sorted. The header action menu provides sort, hide, reset size, and move left/right actions using shared Dravyn icon/menu primitives where they are safe for the native table interactions.
 
 ## Column Resizing
 

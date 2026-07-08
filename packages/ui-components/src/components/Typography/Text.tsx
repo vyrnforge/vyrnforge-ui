@@ -1,12 +1,11 @@
 import type { ElementType } from "react";
+import { joinClassNames } from "../../utils/classNames";
 import type { TextProps } from "./Typography.types";
-
-const joinClassNames = (...classNames: Array<string | undefined | false>) =>
-  classNames.filter(Boolean).join(" ");
 
 export function Text({
   as = "p",
   className,
+  size = "md",
   tone = "default",
   ...props
 }: TextProps) {
@@ -16,6 +15,7 @@ export function Text({
     <Component
       className={joinClassNames(
         "dv-text",
+        `dv-text--${size}`,
         tone !== "default" && `dv-text--${tone}`,
         className
       )}

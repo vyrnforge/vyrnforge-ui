@@ -1,4 +1,4 @@
-import { Badge, Button } from "@dravyn/ui-components";
+import { Badge, Button, Icon, ToolbarButton } from "@dravyn/ui-components";
 import {
   createLocalStorageGridPersistence,
   type DataGridBulkAction,
@@ -156,8 +156,8 @@ export function GridNote({ children }: { children: string }) {
 export function SectionActions() {
   return (
     <div className="inline-actions">
-      <Button size="sm" variant="primary">Save view</Button>
-      <Button size="sm" variant="subtle">Reset</Button>
+      <Button leftSlot={<Icon name="Check" />} size="sm" variant="primary">Save view</Button>
+      <ToolbarButton icon={<Icon name="Reset" />} label="Reset" tooltip="Reset view" />
     </div>
   );
 }

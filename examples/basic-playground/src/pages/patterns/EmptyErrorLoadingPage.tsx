@@ -1,4 +1,4 @@
-import { Button, EmptyState, ErrorState, Heading, LoadingState, Skeleton } from "@dravyn/ui-components";
+import { Button, EmptyState, ErrorState, Heading, Icon, LoadingState, Skeleton } from "@dravyn/ui-components";
 
 export function EmptyErrorLoadingPage() {
   return (
@@ -8,7 +8,7 @@ export function EmptyErrorLoadingPage() {
         <EmptyState
           title="No orders found"
           description="Try a different filter or create the first order."
-          action={<Button size="sm" variant="primary">Create order</Button>}
+          action={<Button leftSlot={<Icon name="Plus" />} size="sm" variant="primary">Create order</Button>}
         />
       </section>
       <section className="playground-card">
@@ -16,7 +16,7 @@ export function EmptyErrorLoadingPage() {
         <ErrorState
           title="Sync failed"
           description="The source returned an unavailable response."
-          action={<Button size="sm" variant="danger">Retry sync</Button>}
+          action={<Button leftSlot={<Icon name="Refresh" />} size="sm" variant="danger">Retry sync</Button>}
         />
       </section>
       <section className="playground-card">
