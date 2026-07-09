@@ -1,12 +1,10 @@
 # Dravyn UI
 
-Dravyn UI is a native-first enterprise UI foundation for reusable application components.
+Dravyn UI is a native-first enterprise UI foundation for internal tools, admin portals, customer portals, data-heavy applications, and workflow systems.
 
-The project started as a Universal Data Grid package, but the workspace is now structured for a broader UI system: shared core tokens, reusable component primitives, and data-heavy enterprise components.
+This repository is not only a data-grid project. The data grid is one specialized package inside the broader Dravyn UI foundation.
 
 ## Packages
-
-Current packages:
 
 ```txt
 @dravyn/ui-core
@@ -14,64 +12,24 @@ Current packages:
 @dravyn/ui-data-grid
 ```
 
-`@dravyn/ui-core` provides the shared token and theme foundation.
-`@dravyn/ui-components` provides hardened native React primitives for actions, typography, forms, feedback, simple layout, and overlays.
-`@dravyn/ui-data-grid` remains backward compatible with its `--udg-*` variables while aligning defaults to shared `--dv-*` tokens.
+| Package | Role |
+| --- | --- |
+| `@dravyn/ui-core` | Shared tokens, themes, density, and utilities. |
+| `@dravyn/ui-components` | Native React primitives and reusable application components. |
+| `@dravyn/ui-data-grid` | Specialized enterprise data-management grid. |
 
-## Install
+## Documentation
 
-```bash
-npm install @dravyn/ui-data-grid
-```
+The canonical documentation entrypoint is:
 
-Import the component and CSS:
+- [docs/README.md](docs/README.md)
 
-```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
-import {
-  UniversalDataGrid
-} from "@dravyn/ui-data-grid";
-```
+Agent and AI context entrypoints:
 
-Recommended CSS import order:
+- [AGENTS.md](AGENTS.md)
+- [.ai/AI_CONTEXT.md](.ai/AI_CONTEXT.md)
 
-1. `@dravyn/ui-core/styles/index.css`
-2. `@dravyn/ui-components/styles/index.css`
-3. `@dravyn/ui-data-grid/styles/index.css`
-
-`ui-core` owns shared `--dv-*` tokens. `ui-components` consumes those shared variables directly. `ui-data-grid` keeps its backward-compatible `--udg-*` variables, but maps many defaults to `--dv-*` tokens when core CSS is present.
-
-## State And Architecture Model
-
-- Apps own backend data, permissions, workflows, and business state.
-- Dravyn packages do not create a global store and do not depend on Redux, Zustand, TanStack, or app state libraries.
-- `ui-core` owns tokens, themes, density, and utilities.
-- `ui-components` owns reusable native primitives and `dv-*` styles.
-- `ui-data-grid` owns grid-specific behavior, controlled/uncontrolled view state, pure grid helpers, and adapter contracts.
-- Data-grid persistence is adapter-based and preference-only.
-- Server and export integrations should start from query/request contracts; apps own fetching and file generation.
-
-Architecture details live in `docs/architecture/`.
-
-Global app theme override:
-
-```css
-.my-app {
-  --dv-primary: #003b71;
-  --dv-radius-md: 10px;
-}
-```
-
-Grid-specific override:
-
-```css
-.my-app .udg {
-  --udg-header-bg: #f8fafc;
-  --udg-row-height: 42px;
-}
-```
+Do not create competing source-of-truth documents. If a topic overlaps existing docs, update the canonical document listed in [docs/README.md](docs/README.md) or archive outdated material under `docs/archive/`.
 
 ## Development
 
@@ -81,6 +39,7 @@ npm run build
 npm run typecheck
 npm run test
 npm run build:playground
+npm run build:docs
 ```
 
 Run the playground locally:
@@ -89,49 +48,16 @@ Run the playground locally:
 npm run dev:playground
 ```
 
-The playground is organized into Overview, Core, Components, Data Grid, and Patterns sections. It uses simple React state routing and demonstrates shared theme tokens across primitives and the grid without adding a router dependency.
+Run the documentation app locally:
 
-## Workspace Structure
-
-```txt
-docs/
-packages/
-  ui-core/
-  ui-components/
-  ui-data-grid/
-examples/
-  basic-playground/
+```bash
+npm run dev:docs
 ```
 
-## Documentation
-
-The Dravyn UI documentation is the source of truth for project direction:
-
-```txt
-docs/00-project-charter.md
-docs/01-naming-and-brand-system.md
-docs/02-repository-and-package-architecture.md
-docs/03-native-first-engineering-principles.md
-docs/04-theme-system-spec.md
-docs/05-component-system-roadmap.md
-docs/06-universal-data-grid-spec.md
-docs/07-data-grid-state-and-api-contract.md
-docs/08-data-grid-implementation-roadmap.md
-docs/09-build-release-upgrade-strategy.md
-docs/10-playground-and-documentation-strategy.md
-docs/11-quality-accessibility-test-strategy.md
-docs/12-codex-master-implementation-prompt.md
-docs/13-codex-repo-rebuild-prompt.md
-docs/architecture/00-state-distribution.md
-docs/architecture/01-package-boundaries.md
-docs/architecture/02-data-grid-clean-architecture.md
-docs/architecture/03-component-clean-architecture.md
-docs/architecture/04-adapter-patterns.md
-docs/architecture/05-public-api-stability.md
-```
+The playground is for interactive component behavior examples. The docs app is a source-of-truth documentation viewer and AI-readable reference layer over the markdown docs.
 
 ## Dependency Policy
 
-Dravyn UI should remain native-first and dependency-light.
+Dravyn UI should remain native-first and dependency-minimal.
 
-Do not add MUI, TanStack, Redux, Radix, Tailwind, Headless UI, Emotion, styled-components, icon libraries, CSS frameworks, or other heavy runtime dependencies without review and a written reason.
+Do not add MUI, TanStack, Redux, Radix, Tailwind, Headless UI, Emotion, styled-components, icon libraries, CSS frameworks, or other heavy runtime dependencies without explicit review and a written reason.

@@ -1,0 +1,114 @@
+{
+  "project": "Dravyn UI",
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "docsIndex": "docs/README.md",
+    "fullComponentCatalog": "docs/metadata/components.json",
+    "componentStatus": "docs/metadata/component-status.json",
+    "packageMetadata": "docs/metadata/packages.json",
+    "cssImports": "docs/metadata/css-imports.json",
+    "stateContracts": "docs/metadata/state-contracts.json",
+    "aiUsageRules": "docs/metadata/ai-usage-rules.json"
+  },
+  "packages": {
+    "@dravyn/ui-core": {
+      "owns": ["tokens", "themes", "density", "utilities"],
+      "css": ["@dravyn/ui-core/styles/index.css"],
+      "current": ["Theme tokens", "Density tokens", "Utility classes"],
+      "planned": []
+    },
+    "@dravyn/ui-components": {
+      "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation planned", "data display planned"],
+      "css": ["@dravyn/ui-core/styles/index.css", "@dravyn/ui-components/styles/index.css"],
+      "current": [
+        "Button",
+        "IconButton",
+        "ToolbarButton",
+        "ButtonGroup",
+        "SegmentedControl",
+        "Icon",
+        "Text",
+        "Heading",
+        "Label",
+        "Caption",
+        "CodeText",
+        "Field",
+        "TextInput",
+        "SearchInput",
+        "Select",
+        "Checkbox",
+        "Textarea",
+        "Badge",
+        "StatusBadge",
+        "Alert",
+        "InlineMessage",
+        "EmptyState",
+        "ErrorState",
+        "LoadingState",
+        "Skeleton",
+        "Card",
+        "Panel",
+        "Stack",
+        "Inline",
+        "Section",
+        "Popover",
+        "Menu",
+        "Dropdown",
+        "Tooltip",
+        "Dialog",
+        "Drawer",
+        "ConfirmDialog"
+      ],
+      "planned": [
+        "AppShell",
+        "Page",
+        "PageHeader",
+        "SideNav",
+        "TopNav",
+        "Breadcrumbs",
+        "Tabs",
+        "Radio",
+        "Switch",
+        "NumberInput",
+        "DateInput",
+        "MultiSelect",
+        "Toast",
+        "Progress",
+        "DescriptionList",
+        "KeyValueList",
+        "PropertyTable",
+        "ResourceList",
+        "Timeline",
+        "ActivityLog"
+      ]
+    },
+    "@dravyn/ui-data-grid": {
+      "owns": ["UniversalDataGrid", "grid behavior", "grid state", "grid adapters", "grid-specific styles"],
+      "css": ["@dravyn/ui-core/styles/index.css", "@dravyn/ui-components/styles/index.css", "@dravyn/ui-data-grid/styles/index.css"],
+      "current": [
+        "UniversalDataGrid",
+        "DataGridToolbar",
+        "DataGridSearch",
+        "DataGridFilterBar",
+        "DataGridColumnMenu",
+        "DataGridSkeletonRows",
+        "DataGridEmptyState",
+        "DataGridErrorState",
+        "DataGridPagination",
+        "DataGrid state/adapters"
+      ],
+      "planned": [
+        "DataGridBulkActionBar",
+        "AdvancedFilterDrawer",
+        "SavedViewSelector",
+        "ExportPreviewPanel"
+      ]
+    }
+  },
+  "rules": {
+    "state": "store-agnostic controlled/uncontrolled; no Redux dependency",
+    "styling": "CSS variables and package CSS; no static visual inline styles",
+    "dependencies": "native-first, dependency-minimal",
+    "status": "Check docs/metadata/component-status.json before using planned components"
+  }
+}

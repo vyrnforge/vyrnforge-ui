@@ -4,9 +4,16 @@ import type { DataGridState } from "./gridState.types";
 export function createGridState(
   initialState?: Partial<DataGridState>
 ): DataGridState {
-  return {
-    ...defaultDataGridState,
-    ...initialState,
+  const nextState: DataGridState = {
+    search: initialState?.search ?? defaultDataGridState.search,
+    filters: initialState?.filters ?? defaultDataGridState.filters,
+    sort:
+      initialState?.sort ??
+      initialState?.sorting ??
+      defaultDataGridState.sort,
+    grouping: initialState?.grouping ?? defaultDataGridState.grouping,
+    expandedGroupIds:
+      initialState?.expandedGroupIds ?? defaultDataGridState.expandedGroupIds,
     pagination: {
       ...defaultDataGridState.pagination,
       ...initialState?.pagination
@@ -22,12 +29,14 @@ export function createGridState(
     },
     selectedRowIds:
       initialState?.selectedRowIds ?? defaultDataGridState.selectedRowIds,
-    density: initialState?.density ?? defaultDataGridState.density,
-    grouping: initialState?.grouping ?? defaultDataGridState.grouping,
-    expandedGroupIds:
-      initialState?.expandedGroupIds ?? defaultDataGridState.expandedGroupIds,
-    sort: initialState?.sort ?? initialState?.sorting ?? defaultDataGridState.sort
+    density: initialState?.density ?? defaultDataGridState.density
   };
+
+  if (initialState?.sorting !== undefined) {
+    nextState.sorting = initialState.sorting;
+  }
+
+  return nextState;
 }
 
 export const mergeGridState = createGridState;

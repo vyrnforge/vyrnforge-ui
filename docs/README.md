@@ -1,0 +1,137 @@
+# Dravyn UI Documentation Index
+
+This is the canonical documentation entrypoint for Dravyn UI.
+
+Do not create new top-level documentation without linking it from this file. If a new document overlaps with an existing document, update the existing canonical document instead of creating another competing source of truth.
+
+## 1. Governance
+
+| Document | Purpose |
+| --- | --- |
+| `governance/00-documentation-governance.md` | Rules for creating, updating, archiving, and avoiding duplicate docs. |
+| `governance/01-project-source-of-truth.md` | Canonical definition of what Dravyn UI is and is not. |
+| `governance/02-document-lifecycle.md` | Draft/stable/deprecated/archive lifecycle. |
+| `governance/03-naming-and-terminology.md` | Required package names, prefixes, and vocabulary. |
+| `governance/04-metadata-maintenance.md` | Rules for keeping AI-readable metadata aligned with docs and package APIs. |
+
+## 2. Architecture
+
+| Document | Purpose |
+| --- | --- |
+| `architecture/00-system-overview.md` | High-level package architecture. |
+| `architecture/01-package-boundaries.md` | What each package owns and must not own. |
+| `architecture/02-state-and-adapter-ownership.md` | State distribution, adapters, and Redux policy. |
+| `architecture/03-theming-and-styling.md` | CSS variable, token, and styling rules. |
+| `architecture/04-clean-code-boundaries.md` | Components vs hooks vs core vs adapters. |
+| `architecture/05-accessibility-standards.md` | Accessibility baseline. |
+
+## 3. Roadmap
+
+| Document | Purpose |
+| --- | --- |
+| `roadmap/00-master-roadmap.md` | Sprint-level execution plan. |
+| `roadmap/01-component-inventory.md` | Current/planned components and maturity status. |
+| `roadmap/02-gap-analysis.md` | Missing areas and priorities. |
+| `roadmap/03-do-not-build-yet.md` | Explicit non-goals and deferred work. |
+
+## 4. Package Docs
+
+| Document | Purpose |
+| --- | --- |
+| `packages/ui-core.md` | Tokens, themes, density, utilities. |
+| `packages/ui-components.md` | Shared React primitives and application components. |
+| `packages/ui-data-grid.md` | UniversalDataGrid package scope and API direction. |
+
+## 5. Benchmark And Positioning
+
+| Document | Purpose |
+| --- | --- |
+| `benchmark/00-ui-library-landscape.md` | Comparison against major UI library categories. |
+| `benchmark/01-dravyn-positioning.md` | Dravyn positioning as a native-first enterprise UI foundation. |
+| `benchmark/02-component-coverage-comparison.md` | Component coverage matrix and gaps. |
+| `benchmark/03-data-grid-comparison.md` | Data-grid benchmark against TanStack Table, AG Grid, MUI X, and related options. |
+| `benchmark/04-theming-and-styling-comparison.md` | Theme and styling model comparison. |
+| `benchmark/05-state-and-adapter-comparison.md` | State ownership and adapter comparison. |
+| `benchmark/06-roadmap-gap-analysis.md` | Benchmark-informed roadmap gaps and priorities. |
+
+## 6. React Documentation App
+
+The React docs app lives in `apps/docs`. It is a viewer/navigation layer over these markdown files, not a new source of truth.
+
+```bash
+npm run dev:docs
+npm run build:docs
+```
+
+| Document | Purpose |
+| --- | --- |
+| `react-docs/00-react-docs-app-spec.md` | Specification for the human-facing docs/playground app. |
+| `react-docs/01-route-map.md` | Required route structure. |
+| `react-docs/02-example-standards.md` | Rules for examples, snippets, and use-case pages. |
+| `react-docs/03-ai-readable-docs.md` | How docs should expose machine-readable context. |
+
+## 7. AI Documentation
+
+| Document | Purpose |
+| --- | --- |
+| `../.ai/AI_CONTEXT.md` | Primary AI context file. |
+| `../.ai/REPO_MAP.md` | AI-readable repo structure guide. |
+| `../.ai/CODING_RULES.md` | Implementation rules for agents. |
+| `../.ai/DOC_USAGE_GUIDE.md` | How AI should read and update docs. |
+| `../AGENTS.md` | Root instruction file for Codex/agents. |
+| `ai/00-ai-documentation-strategy.md` | Strategy for AI-readable project docs. |
+
+## 8. AI-Readable Metadata
+
+Markdown docs are the human source of truth. Metadata files are structured indexes for AI agents and the React docs app. Update metadata whenever public components, APIs, CSS imports, state contracts, package boundaries, or AI usage rules change.
+
+| Metadata | Purpose |
+| --- | --- |
+| `metadata/packages.json` | Package ownership, dependencies, CSS imports, and public entry points. |
+| `metadata/components.json` | Full component and public contract catalog. |
+| `metadata/component-status.json` | Compact component status lookup. |
+| `metadata/css-imports.json` | CSS import order and styling ownership. |
+| `metadata/state-contracts.json` | State ownership and adapter policies. |
+| `metadata/ai-usage-rules.json` | AI-specific usage rules and dependency constraints. |
+| `../.ai/COMPONENT_MAP.json` | Compact AI quick map aligned to the full component catalog. |
+
+## 9. Templates
+
+| Template | Purpose |
+| --- | --- |
+| `templates/component-doc-template.md` | Standard component docs. |
+| `templates/package-readme-template.md` | Standard package README. |
+| `templates/sprint-doc-template.md` | Standard sprint plan. |
+| `templates/adr-template.md` | Architecture decision record. |
+| `templates/ai-task-card-template.md` | AI implementation task card. |
+
+## 10. Prompts
+
+| Prompt | Purpose |
+| --- | --- |
+| `prompts/01-doc-cleanup-and-unification.md` | Documentation cleanup workflow. |
+| `prompts/02-react-docs-app-implementation.md` | React documentation app implementation workflow. |
+
+## 11. Archive
+
+Archived docs are historical only. They preserve useful context but do not guide new work.
+
+| Archive | Contents |
+| --- | --- |
+| `archive/2026-07-legacy-planning-pack/` | Previous root-numbered planning docs replaced by governance, architecture, roadmap, package, and AI docs. |
+| `archive/2026-07-ui6-architecture-notes/` | Previous UI-6 architecture notes replaced by the canonical architecture docs. |
+| `archive/2026-07-documentation-system-pack/` | Copied documentation-system zip preserved as historical input. |
+
+## Source Of Truth Map
+
+| Topic | Canonical document |
+| --- | --- |
+| Project identity | `governance/01-project-source-of-truth.md` |
+| Package boundaries | `architecture/01-package-boundaries.md` |
+| State ownership and Redux policy | `architecture/02-state-and-adapter-ownership.md` |
+| Styling and theme rules | `architecture/03-theming-and-styling.md` |
+| Code boundaries | `architecture/04-clean-code-boundaries.md` |
+| Roadmap | `roadmap/00-master-roadmap.md` |
+| Component inventory | `roadmap/01-component-inventory.md` |
+| Benchmark positioning | `benchmark/01-dravyn-positioning.md` |
+| AI context | `../.ai/AI_CONTEXT.md` |

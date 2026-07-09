@@ -28,6 +28,17 @@ describe("grid state module", () => {
       grouping: [],
       density: "compact"
     });
+    expect(pickPersistableGridState(state)).not.toHaveProperty(
+      "selectedRowIds"
+    );
+  });
+
+  it("does not keep row data in grid state", () => {
+    const state = createGridState({
+      rows: [{ id: 1, name: "Alpha" }]
+    } as unknown as Partial<ReturnType<typeof createGridState>>);
+
+    expect("rows" in state).toBe(false);
   });
 
   it("applies reducer actions and resets search pagination", () => {

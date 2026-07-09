@@ -1,39 +1,68 @@
 # Package Boundaries
 
-## Responsibilities
+## `@dravyn/ui-core`
 
-| Package | Owns | Must Not Own |
-| --- | --- | --- |
-| `@dravyn/ui-core` | Design tokens, themes, density tokens, utility classes, theme helpers | React components, grid behavior, app data |
-| `@dravyn/ui-components` | Native reusable React primitives and `dv-*` component styles | Data-grid behavior, backend data, global app state |
-| `@dravyn/ui-data-grid` | Grid-specific rendering, state contracts, pure grid helpers, grid adapters, `udg-*` styles | Shared primitive ownership, app business state, direct fetching/export generation |
+### Owns
 
-## Dependency Direction
+- `--dv-*` CSS variables
+- theme presets: light, dark, system, enterprise
+- density tokens: compact, standard, comfortable
+- utility classes
+- theme helper types/functions if dependency-free
 
-Valid:
+### Must not own
 
-- `ui-components -> ui-core`
-- `ui-data-grid -> ui-core`
-- `ui-data-grid -> ui-components`
+- React components
+- data grid behavior
+- business state
+- app routing
+- backend fetching
 
-Invalid:
+## `@dravyn/ui-components`
 
-- `ui-core -> ui-components`
-- `ui-core -> ui-data-grid`
-- `ui-components -> ui-data-grid`
+### Owns
 
-## Current Dependency Audit
+- shared `dv-*` React components
+- actions: Button, IconButton, ToolbarButton, SegmentedControl
+- forms: Field, TextInput, Select, Checkbox, etc.
+- feedback: Badge, EmptyState, ErrorState, LoadingState, Skeleton
+- overlays: Popover, Menu, Tooltip, Dialog, Drawer, ConfirmDialog
+- layout/app primitives: Card, Panel, Stack, Inline, AppShell, PageHeader later
 
-Checked package manifests:
+### Must not own
 
-- `packages/ui-core/package.json`: no Dravyn package dependencies. This is valid.
-- `packages/ui-components/package.json`: depends on `@dravyn/ui-core`. This is valid.
-- `packages/ui-data-grid/package.json`: depends on `@dravyn/ui-core` and `@dravyn/ui-components`. This is valid.
+- data-grid algorithms
+- grid row models
+- backend data fetching
+- global store
+- tenant/auth/permissions
 
-No circular Dravyn package dependency is present.
+## `@dravyn/ui-data-grid`
 
-## Boundary Rules
+### Owns
 
-- Public package APIs should export components, public types, hooks, and stable helpers only.
-- Internal implementation details can be organized under `state/`, `core/`, `hooks/`, and `adapters/`, but old public imports must remain compatible unless explicitly deprecated.
-- Styling ownership follows prefixes: shared components use `dv-*`; data-grid-specific styles use `udg-*`.
+- UniversalDataGrid
+- grid-specific `udg-*` styles
+- grid state contracts
+- column/search/filter/sort/pagination/grouping/selection logic
+- persistence adapter contracts
+- server query contracts
+- export request contracts
+
+### Must not own
+
+- API calls
+- export file generation by default
+- report generator engine
+- global store
+- backend business workflows
+
+## Circular dependency rule
+
+If a package needs something from a higher-level package, the abstraction belongs in the lower-level package or in a new adapter package.
+
+## Dependency policy
+
+Dravyn packages must not depend on Redux, React Redux, RTK Query, Zustand, TanStack state/query/table/virtual, MUI, AntD, Chakra, Mantine, Radix, Headless UI, Tailwind, styled-components, Emotion, icon libraries, or CSS frameworks by default.
+
+Apps may use those tools around Dravyn through controlled props, adapter contracts, and normal application composition.

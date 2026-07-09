@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    {
+      "id": "prefer-dravyn-components",
+      "rule": "Prefer @dravyn/ui-components before creating raw custom controls.",
+      "reason": "Keeps UI consistent and accessible."
+    },
+    {
+      "id": "use-grid-for-data-management",
+      "rule": "Use @dravyn/ui-data-grid only for data-management tables.",
+      "reason": "UniversalDataGrid is specialized grid behavior, not a generic layout component."
+    },
+    {
+      "id": "do-not-use-grid-as-layout",
+      "rule": "Do not use DataGrid as generic layout.",
+      "reason": "Use layout primitives such as Card, Panel, Stack, Inline, and Section."
+    },
+    {
+      "id": "button-for-primary-actions",
+      "rule": "Use Button for primary or business actions.",
+      "reason": "Visible labels are clearer for important actions."
+    },
+    {
+      "id": "icon-controls",
+      "rule": "Use IconButton or ToolbarButton for repeated utility actions.",
+      "reason": "They provide consistent compact action styling."
+    },
+    {
+      "id": "icon-accessibility",
+      "rule": "Every icon-only button needs an aria-label.",
+      "reason": "Screen reader users need a text name for the control."
+    },
+    {
+      "id": "css-variables",
+      "rule": "Use CSS variables for styling customization.",
+      "reason": "Dravyn theming is token-driven and scoped."
+    },
+    {
+      "id": "no-forbidden-deps",
+      "rule": "Do not add MUI, Tailwind, Radix, TanStack, Redux, styled-components, Emotion, icon libraries, or CSS frameworks unless explicitly approved.",
+      "reason": "Dravyn is native-first and dependency-minimal."
+    },
+    {
+      "id": "app-fetching",
+      "rule": "Keep app data fetching outside Dravyn packages.",
+      "reason": "Apps own backend rows, auth, permissions, retries, and cache."
+    },
+    {
+      "id": "check-status",
+      "rule": "Check component status before using planned components.",
+      "reason": "Planned components may not exist in package exports yet."
+    },
+    {
+      "id": "follow-boundaries",
+      "rule": "Follow package boundaries.",
+      "reason": "ui-core must stay lowest-level, ui-components must not depend on ui-data-grid."
+    }
+  ],
+  "lookupOrder": [
+    "docs/README.md",
+    "docs/metadata/component-status.json",
+    "docs/metadata/components.json",
+    "docs/metadata/packages.json",
+    ".ai/AI_CONTEXT.md"
+  ]
+}

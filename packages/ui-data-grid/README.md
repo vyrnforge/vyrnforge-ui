@@ -103,6 +103,24 @@ Persistence is adapter-based and stores preferences only. Server integration sho
 
 No global store is created inside `@dravyn/ui-data-grid`.
 
+Redux and RTK Query can be used by consuming apps without becoming Dravyn dependencies. Connect them through controlled state:
+
+```tsx
+const gridState = useSelector(selectGridState("users"));
+
+<UniversalDataGrid
+  tableId="users"
+  columns={columns}
+  rows={rows}
+  state={gridState}
+  onStateChange={(next) =>
+    dispatch(updateGridState({ tableId: "users", state: next }))
+  }
+/>;
+```
+
+The Redux slice, API fetching, and persistence decisions stay in the app.
+
 ## Column Management
 
 Columns can be hidden by default and protected from hiding:

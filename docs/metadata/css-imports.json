@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "recommendedOrder": [
+    "@dravyn/ui-core/styles/index.css",
+    "@dravyn/ui-components/styles/index.css",
+    "@dravyn/ui-data-grid/styles/index.css"
+  ],
+  "imports": [
+    {
+      "package": "@dravyn/ui-core",
+      "importPath": "@dravyn/ui-core/styles/index.css",
+      "requiredFor": ["shared --dv-* tokens", "theme presets", "density tokens", "utility classes"],
+      "mustComeBefore": ["@dravyn/ui-components/styles/index.css", "@dravyn/ui-data-grid/styles/index.css"],
+      "notes": "ui-core owns shared --dv-* design tokens and utilities."
+    },
+    {
+      "package": "@dravyn/ui-components",
+      "importPath": "@dravyn/ui-components/styles/index.css",
+      "requiredFor": ["dv-* component classes", "shared component visual states"],
+      "mustComeBefore": ["@dravyn/ui-data-grid/styles/index.css"],
+      "notes": "ui-components consumes --dv-* variables and owns dv-* classes."
+    },
+    {
+      "package": "@dravyn/ui-data-grid",
+      "importPath": "@dravyn/ui-data-grid/styles/index.css",
+      "requiredFor": ["udg-* grid classes", "--udg-* grid variables", "grid layout and density"],
+      "mustComeBefore": [],
+      "notes": "ui-data-grid owns udg-* classes and --udg-* variables. The grid should work with fallback values but aligns best when ui-core is imported."
+    }
+  ],
+  "rules": [
+    "Import ui-core styles before ui-components styles.",
+    "Import ui-components styles before ui-data-grid styles.",
+    "Override --dv-* tokens for app-wide theme changes.",
+    "Override --udg-* variables for grid-specific changes.",
+    "Do not edit package CSS directly in consuming apps."
+  ]
+}
