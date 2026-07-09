@@ -42,7 +42,22 @@ Do not create new top-level documentation without linking it from this file. If 
 | `packages/ui-components.md` | Shared React primitives and application components. |
 | `packages/ui-data-grid.md` | UniversalDataGrid package scope and API direction. |
 
-## 5. Benchmark And Positioning
+## 5. API Reference
+
+API docs define public package usage for humans and AI agents. Use `api/README.md` before consuming Dravyn components, tokens, grid contracts, or adapter contracts. Metadata remains the structured AI index.
+
+| Document | Purpose |
+| --- | --- |
+| `api/README.md` | Public API overview and index. |
+| `api/import-and-setup.md` | Package import and CSS setup order. |
+| `api/ui-core-api.md` | Public `@dravyn/ui-core` token, theme, density, and utility API. |
+| `api/ui-components-api.md` | Public `@dravyn/ui-components` component API overview. |
+| `api/ui-data-grid-api.md` | Public `@dravyn/ui-data-grid` grid, state, adapter, and styling API overview. |
+| `api/css-token-reference.md` | Stable public CSS variables. |
+| `api/css-class-reference.md` | Public class prefixes and extension rules. |
+| `api/public-vs-internal-api.md` | What is stable public API and what is internal. |
+
+## 6. Benchmark And Positioning
 
 | Document | Purpose |
 | --- | --- |
@@ -54,7 +69,7 @@ Do not create new top-level documentation without linking it from this file. If 
 | `benchmark/05-state-and-adapter-comparison.md` | State ownership and adapter comparison. |
 | `benchmark/06-roadmap-gap-analysis.md` | Benchmark-informed roadmap gaps and priorities. |
 
-## 6. React Documentation App
+## 7. React Documentation App
 
 The React docs app lives in `apps/docs`. It is a viewer/navigation layer over these markdown files, not a new source of truth.
 
@@ -70,7 +85,7 @@ npm run build:docs
 | `react-docs/02-example-standards.md` | Rules for examples, snippets, and use-case pages. |
 | `react-docs/03-ai-readable-docs.md` | How docs should expose machine-readable context. |
 
-## 7. AI Documentation
+## 8. AI Documentation
 
 | Document | Purpose |
 | --- | --- |
@@ -81,7 +96,7 @@ npm run build:docs
 | `../AGENTS.md` | Root instruction file for Codex/agents. |
 | `ai/00-ai-documentation-strategy.md` | Strategy for AI-readable project docs. |
 
-## 8. AI-Readable Metadata
+## 9. AI-Readable Metadata
 
 Markdown docs are the human source of truth. Metadata files are structured indexes for AI agents and the React docs app. Update metadata whenever public components, APIs, CSS imports, state contracts, package boundaries, or AI usage rules change.
 
@@ -95,7 +110,7 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `metadata/ai-usage-rules.json` | AI-specific usage rules and dependency constraints. |
 | `../.ai/COMPONENT_MAP.json` | Compact AI quick map aligned to the full component catalog. |
 
-## 9. Templates
+## 10. Templates
 
 | Template | Purpose |
 | --- | --- |
@@ -105,14 +120,14 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `templates/adr-template.md` | Architecture decision record. |
 | `templates/ai-task-card-template.md` | AI implementation task card. |
 
-## 10. Prompts
+## 11. Prompts
 
 | Prompt | Purpose |
 | --- | --- |
 | `prompts/01-doc-cleanup-and-unification.md` | Documentation cleanup workflow. |
 | `prompts/02-react-docs-app-implementation.md` | React documentation app implementation workflow. |
 
-## 11. Archive
+## 12. Archive
 
 Archived docs are historical only. They preserve useful context but do not guide new work.
 
@@ -130,6 +145,7 @@ Archived docs are historical only. They preserve useful context but do not guide
 | Package boundaries | `architecture/01-package-boundaries.md` |
 | State ownership and Redux policy | `architecture/02-state-and-adapter-ownership.md` |
 | Styling and theme rules | `architecture/03-theming-and-styling.md` |
+| Public API usage | `api/README.md` |
 | Code boundaries | `architecture/04-clean-code-boundaries.md` |
 | Roadmap | `roadmap/00-master-roadmap.md` |
 | Component inventory | `roadmap/01-component-inventory.md` |

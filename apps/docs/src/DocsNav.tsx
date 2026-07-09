@@ -1,4 +1,4 @@
-import { Badge } from "@dravyn/ui-components";
+import { Button, Caption } from "@dravyn/ui-components";
 import { docsGroups, docsRoutes } from "./docsRegistry";
 
 type DocsNavProps = {
@@ -8,7 +8,7 @@ type DocsNavProps = {
 
 export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
   return (
-    <nav className="docs-nav" aria-label="Documentation">
+    <nav className="dv-docs-nav" aria-label="Documentation">
       {docsGroups.map((group) => {
         const routes = docsRoutes.filter((route) => route.group === group);
 
@@ -17,24 +17,21 @@ export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
         }
 
         return (
-          <section className="docs-nav__group" key={group}>
-            <div className="docs-nav__group-title">{group}</div>
-            <div className="docs-nav__links">
+          <section className="dv-docs-nav__group" key={group}>
+            <Caption className="dv-docs-nav__group-title">{group}</Caption>
+            <div className="dv-docs-nav__links">
               {routes.map((route) => (
-                <button
+                <Button
                   aria-current={route.id === activeRouteId ? "page" : undefined}
-                  className="docs-nav__link"
+                  className="dv-docs-nav__link"
+                  fullWidth
                   key={route.id}
                   onClick={() => onRouteChange(route.id)}
-                  type="button"
+                  size="sm"
+                  variant={route.id === activeRouteId ? "subtle" : "ghost"}
                 >
-                  <span>{route.title}</span>
-                  {route.canonical && (
-                    <Badge size="sm" tone="subtle" variant="success">
-                      Canonical
-                    </Badge>
-                  )}
-                </button>
+                  {route.title}
+                </Button>
               ))}
             </div>
           </section>

@@ -29,6 +29,7 @@ docs/README.md
 docs/governance/
 docs/architecture/
 docs/roadmap/
+docs/api/
 docs/benchmark/
 docs/metadata/
 docs/archive/
@@ -48,6 +49,7 @@ docs/prompts/
 | Grid-specific behavior | `packages/ui-data-grid` |
 | Docs app example | `examples/basic-playground` or future docs app |
 | Architecture docs | `docs/architecture` |
+| Public API docs | `docs/api` |
 | Component docs | Component README plus docs app page |
 
 ## Before Creating New Docs

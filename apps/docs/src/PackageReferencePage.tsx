@@ -1,4 +1,4 @@
-import { Badge, Card, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Card, CodeText, Heading, Text } from "@dravyn/ui-components";
 
 const packages = [
   {
@@ -42,11 +42,11 @@ const dependencyRules = [
 
 export function PackageReferencePage() {
   return (
-    <div className="docs-reference">
-      <div className="docs-package-grid">
+    <div className="dv-docs-reference">
+      <div className="dv-docs-package-grid">
         {packages.map((packageInfo) => (
-          <Card className="docs-package-card" key={packageInfo.name} padding="lg">
-            <div className="docs-package-card__header">
+          <Card className="dv-docs-package-card" key={packageInfo.name} padding="lg">
+            <div className="dv-docs-package-card__header">
               <Heading level={3} size="md">
                 {packageInfo.name}
               </Heading>
@@ -64,15 +64,15 @@ export function PackageReferencePage() {
         ))}
       </div>
 
-      <Card className="docs-reference__section" padding="lg">
+      <Card className="dv-docs-reference__section" padding="lg">
         <Heading level={3} size="md">
           Dependency direction
         </Heading>
-        <div className="docs-dependency-list">
+        <div className="dv-docs-dependency-list">
           {dependencyRules.map((rule) => (
-            <div className="docs-dependency-item" key={rule}>
+            <CodeText className="dv-docs-dependency-item" key={rule}>
               {rule}
-            </div>
+            </CodeText>
           ))}
         </div>
       </Card>

@@ -180,18 +180,20 @@ function statusVariant(status: ComponentStatus) {
 
 export function ComponentReferencePage() {
   return (
-    <div className="docs-reference">
+    <div className="dv-docs-reference">
       {componentAreas.map((area) => (
-        <Card className="docs-reference__section" key={area.area} padding="lg">
+        <Card className="dv-docs-reference__section" key={area.area} padding="lg">
           <Heading level={3} size="md">
             {area.area}
           </Heading>
-          <div className="docs-reference__grid">
+          <div className="dv-docs-reference__grid">
             {area.components.map((component) => (
-              <article className="docs-reference-card" key={component.name}>
-                <div className="docs-reference-card__header">
+              <Card className="dv-docs-reference-card" key={component.name} padding="md">
+                <div className="dv-docs-reference-card__header">
                   <div>
-                    <h4>{component.name}</h4>
+                    <Heading level={4} size="sm">
+                      {component.name}
+                    </Heading>
                     <code>{component.packageName}</code>
                   </div>
                   <Badge
@@ -206,7 +208,7 @@ export function ComponentReferencePage() {
                 <Text tone="muted" size="sm">
                   {component.notes}
                 </Text>
-              </article>
+              </Card>
             ))}
           </div>
         </Card>

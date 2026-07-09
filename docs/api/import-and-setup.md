@@ -1,0 +1,57 @@
+# Import And Setup
+
+Dravyn UI is package-based. Import only the packages and CSS that your app uses.
+
+## Recommended CSS Order
+
+```ts
+import "@dravyn/ui-core/styles/index.css";
+import "@dravyn/ui-components/styles/index.css";
+import "@dravyn/ui-data-grid/styles/index.css";
+```
+
+Use this order when an app renders core tokens, shared components, and the data grid together.
+
+## Why Order Matters
+
+| CSS import | Why it comes here |
+| --- | --- |
+| `@dravyn/ui-core/styles/index.css` | Defines shared `--dv-*` tokens, themes, density, and utilities. |
+| `@dravyn/ui-components/styles/index.css` | Defines shared component classes that consume `--dv-*` tokens. |
+| `@dravyn/ui-data-grid/styles/index.css` | Defines `udg-*` grid classes and `--udg-*` variables, with fallbacks to `--dv-*` tokens where practical. |
+
+Apps that only use `@dravyn/ui-core` and `@dravyn/ui-components` do not need to import data-grid CSS. Apps that only use the data grid should still prefer importing `ui-core` first for shared token alignment, but the grid CSS includes fallback values so it can render correctly without forcing every consumer to import all CSS.
+
+## JavaScript Imports
+
+```tsx
+import { Button, Card } from "@dravyn/ui-components";
+import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+```
+
+## Theme Overrides
+
+Use `--dv-*` tokens for app-wide theming:
+
+```css
+.my-app {
+  --dv-primary: #003b71;
+  --dv-radius-md: 10px;
+}
+```
+
+Use `--udg-*` tokens for grid-specific overrides:
+
+```css
+.my-app .udg {
+  --udg-row-height: 42px;
+  --udg-header-bg: #f8fafc;
+}
+```
+
+## Rules
+
+- Do not edit package CSS files in consuming apps.
+- Prefer component props and CSS variables before custom class overrides.
+- Keep app-specific styles scoped to the consuming application.
+- Do not import forbidden UI frameworks to style Dravyn components.

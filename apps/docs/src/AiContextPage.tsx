@@ -17,7 +17,7 @@ function formatJson(content: string) {
 export function AiContextPage({ route }: AiContextPageProps) {
   if (route.kind === "json") {
     return (
-      <Card className="docs-reference" padding="lg">
+      <Card className="dv-docs-reference" padding="lg">
         <Heading level={3} size="md">
           Machine-readable component metadata
         </Heading>
@@ -25,7 +25,7 @@ export function AiContextPage({ route }: AiContextPageProps) {
           This JSON is intended for tools and AI agents. Human-facing component
           guidance remains in the markdown docs and reference page.
         </Text>
-        <pre className="docs-markdown__code docs-json">
+        <pre className="dv-docs-markdown__code dv-docs-json">
           <code>{formatJson(route.content ?? "")}</code>
         </pre>
       </Card>

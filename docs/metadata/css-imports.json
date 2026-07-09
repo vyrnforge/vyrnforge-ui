@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
+  "sourceOfTruth": "docs/api/import-and-setup.md",
   "recommendedOrder": [
     "@dravyn/ui-core/styles/index.css",
     "@dravyn/ui-components/styles/index.css",

@@ -4,8 +4,19 @@
     "docs/roadmap/01-component-inventory.md",
     "docs/packages/ui-core.md",
     "docs/packages/ui-components.md",
-    "docs/packages/ui-data-grid.md"
+    "docs/packages/ui-data-grid.md",
+    "docs/api/ui-core-api.md",
+    "docs/api/ui-components-api.md",
+    "docs/api/ui-data-grid-api.md"
   ],
+  "apiDocs": {
+    "@dravyn/ui-core": "docs/api/ui-core-api.md",
+    "@dravyn/ui-components": "docs/api/ui-components-api.md",
+    "@dravyn/ui-data-grid": "docs/api/ui-data-grid-api.md",
+    "cssTokens": "docs/api/css-token-reference.md",
+    "cssClasses": "docs/api/css-class-reference.md",
+    "publicVsInternal": "docs/api/public-vs-internal-api.md"
+  },
   "components": [
     {
       "id": "theme-tokens",

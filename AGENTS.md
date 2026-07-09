@@ -15,7 +15,9 @@ Do not treat this repository as only a data-grid project.
 1. `.ai/AI_CONTEXT.md`
 2. `docs/README.md`
 3. Relevant package doc under `docs/packages/`
-4. Relevant architecture doc under `docs/architecture/`
+4. Relevant public API doc under `docs/api/`
+5. Relevant metadata under `docs/metadata/`
+6. Relevant architecture doc under `docs/architecture/`
 
 `docs/README.md` is the single documentation entrypoint. Do not create a competing source-of-truth document for project identity, package boundaries, state policy, styling, roadmap, or benchmarks.
 
@@ -73,8 +75,12 @@ For documentation-only changes, validate file placement, links, and `git diff --
 If public API changes, update:
 
 - package README
+- `docs/api/`
 - docs index if needed
+- metadata under `docs/metadata/`
 - playground example
 - AI docs if agent behavior changes
+
+Before using a Dravyn component, token, grid contract, or adapter, check `docs/api/` and `docs/metadata/`. Do not use undocumented internal APIs unless explicitly asked.
 
 If documentation becomes outdated, move it to `docs/archive/<yyyy-mm-topic>/` with an archive note pointing to the replacement.

@@ -52,6 +52,16 @@
       "reason": "Planned components may not exist in package exports yet."
     },
     {
+      "id": "check-public-api-docs",
+      "rule": "Before using a Dravyn component or contract, check docs/api and docs/metadata.",
+      "reason": "API docs define public usage while metadata provides structured lookup."
+    },
+    {
+      "id": "avoid-internal-api",
+      "rule": "Do not use undocumented internal APIs unless explicitly asked.",
+      "reason": "Only documented exports, props, tokens, and adapter contracts are stable public API."
+    },
+    {
       "id": "follow-boundaries",
       "rule": "Follow package boundaries.",
       "reason": "ui-core must stay lowest-level, ui-components must not depend on ui-data-grid."
@@ -59,6 +69,7 @@
   ],
   "lookupOrder": [
     "docs/README.md",
+    "docs/api/README.md",
     "docs/metadata/component-status.json",
     "docs/metadata/components.json",
     "docs/metadata/packages.json",

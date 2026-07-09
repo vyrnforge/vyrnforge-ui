@@ -78,7 +78,7 @@ function renderTextLine(line: string, index: number) {
   const trimmed = line.trim();
 
   if (!trimmed) {
-    return <div aria-hidden="true" className="docs-markdown__space" key={index} />;
+    return <div aria-hidden="true" className="dv-docs-markdown__space" key={index} />;
   }
 
   const headingMatch = /^(#{1,4})\s+(.*)$/.exec(trimmed);
@@ -90,7 +90,7 @@ function renderTextLine(line: string, index: number) {
       | "h4"
       | "h5";
     return (
-      <HeadingTag className={`docs-markdown__heading docs-markdown__heading--${level}`} key={index}>
+      <HeadingTag className={`dv-docs-markdown__heading dv-docs-markdown__heading--${level}`} key={index}>
         {parseInlineCode(headingMatch[2])}
       </HeadingTag>
     );
@@ -98,7 +98,7 @@ function renderTextLine(line: string, index: number) {
 
   if (/^[-*]\s+/.test(trimmed)) {
     return (
-      <div className="docs-markdown__list-item" key={index}>
+      <div className="dv-docs-markdown__list-item" key={index}>
         {parseInlineCode(trimmed.replace(/^[-*]\s+/, ""))}
       </div>
     );
@@ -106,7 +106,7 @@ function renderTextLine(line: string, index: number) {
 
   if (/^\d+\.\s+/.test(trimmed)) {
     return (
-      <div className="docs-markdown__list-item docs-markdown__list-item--ordered" key={index}>
+      <div className="dv-docs-markdown__list-item dv-docs-markdown__list-item--ordered" key={index}>
         {parseInlineCode(trimmed.replace(/^\d+\.\s+/, ""))}
       </div>
     );
@@ -114,14 +114,14 @@ function renderTextLine(line: string, index: number) {
 
   if (trimmed.startsWith(">")) {
     return (
-      <blockquote className="docs-markdown__quote" key={index}>
+      <blockquote className="dv-docs-markdown__quote" key={index}>
         {parseInlineCode(trimmed.replace(/^>\s?/, ""))}
       </blockquote>
     );
   }
 
   return (
-    <p className="docs-markdown__paragraph" key={index}>
+    <p className="dv-docs-markdown__paragraph" key={index}>
       {parseInlineCode(trimmed)}
     </p>
   );
@@ -143,8 +143,8 @@ function renderTable(lines: string[], index: number) {
   }
 
   return (
-    <div className="docs-table-wrap" key={index}>
-      <table className="docs-markdown__table">
+    <div className="dv-docs-table-wrap" key={index}>
+      <table className="dv-docs-markdown__table">
         <thead>
           <tr>
             {header.map((cell) => (
@@ -170,11 +170,11 @@ export function MarkdownView({ markdown }: MarkdownViewProps) {
   const blocks = splitBlocks(markdown);
 
   return (
-    <article className="docs-markdown">
+    <article className="dv-docs-markdown">
       {blocks.map((block, index) => {
         if (block.type === "code") {
           return (
-            <pre className="docs-markdown__code" key={index}>
+            <pre className="dv-docs-markdown__code" key={index}>
               <code>{block.lines.join("\n")}</code>
             </pre>
           );

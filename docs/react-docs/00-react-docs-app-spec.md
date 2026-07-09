@@ -58,6 +58,15 @@ Each example page should include:
 - AI usage notes
 - related components
 
+## Dogfooding rule
+
+The docs app must consume Dravyn UI for common UI primitives.
+
+- Use `@dravyn/ui-components` for buttons, badges, cards, panels, inputs, selects, empty states, alerts, headings, and text.
+- Keep docs app CSS limited to documentation layout, sidebar layout, markdown presentation, metadata master-detail layout, responsive layout, and code block presentation.
+- Do not create a second docs-only design system with custom generic cards, badges, buttons, inputs, panels, or alerts.
+- If a missing primitive is needed, prefer adding it to `@dravyn/ui-components` in a dedicated component sprint instead of building a reusable replacement inside `apps/docs`.
+
 ## Do not do
 
 - Do not make every example a table.

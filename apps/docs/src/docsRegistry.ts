@@ -14,6 +14,14 @@ import doNotBuildYet from "../../../docs/roadmap/03-do-not-build-yet.md?raw";
 import uiCoreDoc from "../../../docs/packages/ui-core.md?raw";
 import uiComponentsDoc from "../../../docs/packages/ui-components.md?raw";
 import uiDataGridDoc from "../../../docs/packages/ui-data-grid.md?raw";
+import apiOverview from "../../../docs/api/README.md?raw";
+import apiImportSetup from "../../../docs/api/import-and-setup.md?raw";
+import apiUiCore from "../../../docs/api/ui-core-api.md?raw";
+import apiUiComponents from "../../../docs/api/ui-components-api.md?raw";
+import apiUiDataGrid from "../../../docs/api/ui-data-grid-api.md?raw";
+import apiCssTokens from "../../../docs/api/css-token-reference.md?raw";
+import apiCssClasses from "../../../docs/api/css-class-reference.md?raw";
+import apiPublicVsInternal from "../../../docs/api/public-vs-internal-api.md?raw";
 import docsAppSpec from "../../../docs/react-docs/00-react-docs-app-spec.md?raw";
 import routeMap from "../../../docs/react-docs/01-route-map.md?raw";
 import exampleStandards from "../../../docs/react-docs/02-example-standards.md?raw";
@@ -235,6 +243,87 @@ export const docsRoutes: DocsRoute[] = [
     content: metadataPackages
   },
   {
+    id: "api-overview",
+    title: "API Overview",
+    group: "API Reference",
+    description: "Public API overview and reference index.",
+    sourcePath: "docs/api/README.md",
+    aiPurpose: "Use this before consuming Dravyn public APIs.",
+    tags: ["api", "canonical"],
+    canonical: true,
+    content: apiOverview
+  },
+  {
+    id: "api-import-and-setup",
+    title: "Import and Setup",
+    group: "API Reference",
+    description: "Package import and CSS setup order.",
+    sourcePath: "docs/api/import-and-setup.md",
+    aiPurpose: "Use this before importing package CSS or components.",
+    tags: ["api", "imports", "css"],
+    content: apiImportSetup
+  },
+  {
+    id: "api-ui-core",
+    title: "ui-core API",
+    group: "API Reference",
+    description: "Public token, theme, density, utility, and helper API.",
+    sourcePath: "docs/api/ui-core-api.md",
+    aiPurpose: "Use this before consuming ui-core tokens or theme helpers.",
+    tags: ["api", "ui-core"],
+    content: apiUiCore
+  },
+  {
+    id: "api-ui-components",
+    title: "ui-components API",
+    group: "API Reference",
+    description: "Public React component API overview.",
+    sourcePath: "docs/api/ui-components-api.md",
+    aiPurpose: "Use this before using Dravyn components.",
+    tags: ["api", "ui-components"],
+    content: apiUiComponents
+  },
+  {
+    id: "api-ui-data-grid",
+    title: "ui-data-grid API",
+    group: "API Reference",
+    description: "Public data-grid component, state, adapter, and styling API.",
+    sourcePath: "docs/api/ui-data-grid-api.md",
+    aiPurpose: "Use this before consuming grid components, state, or adapters.",
+    tags: ["api", "ui-data-grid"],
+    content: apiUiDataGrid
+  },
+  {
+    id: "api-css-tokens",
+    title: "CSS Tokens",
+    group: "API Reference",
+    description: "Stable public CSS variables.",
+    sourcePath: "docs/api/css-token-reference.md",
+    aiPurpose: "Use this before overriding Dravyn CSS variables.",
+    tags: ["api", "css", "tokens"],
+    content: apiCssTokens
+  },
+  {
+    id: "api-css-classes",
+    title: "CSS Classes",
+    group: "API Reference",
+    description: "Public class prefixes and extension rules.",
+    sourcePath: "docs/api/css-class-reference.md",
+    aiPurpose: "Use this before relying on Dravyn class names.",
+    tags: ["api", "css", "classes"],
+    content: apiCssClasses
+  },
+  {
+    id: "api-public-vs-internal",
+    title: "Public vs Internal API",
+    group: "API Reference",
+    description: "Defines stable public API and private implementation details.",
+    sourcePath: "docs/api/public-vs-internal-api.md",
+    aiPurpose: "Use this before importing non-obvious APIs or deep paths.",
+    tags: ["api", "boundaries"],
+    content: apiPublicVsInternal
+  },
+  {
     id: "metadata-components",
     title: "Metadata / Components",
     group: "Metadata",
@@ -411,6 +500,7 @@ export const docsGroups = [
   "Architecture",
   "Roadmap",
   "Packages",
+  "API Reference",
   "Metadata",
   "React Docs",
   "AI"

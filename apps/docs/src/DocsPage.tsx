@@ -1,4 +1,4 @@
-import { Badge, Card, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Card, Heading, InlineMessage, Text } from "@dravyn/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
@@ -12,16 +12,16 @@ type DocsPageProps = {
 
 export function DocsPage({ route }: DocsPageProps) {
   return (
-    <main className="docs-page">
-      <Card className="docs-page__intro" padding="lg">
-        <div className="docs-page__intro-header">
+    <main className="dv-docs-page">
+      <Card className="dv-docs-page__intro" padding="lg">
+        <div className="dv-docs-page__intro-header">
           <div>
-            <div className="docs-page__source">{route.sourcePath}</div>
+            <div className="dv-docs-page__source">{route.sourcePath}</div>
             <Heading level={2} size="lg">
               {route.title}
             </Heading>
           </div>
-          <div className="docs-page__badges">
+          <div className="dv-docs-page__badges">
             {route.canonical && (
               <Badge variant="success" tone="subtle">
                 Canonical
@@ -36,9 +36,9 @@ export function DocsPage({ route }: DocsPageProps) {
         </div>
         {route.description && <Text tone="muted">{route.description}</Text>}
         {route.aiPurpose && (
-          <div className="docs-ai-purpose">
-            <strong>AI purpose:</strong> {route.aiPurpose}
-          </div>
+          <InlineMessage className="dv-docs-ai-purpose" title="AI purpose" variant="info">
+            {route.aiPurpose}
+          </InlineMessage>
         )}
       </Card>
 
