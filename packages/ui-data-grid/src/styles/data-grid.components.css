@@ -378,12 +378,25 @@
 
 .udg-table {
   width: 100%;
-  min-width: 560px;
+  min-width: var(--udg-table-min-width, 560px);
   border-collapse: separate;
   border-spacing: 0;
   color: var(--udg-text);
   font-size: var(--udg-font-size-md);
   table-layout: fixed;
+}
+
+.udg-selection-col {
+  width: var(--udg-selection-column-width);
+  min-width: var(--udg-selection-column-width);
+  max-width: var(--udg-selection-column-width);
+}
+
+.udg-column-col,
+.udg-header-cell {
+  width: var(--udg-column-width);
+  min-width: var(--udg-column-min-width);
+  max-width: var(--udg-column-max-width);
 }
 
 .udg-table th,

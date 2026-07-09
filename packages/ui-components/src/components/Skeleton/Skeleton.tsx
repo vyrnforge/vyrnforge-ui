@@ -2,6 +2,20 @@ import type { CSSProperties } from "react";
 import { joinClassNames } from "../../utils/classNames";
 import type { SkeletonProps } from "./Skeleton.types";
 
+type SkeletonStyleVars = CSSProperties & {
+  "--dv-skeleton-height"?: string;
+  "--dv-skeleton-radius"?: string;
+  "--dv-skeleton-width"?: string;
+};
+
+function toCssLength(value: number | string | undefined) {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return typeof value === "number" ? `${value}px` : value;
+}
+
 export function Skeleton({
   animated = true,
   className,
@@ -11,11 +25,11 @@ export function Skeleton({
   width,
   ...props
 }: SkeletonProps) {
-  const skeletonStyle: CSSProperties = {
-    ...style,
-    ...(height === undefined ? {} : { height }),
-    ...(radius === undefined ? {} : { borderRadius: radius }),
-    ...(width === undefined ? {} : { width })
+  const skeletonStyle: SkeletonStyleVars = {
+    "--dv-skeleton-height": toCssLength(height),
+    "--dv-skeleton-radius": toCssLength(radius),
+    "--dv-skeleton-width": toCssLength(width),
+    ...style
   };
 
   return (

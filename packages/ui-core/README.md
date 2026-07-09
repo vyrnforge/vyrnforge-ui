@@ -2,6 +2,8 @@
 
 Shared Dravyn UI foundation package for native-first design tokens, CSS variables, theme helpers, density tokens, and small utility classes.
 
+`@dravyn/ui-core` owns tokens and utilities only. It does not own React components, data-grid behavior, app state, adapters, or a global store.
+
 ## CSS
 
 ```tsx
@@ -32,6 +34,16 @@ Global app theme override:
   --dv-radius-md: 10px;
 }
 ```
+
+## Styling Architecture Rules
+
+- `ui-core` owns shared `--dv-*` tokens and utility classes.
+- `ui-components` owns reusable `dv-*` component classes and should consume `ui-core` tokens.
+- `ui-data-grid` owns grid-specific `udg-*` classes and maps grid variables back to `dv-*` tokens.
+- TSX should not contain static visual styling. Component TSX should define structure, behavior, accessibility, state classes, and dynamic CSS variables only.
+- CSS owns colors, spacing, borders, radius, shadows, typography, hover/focus/active/disabled states, theme behavior, and density behavior.
+- Use CSS variables for customization; do not edit package CSS directly.
+- Use `className` for structural extension and `style` or `themeVars` only for instance-level overrides.
 
 ## Theme Helpers
 

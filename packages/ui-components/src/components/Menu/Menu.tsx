@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
+import { useControllableState } from "../../hooks";
 import { joinClassNames } from "../../utils/classNames";
-import { useControllableState } from "../../utils/useControllableState";
 import { Popover } from "../Popover";
 import type { MenuItem, MenuProps } from "./Menu.types";
 

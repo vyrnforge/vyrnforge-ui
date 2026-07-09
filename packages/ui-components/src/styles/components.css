@@ -703,9 +703,9 @@
 
 .dv-skeleton {
   display: block;
-  width: 100%;
-  min-height: 16px;
-  border-radius: var(--dv-radius-md);
+  width: var(--dv-skeleton-width, 100%);
+  min-height: var(--dv-skeleton-height, 16px);
+  border-radius: var(--dv-skeleton-radius, var(--dv-radius-md));
   background:
     linear-gradient(
       90deg,

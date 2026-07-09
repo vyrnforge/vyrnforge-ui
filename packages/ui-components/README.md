@@ -17,6 +17,8 @@ import "@dravyn/ui-components/styles/index.css";
 
 `@dravyn/ui-components` consumes shared `--dv-*` variables from `@dravyn/ui-core`, so light, dark, enterprise, density, and scoped token overrides flow through the primitives.
 
+`@dravyn/ui-components` owns reusable UI primitives only. It does not own app business state, backend data, grid behavior, or a global store.
+
 ## Components
 
 - Actions: `Button`, `IconButton`, `ToolbarButton`, `ButtonGroup`, `SegmentedControl`
@@ -210,6 +212,17 @@ Dialog and drawer:
 - Use `ToolbarButton` when an action appears inside a dense toolbar and may need icon plus text.
 - Use `SegmentedControl` for small mutually exclusive modes such as density, view type, or theme preview.
 - Do not hide destructive actions behind unlabeled icons.
+
+## Styling Architecture Rules
+
+- `ui-core` owns shared `--dv-*` tokens for color, surfaces, spacing, radius, shadows, typography, focus, and density.
+- `ui-components` owns reusable component styles through `dv-*` classes such as `dv-button`, `dv-icon-button`, `dv-input`, `dv-badge`, `dv-popover`, and `dv-dialog`.
+- TSX should define structure, behavior, accessibility, state classes, and dynamic CSS variables only.
+- CSS owns static visual styling such as colors, spacing, borders, radius, shadows, typography, hover/focus/active/disabled states, themes, and density.
+- Use CSS variables for customization. Prefer scoped token overrides over editing package CSS directly.
+- Use `className` for structural extension and `style` only for instance-level overrides or dynamic runtime values.
+- Keep data-grid-specific styling in `@dravyn/ui-data-grid` with `udg-*` classes mapped to shared `dv-*` tokens.
+- Shared interaction hooks live under `src/hooks/` when they are React-specific to components.
 
 ## Dependency Policy
 

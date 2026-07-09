@@ -10,7 +10,14 @@ export { DataGridEmptyState } from "./components/DataGridEmptyState";
 export { DataGridErrorState } from "./components/DataGridErrorState";
 export { DataGridPagination } from "./components/DataGridPagination";
 
-export { createGridState } from "./core/createGridState";
+export {
+  createGridState,
+  defaultDataGridState,
+  gridStateActions,
+  gridStateReducer,
+  mergeGridState,
+  selectGridQueryState
+} from "./state";
 export { applySearch } from "./core/applySearch";
 export { applyFilters } from "./core/applyFilters";
 export { applySorting } from "./core/applySorting";
@@ -71,8 +78,11 @@ export {
   selectRows,
   toggleRowSelection
 } from "./core/rowSelection";
-export { createLocalStorageGridPersistence } from "./core/gridPersistence";
-export { buildDataGridExportRequest } from "./core/exportRequestBuilder";
+export {
+  buildDataGridExportRequest,
+  buildDataGridServerQuery,
+  createLocalStorageGridPersistence
+} from "./adapters";
 export {
   createDataGridTheme,
   mergeDataGridTheme,
@@ -83,11 +93,16 @@ export {
   dataGridEnterpriseTheme,
   dataGridLightTheme
 } from "./theme/dataGridThemes";
-export { useDataGridState } from "./hooks/useDataGridState";
-export { useControlledState } from "./hooks/useControlledState";
-export { useDebouncedValue } from "./hooks/useDebouncedValue";
-export { useColumnResize } from "./hooks/useColumnResize";
+export {
+  useColumnResize,
+  useControlledState,
+  useDataGridState,
+  useDebouncedValue
+} from "./hooks";
 
+export type {
+  GridStateAction
+} from "./state";
 export type {
   DataGridBulkAction,
   DataGridBulkActionContext,
@@ -135,6 +150,11 @@ export type {
   DataGridExportScope
 } from "./types/export.types";
 export type { LocalStorageGridPersistenceOptions } from "./core/gridPersistence";
+export type {
+  BuildDataGridServerQueryParams,
+  DataGridServerQuery,
+  LocalStorageGridPersistenceOptions as AdapterLocalStorageGridPersistenceOptions
+} from "./adapters";
 export type {
   DataGridPageSelectionState,
   DataGridRowIdGetter,

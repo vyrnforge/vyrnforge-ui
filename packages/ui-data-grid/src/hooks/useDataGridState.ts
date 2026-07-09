@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { createGridState } from "../core/createGridState";
+import { createGridState } from "../state";
 import type { DataGridState } from "../types/dataGrid.types";
 import { useControlledState } from "./useControlledState";
 

@@ -41,14 +41,11 @@ import {
   hideOptionalColumns,
   moveColumnBefore,
   moveColumnOrder,
-  pickPersistableGridState,
-  resetGridViewState,
   resolveOrderedColumns,
   resolveVisibleColumns,
   showAllColumns,
   updateColumnVisibility
 } from "../core/columnManagement";
-import { createGridState } from "../core/createGridState";
 import {
   clearSelection,
   deselectRows,
@@ -60,9 +57,13 @@ import {
   selectRows,
   toggleRowSelection
 } from "../core/rowSelection";
+import {
+  createGridState,
+  pickPersistableGridState,
+  resetGridViewState
+} from "../state";
 import { toDataGridThemeStyle } from "../theme/createDataGridTheme";
-import { useColumnResize } from "../hooks/useColumnResize";
-import { useDataGridState } from "../hooks/useDataGridState";
+import { useColumnResize, useDataGridState } from "../hooks";
 import type { DataGridColumnDef } from "../types/column.types";
 import type {
   DataGridDisplayRow,
@@ -99,6 +100,15 @@ type IndeterminateCheckboxProps = Omit<
   "size" | "type"
 > & {
   indeterminate?: boolean;
+};
+
+type DataGridRuntimeStyle = CSSProperties & {
+  "--udg-column-max-width"?: string;
+  "--udg-column-min-width"?: string;
+  "--udg-column-width"?: string;
+  "--udg-group-depth"?: number;
+  "--udg-selection-column-width"?: string;
+  "--udg-table-min-width"?: string;
 };
 
 function IndeterminateCheckbox({
@@ -359,9 +369,9 @@ export function UniversalDataGrid<
   const resolvedDensity = density ?? gridState.density;
   const rootStyle: CSSProperties = {
     ...toDataGridThemeStyle(themeVars),
-    ...style,
     ...(height === undefined ? {} : { height }),
-    ...(maxHeight === undefined ? {} : { maxHeight })
+    ...(maxHeight === undefined ? {} : { maxHeight }),
+    ...style
   };
   const hasQuery = gridState.search.trim().length > 0 || gridState.filters.length > 0;
 
@@ -983,28 +993,27 @@ export function UniversalDataGrid<
         <table
           className="udg-table"
           style={{
-            minWidth: tableMinWidth + selectionColumnWidth
-          }}
+            "--udg-table-min-width": `${tableMinWidth + selectionColumnWidth}px`
+          } as DataGridRuntimeStyle}
         >
           <colgroup>
             {selectionEnabled && (
               <col
                 className="udg-selection-col"
                 style={{
-                  width: selectionColumnWidth,
-                  minWidth: selectionColumnWidth,
-                  maxWidth: selectionColumnWidth
-                }}
+                  "--udg-selection-column-width": `${selectionColumnWidth}px`
+                } as DataGridRuntimeStyle}
               />
             )}
             {columnWidths.map(({ column, maxWidth, minWidth, width }) => (
               <col
+                className="udg-column-col"
                 key={column.id}
                 style={{
-                  width,
-                  minWidth,
-                  maxWidth
-                }}
+                  "--udg-column-width": `${width}px`,
+                  "--udg-column-min-width": `${minWidth}px`,
+                  "--udg-column-max-width": `${maxWidth}px`
+                } as DataGridRuntimeStyle}
               />
             ))}
           </colgroup>
@@ -1077,10 +1086,10 @@ export function UniversalDataGrid<
                         : ""
                     ].filter(Boolean).join(" ")}
                     style={{
-                      width,
-                      minWidth,
-                      maxWidth
-                    }}
+                      "--udg-column-width": `${width}px`,
+                      "--udg-column-min-width": `${minWidth}px`,
+                      "--udg-column-max-width": `${maxWidth}px`
+                    } as DataGridRuntimeStyle}
                     scope="col"
                     onDragLeave={() => setHeaderDropTarget(null)}
                     onDragOver={(event) => {
@@ -1364,7 +1373,7 @@ export function UniversalDataGrid<
                           className="udg-group-row__content"
                           style={{
                             "--udg-group-depth": group.depth
-                          } as CSSProperties}
+                          } as DataGridRuntimeStyle}
                         >
                           {groupHeader}
                         </div>
@@ -1435,7 +1444,7 @@ export function UniversalDataGrid<
                               column.id === orderedColumns[0]?.id && depth > 0
                                 ? ({
                                     "--udg-group-depth": depth
-                                  } as CSSProperties)
+                                  } as DataGridRuntimeStyle)
                                 : undefined
                             }
                           >

@@ -1,22 +1,12 @@
-import { createGridState } from "./createGridState";
 import type { DataGridColumnDef } from "../types/column.types";
-import type {
-  DataGridPersistKey,
-  DataGridPersistedState,
-  DataGridState
-} from "../types/dataGrid.types";
-
-export const defaultPersistKeys: DataGridPersistKey[] = [
-  "search",
-  "filters",
-  "sort",
-  "pagination",
-  "columnVisibility",
-  "columnOrder",
-  "columnSizing",
-  "grouping",
-  "density"
-];
+import type { DataGridState } from "../types/dataGrid.types";
+export {
+  resetGridViewState
+} from "../state/gridState.merge";
+export {
+  defaultPersistKeys,
+  pickPersistableGridState
+} from "../state/gridState.selectors";
 
 const isColumnVisible = <RowData extends Record<string, unknown>>(
   column: DataGridColumnDef<RowData>,
@@ -195,80 +185,4 @@ export function moveColumnBefore(
 
   nextOrder.splice(placement === "after" ? targetIndex + 1 : targetIndex, 0, columnId);
   return nextOrder;
-}
-
-export function resetGridViewState(
-  currentState: DataGridState,
-  defaultState?: Partial<DataGridState>
-) {
-  const baselineState = createGridState(defaultState);
-
-  return {
-    ...currentState,
-    search: baselineState.search,
-    filters: baselineState.filters,
-    sort: baselineState.sort,
-    sorting: baselineState.sort,
-    pagination: {
-      ...currentState.pagination,
-      ...baselineState.pagination,
-      pageIndex: 0
-    },
-    columnVisibility: baselineState.columnVisibility,
-    columnOrder: baselineState.columnOrder,
-    columnSizing: baselineState.columnSizing,
-    grouping: baselineState.grouping,
-    expandedGroupIds: baselineState.expandedGroupIds,
-    selectedRowIds: baselineState.selectedRowIds,
-    density: baselineState.density
-  };
-}
-
-export function pickPersistableGridState(
-  state: DataGridState,
-  keys: DataGridPersistKey[] = defaultPersistKeys
-): DataGridPersistedState {
-  const persistableState: DataGridPersistedState = {};
-  const keySet = new Set(keys);
-
-  if (keySet.has("search")) {
-    persistableState.search = state.search;
-  }
-
-  if (keySet.has("filters")) {
-    persistableState.filters = state.filters;
-  }
-
-  if (keySet.has("sort")) {
-    persistableState.sort = state.sort;
-  }
-
-  if (keySet.has("pagination")) {
-    persistableState.pagination = {
-      pageIndex: 0,
-      pageSize: state.pagination.pageSize
-    };
-  }
-
-  if (keySet.has("columnVisibility")) {
-    persistableState.columnVisibility = state.columnVisibility;
-  }
-
-  if (keySet.has("columnOrder")) {
-    persistableState.columnOrder = state.columnOrder;
-  }
-
-  if (keySet.has("columnSizing")) {
-    persistableState.columnSizing = state.columnSizing;
-  }
-
-  if (keySet.has("grouping")) {
-    persistableState.grouping = state.grouping;
-  }
-
-  if (keySet.has("density")) {
-    persistableState.density = state.density;
-  }
-
-  return persistableState;
 }

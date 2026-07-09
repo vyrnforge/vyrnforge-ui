@@ -43,6 +43,18 @@ Recommended CSS import order:
 
 `ui-core` owns shared `--dv-*` tokens. `ui-components` consumes those shared variables directly. `ui-data-grid` keeps its backward-compatible `--udg-*` variables, but maps many defaults to `--dv-*` tokens when core CSS is present.
 
+## State And Architecture Model
+
+- Apps own backend data, permissions, workflows, and business state.
+- Dravyn packages do not create a global store and do not depend on Redux, Zustand, TanStack, or app state libraries.
+- `ui-core` owns tokens, themes, density, and utilities.
+- `ui-components` owns reusable native primitives and `dv-*` styles.
+- `ui-data-grid` owns grid-specific behavior, controlled/uncontrolled view state, pure grid helpers, and adapter contracts.
+- Data-grid persistence is adapter-based and preference-only.
+- Server and export integrations should start from query/request contracts; apps own fetching and file generation.
+
+Architecture details live in `docs/architecture/`.
+
 Global app theme override:
 
 ```css
@@ -110,6 +122,12 @@ docs/10-playground-and-documentation-strategy.md
 docs/11-quality-accessibility-test-strategy.md
 docs/12-codex-master-implementation-prompt.md
 docs/13-codex-repo-rebuild-prompt.md
+docs/architecture/00-state-distribution.md
+docs/architecture/01-package-boundaries.md
+docs/architecture/02-data-grid-clean-architecture.md
+docs/architecture/03-component-clean-architecture.md
+docs/architecture/04-adapter-patterns.md
+docs/architecture/05-public-api-stability.md
 ```
 
 ## Dependency Policy

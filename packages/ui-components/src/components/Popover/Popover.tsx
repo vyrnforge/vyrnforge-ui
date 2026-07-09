@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
+import { useControllableState } from "../../hooks";
 import { joinClassNames } from "../../utils/classNames";
-import { useControllableState } from "../../utils/useControllableState";
 import type { PopoverProps } from "./Popover.types";
 
 export function Popover({

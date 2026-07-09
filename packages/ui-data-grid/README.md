@@ -88,6 +88,21 @@ Recommended customization order:
 3. Use `themeVars` for per-instance overrides.
 4. Avoid editing package CSS directly.
 
+## State And Adapters
+
+The app owns backend rows, permissions, workflows, and business state. The grid owns local view state only when it is uncontrolled. Controlled integrations should pass `state` and observe `onStateChange`; the parent remains the source of truth.
+
+Grid state organization:
+
+- `state/` owns defaults, merge/reset logic, reducer actions, and selectors.
+- `core/` owns pure grid algorithms.
+- `hooks/` coordinates React interactions.
+- `adapters/` owns persistence, server query, and export request boundaries.
+
+Persistence is adapter-based and stores preferences only. Server integration should use query contracts and fetch in the app. Export integration should use request contracts and generate files outside the default grid package.
+
+No global store is created inside `@dravyn/ui-data-grid`.
+
 ## Column Management
 
 Columns can be hidden by default and protected from hiding:
