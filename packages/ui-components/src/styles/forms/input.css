@@ -1,0 +1,63 @@
+.dv-input,
+.dv-select {
+  width: 100%;
+  min-height: var(--dv-control-height);
+  border: 1px solid var(--dv-border);
+  border-radius: var(--dv-radius-md);
+  padding: 0 var(--dv-control-padding-x);
+  color: var(--dv-text);
+  background: var(--dv-surface);
+  font-size: var(--dv-font-size-md);
+  transition:
+    border-color var(--dv-transition-fast),
+    box-shadow var(--dv-transition-fast),
+    background-color var(--dv-transition-fast);
+}
+.dv-input--sm,
+.dv-select--sm {
+  min-height: 30px;
+  padding-inline: 10px;
+  font-size: var(--dv-font-size-sm);
+}
+.dv-input--lg,
+.dv-select--lg {
+  min-height: 42px;
+  padding-inline: 14px;
+  font-size: var(--dv-font-size-lg);
+}
+.dv-input:hover:not(:disabled),
+.dv-select:hover:not(:disabled) {
+  border-color: var(--dv-border-strong);
+}
+.dv-input[aria-invalid=true],
+.dv-select[aria-invalid=true],
+.dv-checkbox[aria-invalid=true] {
+  border-color: var(--dv-danger);
+}
+.dv-textarea {
+  min-height: 96px;
+  padding-block: 9px;
+  resize: vertical;
+  line-height: var(--dv-line-height-md);
+}
+.dv-search-input {
+  position: relative;
+  display: grid;
+}
+.dv-search-input .dv-input {
+  padding-left: 34px;
+}
+.dv-search-input__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  color: var(--dv-text-muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.dv-number-input,
+.dv-date-input,
+.dv-datetime-input {
+  font-variant-numeric: tabular-nums;
+}

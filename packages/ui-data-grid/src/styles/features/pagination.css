@@ -1,0 +1,41 @@
+.udg-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 44px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--udg-border);
+  margin-top: var(--udg-space-3);
+  padding-top: var(--udg-space-3);
+  color: var(--udg-text-muted);
+  font-size: var(--udg-font-size-sm);
+}
+.udg-page-size {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--udg-space-2);
+}
+.udg-page-size-select {
+  padding: 4px 28px 4px 8px;
+  cursor: pointer;
+}
+.udg-pagination-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+.udg-pagination-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  padding: 6px 10px;
+  color: var(--udg-text);
+  cursor: pointer;
+}
+.udg-pagination-button:disabled {
+  color: var(--udg-control-disabled-text);
+  background: var(--udg-control-disabled-bg);
+  cursor: default;
+  opacity: 0.75;
+}

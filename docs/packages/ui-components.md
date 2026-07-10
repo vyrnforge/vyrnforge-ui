@@ -36,3 +36,5 @@ import "@dravyn/ui-components/styles/index.css";
 ## Usage principle
 
 Use text buttons for primary business actions. Use IconButton/ToolbarButton for repeated utility actions. Every icon-only action must have an accessible label.
+
+Use `AppShell` `scrollMode`, `headerPosition`, and `sidebarPosition` props for persistent enterprise navigation. Do not patch app-specific sidebar stickiness when the shell API can express the layout.

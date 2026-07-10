@@ -1,0 +1,29 @@
+.dv-drawer__overlay {
+  align-items: stretch;
+  justify-items: end;
+}
+.dv-drawer--left .dv-drawer__overlay {
+  justify-items: start;
+}
+.dv-drawer--bottom .dv-drawer__overlay {
+  align-items: end;
+  justify-items: stretch;
+}
+.dv-drawer__panel {
+  height: 100vh;
+  width: min(100vw, 420px);
+}
+.dv-drawer__panel--sm {
+  width: min(100vw, 340px);
+}
+.dv-drawer__panel--md {
+  width: min(100vw, 420px);
+}
+.dv-drawer__panel--lg {
+  width: min(100vw, 560px);
+}
+.dv-drawer__panel--bottom {
+  width: 100%;
+  height: min(70vh, 520px);
+  border-radius: var(--dv-radius-lg) var(--dv-radius-lg) 0 0;
+}

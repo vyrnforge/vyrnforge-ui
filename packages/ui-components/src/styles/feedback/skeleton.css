@@ -1,0 +1,17 @@
+.dv-skeleton {
+  display: block;
+  width: var(--dv-skeleton-width, 100%);
+  min-height: var(--dv-skeleton-height, 16px);
+  border-radius: var(--dv-skeleton-radius, var(--dv-radius-md));
+  background:
+    linear-gradient(
+      90deg,
+      var(--dv-surface-subtle),
+      color-mix(in srgb, var(--dv-surface-subtle) 55%, var(--dv-border)),
+      var(--dv-surface-subtle));
+  background-size: 220% 100%;
+  animation: dv-skeleton 1.1s ease-in-out infinite;
+}
+.dv-skeleton--static {
+  animation: none;
+}

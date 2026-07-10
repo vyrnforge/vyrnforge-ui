@@ -22,8 +22,8 @@ export function SettingsPage() {
   });
 
   return (
-    <section className="playground-panel settings-panel">
-      <div className="section-heading">
+    <section className="dv-playground-panel dv-playground-settings-panel">
+      <div className="dv-playground-section-heading">
         <div>
           <Heading size="md">Workspace settings</Heading>
           <Text tone="muted">Sectioned settings built from native controls and shared tokens.</Text>
@@ -60,7 +60,7 @@ export function SettingsPage() {
           { value: "annual", label: "Annual" }
         ]}
       />
-      <div className="settings-switch-list">
+      <div className="dv-playground-settings-switch-list">
         <Switch
           checked={settings.email}
           label="Send workflow email notifications"

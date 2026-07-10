@@ -15,19 +15,20 @@ import {
 
 export function AdminShellPage() {
   return (
-    <section className="playground-panel">
+    <section className="dv-playground-panel">
       <PageHeader
         description="A dense internal-operations shell with a persistent top bar, sidebar navigation, page header, toolbar, and work panels."
         status={<Badge variant="info">admin pattern</Badge>}
         title="Admin shell pattern"
       />
       <AppShell
-        className="shell-preview"
+        className="dv-playground-shell-preview"
+        fullHeight={false}
         header={
           <TopNav
             brand={
-              <span className="playground-top-brand">
-                <span className="playground-brand__mark">D</span>
+              <span className="dv-playground-top-brand">
+                <span className="dv-playground-brand__mark">D</span>
                 Operations Console
               </span>
             }
@@ -40,6 +41,9 @@ export function AdminShellPage() {
             userArea={<Badge tone="subtle">Admin</Badge>}
           />
         }
+        headerPosition="sticky"
+        minHeight={520}
+        scrollMode="content"
         sidebar={
           <SideNav
             activeId="tickets"
@@ -51,9 +55,10 @@ export function AdminShellPage() {
             ]}
           />
         }
+        sidebarPosition="sticky"
         sidebarWidth={260}
       >
-        <div className="shell-preview__content">
+        <div className="dv-playground-shell-preview__content">
           <PageHeader
             actions={<Button variant="primary">Create ticket</Button>}
             description="Prioritize incidents, review ownership, and hand off work without the shell owning app state."
@@ -61,6 +66,7 @@ export function AdminShellPage() {
             title="Ticket triage"
           />
           <PageToolbar
+            sticky
             left={<SearchInput aria-label="Search tickets" placeholder="Search tickets" />}
             right={
               <>
@@ -69,7 +75,7 @@ export function AdminShellPage() {
               </>
             }
           />
-          <div className="playground-grid two">
+          <div className="dv-playground-grid two">
             <Panel title="Queue health" description="Live operational summary.">
               <Text>4 critical tickets, 8 standard tickets, 2 pending review.</Text>
             </Panel>

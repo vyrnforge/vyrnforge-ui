@@ -20,11 +20,12 @@ export function PlaygroundShell({
 }: PlaygroundShellProps) {
   return (
     <AppShell
+      fullHeight
       header={
         <TopNav
           brand={
-            <div className="playground-top-brand">
-              <span className="playground-brand__mark">D</span>
+            <div className="dv-playground-top-brand">
+              <span className="dv-playground-brand__mark">D</span>
               <span>Dravyn UI Playground</span>
             </div>
           }
@@ -32,6 +33,8 @@ export function PlaygroundShell({
           userArea={<Badge tone="subtle">S2 shell</Badge>}
         />
       }
+      headerPosition="sticky"
+      scrollMode="content"
       sidebar={
         <PlaygroundNav
           activeRouteId={activeRouteId}
@@ -39,6 +42,7 @@ export function PlaygroundShell({
           onRouteChange={onRouteChange}
         />
       }
+      sidebarPosition="sticky"
       sidebarWidth={300}
     >
       <Page

@@ -1,0 +1,39 @@
+.udg {
+  display: flex;
+  flex-direction: column;
+  color: var(--udg-text);
+  background: var(--udg-bg);
+  font-family: var(--udg-font-family);
+  font-size: var(--udg-font-size-md);
+  line-height: 1.45;
+  min-height: 0;
+  min-width: 0;
+}
+.udg *,
+.udg *::before,
+.udg *::after {
+  box-sizing: border-box;
+}
+.udg[data-variant=card] {
+  border: 1px solid var(--udg-border);
+  border-radius: var(--udg-radius-md);
+  padding: var(--udg-space-4);
+  background: var(--udg-surface);
+  box-shadow: var(--udg-shadow-md);
+}
+.udg[data-variant=bordered] {
+  border: 1px solid var(--udg-border);
+  border-radius: var(--udg-radius-md);
+  padding: var(--udg-space-3);
+  background: var(--udg-surface);
+}
+.udg[data-variant=plain] {
+  background: transparent;
+}
+.udg-title {
+  margin: 0 0 var(--udg-space-3);
+  color: var(--udg-text-strong);
+  font-size: var(--udg-font-size-lg);
+  font-weight: var(--udg-font-weight-medium);
+  line-height: 1.25;
+}

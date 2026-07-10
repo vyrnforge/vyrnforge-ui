@@ -1,0 +1,94 @@
+.udg-toolbar {
+  display: flex;
+  min-height: var(--udg-toolbar-height);
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--udg-space-3);
+  border-bottom: 1px solid var(--udg-border);
+  margin-bottom: var(--udg-space-3);
+  padding: 0 0 var(--udg-space-3);
+  background: var(--udg-toolbar-bg);
+}
+.udg-search {
+  flex: 1 1 240px;
+  display: inline-flex;
+  position: relative;
+  min-width: min(100%, 280px);
+}
+.udg-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+.udg-search-input,
+.udg-column-menu__search input,
+.udg-group-menu select,
+.udg-page-size-select,
+.udg-pagination-button,
+.udg-toolbar-button,
+.udg-segmented-control button,
+.udg-reset-menu summary,
+.udg-group-menu__actions button,
+.udg-header-menu summary,
+.udg-header-menu__panel button,
+.udg-column-menu-panel button {
+  min-height: var(--udg-control-height);
+  border: 1px solid var(--udg-control-border);
+  border-radius: var(--udg-radius-sm);
+  color: var(--udg-text);
+  background: var(--udg-control-bg);
+  font: inherit;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background-color 140ms ease;
+}
+.udg-search-input {
+  width: 100%;
+  min-width: 0;
+}
+.udg-search-input::placeholder {
+  color: var(--udg-text-muted);
+}
+.udg-search-input:hover,
+.udg-column-menu__search input:hover,
+.udg-group-menu select:hover,
+.udg-page-size-select:hover,
+.udg-pagination-button:hover:not(:disabled),
+.udg-toolbar-button:hover,
+.udg-segmented-control button:hover:not(:disabled),
+.udg-group-menu__actions button:hover:not(:disabled),
+.udg-header-menu summary:hover,
+.udg-header-menu__panel button:hover:not(:disabled),
+.udg-column-menu-panel button:hover:not(:disabled) {
+  border-color: var(--udg-control-hover-border);
+  background: var(--udg-surface-muted);
+}
+.udg-search-input:focus-visible,
+.udg-column-menu__search input:focus-visible,
+.udg-group-menu select:focus-visible,
+.udg-page-size-select:focus-visible,
+.udg-selection-cell input:focus-visible,
+.udg-bulk-action:focus-visible,
+.udg-group-chip button:focus-visible,
+.udg-group-chip__clear:focus-visible,
+.udg-group-row__toggle:focus-visible,
+.udg-group-menu__actions button:focus-visible,
+.udg-header-button:focus-visible,
+.udg-header-drag-grip:focus-visible,
+.udg-column-resizer:focus-visible,
+.udg-header-cell__menu-button:focus-visible,
+.udg-header-menu__panel button:focus-visible,
+.udg-pagination-button:focus-visible,
+.udg-toolbar-button:focus-visible,
+.udg-segmented-control button:focus-visible,
+.udg-reset-menu summary:focus-visible,
+.udg-column-menu__more summary:focus-visible,
+.udg-column-menu-panel button:focus-visible,
+.udg-column-toggle input:focus-visible {
+  outline: 2px solid var(--udg-focus-ring);
+  outline-offset: 2px;
+  border-color: var(--udg-control-focus-border);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--udg-focus-ring) 16%, transparent);
+}

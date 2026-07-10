@@ -1,0 +1,40 @@
+.dv-empty-state,
+.dv-error-state,
+.dv-loading-state,
+.dv-card,
+.dv-panel {
+  color: var(--dv-text);
+  background: var(--dv-surface);
+}
+.dv-empty-state,
+.dv-error-state,
+.dv-loading-state {
+  display: grid;
+  gap: var(--dv-space-2);
+  justify-items: start;
+  border: 1px solid var(--dv-border);
+  border-radius: var(--dv-radius-lg);
+  padding: var(--dv-space-5);
+}
+.dv-error-state {
+  border-color: color-mix(in srgb, var(--dv-danger) 35%, var(--dv-border));
+}
+.dv-empty-state__title,
+.dv-error-state__title,
+.dv-loading-state__title {
+  margin: 0;
+  color: var(--dv-text-strong);
+  font-weight: 760;
+}
+.dv-empty-state__description,
+.dv-error-state__description,
+.dv-loading-state__description {
+  margin: 0;
+  color: var(--dv-text-muted);
+}
+.dv-state-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--dv-space-2);
+  margin-top: var(--dv-space-2);
+}

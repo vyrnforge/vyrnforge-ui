@@ -1,0 +1,67 @@
+.udg-table tbody tr {
+  background: var(--udg-row-bg);
+  transition: background-color 120ms ease;
+}
+.udg-table tbody tr:hover {
+  background: var(--udg-row-hover-bg);
+}
+.udg-table tbody tr.udg-row--selected {
+  background: var(--udg-row-selected-bg);
+}
+.udg-table tbody tr.udg-row--selected td:first-child {
+  box-shadow: inset 3px 0 0 var(--udg-primary);
+}
+.udg-table tbody tr.udg-row--clickable {
+  cursor: pointer;
+}
+.udg-table tbody tr.udg-row--disabled {
+  color: var(--udg-text-muted);
+}
+.udg-table tbody tr.udg-row--disabled .udg-cell-content {
+  opacity: 0.72;
+}
+
+.udg-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.udg-table td {
+  color: var(--udg-text);
+}
+.udg-selection-cell {
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  padding-right: 8px;
+  padding-left: 8px;
+  text-align: center;
+}
+.udg-selection-cell input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--udg-primary);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.udg-selection-cell input:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.udg-selection-cell--header {
+  z-index: 2;
+}
+
+.udg-cell-content {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.udg-cell-content > * {
+  min-width: 0;
+  max-width: 100%;
+}

@@ -48,10 +48,6 @@ body {
   padding: 22px 28px 48px;
 }
 
-.dv-docs-shell .dv-app-shell__sidebar {
-  overflow: auto;
-}
-
 .dv-docs-header__eyebrow,
 .dv-docs-page__source,
 .dv-docs-nav__group-title {
@@ -90,11 +86,6 @@ body {
 }
 
 .dv-docs-nav {
-  position: sticky;
-  top: 0;
-  align-self: start;
-  max-height: calc(100vh - 56px);
-  overflow: auto;
   padding: 12px;
   background: transparent;
 }

@@ -182,7 +182,10 @@ import {
 
 <AppShell
   header={<TopNav brand="Operations" />}
+  headerPosition="sticky"
+  scrollMode="content"
   sidebar={<SideNav activeId="orders" items={navItems} />}
+  sidebarPosition="sticky"
 >
   <Page toolbar={<PageToolbar left={<SearchInput aria-label="Search orders" />} />}>
     <PageHeader
@@ -193,6 +196,14 @@ import {
   </Page>
 </AppShell>
 ```
+
+`AppShell` layout modes:
+
+- `scrollMode="page"`: document scrolls normally; useful for simple pages.
+- `scrollMode="content"`: shell fills the viewport and main content scrolls; useful for docs, admin apps, and persistent navigation.
+- `scrollMode="split"`: shell fills the viewport while sidebar and content are independent scroll containers; useful for workspaces.
+
+Prefer `AppShell` props for persistent header/sidebar behavior. Do not fix navigation persistence with one-off app CSS when `scrollMode`, `headerPosition`, or `sidebarPosition` can express the layout.
 
 Overlays:
 

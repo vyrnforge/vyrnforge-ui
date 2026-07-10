@@ -1,0 +1,33 @@
+.dv-button-group,
+.dv-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--dv-space-2);
+}
+.dv-button-group--attached {
+  gap: 0;
+}
+.dv-button-group--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+.dv-button-group--sm .dv-button,
+.dv-button-group--sm .dv-icon-button,
+.dv-button-group--sm .dv-toolbar-button {
+  min-height: 30px;
+  font-size: var(--dv-font-size-sm);
+}
+.dv-button-group--attached .dv-button:not(:first-child),
+.dv-button-group--attached .dv-icon-button:not(:first-child),
+.dv-button-group--attached .dv-toolbar-button:not(:first-child) {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.dv-button-group--attached .dv-button:not(:last-child),
+.dv-button-group--attached .dv-icon-button:not(:last-child),
+.dv-button-group--attached .dv-toolbar-button:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

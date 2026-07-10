@@ -1,0 +1,32 @@
+.dv-button__spinner,
+.dv-loading-state__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 999px;
+  animation: dv-spin 800ms linear infinite;
+}
+
+@keyframes dv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dv-skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dv-button__spinner,
+  .dv-loading-state__spinner,
+  .dv-skeleton,
+  .dv-tooltip__content {
+    animation: none;
+    transition: none;
+  }
+}

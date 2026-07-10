@@ -1,0 +1,82 @@
+.dv-text {
+  margin: 0;
+  color: var(--dv-text);
+  line-height: var(--dv-line-height-md);
+}
+.dv-text--sm {
+  font-size: var(--dv-font-size-sm);
+}
+.dv-text--md {
+  font-size: var(--dv-font-size-md);
+}
+.dv-text--lg {
+  font-size: var(--dv-font-size-lg);
+}
+.dv-text--muted {
+  color: var(--dv-text-muted);
+}
+.dv-text--strong {
+  color: var(--dv-text-strong);
+  font-weight: 700;
+}
+.dv-text--danger {
+  color: var(--dv-danger);
+}
+.dv-text--success {
+  color: var(--dv-success);
+}
+.dv-text--warning {
+  color: var(--dv-warning);
+}
+.dv-heading {
+  margin: 0;
+  color: var(--dv-text-strong);
+  font-weight: 760;
+  line-height: var(--dv-line-height-tight);
+}
+.dv-heading--sm {
+  font-size: var(--dv-font-size-lg);
+}
+.dv-heading--md {
+  font-size: var(--dv-font-size-xl);
+}
+.dv-heading--lg {
+  font-size: 24px;
+}
+.dv-label {
+  display: inline-flex;
+  gap: var(--dv-space-1);
+  color: var(--dv-text-strong);
+  font-weight: 720;
+  line-height: var(--dv-line-height-md);
+}
+.dv-label--sm,
+.dv-caption {
+  font-size: var(--dv-font-size-sm);
+}
+.dv-label--md {
+  font-size: var(--dv-font-size-md);
+}
+.dv-caption {
+  display: inline-block;
+  margin: 0;
+  color: var(--dv-text-muted);
+  line-height: var(--dv-line-height-md);
+}
+.dv-code-text {
+  display: inline-flex;
+  width: fit-content;
+  border: 1px solid var(--dv-border);
+  border-radius: var(--dv-radius-sm);
+  padding: 2px 6px;
+  color: var(--dv-text-strong);
+  background: var(--dv-surface-subtle);
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+  font-size: var(--dv-font-size-sm);
+  line-height: var(--dv-line-height-md);
+}

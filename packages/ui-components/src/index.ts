@@ -116,7 +116,12 @@ export type { InlineProps } from "./components/Inline";
 export { Section } from "./components/Section";
 export type { SectionProps } from "./components/Section";
 export { AppShell } from "./components/AppShell";
-export type { AppShellProps } from "./components/AppShell";
+export type {
+  AppShellHeaderPosition,
+  AppShellProps,
+  AppShellScrollMode,
+  AppShellSidebarPosition
+} from "./components/AppShell";
 export { Page } from "./components/Page";
 export type { PageDensity, PageMaxWidth, PageProps } from "./components/Page";
 export { PageHeader } from "./components/PageHeader";

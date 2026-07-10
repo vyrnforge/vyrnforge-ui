@@ -1,0 +1,10 @@
+.dv-validation-message--success {
+  color: var(--dv-success);
+}
+.dv-validation-message--error,
+.dv-validation-message--danger {
+  color: var(--dv-danger);
+}
+.dv-validation-message--info {
+  color: var(--dv-info);
+}

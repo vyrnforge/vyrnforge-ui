@@ -1,0 +1,79 @@
+.dv-button,
+.dv-icon-button,
+.dv-toolbar-button,
+.dv-input,
+.dv-select,
+.dv-textarea,
+.dv-radio,
+.dv-switch__input,
+.dv-side-nav__item,
+.dv-breadcrumbs__link,
+.dv-tabs__tab {
+  font: inherit;
+}
+
+.dv-button:disabled,
+.dv-icon-button:disabled,
+.dv-toolbar-button:disabled,
+.dv-segmented-control__item:disabled,
+.dv-input:disabled,
+.dv-select:disabled,
+.dv-textarea:disabled,
+.dv-checkbox:disabled,
+.dv-radio:disabled,
+.dv-switch__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+
+@media (max-width: 780px) {
+  .dv-app-shell,
+  .dv-app-shell__body,
+  .dv-app-shell--with-sidebar .dv-app-shell__body,
+  .dv-app-shell--sidebar-collapsed .dv-app-shell__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dv-app-shell__sidebar {
+    position: relative;
+    inset: auto;
+    width: auto;
+    max-height: 320px;
+    border-right: 0;
+    border-bottom: 1px solid var(--dv-border);
+  }
+  .dv-app-shell__sidebar-scroll {
+    max-height: 320px;
+  }
+  .dv-app-shell--sidebar-fixed .dv-app-shell__sidebar {
+    position: relative;
+    inset: auto;
+    width: auto;
+  }
+  .dv-app-shell--with-header.dv-app-shell--sidebar-fixed .dv-app-shell__sidebar {
+    inset-block-start: auto;
+  }
+  .dv-page {
+    --dv-page-padding: var(--dv-space-4);
+  }
+  .dv-page-header__row,
+  .dv-field--horizontal,
+  .dv-page-toolbar,
+  .dv-top-nav {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .dv-field--horizontal .dv-field__description,
+  .dv-field--horizontal .dv-field__message,
+  .dv-field--horizontal > :not(.dv-field__label, .dv-field__description, .dv-field__message) {
+    grid-column: auto;
+  }
+  .dv-page-header__actions,
+  .dv-page-toolbar__right,
+  .dv-top-nav__actions {
+    justify-content: flex-start;
+  }
+  .dv-side-nav {
+    max-height: 320px;
+  }
+}

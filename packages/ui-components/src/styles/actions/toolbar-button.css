@@ -1,0 +1,40 @@
+.dv-toolbar-button {
+  gap: var(--dv-space-2);
+  min-height: 30px;
+  border-color: var(--dv-border);
+  border-radius: var(--dv-radius-md);
+  padding: 0 9px;
+  font-size: var(--dv-font-size-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.dv-toolbar-button--md {
+  min-height: var(--dv-control-height);
+  padding-inline: var(--dv-control-padding-x);
+  font-size: var(--dv-font-size-md);
+}
+.dv-toolbar-button--primary {
+  border-color: var(--dv-primary);
+  color: #ffffff;
+  background: var(--dv-primary);
+}
+.dv-toolbar-button--danger {
+  border-color: var(--dv-danger);
+  color: #ffffff;
+  background: var(--dv-danger);
+}
+.dv-toolbar-button--ghost {
+  border-color: transparent;
+  background: transparent;
+}
+.dv-toolbar-button--active,
+.dv-toolbar-button[aria-pressed=true] {
+  border-color: color-mix(in srgb, var(--dv-primary) 45%, var(--dv-border));
+  color: var(--dv-primary);
+  background: var(--dv-primary-soft);
+}
+.dv-toolbar-button__icon,
+.dv-segmented-control__icon {
+  display: inline-flex;
+  align-items: center;
+}

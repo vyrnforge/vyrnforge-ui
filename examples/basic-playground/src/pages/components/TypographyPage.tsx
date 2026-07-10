@@ -2,7 +2,7 @@ import { Caption, CodeText, Heading, Label, Text } from "@dravyn/ui-components";
 
 export function TypographyPage() {
   return (
-    <section className="playground-panel text-demo">
+    <section className="dv-playground-panel dv-playground-text-demo">
       <Heading level={2} size="lg">Heading large</Heading>
       <Heading level={3} size="md">Heading medium</Heading>
       <Heading level={4} size="sm">Heading small</Heading>
@@ -19,7 +19,7 @@ export function TypographyPage() {
       <Label>Label primitive</Label>
       <Caption>Caption text supports hints, timestamps, and quiet helper copy.</Caption>
       <CodeText>--dv-primary: #2563eb;</CodeText>
-      <p className="dv-truncate truncate-demo">
+      <p className="dv-truncate dv-playground-truncate-demo">
         Truncated utility text keeps long labels contained in fixed-width operational layouts.
       </p>
     </section>

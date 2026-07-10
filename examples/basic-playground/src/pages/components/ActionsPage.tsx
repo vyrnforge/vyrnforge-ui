@@ -18,11 +18,11 @@ export function ActionsPage() {
   const [viewMode, setViewMode] = useState("table");
 
   return (
-    <div className="page-stack">
-      <section className="playground-panel">
+    <div className="dv-playground-page-stack">
+      <section className="dv-playground-panel">
         <Heading size="md">Icon-only actions</Heading>
         <Text tone="muted">Icon-only controls stay square, compact, and labelled for assistive tech.</Text>
-        <div className="control-grid">
+        <div className="dv-playground-control-grid">
           <IconButton aria-label="Search" tooltip="Search">
             <Icon name="Search" />
           </IconButton>
@@ -42,9 +42,9 @@ export function ActionsPage() {
         </div>
       </section>
 
-      <section className="playground-panel">
+      <section className="dv-playground-panel">
         <Heading size="md">Toolbar buttons</Heading>
-        <div className="compact-toolbar">
+        <div className="dv-playground-compact-toolbar">
           <ToolbarButton icon={<Icon name="Refresh" />} label="Refresh" tooltip="Refresh data" />
           <ToolbarButton active icon={<Icon name="Filter" />} label="Filters" tooltip="Filters active" />
           <ToolbarButton icon={<Icon name="Columns" />} label="Columns" />
@@ -53,9 +53,9 @@ export function ActionsPage() {
         </div>
       </section>
 
-      <section className="playground-panel">
+      <section className="dv-playground-panel">
         <Heading size="md">Groups and segmented controls</Heading>
-        <div className="control-grid">
+        <div className="dv-playground-control-grid">
           <ButtonGroup attached size="sm">
             <Button size="sm" variant="subtle">Day</Button>
             <Button size="sm" variant="primary">Week</Button>
@@ -84,18 +84,18 @@ export function ActionsPage() {
         </div>
       </section>
 
-      <section className="playground-grid two">
-        <div className="playground-card" data-theme="dark">
+      <section className="dv-playground-grid two">
+        <div className="dv-playground-card" data-theme="dark">
           <Heading size="sm">Dark toolbar</Heading>
-          <div className="compact-toolbar">
+          <div className="dv-playground-compact-toolbar">
             <ToolbarButton icon={<Icon name="Search" />} label="Search" variant="subtle" />
             <ToolbarButton active icon={<Icon name="Filter" />} label="Filter" />
             <ToolbarButton aria-label="More" icon={<Icon name="MoreVertical" />} tooltip="More" />
           </div>
         </div>
-        <div className="playground-card" data-theme="enterprise">
+        <div className="dv-playground-card" data-theme="enterprise">
           <Heading size="sm">Enterprise actions</Heading>
-          <div className="compact-toolbar">
+          <div className="dv-playground-compact-toolbar">
             <ToolbarButton icon={<Icon name="Import" />} label="Import" />
             <ToolbarButton icon={<Icon name="Export" />} label="Export" />
             <ToolbarButton icon={<Icon name="Reset" />} label="Reset" variant="subtle" />

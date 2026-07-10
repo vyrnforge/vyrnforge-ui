@@ -28,25 +28,25 @@ const scaleTokens = [
 
 export function ThemeTokensPage() {
   return (
-    <section className="playground-panel">
-      <div className="section-heading">
+    <section className="dv-playground-panel">
+      <div className="dv-playground-section-heading">
         <div>
           <Heading size="md">Shared dv token contract</Heading>
           <Text tone="muted">Components and grid examples inherit these values from ui-core.</Text>
         </div>
       </div>
-      <div className="token-grid">
+      <div className="dv-playground-token-grid">
         {tokens.map(([label, name, value]) => (
-          <div className="token-card" key={name}>
-            <span className="token-swatch" style={{ background: value }} />
+          <div className="dv-playground-token-card" key={name}>
+            <span className="dv-playground-token-swatch" style={{ background: value }} />
             <strong>{label}</strong>
             <code>{name}</code>
           </div>
         ))}
       </div>
-      <div className="scale-grid">
+      <div className="dv-playground-scale-grid">
         {scaleTokens.map(([label, name]) => (
-          <div className="scale-row" key={name}>
+          <div className="dv-playground-scale-row" key={name}>
             <strong>{label}</strong>
             <code>{name}</code>
             <span style={{ width: `var(${name}, 24px)`, borderRadius: name.includes("radius") ? `var(${name}, 8px)` : 4 }} />

@@ -11,8 +11,8 @@ import {
 
 export function StatesPage() {
   return (
-    <div className="playground-grid three">
-      <section className="playground-card">
+    <div className="dv-playground-grid three">
+      <section className="dv-playground-card">
         <Heading size="sm">Empty</Heading>
         <EmptyState
           title="No saved views"
@@ -20,7 +20,7 @@ export function StatesPage() {
           actions={<Button leftSlot={<Icon name="Plus" />} size="sm" variant="primary">Create view</Button>}
         />
       </section>
-      <section className="playground-card">
+      <section className="dv-playground-card">
         <Heading size="sm">Error</Heading>
         <ErrorState
           title="Could not load records"
@@ -28,16 +28,16 @@ export function StatesPage() {
           retryAction={<Button leftSlot={<Icon name="Refresh" />} size="sm" variant="danger">Retry</Button>}
         />
       </section>
-      <section className="playground-card">
+      <section className="dv-playground-card">
         <Heading size="sm">Loading</Heading>
         <LoadingState label="Loading workspace" description="Fetching current settings." />
-        <div className="skeleton-stack">
+        <div className="dv-playground-skeleton-stack">
           <Skeleton height={12} width="80%" />
           <Skeleton height={12} width="64%" />
           <Skeleton animated={false} height={32} radius={6} width="100%" />
         </div>
       </section>
-      <section className="playground-card">
+      <section className="dv-playground-card">
         <Heading size="sm">Inline message</Heading>
         <InlineMessage title="Policy updated" variant="success">
           Inline feedback can sit inside forms, cards, and panels.

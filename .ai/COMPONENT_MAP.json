@@ -114,5 +114,19 @@
     "styling": "CSS variables and package CSS; no static visual inline styles",
     "dependencies": "native-first, dependency-minimal",
     "status": "Check docs/metadata/component-status.json before using planned components"
+  },
+  "componentUsageNotes": {
+    "AppShell": {
+      "layoutProps": ["scrollMode", "headerPosition", "sidebarPosition", "headerHeight", "sidebarWidth", "collapsedSidebarWidth", "minHeight", "fullHeight"],
+      "scrollModes": {
+        "page": "Use for simple pages where the document scrolls normally.",
+        "content": "Use for admin/docs apps with persistent navigation and main content scrolling.",
+        "split": "Use for workspaces where sidebar and main content scroll independently."
+      },
+      "rule": "Do not fix persistent navigation with one-off app CSS when AppShell props can express the layout. AppShell wraps sidebar content in dv-app-shell__sidebar-scroll so long persistent sidebars can scroll independently."
+    },
+    "SideNav": {
+      "layoutRule": "SideNav renders header and footer outside dv-side-nav__scroll; keep long navigation items inside the component list rather than adding app-owned scroll wrappers."
+    }
   }
 }

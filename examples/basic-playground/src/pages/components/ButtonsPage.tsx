@@ -5,10 +5,10 @@ const sizes = ["sm", "md", "lg"] as const;
 
 export function ButtonsPage() {
   return (
-    <div className="page-stack">
-      <section className="playground-panel">
+    <div className="dv-playground-page-stack">
+      <section className="dv-playground-panel">
         <Heading size="md">Button variants</Heading>
-        <div className="control-grid">
+        <div className="dv-playground-control-grid">
           {variants.map((variant) => (
             <Button key={variant} variant={variant}>{variant}</Button>
           ))}
@@ -19,10 +19,10 @@ export function ButtonsPage() {
         </div>
       </section>
 
-      <section className="playground-panel">
+      <section className="dv-playground-panel">
         <Heading size="md">Sizing and icon buttons</Heading>
         <Text tone="muted">Icon buttons use native button semantics and shared sizing tokens.</Text>
-        <div className="control-grid">
+        <div className="dv-playground-control-grid">
           {sizes.map((size) => (
             <Button key={size} size={size} variant="primary">{size}</Button>
           ))}
@@ -32,7 +32,7 @@ export function ButtonsPage() {
         </div>
       </section>
 
-      <section className="playground-panel">
+      <section className="dv-playground-panel">
         <Heading size="md">Button group</Heading>
         <Text tone="muted">Grouped native buttons keep keyboard and disabled behavior intact.</Text>
         <ButtonGroup attached>

@@ -24,6 +24,7 @@ Use `docs/README.md` as the canonical documentation entrypoint.
 | Package boundaries | `docs/architecture/01-package-boundaries.md` |
 | State and Redux policy | `docs/architecture/02-state-and-adapter-ownership.md` |
 | Styling and themes | `docs/architecture/03-theming-and-styling.md` |
+| CSS architecture | `docs/architecture/06-css-architecture.md` |
 | Clean code boundaries | `docs/architecture/04-clean-code-boundaries.md` |
 | Roadmap | `docs/roadmap/00-master-roadmap.md` |
 | Component inventory | `docs/roadmap/01-component-inventory.md` |
@@ -39,6 +40,7 @@ Use `docs/README.md` as the canonical documentation entrypoint.
 - Keep static visual styling in CSS, not TSX.
 - Use `--dv-*` tokens for shared design.
 - Use `--udg-*` variables only for grid-specific styling.
+- Keep package CSS split by owner; consumers still import package-level `styles/index.css` files.
 - Do not store row data in grid state.
 - Do not fetch data inside the grid package.
 - Do not generate export files inside the grid package by default.

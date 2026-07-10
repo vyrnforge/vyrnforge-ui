@@ -20,8 +20,8 @@ const cards = [
 
 export function OverviewPage() {
   return (
-    <div className="page-stack">
-      <section className="playground-panel overview-hero">
+    <div className="dv-playground-page-stack">
+      <section className="dv-playground-panel dv-playground-overview-hero">
         <div>
           <Heading size="lg">Native-first enterprise UI workspace</Heading>
           <Text tone="muted">
@@ -29,16 +29,16 @@ export function OverviewPage() {
             behavior, and common product patterns.
           </Text>
         </div>
-        <div className="inline-actions">
+        <div className="dv-playground-inline-actions">
           <Button leftSlot={<Icon name="Plus" />} variant="primary">Primary action</Button>
           <Button leftSlot={<Icon name="Info" />} variant="subtle">Secondary</Button>
         </div>
       </section>
 
-      <section className="playground-grid three">
+      <section className="dv-playground-grid three">
         {cards.map((card) => (
-          <article className="playground-card" key={card.title}>
-            <div className="card-heading">
+          <article className="dv-playground-card" key={card.title}>
+            <div className="dv-playground-card-heading">
               <Heading size="sm">{card.title}</Heading>
               <Badge variant={card.status === "Stable" ? "success" : "info"}>{card.status}</Badge>
             </div>

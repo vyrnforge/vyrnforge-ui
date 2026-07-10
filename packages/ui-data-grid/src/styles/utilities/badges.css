@@ -1,0 +1,28 @@
+.udg-badge {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, currentColor 34%, transparent);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: var(--udg-font-size-xs);
+  font-weight: var(--udg-font-weight-semibold);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.udg-badge--success {
+  color: var(--udg-success);
+  background: var(--udg-success-soft);
+}
+.udg-badge--warning {
+  color: var(--udg-warning);
+  background: var(--udg-warning-soft);
+}
+.udg-badge--danger {
+  color: var(--udg-danger);
+  background: var(--udg-danger-soft);
+}
+.udg-badge--neutral {
+  color: var(--udg-text-muted);
+  background: var(--udg-surface-subtle);
+}

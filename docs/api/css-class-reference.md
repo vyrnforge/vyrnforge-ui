@@ -9,6 +9,7 @@ CSS classes exist to support component rendering and scoped extension. App code 
 | `dv-*` | `@dravyn/ui-core` and `@dravyn/ui-components` | Shared utilities and component classes. |
 | `udg-*` | `@dravyn/ui-data-grid` | Data-grid-specific classes. |
 | `dv-docs-*` | `apps/docs` | Docs-app-only layout and documentation presentation classes. |
+| `dv-playground-*` | `examples/basic-playground` | Playground-only demo layout and example helper classes. |
 
 ## Shared dv Classes
 
@@ -20,7 +21,7 @@ Public utility classes include:
 - `dv-sr-only`
 - `dv-focus-ring`
 
-Component classes such as `dv-button`, `dv-card`, `dv-panel`, `dv-input`, `dv-radio`, `dv-radio-group`, `dv-switch`, `dv-number-input`, `dv-date-input`, `dv-datetime-input`, `dv-multi-select`, `dv-validation-message`, `dv-app-shell`, `dv-page`, `dv-page-header`, `dv-page-toolbar`, `dv-side-nav`, `dv-top-nav`, `dv-breadcrumbs`, and `dv-tabs` are owned by `@dravyn/ui-components`. Apps should usually use the component instead of styling these classes directly.
+Component classes such as `dv-button`, `dv-card`, `dv-panel`, `dv-input`, `dv-radio`, `dv-radio-group`, `dv-switch`, `dv-number-input`, `dv-date-input`, `dv-datetime-input`, `dv-multi-select`, `dv-validation-message`, `dv-app-shell`, `dv-app-shell--scroll-content`, `dv-app-shell--header-sticky`, `dv-app-shell--sidebar-sticky`, `dv-page`, `dv-page-header`, `dv-page-toolbar`, `dv-side-nav`, `dv-top-nav`, `dv-breadcrumbs`, and `dv-tabs` are owned by `@dravyn/ui-components`. Apps should usually use the component instead of styling these classes directly.
 
 ## Grid udg Classes
 
@@ -41,6 +42,10 @@ They cover:
 - docs code blocks
 - responsive docs layout
 
+## Playground Classes
+
+`dv-playground-*` classes are private to `examples/basic-playground`. They are demo helpers only and should not be copied into packages or consuming apps.
+
 ## Rules
 
 - Prefer component props first.
@@ -48,3 +53,4 @@ They cover:
 - Use `className` for scoped layout and extension.
 - Do not rely on undocumented internal classes.
 - Do not copy package CSS or docs CSS into consuming apps.
+- Do not create duplicate button, input, badge, card, or grid styling outside the owning package.

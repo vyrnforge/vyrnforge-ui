@@ -23,10 +23,10 @@ export function PlaygroundNav({
   return (
     <SideNav
       aria-label="Playground sections"
-      className="playground-nav"
+      className="dv-playground-nav"
       header={
-        <div className="playground-brand">
-          <span className="playground-brand__mark">D</span>
+        <div className="dv-playground-brand">
+          <span className="dv-playground-brand__mark">D</span>
           <div>
             <strong>Dravyn UI</strong>
             <span>Playground</span>

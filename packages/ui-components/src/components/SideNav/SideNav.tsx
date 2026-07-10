@@ -98,11 +98,13 @@ export function SideNav({
       {...props}
     >
       {header && <div className="dv-side-nav__header">{header}</div>}
-      <ul className="dv-side-nav__list">
-        {items.map((item) =>
-          renderItem({ activeId, collapsed, item, level: 1, onSelect })
-        )}
-      </ul>
+      <div className="dv-side-nav__scroll">
+        <ul className="dv-side-nav__list">
+          {items.map((item) =>
+            renderItem({ activeId, collapsed, item, level: 1, onSelect })
+          )}
+        </ul>
+      </div>
       {footer && <div className="dv-side-nav__footer">{footer}</div>}
     </nav>
   );

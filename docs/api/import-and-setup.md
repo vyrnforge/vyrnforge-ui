@@ -12,6 +12,8 @@ import "@dravyn/ui-data-grid/styles/index.css";
 
 Use this order when an app renders core tokens, shared components, and the data grid together.
 
+These package-level entry files are the public CSS import contract. Internally, each package may split CSS into smaller files by token layer, component family, or grid feature, but apps should not import those internal files directly.
+
 ## Why Order Matters
 
 | CSS import | Why it comes here |
@@ -52,6 +54,7 @@ Use `--udg-*` tokens for grid-specific overrides:
 ## Rules
 
 - Do not edit package CSS files in consuming apps.
+- Do not import internal package CSS modules directly; use package-level `styles/index.css` paths.
 - Prefer component props and CSS variables before custom class overrides.
 - Keep app-specific styles scoped to the consuming application.
 - Do not import forbidden UI frameworks to style Dravyn components.

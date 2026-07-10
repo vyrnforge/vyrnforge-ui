@@ -806,16 +806,33 @@
       "package": "@dravyn/ui-components",
       "category": "Navigation",
       "status": "experimental",
-      "purpose": "Application shell layout with optional header, sidebar, footer, and scrollable content area.",
+      "purpose": "Application shell layout with optional header, sidebar, footer, and explicit page/content/split scroll behavior.",
       "useWhen": "Use for admin portals, customer portals, and enterprise apps that need a consistent shell without routing assumptions.",
       "avoidWhen": "Avoid for small inline layouts or when an app-specific router shell already owns all regions.",
       "relatedComponents": ["Page", "SideNav", "TopNav"],
-      "cssClasses": ["dv-app-shell"],
-      "cssVariables": ["--dv-app-shell-sidebar-width", "--dv-app-shell-collapsed-sidebar-width"],
+      "cssClasses": [
+        "dv-app-shell",
+        "dv-app-shell--scroll-page",
+        "dv-app-shell--scroll-content",
+        "dv-app-shell--scroll-split",
+        "dv-app-shell--header-static",
+        "dv-app-shell--header-sticky",
+        "dv-app-shell--header-fixed",
+        "dv-app-shell--sidebar-static",
+        "dv-app-shell--sidebar-sticky",
+        "dv-app-shell--sidebar-fixed",
+        "dv-app-shell__sidebar-scroll"
+      ],
+      "cssVariables": [
+        "--dv-app-shell-header-height",
+        "--dv-app-shell-sidebar-width",
+        "--dv-app-shell-sidebar-collapsed-width",
+        "--dv-app-shell-min-height"
+      ],
       "importExample": "import { AppShell } from '@dravyn/ui-components';",
-      "basicUsageExample": "<AppShell header={<TopNav />} sidebar={<SideNav items={items} />}>Content</AppShell>",
+      "basicUsageExample": "<AppShell scrollMode='content' headerPosition='sticky' sidebarPosition='sticky' header={<TopNav />} sidebar={<SideNav items={items} />}>Content</AppShell>",
       "accessibilityNotes": "Pass meaningful header/sidebar content and avoid duplicate main landmarks inside shell content unless Page owns the main region.",
-      "aiUsageNotes": "Do not add router integration or global state to AppShell."
+      "aiUsageNotes": "Use scrollMode='page' for simple pages, 'content' for admin/docs apps with persistent navigation, and 'split' for independently scrollable nav/content. Do not add router integration, global state, or one-off app CSS for persistent navigation when AppShell props can express it."
     },
     {
       "id": "page",
@@ -874,16 +891,16 @@
       "package": "@dravyn/ui-components",
       "category": "Navigation",
       "status": "experimental",
-      "purpose": "Sidebar navigation for admin and customer portals with active, disabled, badge, icon, collapsed, and one-level nested items.",
+      "purpose": "Sidebar navigation for admin and customer portals with active, disabled, badge, icon, collapsed, header/footer slots, internal list scrolling, and one-level nested items.",
       "useWhen": "Use for app-level sidebar navigation without coupling to a router.",
       "avoidWhen": "Avoid for complex tree navigation or data-grid column menus.",
       "relatedComponents": ["AppShell", "TopNav"],
-      "cssClasses": ["dv-side-nav", "dv-side-nav__item"],
+      "cssClasses": ["dv-side-nav", "dv-side-nav__scroll", "dv-side-nav__item"],
       "cssVariables": [],
       "importExample": "import { SideNav } from '@dravyn/ui-components';",
       "basicUsageExample": "<SideNav activeId='orders' items={[{ id: 'orders', label: 'Orders' }]} />",
       "accessibilityNotes": "Navigation should use nav landmark and current-page state.",
-      "aiUsageNotes": "Keep route state in the app and pass activeId/onSelect; do not add router dependencies."
+      "aiUsageNotes": "Keep route state in the app and pass activeId/onSelect; do not add router dependencies. Use inside AppShell for persistent sidebars; SideNav keeps header/footer visible while the item list scrolls inside dv-side-nav__scroll."
     },
     {
       "id": "top-nav",

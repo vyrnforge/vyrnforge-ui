@@ -24,8 +24,8 @@ export function InputsPage() {
   const [roles, setRoles] = useState(["owner", "approver"]);
 
   return (
-    <div className="page-stack">
-      <section className="playground-panel form-grid">
+    <div className="dv-playground-page-stack">
+      <section className="dv-playground-panel dv-playground-form-grid">
         <Heading size="md">Inputs and fields</Heading>
         <Field
           description="Plain text input with helper copy."
@@ -49,7 +49,7 @@ export function InputsPage() {
             ]}
           />
         </Field>
-        <div className="playground-grid two">
+        <div className="dv-playground-grid two">
           <Field htmlFor="seat-count" label="Seat limit" warning="Integer-only input blocks exponent characters.">
             <NumberInput id="seat-count" mode="integer" min={1} max={500} defaultValue={120} />
           </Field>
@@ -57,7 +57,7 @@ export function InputsPage() {
             <NumberInput id="discount-rate" mode="decimal" min={0} max={100} step={0.01} defaultValue={12.5} />
           </Field>
         </div>
-        <div className="playground-grid two">
+        <div className="dv-playground-grid two">
           <Field htmlFor="start-date" label="Start date" required>
             <DateInput id="start-date" defaultValue="2026-07-10" />
           </Field>
@@ -88,7 +88,7 @@ export function InputsPage() {
         <ValidationMessage tone="success">All native controls preserve value/defaultValue/onChange props.</ValidationMessage>
       </section>
 
-      <section className="playground-panel form-grid">
+      <section className="dv-playground-panel dv-playground-form-grid">
         <Heading size="md">Choice controls</Heading>
         <RadioGroup
           label="Billing cycle"

@@ -4,6 +4,8 @@ Dravyn UI uses CSS variables as the public styling contract.
 
 Use shared `--dv-*` tokens for app-wide theme customization. Use grid-specific `--udg-*` variables only for data-grid overrides.
 
+Package CSS may be split internally, but token ownership does not change: `@dravyn/ui-core` owns shared `--dv-*` tokens and `@dravyn/ui-data-grid` owns grid-specific `--udg-*` variables.
+
 ## Shared dv Tokens
 
 | Token | Purpose |

@@ -1,0 +1,5 @@
+.dv-dropdown {
+  display: grid;
+  gap: var(--dv-space-2);
+  padding: var(--dv-space-3);
+}

@@ -3,22 +3,22 @@ import { assets } from "../../data/assets";
 
 export function ResourceListPage() {
   return (
-    <section className="playground-panel">
-      <div className="section-heading">
+    <section className="dv-playground-panel">
+      <div className="dv-playground-section-heading">
         <div>
           <Heading size="md">Assets</Heading>
           <Text tone="muted">A compact list pattern for resources, metadata, and actions.</Text>
         </div>
         <Button leftSlot={<Icon name="Plus" />} variant="primary">Register asset</Button>
       </div>
-      <div className="resource-list">
+      <div className="dv-playground-resource-list">
         {assets.map((asset) => (
-          <article className="resource-row" key={asset.id}>
+          <article className="dv-playground-resource-row" key={asset.id}>
             <div>
               <strong>{asset.name}</strong>
               <span>{asset.id} / {asset.type} / {asset.environment}</span>
             </div>
-            <div className="resource-meta">
+            <div className="dv-playground-resource-meta">
               <Badge variant={asset.status === "Healthy" ? "success" : asset.status === "At Risk" ? "danger" : "warning"}>
                 {asset.status}
               </Badge>

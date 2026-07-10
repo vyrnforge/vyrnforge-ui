@@ -1,2 +1,7 @@
 export { AppShell } from "./AppShell";
-export type { AppShellProps } from "./AppShell.types";
+export type {
+  AppShellHeaderPosition,
+  AppShellProps,
+  AppShellScrollMode,
+  AppShellSidebarPosition
+} from "./AppShell.types";

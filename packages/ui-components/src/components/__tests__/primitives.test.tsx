@@ -355,8 +355,37 @@ describe("@dravyn/ui-components primitives", () => {
 
     expect(markup).toContain("dv-app-shell--with-sidebar");
     expect(markup).toContain("dv-app-shell__header");
+    expect(markup).toContain("dv-app-shell__sidebar-scroll");
     expect(markup).toContain("Sidebar");
     expect(markup).toContain("Content");
+  });
+
+  it("renders AppShell scroll and position classes with layout variables", () => {
+    const markup = renderToStaticMarkup(
+      <AppShell
+        collapsedSidebarWidth={72}
+        header="Header"
+        headerHeight={80}
+        headerPosition="fixed"
+        minHeight="720px"
+        scrollMode="split"
+        sidebar="Sidebar"
+        sidebarCollapsed
+        sidebarPosition="fixed"
+        sidebarWidth={260}
+      >
+        Content
+      </AppShell>
+    );
+
+    expect(markup).toContain("dv-app-shell--scroll-split");
+    expect(markup).toContain("dv-app-shell--header-fixed");
+    expect(markup).toContain("dv-app-shell--sidebar-fixed");
+    expect(markup).toContain("dv-app-shell--sidebar-collapsed");
+    expect(markup).toContain("--dv-app-shell-header-height:80px");
+    expect(markup).toContain("--dv-app-shell-sidebar-width:260px");
+    expect(markup).toContain("--dv-app-shell-sidebar-collapsed-width:72px");
+    expect(markup).toContain("--dv-app-shell-min-height:720px");
   });
 
   it("renders PageHeader actions and status", () => {
@@ -398,9 +427,10 @@ describe("@dravyn/ui-components primitives", () => {
       onSelect
     });
     const markup = renderToStaticMarkup(element);
-    const list = Array.isArray(element.props.children)
+    const scroll = Array.isArray(element.props.children)
       ? element.props.children[1]
       : undefined;
+    const list = scroll?.props.children;
     const entries = list?.props.children;
     const activeEntry = Array.isArray(entries) ? entries[1] : undefined;
     const activeButton = Array.isArray(activeEntry?.props.children)
@@ -410,8 +440,26 @@ describe("@dravyn/ui-components primitives", () => {
     activeButton?.props.onClick();
 
     expect(markup).toContain("dv-side-nav__item--active");
+    expect(markup).toContain("dv-side-nav__scroll");
     expect(markup).toContain("aria-current=\"page\"");
     expect(onSelect).toHaveBeenCalledWith({ id: "orders", label: "Orders" });
+  });
+
+  it("renders SideNav header, footer, scroll container, and collapsed state", () => {
+    const markup = renderToStaticMarkup(
+      <SideNav
+        collapsed
+        footer="Workspace"
+        header="Dravyn"
+        items={[{ id: "overview", label: "Overview" }]}
+      />
+    );
+
+    expect(markup).toContain("dv-side-nav--collapsed");
+    expect(markup).toContain("dv-side-nav__header");
+    expect(markup).toContain("dv-side-nav__scroll");
+    expect(markup).toContain("dv-side-nav__list");
+    expect(markup).toContain("dv-side-nav__footer");
   });
 
   it("renders controlled Tabs selection and disabled tabs", () => {

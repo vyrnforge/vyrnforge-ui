@@ -1,0 +1,37 @@
+.dv-field {
+  display: grid;
+  gap: var(--dv-space-2);
+  min-width: 0;
+}
+.dv-field--horizontal {
+  grid-template-columns: minmax(140px, 0.36fr) minmax(0, 1fr);
+  align-items: start;
+  column-gap: var(--dv-space-4);
+}
+.dv-field--horizontal .dv-field__description,
+.dv-field--horizontal .dv-field__message {
+  grid-column: 2;
+}
+.dv-field--horizontal > :not(.dv-field__label, .dv-field__description, .dv-field__message) {
+  grid-column: 2;
+}
+.dv-field__label {
+  color: var(--dv-text-strong);
+  font-size: var(--dv-font-size-sm);
+  font-weight: 720;
+}
+.dv-field__required,
+.dv-field--invalid .dv-field__message,
+.dv-validation-message--danger {
+  color: var(--dv-danger);
+}
+.dv-field__description,
+.dv-field__message,
+.dv-validation-message {
+  color: var(--dv-text-muted);
+  font-size: var(--dv-font-size-sm);
+  line-height: var(--dv-line-height-md);
+}
+.dv-field--disabled {
+  opacity: 0.68;
+}

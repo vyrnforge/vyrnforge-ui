@@ -1,0 +1,18 @@
+.dv-button:focus-visible,
+.dv-icon-button:focus-visible,
+.dv-toolbar-button:focus-visible,
+.dv-segmented-control__item:focus-visible,
+.dv-input:focus-visible,
+.dv-select:focus-visible,
+.dv-textarea:focus-visible,
+.dv-checkbox:focus-visible,
+.dv-radio:focus-visible,
+.dv-switch__input:focus-visible + .dv-switch__control,
+.dv-multi-select__trigger:focus-visible,
+.dv-multi-select__option input:focus-visible,
+.dv-side-nav__item:focus-visible,
+.dv-breadcrumbs__link:focus-visible,
+.dv-tabs__tab:focus-visible {
+  outline: 2px solid var(--dv-focus-ring);
+  outline-offset: 2px;
+}

@@ -24,6 +24,7 @@ Do not create new top-level documentation without linking it from this file. If 
 | `architecture/03-theming-and-styling.md` | CSS variable, token, and styling rules. |
 | `architecture/04-clean-code-boundaries.md` | Components vs hooks vs core vs adapters. |
 | `architecture/05-accessibility-standards.md` | Accessibility baseline. |
+| `architecture/06-css-architecture.md` | CSS ownership, split policy, prefixes, and package-level style imports. |
 
 ## 3. Roadmap
 

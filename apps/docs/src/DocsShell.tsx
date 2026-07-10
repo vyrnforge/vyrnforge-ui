@@ -18,6 +18,7 @@ export function DocsShell({
   return (
     <AppShell
       className="dv-docs-shell"
+      fullHeight
       header={
         <TopNav
           brand={
@@ -40,12 +41,15 @@ export function DocsShell({
           userArea={headerAction}
         />
       }
+      headerPosition="sticky"
+      scrollMode="content"
       sidebar={
         <DocsNav
           activeRouteId={activeRoute.id}
           onRouteChange={onRouteChange}
         />
       }
+      sidebarPosition="sticky"
       sidebarWidth={260}
     >
       <DocsPage route={activeRoute} />

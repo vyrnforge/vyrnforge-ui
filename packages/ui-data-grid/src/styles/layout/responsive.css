@@ -1,0 +1,21 @@
+@media (max-width: 640px) {
+  .udg-toolbar,
+  .udg-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .udg-search {
+    width: 100%;
+  }
+  .udg-pagination-actions {
+    width: 100%;
+  }
+  .udg-pagination-button {
+    flex: 1;
+  }
+  .udg-column-menu-panel {
+    right: auto;
+    left: 0;
+    width: 100%;
+  }
+}

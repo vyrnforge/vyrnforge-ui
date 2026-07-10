@@ -1,0 +1,89 @@
+.dv-button,
+.dv-icon-button,
+.dv-toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--dv-radius-md);
+  color: var(--dv-text);
+  background: var(--dv-surface);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color var(--dv-transition-fast),
+    border-color var(--dv-transition-fast),
+    color var(--dv-transition-fast),
+    box-shadow var(--dv-transition-fast),
+    opacity var(--dv-transition-fast);
+}
+.dv-button:hover:not(:disabled),
+.dv-icon-button:hover:not(:disabled),
+.dv-toolbar-button:hover:not(:disabled) {
+  background: var(--dv-surface-subtle);
+}
+
+.dv-button {
+  gap: var(--dv-space-2);
+  min-height: var(--dv-control-height);
+  padding: 0 var(--dv-control-padding-x);
+  font-size: var(--dv-font-size-md);
+  white-space: nowrap;
+}
+.dv-button--sm {
+  min-height: 30px;
+  padding-inline: 10px;
+  font-size: var(--dv-font-size-sm);
+}
+.dv-button--lg {
+  min-height: 42px;
+  padding-inline: 16px;
+  font-size: var(--dv-font-size-lg);
+}
+.dv-button--full-width {
+  width: 100%;
+}
+.dv-button--default,
+.dv-icon-button--default {
+  border-color: var(--dv-border);
+}
+.dv-button--primary,
+.dv-icon-button--primary {
+  border-color: var(--dv-primary);
+  color: #ffffff;
+  background: var(--dv-primary);
+}
+.dv-button--primary:hover:not(:disabled),
+.dv-icon-button--primary:hover:not(:disabled) {
+  border-color: var(--dv-primary-hover);
+  background: var(--dv-primary-hover);
+}
+.dv-button--danger,
+.dv-icon-button--danger {
+  border-color: var(--dv-danger);
+  color: #ffffff;
+  background: var(--dv-danger);
+}
+.dv-button--danger:hover:not(:disabled),
+.dv-icon-button--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--dv-danger) 88%, #000000);
+}
+.dv-button--ghost,
+.dv-icon-button--ghost {
+  background: transparent;
+}
+.dv-button--subtle,
+.dv-icon-button--subtle {
+  border-color: transparent;
+  background: var(--dv-surface-subtle);
+}
+.dv-toolbar-button--subtle {
+  border-color: transparent;
+  background: var(--dv-surface-subtle);
+}
+.dv-button__label,
+.dv-button__slot {
+  display: inline-flex;
+  align-items: center;
+}

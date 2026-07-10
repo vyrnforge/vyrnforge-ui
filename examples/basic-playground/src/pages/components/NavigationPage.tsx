@@ -34,8 +34,8 @@ export function NavigationPage() {
   ];
 
   return (
-    <div className="page-stack">
-      <section className="playground-panel">
+    <div className="dv-playground-page-stack">
+      <section className="dv-playground-panel">
         <PageHeader
           breadcrumbs={
             <Breadcrumbs
@@ -53,9 +53,9 @@ export function NavigationPage() {
         />
       </section>
 
-      <section className="playground-grid two">
-        <div className="playground-card">
-          <div className="card-heading">
+      <section className="dv-playground-grid two">
+        <div className="dv-playground-card">
+          <div className="dv-playground-card-heading">
             <Heading size="sm">SideNav</Heading>
             <ToolbarButton
               active={collapsed}
@@ -65,7 +65,7 @@ export function NavigationPage() {
               size="sm"
             />
           </div>
-          <div className="nav-demo-frame">
+          <div className="dv-playground-nav-demo-frame">
             <SideNav
               activeId={activeNav}
               collapsed={collapsed}
@@ -75,7 +75,7 @@ export function NavigationPage() {
           </div>
         </div>
 
-        <div className="playground-card">
+        <div className="dv-playground-card">
           <Heading size="sm">PageToolbar + Tabs</Heading>
           <PageToolbar
             left={<SearchInput aria-label="Search records" placeholder="Search records" />}

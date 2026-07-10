@@ -6,20 +6,27 @@
     "@dravyn/ui-components/styles/index.css",
     "@dravyn/ui-data-grid/styles/index.css"
   ],
+  "internalSplitPolicy": {
+    "publicImportContract": "Consumers import package-level styles/index.css files only.",
+    "reviewAtLines": 600,
+    "splitAtLines": 1000,
+    "mustSplitAtLines": 3000,
+    "architectureDoc": "docs/architecture/06-css-architecture.md"
+  },
   "imports": [
     {
       "package": "@dravyn/ui-core",
       "importPath": "@dravyn/ui-core/styles/index.css",
       "requiredFor": ["shared --dv-* tokens", "theme presets", "density tokens", "utility classes"],
       "mustComeBefore": ["@dravyn/ui-components/styles/index.css", "@dravyn/ui-data-grid/styles/index.css"],
-      "notes": "ui-core owns shared --dv-* design tokens and utilities."
+      "notes": "ui-core owns shared --dv-* design tokens, reset, density, utilities, and accessibility helpers."
     },
     {
       "package": "@dravyn/ui-components",
       "importPath": "@dravyn/ui-components/styles/index.css",
       "requiredFor": ["dv-* component classes", "shared component visual states"],
       "mustComeBefore": ["@dravyn/ui-data-grid/styles/index.css"],
-      "notes": "ui-components consumes --dv-* variables and owns dv-* classes."
+      "notes": "ui-components consumes --dv-* variables and owns dv-* component classes split by component family internally."
     },
     {
       "package": "@dravyn/ui-data-grid",
@@ -32,6 +39,7 @@
   "rules": [
     "Import ui-core styles before ui-components styles.",
     "Import ui-components styles before ui-data-grid styles.",
+    "Do not import internal package CSS module files directly.",
     "Override --dv-* tokens for app-wide theme changes.",
     "Override --udg-* variables for grid-specific changes.",
     "Do not edit package CSS directly in consuming apps."

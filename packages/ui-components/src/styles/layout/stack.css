@@ -1,0 +1,60 @@
+.dv-stack {
+  display: flex;
+  flex-direction: column;
+}
+.dv-stack--gap-none,
+.dv-inline--gap-none {
+  gap: 0;
+}
+.dv-stack--gap-xs,
+.dv-inline--gap-xs {
+  gap: var(--dv-space-1);
+}
+.dv-stack--gap-sm,
+.dv-inline--gap-sm {
+  gap: var(--dv-space-2);
+}
+.dv-stack--gap-md,
+.dv-inline--gap-md {
+  gap: var(--dv-space-3);
+}
+.dv-stack--gap-lg,
+.dv-inline--gap-lg {
+  gap: var(--dv-space-4);
+}
+.dv-stack--gap-xl,
+.dv-inline--gap-xl {
+  gap: var(--dv-space-6);
+}
+.dv-stack--align-stretch,
+.dv-inline--align-stretch {
+  align-items: stretch;
+}
+.dv-stack--align-start,
+.dv-inline--align-start {
+  align-items: flex-start;
+}
+.dv-stack--align-center,
+.dv-inline--align-center {
+  align-items: center;
+}
+.dv-stack--align-end,
+.dv-inline--align-end {
+  align-items: flex-end;
+}
+.dv-stack--justify-start,
+.dv-inline--justify-start {
+  justify-content: flex-start;
+}
+.dv-stack--justify-center,
+.dv-inline--justify-center {
+  justify-content: center;
+}
+.dv-stack--justify-end,
+.dv-inline--justify-end {
+  justify-content: flex-end;
+}
+.dv-stack--justify-between,
+.dv-inline--justify-between {
+  justify-content: space-between;
+}

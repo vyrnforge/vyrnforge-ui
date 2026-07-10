@@ -22,7 +22,7 @@ export function FormPage() {
   const [roles, setRoles] = useState(["viewer"]);
 
   return (
-    <section className="playground-panel form-grid">
+    <section className="dv-playground-panel dv-playground-form-grid">
       <div>
         <Heading size="md">Request form</Heading>
         <Text tone="muted">A create/edit pattern using completed native form primitives.</Text>
@@ -44,7 +44,7 @@ export function FormPage() {
           { value: "change", label: "Change" }
         ]}
       />
-      <div className="playground-grid two">
+      <div className="dv-playground-grid two">
         <Field label="Priority" htmlFor="request-priority">
           <Select
             id="request-priority"
@@ -60,7 +60,7 @@ export function FormPage() {
           <NumberInput id="risk-score" mode="integer" min={0} max={100} defaultValue={74} />
         </Field>
       </div>
-      <div className="playground-grid two">
+      <div className="dv-playground-grid two">
         <Field label="Needed by" htmlFor="needed-by" required>
           <DateInput id="needed-by" defaultValue="2026-07-17" />
         </Field>
@@ -93,7 +93,7 @@ export function FormPage() {
       <ValidationMessage tone={acknowledged ? "success" : "info"}>
         Submit is enabled after policy acknowledgement.
       </ValidationMessage>
-      <div className="inline-actions form-footer">
+      <div className="dv-playground-inline-actions dv-playground-form-footer">
         <Button leftSlot={<Icon name="Check" />} variant="primary" disabled={!acknowledged}>Submit request</Button>
         <Button leftSlot={<Icon name="Edit" />} variant="subtle">Save draft</Button>
       </div>
