@@ -48,11 +48,14 @@
 | Select | `ui-components` | Current |
 | Checkbox | `ui-components` | Current |
 | Textarea | `ui-components` | Current |
-| Radio | `ui-components` | Planned |
-| Switch | `ui-components` | Planned |
-| NumberInput | `ui-components` | Planned |
-| DateInput | `ui-components` | Planned |
-| MultiSelect | `ui-components` | Planned |
+| Radio | `ui-components` | Experimental |
+| RadioGroup | `ui-components` | Experimental |
+| Switch | `ui-components` | Experimental |
+| NumberInput | `ui-components` | Experimental |
+| DateInput | `ui-components` | Experimental |
+| DateTimeInput | `ui-components` | Experimental |
+| MultiSelect | `ui-components` | Experimental |
+| ValidationMessage | `ui-components` | Experimental |
 | Combobox | `ui-components` | Later |
 
 ## Overlays

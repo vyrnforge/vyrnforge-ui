@@ -12,14 +12,17 @@ export function Field({
   invalid = false,
   label,
   message,
+  orientation = "vertical",
   required = false,
+  warning,
   ...props
 }: FieldProps) {
   const generatedId = useId();
   const descriptionId = description ? `${generatedId}-description` : undefined;
-  const messageContent = error ?? message;
+  const messageContent = error ?? warning ?? message;
   const messageId = messageContent ? `${generatedId}-message` : undefined;
   const isInvalid = invalid || Boolean(error);
+  const hasWarning = Boolean(warning) && !isInvalid;
   const LabelComponent = htmlFor ? "label" : "div";
 
   return (
@@ -27,7 +30,9 @@ export function Field({
       aria-describedby={[descriptionId, messageId].filter(Boolean).join(" ") || undefined}
       className={joinClassNames(
         "dv-field",
+        `dv-field--${orientation}`,
         isInvalid && "dv-field--invalid",
+        hasWarning && "dv-field--warning",
         disabled && "dv-field--disabled",
         className
       )}
@@ -48,7 +53,11 @@ export function Field({
       )}
       {children}
       {messageContent && (
-        <div className="dv-field__message" id={messageId} role={isInvalid ? "alert" : undefined}>
+        <div
+          className="dv-field__message"
+          id={messageId}
+          role={isInvalid ? "alert" : undefined}
+        >
           {messageContent}
         </div>
       )}

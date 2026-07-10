@@ -7,6 +7,8 @@ import {
   Button,
   Checkbox,
   ConfirmDialog,
+  DateInput,
+  DateTimeInput,
   Dialog,
   EmptyState,
   ErrorState,
@@ -14,17 +16,23 @@ import {
   Icon,
   IconButton,
   Menu,
+  MultiSelect,
+  NumberInput,
   PageHeader,
   Popover,
+  Radio,
+  RadioGroup,
   Select,
   SegmentedControl,
   SideNav,
   Skeleton,
+  Switch,
   Tabs,
   TextInput,
   Tooltip,
   ToolbarButton,
-  ButtonGroup
+  ButtonGroup,
+  ValidationMessage
 } from "../../index";
 
 describe("@dravyn/ui-components primitives", () => {
@@ -111,13 +119,22 @@ describe("@dravyn/ui-components primitives", () => {
     const onInputChange = vi.fn();
     const onCheckboxChange = vi.fn();
     const onSelectChange = vi.fn();
+    const onNumberChange = vi.fn();
+    const onDateChange = vi.fn();
+    const onDateTimeChange = vi.fn();
     const input = <TextInput onChange={onInputChange} />;
     const checkbox = <Checkbox onChange={onCheckboxChange} />;
     const select = <Select onChange={onSelectChange} />;
+    const number = <NumberInput onChange={onNumberChange} />;
+    const date = <DateInput onChange={onDateChange} />;
+    const dateTime = <DateTimeInput onChange={onDateTimeChange} />;
 
     expect(input.props.onChange).toBe(onInputChange);
     expect(checkbox.props.onChange).toBe(onCheckboxChange);
     expect(select.props.onChange).toBe(onSelectChange);
+    expect(number.props.onChange).toBe(onNumberChange);
+    expect(date.props.onChange).toBe(onDateChange);
+    expect(dateTime.props.onChange).toBe(onDateTimeChange);
   });
 
   it("renders Badge variant classes", () => {
@@ -143,6 +160,102 @@ describe("@dravyn/ui-components primitives", () => {
     expect(markup).toContain("Helper text");
     expect(markup).toContain("Required");
     expect(markup).toContain("role=\"alert\"");
+  });
+
+  it("renders Field warning and horizontal orientation", () => {
+    const markup = renderToStaticMarkup(
+      <Field label="Limit" orientation="horizontal" warning="Close to limit">
+        <NumberInput defaultValue={80} />
+      </Field>
+    );
+
+    expect(markup).toContain("dv-field--horizontal");
+    expect(markup).toContain("dv-field--warning");
+    expect(markup).toContain("Close to limit");
+  });
+
+  it("renders Radio checked and invalid state", () => {
+    const onChange = vi.fn();
+    const radio = <Radio checked invalid label="Email" onChange={onChange} value="email" />;
+    const markup = renderToStaticMarkup(radio);
+
+    expect(radio.props.onChange).toBe(onChange);
+    expect(markup).toContain("type=\"radio\"");
+    expect(markup).toContain("checked=\"\"");
+    expect(markup).toContain("aria-invalid=\"true\"");
+  });
+
+  it("renders RadioGroup controlled selection and error", () => {
+    const markup = renderToStaticMarkup(
+      <RadioGroup
+        error="Choose one"
+        label="Delivery"
+        name="delivery"
+        options={[
+          { value: "standard", label: "Standard" },
+          { value: "express", label: "Express", disabled: true }
+        ]}
+        value="standard"
+      />
+    );
+
+    expect(markup).toContain("<fieldset");
+    expect(markup).toContain("<legend");
+    expect(markup).toContain("checked=\"\"");
+    expect(markup).toContain("Choose one");
+    expect(markup).toContain("disabled=\"\"");
+  });
+
+  it("renders Switch checked state and accessible role", () => {
+    const markup = renderToStaticMarkup(
+      <Switch checked label="Enabled" onCheckedChange={() => undefined} />
+    );
+
+    expect(markup).toContain("role=\"switch\"");
+    expect(markup).toContain("aria-checked=\"true\"");
+    expect(markup).toContain("Enabled");
+  });
+
+  it("renders native number and date inputs", () => {
+    const markup = renderToStaticMarkup(
+      <>
+        <NumberInput defaultValue={10} min={0} max={20} />
+        <NumberInput defaultValue={12.5} mode="decimal" />
+        <DateInput defaultValue="2026-07-10" />
+        <DateTimeInput defaultValue="2026-07-10T09:30" />
+      </>
+    );
+
+    expect(markup).toContain("type=\"number\"");
+    expect(markup).toContain("inputMode=\"decimal\"");
+    expect(markup).toContain("step=\"any\"");
+    expect(markup).toContain("type=\"date\"");
+    expect(markup).toContain("type=\"datetime-local\"");
+  });
+
+  it("renders MultiSelect selected chips and disabled options", () => {
+    const markup = renderToStaticMarkup(
+      <MultiSelect
+        value={["admin"]}
+        options={[
+          { value: "admin", label: "Admin" },
+          { value: "viewer", label: "Viewer", disabled: true }
+        ]}
+      />
+    );
+
+    expect(markup).toContain("dv-multi-select__chip");
+    expect(markup).toContain("Admin");
+    expect(markup).toContain("aria-expanded=\"false\"");
+  });
+
+  it("renders ValidationMessage tone", () => {
+    const markup = renderToStaticMarkup(
+      <ValidationMessage tone="info">Helpful message</ValidationMessage>
+    );
+
+    expect(markup).toContain("dv-validation-message--info");
+    expect(markup).toContain("Helpful message");
   });
 
   it("renders static Skeleton class when animated is false", () => {

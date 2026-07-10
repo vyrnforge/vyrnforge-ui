@@ -20,7 +20,7 @@ Public utility classes include:
 - `dv-sr-only`
 - `dv-focus-ring`
 
-Component classes such as `dv-button`, `dv-card`, `dv-panel`, `dv-input`, `dv-app-shell`, `dv-page`, `dv-page-header`, `dv-page-toolbar`, `dv-side-nav`, `dv-top-nav`, `dv-breadcrumbs`, and `dv-tabs` are owned by `@dravyn/ui-components`. Apps should usually use the component instead of styling these classes directly.
+Component classes such as `dv-button`, `dv-card`, `dv-panel`, `dv-input`, `dv-radio`, `dv-radio-group`, `dv-switch`, `dv-number-input`, `dv-date-input`, `dv-datetime-input`, `dv-multi-select`, `dv-validation-message`, `dv-app-shell`, `dv-page`, `dv-page-header`, `dv-page-toolbar`, `dv-side-nav`, `dv-top-nav`, `dv-breadcrumbs`, and `dv-tabs` are owned by `@dravyn/ui-components`. Apps should usually use the component instead of styling these classes directly.
 
 ## Grid udg Classes
 

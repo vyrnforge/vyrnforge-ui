@@ -25,7 +25,7 @@ import "@dravyn/ui-components/styles/index.css";
 - Icons: `Icon`, `CloseButton`, `ClearButton`, `RefreshButton`, `MoreButton`
 - Typography: `Heading`, `Text`, `Label`, `Caption`, `CodeText`
 - Feedback: `Badge`, `StatusBadge`, `EmptyState`, `ErrorState`, `LoadingState`, `Skeleton`, `InlineMessage`, `Alert`
-- Forms: `Field`, `TextInput`, `SearchInput`, `Select`, `Checkbox`, `Textarea`, `ValidationMessage`
+- Forms: `Field`, `TextInput`, `SearchInput`, `Select`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `NumberInput`, `DateInput`, `DateTimeInput`, `MultiSelect`, `Textarea`, `ValidationMessage`
 - Layout: `Card`, `Panel`, `Stack`, `Inline`, `Section`, `AppShell`, `Page`, `PageHeader`, `PageToolbar`
 - Navigation: `SideNav`, `TopNav`, `Breadcrumbs`, `Tabs`
 - Overlays: `Popover`, `Menu`, `Dropdown`, `Tooltip`, `Dialog`, `Drawer`, `ConfirmDialog`
@@ -118,6 +118,38 @@ Form validation:
 <Field label="Email" htmlFor="email" error="Email is required">
   <TextInput id="email" invalid />
 </Field>
+```
+
+Choice and scheduling inputs:
+
+```tsx
+<RadioGroup
+  label="Billing cycle"
+  value={cycle}
+  onValueChange={setCycle}
+  options={[
+    { value: "monthly", label: "Monthly" },
+    { value: "annual", label: "Annual" }
+  ]}
+/>
+
+<Switch
+  checked={enabled}
+  onCheckedChange={setEnabled}
+  label="Enable workflow alerts"
+/>
+
+<NumberInput mode="integer" min={0} max={100} defaultValue={50} />
+<NumberInput mode="decimal" min={0} max={100} step={0.01} defaultValue={12.5} />
+<DateInput defaultValue="2026-07-10" />
+<DateTimeInput defaultValue="2026-07-10T09:30" />
+
+<MultiSelect
+  value={roles}
+  onValueChange={setRoles}
+  options={roleOptions}
+  searchable
+/>
 ```
 
 Layout:

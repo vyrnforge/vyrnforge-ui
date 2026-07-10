@@ -285,6 +285,16 @@ select {
   max-width: 760px;
 }
 
+.settings-switch-list {
+  display: grid;
+  gap: 14px;
+}
+
+.form-footer {
+  border-top: 1px solid var(--dv-border, #d8e0ea);
+  padding-top: 14px;
+}
+
 .text-demo {
   max-width: 760px;
 }
