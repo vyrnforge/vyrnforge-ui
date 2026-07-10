@@ -11,7 +11,8 @@
 - forms: Field, TextInput, SearchInput, Select, Checkbox, Textarea, planned Radio/Switch/DateInput/MultiSelect
 - feedback: Badge, Alert/InlineMessage, EmptyState, ErrorState, LoadingState, Skeleton, planned Toast/Progress
 - overlays: Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, ConfirmDialog
-- layout: Card, Panel, Stack, Inline, Section, planned AppShell/Page/Nav/Tabs
+- layout: Card, Panel, Stack, Inline, Section, AppShell, Page, PageHeader, PageToolbar
+- navigation: SideNav, TopNav, Breadcrumbs, Tabs
 
 ## Owns
 

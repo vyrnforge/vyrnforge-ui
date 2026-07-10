@@ -1,4 +1,4 @@
-import { Badge, Card, Heading, InlineMessage, Text } from "@dravyn/ui-components";
+import { Badge, InlineMessage, PageHeader } from "@dravyn/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
@@ -13,34 +13,32 @@ type DocsPageProps = {
 export function DocsPage({ route }: DocsPageProps) {
   return (
     <main className="dv-docs-page">
-      <Card className="dv-docs-page__intro" padding="lg">
-        <div className="dv-docs-page__intro-header">
-          <div>
-            <div className="dv-docs-page__source">{route.sourcePath}</div>
-            <Heading level={2} size="lg">
-              {route.title}
-            </Heading>
-          </div>
-          <div className="dv-docs-page__badges">
-            {route.canonical && (
-              <Badge variant="success" tone="subtle">
-                Canonical
-              </Badge>
-            )}
-            {route.tags?.map((tag) => (
-              <Badge key={tag} size="sm" tone="subtle">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        </div>
-        {route.description && <Text tone="muted">{route.description}</Text>}
+      <div className="dv-docs-page__intro">
+        <PageHeader
+          actions={
+            <div className="dv-docs-page__badges">
+              {route.canonical && (
+                <Badge variant="success" tone="subtle">
+                  Canonical
+                </Badge>
+              )}
+              {route.tags?.map((tag) => (
+                <Badge key={tag} size="sm" tone="subtle">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          }
+          description={route.description}
+          eyebrow={route.sourcePath}
+          title={route.title}
+        />
         {route.aiPurpose && (
           <InlineMessage className="dv-docs-ai-purpose" title="AI purpose" variant="info">
             {route.aiPurpose}
           </InlineMessage>
         )}
-      </Card>
+      </div>
 
       {route.kind === "component-reference" ? (
         <ComponentReferencePage />

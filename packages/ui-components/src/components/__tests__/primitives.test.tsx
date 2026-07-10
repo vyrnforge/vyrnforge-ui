@@ -1,7 +1,9 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import {
+  AppShell,
   Badge,
+  Breadcrumbs,
   Button,
   Checkbox,
   ConfirmDialog,
@@ -12,10 +14,13 @@ import {
   Icon,
   IconButton,
   Menu,
+  PageHeader,
   Popover,
   Select,
   SegmentedControl,
+  SideNav,
   Skeleton,
+  Tabs,
   TextInput,
   Tooltip,
   ToolbarButton,
@@ -226,5 +231,91 @@ describe("@dravyn/ui-components primitives", () => {
     );
 
     expect(markup).not.toContain("Helpful hint");
+  });
+
+  it("renders AppShell header, sidebar, and content regions", () => {
+    const markup = renderToStaticMarkup(
+      <AppShell header="Header" sidebar="Sidebar">
+        Content
+      </AppShell>
+    );
+
+    expect(markup).toContain("dv-app-shell--with-sidebar");
+    expect(markup).toContain("dv-app-shell__header");
+    expect(markup).toContain("Sidebar");
+    expect(markup).toContain("Content");
+  });
+
+  it("renders PageHeader actions and status", () => {
+    const markup = renderToStaticMarkup(
+      <PageHeader
+        actions={<Button>Approve</Button>}
+        status={<Badge variant="success">Active</Badge>}
+        title="Customer"
+      />
+    );
+
+    expect(markup).toContain("Customer");
+    expect(markup).toContain("Approve");
+    expect(markup).toContain("dv-page-header__status");
+  });
+
+  it("marks the current Breadcrumb item", () => {
+    const markup = renderToStaticMarkup(
+      <Breadcrumbs
+        items={[
+          { id: "home", label: "Home", href: "/" },
+          { id: "orders", label: "Orders", current: true }
+        ]}
+      />
+    );
+
+    expect(markup).toContain("aria-current=\"page\"");
+    expect(markup).toContain("Orders");
+  });
+
+  it("renders SideNav active state and calls onSelect", () => {
+    const onSelect = vi.fn();
+    const element = SideNav({
+      activeId: "orders",
+      items: [
+        { id: "overview", label: "Overview" },
+        { id: "orders", label: "Orders" }
+      ],
+      onSelect
+    });
+    const markup = renderToStaticMarkup(element);
+    const list = Array.isArray(element.props.children)
+      ? element.props.children[1]
+      : undefined;
+    const entries = list?.props.children;
+    const activeEntry = Array.isArray(entries) ? entries[1] : undefined;
+    const activeButton = Array.isArray(activeEntry?.props.children)
+      ? activeEntry.props.children[0]
+      : undefined;
+
+    activeButton?.props.onClick();
+
+    expect(markup).toContain("dv-side-nav__item--active");
+    expect(markup).toContain("aria-current=\"page\"");
+    expect(onSelect).toHaveBeenCalledWith({ id: "orders", label: "Orders" });
+  });
+
+  it("renders controlled Tabs selection and disabled tabs", () => {
+    const markup = renderToStaticMarkup(
+      <Tabs
+        value="details"
+        items={[
+          { id: "summary", label: "Summary", content: "Summary panel" },
+          { id: "details", label: "Details", content: "Details panel" },
+          { id: "history", label: "History", disabled: true }
+        ]}
+      />
+    );
+
+    expect(markup).toContain("role=\"tablist\"");
+    expect(markup).toContain("aria-selected=\"true\"");
+    expect(markup).toContain("Details panel");
+    expect(markup).toContain("disabled=\"\"");
   });
 });

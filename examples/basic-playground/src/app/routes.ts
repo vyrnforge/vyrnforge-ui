@@ -11,6 +11,7 @@ import { BadgesPage } from "../pages/components/BadgesPage";
 import { InputsPage } from "../pages/components/InputsPage";
 import { StatesPage } from "../pages/components/StatesPage";
 import { LayoutPage } from "../pages/components/LayoutPage";
+import { NavigationPage } from "../pages/components/NavigationPage";
 import { OverlaysPage } from "../pages/components/OverlaysPage";
 import { BasicGridPage } from "../pages/data-grid/BasicGridPage";
 import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
@@ -26,6 +27,8 @@ import { DetailPage } from "../pages/patterns/DetailPage";
 import { SettingsPage } from "../pages/patterns/SettingsPage";
 import { FormPage } from "../pages/patterns/FormPage";
 import { EmptyErrorLoadingPage } from "../pages/patterns/EmptyErrorLoadingPage";
+import { AdminShellPage } from "../pages/patterns/AdminShellPage";
+import { CustomerPortalShellPage } from "../pages/patterns/CustomerPortalShellPage";
 
 export type PlaygroundRoute = {
   id: string;
@@ -129,9 +132,17 @@ export const routes: PlaygroundRoute[] = [
     id: "layout",
     label: "Layout",
     title: "Layout",
-    description: "Simple Card, Panel, Stack, Inline, and Section primitives.",
+    description: "Simple Card, Panel, Stack, Inline, Section, Page, and shell primitives.",
     group: "Components",
     Component: LayoutPage
+  },
+  {
+    id: "navigation",
+    label: "Navigation",
+    title: "Navigation",
+    description: "SideNav, TopNav, Breadcrumbs, Tabs, PageHeader, and PageToolbar examples.",
+    group: "Components",
+    Component: NavigationPage
   },
   {
     id: "overlays",
@@ -252,6 +263,22 @@ export const routes: PlaygroundRoute[] = [
     description: "Full-page feedback states for enterprise workflows.",
     group: "Patterns",
     Component: EmptyErrorLoadingPage
+  },
+  {
+    id: "admin-shell",
+    label: "Admin Shell",
+    title: "Admin Shell",
+    description: "A complete admin app frame using AppShell, TopNav, SideNav, PageHeader, and PageToolbar.",
+    group: "Patterns",
+    Component: AdminShellPage
+  },
+  {
+    id: "customer-portal-shell",
+    label: "Customer Portal",
+    title: "Customer Portal Shell",
+    description: "A customer-facing portal frame with enterprise theme, breadcrumbs, and tabs.",
+    group: "Patterns",
+    Component: CustomerPortalShellPage
   }
 ];
 

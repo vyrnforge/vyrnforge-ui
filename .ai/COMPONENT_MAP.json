@@ -18,7 +18,7 @@
       "planned": []
     },
     "@dravyn/ui-components": {
-      "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation planned", "data display planned"],
+      "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation", "data display planned"],
       "css": ["@dravyn/ui-core/styles/index.css", "@dravyn/ui-components/styles/index.css"],
       "current": [
         "Button",
@@ -51,6 +51,14 @@
         "Stack",
         "Inline",
         "Section",
+        "AppShell",
+        "Page",
+        "PageHeader",
+        "PageToolbar",
+        "SideNav",
+        "TopNav",
+        "Breadcrumbs",
+        "Tabs",
         "Popover",
         "Menu",
         "Dropdown",
@@ -60,13 +68,6 @@
         "ConfirmDialog"
       ],
       "planned": [
-        "AppShell",
-        "Page",
-        "PageHeader",
-        "SideNav",
-        "TopNav",
-        "Breadcrumbs",
-        "Tabs",
         "Radio",
         "Switch",
         "NumberInput",

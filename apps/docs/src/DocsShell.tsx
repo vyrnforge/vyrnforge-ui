@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Badge, Heading, Text } from "@dravyn/ui-components";
+import { AppShell, Badge, Heading, Text, TopNav } from "@dravyn/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
@@ -16,32 +16,39 @@ export function DocsShell({
   onRouteChange
 }: DocsShellProps) {
   return (
-    <div className="dv-docs-shell">
-      <header className="dv-docs-header">
-        <div>
-          <div className="dv-docs-header__eyebrow">Dravyn UI Docs</div>
-          <Heading level={1} size="lg" className="dv-docs-header__title">
-            Source-of-truth documentation and AI reference
-          </Heading>
-          <Text tone="muted" className="dv-docs-header__description">
-            Markdown files remain canonical. This app is a readable navigation
-            and reference layer.
-          </Text>
-        </div>
-        <div className="dv-docs-header__actions">
-          <Badge variant="info" tone="subtle">
-            Docs viewer
-          </Badge>
-          {headerAction}
-        </div>
-      </header>
-      <div className="dv-docs-layout">
+    <AppShell
+      className="dv-docs-shell"
+      header={
+        <TopNav
+          brand={
+            <div>
+              <div className="dv-docs-header__eyebrow">Dravyn UI Docs</div>
+              <Heading level={1} size="lg" className="dv-docs-header__title">
+                Source-of-truth documentation and AI reference
+              </Heading>
+              <Text tone="muted" className="dv-docs-header__description">
+                Markdown files remain canonical. This app is a readable navigation
+                and reference layer.
+              </Text>
+            </div>
+          }
+          actions={
+            <Badge variant="info" tone="subtle">
+              Docs viewer
+            </Badge>
+          }
+          userArea={headerAction}
+        />
+      }
+      sidebar={
         <DocsNav
           activeRouteId={activeRoute.id}
           onRouteChange={onRouteChange}
         />
-        <DocsPage route={activeRoute} />
-      </div>
-    </div>
+      }
+      sidebarWidth={260}
+    >
+      <DocsPage route={activeRoute} />
+    </AppShell>
   );
 }

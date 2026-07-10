@@ -30,22 +30,18 @@ select {
 }
 
 .playground-nav {
-  position: sticky;
-  top: 0;
-  display: grid;
-  align-content: start;
-  gap: 18px;
-  height: 100vh;
-  overflow: auto;
-  border-right: 1px solid var(--dv-border, #d8e0ea);
-  padding: 20px;
-  background: var(--dv-surface, #ffffff);
+  height: 100%;
+  min-height: 0;
 }
 
-.playground-brand {
+.playground-brand,
+.playground-top-brand {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.playground-brand {
   padding-bottom: 14px;
   border-bottom: 1px solid var(--dv-border, #d8e0ea);
 }
@@ -69,41 +65,6 @@ select {
 .playground-brand span {
   color: var(--dv-text-muted, #64748b);
   font-size: var(--dv-font-size-sm, 13px);
-}
-
-.playground-nav__group {
-  display: grid;
-  gap: 6px;
-}
-
-.playground-nav__label {
-  color: var(--dv-text-muted, #64748b);
-  font-size: 12px;
-  font-weight: 750;
-  text-transform: uppercase;
-}
-
-.playground-nav button {
-  width: 100%;
-  min-height: 34px;
-  border: 1px solid transparent;
-  border-radius: var(--dv-radius-sm, 6px);
-  padding: 7px 10px;
-  color: var(--dv-text, #172033);
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
-}
-
-.playground-nav button:hover,
-.playground-nav button.is-active {
-  border-color: var(--dv-border, #d8e0ea);
-  background: var(--dv-surface-subtle, #f8fafc);
-}
-
-.playground-nav button.is-active {
-  color: var(--dv-primary, #2563eb);
-  font-weight: 750;
 }
 
 .playground-main {
@@ -419,6 +380,28 @@ select {
   padding: var(--dv-space-4, 16px);
 }
 
+.nav-demo-frame {
+  height: 360px;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--dv-border, #d8e0ea);
+  border-radius: var(--dv-radius-lg, 10px);
+}
+
+.shell-preview.dv-app-shell {
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid var(--dv-border, #d8e0ea);
+  border-radius: var(--dv-radius-lg, 10px);
+}
+
+.shell-preview__content {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
+}
+
 .demo-boolean {
   display: inline-flex;
   min-width: 78px;
@@ -501,23 +484,8 @@ select {
 }
 
 @media (max-width: 960px) {
-  .playground-layout {
-    grid-template-columns: 1fr;
-  }
-
   .playground-nav {
-    position: static;
     height: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--dv-border, #d8e0ea);
-  }
-
-  .playground-nav__group {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .playground-nav__label {
-    grid-column: 1 / -1;
   }
 
   .playground-main {

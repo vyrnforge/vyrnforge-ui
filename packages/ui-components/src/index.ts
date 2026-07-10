@@ -97,6 +97,22 @@ export { Inline } from "./components/Inline";
 export type { InlineProps } from "./components/Inline";
 export { Section } from "./components/Section";
 export type { SectionProps } from "./components/Section";
+export { AppShell } from "./components/AppShell";
+export type { AppShellProps } from "./components/AppShell";
+export { Page } from "./components/Page";
+export type { PageDensity, PageMaxWidth, PageProps } from "./components/Page";
+export { PageHeader } from "./components/PageHeader";
+export type { PageHeaderProps } from "./components/PageHeader";
+export { PageToolbar } from "./components/PageToolbar";
+export type { PageToolbarDensity, PageToolbarProps } from "./components/PageToolbar";
+export { SideNav } from "./components/SideNav";
+export type { SideNavItem, SideNavProps } from "./components/SideNav";
+export { TopNav } from "./components/TopNav";
+export type { TopNavProps } from "./components/TopNav";
+export { Breadcrumbs } from "./components/Breadcrumbs";
+export type { BreadcrumbItem, BreadcrumbsProps } from "./components/Breadcrumbs";
+export { Tabs } from "./components/Tabs";
+export type { TabItem, TabsProps, TabsSize, TabsVariant } from "./components/Tabs";
 export { Popover } from "./components/Popover";
 export type {
   PopoverAlign,

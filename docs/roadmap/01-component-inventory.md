@@ -72,14 +72,14 @@
 
 | Component | Package | Status |
 | --- | --- | --- |
-| Tabs | `ui-components` | Planned |
-| Breadcrumbs | `ui-components` | Planned |
-| SideNav | `ui-components` | Planned |
-| TopNav | `ui-components` | Planned |
-| AppShell | `ui-components` | Planned |
-| Page | `ui-components` | Planned |
-| PageHeader | `ui-components` | Planned |
-| PageToolbar | `ui-components` | Planned |
+| Tabs | `ui-components` | Experimental |
+| Breadcrumbs | `ui-components` | Experimental |
+| SideNav | `ui-components` | Experimental |
+| TopNav | `ui-components` | Experimental |
+| AppShell | `ui-components` | Experimental |
+| Page | `ui-components` | Experimental |
+| PageHeader | `ui-components` | Experimental |
+| PageToolbar | `ui-components` | Experimental |
 
 ## Data display
 

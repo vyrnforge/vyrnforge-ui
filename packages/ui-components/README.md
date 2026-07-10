@@ -26,7 +26,8 @@ import "@dravyn/ui-components/styles/index.css";
 - Typography: `Heading`, `Text`, `Label`, `Caption`, `CodeText`
 - Feedback: `Badge`, `StatusBadge`, `EmptyState`, `ErrorState`, `LoadingState`, `Skeleton`, `InlineMessage`, `Alert`
 - Forms: `Field`, `TextInput`, `SearchInput`, `Select`, `Checkbox`, `Textarea`, `ValidationMessage`
-- Layout: `Card`, `Panel`, `Stack`, `Inline`, `Section`
+- Layout: `Card`, `Panel`, `Stack`, `Inline`, `Section`, `AppShell`, `Page`, `PageHeader`, `PageToolbar`
+- Navigation: `SideNav`, `TopNav`, `Breadcrumbs`, `Tabs`
 - Overlays: `Popover`, `Menu`, `Dropdown`, `Tooltip`, `Dialog`, `Drawer`, `ConfirmDialog`
 
 ## Examples
@@ -132,6 +133,35 @@ Layout:
 </Section>
 ```
 
+App shell and navigation:
+
+```tsx
+import {
+  AppShell,
+  Breadcrumbs,
+  Page,
+  PageHeader,
+  PageToolbar,
+  SearchInput,
+  SideNav,
+  Tabs,
+  TopNav
+} from "@dravyn/ui-components";
+
+<AppShell
+  header={<TopNav brand="Operations" />}
+  sidebar={<SideNav activeId="orders" items={navItems} />}
+>
+  <Page toolbar={<PageToolbar left={<SearchInput aria-label="Search orders" />} />}>
+    <PageHeader
+      breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
+      title="Orders"
+    />
+    <Tabs defaultValue="open" items={tabs} />
+  </Page>
+</AppShell>
+```
+
 Overlays:
 
 ```tsx
@@ -197,6 +227,9 @@ Dialog and drawer:
 - `Tooltip` uses `role="tooltip"` and opens on hover or focus.
 - `Dialog` and `Drawer` use `role="dialog"`, `aria-modal`, labelled title/description ids, Escape close, overlay click close, and basic focus return.
 - `Popover`, `Menu`, and `Dropdown` support controlled and uncontrolled open state.
+- `Tabs` supports controlled and uncontrolled selection, tab roles, and arrow/Home/End keyboard navigation.
+- `Breadcrumbs` marks the current item with `aria-current="page"`.
+- `SideNav` exposes active navigation with `aria-current`; app routing remains outside the component.
 
 ## Current Overlay Limitations
 

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { AppShell, Badge, Page, TopNav } from "@dravyn/ui-components";
 import type { PlaygroundRoute } from "./routes";
 import { PlaygroundNav } from "./PlaygroundNav";
 
@@ -18,22 +19,37 @@ export function PlaygroundShell({
   routes
 }: PlaygroundShellProps) {
   return (
-    <div className="playground-layout">
-      <PlaygroundNav
-        activeRouteId={activeRouteId}
-        routes={routes}
-        onRouteChange={onRouteChange}
-      />
-      <main className="playground-main">
-        <header className="page-header">
-          <div>
-            <p className="page-kicker">{activeRoute.group}</p>
-            <h1>{activeRoute.title}</h1>
-            <p>{activeRoute.description}</p>
-          </div>
-        </header>
-        <div className="page-content">{children}</div>
-      </main>
-    </div>
+    <AppShell
+      header={
+        <TopNav
+          brand={
+            <div className="playground-top-brand">
+              <span className="playground-brand__mark">D</span>
+              <span>Dravyn UI Playground</span>
+            </div>
+          }
+          actions={<Badge variant="info">native-first</Badge>}
+          userArea={<Badge tone="subtle">S2 shell</Badge>}
+        />
+      }
+      sidebar={
+        <PlaygroundNav
+          activeRouteId={activeRouteId}
+          routes={routes}
+          onRouteChange={onRouteChange}
+        />
+      }
+      sidebarWidth={300}
+    >
+      <Page
+        actions={<Badge variant="success">playground</Badge>}
+        description={activeRoute.description}
+        eyebrow={activeRoute.group}
+        maxWidth="xl"
+        title={activeRoute.title}
+      >
+        {children}
+      </Page>
+    </AppShell>
   );
 }

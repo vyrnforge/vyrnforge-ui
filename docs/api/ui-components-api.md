@@ -70,6 +70,21 @@ import "@dravyn/ui-components/styles/index.css";
 | `Inline` | Horizontal layout. | `import { Inline } from "@dravyn/ui-components";`<br>`<Inline gap="sm">...</Inline>` | `gap`, `align`, `justify`, `wrap` | Preserve reading order. | Use for inline controls. Avoid table-like layout. |
 | `Section` | Semantic content section. | `import { Section } from "@dravyn/ui-components";`<br>`<Section title="Details">...</Section>` | `title`, `description`, `actions` | Use meaningful section titles. | Use for document/application sections. Avoid for tiny grouped controls. |
 
+## App Shell And Navigation
+
+These components are experimental. They are implemented and public, but API details may still evolve.
+
+| Component | Purpose | Import and usage | Important props | Accessibility | Use / avoid |
+| --- | --- | --- | --- | --- | --- |
+| `AppShell` | Enterprise app layout with optional header, sidebar, footer, and content area. | `import { AppShell } from "@dravyn/ui-components";`<br>`<AppShell header={<TopNav />} sidebar={<SideNav items={items} />}>...</AppShell>` | `header`, `sidebar`, `footer`, `sidebarCollapsed`, `sidebarWidth`, `collapsedSidebarWidth` | Provide meaningful header/sidebar content and avoid duplicate main landmarks. | Use for admin/customer portal shells. Avoid for small embedded layouts. |
+| `Page` | Route-level page wrapper with header, toolbar, density, and max-width. | `import { Page } from "@dravyn/ui-components";`<br>`<Page title="Orders" toolbar={<PageToolbar />}>...</Page>` | `title`, `description`, `actions`, `toolbar`, `maxWidth`, `density` | Renders a main landmark. | Use for route pages. Avoid inside another main landmark or repeated cards. |
+| `PageHeader` | Page title area with description, status, metadata, breadcrumbs, and actions. | `import { PageHeader } from "@dravyn/ui-components";`<br>`<PageHeader title="Orders" actions={<Button>Create</Button>} />` | `title`, `description`, `eyebrow`, `status`, `metadata`, `actions`, `breadcrumbs` | Renders an `h1`; keep heading order logical. | Use for route/workflow headers. Avoid for small panel headings. |
+| `PageToolbar` | Page-level controls for search, filters, refresh, export, and view controls. | `import { PageToolbar } from "@dravyn/ui-components";`<br>`<PageToolbar left={<SearchInput aria-label="Search" />} right={<ToolbarButton label="Refresh" />} />` | `left`, `right`, `sticky`, `density`, `children` | Controls need accessible names. | Use below a page header. Avoid for primary business actions. |
+| `SideNav` | Sidebar navigation with active, disabled, badge, icon, collapsed, and one-level nested items. | `import { SideNav } from "@dravyn/ui-components";`<br>`<SideNav activeId="orders" items={items} onSelect={setRoute} />` | `items`, `activeId`, `collapsed`, `onSelect`, `header`, `footer` | Uses a nav landmark and `aria-current` for active items. | Use for app navigation. Avoid for complex tree views. |
+| `TopNav` | Compact top navigation/header bar. | `import { TopNav } from "@dravyn/ui-components";`<br>`<TopNav brand="Admin" actions={<Button>Invite</Button>} />` | `brand`, `navigation`, `actions`, `userArea` | Navigation/action labels must be clear. | Use in `AppShell` headers. Avoid owning auth/user state inside it. |
+| `Breadcrumbs` | Hierarchical location trail. | `import { Breadcrumbs } from "@dravyn/ui-components";`<br>`<Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Orders", current: true }]} />` | `items`, `separator` | Current item receives `aria-current="page"`. | Use for nested app pages. Avoid for step progress. |
+| `Tabs` | Controlled/uncontrolled tab navigation with panels. | `import { Tabs } from "@dravyn/ui-components";`<br>`<Tabs defaultValue="summary" items={[{ id: "summary", label: "Summary", content: "..." }]} />` | `items`, `value`, `defaultValue`, `onValueChange`, `variant`, `size` | Uses tablist/tab/tabpanel roles and arrow/Home/End keyboard behavior. | Use for related content panels. Avoid for simple mode switches; use `SegmentedControl`. |
+
 ## Overlays
 
 | Component | Purpose | Import and usage | Important props | Accessibility | Use / avoid |
