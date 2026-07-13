@@ -27,8 +27,8 @@ export function FormPage() {
         <Heading size="md">Request form</Heading>
         <Text tone="muted">A create/edit pattern using completed native form primitives.</Text>
       </div>
-      <Field label="Request title" htmlFor="request-title" required>
-        <TextInput id="request-title" defaultValue="Provision reporting workspace" />
+      <Field id="request-title" label="Request title" required>
+        {(controlProps) => <TextInput {...controlProps} defaultValue="Provision reporting workspace" />}
       </Field>
       <Field label="Owner" htmlFor="request-owner">
         <TextInput id="request-owner" defaultValue="Finance Operations" />
@@ -82,8 +82,8 @@ export function FormPage() {
           ]}
         />
       </Field>
-      <Field label="Justification" error="A justification is required before submission.">
-        <TextInput aria-label="Justification" invalid placeholder="Add business reason" />
+      <Field id="justification" label="Justification" error="A justification is required before submission." required>
+        {(controlProps) => <TextInput {...controlProps} placeholder="Add business reason" />}
       </Field>
       <Checkbox
         checked={acknowledged}

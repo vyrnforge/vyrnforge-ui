@@ -55,9 +55,3 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
-
-.dv-number-input,
-.dv-date-input,
-.dv-datetime-input {
-  font-variant-numeric: tabular-nums;
-}

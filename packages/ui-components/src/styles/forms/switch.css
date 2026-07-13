@@ -80,3 +80,14 @@
   gap: 2px;
   min-width: 0;
 }
+
+.dv-switch__label {
+  color: var(--dv-text-strong);
+  font-weight: 680;
+}
+
+.dv-switch__description {
+  color: var(--dv-text-muted);
+  font-size: var(--dv-font-size-sm);
+  line-height: var(--dv-line-height-md);
+}

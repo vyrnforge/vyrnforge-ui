@@ -148,15 +148,19 @@ describe("@dravyn/ui-components primitives", () => {
       <Field
         description="Helper text"
         error="Required"
-        htmlFor="name"
+        id="name"
         label="Name"
         required
       >
-        <TextInput id="name" invalid />
+        {(controlProps) => <TextInput {...controlProps} />}
       </Field>
     );
 
-    expect(markup).toContain("<label");
+    expect(markup).toContain("for=\"name\"");
+    expect(markup).toContain("id=\"name\"");
+    expect(markup).toMatch(/aria-describedby=\"name-description [^\"]+-message\"/);
+    expect(markup).toContain("aria-invalid=\"true\"");
+    expect(markup).toContain("aria-required=\"true\"");
     expect(markup).toContain("Helper text");
     expect(markup).toContain("Required");
     expect(markup).toContain("role=\"alert\"");
@@ -214,6 +218,13 @@ describe("@dravyn/ui-components primitives", () => {
     expect(markup).toContain("role=\"switch\"");
     expect(markup).toContain("aria-checked=\"true\"");
     expect(markup).toContain("Enabled");
+  });
+
+  it("forwards native Switch change handlers alongside onCheckedChange", () => {
+    const onChange = vi.fn();
+    const switchElement = <Switch label="Enabled" onChange={onChange} onCheckedChange={() => undefined} />;
+
+    expect(switchElement.props.onChange).toBe(onChange);
   });
 
   it("renders native number and date inputs", () => {

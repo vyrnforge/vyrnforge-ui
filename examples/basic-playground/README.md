@@ -1,6 +1,32 @@
 # Basic Playground
 
-This Vite React app validates Dravyn UI package consumption from another workspace project. It is organized as a multi-section playground for core tokens, primitive components, data-grid behavior, and product patterns.
+This Vite React app validates Dravyn UI package consumption from another workspace project. It is the interactive usage lab for core tokens, primitives, data-grid behavior, and product patterns.
+
+## Playground And Docs App
+
+The docs app is the source-of-truth reference for public APIs, architecture, and AI-readable metadata. The playground is the place to try working components in a live browser.
+
+Each gallery page should use the shared playground helpers:
+
+- `ComponentDemoPage` for the route header, import, usage guidance, API reference, accessibility, related components, and right-side outline.
+- `LiveExample` for a live preview derived directly from editable JSX source.
+- `PropsTable` only for compact, verified prop reference.
+- `PageOutline` for the section IDs rendered on a reference page.
+
+## Adding A Component Reference
+
+Every implemented public component gets its own route. Category pages may introduce a group, but they must not replace component reference pages.
+
+1. Add the component's route metadata in `src/app/routes.ts`, including its category, package, status, and path.
+2. Create a `ComponentDemoPage` with only relevant sections. Use stable section IDs so the right-side `PageOutline` can link to them.
+3. Add a `LiveExample` for every migrated example. Never pass a separately rendered preview: `initialCode` is the only source of the result.
+4. Give the example a restricted `createLiveScope(...)` containing only the Dravyn primitives it needs. Do not expose application services, auth, storage, APIs, or other application internals.
+5. Keep the import block read-only. `Copy full example` combines it with the current editable source; `Reset` restores `initialCode` and the original preview.
+6. Let syntax and runtime errors remain scoped to the individual example. The evaluator is for trusted playground examples only and is not part of Dravyn's public runtime API.
+7. Verify prop names and defaults against the public component type before adding rows to `PropsTable`.
+8. Add related component route IDs and short relationship descriptions. Keep live source and visual intent synchronized in the same edit.
+
+Use public Dravyn APIs and Dravyn UI primitives for the gallery surface. `react-live` is installed only in this private playground workspace to compile trusted editable examples. Playground CSS is only for reference layout, preview/code presentation, responsive behavior, and anchor spacing; do not duplicate package button, badge, input, card, tab, or alert styling in `playground.css`.
 
 ## Run
 

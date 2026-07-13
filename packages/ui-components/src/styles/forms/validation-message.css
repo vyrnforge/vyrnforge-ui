@@ -8,3 +8,11 @@
 .dv-validation-message--info {
   color: var(--dv-info);
 }
+
+.dv-validation-message--warning {
+  color: var(--dv-warning);
+}
+.dv-validation-message {
+  font-size: var(--dv-font-size-sm);
+  line-height: var(--dv-line-height-md);
+}

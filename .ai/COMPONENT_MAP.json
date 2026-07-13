@@ -127,6 +127,13 @@
     },
     "SideNav": {
       "layoutRule": "SideNav renders header and footer outside dv-side-nav__scroll; keep long navigation items inside the component list rather than adding app-owned scroll wrappers."
+    },
+    "Field": {
+      "relationshipRule": "Use Field's render-function child when it should supply the native control id, aria-describedby, invalid, required, and disabled props. For a static child, pair Field htmlFor with the child control id. Do not expect Field to clone arbitrary children.",
+      "validationRule": "Use error, warning, success, or message for standard field feedback. Error uses alert semantics through ValidationMessage."
+    },
+    "NativeFormControls": {
+      "rule": "TextInput, SearchInput, Textarea, Checkbox, Select, Radio, RadioGroup, Switch, NumberInput, DateInput, and DateTimeInput remain native controls. Keep value/defaultValue/onChange ownership in the application and do not add form or date libraries for basic workflows."
     }
   }
 }

@@ -115,8 +115,8 @@ import {
 Form validation:
 
 ```tsx
-<Field label="Email" htmlFor="email" error="Email is required">
-  <TextInput id="email" invalid />
+<Field id="email" label="Email" error="Email is required" required>
+  {(controlProps) => <TextInput {...controlProps} />}
 </Field>
 ```
 
@@ -264,7 +264,7 @@ Dialog and drawer:
 - `IconButton` requires `aria-label` in its TypeScript props.
 - Every icon-only control must have an accessible label. Prefer `tooltip` for repeated utility actions.
 - `Button loading` sets `aria-busy` and disables the button.
-- `Field` supports `htmlFor`, `required`, descriptions, and accessible error text.
+- `Field` supplies stable control and description ids through its render-function child. Static children remain supported with `htmlFor` plus a matching child control id; `Field` does not clone arbitrary controls.
 - `ErrorState` and danger validation messages use alert roles.
 - `Skeleton` disables animation when `animated={false}` and respects `prefers-reduced-motion`.
 - `Tooltip` uses `role="tooltip"` and opens on hover or focus.

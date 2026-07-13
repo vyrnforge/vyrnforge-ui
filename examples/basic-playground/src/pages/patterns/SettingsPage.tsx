@@ -8,7 +8,8 @@ import {
   Select,
   Switch,
   Text,
-  TextInput
+  TextInput,
+  ValidationMessage
 } from "@dravyn/ui-components";
 
 export function SettingsPage() {
@@ -37,6 +38,7 @@ export function SettingsPage() {
           onChange={(event) => setSettings({ ...settings, workspaceName: event.currentTarget.value })}
         />
       </Field>
+      <ValidationMessage tone="info">Changes apply to new workspace requests after saving.</ValidationMessage>
       <Field label="Default region" htmlFor="settings-region" orientation="horizontal">
         <Select
           id="settings-region"

@@ -7,6 +7,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
   description,
   invalid = false,
   label,
+  onChange,
   onCheckedChange,
   style,
   ...props
@@ -14,10 +15,11 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
   return (
     <label className={joinClassNames("dv-switch", className)} style={style}>
       <input
-        aria-checked={props.checked}
+        aria-checked={props.checked ?? props.defaultChecked}
         aria-invalid={invalid || undefined}
         className="dv-switch__input"
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          onChange?.(event);
           onCheckedChange?.(event.currentTarget.checked);
         }}
         ref={ref}

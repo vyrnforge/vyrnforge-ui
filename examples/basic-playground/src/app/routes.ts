@@ -4,16 +4,31 @@ import { ThemeTokensPage } from "../pages/core/ThemeTokensPage";
 import { ThemeModesPage } from "../pages/core/ThemeModesPage";
 import { DensityPage } from "../pages/core/DensityPage";
 import { CssOverridePage } from "../pages/core/CssOverridePage";
-import { ButtonsPage } from "../pages/components/ButtonsPage";
-import { ActionsPage } from "../pages/components/ActionsPage";
-import { TypographyPage } from "../pages/components/TypographyPage";
-import { BadgesPage } from "../pages/components/BadgesPage";
-import { InputsPage } from "../pages/components/InputsPage";
-import { StatesPage } from "../pages/components/StatesPage";
-import { LayoutPage } from "../pages/components/LayoutPage";
-import { NavigationPage } from "../pages/components/NavigationPage";
-import { OverlaysPage } from "../pages/components/OverlaysPage";
-import { BasicGridPage } from "../pages/data-grid/BasicGridPage";
+import {
+  AppShellPage,
+  BadgePage,
+  BasicGridReferencePage,
+  ButtonGroupPage,
+  ButtonPage,
+  IconButtonPage,
+  SegmentedControlPage,
+  TabsPage,
+  ToolbarButtonPage
+} from "../pages/reference/PriorityComponentPages";
+import {
+  CheckboxReferencePage,
+  DateInputPage,
+  DateTimeInputPage,
+  FieldReferencePage,
+  NumberInputPage,
+  RadioGroupPage,
+  RadioPage,
+  SelectReferencePage,
+  SwitchPage,
+  TextareaPage,
+  TextInputReferencePage,
+  ValidationMessagePage
+} from "../pages/reference/FormComponentPages";
 import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
 import { FilteringPage } from "../pages/data-grid/FilteringPage";
 import { SelectionPage } from "../pages/data-grid/SelectionPage";
@@ -29,13 +44,19 @@ import { FormPage } from "../pages/patterns/FormPage";
 import { EmptyErrorLoadingPage } from "../pages/patterns/EmptyErrorLoadingPage";
 import { AdminShellPage } from "../pages/patterns/AdminShellPage";
 import { CustomerPortalShellPage } from "../pages/patterns/CustomerPortalShellPage";
+import { FilterFormPage } from "../pages/patterns/FilterFormPage";
 
 export type PlaygroundRoute = {
   id: string;
   label: string;
   title: string;
   description: string;
-  group: "Overview" | "Core" | "Components" | "Data Grid" | "Patterns";
+  group: "Overview" | "Foundations" | "Components" | "Data Grid" | "Patterns";
+  subgroup?: "Actions" | "Forms" | "Feedback" | "Layout" | "Navigation" | "Overlays";
+  gallery?: boolean;
+  path?: string;
+  packageName?: "@dravyn/ui-components" | "@dravyn/ui-data-grid";
+  status?: "stable" | "experimental" | "planned";
   Component: ComponentType;
 };
 
@@ -53,7 +74,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Theme Tokens",
     title: "Theme Tokens",
     description: "Shared dv tokens for color, surfaces, typography, spacing, and status.",
-    group: "Core",
+    group: "Foundations",
     Component: ThemeTokensPage
   },
   {
@@ -61,7 +82,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Theme Modes",
     title: "Theme Modes",
     description: "Light, dark, enterprise, and system theme behavior.",
-    group: "Core",
+    group: "Foundations",
     Component: ThemeModesPage
   },
   {
@@ -69,7 +90,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Density",
     title: "Density",
     description: "Compact, standard, and comfortable sizing across controls.",
-    group: "Core",
+    group: "Foundations",
     Component: DensityPage
   },
   {
@@ -77,80 +98,268 @@ export const routes: PlaygroundRoute[] = [
     label: "CSS Overrides",
     title: "CSS Overrides",
     description: "Global dv overrides, local scopes, and grid-only udg overrides.",
-    group: "Core",
+    group: "Foundations",
     Component: CssOverridePage
   },
   {
-    id: "buttons",
-    label: "Buttons",
-    title: "Buttons",
-    description: "Button and icon button variants, sizing, disabled, and loading states.",
+    id: "button",
+    label: "Button",
+    title: "Button",
+    description: "Visible business actions and form commands.",
     group: "Components",
-    Component: ButtonsPage
+    subgroup: "Actions",
+    gallery: true,
+    path: "/components/actions/button",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: ButtonPage
   },
   {
-    id: "actions",
-    label: "Actions",
-    title: "Action Controls",
-    description: "First-party icons, icon buttons, toolbar buttons, groups, and segmented controls.",
+    id: "icon-button",
+    label: "IconButton",
+    title: "IconButton",
+    description: "Compact icon-only utility actions.",
     group: "Components",
-    Component: ActionsPage
+    subgroup: "Actions",
+    gallery: true,
+    path: "/components/actions/icon-button",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: IconButtonPage
   },
   {
-    id: "typography",
-    label: "Typography",
-    title: "Typography",
-    description: "Headings, body text, muted text, and strong emphasis.",
+    id: "button-group",
+    label: "ButtonGroup",
+    title: "ButtonGroup",
+    description: "Visually grouped related actions.",
     group: "Components",
-    Component: TypographyPage
+    subgroup: "Actions",
+    gallery: true,
+    path: "/components/actions/button-group",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: ButtonGroupPage
   },
   {
-    id: "badges",
-    label: "Badges",
-    title: "Badges",
-    description: "Neutral, status, and informational badge treatments.",
+    id: "toolbar-button",
+    label: "ToolbarButton",
+    title: "ToolbarButton",
+    description: "Dense labelled toolbar commands.",
     group: "Components",
-    Component: BadgesPage
+    subgroup: "Actions",
+    gallery: true,
+    path: "/components/actions/toolbar-button",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: ToolbarButtonPage
   },
   {
-    id: "inputs",
-    label: "Inputs",
-    title: "Inputs",
-    description: "Fields, text input, search input, select, checkbox, and validation states.",
+    id: "segmented-control",
+    label: "SegmentedControl",
+    title: "SegmentedControl",
+    description: "Mutually exclusive view and mode selection.",
     group: "Components",
-    Component: InputsPage
+    subgroup: "Actions",
+    gallery: true,
+    path: "/components/actions/segmented-control",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: SegmentedControlPage
   },
   {
-    id: "states",
-    label: "States",
-    title: "States",
-    description: "Reusable empty, error, loading, and skeleton states.",
+    id: "text-input",
+    label: "TextInput",
+    title: "TextInput",
+    description: "Native short-text input.",
     group: "Components",
-    Component: StatesPage
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/text-input",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: TextInputReferencePage
   },
   {
-    id: "layout",
-    label: "Layout",
-    title: "Layout",
-    description: "Simple Card, Panel, Stack, Inline, Section, Page, and shell primitives.",
+    id: "select",
+    label: "Select",
+    title: "Select",
+    description: "Native select for compact option sets.",
     group: "Components",
-    Component: LayoutPage
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/select",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: SelectReferencePage
   },
   {
-    id: "navigation",
-    label: "Navigation",
-    title: "Navigation",
-    description: "SideNav, TopNav, Breadcrumbs, Tabs, PageHeader, and PageToolbar examples.",
+    id: "checkbox",
+    label: "Checkbox",
+    title: "Checkbox",
+    description: "Native independent-choice input.",
     group: "Components",
-    Component: NavigationPage
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/checkbox",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: CheckboxReferencePage
   },
   {
-    id: "overlays",
-    label: "Overlays",
-    title: "Overlays",
-    description: "Popover, menu, dropdown, tooltip, dialog, drawer, and confirmations.",
+    id: "field",
+    label: "Field",
+    title: "Field",
+    description: "Labels, descriptions, validation, and control relationships.",
     group: "Components",
-    Component: OverlaysPage
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/field",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: FieldReferencePage
+  },
+  {
+    id: "validation-message",
+    label: "ValidationMessage",
+    title: "Validation Message",
+    description: "Field-level validation and guidance messages.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/validation-message",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: ValidationMessagePage
+  },
+  {
+    id: "radio",
+    label: "Radio",
+    title: "Radio",
+    description: "Native individual choice control.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/radio",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: RadioPage
+  },
+  {
+    id: "radio-group",
+    label: "RadioGroup",
+    title: "Radio Group",
+    description: "Native fieldset-based single-choice group.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/radio-group",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: RadioGroupPage
+  },
+  {
+    id: "switch",
+    label: "Switch",
+    title: "Switch",
+    description: "Native checkbox-based settings control.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/switch",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: SwitchPage
+  },
+  {
+    id: "number-input",
+    label: "NumberInput",
+    title: "Number Input",
+    description: "Native integer and decimal input.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/number-input",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: NumberInputPage
+  },
+  {
+    id: "date-input",
+    label: "DateInput",
+    title: "Date Input",
+    description: "Native local date input.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/date-input",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: DateInputPage
+  },
+  {
+    id: "datetime-input",
+    label: "DateTimeInput",
+    title: "Date Time Input",
+    description: "Native local date and time input.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/datetime-input",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: DateTimeInputPage
+  },
+  {
+    id: "textarea",
+    label: "Textarea",
+    title: "Textarea",
+    description: "Native multiline text input.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/textarea",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: TextareaPage
+  },
+  {
+    id: "badge",
+    label: "Badge",
+    title: "Badge",
+    description: "Compact status and metadata label.",
+    group: "Components",
+    subgroup: "Feedback",
+    gallery: true,
+    path: "/components/feedback/badge",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: BadgePage
+  },
+  {
+    id: "app-shell",
+    label: "AppShell",
+    title: "AppShell",
+    description: "Persistent application layout and scroll ownership.",
+    group: "Components",
+    subgroup: "Layout",
+    gallery: true,
+    path: "/components/layout/app-shell",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: AppShellPage
+  },
+  {
+    id: "tabs",
+    label: "Tabs",
+    title: "Tabs",
+    description: "Related content panels on one route.",
+    group: "Components",
+    subgroup: "Navigation",
+    gallery: true,
+    path: "/components/navigation/tabs",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: TabsPage
   },
   {
     id: "grid-basic",
@@ -158,7 +367,11 @@ export const routes: PlaygroundRoute[] = [
     title: "Basic Grid",
     description: "Rows, columns, search, sort, and pagination.",
     group: "Data Grid",
-    Component: BasicGridPage
+    gallery: true,
+    path: "/data-grid/basic",
+    packageName: "@dravyn/ui-data-grid",
+    status: "stable",
+    Component: BasicGridReferencePage
   },
   {
     id: "grid-columns",
@@ -257,6 +470,14 @@ export const routes: PlaygroundRoute[] = [
     Component: FormPage
   },
   {
+    id: "filter-form",
+    label: "Filter Form",
+    title: "Filter Form",
+    description: "Search, select, native date range, and filter actions.",
+    group: "Patterns",
+    Component: FilterFormPage
+  },
+  {
     id: "empty-error-loading",
     label: "Empty/Error/Loading",
     title: "Empty, Error, and Loading",
@@ -282,4 +503,4 @@ export const routes: PlaygroundRoute[] = [
   }
 ];
 
-export const routeGroups = ["Overview", "Core", "Components", "Data Grid", "Patterns"] as const;
+export const routeGroups = ["Overview", "Foundations", "Components", "Data Grid", "Patterns"] as const;

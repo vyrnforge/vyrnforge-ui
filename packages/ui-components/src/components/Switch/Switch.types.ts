@@ -1,6 +1,6 @@
 import type { CSSProperties, InputHTMLAttributes, ReactNode } from "react";
 
-export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "type"> & {
+export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;

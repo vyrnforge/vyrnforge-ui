@@ -20,14 +20,11 @@
   font-size: var(--dv-font-size-sm);
   font-weight: 720;
 }
-.dv-field__required,
-.dv-field--invalid .dv-field__message,
-.dv-validation-message--danger {
+.dv-field__required {
   color: var(--dv-danger);
 }
 .dv-field__description,
-.dv-field__message,
-.dv-validation-message {
+.dv-field__message {
   color: var(--dv-text-muted);
   font-size: var(--dv-font-size-sm);
   line-height: var(--dv-line-height-md);

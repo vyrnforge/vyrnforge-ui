@@ -1,2 +1,2 @@
 export { Field } from "./Field";
-export type { FieldProps } from "./Field.types";
+export type { FieldChildren, FieldControlProps, FieldProps } from "./Field.types";

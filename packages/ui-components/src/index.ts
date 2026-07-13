@@ -53,7 +53,7 @@ export type {
   StatusBadgeStatus
 } from "./components/Badge";
 export { Field } from "./components/Field";
-export type { FieldProps } from "./components/Field";
+export type { FieldChildren, FieldControlProps, FieldProps } from "./components/Field";
 export { TextInput } from "./components/TextInput";
 export type { TextInputProps, TextInputSize } from "./components/TextInput";
 export { SearchInput } from "./components/SearchInput";

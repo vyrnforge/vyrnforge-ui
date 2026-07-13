@@ -1,13 +1,17 @@
 import type { ReactNode } from "react";
-import { AppShell, Badge, Page, TopNav } from "@dravyn/ui-components";
+import { AppShell, Badge, Page, SegmentedControl, Select, TopNav } from "@dravyn/ui-components";
 import type { PlaygroundRoute } from "./routes";
 import { PlaygroundNav } from "./PlaygroundNav";
 
 export type PlaygroundShellProps = {
   activeRoute: PlaygroundRoute;
   activeRouteId: string;
+  density: string;
   routes: PlaygroundRoute[];
   onRouteChange: (routeId: string) => void;
+  onDensityChange: (density: string) => void;
+  onThemeChange: (theme: string) => void;
+  theme: string;
   children: ReactNode;
 };
 
@@ -15,7 +19,11 @@ export function PlaygroundShell({
   activeRoute,
   activeRouteId,
   children,
+  density,
+  theme,
+  onDensityChange,
   onRouteChange,
+  onThemeChange,
   routes
 }: PlaygroundShellProps) {
   return (
@@ -29,10 +37,38 @@ export function PlaygroundShell({
               <span>Dravyn UI Playground</span>
             </div>
           }
-          actions={<Badge variant="info">native-first</Badge>}
-          userArea={<Badge tone="subtle">S2 shell</Badge>}
+          actions={
+            <div className="dv-playground-top-controls">
+              <Select
+                aria-label="Playground theme"
+                onChange={(event) => onThemeChange(event.currentTarget.value)}
+                options={[
+                  { label: "Light", value: "light" },
+                  { label: "Dark", value: "dark" },
+                  { label: "Enterprise", value: "enterprise" },
+                  { label: "System", value: "system" }
+                ]}
+                size="sm"
+                value={theme}
+              />
+              <SegmentedControl
+                aria-label="Playground density"
+                onChange={onDensityChange}
+                options={[
+                  { label: "Compact", value: "compact" },
+                  { label: "Standard", value: "standard" },
+                  { label: "Comfortable", value: "comfortable" }
+                ]}
+                size="sm"
+                value={density}
+              />
+            </div>
+          }
+          userArea={<Badge tone="subtle">native-first</Badge>}
         />
       }
+      data-density={density}
+      data-theme={theme}
       headerPosition="sticky"
       scrollMode="content"
       sidebar={
@@ -46,11 +82,11 @@ export function PlaygroundShell({
       sidebarWidth={300}
     >
       <Page
-        actions={<Badge variant="success">playground</Badge>}
-        description={activeRoute.description}
+        actions={<Badge variant="success">usage lab</Badge>}
+        description={activeRoute.gallery ? undefined : activeRoute.description}
         eyebrow={activeRoute.group}
         maxWidth="xl"
-        title={activeRoute.title}
+        title={activeRoute.gallery ? undefined : activeRoute.title}
       >
         {children}
       </Page>

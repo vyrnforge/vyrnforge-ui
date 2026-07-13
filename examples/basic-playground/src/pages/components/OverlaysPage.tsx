@@ -17,6 +17,7 @@ import {
   TextInput,
   Tooltip
 } from "@dravyn/ui-components";
+import { DemoPage } from "../../components/DemoPage";
 
 export function OverlaysPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -25,7 +26,18 @@ export function OverlaysPage() {
   const [dangerOpen, setDangerOpen] = useState(false);
 
   return (
-    <div className="dv-playground-page-stack">
+    <DemoPage
+      accessibility="Verify Escape handling, focus return, and an accessible trigger label for every overlay."
+      avoid="Avoid overlays for long multi-step workflows or content that needs to stay visible while users work."
+      description="Anchored and modal primitives for focused actions, short workflows, and contextual help."
+      importSnippet={'import { Popover, Menu, Tooltip, Dialog, Drawer } from "@dravyn/ui-components";'}
+      packageName="@dravyn/ui-components"
+      relatedComponents={["Button", "IconButton", "ConfirmDialog"]}
+      status="experimental"
+      title="Overlays"
+      usage="Use a small anchored overlay for contextual content and a dialog or drawer for a focused task."
+    >
+      <div className="dv-playground-page-stack">
       <Section
         title="Popover, menu, dropdown, and tooltip"
         description="Small anchored overlays use native events and CSS positioning."
@@ -166,6 +178,7 @@ export function OverlaysPage() {
         title="Delete saved view?"
         variant="danger"
       />
-    </div>
+      </div>
+    </DemoPage>
   );
 }
