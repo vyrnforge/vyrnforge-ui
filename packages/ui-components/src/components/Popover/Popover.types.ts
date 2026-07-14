@@ -1,8 +1,10 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode, RefObject } from "react";
 
 export type PopoverPlacement =
+  | "bottom"
   | "bottom-start"
   | "bottom-end"
+  | "top"
   | "top-start"
   | "top-end"
   | "right"
@@ -20,6 +22,12 @@ export type PopoverProps = {
   align?: PopoverAlign;
   closeOnEscape?: boolean;
   closeOnOutsideClick?: boolean;
+  closeOnOutsidePointer?: boolean;
+  offset?: number;
+  matchTriggerWidth?: boolean;
+  modal?: boolean;
+  initialFocusRef?: RefObject<HTMLElement | null>;
+  portalContainer?: Element | null;
   className?: string;
   style?: CSSProperties;
 };

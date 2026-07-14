@@ -10,6 +10,7 @@ import {
   DateInput,
   DateTimeInput,
   Dialog,
+  Drawer,
   EmptyState,
   ErrorState,
   Field,
@@ -22,15 +23,19 @@ import {
   Popover,
   Radio,
   RadioGroup,
+  Rating,
   Select,
   SegmentedControl,
   SideNav,
   Skeleton,
+  Slider,
   Switch,
   Tabs,
   TextInput,
   Tooltip,
   ToolbarButton,
+  ToggleButton,
+  ToggleButtonGroup,
   ButtonGroup,
   ValidationMessage
 } from "../../index";
@@ -102,6 +107,65 @@ describe("@dravyn/ui-components primitives", () => {
 
     expect(markup).toContain("role=\"radiogroup\"");
     expect(markup).toContain("aria-checked=\"true\"");
+  });
+
+  it("renders Rating controlled, read-only, disabled, and accessible radio labels", () => {
+    const markup = renderToStaticMarkup(
+      <>
+        <Rating label="Quality" max={5} value={3} />
+        <Rating label="Archived quality" readOnly value={4} />
+        <Rating disabled label="Unavailable quality" defaultValue={2} />
+      </>
+    );
+
+    expect(markup).toContain("type=\"radio\"");
+    expect(markup).toContain("aria-label=\"3 of 5 stars\"");
+    expect(markup).toContain("dv-rating--read-only");
+    expect(markup).toContain("dv-rating--disabled");
+  });
+
+  it("renders Slider with native range constraints and displayed controlled value", () => {
+    const markup = renderToStaticMarkup(
+      <Slider ariaLabel="Allocation" max={50} min={0} showValue step={5} value={25} />
+    );
+
+    expect(markup).toContain("type=\"range\"");
+    expect(markup).toContain("min=\"0\"");
+    expect(markup).toContain("max=\"50\"");
+    expect(markup).toContain("step=\"5\"");
+    expect(markup).toContain(">25</output>");
+  });
+
+  it("renders ToggleButton pressed and disabled states", () => {
+    const markup = renderToStaticMarkup(
+      <>
+        <ToggleButton pressed>Show archived</ToggleButton>
+        <ToggleButton disabled>Managed</ToggleButton>
+      </>
+    );
+
+    expect(markup).toContain("aria-pressed=\"true\"");
+    expect(markup).toContain("dv-toggle-button--pressed");
+    expect(markup).toContain("disabled=\"\"");
+  });
+
+  it("renders ToggleButtonGroup single and multiple default selections", () => {
+    const markup = renderToStaticMarkup(
+      <>
+        <ToggleButtonGroup ariaLabel="View" defaultValue="table">
+          <ToggleButton value="table">Table</ToggleButton>
+          <ToggleButton value="board">Board</ToggleButton>
+        </ToggleButtonGroup>
+        <ToggleButtonGroup ariaLabel="Formatting" defaultValue={["bold", "italic"]} type="multiple">
+          <ToggleButton value="bold">Bold</ToggleButton>
+          <ToggleButton value="italic">Italic</ToggleButton>
+        </ToggleButtonGroup>
+      </>
+    );
+
+    expect(markup).toContain("dv-toggle-button-group--single");
+    expect(markup).toContain("dv-toggle-button-group--multiple");
+    expect(markup.match(/aria-pressed=\"true\"/g)).toHaveLength(3);
   });
 
   it("renders ButtonGroup orientation and size", () => {
@@ -330,6 +394,31 @@ describe("@dravyn/ui-components primitives", () => {
     expect(markup).toContain("role=\"dialog\"");
     expect(markup).toContain("aria-modal=\"true\"");
     expect(markup).toContain("Dialog body");
+    expect(markup).toContain("dv-dialog__layer");
+    expect(markup).toContain("data-dv-focus-fallback");
+  });
+
+  it("renders modal Drawer through the shared overlay layer", () => {
+    const markup = renderToStaticMarkup(
+      <Drawer onOpenChange={() => undefined} open side="top" title="Review">
+        Drawer body
+      </Drawer>
+    );
+
+    expect(markup).toContain("dv-drawer--top");
+    expect(markup).toContain("aria-modal=\"true\"");
+    expect(markup).toContain("dv-drawer__layer");
+  });
+
+  it("renders Popover portal-ready dismissal content", () => {
+    const markup = renderToStaticMarkup(
+      <Popover defaultOpen matchTriggerWidth trigger={<Button>Open</Button>}>
+        Content
+      </Popover>
+    );
+
+    expect(markup).toContain("dv-dismissable-layer");
+    expect(markup).toContain("dv-popover__content");
   });
 
   it("renders ConfirmDialog actions", () => {

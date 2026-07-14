@@ -21,11 +21,11 @@ import "@dravyn/ui-components/styles/index.css";
 
 ## Components
 
-- Actions: `Button`, `IconButton`, `ToolbarButton`, `ButtonGroup`, `SegmentedControl`
+- Actions: `Button`, `IconButton`, `ToolbarButton`, `ButtonGroup`, `SegmentedControl`, `ToggleButton`, `ToggleButtonGroup`
 - Icons: `Icon`, `CloseButton`, `ClearButton`, `RefreshButton`, `MoreButton`
 - Typography: `Heading`, `Text`, `Label`, `Caption`, `CodeText`
 - Feedback: `Badge`, `StatusBadge`, `EmptyState`, `ErrorState`, `LoadingState`, `Skeleton`, `InlineMessage`, `Alert`
-- Forms: `Field`, `TextInput`, `SearchInput`, `Select`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `NumberInput`, `DateInput`, `DateTimeInput`, `MultiSelect`, `Textarea`, `ValidationMessage`
+- Forms: `Field`, `TextInput`, `SearchInput`, `Select`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `NumberInput`, `DateInput`, `DateTimeInput`, `Rating`, `Slider`, `MultiSelect`, `Textarea`, `ValidationMessage`
 - Layout: `Card`, `Panel`, `Stack`, `Inline`, `Section`, `AppShell`, `Page`, `PageHeader`, `PageToolbar`
 - Navigation: `SideNav`, `TopNav`, `Breadcrumbs`, `Tabs`
 - Overlays: `Popover`, `Menu`, `Dropdown`, `Tooltip`, `Dialog`, `Drawer`, `ConfirmDialog`
@@ -152,6 +152,21 @@ Choice and scheduling inputs:
 />
 ```
 
+Native selection controls:
+
+```tsx
+<Rating label="Quality score" defaultValue={4} />
+<Slider ariaLabel="Approval threshold" defaultValue={65} showValue />
+
+<ToggleButton defaultPressed>Pin column</ToggleButton>
+<ToggleButtonGroup ariaLabel="View mode" defaultValue="table">
+  <ToggleButton value="table">Table</ToggleButton>
+  <ToggleButton value="board">Board</ToggleButton>
+</ToggleButtonGroup>
+```
+
+Use `Switch` for a persistent setting, `ToggleButton` for an active tool or view action, `SegmentedControl` for a small stable exclusive set, `RadioGroup` for spacious form choices, and `Checkbox` for an independent Boolean value.
+
 Layout:
 
 ```tsx
@@ -267,19 +282,18 @@ Dialog and drawer:
 - `Field` supplies stable control and description ids through its render-function child. Static children remain supported with `htmlFor` plus a matching child control id; `Field` does not clone arbitrary controls.
 - `ErrorState` and danger validation messages use alert roles.
 - `Skeleton` disables animation when `animated={false}` and respects `prefers-reduced-motion`.
-- `Tooltip` uses `role="tooltip"` and opens on hover or focus.
-- `Dialog` and `Drawer` use `role="dialog"`, `aria-modal`, labelled title/description ids, Escape close, overlay click close, and basic focus return.
-- `Popover`, `Menu`, and `Dropdown` support controlled and uncontrolled open state.
+- `Tooltip` uses `role="tooltip"`, opens on hover or focus, and stays non-interactive.
+- `Dialog` and modal `Drawer` use portals, `role="dialog"`, `aria-modal`, labelled title/description ids, focus containment, focus restoration, Escape/outside dismissal, and nested-safe body scroll locking.
+- `Popover`, `Menu`, and `Dropdown` support controlled and uncontrolled open state through shared portal, dismissal, and anchored positioning behavior. Popover remains non-modal unless `modal` is explicitly enabled.
 - `Tabs` supports controlled and uncontrolled selection, tab roles, and arrow/Home/End keyboard navigation.
 - `Breadcrumbs` marks the current item with `aria-current="page"`.
 - `SideNav` exposes active navigation with `aria-current`; app routing remains outside the component.
 
 ## Current Overlay Limitations
 
-- Positioning is CSS-based with no complex collision detection.
+- Anchored overlays use fixed portal positioning with viewport shifting, basic flipping, and scroll/resize updates; this is intentionally smaller than a general positioning engine.
 - Menu does not support nested menus yet.
-- Dialog and Drawer use basic focus handling, not a full focus-trap library.
-- Overlays do not use portals yet.
+- Menu does not support nested menus yet.
 
 ## UX Guidance
 

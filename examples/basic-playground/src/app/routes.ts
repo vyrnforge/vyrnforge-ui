@@ -29,6 +29,21 @@ import {
   TextInputReferencePage,
   ValidationMessagePage
 } from "../pages/reference/FormComponentPages";
+import {
+  RatingPage,
+  SliderPage,
+  ToggleButtonGroupPage,
+  ToggleButtonPage
+} from "../pages/reference/S3B1ComponentPages";
+import {
+  ConfirmDialogPage,
+  DialogPage,
+  DrawerPage,
+  DropdownPage,
+  MenuPage,
+  PopoverPage,
+  TooltipPage
+} from "../pages/reference/OverlayComponentPages";
 import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
 import { FilteringPage } from "../pages/data-grid/FilteringPage";
 import { SelectionPage } from "../pages/data-grid/SelectionPage";
@@ -45,6 +60,7 @@ import { EmptyErrorLoadingPage } from "../pages/patterns/EmptyErrorLoadingPage";
 import { AdminShellPage } from "../pages/patterns/AdminShellPage";
 import { CustomerPortalShellPage } from "../pages/patterns/CustomerPortalShellPage";
 import { FilterFormPage } from "../pages/patterns/FilterFormPage";
+import { OverlayStressPage } from "../pages/patterns/OverlayStressPage";
 
 export type PlaygroundRoute = {
   id: string;
@@ -165,6 +181,32 @@ export const routes: PlaygroundRoute[] = [
     packageName: "@dravyn/ui-components",
     status: "experimental",
     Component: SegmentedControlPage
+  },
+  {
+    id: "toggle-button",
+    label: "ToggleButton",
+    title: "Toggle Button",
+    description: "Pressable tools, formatting controls, and view actions.",
+    group: "Components",
+    subgroup: "Actions",
+    gallery: true,
+    path: "/components/actions/toggle-button",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: ToggleButtonPage
+  },
+  {
+    id: "toggle-button-group",
+    label: "ToggleButtonGroup",
+    title: "Toggle Button Group",
+    description: "Joined exclusive and multi-select tool groups.",
+    group: "Components",
+    subgroup: "Actions",
+    gallery: true,
+    path: "/components/actions/toggle-button-group",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: ToggleButtonGroupPage
   },
   {
     id: "text-input",
@@ -323,6 +365,123 @@ export const routes: PlaygroundRoute[] = [
     Component: TextareaPage
   },
   {
+    id: "rating",
+    label: "Rating",
+    title: "Rating",
+    description: "Discrete native radio-based score selection.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/rating",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: RatingPage
+  },
+  {
+    id: "slider",
+    label: "Slider",
+    title: "Slider",
+    description: "Native bounded numeric range input.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/slider",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: SliderPage
+  },
+  {
+    id: "popover",
+    label: "Popover",
+    title: "Popover",
+    description: "Anchored interactive floating content.",
+    group: "Components",
+    subgroup: "Overlays",
+    gallery: true,
+    path: "/components/overlays/popover",
+    packageName: "@dravyn/ui-components",
+    status: "stable",
+    Component: PopoverPage
+  },
+  {
+    id: "menu",
+    label: "Menu",
+    title: "Menu",
+    description: "Keyboard-ready floating action menu.",
+    group: "Components",
+    subgroup: "Overlays",
+    gallery: true,
+    path: "/components/overlays/menu",
+    packageName: "@dravyn/ui-components",
+    status: "stable",
+    Component: MenuPage
+  },
+  {
+    id: "dropdown",
+    label: "Dropdown",
+    title: "Dropdown",
+    description: "Generic trigger-controlled floating content.",
+    group: "Components",
+    subgroup: "Overlays",
+    gallery: true,
+    path: "/components/overlays/dropdown",
+    packageName: "@dravyn/ui-components",
+    status: "stable",
+    Component: DropdownPage
+  },
+  {
+    id: "tooltip",
+    label: "Tooltip",
+    title: "Tooltip",
+    description: "Short contextual description for hover and focus.",
+    group: "Components",
+    subgroup: "Overlays",
+    gallery: true,
+    path: "/components/overlays/tooltip",
+    packageName: "@dravyn/ui-components",
+    status: "stable",
+    Component: TooltipPage
+  },
+  {
+    id: "dialog",
+    label: "Dialog",
+    title: "Dialog",
+    description: "Modal focus-contained workflow.",
+    group: "Components",
+    subgroup: "Overlays",
+    gallery: true,
+    path: "/components/overlays/dialog",
+    packageName: "@dravyn/ui-components",
+    status: "stable",
+    Component: DialogPage
+  },
+  {
+    id: "drawer",
+    label: "Drawer",
+    title: "Drawer",
+    description: "Modal edge workflow with internal scrolling.",
+    group: "Components",
+    subgroup: "Overlays",
+    gallery: true,
+    path: "/components/overlays/drawer",
+    packageName: "@dravyn/ui-components",
+    status: "stable",
+    Component: DrawerPage
+  },
+  {
+    id: "confirm-dialog",
+    label: "Confirm Dialog",
+    title: "Confirm Dialog",
+    description: "Reusable normal and destructive confirmation flow.",
+    group: "Components",
+    subgroup: "Overlays",
+    gallery: true,
+    path: "/components/overlays/confirm-dialog",
+    packageName: "@dravyn/ui-components",
+    status: "stable",
+    Component: ConfirmDialogPage
+  },
+  {
     id: "badge",
     label: "Badge",
     title: "Badge",
@@ -476,6 +635,14 @@ export const routes: PlaygroundRoute[] = [
     description: "Search, select, native date range, and filter actions.",
     group: "Patterns",
     Component: FilterFormPage
+  },
+  {
+    id: "overlay-stress",
+    label: "Overlay Stress Test",
+    title: "Overlay Stress Test",
+    description: "Nested portal, focus, dismissal, scroll, and z-index exercise.",
+    group: "Patterns",
+    Component: OverlayStressPage
   },
   {
     id: "empty-error-loading",

@@ -5,6 +5,7 @@ import type { ConfirmDialogProps } from "./ConfirmDialog.types";
 export function ConfirmDialog({
   cancelLabel = "Cancel",
   confirmLabel = "Confirm",
+  disabled = false,
   description,
   loading = false,
   onCancel,
@@ -15,7 +16,7 @@ export function ConfirmDialog({
   variant = "default"
 }: ConfirmDialogProps) {
   const handleCancel = () => {
-    if (loading) {
+    if (loading || disabled) {
       return;
     }
 
@@ -31,10 +32,11 @@ export function ConfirmDialog({
       description={description}
       footer={
         <div className="dv-confirm-dialog__actions">
-          <Button disabled={loading} onClick={handleCancel} variant="subtle">
+          <Button disabled={loading || disabled} onClick={handleCancel} variant="subtle">
             {cancelLabel}
           </Button>
           <Button
+            disabled={disabled}
             loading={loading}
             onClick={onConfirm}
             variant={variant === "danger" ? "danger" : "primary"}

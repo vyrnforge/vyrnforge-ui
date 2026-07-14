@@ -1,9 +1,12 @@
 .dv-tooltip {
   width: fit-content;
 }
+
 .dv-tooltip__content {
-  position: absolute;
-  z-index: 50;
+  position: fixed;
+  top: var(--dv-overlay-y, 0);
+  left: var(--dv-overlay-x, 0);
+  z-index: var(--dv-z-tooltip);
   max-width: 260px;
   border: 1px solid var(--dv-border);
   border-radius: var(--dv-radius-md);
@@ -14,24 +17,4 @@
   font-size: var(--dv-font-size-sm);
   line-height: var(--dv-line-height-md);
   pointer-events: none;
-}
-.dv-tooltip--top .dv-tooltip__content {
-  bottom: calc(100% + var(--dv-space-2));
-  left: 50%;
-  transform: translateX(-50%);
-}
-.dv-tooltip--bottom .dv-tooltip__content {
-  left: 50%;
-  top: calc(100% + var(--dv-space-2));
-  transform: translateX(-50%);
-}
-.dv-tooltip--left .dv-tooltip__content {
-  right: calc(100% + var(--dv-space-2));
-  top: 50%;
-  transform: translateY(-50%);
-}
-.dv-tooltip--right .dv-tooltip__content {
-  left: calc(100% + var(--dv-space-2));
-  top: 50%;
-  transform: translateY(-50%);
 }

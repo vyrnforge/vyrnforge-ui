@@ -27,6 +27,8 @@
 | ToolbarButton | `ui-components` | Current |
 | ButtonGroup | `ui-components` | Current/Experimental |
 | SegmentedControl | `ui-components` | Current |
+| ToggleButton | `ui-components` | Experimental |
+| ToggleButtonGroup | `ui-components` | Experimental |
 
 ## Typography
 
@@ -56,7 +58,11 @@
 | DateTimeInput | `ui-components` | Experimental |
 | MultiSelect | `ui-components` | Experimental |
 | ValidationMessage | `ui-components` | Experimental |
+| Rating | `ui-components` | Experimental |
+| Slider | `ui-components` | Experimental |
 | Combobox | `ui-components` | Later |
+| Autocomplete | `ui-components` | Planned |
+| TransferList | `ui-components` | Planned |
 
 ## Overlays
 

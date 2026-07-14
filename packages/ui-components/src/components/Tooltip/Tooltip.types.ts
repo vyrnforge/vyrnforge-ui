@@ -8,5 +8,7 @@ export type TooltipProps = {
   placement?: TooltipPlacement;
   delayMs?: number;
   disabled?: boolean;
+  offset?: number;
+  portalContainer?: Element | null;
   className?: string;
 };

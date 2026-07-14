@@ -9,6 +9,10 @@
   align-items: end;
   justify-items: stretch;
 }
+.dv-drawer--top .dv-drawer__overlay {
+  align-items: start;
+  justify-items: stretch;
+}
 .dv-drawer__panel {
   height: 100vh;
   width: min(100vw, 420px);
@@ -26,4 +30,9 @@
   width: 100%;
   height: min(70vh, 520px);
   border-radius: var(--dv-radius-lg) var(--dv-radius-lg) 0 0;
+}
+.dv-drawer__panel--top {
+  width: 100%;
+  height: min(70vh, 520px);
+  border-radius: 0 0 var(--dv-radius-lg) var(--dv-radius-lg);
 }

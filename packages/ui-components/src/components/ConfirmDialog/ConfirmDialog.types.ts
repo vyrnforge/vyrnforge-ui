@@ -11,6 +11,7 @@ export type ConfirmDialogProps = {
   cancelLabel?: ReactNode;
   variant?: ConfirmDialogVariant;
   loading?: boolean;
+  disabled?: boolean;
   onConfirm: () => void;
   onCancel?: () => void;
 };

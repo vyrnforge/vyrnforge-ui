@@ -155,6 +155,40 @@
       "aiUsageNotes": "Use for compact mode choices, not multi-select."
     },
     {
+      "id": "toggle-button",
+      "name": "ToggleButton",
+      "package": "@dravyn/ui-components",
+      "category": "Actions",
+      "status": "experimental",
+      "purpose": "Native pressable tool, formatting, or view action with controlled or uncontrolled pressed state.",
+      "useWhen": "Use for an active tool, formatting option, or current-surface view action.",
+      "avoidWhen": "Avoid for persistent settings; use Switch. Avoid navigation links.",
+      "relatedComponents": ["Switch", "Button", "IconButton", "SegmentedControl", "ToggleButtonGroup"],
+      "cssClasses": ["dv-toggle-button", "dv-toggle-button--pressed"],
+      "cssVariables": [],
+      "importExample": "import { ToggleButton } from '@dravyn/ui-components';",
+      "basicUsageExample": "<ToggleButton defaultPressed>Pin column</ToggleButton>",
+      "accessibilityNotes": "Renders a native button with aria-pressed. Icon-only usage requires aria-label.",
+      "aiUsageNotes": "Do not substitute ToggleButton for a persistent Switch setting or navigation link."
+    },
+    {
+      "id": "toggle-button-group",
+      "name": "ToggleButtonGroup",
+      "package": "@dravyn/ui-components",
+      "category": "Actions",
+      "status": "experimental",
+      "purpose": "Joined native ToggleButton collection with single or multiple selection state.",
+      "useWhen": "Use for compact related tool or view choices.",
+      "avoidWhen": "Avoid for long form choice labels or descriptions; use RadioGroup.",
+      "relatedComponents": ["ToggleButton", "SegmentedControl", "RadioGroup", "ButtonGroup"],
+      "cssClasses": ["dv-toggle-button-group", "dv-toggle-button-group--single", "dv-toggle-button-group--multiple"],
+      "cssVariables": [],
+      "importExample": "import { ToggleButton, ToggleButtonGroup } from '@dravyn/ui-components';",
+      "basicUsageExample": "<ToggleButtonGroup defaultValue='table'><ToggleButton value='table'>Table</ToggleButton></ToggleButtonGroup>",
+      "accessibilityNotes": "Use ToggleButton children with unique values. The group does not clone arbitrary children and supports arrow-key focus movement.",
+      "aiUsageNotes": "Use type='single' for exclusive tools and type='multiple' for independent active tools."
+    },
+    {
       "id": "icon",
       "name": "Icon",
       "package": "@dravyn/ui-components",
@@ -602,7 +636,7 @@
       "package": "@dravyn/ui-components",
       "category": "Overlays",
       "status": "stable",
-      "purpose": "Small floating content anchored to a trigger.",
+      "purpose": "Shared-foundation anchored floating content with portal rendering and optional modal behavior.",
       "useWhen": "Use for contextual controls or short information.",
       "avoidWhen": "Avoid for complex forms; use Dialog or Drawer.",
       "relatedComponents": ["Menu", "Tooltip", "Dialog"],
@@ -610,8 +644,8 @@
       "cssVariables": [],
       "importExample": "import { Popover } from '@dravyn/ui-components';",
       "basicUsageExample": "<Popover trigger={<Button>Open</Button>}>Content</Popover>",
-      "accessibilityNotes": "Support Escape close and focus return.",
-      "aiUsageNotes": "Keep popover content compact."
+      "accessibilityNotes": "Non-modal by default; Escape/outside dismissal is topmost-safe and focus restores to the trigger on close.",
+      "aiUsageNotes": "Keep popover content compact. Use modal only when a focus boundary is intentionally required."
     },
     {
       "id": "menu",
@@ -627,8 +661,8 @@
       "cssVariables": [],
       "importExample": "import { Menu } from '@dravyn/ui-components';",
       "basicUsageExample": "<Menu trigger={<Button>Actions</Button>} items={items} />",
-      "accessibilityNotes": "Menu items need clear labels and keyboard support.",
-      "aiUsageNotes": "Do not hide destructive actions behind unclear labels."
+      "accessibilityNotes": "Uses menu roles and ArrowUp/ArrowDown, Home, End, Enter, Space, and Escape navigation while skipping disabled items.",
+      "aiUsageNotes": "Use for actions, not form values. Do not hide destructive actions behind unclear labels."
     },
     {
       "id": "dropdown",
@@ -636,7 +670,7 @@
       "package": "@dravyn/ui-components",
       "category": "Overlays",
       "status": "stable",
-      "purpose": "Dropdown composition for trigger and menu-like content.",
+      "purpose": "Generic Popover composition for trigger-controlled floating content.",
       "useWhen": "Use for compact option/action surfaces.",
       "avoidWhen": "Avoid for native form select choices; use Select.",
       "relatedComponents": ["Menu", "Popover"],
@@ -645,7 +679,7 @@
       "importExample": "import { Dropdown } from '@dravyn/ui-components';",
       "basicUsageExample": "<Dropdown trigger={<Button>Open</Button>}>Content</Dropdown>",
       "accessibilityNotes": "Trigger should expose expanded state.",
-      "aiUsageNotes": "Use Dropdown for composed overlay content."
+      "aiUsageNotes": "Use Dropdown for generic composed content. Use Menu for actions and Select for form value selection."
     },
     {
       "id": "tooltip",
@@ -661,7 +695,7 @@
       "cssVariables": [],
       "importExample": "import { Tooltip } from '@dravyn/ui-components';",
       "basicUsageExample": "<Tooltip content='Refresh'><Button>Refresh</Button></Tooltip>",
-      "accessibilityNotes": "Tooltip is not a substitute for accessible names.",
+      "accessibilityNotes": "Tooltip opens from hover/focus and is not a substitute for an accessible name. Content must not be interactive.",
       "aiUsageNotes": "Use tooltip as supporting help only."
     },
     {
@@ -678,8 +712,8 @@
       "cssVariables": [],
       "importExample": "import { Dialog } from '@dravyn/ui-components';",
       "basicUsageExample": "<Dialog open={open} onOpenChange={setOpen} title='Edit'>Content</Dialog>",
-      "accessibilityNotes": "Dialog should be labelled and support Escape close.",
-      "aiUsageNotes": "Use title and description for context."
+      "accessibilityNotes": "Portal modal with title/description relationships, topmost Escape/outside dismissal, trapped focus, restoration, and scroll locking.",
+      "aiUsageNotes": "Use title and description for context. Use initialFocusRef for deliberate first focus."
     },
     {
       "id": "drawer",
@@ -695,8 +729,8 @@
       "cssVariables": [],
       "importExample": "import { Drawer } from '@dravyn/ui-components';",
       "basicUsageExample": "<Drawer open={open} onOpenChange={setOpen} title='Filters'>Content</Drawer>",
-      "accessibilityNotes": "Drawer should be labelled and closable.",
-      "aiUsageNotes": "Use Drawer for larger secondary surfaces."
+      "accessibilityNotes": "Modal by default with Dialog-equivalent focus and scroll behavior; its body scrolls independently from header/footer.",
+      "aiUsageNotes": "Use Drawer for larger secondary surfaces. Use non-modal mode only for an intentional advanced composition."
     },
     {
       "id": "confirm-dialog",
@@ -712,8 +746,8 @@
       "cssVariables": [],
       "importExample": "import { ConfirmDialog } from '@dravyn/ui-components';",
       "basicUsageExample": "<ConfirmDialog open={open} onOpenChange={setOpen} title='Delete item?' onConfirm={onConfirm} />",
-      "accessibilityNotes": "Confirm and cancel actions must be clear.",
-      "aiUsageNotes": "Use for destructive confirmation flows."
+      "accessibilityNotes": "Composes Dialog, including modal focus containment and restoration. Confirm and cancel actions must be clear.",
+      "aiUsageNotes": "Use for destructive confirmation flows; it must not create separate portal or focus logic."
     },
     {
       "id": "universal-data-grid",
@@ -1056,6 +1090,40 @@
       "aiUsageNotes": "Use native datetime-local behavior; do not add date libraries."
     },
     {
+      "id": "rating",
+      "name": "Rating",
+      "package": "@dravyn/ui-components",
+      "category": "Forms",
+      "status": "experimental",
+      "purpose": "Discrete whole-number rating control backed by native radio behavior when editable.",
+      "useWhen": "Use for small qualitative scores such as quality, satisfaction, or review ratings.",
+      "avoidWhen": "Avoid for continuous bounded ranges; use Slider.",
+      "relatedComponents": ["RadioGroup", "Slider"],
+      "cssClasses": ["dv-rating", "dv-rating__item", "dv-rating__icon"],
+      "cssVariables": [],
+      "importExample": "import { Rating } from '@dravyn/ui-components';",
+      "basicUsageExample": "<Rating label='Quality score' defaultValue={4} />",
+      "accessibilityNotes": "Editable ratings use labelled native radio inputs. Read-only ratings are exposed as non-editable text equivalents.",
+      "aiUsageNotes": "Keep Rating whole-number only. Do not add half-star precision or an icon library."
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "package": "@dravyn/ui-components",
+      "category": "Forms",
+      "status": "experimental",
+      "purpose": "Native bounded numeric range input with optional displayed value.",
+      "useWhen": "Use for a bounded numeric setting where range interaction is useful.",
+      "avoidWhen": "Avoid for formatted or direct numeric entry; use NumberInput.",
+      "relatedComponents": ["NumberInput", "Rating"],
+      "cssClasses": ["dv-slider", "dv-slider__control", "dv-slider__value"],
+      "cssVariables": [],
+      "importExample": "import { Slider } from '@dravyn/ui-components';",
+      "basicUsageExample": "<Slider ariaLabel='Approval threshold' defaultValue={65} showValue />",
+      "accessibilityNotes": "Uses native input type='range'; provide Field label or ariaLabel.",
+      "aiUsageNotes": "Do not add dual-thumb ranges, tooltip positioning, or custom drag mathematics."
+    },
+    {
       "id": "multi-select",
       "name": "MultiSelect",
       "package": "@dravyn/ui-components",
@@ -1071,6 +1139,40 @@
       "basicUsageExample": "<MultiSelect value={roles} onValueChange={setRoles} options={options} searchable />",
       "accessibilityNotes": "Multi-select needs clear keyboard and announcement behavior.",
       "aiUsageNotes": "Keep S3 MultiSelect simple; do not add async loading, creatable options, or virtualization."
+    },
+    {
+      "id": "autocomplete",
+      "name": "Autocomplete",
+      "package": "@dravyn/ui-components",
+      "category": "Forms planned",
+      "status": "planned",
+      "purpose": "Future searchable single-value suggestion input.",
+      "useWhen": "Use later for approved searchable option workflows.",
+      "avoidWhen": "Do not import until implemented.",
+      "relatedComponents": ["Select", "MultiSelect"],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "Planned; no import yet.",
+      "basicUsageExample": "Planned.",
+      "accessibilityNotes": "Will require robust combobox semantics.",
+      "aiUsageNotes": "Autocomplete is approved for the roadmap but must not be partially implemented in S3B1."
+    },
+    {
+      "id": "transfer-list",
+      "name": "TransferList",
+      "package": "@dravyn/ui-components",
+      "category": "Forms planned",
+      "status": "planned",
+      "purpose": "Future dual-list assignment control.",
+      "useWhen": "Use later for explicit available-to-selected assignment workflows.",
+      "avoidWhen": "Do not import until implemented.",
+      "relatedComponents": ["MultiSelect", "Checkbox"],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "Planned; no import yet.",
+      "basicUsageExample": "Planned.",
+      "accessibilityNotes": "Will require clear source, destination, and move-action labels.",
+      "aiUsageNotes": "TransferList is approved for the roadmap but must not be partially implemented in S3B1."
     },
     {
       "id": "toast",

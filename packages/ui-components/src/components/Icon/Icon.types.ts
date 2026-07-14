@@ -22,6 +22,7 @@ export type IconName =
   | "Info"
   | "Error"
   | "Success"
+  | "Star"
   | "Plus"
   | "Minus"
   | "Edit"

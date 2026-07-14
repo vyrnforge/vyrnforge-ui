@@ -2,7 +2,7 @@
 .dv-drawer {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: var(--dv-z-dialog);
 }
 .dv-dialog__overlay,
 .dv-drawer__overlay {
@@ -14,6 +14,12 @@
 .dv-dialog__overlay {
   place-items: center;
   padding: var(--dv-space-4);
+}
+.dv-dialog__layer,
+.dv-drawer__layer {
+  display: grid;
+  min-width: 0;
+  max-height: calc(100vh - 32px);
 }
 .dv-dialog__panel,
 .dv-drawer__panel {

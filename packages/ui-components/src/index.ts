@@ -26,6 +26,18 @@ export type {
   ToolbarButtonProps,
   ToolbarButtonSize
 } from "./components/ToolbarButton";
+export { ToggleButton } from "./components/ToggleButton";
+export type {
+  ToggleButtonProps,
+  ToggleButtonSize,
+  ToggleButtonVariant
+} from "./components/ToggleButton";
+export { ToggleButtonGroup } from "./components/ToggleButtonGroup";
+export type {
+  ToggleButtonGroupProps,
+  ToggleButtonGroupType,
+  ToggleButtonGroupValue
+} from "./components/ToggleButtonGroup";
 export { SegmentedControl } from "./components/SegmentedControl";
 export type {
   SegmentedControlOption,
@@ -87,6 +99,10 @@ export type {
   ValidationMessageProps,
   ValidationMessageTone
 } from "./components/ValidationMessage";
+export { Rating } from "./components/Rating";
+export type { RatingProps } from "./components/Rating";
+export { Slider } from "./components/Slider";
+export type { SliderProps } from "./components/Slider";
 export { EmptyState } from "./components/EmptyState";
 export type { EmptyStateProps } from "./components/EmptyState";
 export { ErrorState } from "./components/ErrorState";

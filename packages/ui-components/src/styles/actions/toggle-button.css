@@ -1,0 +1,63 @@
+.dv-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--dv-space-1);
+  min-height: var(--dv-control-height);
+  border: 1px solid var(--dv-border);
+  border-radius: var(--dv-radius-md);
+  padding: 0 var(--dv-control-padding-x);
+  color: var(--dv-text);
+  background: var(--dv-surface);
+  font: inherit;
+  font-size: var(--dv-font-size-md);
+  font-weight: 680;
+  cursor: pointer;
+  transition:
+    border-color var(--dv-transition-fast),
+    background-color var(--dv-transition-fast),
+    box-shadow var(--dv-transition-fast);
+}
+
+.dv-toggle-button--sm {
+  min-height: 30px;
+  padding-inline: 10px;
+  font-size: var(--dv-font-size-sm);
+}
+
+.dv-toggle-button--lg {
+  min-height: 42px;
+  padding-inline: 14px;
+  font-size: var(--dv-font-size-lg);
+}
+
+.dv-toggle-button:hover:not(:disabled) {
+  border-color: var(--dv-border-strong);
+  background: var(--dv-surface-subtle);
+}
+
+.dv-toggle-button--pressed {
+  border-color: var(--dv-primary);
+  color: var(--dv-primary);
+  background: var(--dv-primary-soft);
+  box-shadow: inset 0 0 0 1px var(--dv-primary);
+}
+
+.dv-toggle-button--quiet {
+  border-color: transparent;
+  background: transparent;
+}
+
+.dv-toggle-button--outline {
+  background: transparent;
+}
+
+.dv-toggle-button__icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.dv-toggle-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}

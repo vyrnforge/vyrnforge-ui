@@ -1,0 +1,52 @@
+.dv-toggle-button-group {
+  display: inline-flex;
+  align-items: stretch;
+  width: fit-content;
+}
+
+.dv-toggle-button-group--vertical {
+  flex-direction: column;
+}
+
+.dv-toggle-button-group .dv-toggle-button {
+  position: relative;
+  border-radius: 0;
+}
+
+.dv-toggle-button-group--horizontal .dv-toggle-button:first-child {
+  border-top-left-radius: var(--dv-radius-md);
+  border-bottom-left-radius: var(--dv-radius-md);
+}
+
+.dv-toggle-button-group--horizontal .dv-toggle-button:last-child {
+  border-top-right-radius: var(--dv-radius-md);
+  border-bottom-right-radius: var(--dv-radius-md);
+}
+
+.dv-toggle-button-group--vertical .dv-toggle-button:first-child {
+  border-top-left-radius: var(--dv-radius-md);
+  border-top-right-radius: var(--dv-radius-md);
+}
+
+.dv-toggle-button-group--vertical .dv-toggle-button:last-child {
+  border-bottom-right-radius: var(--dv-radius-md);
+  border-bottom-left-radius: var(--dv-radius-md);
+}
+
+.dv-toggle-button-group--horizontal .dv-toggle-button:not(:first-child) {
+  margin-left: -1px;
+}
+
+.dv-toggle-button-group--vertical .dv-toggle-button:not(:first-child) {
+  margin-top: -1px;
+}
+
+.dv-toggle-button-group .dv-toggle-button:hover,
+.dv-toggle-button-group .dv-toggle-button:focus-visible,
+.dv-toggle-button-group .dv-toggle-button--pressed {
+  z-index: 1;
+}
+
+.dv-toggle-button-group--disabled {
+  opacity: 0.72;
+}

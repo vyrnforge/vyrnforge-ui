@@ -26,6 +26,8 @@ Every implemented public component gets its own route. Category pages may introd
 7. Verify prop names and defaults against the public component type before adding rows to `PropsTable`.
 8. Add related component route IDs and short relationship descriptions. Keep live source and visual intent synchronized in the same edit.
 
+For adjacent selection controls, keep the public intent distinct: use `Switch` for persistent settings, `ToggleButton` for active tools or view modes, `ToggleButtonGroup` for joined tool choices, `SegmentedControl` for small stable exclusive choices, `RadioGroup` for spacious form options, and `Checkbox` for independent Boolean form values.
+
 Use public Dravyn APIs and Dravyn UI primitives for the gallery surface. `react-live` is installed only in this private playground workspace to compile trusted editable examples. Playground CSS is only for reference layout, preview/code presentation, responsive behavior, and anchor spacing; do not duplicate package button, badge, input, card, tab, or alert styling in `playground.css`.
 
 ## Run

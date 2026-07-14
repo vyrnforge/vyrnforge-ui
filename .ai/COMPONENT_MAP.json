@@ -26,6 +26,8 @@
         "ToolbarButton",
         "ButtonGroup",
         "SegmentedControl",
+        "ToggleButton",
+        "ToggleButtonGroup",
         "Icon",
         "Text",
         "Heading",
@@ -43,6 +45,8 @@
         "NumberInput",
         "DateInput",
         "DateTimeInput",
+        "Rating",
+        "Slider",
         "MultiSelect",
         "ValidationMessage",
         "Textarea",
@@ -83,7 +87,9 @@
         "PropertyTable",
         "ResourceList",
         "Timeline",
-        "ActivityLog"
+        "ActivityLog",
+        "Autocomplete",
+        "TransferList"
       ]
     },
     "@dravyn/ui-data-grid": {
@@ -133,7 +139,14 @@
       "validationRule": "Use error, warning, success, or message for standard field feedback. Error uses alert semantics through ValidationMessage."
     },
     "NativeFormControls": {
-      "rule": "TextInput, SearchInput, Textarea, Checkbox, Select, Radio, RadioGroup, Switch, NumberInput, DateInput, and DateTimeInput remain native controls. Keep value/defaultValue/onChange ownership in the application and do not add form or date libraries for basic workflows."
+      "rule": "TextInput, SearchInput, Textarea, Checkbox, Select, Radio, RadioGroup, Switch, NumberInput, DateInput, DateTimeInput, Rating, and Slider remain native controls. Keep value/defaultValue/onChange ownership in the application and do not add form or date libraries for basic workflows."
+    },
+    "SelectionControls": {
+      "rule": "Use Switch for persistent settings, ToggleButton for active tools or views, ToggleButtonGroup for related compact tools, SegmentedControl for small stable exclusive options, RadioGroup for spacious form choices, and Checkbox for independent Boolean values. Autocomplete and TransferList are planned only."
+    }
+    ,
+    "Overlays": {
+      "rule": "Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, and ConfirmDialog use a shared private portal, dismissal, focus, scroll-lock, and anchored-positioning foundation. Use Menu for actions, Dropdown for generic floating content, and Select for form values. Autocomplete must reuse this foundation and must not add its own portal, dismissal, or positioning engine."
     }
   }
 }

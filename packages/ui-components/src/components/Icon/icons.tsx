@@ -94,6 +94,7 @@ export const iconPaths: Record<IconName, ReactNode> = {
       <path d="m8 12 3 3 5-6" />
     </>
   ),
+  Star: <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z" />,
   Plus: <path d="M12 5v14M5 12h14" />,
   Minus: <path d="M5 12h14" />,
   Edit: (

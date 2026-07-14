@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useControllableState } from "../../hooks";
 import { joinClassNames } from "../../utils/classNames";
 import { Popover } from "../Popover";
@@ -14,25 +14,34 @@ export function Menu({
   size = "md",
   trigger
 }: MenuProps) {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [isOpen, setIsOpen] = useControllableState({
     value: open,
     defaultValue: defaultOpen,
     onChange: onOpenChange
   });
   const enabledIndexes = useMemo(
-    () =>
-      items
-        .map((item, index) => (item.disabled ? -1 : index))
-        .filter((index) => index >= 0),
+    () => items.map((item, index) => (item.disabled ? -1 : index)).filter((index) => index >= 0),
     [items]
   );
   const [activeIndex, setActiveIndex] = useState(enabledIndexes[0] ?? -1);
 
   useEffect(() => {
-    if (isOpen) {
-      setActiveIndex(enabledIndexes[0] ?? -1);
+    if (!isOpen) {
+      return;
     }
+
+    const firstEnabled = enabledIndexes[0] ?? -1;
+    setActiveIndex(firstEnabled);
+    const frame = window.requestAnimationFrame(() => itemRefs.current[firstEnabled]?.focus());
+    return () => window.cancelAnimationFrame(frame);
   }, [enabledIndexes, isOpen]);
+
+  const setActiveItem = (nextIndex: number) => {
+    setActiveIndex(nextIndex);
+    itemRefs.current[nextIndex]?.focus();
+  };
 
   const moveActive = (direction: 1 | -1) => {
     if (enabledIndexes.length === 0) {
@@ -40,9 +49,8 @@ export function Menu({
     }
 
     const currentPosition = Math.max(enabledIndexes.indexOf(activeIndex), 0);
-    const nextPosition =
-      (currentPosition + direction + enabledIndexes.length) % enabledIndexes.length;
-    setActiveIndex(enabledIndexes[nextPosition]);
+    const nextPosition = (currentPosition + direction + enabledIndexes.length) % enabledIndexes.length;
+    setActiveItem(enabledIndexes[nextPosition]);
   };
 
   const selectItem = (item: MenuItem) => {
@@ -67,17 +75,24 @@ export function Menu({
       return;
     }
 
+    if (event.key === "Home") {
+      event.preventDefault();
+      setActiveItem(enabledIndexes[0] ?? -1);
+      return;
+    }
+
+    if (event.key === "End") {
+      event.preventDefault();
+      setActiveItem(enabledIndexes[enabledIndexes.length - 1] ?? -1);
+      return;
+    }
+
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       const item = items[activeIndex];
       if (item) {
         selectItem(item);
       }
-      return;
-    }
-
-    if (event.key === "Escape") {
-      setIsOpen(false);
     }
   };
 
@@ -90,8 +105,10 @@ export function Menu({
       trigger={trigger}
     >
       <div
+        aria-label="Menu"
         className={joinClassNames("dv-menu", `dv-menu--${size}`)}
         onKeyDown={handleKeyDown}
+        ref={menuRef}
         role="menu"
         tabIndex={-1}
       >
@@ -108,10 +125,14 @@ export function Menu({
             disabled={item.disabled}
             key={item.id}
             onClick={() => selectItem(item)}
+            onFocus={() => setActiveIndex(index)}
             onMouseEnter={() => {
               if (!item.disabled) {
                 setActiveIndex(index);
               }
+            }}
+            ref={(element) => {
+              itemRefs.current[index] = element;
             }}
             role="menuitem"
             type="button"
