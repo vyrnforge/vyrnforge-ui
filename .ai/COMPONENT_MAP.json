@@ -18,7 +18,7 @@
       "planned": []
     },
     "@dravyn/ui-components": {
-      "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation", "data display planned"],
+      "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation", "data management"],
       "css": ["@dravyn/ui-core/styles/index.css", "@dravyn/ui-components/styles/index.css"],
       "current": [
         "Button",
@@ -47,11 +47,17 @@
         "DateTimeInput",
         "Rating",
         "Slider",
+        "Autocomplete",
+        "TransferList",
         "MultiSelect",
         "ValidationMessage",
         "Textarea",
         "Badge",
         "StatusBadge",
+        "Toast",
+        "ToastProvider",
+        "ToastAction",
+        "useToast",
         "Alert",
         "InlineMessage",
         "EmptyState",
@@ -80,16 +86,13 @@
         "ConfirmDialog"
       ],
       "planned": [
-        "Toast",
         "Progress",
         "DescriptionList",
         "KeyValueList",
         "PropertyTable",
         "ResourceList",
         "Timeline",
-        "ActivityLog",
-        "Autocomplete",
-        "TransferList"
+        "ActivityLog"
       ]
     },
     "@dravyn/ui-data-grid": {
@@ -142,7 +145,10 @@
       "rule": "TextInput, SearchInput, Textarea, Checkbox, Select, Radio, RadioGroup, Switch, NumberInput, DateInput, DateTimeInput, Rating, and Slider remain native controls. Keep value/defaultValue/onChange ownership in the application and do not add form or date libraries for basic workflows."
     },
     "SelectionControls": {
-      "rule": "Use Switch for persistent settings, ToggleButton for active tools or views, ToggleButtonGroup for related compact tools, SegmentedControl for small stable exclusive options, RadioGroup for spacious form choices, and Checkbox for independent Boolean values. Autocomplete and TransferList are planned only."
+      "rule": "Use Switch for persistent settings, ToggleButton for active tools or views, ToggleButtonGroup for related compact tools, SegmentedControl for small stable exclusive options, RadioGroup for spacious form choices, and Checkbox for independent Boolean values. Use Autocomplete for known single-value option sets that benefit from label search. Use TransferList for bounded available-to-assigned workflows; use UniversalDataGrid or a dedicated assignment page for large, server-managed, or permission-heavy resources."
+    },
+    "Toast": {
+      "rule": "Use ToastProvider and useToast for transient operation feedback only. Use ValidationMessage for fields, Alert/InlineMessage for persistent contextual feedback, Dialog/ConfirmDialog for blocking workflows, and app-owned state for notification history."
     }
     ,
     "Overlays": {

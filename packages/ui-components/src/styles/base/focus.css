@@ -13,6 +13,8 @@
 .dv-switch__input:focus-visible + .dv-switch__control,
 .dv-multi-select__trigger:focus-visible,
 .dv-multi-select__option input:focus-visible,
+.dv-transfer-list__option input:focus-visible,
+.dv-toast__dismiss:focus-visible,
 .dv-side-nav__item:focus-visible,
 .dv-breadcrumbs__link:focus-visible,
 .dv-tabs__tab:focus-visible {

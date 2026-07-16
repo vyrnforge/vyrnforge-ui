@@ -53,7 +53,7 @@ export function ButtonPage() {
   <Button fullWidth variant="primary">Publish changes</Button>
 </Stack>`, scope, 'import { Button, Icon, Inline, Stack } from "@dravyn/ui-components";') }
     ]}
-    status="experimental"
+    status="stable"
     title="Button"
     useWhen={["Triggering a visible business action.", "Submitting or cancelling a form.", "Executing a clearly labelled operation."]}
   />;
@@ -82,7 +82,7 @@ export function IconButtonPage() {
   <ToolbarButton icon={<Icon name="Refresh" />} label="Refresh" />
 </Inline>`, scope, 'import { Icon, IconButton, Inline, ToolbarButton } from "@dravyn/ui-components";') }
     ]}
-    status="experimental"
+    status="stable"
     title="IconButton"
     useWhen={["Repeating a familiar utility action in a compact area.", "A nearby toolbar gives clear context for the icon."]}
   />;
@@ -134,7 +134,7 @@ export function ToolbarButtonPage() {
   <ToolbarButton aria-label="More actions" icon={<Icon name="MoreHorizontal" />} tooltip="More actions" />
 </Inline>`, scope, 'import { Icon, Inline, ToolbarButton } from "@dravyn/ui-components";') }
     ]}
-    status="experimental"
+    status="stable"
     title="ToolbarButton"
     useWhen={["A repeated command belongs in a dense toolbar.", "A short visible label improves scanability."]}
   />;
@@ -147,7 +147,7 @@ export function SegmentedControlPage() {
   return <SegmentedControl aria-label="View mode" value={value} onChange={setValue} options={[{ label: "Table", value: "table", icon: <Icon name="Columns" /> }, { label: "List", value: "list", icon: <Icon name="DragHandle" /> }]} />;
 }
 
-render(<Example />);`, scope, 'import { Icon, SegmentedControl } from "@dravyn/ui-components";') }]} status="experimental" title="SegmentedControl" useWhen={["Selecting one mode from a small set.", "The choice changes the current surface in place."]} />;
+render(<Example />);`, scope, 'import { Icon, SegmentedControl } from "@dravyn/ui-components";') }]} status="stable" title="SegmentedControl" useWhen={["Selecting one mode from a small set.", "The choice changes the current surface in place."]} />;
 }
 
 export function TextInputPage() {
@@ -183,7 +183,7 @@ export function BadgePage() {
   <Badge variant="success">Success</Badge>
   <Badge variant="warning">Pending</Badge>
   <Badge tone="solid" variant="danger">Blocked</Badge>
-</Inline>`, scope, 'import { Badge, Inline } from "@dravyn/ui-components";') }]} status="experimental" title="Badge" useWhen={["Showing short, scannable status or metadata.", "Adding secondary context beside a name or heading."]} />;
+</Inline>`, scope, 'import { Badge, Inline } from "@dravyn/ui-components";') }]} status="stable" title="Badge" useWhen={["Showing short, scannable status or metadata.", "Adding secondary context beside a name or heading."]} />;
 }
 
 export function AppShellPage() {

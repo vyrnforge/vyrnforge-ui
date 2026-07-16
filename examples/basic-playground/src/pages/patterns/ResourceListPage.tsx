@@ -1,7 +1,17 @@
-import { Badge, Button, Heading, Icon, MoreButton, Text } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Icon, MoreButton, Text, ToastProvider, useToast } from "@dravyn/ui-components";
 import { assets } from "../../data/assets";
 
 export function ResourceListPage() {
+  return (
+    <ToastProvider>
+      <ResourceListPageContent />
+    </ToastProvider>
+  );
+}
+
+function ResourceListPageContent() {
+  const toast = useToast();
+
   return (
     <section className="dv-playground-panel">
       <div className="dv-playground-section-heading">
@@ -9,7 +19,30 @@ export function ResourceListPage() {
           <Heading size="md">Assets</Heading>
           <Text tone="muted">A compact list pattern for resources, metadata, and actions.</Text>
         </div>
-        <Button leftSlot={<Icon name="Plus" />} variant="primary">Register asset</Button>
+        <div className="dv-playground-inline-actions">
+          <Button leftSlot={<Icon name="Plus" />} variant="primary">Register asset</Button>
+          <Button
+            leftSlot={<Icon name="Export" />}
+            onClick={() => {
+              const id = toast.info({
+                title: "Export started",
+                description: "Preparing the asset inventory.",
+                duration: null
+              });
+              window.setTimeout(() => {
+                toast.update(id, {
+                  title: "Export ready",
+                  description: "The asset inventory export is ready.",
+                  tone: "success",
+                  duration: 5000
+                });
+              }, 900);
+            }}
+            variant="subtle"
+          >
+            Export
+          </Button>
+        </div>
       </div>
       <div className="dv-playground-resource-list">
         {assets.map((asset) => (

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Button,
+  Autocomplete,
   Field,
   Heading,
   Icon,
@@ -9,15 +10,27 @@ import {
   Switch,
   Text,
   TextInput,
+  ToastProvider,
+  useToast,
   ValidationMessage
 } from "@dravyn/ui-components";
 
 export function SettingsPage() {
+  return (
+    <ToastProvider>
+      <SettingsPageContent />
+    </ToastProvider>
+  );
+}
+
+function SettingsPageContent() {
+  const toast = useToast();
   const [settings, setSettings] = useState({
     email: true,
     audit: true,
     experimental: false,
     region: "apac",
+    workspace: "revenue-operations",
     workspaceName: "Revenue operations",
     reviewCycle: "monthly"
   });
@@ -29,7 +42,16 @@ export function SettingsPage() {
           <Heading size="md">Workspace settings</Heading>
           <Text tone="muted">Sectioned settings built from native controls and shared tokens.</Text>
         </div>
-        <Button leftSlot={<Icon name="Check" />} variant="primary">Save settings</Button>
+        <Button
+          leftSlot={<Icon name="Check" />}
+          onClick={() => toast.success({
+            title: "Settings saved",
+            description: "Workspace defaults were updated."
+          })}
+          variant="primary"
+        >
+          Save settings
+        </Button>
       </div>
       <Field label="Workspace name" htmlFor="workspace-name" orientation="horizontal">
         <TextInput
@@ -50,6 +72,14 @@ export function SettingsPage() {
             { label: "AMER", value: "amer" }
           ]}
         />
+      </Field>
+      <Field id="settings-workspace" label="Default workspace" orientation="horizontal" description="Search larger workspace directories by name or team.">
+        {(controlProps) => <Autocomplete {...controlProps} onValueChange={(workspace) => setSettings({ ...settings, workspace: workspace ?? "" })} options={[
+          { value: "revenue-operations", label: "Revenue Operations", keywords: ["revenue", "finance"] },
+          { value: "platform-services", label: "Platform Services", keywords: ["platform", "engineering"] },
+          { value: "customer-analytics", label: "Customer Analytics", keywords: ["analytics", "customer"] },
+          { value: "security-oversight", label: "Security Oversight", keywords: ["security"] }
+        ]} value={settings.workspace} />}
       </Field>
       <RadioGroup
         label="Access review cycle"

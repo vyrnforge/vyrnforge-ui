@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import {
   AppShell,
+  Autocomplete,
   Badge,
   Breadcrumbs,
   Button,
@@ -34,11 +35,38 @@ import {
   TextInput,
   Tooltip,
   ToolbarButton,
+  Toast,
+  ToastAction,
+  ToastViewport,
   ToggleButton,
   ToggleButtonGroup,
+  TransferList,
+  useToast,
   ButtonGroup,
   ValidationMessage
 } from "../../index";
+import {
+  defaultAutocompleteFilter,
+  getFirstEnabledIndex,
+  getLastEnabledIndex,
+  getNextEnabledIndex
+} from "../Autocomplete/useAutocomplete";
+import {
+  defaultTransferListFilter,
+  enabledOptionValues,
+  mergeTargetValues,
+  normalizeTransferValues,
+  removeTargetValues,
+  selectedEnabledValues
+} from "../TransferList/transferList.utils";
+import {
+  initialToastState,
+  toastReducer
+} from "../Toast/toast.reducer";
+import {
+  getToastDuration,
+  getVisibleToasts
+} from "../Toast/toast.utils";
 
 describe("@dravyn/ui-components primitives", () => {
   it("disables Button while loading and marks it busy", () => {
@@ -324,6 +352,125 @@ describe("@dravyn/ui-components primitives", () => {
     expect(markup).toContain("aria-expanded=\"false\"");
   });
 
+  it("renders Autocomplete combobox, hidden form value, and listbox semantics", () => {
+    const markup = renderToStaticMarkup(
+      <Autocomplete
+        defaultInputValue=""
+        defaultOpen
+        defaultValue="operator"
+        invalid
+        name="role"
+        options={[
+          { value: "admin", label: "Administrator" },
+          { value: "operator", label: "Operator" },
+          { value: "viewer", label: "Viewer", disabled: true }
+        ]}
+        required
+      />
+    );
+
+    expect(markup).toContain("role=\"combobox\"");
+    expect(markup).toContain("aria-autocomplete=\"list\"");
+    expect(markup).toContain("aria-expanded=\"true\"");
+    expect(markup).toContain("role=\"listbox\"");
+    expect(markup).toContain("role=\"option\"");
+    expect(markup).toContain("aria-selected=\"true\"");
+    expect(markup).toContain("aria-disabled=\"true\"");
+    expect(markup).toContain("name=\"role\"");
+    expect(markup).toContain("value=\"operator\"");
+    expect(markup).toContain("aria-invalid=\"true\"");
+    expect(markup).toContain("aria-required=\"true\"");
+  });
+
+  it("filters Autocomplete options and skips disabled navigation targets", () => {
+    const options = [
+      { value: "admin", label: "Administrator", keywords: ["owner"] },
+      { value: "operator", label: "Operator", disabled: true },
+      { value: "viewer", label: "Viewer", keywords: ["read"] }
+    ];
+
+    expect(defaultAutocompleteFilter(options, "ADMIN")).toHaveLength(1);
+    expect(defaultAutocompleteFilter(options, "read")[0]?.value).toBe("viewer");
+    expect(getFirstEnabledIndex(options)).toBe(0);
+    expect(getLastEnabledIndex(options)).toBe(2);
+    expect(getNextEnabledIndex(options, 0, 1)).toBe(2);
+    expect(getNextEnabledIndex(options, 2, -1)).toBe(0);
+  });
+
+  it("renders TransferList panels, checkbox labels, actions, and hidden target values", () => {
+    const markup = renderToStaticMarkup(
+      <TransferList
+        defaultValue={["atlas", "missing", "atlas"]}
+        name="applicationIds"
+        options={[
+          {
+            value: "iam",
+            label: "Identity and Access Management",
+            description: "Authentication and roles."
+          },
+          {
+            value: "atlas",
+            label: "Atlas Intelligence Platform",
+            description: "Document intelligence."
+          },
+          {
+            value: "gateway",
+            label: "Gateway UI",
+            disabled: true
+          }
+        ]}
+        required
+        searchable
+        sourceTitle="Available applications"
+        targetTitle="Assigned applications"
+      />
+    );
+
+    expect(markup).toContain("role=\"group\"");
+    expect(markup).toContain("Available applications");
+    expect(markup).toContain("Assigned applications");
+    expect(markup).toContain("Identity and Access Management");
+    expect(markup).toContain("Document intelligence.");
+    expect(markup).toContain("aria-label=\"Move selected items to Assigned applications\"");
+    expect(markup).toContain("aria-label=\"Move all items to Available applications\"");
+    expect(markup).toContain("name=\"applicationIds\"");
+    expect(markup).toContain("value=\"atlas\"");
+    expect(markup).not.toContain("value=\"missing\"");
+    expect(markup).toContain("aria-required=\"true\"");
+  });
+
+  it("does not submit TransferList hidden values while disabled", () => {
+    const markup = renderToStaticMarkup(
+      <TransferList
+        defaultValue={["atlas"]}
+        disabled
+        name="applicationIds"
+        options={[
+          { value: "atlas", label: "Atlas Intelligence Platform" }
+        ]}
+      />
+    );
+
+    expect(markup).not.toContain("name=\"applicationIds\"");
+    expect(markup).toContain("dv-transfer-list--disabled");
+  });
+
+  it("normalizes TransferList values and computes ordered move targets", () => {
+    const options = [
+      { value: "iam", label: "Identity" },
+      { value: "atlas", label: "Atlas" },
+      { value: "gateway", label: "Gateway", disabled: true },
+      { value: "reports", label: "Reports", keywords: ["analytics"] }
+    ];
+
+    expect(normalizeTransferValues(["reports", "missing", "iam", "reports"], options)).toEqual(["iam", "reports"]);
+    expect(mergeTargetValues(["atlas"], ["reports", "iam"], options)).toEqual(["iam", "atlas", "reports"]);
+    expect(removeTargetValues(["iam", "atlas", "reports"], ["atlas"], options)).toEqual(["iam", "reports"]);
+    expect(enabledOptionValues(options)).toEqual(["iam", "atlas", "reports"]);
+    expect(selectedEnabledValues(["gateway", "reports"], options)).toEqual(["reports"]);
+    expect(defaultTransferListFilter(options, "analytics", "source")[0]?.value).toBe("reports");
+  });
+
   it("renders ValidationMessage tone", () => {
     const markup = renderToStaticMarkup(
       <ValidationMessage tone="info">Helpful message</ValidationMessage>
@@ -349,6 +496,86 @@ describe("@dravyn/ui-components primitives", () => {
 
     expect(emptyMarkup).toContain("New");
     expect(errorMarkup).toContain("Retry");
+  });
+
+  it("renders Toast tone, accessible announcement, action, and dismiss control", () => {
+    const markup = renderToStaticMarkup(
+      <Toast
+        action={<ToastAction altText="Retry export">Retry</ToastAction>}
+        description="The report export failed."
+        id="export-toast"
+        onDismiss={() => undefined}
+        title="Export failed"
+        tone="error"
+      />
+    );
+
+    expect(markup).toContain("dv-toast--error");
+    expect(markup).toContain("role=\"alert\"");
+    expect(markup).toContain("aria-live=\"assertive\"");
+    expect(markup).toContain("Export failed");
+    expect(markup).toContain("The report export failed.");
+    expect(markup).toContain("aria-label=\"Retry export\"");
+    expect(markup).toContain("aria-label=\"Dismiss notification\"");
+  });
+
+  it("renders ToastViewport position and toast items through the portal fallback", () => {
+    const markup = renderToStaticMarkup(
+      <ToastViewport
+        onDismiss={() => undefined}
+        position="top-center"
+        toasts={[
+          { id: "saved", title: "Saved", tone: "success" }
+        ]}
+      />
+    );
+
+    expect(markup).toContain("dv-toast-viewport--top-center");
+    expect(markup).toContain("aria-label=\"Notifications\"");
+    expect(markup).toContain("Saved");
+  });
+
+  it("updates duplicate Toast IDs, dismisses queued records, and orders visible toasts", () => {
+    const firstState = toastReducer(initialToastState, {
+      type: "add",
+      toast: { id: "one", title: "One", tone: "neutral" }
+    });
+    const duplicateState = toastReducer(firstState, {
+      type: "add",
+      toast: { id: "one", title: "Updated", tone: "success" }
+    });
+    const queuedState = toastReducer(duplicateState, {
+      type: "add",
+      toast: { id: "two", title: "Two", tone: "info" }
+    });
+    const dismissedState = toastReducer(queuedState, {
+      type: "dismiss",
+      id: "one"
+    });
+
+    expect(duplicateState.toasts).toHaveLength(1);
+    expect(duplicateState.toasts[0]?.title).toBe("Updated");
+    expect(duplicateState.toasts[0]?.tone).toBe("success");
+    expect(getVisibleToasts(queuedState.toasts, 1, false)[0]?.id).toBe("one");
+    expect(getVisibleToasts(queuedState.toasts, 2, true).map((toast) => toast.id)).toEqual(["two", "one"]);
+    expect(dismissedState.toasts.map((toast) => toast.id)).toEqual(["two"]);
+  });
+
+  it("keeps Toast duration defaults explicit and supports persistent duration", () => {
+    expect(getToastDuration({}, 5000)).toBe(5000);
+    expect(getToastDuration({ duration: null }, 5000)).toBeNull();
+    expect(getToastDuration({ duration: 1200 }, 5000)).toBe(1200);
+  });
+
+  it("throws a clear Toast provider error when useToast is outside ToastProvider", () => {
+    function MissingProvider() {
+      useToast();
+      return null;
+    }
+
+    expect(() => renderToStaticMarkup(<MissingProvider />)).toThrow(
+      "useToast must be used within a ToastProvider."
+    );
   });
 
   it("renders Popover content when uncontrolled defaultOpen is true", () => {

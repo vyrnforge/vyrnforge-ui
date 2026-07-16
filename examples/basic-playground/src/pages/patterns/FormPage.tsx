@@ -1,23 +1,37 @@
 import { useState } from "react";
 import {
   Button,
+  Autocomplete,
   Checkbox,
   DateInput,
   DateTimeInput,
   Field,
   Heading,
   Icon,
+  InlineMessage,
   MultiSelect,
   NumberInput,
   RadioGroup,
   Select,
   Text,
   TextInput,
+  ToastProvider,
+  useToast,
   ValidationMessage
 } from "@dravyn/ui-components";
 
 export function FormPage() {
+  return (
+    <ToastProvider>
+      <FormPageContent />
+    </ToastProvider>
+  );
+}
+
+function FormPageContent() {
+  const toast = useToast();
   const [acknowledged, setAcknowledged] = useState(false);
+  const [apiError, setApiError] = useState(false);
   const [requestType, setRequestType] = useState("access");
   const [roles, setRoles] = useState(["viewer"]);
 
@@ -30,8 +44,13 @@ export function FormPage() {
       <Field id="request-title" label="Request title" required>
         {(controlProps) => <TextInput {...controlProps} defaultValue="Provision reporting workspace" />}
       </Field>
-      <Field label="Owner" htmlFor="request-owner">
-        <TextInput id="request-owner" defaultValue="Finance Operations" />
+      <Field id="request-owner" label="Owner" description="Search the workspace owner directory.">
+        {(controlProps) => <Autocomplete {...controlProps} name="owner" defaultValue="finance-operations" options={[
+          { value: "finance-operations", label: "Finance Operations", keywords: ["finance", "operations"] },
+          { value: "platform-engineering", label: "Platform Engineering", keywords: ["platform"] },
+          { value: "security-governance", label: "Security Governance", keywords: ["security"] },
+          { value: "customer-success", label: "Customer Success", keywords: ["customer"] }
+        ]} />}
       </Field>
       <RadioGroup
         label="Request type"
@@ -93,8 +112,39 @@ export function FormPage() {
       <ValidationMessage tone={acknowledged ? "success" : "info"}>
         Submit is enabled after policy acknowledgement.
       </ValidationMessage>
+      {apiError && (
+        <InlineMessage variant="danger" title="Could not create request">
+          Resolve the highlighted fields and try again. This persistent message stays in context while the toast is transient.
+        </InlineMessage>
+      )}
       <div className="dv-playground-inline-actions dv-playground-form-footer">
-        <Button leftSlot={<Icon name="Check" />} variant="primary" disabled={!acknowledged}>Submit request</Button>
+        <Button
+          disabled={!acknowledged}
+          leftSlot={<Icon name="Check" />}
+          onClick={() => {
+            setApiError(false);
+            toast.success({
+              title: "Request created",
+              description: "The access request was added to the review queue."
+            });
+          }}
+          variant="primary"
+        >
+          Submit request
+        </Button>
+        <Button
+          leftSlot={<Icon name="Warning" />}
+          onClick={() => {
+            setApiError(true);
+            toast.error({
+              title: "Create failed",
+              description: "A persistent error explains how to recover."
+            });
+          }}
+          variant="subtle"
+        >
+          Simulate failure
+        </Button>
         <Button leftSlot={<Icon name="Edit" />} variant="subtle">Save draft</Button>
       </div>
     </section>

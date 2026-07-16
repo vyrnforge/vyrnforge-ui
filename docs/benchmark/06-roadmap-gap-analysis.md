@@ -21,7 +21,7 @@ This gap analysis uses the benchmark comparison to prioritize Dravyn's next work
 | Tabs/breadcrumbs/sidebar/top nav | Common enterprise navigation missing from stable set | MUI, AntD, Bootstrap, shadcn |
 | Form completion | Radio, switch, number/date input, multi-select, combobox not complete | MUI, AntD, Chakra, Mantine, React Aria |
 | Data display primitives | Description list, key/value list, property table, timeline, resource list missing | AntD, Mantine, shadcn |
-| Toast/progress | Common feedback loops missing | MUI, AntD, Chakra, Mantine, Bootstrap, shadcn |
+| Progress | Common feedback loop still missing after Toast foundation | MUI, AntD, Chakra, Mantine, Bootstrap, shadcn |
 | Overlay robustness | Positioning/collision/portal/focus trap still limited | Radix, React Aria, Headless UI |
 | Grid server mode | Adapter contract exists, full server mode not built | TanStack Table, AG Grid, MUI X |
 | Grid saved views | Not built | Enterprise grid expectations |
@@ -49,7 +49,7 @@ This gap analysis uses the benchmark comparison to prioritize Dravyn's next work
 | Breadcrumbs | Admin/customer portal orientation |
 | SideNav/TopNav/AppShell | Dravyn must prove it is broader than a grid |
 | Radio/Switch/NumberInput/DateInput/MultiSelect | Completes normal enterprise forms |
-| Toast/Progress | Completes feedback basics |
+| Progress | Completes feedback basics after Toast foundation |
 | DescriptionList/KeyValueList/PropertyTable | Common read-only enterprise data display |
 
 ### P2: Advance Data-Management Workflows

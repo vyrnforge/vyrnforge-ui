@@ -1,8 +1,51 @@
+import { ToastAction, ToastProvider, useToast } from "@dravyn/ui-components";
 import { UniversalDataGrid } from "@dravyn/ui-data-grid";
 import { users } from "../../data/users";
-import { GridNote, userBulkActions, userColumns } from "./gridShared";
+import { GridNote, userColumns } from "./gridShared";
 
 export function SelectionPage() {
+  return (
+    <ToastProvider>
+      <SelectionPageContent />
+    </ToastProvider>
+  );
+}
+
+function SelectionPageContent() {
+  const toast = useToast();
+  const bulkActions = [
+    {
+      id: "enable",
+      label: "Enable",
+      variant: "primary" as const,
+      onClick: ({ selectedRows }: { selectedRows: typeof users }) => {
+        toast.success({
+          title: "Users enabled",
+          description: `${selectedRows.length} selected users were enabled.`
+        });
+      }
+    },
+    {
+      id: "archive",
+      label: "Archive",
+      variant: "danger" as const,
+      onClick: ({ selectedRows }: { selectedRows: typeof users }) => {
+        toast.warning({
+          title: "Users archived",
+          description: `${selectedRows.length} selected users were archived.`,
+          action: (
+            <ToastAction
+              altText="Undo archive selected users"
+              onClick={() => toast.info({ title: "Undo requested" })}
+            >
+              Undo
+            </ToastAction>
+          )
+        });
+      }
+    }
+  ];
+
   return (
     <section className="dv-playground-panel">
       <div className="dv-playground-section-heading">
@@ -19,7 +62,7 @@ export function SelectionPage() {
         selectable
         selectionMode="multiple"
         getRowSelectable={(row) => row.status !== "Suspended"}
-        bulkActions={userBulkActions}
+        bulkActions={bulkActions}
         variant="bordered"
       />
     </section>

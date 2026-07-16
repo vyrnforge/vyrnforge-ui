@@ -61,8 +61,8 @@
 | Rating | `ui-components` | Experimental |
 | Slider | `ui-components` | Experimental |
 | Combobox | `ui-components` | Later |
-| Autocomplete | `ui-components` | Planned |
-| TransferList | `ui-components` | Planned |
+| Autocomplete | `ui-components` | Experimental (single-select) |
+| TransferList | `ui-components` | Experimental |
 
 ## Overlays
 

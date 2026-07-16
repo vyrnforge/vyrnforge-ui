@@ -29,6 +29,8 @@ import {
   TextInputReferencePage,
   ValidationMessagePage
 } from "../pages/reference/FormComponentPages";
+import { AutocompletePage } from "../pages/reference/AutocompletePage";
+import { TransferListPage } from "../pages/reference/TransferListPage";
 import {
   RatingPage,
   SliderPage,
@@ -44,6 +46,7 @@ import {
   PopoverPage,
   TooltipPage
 } from "../pages/reference/OverlayComponentPages";
+import { ToastPage } from "../pages/reference/ToastPage";
 import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
 import { FilteringPage } from "../pages/data-grid/FilteringPage";
 import { SelectionPage } from "../pages/data-grid/SelectionPage";
@@ -61,14 +64,16 @@ import { AdminShellPage } from "../pages/patterns/AdminShellPage";
 import { CustomerPortalShellPage } from "../pages/patterns/CustomerPortalShellPage";
 import { FilterFormPage } from "../pages/patterns/FilterFormPage";
 import { OverlayStressPage } from "../pages/patterns/OverlayStressPage";
+import { AssignmentPatternsPage } from "../pages/patterns/AssignmentPatternsPage";
+import { ComponentMatrixPage } from "../pages/quality/ComponentMatrixPage";
 
 export type PlaygroundRoute = {
   id: string;
   label: string;
   title: string;
   description: string;
-  group: "Overview" | "Foundations" | "Components" | "Data Grid" | "Patterns";
-  subgroup?: "Actions" | "Forms" | "Feedback" | "Layout" | "Navigation" | "Overlays";
+  group: "Overview" | "Foundations" | "Components" | "Data Grid" | "Patterns" | "Quality";
+  subgroup?: "Actions" | "Forms" | "Data Management" | "Feedback" | "Layout" | "Navigation" | "Overlays";
   gallery?: boolean;
   path?: string;
   packageName?: "@dravyn/ui-components" | "@dravyn/ui-data-grid";
@@ -127,7 +132,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/button",
     packageName: "@dravyn/ui-components",
-    status: "experimental",
+    status: "stable",
     Component: ButtonPage
   },
   {
@@ -140,7 +145,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/icon-button",
     packageName: "@dravyn/ui-components",
-    status: "experimental",
+    status: "stable",
     Component: IconButtonPage
   },
   {
@@ -166,7 +171,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/toolbar-button",
     packageName: "@dravyn/ui-components",
-    status: "experimental",
+    status: "stable",
     Component: ToolbarButtonPage
   },
   {
@@ -179,7 +184,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/segmented-control",
     packageName: "@dravyn/ui-components",
-    status: "experimental",
+    status: "stable",
     Component: SegmentedControlPage
   },
   {
@@ -220,6 +225,32 @@ export const routes: PlaygroundRoute[] = [
     packageName: "@dravyn/ui-components",
     status: "experimental",
     Component: TextInputReferencePage
+  },
+  {
+    id: "autocomplete",
+    label: "Autocomplete",
+    title: "Autocomplete",
+    description: "Searchable single-value combobox for larger known option sets.",
+    group: "Components",
+    subgroup: "Forms",
+    gallery: true,
+    path: "/components/forms/autocomplete",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: AutocompletePage
+  },
+  {
+    id: "transfer-list",
+    label: "Transfer List",
+    title: "Transfer List",
+    description: "Dual-list assignment for moderate known collections.",
+    group: "Components",
+    subgroup: "Data Management",
+    gallery: true,
+    path: "/components/data-management/transfer-list",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: TransferListPage
   },
   {
     id: "select",
@@ -491,8 +522,21 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/feedback/badge",
     packageName: "@dravyn/ui-components",
-    status: "experimental",
+    status: "stable",
     Component: BadgePage
+  },
+  {
+    id: "toast",
+    label: "Toast",
+    title: "Toast",
+    description: "Transient operation feedback with provider-owned queue and timers.",
+    group: "Components",
+    subgroup: "Feedback",
+    gallery: true,
+    path: "/components/feedback/toast",
+    packageName: "@dravyn/ui-components",
+    status: "experimental",
+    Component: ToastPage
   },
   {
     id: "app-shell",
@@ -637,6 +681,14 @@ export const routes: PlaygroundRoute[] = [
     Component: FilterFormPage
   },
   {
+    id: "assignment-patterns",
+    label: "Assignments",
+    title: "Assignment Patterns",
+    description: "Bounded dual-list assignment flows with TransferList.",
+    group: "Patterns",
+    Component: AssignmentPatternsPage
+  },
+  {
     id: "overlay-stress",
     label: "Overlay Stress Test",
     title: "Overlay Stress Test",
@@ -667,7 +719,15 @@ export const routes: PlaygroundRoute[] = [
     description: "A customer-facing portal frame with enterprise theme, breadcrumbs, and tabs.",
     group: "Patterns",
     Component: CustomerPortalShellPage
+  },
+  {
+    id: "quality-component-matrix",
+    label: "Component Matrix",
+    title: "Quality / Component Matrix",
+    description: "Controlled review surface for component states, themes, densities, overlays, layouts, and grid behavior.",
+    group: "Quality",
+    Component: ComponentMatrixPage
   }
 ];
 
-export const routeGroups = ["Overview", "Foundations", "Components", "Data Grid", "Patterns"] as const;
+export const routeGroups = ["Overview", "Foundations", "Components", "Data Grid", "Patterns", "Quality"] as const;

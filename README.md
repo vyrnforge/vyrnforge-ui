@@ -40,6 +40,7 @@ npm run typecheck
 npm run test
 npm run build:playground
 npm run build:docs
+npm run quality
 ```
 
 Run the playground locally:

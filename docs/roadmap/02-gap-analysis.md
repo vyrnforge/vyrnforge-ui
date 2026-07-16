@@ -17,7 +17,7 @@
 | Tabs/breadcrumbs/sidebar/top nav | Common admin/customer navigation | High |
 | Form completion | Enterprise forms incomplete | High |
 | Data display primitives | Detail pages rely on ad hoc layout | Medium/high |
-| Toast/progress | Feedback loops incomplete | Medium |
+| Progress | Feedback loops incomplete after Toast foundation | Medium |
 | Overlay robustness | Menus/dialogs may fail in complex layouts | Medium/high |
 | Grid server mode | Needed for API-backed data | High |
 | Grid saved views | Enterprise preference workflow missing | Medium/high |

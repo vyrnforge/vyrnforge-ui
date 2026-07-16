@@ -24,7 +24,7 @@ export function PlaygroundNav({
     const groupRoutes = routes.filter((route) => route.group === group);
 
     if (group === "Components") {
-      const subgroups = ["Actions", "Forms", "Feedback", "Layout", "Navigation", "Overlays"] as const;
+      const subgroups = ["Actions", "Forms", "Data Management", "Feedback", "Layout", "Navigation", "Overlays"] as const;
       return subgroups.flatMap((subgroup) => {
         const subgroupRoutes = groupRoutes.filter((route) => route.subgroup === subgroup);
         return subgroupRoutes.length === 0

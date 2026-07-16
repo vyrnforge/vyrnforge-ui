@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Button,
+  Autocomplete,
   DateInput,
   Field,
   Heading,
@@ -28,8 +29,8 @@ export function FilterFormPage() {
         <Field htmlFor="filter-status" label="Status">
           <Select id="filter-status" defaultValue="open" options={[{ label: "Open", value: "open" }, { label: "Pending", value: "pending" }, { label: "Closed", value: "closed" }]} />
         </Field>
-        <Field htmlFor="filter-owner" label="Owner">
-          <Select id="filter-owner" defaultValue="all" options={[{ label: "All owners", value: "all" }, { label: "Finance", value: "finance" }, { label: "Platform", value: "platform" }]} />
+        <Field id="filter-owner" label="Owner">
+          {(controlProps) => <Autocomplete {...controlProps} options={[{ label: "All owners", value: "all" }, { label: "Finance Operations", value: "finance", keywords: ["finance"] }, { label: "Platform Engineering", value: "platform", keywords: ["platform"] }, { label: "Security Governance", value: "security", keywords: ["security"] }, { label: "Customer Success", value: "customer", keywords: ["customer"] }]} placeholder="Find an owner" />}
         </Field>
       </div>
       <div className="dv-playground-grid two">

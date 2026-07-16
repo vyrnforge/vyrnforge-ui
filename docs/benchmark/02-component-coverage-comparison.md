@@ -29,7 +29,7 @@ Legend:
 | Popover/menu/dropdown | Current | Strong | Strong | Strong | Strong | Strong | Strong | Strong | Current | N/A | Grid menus |
 | Tooltip | Current | Strong | Strong | Strong | Strong | Strong | Primitive | Current | Current | N/A | Grid tooltip |
 | Dialog/drawer/confirm | Current | Strong | Strong | Strong | Strong | Modal/offcanvas | Primitive | Current | Current | N/A | Grid dialogs |
-| Toast/notification | Planned | Strong | Strong | Strong | Strong | Toast | N/A | External | Current | N/A | N/A |
+| Toast/notification | Experimental | Strong | Strong | Strong | Strong | Toast | N/A | External | Current | N/A | N/A |
 | Alert/inline message | Current | Strong | Strong | Strong | Strong | Strong | N/A | External | Current | N/A | N/A |
 | Skeleton/loading/empty/error | Current | Strong | Strong | Strong | Strong | Partial | N/A | External | Current | N/A | Grid overlays |
 | Progress | Planned | Strong | Strong | Strong | Strong | Strong | Primitive | Current | Current | N/A | N/A |
@@ -59,7 +59,7 @@ Legend:
 | Tabs and navigation | Common for admin portals and data-heavy workflows | High |
 | Page shell/header/sidebar patterns | Needed to build complete products, not just components | High |
 | Radio, switch, number/date input, multi-select | Completes basic form coverage | High |
-| Toast/progress | Common feedback primitives | Medium |
+| Progress | Common feedback primitive still missing after Toast foundation | Medium |
 | Description/key-value/resource lists | Enterprise read-only data display | Medium |
 | Advanced filters and saved views | Grid workflow maturity | Medium/high after server/export contracts |
 | Command palette | Valuable but not foundational | Later |

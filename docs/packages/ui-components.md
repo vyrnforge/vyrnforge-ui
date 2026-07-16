@@ -8,8 +8,9 @@
 
 - actions: Button, IconButton, ToolbarButton, ButtonGroup, SegmentedControl
 - typography: Text, Heading, Label, Caption, CodeText
-- forms: Field, TextInput, SearchInput, Select, Checkbox, Radio, RadioGroup, Switch, NumberInput, DateInput, DateTimeInput, MultiSelect, Textarea, ValidationMessage
-- feedback: Badge, Alert/InlineMessage, EmptyState, ErrorState, LoadingState, Skeleton, planned Toast/Progress
+- forms: Field, TextInput, SearchInput, Select, Autocomplete, Checkbox, Radio, RadioGroup, Switch, NumberInput, DateInput, DateTimeInput, MultiSelect, Textarea, ValidationMessage
+- data management: TransferList
+- feedback: Badge, Alert/InlineMessage, Toast, EmptyState, ErrorState, LoadingState, Skeleton, planned Progress
 - overlays: Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, ConfirmDialog
 - layout: Card, Panel, Stack, Inline, Section, AppShell, Page, PageHeader, PageToolbar
 - navigation: SideNav, TopNav, Breadcrumbs, Tabs
