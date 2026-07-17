@@ -1,4 +1,4 @@
-import { Badge, InlineMessage, PageHeader } from "@dravyn/ui-components";
+import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";

@@ -1,18 +1,18 @@
-import { Badge, Button, Heading, Icon, Text } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Icon, Text } from "@vyrnforge/ui-components";
 
 const cards = [
   {
-    title: "@dravyn/ui-core",
+    title: "@vyrnforge/ui-core",
     status: "Foundation",
     text: "Owns shared dv tokens, theme modes, density, and reusable utility classes."
   },
   {
-    title: "@dravyn/ui-components",
+    title: "@vyrnforge/ui-components",
     status: "Candidate",
     text: "Hosts native-first primitives that consume the shared core token contract."
   },
   {
-    title: "@dravyn/ui-data-grid",
+    title: "@vyrnforge/ui-data-grid",
     status: "Stable",
     text: "Keeps udg variables for compatibility while aligning to dv tokens where possible."
   }

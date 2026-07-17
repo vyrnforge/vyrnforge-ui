@@ -23,7 +23,7 @@ npm install <package-name>
 ## CSS import
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
 ```
 
 ## Usage

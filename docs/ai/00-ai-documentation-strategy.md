@@ -2,7 +2,7 @@
 
 ## Goal
 
-Make Dravyn UI easy for AI agents to use, extend, and maintain without violating package boundaries.
+Make VyrnForge UI easy for AI agents to use, extend, and maintain without violating package boundaries.
 
 ## AI needs
 

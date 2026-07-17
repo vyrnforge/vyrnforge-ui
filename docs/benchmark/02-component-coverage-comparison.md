@@ -2,15 +2,15 @@
 
 Legend:
 
-- Current: available in Dravyn today.
-- Planned: named in the Dravyn roadmap, not yet stable.
+- Current: available in VyrnForge today.
+- Planned: named in the VyrnForge roadmap, not yet stable.
 - Partial: available with limited scope or only as a pattern.
 - External: usually solved by another package in that ecosystem.
 - N/A: not a goal for that library/category.
 
 ## Coverage Matrix
 
-| Area | Dravyn | MUI | AntD | Chakra | Mantine | Bootstrap | Radix | React Aria | shadcn | TanStack Table | AG Grid |
+| Area | VyrnForge | MUI | AntD | Chakra | Mantine | Bootstrap | Radix | React Aria | shadcn | TanStack Table | AG Grid |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Tokens/themes | Current | Strong | Strong | Strong | Strong | Strong | N/A | External | Strong | N/A | Grid themes |
 | Typography | Current | Strong | Strong | Strong | Strong | Strong | N/A | External | Current | N/A | N/A |
@@ -44,7 +44,7 @@ Legend:
 | Workflow components | Planned | Partial | Strong ecosystem | Partial | Partial | N/A | N/A | N/A | Blocks | N/A | N/A |
 | Charts | Not planned now | MUI X Charts | AntV ecosystem | Chakra Charts | External | N/A | N/A | N/A | Charts registry | N/A | AG Charts separate |
 
-## Dravyn Current Strengths
+## VyrnForge Current Strengths
 
 - Shared core tokens and CSS variable theming.
 - Dense action, form, feedback, layout, and overlay primitives.
@@ -52,7 +52,7 @@ Legend:
 - Store-agnostic controlled/uncontrolled state.
 - Native-first components with accessible labels and keyboard-friendly behavior.
 
-## Dravyn Coverage Gaps
+## VyrnForge Coverage Gaps
 
 | Gap | Why it matters | Priority |
 | --- | --- | --- |
@@ -68,7 +68,7 @@ Legend:
 
 ## Recommendation
 
-Dravyn should not attempt to match MUI, Ant Design, Chakra, or Mantine component counts in the short term. The correct comparison is not raw volume. Dravyn should prioritize the smallest set of components needed to build complete enterprise workflows:
+VyrnForge should not attempt to match MUI, Ant Design, Chakra, or Mantine component counts in the short term. The correct comparison is not raw volume. VyrnForge should prioritize the smallest set of components needed to build complete enterprise workflows:
 
 1. App shell and navigation.
 2. Form completeness.

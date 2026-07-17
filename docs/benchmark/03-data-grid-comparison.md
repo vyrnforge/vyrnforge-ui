@@ -1,6 +1,6 @@
 # Data Grid Comparison
 
-Dravyn's data grid sits between headless table engines and full enterprise grid platforms.
+VyrnForge's data grid sits between headless table engines and full enterprise grid platforms.
 
 It should be more usable out of the box than TanStack Table, smaller and more design-system-neutral than MUI X, and much lighter in scope than AG Grid.
 
@@ -8,16 +8,16 @@ It should be more usable out of the box than TanStack Table, smaller and more de
 
 | Library | Grid type | Primary strength | Trade-off |
 | --- | --- | --- | --- |
-| Dravyn UniversalDataGrid | Styled native-first enterprise grid | Fits Dravyn tokens/components, dependency-minimal, controlled/uncontrolled, adapter-based | Not yet as feature-complete as AG Grid or MUI X advanced tiers |
+| VyrnForge UniversalDataGrid | Styled native-first enterprise grid | Fits VyrnForge tokens/components, dependency-minimal, controlled/uncontrolled, adapter-based | Not yet as feature-complete as AG Grid or MUI X advanced tiers |
 | TanStack Table | Headless table engine | Powerful row models and controlled state without owning markup | Requires teams to build UI, accessibility, styling, density, and workflow surfaces |
 | AG Grid | Full enterprise data grid | Deep feature set, performance, enterprise options | Larger conceptual/API surface, grid-first ecosystem, enterprise licensing for advanced features |
 | MUI X Data Grid | Styled React/MUI data grid | Batteries-included grid integrated with MUI | Best fit when adopting MUI/MUI X styling and package model |
-| Ant Design Table | Enterprise table component | Strong admin table defaults inside Ant ecosystem | Not a standalone grid foundation for Dravyn's native-first package goals |
+| Ant Design Table | Enterprise table component | Strong admin table defaults inside Ant ecosystem | Not a standalone grid foundation for VyrnForge's native-first package goals |
 | Bootstrap table | CSS table styling | Simple responsive table styling | Not an interactive data-grid engine |
 
 ## Capability Matrix
 
-| Capability | Dravyn | TanStack Table | AG Grid | MUI X Data Grid | Ant Design Table |
+| Capability | VyrnForge | TanStack Table | AG Grid | MUI X Data Grid | Ant Design Table |
 | --- | --- | --- | --- | --- | --- |
 | Styled grid UI | Yes | No | Yes | Yes | Yes |
 | Headless engine option | No | Yes | No | No | No |
@@ -37,11 +37,11 @@ It should be more usable out of the box than TanStack Table, smaller and more de
 | Server mode | Planned adapter/query contract | Strong controlled model | Strong | Strong | App-controlled |
 | Export files | Request contract only | App-owned | Strong | Built-in/export features | App-owned/extensions |
 | Saved views | Planned adapter model | App-owned | Enterprise/app-owned patterns | App-owned | App-owned |
-| Accessibility ownership | Dravyn owns grid UI | App owns markup quality | Grid owns UI | Grid owns UI | Component owns table UI |
+| Accessibility ownership | VyrnForge owns grid UI | App owns markup quality | Grid owns UI | Grid owns UI | Component owns table UI |
 | Dependency footprint | Minimal | Engine dependency | Dedicated grid packages | MUI X/MUI ecosystem | Ant ecosystem |
-| Best use case | Dravyn enterprise apps needing a package-native grid | Teams designing their own table UI | Feature-heavy grid products | MUI-based products | Ant-based admin apps |
+| Best use case | VyrnForge enterprise apps needing a package-native grid | Teams designing their own table UI | Feature-heavy grid products | MUI-based products | Ant-based admin apps |
 
-## What Dravyn Should Learn
+## What VyrnForge Should Learn
 
 | Source | Lesson |
 | --- | --- |
@@ -50,14 +50,14 @@ It should be more usable out of the box than TanStack Table, smaller and more de
 | MUI X Data Grid | Good defaults matter. A grid should be useful before every slot is customized. |
 | Ant Design Table | Admin tables need practical actions, filters, pagination, and empty/loading states integrated as normal workflow pieces. |
 
-## Where Dravyn Should Differ
+## Where VyrnForge Should Differ
 
 | Source | Intentional difference |
 | --- | --- |
-| TanStack Table | Dravyn should not require every app to rebuild table markup and styling from scratch. |
-| AG Grid | Dravyn should not chase spreadsheet, BI, pivot, charting, or massive enterprise feature scope early. |
-| MUI X Data Grid | Dravyn should not require MUI theming or Material visual language. |
-| Ant Design Table | Dravyn should not couple the grid to a large all-in-one UI ecosystem. |
+| TanStack Table | VyrnForge should not require every app to rebuild table markup and styling from scratch. |
+| AG Grid | VyrnForge should not chase spreadsheet, BI, pivot, charting, or massive enterprise feature scope early. |
+| MUI X Data Grid | VyrnForge should not require MUI theming or Material visual language. |
+| Ant Design Table | VyrnForge should not couple the grid to a large all-in-one UI ecosystem. |
 
 ## Near-Term Grid Priorities
 
@@ -70,7 +70,7 @@ It should be more usable out of the box than TanStack Table, smaller and more de
 
 ## Non-Goals
 
-Dravyn UniversalDataGrid should not become:
+VyrnForge UniversalDataGrid should not become:
 
 - a spreadsheet clone
 - a BI pivot engine

@@ -5,7 +5,7 @@
 
 ## Purpose
 
-UniversalDataGrid is the first strategic component in Dravyn UI.
+UniversalDataGrid is the first strategic component in VyrnForge UI.
 
 It provides a reusable enterprise-grade data grid for resource management, reporting, admin pages, customer portals, operational workspaces, and data-heavy product screens.
 

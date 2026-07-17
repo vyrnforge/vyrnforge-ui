@@ -5,7 +5,7 @@
 
 ## Quality goals
 
-Dravyn UI should be reliable enough for enterprise applications.
+VyrnForge UI should be reliable enough for enterprise applications.
 
 The library should avoid fragile UI behavior and hidden assumptions.
 

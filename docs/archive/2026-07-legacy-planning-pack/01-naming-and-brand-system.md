@@ -5,11 +5,11 @@
 
 ## Chosen project name
 
-**Dravyn UI**
+**VyrnForge UI**
 
-## Why Dravyn
+## Why VyrnForge
 
-Dravyn is dragon-inspired but more suitable for enterprise software than names like DragonGrid or DragonUI.
+VyrnForge is forge-inspired and more suitable for enterprise software than names like DragonGrid or DragonUI.
 
 It has a strong technical feel without becoming overly fantasy-themed.
 
@@ -36,7 +36,7 @@ Avoid names that feel:
 ## Repository name
 
 ```txt
-dravyn-ui
+vyrnforge-ui
 ```
 
 ## Package namespace
@@ -153,7 +153,7 @@ Do not turn enterprise applications into fantasy dashboards.
 
 ## Alternative names considered
 
-If Dravyn UI is not preferred, acceptable alternatives are:
+If VyrnForge UI is not preferred, acceptable alternatives are:
 
 ```txt
 Draken UI
@@ -166,5 +166,5 @@ EmberCore UI
 Recommended final choice remains:
 
 ```txt
-Dravyn UI
+VyrnForge UI
 ```

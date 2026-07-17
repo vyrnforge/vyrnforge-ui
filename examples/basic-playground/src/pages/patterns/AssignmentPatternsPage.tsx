@@ -8,7 +8,7 @@ import {
   Text,
   TransferList,
   ValidationMessage
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 const applicationOptions = [
   {

@@ -1,4 +1,4 @@
-import { Heading, Text } from "@dravyn/ui-components";
+import { Heading, Text } from "@vyrnforge/ui-components";
 
 const tokens = [
   ["Background", "--dv-bg", "var(--dv-bg)"],

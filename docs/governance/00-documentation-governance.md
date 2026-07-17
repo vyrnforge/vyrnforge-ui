@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This document prevents Dravyn UI documentation from becoming duplicated, conflicting, or multi-directional.
+This document prevents VyrnForge UI documentation from becoming duplicated, conflicting, or multi-directional.
 
-Dravyn UI has multiple concerns:
+VyrnForge UI has multiple concerns:
 
 - native-first UI foundation
 - component library
@@ -81,7 +81,7 @@ If a decision affects package boundaries, state ownership, dependencies, theming
 ---
 title: <Document title>
 status: Stable
-owner: Dravyn UI maintainers
+owner: VyrnForge UI maintainers
 last_reviewed: YYYY-MM-DD
 canonical: true
 ---

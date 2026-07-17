@@ -1,8 +1,8 @@
-# Dravyn UI Public API Reference
+# VyrnForge UI Public API Reference
 
-This folder documents the public API surface for Dravyn UI.
+This folder documents the public API surface for VyrnForge UI.
 
-Public API means the parts of Dravyn UI that consuming applications may rely on:
+Public API means the parts of VyrnForge UI that consuming applications may rely on:
 
 - package entry exports
 - documented React components and props
@@ -15,23 +15,23 @@ The public packages are:
 
 | Package | Public role |
 | --- | --- |
-| `@dravyn/ui-core` | Shared tokens, themes, density, utilities, and theme helpers. |
-| `@dravyn/ui-components` | Native-first reusable React components. |
-| `@dravyn/ui-data-grid` | Specialized enterprise data-management grid and grid contracts. |
+| `@vyrnforge/ui-core` | Shared tokens, themes, density, utilities, and theme helpers. |
+| `@vyrnforge/ui-components` | Native-first reusable React components. |
+| `@vyrnforge/ui-data-grid` | Specialized enterprise data-management grid and grid contracts. |
 
 ## Importing Packages
 
 ```ts
-import { Button } from "@dravyn/ui-components";
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+import { Button } from "@vyrnforge/ui-components";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
 
 Import CSS for the packages you use:
 
 ```ts
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 `ui-core` styles should come first because they define shared `--dv-*` tokens. `ui-components` consumes those shared tokens. `ui-data-grid` owns grid-specific `--udg-*` variables and maps them to `--dv-*` tokens where practical.

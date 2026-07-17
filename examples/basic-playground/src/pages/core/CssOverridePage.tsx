@@ -1,5 +1,5 @@
-import { Badge, Button, Heading, Text } from "@dravyn/ui-components";
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+import { Badge, Button, Heading, Text } from "@vyrnforge/ui-components";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { users } from "../../data/users";
 import { userColumns } from "../data-grid/gridShared";
 

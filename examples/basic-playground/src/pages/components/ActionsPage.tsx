@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, ButtonGroup, CloseButton, Icon, IconButton, MoreButton, RefreshButton, SegmentedControl, ToolbarButton } from "@dravyn/ui-components";
+import { Button, ButtonGroup, CloseButton, Icon, IconButton, MoreButton, RefreshButton, SegmentedControl, ToolbarButton } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -13,8 +13,8 @@ export function ActionsPage() {
       accessibility="Every icon-only action needs an aria-label. Keep visible labels in toolbars where the command is not obvious."
       avoid="Avoid using toolbar controls for a page-level business action such as Save or Create."
       description="Dense action controls for repeated operational commands and small mutually exclusive view choices."
-      importSnippet={'import { IconButton, ToolbarButton, SegmentedControl } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { IconButton, ToolbarButton, SegmentedControl } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["Button", "ButtonGroup", "Menu"]}
       status="candidate"
       title="Icon and toolbar actions"

@@ -1,4 +1,4 @@
-import { Button, EmptyState, ErrorState, Heading, Icon, LoadingState, Skeleton } from "@dravyn/ui-components";
+import { Button, EmptyState, ErrorState, Heading, Icon, LoadingState, Skeleton } from "@vyrnforge/ui-components";
 
 export function EmptyErrorLoadingPage() {
   return (

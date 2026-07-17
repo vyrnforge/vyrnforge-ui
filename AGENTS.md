@@ -1,12 +1,12 @@
-# AGENTS.md - Dravyn UI
+# AGENTS.md - VyrnForge UI
 
 ## Project
 
-Dravyn UI is a native-first enterprise UI foundation. It includes:
+VyrnForge UI is a native-first enterprise UI foundation. It includes:
 
-- `@dravyn/ui-core`
-- `@dravyn/ui-components`
-- `@dravyn/ui-data-grid`
+- `@vyrnforge/ui-core`
+- `@vyrnforge/ui-components`
+- `@vyrnforge/ui-data-grid`
 
 Do not treat this repository as only a data-grid project.
 
@@ -52,7 +52,7 @@ Do not add these unless explicitly approved:
 
 ## State Rules
 
-- No global store inside Dravyn packages.
+- No global store inside VyrnForge packages.
 - Use controlled/uncontrolled props.
 - App owns backend rows, auth, permissions, and business workflows.
 - Persistence/server/export use adapter contracts.
@@ -81,6 +81,6 @@ If public API changes, update:
 - playground example
 - AI docs if agent behavior changes
 
-Before using a Dravyn component, token, grid contract, or adapter, check `docs/api/` and `docs/metadata/`. Do not use undocumented internal APIs unless explicitly asked.
+Before using a VyrnForge component, token, grid contract, or adapter, check `docs/api/` and `docs/metadata/`. Do not use undocumented internal APIs unless explicitly asked.
 
 If documentation becomes outdated, move it to `docs/archive/<yyyy-mm-topic>/` with an archive note pointing to the replacement.

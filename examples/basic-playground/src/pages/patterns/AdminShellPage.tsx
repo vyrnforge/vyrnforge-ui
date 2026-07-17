@@ -11,7 +11,7 @@ import {
   Text,
   ToolbarButton,
   TopNav
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 export function AdminShellPage() {
   return (

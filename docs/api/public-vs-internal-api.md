@@ -6,9 +6,9 @@ This document defines what consuming apps may rely on.
 
 Public API includes:
 
-- package entry exports from `@dravyn/ui-core`
-- package entry exports from `@dravyn/ui-components`
-- package entry exports from `@dravyn/ui-data-grid`
+- package entry exports from `@vyrnforge/ui-core`
+- package entry exports from `@vyrnforge/ui-components`
+- package entry exports from `@vyrnforge/ui-data-grid`
 - documented React components
 - documented component props and exported types
 - documented CSS variables
@@ -36,7 +36,7 @@ Internal APIs may change without a compatibility guarantee.
 
 ## Agent Rules
 
-- Before using a Dravyn component, check API docs and metadata.
+- Before using a VyrnForge component, check API docs and metadata.
 - Do not import from deep internal package paths unless explicitly asked.
 - Do not use undocumented internal APIs as app contracts.
 - If a needed API is missing, document the gap and add it in a dedicated implementation task.

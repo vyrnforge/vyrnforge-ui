@@ -1,20 +1,20 @@
 import {
-  dravynDarkTheme,
-  dravynEnterpriseTheme,
-  dravynLightTheme
+  vyrnForgeDarkTheme,
+  vyrnForgeEnterpriseTheme,
+  vyrnForgeLightTheme
 } from "./themePresets";
-import type { DravynThemeName, DravynThemeVars } from "./theme.types";
+import type { VyrnForgeThemeName, VyrnForgeThemeVars } from "./theme.types";
 
-export function getDravynThemePreset(
-  theme: DravynThemeName
-): DravynThemeVars {
+export function getVyrnForgeThemePreset(
+  theme: VyrnForgeThemeName
+): VyrnForgeThemeVars {
   if (theme === "dark") {
-    return dravynDarkTheme;
+    return vyrnForgeDarkTheme;
   }
 
   if (theme === "enterprise") {
-    return dravynEnterpriseTheme;
+    return vyrnForgeEnterpriseTheme;
   }
 
-  return dravynLightTheme;
+  return vyrnForgeLightTheme;
 }

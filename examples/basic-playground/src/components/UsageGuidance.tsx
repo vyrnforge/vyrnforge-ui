@@ -1,4 +1,4 @@
-import { Panel, Text } from "@dravyn/ui-components";
+import { Panel, Text } from "@vyrnforge/ui-components";
 
 export type UsageGuidanceProps = {
   useWhen?: string;

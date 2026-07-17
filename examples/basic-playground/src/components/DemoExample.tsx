@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Badge, Button, Panel, SegmentedControl } from "@dravyn/ui-components";
+import { Badge, Button, Panel, SegmentedControl } from "@vyrnforge/ui-components";
 import { CodeBlock } from "./CodeBlock";
 
 export type DemoExampleProps = {

@@ -1,4 +1,4 @@
-import { Badge, Card, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
 
 type ComponentStatus = "current" | "planned" | "experimental";
 
@@ -21,14 +21,14 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Theme tokens",
-        packageName: "@dravyn/ui-core",
+        packageName: "@vyrnforge/ui-core",
         status: "current",
         purpose: "Shared design variables for color, spacing, typography, radius, shadow, and density.",
         notes: "Source of truth: docs/packages/ui-core.md."
       },
       {
         name: "Utilities",
-        packageName: "@dravyn/ui-core",
+        packageName: "@vyrnforge/ui-core",
         status: "current",
         purpose: "Small shared utility classes such as text, focus, truncation, and screen-reader helpers.",
         notes: "Keep dependency-free and stable."
@@ -40,21 +40,21 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Button",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Primary, secondary, subtle, and utility actions.",
         notes: "Use for business actions with visible text."
       },
       {
         name: "IconButton / ToolbarButton",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Compact repeated utility actions.",
         notes: "Icon-only controls require accessible labels."
       },
       {
         name: "SegmentedControl",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Small mutually exclusive mode selection.",
         notes: "Useful for density, view mode, and theme previews."
@@ -66,7 +66,7 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Heading / Text / Label / Caption / CodeText",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Consistent semantic text primitives.",
         notes: "Use package typography before custom heading/text classes."
@@ -78,7 +78,7 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Field / TextInput / SearchInput / Select / Checkbox / Textarea",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Native-first form controls and field composition.",
         notes: "Radio, Switch, NumberInput, DateInput, and MultiSelect are planned."
@@ -90,14 +90,14 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Badge / StatusBadge / Alert / InlineMessage",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Compact status and message surfaces.",
         notes: "Use semantic tone variants."
       },
       {
         name: "EmptyState / ErrorState / LoadingState / Skeleton",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Common stateful content placeholders.",
         notes: "Skeleton respects reduced motion settings."
@@ -109,7 +109,7 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Card / Panel / Stack / Inline / Section",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Reusable layout primitives for dense application UI.",
         notes: "AppShell, Page, PageHeader, and navigation are planned."
@@ -121,7 +121,7 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Popover / Menu / Dropdown / Tooltip / Dialog / Drawer / ConfirmDialog",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "current",
         purpose: "Native-first overlay interactions.",
         notes: "Portal, robust collision handling, and focus-trap hardening remain roadmap work."
@@ -133,7 +133,7 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "UniversalDataGrid",
-        packageName: "@dravyn/ui-data-grid",
+        packageName: "@vyrnforge/ui-data-grid",
         status: "current",
         purpose: "Specialized enterprise data-management grid.",
         notes: "Server mode, saved views, advanced filters, and virtualization remain planned phases."
@@ -145,7 +145,7 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "Tabs / Breadcrumbs / SideNav / TopNav / AppShell",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "planned",
         purpose: "Complete portal and admin app navigation.",
         notes: "Prioritized in the master roadmap before deep grid-only work."
@@ -157,7 +157,7 @@ const componentAreas: ComponentArea[] = [
     components: [
       {
         name: "DescriptionList / KeyValueList / PropertyTable / ResourceList / Timeline / ActivityLog",
-        packageName: "@dravyn/ui-components",
+        packageName: "@vyrnforge/ui-components",
         status: "planned",
         purpose: "Read-only enterprise data display surfaces.",
         notes: "Should follow repeated real product needs."

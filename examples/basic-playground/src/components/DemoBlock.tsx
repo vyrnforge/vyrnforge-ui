@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Button, Panel } from "@dravyn/ui-components";
+import { Button, Panel } from "@vyrnforge/ui-components";
 import { CodeBlock } from "./CodeBlock";
 
 export type DemoBlockProps = {

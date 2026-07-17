@@ -1,4 +1,4 @@
-# Dravyn UI Metadata
+# VyrnForge UI Metadata
 
 These files are structured indexes for the docs app and AI/Codex agents.
 

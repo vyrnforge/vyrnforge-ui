@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SearchInput } from "@dravyn/ui-components";
+import { SearchInput } from "@vyrnforge/ui-components";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
 
 export type DataGridSearchProps = {

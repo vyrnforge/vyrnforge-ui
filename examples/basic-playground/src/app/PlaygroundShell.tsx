@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { AppShell, Badge, Page, SegmentedControl, Select, TopNav } from "@dravyn/ui-components";
+import { AppShell, Badge, Page, SegmentedControl, Select, TopNav } from "@vyrnforge/ui-components";
 import type { PlaygroundRoute } from "./routes";
 import { PlaygroundNav } from "./PlaygroundNav";
 
@@ -34,7 +34,7 @@ export function PlaygroundShell({
           brand={
             <div className="dv-playground-top-brand">
               <span className="dv-playground-brand__mark">D</span>
-              <span>Dravyn UI Playground</span>
+              <span>VyrnForge UI Playground</span>
             </div>
           }
           actions={

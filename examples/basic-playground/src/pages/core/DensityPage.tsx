@@ -1,4 +1,4 @@
-import { Button, Heading, Icon, Text, TextInput } from "@dravyn/ui-components";
+import { Button, Heading, Icon, Text, TextInput } from "@vyrnforge/ui-components";
 
 const densities = ["compact", "standard", "comfortable"] as const;
 

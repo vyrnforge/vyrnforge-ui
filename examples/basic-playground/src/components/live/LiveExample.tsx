@@ -1,4 +1,4 @@
-import { Badge, Panel, Text } from "@dravyn/ui-components";
+import { Badge, Panel, Text } from "@vyrnforge/ui-components";
 import { LiveProvider } from "react-live";
 import type { LiveExampleProps } from "./LiveExample.types";
 import { LiveCodeEditor } from "./LiveCodeEditor";

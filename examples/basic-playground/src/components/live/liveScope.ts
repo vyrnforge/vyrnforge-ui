@@ -48,8 +48,8 @@ import {
   TopNav,
   useToast,
   ValidationMessage
-} from "@dravyn/ui-components";
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+} from "@vyrnforge/ui-components";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 
 export const liveScope = {
   React,

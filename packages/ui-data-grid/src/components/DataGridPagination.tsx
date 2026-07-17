@@ -1,4 +1,4 @@
-import { Button, Icon, Select } from "@dravyn/ui-components";
+import { Button, Icon, Select } from "@vyrnforge/ui-components";
 import type { DataGridPaginationState } from "../types/dataGrid.types";
 
 export type DataGridPaginationProps = {

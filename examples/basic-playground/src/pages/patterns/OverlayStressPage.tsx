@@ -7,8 +7,8 @@ export function OverlayStressPage() {
   return <ComponentDemoPage
     accessibility={["Use this page with a keyboard to verify Escape affects only the topmost layer and modal Tab focus remains contained.", "The live example intentionally combines overlays; each remains responsible for its own labels and commands."]}
     description="A composed overlay exercise for portal, stack ordering, focus, scrolling, and sticky AppShell regression checks."
-    importCode={'import { ConfirmDialog, Dialog, Drawer, Menu, Popover, Tooltip } from "@dravyn/ui-components";'}
-    packageName="@dravyn/ui-components"
+    importCode={'import { ConfirmDialog, Dialog, Drawer, Menu, Popover, Tooltip } from "@vyrnforge/ui-components";'}
+    packageName="@vyrnforge/ui-components"
     props={[]}
     relatedComponents={[]}
     sections={[{
@@ -18,7 +18,7 @@ export function OverlayStressPage() {
       children: <LiveExample
         description="Open the dialog, then its nested popover and confirmation. Close each layer with Escape. The drawer includes a keyboard-ready menu and a tooltip on its close action."
         id="overlay-stress"
-        imports={'import { Button, ConfirmDialog, Dialog, Drawer, Icon, IconButton, Menu, Popover, Stack, Text, Tooltip } from "@dravyn/ui-components";'}
+        imports={'import { Button, ConfirmDialog, Dialog, Drawer, Icon, IconButton, Menu, Popover, Stack, Text, Tooltip } from "@vyrnforge/ui-components";'}
         initialCode={`function Example() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);

@@ -1,22 +1,22 @@
 # CSS Architecture
 
-Dravyn CSS is package-owned and imported through stable package entry files. Internal CSS files may be split by component group or feature, but consuming apps should keep using package-level imports.
+VyrnForge CSS is package-owned and imported through stable package entry files. Internal CSS files may be split by component group or feature, but consuming apps should keep using package-level imports.
 
 ## Stable Imports
 
 ```ts
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 ## Ownership
 
 | Area | Prefix | Owns | Must not own |
 | --- | --- | --- | --- |
-| `@dravyn/ui-core` | `--dv-*`, shared `dv-*` utilities | reset, tokens, themes, density, generic utilities, accessibility helpers | component classes, grid classes, app-specific classes |
-| `@dravyn/ui-components` | `dv-*` | shared component styles for actions, forms, feedback, layout, navigation, overlays, typography | `udg-*`, docs/playground styling |
-| `@dravyn/ui-data-grid` | `udg-*`, `--udg-*` | grid shell, table, header, body, toolbar, pagination, grid features, grid states | generic button/input/badge/card styles |
+| `@vyrnforge/ui-core` | `--dv-*`, shared `dv-*` utilities | reset, tokens, themes, density, generic utilities, accessibility helpers | component classes, grid classes, app-specific classes |
+| `@vyrnforge/ui-components` | `dv-*` | shared component styles for actions, forms, feedback, layout, navigation, overlays, typography | `udg-*`, docs/playground styling |
+| `@vyrnforge/ui-data-grid` | `udg-*`, `--udg-*` | grid shell, table, header, body, toolbar, pagination, grid features, grid states | generic button/input/badge/card styles |
 | `apps/docs` | `dv-docs-*` | docs shell, sidebar, markdown, metadata, code block presentation | package component styles |
 | `examples/basic-playground` | `dv-playground-*` | demo layout and example helpers | package component styles |
 

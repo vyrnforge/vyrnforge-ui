@@ -3,7 +3,7 @@
 Use this prompt after copying the documentation system into the repo.
 
 ```txt
-You are working inside the Dravyn UI repository.
+You are working inside the VyrnForge UI repository.
 
 Task:
 Unify and clean the project documentation so there is no duplicate or conflicting direction.
@@ -16,7 +16,7 @@ Important:
 - Preserve benchmark docs and any useful history.
 
 Goal:
-Make docs/README.md the canonical documentation index and align all docs with the Dravyn UI direction.
+Make docs/README.md the canonical documentation index and align all docs with the VyrnForge UI direction.
 
 Required work:
 
@@ -61,7 +61,7 @@ Required work:
 Acceptance criteria:
 - docs/README.md is the single documentation entrypoint.
 - Old conflicting docs are archived or clearly marked deprecated.
-- Project direction is consistently Dravyn UI, not data-grid-only.
+- Project direction is consistently VyrnForge UI, not data-grid-only.
 - AI files exist and are aligned with human docs.
 - No implementation code was changed.
 ```

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Badge, Breadcrumbs, Button, Icon, PageHeader, PageToolbar, SearchInput, SideNav, Tabs, Text, ToolbarButton } from "@dravyn/ui-components";
+import { Badge, Breadcrumbs, Button, Icon, PageHeader, PageToolbar, SearchInput, SideNav, Tabs, Text, ToolbarButton } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -15,8 +15,8 @@ export function NavigationPage() {
       accessibility="Mark the current page, use nav landmarks, and preserve the native keyboard behavior of tabs and buttons."
       avoid="Avoid SideNav for deeply nested trees or Tabs for unrelated destinations."
       description="Routing-agnostic navigation primitives for application shells, page context, and related work areas."
-      importSnippet={'import { SideNav, TopNav, Breadcrumbs, Tabs, PageHeader } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { SideNav, TopNav, Breadcrumbs, Tabs, PageHeader } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["AppShell", "PageToolbar", "SegmentedControl"]}
       status="experimental"
       title="Navigation"

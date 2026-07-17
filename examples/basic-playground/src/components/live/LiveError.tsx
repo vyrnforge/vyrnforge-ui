@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Alert, Text } from "@dravyn/ui-components";
+import { Alert, Text } from "@vyrnforge/ui-components";
 import { LiveContext, LiveError as ReactLiveError } from "react-live";
 
 export function LiveError() {

@@ -1,4 +1,4 @@
-import { Card, Heading, Text } from "@dravyn/ui-components";
+import { Card, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { MarkdownView } from "./MarkdownView";
 

@@ -1,5 +1,5 @@
-import { ToastAction, ToastProvider, useToast } from "@dravyn/ui-components";
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+import { ToastAction, ToastProvider, useToast } from "@vyrnforge/ui-components";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { users } from "../../data/users";
 import { GridNote, userColumns } from "./gridShared";
 

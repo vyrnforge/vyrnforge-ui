@@ -5,7 +5,7 @@
 
 ## Purpose
 
-The theme system allows Dravyn UI components to be customized across projects without editing package internals.
+The theme system allows VyrnForge UI components to be customized across projects without editing package internals.
 
 The system should support:
 

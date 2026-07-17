@@ -2,7 +2,7 @@
 
 ## 0.x Versions
 
-The `0.x` API is unstable while Dravyn UI and the Universal Data Grid contract are being shaped.
+The `0.x` API is unstable while VyrnForge UI and the Universal Data Grid contract are being shaped.
 
 Breaking changes may happen in minor releases before `1.0.0`, including changes to:
 
@@ -24,10 +24,10 @@ Future migrations should preserve this direction unless a heavier dependency has
 
 Early local scaffolding used the placeholder package name `@your-org/ui-data-grid`.
 
-The Dravyn-aligned package name is:
+The current package name uses the legacy `@vyrnforge/*` npm scope. This scope is intentionally unchanged until BR-006:
 
 ```txt
-@dravyn/ui-data-grid
+@vyrnforge/ui-data-grid
 ```
 
 Update imports and CSS imports accordingly:
@@ -42,6 +42,6 @@ import "@your-org/ui-data-grid/style.css";
 After:
 
 ```tsx
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
-import "@dravyn/ui-data-grid/style.css";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
+import "@vyrnforge/ui-data-grid/style.css";
 ```

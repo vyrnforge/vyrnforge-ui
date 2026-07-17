@@ -7,7 +7,7 @@
       "rules": ["Keep local", "Do not persist", "Do not expose as application business state"]
     },
     "componentViewState": {
-      "owner": "Dravyn component in uncontrolled mode or consuming app in controlled mode",
+      "owner": "VyrnForge component in uncontrolled mode or consuming app in controlled mode",
       "examples": ["search", "filters", "sort", "pagination", "density", "column visibility", "column order", "column sizing", "grouping", "selected rows"],
       "rules": ["Support controlled props", "Support uncontrolled defaults", "Emit callbacks when state changes"]
     },
@@ -24,14 +24,14 @@
     "businessApplicationState": {
       "owner": "consuming application",
       "examples": ["API rows", "auth", "tenant", "permissions", "backend actions", "export jobs", "mutations"],
-      "rules": ["Never owned globally by Dravyn packages", "Keep backend workflows in the app"]
+      "rules": ["Never owned globally by VyrnForge packages", "Keep backend workflows in the app"]
     }
   },
   "policies": {
     "redux": {
-      "summary": "Dravyn packages do not depend on Redux, React Redux, or RTK Query.",
+      "summary": "VyrnForge packages do not depend on Redux, React Redux, or RTK Query.",
       "allowed": "Apps may use Redux through controlled props such as state and onStateChange.",
-      "forbidden": "Do not add Redux as a Dravyn package dependency."
+      "forbidden": "Do not add Redux as a VyrnForge package dependency."
     },
     "controlledUncontrolled": {
       "summary": "Components should support app-controlled state and local uncontrolled state where appropriate.",

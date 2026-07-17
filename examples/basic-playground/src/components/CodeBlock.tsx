@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Text } from "@dravyn/ui-components";
+import { Button, Text } from "@vyrnforge/ui-components";
 
 export type CodeBlockProps = {
   code: string;

@@ -1,9 +1,9 @@
-import { Badge, Button, Icon, ToolbarButton } from "@dravyn/ui-components";
+import { Badge, Button, Icon, ToolbarButton } from "@vyrnforge/ui-components";
 import {
   createLocalStorageGridPersistence,
   type DataGridBulkAction,
   type DataGridColumnDef
-} from "@dravyn/ui-data-grid";
+} from "@vyrnforge/ui-data-grid";
 import type { UserRecord } from "../../data/users";
 
 export const userColumns: DataGridColumnDef<UserRecord>[] = [
@@ -127,7 +127,7 @@ export const stressColumns: DataGridColumnDef<UserRecord>[] = [
 ];
 
 export const persistenceAdapter = createLocalStorageGridPersistence({
-  namespace: "dravyn-playground"
+  namespace: "vyrnforge-playground"
 });
 
 export const userBulkActions: DataGridBulkAction<UserRecord>[] = [

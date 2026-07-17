@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Section } from "@dravyn/ui-components";
+import { Section } from "@vyrnforge/ui-components";
 
 export type DemoSectionProps = {
   title: string;

@@ -1,4 +1,4 @@
-import { AppShell, Badge, Button, Card, Icon, Inline, PageToolbar, Panel, Section, SideNav, Stack, Text, TopNav } from "@dravyn/ui-components";
+import { AppShell, Badge, Button, Card, Icon, Inline, PageToolbar, Panel, Section, SideNav, Stack, Text, TopNav } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -12,8 +12,8 @@ export function LayoutPage() {
       accessibility="Use landmarks and heading structure supplied by Page, Section, Panel, and AppShell rather than recreating generic containers."
       avoid="Avoid nesting cards in cards or using AppShell inside a normal page layout."
       description="Composable layout primitives for task surfaces, page hierarchy, and persistent enterprise navigation."
-      importSnippet={'import { AppShell, Card, Panel, Section, Stack, Inline } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { AppShell, Card, Panel, Section, Stack, Inline } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["Page", "PageHeader", "PageToolbar", "SideNav"]}
       status="experimental"
       title="Layout primitives"

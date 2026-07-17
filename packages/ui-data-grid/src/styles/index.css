@@ -1,5 +1,5 @@
-@import "@dravyn/ui-core/styles/index.css";
-@import "@dravyn/ui-components/styles/index.css";
+@import "@vyrnforge/ui-core/styles/index.css";
+@import "@vyrnforge/ui-components/styles/index.css";
 @import "./tokens/data-grid.tokens.css";
 @import "./tokens/data-grid.themes.css";
 @import "./tokens/data-grid.density.css";

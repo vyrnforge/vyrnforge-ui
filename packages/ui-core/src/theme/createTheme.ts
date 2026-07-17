@@ -1,21 +1,21 @@
-import type { DravynThemeVars } from "./theme.types";
+import type { VyrnForgeThemeVars } from "./theme.types";
 
-export function createDravynTheme(vars: DravynThemeVars): DravynThemeVars {
+export function createVyrnForgeTheme(vars: VyrnForgeThemeVars): VyrnForgeThemeVars {
   return { ...vars };
 }
 
-export function mergeDravynTheme(
-  baseTheme: DravynThemeVars,
-  overrideTheme?: DravynThemeVars
-): DravynThemeVars {
+export function mergeVyrnForgeTheme(
+  baseTheme: VyrnForgeThemeVars,
+  overrideTheme?: VyrnForgeThemeVars
+): VyrnForgeThemeVars {
   return {
     ...baseTheme,
     ...overrideTheme
   };
 }
 
-export function toDravynThemeStyle(
-  vars?: DravynThemeVars
+export function toVyrnForgeThemeStyle(
+  vars?: VyrnForgeThemeVars
 ): Record<string, string | number> | undefined {
   if (!vars) {
     return undefined;

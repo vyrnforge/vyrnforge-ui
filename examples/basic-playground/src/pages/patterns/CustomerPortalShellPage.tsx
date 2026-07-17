@@ -10,7 +10,7 @@ import {
   Tabs,
   Text,
   TopNav
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 export function CustomerPortalShellPage() {
   return (

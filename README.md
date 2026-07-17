@@ -1,22 +1,22 @@
-# Dravyn UI
+# VyrnForge UI
 
-Dravyn UI is a native-first enterprise UI foundation for internal tools, admin portals, customer portals, data-heavy applications, and workflow systems.
+VyrnForge UI is a native-first enterprise UI foundation for internal tools, admin portals, customer portals, data-heavy applications, and workflow systems.
 
-This repository is not only a data-grid project. The data grid is one specialized package inside the broader Dravyn UI foundation.
+This repository is not only a data-grid project. The data grid is one specialized package inside the broader VyrnForge UI foundation.
 
 ## Packages
 
 ```txt
-@dravyn/ui-core
-@dravyn/ui-components
-@dravyn/ui-data-grid
+@vyrnforge/ui-core
+@vyrnforge/ui-components
+@vyrnforge/ui-data-grid
 ```
 
 | Package | Role |
 | --- | --- |
-| `@dravyn/ui-core` | Shared tokens, themes, density, and utilities. |
-| `@dravyn/ui-components` | Native React primitives and reusable application components. |
-| `@dravyn/ui-data-grid` | Specialized enterprise data-management grid. |
+| `@vyrnforge/ui-core` | Shared tokens, themes, density, and utilities. |
+| `@vyrnforge/ui-components` | Native React primitives and reusable application components. |
+| `@vyrnforge/ui-data-grid` | Specialized enterprise data-management grid. |
 
 ## Documentation
 
@@ -59,6 +59,6 @@ The playground is for interactive component behavior examples. The docs app is a
 
 ## Dependency Policy
 
-Dravyn UI should remain native-first and dependency-minimal.
+VyrnForge UI should remain native-first and dependency-minimal.
 
 Do not add MUI, TanStack, Redux, Radix, Tailwind, Headless UI, Emotion, styled-components, icon libraries, CSS frameworks, or other heavy runtime dependencies without explicit review and a written reason.

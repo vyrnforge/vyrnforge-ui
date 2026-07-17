@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve Dravyn UI.
+Thanks for helping improve VyrnForge UI.
 
 Before opening a pull request, run:
 
@@ -13,7 +13,7 @@ npm run build:playground
 
 Contribution rules:
 
-- Keep Dravyn UI native-first.
+- Keep VyrnForge UI native-first.
 - Do not add MUI, TanStack, Redux, RTK Query, Tailwind, Radix, Headless UI, Emotion, styled-components, icon libraries, CSS frameworks, or other heavy dependencies without clear justification.
 - Prefer small, focused changes.
 - Keep public APIs generic and reusable across projects.

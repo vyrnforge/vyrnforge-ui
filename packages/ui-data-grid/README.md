@@ -1,28 +1,28 @@
-# @dravyn/ui-data-grid
+# @vyrnforge/ui-data-grid
 
 Lightweight native-first React + TypeScript Universal Data Grid package foundation.
 
 This package exposes generic contracts, pure core helpers, controlled/uncontrolled state hooks, native table rendering, column management, optional view-state persistence, and base CSS variables. Redux, MUI, TanStack, exporter engines, and domain-specific UI are intentionally not part of the package.
 
-`@dravyn/ui-data-grid` now consumes shared Dravyn primitives from `@dravyn/ui-components` for common controls such as buttons, icon buttons, search inputs, selects, checkboxes, badges, menus, and feedback states. The grid remains a specialized data-management package: use `@dravyn/ui-components` for shared UI outside grids, and use `@dravyn/ui-data-grid` for grid-specific APIs, state, column behavior, selection, grouping, resizing, and persistence.
+`@vyrnforge/ui-data-grid` now consumes shared VyrnForge primitives from `@vyrnforge/ui-components` for common controls such as buttons, icon buttons, search inputs, selects, checkboxes, badges, menus, and feedback states. The grid remains a specialized data-management package: use `@vyrnforge/ui-components` for shared UI outside grids, and use `@vyrnforge/ui-data-grid` for grid-specific APIs, state, column behavior, selection, grouping, resizing, and persistence.
 
 ## CSS
 
 Import the package CSS once in the consuming app:
 
 ```tsx
-import "@dravyn/ui-data-grid/style.css";
+import "@vyrnforge/ui-data-grid/style.css";
 ```
 
-The data-grid stylesheet includes the shared core/component layers for standalone use. When using the full Dravyn UI workspace, the recommended explicit import order is still:
+The data-grid stylesheet includes the shared core/component layers for standalone use. When using the full VyrnForge UI workspace, the recommended explicit import order is still:
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
-`@dravyn/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--dv-*` variables when `@dravyn/ui-core` CSS is present, so app-level Dravyn tokens can theme components and grid together.
+`@vyrnforge/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--dv-*` variables when `@vyrnforge/ui-core` CSS is present, so app-level VyrnForge tokens can theme components and grid together.
 
 Override shared `--dv-*` tokens when components and grid should move together:
 
@@ -65,7 +65,7 @@ Per-instance CSS variables can be passed with `themeVars`:
 import {
   UniversalDataGrid,
   createDataGridTheme
-} from "@dravyn/ui-data-grid";
+} from "@vyrnforge/ui-data-grid";
 
 const customTheme = createDataGridTheme({
   "--udg-primary": "#003b71",
@@ -101,9 +101,9 @@ Grid state organization:
 
 Persistence is adapter-based and stores preferences only. Server integration should use query contracts and fetch in the app. Export integration should use request contracts and generate files outside the default grid package.
 
-No global store is created inside `@dravyn/ui-data-grid`.
+No global store is created inside `@vyrnforge/ui-data-grid`.
 
-Redux and RTK Query can be used by consuming apps without becoming Dravyn dependencies. Connect them through controlled state:
+Redux and RTK Query can be used by consuming apps without becoming VyrnForge dependencies. Connect them through controlled state:
 
 ```tsx
 const gridState = useSelector(selectGridState("users"));
@@ -138,7 +138,7 @@ const columns = [
 <UniversalDataGrid tableId="users" columns={columns} rows={rows} />
 ```
 
-The built-in column menu uses shared Dravyn search, checkbox, segmented control, badge, icon button, and menu primitives while keeping grid-specific behavior in the grid package. It focuses on search, visibility, density, and reset actions. Rows stay compact by default; move up/down and more actions appear on hover or keyboard focus. Users can reorder columns by dragging rows in the column menu or by dragging the small grip in a table header. The reset menu can reset order, sizes, column visibility/order/sizing, or the full view.
+The built-in column menu uses shared VyrnForge search, checkbox, segmented control, badge, icon button, and menu primitives while keeping grid-specific behavior in the grid package. It focuses on search, visibility, density, and reset actions. Rows stay compact by default; move up/down and more actions appear on hover or keyboard focus. Users can reorder columns by dragging rows in the column menu or by dragging the small grip in a table header. The reset menu can reset order, sizes, column visibility/order/sizing, or the full view.
 
 ## Filtering
 
@@ -158,7 +158,7 @@ Supported filter operators:
 - number/date/datetime: `equals`, `gt`, `gte`, `lt`, `lte`
 - boolean: `equals`
 
-Set `filterable: false` on a column to mark that column as unavailable for column-level filtering in custom integrations. Header controls appear on hover/focus and remain visible when a column is sorted. The header action menu provides sort, hide, reset size, and move left/right actions using shared Dravyn icon/menu primitives where they are safe for the native table interactions.
+Set `filterable: false` on a column to mark that column as unavailable for column-level filtering in custom integrations. Header controls appear on hover/focus and remain visible when a column is sorted. The header action menu provides sort, hide, reset size, and move left/right actions using shared VyrnForge icon/menu primitives where they are safe for the native table interactions.
 
 ## Column Resizing
 
@@ -277,7 +277,7 @@ Persistence is optional and stores preferences only, not row data:
 import {
   UniversalDataGrid,
   createLocalStorageGridPersistence
-} from "@dravyn/ui-data-grid";
+} from "@vyrnforge/ui-data-grid";
 
 const persistenceAdapter = createLocalStorageGridPersistence({
   namespace: "my-app"

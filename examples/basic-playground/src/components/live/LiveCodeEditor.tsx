@@ -1,5 +1,5 @@
 import { useContext, useState, type CSSProperties } from "react";
-import { Button, Inline } from "@dravyn/ui-components";
+import { Button, Inline } from "@vyrnforge/ui-components";
 import { LiveContext, LiveEditor } from "react-live";
 
 export type LiveCodeEditorProps = {

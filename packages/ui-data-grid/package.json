@@ -1,5 +1,5 @@
 {
-  "name": "@dravyn/ui-data-grid",
+  "name": "@vyrnforge/ui-data-grid",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -30,8 +30,8 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@dravyn/ui-components": "0.1.0",
-    "@dravyn/ui-core": "0.1.0"
+    "@vyrnforge/ui-components": "0.1.0",
+    "@vyrnforge/ui-core": "0.1.0"
   },
   "devDependencies": {
     "@types/react": "latest",

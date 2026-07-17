@@ -3,18 +3,18 @@
 ## Package architecture
 
 ```txt
-@dravyn/ui-core
+@vyrnforge/ui-core
   tokens
   themes
   density
   utility classes
 
-@dravyn/ui-components
+@vyrnforge/ui-components
   depends on ui-core
   reusable native React primitives
   forms, actions, overlays, feedback, layout
 
-@dravyn/ui-data-grid
+@vyrnforge/ui-data-grid
   depends on ui-core and ui-components
   UniversalDataGrid
   grid state/core/adapters
@@ -52,7 +52,7 @@ The architecture separates:
 
 ## Why this matters
 
-This keeps Dravyn:
+This keeps VyrnForge:
 
 - reusable across different products
 - easy to theme

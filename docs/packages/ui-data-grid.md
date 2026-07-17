@@ -1,10 +1,10 @@
-# `@dravyn/ui-data-grid`
+# `@vyrnforge/ui-data-grid`
 
 ## Purpose
 
-`@dravyn/ui-data-grid` provides `UniversalDataGrid`, a specialized enterprise data-management grid.
+`@vyrnforge/ui-data-grid` provides `UniversalDataGrid`, a specialized enterprise data-management grid.
 
-It is not the entire Dravyn UI library. It is one specialized package inside the larger foundation.
+It is not the entire VyrnForge UI library. It is one specialized package inside the larger foundation.
 
 ## Owns
 
@@ -26,9 +26,9 @@ It is not the entire Dravyn UI library. It is one specialized package inside the
 ## Import
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 ## State model

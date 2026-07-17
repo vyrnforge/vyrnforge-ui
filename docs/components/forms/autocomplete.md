@@ -1,11 +1,11 @@
 # Autocomplete
 
-`Autocomplete` is an experimental single-select searchable combobox for known option sets. It is native-first, dependency-free, and reuses the shared Dravyn overlay foundation for portal rendering, anchored positioning, outside dismissal, and topmost Escape handling.
+`Autocomplete` is an experimental single-select searchable combobox for known option sets. It is native-first, dependency-free, and reuses the shared VyrnForge overlay foundation for portal rendering, anchored positioning, outside dismissal, and topmost Escape handling.
 
 ## Import
 
 ```tsx
-import { Autocomplete } from "@dravyn/ui-components";
+import { Autocomplete } from "@vyrnforge/ui-components";
 ```
 
 ## Use The Right Control

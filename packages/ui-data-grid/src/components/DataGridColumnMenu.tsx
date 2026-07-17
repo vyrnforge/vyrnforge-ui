@@ -9,7 +9,7 @@ import {
   SearchInput,
   SegmentedControl,
   ToolbarButton
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 import {
   filterColumnMenuColumns,
   resolveOrderedColumns,

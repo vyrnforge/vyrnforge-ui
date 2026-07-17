@@ -1,4 +1,4 @@
-import { EmptyState } from "@dravyn/ui-components";
+import { EmptyState } from "@vyrnforge/ui-components";
 
 export type DataGridEmptyStateProps = {
   message?: string;

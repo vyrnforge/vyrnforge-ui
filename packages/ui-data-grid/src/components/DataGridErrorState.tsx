@@ -1,4 +1,4 @@
-import { ErrorState } from "@dravyn/ui-components";
+import { ErrorState } from "@vyrnforge/ui-components";
 
 export type DataGridErrorStateProps = {
   error?: string | Error | null;

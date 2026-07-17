@@ -1,8 +1,8 @@
-# `@dravyn/ui-core`
+# `@vyrnforge/ui-core`
 
 ## Purpose
 
-`@dravyn/ui-core` is the shared foundation package.
+`@vyrnforge/ui-core` is the shared foundation package.
 
 It provides:
 
@@ -31,7 +31,7 @@ It should remain dependency-light and should not own React components.
 ## Import
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
 ```
 
 ## Theme override example

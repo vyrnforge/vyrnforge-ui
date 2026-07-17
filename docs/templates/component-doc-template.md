@@ -2,9 +2,9 @@
 
 ## Status
 
-- Package: `@dravyn/ui-components`
+- Package: `@vyrnforge/ui-components`
 - Status: Draft | Experimental | Stable
-- Owner: Dravyn UI maintainers
+- Owner: VyrnForge UI maintainers
 
 ## Purpose
 
@@ -23,9 +23,9 @@ Describe what this component solves.
 ## Import
 
 ```tsx
-import { ComponentName } from "@dravyn/ui-components";
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
+import { ComponentName } from "@vyrnforge/ui-components";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
 ```
 
 ## Basic usage

@@ -1,4 +1,4 @@
-# Dravyn UI - Coding Rules For AI
+# VyrnForge UI - Coding Rules For AI
 
 ## Components
 

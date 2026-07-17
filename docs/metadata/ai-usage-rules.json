@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "rules": [
     {
-      "id": "prefer-dravyn-components",
-      "rule": "Prefer @dravyn/ui-components before creating raw custom controls.",
+      "id": "prefer-VyrnForge-components",
+      "rule": "Prefer @vyrnforge/ui-components before creating raw custom controls.",
       "reason": "Keeps UI consistent and accessible."
     },
     {
       "id": "use-grid-for-data-management",
-      "rule": "Use @dravyn/ui-data-grid only for data-management tables.",
+      "rule": "Use @vyrnforge/ui-data-grid only for data-management tables.",
       "reason": "UniversalDataGrid is specialized grid behavior, not a generic layout component."
     },
     {
@@ -34,16 +34,16 @@
     {
       "id": "css-variables",
       "rule": "Use CSS variables for styling customization.",
-      "reason": "Dravyn theming is token-driven and scoped."
+      "reason": "VyrnForge theming is token-driven and scoped."
     },
     {
       "id": "no-forbidden-deps",
       "rule": "Do not add MUI, Tailwind, Radix, TanStack, Redux, styled-components, Emotion, icon libraries, or CSS frameworks unless explicitly approved.",
-      "reason": "Dravyn is native-first and dependency-minimal."
+      "reason": "VyrnForge is native-first and dependency-minimal."
     },
     {
       "id": "app-fetching",
-      "rule": "Keep app data fetching outside Dravyn packages.",
+      "rule": "Keep app data fetching outside VyrnForge packages.",
       "reason": "Apps own backend rows, auth, permissions, retries, and cache."
     },
     {
@@ -53,7 +53,7 @@
     },
     {
       "id": "check-public-api-docs",
-      "rule": "Before using a Dravyn component or contract, check docs/api and docs/metadata.",
+      "rule": "Before using a VyrnForge component or contract, check docs/api and docs/metadata.",
       "reason": "API docs define public usage while metadata provides structured lookup."
     },
     {

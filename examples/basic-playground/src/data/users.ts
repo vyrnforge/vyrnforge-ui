@@ -33,7 +33,7 @@ export const users: UserRecord[] = Array.from({ length: 72 }, (_, index) => {
   return {
     id: index + 1,
     name: `${name} ${index + 1}`,
-    email: `user${index + 1}@dravyn.example`,
+    email: `user${index + 1}@vyrnforge.example`,
     role: roles[index % roles.length],
     team,
     status,

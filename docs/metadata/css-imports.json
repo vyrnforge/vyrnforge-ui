@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "sourceOfTruth": "docs/api/import-and-setup.md",
   "recommendedOrder": [
-    "@dravyn/ui-core/styles/index.css",
-    "@dravyn/ui-components/styles/index.css",
-    "@dravyn/ui-data-grid/styles/index.css"
+    "@vyrnforge/ui-core/styles/index.css",
+    "@vyrnforge/ui-components/styles/index.css",
+    "@vyrnforge/ui-data-grid/styles/index.css"
   ],
   "internalSplitPolicy": {
     "publicImportContract": "Consumers import package-level styles/index.css files only.",
@@ -15,22 +15,22 @@
   },
   "imports": [
     {
-      "package": "@dravyn/ui-core",
-      "importPath": "@dravyn/ui-core/styles/index.css",
+      "package": "@vyrnforge/ui-core",
+      "importPath": "@vyrnforge/ui-core/styles/index.css",
       "requiredFor": ["shared --dv-* tokens", "theme presets", "density tokens", "utility classes"],
-      "mustComeBefore": ["@dravyn/ui-components/styles/index.css", "@dravyn/ui-data-grid/styles/index.css"],
+      "mustComeBefore": ["@vyrnforge/ui-components/styles/index.css", "@vyrnforge/ui-data-grid/styles/index.css"],
       "notes": "ui-core owns shared --dv-* design tokens, reset, density, utilities, and accessibility helpers."
     },
     {
-      "package": "@dravyn/ui-components",
-      "importPath": "@dravyn/ui-components/styles/index.css",
+      "package": "@vyrnforge/ui-components",
+      "importPath": "@vyrnforge/ui-components/styles/index.css",
       "requiredFor": ["dv-* component classes", "shared component visual states"],
-      "mustComeBefore": ["@dravyn/ui-data-grid/styles/index.css"],
+      "mustComeBefore": ["@vyrnforge/ui-data-grid/styles/index.css"],
       "notes": "ui-components consumes --dv-* variables and owns dv-* component classes split by component family internally."
     },
     {
-      "package": "@dravyn/ui-data-grid",
-      "importPath": "@dravyn/ui-data-grid/styles/index.css",
+      "package": "@vyrnforge/ui-data-grid",
+      "importPath": "@vyrnforge/ui-data-grid/styles/index.css",
       "requiredFor": ["udg-* grid classes", "--udg-* grid variables", "grid layout and density"],
       "mustComeBefore": [],
       "notes": "ui-data-grid owns udg-* classes and --udg-* variables. The grid should work with fallback values but aligns best when ui-core is imported."

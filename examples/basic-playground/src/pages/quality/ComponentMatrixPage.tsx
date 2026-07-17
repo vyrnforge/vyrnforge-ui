@@ -51,8 +51,8 @@ import {
   TopNav,
   TransferList,
   useToast
-} from "@dravyn/ui-components";
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+} from "@vyrnforge/ui-components";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 
 const roleOptions = [
   { value: "admin", label: "Administrator" },

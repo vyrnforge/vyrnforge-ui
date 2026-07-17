@@ -1,6 +1,6 @@
-# Dravyn UI Quality Gates
+# VyrnForge UI Quality Gates
 
-This document defines the minimum quality bar for shipped Dravyn UI components. It applies to `@dravyn/ui-components` and `@dravyn/ui-data-grid`.
+This document defines the minimum quality bar for shipped VyrnForge UI components. It applies to `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid`.
 
 ## Severity
 
@@ -15,7 +15,7 @@ This document defines the minimum quality bar for shipped Dravyn UI components. 
 
 | Gate | Stable requirement |
 | --- | --- |
-| API consistency | Props follow existing Dravyn conventions: `value/defaultValue`, `checked/defaultChecked`, `open/defaultOpen`, `onValueChange`, `onCheckedChange`, `onOpenChange`, `disabled`, `readOnly`, `invalid`, `required`, `size`, `density`, `className`, and `style` where relevant. |
+| API consistency | Props follow existing VyrnForge conventions: `value/defaultValue`, `checked/defaultChecked`, `open/defaultOpen`, `onValueChange`, `onCheckedChange`, `onOpenChange`, `disabled`, `readOnly`, `invalid`, `required`, `size`, `density`, `className`, and `style` where relevant. |
 | Behavior correctness | Controlled mode never mutates internal business state, uncontrolled defaults apply only initially, disabled/read-only blocks mutation, and callbacks receive predictable values. |
 | Accessibility | Primary interaction has labels, ARIA relationships, visible focus, keyboard operation, expected Escape behavior, and correct live-region/modal semantics. |
 | Visual quality | Light, dark, enterprise, compact, standard, and comfortable modes retain usable spacing, contrast, control heights, and focus visibility. |

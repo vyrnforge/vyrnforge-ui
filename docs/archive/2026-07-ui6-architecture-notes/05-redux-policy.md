@@ -3,14 +3,14 @@
 
 # Redux Policy
 
-Dravyn UI packages are store-agnostic. They do not require Redux, `react-redux`, RTK Query, Zustand, TanStack state, or any global app store.
+VyrnForge UI packages are store-agnostic. They do not require Redux, `react-redux`, RTK Query, Zustand, TanStack state, or any global app store.
 
 ## Package Rule
 
 - `@dravyn/ui-core` must not depend on Redux or app state libraries.
 - `@dravyn/ui-components` must not depend on Redux or app state libraries.
 - `@dravyn/ui-data-grid` must not depend on Redux or app state libraries.
-- Dravyn packages must not create a global store internally.
+- VyrnForge packages must not create a global store internally.
 - Core logic must remain pure TypeScript and store-agnostic.
 
 ## App Integration

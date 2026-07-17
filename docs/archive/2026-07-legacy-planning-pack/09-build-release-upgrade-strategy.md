@@ -5,7 +5,7 @@
 
 ## Build goals
 
-Dravyn UI packages must be easy to build, test, pack, and upgrade across multiple consuming applications.
+VyrnForge UI packages must be easy to build, test, pack, and upgrade across multiple consuming applications.
 
 ## Package build format
 

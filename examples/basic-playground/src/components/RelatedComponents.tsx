@@ -1,4 +1,4 @@
-import { Badge, Panel } from "@dravyn/ui-components";
+import { Badge, Panel } from "@vyrnforge/ui-components";
 
 export type RelatedComponentsProps = {
   components?: string[];

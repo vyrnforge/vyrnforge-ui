@@ -1,6 +1,6 @@
-import type { DravynThemeVars } from "./theme.types";
+import type { VyrnForgeThemeVars } from "./theme.types";
 
-export const dravynLightTheme: DravynThemeVars = {
+export const vyrnForgeLightTheme: VyrnForgeThemeVars = {
   "--dv-bg": "#f8fafc",
   "--dv-surface": "#ffffff",
   "--dv-text": "#172033",
@@ -8,7 +8,7 @@ export const dravynLightTheme: DravynThemeVars = {
   "--dv-primary": "#2563eb"
 };
 
-export const dravynDarkTheme: DravynThemeVars = {
+export const vyrnForgeDarkTheme: VyrnForgeThemeVars = {
   "--dv-bg": "#0f172a",
   "--dv-surface": "#172033",
   "--dv-text": "#e5e7eb",
@@ -16,7 +16,7 @@ export const dravynDarkTheme: DravynThemeVars = {
   "--dv-primary": "#60a5fa"
 };
 
-export const dravynEnterpriseTheme: DravynThemeVars = {
+export const vyrnForgeEnterpriseTheme: VyrnForgeThemeVars = {
   "--dv-bg": "#eef2f7",
   "--dv-surface": "#ffffff",
   "--dv-text": "#182233",

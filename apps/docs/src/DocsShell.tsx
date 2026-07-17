@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { AppShell, Badge, Heading, Text, TopNav } from "@dravyn/ui-components";
+import { AppShell, Badge, Heading, Text, TopNav } from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
@@ -23,7 +23,7 @@ export function DocsShell({
         <TopNav
           brand={
             <div>
-              <div className="dv-docs-header__eyebrow">Dravyn UI Docs</div>
+              <div className="dv-docs-header__eyebrow">VyrnForge UI Docs</div>
               <Heading level={1} size="lg" className="dv-docs-header__title">
                 Source-of-truth documentation and AI reference
               </Heading>

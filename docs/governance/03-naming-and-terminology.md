@@ -4,28 +4,28 @@
 
 | Item | Name |
 | --- | --- |
-| Project | Dravyn UI |
-| Repository | `dravyn-ui` |
-| Package scope | `@dravyn` |
-| Core package | `@dravyn/ui-core` |
-| Components package | `@dravyn/ui-components` |
-| Data grid package | `@dravyn/ui-data-grid` |
+| Project | VyrnForge UI |
+| Repository | `vyrnforge-ui` |
+| Package scope | `@vyrnforge` |
+| Core package | `@vyrnforge/ui-core` |
+| Components package | `@vyrnforge/ui-components` |
+| Data grid package | `@vyrnforge/ui-data-grid` |
 
 ## CSS prefixes
 
 | Prefix | Owner | Usage |
 | --- | --- | --- |
-| `--dv-*` | `@dravyn/ui-core` | shared design tokens |
-| `dv-*` | `@dravyn/ui-components` | shared component classes |
-| `--udg-*` | `@dravyn/ui-data-grid` | grid-specific variables |
-| `udg-*` | `@dravyn/ui-data-grid` | grid-specific classes |
+| `--dv-*` | `@vyrnforge/ui-core` | shared design tokens |
+| `dv-*` | `@vyrnforge/ui-components` | shared component classes |
+| `--udg-*` | `@vyrnforge/ui-data-grid` | grid-specific variables |
+| `udg-*` | `@vyrnforge/ui-data-grid` | grid-specific classes |
 
 ## Terms
 
 | Term | Meaning |
 | --- | --- |
 | Native-first | Prefer platform/native HTML behavior before custom abstractions. |
-| Store-agnostic | Dravyn does not require Redux/Zustand/TanStack state. |
+| Store-agnostic | VyrnForge does not require Redux/Zustand/TanStack state. |
 | Controlled state | App owns state through props and callbacks. |
 | Uncontrolled state | Component owns local view state internally. |
 | Adapter | Explicit integration boundary for persistence/server/export. |
@@ -34,7 +34,7 @@
 
 ## Avoid terms
 
-Avoid calling Dravyn:
+Avoid calling VyrnForge:
 
 - only a data-grid library
 - a CSS framework
@@ -43,4 +43,4 @@ Avoid calling Dravyn:
 - a TanStack wrapper
 - a MUI alternative in full scope
 
-Dravyn is a focused enterprise UI foundation.
+VyrnForge is a focused enterprise UI foundation.

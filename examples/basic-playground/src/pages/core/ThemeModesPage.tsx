@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Text } from "@vyrnforge/ui-components";
 
 const modes = ["light", "dark", "enterprise", "system"] as const;
 

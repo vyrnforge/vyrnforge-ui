@@ -76,7 +76,7 @@ export type PlaygroundRoute = {
   subgroup?: "Actions" | "Forms" | "Data Management" | "Feedback" | "Layout" | "Navigation" | "Overlays";
   gallery?: boolean;
   path?: string;
-  packageName?: "@dravyn/ui-components" | "@dravyn/ui-data-grid";
+  packageName?: "@vyrnforge/ui-components" | "@vyrnforge/ui-data-grid";
   status?: "stable" | "experimental" | "planned";
   Component: ComponentType;
 };
@@ -85,7 +85,7 @@ export const routes: PlaygroundRoute[] = [
   {
     id: "overview",
     label: "Overview",
-    title: "Dravyn UI Overview",
+    title: "VyrnForge UI Overview",
     description: "Workspace purpose, package boundaries, and maturity at a glance.",
     group: "Overview",
     Component: OverviewPage
@@ -131,7 +131,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Actions",
     gallery: true,
     path: "/components/actions/button",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: ButtonPage
   },
@@ -144,7 +144,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Actions",
     gallery: true,
     path: "/components/actions/icon-button",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: IconButtonPage
   },
@@ -157,7 +157,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Actions",
     gallery: true,
     path: "/components/actions/button-group",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: ButtonGroupPage
   },
@@ -170,7 +170,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Actions",
     gallery: true,
     path: "/components/actions/toolbar-button",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: ToolbarButtonPage
   },
@@ -183,7 +183,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Actions",
     gallery: true,
     path: "/components/actions/segmented-control",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: SegmentedControlPage
   },
@@ -196,7 +196,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Actions",
     gallery: true,
     path: "/components/actions/toggle-button",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: ToggleButtonPage
   },
@@ -209,7 +209,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Actions",
     gallery: true,
     path: "/components/actions/toggle-button-group",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: ToggleButtonGroupPage
   },
@@ -222,7 +222,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/text-input",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: TextInputReferencePage
   },
@@ -235,7 +235,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/autocomplete",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: AutocompletePage
   },
@@ -248,7 +248,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Data Management",
     gallery: true,
     path: "/components/data-management/transfer-list",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: TransferListPage
   },
@@ -261,7 +261,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/select",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: SelectReferencePage
   },
@@ -274,7 +274,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/checkbox",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: CheckboxReferencePage
   },
@@ -287,7 +287,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/field",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: FieldReferencePage
   },
@@ -300,7 +300,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/validation-message",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: ValidationMessagePage
   },
@@ -313,7 +313,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/radio",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: RadioPage
   },
@@ -326,7 +326,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/radio-group",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: RadioGroupPage
   },
@@ -339,7 +339,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/switch",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: SwitchPage
   },
@@ -352,7 +352,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/number-input",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: NumberInputPage
   },
@@ -365,7 +365,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/date-input",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: DateInputPage
   },
@@ -378,7 +378,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/datetime-input",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: DateTimeInputPage
   },
@@ -391,7 +391,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/textarea",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: TextareaPage
   },
@@ -404,7 +404,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/rating",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: RatingPage
   },
@@ -417,7 +417,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/slider",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: SliderPage
   },
@@ -430,7 +430,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Overlays",
     gallery: true,
     path: "/components/overlays/popover",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: PopoverPage
   },
@@ -443,7 +443,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Overlays",
     gallery: true,
     path: "/components/overlays/menu",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: MenuPage
   },
@@ -456,7 +456,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Overlays",
     gallery: true,
     path: "/components/overlays/dropdown",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: DropdownPage
   },
@@ -469,7 +469,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Overlays",
     gallery: true,
     path: "/components/overlays/tooltip",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: TooltipPage
   },
@@ -482,7 +482,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Overlays",
     gallery: true,
     path: "/components/overlays/dialog",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: DialogPage
   },
@@ -495,7 +495,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Overlays",
     gallery: true,
     path: "/components/overlays/drawer",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: DrawerPage
   },
@@ -508,7 +508,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Overlays",
     gallery: true,
     path: "/components/overlays/confirm-dialog",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: ConfirmDialogPage
   },
@@ -521,7 +521,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Feedback",
     gallery: true,
     path: "/components/feedback/badge",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "stable",
     Component: BadgePage
   },
@@ -534,7 +534,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Feedback",
     gallery: true,
     path: "/components/feedback/toast",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: ToastPage
   },
@@ -547,7 +547,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Layout",
     gallery: true,
     path: "/components/layout/app-shell",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: AppShellPage
   },
@@ -560,7 +560,7 @@ export const routes: PlaygroundRoute[] = [
     subgroup: "Navigation",
     gallery: true,
     path: "/components/navigation/tabs",
-    packageName: "@dravyn/ui-components",
+    packageName: "@vyrnforge/ui-components",
     status: "experimental",
     Component: TabsPage
   },
@@ -572,7 +572,7 @@ export const routes: PlaygroundRoute[] = [
     group: "Data Grid",
     gallery: true,
     path: "/data-grid/basic",
-    packageName: "@dravyn/ui-data-grid",
+    packageName: "@vyrnforge/ui-data-grid",
     status: "stable",
     Component: BasicGridReferencePage
   },

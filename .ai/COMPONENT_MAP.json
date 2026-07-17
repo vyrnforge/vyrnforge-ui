@@ -1,5 +1,5 @@
 {
-  "project": "Dravyn UI",
+  "project": "VyrnForge UI",
   "schemaVersion": 1,
   "sourceOfTruth": {
     "docsIndex": "docs/README.md",
@@ -11,15 +11,15 @@
     "aiUsageRules": "docs/metadata/ai-usage-rules.json"
   },
   "packages": {
-    "@dravyn/ui-core": {
+    "@vyrnforge/ui-core": {
       "owns": ["tokens", "themes", "density", "utilities"],
-      "css": ["@dravyn/ui-core/styles/index.css"],
+      "css": ["@vyrnforge/ui-core/styles/index.css"],
       "current": ["Theme tokens", "Density tokens", "Utility classes"],
       "planned": []
     },
-    "@dravyn/ui-components": {
+    "@vyrnforge/ui-components": {
       "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation", "data management"],
-      "css": ["@dravyn/ui-core/styles/index.css", "@dravyn/ui-components/styles/index.css"],
+      "css": ["@vyrnforge/ui-core/styles/index.css", "@vyrnforge/ui-components/styles/index.css"],
       "current": [
         "Button",
         "IconButton",
@@ -95,9 +95,9 @@
         "ActivityLog"
       ]
     },
-    "@dravyn/ui-data-grid": {
+    "@vyrnforge/ui-data-grid": {
       "owns": ["UniversalDataGrid", "grid behavior", "grid state", "grid adapters", "grid-specific styles"],
-      "css": ["@dravyn/ui-core/styles/index.css", "@dravyn/ui-components/styles/index.css", "@dravyn/ui-data-grid/styles/index.css"],
+      "css": ["@vyrnforge/ui-core/styles/index.css", "@vyrnforge/ui-components/styles/index.css", "@vyrnforge/ui-data-grid/styles/index.css"],
       "current": [
         "UniversalDataGrid",
         "DataGridToolbar",

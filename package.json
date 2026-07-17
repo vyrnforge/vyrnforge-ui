@@ -1,5 +1,5 @@
 {
-  "name": "dravyn-ui",
+  "name": "vyrnforge-ui",
   "private": true,
   "workspaces": [
     "packages/*",
@@ -7,11 +7,12 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && npm run build --workspace @dravyn/ui-data-grid-basic-playground",
-    "build:docs": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-docs",
-    "build:playground": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && npm run build --workspace @dravyn/ui-data-grid-basic-playground",
-    "dev:docs": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run dev --workspace @dravyn/ui-docs",
-    "dev:playground": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && npm run dev --workspace @dravyn/ui-data-grid-basic-playground",
+    "build": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "build:packages": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid",
+    "build:docs": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-docs",
+    "build:playground": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "dev:docs": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run dev --workspace @vyrnforge/ui-docs",
+    "dev:playground": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run dev --workspace @vyrnforge/ui-data-grid-basic-playground",
     "quality": "npm run typecheck && npm run test && npm run build && npm run build:docs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"

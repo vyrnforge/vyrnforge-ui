@@ -15,7 +15,7 @@ import {
   IconButton,
   Menu,
   Select
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 import { applyFilters } from "../core/applyFilters";
 import {
   buildGroupedRows,

@@ -13,7 +13,7 @@ import {
   ToastProvider,
   useToast,
   ValidationMessage
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 export function SettingsPage() {
   return (

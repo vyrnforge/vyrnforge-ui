@@ -1,6 +1,6 @@
 # UI Library Landscape
 
-This benchmark compares Dravyn UI with common React UI libraries, CSS toolkits, headless primitives, registry-based component systems, and data-grid libraries.
+This benchmark compares VyrnForge UI with common React UI libraries, CSS toolkits, headless primitives, registry-based component systems, and data-grid libraries.
 
 Source baseline: public project documentation reviewed on 2026-07-09.
 
@@ -22,19 +22,19 @@ Source baseline: public project documentation reviewed on 2026-07-09.
 
 ## Categories
 
-| Category | Libraries | Primary purpose | Dravyn relationship |
+| Category | Libraries | Primary purpose | VyrnForge relationship |
 | --- | --- | --- | --- |
-| Full React UI libraries | MUI, Ant Design, Chakra UI, Mantine | Broad component coverage with theming and application primitives | Dravyn should learn coverage discipline, docs, accessibility patterns, and production defaults. |
-| CSS/frontend toolkits | Bootstrap, Tailwind Plus | Styling systems, templates, utilities, prebuilt blocks | Dravyn should learn predictable layout and rapid app assembly, but avoid utility-first dependency lock-in. |
-| Headless/accessibility primitives | Radix UI, React Aria, Headless UI | Behavior and accessibility primitives without full visual ownership | Dravyn should learn interaction quality, focus behavior, and ARIA rigor while keeping native-first implementation. |
-| Copy-paste/component registry | shadcn/ui | Open component code distributed into the app | Dravyn should learn composability and transparent source, but remain a versioned package library. |
-| Table/data-grid libraries | TanStack Table, AG Grid, MUI X Data Grid | Table engines or full enterprise data grids | Dravyn should learn controlled state, row models, and enterprise grid UX while keeping a smaller native-first scope. |
+| Full React UI libraries | MUI, Ant Design, Chakra UI, Mantine | Broad component coverage with theming and application primitives | VyrnForge should learn coverage discipline, docs, accessibility patterns, and production defaults. |
+| CSS/frontend toolkits | Bootstrap, Tailwind Plus | Styling systems, templates, utilities, prebuilt blocks | VyrnForge should learn predictable layout and rapid app assembly, but avoid utility-first dependency lock-in. |
+| Headless/accessibility primitives | Radix UI, React Aria, Headless UI | Behavior and accessibility primitives without full visual ownership | VyrnForge should learn interaction quality, focus behavior, and ARIA rigor while keeping native-first implementation. |
+| Copy-paste/component registry | shadcn/ui | Open component code distributed into the app | VyrnForge should learn composability and transparent source, but remain a versioned package library. |
+| Table/data-grid libraries | TanStack Table, AG Grid, MUI X Data Grid | Table engines or full enterprise data grids | VyrnForge should learn controlled state, row models, and enterprise grid UX while keeping a smaller native-first scope. |
 
 ## Landscape Matrix
 
 | Library/category | Primary purpose | Styling model | Dependency model | Theming model | Accessibility approach | Component coverage | Data-grid capability | Enterprise suitability | Customization model |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Dravyn UI | Enterprise UI foundation for internal tools, admin portals, customer portals, data-heavy apps, workflow systems | CSS variables, package CSS, native elements | Dependency-minimal Dravyn packages | Shared `--dv-*` tokens, grid `--udg-*` mappings, density tokens | Native controls first, explicit ARIA for overlays/grid, keyboard support by default | Growing component primitives plus specialized grid | Specialized enterprise grid owned by `@dravyn/ui-data-grid` | Strong target fit for dense business apps | Controlled/uncontrolled props, CSS variables, adapter contracts |
+| VyrnForge UI | Enterprise UI foundation for internal tools, admin portals, customer portals, data-heavy apps, workflow systems | CSS variables, package CSS, native elements | Dependency-minimal VyrnForge packages | Shared `--dv-*` tokens, grid `--udg-*` mappings, density tokens | Native controls first, explicit ARIA for overlays/grid, keyboard support by default | Growing component primitives plus specialized grid | Specialized enterprise grid owned by `@vyrnforge/ui-data-grid` | Strong target fit for dense business apps | Controlled/uncontrolled props, CSS variables, adapter contracts |
 | MUI | Comprehensive React component library implementing Material Design | Styled component system and theme APIs | React library ecosystem with MUI packages | Central theme object, design tokens, component overrides | Mature accessibility work across components | Very broad | MUI X provides full data grid | Strong, especially when Material Design is acceptable | Theme overrides, slots, props, component composition |
 | Ant Design | Enterprise-class React UI library | CSS-in-JS/token-driven Ant styles | React package with ecosystem add-ons | Design tokens, algorithms, ConfigProvider | Broad enterprise component patterns | Very broad | Table is strong; Pro ecosystem adds app patterns | Very strong for enterprise admin apps | Tokens, component props, Pro Components |
 | Chakra UI | Accessible component library with style props | Runtime style props and recipe/system layer | React package with Ark/Panda ecosystem influence | Theme tokens and color palettes | Accessibility-focused component APIs | Broad application primitives | No specialized enterprise grid | Good for app UI, less grid-focused | Props, recipes, theme extension |
@@ -51,18 +51,18 @@ Source baseline: public project documentation reviewed on 2026-07-09.
 
 ## Learn From / Differ From
 
-| Library/category | Dravyn should learn | Dravyn should intentionally differ |
+| Library/category | VyrnForge should learn | VyrnForge should intentionally differ |
 | --- | --- | --- |
 | MUI | Documentation depth, prop consistency, theme override taxonomy, slot patterns | Do not inherit Material Design as the default visual language. Keep native-first CSS variable styling. |
-| Ant Design | Enterprise density, table/admin workflows, design-token rigor, clear app patterns | Avoid large ecosystem coupling and heavy runtime assumptions. Keep Dravyn smaller and more application-owned. |
+| Ant Design | Enterprise density, table/admin workflows, design-token rigor, clear app patterns | Avoid large ecosystem coupling and heavy runtime assumptions. Keep VyrnForge smaller and more application-owned. |
 | Chakra UI | Accessible defaults, simple composition, ergonomic primitives | Avoid style-prop-first architecture if it adds runtime styling cost and fragments CSS ownership. |
 | Mantine | Broad practical component coverage, hooks organization, examples | Avoid building too many niche components before core enterprise workflows are stable. |
-| Bootstrap | Stable class conventions, layout utilities, low setup friction | Do not become global CSS toolkit first. Dravyn should remain React + TypeScript component-centered. |
+| Bootstrap | Stable class conventions, layout utilities, low setup friction | Do not become global CSS toolkit first. VyrnForge should remain React + TypeScript component-centered. |
 | Tailwind Plus | High-quality app layouts and workflow blocks | Do not require Tailwind or utility-first authoring in consuming apps. |
 | Radix UI | ARIA/focus/menu/dialog quality and part composition | Do not add Radix as a dependency by default; reproduce only the needed native-first behavior. |
 | React Aria | Cross-device accessibility, keyboard models, internationalization seriousness | Do not make the base package too abstract or hook-heavy before app primitives are stable. |
-| Headless UI | Simple headless overlay APIs and Tailwind-friendly patterns | Do not assume Tailwind or unstyled-only consumption. Dravyn ships usable enterprise styling. |
-| shadcn/ui | Transparent code, registry thinking, component ownership clarity | Do not switch to copy-paste distribution as the primary model. Dravyn should stay versioned and upgradeable. |
+| Headless UI | Simple headless overlay APIs and Tailwind-friendly patterns | Do not assume Tailwind or unstyled-only consumption. VyrnForge ships usable enterprise styling. |
+| shadcn/ui | Transparent code, registry thinking, component ownership clarity | Do not switch to copy-paste distribution as the primary model. VyrnForge should stay versioned and upgradeable. |
 | TanStack Table | Controlled state, row models, headless data transforms | Do not wrap TanStack or outsource grid architecture unless a future phase explicitly chooses it. |
 | AG Grid | Enterprise grid feature taxonomy and performance expectations | Do not chase full spreadsheet/BI scope or Enterprise licensing model. |
 | MUI X Data Grid | Good default grid UI, slots, grid docs | Do not tie grid design to MUI theming or large component stack. |

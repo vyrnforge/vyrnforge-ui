@@ -1,4 +1,4 @@
-> Archived: This folder preserves the copied Dravyn UI Documentation System Pack artifact.
+> Archived: This folder preserves the copied VyrnForge UI Documentation System Pack artifact.
 > Replacement: ../../README.md is the canonical documentation index.
 
 # Documentation System Pack Archive

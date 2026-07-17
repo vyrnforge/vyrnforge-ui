@@ -1,6 +1,6 @@
 # Basic Playground
 
-This Vite React app validates Dravyn UI package consumption from another workspace project. It is the interactive usage lab for core tokens, primitives, data-grid behavior, and product patterns.
+This Vite React app validates VyrnForge UI package consumption from another workspace project. It is the interactive usage lab for core tokens, primitives, data-grid behavior, and product patterns.
 
 ## Playground And Docs App
 
@@ -20,15 +20,15 @@ Every implemented public component gets its own route. Category pages may introd
 1. Add the component's route metadata in `src/app/routes.ts`, including its category, package, status, and path.
 2. Create a `ComponentDemoPage` with only relevant sections. Use stable section IDs so the right-side `PageOutline` can link to them.
 3. Add a `LiveExample` for every migrated example. Never pass a separately rendered preview: `initialCode` is the only source of the result.
-4. Give the example a restricted `createLiveScope(...)` containing only the Dravyn primitives it needs. Do not expose application services, auth, storage, APIs, or other application internals.
+4. Give the example a restricted `createLiveScope(...)` containing only the VyrnForge primitives it needs. Do not expose application services, auth, storage, APIs, or other application internals.
 5. Keep the import block read-only. `Copy full example` combines it with the current editable source; `Reset` restores `initialCode` and the original preview.
-6. Let syntax and runtime errors remain scoped to the individual example. The evaluator is for trusted playground examples only and is not part of Dravyn's public runtime API.
+6. Let syntax and runtime errors remain scoped to the individual example. The evaluator is for trusted playground examples only and is not part of VyrnForge's public runtime API.
 7. Verify prop names and defaults against the public component type before adding rows to `PropsTable`.
 8. Add related component route IDs and short relationship descriptions. Keep live source and visual intent synchronized in the same edit.
 
 For adjacent selection controls, keep the public intent distinct: use `Switch` for persistent settings, `ToggleButton` for active tools or view modes, `ToggleButtonGroup` for joined tool choices, `SegmentedControl` for small stable exclusive choices, `RadioGroup` for spacious form options, and `Checkbox` for independent Boolean form values.
 
-Use public Dravyn APIs and Dravyn UI primitives for the gallery surface. `react-live` is installed only in this private playground workspace to compile trusted editable examples. Playground CSS is only for reference layout, preview/code presentation, responsive behavior, and anchor spacing; do not duplicate package button, badge, input, card, tab, or alert styling in `playground.css`.
+Use public VyrnForge APIs and VyrnForge UI primitives for the gallery surface. `react-live` is installed only in this private playground workspace to compile trusted editable examples. Playground CSS is only for reference layout, preview/code presentation, responsive behavior, and anchor spacing; do not duplicate package button, badge, input, card, tab, or alert styling in `playground.css`.
 
 ## Run
 
@@ -46,7 +46,7 @@ npm run build:playground
 
 ## What It Validates
 
-- Local workspace package consumption with `@dravyn/ui-core`, `@dravyn/ui-components`, and `@dravyn/ui-data-grid`.
+- Local workspace package consumption with `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and `@vyrnforge/ui-data-grid`.
 - Recommended CSS import order: core, components, then data grid.
 - Overview, Core, Components, Data Grid, and Patterns navigation using simple React state.
 - Shared `--dv-*` tokens across buttons, inputs, states, and data-grid fallbacks.
@@ -62,18 +62,18 @@ npm run build:playground
 - Core: tokens, theme modes, density, and CSS override layering.
 - Components: buttons, typography, badges, inputs, feedback states, and layout guidance.
 - Data Grid: all `UniversalDataGrid` examples, including columns, filters, selection, grouping, resizing, themes, and stress data.
-- Patterns: realistic non-table enterprise UI composed from Dravyn primitives.
+- Patterns: realistic non-table enterprise UI composed from VyrnForge primitives.
 
-Component examples are intentionally separate from grid examples. Data-grid demos live under Data Grid so the playground can review Dravyn UI as a broader foundation without hiding the existing grid surface.
+Component examples are intentionally separate from grid examples. Data-grid demos live under Data Grid so the playground can review VyrnForge UI as a broader foundation without hiding the existing grid surface.
 
 ## Styling
 
 Import the package CSS once in the consuming app entry file:
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 Visual props can be passed directly to `UniversalDataGrid`:
@@ -104,7 +104,7 @@ Create per-instance theme variables with `createDataGridTheme`:
 import {
   UniversalDataGrid,
   createDataGridTheme
-} from "@dravyn/ui-data-grid";
+} from "@vyrnforge/ui-data-grid";
 
 const customTheme = createDataGridTheme({
   "--udg-primary": "#003b71",
@@ -126,7 +126,7 @@ Column preferences can be persisted with the built-in localStorage adapter:
 import {
   UniversalDataGrid,
   createLocalStorageGridPersistence
-} from "@dravyn/ui-data-grid";
+} from "@vyrnforge/ui-data-grid";
 
 const persistenceAdapter = createLocalStorageGridPersistence({
   namespace: "playground"
@@ -255,4 +255,4 @@ Recommended customization hierarchy:
 
 ## Scope
 
-This playground is for local development and package reuse validation only. It is not part of the distributable `@dravyn/ui-data-grid` package.
+This playground is for local development and package reuse validation only. It is not part of the distributable `@vyrnforge/ui-data-grid` package.

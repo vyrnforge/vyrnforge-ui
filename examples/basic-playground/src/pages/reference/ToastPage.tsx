@@ -13,7 +13,7 @@ function live(
       description={description}
       editorHeight={editorHeight}
       id={id}
-      imports={'import { Button, Inline, Select, ToastAction, ToastProvider, useToast } from "@dravyn/ui-components";'}
+      imports={'import { Button, Inline, Select, ToastAction, ToastProvider, useToast } from "@vyrnforge/ui-components";'}
       initialCode={initialCode.trim()}
       minPreviewHeight={220}
       scope={createLiveScope("Button", "Inline", "Select", "ToastAction", "ToastProvider", "useToast")}
@@ -37,8 +37,8 @@ export function ToastPage() {
         "The app needs persistent notification history; own that in the application."
       ]}
       description="Experimental transient feedback for successful operations, failures, warnings, and informational events."
-      importCode={'import { ToastProvider, ToastAction, useToast } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importCode={'import { ToastProvider, ToastAction, useToast } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       props={[
         { name: "ToastProvider.position", type: "ToastPosition", defaultValue: '"bottom-end"', description: "Viewport placement around the browser viewport." },
         { name: "ToastProvider.maxVisible", type: "number", defaultValue: "5", description: "Maximum visible toasts before additional records queue." },

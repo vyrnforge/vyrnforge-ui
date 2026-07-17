@@ -3,7 +3,7 @@
 
 # Public API Stability
 
-Dravyn UI should evolve without breaking consuming apps unnecessarily.
+VyrnForge UI should evolve without breaking consuming apps unnecessarily.
 
 ## Stability Rules
 

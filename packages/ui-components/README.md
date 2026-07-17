@@ -1,23 +1,23 @@
-# @dravyn/ui-components
+# @vyrnforge/ui-components
 
-Native-first Dravyn UI component primitives built with React, TypeScript, and CSS variables.
+Native-first VyrnForge UI component primitives built with React, TypeScript, and CSS variables.
 
 ## Install
 
 ```bash
-npm install @dravyn/ui-core @dravyn/ui-components
+npm install @vyrnforge/ui-core @vyrnforge/ui-components
 ```
 
 Import core tokens first, then component styles:
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-`@dravyn/ui-components` consumes shared `--dv-*` variables from `@dravyn/ui-core`, so light, dark, enterprise, density, and scoped token overrides flow through the primitives.
+`@vyrnforge/ui-components` consumes shared `--dv-*` variables from `@vyrnforge/ui-core`, so light, dark, enterprise, density, and scoped token overrides flow through the primitives.
 
-`@dravyn/ui-components` owns reusable UI primitives only. It does not own app business state, backend data, grid behavior, or a global store.
+`@vyrnforge/ui-components` owns reusable UI primitives only. It does not own app business state, backend data, grid behavior, or a global store.
 
 ## Components
 
@@ -41,7 +41,7 @@ import {
   Field,
   Stack,
   TextInput
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 export function Example() {
   return (
@@ -49,7 +49,7 @@ export function Example() {
       <Stack gap="md">
         <Badge variant="success">Active</Badge>
         <Field label="Name" htmlFor="name" required>
-          <TextInput id="name" defaultValue="Dravyn" />
+          <TextInput id="name" defaultValue="VyrnForge" />
         </Field>
         <Button variant="primary" leftSlot="+">
           Save
@@ -81,7 +81,7 @@ import {
   IconButton,
   SegmentedControl,
   ToolbarButton
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 <Icon name="Search" title="Search" decorative={false} />
 
@@ -194,7 +194,7 @@ import {
   SideNav,
   Tabs,
   TopNav
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 <AppShell
   header={<TopNav brand="Operations" />}
@@ -312,7 +312,7 @@ Dialog and drawer:
 - CSS owns static visual styling such as colors, spacing, borders, radius, shadows, typography, hover/focus/active/disabled states, themes, and density.
 - Use CSS variables for customization. Prefer scoped token overrides over editing package CSS directly.
 - Use `className` for structural extension and `style` only for instance-level overrides or dynamic runtime values.
-- Keep data-grid-specific styling in `@dravyn/ui-data-grid` with `udg-*` classes mapped to shared `dv-*` tokens.
+- Keep data-grid-specific styling in `@vyrnforge/ui-data-grid` with `udg-*` classes mapped to shared `dv-*` tokens.
 - Shared interaction hooks live under `src/hooks/` when they are React-specific to components.
 
 ## Dependency Policy

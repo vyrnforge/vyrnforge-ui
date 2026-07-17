@@ -76,8 +76,8 @@ export function TransferListPage() {
         "Users primarily complete the flow on narrow mobile screens."
       ]}
       description="An experimental dual-list assignment component for moving a moderate known collection between available and assigned states."
-      importCode={'import { TransferList } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importCode={'import { TransferList } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       props={[
         { name: "options", type: "readonly TransferListOptionData[]", required: true, description: "Known option contract with value, plain-text label, optional description, disabled state, and keywords." },
         { name: "value | defaultValue", type: "readonly string[]", defaultValue: "[]", description: "Controlled or initial assigned target values. Unknown and duplicate values are normalized visually." },
@@ -115,7 +115,7 @@ export function TransferListPage() {
   );
 }
 
-render(<Example />);`, baseScope, 'import { TransferList } from "@dravyn/ui-components";')
+render(<Example />);`, baseScope, 'import { TransferList } from "@vyrnforge/ui-components";')
         },
         {
           id: "controlled-value",
@@ -138,7 +138,7 @@ render(<Example />);`, baseScope, 'import { TransferList } from "@dravyn/ui-comp
   );
 }
 
-render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@dravyn/ui-components";')
+render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@vyrnforge/ui-components";')
         },
         {
           id: "searchable-panels",
@@ -152,7 +152,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@d
   targetSearchPlaceholder="Search assigned apps"
   sourceTitle="Available applications"
   targetTitle="Assigned applications"
-/>`, baseScope, 'import { TransferList } from "@dravyn/ui-components";')
+/>`, baseScope, 'import { TransferList } from "@vyrnforge/ui-components";')
         },
         {
           id: "select-visible",
@@ -165,7 +165,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@d
   sourceDescription="Select visible affects only the currently filtered enabled rows."
   sourceTitle="Available report fields"
   targetTitle="Selected report fields"
-/>`, baseScope, 'import { TransferList } from "@dravyn/ui-components";')
+/>`, baseScope, 'import { TransferList } from "@vyrnforge/ui-components";')
         },
         {
           id: "disabled-options",
@@ -181,7 +181,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@d
   ]}
   sourceTitle="Available applications"
   targetTitle="Assigned applications"
-/>`, baseScope, 'import { TransferList } from "@dravyn/ui-components";')
+/>`, baseScope, 'import { TransferList } from "@vyrnforge/ui-components";')
         },
         {
           id: "disabled-read-only",
@@ -202,7 +202,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@d
     sourceTitle="Read-only available"
     targetTitle="Read-only assigned"
   />
-</Stack>`, richScope, 'import { Stack, TransferList } from "@dravyn/ui-components";', undefined, 260)
+</Stack>`, richScope, 'import { Stack, TransferList } from "@vyrnforge/ui-components";', undefined, 260)
         },
         {
           id: "custom-option-rendering",
@@ -220,7 +220,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@d
   )}
   sourceTitle="Available applications"
   targetTitle="Assigned applications"
-/>`, richScope, 'import { Badge, Caption, Stack, Text, TransferList } from "@dravyn/ui-components";')
+/>`, richScope, 'import { Badge, Caption, Stack, Text, TransferList } from "@vyrnforge/ui-components";')
         },
         {
           id: "form-submission",
@@ -237,7 +237,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@d
     />
   </Field>
   <Button type="submit" variant="primary">Submit assignment</Button>
-</form>`, richScope, 'import { Button, Field, TransferList } from "@dravyn/ui-components";')
+</form>`, richScope, 'import { Button, Field, TransferList } from "@vyrnforge/ui-components";')
         },
         {
           id: "responsive-behavior",
@@ -251,7 +251,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@d
     sourceTitle="Available fields"
     targetTitle="Report fields"
   />
-</div>`, baseScope, 'import { TransferList } from "@dravyn/ui-components";', "The component stacks panels when its viewport is narrow, and each panel keeps its own scroll container.")
+</div>`, baseScope, 'import { TransferList } from "@vyrnforge/ui-components";', "The component stacks panels when its viewport is narrow, and each panel keeps its own scroll container.")
         }
       ]}
       status="experimental"

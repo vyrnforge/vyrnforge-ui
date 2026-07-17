@@ -3,13 +3,13 @@
 
 # 12 — Codex Master Implementation Prompt
 
-Use this prompt when you want Codex to understand the full Dravyn UI project direction.
+Use this prompt when you want Codex to understand the full VyrnForge UI project direction.
 
 ```txt
-You are working inside the Dravyn UI repository.
+You are working inside the VyrnForge UI repository.
 
 Project name:
-Dravyn UI.
+VyrnForge UI.
 
 Project purpose:
 Build a native-first enterprise UI component system for reusable application components across IAM, ITAM, ITSM, Atlas, Gateway UI, admin portals, customer portals, and reporting screens.

@@ -1,6 +1,6 @@
 # TransferList
 
-`TransferList` is an experimental dual-list assignment component in `@dravyn/ui-components`.
+`TransferList` is an experimental dual-list assignment component in `@vyrnforge/ui-components`.
 
 Use it when users choose a subset from a bounded known collection and need to see available and assigned items at the same time.
 
@@ -9,7 +9,7 @@ Do not use it as a replacement for `UniversalDataGrid`, complex IAM permission c
 ## Import
 
 ```tsx
-import { TransferList } from "@dravyn/ui-components";
+import { TransferList } from "@vyrnforge/ui-components";
 ```
 
 ## Value Contract

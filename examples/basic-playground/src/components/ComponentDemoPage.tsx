@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Badge, CodeText, PageHeader, Panel, Text } from "@dravyn/ui-components";
+import { Badge, CodeText, PageHeader, Panel, Text } from "@vyrnforge/ui-components";
 import { CodeBlock } from "./CodeBlock";
 import { PageOutline, type PageOutlineItem } from "./PageOutline";
 import { PropsTable, type PropsTableRow } from "./PropsTable";
@@ -20,7 +20,7 @@ export type RelatedComponentLink = {
 export type ComponentDemoPageProps = {
   title: string;
   description: string;
-  packageName: "@dravyn/ui-components" | "@dravyn/ui-data-grid";
+  packageName: "@vyrnforge/ui-components" | "@vyrnforge/ui-data-grid";
   status: "stable" | "experimental" | "planned";
   importCode: string;
   sections: ComponentPageSection[];

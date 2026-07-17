@@ -1,4 +1,4 @@
-import { Caption, CodeText, Heading, Label, Text } from "@dravyn/ui-components";
+import { Caption, CodeText, Heading, Label, Text } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -9,8 +9,8 @@ export function TypographyPage() {
       accessibility="Preserve heading order and use semantic labels for associated controls."
       avoid="Avoid styling raw paragraphs and headings when a typography primitive already fits."
       description="Semantic text primitives for dense operational screens and reusable UI composition."
-      importSnippet={'import { Heading, Text, Label, Caption, CodeText } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { Heading, Text, Label, Caption, CodeText } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["PageHeader", "Field", "Badge"]}
       status="candidate"
       title="Typography"

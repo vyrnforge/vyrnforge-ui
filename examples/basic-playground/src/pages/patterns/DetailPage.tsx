@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Icon, MoreButton, Text } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Icon, MoreButton, Text } from "@vyrnforge/ui-components";
 import { assets } from "../../data/assets";
 import { tickets } from "../../data/tickets";
 

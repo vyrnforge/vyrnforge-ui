@@ -5,7 +5,7 @@
 
 ## Principle
 
-Dravyn UI should be native-first and dependency-light.
+VyrnForge UI should be native-first and dependency-light.
 
 The project should build reusable enterprise-grade components using browser-native capabilities before reaching for large frameworks.
 
@@ -40,7 +40,7 @@ icon libraries
 large utility libraries
 ```
 
-Apps may use those libraries outside Dravyn UI. Dravyn UI should not force them.
+Apps may use those libraries outside VyrnForge UI. VyrnForge UI should not force them.
 
 ## Controlled and uncontrolled state
 

@@ -4,8 +4,8 @@ Audit date: 2026-07-16.
 
 Scope reviewed:
 
-- `@dravyn/ui-components` public exports
-- `@dravyn/ui-data-grid` public exports
+- `@vyrnforge/ui-components` public exports
+- `@vyrnforge/ui-data-grid` public exports
 - component metadata and status metadata
 - playground reference routes
 - current SSR/unit coverage for component contracts

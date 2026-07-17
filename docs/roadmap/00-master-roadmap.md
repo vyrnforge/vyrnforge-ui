@@ -1,8 +1,8 @@
-# Dravyn UI Master Roadmap
+# VyrnForge UI Master Roadmap
 
 ## Execution principle
 
-Dravyn should not become only a data-grid project. The roadmap balances:
+VyrnForge should not become only a data-grid project. The roadmap balances:
 
 1. foundation stabilization
 2. complete enterprise app components
@@ -32,7 +32,7 @@ Dravyn should not become only a data-grid project. The roadmap balances:
 
 ## Near-term priority
 
-Do S1-S6 before deep grid-only work if the goal is to prove Dravyn as a full UI foundation.
+Do S1-S6 before deep grid-only work if the goal is to prove VyrnForge as a full UI foundation.
 
 ## Data-grid continuation
 

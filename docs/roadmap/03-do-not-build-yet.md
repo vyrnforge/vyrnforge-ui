@@ -4,7 +4,7 @@ These items are intentionally deferred.
 
 | Avoid | Reason |
 | --- | --- |
-| Charting package | Not core to current Dravyn positioning. Integrate external chart packages later. |
+| Charting package | Not core to current VyrnForge positioning. Integrate external chart packages later. |
 | Spreadsheet clone features | Pulls grid toward AG Grid/Excel scope too early. |
 | BI pivot engine | Too broad and not aligned with enterprise UI foundation phase. |
 | Required Redux adapter | Controlled props already support Redux integration. Wait for repeated pain. |

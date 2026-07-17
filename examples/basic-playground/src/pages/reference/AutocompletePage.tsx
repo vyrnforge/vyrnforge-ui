@@ -34,8 +34,8 @@ export function AutocompletePage() {
       "The goal is filtering a page or dataset rather than selecting one option; use SearchInput."
     ]}
     description="An experimental single-select searchable combobox for larger known option sets. It uses the shared portal, dismissal, and anchored positioning foundation without fetching data itself."
-    importCode={'import { Autocomplete } from "@dravyn/ui-components";'}
-    packageName="@dravyn/ui-components"
+    importCode={'import { Autocomplete } from "@vyrnforge/ui-components";'}
+    packageName="@vyrnforge/ui-components"
     props={[
       { name: "options", type: "readonly AutocompleteOptionData[]", required: true, description: "Serializable values, labels, optional descriptions, disabled state, and keywords." },
       { name: "value | defaultValue", type: "string | null", defaultValue: "null", description: "Controlled or initial selected value." },
@@ -56,32 +56,32 @@ export function AutocompletePage() {
       { id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live("autocomplete-basic", "Searchable role", `<Autocomplete
   options={${roleOptions}}
   placeholder="Select a role"
-/>`, basicScope, 'import { Autocomplete } from "@dravyn/ui-components";') },
+/>`, basicScope, 'import { Autocomplete } from "@vyrnforge/ui-components";') },
       { id: "controlled-value", label: "Controlled value", title: "Controlled value", children: live("autocomplete-controlled-value", "Application-owned selection", `function Example() {
   const [value, setValue] = React.useState("operator");
   return <Stack gap="sm"><Autocomplete options={${roleOptions}} onValueChange={(nextValue) => setValue(nextValue)} value={value} /><Text tone="muted">Selected value: {value || "None"}</Text></Stack>;
 }
 
-render(<Example />);`, stateScope, 'import { Autocomplete, Stack, Text } from "@dravyn/ui-components";') },
+render(<Example />);`, stateScope, 'import { Autocomplete, Stack, Text } from "@vyrnforge/ui-components";') },
       { id: "controlled-input", label: "Controlled input", title: "Controlled input", children: live("autocomplete-controlled-input", "Application-owned query", `function Example() {
   const [query, setQuery] = React.useState("");
   return <Stack gap="sm"><Autocomplete inputValue={query} onInputValueChange={setQuery} options={${roleOptions}} placeholder="Type a role" /><Text tone="muted">Query: {query || "Empty"}</Text></Stack>;
 }
 
-render(<Example />);`, stateScope, 'import { Autocomplete, Stack, Text } from "@dravyn/ui-components";') },
+render(<Example />);`, stateScope, 'import { Autocomplete, Stack, Text } from "@vyrnforge/ui-components";') },
       { id: "custom-options", label: "Custom options", title: "Custom options", children: live("autocomplete-custom-options", "Keywords and descriptions", `<Autocomplete
   openOnFocus
   options={${roleOptions}}
   placeholder="Find a workspace role"
-/>`, basicScope, 'import { Autocomplete } from "@dravyn/ui-components";', "Search matches labels and optional keywords while preserving the original option order.") },
+/>`, basicScope, 'import { Autocomplete } from "@vyrnforge/ui-components";', "Search matches labels and optional keywords while preserving the original option order.") },
       { id: "states", label: "Disabled and read-only", title: "Disabled and read-only", children: live("autocomplete-states", "Availability states", `<Stack gap="sm">
   <Autocomplete disabled defaultValue="viewer" options={${roleOptions}} />
   <Autocomplete readOnly defaultValue="operator" options={${roleOptions}} />
-</Stack>`, stateScope, 'import { Autocomplete, Stack } from "@dravyn/ui-components";') },
+</Stack>`, stateScope, 'import { Autocomplete, Stack } from "@vyrnforge/ui-components";') },
       { id: "invalid-state", label: "Invalid state", title: "Invalid state", children: live("autocomplete-invalid", "Required selection", `<Stack gap="sm">
   <Autocomplete ariaLabel="Required role" invalid options={${roleOptions}} required placeholder="Select a role" />
   <ValidationMessage tone="error">Select a workspace role to continue.</ValidationMessage>
-</Stack>`, stateScope, 'import { Autocomplete, Stack, ValidationMessage } from "@dravyn/ui-components";') },
+</Stack>`, stateScope, 'import { Autocomplete, Stack, ValidationMessage } from "@vyrnforge/ui-components";') },
       { id: "loading-state", label: "Loading state", title: "Loading state", children: live("autocomplete-loading", "Application-owned async state", `function Example() {
   const [query, setQuery] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -94,21 +94,21 @@ render(<Example />);`, stateScope, 'import { Autocomplete, Stack, Text } from "@
   return <Autocomplete inputValue={query} loading={loading} loadingText="Searching application-owned results..." onInputValueChange={setQuery} options={query ? ${roleOptions} : []} placeholder="Search roles" />;
 }
 
-render(<Example />);`, basicScope, 'import { Autocomplete } from "@dravyn/ui-components";', "The application owns debouncing, requests, cancellation, caching, and errors. This example only simulates loading.") },
-      { id: "empty-state", label: "Empty state", title: "Empty state", children: live("autocomplete-empty", "No matching options", `<Autocomplete defaultOpen noOptionsText="No matching workspace roles" options={[]} placeholder="Search roles" />`, basicScope, 'import { Autocomplete } from "@dravyn/ui-components";') },
+render(<Example />);`, basicScope, 'import { Autocomplete } from "@vyrnforge/ui-components";', "The application owns debouncing, requests, cancellation, caching, and errors. This example only simulates loading.") },
+      { id: "empty-state", label: "Empty state", title: "Empty state", children: live("autocomplete-empty", "No matching options", `<Autocomplete defaultOpen noOptionsText="No matching workspace roles" options={[]} placeholder="Search roles" />`, basicScope, 'import { Autocomplete } from "@vyrnforge/ui-components";') },
       { id: "custom-filtering", label: "Custom filtering", title: "Custom filtering", children: live("autocomplete-custom-filter", "Prefix-only filter", `<Autocomplete
   filterOptions={(options, query) => options.filter((option) => option.label.toLowerCase().startsWith(query.trim().toLowerCase()))}
   options={${roleOptions}}
   placeholder="Match role prefix"
-/>`, basicScope, 'import { Autocomplete } from "@dravyn/ui-components";') },
+/>`, basicScope, 'import { Autocomplete } from "@vyrnforge/ui-components";') },
       { id: "custom-option-rendering", label: "Custom option rendering", title: "Custom option rendering", children: live("autocomplete-render-option", "Rich visual option content", `<Autocomplete
   options={${roleOptions}}
   renderOption={(option, state) => <Stack gap="xs"><Text as="span" tone={state.selected ? "strong" : "default"}>{option.label}</Text>{option.description && <Caption>{option.description}</Caption>}</Stack>}
   placeholder="Choose a role"
-/>`, stateScope, 'import { Autocomplete, Caption, Stack, Text } from "@dravyn/ui-components";', "Only the visual content is customized. The listbox roles, state, IDs, labels, and selection behavior remain owned by Autocomplete.") },
+/>`, stateScope, 'import { Autocomplete, Caption, Stack, Text } from "@vyrnforge/ui-components";', "Only the visual content is customized. The listbox roles, state, IDs, labels, and selection behavior remain owned by Autocomplete.") },
       { id: "field-composition", label: "Field composition", title: "Field composition", children: live("autocomplete-field", "Field relationship and form value", `<Field id="workspace-owner" label="Workspace owner" description="Search by name, team, or keyword." required>
   {(controlProps) => <Autocomplete {...controlProps} name="owner" options={${roleOptions}} placeholder="Select an owner" />}
-</Field>`, stateScope, 'import { Autocomplete, Field } from "@dravyn/ui-components";') }
+</Field>`, stateScope, 'import { Autocomplete, Field } from "@vyrnforge/ui-components";') }
     ]}
     status="experimental"
     title="Autocomplete"

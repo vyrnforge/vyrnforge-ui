@@ -1,12 +1,12 @@
 # Roadmap Gap Analysis
 
-This gap analysis uses the benchmark comparison to prioritize Dravyn's next work.
+This gap analysis uses the benchmark comparison to prioritize VyrnForge's next work.
 
-## What Dravyn Already Has
+## What VyrnForge Already Has
 
 | Area | Current assets |
 | --- | --- |
-| Package structure | `@dravyn/ui-core`, `@dravyn/ui-components`, `@dravyn/ui-data-grid` |
+| Package structure | `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, `@vyrnforge/ui-data-grid` |
 | Theme foundation | Shared `--dv-*` tokens, light/dark/system/enterprise themes, density tokens, utilities |
 | Component primitives | Buttons, icon buttons, toolbar buttons, segmented control, typography, badges, field/input/select/checkbox/textarea, feedback states, card/panel/stack/inline/section, popover/menu/dropdown/tooltip/dialog/drawer/confirm dialog |
 | Grid foundation | Native table grid, search, filters state/core logic, sorting, pagination, column management, resizing, selection, bulk actions, grouping, persistence, server query builder, export request builder |
@@ -17,7 +17,7 @@ This gap analysis uses the benchmark comparison to prioritize Dravyn's next work
 
 | Gap | Impact | Benchmark pressure |
 | --- | --- | --- |
-| App shell/navigation | Hard to build complete admin portals using Dravyn alone | MUI, AntD, Mantine, Bootstrap, shadcn |
+| App shell/navigation | Hard to build complete admin portals using VyrnForge alone | MUI, AntD, Mantine, Bootstrap, shadcn |
 | Tabs/breadcrumbs/sidebar/top nav | Common enterprise navigation missing from stable set | MUI, AntD, Bootstrap, shadcn |
 | Form completion | Radio, switch, number/date input, multi-select, combobox not complete | MUI, AntD, Chakra, Mantine, React Aria |
 | Data display primitives | Description list, key/value list, property table, timeline, resource list missing | AntD, Mantine, shadcn |
@@ -47,7 +47,7 @@ This gap analysis uses the benchmark comparison to prioritize Dravyn's next work
 | --- | --- |
 | Tabs | Common dense workflow navigation |
 | Breadcrumbs | Admin/customer portal orientation |
-| SideNav/TopNav/AppShell | Dravyn must prove it is broader than a grid |
+| SideNav/TopNav/AppShell | VyrnForge must prove it is broader than a grid |
 | Radio/Switch/NumberInput/DateInput/MultiSelect | Completes normal enterprise forms |
 | Progress | Completes feedback basics after Toast foundation |
 | DescriptionList/KeyValueList/PropertyTable | Common read-only enterprise data display |
@@ -75,7 +75,7 @@ This gap analysis uses the benchmark comparison to prioritize Dravyn's next work
 
 | Avoid | Why |
 | --- | --- |
-| Charting package | Not core to current Dravyn positioning; can integrate external chart packages later |
+| Charting package | Not core to current VyrnForge positioning; can integrate external chart packages later |
 | Spreadsheet clone features | Would pull grid toward AG Grid/Excel scope too early |
 | BI pivot engine | Too broad and not aligned with current enterprise UI foundation phase |
 | Built-in Redux adapter package | Controlled props already support Redux; wait for repeated integration pain |
@@ -85,7 +85,7 @@ This gap analysis uses the benchmark comparison to prioritize Dravyn's next work
 
 ## Success Criteria For Next Phase
 
-Dravyn should be considered well-positioned when a team can build a realistic admin/customer portal using only Dravyn packages for:
+VyrnForge should be considered well-positioned when a team can build a realistic admin/customer portal using only VyrnForge packages for:
 
 - theme and density
 - page shell and navigation
@@ -95,4 +95,4 @@ Dravyn should be considered well-positioned when a team can build a realistic ad
 - data grid with server query/export/saved-view contracts
 - controlled integration with app-owned state and APIs
 
-The benchmark does not suggest copying any one library. It suggests a focused path: AntD-level enterprise sensibility, Radix/React Aria-level accessibility discipline, TanStack-level state clarity, and Dravyn's own native-first dependency-minimal implementation.
+The benchmark does not suggest copying any one library. It suggests a focused path: AntD-level enterprise sensibility, Radix/React Aria-level accessibility discipline, TanStack-level state clarity, and VyrnForge's own native-first dependency-minimal implementation.

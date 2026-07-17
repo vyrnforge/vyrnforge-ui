@@ -1,4 +1,4 @@
-import { Badge, CodeText } from "@dravyn/ui-components";
+import { Badge, CodeText } from "@vyrnforge/ui-components";
 
 export type PropsTableRow = {
   name: string;

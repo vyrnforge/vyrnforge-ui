@@ -1,23 +1,23 @@
 import "./styles/index.css";
 
-export const dravynUiCoreVersion = "0.1.0";
+export const vyrnForgeUiCoreVersion = "0.1.0";
 
 export {
-  createDravynTheme,
-  mergeDravynTheme,
-  toDravynThemeStyle
+  createVyrnForgeTheme,
+  mergeVyrnForgeTheme,
+  toVyrnForgeThemeStyle
 } from "./theme/createTheme";
 export {
-  dravynDarkTheme,
-  dravynEnterpriseTheme,
-  dravynLightTheme
+  vyrnForgeDarkTheme,
+  vyrnForgeEnterpriseTheme,
+  vyrnForgeLightTheme
 } from "./theme/themePresets";
-export { getDravynThemePreset } from "./theme/themeUtils";
+export { getVyrnForgeThemePreset } from "./theme/themeUtils";
 export type {
-  DravynCssVar,
-  DravynDensity,
-  DravynTheme,
-  DravynThemeName,
-  DravynThemeVars,
-  DravynVariant
+  VyrnForgeCssVar,
+  VyrnForgeDensity,
+  VyrnForgeTheme,
+  VyrnForgeThemeName,
+  VyrnForgeThemeVars,
+  VyrnForgeVariant
 } from "./theme/theme.types";

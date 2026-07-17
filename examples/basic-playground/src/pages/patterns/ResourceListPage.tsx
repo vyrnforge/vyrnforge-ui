@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Icon, MoreButton, Text, ToastProvider, useToast } from "@dravyn/ui-components";
+import { Badge, Button, Heading, Icon, MoreButton, Text, ToastProvider, useToast } from "@vyrnforge/ui-components";
 import { assets } from "../../data/assets";
 
 export function ResourceListPage() {

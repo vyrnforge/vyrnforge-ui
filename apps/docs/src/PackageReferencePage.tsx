@@ -1,14 +1,14 @@
-import { Badge, Card, CodeText, Heading, Text } from "@dravyn/ui-components";
+import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 
 const packages = [
   {
-    name: "@dravyn/ui-core",
+    name: "@vyrnforge/ui-core",
     role: "Shared foundation",
     owns: ["tokens", "themes", "density", "utilities"],
     notes: "Must stay dependency-light and must not own React components or grid behavior."
   },
   {
-    name: "@dravyn/ui-components",
+    name: "@vyrnforge/ui-components",
     role: "Reusable UI layer",
     owns: [
       "reusable primitives",
@@ -20,7 +20,7 @@ const packages = [
     notes: "May depend on ui-core. Must not depend on ui-data-grid."
   },
   {
-    name: "@dravyn/ui-data-grid",
+    name: "@vyrnforge/ui-data-grid",
     role: "Specialized data-management grid",
     owns: [
       "UniversalDataGrid",

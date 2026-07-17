@@ -1,10 +1,10 @@
 # Codex Prompt - React Docs App Implementation
 
 ```txt
-You are working inside the Dravyn UI repository.
+You are working inside the VyrnForge UI repository.
 
 Task:
-Create or refactor the React docs/playground app so it documents Dravyn UI for humans and AI.
+Create or refactor the React docs/playground app so it documents VyrnForge UI for humans and AI.
 
 Important:
 - Do not add external UI frameworks.

@@ -1,18 +1,18 @@
 {
-  "name": "@dravyn/ui-data-grid-basic-playground",
+  "name": "@vyrnforge/ui-data-grid-basic-playground",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "typecheck": "npm run build --workspace @dravyn/ui-core && npm run build --workspace @dravyn/ui-components && npm run build --workspace @dravyn/ui-data-grid && tsc --noEmit",
+    "typecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dravyn/ui-components": "0.1.0",
-    "@dravyn/ui-core": "0.1.0",
-    "@dravyn/ui-data-grid": "0.1.0",
+    "@vyrnforge/ui-components": "0.1.0",
+    "@vyrnforge/ui-core": "0.1.0",
+    "@vyrnforge/ui-data-grid": "0.1.0",
     "react": "latest",
     "react-dom": "latest",
     "react-live": "^4.1.8"

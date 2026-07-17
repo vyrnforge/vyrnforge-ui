@@ -3,62 +3,62 @@
   "sourceOfTruth": "docs/README.md",
   "packages": [
     {
-      "name": "@dravyn/ui-core",
-      "purpose": "Shared Dravyn design foundation for tokens, themes, density, utilities, and theme helpers.",
+      "name": "@vyrnforge/ui-core",
+      "purpose": "Shared VyrnForge design foundation for tokens, themes, density, utilities, and theme helpers.",
       "owns": ["tokens", "themes", "density", "utility classes", "theme helper contracts"],
       "doesNotOwn": ["React components", "data grid behavior", "app state", "backend fetching", "business workflows"],
-      "cssImport": "@dravyn/ui-core/styles/index.css",
+      "cssImport": "@vyrnforge/ui-core/styles/index.css",
       "apiDoc": "docs/api/ui-core-api.md",
       "dependsOn": [],
-      "mustNotDependOn": ["@dravyn/ui-components", "@dravyn/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
+      "mustNotDependOn": ["@vyrnforge/ui-components", "@vyrnforge/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
       "status": "current",
       "publicEntryPoints": [
-        "@dravyn/ui-core",
-        "@dravyn/ui-core/styles/index.css",
-        "@dravyn/ui-core/style.css",
-        "@dravyn/ui-core/index.css"
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-core/styles/index.css",
+        "@vyrnforge/ui-core/style.css",
+        "@vyrnforge/ui-core/index.css"
       ],
       "notes": "Lowest-level package. Keep dependency-free apart from build/dev tooling."
     },
     {
-      "name": "@dravyn/ui-components",
+      "name": "@vyrnforge/ui-components",
       "purpose": "Reusable native-first React primitives and application components.",
       "owns": ["actions", "typography", "forms", "data management", "feedback", "layout", "overlays", "shared dv-* classes"],
       "doesNotOwn": ["data grid algorithms", "grid row models", "backend data", "global store", "tenant/auth/permissions"],
-      "cssImport": "@dravyn/ui-components/styles/index.css",
+      "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",
-      "dependsOn": ["@dravyn/ui-core"],
-      "mustNotDependOn": ["@dravyn/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
+      "dependsOn": ["@vyrnforge/ui-core"],
+      "mustNotDependOn": ["@vyrnforge/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
       "status": "current",
       "publicEntryPoints": [
-        "@dravyn/ui-components",
-        "@dravyn/ui-components/styles/index.css",
-        "@dravyn/ui-components/style.css",
-        "@dravyn/ui-components/index.css"
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-components/styles/index.css",
+        "@vyrnforge/ui-components/style.css",
+        "@vyrnforge/ui-components/index.css"
       ],
       "notes": "Use for reusable UI outside specialized grid behavior."
     },
     {
-      "name": "@dravyn/ui-data-grid",
+      "name": "@vyrnforge/ui-data-grid",
       "purpose": "Specialized enterprise data-management grid and grid contracts.",
       "owns": ["UniversalDataGrid", "grid-specific udg-* styles", "grid state contracts", "grid core helpers", "persistence/server/export adapters"],
       "doesNotOwn": ["API calls", "export file generation by default", "report engine", "global store", "backend business workflows"],
-      "cssImport": "@dravyn/ui-data-grid/styles/index.css",
+      "cssImport": "@vyrnforge/ui-data-grid/styles/index.css",
       "apiDoc": "docs/api/ui-data-grid-api.md",
-      "dependsOn": ["@dravyn/ui-core", "@dravyn/ui-components"],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
       "mustNotDependOn": ["Redux", "TanStack", "MUI", "Radix", "Tailwind"],
       "status": "current",
       "publicEntryPoints": [
-        "@dravyn/ui-data-grid",
-        "@dravyn/ui-data-grid/styles/index.css",
-        "@dravyn/ui-data-grid/style.css",
-        "@dravyn/ui-data-grid/index.css"
+        "@vyrnforge/ui-data-grid",
+        "@vyrnforge/ui-data-grid/styles/index.css",
+        "@vyrnforge/ui-data-grid/style.css",
+        "@vyrnforge/ui-data-grid/index.css"
       ],
       "notes": "Apps own rows, fetching, permissions, business actions, and file generation."
     }
   ],
   "dependencyRules": [
-    "ui-core depends on no Dravyn package",
+    "ui-core depends on no VyrnForge package",
     "ui-components may depend on ui-core",
     "ui-data-grid may depend on ui-core and ui-components",
     "ui-core must never depend on ui-components or ui-data-grid",

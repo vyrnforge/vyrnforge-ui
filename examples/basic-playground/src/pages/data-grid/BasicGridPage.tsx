@@ -1,4 +1,4 @@
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -11,8 +11,8 @@ export function BasicGridPage() {
       accessibility="Give the grid a meaningful surrounding heading and test keyboard access for sorting, column actions, and pagination."
       avoid="Avoid passing application fetching, mutations, or a global store into the grid package."
       description="A specialized data-management grid with local search, sorting, pagination, and persisted view preferences."
-      importSnippet={'import { UniversalDataGrid } from "@dravyn/ui-data-grid";'}
-      packageName="@dravyn/ui-data-grid"
+      importSnippet={'import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";'}
+      packageName="@vyrnforge/ui-data-grid"
       relatedComponents={["PageToolbar", "SearchInput", "DataGrid state contracts"]}
       status="stable"
       title="Basic data grid"

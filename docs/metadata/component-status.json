@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "@dravyn/ui-core": {
+  "@vyrnforge/ui-core": {
     "Theme tokens": "stable",
     "Density tokens": "stable",
     "Utility classes": "stable"
   },
-  "@dravyn/ui-components": {
+  "@vyrnforge/ui-components": {
     "Button": "stable",
     "IconButton": "stable",
     "ToolbarButton": "stable",
@@ -74,7 +74,7 @@
     "Timeline": "planned",
     "ActivityLog": "planned"
   },
-  "@dravyn/ui-data-grid": {
+  "@vyrnforge/ui-data-grid": {
     "UniversalDataGrid": "stable",
     "DataGridToolbar": "stable",
     "DataGridSearch": "stable",

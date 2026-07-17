@@ -1,6 +1,6 @@
-# Dravyn UI Documentation Index
+# VyrnForge UI Documentation Index
 
-This is the canonical documentation entrypoint for Dravyn UI.
+This is the canonical documentation entrypoint for VyrnForge UI.
 
 Do not create new top-level documentation without linking it from this file. If a new document overlaps with an existing document, update the existing canonical document instead of creating another competing source of truth.
 
@@ -9,7 +9,7 @@ Do not create new top-level documentation without linking it from this file. If 
 | Document | Purpose |
 | --- | --- |
 | `governance/00-documentation-governance.md` | Rules for creating, updating, archiving, and avoiding duplicate docs. |
-| `governance/01-project-source-of-truth.md` | Canonical definition of what Dravyn UI is and is not. |
+| `governance/01-project-source-of-truth.md` | Canonical definition of what VyrnForge UI is and is not. |
 | `governance/02-document-lifecycle.md` | Draft/stable/deprecated/archive lifecycle. |
 | `governance/03-naming-and-terminology.md` | Required package names, prefixes, and vocabulary. |
 | `governance/04-metadata-maintenance.md` | Rules for keeping AI-readable metadata aligned with docs and package APIs. |
@@ -46,15 +46,15 @@ Do not create new top-level documentation without linking it from this file. If 
 
 ## 5. API Reference
 
-API docs define public package usage for humans and AI agents. Use `api/README.md` before consuming Dravyn components, tokens, grid contracts, or adapter contracts. Metadata remains the structured AI index.
+API docs define public package usage for humans and AI agents. Use `api/README.md` before consuming VyrnForge components, tokens, grid contracts, or adapter contracts. Metadata remains the structured AI index.
 
 | Document | Purpose |
 | --- | --- |
 | `api/README.md` | Public API overview and index. |
 | `api/import-and-setup.md` | Package import and CSS setup order. |
-| `api/ui-core-api.md` | Public `@dravyn/ui-core` token, theme, density, and utility API. |
-| `api/ui-components-api.md` | Public `@dravyn/ui-components` component API overview. |
-| `api/ui-data-grid-api.md` | Public `@dravyn/ui-data-grid` grid, state, adapter, and styling API overview. |
+| `api/ui-core-api.md` | Public `@vyrnforge/ui-core` token, theme, density, and utility API. |
+| `api/ui-components-api.md` | Public `@vyrnforge/ui-components` component API overview. |
+| `api/ui-data-grid-api.md` | Public `@vyrnforge/ui-data-grid` grid, state, adapter, and styling API overview. |
 | `api/css-token-reference.md` | Stable public CSS variables. |
 | `api/css-class-reference.md` | Public class prefixes and extension rules. |
 | `api/public-vs-internal-api.md` | What is stable public API and what is internal. |
@@ -67,7 +67,7 @@ API docs define public package usage for humans and AI agents. Use `api/README.m
 | Document | Purpose |
 | --- | --- |
 | `benchmark/00-ui-library-landscape.md` | Comparison against major UI library categories. |
-| `benchmark/01-dravyn-positioning.md` | Dravyn positioning as a native-first enterprise UI foundation. |
+| `benchmark/01-VyrnForge-positioning.md` | VyrnForge positioning as a native-first enterprise UI foundation. |
 | `benchmark/02-component-coverage-comparison.md` | Component coverage matrix and gaps. |
 | `benchmark/03-data-grid-comparison.md` | Data-grid benchmark against TanStack Table, AG Grid, MUI X, and related options. |
 | `benchmark/04-theming-and-styling-comparison.md` | Theme and styling model comparison. |
@@ -165,5 +165,5 @@ Archived docs are historical only. They preserve useful context but do not guide
 | Code boundaries | `architecture/04-clean-code-boundaries.md` |
 | Roadmap | `roadmap/00-master-roadmap.md` |
 | Component inventory | `roadmap/01-component-inventory.md` |
-| Benchmark positioning | `benchmark/01-dravyn-positioning.md` |
+| Benchmark positioning | `benchmark/01-VyrnForge-positioning.md` |
 | AI context | `../.ai/AI_CONTEXT.md` |

@@ -1,15 +1,15 @@
 > Archived: This document is historical and no longer canonical.
 > Replacement: ../../governance/01-project-source-of-truth.md
 
-# 00 — Dravyn UI Project Charter
+# 00 — VyrnForge UI Project Charter
 
 ## Project name
 
-**Dravyn UI**
+**VyrnForge UI**
 
 ## Project purpose
 
-Dravyn UI is a native-first enterprise UI foundation for reusable application components.
+VyrnForge UI is a native-first enterprise UI foundation for reusable application components.
 
 The project began as a reusable Universal Data Grid, but the intended scope is broader:
 
@@ -24,7 +24,7 @@ The goal is not to build a decorative UI library. The goal is to build reusable,
 
 ## Target applications
 
-Dravyn UI should be reusable across:
+VyrnForge UI should be reusable across:
 
 * IAM applications
 * ITAM applications
@@ -39,7 +39,7 @@ Dravyn UI should be reusable across:
 
 ## Product philosophy
 
-Dravyn UI should prioritize:
+VyrnForge UI should prioritize:
 
 1. clarity
 2. speed of work
@@ -78,7 +78,7 @@ icon libraries
 large runtime dependencies
 ```
 
-This does not mean other apps cannot use those technologies. It means Dravyn UI should not force every consuming app to adopt them.
+This does not mean other apps cannot use those technologies. It means VyrnForge UI should not force every consuming app to adopt them.
 
 ## Strategic component priority
 
@@ -99,7 +99,7 @@ However, the project should evolve into a component system with:
 
 ## Success criteria
 
-Dravyn UI is successful when:
+VyrnForge UI is successful when:
 
 * one package can be upgraded across multiple products
 * common UI behavior is consistent

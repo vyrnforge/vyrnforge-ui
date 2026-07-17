@@ -1,4 +1,4 @@
-import { Skeleton } from "@dravyn/ui-components";
+import { Skeleton } from "@vyrnforge/ui-components";
 
 export type DataGridSkeletonRowsProps = {
   rowCount?: number;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Checkbox, DateInput, DateTimeInput, Field, MultiSelect, NumberInput, Radio, RadioGroup, SearchInput, Select, Switch, Textarea, TextInput, ValidationMessage } from "@dravyn/ui-components";
+import { Checkbox, DateInput, DateTimeInput, Field, MultiSelect, NumberInput, Radio, RadioGroup, SearchInput, Select, Switch, Textarea, TextInput, ValidationMessage } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -15,9 +15,9 @@ export function InputsPage() {
     <DemoPage
       accessibility="Associate controls with visible Field labels. Describe validation in text and use the native input type that matches the value."
       avoid="Avoid these simple controls for async comboboxes, masked currency, or complex date range selection."
-      description="Native-first form controls with shared Dravyn density, validation, and theme behavior."
-      importSnippet={'import { Field, TextInput, Select, NumberInput } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      description="Native-first form controls with shared VyrnForge density, validation, and theme behavior."
+      importSnippet={'import { Field, TextInput, Select, NumberInput } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["Field", "ValidationMessage", "RadioGroup", "MultiSelect"]}
       status="candidate"
       title="Form controls"

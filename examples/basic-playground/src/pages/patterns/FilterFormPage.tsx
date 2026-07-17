@@ -11,7 +11,7 @@ import {
   Select,
   Stack,
   Text
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 
 export function FilterFormPage() {
   const [query, setQuery] = useState("");

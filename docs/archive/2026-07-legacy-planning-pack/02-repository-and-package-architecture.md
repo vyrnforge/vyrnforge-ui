@@ -8,7 +8,7 @@
 Use one standalone repository for the UI foundation:
 
 ```txt
-dravyn-ui/
+vyrnforge-ui/
 ```
 
 Do not store this as a subfolder inside IAM, Atlas, ITSM, or any single application.
@@ -18,7 +18,7 @@ This project should be independently versioned and consumed by multiple applicat
 ## Recommended repository structure
 
 ```txt
-dravyn-ui/
+vyrnforge-ui/
   docs/
     00-project-charter.md
     01-naming-and-brand-system.md
@@ -64,7 +64,7 @@ Phase A
   packages/ui-data-grid only
 
 Phase B
-  add Dravyn UI planning docs
+  add VyrnForge UI planning docs
 
 Phase C
   add packages/ui-core
@@ -191,7 +191,7 @@ Root package example:
 
 ```json
 {
-  "name": "dravyn-ui-workspace",
+  "name": "vyrnforge-ui-workspace",
   "private": true,
   "workspaces": [
     "packages/*",

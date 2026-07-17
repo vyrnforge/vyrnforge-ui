@@ -18,9 +18,9 @@ What this sprint accomplishes.
 
 | Package | Change |
 | --- | --- |
-| `@dravyn/ui-core` | - |
-| `@dravyn/ui-components` | - |
-| `@dravyn/ui-data-grid` | - |
+| `@vyrnforge/ui-core` | - |
+| `@vyrnforge/ui-components` | - |
+| `@vyrnforge/ui-data-grid` | - |
 
 ## Tasks
 

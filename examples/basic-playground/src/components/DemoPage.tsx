@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Badge, CodeText, PageHeader, Panel, Text } from "@dravyn/ui-components";
+import { Badge, CodeText, PageHeader, Panel, Text } from "@vyrnforge/ui-components";
 import { CodeBlock } from "./CodeBlock";
 import { RelatedComponents } from "./RelatedComponents";
 import { UsageGuidance } from "./UsageGuidance";
@@ -9,7 +9,7 @@ export type DemoStatus = "stable" | "experimental" | "candidate" | "planned";
 export type DemoPageProps = {
   title: string;
   description: string;
-  packageName: "@dravyn/ui-core" | "@dravyn/ui-components" | "@dravyn/ui-data-grid";
+  packageName: "@vyrnforge/ui-core" | "@vyrnforge/ui-components" | "@vyrnforge/ui-data-grid";
   status: DemoStatus;
   importSnippet: string;
   children: ReactNode;

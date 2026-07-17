@@ -1,6 +1,6 @@
 import "./styles/index.css";
 
-export const dravynUiComponentsVersion = "0.1.0";
+export const vyrnForgeUiComponentsVersion = "0.1.0";
 
 export { Button } from "./components/Button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./components/Button";
@@ -204,4 +204,4 @@ export type {
   ConfirmDialogProps,
   ConfirmDialogVariant
 } from "./components/ConfirmDialog";
-export type DravynComponentStatus = "candidate" | "experimental" | "stable";
+export type VyrnForgeComponentStatus = "candidate" | "experimental" | "stable";

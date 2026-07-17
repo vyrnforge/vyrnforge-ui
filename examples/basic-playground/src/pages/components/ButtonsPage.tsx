@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Icon, IconButton } from "@dravyn/ui-components";
+import { Button, ButtonGroup, Icon, IconButton } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -13,8 +13,8 @@ export function ButtonsPage() {
       accessibility="Use a visible text label for business actions. Icon-only actions need an aria-label."
       avoid="Avoid Button for repeated icon-only utilities; use IconButton or ToolbarButton."
       description="Text actions for page commands, form submission, and clear workflow choices."
-      importSnippet={'import { Button, ButtonGroup } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { Button, ButtonGroup } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["IconButton", "ToolbarButton", "SegmentedControl"]}
       status="candidate"
       title="Button"

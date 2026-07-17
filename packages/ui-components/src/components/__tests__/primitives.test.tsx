@@ -68,7 +68,7 @@ import {
   getVisibleToasts
 } from "../Toast/toast.utils";
 
-describe("@dravyn/ui-components primitives", () => {
+describe("@vyrnforge/ui-components primitives", () => {
   it("disables Button while loading and marks it busy", () => {
     const markup = renderToStaticMarkup(
       <Button loading onClick={() => undefined} variant="primary">
@@ -777,7 +777,7 @@ describe("@dravyn/ui-components primitives", () => {
       <SideNav
         collapsed
         footer="Workspace"
-        header="Dravyn"
+        header="VyrnForge"
         items={[{ id: "overview", label: "Overview" }]}
       />
     );

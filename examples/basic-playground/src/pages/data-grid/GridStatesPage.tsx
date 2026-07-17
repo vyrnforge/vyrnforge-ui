@@ -1,4 +1,4 @@
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { userColumns } from "./gridShared";
 
 const stateColumns = userColumns.slice(0, 5);

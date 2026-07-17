@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Dravyn metadata files make package, component, styling, state, and AI guidance machine-readable for the docs app and Codex agents.
+VyrnForge metadata files make package, component, styling, state, and AI guidance machine-readable for the docs app and Codex agents.
 
 Markdown docs remain the source of truth for project direction. Metadata files are structured indexes and must not introduce competing roadmap or architecture decisions.
 

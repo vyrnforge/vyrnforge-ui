@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@dravyn/ui-components";
+import { Button } from "@vyrnforge/ui-components";
 import { getRouteById } from "./docsRegistry";
 import { DocsShell } from "./DocsShell";
 
@@ -24,7 +24,7 @@ export default function App() {
   );
 
   const handleRouteChange = (routeId: string) => {
-    window.location.hash = routeId;
+    window.location.hash = `/${routeId}`;
     setActiveRouteId(routeId);
   };
 

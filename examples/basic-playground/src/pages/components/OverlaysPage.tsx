@@ -16,7 +16,7 @@ import {
   Text,
   TextInput,
   Tooltip
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 import { DemoPage } from "../../components/DemoPage";
 
 export function OverlaysPage() {
@@ -30,8 +30,8 @@ export function OverlaysPage() {
       accessibility="Verify Escape handling, focus return, and an accessible trigger label for every overlay."
       avoid="Avoid overlays for long multi-step workflows or content that needs to stay visible while users work."
       description="Anchored and modal primitives for focused actions, short workflows, and contextual help."
-      importSnippet={'import { Popover, Menu, Tooltip, Dialog, Drawer } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { Popover, Menu, Tooltip, Dialog, Drawer } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["Button", "IconButton", "ConfirmDialog"]}
       status="experimental"
       title="Overlays"

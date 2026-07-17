@@ -1,6 +1,6 @@
 # Overlay And Focus Foundation
 
-`@dravyn/ui-components` owns the private overlay foundation used by Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, and ConfirmDialog. It remains an implementation detail; applications consume the public components rather than internal portal or positioning helpers.
+`@vyrnforge/ui-components` owns the private overlay foundation used by Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, and ConfirmDialog. It remains an implementation detail; applications consume the public components rather than internal portal or positioning helpers.
 
 ## Portal And Positioning
 

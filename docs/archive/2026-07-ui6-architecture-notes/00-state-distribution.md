@@ -3,11 +3,11 @@
 
 # State Distribution
 
-Dravyn UI packages do not own application data or business state. They own reusable UI behavior and emit contracts that apps can connect to their own services.
+VyrnForge UI packages do not own application data or business state. They own reusable UI behavior and emit contracts that apps can connect to their own services.
 
 ## Ownership Levels
 
-| Level | Owner | Examples | Dravyn Rule |
+| Level | Owner | Examples | VyrnForge Rule |
 | --- | --- | --- | --- |
 | Local transient UI state | Component or hook | open menus, hovered rows, active resize session | Keep local and disposable. Do not persist. |
 | Component view state | Component or controlled parent | search, sort, pagination, density, grouping, column sizing | Support uncontrolled defaults and controlled props/callbacks. |
@@ -18,7 +18,7 @@ Dravyn UI packages do not own application data or business state. They own reusa
 ## Rules
 
 - Apps own backend data, permissions, workflows, and business state.
-- Dravyn packages must not create a global store.
+- VyrnForge packages must not create a global store.
 - Data grid may own local view state in uncontrolled mode.
 - Controlled state must remain available through props and callbacks.
 - Persistence must remain adapter-based and preference-only.

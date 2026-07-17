@@ -1,4 +1,4 @@
-import { Button, Caption } from "@dravyn/ui-components";
+import { Button, Caption } from "@vyrnforge/ui-components";
 import { docsGroups, docsRoutes } from "./docsRegistry";
 
 type DocsNavProps = {

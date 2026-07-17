@@ -9,7 +9,7 @@ import {
   SearchInput,
   Select,
   Text,
-} from "@dravyn/ui-components";
+} from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 
 type MetadataPageProps = {

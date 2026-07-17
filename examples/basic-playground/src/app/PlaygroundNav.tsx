@@ -1,4 +1,4 @@
-import { SideNav, type SideNavItem } from "@dravyn/ui-components";
+import { SideNav, type SideNavItem } from "@vyrnforge/ui-components";
 import { routeGroups, type PlaygroundRoute } from "./routes";
 
 export type PlaygroundNavProps = {

@@ -1,13 +1,13 @@
-# @dravyn/ui-core
+# @vyrnforge/ui-core
 
-Shared Dravyn UI foundation package for native-first design tokens, CSS variables, theme helpers, density tokens, and small utility classes.
+Shared VyrnForge UI foundation package for native-first design tokens, CSS variables, theme helpers, density tokens, and small utility classes.
 
-`@dravyn/ui-core` owns tokens and utilities only. It does not own React components, data-grid behavior, app state, adapters, or a global store.
+`@vyrnforge/ui-core` owns tokens and utilities only. It does not own React components, data-grid behavior, app state, adapters, or a global store.
 
 ## CSS
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
 ```
 
 The CSS provides:
@@ -18,12 +18,12 @@ The CSS provides:
 - `compact`, `standard`, and `comfortable` density support
 - utility classes such as `dv-text-muted`, `dv-truncate`, `dv-sr-only`, and `dv-focus-ring`
 
-Use `ui-core` before other Dravyn package styles so shared `--dv-*` tokens are available:
+Use `ui-core` before other VyrnForge package styles so shared `--dv-*` tokens are available:
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 Global app theme override:
@@ -49,12 +49,12 @@ Global app theme override:
 
 ```ts
 import {
-  createDravynTheme,
-  dravynEnterpriseTheme
-} from "@dravyn/ui-core";
+  createVyrnForgeTheme,
+  vyrnForgeEnterpriseTheme
+} from "@vyrnforge/ui-core";
 
-const theme = createDravynTheme({
-  ...dravynEnterpriseTheme,
+const theme = createVyrnForgeTheme({
+  ...vyrnForgeEnterpriseTheme,
   "--dv-primary": "#1d4ed8"
 });
 ```

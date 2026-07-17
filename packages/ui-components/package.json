@@ -1,5 +1,5 @@
 {
-  "name": "@dravyn/ui-components",
+  "name": "@vyrnforge/ui-components",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -26,7 +26,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@dravyn/ui-core": "0.1.0"
+    "@vyrnforge/ui-core": "0.1.0"
   },
   "peerDependencies": {
     "react": ">=18",

@@ -1,6 +1,6 @@
 # Toast
 
-`Toast` is an experimental transient feedback foundation in `@dravyn/ui-components`.
+`Toast` is an experimental transient feedback foundation in `@vyrnforge/ui-components`.
 
 Use it for brief operation feedback such as saved changes, copy completion, export lifecycle updates, background completion, warnings, and failures.
 
@@ -11,21 +11,21 @@ Do not use Toast for required form validation, critical information that must re
 Wrap the app area that should own transient feedback.
 
 ```tsx
-import { ToastProvider } from "@dravyn/ui-components";
+import { ToastProvider } from "@vyrnforge/ui-components";
 
 <ToastProvider position="bottom-end" maxVisible={5}>
   <App />
 </ToastProvider>
 ```
 
-Each provider owns an isolated queue. Multiple providers may exist. Dravyn does not use Redux, Zustand, module-level global state, or persistent storage for toast state.
+Each provider owns an isolated queue. Multiple providers may exist. VyrnForge does not use Redux, Zustand, module-level global state, or persistent storage for toast state.
 
 `ToastProvider` renders `ToastViewport` automatically through the shared Portal foundation.
 
 ## Controller API
 
 ```tsx
-import { useToast } from "@dravyn/ui-components";
+import { useToast } from "@vyrnforge/ui-components";
 
 function SaveButton() {
   const toast = useToast();

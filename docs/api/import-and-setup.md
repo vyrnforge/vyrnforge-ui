@@ -1,13 +1,13 @@
 # Import And Setup
 
-Dravyn UI is package-based. Import only the packages and CSS that your app uses.
+VyrnForge UI is package-based. Import only the packages and CSS that your app uses.
 
 ## Recommended CSS Order
 
 ```ts
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 Use this order when an app renders core tokens, shared components, and the data grid together.
@@ -18,17 +18,17 @@ These package-level entry files are the public CSS import contract. Internally, 
 
 | CSS import | Why it comes here |
 | --- | --- |
-| `@dravyn/ui-core/styles/index.css` | Defines shared `--dv-*` tokens, themes, density, and utilities. |
-| `@dravyn/ui-components/styles/index.css` | Defines shared component classes that consume `--dv-*` tokens. |
-| `@dravyn/ui-data-grid/styles/index.css` | Defines `udg-*` grid classes and `--udg-*` variables, with fallbacks to `--dv-*` tokens where practical. |
+| `@vyrnforge/ui-core/styles/index.css` | Defines shared `--dv-*` tokens, themes, density, and utilities. |
+| `@vyrnforge/ui-components/styles/index.css` | Defines shared component classes that consume `--dv-*` tokens. |
+| `@vyrnforge/ui-data-grid/styles/index.css` | Defines `udg-*` grid classes and `--udg-*` variables, with fallbacks to `--dv-*` tokens where practical. |
 
-Apps that only use `@dravyn/ui-core` and `@dravyn/ui-components` do not need to import data-grid CSS. Apps that only use the data grid should still prefer importing `ui-core` first for shared token alignment, but the grid CSS includes fallback values so it can render correctly without forcing every consumer to import all CSS.
+Apps that only use `@vyrnforge/ui-core` and `@vyrnforge/ui-components` do not need to import data-grid CSS. Apps that only use the data grid should still prefer importing `ui-core` first for shared token alignment, but the grid CSS includes fallback values so it can render correctly without forcing every consumer to import all CSS.
 
 ## JavaScript Imports
 
 ```tsx
-import { Button, Card } from "@dravyn/ui-components";
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+import { Button, Card } from "@vyrnforge/ui-components";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
 
 ## Theme Overrides
@@ -57,4 +57,4 @@ Use `--udg-*` tokens for grid-specific overrides:
 - Do not import internal package CSS modules directly; use package-level `styles/index.css` paths.
 - Prefer component props and CSS variables before custom class overrides.
 - Keep app-specific styles scoped to the consuming application.
-- Do not import forbidden UI frameworks to style Dravyn components.
+- Do not import forbidden UI frameworks to style VyrnForge components.

@@ -1,4 +1,4 @@
-import { Badge, StatusBadge } from "@dravyn/ui-components";
+import { Badge, StatusBadge } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -11,8 +11,8 @@ export function BadgesPage() {
       accessibility="Do not use badge color as the sole way to communicate a status; keep the label meaningful."
       avoid="Avoid badges for primary actions or long prose."
       description="Compact labels for status, metadata, and categorization in dense product surfaces."
-      importSnippet={'import { Badge, StatusBadge } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { Badge, StatusBadge } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["Alert", "InlineMessage", "Text"]}
       status="candidate"
       title="Badge"

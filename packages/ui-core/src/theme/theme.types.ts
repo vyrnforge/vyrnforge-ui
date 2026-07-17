@@ -1,11 +1,11 @@
-export type DravynDensity = "compact" | "standard" | "comfortable";
+export type VyrnForgeDensity = "compact" | "standard" | "comfortable";
 
-export type DravynThemeName = "light" | "dark" | "system" | "enterprise";
+export type VyrnForgeThemeName = "light" | "dark" | "system" | "enterprise";
 
-export type DravynTheme = DravynThemeName | (string & {});
+export type VyrnForgeTheme = VyrnForgeThemeName | (string & {});
 
-export type DravynVariant = "plain" | "bordered" | "card";
+export type VyrnForgeVariant = "plain" | "bordered" | "card";
 
-export type DravynCssVar = `--dv-${string}`;
+export type VyrnForgeCssVar = `--dv-${string}`;
 
-export type DravynThemeVars = Partial<Record<DravynCssVar, string | number>>;
+export type VyrnForgeThemeVars = Partial<Record<VyrnForgeCssVar, string | number>>;

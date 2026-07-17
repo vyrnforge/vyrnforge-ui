@@ -1,4 +1,4 @@
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { users } from "../../data/users";
 import { GridNote, stressColumns } from "./gridShared";
 

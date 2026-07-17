@@ -12,7 +12,7 @@
 
 ## Redux policy
 
-Dravyn packages must not depend on:
+VyrnForge packages must not depend on:
 
 - Redux
 - React Redux

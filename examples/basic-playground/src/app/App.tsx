@@ -2,10 +2,22 @@ import { useEffect, useMemo, useState } from "react";
 import { PlaygroundShell } from "./PlaygroundShell";
 import { routes } from "./routes";
 
+function normalizeHashRoute(hash: string) {
+  return hash.replace(/^#\/?/, "").replace(/^\/+/, "");
+}
+
+function getRouteFromHash() {
+  const hashRoute = normalizeHashRoute(window.location.hash);
+
+  return routes.find((route) => {
+    const path = route.path?.replace(/^\/+/, "");
+    return route.id === hashRoute || path === hashRoute;
+  });
+}
+
 export default function App() {
   const [activeRouteId, setActiveRouteId] = useState(() => {
-    const routeId = window.location.hash.slice(1);
-    return routes.some((route) => route.id === routeId) ? routeId : routes[0].id;
+    return getRouteFromHash()?.id ?? routes[0].id;
   });
   const [density, setDensity] = useState("standard");
   const [theme, setTheme] = useState("light");
@@ -17,9 +29,9 @@ export default function App() {
 
   useEffect(() => {
     const onHashChange = () => {
-      const routeId = window.location.hash.slice(1);
-      if (routes.some((route) => route.id === routeId)) {
-        setActiveRouteId(routeId);
+      const route = getRouteFromHash();
+      if (route) {
+        setActiveRouteId(route.id);
       }
     };
 
@@ -32,7 +44,8 @@ export default function App() {
       return;
     }
 
-    window.location.hash = routeId;
+    const route = routes.find((item) => item.id === routeId);
+    window.location.hash = route?.path ?? `/${routeId}`;
     setActiveRouteId(routeId);
   };
 

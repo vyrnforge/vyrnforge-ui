@@ -1,6 +1,6 @@
 # Package Boundaries
 
-## `@dravyn/ui-core`
+## `@vyrnforge/ui-core`
 
 ### Owns
 
@@ -18,7 +18,7 @@
 - app routing
 - backend fetching
 
-## `@dravyn/ui-components`
+## `@vyrnforge/ui-components`
 
 ### Owns
 
@@ -37,7 +37,7 @@
 - global store
 - tenant/auth/permissions
 
-## `@dravyn/ui-data-grid`
+## `@vyrnforge/ui-data-grid`
 
 ### Owns
 
@@ -63,6 +63,6 @@ If a package needs something from a higher-level package, the abstraction belong
 
 ## Dependency policy
 
-Dravyn packages must not depend on Redux, React Redux, RTK Query, Zustand, TanStack state/query/table/virtual, MUI, AntD, Chakra, Mantine, Radix, Headless UI, Tailwind, styled-components, Emotion, icon libraries, or CSS frameworks by default.
+VyrnForge packages must not depend on Redux, React Redux, RTK Query, Zustand, TanStack state/query/table/virtual, MUI, AntD, Chakra, Mantine, Radix, Headless UI, Tailwind, styled-components, Emotion, icon libraries, or CSS frameworks by default.
 
-Apps may use those tools around Dravyn through controlled props, adapter contracts, and normal application composition.
+Apps may use those tools around VyrnForge through controlled props, adapter contracts, and normal application composition.

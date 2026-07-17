@@ -1,6 +1,6 @@
-# @dravyn/ui-core API
+# @vyrnforge/ui-core API
 
-`@dravyn/ui-core` is the shared design foundation for Dravyn UI.
+`@vyrnforge/ui-core` is the shared design foundation for VyrnForge UI.
 
 It owns:
 
@@ -15,7 +15,7 @@ It does not own React components, data-grid behavior, app state, backend fetchin
 ## CSS Import
 
 ```ts
-import "@dravyn/ui-core/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
 ```
 
 Import `ui-core` CSS before `ui-components` and `ui-data-grid` CSS.
@@ -24,42 +24,42 @@ Import `ui-core` CSS before `ui-components` and `ui-data-grid` CSS.
 
 ```ts
 import {
-  createDravynTheme,
-  mergeDravynTheme,
-  toDravynThemeStyle,
-  dravynLightTheme,
-  dravynDarkTheme,
-  dravynEnterpriseTheme,
-  getDravynThemePreset
-} from "@dravyn/ui-core";
+  createVyrnForgeTheme,
+  mergeVyrnForgeTheme,
+  toVyrnForgeThemeStyle,
+  vyrnForgeLightTheme,
+  vyrnForgeDarkTheme,
+  vyrnForgeEnterpriseTheme,
+  getVyrnForgeThemePreset
+} from "@vyrnforge/ui-core";
 ```
 
 Public types include:
 
-- `DravynTheme`
-- `DravynThemeName`
-- `DravynThemeVars`
-- `DravynCssVar`
-- `DravynDensity`
-- `DravynVariant`
+- `VyrnForgeTheme`
+- `VyrnForgeThemeName`
+- `VyrnForgeThemeVars`
+- `VyrnForgeCssVar`
+- `VyrnForgeDensity`
+- `VyrnForgeVariant`
 
 ## Theme Model
 
 Themes are CSS-variable maps using the `--dv-*` namespace. Apps can use preset themes or create scoped overrides.
 
 ```tsx
-import { dravynEnterpriseTheme, toDravynThemeStyle } from "@dravyn/ui-core";
+import { vyrnForgeEnterpriseTheme, toVyrnForgeThemeStyle } from "@vyrnforge/ui-core";
 
 export function AppShell() {
-  return <div style={toDravynThemeStyle(dravynEnterpriseTheme)}>...</div>;
+  return <div style={toVyrnForgeThemeStyle(vyrnForgeEnterpriseTheme)}>...</div>;
 }
 ```
 
-Use `mergeDravynTheme` to extend a preset without losing defaults.
+Use `mergeVyrnForgeTheme` to extend a preset without losing defaults.
 
 ## Density Model
 
-Dravyn uses these density names:
+VyrnForge uses these density names:
 
 - `compact`
 - `standard`

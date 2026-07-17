@@ -1,8 +1,8 @@
-# `@dravyn/ui-components`
+# `@vyrnforge/ui-components`
 
 ## Purpose
 
-`@dravyn/ui-components` provides reusable native-first React components for enterprise apps.
+`@vyrnforge/ui-components` provides reusable native-first React components for enterprise apps.
 
 ## Component groups
 
@@ -30,8 +30,8 @@
 ## Import
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
 ```
 
 ## Usage principle

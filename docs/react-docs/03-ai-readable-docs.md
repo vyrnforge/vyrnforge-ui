@@ -2,7 +2,7 @@
 
 ## Purpose
 
-AI agents should be able to use Dravyn UI correctly without guessing package boundaries, imports, or state rules.
+AI agents should be able to use VyrnForge UI correctly without guessing package boundaries, imports, or state rules.
 
 ## Required AI files
 
@@ -23,10 +23,10 @@ Each stable component should eventually have metadata like:
 ```json
 {
   "name": "Button",
-  "package": "@dravyn/ui-components",
+  "package": "@vyrnforge/ui-components",
   "css": [
-    "@dravyn/ui-core/styles/index.css",
-    "@dravyn/ui-components/styles/index.css"
+    "@vyrnforge/ui-core/styles/index.css",
+    "@vyrnforge/ui-components/styles/index.css"
   ],
   "props": {
     "variant": ["default", "primary", "danger", "ghost", "subtle"],

@@ -1,4 +1,4 @@
-import { Button, EmptyState, ErrorState, Icon, InlineMessage, LoadingState, Skeleton } from "@dravyn/ui-components";
+import { Button, EmptyState, ErrorState, Icon, InlineMessage, LoadingState, Skeleton } from "@vyrnforge/ui-components";
 import { DemoBlock } from "../../components/DemoBlock";
 import { DemoPage } from "../../components/DemoPage";
 import { DemoSection } from "../../components/DemoSection";
@@ -9,8 +9,8 @@ export function StatesPage() {
       accessibility="Loading and error content must state what is happening in text, not only through color or animation."
       avoid="Avoid leaving a blank panel when content is unavailable or still loading."
       description="Reusable feedback states for empty data, retryable failures, and asynchronous loading."
-      importSnippet={'import { EmptyState, ErrorState, LoadingState, Skeleton } from "@dravyn/ui-components";'}
-      packageName="@dravyn/ui-components"
+      importSnippet={'import { EmptyState, ErrorState, LoadingState, Skeleton } from "@vyrnforge/ui-components";'}
+      packageName="@vyrnforge/ui-components"
       relatedComponents={["Alert", "InlineMessage", "Button"]}
       status="candidate"
       title="Feedback states"

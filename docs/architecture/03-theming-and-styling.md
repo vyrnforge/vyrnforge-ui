@@ -2,23 +2,23 @@
 
 ## Styling model
 
-Dravyn uses package CSS and CSS variables, not CSS-in-JS or utility-framework dependency.
+VyrnForge uses package CSS and CSS variables, not CSS-in-JS or utility-framework dependency.
 
 ## Theme layers
 
 | Layer | Prefix | Owner | Purpose |
 | --- | --- | --- | --- |
-| Shared foundation | `--dv-*` | `@dravyn/ui-core` | app-wide colors, typography, spacing, radius, shadows, density |
-| Component classes | `dv-*` | `@dravyn/ui-components` | shared component visuals |
-| Grid variables | `--udg-*` | `@dravyn/ui-data-grid` | grid row/header/layout variables |
-| Grid classes | `udg-*` | `@dravyn/ui-data-grid` | grid-specific layout and interactions |
+| Shared foundation | `--dv-*` | `@vyrnforge/ui-core` | app-wide colors, typography, spacing, radius, shadows, density |
+| Component classes | `dv-*` | `@vyrnforge/ui-components` | shared component visuals |
+| Grid variables | `--udg-*` | `@vyrnforge/ui-data-grid` | grid row/header/layout variables |
+| Grid classes | `udg-*` | `@vyrnforge/ui-data-grid` | grid-specific layout and interactions |
 
 ## Recommended import order
 
 ```tsx
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 ## TSX vs CSS rule

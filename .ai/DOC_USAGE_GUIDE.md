@@ -1,4 +1,4 @@
-# Dravyn UI - Documentation Usage Guide For AI
+# VyrnForge UI - Documentation Usage Guide For AI
 
 ## Before Implementing
 
@@ -9,7 +9,7 @@
 5. Read `docs/metadata/` for structured component/package/status lookup.
 6. Read architecture rules if changing state, styling, or package boundaries.
 
-Before using a Dravyn component, token, grid contract, or adapter, check API docs and metadata. Do not use undocumented internal APIs unless explicitly asked.
+Before using a VyrnForge component, token, grid contract, or adapter, check API docs and metadata. Do not use undocumented internal APIs unless explicitly asked.
 
 ## When Updating Docs
 

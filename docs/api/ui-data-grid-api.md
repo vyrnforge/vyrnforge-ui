@@ -1,22 +1,22 @@
-# @dravyn/ui-data-grid API
+# @vyrnforge/ui-data-grid API
 
-`@dravyn/ui-data-grid` provides `UniversalDataGrid`, specialized grid components, core helpers, state contracts, and adapter contracts for enterprise data-management interfaces.
+`@vyrnforge/ui-data-grid` provides `UniversalDataGrid`, specialized grid components, core helpers, state contracts, and adapter contracts for enterprise data-management interfaces.
 
 The grid is not a backend client, global store, report engine, or export file generator.
 
 ## CSS Import
 
 ```ts
-import "@dravyn/ui-core/styles/index.css";
-import "@dravyn/ui-components/styles/index.css";
-import "@dravyn/ui-data-grid/styles/index.css";
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 ## Basic Usage
 
 ```tsx
-import { UniversalDataGrid } from "@dravyn/ui-data-grid";
-import type { DataGridColumnDef } from "@dravyn/ui-data-grid";
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
+import type { DataGridColumnDef } from "@vyrnforge/ui-data-grid";
 
 type Order = {
   id: string;

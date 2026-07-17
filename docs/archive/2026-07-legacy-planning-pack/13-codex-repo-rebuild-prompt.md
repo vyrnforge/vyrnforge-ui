@@ -3,13 +3,13 @@
 
 # 13 — Codex Repo Rebuild Prompt
 
-Use this prompt to rebuild and align repository documentation around the Dravyn UI project name and broader component-system direction.
+Use this prompt to rebuild and align repository documentation around the VyrnForge UI project name and broader component-system direction.
 
 ```txt
 You are working inside the current DATA-GRID repository.
 
 Task:
-Rebuild the project documentation to reflect the new project direction and name: Dravyn UI.
+Rebuild the project documentation to reflect the new project direction and name: VyrnForge UI.
 
 Important:
 - This is documentation and repository-alignment work first.
@@ -20,8 +20,8 @@ Important:
 - Preserve the native-first direction.
 
 New project identity:
-- Project name: Dravyn UI
-- Repository name recommendation: dravyn-ui
+- Project name: VyrnForge UI
+- Repository name recommendation: vyrnforge-ui
 - Package namespace recommendation: @dravyn
 - Main package: @dravyn/ui-data-grid
 - Future packages:
@@ -52,10 +52,10 @@ docs/
 Documentation requirements:
 
 1. Project charter
-Explain Dravyn UI as a native-first enterprise UI foundation for IAM, ITAM, ITSM, Atlas, Gateway UI, admin portals, customer portals, and reporting screens.
+Explain VyrnForge UI as a native-first enterprise UI foundation for IAM, ITAM, ITSM, Atlas, Gateway UI, admin portals, customer portals, and reporting screens.
 
 2. Naming system
-Document Dravyn UI as the chosen name.
+Document VyrnForge UI as the chosen name.
 Explain dragon-inspired naming without making components overly fantasy-themed.
 Recommend package namespace @dravyn.
 Recommend packages @dravyn/ui-core, @dravyn/ui-components, @dravyn/ui-data-grid.
@@ -115,7 +115,7 @@ Include a reusable master prompt that gives future Codex sessions the full proje
 
 Acceptance criteria:
 - Docs are complete and readable.
-- Docs use Dravyn UI naming consistently.
+- Docs use VyrnForge UI naming consistently.
 - Docs explain that the data grid is the first strategic component, not the whole project.
 - Docs preserve native-first direction.
 - Docs define package boundaries and future UI system roadmap.

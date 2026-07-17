@@ -2,7 +2,7 @@
 
 ## Baseline
 
-Dravyn should target WCAG AA as a baseline for reusable components.
+VyrnForge should target WCAG AA as a baseline for reusable components.
 
 ## Requirements
 
