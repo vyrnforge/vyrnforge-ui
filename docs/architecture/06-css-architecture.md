@@ -14,11 +14,11 @@ import "@vyrnforge/ui-data-grid/styles/index.css";
 
 | Area | Prefix | Owns | Must not own |
 | --- | --- | --- | --- |
-| `@vyrnforge/ui-core` | `--dv-*`, shared `dv-*` utilities | reset, tokens, themes, density, generic utilities, accessibility helpers | component classes, grid classes, app-specific classes |
-| `@vyrnforge/ui-components` | `dv-*` | shared component styles for actions, forms, feedback, layout, navigation, overlays, typography | `udg-*`, docs/playground styling |
+| `@vyrnforge/ui-core` | `--vf-*`, shared `vf-*` utilities | reset, tokens, themes, density, generic utilities, accessibility helpers | component classes, grid classes, app-specific classes |
+| `@vyrnforge/ui-components` | `vf-*` | shared component styles for actions, forms, feedback, layout, navigation, overlays, typography | `udg-*`, docs/playground styling |
 | `@vyrnforge/ui-data-grid` | `udg-*`, `--udg-*` | grid shell, table, header, body, toolbar, pagination, grid features, grid states | generic button/input/badge/card styles |
-| `apps/docs` | `dv-docs-*` | docs shell, sidebar, markdown, metadata, code block presentation | package component styles |
-| `examples/basic-playground` | `dv-playground-*` | demo layout and example helpers | package component styles |
+| `apps/docs` | `vf-docs-*` | docs shell, sidebar, markdown, metadata, code block presentation | package component styles |
+| `examples/basic-playground` | `vf-playground-*` | demo layout and example helpers | package component styles |
 
 ## Split Policy
 
@@ -67,7 +67,7 @@ Do not split tiny files just to mirror a theoretical folder tree. Create CSS fil
 - Preserve package-level import paths.
 - Do not expose internal CSS modules as required public API.
 - Do not duplicate generic component styling in docs, playground, or grid CSS.
-- Map `--udg-*` variables to `--dv-*` fallbacks where practical.
-- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `dv-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `dv-side-nav__scroll`.
-- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `dv-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `dv-side-nav__scroll`.
-- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `dv-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `dv-side-nav__scroll`.
+- Map `--udg-*` variables to `--vf-*` fallbacks where practical.
+- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `vf-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `vf-side-nav__scroll`.
+- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `vf-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `vf-side-nav__scroll`.
+- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `vf-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `vf-side-nav__scroll`.

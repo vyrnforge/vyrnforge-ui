@@ -24,10 +24,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       aria-busy={loading || undefined}
       className={joinClassNames(
-        "dv-button",
-        `dv-button--${variant}`,
-        `dv-button--${size}`,
-        fullWidth && "dv-button--full-width",
+        "vf-button",
+        `vf-button--${variant}`,
+        `vf-button--${size}`,
+        fullWidth && "vf-button--full-width",
         className
       )}
       disabled={disabled || loading}
@@ -35,10 +35,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       type={type}
       {...props}
     >
-      {loading && <span aria-hidden="true" className="dv-button__spinner" />}
-      {!loading && startSlot && <span className="dv-button__slot">{startSlot}</span>}
-      {children && <span className="dv-button__label">{children}</span>}
-      {endSlot && <span className="dv-button__slot">{endSlot}</span>}
+      {loading && <span aria-hidden="true" className="vf-button__spinner" />}
+      {!loading && startSlot && <span className="vf-button__slot">{startSlot}</span>}
+      {children && <span className="vf-button__label">{children}</span>}
+      {endSlot && <span className="vf-button__slot">{endSlot}</span>}
     </button>
   );
 });

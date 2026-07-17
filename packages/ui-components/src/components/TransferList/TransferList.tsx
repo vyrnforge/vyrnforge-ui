@@ -46,7 +46,7 @@ export function TransferList({
   value
 }: TransferListProps) {
   const generatedId = useId().replace(/:/g, "");
-  const rootId = id ?? `dv-transfer-list-${generatedId}`;
+  const rootId = id ?? `vf-transfer-list-${generatedId}`;
   const resolvedInvalid = invalid || ariaInvalid || false;
   const resolvedRequired = required || ariaRequired || false;
   const resolvedAriaDescribedBy = ariaDescribedBy ?? ariaDescribedByAttribute;
@@ -94,10 +94,10 @@ export function TransferList({
       aria-label={ariaLabel}
       aria-required={resolvedRequired || undefined}
       className={joinClassNames(
-        "dv-transfer-list",
-        disabled && "dv-transfer-list--disabled",
-        readOnly && "dv-transfer-list--read-only",
-        resolvedInvalid && "dv-transfer-list--invalid",
+        "vf-transfer-list",
+        disabled && "vf-transfer-list--disabled",
+        readOnly && "vf-transfer-list--read-only",
+        resolvedInvalid && "vf-transfer-list--invalid",
         className
       )}
       id={rootId}
@@ -130,7 +130,7 @@ export function TransferList({
         title={sourceTitle}
         visibleOptions={visibleSourceOptions}
       />
-      <div className="dv-transfer-list__actions">
+      <div className="vf-transfer-list__actions">
         {moveAll && (
           <Button
             aria-label={actionLabel("all", "target", targetTitle)}

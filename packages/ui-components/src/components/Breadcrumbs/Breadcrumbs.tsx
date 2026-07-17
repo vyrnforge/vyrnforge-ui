@@ -14,34 +14,34 @@ export function Breadcrumbs({
   return (
     <nav
       aria-label={props["aria-label"] ?? "Breadcrumb"}
-      className={joinClassNames("dv-breadcrumbs", className)}
+      className={joinClassNames("vf-breadcrumbs", className)}
       {...props}
     >
-      <ol className="dv-breadcrumbs__list">
+      <ol className="vf-breadcrumbs__list">
         {items.map((item, index) => {
           const current = item.current || index === items.length - 1;
           const content = item.href && !current ? (
-            <a className="dv-breadcrumbs__link" href={item.href} onClick={item.onClick}>
+            <a className="vf-breadcrumbs__link" href={item.href} onClick={item.onClick}>
               {item.label}
             </a>
           ) : item.onClick && !current ? (
             <button
-              className="dv-breadcrumbs__link"
+              className="vf-breadcrumbs__link"
               onClick={item.onClick}
               type="button"
             >
               {item.label}
             </button>
           ) : (
-            <span aria-current={current ? "page" : undefined} className="dv-breadcrumbs__current">
+            <span aria-current={current ? "page" : undefined} className="vf-breadcrumbs__current">
               {item.label}
             </span>
           );
 
           return (
-            <li className="dv-breadcrumbs__item" key={itemKey(item, index)}>
+            <li className="vf-breadcrumbs__item" key={itemKey(item, index)}>
               {index > 0 && (
-                <span aria-hidden="true" className="dv-breadcrumbs__separator">
+                <span aria-hidden="true" className="vf-breadcrumbs__separator">
                   {separator}
                 </span>
               )}

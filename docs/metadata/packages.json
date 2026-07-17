@@ -23,7 +23,7 @@
     {
       "name": "@vyrnforge/ui-components",
       "purpose": "Reusable native-first React primitives and application components.",
-      "owns": ["actions", "typography", "forms", "data management", "feedback", "layout", "overlays", "shared dv-* classes"],
+      "owns": ["actions", "typography", "forms", "data management", "feedback", "layout", "overlays", "shared vf-* classes"],
       "doesNotOwn": ["data grid algorithms", "grid row models", "backend data", "global store", "tenant/auth/permissions"],
       "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",

@@ -82,13 +82,13 @@ function statusVariant(status: string) {
 
 function MetadataChips({ items }: { items: unknown[] }) {
   if (items.length === 0) {
-    return <span className="dv-docs-muted-inline">None</span>;
+    return <span className="vf-docs-muted-inline">None</span>;
   }
 
   return (
-    <div className="dv-docs-metadata-chips">
+    <div className="vf-docs-metadata-chips">
       {items.map((item, index) => (
-        <span className="dv-docs-metadata-chip" key={`${toText(item)}-${index}`}>
+        <span className="vf-docs-metadata-chip" key={`${toText(item)}-${index}`}>
           {toText(item)}
         </span>
       ))}
@@ -100,11 +100,11 @@ function CodeBlock({ value }: { value: unknown }) {
   const text = toText(value);
 
   if (!text) {
-    return <span className="dv-docs-muted-inline">None</span>;
+    return <span className="vf-docs-muted-inline">None</span>;
   }
 
   return (
-    <pre className="dv-docs-metadata-code">
+    <pre className="vf-docs-metadata-code">
       <code>{text}</code>
     </pre>
   );
@@ -118,7 +118,7 @@ function DetailSection({
   title: string;
 }) {
   return (
-    <section className="dv-docs-metadata-detail__section">
+    <section className="vf-docs-metadata-detail__section">
       <Heading level={4} size="sm">
         {title}
       </Heading>
@@ -139,7 +139,7 @@ function SelectFilter({
   value: string;
 }) {
   return (
-    <label className="dv-docs-metadata-filter">
+    <label className="vf-docs-metadata-filter">
       <span>{label}</span>
       <Select
         onChange={(event) => onChange(event.target.value)}
@@ -172,7 +172,7 @@ function MetadataToolbar({
   onSearch: (value: string) => void;
 }) {
   return (
-    <div className="dv-docs-metadata-toolbar" role="search">
+    <div className="vf-docs-metadata-toolbar" role="search">
       <SearchInput
         aria-label={searchLabel}
         onChange={(event) => onSearch(event.target.value)}
@@ -180,8 +180,8 @@ function MetadataToolbar({
         size="sm"
         value={value}
       />
-      <div className="dv-docs-metadata-toolbar__filters">{children}</div>
-      <Text className="dv-docs-metadata-count" tone="muted" size="sm">
+      <div className="vf-docs-metadata-toolbar__filters">{children}</div>
+      <Text className="vf-docs-metadata-count" tone="muted" size="sm">
         {count} of {total}
       </Text>
     </div>
@@ -211,7 +211,7 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
   );
 
   return (
-    <div className="dv-docs-metadata">
+    <div className="vf-docs-metadata">
       <MetadataToolbar
         count={filteredPackages.length}
         onSearch={setQuery}
@@ -220,15 +220,15 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
         total={packages.length}
         value={query}
       />
-      <div className="dv-docs-metadata-table dv-docs-metadata-table--packages">
-        <div className="dv-docs-metadata-table__head">
+      <div className="vf-docs-metadata-table vf-docs-metadata-table--packages">
+        <div className="vf-docs-metadata-table__head">
           <span>Package</span>
           <span>Status</span>
           <span>CSS import</span>
           <span>Purpose</span>
         </div>
         {filteredPackages.map((packageInfo) => (
-          <article className="dv-docs-metadata-table__row" key={toText(packageInfo.name)}>
+          <article className="vf-docs-metadata-table__row" key={toText(packageInfo.name)}>
             <div>
               <strong>{toText(packageInfo.name)}</strong>
               <Text tone="muted" size="sm">
@@ -244,11 +244,11 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
         ))}
       </div>
       {filteredPackages.map((packageInfo) => (
-        <Card className="dv-docs-metadata-summary" key={`${toText(packageInfo.name)}-details`} padding="md">
+        <Card className="vf-docs-metadata-summary" key={`${toText(packageInfo.name)}-details`} padding="md">
           <Heading level={3} size="sm">
             {toText(packageInfo.name)} boundaries
           </Heading>
-          <div className="dv-docs-metadata-summary__grid">
+          <div className="vf-docs-metadata-summary__grid">
             <DetailSection title="Owns">
               <MetadataChips items={asArray(packageInfo.owns)} />
             </DetailSection>
@@ -269,7 +269,7 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
       ))}
       {filteredPackages.length === 0 && (
         <EmptyState
-          className="dv-docs-metadata-empty"
+          className="vf-docs-metadata-empty"
           title="No packages found"
           description="No packages match the current search."
         />
@@ -335,7 +335,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
     filteredComponents[0];
 
   return (
-    <div className="dv-docs-metadata">
+    <div className="vf-docs-metadata">
       <MetadataToolbar
         count={filteredComponents.length}
         onSearch={setQuery}
@@ -364,9 +364,9 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
         />
       </MetadataToolbar>
 
-      <div className="dv-docs-metadata-master-detail">
-        <div className="dv-docs-metadata-table dv-docs-metadata-table--components">
-          <div className="dv-docs-metadata-table__head">
+      <div className="vf-docs-metadata-master-detail">
+        <div className="vf-docs-metadata-table vf-docs-metadata-table--components">
+          <div className="vf-docs-metadata-table__head">
             <span>Component</span>
             <span>Package</span>
             <span>Category</span>
@@ -379,7 +379,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
             return (
               <button
                 aria-current={id === toText(selectedComponent?.id) ? "true" : undefined}
-                className="dv-docs-metadata-table__row dv-docs-metadata-table__row--button"
+                className="vf-docs-metadata-table__row vf-docs-metadata-table__row--button"
                 key={id}
                 onClick={() => setSelectedId(id)}
                 type="button"
@@ -396,7 +396,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
           })}
           {filteredComponents.length === 0 && (
             <EmptyState
-              className="dv-docs-metadata-empty"
+              className="vf-docs-metadata-empty"
               title="No components found"
               description="No components match the current filters."
             />
@@ -412,12 +412,12 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
 function ComponentDetail({ component }: { component: MetadataRecord }) {
   return (
     <Card
-      className="dv-docs-metadata-detail"
+      className="vf-docs-metadata-detail"
       aria-label={`${toText(component.name)} details`}
       padding="md"
       role="complementary"
     >
-      <div className="dv-docs-metadata-detail__header">
+      <div className="vf-docs-metadata-detail__header">
         <div>
           <Heading level={3} size="md">
             {toText(component.name)}
@@ -461,9 +461,9 @@ function ComponentDetail({ component }: { component: MetadataRecord }) {
       <DetailSection title="AI usage notes">
         <Text>{toText(component.aiUsageNotes)}</Text>
       </DetailSection>
-      <details className="dv-docs-metadata-raw dv-docs-metadata-raw--compact">
+      <details className="vf-docs-metadata-raw vf-docs-metadata-raw--compact">
         <summary>Raw metadata</summary>
-        <pre className="dv-docs-metadata-code">
+        <pre className="vf-docs-metadata-code">
           <code>{JSON.stringify(component, null, 2)}</code>
         </pre>
       </details>
@@ -475,12 +475,12 @@ function CssImportsMetadata({ data }: { data: MetadataRecord }) {
   const imports = useMemo(() => asArray(data.imports).map(asRecord), [data]);
 
   return (
-    <div className="dv-docs-metadata">
-      <Card className="dv-docs-metadata-summary" padding="md">
+    <div className="vf-docs-metadata">
+      <Card className="vf-docs-metadata-summary" padding="md">
         <Heading level={3} size="sm">
           Recommended import order
         </Heading>
-        <ol className="dv-docs-metadata-order">
+        <ol className="vf-docs-metadata-order">
           {asArray(data.recommendedOrder).map((item, index) => (
             <li key={`${toText(item)}-${index}`}>
               <code>{toText(item)}</code>
@@ -488,15 +488,15 @@ function CssImportsMetadata({ data }: { data: MetadataRecord }) {
           ))}
         </ol>
       </Card>
-      <div className="dv-docs-metadata-table dv-docs-metadata-table--imports">
-        <div className="dv-docs-metadata-table__head">
+      <div className="vf-docs-metadata-table vf-docs-metadata-table--imports">
+        <div className="vf-docs-metadata-table__head">
           <span>Package</span>
           <span>Import path</span>
           <span>Required for</span>
           <span>Notes</span>
         </div>
         {imports.map((item) => (
-          <article className="dv-docs-metadata-table__row" key={toText(item.importPath)}>
+          <article className="vf-docs-metadata-table__row" key={toText(item.importPath)}>
             <strong>{toText(item.package)}</strong>
             <code>{toText(item.importPath)}</code>
             <MetadataChips items={asArray(item.requiredFor)} />
@@ -504,7 +504,7 @@ function CssImportsMetadata({ data }: { data: MetadataRecord }) {
           </article>
         ))}
       </div>
-      <Card className="dv-docs-metadata-summary" padding="md">
+      <Card className="vf-docs-metadata-summary" padding="md">
         <Heading level={3} size="sm">
           Rules
         </Heading>
@@ -519,18 +519,18 @@ function StateContractsMetadata({ data }: { data: MetadataRecord }) {
   const policies = asRecord(data.policies);
 
   return (
-    <div className="dv-docs-metadata">
+    <div className="vf-docs-metadata">
       <section>
         <Heading level={3} size="md">
           State ownership
         </Heading>
-        <div className="dv-docs-metadata-section-grid">
+        <div className="vf-docs-metadata-section-grid">
           {Object.entries(ownership).map(([key, value]) => {
             const record = asRecord(value);
 
             return (
-              <Card className="dv-docs-metadata-summary" key={key} padding="md">
-                <div className="dv-docs-metadata-summary__header">
+              <Card className="vf-docs-metadata-summary" key={key} padding="md">
+                <div className="vf-docs-metadata-summary__header">
                   <Heading level={4} size="sm">
                     {key}
                   </Heading>
@@ -553,12 +553,12 @@ function StateContractsMetadata({ data }: { data: MetadataRecord }) {
         <Heading level={3} size="md">
           Policies
         </Heading>
-        <div className="dv-docs-metadata-section-grid">
+        <div className="vf-docs-metadata-section-grid">
           {Object.entries(policies).map(([key, value]) => {
             const record = asRecord(value);
 
             return (
-              <Card className="dv-docs-metadata-summary" key={key} padding="md">
+              <Card className="vf-docs-metadata-summary" key={key} padding="md">
                 <Heading level={4} size="sm">
                   {key}
                 </Heading>
@@ -604,7 +604,7 @@ function AiRulesMetadata({ data }: { data: MetadataRecord }) {
   );
 
   return (
-    <div className="dv-docs-metadata">
+    <div className="vf-docs-metadata">
       <MetadataToolbar
         count={filteredRules.length}
         onSearch={setQuery}
@@ -613,14 +613,14 @@ function AiRulesMetadata({ data }: { data: MetadataRecord }) {
         total={rules.length}
         value={query}
       />
-      <div className="dv-docs-metadata-table dv-docs-metadata-table--rules">
-        <div className="dv-docs-metadata-table__head">
+      <div className="vf-docs-metadata-table vf-docs-metadata-table--rules">
+        <div className="vf-docs-metadata-table__head">
           <span>Rule</span>
           <span>Guidance</span>
           <span>Reason</span>
         </div>
         {filteredRules.map((rule) => (
-          <article className="dv-docs-metadata-table__row" key={toText(rule.id)}>
+          <article className="vf-docs-metadata-table__row" key={toText(rule.id)}>
             <strong>{toText(rule.id)}</strong>
             <Text>{toText(rule.rule)}</Text>
             <Text tone="muted">{toText(rule.reason)}</Text>
@@ -629,7 +629,7 @@ function AiRulesMetadata({ data }: { data: MetadataRecord }) {
       </div>
       {filteredRules.length === 0 && (
         <EmptyState
-          className="dv-docs-metadata-empty"
+          className="vf-docs-metadata-empty"
           title="No rules found"
           description="No AI rules match the current search."
         />
@@ -642,8 +642,8 @@ export function MetadataPage({ route }: MetadataPageProps) {
   const data = asRecord(parseJson(route.content ?? ""));
 
   return (
-    <div className="dv-docs-reference">
-      <InlineMessage className="dv-docs-metadata-note" variant="info">
+    <div className="vf-docs-reference">
+      <InlineMessage className="vf-docs-metadata-note" variant="info">
         Metadata powers the docs UI and AI lookups. Markdown docs remain the
         source of truth for project direction.
       </InlineMessage>
@@ -654,9 +654,9 @@ export function MetadataPage({ route }: MetadataPageProps) {
         <StateContractsMetadata data={data} />
       )}
       {route.id === "metadata-ai-usage-rules" && <AiRulesMetadata data={data} />}
-      <details className="dv-docs-metadata-raw">
+      <details className="vf-docs-metadata-raw">
         <summary>Raw JSON</summary>
-        <pre className="dv-docs-metadata-code">
+        <pre className="vf-docs-metadata-code">
           <code>{formatJson(route.content ?? "")}</code>
         </pre>
       </details>

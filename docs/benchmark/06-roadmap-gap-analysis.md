@@ -7,7 +7,7 @@ This gap analysis uses the benchmark comparison to prioritize VyrnForge's next w
 | Area | Current assets |
 | --- | --- |
 | Package structure | `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, `@vyrnforge/ui-data-grid` |
-| Theme foundation | Shared `--dv-*` tokens, light/dark/system/enterprise themes, density tokens, utilities |
+| Theme foundation | Shared `--vf-*` tokens, light/dark/system/enterprise themes, density tokens, utilities |
 | Component primitives | Buttons, icon buttons, toolbar buttons, segmented control, typography, badges, field/input/select/checkbox/textarea, feedback states, card/panel/stack/inline/section, popover/menu/dropdown/tooltip/dialog/drawer/confirm dialog |
 | Grid foundation | Native table grid, search, filters state/core logic, sorting, pagination, column management, resizing, selection, bulk actions, grouping, persistence, server query builder, export request builder |
 | Architecture | State ownership docs, package boundaries, clean architecture folders, adapter boundaries, Redux policy |

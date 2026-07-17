@@ -35,13 +35,13 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       <button
         aria-pressed={isPressed}
         className={joinClassNames(
-          "dv-toggle-button",
-          `dv-toggle-button--${resolvedSize}`,
-          `dv-toggle-button--${variant}`,
-          isPressed && "dv-toggle-button--pressed",
+          "vf-toggle-button",
+          `vf-toggle-button--${resolvedSize}`,
+          `vf-toggle-button--${variant}`,
+          isPressed && "vf-toggle-button--pressed",
           className
         )}
-        data-dv-toggle-button
+        data-vf-toggle-button
         disabled={resolvedDisabled}
         onClick={(event) => {
           onClick?.(event);
@@ -60,8 +60,8 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
         type={type}
         {...props}
       >
-        {icon && <span aria-hidden="true" className="dv-toggle-button__icon">{icon}</span>}
-        {children && <span className="dv-toggle-button__label">{children}</span>}
+        {icon && <span aria-hidden="true" className="vf-toggle-button__icon">{icon}</span>}
+        {children && <span className="vf-toggle-button__label">{children}</span>}
       </button>
     );
   }

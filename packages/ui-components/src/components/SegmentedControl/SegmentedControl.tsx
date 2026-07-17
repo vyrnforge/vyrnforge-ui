@@ -13,8 +13,8 @@ export function SegmentedControl({
     <div
       aria-label={ariaLabel}
       className={joinClassNames(
-        "dv-segmented-control",
-        `dv-segmented-control--${size}`,
+        "vf-segmented-control",
+        `vf-segmented-control--${size}`,
         className
       )}
       role="radiogroup"
@@ -26,8 +26,8 @@ export function SegmentedControl({
           <button
             aria-checked={selected}
             className={joinClassNames(
-              "dv-segmented-control__item",
-              selected && "dv-segmented-control__item--selected"
+              "vf-segmented-control__item",
+              selected && "vf-segmented-control__item--selected"
             )}
             disabled={option.disabled}
             key={option.value}
@@ -40,9 +40,9 @@ export function SegmentedControl({
             type="button"
           >
             {option.icon && (
-              <span className="dv-segmented-control__icon">{option.icon}</span>
+              <span className="vf-segmented-control__icon">{option.icon}</span>
             )}
-            <span className="dv-segmented-control__label">{option.label}</span>
+            <span className="vf-segmented-control__label">{option.label}</span>
           </button>
         );
       })}

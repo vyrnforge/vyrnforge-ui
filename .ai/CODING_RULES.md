@@ -13,11 +13,11 @@
 
 - Static styling belongs in CSS.
 - TSX should use classes and dynamic CSS variables only.
-- Use `dv-*` classes for shared components.
+- Use `vf-*` classes for shared components.
 - Use `udg-*` classes for data grid only.
-- Use `--dv-*` tokens for shared theme values.
+- Use `--vf-*` tokens for shared theme values.
 - Use `--udg-*` variables for grid-specific styling.
-- Map grid variables to `--dv-*` when practical.
+- Map grid variables to `--vf-*` when practical.
 
 ## Data Grid
 

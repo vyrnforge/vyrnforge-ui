@@ -54,10 +54,10 @@ export function TransferListPanel({
   visibleOptions
 }: TransferListPanelProps) {
   const generatedId = useId().replace(/:/g, "");
-  const titleId = `dv-transfer-list-${generatedId}-title`;
-  const countId = `dv-transfer-list-${generatedId}-count`;
+  const titleId = `vf-transfer-list-${generatedId}-title`;
+  const countId = `vf-transfer-list-${generatedId}-count`;
   const descriptionId = description
-    ? `dv-transfer-list-${generatedId}-description`
+    ? `vf-transfer-list-${generatedId}-description`
     : undefined;
   const selectAllRef = useRef<HTMLInputElement>(null);
   const enabledVisibleOptions = visibleOptions.filter((option) => !option.disabled);
@@ -97,20 +97,20 @@ export function TransferListPanel({
     <section
       aria-describedby={[descriptionId, countId].filter(Boolean).join(" ") || undefined}
       aria-labelledby={titleId}
-      className="dv-transfer-list__panel"
+      className="vf-transfer-list__panel"
       onKeyDown={handleKeyDown}
       role="group"
     >
-      <div className="dv-transfer-list__panel-header">
-        <div className="dv-transfer-list__panel-heading">
-          <h3 className="dv-transfer-list__panel-title" id={titleId}>{title}</h3>
+      <div className="vf-transfer-list__panel-header">
+        <div className="vf-transfer-list__panel-heading">
+          <h3 className="vf-transfer-list__panel-title" id={titleId}>{title}</h3>
           {description && (
-            <p className="dv-transfer-list__panel-description" id={descriptionId}>
+            <p className="vf-transfer-list__panel-description" id={descriptionId}>
               {description}
             </p>
           )}
         </div>
-        <div className="dv-transfer-list__panel-count" id={countId}>
+        <div className="vf-transfer-list__panel-count" id={countId}>
           <Badge size="sm" tone="subtle">{options.length} items</Badge>
           <Badge size="sm" tone={totalSelectedCount > 0 ? "solid" : "subtle"} variant={totalSelectedCount > 0 ? "info" : "neutral"}>
             {totalSelectedCount} selected
@@ -125,13 +125,13 @@ export function TransferListPanel({
           placeholder={searchPlaceholder}
           size="sm"
           value={query}
-          wrapperClassName="dv-transfer-list__search"
+          wrapperClassName="vf-transfer-list__search"
         />
       )}
-      <label className="dv-transfer-list__select-all">
+      <label className="vf-transfer-list__select-all">
         <input
           checked={allVisibleSelected}
-          className="dv-checkbox dv-checkbox--sm"
+          className="vf-checkbox vf-checkbox--sm"
           disabled={disabled || readOnly || enabledVisibleOptions.length === 0}
           onChange={(event) => onSelectVisible(event.currentTarget.checked)}
           ref={selectAllRef}
@@ -139,10 +139,10 @@ export function TransferListPanel({
         />
         <span>Select visible</span>
       </label>
-      <div className="dv-transfer-list__options">
+      <div className="vf-transfer-list__options">
         {visibleOptions.length > 0 ? (
           visibleOptions.map((option) => {
-            const checkboxId = `dv-transfer-list-${generatedId}-${encodeURIComponent(option.value)}`;
+            const checkboxId = `vf-transfer-list-${generatedId}-${encodeURIComponent(option.value)}`;
             const descriptionIdForOption = option.description
               ? `${checkboxId}-description`
               : undefined;
@@ -165,7 +165,7 @@ export function TransferListPanel({
             );
           })
         ) : (
-          <div className="dv-transfer-list__empty" role="status">
+          <div className="vf-transfer-list__empty" role="status">
             {emptyText}
           </div>
         )}

@@ -47,15 +47,15 @@ function SelectionPageContent() {
   ];
 
   return (
-    <section className="dv-playground-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <h2>Selection and bulk actions</h2>
           <GridNote>Suspended rows are visible but not selectable in this example.</GridNote>
         </div>
       </div>
       <UniversalDataGrid
-        tableId="dv-playground-selection"
+        tableId="vf-playground-selection"
         rows={users.slice(0, 32)}
         columns={userColumns}
         getRowId={(row) => row.id}

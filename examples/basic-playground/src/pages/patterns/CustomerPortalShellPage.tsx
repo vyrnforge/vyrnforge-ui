@@ -14,20 +14,20 @@ import {
 
 export function CustomerPortalShellPage() {
   return (
-    <section className="dv-playground-panel" data-theme="enterprise">
+    <section className="vf-playground-panel" data-theme="enterprise">
       <PageHeader
         description="A customer-facing portal shell that keeps navigation predictable while letting the application own account, auth, and workflow state."
         status={<Badge variant="info">portal pattern</Badge>}
         title="Customer portal shell pattern"
       />
       <AppShell
-        className="dv-playground-shell-preview"
+        className="vf-playground-shell-preview"
         fullHeight={false}
         header={
           <TopNav
             brand={
-              <span className="dv-playground-top-brand">
-                <span className="dv-playground-brand__mark">D</span>
+              <span className="vf-playground-top-brand">
+                <span className="vf-playground-brand__mark">D</span>
                 Customer Portal
               </span>
             }
@@ -52,7 +52,7 @@ export function CustomerPortalShellPage() {
         sidebarPosition="sticky"
         sidebarWidth={250}
       >
-        <div className="dv-playground-shell-preview__content">
+        <div className="vf-playground-shell-preview__content">
           <PageHeader
             breadcrumbs={
               <Breadcrumbs

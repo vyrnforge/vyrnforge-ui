@@ -12,15 +12,15 @@ const stressRows = Array.from({ length: 4 }, (_, round) =>
 
 export function StressGridPage() {
   return (
-    <section className="dv-playground-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <h2>Stress grid</h2>
           <GridNote>Several hundred rows and wider columns exercise existing pagination and layout behavior.</GridNote>
         </div>
       </div>
       <UniversalDataGrid
-        tableId="dv-playground-stress"
+        tableId="vf-playground-stress"
         rows={stressRows}
         columns={stressColumns}
         getRowId={(row) => row.id}

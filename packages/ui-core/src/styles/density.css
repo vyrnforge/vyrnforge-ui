@@ -1,22 +1,22 @@
 [data-density="compact"],
-.dv-density-compact {
-  --dv-control-height: 30px;
-  --dv-control-padding-x: 10px;
-  --dv-font-size-md: 13px;
-  --dv-row-height: 36px;
+.vf-density-compact {
+  --vf-control-height: 30px;
+  --vf-control-padding-x: 10px;
+  --vf-font-size-md: 13px;
+  --vf-row-height: 36px;
 }
 
 [data-density="standard"],
-.dv-density-standard {
-  --dv-control-height: 36px;
-  --dv-control-padding-x: 12px;
-  --dv-row-height: 44px;
+.vf-density-standard {
+  --vf-control-height: 36px;
+  --vf-control-padding-x: 12px;
+  --vf-row-height: 44px;
 }
 
 [data-density="comfortable"],
-.dv-density-comfortable {
-  --dv-control-height: 42px;
-  --dv-control-padding-x: 14px;
-  --dv-font-size-md: 15px;
-  --dv-row-height: 52px;
+.vf-density-comfortable {
+  --vf-control-height: 42px;
+  --vf-control-padding-x: 14px;
+  --vf-font-size-md: 15px;
+  --vf-row-height: 52px;
 }

@@ -32,43 +32,43 @@ export function AppShell({
   const hasHeader = Boolean(header);
   const hasSidebar = Boolean(sidebar);
   const shellStyle = {
-    "--dv-app-shell-header-height": toCssSize(headerHeight),
-    "--dv-app-shell-sidebar-width": toCssSize(sidebarWidth),
-    "--dv-app-shell-sidebar-collapsed-width": toCssSize(collapsedSidebarWidth),
-    "--dv-app-shell-collapsed-sidebar-width": toCssSize(collapsedSidebarWidth),
-    "--dv-app-shell-min-height": toCssSize(minHeight),
+    "--vf-app-shell-header-height": toCssSize(headerHeight),
+    "--vf-app-shell-sidebar-width": toCssSize(sidebarWidth),
+    "--vf-app-shell-sidebar-collapsed-width": toCssSize(collapsedSidebarWidth),
+    "--vf-app-shell-collapsed-sidebar-width": toCssSize(collapsedSidebarWidth),
+    "--vf-app-shell-min-height": toCssSize(minHeight),
     ...style
   } as CSSProperties;
 
   return (
     <div
       className={joinClassNames(
-        "dv-app-shell",
-        hasSidebar && "dv-app-shell--with-sidebar",
-        hasHeader && "dv-app-shell--with-header",
-        hasFooter && "dv-app-shell--with-footer",
-        fullHeight && "dv-app-shell--full-height",
-        `dv-app-shell--scroll-${scrollMode}`,
-        `dv-app-shell--header-${headerPosition}`,
-        `dv-app-shell--sidebar-${sidebarPosition}`,
-        sidebarCollapsed && "dv-app-shell--sidebar-collapsed",
+        "vf-app-shell",
+        hasSidebar && "vf-app-shell--with-sidebar",
+        hasHeader && "vf-app-shell--with-header",
+        hasFooter && "vf-app-shell--with-footer",
+        fullHeight && "vf-app-shell--full-height",
+        `vf-app-shell--scroll-${scrollMode}`,
+        `vf-app-shell--header-${headerPosition}`,
+        `vf-app-shell--sidebar-${sidebarPosition}`,
+        sidebarCollapsed && "vf-app-shell--sidebar-collapsed",
         className
       )}
       style={shellStyle}
       {...props}
     >
-      {header && <header className="dv-app-shell__header">{header}</header>}
-      <div className="dv-app-shell__body">
+      {header && <header className="vf-app-shell__header">{header}</header>}
+      <div className="vf-app-shell__body">
         {sidebar && (
-          <aside className="dv-app-shell__sidebar">
-            <div className="dv-app-shell__sidebar-scroll">{sidebar}</div>
+          <aside className="vf-app-shell__sidebar">
+            <div className="vf-app-shell__sidebar-scroll">{sidebar}</div>
           </aside>
         )}
-        <div className="dv-app-shell__main">
-          <div className="dv-app-shell__content">{children}</div>
+        <div className="vf-app-shell__main">
+          <div className="vf-app-shell__content">{children}</div>
         </div>
       </div>
-      {footer && <footer className="dv-app-shell__footer">{footer}</footer>}
+      {footer && <footer className="vf-app-shell__footer">{footer}</footer>}
     </div>
   );
 }

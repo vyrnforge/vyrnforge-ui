@@ -6,7 +6,7 @@ export type LivePreviewProps = {
 
 export function LivePreview({ minHeight }: LivePreviewProps) {
   return (
-    <div className="dv-playground-live-preview" style={{ minHeight }}>
+    <div className="vf-playground-live-preview" style={{ minHeight }}>
       <ReactLivePreview />
     </div>
   );

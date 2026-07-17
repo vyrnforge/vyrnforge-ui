@@ -17,16 +17,16 @@
     {
       "package": "@vyrnforge/ui-core",
       "importPath": "@vyrnforge/ui-core/styles/index.css",
-      "requiredFor": ["shared --dv-* tokens", "theme presets", "density tokens", "utility classes"],
+      "requiredFor": ["shared --vf-* tokens", "theme presets", "density tokens", "utility classes"],
       "mustComeBefore": ["@vyrnforge/ui-components/styles/index.css", "@vyrnforge/ui-data-grid/styles/index.css"],
-      "notes": "ui-core owns shared --dv-* design tokens, reset, density, utilities, and accessibility helpers."
+      "notes": "ui-core owns shared --vf-* design tokens, reset, density, utilities, and accessibility helpers."
     },
     {
       "package": "@vyrnforge/ui-components",
       "importPath": "@vyrnforge/ui-components/styles/index.css",
-      "requiredFor": ["dv-* component classes", "shared component visual states"],
+      "requiredFor": ["vf-* component classes", "shared component visual states"],
       "mustComeBefore": ["@vyrnforge/ui-data-grid/styles/index.css"],
-      "notes": "ui-components consumes --dv-* variables and owns dv-* component classes split by component family internally."
+      "notes": "ui-components consumes --vf-* variables and owns vf-* component classes split by component family internally."
     },
     {
       "package": "@vyrnforge/ui-data-grid",
@@ -40,7 +40,7 @@
     "Import ui-core styles before ui-components styles.",
     "Import ui-components styles before ui-data-grid styles.",
     "Do not import internal package CSS module files directly.",
-    "Override --dv-* tokens for app-wide theme changes.",
+    "Override --vf-* tokens for app-wide theme changes.",
     "Override --udg-* variables for grid-specific changes.",
     "Do not edit package CSS directly in consuming apps."
   ]

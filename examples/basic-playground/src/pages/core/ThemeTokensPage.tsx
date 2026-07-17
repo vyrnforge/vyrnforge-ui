@@ -1,52 +1,52 @@
 import { Heading, Text } from "@vyrnforge/ui-components";
 
 const tokens = [
-  ["Background", "--dv-bg", "var(--dv-bg)"],
-  ["Surface", "--dv-surface", "var(--dv-surface)"],
-  ["Subtle surface", "--dv-surface-subtle", "var(--dv-surface-subtle)"],
-  ["Text", "--dv-text", "var(--dv-text)"],
-  ["Muted text", "--dv-text-muted", "var(--dv-text-muted)"],
-  ["Border", "--dv-border", "var(--dv-border)"],
-  ["Primary", "--dv-primary", "var(--dv-primary)"],
-  ["Danger", "--dv-danger", "var(--dv-danger)"],
-  ["Warning", "--dv-warning", "var(--dv-warning)"],
-  ["Success", "--dv-success", "var(--dv-success)"],
-  ["Info", "--dv-info", "var(--dv-info)"],
-  ["Focus", "--dv-focus-ring", "var(--dv-focus-ring)"]
+  ["Background", "--vf-bg", "var(--vf-bg)"],
+  ["Surface", "--vf-surface", "var(--vf-surface)"],
+  ["Subtle surface", "--vf-surface-subtle", "var(--vf-surface-subtle)"],
+  ["Text", "--vf-text", "var(--vf-text)"],
+  ["Muted text", "--vf-text-muted", "var(--vf-text-muted)"],
+  ["Border", "--vf-border", "var(--vf-border)"],
+  ["Primary", "--vf-primary", "var(--vf-primary)"],
+  ["Danger", "--vf-danger", "var(--vf-danger)"],
+  ["Warning", "--vf-warning", "var(--vf-warning)"],
+  ["Success", "--vf-success", "var(--vf-success)"],
+  ["Info", "--vf-info", "var(--vf-info)"],
+  ["Focus", "--vf-focus-ring", "var(--vf-focus-ring)"]
 ];
 
 const scaleTokens = [
-  ["Small radius", "--dv-radius-sm"],
-  ["Medium radius", "--dv-radius-md"],
-  ["Large radius", "--dv-radius-lg"],
-  ["Control height", "--dv-control-height"],
-  ["Row height", "--dv-row-height"],
-  ["Space 2", "--dv-space-2"],
-  ["Space 3", "--dv-space-3"],
-  ["Space 4", "--dv-space-4"]
+  ["Small radius", "--vf-radius-sm"],
+  ["Medium radius", "--vf-radius-md"],
+  ["Large radius", "--vf-radius-lg"],
+  ["Control height", "--vf-control-height"],
+  ["Row height", "--vf-row-height"],
+  ["Space 2", "--vf-space-2"],
+  ["Space 3", "--vf-space-3"],
+  ["Space 4", "--vf-space-4"]
 ];
 
 export function ThemeTokensPage() {
   return (
-    <section className="dv-playground-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <Heading size="md">Shared dv token contract</Heading>
           <Text tone="muted">Components and grid examples inherit these values from ui-core.</Text>
         </div>
       </div>
-      <div className="dv-playground-token-grid">
+      <div className="vf-playground-token-grid">
         {tokens.map(([label, name, value]) => (
-          <div className="dv-playground-token-card" key={name}>
-            <span className="dv-playground-token-swatch" style={{ background: value }} />
+          <div className="vf-playground-token-card" key={name}>
+            <span className="vf-playground-token-swatch" style={{ background: value }} />
             <strong>{label}</strong>
             <code>{name}</code>
           </div>
         ))}
       </div>
-      <div className="dv-playground-scale-grid">
+      <div className="vf-playground-scale-grid">
         {scaleTokens.map(([label, name]) => (
-          <div className="dv-playground-scale-row" key={name}>
+          <div className="vf-playground-scale-row" key={name}>
             <strong>{label}</strong>
             <code>{name}</code>
             <span style={{ width: `var(${name}, 24px)`, borderRadius: name.includes("radius") ? `var(${name}, 8px)` : 4 }} />

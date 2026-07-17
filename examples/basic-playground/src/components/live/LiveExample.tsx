@@ -17,9 +17,9 @@ export function LiveExample({
   resetKey
 }: LiveExampleProps) {
   return (
-    <Panel className="dv-playground-live-example" title={title} description={description} actions={<Badge size="sm" tone="subtle">Live</Badge>}>
+    <Panel className="vf-playground-live-example" title={title} description={description} actions={<Badge size="sm" tone="subtle">Live</Badge>}>
       {imports && (
-        <div className="dv-playground-live-import">
+        <div className="vf-playground-live-import">
           <Text size="sm" tone="muted">Import</Text>
           <pre><code>{imports}</code></pre>
         </div>

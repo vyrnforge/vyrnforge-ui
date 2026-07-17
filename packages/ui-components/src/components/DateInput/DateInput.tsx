@@ -8,9 +8,9 @@ export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
       <input
         aria-invalid={invalid || undefined}
         className={joinClassNames(
-          "dv-input",
-          "dv-date-input",
-          `dv-input--${size}`,
+          "vf-input",
+          "vf-date-input",
+          `vf-input--${size}`,
           className
         )}
         ref={ref}

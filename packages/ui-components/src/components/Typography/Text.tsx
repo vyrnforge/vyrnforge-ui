@@ -14,9 +14,9 @@ export function Text({
   return (
     <Component
       className={joinClassNames(
-        "dv-text",
-        `dv-text--${size}`,
-        tone !== "default" && `dv-text--${tone}`,
+        "vf-text",
+        `vf-text--${size}`,
+        tone !== "default" && `vf-text--${tone}`,
         className
       )}
       {...props}

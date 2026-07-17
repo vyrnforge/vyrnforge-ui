@@ -29,7 +29,7 @@ export default function App() {
   };
 
   return (
-    <div className="dv-docs-app" data-theme={theme}>
+    <div className="vf-docs-app" data-theme={theme}>
       <DocsShell
         activeRoute={activeRoute}
         headerAction={

@@ -12,10 +12,10 @@ export function ButtonGroup({
     <div
       aria-orientation={orientation}
       className={joinClassNames(
-        "dv-button-group",
-        `dv-button-group--${orientation}`,
-        `dv-button-group--${size}`,
-        attached && "dv-button-group--attached",
+        "vf-button-group",
+        `vf-button-group--${orientation}`,
+        `vf-button-group--${size}`,
+        attached && "vf-button-group--attached",
         className
       )}
       role="group"

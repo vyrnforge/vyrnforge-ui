@@ -91,9 +91,9 @@ export function useAnchoredPosition({
     }
 
     if (matchAnchorWidth) {
-      floating.style.setProperty("--dv-overlay-anchor-width", `${anchorRect.width}px`);
+      floating.style.setProperty("--vf-overlay-anchor-width", `${anchorRect.width}px`);
     } else {
-      floating.style.removeProperty("--dv-overlay-anchor-width");
+      floating.style.removeProperty("--vf-overlay-anchor-width");
     }
 
     setPosition((current) => ({ ...current, ...next, ready: true }));

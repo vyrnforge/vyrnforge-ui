@@ -15,7 +15,7 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-`@vyrnforge/ui-components` consumes shared `--dv-*` variables from `@vyrnforge/ui-core`, so light, dark, enterprise, density, and scoped token overrides flow through the primitives.
+`@vyrnforge/ui-components` consumes shared `--vf-*` variables from `@vyrnforge/ui-core`, so light, dark, enterprise, density, and scoped token overrides flow through the primitives.
 
 `@vyrnforge/ui-components` owns reusable UI primitives only. It does not own app business state, backend data, grid behavior, or a global store.
 
@@ -306,13 +306,13 @@ Dialog and drawer:
 
 ## Styling Architecture Rules
 
-- `ui-core` owns shared `--dv-*` tokens for color, surfaces, spacing, radius, shadows, typography, focus, and density.
-- `ui-components` owns reusable component styles through `dv-*` classes such as `dv-button`, `dv-icon-button`, `dv-input`, `dv-badge`, `dv-popover`, and `dv-dialog`.
+- `ui-core` owns shared `--vf-*` tokens for color, surfaces, spacing, radius, shadows, typography, focus, and density.
+- `ui-components` owns reusable component styles through `vf-*` classes such as `vf-button`, `vf-icon-button`, `vf-input`, `vf-badge`, `vf-popover`, and `vf-dialog`.
 - TSX should define structure, behavior, accessibility, state classes, and dynamic CSS variables only.
 - CSS owns static visual styling such as colors, spacing, borders, radius, shadows, typography, hover/focus/active/disabled states, themes, and density.
 - Use CSS variables for customization. Prefer scoped token overrides over editing package CSS directly.
 - Use `className` for structural extension and `style` only for instance-level overrides or dynamic runtime values.
-- Keep data-grid-specific styling in `@vyrnforge/ui-data-grid` with `udg-*` classes mapped to shared `dv-*` tokens.
+- Keep data-grid-specific styling in `@vyrnforge/ui-data-grid` with `udg-*` classes mapped to shared `vf-*` tokens.
 - Shared interaction hooks live under `src/hooks/` when they are React-specific to components.
 
 ## Dependency Policy

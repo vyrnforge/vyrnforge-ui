@@ -1,32 +1,32 @@
-.dv-radio-field {
+.vf-radio-field {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--dv-space-2);
-  color: var(--dv-text);
-  font-size: var(--dv-font-size-md);
-  line-height: var(--dv-line-height-md);
+  gap: var(--vf-space-2);
+  color: var(--vf-text);
+  font-size: var(--vf-font-size-md);
+  line-height: var(--vf-line-height-md);
 }
-.dv-radio {
+.vf-radio {
   width: 16px;
   height: 16px;
   margin: 2px 0 0;
-  accent-color: var(--dv-primary);
+  accent-color: var(--vf-primary);
 }
-.dv-radio[aria-invalid=true] {
-  outline: 1px solid var(--dv-danger);
+.vf-radio[aria-invalid=true] {
+  outline: 1px solid var(--vf-danger);
   outline-offset: 1px;
 }
-.dv-radio-field__content {
+.vf-radio-field__content {
   display: grid;
   gap: 2px;
   min-width: 0;
 }
-.dv-radio-field__label {
-  color: var(--dv-text-strong);
+.vf-radio-field__label {
+  color: var(--vf-text-strong);
   font-weight: 680;
 }
-.dv-radio-field__description {
-  color: var(--dv-text-muted);
-  font-size: var(--dv-font-size-sm);
-  line-height: var(--dv-line-height-md);
+.vf-radio-field__description {
+  color: var(--vf-text-muted);
+  font-size: var(--vf-font-size-sm);
+  line-height: var(--vf-line-height-md);
 }

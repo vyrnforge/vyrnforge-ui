@@ -51,10 +51,10 @@ export function ToggleButtonGroup({
         aria-label={ariaLabel}
         aria-orientation={orientation}
         className={joinClassNames(
-          "dv-toggle-button-group",
-          `dv-toggle-button-group--${orientation}`,
-          `dv-toggle-button-group--${type}`,
-          disabled && "dv-toggle-button-group--disabled",
+          "vf-toggle-button-group",
+          `vf-toggle-button-group--${orientation}`,
+          `vf-toggle-button-group--${type}`,
+          disabled && "vf-toggle-button-group--disabled",
           className
         )}
         onKeyDown={(event) => {
@@ -63,7 +63,7 @@ export function ToggleButtonGroup({
             return;
           }
 
-          const buttons = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>(".dv-toggle-button:not(:disabled)"));
+          const buttons = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>(".vf-toggle-button:not(:disabled)"));
           const currentIndex = buttons.indexOf(document.activeElement as HTMLButtonElement);
           if (currentIndex < 0 || buttons.length === 0) {
             return;

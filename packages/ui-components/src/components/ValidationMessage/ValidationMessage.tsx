@@ -12,8 +12,8 @@ export function ValidationMessage({
   return (
     <div
       className={joinClassNames(
-        "dv-validation-message",
-        `dv-validation-message--${normalizedTone}`,
+        "vf-validation-message",
+        `vf-validation-message--${normalizedTone}`,
         className
       )}
       role={normalizedTone === "error" ? "alert" : undefined}

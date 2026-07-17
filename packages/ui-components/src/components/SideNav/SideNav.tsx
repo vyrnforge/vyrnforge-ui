@@ -29,21 +29,21 @@ function renderItem({
   };
   const content = (
     <>
-      {item.icon && <span className="dv-side-nav__icon">{item.icon}</span>}
-      {!collapsed && <span className="dv-side-nav__label">{item.label}</span>}
+      {item.icon && <span className="vf-side-nav__icon">{item.icon}</span>}
+      {!collapsed && <span className="vf-side-nav__label">{item.label}</span>}
       {!collapsed && item.badge && (
-        <span className="dv-side-nav__badge">{item.badge}</span>
+        <span className="vf-side-nav__badge">{item.badge}</span>
       )}
     </>
   );
   const className = joinClassNames(
-    "dv-side-nav__item",
-    `dv-side-nav__item--level-${level}`,
-    active && "dv-side-nav__item--active"
+    "vf-side-nav__item",
+    `vf-side-nav__item--level-${level}`,
+    active && "vf-side-nav__item--active"
   );
 
   return (
-    <li className="dv-side-nav__entry" key={item.id}>
+    <li className="vf-side-nav__entry" key={item.id}>
       {item.href && !item.disabled ? (
         <a
           aria-current={active ? "page" : undefined}
@@ -67,7 +67,7 @@ function renderItem({
         </button>
       )}
       {!collapsed && item.children && item.children.length > 0 && (
-        <ul className="dv-side-nav__children">
+        <ul className="vf-side-nav__children">
           {item.children.map((child) =>
             renderItem({ activeId, collapsed, item: child, level: 2, onSelect })
           )}
@@ -91,21 +91,21 @@ export function SideNav({
     <nav
       aria-label={props["aria-label"] ?? "Primary navigation"}
       className={joinClassNames(
-        "dv-side-nav",
-        collapsed && "dv-side-nav--collapsed",
+        "vf-side-nav",
+        collapsed && "vf-side-nav--collapsed",
         className
       )}
       {...props}
     >
-      {header && <div className="dv-side-nav__header">{header}</div>}
-      <div className="dv-side-nav__scroll">
-        <ul className="dv-side-nav__list">
+      {header && <div className="vf-side-nav__header">{header}</div>}
+      <div className="vf-side-nav__scroll">
+        <ul className="vf-side-nav__list">
           {items.map((item) =>
             renderItem({ activeId, collapsed, item, level: 1, onSelect })
           )}
         </ul>
       </div>
-      {footer && <div className="dv-side-nav__footer">{footer}</div>}
+      {footer && <div className="vf-side-nav__footer">{footer}</div>}
     </nav>
   );
 }

@@ -6,5 +6,5 @@ type AutocompleteListboxProps = {
 };
 
 export function AutocompleteListbox({ children, id }: AutocompleteListboxProps) {
-  return <div aria-label="Suggestions" className="dv-autocomplete__listbox" id={id} role="listbox">{children}</div>;
+  return <div aria-label="Suggestions" className="vf-autocomplete__listbox" id={id} role="listbox">{children}</div>;
 }

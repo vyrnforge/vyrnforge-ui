@@ -44,18 +44,18 @@ export function Slider({
   };
 
   return (
-    <div className={joinClassNames("dv-slider", disabled && "dv-slider--disabled", className)} style={style}>
+    <div className={joinClassNames("vf-slider", disabled && "vf-slider--disabled", className)} style={style}>
       {(label || showValue) && (
-        <div className="dv-slider__header">
-          {label && <span className="dv-slider__label">{label}</span>}
-          {showValue && <output className="dv-slider__value" htmlFor={controlId}>{formatValue?.(currentValue) ?? currentValue}</output>}
+        <div className="vf-slider__header">
+          {label && <span className="vf-slider__label">{label}</span>}
+          {showValue && <output className="vf-slider__value" htmlFor={controlId}>{formatValue?.(currentValue) ?? currentValue}</output>}
         </div>
       )}
-      <span className="dv-slider__track" style={{ "--dv-slider-progress": `${percentage}%` } as CSSProperties}>
+      <span className="vf-slider__track" style={{ "--vf-slider-progress": `${percentage}%` } as CSSProperties}>
         <input
           aria-describedby={describedBy}
           aria-label={ariaLabel ?? (typeof label === "string" ? label : undefined)}
-          className="dv-slider__control"
+          className="vf-slider__control"
           disabled={disabled}
           id={controlId}
           max={rangeMax}
@@ -69,7 +69,7 @@ export function Slider({
           {...props}
         />
       </span>
-      {description && <span className="dv-slider__description" id={descriptionId}>{description}</span>}
+      {description && <span className="vf-slider__description" id={descriptionId}>{description}</span>}
     </div>
   );
 }

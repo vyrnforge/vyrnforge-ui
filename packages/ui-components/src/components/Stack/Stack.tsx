@@ -11,10 +11,10 @@ export function Stack({
   return (
     <div
       className={joinClassNames(
-        "dv-stack",
-        `dv-stack--gap-${gap}`,
-        `dv-stack--align-${align}`,
-        `dv-stack--justify-${justify}`,
+        "vf-stack",
+        `vf-stack--gap-${gap}`,
+        `vf-stack--align-${align}`,
+        `vf-stack--justify-${justify}`,
         className
       )}
       {...props}

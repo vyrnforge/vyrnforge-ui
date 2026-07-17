@@ -38,7 +38,7 @@ Use `docs/README.md` as the canonical documentation entrypoint.
 - Do not add MUI, AntD, Tailwind, Radix, Headless UI, styled-components, Emotion, or icon libraries by default.
 - Keep native React + TypeScript + CSS.
 - Keep static visual styling in CSS, not TSX.
-- Use `--dv-*` tokens for shared design.
+- Use `--vf-*` tokens for shared design.
 - Use `--udg-*` variables only for grid-specific styling.
 - Keep package CSS split by owner; consumers still import package-level `styles/index.css` files.
 - Do not store row data in grid state.

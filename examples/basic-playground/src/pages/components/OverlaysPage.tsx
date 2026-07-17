@@ -37,7 +37,7 @@ export function OverlaysPage() {
       title="Overlays"
       usage="Use a small anchored overlay for contextual content and a dialog or drawer for a focused task."
     >
-      <div className="dv-playground-page-stack">
+      <div className="vf-playground-page-stack">
       <Section
         title="Popover, menu, dropdown, and tooltip"
         description="Small anchored overlays use native events and CSS positioning."
@@ -47,7 +47,7 @@ export function OverlaysPage() {
             trigger={<Button leftSlot={<Icon name="Plus" />} variant="primary">Open popover</Button>}
             placement="bottom-start"
           >
-            <div className="dv-playground-overlay-demo-panel">
+            <div className="vf-playground-overlay-demo-panel">
               <Heading size="sm">Popover content</Heading>
               <Text tone="muted">Useful for simple forms, help panels, and previews.</Text>
               <Field htmlFor="popover-name" label="View name">
@@ -92,12 +92,12 @@ export function OverlaysPage() {
         </Inline>
       </Section>
 
-      <section className="dv-playground-grid two">
-        <div className="dv-playground-card" data-theme="dark">
+      <section className="vf-playground-grid two">
+        <div className="vf-playground-card" data-theme="dark">
           <Heading size="sm">Dark theme overlays</Heading>
           <Inline>
             <Popover trigger={<Button leftSlot={<Icon name="Info" />} variant="primary">Dark popover</Button>}>
-              <div className="dv-playground-overlay-demo-panel">
+              <div className="vf-playground-overlay-demo-panel">
                 <Text tone="strong">Dark scoped popover</Text>
                 <Text tone="muted">The overlay inherits dv tokens from the scoped theme.</Text>
               </div>
@@ -108,7 +108,7 @@ export function OverlaysPage() {
           </Inline>
         </div>
 
-        <div className="dv-playground-card" data-theme="enterprise">
+        <div className="vf-playground-card" data-theme="enterprise">
           <Heading size="sm">Enterprise theme overlays</Heading>
           <Menu
             trigger={<Button leftSlot={<Icon name="MoreHorizontal" />} variant="primary">Enterprise menu</Button>}

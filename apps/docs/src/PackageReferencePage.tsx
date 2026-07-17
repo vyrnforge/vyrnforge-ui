@@ -42,11 +42,11 @@ const dependencyRules = [
 
 export function PackageReferencePage() {
   return (
-    <div className="dv-docs-reference">
-      <div className="dv-docs-package-grid">
+    <div className="vf-docs-reference">
+      <div className="vf-docs-package-grid">
         {packages.map((packageInfo) => (
-          <Card className="dv-docs-package-card" key={packageInfo.name} padding="lg">
-            <div className="dv-docs-package-card__header">
+          <Card className="vf-docs-package-card" key={packageInfo.name} padding="lg">
+            <div className="vf-docs-package-card__header">
               <Heading level={3} size="md">
                 {packageInfo.name}
               </Heading>
@@ -64,13 +64,13 @@ export function PackageReferencePage() {
         ))}
       </div>
 
-      <Card className="dv-docs-reference__section" padding="lg">
+      <Card className="vf-docs-reference__section" padding="lg">
         <Heading level={3} size="md">
           Dependency direction
         </Heading>
-        <div className="dv-docs-dependency-list">
+        <div className="vf-docs-dependency-list">
           {dependencyRules.map((rule) => (
-            <CodeText className="dv-docs-dependency-item" key={rule}>
+            <CodeText className="vf-docs-dependency-item" key={rule}>
               {rule}
             </CodeText>
           ))}

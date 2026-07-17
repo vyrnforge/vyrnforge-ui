@@ -4,15 +4,15 @@ import { GridNote, resizableUserColumns } from "./gridShared";
 
 export function ResizingPage() {
   return (
-    <section className="dv-playground-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <h2>Resizable columns</h2>
           <GridNote>Columns define min widths and opt into the package's resize handling.</GridNote>
         </div>
       </div>
       <UniversalDataGrid
-        tableId="dv-playground-resizing"
+        tableId="vf-playground-resizing"
         rows={users}
         columns={resizableUserColumns}
         getRowId={(row) => row.id}

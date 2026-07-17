@@ -4,7 +4,7 @@
 
 ### Owns
 
-- `--dv-*` CSS variables
+- `--vf-*` CSS variables
 - theme presets: light, dark, system, enterprise
 - density tokens: compact, standard, comfortable
 - utility classes
@@ -22,7 +22,7 @@
 
 ### Owns
 
-- shared `dv-*` React components
+- shared `vf-*` React components
 - actions: Button, IconButton, ToolbarButton, SegmentedControl
 - forms: Field, TextInput, Select, Checkbox, etc.
 - feedback: Badge, EmptyState, ErrorState, LoadingState, Skeleton

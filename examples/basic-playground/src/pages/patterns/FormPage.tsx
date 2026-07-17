@@ -36,7 +36,7 @@ function FormPageContent() {
   const [roles, setRoles] = useState(["viewer"]);
 
   return (
-    <section className="dv-playground-panel dv-playground-form-grid">
+    <section className="vf-playground-panel vf-playground-form-grid">
       <div>
         <Heading size="md">Request form</Heading>
         <Text tone="muted">A create/edit pattern using completed native form primitives.</Text>
@@ -63,7 +63,7 @@ function FormPageContent() {
           { value: "change", label: "Change" }
         ]}
       />
-      <div className="dv-playground-grid two">
+      <div className="vf-playground-grid two">
         <Field label="Priority" htmlFor="request-priority">
           <Select
             id="request-priority"
@@ -79,7 +79,7 @@ function FormPageContent() {
           <NumberInput id="risk-score" mode="integer" min={0} max={100} defaultValue={74} />
         </Field>
       </div>
-      <div className="dv-playground-grid two">
+      <div className="vf-playground-grid two">
         <Field label="Needed by" htmlFor="needed-by" required>
           <DateInput id="needed-by" defaultValue="2026-07-17" />
         </Field>
@@ -117,7 +117,7 @@ function FormPageContent() {
           Resolve the highlighted fields and try again. This persistent message stays in context while the toast is transient.
         </InlineMessage>
       )}
-      <div className="dv-playground-inline-actions dv-playground-form-footer">
+      <div className="vf-playground-inline-actions vf-playground-form-footer">
         <Button
           disabled={!acknowledged}
           leftSlot={<Icon name="Check" />}

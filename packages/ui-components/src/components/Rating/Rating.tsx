@@ -39,21 +39,21 @@ export function Rating({
     return (
       <div
         aria-label={`${accessibleLabel}: ${getLabelText(currentValue, ratingMax)}`}
-        className={joinClassNames("dv-rating", "dv-rating--read-only", className)}
+        className={joinClassNames("vf-rating", "vf-rating--read-only", className)}
         role="img"
         style={style}
       >
-        {label && <span className="dv-rating__label">{label}</span>}
-        <span className="dv-rating__items">
+        {label && <span className="vf-rating__label">{label}</span>}
+        <span className="vf-rating__items">
           {Array.from({ length: ratingMax }, (_, index) => {
             const itemValue = index + 1;
             return (
               <span
                 aria-hidden="true"
-                className={joinClassNames("dv-rating__item", itemValue <= currentValue && "dv-rating__item--selected")}
+                className={joinClassNames("vf-rating__item", itemValue <= currentValue && "vf-rating__item--selected")}
                 key={itemValue}
               >
-                <span className="dv-rating__icon">
+                <span className="vf-rating__icon">
                   {itemValue <= currentValue ? icon ?? <Icon name="Star" /> : emptyIcon ?? <Icon name="Star" />}
                 </span>
               </span>
@@ -67,12 +67,12 @@ export function Rating({
   return (
     <fieldset
       aria-label={label ? undefined : accessibleLabel}
-      className={joinClassNames("dv-rating", disabled && "dv-rating--disabled", className)}
+      className={joinClassNames("vf-rating", disabled && "vf-rating--disabled", className)}
       disabled={disabled}
       style={style}
     >
-      {label && <legend className="dv-rating__label">{label}</legend>}
-      <span className="dv-rating__items">
+      {label && <legend className="vf-rating__label">{label}</legend>}
+      <span className="vf-rating__items">
         {Array.from({ length: ratingMax }, (_, index) => {
           const itemValue = index + 1;
           const selected = currentValue === itemValue;
@@ -80,13 +80,13 @@ export function Rating({
 
           return (
             <label
-              className={joinClassNames("dv-rating__item", itemValue <= currentValue && "dv-rating__item--selected")}
+              className={joinClassNames("vf-rating__item", itemValue <= currentValue && "vf-rating__item--selected")}
               key={itemValue}
             >
               <input
                 aria-label={itemLabel}
                 checked={selected}
-                className="dv-rating__input"
+                className="vf-rating__input"
                 name={ratingName}
                 onChange={() => setCurrentValue(itemValue)}
                 onClick={(event) => {
@@ -99,10 +99,10 @@ export function Rating({
                 type="radio"
                 value={itemValue}
               />
-              <span aria-hidden="true" className="dv-rating__icon">
+              <span aria-hidden="true" className="vf-rating__icon">
                 {itemValue <= currentValue ? icon ?? <Icon name="Star" /> : emptyIcon ?? <Icon name="Star" />}
               </span>
-              <span className="dv-sr-only">{itemLabel}</span>
+              <span className="vf-sr-only">{itemLabel}</span>
             </label>
           );
         })}

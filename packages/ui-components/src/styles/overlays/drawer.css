@@ -1,38 +1,38 @@
-.dv-drawer__overlay {
+.vf-drawer__overlay {
   align-items: stretch;
   justify-items: end;
 }
-.dv-drawer--left .dv-drawer__overlay {
+.vf-drawer--left .vf-drawer__overlay {
   justify-items: start;
 }
-.dv-drawer--bottom .dv-drawer__overlay {
+.vf-drawer--bottom .vf-drawer__overlay {
   align-items: end;
   justify-items: stretch;
 }
-.dv-drawer--top .dv-drawer__overlay {
+.vf-drawer--top .vf-drawer__overlay {
   align-items: start;
   justify-items: stretch;
 }
-.dv-drawer__panel {
+.vf-drawer__panel {
   height: 100vh;
   width: min(100vw, 420px);
 }
-.dv-drawer__panel--sm {
+.vf-drawer__panel--sm {
   width: min(100vw, 340px);
 }
-.dv-drawer__panel--md {
+.vf-drawer__panel--md {
   width: min(100vw, 420px);
 }
-.dv-drawer__panel--lg {
+.vf-drawer__panel--lg {
   width: min(100vw, 560px);
 }
-.dv-drawer__panel--bottom {
+.vf-drawer__panel--bottom {
   width: 100%;
   height: min(70vh, 520px);
-  border-radius: var(--dv-radius-lg) var(--dv-radius-lg) 0 0;
+  border-radius: var(--vf-radius-lg) var(--vf-radius-lg) 0 0;
 }
-.dv-drawer__panel--top {
+.vf-drawer__panel--top {
   width: 100%;
   height: min(70vh, 520px);
-  border-radius: 0 0 var(--dv-radius-lg) var(--dv-radius-lg);
+  border-radius: 0 0 var(--vf-radius-lg) var(--vf-radius-lg);
 }

@@ -106,7 +106,7 @@ export function Menu({
     >
       <div
         aria-label="Menu"
-        className={joinClassNames("dv-menu", `dv-menu--${size}`)}
+        className={joinClassNames("vf-menu", `vf-menu--${size}`)}
         onKeyDown={handleKeyDown}
         ref={menuRef}
         role="menu"
@@ -117,10 +117,10 @@ export function Menu({
             aria-disabled={item.disabled || undefined}
             aria-selected={item.selected || undefined}
             className={joinClassNames(
-              "dv-menu-item",
-              item.danger && "dv-menu-item--danger",
-              item.selected && "dv-menu-item--selected",
-              activeIndex === index && "dv-menu-item--active"
+              "vf-menu-item",
+              item.danger && "vf-menu-item--danger",
+              item.selected && "vf-menu-item--selected",
+              activeIndex === index && "vf-menu-item--active"
             )}
             disabled={item.disabled}
             key={item.id}
@@ -137,13 +137,13 @@ export function Menu({
             role="menuitem"
             type="button"
           >
-            <span className="dv-menu-item__main">
-              <span className="dv-menu-item__label">{item.label}</span>
+            <span className="vf-menu-item__main">
+              <span className="vf-menu-item__label">{item.label}</span>
               {item.description && (
-                <span className="dv-menu-item__description">{item.description}</span>
+                <span className="vf-menu-item__description">{item.description}</span>
               )}
             </span>
-            {item.shortcut && <span className="dv-menu-item__shortcut">{item.shortcut}</span>}
+            {item.shortcut && <span className="vf-menu-item__shortcut">{item.shortcut}</span>}
           </button>
         ))}
       </div>

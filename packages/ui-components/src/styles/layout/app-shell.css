@@ -1,72 +1,72 @@
-.dv-app-shell {
-  --dv-app-shell-header-height: 64px;
-  --dv-app-shell-min-height: 100dvh;
-  --dv-app-shell-sidebar-width: 280px;
-  --dv-app-shell-sidebar-collapsed-width: var(--dv-app-shell-collapsed-sidebar-width, 64px);
+.vf-app-shell {
+  --vf-app-shell-header-height: 64px;
+  --vf-app-shell-min-height: 100dvh;
+  --vf-app-shell-sidebar-width: 280px;
+  --vf-app-shell-sidebar-collapsed-width: var(--vf-app-shell-collapsed-sidebar-width, 64px);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  min-height: var(--dv-app-shell-min-height);
-  color: var(--dv-text);
-  background: var(--dv-bg);
+  min-height: var(--vf-app-shell-min-height);
+  color: var(--vf-text);
+  background: var(--vf-bg);
 }
-.dv-app-shell--full-height {
-  height: var(--dv-app-shell-min-height);
+.vf-app-shell--full-height {
+  height: var(--vf-app-shell-min-height);
 }
-.dv-app-shell--scroll-content,
-.dv-app-shell--scroll-split {
+.vf-app-shell--scroll-content,
+.vf-app-shell--scroll-split {
   overflow: hidden;
 }
-.dv-app-shell--scroll-page {
+.vf-app-shell--scroll-page {
   height: auto;
   overflow: visible;
 }
-.dv-app-shell__header {
+.vf-app-shell__header {
   z-index: 30;
-  min-height: var(--dv-app-shell-header-height);
-  border-bottom: 1px solid var(--dv-border);
-  background: var(--dv-surface);
+  min-height: var(--vf-app-shell-header-height);
+  border-bottom: 1px solid var(--vf-border);
+  background: var(--vf-surface);
 }
-.dv-app-shell--header-static .dv-app-shell__header {
+.vf-app-shell--header-static .vf-app-shell__header {
   position: static;
 }
-.dv-app-shell--header-sticky .dv-app-shell__header {
+.vf-app-shell--header-sticky .vf-app-shell__header {
   position: sticky;
   top: 0;
 }
-.dv-app-shell--header-fixed .dv-app-shell__header {
+.vf-app-shell--header-fixed .vf-app-shell__header {
   position: fixed;
   inset-block-start: 0;
   inset-inline: 0;
 }
-.dv-app-shell__body {
+.vf-app-shell__body {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   min-height: 0;
 }
-.dv-app-shell--scroll-content .dv-app-shell__body,
-.dv-app-shell--scroll-split .dv-app-shell__body {
+.vf-app-shell--scroll-content .vf-app-shell__body,
+.vf-app-shell--scroll-split .vf-app-shell__body {
   overflow: hidden;
 }
-.dv-app-shell--header-fixed .dv-app-shell__body {
-  padding-top: var(--dv-app-shell-header-height);
+.vf-app-shell--header-fixed .vf-app-shell__body {
+  padding-top: var(--vf-app-shell-header-height);
 }
-.dv-app-shell--with-sidebar .dv-app-shell__body {
-  grid-template-columns: var(--dv-app-shell-sidebar-width) minmax(0, 1fr);
+.vf-app-shell--with-sidebar .vf-app-shell__body {
+  grid-template-columns: var(--vf-app-shell-sidebar-width) minmax(0, 1fr);
 }
-.dv-app-shell--sidebar-collapsed .dv-app-shell__body {
-  grid-template-columns: var(--dv-app-shell-sidebar-collapsed-width) minmax(0, 1fr);
+.vf-app-shell--sidebar-collapsed .vf-app-shell__body {
+  grid-template-columns: var(--vf-app-shell-sidebar-collapsed-width) minmax(0, 1fr);
 }
-.dv-app-shell__sidebar {
+.vf-app-shell__sidebar {
   position: relative;
   z-index: 20;
   display: grid;
   min-width: 0;
   min-height: 0;
-  border-right: 1px solid var(--dv-border);
-  background: var(--dv-surface);
+  border-right: 1px solid var(--vf-border);
+  background: var(--vf-surface);
   overflow: hidden;
 }
-.dv-app-shell__sidebar-scroll {
+.vf-app-shell__sidebar-scroll {
   min-width: 0;
   min-height: 0;
   height: 100%;
@@ -74,66 +74,66 @@
   overflow-y: auto;
   scrollbar-gutter: stable;
 }
-.dv-app-shell--sidebar-static .dv-app-shell__sidebar {
+.vf-app-shell--sidebar-static .vf-app-shell__sidebar {
   position: relative;
 }
-.dv-app-shell--sidebar-sticky .dv-app-shell__sidebar {
+.vf-app-shell--sidebar-sticky .vf-app-shell__sidebar {
   position: sticky;
   top: 0;
   align-self: start;
   max-height: 100dvh;
 }
-.dv-app-shell--with-header.dv-app-shell--sidebar-sticky .dv-app-shell__sidebar {
-  top: var(--dv-app-shell-header-height);
-  max-height: calc(100dvh - var(--dv-app-shell-header-height));
+.vf-app-shell--with-header.vf-app-shell--sidebar-sticky .vf-app-shell__sidebar {
+  top: var(--vf-app-shell-header-height);
+  max-height: calc(100dvh - var(--vf-app-shell-header-height));
 }
-.dv-app-shell--sidebar-fixed .dv-app-shell__sidebar {
+.vf-app-shell--sidebar-fixed .vf-app-shell__sidebar {
   position: fixed;
   inset-block-start: 0;
   inset-block-end: 0;
   inset-inline-start: 0;
-  width: var(--dv-app-shell-sidebar-width);
+  width: var(--vf-app-shell-sidebar-width);
   height: 100dvh;
 }
-.dv-app-shell--with-header.dv-app-shell--sidebar-fixed .dv-app-shell__sidebar {
-  inset-block-start: var(--dv-app-shell-header-height);
-  height: calc(100dvh - var(--dv-app-shell-header-height));
+.vf-app-shell--with-header.vf-app-shell--sidebar-fixed .vf-app-shell__sidebar {
+  inset-block-start: var(--vf-app-shell-header-height);
+  height: calc(100dvh - var(--vf-app-shell-header-height));
 }
-.dv-app-shell--sidebar-collapsed.dv-app-shell--sidebar-fixed .dv-app-shell__sidebar {
-  width: var(--dv-app-shell-sidebar-collapsed-width);
+.vf-app-shell--sidebar-collapsed.vf-app-shell--sidebar-fixed .vf-app-shell__sidebar {
+  width: var(--vf-app-shell-sidebar-collapsed-width);
 }
-.dv-app-shell--scroll-content .dv-app-shell__sidebar,
-.dv-app-shell--scroll-split .dv-app-shell__sidebar {
+.vf-app-shell--scroll-content .vf-app-shell__sidebar,
+.vf-app-shell--scroll-split .vf-app-shell__sidebar {
   align-self: stretch;
   height: 100%;
 }
-.dv-app-shell--scroll-page .dv-app-shell__sidebar {
+.vf-app-shell--scroll-page .vf-app-shell__sidebar {
   max-height: 100dvh;
 }
-.dv-app-shell--scroll-page.dv-app-shell--with-header .dv-app-shell__sidebar {
-  max-height: calc(100dvh - var(--dv-app-shell-header-height));
+.vf-app-shell--scroll-page.vf-app-shell--with-header .vf-app-shell__sidebar {
+  max-height: calc(100dvh - var(--vf-app-shell-header-height));
 }
-.dv-app-shell__main {
+.vf-app-shell__main {
   min-width: 0;
   min-height: 0;
 }
-.dv-app-shell--scroll-content .dv-app-shell__main,
-.dv-app-shell--scroll-split .dv-app-shell__main {
+.vf-app-shell--scroll-content .vf-app-shell__main,
+.vf-app-shell--scroll-split .vf-app-shell__main {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.dv-app-shell--scroll-page .dv-app-shell__main {
+.vf-app-shell--scroll-page .vf-app-shell__main {
   overflow: visible;
 }
-.dv-app-shell--sidebar-fixed.dv-app-shell--with-sidebar .dv-app-shell__main {
+.vf-app-shell--sidebar-fixed.vf-app-shell--with-sidebar .vf-app-shell__main {
   margin-inline-start: 0;
 }
-.dv-app-shell__content {
+.vf-app-shell__content {
   min-width: 0;
   min-height: 0;
 }
-.dv-app-shell__footer {
+.vf-app-shell__footer {
   z-index: 25;
-  border-top: 1px solid var(--dv-border);
-  background: var(--dv-surface);
+  border-top: 1px solid var(--vf-border);
+  background: var(--vf-surface);
 }

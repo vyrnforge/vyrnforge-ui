@@ -28,10 +28,10 @@ export function AutocompleteOption({
       aria-disabled={option.disabled || undefined}
       aria-selected={selected}
       className={joinClassNames(
-        "dv-autocomplete__option",
-        active && "dv-autocomplete__option--active",
-        selected && "dv-autocomplete__option--selected",
-        option.disabled && "dv-autocomplete__option--disabled"
+        "vf-autocomplete__option",
+        active && "vf-autocomplete__option--active",
+        selected && "vf-autocomplete__option--selected",
+        option.disabled && "vf-autocomplete__option--disabled"
       )}
       id={id}
       onClick={onClick}

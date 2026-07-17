@@ -101,12 +101,12 @@ export function DismissableLayer({
   return (
     <OverlayTopmostContext.Provider value={isTopmost}>
       <div
-        className={joinClassNames("dv-dismissable-layer", className)}
+        className={joinClassNames("vf-dismissable-layer", className)}
         ref={(element) => {
           layerRef.current = element;
           onLayerChange?.(element);
         }}
-        style={{ ...style, "--dv-overlay-stack-index": zIndex } as CSSProperties}
+        style={{ ...style, "--vf-overlay-stack-index": zIndex } as CSSProperties}
       >
         {children}
       </div>

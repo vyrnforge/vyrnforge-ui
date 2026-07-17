@@ -11,13 +11,13 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   ...props
 }, ref) {
   return (
-    <span className={joinClassNames("dv-search-input", wrapperClassName)}>
-      <span aria-hidden="true" className="dv-search-input__icon">
+    <span className={joinClassNames("vf-search-input", wrapperClassName)}>
+      <span aria-hidden="true" className="vf-search-input__icon">
         <Icon name="Search" size="sm" />
       </span>
       <input
         aria-invalid={invalid || undefined}
-        className={joinClassNames("dv-input", `dv-input--${size}`, className)}
+        className={joinClassNames("vf-input", `vf-input--${size}`, className)}
         ref={ref}
         type="search"
         {...props}

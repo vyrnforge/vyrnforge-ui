@@ -5,15 +5,15 @@ import { GridNote, userColumns } from "./gridShared";
 
 export function GroupingPage() {
   return (
-    <section className="dv-playground-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <h2>Grouping</h2>
           <GridNote>Grouping starts by team and status using the grid's current grouping behavior.</GridNote>
         </div>
       </div>
       <UniversalDataGrid
-        tableId="dv-playground-grouping"
+        tableId="vf-playground-grouping"
         rows={users}
         columns={userColumns}
         getRowId={(row) => row.id}
@@ -21,7 +21,7 @@ export function GroupingPage() {
         defaultGrouping={["team", "status"]}
         defaultExpandedGroups="all"
         renderGroupHeader={({ group }) => (
-          <span className="dv-playground-group-header">
+          <span className="vf-playground-group-header">
             <strong>{group.label}</strong>
             <Badge variant="neutral">{group.rowCount} rows</Badge>
           </span>

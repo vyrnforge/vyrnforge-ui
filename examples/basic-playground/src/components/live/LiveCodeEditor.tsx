@@ -23,9 +23,9 @@ export function LiveCodeEditor({ initialCode, imports, editorHeight }: LiveCodeE
   };
 
   return (
-    <div className="dv-playground-live-editor" style={{ "--dv-playground-live-editor-height": editorHeight } as CSSProperties}>
-      <LiveEditor className="dv-playground-live-editor__surface" onChange={onChange} tabMode="indentation" />
-      <Inline className="dv-playground-live-toolbar" justify="end">
+    <div className="vf-playground-live-editor" style={{ "--vf-playground-live-editor-height": editorHeight } as CSSProperties}>
+      <LiveEditor className="vf-playground-live-editor__surface" onChange={onChange} tabMode="indentation" />
+      <Inline className="vf-playground-live-toolbar" justify="end">
         <Button onClick={copy} size="sm" variant="ghost">{copied ? "Copied" : imports ? "Copy full example" : "Copy"}</Button>
         <Button onClick={() => onChange(initialCode)} size="sm" variant="subtle">Reset</Button>
       </Inline>

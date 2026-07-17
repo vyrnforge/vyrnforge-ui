@@ -2,43 +2,43 @@
 
 VyrnForge UI uses CSS variables as the public styling contract.
 
-Use shared `--dv-*` tokens for app-wide theme customization. Use grid-specific `--udg-*` variables only for data-grid overrides.
+Use shared `--vf-*` tokens for app-wide theme customization. Use grid-specific `--udg-*` variables only for data-grid overrides.
 
-Package CSS may be split internally, but token ownership does not change: `@vyrnforge/ui-core` owns shared `--dv-*` tokens and `@vyrnforge/ui-data-grid` owns grid-specific `--udg-*` variables.
+Package CSS may be split internally, but token ownership does not change: `@vyrnforge/ui-core` owns shared `--vf-*` tokens and `@vyrnforge/ui-data-grid` owns grid-specific `--udg-*` variables.
 
 ## Shared dv Tokens
 
 | Token | Purpose |
 | --- | --- |
-| `--dv-bg` | App/page background. |
-| `--dv-surface` | Default component surface. |
-| `--dv-surface-subtle` | Subtle surface or low-emphasis background. |
-| `--dv-surface-raised` | Raised surface. |
-| `--dv-text` | Default text. |
-| `--dv-text-muted` | Secondary text. |
-| `--dv-text-strong` | Strong/high-emphasis text. |
-| `--dv-border` | Default border. |
-| `--dv-border-strong` | Stronger border. |
-| `--dv-primary` | Primary brand/action color. |
-| `--dv-primary-hover` | Primary hover color. |
-| `--dv-primary-soft` | Soft primary background. |
-| `--dv-danger` | Danger status color. |
-| `--dv-danger-soft` | Soft danger background. |
-| `--dv-warning` | Warning status color. |
-| `--dv-warning-soft` | Soft warning background. |
-| `--dv-success` | Success status color. |
-| `--dv-success-soft` | Soft success background. |
-| `--dv-info` | Info status color. |
-| `--dv-info-soft` | Soft info background. |
-| `--dv-focus-ring` | Focus outline/ring color. |
-| `--dv-radius-sm` | Small radius. |
-| `--dv-radius-md` | Medium radius. |
-| `--dv-radius-lg` | Large radius. |
-| `--dv-shadow-sm` | Small shadow. |
-| `--dv-shadow-md` | Medium shadow. |
-| `--dv-font-family` | Default font stack. |
-| `--dv-control-height` | Standard control height by density. |
-| `--dv-row-height` | Standard row height by density. |
+| `--vf-bg` | App/page background. |
+| `--vf-surface` | Default component surface. |
+| `--vf-surface-subtle` | Subtle surface or low-emphasis background. |
+| `--vf-surface-raised` | Raised surface. |
+| `--vf-text` | Default text. |
+| `--vf-text-muted` | Secondary text. |
+| `--vf-text-strong` | Strong/high-emphasis text. |
+| `--vf-border` | Default border. |
+| `--vf-border-strong` | Stronger border. |
+| `--vf-primary` | Primary brand/action color. |
+| `--vf-primary-hover` | Primary hover color. |
+| `--vf-primary-soft` | Soft primary background. |
+| `--vf-danger` | Danger status color. |
+| `--vf-danger-soft` | Soft danger background. |
+| `--vf-warning` | Warning status color. |
+| `--vf-warning-soft` | Soft warning background. |
+| `--vf-success` | Success status color. |
+| `--vf-success-soft` | Soft success background. |
+| `--vf-info` | Info status color. |
+| `--vf-info-soft` | Soft info background. |
+| `--vf-focus-ring` | Focus outline/ring color. |
+| `--vf-radius-sm` | Small radius. |
+| `--vf-radius-md` | Medium radius. |
+| `--vf-radius-lg` | Large radius. |
+| `--vf-shadow-sm` | Small shadow. |
+| `--vf-shadow-md` | Medium shadow. |
+| `--vf-font-family` | Default font stack. |
+| `--vf-control-height` | Standard control height by density. |
+| `--vf-row-height` | Standard row height by density. |
 
 ## Grid udg Tokens
 
@@ -64,14 +64,14 @@ Stable public grid variables include:
 | `--udg-header-height` | Grid header height. |
 | `--udg-control-height` | Grid toolbar/control height. |
 
-Grid variables should fallback to `--dv-*` tokens where practical so shared themes affect the grid.
+Grid variables should fallback to `--vf-*` tokens where practical so shared themes affect the grid.
 
 ## App-Wide Override
 
 ```css
 .my-app {
-  --dv-primary: #003b71;
-  --dv-radius-md: 10px;
+  --vf-primary: #003b71;
+  --vf-radius-md: 10px;
 }
 ```
 
@@ -86,7 +86,7 @@ Grid variables should fallback to `--dv-*` tokens where practical so shared them
 
 ## Rules
 
-- Prefer semantic `--dv-*` tokens over hard-coded colors.
+- Prefer semantic `--vf-*` tokens over hard-coded colors.
 - Use `--udg-*` only for grid-specific behavior or visuals.
 - Keep overrides scoped to the app or feature area.
 - Do not edit package CSS directly.

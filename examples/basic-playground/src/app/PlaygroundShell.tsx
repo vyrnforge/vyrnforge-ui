@@ -32,13 +32,13 @@ export function PlaygroundShell({
       header={
         <TopNav
           brand={
-            <div className="dv-playground-top-brand">
-              <span className="dv-playground-brand__mark">D</span>
+            <div className="vf-playground-top-brand">
+              <span className="vf-playground-brand__mark">D</span>
               <span>VyrnForge UI Playground</span>
             </div>
           }
           actions={
-            <div className="dv-playground-top-controls">
+            <div className="vf-playground-top-controls">
               <Select
                 aria-label="Playground theme"
                 onChange={(event) => onThemeChange(event.currentTarget.value)}

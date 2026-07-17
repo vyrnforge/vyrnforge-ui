@@ -83,9 +83,9 @@ function MatrixSection({
   title: string;
 }) {
   return (
-    <Panel className="dv-playground-quality-section" title={title}>
+    <Panel className="vf-playground-quality-section" title={title}>
       <Text tone="muted">{description}</Text>
-      <div className="dv-playground-quality-surface">{children}</div>
+      <div className="vf-playground-quality-surface">{children}</div>
     </Panel>
   );
 }
@@ -132,19 +132,19 @@ export function ComponentMatrixPage() {
 
   return (
     <ToastProvider>
-      <div className="dv-playground-page-stack">
+      <div className="vf-playground-page-stack">
         <Panel>
-          <div className="dv-playground-section-heading">
+          <div className="vf-playground-section-heading">
             <div>
               <h2>Component Quality Matrix</h2>
-              <p className="dv-playground-note">
+              <p className="vf-playground-note">
                 Review representative component states against theme, density, focus, disabled,
                 read-only, invalid, loading, long-label, and narrow-width cases.
               </p>
             </div>
             <Badge variant="info">Q1</Badge>
           </div>
-          <div className="dv-playground-quality-controls">
+          <div className="vf-playground-quality-controls">
             <SegmentedControl
               aria-label="Quality matrix theme"
               onChange={setTheme}
@@ -174,7 +174,7 @@ export function ComponentMatrixPage() {
         </Panel>
 
         <div
-          className={narrow ? "dv-playground-quality-frame dv-playground-quality-frame--narrow" : "dv-playground-quality-frame"}
+          className={narrow ? "vf-playground-quality-frame vf-playground-quality-frame--narrow" : "vf-playground-quality-frame"}
           data-density={density}
           data-theme={theme}
         >
@@ -221,7 +221,7 @@ export function ComponentMatrixPage() {
             description="Native-first form controls with invalid, disabled, read-only, required, and long-label states."
             title="Form Controls"
           >
-            <div className="dv-playground-quality-grid">
+            <div className="vf-playground-quality-grid">
               <Field id="quality-name" label="Workspace name" description="A normal labelled text field." required>
                 {(controlProps) => <SearchInput {...controlProps} defaultValue="Operations" />}
               </Field>
@@ -258,7 +258,7 @@ export function ComponentMatrixPage() {
             description="Composite controls for known single-value search and bounded dual-list assignment."
             title="Composite Controls"
           >
-            <div className="dv-playground-quality-grid">
+            <div className="vf-playground-quality-grid">
               <Autocomplete
                 defaultValue="operator"
                 options={roleOptions}
@@ -287,7 +287,7 @@ export function ComponentMatrixPage() {
               <Alert title="Policy warning" variant="warning">
                 This persistent message should remain readable in every theme.
               </Alert>
-              <div className="dv-playground-quality-grid">
+              <div className="vf-playground-quality-grid">
                 <EmptyState action={<Button>Create record</Button>} title="No records" />
                 <ErrorState retryAction={<Button>Retry</Button>} title="Could not load records" />
                 <LoadingState label="Loading records" />
@@ -325,7 +325,7 @@ export function ComponentMatrixPage() {
                   { id: "disabled", disabled: true, label: "Disabled" }
                 ]}
               />
-              <div className="dv-playground-nav-demo-frame">
+              <div className="vf-playground-nav-demo-frame">
                 <SideNav
                   activeId="orders"
                   items={[
@@ -369,7 +369,7 @@ export function ComponentMatrixPage() {
           >
             <Inline gap="sm" wrap>
               <Popover trigger={<Button>Open popover</Button>}>
-                <div className="dv-playground-overlay-demo-panel">
+                <div className="vf-playground-overlay-demo-panel">
                   <Text>Popover content</Text>
                   <Button size="sm">Action</Button>
                 </div>

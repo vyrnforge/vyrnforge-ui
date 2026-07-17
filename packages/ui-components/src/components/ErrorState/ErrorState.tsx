@@ -13,10 +13,10 @@ export function ErrorState({
   const actionContent = actions ?? retryAction ?? action;
 
   return (
-    <div className={joinClassNames("dv-error-state", className)} role="alert" {...props}>
-      <p className="dv-error-state__title">{title}</p>
-      {description && <p className="dv-error-state__description">{description}</p>}
-      {actionContent && <div className="dv-state-actions">{actionContent}</div>}
+    <div className={joinClassNames("vf-error-state", className)} role="alert" {...props}>
+      <p className="vf-error-state__title">{title}</p>
+      {description && <p className="vf-error-state__description">{description}</p>}
+      {actionContent && <div className="vf-state-actions">{actionContent}</div>}
     </div>
   );
 }

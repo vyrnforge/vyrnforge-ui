@@ -15,20 +15,20 @@ import {
 
 export function AdminShellPage() {
   return (
-    <section className="dv-playground-panel">
+    <section className="vf-playground-panel">
       <PageHeader
         description="A dense internal-operations shell with a persistent top bar, sidebar navigation, page header, toolbar, and work panels."
         status={<Badge variant="info">admin pattern</Badge>}
         title="Admin shell pattern"
       />
       <AppShell
-        className="dv-playground-shell-preview"
+        className="vf-playground-shell-preview"
         fullHeight={false}
         header={
           <TopNav
             brand={
-              <span className="dv-playground-top-brand">
-                <span className="dv-playground-brand__mark">D</span>
+              <span className="vf-playground-top-brand">
+                <span className="vf-playground-brand__mark">D</span>
                 Operations Console
               </span>
             }
@@ -58,7 +58,7 @@ export function AdminShellPage() {
         sidebarPosition="sticky"
         sidebarWidth={260}
       >
-        <div className="dv-playground-shell-preview__content">
+        <div className="vf-playground-shell-preview__content">
           <PageHeader
             actions={<Button variant="primary">Create ticket</Button>}
             description="Prioritize incidents, review ownership, and hand off work without the shell owning app state."
@@ -75,7 +75,7 @@ export function AdminShellPage() {
               </>
             }
           />
-          <div className="dv-playground-grid two">
+          <div className="vf-playground-grid two">
             <Panel title="Queue health" description="Live operational summary.">
               <Text>4 critical tickets, 8 standard tickets, 2 pending review.</Text>
             </Panel>

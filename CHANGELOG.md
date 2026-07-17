@@ -5,7 +5,7 @@
 - Restructured the repository as the VyrnForge UI workspace.
 - Added `@vyrnforge/ui-core` with shared tokens, theme helpers, density CSS, and utility classes.
 - Added `@vyrnforge/ui-components` with native-first React primitives for actions, typography, badges, forms, and feedback states.
-- Aligned `@vyrnforge/ui-data-grid` theme defaults with shared `--dv-*` tokens while preserving backward-compatible `--udg-*` variables.
+- Aligned `@vyrnforge/ui-data-grid` theme defaults with shared `--vf-*` tokens while preserving backward-compatible `--udg-*` variables.
 - Aligned the data grid package name with `@vyrnforge/ui-data-grid`.
 - Made the VyrnForge UI docs the primary flat documentation set under `docs/`.
 

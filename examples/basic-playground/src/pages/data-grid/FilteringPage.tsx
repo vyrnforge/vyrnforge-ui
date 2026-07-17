@@ -4,15 +4,15 @@ import { GridNote, userColumns } from "./gridShared";
 
 export function FilteringPage() {
   return (
-    <section className="dv-playground-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <h2>Search and filters</h2>
           <GridNote>This view starts with APAC active users and leaves the toolbar editable.</GridNote>
         </div>
       </div>
       <UniversalDataGrid
-        tableId="dv-playground-filtering"
+        tableId="vf-playground-filtering"
         rows={users}
         columns={userColumns}
         getRowId={(row) => row.id}

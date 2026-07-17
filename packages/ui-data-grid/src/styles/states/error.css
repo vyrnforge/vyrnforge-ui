@@ -2,7 +2,7 @@
   border-radius: var(--udg-radius-sm);
   background: var(--udg-danger-soft);
 }
-.udg-error .udg-state .dv-error-state__title,
-.udg-error .udg-state .dv-error-state__description {
+.udg-error .udg-state .vf-error-state__title,
+.udg-error .udg-state .vf-error-state__description {
   color: var(--udg-danger);
 }

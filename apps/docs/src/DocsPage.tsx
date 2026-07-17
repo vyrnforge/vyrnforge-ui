@@ -12,11 +12,11 @@ type DocsPageProps = {
 
 export function DocsPage({ route }: DocsPageProps) {
   return (
-    <main className="dv-docs-page">
-      <div className="dv-docs-page__intro">
+    <main className="vf-docs-page">
+      <div className="vf-docs-page__intro">
         <PageHeader
           actions={
-            <div className="dv-docs-page__badges">
+            <div className="vf-docs-page__badges">
               {route.canonical && (
                 <Badge variant="success" tone="subtle">
                   Canonical
@@ -34,7 +34,7 @@ export function DocsPage({ route }: DocsPageProps) {
           title={route.title}
         />
         {route.aiPurpose && (
-          <InlineMessage className="dv-docs-ai-purpose" title="AI purpose" variant="info">
+          <InlineMessage className="vf-docs-ai-purpose" title="AI purpose" variant="info">
             {route.aiPurpose}
           </InlineMessage>
         )}

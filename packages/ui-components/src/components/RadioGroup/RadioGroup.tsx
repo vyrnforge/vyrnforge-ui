@@ -34,27 +34,27 @@ export function RadioGroup({
       aria-describedby={[descriptionId, errorId].filter(Boolean).join(" ") || undefined}
       aria-invalid={Boolean(error) || undefined}
       className={joinClassNames(
-        "dv-radio-group",
-        `dv-radio-group--${orientation}`,
-        Boolean(error) && "dv-radio-group--invalid",
-        disabled && "dv-radio-group--disabled",
+        "vf-radio-group",
+        `vf-radio-group--${orientation}`,
+        Boolean(error) && "vf-radio-group--invalid",
+        disabled && "vf-radio-group--disabled",
         className
       )}
       disabled={disabled}
       {...props}
     >
       {label && (
-        <legend className="dv-radio-group__legend">
+        <legend className="vf-radio-group__legend">
           {label}
-          {required && <span aria-hidden="true" className="dv-field__required"> *</span>}
+          {required && <span aria-hidden="true" className="vf-field__required"> *</span>}
         </legend>
       )}
       {description && (
-        <div className="dv-radio-group__description" id={descriptionId}>
+        <div className="vf-radio-group__description" id={descriptionId}>
           {description}
         </div>
       )}
-      <div className="dv-radio-group__options">
+      <div className="vf-radio-group__options">
         {options.map((option) => (
           <Radio
             checked={selectedValue === option.value}
@@ -71,7 +71,7 @@ export function RadioGroup({
         ))}
       </div>
       {error && (
-        <div className="dv-radio-group__error" id={errorId} role="alert">
+        <div className="vf-radio-group__error" id={errorId} role="alert">
           {error}
         </div>
       )}

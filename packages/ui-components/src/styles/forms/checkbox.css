@@ -1,22 +1,22 @@
-.dv-checkbox-field {
+.vf-checkbox-field {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--dv-space-2);
-  color: var(--dv-text);
-  font-size: var(--dv-font-size-md);
-  line-height: var(--dv-line-height-md);
+  gap: var(--vf-space-2);
+  color: var(--vf-text);
+  font-size: var(--vf-font-size-md);
+  line-height: var(--vf-line-height-md);
 }
-.dv-checkbox {
+.vf-checkbox {
   width: 16px;
   height: 16px;
   margin: 2px 0 0;
-  accent-color: var(--dv-primary);
+  accent-color: var(--vf-primary);
 }
-.dv-checkbox--sm {
+.vf-checkbox--sm {
   width: 14px;
   height: 14px;
 }
-.dv-checkbox--lg {
+.vf-checkbox--lg {
   width: 18px;
   height: 18px;
 }

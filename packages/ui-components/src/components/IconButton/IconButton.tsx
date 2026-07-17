@@ -19,10 +19,10 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
     <button
       aria-busy={loading || undefined}
       className={joinClassNames(
-        "dv-icon-button",
-        `dv-icon-button--${variant}`,
-        `dv-icon-button--${size}`,
-        loading && "dv-icon-button--loading",
+        "vf-icon-button",
+        `vf-icon-button--${variant}`,
+        `vf-icon-button--${size}`,
+        loading && "vf-icon-button--loading",
         className
       )}
       disabled={disabled || loading}
@@ -30,7 +30,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       type={type}
       {...props}
     >
-      {loading ? <span aria-hidden="true" className="dv-button__spinner" /> : children}
+      {loading ? <span aria-hidden="true" className="vf-button__spinner" /> : children}
     </button>
   );
 

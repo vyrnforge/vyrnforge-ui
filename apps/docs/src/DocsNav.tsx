@@ -8,7 +8,7 @@ type DocsNavProps = {
 
 export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
   return (
-    <nav className="dv-docs-nav" aria-label="Documentation">
+    <nav className="vf-docs-nav" aria-label="Documentation">
       {docsGroups.map((group) => {
         const routes = docsRoutes.filter((route) => route.group === group);
 
@@ -17,13 +17,13 @@ export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
         }
 
         return (
-          <section className="dv-docs-nav__group" key={group}>
-            <Caption className="dv-docs-nav__group-title">{group}</Caption>
-            <div className="dv-docs-nav__links">
+          <section className="vf-docs-nav__group" key={group}>
+            <Caption className="vf-docs-nav__group-title">{group}</Caption>
+            <div className="vf-docs-nav__links">
               {routes.map((route) => (
                 <Button
                   aria-current={route.id === activeRouteId ? "page" : undefined}
-                  className="dv-docs-nav__link"
+                  className="vf-docs-nav__link"
                   fullWidth
                   key={route.id}
                   onClick={() => onRouteChange(route.id)}

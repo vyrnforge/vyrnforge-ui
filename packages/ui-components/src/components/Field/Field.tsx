@@ -49,12 +49,12 @@ export function Field({
   return (
     <div
       className={joinClassNames(
-        "dv-field",
-        `dv-field--${orientation}`,
-        isInvalid && "dv-field--invalid",
-        hasWarning && "dv-field--warning",
-        hasSuccess && "dv-field--success",
-        disabled && "dv-field--disabled",
+        "vf-field",
+        `vf-field--${orientation}`,
+        isInvalid && "vf-field--invalid",
+        hasWarning && "vf-field--warning",
+        hasSuccess && "vf-field--success",
+        disabled && "vf-field--disabled",
         className
       )}
       data-disabled={disabled || undefined}
@@ -62,20 +62,20 @@ export function Field({
       {...props}
       >
       {label && (
-        <label className="dv-field__label" htmlFor={labelFor}>
+        <label className="vf-field__label" htmlFor={labelFor}>
           {label}
-          {required && <span aria-hidden="true" className="dv-field__required"> *</span>}
+          {required && <span aria-hidden="true" className="vf-field__required"> *</span>}
         </label>
       )}
       {description && (
-        <div className="dv-field__description" id={descriptionId}>
+        <div className="vf-field__description" id={descriptionId}>
           {description}
         </div>
       )}
       {getChildren(children, controlProps)}
       {messageContent && (
         <ValidationMessage
-          className="dv-field__message"
+          className="vf-field__message"
           id={messageId}
           tone={isInvalid ? "error" : hasWarning ? "warning" : hasSuccess ? "success" : "info"}
         >

@@ -30,10 +30,10 @@ export function Dialog({
 
   return (
     <Portal container={portalContainer}>
-      <div className="dv-dialog">
-        <div className="dv-dialog__overlay">
+      <div className="vf-dialog">
+        <div className="vf-dialog__overlay">
           <DismissableLayer
-            className="dv-dialog__layer"
+            className="vf-dialog__layer"
             dismissOnEscape={closeOnEscape}
             dismissOnOutsidePointer={closeOnOverlayClick}
             onDismiss={() => onOpenChange(false)}
@@ -50,28 +50,28 @@ export function Dialog({
                 aria-label={title ? undefined : "Dialog"}
                 aria-labelledby={title ? titleId : undefined}
                 aria-modal="true"
-                className={joinClassNames("dv-dialog__panel", `dv-dialog__panel--${size}`, className)}
-                data-dv-focus-fallback
+                className={joinClassNames("vf-dialog__panel", `vf-dialog__panel--${size}`, className)}
+                data-vf-focus-fallback
                 role="dialog"
                 tabIndex={-1}
               >
-                <div className="dv-dialog__header">
-                  <div className="dv-dialog__heading">
-                    {title && <h2 className="dv-dialog__title" id={titleId}>{title}</h2>}
+                <div className="vf-dialog__header">
+                  <div className="vf-dialog__heading">
+                    {title && <h2 className="vf-dialog__title" id={titleId}>{title}</h2>}
                     {description && (
-                      <p className="dv-dialog__description" id={descriptionId}>
+                      <p className="vf-dialog__description" id={descriptionId}>
                         {description}
                       </p>
                     )}
                   </div>
                   <CloseButton
                     aria-label="Close dialog"
-                    className="dv-overlay-close"
+                    className="vf-overlay-close"
                     onClick={() => onOpenChange(false)}
                   />
                 </div>
-                {children && <div className="dv-dialog__body">{children}</div>}
-                {footer && <div className="dv-dialog__footer">{footer}</div>}
+                {children && <div className="vf-dialog__body">{children}</div>}
+                {footer && <div className="vf-dialog__footer">{footer}</div>}
               </div>
             </FocusScope>
           </DismissableLayer>

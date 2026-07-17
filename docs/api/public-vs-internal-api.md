@@ -30,7 +30,7 @@ Internal API includes:
 - internal class names not documented in `css-class-reference.md`
 - test utilities
 - generated build output
-- docs-app-only classes such as `dv-docs-*`
+- docs-app-only classes such as `vf-docs-*`
 
 Internal APIs may change without a compatibility guarantee.
 

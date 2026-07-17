@@ -13,7 +13,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   return (
     <select
       aria-invalid={invalid || undefined}
-      className={joinClassNames("dv-select", `dv-select--${size}`, className)}
+      className={joinClassNames("vf-select", `vf-select--${size}`, className)}
       ref={ref}
       {...props}
     >

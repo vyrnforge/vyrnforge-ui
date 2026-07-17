@@ -1,18 +1,18 @@
-.dv-validation-message--success {
-  color: var(--dv-success);
+.vf-validation-message--success {
+  color: var(--vf-success);
 }
-.dv-validation-message--error,
-.dv-validation-message--danger {
-  color: var(--dv-danger);
+.vf-validation-message--error,
+.vf-validation-message--danger {
+  color: var(--vf-danger);
 }
-.dv-validation-message--info {
-  color: var(--dv-info);
+.vf-validation-message--info {
+  color: var(--vf-info);
 }
 
-.dv-validation-message--warning {
-  color: var(--dv-warning);
+.vf-validation-message--warning {
+  color: var(--vf-warning);
 }
-.dv-validation-message {
-  font-size: var(--dv-font-size-sm);
-  line-height: var(--dv-line-height-md);
+.vf-validation-message {
+  font-size: var(--vf-font-size-sm);
+  line-height: var(--vf-line-height-md);
 }

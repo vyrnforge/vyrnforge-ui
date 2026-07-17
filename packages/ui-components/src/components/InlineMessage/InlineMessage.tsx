@@ -11,15 +11,15 @@ export function InlineMessage({
   return (
     <div
       className={joinClassNames(
-        "dv-inline-message",
-        `dv-inline-message--${variant}`,
+        "vf-inline-message",
+        `vf-inline-message--${variant}`,
         className
       )}
       role={variant === "danger" ? "alert" : "status"}
       {...props}
     >
-      {title && <strong className="dv-inline-message__title">{title}</strong>}
-      {children && <div className="dv-inline-message__content">{children}</div>}
+      {title && <strong className="vf-inline-message__title">{title}</strong>}
+      {children && <div className="vf-inline-message__content">{children}</div>}
     </div>
   );
 }

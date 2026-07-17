@@ -18,9 +18,9 @@ These package-level entry files are the public CSS import contract. Internally, 
 
 | CSS import | Why it comes here |
 | --- | --- |
-| `@vyrnforge/ui-core/styles/index.css` | Defines shared `--dv-*` tokens, themes, density, and utilities. |
-| `@vyrnforge/ui-components/styles/index.css` | Defines shared component classes that consume `--dv-*` tokens. |
-| `@vyrnforge/ui-data-grid/styles/index.css` | Defines `udg-*` grid classes and `--udg-*` variables, with fallbacks to `--dv-*` tokens where practical. |
+| `@vyrnforge/ui-core/styles/index.css` | Defines shared `--vf-*` tokens, themes, density, and utilities. |
+| `@vyrnforge/ui-components/styles/index.css` | Defines shared component classes that consume `--vf-*` tokens. |
+| `@vyrnforge/ui-data-grid/styles/index.css` | Defines `udg-*` grid classes and `--udg-*` variables, with fallbacks to `--vf-*` tokens where practical. |
 
 Apps that only use `@vyrnforge/ui-core` and `@vyrnforge/ui-components` do not need to import data-grid CSS. Apps that only use the data grid should still prefer importing `ui-core` first for shared token alignment, but the grid CSS includes fallback values so it can render correctly without forcing every consumer to import all CSS.
 
@@ -33,12 +33,12 @@ import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 
 ## Theme Overrides
 
-Use `--dv-*` tokens for app-wide theming:
+Use `--vf-*` tokens for app-wide theming:
 
 ```css
 .my-app {
-  --dv-primary: #003b71;
-  --dv-radius-md: 10px;
+  --vf-primary: #003b71;
+  --vf-radius-md: 10px;
 }
 ```
 

@@ -100,7 +100,7 @@ Legend: `Pass` meets the current gate for its maturity, `Partial` is usable but 
 | Availability | `disabled` blocks interaction and submission where applicable. `readOnly` blocks mutation but may still submit native values when that matches native semantics. |
 | Validation | Use `invalid`, `required`, `aria-invalid`, `aria-required`, and Field/ValidationMessage relationships. |
 | Size/density | Component `size` controls local control size. App or container `data-density` controls shared density tokens. |
-| CSS extension | Public classes use `dv-*`; grid classes and variables use `udg-*`. Static visual styles stay in CSS. |
+| CSS extension | Public classes use `vf-*`; grid classes and variables use `udg-*`. Static visual styles stay in CSS. |
 
 ## P0/P1 Remediation
 

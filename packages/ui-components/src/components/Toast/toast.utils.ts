@@ -4,7 +4,7 @@ let toastIdCounter = 0;
 
 export function createToastId() {
   toastIdCounter += 1;
-  return `dv-toast-${toastIdCounter}`;
+  return `vf-toast-${toastIdCounter}`;
 }
 
 export function getToastTone(toast: Pick<ToastRecord, "tone">): ToastTone {
@@ -29,5 +29,5 @@ export function getVisibleToasts(
 }
 
 export function toastViewportClass(position: ToastPosition) {
-  return `dv-toast-viewport--${position}`;
+  return `vf-toast-viewport--${position}`;
 }

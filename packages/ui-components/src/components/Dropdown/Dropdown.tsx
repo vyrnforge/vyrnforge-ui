@@ -19,7 +19,7 @@ export function Dropdown({
       placement={placement}
       trigger={trigger}
     >
-      <div className="dv-dropdown">{children}</div>
+      <div className="vf-dropdown">{children}</div>
     </Popover>
   );
 }

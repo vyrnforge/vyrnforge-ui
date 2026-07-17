@@ -64,7 +64,7 @@ export function Autocomplete({
   value
 }: AutocompleteProps) {
   const generatedId = useId().replace(/:/g, "");
-  const inputId = id ?? `dv-autocomplete-${generatedId}`;
+  const inputId = id ?? `vf-autocomplete-${generatedId}`;
   const listboxId = `${inputId}-listbox`;
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -185,17 +185,17 @@ export function Autocomplete({
   return (
     <div
       className={joinClassNames(
-        "dv-autocomplete",
-        isOpen && "dv-autocomplete--open",
-        disabled && "dv-autocomplete--disabled",
-        readOnly && "dv-autocomplete--read-only",
-        resolvedInvalid && "dv-autocomplete--invalid",
+        "vf-autocomplete",
+        isOpen && "vf-autocomplete--open",
+        disabled && "vf-autocomplete--disabled",
+        readOnly && "vf-autocomplete--read-only",
+        resolvedInvalid && "vf-autocomplete--invalid",
         className
       )}
       ref={rootRef}
       style={style}
     >
-      <div className="dv-autocomplete__control" ref={setControlElement}>
+      <div className="vf-autocomplete__control" ref={setControlElement}>
         <AutocompleteInput
           activeDescendantId={isOpen && activeOption ? optionId(listboxId, activeOption) : undefined}
           ariaDescribedBy={resolvedAriaDescribedBy}
@@ -218,11 +218,11 @@ export function Autocomplete({
           required={resolvedRequired}
           value={currentInputValue}
         />
-        <div className="dv-autocomplete__actions">
+        <div className="vf-autocomplete__actions">
           {clearable && (selectedValue !== null || currentInputValue) && (
             <IconButton
               aria-label="Clear selection"
-              className="dv-autocomplete__clear"
+              className="vf-autocomplete__clear"
               disabled={!interactive}
               onClick={() => {
                 clearSelection();
@@ -235,11 +235,11 @@ export function Autocomplete({
             </IconButton>
           )}
           {loading ? (
-            <span aria-label="Loading options" className="dv-autocomplete__loading" role="status" />
+            <span aria-label="Loading options" className="vf-autocomplete__loading" role="status" />
           ) : (
             <IconButton
               aria-label={isOpen ? "Close options" : "Open options"}
-              className="dv-autocomplete__indicator"
+              className="vf-autocomplete__indicator"
               disabled={!interactive}
               onClick={() => {
                 if (isOpen) {
@@ -262,7 +262,7 @@ export function Autocomplete({
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[rootRef]}
-            className="dv-autocomplete__layer"
+            className="vf-autocomplete__layer"
             dismissOnOutsideFocus
             onDismiss={() => closeList(true)}
             onEscapeKeyDown={(event) => {
@@ -271,8 +271,8 @@ export function Autocomplete({
             }}
             onLayerChange={setFloatingElement}
             style={{
-              "--dv-overlay-x": `${position.x}px`,
-              "--dv-overlay-y": `${position.y}px`,
+              "--vf-overlay-x": `${position.x}px`,
+              "--vf-overlay-y": `${position.y}px`,
               visibility: position.ready ? undefined : "hidden"
             } as CSSProperties}
           >
@@ -297,11 +297,11 @@ export function Autocomplete({
                       option={option}
                       selected={selected}
                     >
-                      <div className="dv-autocomplete__option-main" ref={active ? activeOptionRef : undefined}>
+                      <div className="vf-autocomplete__option-main" ref={active ? activeOptionRef : undefined}>
                         {renderOption ? renderOption(option, { active, selected, disabled: Boolean(option.disabled) }) : (
                           <>
-                            <span className="dv-autocomplete__option-label">{option.label}</span>
-                            {option.description && <span className="dv-autocomplete__option-description">{option.description}</span>}
+                            <span className="vf-autocomplete__option-label">{option.label}</span>
+                            {option.description && <span className="vf-autocomplete__option-description">{option.description}</span>}
                           </>
                         )}
                       </div>
@@ -310,7 +310,7 @@ export function Autocomplete({
                   );
                 })
               ) : (
-                <div aria-live="polite" className="dv-autocomplete__status" role="status">
+                <div aria-live="polite" className="vf-autocomplete__status" role="status">
                   {loading ? loadingText : noOptionsText}
                 </div>
               )}

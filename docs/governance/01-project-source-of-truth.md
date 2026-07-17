@@ -19,7 +19,7 @@ The data grid is the first strategic specialized component, but the project dire
 | Package | Role | Owns | Does not own |
 | --- | --- | --- | --- |
 | `@vyrnforge/ui-core` | Shared foundation | tokens, themes, density, utilities, CSS variables | React components, data grid logic, app state |
-| `@vyrnforge/ui-components` | Reusable UI layer | native React primitives, application components, shared `dv-*` styles | data-grid algorithms, backend data, global store |
+| `@vyrnforge/ui-components` | Reusable UI layer | native React primitives, application components, shared `vf-*` styles | data-grid algorithms, backend data, global store |
 | `@vyrnforge/ui-data-grid` | Specialized data package | UniversalDataGrid, grid state contracts, grid algorithms, adapters, `udg-*` styles | backend fetching, report generation, business workflows |
 
 ## Principles

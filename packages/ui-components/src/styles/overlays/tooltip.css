@@ -1,20 +1,20 @@
-.dv-tooltip {
+.vf-tooltip {
   width: fit-content;
 }
 
-.dv-tooltip__content {
+.vf-tooltip__content {
   position: fixed;
-  top: var(--dv-overlay-y, 0);
-  left: var(--dv-overlay-x, 0);
-  z-index: var(--dv-z-tooltip);
+  top: var(--vf-overlay-y, 0);
+  left: var(--vf-overlay-x, 0);
+  z-index: var(--vf-z-tooltip);
   max-width: 260px;
-  border: 1px solid var(--dv-border);
-  border-radius: var(--dv-radius-md);
-  padding: var(--dv-space-2) var(--dv-space-3);
-  color: var(--dv-text);
-  background: var(--dv-surface-raised);
-  box-shadow: var(--dv-shadow-sm);
-  font-size: var(--dv-font-size-sm);
-  line-height: var(--dv-line-height-md);
+  border: 1px solid var(--vf-border);
+  border-radius: var(--vf-radius-md);
+  padding: var(--vf-space-2) var(--vf-space-3);
+  color: var(--vf-text);
+  background: var(--vf-surface-raised);
+  box-shadow: var(--vf-shadow-sm);
+  font-size: var(--vf-font-size-sm);
+  line-height: var(--vf-line-height-md);
   pointer-events: none;
 }

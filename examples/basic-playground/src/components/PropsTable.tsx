@@ -14,8 +14,8 @@ export type PropsTableProps = {
 
 export function PropsTable({ rows }: PropsTableProps) {
   return (
-    <div className="dv-playground-props-table-wrap">
-      <table className="dv-playground-props-table">
+    <div className="vf-playground-props-table-wrap">
+      <table className="vf-playground-props-table">
         <thead>
           <tr>
             <th scope="col">Prop</th>

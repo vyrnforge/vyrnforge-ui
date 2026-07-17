@@ -1,61 +1,61 @@
-.dv-menu {
+.vf-menu {
   display: grid;
-  gap: var(--dv-space-1);
+  gap: var(--vf-space-1);
   min-width: 220px;
-  padding: var(--dv-space-2);
+  padding: var(--vf-space-2);
 }
-.dv-menu--sm {
+.vf-menu--sm {
   min-width: 180px;
 }
-.dv-menu--lg {
+.vf-menu--lg {
   min-width: 280px;
 }
-.dv-menu-item {
+.vf-menu-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--dv-space-3);
+  gap: var(--vf-space-3);
   width: 100%;
   border: 1px solid transparent;
-  border-radius: var(--dv-radius-md);
-  padding: var(--dv-space-2) var(--dv-space-3);
-  color: var(--dv-text);
+  border-radius: var(--vf-radius-md);
+  padding: var(--vf-space-2) var(--vf-space-3);
+  color: var(--vf-text);
   background: transparent;
   font: inherit;
   text-align: left;
   cursor: pointer;
 }
-.dv-menu-item:hover:not(:disabled),
-.dv-menu-item--active {
-  background: var(--dv-surface-subtle);
+.vf-menu-item:hover:not(:disabled),
+.vf-menu-item--active {
+  background: var(--vf-surface-subtle);
 }
-.dv-menu-item:focus-visible {
-  outline: 2px solid var(--dv-focus-ring);
+.vf-menu-item:focus-visible {
+  outline: 2px solid var(--vf-focus-ring);
   outline-offset: 1px;
 }
-.dv-menu-item:disabled,
-.dv-menu-item[aria-disabled=true] {
+.vf-menu-item:disabled,
+.vf-menu-item[aria-disabled=true] {
   cursor: not-allowed;
   opacity: 0.55;
 }
-.dv-menu-item--selected {
-  color: var(--dv-primary);
-  background: var(--dv-primary-soft);
+.vf-menu-item--selected {
+  color: var(--vf-primary);
+  background: var(--vf-primary-soft);
 }
-.dv-menu-item--danger {
-  color: var(--dv-danger);
+.vf-menu-item--danger {
+  color: var(--vf-danger);
 }
-.dv-menu-item__main {
+.vf-menu-item__main {
   display: grid;
   gap: 2px;
   min-width: 0;
 }
-.dv-menu-item__label {
+.vf-menu-item__label {
   color: inherit;
   font-weight: 680;
 }
-.dv-menu-item__description,
-.dv-menu-item__shortcut {
-  color: var(--dv-text-muted);
-  font-size: var(--dv-font-size-sm);
+.vf-menu-item__description,
+.vf-menu-item__shortcut {
+  color: var(--vf-text-muted);
+  font-size: var(--vf-font-size-sm);
 }

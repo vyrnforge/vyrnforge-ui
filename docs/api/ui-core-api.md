@@ -45,7 +45,7 @@ Public types include:
 
 ## Theme Model
 
-Themes are CSS-variable maps using the `--dv-*` namespace. Apps can use preset themes or create scoped overrides.
+Themes are CSS-variable maps using the `--vf-*` namespace. Apps can use preset themes or create scoped overrides.
 
 ```tsx
 import { vyrnForgeEnterpriseTheme, toVyrnForgeThemeStyle } from "@vyrnforge/ui-core";
@@ -65,23 +65,23 @@ VyrnForge uses these density names:
 - `standard`
 - `comfortable`
 
-Density is represented through reusable tokens such as `--dv-control-height` and `--dv-row-height`.
+Density is represented through reusable tokens such as `--vf-control-height` and `--vf-row-height`.
 
 ## Public Token Categories
 
 | Category | Examples |
 | --- | --- |
-| Color | `--dv-primary`, `--dv-primary-hover`, `--dv-primary-soft` |
-| Surface | `--dv-bg`, `--dv-surface`, `--dv-surface-subtle`, `--dv-surface-raised` |
-| Text | `--dv-text`, `--dv-text-muted`, `--dv-text-strong` |
-| Border | `--dv-border`, `--dv-border-strong` |
-| Focus | `--dv-focus-ring` |
-| Status | `--dv-danger`, `--dv-warning`, `--dv-success`, `--dv-info` and soft variants |
+| Color | `--vf-primary`, `--vf-primary-hover`, `--vf-primary-soft` |
+| Surface | `--vf-bg`, `--vf-surface`, `--vf-surface-subtle`, `--vf-surface-raised` |
+| Text | `--vf-text`, `--vf-text-muted`, `--vf-text-strong` |
+| Border | `--vf-border`, `--vf-border-strong` |
+| Focus | `--vf-focus-ring` |
+| Status | `--vf-danger`, `--vf-warning`, `--vf-success`, `--vf-info` and soft variants |
 | Spacing | shared spacing values used by package CSS |
-| Radius | `--dv-radius-sm`, `--dv-radius-md`, `--dv-radius-lg` |
-| Shadow | `--dv-shadow-sm`, `--dv-shadow-md` |
-| Typography | `--dv-font-family`, font-size tokens |
-| Density | `--dv-control-height`, `--dv-row-height` |
+| Radius | `--vf-radius-sm`, `--vf-radius-md`, `--vf-radius-lg` |
+| Shadow | `--vf-shadow-sm`, `--vf-shadow-md` |
+| Typography | `--vf-font-family`, font-size tokens |
+| Density | `--vf-control-height`, `--vf-row-height` |
 
 See `css-token-reference.md` for the stable token list.
 
@@ -89,10 +89,10 @@ See `css-token-reference.md` for the stable token list.
 
 Public utility classes include:
 
-- `dv-text-muted`
-- `dv-text-strong`
-- `dv-truncate`
-- `dv-sr-only`
-- `dv-focus-ring`
+- `vf-text-muted`
+- `vf-text-strong`
+- `vf-truncate`
+- `vf-sr-only`
+- `vf-focus-ring`
 
 Use utilities for small shared behavior only. Do not move package-specific component styles into `ui-core`.

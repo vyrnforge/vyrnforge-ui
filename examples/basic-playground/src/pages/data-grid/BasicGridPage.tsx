@@ -22,7 +22,7 @@ export function BasicGridPage() {
         <DemoBlock
           defaultCodeVisible
           code={'<UniversalDataGrid\n  tableId="users"\n  columns={userColumns}\n  rows={users}\n  getRowId={(row) => row.id}\n  persistState\n  persistenceAdapter={persistenceAdapter}\n  variant="card"\n/>'}
-          preview={<UniversalDataGrid tableId="dv-playground-basic-users" rows={users} columns={userColumns} getRowId={(row) => row.id} persistenceAdapter={persistenceAdapter} persistState variant="card" />}
+          preview={<UniversalDataGrid tableId="vf-playground-basic-users" rows={users} columns={userColumns} getRowId={(row) => row.id} persistenceAdapter={persistenceAdapter} persistState variant="card" />}
           title="Users"
         />
       </DemoSection>

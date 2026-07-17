@@ -23,14 +23,14 @@ export function ButtonsPage() {
       <DemoSection description="Choose the visual weight that matches the action's importance." title="Variants">
         <DemoBlock
           code={'<Button variant="primary">Create workspace</Button>\n<Button variant="subtle">Cancel</Button>\n<Button variant="danger">Delete</Button>'}
-          preview={<div className="dv-playground-control-grid">{variants.map((variant) => <Button key={variant} variant={variant}>{variant}</Button>)}<Button disabled>disabled</Button><Button loading variant="primary">loading</Button></div>}
+          preview={<div className="vf-playground-control-grid">{variants.map((variant) => <Button key={variant} variant={variant}>{variant}</Button>)}<Button disabled>disabled</Button><Button loading variant="primary">loading</Button></div>}
           title="Action states"
         />
       </DemoSection>
       <DemoSection description="Keep icon-only controls compact and labelled." title="Sizing and composition">
         <DemoBlock
           code={'<Button size="sm" variant="primary">Save</Button>\n<IconButton aria-label="Refresh"><Icon name="Refresh" /></IconButton>'}
-          preview={<div className="dv-playground-control-grid">{sizes.map((size) => <Button key={size} size={size} variant="primary">{size}</Button>)}<IconButton aria-label="Add" title="Add"><Icon name="Plus" /></IconButton><IconButton aria-label="Refresh" title="Refresh" variant="subtle"><Icon name="Refresh" /></IconButton><IconButton aria-label="Delete" title="Delete" variant="danger"><Icon name="Delete" /></IconButton></div>}
+          preview={<div className="vf-playground-control-grid">{sizes.map((size) => <Button key={size} size={size} variant="primary">{size}</Button>)}<IconButton aria-label="Add" title="Add"><Icon name="Plus" /></IconButton><IconButton aria-label="Refresh" title="Refresh" variant="subtle"><Icon name="Refresh" /></IconButton><IconButton aria-label="Delete" title="Delete" variant="danger"><Icon name="Delete" /></IconButton></div>}
           title="Sizes and icon actions"
         />
         <DemoBlock

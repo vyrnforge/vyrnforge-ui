@@ -30,7 +30,7 @@ export function Icon({
     <svg
       aria-hidden={isDecorative || undefined}
       aria-labelledby={!isDecorative && title ? titleId : undefined}
-      className={joinClassNames("dv-icon", className)}
+      className={joinClassNames("vf-icon", className)}
       fill="none"
       focusable="false"
       height={resolvedSize}

@@ -45,9 +45,9 @@ Do not add these unless explicitly approved:
 
 - Static styling belongs in CSS.
 - TSX uses classes and dynamic CSS variables.
-- Shared classes use `dv-*`.
+- Shared classes use `vf-*`.
 - Grid classes use `udg-*`.
-- Shared tokens use `--dv-*`.
+- Shared tokens use `--vf-*`.
 - Grid variables use `--udg-*`.
 
 ## State Rules

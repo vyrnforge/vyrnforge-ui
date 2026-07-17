@@ -41,8 +41,8 @@ export function Popover({
   return (
     <div
       className={joinClassNames(
-        "dv-popover",
-        isOpen && "dv-popover--open",
+        "vf-popover",
+        isOpen && "vf-popover--open",
         className
       )}
       style={style}
@@ -50,7 +50,7 @@ export function Popover({
       <span
         aria-expanded={isOpen}
         aria-haspopup={modal ? "dialog" : undefined}
-        className="dv-popover__trigger"
+        className="vf-popover__trigger"
         ref={setTriggerElement}
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -60,14 +60,14 @@ export function Popover({
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[{ current: triggerElement }]}
-            className={joinClassNames("dv-popover__content", modal && "dv-popover__content--modal")}
+            className={joinClassNames("vf-popover__content", modal && "vf-popover__content--modal")}
             dismissOnEscape={closeOnEscape}
             dismissOnOutsidePointer={closeOnOutsidePointer ?? closeOnOutsideClick}
             onDismiss={() => setIsOpen(false)}
             onLayerChange={setContentElement}
             style={{
-              "--dv-overlay-x": `${position.x}px`,
-              "--dv-overlay-y": `${position.y}px`,
+              "--vf-overlay-x": `${position.x}px`,
+              "--vf-overlay-y": `${position.y}px`,
               visibility: position.ready ? undefined : "hidden"
             } as CSSProperties}
           >

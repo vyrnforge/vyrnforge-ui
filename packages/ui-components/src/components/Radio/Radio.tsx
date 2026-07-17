@@ -13,7 +13,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({
   const input = (
     <input
       aria-invalid={invalid || undefined}
-      className={joinClassNames("dv-radio", className)}
+      className={joinClassNames("vf-radio", className)}
       ref={ref}
       style={label ? undefined : style}
       type="radio"
@@ -26,12 +26,12 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({
   }
 
   return (
-    <label className="dv-radio-field" style={style}>
+    <label className="vf-radio-field" style={style}>
       {input}
-      <span className="dv-radio-field__content">
-        <span className="dv-radio-field__label">{label}</span>
+      <span className="vf-radio-field__content">
+        <span className="vf-radio-field__label">{label}</span>
         {description && (
-          <span className="dv-radio-field__description">{description}</span>
+          <span className="vf-radio-field__description">{description}</span>
         )}
       </span>
     </label>

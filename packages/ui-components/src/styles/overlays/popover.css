@@ -1,29 +1,29 @@
-.dv-popover,
-.dv-tooltip {
+.vf-popover,
+.vf-tooltip {
   position: relative;
   display: inline-flex;
 }
 
-.dv-popover__trigger,
-.dv-tooltip__trigger {
+.vf-popover__trigger,
+.vf-tooltip__trigger {
   display: inline-flex;
 }
 
-.dv-popover__content {
+.vf-popover__content {
   position: fixed;
-  top: var(--dv-overlay-y, 0);
-  left: var(--dv-overlay-x, 0);
-  z-index: var(--dv-z-popover);
-  width: var(--dv-overlay-anchor-width, auto);
+  top: var(--vf-overlay-y, 0);
+  left: var(--vf-overlay-x, 0);
+  z-index: var(--vf-z-popover);
+  width: var(--vf-overlay-anchor-width, auto);
   min-width: 220px;
-  max-width: min(420px, calc(100vw - (var(--dv-space-4) * 2)));
-  border: 1px solid var(--dv-border);
-  border-radius: var(--dv-radius-lg);
-  color: var(--dv-text);
-  background: var(--dv-surface-raised);
-  box-shadow: var(--dv-shadow-md);
+  max-width: min(420px, calc(100vw - (var(--vf-space-4) * 2)));
+  border: 1px solid var(--vf-border);
+  border-radius: var(--vf-radius-lg);
+  color: var(--vf-text);
+  background: var(--vf-surface-raised);
+  box-shadow: var(--vf-shadow-md);
 }
 
-.dv-popover__content--modal {
-  z-index: var(--dv-z-overlay);
+.vf-popover__content--modal {
+  z-index: var(--vf-z-overlay);
 }

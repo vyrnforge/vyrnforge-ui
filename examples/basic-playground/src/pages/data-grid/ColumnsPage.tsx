@@ -4,15 +4,15 @@ import { GridNote, persistenceAdapter, userColumns } from "./gridShared";
 
 export function ColumnsPage() {
   return (
-    <section className="dv-playground-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <h2>Column visibility and ordering</h2>
           <GridNote>The grid keeps its own column management while inheriting shared visual tokens.</GridNote>
         </div>
       </div>
       <UniversalDataGrid
-        tableId="dv-playground-column-management"
+        tableId="vf-playground-column-management"
         rows={users}
         columns={userColumns}
         getRowId={(row) => row.id}

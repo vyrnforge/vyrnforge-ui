@@ -132,10 +132,10 @@
         "content": "Use for admin/docs apps with persistent navigation and main content scrolling.",
         "split": "Use for workspaces where sidebar and main content scroll independently."
       },
-      "rule": "Do not fix persistent navigation with one-off app CSS when AppShell props can express the layout. AppShell wraps sidebar content in dv-app-shell__sidebar-scroll so long persistent sidebars can scroll independently."
+      "rule": "Do not fix persistent navigation with one-off app CSS when AppShell props can express the layout. AppShell wraps sidebar content in vf-app-shell__sidebar-scroll so long persistent sidebars can scroll independently."
     },
     "SideNav": {
-      "layoutRule": "SideNav renders header and footer outside dv-side-nav__scroll; keep long navigation items inside the component list rather than adding app-owned scroll wrappers."
+      "layoutRule": "SideNav renders header and footer outside vf-side-nav__scroll; keep long navigation items inside the component list rather than adding app-owned scroll wrappers."
     },
     "Field": {
       "relationshipRule": "Use Field's render-function child when it should supply the native control id, aria-describedby, invalid, required, and disabled props. For a static child, pair Field htmlFor with the child control id. Do not expect Field to clone arbitrary children.",

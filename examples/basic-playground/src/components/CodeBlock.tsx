@@ -25,8 +25,8 @@ export function CodeBlock({
   };
 
   return (
-    <div className="dv-playground-code-block">
-      <div className="dv-playground-code-block__toolbar">
+    <div className="vf-playground-code-block">
+      <div className="vf-playground-code-block__toolbar">
         <Text size="sm" tone="muted">{language}</Text>
         {copyable && (
           <Button onClick={copy} size="sm" variant="ghost">
@@ -34,7 +34,7 @@ export function CodeBlock({
           </Button>
         )}
       </div>
-      <pre className="dv-playground-code-block__pre">
+      <pre className="vf-playground-code-block__pre">
         <code>{code}</code>
       </pre>
     </div>

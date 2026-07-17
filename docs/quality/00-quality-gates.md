@@ -20,8 +20,8 @@ This document defines the minimum quality bar for shipped VyrnForge UI component
 | Accessibility | Primary interaction has labels, ARIA relationships, visible focus, keyboard operation, expected Escape behavior, and correct live-region/modal semantics. |
 | Visual quality | Light, dark, enterprise, compact, standard, and comfortable modes retain usable spacing, contrast, control heights, and focus visibility. |
 | Layout and scrolling | Components own predictable `min-width: 0`, `min-height: 0`, overflow, sticky offsets, and avoid clipped focus or double scrollbars. |
-| Theme and density support | Static visuals use `--dv-*` tokens in components and `--udg-*` in the grid. Density names are `compact`, `standard`, and `comfortable`. |
-| CSS ownership | `ui-core` owns tokens/utilities, `ui-components` owns reusable `dv-*` component styles, `ui-data-grid` owns `udg-*`, docs use `dv-docs-*`, and playground uses `dv-playground-*`. |
+| Theme and density support | Static visuals use `--vf-*` tokens in components and `--udg-*` in the grid. Density names are `compact`, `standard`, and `comfortable`. |
+| CSS ownership | `ui-core` owns tokens/utilities, `ui-components` owns reusable `vf-*` component styles, `ui-data-grid` owns `udg-*`, docs use `vf-docs-*`, and playground uses `vf-playground-*`. |
 | Documentation | Public components have API docs, metadata, playground examples, and AI usage notes when public enough for agents to consume. |
 | Testing | Stable components have meaningful tests for rendering contract, ARIA, state helpers, disabled/read-only behavior, or grid state behavior where practical. |
 | Production readiness | Stable components have no known P0/P1 issue and are represented accurately in metadata and playground badges. |

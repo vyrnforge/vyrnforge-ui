@@ -187,11 +187,11 @@ The grid does not generate files by default. The app or a future optional adapte
 
 ## Styling Overrides
 
-Use shared `--dv-*` tokens for app-wide theme alignment and `--udg-*` variables for grid-specific overrides:
+Use shared `--vf-*` tokens for app-wide theme alignment and `--udg-*` variables for grid-specific overrides:
 
 ```css
 .my-app {
-  --dv-primary: #003b71;
+  --vf-primary: #003b71;
 }
 
 .my-app .udg {

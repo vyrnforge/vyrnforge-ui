@@ -1,13 +1,13 @@
-.dv-text-muted {
-  color: var(--dv-text-muted);
+.vf-text-muted {
+  color: var(--vf-text-muted);
 }
 
-.dv-text-strong {
-  color: var(--dv-text-strong);
+.vf-text-strong {
+  color: var(--vf-text-strong);
   font-weight: 700;
 }
 
-.dv-truncate {
+.vf-truncate {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

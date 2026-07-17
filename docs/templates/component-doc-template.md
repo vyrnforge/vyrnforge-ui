@@ -48,7 +48,7 @@ import "@vyrnforge/ui-components/styles/index.css";
 
 ## Theming
 
-Uses `--dv-*` tokens.
+Uses `--vf-*` tokens.
 
 ## AI usage notes
 

@@ -20,9 +20,9 @@ export function Page({
   return (
     <main
       className={joinClassNames(
-        "dv-page",
-        `dv-page--max-${maxWidth}`,
-        `dv-page--${density}`,
+        "vf-page",
+        `vf-page--max-${maxWidth}`,
+        `vf-page--${density}`,
         className
       )}
       {...props}
@@ -36,8 +36,8 @@ export function Page({
           title={title}
         />
       )}
-      {toolbar && <div className="dv-page__toolbar">{toolbar}</div>}
-      {children && <div className="dv-page__body">{children}</div>}
+      {toolbar && <div className="vf-page__toolbar">{toolbar}</div>}
+      {children && <div className="vf-page__body">{children}</div>}
     </main>
   );
 }

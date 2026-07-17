@@ -12,11 +12,11 @@ export function Inline({
   return (
     <div
       className={joinClassNames(
-        "dv-inline",
-        `dv-inline--gap-${gap}`,
-        `dv-inline--align-${align}`,
-        `dv-inline--justify-${justify}`,
-        wrap && "dv-inline--wrap",
+        "vf-inline",
+        `vf-inline--gap-${gap}`,
+        `vf-inline--align-${align}`,
+        `vf-inline--justify-${justify}`,
+        wrap && "vf-inline--wrap",
         className
       )}
       {...props}

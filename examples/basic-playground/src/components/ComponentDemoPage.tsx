@@ -39,7 +39,7 @@ function GuidanceList({ title, items }: { title: string; items?: string[] }) {
   }
 
   return (
-    <div className="dv-playground-guidance-list">
+    <div className="vf-playground-guidance-list">
       <h3>{title}</h3>
       <ul>{items.map((item) => <li key={item}>{item}</li>)}</ul>
     </div>
@@ -70,46 +70,46 @@ export function ComponentDemoPage({
   ];
 
   return (
-    <div className="dv-playground-reference-layout">
-      <div className="dv-playground-reference-content">
-        <section className="dv-playground-section" id="overview">
+    <div className="vf-playground-reference-layout">
+      <div className="vf-playground-reference-content">
+        <section className="vf-playground-section" id="overview">
           <PageHeader
             description={description}
-            status={<div className="dv-playground-demo-page__badges"><Badge tone="subtle">{packageName}</Badge><Badge variant={statusVariant[status]}>{status}</Badge></div>}
+            status={<div className="vf-playground-demo-page__badges"><Badge tone="subtle">{packageName}</Badge><Badge variant={statusVariant[status]}>{status}</Badge></div>}
             title={title}
           />
         </section>
-        <section className="dv-playground-section" id="import">
+        <section className="vf-playground-section" id="import">
           <Panel title="Import"><CodeBlock code={importCode} /></Panel>
         </section>
         {sections.map((section) => (
-          <section className="dv-playground-section" id={section.id} key={section.id}>
-            {section.title && <h2 className="dv-playground-section__title">{section.title}</h2>}
+          <section className="vf-playground-section" id={section.id} key={section.id}>
+            {section.title && <h2 className="vf-playground-section__title">{section.title}</h2>}
             {section.children}
           </section>
         ))}
         {(useWhen?.length || avoidWhen?.length) && (
-          <section className="dv-playground-section" id="usage-guidance">
-            <Panel className="dv-playground-guidance" title="Usage guidance">
+          <section className="vf-playground-section" id="usage-guidance">
+            <Panel className="vf-playground-guidance" title="Usage guidance">
               <GuidanceList items={useWhen} title="Use when" />
               <GuidanceList items={avoidWhen} title="Avoid when" />
             </Panel>
           </section>
         )}
         {props && props.length > 0 && (
-          <section className="dv-playground-section" id="api-reference">
+          <section className="vf-playground-section" id="api-reference">
             <Panel title="API reference"><PropsTable rows={props} /></Panel>
           </section>
         )}
         {accessibility && accessibility.length > 0 && (
-          <section className="dv-playground-section" id="accessibility">
+          <section className="vf-playground-section" id="accessibility">
             <Panel title="Accessibility"><GuidanceList items={accessibility} title="Considerations" /></Panel>
           </section>
         )}
         {relatedComponents && relatedComponents.length > 0 && (
-          <section className="dv-playground-section" id="related-components">
+          <section className="vf-playground-section" id="related-components">
             <Panel title="Related components">
-              <ul className="dv-playground-related-links">
+              <ul className="vf-playground-related-links">
                 {relatedComponents.map((component) => <li key={component.id}><a href={`#${component.id}`}><CodeText>{component.name}</CodeText><Text tone="muted">{component.description}</Text></a></li>)}
               </ul>
             </Panel>

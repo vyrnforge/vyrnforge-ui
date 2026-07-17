@@ -11,7 +11,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   return (
     <textarea
       aria-invalid={invalid || undefined}
-      className={joinClassNames("dv-input", "dv-textarea", `dv-input--${size}`, className)}
+      className={joinClassNames("vf-input", "vf-textarea", `vf-input--${size}`, className)}
       ref={ref}
       {...props}
     />

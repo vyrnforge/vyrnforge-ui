@@ -10,13 +10,13 @@ export function TopNav({
   ...props
 }: TopNavProps) {
   return (
-    <header className={joinClassNames("dv-top-nav", className)} {...props}>
-      {brand && <div className="dv-top-nav__brand">{brand}</div>}
-      {navigation && <nav className="dv-top-nav__navigation">{navigation}</nav>}
+    <header className={joinClassNames("vf-top-nav", className)} {...props}>
+      {brand && <div className="vf-top-nav__brand">{brand}</div>}
+      {navigation && <nav className="vf-top-nav__navigation">{navigation}</nav>}
       {(actions || userArea) && (
-        <div className="dv-top-nav__actions">
+        <div className="vf-top-nav__actions">
           {actions}
-          {userArea && <div className="dv-top-nav__user">{userArea}</div>}
+          {userArea && <div className="vf-top-nav__user">{userArea}</div>}
         </div>
       )}
     </header>

@@ -49,7 +49,7 @@ npm run build:playground
 - Local workspace package consumption with `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and `@vyrnforge/ui-data-grid`.
 - Recommended CSS import order: core, components, then data grid.
 - Overview, Core, Components, Data Grid, and Patterns navigation using simple React state.
-- Shared `--dv-*` tokens across buttons, inputs, states, and data-grid fallbacks.
+- Shared `--vf-*` tokens across buttons, inputs, states, and data-grid fallbacks.
 - Backward-compatible grid-specific `--udg-*` override examples.
 - Light, dark, enterprise, and system theme previews.
 - Compact, standard, and comfortable density examples.

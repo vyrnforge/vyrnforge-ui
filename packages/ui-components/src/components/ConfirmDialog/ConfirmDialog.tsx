@@ -26,12 +26,12 @@ export function ConfirmDialog({
 
   return (
     <Dialog
-      className="dv-confirm-dialog"
+      className="vf-confirm-dialog"
       closeOnEscape={!loading}
       closeOnOverlayClick={!loading}
       description={description}
       footer={
-        <div className="dv-confirm-dialog__actions">
+        <div className="vf-confirm-dialog__actions">
           <Button disabled={loading || disabled} onClick={handleCancel} variant="subtle">
             {cancelLabel}
           </Button>

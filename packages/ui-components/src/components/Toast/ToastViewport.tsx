@@ -23,7 +23,7 @@ export function ToastViewport({
       <section
         aria-label={label}
         className={joinClassNames(
-          "dv-toast-viewport",
+          "vf-toast-viewport",
           toastViewportClass(position)
         )}
       >

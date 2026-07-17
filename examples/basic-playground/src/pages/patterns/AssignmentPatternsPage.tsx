@@ -59,9 +59,9 @@ export function AssignmentPatternsPage() {
   const [channels, setChannels] = useState(["email", "webhook"]);
 
   return (
-    <section className="dv-playground-panel">
+    <section className="vf-playground-panel">
       <Stack gap="lg">
-        <div className="dv-playground-section-heading">
+        <div className="vf-playground-section-heading">
           <div>
             <Heading size="md">Assignment patterns</Heading>
             <Text tone="muted">
@@ -105,7 +105,7 @@ export function AssignmentPatternsPage() {
         </Stack>
 
         <Stack gap="sm">
-          <div className="dv-playground-section-heading">
+          <div className="vf-playground-section-heading">
             <div>
               <Heading level={3} size="sm">Notification channel assignment</Heading>
               <Text tone="muted">

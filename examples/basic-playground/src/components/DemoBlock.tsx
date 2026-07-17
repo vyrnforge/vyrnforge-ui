@@ -31,11 +31,11 @@ export function DemoBlock({
           {codeVisible ? "Hide code" : "Show code"}
         </Button>
       }
-      className="dv-playground-demo-block"
+      className="vf-playground-demo-block"
       description={description}
       title={title}
     >
-      <div className="dv-playground-demo-block__preview">{preview}</div>
+      <div className="vf-playground-demo-block__preview">{preview}</div>
       {codeVisible && <CodeBlock code={code} />}
     </Panel>
   );

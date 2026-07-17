@@ -1,18 +1,18 @@
-.dv-icon-button {
-  width: var(--dv-control-height);
-  height: var(--dv-control-height);
+.vf-icon-button {
+  width: var(--vf-control-height);
+  height: var(--vf-control-height);
   padding: 0;
 }
-.dv-icon-button--xs {
+.vf-icon-button--xs {
   width: 24px;
   height: 24px;
-  border-radius: var(--dv-radius-sm);
+  border-radius: var(--vf-radius-sm);
 }
-.dv-icon-button--sm {
+.vf-icon-button--sm {
   width: 30px;
   height: 30px;
 }
-.dv-icon-button--lg {
+.vf-icon-button--lg {
   width: 42px;
   height: 42px;
 }

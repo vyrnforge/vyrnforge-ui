@@ -1,57 +1,57 @@
-.dv-input,
-.dv-select {
+.vf-input,
+.vf-select {
   width: 100%;
-  min-height: var(--dv-control-height);
-  border: 1px solid var(--dv-border);
-  border-radius: var(--dv-radius-md);
-  padding: 0 var(--dv-control-padding-x);
-  color: var(--dv-text);
-  background: var(--dv-surface);
-  font-size: var(--dv-font-size-md);
+  min-height: var(--vf-control-height);
+  border: 1px solid var(--vf-border);
+  border-radius: var(--vf-radius-md);
+  padding: 0 var(--vf-control-padding-x);
+  color: var(--vf-text);
+  background: var(--vf-surface);
+  font-size: var(--vf-font-size-md);
   transition:
-    border-color var(--dv-transition-fast),
-    box-shadow var(--dv-transition-fast),
-    background-color var(--dv-transition-fast);
+    border-color var(--vf-transition-fast),
+    box-shadow var(--vf-transition-fast),
+    background-color var(--vf-transition-fast);
 }
-.dv-input--sm,
-.dv-select--sm {
+.vf-input--sm,
+.vf-select--sm {
   min-height: 30px;
   padding-inline: 10px;
-  font-size: var(--dv-font-size-sm);
+  font-size: var(--vf-font-size-sm);
 }
-.dv-input--lg,
-.dv-select--lg {
+.vf-input--lg,
+.vf-select--lg {
   min-height: 42px;
   padding-inline: 14px;
-  font-size: var(--dv-font-size-lg);
+  font-size: var(--vf-font-size-lg);
 }
-.dv-input:hover:not(:disabled),
-.dv-select:hover:not(:disabled) {
-  border-color: var(--dv-border-strong);
+.vf-input:hover:not(:disabled),
+.vf-select:hover:not(:disabled) {
+  border-color: var(--vf-border-strong);
 }
-.dv-input[aria-invalid=true],
-.dv-select[aria-invalid=true],
-.dv-checkbox[aria-invalid=true] {
-  border-color: var(--dv-danger);
+.vf-input[aria-invalid=true],
+.vf-select[aria-invalid=true],
+.vf-checkbox[aria-invalid=true] {
+  border-color: var(--vf-danger);
 }
-.dv-textarea {
+.vf-textarea {
   min-height: 96px;
   padding-block: 9px;
   resize: vertical;
-  line-height: var(--dv-line-height-md);
+  line-height: var(--vf-line-height-md);
 }
-.dv-search-input {
+.vf-search-input {
   position: relative;
   display: grid;
 }
-.dv-search-input .dv-input {
+.vf-search-input .vf-input {
   padding-left: 34px;
 }
-.dv-search-input__icon {
+.vf-search-input__icon {
   position: absolute;
   left: 12px;
   top: 50%;
-  color: var(--dv-text-muted);
+  color: var(--vf-text-muted);
   transform: translateY(-50%);
   pointer-events: none;
 }

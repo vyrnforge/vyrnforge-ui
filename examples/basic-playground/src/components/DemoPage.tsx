@@ -39,26 +39,26 @@ export function DemoPage({
   relatedComponents
 }: DemoPageProps) {
   return (
-    <div className="dv-playground-demo-page">
+    <div className="vf-playground-demo-page">
       <PageHeader
         description={description}
         status={
-          <div className="dv-playground-demo-page__badges">
+          <div className="vf-playground-demo-page__badges">
             <Badge tone="subtle">{packageName}</Badge>
             <Badge variant={statusVariant[status]}>{status}</Badge>
           </div>
         }
         title={title}
       />
-      <Panel className="dv-playground-import" title="Import">
+      <Panel className="vf-playground-import" title="Import">
         <CodeBlock code={importSnippet} />
       </Panel>
       {children}
-      <div className="dv-playground-demo-page__reference">
+      <div className="vf-playground-demo-page__reference">
         <UsageGuidance accessibility={accessibility} avoidWhen={avoid} useWhen={usage} />
         <RelatedComponents components={relatedComponents} />
       </div>
-      <Text className="dv-playground-demo-page__note" size="sm" tone="muted">
+      <Text className="vf-playground-demo-page__note" size="sm" tone="muted">
         Examples use documented public APIs only. <CodeText>{packageName}</CodeText> owns the behavior shown here.
       </Text>
     </div>

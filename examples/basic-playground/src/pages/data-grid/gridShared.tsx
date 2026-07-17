@@ -17,7 +17,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     groupable: true,
     width: 220,
     cell: (_value, row) => (
-      <span className="dv-playground-demo-user-cell">
+      <span className="vf-playground-demo-user-cell">
         <strong>{row.name}</strong>
         <small>{row.email}</small>
       </span>
@@ -72,7 +72,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     dataType: "number",
     align: "right",
     width: 110,
-    cell: (value) => <span className="dv-playground-demo-score">{String(value)}</span>
+    cell: (value) => <span className="vf-playground-demo-score">{String(value)}</span>
   },
   {
     id: "enabled",
@@ -83,7 +83,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     align: "center",
     width: 120,
     cell: (value) => (
-      <span className={value ? "dv-playground-demo-boolean dv-playground-demo-boolean-on" : "dv-playground-demo-boolean dv-playground-demo-boolean-off"}>
+      <span className={value ? "vf-playground-demo-boolean vf-playground-demo-boolean-on" : "vf-playground-demo-boolean vf-playground-demo-boolean-off"}>
         {value ? "Enabled" : "Paused"}
       </span>
     )
@@ -150,12 +150,12 @@ export const userBulkActions: DataGridBulkAction<UserRecord>[] = [
 ];
 
 export function GridNote({ children }: { children: string }) {
-  return <p className="dv-playground-note">{children}</p>;
+  return <p className="vf-playground-note">{children}</p>;
 }
 
 export function SectionActions() {
   return (
-    <div className="dv-playground-inline-actions">
+    <div className="vf-playground-inline-actions">
       <Button leftSlot={<Icon name="Check" />} size="sm" variant="primary">Save view</Button>
       <ToolbarButton icon={<Icon name="Reset" />} label="Reset" tooltip="Reset view" />
     </div>

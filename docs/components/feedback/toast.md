@@ -82,7 +82,7 @@ Toast must not replace persistent contextual feedback when the user must act. Cr
 
 ## Z-Index
 
-Toast viewport uses `--dv-z-toast` and renders through the shared Portal foundation. Toasts are anchored to the browser viewport and remain independent from AppShell content scrolling.
+Toast viewport uses `--vf-z-toast` and renders through the shared Portal foundation. Toasts are anchored to the browser viewport and remain independent from AppShell content scrolling.
 
 Do not use Toast as the only feedback inside a modal workflow. Modal workflows should include contextual feedback inside the dialog or drawer when corrective action is required.
 

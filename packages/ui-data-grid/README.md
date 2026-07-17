@@ -22,14 +22,14 @@ import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
-`@vyrnforge/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--dv-*` variables when `@vyrnforge/ui-core` CSS is present, so app-level VyrnForge tokens can theme components and grid together.
+`@vyrnforge/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--vf-*` variables when `@vyrnforge/ui-core` CSS is present, so app-level VyrnForge tokens can theme components and grid together.
 
-Override shared `--dv-*` tokens when components and grid should move together:
+Override shared `--vf-*` tokens when components and grid should move together:
 
 ```css
 .my-app {
-  --dv-primary: #003b71;
-  --dv-radius-md: 10px;
+  --vf-primary: #003b71;
+  --vf-radius-md: 10px;
 }
 ```
 

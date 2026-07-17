@@ -1,112 +1,112 @@
-.dv-dialog,
-.dv-drawer {
+.vf-dialog,
+.vf-drawer {
   position: fixed;
   inset: 0;
-  z-index: var(--dv-z-dialog);
+  z-index: var(--vf-z-dialog);
 }
-.dv-dialog__overlay,
-.dv-drawer__overlay {
+.vf-dialog__overlay,
+.vf-drawer__overlay {
   position: fixed;
   inset: 0;
   display: grid;
   background: rgb(15 23 42 / 45%);
 }
-.dv-dialog__overlay {
+.vf-dialog__overlay {
   place-items: center;
-  padding: var(--dv-space-4);
+  padding: var(--vf-space-4);
 }
-.dv-dialog__layer,
-.dv-drawer__layer {
+.vf-dialog__layer,
+.vf-drawer__layer {
   display: grid;
   min-width: 0;
   max-height: calc(100vh - 32px);
 }
-.dv-dialog__panel,
-.dv-drawer__panel {
+.vf-dialog__panel,
+.vf-drawer__panel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   min-width: 0;
   max-height: calc(100vh - 32px);
-  border: 1px solid var(--dv-border);
-  color: var(--dv-text);
-  background: var(--dv-surface);
-  box-shadow: var(--dv-shadow-md);
+  border: 1px solid var(--vf-border);
+  color: var(--vf-text);
+  background: var(--vf-surface);
+  box-shadow: var(--vf-shadow-md);
 }
-.dv-dialog__panel {
+.vf-dialog__panel {
   width: min(100%, 520px);
-  border-radius: var(--dv-radius-lg);
+  border-radius: var(--vf-radius-lg);
 }
-.dv-dialog__panel--sm {
+.vf-dialog__panel--sm {
   max-width: 400px;
 }
-.dv-dialog__panel--md {
+.vf-dialog__panel--md {
   max-width: 560px;
 }
-.dv-dialog__panel--lg {
+.vf-dialog__panel--lg {
   max-width: 720px;
 }
-.dv-dialog__panel--xl {
+.vf-dialog__panel--xl {
   max-width: 920px;
 }
-.dv-dialog__panel:focus,
-.dv-drawer__panel:focus {
+.vf-dialog__panel:focus,
+.vf-drawer__panel:focus {
   outline: none;
 }
-.dv-dialog__header,
-.dv-drawer__header {
+.vf-dialog__header,
+.vf-drawer__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dv-space-4);
-  border-bottom: 1px solid var(--dv-border);
-  padding: var(--dv-space-4);
+  gap: var(--vf-space-4);
+  border-bottom: 1px solid var(--vf-border);
+  padding: var(--vf-space-4);
 }
-.dv-dialog__heading,
-.dv-drawer__heading {
+.vf-dialog__heading,
+.vf-drawer__heading {
   display: grid;
-  gap: var(--dv-space-1);
+  gap: var(--vf-space-1);
 }
-.dv-dialog__title,
-.dv-drawer__title {
+.vf-dialog__title,
+.vf-drawer__title {
   margin: 0;
-  color: var(--dv-text-strong);
-  font-size: var(--dv-font-size-lg);
-  line-height: var(--dv-line-height-tight);
+  color: var(--vf-text-strong);
+  font-size: var(--vf-font-size-lg);
+  line-height: var(--vf-line-height-tight);
 }
-.dv-dialog__description,
-.dv-drawer__description {
+.vf-dialog__description,
+.vf-drawer__description {
   margin: 0;
-  color: var(--dv-text-muted);
-  font-size: var(--dv-font-size-sm);
-  line-height: var(--dv-line-height-md);
+  color: var(--vf-text-muted);
+  font-size: var(--vf-font-size-sm);
+  line-height: var(--vf-line-height-md);
 }
-.dv-dialog__body,
-.dv-drawer__body {
+.vf-dialog__body,
+.vf-drawer__body {
   min-height: 0;
   overflow: auto;
-  padding: var(--dv-space-4);
+  padding: var(--vf-space-4);
 }
-.dv-dialog__footer,
-.dv-drawer__footer {
-  border-top: 1px solid var(--dv-border);
-  padding: var(--dv-space-4);
+.vf-dialog__footer,
+.vf-drawer__footer {
+  border-top: 1px solid var(--vf-border);
+  padding: var(--vf-space-4);
 }
-.dv-overlay-close {
+.vf-overlay-close {
   display: inline-grid;
   width: 30px;
   height: 30px;
   place-items: center;
-  border: 1px solid var(--dv-border);
-  border-radius: var(--dv-radius-md);
-  color: var(--dv-text-muted);
-  background: var(--dv-surface);
+  border: 1px solid var(--vf-border);
+  border-radius: var(--vf-radius-md);
+  color: var(--vf-text-muted);
+  background: var(--vf-surface);
   cursor: pointer;
 }
-.dv-overlay-close:hover {
-  color: var(--dv-text);
-  background: var(--dv-surface-subtle);
+.vf-overlay-close:hover {
+  color: var(--vf-text);
+  background: var(--vf-surface-subtle);
 }
-.dv-overlay-close:focus-visible {
-  outline: 2px solid var(--dv-focus-ring);
+.vf-overlay-close:focus-visible {
+  outline: 2px solid var(--vf-focus-ring);
   outline-offset: 2px;
 }

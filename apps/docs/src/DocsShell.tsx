@@ -17,17 +17,17 @@ export function DocsShell({
 }: DocsShellProps) {
   return (
     <AppShell
-      className="dv-docs-shell"
+      className="vf-docs-shell"
       fullHeight
       header={
         <TopNav
           brand={
             <div>
-              <div className="dv-docs-header__eyebrow">VyrnForge UI Docs</div>
-              <Heading level={1} size="lg" className="dv-docs-header__title">
+              <div className="vf-docs-header__eyebrow">VyrnForge UI Docs</div>
+              <Heading level={1} size="lg" className="vf-docs-header__title">
                 Source-of-truth documentation and AI reference
               </Heading>
-              <Text tone="muted" className="dv-docs-header__description">
+              <Text tone="muted" className="vf-docs-header__description">
                 Markdown files remain canonical. This app is a readable navigation
                 and reference layer.
               </Text>

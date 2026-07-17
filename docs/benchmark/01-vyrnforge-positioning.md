@@ -21,7 +21,7 @@ VyrnForge UI is not only a data grid package. The data grid is the first strateg
 | Package | Role | Owns | Does not own |
 | --- | --- | --- | --- |
 | `@vyrnforge/ui-core` | Shared foundation | Tokens, themes, density, utilities, shared CSS variables | React components, grid logic, app state |
-| `@vyrnforge/ui-components` | Reusable UI layer | Native React primitives, application components, shared `dv-*` styles | Data-grid behavior, backend data, global store |
+| `@vyrnforge/ui-components` | Reusable UI layer | Native React primitives, application components, shared `vf-*` styles | Data-grid behavior, backend data, global store |
 | `@vyrnforge/ui-data-grid` | Specialized data-management package | UniversalDataGrid, grid state contracts, grid-specific algorithms, adapters, `udg-*` styles | App data fetching, report generation, business workflows |
 
 ## Principles
@@ -29,7 +29,7 @@ VyrnForge UI is not only a data grid package. The data grid is the first strateg
 | Principle | Position |
 | --- | --- |
 | Native-first | Prefer browser-native elements and platform behavior before adding custom abstractions. |
-| CSS variable theming | Use `--dv-*` shared tokens and `--udg-*` grid variables for scoped customization. |
+| CSS variable theming | Use `--vf-*` shared tokens and `--udg-*` grid variables for scoped customization. |
 | Dependency-minimal | Do not add heavy UI/runtime dependencies by default. |
 | Store-agnostic | No Redux/Zustand/TanStack state dependency inside VyrnForge packages. |
 | Controlled/uncontrolled state | Components can manage local view state or let apps fully control it. |

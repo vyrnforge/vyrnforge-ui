@@ -51,7 +51,7 @@ export function PlaygroundNav({
   return (
     <SideNav
       aria-label="Playground sections"
-      className="dv-playground-nav"
+      className="vf-playground-nav"
       items={items}
     />
   );

@@ -37,8 +37,8 @@ export function Toast({
     <div
       aria-live={role === "alert" ? "assertive" : "polite"}
       className={joinClassNames(
-        "dv-toast",
-        `dv-toast--${resolvedTone}`,
+        "vf-toast",
+        `vf-toast--${resolvedTone}`,
         className
       )}
       id={id}
@@ -53,20 +53,20 @@ export function Toast({
       role={role}
       style={style}
     >
-      <span aria-hidden="true" className="dv-toast__icon">
+      <span aria-hidden="true" className="vf-toast__icon">
         <Icon name={toneIconMap[resolvedTone]} />
       </span>
-      <span className="dv-toast__content">
-        {title && <strong className="dv-toast__title">{title}</strong>}
+      <span className="vf-toast__content">
+        {title && <strong className="vf-toast__title">{title}</strong>}
         {description && (
-          <span className="dv-toast__description">{description}</span>
+          <span className="vf-toast__description">{description}</span>
         )}
       </span>
-      {action && <span className="dv-toast__action">{action}</span>}
+      {action && <span className="vf-toast__action">{action}</span>}
       {dismissible && (
         <IconButton
           aria-label="Dismiss notification"
-          className="dv-toast__dismiss"
+          className="vf-toast__dismiss"
           onClick={onDismiss}
           size="sm"
           variant="ghost"

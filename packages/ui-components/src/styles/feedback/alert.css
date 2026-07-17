@@ -1,33 +1,33 @@
-.dv-inline-message {
+.vf-inline-message {
   display: grid;
-  gap: var(--dv-space-1);
-  border: 1px solid var(--dv-border);
-  border-radius: var(--dv-radius-md);
-  padding: var(--dv-space-3);
-  color: var(--dv-text);
-  background: var(--dv-surface-subtle);
+  gap: var(--vf-space-1);
+  border: 1px solid var(--vf-border);
+  border-radius: var(--vf-radius-md);
+  padding: var(--vf-space-3);
+  color: var(--vf-text);
+  background: var(--vf-surface-subtle);
 }
-.dv-inline-message__title {
-  color: var(--dv-text-strong);
+.vf-inline-message__title {
+  color: var(--vf-text-strong);
 }
-.dv-inline-message__content {
-  color: var(--dv-text-muted);
-  font-size: var(--dv-font-size-sm);
-  line-height: var(--dv-line-height-md);
+.vf-inline-message__content {
+  color: var(--vf-text-muted);
+  font-size: var(--vf-font-size-sm);
+  line-height: var(--vf-line-height-md);
 }
-.dv-inline-message--success {
-  border-color: color-mix(in srgb, var(--dv-success) 35%, var(--dv-border));
-  background: var(--dv-success-soft);
+.vf-inline-message--success {
+  border-color: color-mix(in srgb, var(--vf-success) 35%, var(--vf-border));
+  background: var(--vf-success-soft);
 }
-.dv-inline-message--warning {
-  border-color: color-mix(in srgb, var(--dv-warning) 35%, var(--dv-border));
-  background: var(--dv-warning-soft);
+.vf-inline-message--warning {
+  border-color: color-mix(in srgb, var(--vf-warning) 35%, var(--vf-border));
+  background: var(--vf-warning-soft);
 }
-.dv-inline-message--danger {
-  border-color: color-mix(in srgb, var(--dv-danger) 35%, var(--dv-border));
-  background: var(--dv-danger-soft);
+.vf-inline-message--danger {
+  border-color: color-mix(in srgb, var(--vf-danger) 35%, var(--vf-border));
+  background: var(--vf-danger-soft);
 }
-.dv-inline-message--info {
-  border-color: color-mix(in srgb, var(--dv-info) 35%, var(--dv-border));
-  background: var(--dv-info-soft);
+.vf-inline-message--info {
+  border-color: color-mix(in srgb, var(--vf-info) 35%, var(--vf-border));
+  background: var(--vf-info-soft);
 }

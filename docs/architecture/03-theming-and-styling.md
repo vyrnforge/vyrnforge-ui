@@ -8,8 +8,8 @@ VyrnForge uses package CSS and CSS variables, not CSS-in-JS or utility-framework
 
 | Layer | Prefix | Owner | Purpose |
 | --- | --- | --- | --- |
-| Shared foundation | `--dv-*` | `@vyrnforge/ui-core` | app-wide colors, typography, spacing, radius, shadows, density |
-| Component classes | `dv-*` | `@vyrnforge/ui-components` | shared component visuals |
+| Shared foundation | `--vf-*` | `@vyrnforge/ui-core` | app-wide colors, typography, spacing, radius, shadows, density |
+| Component classes | `vf-*` | `@vyrnforge/ui-components` | shared component visuals |
 | Grid variables | `--udg-*` | `@vyrnforge/ui-data-grid` | grid row/header/layout variables |
 | Grid classes | `udg-*` | `@vyrnforge/ui-data-grid` | grid-specific layout and interactions |
 
@@ -54,7 +54,7 @@ Inline styles are not allowed for static theme styling.
 ## Customization hierarchy
 
 1. Use built-in `theme`, `density`, `variant` props.
-2. Override scoped `--dv-*` tokens.
+2. Override scoped `--vf-*` tokens.
 3. Override scoped `--udg-*` variables for grid-specific needs.
 4. Use `className` for structural extension.
 5. Use `style` only for instance-level dynamic overrides.
@@ -63,8 +63,8 @@ Inline styles are not allowed for static theme styling.
 
 ```css
 .my-product {
-  --dv-primary: #003b71;
-  --dv-radius-md: 10px;
+  --vf-primary: #003b71;
+  --vf-radius-md: 10px;
 }
 
 .my-product .udg {

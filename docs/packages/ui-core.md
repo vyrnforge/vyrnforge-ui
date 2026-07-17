@@ -16,8 +16,8 @@ It should remain dependency-light and should not own React components.
 
 ## Owns
 
-- `--dv-*` CSS variables
-- `dv-*` utility classes where not component-specific
+- `--vf-*` CSS variables
+- `vf-*` utility classes where not component-specific
 - theme presets: light, dark, system, enterprise
 - density presets: compact, standard, comfortable
 
@@ -38,7 +38,7 @@ import "@vyrnforge/ui-core/styles/index.css";
 
 ```css
 .my-app {
-  --dv-primary: #003b71;
-  --dv-radius-md: 10px;
+  --vf-primary: #003b71;
+  --vf-radius-md: 10px;
 }
 ```

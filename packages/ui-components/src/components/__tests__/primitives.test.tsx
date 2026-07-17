@@ -78,7 +78,7 @@ describe("@vyrnforge/ui-components primitives", () => {
 
     expect(markup).toContain("disabled=\"\"");
     expect(markup).toContain("aria-busy=\"true\"");
-    expect(markup).toContain("dv-button__spinner");
+    expect(markup).toContain("vf-button__spinner");
   });
 
   it("requires IconButton aria-label through props and renders it", () => {
@@ -116,7 +116,7 @@ describe("@vyrnforge/ui-components primitives", () => {
       <ToolbarButton active icon={<Icon name="Filter" />} label="Filters" />
     );
 
-    expect(markup).toContain("dv-toolbar-button--active");
+    expect(markup).toContain("vf-toolbar-button--active");
     expect(markup).toContain("aria-pressed=\"true\"");
   });
 
@@ -148,8 +148,8 @@ describe("@vyrnforge/ui-components primitives", () => {
 
     expect(markup).toContain("type=\"radio\"");
     expect(markup).toContain("aria-label=\"3 of 5 stars\"");
-    expect(markup).toContain("dv-rating--read-only");
-    expect(markup).toContain("dv-rating--disabled");
+    expect(markup).toContain("vf-rating--read-only");
+    expect(markup).toContain("vf-rating--disabled");
   });
 
   it("renders Slider with native range constraints and displayed controlled value", () => {
@@ -173,7 +173,7 @@ describe("@vyrnforge/ui-components primitives", () => {
     );
 
     expect(markup).toContain("aria-pressed=\"true\"");
-    expect(markup).toContain("dv-toggle-button--pressed");
+    expect(markup).toContain("vf-toggle-button--pressed");
     expect(markup).toContain("disabled=\"\"");
   });
 
@@ -191,8 +191,8 @@ describe("@vyrnforge/ui-components primitives", () => {
       </>
     );
 
-    expect(markup).toContain("dv-toggle-button-group--single");
-    expect(markup).toContain("dv-toggle-button-group--multiple");
+    expect(markup).toContain("vf-toggle-button-group--single");
+    expect(markup).toContain("vf-toggle-button-group--multiple");
     expect(markup.match(/aria-pressed=\"true\"/g)).toHaveLength(3);
   });
 
@@ -204,7 +204,7 @@ describe("@vyrnforge/ui-components primitives", () => {
     );
 
     expect(markup).toContain("aria-orientation=\"vertical\"");
-    expect(markup).toContain("dv-button-group--sm");
+    expect(markup).toContain("vf-button-group--sm");
   });
 
   it("passes native onChange handlers through form controls", () => {
@@ -232,7 +232,7 @@ describe("@vyrnforge/ui-components primitives", () => {
   it("renders Badge variant classes", () => {
     const markup = renderToStaticMarkup(<Badge variant="success">Active</Badge>);
 
-    expect(markup).toContain("dv-badge--success");
+    expect(markup).toContain("vf-badge--success");
   });
 
   it("renders Field label, description, and error state", () => {
@@ -265,8 +265,8 @@ describe("@vyrnforge/ui-components primitives", () => {
       </Field>
     );
 
-    expect(markup).toContain("dv-field--horizontal");
-    expect(markup).toContain("dv-field--warning");
+    expect(markup).toContain("vf-field--horizontal");
+    expect(markup).toContain("vf-field--warning");
     expect(markup).toContain("Close to limit");
   });
 
@@ -347,7 +347,7 @@ describe("@vyrnforge/ui-components primitives", () => {
       />
     );
 
-    expect(markup).toContain("dv-multi-select__chip");
+    expect(markup).toContain("vf-multi-select__chip");
     expect(markup).toContain("Admin");
     expect(markup).toContain("aria-expanded=\"false\"");
   });
@@ -452,7 +452,7 @@ describe("@vyrnforge/ui-components primitives", () => {
     );
 
     expect(markup).not.toContain("name=\"applicationIds\"");
-    expect(markup).toContain("dv-transfer-list--disabled");
+    expect(markup).toContain("vf-transfer-list--disabled");
   });
 
   it("normalizes TransferList values and computes ordered move targets", () => {
@@ -476,14 +476,14 @@ describe("@vyrnforge/ui-components primitives", () => {
       <ValidationMessage tone="info">Helpful message</ValidationMessage>
     );
 
-    expect(markup).toContain("dv-validation-message--info");
+    expect(markup).toContain("vf-validation-message--info");
     expect(markup).toContain("Helpful message");
   });
 
   it("renders static Skeleton class when animated is false", () => {
     const markup = renderToStaticMarkup(<Skeleton animated={false} />);
 
-    expect(markup).toContain("dv-skeleton--static");
+    expect(markup).toContain("vf-skeleton--static");
   });
 
   it("renders EmptyState and ErrorState actions", () => {
@@ -510,7 +510,7 @@ describe("@vyrnforge/ui-components primitives", () => {
       />
     );
 
-    expect(markup).toContain("dv-toast--error");
+    expect(markup).toContain("vf-toast--error");
     expect(markup).toContain("role=\"alert\"");
     expect(markup).toContain("aria-live=\"assertive\"");
     expect(markup).toContain("Export failed");
@@ -530,7 +530,7 @@ describe("@vyrnforge/ui-components primitives", () => {
       />
     );
 
-    expect(markup).toContain("dv-toast-viewport--top-center");
+    expect(markup).toContain("vf-toast-viewport--top-center");
     expect(markup).toContain("aria-label=\"Notifications\"");
     expect(markup).toContain("Saved");
   });
@@ -586,7 +586,7 @@ describe("@vyrnforge/ui-components primitives", () => {
     );
 
     expect(markup).toContain("Popover content");
-    expect(markup).toContain("dv-popover__content");
+    expect(markup).toContain("vf-popover__content");
   });
 
   it("renders Menu items and disabled state", () => {
@@ -621,8 +621,8 @@ describe("@vyrnforge/ui-components primitives", () => {
     expect(markup).toContain("role=\"dialog\"");
     expect(markup).toContain("aria-modal=\"true\"");
     expect(markup).toContain("Dialog body");
-    expect(markup).toContain("dv-dialog__layer");
-    expect(markup).toContain("data-dv-focus-fallback");
+    expect(markup).toContain("vf-dialog__layer");
+    expect(markup).toContain("data-vf-focus-fallback");
   });
 
   it("renders modal Drawer through the shared overlay layer", () => {
@@ -632,9 +632,9 @@ describe("@vyrnforge/ui-components primitives", () => {
       </Drawer>
     );
 
-    expect(markup).toContain("dv-drawer--top");
+    expect(markup).toContain("vf-drawer--top");
     expect(markup).toContain("aria-modal=\"true\"");
-    expect(markup).toContain("dv-drawer__layer");
+    expect(markup).toContain("vf-drawer__layer");
   });
 
   it("renders Popover portal-ready dismissal content", () => {
@@ -644,8 +644,8 @@ describe("@vyrnforge/ui-components primitives", () => {
       </Popover>
     );
 
-    expect(markup).toContain("dv-dismissable-layer");
-    expect(markup).toContain("dv-popover__content");
+    expect(markup).toContain("vf-dismissable-layer");
+    expect(markup).toContain("vf-popover__content");
   });
 
   it("renders ConfirmDialog actions", () => {
@@ -660,7 +660,7 @@ describe("@vyrnforge/ui-components primitives", () => {
     );
 
     expect(markup).toContain("Confirm action");
-    expect(markup).toContain("dv-button--danger");
+    expect(markup).toContain("vf-button--danger");
   });
 
   it("does not render Tooltip content before interaction", () => {
@@ -680,9 +680,9 @@ describe("@vyrnforge/ui-components primitives", () => {
       </AppShell>
     );
 
-    expect(markup).toContain("dv-app-shell--with-sidebar");
-    expect(markup).toContain("dv-app-shell__header");
-    expect(markup).toContain("dv-app-shell__sidebar-scroll");
+    expect(markup).toContain("vf-app-shell--with-sidebar");
+    expect(markup).toContain("vf-app-shell__header");
+    expect(markup).toContain("vf-app-shell__sidebar-scroll");
     expect(markup).toContain("Sidebar");
     expect(markup).toContain("Content");
   });
@@ -705,14 +705,14 @@ describe("@vyrnforge/ui-components primitives", () => {
       </AppShell>
     );
 
-    expect(markup).toContain("dv-app-shell--scroll-split");
-    expect(markup).toContain("dv-app-shell--header-fixed");
-    expect(markup).toContain("dv-app-shell--sidebar-fixed");
-    expect(markup).toContain("dv-app-shell--sidebar-collapsed");
-    expect(markup).toContain("--dv-app-shell-header-height:80px");
-    expect(markup).toContain("--dv-app-shell-sidebar-width:260px");
-    expect(markup).toContain("--dv-app-shell-sidebar-collapsed-width:72px");
-    expect(markup).toContain("--dv-app-shell-min-height:720px");
+    expect(markup).toContain("vf-app-shell--scroll-split");
+    expect(markup).toContain("vf-app-shell--header-fixed");
+    expect(markup).toContain("vf-app-shell--sidebar-fixed");
+    expect(markup).toContain("vf-app-shell--sidebar-collapsed");
+    expect(markup).toContain("--vf-app-shell-header-height:80px");
+    expect(markup).toContain("--vf-app-shell-sidebar-width:260px");
+    expect(markup).toContain("--vf-app-shell-sidebar-collapsed-width:72px");
+    expect(markup).toContain("--vf-app-shell-min-height:720px");
   });
 
   it("renders PageHeader actions and status", () => {
@@ -726,7 +726,7 @@ describe("@vyrnforge/ui-components primitives", () => {
 
     expect(markup).toContain("Customer");
     expect(markup).toContain("Approve");
-    expect(markup).toContain("dv-page-header__status");
+    expect(markup).toContain("vf-page-header__status");
   });
 
   it("marks the current Breadcrumb item", () => {
@@ -766,8 +766,8 @@ describe("@vyrnforge/ui-components primitives", () => {
 
     activeButton?.props.onClick();
 
-    expect(markup).toContain("dv-side-nav__item--active");
-    expect(markup).toContain("dv-side-nav__scroll");
+    expect(markup).toContain("vf-side-nav__item--active");
+    expect(markup).toContain("vf-side-nav__scroll");
     expect(markup).toContain("aria-current=\"page\"");
     expect(onSelect).toHaveBeenCalledWith({ id: "orders", label: "Orders" });
   });
@@ -782,11 +782,11 @@ describe("@vyrnforge/ui-components primitives", () => {
       />
     );
 
-    expect(markup).toContain("dv-side-nav--collapsed");
-    expect(markup).toContain("dv-side-nav__header");
-    expect(markup).toContain("dv-side-nav__scroll");
-    expect(markup).toContain("dv-side-nav__list");
-    expect(markup).toContain("dv-side-nav__footer");
+    expect(markup).toContain("vf-side-nav--collapsed");
+    expect(markup).toContain("vf-side-nav__header");
+    expect(markup).toContain("vf-side-nav__scroll");
+    expect(markup).toContain("vf-side-nav__list");
+    expect(markup).toContain("vf-side-nav__footer");
   });
 
   it("renders controlled Tabs selection and disabled tabs", () => {

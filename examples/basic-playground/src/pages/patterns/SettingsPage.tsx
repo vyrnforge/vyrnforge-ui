@@ -36,8 +36,8 @@ function SettingsPageContent() {
   });
 
   return (
-    <section className="dv-playground-panel dv-playground-settings-panel">
-      <div className="dv-playground-section-heading">
+    <section className="vf-playground-panel vf-playground-settings-panel">
+      <div className="vf-playground-section-heading">
         <div>
           <Heading size="md">Workspace settings</Heading>
           <Text tone="muted">Sectioned settings built from native controls and shared tokens.</Text>
@@ -92,7 +92,7 @@ function SettingsPageContent() {
           { value: "annual", label: "Annual" }
         ]}
       />
-      <div className="dv-playground-settings-switch-list">
+      <div className="vf-playground-settings-switch-list">
         <Switch
           checked={settings.email}
           label="Send workflow email notifications"

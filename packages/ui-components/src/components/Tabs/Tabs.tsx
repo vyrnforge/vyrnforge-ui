@@ -80,14 +80,14 @@ export function Tabs({
   return (
     <div
       className={joinClassNames(
-        "dv-tabs",
-        `dv-tabs--${variant}`,
-        `dv-tabs--${size}`,
+        "vf-tabs",
+        `vf-tabs--${variant}`,
+        `vf-tabs--${size}`,
         className
       )}
       {...props}
     >
-      <div className="dv-tabs__list" role="tablist">
+      <div className="vf-tabs__list" role="tablist">
         {items.map((item, index) => {
           const selected = item.id === selectedItem?.id;
           const tabId = `${baseId}-tab-${item.id}`;
@@ -98,8 +98,8 @@ export function Tabs({
               aria-controls={item.content ? panelId : undefined}
               aria-selected={selected}
               className={joinClassNames(
-                "dv-tabs__tab",
-                selected && "dv-tabs__tab--selected"
+                "vf-tabs__tab",
+                selected && "vf-tabs__tab--selected"
               )}
               disabled={item.disabled}
               id={tabId}
@@ -117,8 +117,8 @@ export function Tabs({
               tabIndex={selected ? 0 : -1}
               type="button"
             >
-              <span className="dv-tabs__label">{item.label}</span>
-              {item.badge && <span className="dv-tabs__badge">{item.badge}</span>}
+              <span className="vf-tabs__label">{item.label}</span>
+              {item.badge && <span className="vf-tabs__badge">{item.badge}</span>}
             </button>
           );
         })}
@@ -127,7 +127,7 @@ export function Tabs({
         (selectedItem?.content && (
           <div
             aria-labelledby={`${baseId}-tab-${selectedItem.id}`}
-            className="dv-tabs__panel"
+            className="vf-tabs__panel"
             id={`${baseId}-panel-${selectedItem.id}`}
             role="tabpanel"
           >

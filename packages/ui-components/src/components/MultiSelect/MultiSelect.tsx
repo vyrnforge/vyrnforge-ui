@@ -64,10 +64,10 @@ export function MultiSelect({
   return (
     <div
       className={joinClassNames(
-        "dv-multi-select",
-        isOpen && "dv-multi-select--open",
-        invalid && "dv-multi-select--invalid",
-        disabled && "dv-multi-select--disabled",
+        "vf-multi-select",
+        isOpen && "vf-multi-select--open",
+        invalid && "vf-multi-select--invalid",
+        disabled && "vf-multi-select--disabled",
         className
       )}
       onKeyDown={handleKeyDown}
@@ -78,37 +78,37 @@ export function MultiSelect({
         aria-haspopup="listbox"
         aria-invalid={invalid || undefined}
         aria-label={ariaLabel}
-        className="dv-multi-select__trigger"
+        className="vf-multi-select__trigger"
         disabled={disabled}
         onClick={() => setIsOpen((nextOpen) => !nextOpen)}
         type="button"
       >
-        <span className="dv-multi-select__value">
+        <span className="vf-multi-select__value">
           {selectedOptions.length > 0 ? (
             selectedOptions.map((option) => (
-              <span className="dv-multi-select__chip" key={option.value}>
+              <span className="vf-multi-select__chip" key={option.value}>
                 {option.label}
               </span>
             ))
           ) : (
-            <span className="dv-multi-select__placeholder">{placeholder}</span>
+            <span className="vf-multi-select__placeholder">{placeholder}</span>
           )}
         </span>
-        <span aria-hidden="true" className="dv-multi-select__chevron">v</span>
+        <span aria-hidden="true" className="vf-multi-select__chevron">v</span>
       </button>
       {isOpen && (
-        <div className="dv-multi-select__popover">
+        <div className="vf-multi-select__popover">
           {searchable && (
             <input
               aria-label="Search options"
-              className="dv-input dv-input--sm dv-multi-select__search"
+              className="vf-input vf-input--sm vf-multi-select__search"
               onChange={(event) => setQuery(event.currentTarget.value)}
               placeholder="Search"
               type="search"
               value={query}
             />
           )}
-          <div className="dv-multi-select__list" role="listbox" aria-multiselectable="true">
+          <div className="vf-multi-select__list" role="listbox" aria-multiselectable="true">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => {
                 const selected = selectedValues.includes(option.value);
@@ -116,9 +116,9 @@ export function MultiSelect({
                 return (
                   <label
                     className={joinClassNames(
-                      "dv-multi-select__option",
-                      selected && "dv-multi-select__option--selected",
-                      option.disabled && "dv-multi-select__option--disabled"
+                      "vf-multi-select__option",
+                      selected && "vf-multi-select__option--selected",
+                      option.disabled && "vf-multi-select__option--disabled"
                     )}
                     key={option.value}
                   >
@@ -129,10 +129,10 @@ export function MultiSelect({
                       type="checkbox"
                       value={option.value}
                     />
-                    <span className="dv-multi-select__option-main">
-                      <span className="dv-multi-select__option-label">{option.label}</span>
+                    <span className="vf-multi-select__option-main">
+                      <span className="vf-multi-select__option-label">{option.label}</span>
                       {option.description && (
-                        <span className="dv-multi-select__option-description">
+                        <span className="vf-multi-select__option-description">
                           {option.description}
                         </span>
                       )}
@@ -141,12 +141,12 @@ export function MultiSelect({
                 );
               })
             ) : (
-              <div className="dv-multi-select__empty">No options</div>
+              <div className="vf-multi-select__empty">No options</div>
             )}
           </div>
           {clearable && selectedValues.length > 0 && (
             <button
-              className="dv-multi-select__clear"
+              className="vf-multi-select__clear"
               onClick={() => setSelectedValues([])}
               type="button"
             >

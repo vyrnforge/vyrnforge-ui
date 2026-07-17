@@ -113,21 +113,21 @@ export function Tooltip({
     : <span {...triggerProps}>{children}</span>;
 
   return (
-    <span className={joinClassNames("dv-tooltip", className)} ref={setTriggerElement}>
+    <span className={joinClassNames("vf-tooltip", className)} ref={setTriggerElement}>
       {trigger}
       {isOpen && !disabled && (
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[{ current: triggerElement }]}
-            className="dv-tooltip__content"
+            className="vf-tooltip__content"
             dismissOnEscape={false}
             dismissOnOutsidePointer={false}
             enabled={isOpen}
             onDismiss={hide}
             onLayerChange={setContentElement}
             style={{
-              "--dv-overlay-x": `${position.x}px`,
-              "--dv-overlay-y": `${position.y}px`,
+              "--vf-overlay-x": `${position.x}px`,
+              "--vf-overlay-y": `${position.y}px`,
               visibility: position.ready ? undefined : "hidden"
             } as CSSProperties}
           >

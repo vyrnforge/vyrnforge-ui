@@ -15,8 +15,8 @@
 
 | Prefix | Owner | Usage |
 | --- | --- | --- |
-| `--dv-*` | `@vyrnforge/ui-core` | shared design tokens |
-| `dv-*` | `@vyrnforge/ui-components` | shared component classes |
+| `--vf-*` | `@vyrnforge/ui-core` | shared design tokens |
+| `vf-*` | `@vyrnforge/ui-components` | shared component classes |
 | `--udg-*` | `@vyrnforge/ui-data-grid` | grid-specific variables |
 | `udg-*` | `@vyrnforge/ui-data-grid` | grid-specific classes |
 

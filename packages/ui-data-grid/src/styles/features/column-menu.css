@@ -248,11 +248,11 @@
   user-select: none;
 }
 .udg-column-menu__drag .udg-icon,
-.udg-column-menu__drag .dv-icon,
+.udg-column-menu__drag .vf-icon,
 .udg-header-drag-grip .udg-icon,
-.udg-header-drag-grip .dv-icon,
+.udg-header-drag-grip .vf-icon,
 .udg-header-cell__menu-button .udg-icon,
-.udg-header-cell__menu-button .dv-icon,
+.udg-header-cell__menu-button .vf-icon,
 .udg-column-menu__more summary .udg-icon,
 .udg-icon-button .udg-icon {
   width: 14px;

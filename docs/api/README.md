@@ -34,7 +34,7 @@ import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
-`ui-core` styles should come first because they define shared `--dv-*` tokens. `ui-components` consumes those shared tokens. `ui-data-grid` owns grid-specific `--udg-*` variables and maps them to `--dv-*` tokens where practical.
+`ui-core` styles should come first because they define shared `--vf-*` tokens. `ui-components` consumes those shared tokens. `ui-data-grid` owns grid-specific `--udg-*` variables and maps them to `--vf-*` tokens where practical.
 
 ## API Documents
 

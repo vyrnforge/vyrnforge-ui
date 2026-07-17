@@ -1,19 +1,19 @@
-.dv-button__spinner,
-.dv-loading-state__spinner {
+.vf-button__spinner,
+.vf-loading-state__spinner {
   width: 1em;
   height: 1em;
   border: 2px solid currentColor;
   border-right-color: transparent;
   border-radius: 999px;
-  animation: dv-spin 800ms linear infinite;
+  animation: vf-spin 800ms linear infinite;
 }
 
-@keyframes dv-spin {
+@keyframes vf-spin {
   to {
     transform: rotate(360deg);
   }
 }
-@keyframes dv-skeleton {
+@keyframes vf-skeleton {
   0% {
     background-position: 100% 0;
   }
@@ -22,10 +22,10 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dv-button__spinner,
-  .dv-loading-state__spinner,
-  .dv-skeleton,
-  .dv-tooltip__content {
+  .vf-button__spinner,
+  .vf-loading-state__spinner,
+  .vf-skeleton,
+  .vf-tooltip__content {
     animation: none;
     transition: none;
   }

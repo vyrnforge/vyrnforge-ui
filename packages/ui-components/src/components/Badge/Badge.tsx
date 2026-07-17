@@ -11,10 +11,10 @@ export function Badge({
   return (
     <span
       className={joinClassNames(
-        "dv-badge",
-        `dv-badge--${variant}`,
-        `dv-badge--${size}`,
-        `dv-badge--${tone}`,
+        "vf-badge",
+        `vf-badge--${variant}`,
+        `vf-badge--${size}`,
+        `vf-badge--${tone}`,
         className
       )}
       {...props}

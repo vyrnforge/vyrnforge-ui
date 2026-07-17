@@ -10,9 +10,9 @@ export function Label({
   return (
     <label
       className={joinClassNames(
-        "dv-label",
-        `dv-label--${size}`,
-        tone !== "default" && `dv-text--${tone}`,
+        "vf-label",
+        `vf-label--${size}`,
+        tone !== "default" && `vf-text--${tone}`,
         className
       )}
       {...props}

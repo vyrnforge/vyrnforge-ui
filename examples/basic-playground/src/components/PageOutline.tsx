@@ -14,8 +14,8 @@ export function PageOutline({ items, title = "On this page" }: PageOutlineProps)
   const activeId = useActiveSection(items.map((item) => item.id));
 
   return (
-    <nav aria-label="On this page" className="dv-playground-page-outline">
-      <p className="dv-playground-page-outline__title">{title}</p>
+    <nav aria-label="On this page" className="vf-playground-page-outline">
+      <p className="vf-playground-page-outline__title">{title}</p>
       <ul>
         {items.map((item) => (
           <li key={item.id}>

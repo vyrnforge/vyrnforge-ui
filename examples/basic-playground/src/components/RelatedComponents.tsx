@@ -10,8 +10,8 @@ export function RelatedComponents({ components = [] }: RelatedComponentsProps) {
   }
 
   return (
-    <Panel className="dv-playground-related-components" title="Related components">
-      <div className="dv-playground-related-components__list">
+    <Panel className="vf-playground-related-components" title="Related components">
+      <div className="vf-playground-related-components__list">
         {components.map((component) => (
           <Badge key={component} tone="subtle">{component}</Badge>
         ))}

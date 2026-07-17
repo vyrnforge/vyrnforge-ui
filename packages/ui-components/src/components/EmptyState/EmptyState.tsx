@@ -10,10 +10,10 @@ export function EmptyState({
   ...props
 }: EmptyStateProps) {
   return (
-    <div className={joinClassNames("dv-empty-state", className)} {...props}>
-      <p className="dv-empty-state__title">{title}</p>
-      {description && <p className="dv-empty-state__description">{description}</p>}
-      {(actions || action) && <div className="dv-state-actions">{actions ?? action}</div>}
+    <div className={joinClassNames("vf-empty-state", className)} {...props}>
+      <p className="vf-empty-state__title">{title}</p>
+      {description && <p className="vf-empty-state__description">{description}</p>}
+      {(actions || action) && <div className="vf-state-actions">{actions ?? action}</div>}
     </div>
   );
 }

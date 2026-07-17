@@ -7,14 +7,14 @@
   padding: var(--udg-space-5);
   text-align: center;
 }
-.udg-state .dv-empty-state__title,
-.udg-state .dv-error-state__title {
+.udg-state .vf-empty-state__title,
+.udg-state .vf-error-state__title {
   margin: 0;
   color: var(--udg-text-strong);
   font-size: var(--udg-font-size-md);
 }
-.udg-state .dv-empty-state__description,
-.udg-state .dv-error-state__description {
+.udg-state .vf-empty-state__description,
+.udg-state .vf-error-state__description {
   margin: 0;
   max-width: 440px;
   color: var(--udg-text-muted);

@@ -12,7 +12,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
   const input = (
     <input
       aria-invalid={invalid || undefined}
-      className={joinClassNames("dv-checkbox", `dv-checkbox--${size}`, className)}
+      className={joinClassNames("vf-checkbox", `vf-checkbox--${size}`, className)}
       ref={ref}
       type="checkbox"
       {...props}
@@ -24,7 +24,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
   }
 
   return (
-    <label className="dv-checkbox-field">
+    <label className="vf-checkbox-field">
       {input}
       <span>{label}</span>
     </label>

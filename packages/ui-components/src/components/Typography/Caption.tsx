@@ -13,8 +13,8 @@ export function Caption({
   return (
     <Component
       className={joinClassNames(
-        "dv-caption",
-        tone !== "default" && `dv-text--${tone}`,
+        "vf-caption",
+        tone !== "default" && `vf-text--${tone}`,
         className
       )}
       {...props}

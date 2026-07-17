@@ -10,14 +10,14 @@ export function Section({
   ...props
 }: SectionProps) {
   return (
-    <section className={joinClassNames("dv-section", className)} {...props}>
+    <section className={joinClassNames("vf-section", className)} {...props}>
       {(title || description || actions) && (
-        <div className="dv-section__header">
+        <div className="vf-section__header">
           <div>
-            {title && <h2 className="dv-section__title">{title}</h2>}
-            {description && <p className="dv-section__description">{description}</p>}
+            {title && <h2 className="vf-section__title">{title}</h2>}
+            {description && <p className="vf-section__description">{description}</p>}
           </div>
-          {actions && <div className="dv-section__actions">{actions}</div>}
+          {actions && <div className="vf-section__actions">{actions}</div>}
         </div>
       )}
       {children}

@@ -5,11 +5,11 @@ const stateColumns = userColumns.slice(0, 5);
 
 export function GridStatesPage() {
   return (
-    <div className="dv-playground-grid three">
-      <section className="dv-playground-card">
+    <div className="vf-playground-grid three">
+      <section className="vf-playground-card">
         <h2>Empty grid</h2>
         <UniversalDataGrid
-          tableId="dv-playground-grid-empty-state"
+          tableId="vf-playground-grid-empty-state"
           rows={[]}
           columns={stateColumns}
           getRowId={(row) => row.id}
@@ -17,10 +17,10 @@ export function GridStatesPage() {
           variant="bordered"
         />
       </section>
-      <section className="dv-playground-card">
+      <section className="vf-playground-card">
         <h2>Error grid</h2>
         <UniversalDataGrid
-          tableId="dv-playground-grid-error-state"
+          tableId="vf-playground-grid-error-state"
           rows={[]}
           columns={stateColumns}
           getRowId={(row) => row.id}
@@ -28,10 +28,10 @@ export function GridStatesPage() {
           variant="bordered"
         />
       </section>
-      <section className="dv-playground-card">
+      <section className="vf-playground-card">
         <h2>Loading grid</h2>
         <UniversalDataGrid
-          tableId="dv-playground-grid-loading-state"
+          tableId="vf-playground-grid-loading-state"
           rows={[]}
           columns={stateColumns}
           getRowId={(row) => row.id}

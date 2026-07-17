@@ -1,51 +1,51 @@
-.dv-autocomplete {
+.vf-autocomplete {
   position: relative;
   min-width: 0;
 }
 
-.dv-autocomplete__control {
+.vf-autocomplete__control {
   display: flex;
   align-items: center;
   min-width: 0;
-  border: 1px solid var(--dv-border);
-  border-radius: var(--dv-radius-md);
-  color: var(--dv-text);
-  background: var(--dv-surface);
+  border: 1px solid var(--vf-border);
+  border-radius: var(--vf-radius-md);
+  color: var(--vf-text);
+  background: var(--vf-surface);
   transition:
-    border-color var(--dv-transition-fast),
-    box-shadow var(--dv-transition-fast),
-    background-color var(--dv-transition-fast);
+    border-color var(--vf-transition-fast),
+    box-shadow var(--vf-transition-fast),
+    background-color var(--vf-transition-fast);
 }
 
-.dv-autocomplete__control:hover {
-  border-color: var(--dv-border-strong);
+.vf-autocomplete__control:hover {
+  border-color: var(--vf-border-strong);
 }
 
-.dv-autocomplete__control:focus-within {
-  border-color: var(--dv-focus-ring);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--dv-focus-ring) 22%, transparent);
+.vf-autocomplete__control:focus-within {
+  border-color: var(--vf-focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vf-focus-ring) 22%, transparent);
 }
 
-.dv-autocomplete--invalid .dv-autocomplete__control {
-  border-color: var(--dv-danger);
+.vf-autocomplete--invalid .vf-autocomplete__control {
+  border-color: var(--vf-danger);
 }
 
-.dv-autocomplete--invalid .dv-autocomplete__control:focus-within {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--dv-danger) 20%, transparent);
+.vf-autocomplete--invalid .vf-autocomplete__control:focus-within {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vf-danger) 20%, transparent);
 }
 
-.dv-autocomplete__input.dv-input {
+.vf-autocomplete__input.vf-input {
   min-width: 0;
   border: 0;
   border-radius: inherit;
   box-shadow: none;
 }
 
-.dv-autocomplete__input.dv-input:focus-visible {
+.vf-autocomplete__input.vf-input:focus-visible {
   outline: 0;
 }
 
-.dv-autocomplete__actions {
+.vf-autocomplete__actions {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -53,123 +53,123 @@
   padding-right: 3px;
 }
 
-.dv-autocomplete__clear.dv-icon-button,
-.dv-autocomplete__indicator.dv-icon-button {
+.vf-autocomplete__clear.vf-icon-button,
+.vf-autocomplete__indicator.vf-icon-button {
   width: 28px;
   height: 28px;
-  color: var(--dv-text-muted);
+  color: var(--vf-text-muted);
 }
 
-.dv-autocomplete__clear.dv-icon-button:hover:not(:disabled),
-.dv-autocomplete__indicator.dv-icon-button:hover:not(:disabled) {
-  color: var(--dv-text);
-  background: var(--dv-surface-subtle);
+.vf-autocomplete__clear.vf-icon-button:hover:not(:disabled),
+.vf-autocomplete__indicator.vf-icon-button:hover:not(:disabled) {
+  color: var(--vf-text);
+  background: var(--vf-surface-subtle);
 }
 
-.dv-autocomplete__loading {
+.vf-autocomplete__loading {
   width: 14px;
   height: 14px;
-  margin-inline: var(--dv-space-2);
-  border: 2px solid var(--dv-border-strong);
-  border-top-color: var(--dv-primary);
+  margin-inline: var(--vf-space-2);
+  border: 2px solid var(--vf-border-strong);
+  border-top-color: var(--vf-primary);
   border-radius: 50%;
-  animation: dv-autocomplete-spin 800ms linear infinite;
+  animation: vf-autocomplete-spin 800ms linear infinite;
 }
 
-.dv-autocomplete--disabled .dv-autocomplete__control,
-.dv-autocomplete--read-only .dv-autocomplete__control {
-  background: var(--dv-surface-subtle);
+.vf-autocomplete--disabled .vf-autocomplete__control,
+.vf-autocomplete--read-only .vf-autocomplete__control {
+  background: var(--vf-surface-subtle);
 }
 
-.dv-autocomplete--disabled .dv-autocomplete__control {
+.vf-autocomplete--disabled .vf-autocomplete__control {
   cursor: not-allowed;
   opacity: 0.62;
 }
 
-.dv-autocomplete--read-only .dv-autocomplete__input {
+.vf-autocomplete--read-only .vf-autocomplete__input {
   cursor: default;
 }
 
-.dv-autocomplete__layer {
+.vf-autocomplete__layer {
   position: fixed;
-  top: var(--dv-overlay-y, 0);
-  left: var(--dv-overlay-x, 0);
-  width: var(--dv-overlay-anchor-width, min(360px, calc(100vw - (var(--dv-space-4) * 2))));
-  max-width: calc(100vw - (var(--dv-space-4) * 2));
+  top: var(--vf-overlay-y, 0);
+  left: var(--vf-overlay-x, 0);
+  width: var(--vf-overlay-anchor-width, min(360px, calc(100vw - (var(--vf-space-4) * 2))));
+  max-width: calc(100vw - (var(--vf-space-4) * 2));
 }
 
-.dv-autocomplete__listbox {
-  max-height: min(320px, calc(100vh - (var(--dv-space-6) * 2)));
+.vf-autocomplete__listbox {
+  max-height: min(320px, calc(100vh - (var(--vf-space-6) * 2)));
   overflow: auto;
-  border: 1px solid var(--dv-border);
-  border-radius: var(--dv-radius-lg);
-  padding: var(--dv-space-1);
-  color: var(--dv-text);
-  background: var(--dv-surface-raised);
-  box-shadow: var(--dv-shadow-md);
+  border: 1px solid var(--vf-border);
+  border-radius: var(--vf-radius-lg);
+  padding: var(--vf-space-1);
+  color: var(--vf-text);
+  background: var(--vf-surface-raised);
+  box-shadow: var(--vf-shadow-md);
 }
 
-.dv-autocomplete__option {
+.vf-autocomplete__option {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--dv-space-3);
+  gap: var(--vf-space-3);
   min-width: 0;
   border: 1px solid transparent;
-  border-radius: var(--dv-radius-md);
-  padding: var(--dv-space-2) var(--dv-space-3);
+  border-radius: var(--vf-radius-md);
+  padding: var(--vf-space-2) var(--vf-space-3);
   cursor: pointer;
 }
 
-.dv-autocomplete__option--active {
-  border-color: var(--dv-border-strong);
-  background: var(--dv-surface-subtle);
+.vf-autocomplete__option--active {
+  border-color: var(--vf-border-strong);
+  background: var(--vf-surface-subtle);
 }
 
-.dv-autocomplete__option--selected {
-  color: var(--dv-primary);
-  background: var(--dv-primary-soft);
+.vf-autocomplete__option--selected {
+  color: var(--vf-primary);
+  background: var(--vf-primary-soft);
 }
 
-.dv-autocomplete__option--active.dv-autocomplete__option--selected {
-  border-color: var(--dv-primary);
+.vf-autocomplete__option--active.vf-autocomplete__option--selected {
+  border-color: var(--vf-primary);
 }
 
-.dv-autocomplete__option--disabled {
+.vf-autocomplete__option--disabled {
   cursor: not-allowed;
   opacity: 0.58;
 }
 
-.dv-autocomplete__option-main {
+.vf-autocomplete__option-main {
   display: grid;
   gap: 2px;
   min-width: 0;
 }
 
-.dv-autocomplete__option-label {
-  color: var(--dv-text-strong);
+.vf-autocomplete__option-label {
+  color: var(--vf-text-strong);
   font-weight: 680;
 }
 
-.dv-autocomplete__option-description,
-.dv-autocomplete__status {
-  color: var(--dv-text-muted);
-  font-size: var(--dv-font-size-sm);
-  line-height: var(--dv-line-height-md);
+.vf-autocomplete__option-description,
+.vf-autocomplete__status {
+  color: var(--vf-text-muted);
+  font-size: var(--vf-font-size-sm);
+  line-height: var(--vf-line-height-md);
 }
 
-.dv-autocomplete__status {
-  padding: var(--dv-space-3);
+.vf-autocomplete__status {
+  padding: var(--vf-space-3);
 }
 
-@keyframes dv-autocomplete-spin {
+@keyframes vf-autocomplete-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dv-autocomplete__loading {
+  .vf-autocomplete__loading {
     animation: none;
   }
 }

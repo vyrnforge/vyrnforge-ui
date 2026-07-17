@@ -19,7 +19,7 @@ function getFocusableElements(container: HTMLElement) {
 }
 
 function focusFallback(container: HTMLElement) {
-  const fallback = container.querySelector<HTMLElement>("[data-dv-focus-fallback]");
+  const fallback = container.querySelector<HTMLElement>("[data-vf-focus-fallback]");
   (fallback ?? container).focus();
 }
 
@@ -50,7 +50,7 @@ export function FocusScope({
 
     if (autoFocus && !mountEvent.defaultPrevented) {
       const target = initialFocusRef?.current ?? getFocusableElements(scope)[0];
-      (target ?? scope.querySelector<HTMLElement>("[data-dv-focus-fallback]") ?? scope).focus();
+      (target ?? scope.querySelector<HTMLElement>("[data-vf-focus-fallback]") ?? scope).focus();
     }
 
     return () => {
@@ -94,5 +94,5 @@ export function FocusScope({
     return () => document.removeEventListener("keydown", handleKeyDown, true);
   }, [isTopmost, trapped]);
 
-  return <div className="dv-focus-scope" ref={scopeRef}>{children}</div>;
+  return <div className="vf-focus-scope" ref={scopeRef}>{children}</div>;
 }

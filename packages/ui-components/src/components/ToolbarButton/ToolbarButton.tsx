@@ -23,18 +23,18 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
       <button
         aria-pressed={(pressed ?? active) || undefined}
         className={joinClassNames(
-          "dv-toolbar-button",
-          `dv-toolbar-button--${variant}`,
-          `dv-toolbar-button--${size}`,
-          active && "dv-toolbar-button--active",
+          "vf-toolbar-button",
+          `vf-toolbar-button--${variant}`,
+          `vf-toolbar-button--${size}`,
+          active && "vf-toolbar-button--active",
           className
         )}
         ref={ref}
         type={type}
         {...props}
       >
-        {icon && <span className="dv-toolbar-button__icon">{icon}</span>}
-        {label && <span className="dv-toolbar-button__label">{label}</span>}
+        {icon && <span className="vf-toolbar-button__icon">{icon}</span>}
+        {label && <span className="vf-toolbar-button__label">{label}</span>}
       </button>
     );
 

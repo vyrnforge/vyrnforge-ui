@@ -27,7 +27,7 @@ export function DemoExample({
   return (
     <Panel
       actions={
-        <div className="dv-playground-demo-example__actions">
+        <div className="vf-playground-demo-example__actions">
           <Badge size="sm" tone="subtle">{language}</Badge>
           {!split && (
             <SegmentedControl
@@ -40,16 +40,16 @@ export function DemoExample({
           )}
         </div>
       }
-      className="dv-playground-demo-example"
+      className="vf-playground-demo-example"
       description={description}
       title={title}
     >
-      <div className={split ? "dv-playground-demo-example__split" : "dv-playground-demo-example__content"} id={id}>
-        {(split || view === "preview") && <div className="dv-playground-demo-example__preview">{preview}</div>}
+      <div className={split ? "vf-playground-demo-example__split" : "vf-playground-demo-example__content"} id={id}>
+        {(split || view === "preview") && <div className="vf-playground-demo-example__preview">{preview}</div>}
         {(split || view === "code") && <CodeBlock code={code} language={language} />}
       </div>
       {!split && view === "preview" && (
-        <Button className="dv-playground-demo-example__copy" onClick={() => setView("code")} size="sm" variant="ghost">
+        <Button className="vf-playground-demo-example__copy" onClick={() => setView("code")} size="sm" variant="ghost">
           View code
         </Button>
       )}

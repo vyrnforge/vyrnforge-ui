@@ -13,9 +13,9 @@ export function Heading({
   return (
     <Component
       className={joinClassNames(
-        "dv-heading",
-        `dv-heading--${size}`,
-        tone !== "default" && `dv-text--${tone}`,
+        "vf-heading",
+        `vf-heading--${size}`,
+        tone !== "default" && `vf-text--${tone}`,
         className
       )}
       {...props}

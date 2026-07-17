@@ -22,7 +22,7 @@ export function UsageGuidance({
   }
 
   return (
-    <Panel className="dv-playground-usage-guidance" title="Usage guidance">
+    <Panel className="vf-playground-usage-guidance" title="Usage guidance">
       <dl>
         {guidance.map(([label, value]) => (
           <div key={label}>

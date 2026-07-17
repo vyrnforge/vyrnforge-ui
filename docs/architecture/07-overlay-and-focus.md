@@ -7,7 +7,7 @@
 - Floating and modal content renders through a React portal to `document.body` by default. Public overlay props may accept `portalContainer` when an application needs a different DOM boundary.
 - The internal anchored-positioning hook uses fixed positioning, `getBoundingClientRect`, viewport shifting, basic side flipping, scroll/resize listeners, and `ResizeObserver` when available.
 - `Popover`, `Menu`, `Dropdown`, Tooltip, and future Autocomplete listboxes use this one anchored positioning path.
-- Dynamic x/y and anchor-width values are passed as `--dv-overlay-*` CSS variables. Static visual rules remain in `styles/overlays/`.
+- Dynamic x/y and anchor-width values are passed as `--vf-overlay-*` CSS variables. Static visual rules remain in `styles/overlays/`.
 
 ## Overlay Stack And Dismissal
 
@@ -49,14 +49,14 @@ Shared core tokens define the normal hierarchy:
 
 | Token | Layer |
 | --- | --- |
-| `--dv-z-base` | Application content |
-| `--dv-z-sticky` | Sticky shell regions |
-| `--dv-z-dropdown` | Ordinary dropdown content |
-| `--dv-z-popover` | Popovers and menus |
-| `--dv-z-tooltip` | Tooltips |
-| `--dv-z-overlay` | Modal overlay surfaces |
-| `--dv-z-dialog` | Dialogs and modal drawers |
-| `--dv-z-toast` | Toast notifications |
+| `--vf-z-base` | Application content |
+| `--vf-z-sticky` | Sticky shell regions |
+| `--vf-z-dropdown` | Ordinary dropdown content |
+| `--vf-z-popover` | Popovers and menus |
+| `--vf-z-tooltip` | Tooltips |
+| `--vf-z-overlay` | Modal overlay surfaces |
+| `--vf-z-dialog` | Dialogs and modal drawers |
+| `--vf-z-toast` | Toast notifications |
 
 The active internal overlay stack adds a runtime ordering value so nested portal layers stay above their parent. AppShell header and sidebar remain below overlay portals.
 

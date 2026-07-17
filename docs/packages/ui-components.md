@@ -17,7 +17,7 @@
 
 ## Owns
 
-- `dv-*` classes
+- `vf-*` classes
 - native React component APIs
 - accessibility behavior for shared primitives
 

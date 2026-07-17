@@ -145,9 +145,9 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       <input
         aria-invalid={invalid || undefined}
         className={joinClassNames(
-          "dv-input",
-          "dv-number-input",
-          `dv-input--${size}`,
+          "vf-input",
+          "vf-number-input",
+          `vf-input--${size}`,
           className
         )}
         inputMode={inputMode ?? (allowDecimal ? "decimal" : "numeric")}

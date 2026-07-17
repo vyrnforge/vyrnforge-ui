@@ -10,9 +10,9 @@ export function Card({
   return (
     <div
       className={joinClassNames(
-        "dv-card",
-        `dv-card--${variant}`,
-        `dv-card--padding-${padding}`,
+        "vf-card",
+        `vf-card--${variant}`,
+        `vf-card--padding-${padding}`,
         className
       )}
       {...props}

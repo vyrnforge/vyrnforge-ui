@@ -13,17 +13,17 @@ export function PageToolbar({
   return (
     <div
       className={joinClassNames(
-        "dv-page-toolbar",
-        `dv-page-toolbar--${density}`,
-        sticky && "dv-page-toolbar--sticky",
+        "vf-page-toolbar",
+        `vf-page-toolbar--${density}`,
+        sticky && "vf-page-toolbar--sticky",
         className
       )}
       {...props}
     >
       {(left || children) && (
-        <div className="dv-page-toolbar__left">{left ?? children}</div>
+        <div className="vf-page-toolbar__left">{left ?? children}</div>
       )}
-      {right && <div className="dv-page-toolbar__right">{right}</div>}
+      {right && <div className="vf-page-toolbar__right">{right}</div>}
     </div>
   );
 }

@@ -13,8 +13,8 @@ export function CodeText({
   return (
     <Component
       className={joinClassNames(
-        "dv-code-text",
-        tone !== "default" && `dv-text--${tone}`,
+        "vf-code-text",
+        tone !== "default" && `vf-text--${tone}`,
         className
       )}
       {...props}

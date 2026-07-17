@@ -10,7 +10,7 @@ export type DemoSectionProps = {
 export function DemoSection({ title, description, children }: DemoSectionProps) {
   return (
     <Section
-      className="dv-playground-demo-section"
+      className="vf-playground-demo-section"
       description={description}
       title={title}
     >

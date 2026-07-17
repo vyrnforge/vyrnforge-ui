@@ -21,12 +21,12 @@ export function BadgesPage() {
       <DemoSection description="Neutral and semantic status treatments." title="Variants">
         <DemoBlock
           code={'<Badge variant="success">Active</Badge>\n<Badge variant="warning">Pending</Badge>\n<Badge variant="danger">Blocked</Badge>'}
-          preview={<div className="dv-playground-badge-row">{variants.map((variant) => <Badge key={variant} variant={variant}>{variant}</Badge>)}{variants.map((variant) => <Badge key={`${variant}-solid`} tone="solid" variant={variant}>{variant} solid</Badge>)}</div>}
+          preview={<div className="vf-playground-badge-row">{variants.map((variant) => <Badge key={variant} variant={variant}>{variant}</Badge>)}{variants.map((variant) => <Badge key={`${variant}-solid`} tone="solid" variant={variant}>{variant} solid</Badge>)}</div>}
           title="Status badges"
         />
         <DemoBlock
           code={'<StatusBadge status="active" />\n<StatusBadge status="pending" />'}
-          preview={<div className="dv-playground-badge-row"><StatusBadge status="active" /><StatusBadge status="pending" /><StatusBadge status="error" label="blocked" /><StatusBadge status="custom" label="custom mapped" /></div>}
+          preview={<div className="vf-playground-badge-row"><StatusBadge status="active" /><StatusBadge status="pending" /><StatusBadge status="error" label="blocked" /><StatusBadge status="custom" label="custom mapped" /></div>}
           title="Mapped product statuses"
         />
       </DemoSection>

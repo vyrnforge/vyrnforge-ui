@@ -3,9 +3,9 @@ import { joinClassNames } from "../../utils/classNames";
 import type { SkeletonProps } from "./Skeleton.types";
 
 type SkeletonStyleVars = CSSProperties & {
-  "--dv-skeleton-height"?: string;
-  "--dv-skeleton-radius"?: string;
-  "--dv-skeleton-width"?: string;
+  "--vf-skeleton-height"?: string;
+  "--vf-skeleton-radius"?: string;
+  "--vf-skeleton-width"?: string;
 };
 
 function toCssLength(value: number | string | undefined) {
@@ -26,16 +26,16 @@ export function Skeleton({
   ...props
 }: SkeletonProps) {
   const skeletonStyle: SkeletonStyleVars = {
-    "--dv-skeleton-height": toCssLength(height),
-    "--dv-skeleton-radius": toCssLength(radius),
-    "--dv-skeleton-width": toCssLength(width),
+    "--vf-skeleton-height": toCssLength(height),
+    "--vf-skeleton-radius": toCssLength(radius),
+    "--vf-skeleton-width": toCssLength(width),
     ...style
   };
 
   return (
     <span
       aria-hidden="true"
-      className={joinClassNames("dv-skeleton", !animated && "dv-skeleton--static", className)}
+      className={joinClassNames("vf-skeleton", !animated && "vf-skeleton--static", className)}
       style={skeletonStyle}
       {...props}
     />

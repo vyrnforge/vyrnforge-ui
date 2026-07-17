@@ -1,8 +1,8 @@
 .udg[data-density="compact"] {
   --udg-toolbar-height: 40px;
   --udg-header-height: 36px;
-  --udg-row-height: var(--dv-row-height, 36px);
-  --udg-control-height: var(--dv-control-height, 32px);
+  --udg-row-height: var(--vf-row-height, 36px);
+  --udg-control-height: var(--vf-control-height, 32px);
   --udg-cell-padding-x: 10px;
   --udg-cell-padding-y: 6px;
 }
@@ -10,8 +10,8 @@
 .udg[data-density="standard"] {
   --udg-toolbar-height: 48px;
   --udg-header-height: 42px;
-  --udg-row-height: var(--dv-row-height, 44px);
-  --udg-control-height: var(--dv-control-height, 34px);
+  --udg-row-height: var(--vf-row-height, 44px);
+  --udg-control-height: var(--vf-control-height, 34px);
   --udg-cell-padding-x: 12px;
   --udg-cell-padding-y: 9px;
 }
@@ -19,8 +19,8 @@
 .udg[data-density="comfortable"] {
   --udg-toolbar-height: 56px;
   --udg-header-height: 48px;
-  --udg-row-height: var(--dv-row-height, 52px);
-  --udg-control-height: var(--dv-control-height, 38px);
+  --udg-row-height: var(--vf-row-height, 52px);
+  --udg-control-height: var(--vf-control-height, 38px);
   --udg-cell-padding-x: 16px;
   --udg-cell-padding-y: 12px;
 }

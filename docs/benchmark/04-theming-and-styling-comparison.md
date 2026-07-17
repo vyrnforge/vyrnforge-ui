@@ -6,7 +6,7 @@ VyrnForge's styling position is CSS-variable-first, package CSS based, and nativ
 
 | Library/category | Styling model | Theming model | VyrnForge lesson | VyrnForge difference |
 | --- | --- | --- | --- | --- |
-| VyrnForge UI | Package CSS, CSS variables, native class names | `--dv-*` shared tokens, `--udg-*` grid vars, light/dark/system/enterprise, density | Keep tokens readable and overrideable | This is the target model |
+| VyrnForge UI | Package CSS, CSS variables, native class names | `--vf-*` shared tokens, `--udg-*` grid vars, light/dark/system/enterprise, density | Keep tokens readable and overrideable | This is the target model |
 | MUI | Styled engine, system props, theme object | Central theme, component overrides, variants | Strong override taxonomy and slot customization | Avoid runtime styling dependency as the default |
 | Ant Design | Token-driven component styles | ConfigProvider, design tokens, algorithms | Enterprise token completeness and component tokens | Avoid Ant visual identity and ecosystem lock-in |
 | Chakra UI | Style props, recipes/system layer | Theme tokens and color palettes | Ergonomic token usage and accessible variants | Avoid making style props the main authoring model |
@@ -18,15 +18,15 @@ VyrnForge's styling position is CSS-variable-first, package CSS based, and nativ
 | Headless UI | Unstyled, Tailwind-friendly | Bring styling | Simple headless APIs | VyrnForge should not assume Tailwind |
 | shadcn/ui | Copied Tailwind components, CSS variables | App-owned CSS variables and Tailwind config | Editable code and readable tokens | VyrnForge should remain package-upgradeable |
 | TanStack Table | No styling | App-owned | Logic/UI separation | VyrnForge owns grid UI defaults |
-| AG Grid | Grid themes and theme parameters | Grid theme system | Dedicated grid theming depth | VyrnForge grid theme should map to shared `dv-*` tokens |
+| AG Grid | Grid themes and theme parameters | Grid theme system | Dedicated grid theming depth | VyrnForge grid theme should map to shared `vf-*` tokens |
 | MUI X Data Grid | MUI themed/styled grid | MUI theme integration | Grid slot/theming consistency | VyrnForge should stay MUI-independent |
 
 ## VyrnForge Theme Layers
 
 | Layer | Prefix | Owner | Purpose |
 | --- | --- | --- | --- |
-| Shared foundation | `--dv-*` | `@vyrnforge/ui-core` | App-wide colors, typography, spacing, radius, shadows, focus, density |
-| Component styles | `dv-*` classes | `@vyrnforge/ui-components` | Reusable primitive visuals using shared tokens |
+| Shared foundation | `--vf-*` | `@vyrnforge/ui-core` | App-wide colors, typography, spacing, radius, shadows, focus, density |
+| Component styles | `vf-*` classes | `@vyrnforge/ui-components` | Reusable primitive visuals using shared tokens |
 | Grid-specific variables | `--udg-*` | `@vyrnforge/ui-data-grid` | Grid layout, row/header sizing, grid-specific surfaces and states |
 | Grid classes | `udg-*` classes | `@vyrnforge/ui-data-grid` | Grid-specific structure and interactions |
 
@@ -38,13 +38,13 @@ import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
-The grid must still work when only grid CSS is imported, using fallback values. When `ui-core` CSS is present, grid variables should align to shared `--dv-*` tokens.
+The grid must still work when only grid CSS is imported, using fallback values. When `ui-core` CSS is present, grid variables should align to shared `--vf-*` tokens.
 
 ## Customization Strategy
 
 | Need | Preferred VyrnForge approach |
 | --- | --- |
-| Brand color/radius/typography | Override scoped `--dv-*` tokens |
+| Brand color/radius/typography | Override scoped `--vf-*` tokens |
 | App-wide density | Override density tokens or use component density APIs |
 | Grid-only row/header sizing | Override scoped `--udg-*` variables |
 | Per-instance grid theme | Use grid theme props/CSS variable style object |
@@ -65,7 +65,7 @@ The grid must still work when only grid CSS is imported, using fallback values. 
 
 | Gap | Recommendation |
 | --- | --- |
-| Component-level theme docs | Add examples for scoped `--dv-*` overrides and density changes. |
+| Component-level theme docs | Add examples for scoped `--vf-*` overrides and density changes. |
 | Grid variable catalog | Document stable `--udg-*` variables separately from internal classes. |
 | Dark/enterprise QA | Keep visual regression checklist for components and grid together. |
 | Slot customization | Add only where repeated product needs prove it, not as a blanket architecture. |
