@@ -20,9 +20,9 @@ import { TransferList } from "@vyrnforge/ui-components";
 <TransferList
   options={[
     { value: "iam", label: "Identity and Access Management" },
-    { value: "atlas", label: "Atlas Intelligence Platform" }
+    { value: "analytics", label: "Analytics Workspace" }
   ]}
-  defaultValue={["atlas"]}
+  defaultValue={["analytics"]}
 />
 ```
 
@@ -68,7 +68,7 @@ When `name` is provided, TransferList renders one hidden input per assigned valu
 
 ```html
 applicationIds=iam
-applicationIds=atlas
+applicationIds=analytics
 ```
 
 Disabled TransferList instances do not submit hidden values. Read-only instances remain submitted but cannot be changed.

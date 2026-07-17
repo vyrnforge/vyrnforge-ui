@@ -26,11 +26,11 @@ The goal is not to build a decorative UI library. The goal is to build reusable,
 
 VyrnForge UI should be reusable across:
 
-* IAM applications
-* ITAM applications
-* ITSM applications
-* Atlas Intelligence Platform
-* Gateway / reverse proxy admin UI
+* access management applications
+* asset management applications
+* service management applications
+* Analytics Workspace
+* API gateway / reverse proxy administration
 * Admin portals
 * Customer portals
 * Reporting and exporter screens

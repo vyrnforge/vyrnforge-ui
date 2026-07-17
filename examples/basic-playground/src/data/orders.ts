@@ -11,7 +11,7 @@ export type OrderRecord = {
 export const orders: OrderRecord[] = [
   {
     id: "ORD-9001",
-    account: "Atlas Intelligence Platform",
+    account: "Analytics Workspace",
     owner: "Maya Chen",
     status: "Approved",
     total: 185400,
@@ -20,7 +20,7 @@ export const orders: OrderRecord[] = [
   },
   {
     id: "ORD-9002",
-    account: "Gateway Operations",
+    account: "API Gateway Operations",
     owner: "Kenji Tan",
     status: "Submitted",
     total: 84200,
@@ -29,7 +29,7 @@ export const orders: OrderRecord[] = [
   },
   {
     id: "ORD-9003",
-    account: "IAM Modernization",
+    account: "Access Management Modernization",
     owner: "Alya Pratama",
     status: "Draft",
     total: 43100,
@@ -38,7 +38,7 @@ export const orders: OrderRecord[] = [
   },
   {
     id: "ORD-9004",
-    account: "ITSM Portal",
+    account: "Service Management Portal",
     owner: "Lina Arman",
     status: "Rejected",
     total: 27800,

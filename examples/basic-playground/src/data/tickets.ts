@@ -22,7 +22,7 @@ export const tickets: TicketRecord[] = [
   },
   {
     id: "TCK-2042",
-    title: "Gateway policy deployment approval",
+    title: "API gateway policy deployment approval",
     category: "Change",
     priority: "Medium",
     status: "In Progress",

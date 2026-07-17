@@ -52,7 +52,7 @@ docs/
 Documentation requirements:
 
 1. Project charter
-Explain VyrnForge UI as a native-first enterprise UI foundation for IAM, ITAM, ITSM, Atlas, Gateway UI, admin portals, customer portals, and reporting screens.
+Explain VyrnForge UI as a native-first enterprise UI foundation for access management, asset management, service management, analytics workspaces, API gateway administration, admin portals, customer portals, and reporting screens.
 
 2. Naming system
 Document VyrnForge UI as the chosen name.

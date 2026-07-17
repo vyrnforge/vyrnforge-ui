@@ -32,20 +32,20 @@ const applicationOptions = `[
     keywords: ["identity", "roles", "security"]
   },
   {
-    value: "atlas",
-    label: "Atlas Intelligence Platform",
-    description: "Trusted data and document intelligence.",
+    value: "analytics",
+    label: "Analytics Workspace",
+    description: "Trusted analytics and operational insight.",
     keywords: ["data", "documents"]
   },
   {
-    value: "gateway",
-    label: "Gateway UI",
-    description: "Gateway configuration and service routing.",
+    value: "api-gateway",
+    label: "API Gateway",
+    description: "API gateway configuration and service routing.",
     keywords: ["routing", "services"]
   },
   {
     value: "reports",
-    label: "Reporting Portal",
+    label: "Reporting Workspace",
     description: "Operational and executive reporting.",
     keywords: ["analytics", "reports"]
   }
@@ -102,7 +102,7 @@ export function TransferListPage() {
           label: "Basic usage",
           title: "Basic usage",
           children: live("transfer-list-basic", "Application assignment", `function Example() {
-  const [assigned, setAssigned] = React.useState(["atlas"]);
+  const [assigned, setAssigned] = React.useState(["analytics"]);
 
   return (
     <TransferList
@@ -145,7 +145,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@v
           label: "Searchable panels",
           title: "Searchable panels",
           children: live("transfer-list-searchable", "Independent panel search", `<TransferList
-  defaultValue={["atlas"]}
+  defaultValue={["analytics"]}
   options={${applicationOptions}}
   searchable
   sourceSearchPlaceholder="Search available apps"
@@ -172,12 +172,12 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@v
           label: "Disabled options",
           title: "Disabled options",
           children: live("transfer-list-disabled-option", "Locked assignments", `<TransferList
-  defaultValue={["atlas", "gateway"]}
+  defaultValue={["analytics", "api-gateway"]}
   options={[
     { value: "iam", label: "Identity and Access Management", description: "Can be assigned by workspace owners." },
-    { value: "atlas", label: "Atlas Intelligence Platform", description: "Currently assigned." },
-    { value: "gateway", label: "Gateway UI", description: "Managed by platform policy.", disabled: true },
-    { value: "reports", label: "Reporting Portal", description: "Available for assignment." }
+    { value: "analytics", label: "Analytics Workspace", description: "Currently assigned." },
+    { value: "api-gateway", label: "API Gateway", description: "Managed by platform policy.", disabled: true },
+    { value: "reports", label: "Reporting Workspace", description: "Available for assignment." }
   ]}
   sourceTitle="Available applications"
   targetTitle="Assigned applications"
@@ -190,7 +190,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@v
           children: live("transfer-list-disabled-readonly", "Non-editable states", `<Stack gap="md">
   <TransferList
     disabled
-    defaultValue={["atlas"]}
+    defaultValue={["analytics"]}
     options={${applicationOptions}}
     sourceTitle="Disabled available"
     targetTitle="Disabled assigned"
@@ -209,7 +209,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@v
           label: "Custom rendering",
           title: "Custom option rendering",
           children: live("transfer-list-render-option", "Metadata-rich rows", `<TransferList
-  defaultValue={["atlas"]}
+  defaultValue={["analytics"]}
   options={${applicationOptions}}
   renderOption={(option, state) => (
     <Stack gap="xs">
@@ -230,7 +230,7 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@v
   <Field label="Applications" description="Assigned values submit as repeated applicationIds fields.">
     <TransferList
       name="applicationIds"
-      defaultValue={["iam", "atlas"]}
+      defaultValue={["iam", "analytics"]}
       options={${applicationOptions}}
       sourceTitle="Available applications"
       targetTitle="Assigned applications"

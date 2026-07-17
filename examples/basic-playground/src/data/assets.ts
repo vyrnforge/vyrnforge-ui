@@ -1,7 +1,7 @@
 export type AssetRecord = {
   id: string;
   name: string;
-  type: "Server" | "Database" | "Application" | "Gateway";
+  type: "Server" | "Database" | "Application" | "API Gateway";
   owner: string;
   status: "Healthy" | "Review" | "At Risk" | "Retired";
   environment: "Production" | "Staging" | "Development";
@@ -13,7 +13,7 @@ export type AssetRecord = {
 export const assets: AssetRecord[] = [
   {
     id: "AST-1001",
-    name: "IAM Policy Engine",
+    name: "Access Policy Engine",
     type: "Application",
     owner: "Identity",
     status: "Healthy",
@@ -24,8 +24,8 @@ export const assets: AssetRecord[] = [
   },
   {
     id: "AST-1002",
-    name: "Gateway Admin API",
-    type: "Gateway",
+    name: "API Gateway Admin API",
+    type: "API Gateway",
     owner: "Platform",
     status: "Review",
     environment: "Production",

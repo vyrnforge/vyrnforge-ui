@@ -18,20 +18,20 @@ const applicationOptions = [
     keywords: ["security", "roles"]
   },
   {
-    value: "atlas",
-    label: "Atlas Intelligence Platform",
-    description: "Trusted data and document intelligence.",
+    value: "analytics",
+    label: "Analytics Workspace",
+    description: "Trusted analytics and operational insight.",
     keywords: ["data", "documents"]
   },
   {
-    value: "gateway",
-    label: "Gateway UI",
-    description: "Gateway configuration and service routing.",
+    value: "api-gateway",
+    label: "API Gateway",
+    description: "API gateway configuration and service routing.",
     keywords: ["routing", "services"]
   },
   {
     value: "reports",
-    label: "Reporting Portal",
+    label: "Reporting Workspace",
     description: "Operational and executive reporting.",
     keywords: ["analytics"]
   }
@@ -54,7 +54,7 @@ const notificationOptions = [
 ];
 
 export function AssignmentPatternsPage() {
-  const [applications, setApplications] = useState(["atlas"]);
+  const [applications, setApplications] = useState(["analytics"]);
   const [fields, setFields] = useState(["orderId", "customer", "status"]);
   const [channels, setChannels] = useState(["email", "webhook"]);
 

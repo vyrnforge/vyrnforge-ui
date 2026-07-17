@@ -11,7 +11,7 @@ Use one standalone repository for the UI foundation:
 vyrnforge-ui/
 ```
 
-Do not store this as a subfolder inside IAM, Atlas, ITSM, or any single application.
+Do not store this as a subfolder inside access management, analytics, service management, or any single application.
 
 This project should be independently versioned and consumed by multiple applications.
 

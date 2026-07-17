@@ -12,7 +12,7 @@ Project name:
 VyrnForge UI.
 
 Project purpose:
-Build a native-first enterprise UI component system for reusable application components across IAM, ITAM, ITSM, Atlas, Gateway UI, admin portals, customer portals, and reporting screens.
+Build a native-first enterprise UI component system for reusable application components across access management, asset management, service management, analytics workspaces, API gateway administration, admin portals, customer portals, and reporting screens.
 
 Current strategic component:
 UniversalDataGrid in packages/ui-data-grid.

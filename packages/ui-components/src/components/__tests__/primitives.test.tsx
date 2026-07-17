@@ -400,7 +400,7 @@ describe("@vyrnforge/ui-components primitives", () => {
   it("renders TransferList panels, checkbox labels, actions, and hidden target values", () => {
     const markup = renderToStaticMarkup(
       <TransferList
-        defaultValue={["atlas", "missing", "atlas"]}
+        defaultValue={["analytics", "missing", "analytics"]}
         name="applicationIds"
         options={[
           {
@@ -409,13 +409,13 @@ describe("@vyrnforge/ui-components primitives", () => {
             description: "Authentication and roles."
           },
           {
-            value: "atlas",
-            label: "Atlas Intelligence Platform",
-            description: "Document intelligence."
+            value: "analytics",
+            label: "Analytics Workspace",
+            description: "Operational insight."
           },
           {
-            value: "gateway",
-            label: "Gateway UI",
+            value: "api-gateway",
+            label: "API Gateway",
             disabled: true
           }
         ]}
@@ -430,11 +430,11 @@ describe("@vyrnforge/ui-components primitives", () => {
     expect(markup).toContain("Available applications");
     expect(markup).toContain("Assigned applications");
     expect(markup).toContain("Identity and Access Management");
-    expect(markup).toContain("Document intelligence.");
+    expect(markup).toContain("Operational insight.");
     expect(markup).toContain("aria-label=\"Move selected items to Assigned applications\"");
     expect(markup).toContain("aria-label=\"Move all items to Available applications\"");
     expect(markup).toContain("name=\"applicationIds\"");
-    expect(markup).toContain("value=\"atlas\"");
+    expect(markup).toContain("value=\"analytics\"");
     expect(markup).not.toContain("value=\"missing\"");
     expect(markup).toContain("aria-required=\"true\"");
   });
@@ -442,11 +442,11 @@ describe("@vyrnforge/ui-components primitives", () => {
   it("does not submit TransferList hidden values while disabled", () => {
     const markup = renderToStaticMarkup(
       <TransferList
-        defaultValue={["atlas"]}
+        defaultValue={["analytics"]}
         disabled
         name="applicationIds"
         options={[
-          { value: "atlas", label: "Atlas Intelligence Platform" }
+          { value: "analytics", label: "Analytics Workspace" }
         ]}
       />
     );
@@ -458,17 +458,17 @@ describe("@vyrnforge/ui-components primitives", () => {
   it("normalizes TransferList values and computes ordered move targets", () => {
     const options = [
       { value: "iam", label: "Identity" },
-      { value: "atlas", label: "Atlas" },
-      { value: "gateway", label: "Gateway", disabled: true },
+      { value: "analytics", label: "Analytics" },
+      { value: "api-gateway", label: "API Gateway", disabled: true },
       { value: "reports", label: "Reports", keywords: ["analytics"] }
     ];
 
     expect(normalizeTransferValues(["reports", "missing", "iam", "reports"], options)).toEqual(["iam", "reports"]);
-    expect(mergeTargetValues(["atlas"], ["reports", "iam"], options)).toEqual(["iam", "atlas", "reports"]);
-    expect(removeTargetValues(["iam", "atlas", "reports"], ["atlas"], options)).toEqual(["iam", "reports"]);
-    expect(enabledOptionValues(options)).toEqual(["iam", "atlas", "reports"]);
-    expect(selectedEnabledValues(["gateway", "reports"], options)).toEqual(["reports"]);
-    expect(defaultTransferListFilter(options, "analytics", "source")[0]?.value).toBe("reports");
+    expect(mergeTargetValues(["analytics"], ["reports", "iam"], options)).toEqual(["iam", "analytics", "reports"]);
+    expect(removeTargetValues(["iam", "analytics", "reports"], ["analytics"], options)).toEqual(["iam", "reports"]);
+    expect(enabledOptionValues(options)).toEqual(["iam", "analytics", "reports"]);
+    expect(selectedEnabledValues(["api-gateway", "reports"], options)).toEqual(["reports"]);
+    expect(defaultTransferListFilter(options, "analytics", "source")[0]?.value).toBe("analytics");
   });
 
   it("renders ValidationMessage tone", () => {

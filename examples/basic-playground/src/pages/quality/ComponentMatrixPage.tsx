@@ -62,8 +62,8 @@ const roleOptions = [
 
 const transferOptions = [
   { value: "iam", label: "Identity", description: "Access requests." },
-  { value: "atlas", label: "Atlas", description: "Document intelligence." },
-  { value: "gateway", label: "Gateway", disabled: true },
+  { value: "analytics", label: "Analytics", description: "Operational insight." },
+  { value: "api-gateway", label: "API Gateway", disabled: true },
   { value: "reports", label: "Reports" }
 ];
 
@@ -265,7 +265,7 @@ export function ComponentMatrixPage() {
                 placeholder="Select a role"
               />
               <TransferList
-                defaultValue={["atlas"]}
+                defaultValue={["analytics"]}
                 options={transferOptions}
                 searchable
                 sourceTitle="Available apps"
