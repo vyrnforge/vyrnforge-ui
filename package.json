@@ -1,6 +1,7 @@
 {
   "name": "vyrnforge-ui",
   "private": true,
+  "license": "SEE LICENSE IN LICENSE",
   "workspaces": [
     "packages/*",
     "examples/*",

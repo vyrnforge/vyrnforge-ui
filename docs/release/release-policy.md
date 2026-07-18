@@ -1,6 +1,6 @@
 # Release Policy
 
-VyrnForge UI releases must be explicit, reviewable, and source-of-truth oriented. The current project status is pre-alpha: APIs may change, public npm publication has not started, and licensing approval remains a mandatory gate before publication.
+VyrnForge UI releases must be explicit, reviewable, and source-of-truth oriented. The current project status is pre-alpha: APIs may change and public npm publication has not started. VyrnForge UI is source-available under the VyrnForge Source License 1.0, and production or commercial use requires a separate written commercial license.
 
 The `latest` npm tag must not point to unfinished alpha packages.
 
@@ -16,7 +16,8 @@ The `latest` npm tag must not point to unfinished alpha packages.
 
 ## Gates
 
-- Licensing approval is required before any public package publication.
+- Release approval is required before any public package publication.
+- Package metadata must keep `SEE LICENSE IN LICENSE` and each publishable package must include a LICENSE matching the root VyrnForge Source License 1.0.
 - Security and internal-content review must pass before public release artifacts are published.
 - Release notes and changelog entries must describe user-visible changes without inventing stability claims.
 - Package publication must use prerelease npm tags until a stable release is explicitly approved.

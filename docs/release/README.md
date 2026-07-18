@@ -2,7 +2,7 @@
 
 This directory is the source of truth for VyrnForge UI release governance.
 
-VyrnForge UI is currently pre-alpha. These documents define the intended release process and gates, but they do not claim public package releases, npm publication, stable support, trusted publishing, or licensing approval.
+VyrnForge UI is currently pre-alpha and source-available under the VyrnForge Source License 1.0. These documents define the intended release process and gates, but they do not claim public package releases, npm publication, stable support, trusted publishing, or commercial licensing infrastructure.
 
 | Document | Purpose |
 | --- | --- |

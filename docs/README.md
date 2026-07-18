@@ -87,7 +87,7 @@ Q1 quality docs define the stabilization bar for current components. They do not
 
 ## 8. Release Governance
 
-Release docs define the publication, versioning, deprecation, and release-readiness process. They do not claim that public package publication, stable support, trusted publishing, or licensing approval is complete.
+Release docs define the publication, versioning, deprecation, and release-readiness process. They do not claim that public package publication, stable support, or trusted publishing is complete.
 
 | Document | Purpose |
 | --- | --- |
@@ -98,7 +98,16 @@ Release docs define the publication, versioning, deprecation, and release-readin
 | `release/deprecation-and-migration-policy.md` | Public API, CSS, behavior, and migration rules. |
 | `release/release-readiness-checklist.md` | Reusable alpha, beta, and stable release checklist. |
 
-## 9. React Documentation App
+## 9. Legal
+
+VyrnForge UI is source-available under the VyrnForge Source License 1.0. The full license is the root `../LICENSE` file; documentation should link to it instead of duplicating the legal text.
+
+| Document | Purpose |
+| --- | --- |
+| `../LICENSE` | Full VyrnForge Source License 1.0 legal text. |
+| `legal/commercial-licensing.md` | Informational overview for evaluation, production, commercial use, redistribution, and commercial-license boundaries. |
+
+## 10. React Documentation App
 
 The React docs app lives in `apps/docs`. It is a viewer/navigation layer over these markdown files, not a new source of truth.
 
@@ -114,7 +123,7 @@ npm run build:docs
 | `react-docs/02-example-standards.md` | Rules for examples, snippets, and use-case pages. |
 | `react-docs/03-ai-readable-docs.md` | How docs should expose machine-readable context. |
 
-## 10. AI Documentation
+## 11. AI Documentation
 
 | Document | Purpose |
 | --- | --- |
@@ -125,7 +134,7 @@ npm run build:docs
 | `../AGENTS.md` | Root instruction file for Codex/agents. |
 | `ai/00-ai-documentation-strategy.md` | Strategy for AI-readable project docs. |
 
-## 11. AI-Readable Metadata
+## 12. AI-Readable Metadata
 
 Markdown docs are the human source of truth. Metadata files are structured indexes for AI agents and the React docs app. Update metadata whenever public components, APIs, CSS imports, state contracts, package boundaries, or AI usage rules change.
 
@@ -139,7 +148,7 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `metadata/ai-usage-rules.json` | AI-specific usage rules and dependency constraints. |
 | `../.ai/COMPONENT_MAP.json` | Compact AI quick map aligned to the full component catalog. |
 
-## 12. Templates
+## 13. Templates
 
 | Template | Purpose |
 | --- | --- |
@@ -149,14 +158,14 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `templates/adr-template.md` | Architecture decision record. |
 | `templates/ai-task-card-template.md` | AI implementation task card. |
 
-## 13. Prompts
+## 14. Prompts
 
 | Prompt | Purpose |
 | --- | --- |
 | `prompts/01-doc-cleanup-and-unification.md` | Documentation cleanup workflow. |
 | `prompts/02-react-docs-app-implementation.md` | React documentation app implementation workflow. |
 
-## 14. Archive
+## 15. Archive
 
 Archived docs are historical only. They preserve useful context but do not guide new work.
 

@@ -39,11 +39,11 @@ import "@vyrnforge/ui-components/styles/index.css";
 - JavaScript entry: `@vyrnforge/ui-components` resolves to built `dist/index.js` or `dist/index.cjs`.
 - Type declarations: `dist/index.d.ts`.
 - CSS entry: `@vyrnforge/ui-components/styles/index.css` resolves to built `dist/index.css`.
-- Published file whitelist: `dist` and `README.md`; package metadata is included by npm automatically.
+- Published file whitelist: `dist` and `README.md`; package metadata and top-level `LICENSE` are included by npm automatically.
 - CSS side effect: `./dist/index.css`.
 - Peer dependencies: React and ReactDOM.
 - Internal dependency: `@vyrnforge/ui-core`.
-- License approval remains deferred to RG-002 before publication.
+- License metadata: `SEE LICENSE IN LICENSE`.
 
 ## Usage principle
 

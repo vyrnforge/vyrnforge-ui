@@ -10,6 +10,8 @@ VyrnForge UI is a native-first enterprise UI foundation. It includes:
 
 Do not treat this repository as only a data-grid project.
 
+VyrnForge UI is source-available under the VyrnForge Source License 1.0, not open source. Do not describe production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, or competing-library use as permitted without a separate written license or written permission.
+
 ## Required Reading Before Work
 
 1. `.ai/AI_CONTEXT.md`

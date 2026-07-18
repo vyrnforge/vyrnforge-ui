@@ -11,7 +11,8 @@ VyrnForge UI is currently pre-alpha.
 - APIs may still change.
 - Packages are not yet ready for production use.
 - The first npm alpha release has not yet been completed.
-- Public release and licensing terms are still being finalized.
+- VyrnForge UI is source-available under the VyrnForge Source License 1.0.
+- Production use and commercial use require a separate written commercial license.
 
 ## Packages
 
@@ -141,6 +142,7 @@ npm run verify:packages
 - Documentation index: [docs/README.md](docs/README.md)
 - API setup guide: [docs/api/import-and-setup.md](docs/api/import-and-setup.md)
 - Package docs: [docs/packages/](docs/packages/)
+- Commercial licensing overview: [docs/legal/commercial-licensing.md](docs/legal/commercial-licensing.md)
 - Release governance: [docs/release/README.md](docs/release/README.md)
 - Playground source: [examples/basic-playground/](examples/basic-playground/)
 - Docs app source: [apps/docs/](apps/docs/)
@@ -154,6 +156,12 @@ Release policy, versioning, publication procedure, deprecation rules, and releas
 ## Contribution And Security
 
 Contribution guidance exists in [CONTRIBUTING.md](CONTRIBUTING.md). Security reporting guidance exists in [SECURITY.md](SECURITY.md).
+
+## Licensing
+
+VyrnForge UI is source-available under the [VyrnForge Source License 1.0](LICENSE). The license permits source inspection, local evaluation, and temporary non-production prototypes.
+
+Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and use in competing UI, component, or data-grid products require separate written permission or a separate written commercial license. See the [commercial licensing overview](docs/legal/commercial-licensing.md) for a concise explanation.
 
 ## Ownership
 

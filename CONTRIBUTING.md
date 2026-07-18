@@ -2,7 +2,7 @@
 
 Thanks for helping improve VyrnForge UI. This repository is a native-first, dependency-minimal enterprise React UI foundation, not only a data-grid package.
 
-VyrnForge UI is currently pre-alpha. Contribution and licensing terms are still being finalized, so do not describe the project as open source or production-ready in contributor-facing changes.
+VyrnForge UI is currently pre-alpha and source-available under the VyrnForge Source License 1.0. Do not describe the project as open source or production-ready in contributor-facing changes.
 
 ## Before Contributing
 
@@ -219,4 +219,8 @@ Use [SECURITY.md](SECURITY.md) for private vulnerability reporting guidance. Coo
 
 ## Licensing Status
 
-Contribution and licensing terms are still being finalized. Do not add license files, CLA requirements, license badges, or definitive licensing statements unless that work is explicitly requested in a dedicated task.
+VyrnForge UI is source-available under the [VyrnForge Source License 1.0](LICENSE), not an open-source license. Source inspection, local evaluation, and temporary non-production prototypes are permitted by that license.
+
+Production use and commercial use require a separate written commercial license. Redistribution, npm or package-registry republication, resale, sublicensing, white-labeling, and use to create or operate a competing UI, component, design-system, or data-grid product are prohibited without separate written permission.
+
+Do not add CLA requirements, license badges, alternative license identifiers, or new licensing claims unless that work is explicitly requested in a dedicated task.

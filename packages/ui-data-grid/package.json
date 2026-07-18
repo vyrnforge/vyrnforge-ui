@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Native-first enterprise data-management grid for VyrnForge UI.",
   "private": true,
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

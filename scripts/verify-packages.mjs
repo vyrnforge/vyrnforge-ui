@@ -109,14 +109,24 @@ const packageByName = new Map(
     readJson(path.join(root, packageInfo.dir, "package.json"))
   ])
 );
+const rootPackageJson = readJson(path.join(root, "package.json"));
+const licenseValue = "SEE LICENSE IN LICENSE";
+const rootLicensePath = path.join(root, "LICENSE");
+const rootLicenseText = readFileSync(rootLicensePath, "utf8");
+const conflictingSpdxLicenses = new Set(["MIT", "Apache-2.0", "GPL-2.0", "GPL-3.0", "AGPL-3.0", "ISC"]);
+
+assert(rootPackageJson.license === licenseValue, `root package.json: license must be ${licenseValue}`);
 
 for (const packageInfo of packages) {
   const packageDir = path.join(root, packageInfo.dir);
   const packageJson = packageByName.get(packageInfo.name);
+  const packageLicensePath = path.join(packageDir, "LICENSE");
 
   assert(packageJson.name === packageInfo.name, `${packageInfo.name}: package name mismatch`);
   assert(packageJson.private === true, `${packageInfo.name}: package must remain private until release gates close`);
   assert(typeof packageJson.description === "string" && packageJson.description.length > 0, `${packageInfo.name}: missing description`);
+  assert(packageJson.license === licenseValue, `${packageInfo.name}: license must be ${licenseValue}`);
+  assert(!conflictingSpdxLicenses.has(packageJson.license), `${packageInfo.name}: package uses conflicting SPDX license ${packageJson.license}`);
   assert(packageJson.main === "./dist/index.cjs", `${packageInfo.name}: unexpected main`);
   assert(packageJson.module === "./dist/index.js", `${packageInfo.name}: unexpected module`);
   assert(packageJson.types === "./dist/index.d.ts", `${packageInfo.name}: unexpected types`);
@@ -129,7 +139,8 @@ for (const packageInfo of packages) {
   assert(packageJson.publishConfig?.access === "public", `${packageInfo.name}: missing public publishConfig access`);
   assert(packageJson.engines?.node === ">=22.12 <25", `${packageInfo.name}: node engine mismatch`);
   assert(packageJson.engines?.npm === ">=10 <12", `${packageInfo.name}: npm engine mismatch`);
-  assert(!Object.hasOwn(packageJson, "license"), `${packageInfo.name}: license must remain deferred to RG-002`);
+  assert(existsSync(packageLicensePath), `${packageInfo.name}: missing top-level LICENSE`);
+  assert(readFileSync(packageLicensePath, "utf8") === rootLicenseText, `${packageInfo.name}: package LICENSE must exactly match root LICENSE`);
 
   for (const distFile of requiredDistFiles) {
     assert(existsSync(path.join(packageDir, distFile)), `${packageInfo.name}: missing ${distFile}`);
@@ -182,12 +193,13 @@ for (const packageInfo of packages) {
   const [packInfo] = JSON.parse(packOutput);
   const files = packInfo.files.map((file) => file.path);
 
-  for (const file of ["package.json", "README.md", ...requiredDistFiles]) {
+  for (const file of ["package.json", "README.md", "LICENSE", ...requiredDistFiles]) {
     assert(files.includes(file), `${packageInfo.name}: npm pack missing ${file}`);
   }
 
   for (const file of files) {
     assert(!forbiddenFilePatterns.some((pattern) => pattern.test(file)), `${packageInfo.name}: npm pack includes unexpected file ${file}`);
+    assert(file === "LICENSE" || !/(legal|draft|internal|confidential)/i.test(file), `${packageInfo.name}: npm pack includes unexpected legal/internal file ${file}`);
   }
 
   console.log(`PACK ${packageInfo.name}`);
@@ -196,7 +208,7 @@ for (const packageInfo of packages) {
   console.log(`  packedSize: ${packInfo.size}`);
   console.log(`  unpackedSize: ${packInfo.unpackedSize}`);
   console.log(`  files: ${files.join(", ")}`);
-  console.log("  license: BLOCKED by RG-002");
+  console.log(`  license: ${packageJson.license}`);
 }
 
 console.log("Package verification passed.");

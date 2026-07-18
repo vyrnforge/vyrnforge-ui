@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Native-first VyrnForge UI React primitives and application components.",
   "private": true,
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
