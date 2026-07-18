@@ -94,16 +94,12 @@ export {
   dataGridLightTheme
 } from "./theme/dataGridThemes";
 export {
-  useColumnResize,
-  useColumnReorder,
-  useControlledState,
-  useDataGridState,
-  useDebouncedValue
+  useDataGridState
 } from "./hooks";
 
 export type {
-  ColumnReorderPlacement,
-  UseColumnReorderParams
+  UseDataGridStateOptions,
+  UseDataGridStateResult
 } from "./hooks";
 export type {
   GridStateAction

@@ -21,7 +21,7 @@ import "@vyrnforge/ui-data-grid/styles/index.css";
 
 import { createVyrnForgeTheme } from "@vyrnforge/ui-core";
 import { Button, TextInput, AppShell, Page, Autocomplete } from "@vyrnforge/ui-components";
-import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
+import { UniversalDataGrid, useDataGridState } from "@vyrnforge/ui-data-grid";
 ```
 
 Do not add workspace aliases, `../../packages` imports, or `packages/*/src` imports to this fixture.

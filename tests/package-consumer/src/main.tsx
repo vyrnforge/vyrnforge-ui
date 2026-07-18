@@ -25,6 +25,7 @@ import {
 } from "@vyrnforge/ui-core";
 import {
   UniversalDataGrid,
+  useDataGridState,
   type DataGridColumnDef
 } from "@vyrnforge/ui-data-grid";
 
@@ -56,6 +57,13 @@ const themeOverride = createVyrnForgeTheme({
 });
 
 function VerificationContent() {
+  const [gridState] = useDataGridState({
+    defaultState: {
+      density: "compact",
+      pagination: { pageIndex: 0, pageSize: 25 }
+    }
+  });
+
   return (
     <Stack gap="lg">
       <Inline gap="sm">
@@ -102,7 +110,7 @@ function VerificationContent() {
         rows={rows}
         getRowId={(row) => row.id}
         title="Verification tickets"
-        density="compact"
+        density={gridState.density}
         theme="light"
         variant="card"
         selectable

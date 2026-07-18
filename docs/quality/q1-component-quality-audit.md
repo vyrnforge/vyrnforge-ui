@@ -2,7 +2,7 @@
 
 Audit date: 2026-07-18.
 
-This is the CI-004 source-of-truth audit report for the current VyrnForge UI public surface. It is an evidence-based classification report only; it does not change implementation code, package versions, public APIs, CSS prefixes, or maturity metadata.
+This is the CI-004 source-of-truth audit report for the VyrnForge UI public surface. CI-006 records the focused resolution of Q1-P1-001 below; it changes only the affected pre-alpha data-grid hook exports, documentation, metadata, consumer verification, and tests.
 
 ## Executive Summary
 
@@ -10,15 +10,15 @@ This is the CI-004 source-of-truth audit report for the current VyrnForge UI pub
 | --- | --- |
 | Branch reviewed | `audit/q1-component-quality` |
 | Public package entry points reviewed | `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, `@vyrnforge/ui-data-grid` |
-| Public named exports reviewed | 341 unique named exports |
+| Public named exports reviewed | 337 unique named exports after CI-006 hook disposition |
 | Public CSS entry points reviewed | 9 package export-map CSS paths |
 | Confirmed P0 findings | 0 |
-| Confirmed P1 findings | 1 |
+| Confirmed P1 findings | 0 active; Q1-P1-001 resolved by CI-006 |
 | Confirmed P2 findings | 6 |
 | Confirmed P3 findings | 1 |
-| Alpha recommendation | Proceed only after the P1 public-hook classification gap is resolved. P2/P3 items can remain in the alpha backlog if documented as known limitations. |
+| Alpha recommendation | The public-hook classification blocker is resolved. P2/P3 items can remain in the alpha backlog if documented as known limitations. |
 
-No runtime crash, data-loss issue, destructive behavior, broken package import, or unusable public CSS import was found through the available automated evidence. The main alpha blocker is API governance: several data-grid hooks are exported from the public root but are not documented or classified in the current metadata.
+No runtime crash, data-loss issue, destructive behavior, broken package import, or unusable public CSS import was found through the available automated evidence. CI-006 resolved the former public-hook governance blocker by retaining one documented experimental hook and withdrawing four internal coordination hooks from the package root.
 
 ## Scope And Methodology
 
@@ -152,23 +152,22 @@ Legend:
 | `@vyrnforge/ui-data-grid` | Row selection helpers | Pure helpers | `@vyrnforge/ui-data-grid` | Full | Full | Meaningful | stable | stable | Pass | P3 |
 | `@vyrnforge/ui-data-grid` | Persistence, server-query, and export-request adapters | Adapter contracts | `@vyrnforge/ui-data-grid` | Full | Pattern | Meaningful | stable | stable | Pass | P3 |
 | `@vyrnforge/ui-data-grid` | Data-grid theme helpers and presets | Theme helpers | `@vyrnforge/ui-data-grid` | Full | Full | Meaningful | stable | stable | Pass | P3 |
-| `@vyrnforge/ui-data-grid` | Data-grid hooks (`useColumnResize`, `useColumnReorder`, `useControlledState`, `useDataGridState`, `useDebouncedValue`) | Hooks | `@vyrnforge/ui-data-grid` | Missing in current API docs/metadata | Internal use only except root export | Partial | exported | internal or experimental pending decision | Gap | P1 |
+| `@vyrnforge/ui-data-grid` | Data-grid hooks (`useDataGridState` public; resize/reorder/controlled/debounce hooks internal) | Hooks | `@vyrnforge/ui-data-grid` | Full for `useDataGridState`; internal hooks intentionally undocumented | Public root import and packed consumer for `useDataGridState`; internal source use only otherwise | Meaningful public contract test | experimental / internal | experimental public / internal | Pass | P1 resolved |
 | `@vyrnforge/ui-data-grid` | Planned grid features (`DataGridBulkActionBar`, `AdvancedFilterDrawer`, `SavedViewSelector`, `ExportPreviewPanel`) | Planned | Not exported | Planned | None | N/A | planned | planned | Pass | P3 |
 
 ## Component-Level Findings
 
-### Q1-P1-001: Public data-grid hooks lack current support classification
+### Q1-P1-001: Public data-grid hooks lacked current support classification (resolved by CI-006)
 
 - Severity: P1
 - Package: `@vyrnforge/ui-data-grid`
 - Component or feature: `useColumnResize`, `useColumnReorder`, `useControlledState`, `useDataGridState`, `useDebouncedValue`
 - Category: Public API governance
-- Evidence: These hooks are exported from `packages/ui-data-grid/src/index.ts`, but current docs/metadata do not describe their supported contract. `rg` found the hooks only in source/internal use and archived stability notes, not current API docs.
+- Historical evidence: These hooks were exported from `packages/ui-data-grid/src/index.ts`, but current docs/metadata did not describe their supported contract. `rg` found the hooks only in source/internal use and archived stability notes, not current API docs.
 - User impact: Consuming apps may treat coordination hooks as stable public APIs even though support boundaries, callback behavior, and intended ownership are not documented.
-- Recommended resolution: In CI-007, either document and classify each hook as experimental/stable with examples and tests, or remove/replace public root exports through a deliberate API-change task before alpha.
-- Affected files: `packages/ui-data-grid/src/index.ts`, `docs/api/ui-data-grid-api.md`, `docs/metadata/components.json`, `docs/metadata/component-status.json`
-- Test requirement: Add an export-to-docs parity check or metadata validation that fails when root-exported public hooks lack a status/doc record.
-- Release disposition: Blocks `0.1.0-alpha.0` until classified.
+- Resolution: CI-006 retains `useDataGridState` as the sole supported experimental package-root hook. `useColumnResize`, `useColumnReorder`, `useControlledState`, and `useDebouncedValue` remain internal implementation hooks and are no longer root exports. Their reorder-only types were removed with the internal hook export.
+- Final inventory: `useDataGridState` is experimental, documented in `docs/api/ui-data-grid-api.md`, cataloged in both component metadata files, compiled by the packed-consumer fixture, and covered by `publicHooks.test.tsx`. The four internal hooks have no package-root import path.
+- Release disposition: Resolved before the first alpha. The removal is recorded under `CHANGELOG.md` Unreleased with migration guidance; no compatibility alias is added during pre-alpha.
 
 ### Q1-P2-001: Data-grid public subcomponents are missing from full component metadata
 
@@ -319,12 +318,12 @@ These are recommendations only. CI-004 does not modify actual metadata.
 | Recommendation | Count | Items |
 | --- | ---: | --- |
 | stable | 47 | Core theme/density/utility foundations; Button; IconButton; action aliases; ToolbarButton; SegmentedControl; Icon; typography primitives; Badge; StatusBadge; Alert; InlineMessage; EmptyState; ErrorState; LoadingState; Skeleton; Card; Panel; Stack; Inline; Section; Popover; Menu; Dropdown; Tooltip; Dialog; Drawer; ConfirmDialog; UniversalDataGrid; DataGridToolbar; DataGridSearch; DataGridFilterBar; DataGridColumnMenu; DataGridSkeletonRows; DataGridEmptyState; DataGridErrorState; DataGridPagination; grid state/core/adapters/theme helpers. |
-| experimental | 31 | ButtonGroup; ToggleButton; ToggleButtonGroup; Field; ValidationMessage; TextInput; SearchInput; Select; Checkbox; Radio; RadioGroup; Switch; NumberInput; DateInput; DateTimeInput; Textarea; Rating; Slider; MultiSelect; Autocomplete; TransferList; Toast; useToast; AppShell; Page; PageHeader; PageToolbar; SideNav; TopNav; Breadcrumbs; Tabs. |
+| experimental | 32 | ButtonGroup; ToggleButton; ToggleButtonGroup; Field; ValidationMessage; TextInput; SearchInput; Select; Checkbox; Radio; RadioGroup; Switch; NumberInput; DateInput; DateTimeInput; Textarea; Rating; Slider; MultiSelect; Autocomplete; TransferList; Toast; useToast; AppShell; Page; PageHeader; PageToolbar; SideNav; TopNav; Breadcrumbs; Tabs; useDataGridState. |
 | planned | 11 | Progress; DescriptionList; KeyValueList; PropertyTable; ResourceList; Timeline; ActivityLog; DataGridBulkActionBar; AdvancedFilterDrawer; SavedViewSelector; ExportPreviewPanel. |
 | deprecated | 0 | None. |
-| internal | 5 | ToastViewport, useColumnResize, useColumnReorder, useControlledState, useDebouncedValue unless CI-007 explicitly promotes them. |
+| internal | 5 | ToastViewport, useColumnResize, useColumnReorder, useControlledState, useDebouncedValue. |
 
-`useDataGridState` remains the one hook that may reasonably become experimental public API, but it still needs documentation before alpha.
+`useDataGridState` is now the one documented experimental public data-grid hook. The remaining grid hooks are implementation details and have no supported package-root import path.
 
 ## P0 Remediation Queue
 
@@ -332,9 +331,7 @@ No confirmed P0 findings.
 
 ## P1 Remediation Queue
 
-| ID | One-line description | Required before alpha |
-| --- | --- | --- |
-| Q1-P1-001 | Public data-grid hooks are root-exported without current support classification. | Yes |
+No active P1 remediation remains from this audit. Q1-P1-001 was resolved by CI-006.
 
 ## P2/P3 Backlog
 
@@ -363,7 +360,7 @@ The following could not be proven automatically in this audit:
 
 ## Alpha-Release Recommendation
 
-CI-004 audit coverage is complete, but alpha release should wait until Q1-P1-001 is resolved. No P0 issues were found. P2/P3 findings should be recorded as known alpha limitations or fixed in follow-up documentation/test hardening tasks.
+CI-004 audit coverage is complete and CI-006 resolved Q1-P1-001. No P0/P1 issues remain from this audit. P2/P3 findings should be recorded as known alpha limitations or fixed in follow-up documentation/test hardening tasks.
 
 ## Appendix A: Complete Named Export Inventory
 
@@ -667,13 +664,9 @@ toDataGridThemeStyle
 dataGridDarkTheme
 dataGridEnterpriseTheme
 dataGridLightTheme
-useColumnResize
-useColumnReorder
-useControlledState
 useDataGridState
-useDebouncedValue
-ColumnReorderPlacement
-UseColumnReorderParams
+UseDataGridStateOptions
+UseDataGridStateResult
 GridStateAction
 DataGridBulkAction
 DataGridBulkActionContext
@@ -727,7 +720,7 @@ DataGridThemeVars
 
 ## Validation Record
 
-These commands are the required CI-004 validation set. Results reflect the current worktree at audit time:
+These commands are the required CI-006 validation set. Results reflect the resolved hook contract:
 
 | Command | Result |
 | --- | --- |
@@ -737,25 +730,24 @@ These commands are the required CI-004 validation set. Results reflect the curre
 | `npm run typecheck` | PASS |
 | `npm run test` | PASS |
 | `npm run build:packages` | PASS |
-| `npm run verify:packages` | FAIL: current worktree has `LICENSE` deleted and `LICENSE.md` untracked; `scripts/verify-packages.mjs` requires root/package-local `LICENSE` files. |
-| `npm run verify:consumer` | FAIL: cascades from `npm run verify:packages` and the missing root `LICENSE`. |
+| `npm run verify:packages` | PASS |
+| `npm run verify:consumer` | PASS |
 | `npm run build` | PASS |
 | `npm run build:docs` | PASS |
 | `npm run build:playground` | PASS |
-| `npm run quality` | FAIL: cascades from `npm run verify:packages` and the missing root `LICENSE`. |
+| `npm run quality` | PASS |
 
 Existing non-fatal notes observed during validation:
 
 - `npm ci` reports one low-severity npm audit item.
 - Vite reports the existing playground chunk-size warning after successful production builds.
-- Package verification is currently blocked by unrelated license-file worktree changes outside CI-004.
 
 ## Integrity Statement
 
 - No package was published.
 - No version was changed.
 - No broad runtime component remediation was performed.
-- No public API was intentionally changed.
+- The only public API change is the documented pre-alpha hook disposition: one retained experimental hook with explicit types and four withdrawn internal root exports.
 - No CSS prefix ownership was changed.
 - No large dependency was added.
 - No generated output is intended to be committed.

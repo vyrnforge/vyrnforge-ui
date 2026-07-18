@@ -14,6 +14,7 @@ Public API includes:
 - documented CSS variables
 - documented CSS import paths
 - documented data-grid state contracts
+- the experimental `useDataGridState` hook from `@vyrnforge/ui-data-grid`
 - documented persistence, server-query, and export-request adapter contracts
 - documented metadata JSON files under `docs/metadata/`
 
@@ -25,6 +26,8 @@ Internal API includes:
 
 - private helper files
 - non-exported hooks
+- grid coordination hooks such as column resize/reorder, generic controlled
+  state, and debounced value handling
 - non-exported utilities
 - implementation details inside `src/components`, `src/core`, `src/hooks`, and `src/adapters`
 - internal class names not documented in `css-class-reference.md`

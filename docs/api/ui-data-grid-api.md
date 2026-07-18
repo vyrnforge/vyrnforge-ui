@@ -95,6 +95,56 @@ Controlled state is useful when an app needs to synchronize:
 
 The app remains the source of truth when controlled props are used.
 
+## Experimental State Hook
+
+`useDataGridState` is the one supported public grid hook. It is
+**experimental** during pre-alpha: its package-root import, options, and
+returned tuple are documented, but the API may change before a stable release.
+
+Use it when application code needs to coordinate the same complete
+`DataGridState` contract used by `UniversalDataGrid`, while keeping rows,
+fetching, permissions, and business workflows outside the grid package.
+
+```tsx
+import {
+  UniversalDataGrid,
+  useDataGridState
+} from "@vyrnforge/ui-data-grid";
+
+const [state, setState] = useDataGridState({
+  defaultState: {
+    density: "compact",
+    pagination: { pageIndex: 0, pageSize: 25 }
+  }
+});
+
+<UniversalDataGrid
+  tableId="users"
+  columns={columns}
+  rows={rows}
+  state={state}
+  onStateChange={setState}
+/>;
+```
+
+### Options and result
+
+- `state?: Partial<DataGridState>` makes the hook controlled. The supplied
+  partial state is normalized to a complete `DataGridState` on each render.
+- `defaultState?: Partial<DataGridState>` sets the initial uncontrolled state
+  only. Changing it after mount does not reset current state; remount the
+  owner or use a documented state helper when an explicit reset is required.
+- `onStateChange?: (nextState: DataGridState) => void` receives each next
+  complete state resolved by the returned setter.
+- The result is a readonly tuple of `[DataGridState, setState]`. In controlled
+  mode, `setState` emits through `onStateChange`; the application must pass the
+  updated `state` back. In uncontrolled mode, it updates local view state and
+  then emits the callback.
+
+`useColumnResize`, `useColumnReorder`, `useControlledState`, and
+`useDebouncedValue` are internal grid coordination hooks. They are not
+supported package-root imports and must not be used as application contracts.
+
 ## Search, Filter, Sort, And Pagination
 
 Public helpers include:

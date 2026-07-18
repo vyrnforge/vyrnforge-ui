@@ -115,6 +115,25 @@ Grid state organization:
 - `hooks/` coordinates React interactions.
 - `adapters/` owns persistence, server query, and export request boundaries.
 
+### Experimental public hook
+
+`useDataGridState` is the supported experimental hook for application-owned
+controlled or uncontrolled `DataGridState` coordination. Import it only from
+the package root:
+
+```tsx
+import { useDataGridState } from "@vyrnforge/ui-data-grid";
+```
+
+Pass `state` for controlled use or `defaultState` for an uncontrolled initial
+value. The hook returns `[state, setState]`; controlled callers must apply the
+complete next state received through `onStateChange`. `defaultState` is used
+only on mount and does not reset an existing uncontrolled hook.
+
+Column resize, column reorder, generic controlled-state, and debounce hooks
+remain internal implementation details. Use `UniversalDataGrid` props and the
+documented public state/core helpers instead of importing internal hooks.
+
 Persistence is adapter-based and stores preferences only. Server integration should use query contracts and fetch in the app. Export integration should use request contracts and generate files outside the default grid package.
 
 No global store is created inside `@vyrnforge/ui-data-grid`.
