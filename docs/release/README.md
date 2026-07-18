@@ -11,3 +11,4 @@ VyrnForge UI is currently pre-alpha and source-available under the VyrnForge Sou
 | [publication-procedure.md](publication-procedure.md) | Manual publication and future trusted-publishing procedure. |
 | [deprecation-and-migration-policy.md](deprecation-and-migration-policy.md) | Deprecation, compatibility, migration, and removal rules. |
 | [release-readiness-checklist.md](release-readiness-checklist.md) | Reusable release checklist for alpha, beta, and stable releases. |
+| [external-consumer-verification.md](external-consumer-verification.md) | Packed package consumer fixture and verification command. |

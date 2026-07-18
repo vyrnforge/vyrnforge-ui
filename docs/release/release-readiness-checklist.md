@@ -20,6 +20,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Tests pass.
 - [ ] Package builds pass.
 - [ ] `npm run verify:packages` passes.
+- [ ] `npm run verify:consumer` passes.
 - [ ] Package manifests use `SEE LICENSE IN LICENSE`.
 - [ ] Package tarballs include LICENSE and no unrelated legal drafts or internal legal notes.
 - [ ] Type declaration output is present and reviewable.
