@@ -19,4 +19,9 @@ Markdown docs remain the human source of truth for project direction. Metadata c
 
 Update metadata when public components, package entry points, CSS imports, state contracts, or AI rules change.
 
+Component maturity uses `stable`, `experimental`, `planned`, `deprecated`, and
+`internal`. Public entries belong in the package sections of
+`component-status.json`; internal items belong only in its separate
+`internal` registry. Run `npm run verify:metadata` after metadata changes.
+
 Canonical maintenance rules live in `docs/governance/04-metadata-maintenance.md`.

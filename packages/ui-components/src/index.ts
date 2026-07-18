@@ -129,7 +129,6 @@ export {
   Toast,
   ToastAction,
   ToastProvider,
-  ToastViewport,
   useToast
 } from "./components/Toast";
 export type {
@@ -140,8 +139,7 @@ export type {
   ToastProps,
   ToastProviderProps,
   ToastRecord,
-  ToastTone,
-  ToastViewportProps
+  ToastTone
 } from "./components/Toast";
 export { LoadingState } from "./components/LoadingState";
 export type { LoadingStateProps, LoadingStateSize } from "./components/LoadingState";

@@ -15,7 +15,8 @@
       "owns": ["tokens", "themes", "density", "utilities"],
       "css": ["@vyrnforge/ui-core/styles/index.css"],
       "current": ["Theme tokens", "Density tokens", "Utility classes"],
-      "planned": []
+      "planned": [],
+      "internal": []
     },
     "@vyrnforge/ui-components": {
       "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation", "data management"],
@@ -93,7 +94,8 @@
         "ResourceList",
         "Timeline",
         "ActivityLog"
-      ]
+      ],
+      "internal": ["ToastViewport"]
     },
     "@vyrnforge/ui-data-grid": {
       "owns": ["UniversalDataGrid", "grid behavior", "grid state", "grid adapters", "grid-specific styles"],
@@ -116,6 +118,12 @@
         "AdvancedFilterDrawer",
         "SavedViewSelector",
         "ExportPreviewPanel"
+      ],
+      "internal": [
+        "useColumnResize",
+        "useColumnReorder",
+        "useControlledState",
+        "useDebouncedValue"
       ]
     }
   },
@@ -123,7 +131,7 @@
     "state": "store-agnostic controlled/uncontrolled; no Redux dependency",
     "styling": "CSS variables and package CSS; no static visual inline styles",
     "dependencies": "native-first, dependency-minimal",
-    "status": "Check docs/metadata/component-status.json before using planned components"
+    "status": "Check docs/metadata/component-status.json for stable, experimental, planned, or deprecated maturity. Current entries can be stable or experimental; internal entries are not public APIs."
   },
   "componentUsageNotes": {
     "AppShell": {

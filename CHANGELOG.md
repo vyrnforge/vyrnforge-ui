@@ -21,6 +21,9 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 - Removed undocumented package-root exports for `useColumnResize`,
   `useColumnReorder`, `useControlledState`, and `useDebouncedValue`. These
   remain internal grid coordination hooks and were not supported public APIs.
+- Removed `ToastViewport` and `ToastViewportProps` from the
+  `@vyrnforge/ui-components` package root. The viewport is internal provider
+  infrastructure, not an application API.
 
 ### Accessibility
 
@@ -32,3 +35,5 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   Use `UniversalDataGrid` props and the documented public state/core helpers
   for resizing, ordering, and other grid behavior. Do not replace removed
   exports with deep imports from package source files.
+- Use `ToastProvider` for toast rendering. Do not replace the removed
+  `ToastViewport` root export with an internal source import.

@@ -54,6 +54,10 @@ Machine-readable metadata lives in `docs/metadata/`. It complements these API do
 
 Markdown docs remain the human source of truth. Metadata is a structured index and must not contradict the API docs.
 
+Component maturity is canonical in `metadata/component-status.json`. Public
+components are `stable`, `experimental`, `planned`, or `deprecated`; internal
+items are recorded separately and must not be imported from package roots.
+
 ## Internal API
 
 Anything not exported from a package entry point or documented here is internal unless explicitly stated otherwise. Do not depend on non-exported helpers, internal class names, implementation files, tests, or docs-app-only classes.
