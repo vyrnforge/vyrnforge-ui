@@ -41,6 +41,12 @@ Thumbs.db
 # Package artifacts
 *.tgz
 
+# External package consumer verification
+tests/package-consumer/node_modules/
+tests/package-consumer/dist/
+tests/package-consumer/package-lock.json
+tests/package-consumer/.tmp-packages/
+
 # Editor metadata
 .idea/
 .vscode/*

@@ -134,6 +134,7 @@ npm run dev:playground
 npm run quality
 npm run typecheck
 npm run test
+npm run verify:consumer
 npm run verify:packages
 ```
 
@@ -144,6 +145,7 @@ npm run verify:packages
 - Package docs: [docs/packages/](docs/packages/)
 - Commercial licensing overview: [docs/legal/commercial-licensing.md](docs/legal/commercial-licensing.md)
 - Release governance: [docs/release/README.md](docs/release/README.md)
+- External consumer verification: [docs/release/external-consumer-verification.md](docs/release/external-consumer-verification.md)
 - Playground source: [examples/basic-playground/](examples/basic-playground/)
 - Docs app source: [apps/docs/](apps/docs/)
 - Agent context: [AGENTS.md](AGENTS.md) and [.ai/AI_CONTEXT.md](.ai/AI_CONTEXT.md)

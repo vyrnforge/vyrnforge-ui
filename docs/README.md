@@ -97,6 +97,7 @@ Release docs define the publication, versioning, deprecation, and release-readin
 | `release/publication-procedure.md` | Manual publication and future trusted-publishing procedure. |
 | `release/deprecation-and-migration-policy.md` | Public API, CSS, behavior, and migration rules. |
 | `release/release-readiness-checklist.md` | Reusable alpha, beta, and stable release checklist. |
+| `release/external-consumer-verification.md` | Packed package consumer fixture and verification command. |
 
 ## 9. Legal
 
