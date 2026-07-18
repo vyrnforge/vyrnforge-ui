@@ -1,8 +1,7 @@
 {
   "name": "@vyrnforge/ui-components",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.0",
   "description": "Native-first VyrnForge UI React primitives and application components.",
-  "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -48,7 +47,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@vyrnforge/ui-core": "0.1.0"
+    "@vyrnforge/ui-core": "0.1.0-alpha.0"
   },
   "peerDependencies": {
     "react": ">=18 <20",

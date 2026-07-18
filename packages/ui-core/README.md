@@ -6,7 +6,9 @@ Shared VyrnForge UI foundation package for native-first design tokens, CSS varia
 
 ## Package Status
 
-VyrnForge UI is pre-alpha. This package is private in the repository until release and versioning gates are complete.
+VyrnForge UI is pre-alpha. This package is prepared as the `0.1.0-alpha.0`
+candidate, but it has not been published to npm and is not ready for production
+use.
 
 VyrnForge UI is source-available under the VyrnForge Source License 1.0. Source inspection, local evaluation, and temporary non-production prototypes are permitted. Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license.
 

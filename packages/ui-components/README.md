@@ -4,7 +4,9 @@ Native-first VyrnForge UI component primitives built with React, TypeScript, and
 
 ## Install
 
-VyrnForge UI is pre-alpha and is not yet published for public npm installation. The intended first-alpha install shape is:
+VyrnForge UI is pre-alpha. The `0.1.0-alpha.0` candidate is prepared for the
+first controlled alpha, but has not been published for public npm installation
+and is not ready for production use. The intended install shape is:
 
 ```bash
 npm install @vyrnforge/ui-core @vyrnforge/ui-components

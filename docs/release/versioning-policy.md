@@ -1,8 +1,6 @@
 # Versioning Policy
 
-VyrnForge UI intends to follow Semantic Versioning for public packages once public releases begin.
-
-This task does not set package versions.
+VyrnForge UI intends to follow Semantic Versioning for public packages once public releases begin. The current synchronized candidate is `0.1.0-alpha.0` for the three publishable packages. It remains a prerelease, is source-available under the VyrnForge Source License 1.0, and has not been published to npm.
 
 ## Packages
 

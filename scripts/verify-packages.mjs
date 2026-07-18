@@ -111,11 +111,14 @@ const packageByName = new Map(
 );
 const rootPackageJson = readJson(path.join(root, "package.json"));
 const licenseValue = "SEE LICENSE IN LICENSE";
+const releaseVersion = "0.1.0-alpha.0";
 const rootLicensePath = path.join(root, "LICENSE");
 const rootLicenseText = readFileSync(rootLicensePath, "utf8");
 const conflictingSpdxLicenses = new Set(["MIT", "Apache-2.0", "GPL-2.0", "GPL-3.0", "AGPL-3.0", "ISC"]);
+const localDependencySpecPattern = /^(?:workspace:|file:|link:|\.{1,2}(?:[\\/]|$)|[A-Za-z]:[\\/]|\/)/;
 
 assert(rootPackageJson.license === licenseValue, `root package.json: license must be ${licenseValue}`);
+assert(rootPackageJson.private === true, "root package.json: monorepo root must remain private");
 
 for (const packageInfo of packages) {
   const packageDir = path.join(root, packageInfo.dir);
@@ -123,7 +126,8 @@ for (const packageInfo of packages) {
   const packageLicensePath = path.join(packageDir, "LICENSE");
 
   assert(packageJson.name === packageInfo.name, `${packageInfo.name}: package name mismatch`);
-  assert(packageJson.private === true, `${packageInfo.name}: package must remain private until release gates close`);
+  assert(packageJson.version === releaseVersion, `${packageInfo.name}: version must be ${releaseVersion}`);
+  assert(!Object.hasOwn(packageJson, "private"), `${packageInfo.name}: publishable package must not declare private`);
   assert(typeof packageJson.description === "string" && packageJson.description.length > 0, `${packageInfo.name}: missing description`);
   assert(packageJson.license === licenseValue, `${packageInfo.name}: license must be ${licenseValue}`);
   assert(!conflictingSpdxLicenses.has(packageJson.license), `${packageInfo.name}: package uses conflicting SPDX license ${packageJson.license}`);
@@ -174,6 +178,15 @@ for (const packageInfo of packages) {
     assert(!forbiddenDependencyPatterns.some((pattern) => pattern.test(dependencyName)), `${packageInfo.name}: forbidden dependency ${dependencyName}`);
   }
 
+  for (const dependencyGroup of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
+    for (const [dependencyName, dependencySpec] of Object.entries(packageJson[dependencyGroup] ?? {})) {
+      assert(
+        typeof dependencySpec === "string" && !localDependencySpecPattern.test(dependencySpec),
+        `${packageInfo.name}: packed manifest dependency ${dependencyName} must not use workspace or local spec ${String(dependencySpec)}`
+      );
+    }
+  }
+
   for (const dependencyName of packageInfo.dependencies) {
     assert(packageJson.dependencies?.[dependencyName] === packageByName.get(dependencyName).version, `${packageInfo.name}: internal dependency ${dependencyName} must match workspace version`);
   }
@@ -192,6 +205,8 @@ for (const packageInfo of packages) {
   const packOutput = runNpm(["pack", "--dry-run", "--json"], { cwd: packageDir });
   const [packInfo] = JSON.parse(packOutput);
   const files = packInfo.files.map((file) => file.path);
+
+  assert(packInfo.version === releaseVersion, `${packageInfo.name}: packed manifest version must be ${releaseVersion}`);
 
   for (const file of ["package.json", "README.md", "LICENSE", ...requiredDistFiles]) {
     assert(files.includes(file), `${packageInfo.name}: npm pack missing ${file}`);

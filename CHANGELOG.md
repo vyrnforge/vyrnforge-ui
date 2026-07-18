@@ -12,6 +12,11 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Changed
 
+- Prepared `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and
+  `@vyrnforge/ui-data-grid` as the synchronized `0.1.0-alpha.0` candidate.
+  The candidate remains pre-release and source-available; it has not been
+  published to npm.
+
 ### Fixed
 
 ### Deprecated
