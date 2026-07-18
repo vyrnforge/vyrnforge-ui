@@ -1,0 +1,71 @@
+name: Feature proposal
+description: Propose a reusable VyrnForge UI capability.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for reusable enterprise UI proposals. Consider existing components and patterns before proposing new surface area.
+  - type: textarea
+    id: user-problem
+    attributes:
+      label: User problem
+      description: What user or application problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: enterprise-use-case
+    attributes:
+      label: Enterprise use case
+      description: Describe the administration, workflow, reporting, access-management, or data-heavy use case.
+    validations:
+      required: true
+  - type: textarea
+    id: existing-pattern
+    attributes:
+      label: Existing VyrnForge component or pattern considered
+      description: List existing components, tokens, utilities, or patterns that were considered first.
+    validations:
+      required: true
+  - type: textarea
+    id: reuse
+    attributes:
+      label: Expected reuse across applications
+      description: Explain why this belongs in VyrnForge UI rather than one application.
+    validations:
+      required: true
+  - type: dropdown
+    id: package-owner
+    attributes:
+      label: Proposed package ownership
+      options:
+        - "@vyrnforge/ui-core"
+        - "@vyrnforge/ui-components"
+        - "@vyrnforge/ui-data-grid"
+        - "Not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: api-concept
+    attributes:
+      label: Public API concept
+      description: Sketch props, tokens, classes, or adapter contracts if known.
+  - type: textarea
+    id: accessibility
+    attributes:
+      label: Accessibility behavior
+      description: Describe labels, keyboard support, focus, ARIA, contrast, and motion expectations.
+    validations:
+      required: true
+  - type: textarea
+    id: dependency-impact
+    attributes:
+      label: Dependency impact
+      description: State whether this requires dependencies. Large UI/state dependencies require explicit approval.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe workarounds, composition approaches, or application-level alternatives.

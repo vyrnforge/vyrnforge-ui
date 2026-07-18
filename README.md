@@ -1,64 +1,155 @@
 # VyrnForge UI
 
-VyrnForge UI is a native-first enterprise UI foundation for internal tools, admin portals, customer portals, data-heavy applications, and workflow systems.
+VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundation. It is built for reusable application surfaces such as administration portals, customer portals, IAM and access-management applications, workflow systems, reporting and analytics screens, and data-heavy enterprise applications.
 
-This repository is not only a data-grid project. The data grid is one specialized package inside the broader VyrnForge UI foundation.
+VyrnForge UI is not only a data-grid library. The data grid is one specialized package inside a broader UI foundation.
+
+## Maturity
+
+VyrnForge UI is currently pre-alpha.
+
+- APIs may still change.
+- Packages are not yet ready for production use.
+- The first npm alpha release has not yet been completed.
+- Public release and licensing terms are still being finalized.
 
 ## Packages
 
-```txt
-@vyrnforge/ui-core
-@vyrnforge/ui-components
-@vyrnforge/ui-data-grid
+| Package | Responsibility |
+| --- | --- |
+| `@vyrnforge/ui-core` | Design tokens, themes, density, CSS variables, utilities, and shared foundations. |
+| `@vyrnforge/ui-components` | Reusable React primitives and application components. |
+| `@vyrnforge/ui-data-grid` | Enterprise data-management grid functionality. |
+
+Intended dependency direction:
+
+- `@vyrnforge/ui-core` remains independent.
+- `@vyrnforge/ui-components` may depend on `@vyrnforge/ui-core`.
+- `@vyrnforge/ui-data-grid` may depend on `@vyrnforge/ui-core` and `@vyrnforge/ui-components`.
+
+## Installation
+
+The packages are not published for public npm installation yet. The intended command for the first alpha release is:
+
+```bash
+npm install @vyrnforge/ui-core @vyrnforge/ui-components @vyrnforge/ui-data-grid
 ```
 
-| Package | Role |
+This command is planned for the first npm alpha and should not be read as a claim that the packages are already available on the public npm registry.
+
+## CSS Setup
+
+When using all packages together, import package-level CSS in this order:
+
+```ts
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
+```
+
+Shared VyrnForge UI styling uses `--vf-*` CSS variables and `vf-*` classes. Data-grid-specific styling uses `--udg-*` CSS variables and `udg-*` classes.
+
+## Minimal Usage
+
+```tsx
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
+
+import { Button, Card, Stack } from "@vyrnforge/ui-components";
+import {
+  UniversalDataGrid,
+  type DataGridColumnDef
+} from "@vyrnforge/ui-data-grid";
+
+type AccessRequest = {
+  id: string;
+  requester: string;
+  status: string;
+};
+
+const rows: AccessRequest[] = [
+  { id: "REQ-1001", requester: "Workspace owner", status: "Pending" },
+  { id: "REQ-1002", requester: "Security reviewer", status: "Approved" }
+];
+
+const columns: DataGridColumnDef<AccessRequest>[] = [
+  { id: "requester", header: "Requester", accessorKey: "requester" },
+  { id: "status", header: "Status", accessorKey: "status" }
+];
+
+export function AccessRequestsPanel() {
+  return (
+    <Card variant="bordered" padding="md">
+      <Stack gap="md">
+        <Button variant="primary">Create request</Button>
+        <UniversalDataGrid
+          tableId="access-requests"
+          columns={columns}
+          rows={rows}
+          getRowId={(row) => row.id}
+        />
+      </Stack>
+    </Card>
+  );
+}
+```
+
+## Repository Structure
+
+| Path | Purpose |
 | --- | --- |
-| `@vyrnforge/ui-core` | Shared tokens, themes, density, and utilities. |
-| `@vyrnforge/ui-components` | Native React primitives and reusable application components. |
-| `@vyrnforge/ui-data-grid` | Specialized enterprise data-management grid. |
+| `packages/` | Package workspaces for `ui-core`, `ui-components`, and `ui-data-grid`. |
+| `docs/` | Canonical markdown documentation and AI-readable metadata. |
+| `examples/basic-playground/` | Interactive playground source for component and grid examples. |
+| `apps/docs/` | React documentation viewer over the markdown docs. |
+| `.github/` | Repository automation and workflow configuration. |
 
-## Documentation
+Package tests live beside package source where present.
 
-The canonical documentation entrypoint is:
+## Local Development
 
-- [docs/README.md](docs/README.md)
+Prerequisites:
 
-Agent and AI context entrypoints:
+- Node.js `>=22.12 <25`; `.nvmrc` pins the default development major to Node 22.
+- npm `>=10 <12`; this repository uses npm workspaces and `package-lock.json`.
 
-- [AGENTS.md](AGENTS.md)
-- [.ai/AI_CONTEXT.md](.ai/AI_CONTEXT.md)
-
-Do not create competing source-of-truth documents. If a topic overlaps existing docs, update the canonical document listed in [docs/README.md](docs/README.md) or archive outdated material under `docs/archive/`.
-
-## Development
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Root scripts:
+
+```bash
 npm run build
+npm run build:packages
+npm run build:docs
+npm run build:playground
+npm run dev:docs
+npm run dev:playground
+npm run quality
 npm run typecheck
 npm run test
-npm run build:playground
-npm run build:docs
-npm run quality
 ```
 
-Run the playground locally:
+## Documentation And Playground
 
-```bash
-npm run dev:playground
-```
+- Documentation index: [docs/README.md](docs/README.md)
+- API setup guide: [docs/api/import-and-setup.md](docs/api/import-and-setup.md)
+- Package docs: [docs/packages/](docs/packages/)
+- Playground source: [examples/basic-playground/](examples/basic-playground/)
+- Docs app source: [apps/docs/](apps/docs/)
+- Agent context: [AGENTS.md](AGENTS.md) and [.ai/AI_CONTEXT.md](.ai/AI_CONTEXT.md)
+- Changelog: [CHANGELOG.md](CHANGELOG.md)
 
-Run the documentation app locally:
+Public GitHub Pages links are intentionally omitted until Pages deployment is complete.
 
-```bash
-npm run dev:docs
-```
+## Contribution And Security
 
-The playground is for interactive component behavior examples. The docs app is a source-of-truth documentation viewer and AI-readable reference layer over the markdown docs.
+Contribution guidance exists in [CONTRIBUTING.md](CONTRIBUTING.md). Security reporting guidance exists in [SECURITY.md](SECURITY.md).
 
-## Dependency Policy
+## Ownership
 
-VyrnForge UI should remain native-first and dependency-minimal.
-
-Do not add MUI, TanStack, Redux, Radix, Tailwind, Headless UI, Emotion, styled-components, icon libraries, CSS frameworks, or other heavy runtime dependencies without explicit review and a written reason.
+VyrnForge UI is maintained as part of the VyrnForge UI repository.

@@ -1,0 +1,55 @@
+name: Accessibility issue
+description: Report an accessibility concern in VyrnForge UI.
+title: "[Accessibility]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for accessibility defects or gaps. Do not include sensitive user data.
+  - type: input
+    id: affected-area
+    attributes:
+      label: Affected package or component
+      placeholder: "@vyrnforge/ui-data-grid UniversalDataGrid"
+    validations:
+      required: true
+  - type: textarea
+    id: wcag
+    attributes:
+      label: WCAG concern
+      description: Name the guideline, success criterion, or user-impact area if known.
+    validations:
+      required: true
+  - type: textarea
+    id: keyboard
+    attributes:
+      label: Keyboard behavior
+      description: Describe expected and actual keyboard behavior.
+  - type: textarea
+    id: focus
+    attributes:
+      label: Focus behavior
+      description: Describe focus visibility, order, trapping, or return behavior.
+  - type: textarea
+    id: screen-reader
+    attributes:
+      label: Screen-reader behavior
+      description: Describe accessible names, roles, announcements, or reading order.
+  - type: textarea
+    id: contrast-motion
+    attributes:
+      label: Contrast or motion issue
+      description: Describe color contrast, reduced motion, animation, or visual-only communication concerns.
+  - type: input
+    id: environment
+    attributes:
+      label: Reproduction environment
+      placeholder: "Browser, OS, assistive technology, theme, density"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected accessible behavior
+    validations:
+      required: true

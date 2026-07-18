@@ -1,0 +1,60 @@
+name: Release-readiness issue
+description: Report package, build, export, CSS, docs, or consumer issues that may block release readiness.
+title: "[Release readiness]: "
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Affected package
+      options:
+        - "@vyrnforge/ui-core"
+        - "@vyrnforge/ui-components"
+        - "@vyrnforge/ui-data-grid"
+        - "Repository or workspace"
+    validations:
+      required: true
+  - type: checkboxes
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - label: Packaging
+        - label: Exports
+        - label: Declarations
+        - label: CSS
+        - label: Installation
+        - label: Documentation
+        - label: Consumer integration
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Packed or registry artifact reproduction
+      description: Provide `npm pack --dry-run`, install, import, or consumer-app steps when available.
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - "Blocks release"
+        - "High"
+        - "Medium"
+        - "Low"
+    validations:
+      required: true
+  - type: dropdown
+    id: blocks-release
+    attributes:
+      label: Does this block a release?
+      options:
+        - "Yes"
+        - "No"
+        - "Not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation commands already run
+      placeholder: "npm run build, npm run typecheck, npm pack --dry-run --workspace ..."
