@@ -111,11 +111,17 @@ const packageByName = new Map(
 );
 const rootPackageJson = readJson(path.join(root, "package.json"));
 const licenseValue = "SEE LICENSE IN LICENSE";
-const releaseVersion = "0.1.0-alpha.0";
+const releaseVersion = "0.1.0-alpha.1";
 const rootLicensePath = path.join(root, "LICENSE");
 const rootLicenseText = readFileSync(rootLicensePath, "utf8");
 const conflictingSpdxLicenses = new Set(["MIT", "Apache-2.0", "GPL-2.0", "GPL-3.0", "AGPL-3.0", "ISC"]);
 const localDependencySpecPattern = /^(?:workspace:|file:|link:|\.{1,2}(?:[\\/]|$)|[A-Za-z]:[\\/]|\/)/;
+const unpublishedReadmePatterns = [
+  /has not been published to npm/i,
+  /is not yet published/i,
+  /prepared as (?:the )?.*candidate,? but (?:it )?has not been published/i,
+  /candidate,? but it has not been published/i
+];
 
 assert(rootPackageJson.license === licenseValue, `root package.json: license must be ${licenseValue}`);
 assert(rootPackageJson.private === true, "root package.json: monorepo root must remain private");
@@ -145,6 +151,11 @@ for (const packageInfo of packages) {
   assert(packageJson.engines?.npm === ">=10 <12", `${packageInfo.name}: npm engine mismatch`);
   assert(existsSync(packageLicensePath), `${packageInfo.name}: missing top-level LICENSE`);
   assert(readFileSync(packageLicensePath, "utf8") === rootLicenseText, `${packageInfo.name}: package LICENSE must exactly match root LICENSE`);
+  const readmeText = readFileSync(path.join(packageDir, "README.md"), "utf8");
+  assert(
+    !unpublishedReadmePatterns.some((pattern) => pattern.test(readmeText)),
+    `${packageInfo.name}: README must not claim the package is unpublished`
+  );
 
   for (const distFile of requiredDistFiles) {
     assert(existsSync(path.join(packageDir, distFile)), `${packageInfo.name}: missing ${distFile}`);

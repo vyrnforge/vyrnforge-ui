@@ -1,6 +1,6 @@
 import "./styles/index.css";
 
-export const vyrnForgeUiComponentsVersion = "0.1.0-alpha.0";
+export const vyrnForgeUiComponentsVersion = "0.1.0-alpha.1";
 
 export { Button } from "./components/Button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./components/Button";

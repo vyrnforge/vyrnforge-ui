@@ -2,7 +2,8 @@
 
 Noteworthy public changes to VyrnForge UI will be documented here.
 
-Versioned sections will begin with the first public alpha release. Until then, pre-alpha changes remain under `Unreleased` and detailed component documentation stays in the source-of-truth docs linked from `docs/README.md`.
+Versioned sections record public prereleases. Detailed component documentation
+stays in the source-of-truth docs linked from `docs/README.md`.
 
 Release readiness, versioning, publication, and migration policy live in [docs/release/](docs/release/).
 
@@ -13,9 +14,9 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 ### Changed
 
 - Prepared `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and
-  `@vyrnforge/ui-data-grid` as the synchronized `0.1.0-alpha.0` candidate.
-  The candidate remains pre-release and source-available; it has not been
-  published to npm.
+  `@vyrnforge/ui-data-grid` as the synchronized `0.1.0-alpha.1` corrective
+  prerelease candidate. It corrects registry-facing package status text and
+  aligns all three package versions; it has not been published by this change.
 
 ### Fixed
 
@@ -42,3 +43,11 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   exports with deep imports from package source files.
 - Use `ToastProvider` for toast rendering. Do not replace the removed
   `ToastViewport` root export with an internal source import.
+
+## 0.1.0-alpha.0
+
+### Added
+
+- Historical first public prerelease: `@vyrnforge/ui-core@0.1.0-alpha.0`.
+  `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` were not published
+  in that prerelease.
