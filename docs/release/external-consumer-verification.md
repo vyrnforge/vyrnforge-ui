@@ -8,6 +8,8 @@ Run:
 npm run verify:consumer
 ```
 
+GitHub Actions runs this command in the separate `external-consumer` CI job for pull requests targeting `main` and pushes to `main`.
+
 The command:
 
 1. runs package verification, which cleans and builds `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and `@vyrnforge/ui-data-grid`;
