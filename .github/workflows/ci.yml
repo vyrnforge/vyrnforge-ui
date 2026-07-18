@@ -1,27 +1,46 @@
-name: CI
+name: VyrnForge CI
 
 on:
   push:
     branches:
       - main
   pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  validate:
+  quality:
+    name: quality
     runs-on: ubuntu-latest
+    timeout-minutes: 40
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
+
+      - name: Use package manager version
+        run: |
+          npm install -g "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
 
       - name: Typecheck
         run: npm run typecheck
@@ -29,8 +48,42 @@ jobs:
       - name: Test
         run: npm run test
 
-      - name: Build
+      - name: Build packages
+        run: npm run build:packages
+
+      - name: Verify packages
+        run: npm run verify:packages
+
+      - name: Build repository
         run: npm run build
+
+      - name: Build docs
+        run: npm run build:docs
 
       - name: Build playground
         run: npm run build:playground
+
+  external-consumer:
+    name: external-consumer
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Use package manager version
+        run: |
+          npm install -g "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify packed consumer
+        run: npm run verify:consumer

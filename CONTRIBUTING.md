@@ -48,6 +48,7 @@ npm run dev:playground
 npm run quality
 npm run typecheck
 npm run test
+npm run verify:consumer
 npm run verify:packages
 ```
 
@@ -162,6 +163,30 @@ Add or update tests for:
 - Grid state, filtering, sorting, pagination, grouping, selection, persistence, and adapter behavior when changing data-grid logic.
 
 Avoid tests that depend heavily on private implementation details. Prefer testing the public behavior that consuming apps rely on.
+
+## Continuous Integration
+
+Pull requests targeting `main` and pushes to `main` run the `VyrnForge CI` workflow. The expected status checks are:
+
+- `quality`: installs with `npm ci`, then runs lint, typecheck, tests, package build, package verification, root build, docs build, and playground build.
+- `external-consumer`: runs on a separate clean runner and executes `npm run verify:consumer`, which installs locally packed package artifacts into the isolated consumer fixture.
+
+Reproduce CI locally with:
+
+```bash
+npm ci
+npm run lint --if-present
+npm run typecheck
+npm run test
+npm run build:packages
+npm run verify:packages
+npm run verify:consumer
+npm run build
+npm run build:docs
+npm run build:playground
+```
+
+CI uses read-only repository permissions. It does not publish packages, create GitHub releases, deploy GitHub Pages, or use npm registry tokens. GitHub Pages deployment remains in the separate Pages workflow.
 
 ## Documentation Requirements
 
