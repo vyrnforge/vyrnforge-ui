@@ -11,11 +11,10 @@ VyrnForge UI is currently in an early alpha prerelease stage.
 - APIs may still change.
 - Packages are not yet ready for production use.
 - `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease.
-- `0.1.0-alpha.1` is the coordinated corrective prerelease candidate; manual
-  release steps must still publish all three packages with the `alpha` tag.
-  `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier
-  public prerelease.
-- `latest` must remain absent for prerelease packages.
+- `0.1.0-alpha.1` is the initial coordinated alpha prerelease, published
+  manually for all three packages with the `alpha` tag.
+- Future coordinated prereleases use the controlled GitHub Actions workflow
+  and must never assign `latest` to a prerelease package.
 - VyrnForge UI is source-available under the VyrnForge Source License 1.0.
 - Production use and commercial use require a separate written commercial license.
 

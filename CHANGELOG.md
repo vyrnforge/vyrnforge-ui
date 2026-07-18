@@ -15,8 +15,8 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 - Prepared `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and
   `@vyrnforge/ui-data-grid` as the synchronized `0.1.0-alpha.1` corrective
-  prerelease candidate. It corrects registry-facing package status text and
-  aligns all three package versions; it has not been published by this change.
+  prerelease. It corrects registry-facing package status text and aligns all
+  three package versions.
 
 ### Fixed
 
