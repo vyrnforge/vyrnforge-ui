@@ -84,6 +84,7 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `quality/01-current-component-audit.md` | Current component audit across packages, docs, metadata, playground routes, and tests. |
 | `quality/02-remediation-plan.md` | Prioritized Q1 hardening plan and non-goals. |
 | `quality/03-known-limitations.md` | Remaining limitations, workarounds, and production-use recommendations. |
+| `quality/q1-component-quality-audit.md` | CI-004 public export inventory, component quality findings, maturity recommendations, and alpha remediation queues. |
 
 ## 8. Release Governance
 
