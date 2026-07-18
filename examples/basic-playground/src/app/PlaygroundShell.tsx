@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { AppShell, Badge, Page, SegmentedControl, Select, TopNav } from "@vyrnforge/ui-components";
 import type { PlaygroundRoute } from "./routes";
+import { playgroundLinks } from "./deploymentLinks";
 import { PlaygroundNav } from "./PlaygroundNav";
 
 export type PlaygroundShellProps = {
@@ -39,6 +40,14 @@ export function PlaygroundShell({
           }
           actions={
             <div className="vf-playground-top-controls">
+              <div className="vf-playground-top-links">
+                <a className="vf-playground-top-link" href={playgroundLinks.docs}>
+                  Docs
+                </a>
+                <a className="vf-playground-top-link" href={playgroundLinks.repository}>
+                  GitHub
+                </a>
+              </div>
               <Select
                 aria-label="Playground theme"
                 onChange={(event) => onThemeChange(event.currentTarget.value)}

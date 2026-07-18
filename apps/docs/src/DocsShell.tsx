@@ -3,6 +3,7 @@ import { AppShell, Badge, Heading, Text, TopNav } from "@vyrnforge/ui-components
 import type { DocsRoute } from "./docsRegistry";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
+import { docsLinks } from "./deploymentLinks";
 
 type DocsShellProps = {
   activeRoute: DocsRoute;
@@ -34,9 +35,17 @@ export function DocsShell({
             </div>
           }
           actions={
-            <Badge variant="info" tone="subtle">
-              Docs viewer
-            </Badge>
+            <div className="vf-docs-header__nav">
+              <a className="vf-docs-top-link" href={docsLinks.playground}>
+                Playground
+              </a>
+              <a className="vf-docs-top-link" href={docsLinks.repository}>
+                GitHub
+              </a>
+              <Badge variant="info" tone="subtle">
+                Docs viewer
+              </Badge>
+            </div>
           }
           userArea={headerAction}
         />

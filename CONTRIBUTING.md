@@ -23,6 +23,7 @@ Useful starting points:
 - Accessibility baseline: [docs/architecture/05-accessibility-standards.md](docs/architecture/05-accessibility-standards.md)
 - Quality gates: [docs/quality/00-quality-gates.md](docs/quality/00-quality-gates.md)
 - Public API rules: [docs/api/public-vs-internal-api.md](docs/api/public-vs-internal-api.md)
+- Release governance: [docs/release/README.md](docs/release/README.md)
 
 ## Development Setup
 
@@ -173,6 +174,7 @@ Update as applicable:
 - Playground examples under `examples/basic-playground/`.
 - Changelog entries when useful for release notes.
 - Migration notes for breaking changes.
+Use [docs/release/](docs/release/) for release policy, versioning, publication, deprecation, and release-readiness guidance.
 
 Do not duplicate the same detailed documentation in multiple places. Link to the canonical document from [docs/README.md](docs/README.md).
 

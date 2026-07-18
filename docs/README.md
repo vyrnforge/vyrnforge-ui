@@ -85,7 +85,20 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `quality/02-remediation-plan.md` | Prioritized Q1 hardening plan and non-goals. |
 | `quality/03-known-limitations.md` | Remaining limitations, workarounds, and production-use recommendations. |
 
-## 8. React Documentation App
+## 8. Release Governance
+
+Release docs define the publication, versioning, deprecation, and release-readiness process. They do not claim that public package publication, stable support, trusted publishing, or licensing approval is complete.
+
+| Document | Purpose |
+| --- | --- |
+| `release/README.md` | Release documentation index. |
+| `release/release-policy.md` | Release maturity stages and expectations. |
+| `release/versioning-policy.md` | Package versioning and prerelease rules. |
+| `release/publication-procedure.md` | Manual publication and future trusted-publishing procedure. |
+| `release/deprecation-and-migration-policy.md` | Public API, CSS, behavior, and migration rules. |
+| `release/release-readiness-checklist.md` | Reusable alpha, beta, and stable release checklist. |
+
+## 9. React Documentation App
 
 The React docs app lives in `apps/docs`. It is a viewer/navigation layer over these markdown files, not a new source of truth.
 
@@ -101,7 +114,7 @@ npm run build:docs
 | `react-docs/02-example-standards.md` | Rules for examples, snippets, and use-case pages. |
 | `react-docs/03-ai-readable-docs.md` | How docs should expose machine-readable context. |
 
-## 9. AI Documentation
+## 10. AI Documentation
 
 | Document | Purpose |
 | --- | --- |
@@ -112,7 +125,7 @@ npm run build:docs
 | `../AGENTS.md` | Root instruction file for Codex/agents. |
 | `ai/00-ai-documentation-strategy.md` | Strategy for AI-readable project docs. |
 
-## 10. AI-Readable Metadata
+## 11. AI-Readable Metadata
 
 Markdown docs are the human source of truth. Metadata files are structured indexes for AI agents and the React docs app. Update metadata whenever public components, APIs, CSS imports, state contracts, package boundaries, or AI usage rules change.
 
@@ -126,7 +139,7 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `metadata/ai-usage-rules.json` | AI-specific usage rules and dependency constraints. |
 | `../.ai/COMPONENT_MAP.json` | Compact AI quick map aligned to the full component catalog. |
 
-## 11. Templates
+## 12. Templates
 
 | Template | Purpose |
 | --- | --- |
@@ -136,14 +149,14 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `templates/adr-template.md` | Architecture decision record. |
 | `templates/ai-task-card-template.md` | AI implementation task card. |
 
-## 12. Prompts
+## 13. Prompts
 
 | Prompt | Purpose |
 | --- | --- |
 | `prompts/01-doc-cleanup-and-unification.md` | Documentation cleanup workflow. |
 | `prompts/02-react-docs-app-implementation.md` | React documentation app implementation workflow. |
 
-## 13. Archive
+## 14. Archive
 
 Archived docs are historical only. They preserve useful context but do not guide new work.
 
@@ -162,6 +175,7 @@ Archived docs are historical only. They preserve useful context but do not guide
 | State ownership and Redux policy | `architecture/02-state-and-adapter-ownership.md` |
 | Styling and theme rules | `architecture/03-theming-and-styling.md` |
 | Public API usage | `api/README.md` |
+| Release governance | `release/README.md` |
 | Code boundaries | `architecture/04-clean-code-boundaries.md` |
 | Roadmap | `roadmap/00-master-roadmap.md` |
 | Component inventory | `roadmap/01-component-inventory.md` |

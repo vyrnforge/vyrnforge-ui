@@ -11,6 +11,12 @@ import masterRoadmap from "../../../docs/roadmap/00-master-roadmap.md?raw";
 import componentInventory from "../../../docs/roadmap/01-component-inventory.md?raw";
 import gapAnalysis from "../../../docs/roadmap/02-gap-analysis.md?raw";
 import doNotBuildYet from "../../../docs/roadmap/03-do-not-build-yet.md?raw";
+import releaseDocsIndex from "../../../docs/release/README.md?raw";
+import releasePolicy from "../../../docs/release/release-policy.md?raw";
+import versioningPolicy from "../../../docs/release/versioning-policy.md?raw";
+import publicationProcedure from "../../../docs/release/publication-procedure.md?raw";
+import deprecationPolicy from "../../../docs/release/deprecation-and-migration-policy.md?raw";
+import releaseReadinessChecklist from "../../../docs/release/release-readiness-checklist.md?raw";
 import uiCoreDoc from "../../../docs/packages/ui-core.md?raw";
 import uiComponentsDoc from "../../../docs/packages/ui-components.md?raw";
 import uiDataGridDoc from "../../../docs/packages/ui-data-grid.md?raw";
@@ -197,6 +203,67 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this to avoid premature features.",
     tags: ["roadmap", "non-goals"],
     content: doNotBuildYet
+  },
+  {
+    id: "release-docs",
+    title: "Release Docs",
+    group: "Release",
+    description: "Release governance index.",
+    sourcePath: "docs/release/README.md",
+    aiPurpose: "Use this before planning publication, versioning, or release readiness work.",
+    tags: ["release", "index"],
+    canonical: true,
+    content: releaseDocsIndex
+  },
+  {
+    id: "release-policy",
+    title: "Release Policy",
+    group: "Release",
+    description: "Maturity stages and release expectations.",
+    sourcePath: "docs/release/release-policy.md",
+    aiPurpose: "Use this to understand pre-alpha, alpha, beta, 0.x, and 1.x expectations.",
+    tags: ["release", "policy"],
+    content: releasePolicy
+  },
+  {
+    id: "versioning-policy",
+    title: "Versioning Policy",
+    group: "Release",
+    description: "Package versioning, prerelease, and compatibility rules.",
+    sourcePath: "docs/release/versioning-policy.md",
+    aiPurpose: "Use this before changing package versions or public compatibility contracts.",
+    tags: ["release", "versioning"],
+    content: versioningPolicy
+  },
+  {
+    id: "publication-procedure",
+    title: "Publication Procedure",
+    group: "Release",
+    description: "Manual publication and future trusted-publishing procedure.",
+    sourcePath: "docs/release/publication-procedure.md",
+    aiPurpose: "Use this before package publication planning.",
+    tags: ["release", "publication"],
+    content: publicationProcedure
+  },
+  {
+    id: "deprecation-policy",
+    title: "Deprecation Policy",
+    group: "Release",
+    description: "Deprecation, compatibility, migration, and removal rules.",
+    sourcePath: "docs/release/deprecation-and-migration-policy.md",
+    aiPurpose: "Use this before breaking public APIs, CSS contracts, or behavior.",
+    tags: ["release", "migration"],
+    content: deprecationPolicy
+  },
+  {
+    id: "release-readiness",
+    title: "Release Readiness",
+    group: "Release",
+    description: "Reusable release checklist.",
+    sourcePath: "docs/release/release-readiness-checklist.md",
+    aiPurpose: "Use this to validate alpha, beta, and stable release readiness.",
+    tags: ["release", "checklist"],
+    content: releaseReadinessChecklist
   },
   {
     id: "ui-core",
@@ -499,6 +566,7 @@ export const docsGroups = [
   "Start Here",
   "Architecture",
   "Roadmap",
+  "Release",
   "Packages",
   "API Reference",
   "Metadata",

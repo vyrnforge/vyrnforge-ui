@@ -7,10 +7,10 @@ declare const process: {
   };
 };
 
-export default defineConfig({
-  base: process.env.VITE_BASE_PATH ?? "/",
+export default defineConfig(({ mode }) => ({
+  base: process.env.VITE_BASE_PATH ?? (mode === "production" ? "/vyrnforge-ui/" : "/"),
   plugins: [react()],
   server: {
     port: 5174
   }
-});
+}));

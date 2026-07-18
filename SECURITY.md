@@ -18,21 +18,13 @@ This table does not define long-term support and does not imply production suppo
 
 ## Reporting A Vulnerability
 
-Preferred route after it is enabled for this repository:
+Preferred route for this repository:
 
 ```txt
 Repository -> Security -> Advisories -> Report a vulnerability
 ```
 
-Current repository setting: GitHub Private Vulnerability Reporting is enabled. Use the private advisory route above for vulnerability reports when available.
-
-Fallback contact until that setting or contact is confirmed:
-
-```txt
-[SECURITY CONTACT TO BE CONFIRMED BEFORE PUBLIC RELEASE]
-```
-
-This placeholder is unresolved and not production-ready. Do not add personal email addresses unless they are approved public repository contacts.
+Current repository setting: GitHub Private Vulnerability Reporting is enabled. Use the private advisory route above for vulnerability reports.
 
 ## Information To Include
 
@@ -137,8 +129,7 @@ These channels are listed as expected communication paths and may not all be ope
 - No formal long-term-support policy exists.
 - No guaranteed response SLA exists.
 - No bug bounty currently exists.
-- GitHub Private Vulnerability Reporting is not currently enabled.
-- Security contact and final disclosure procedures must be confirmed before the first public alpha.
+- Final disclosure procedures must be confirmed before the first public alpha.
 
 ## Relationship To CONTRIBUTING.md
 

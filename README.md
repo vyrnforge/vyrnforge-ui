@@ -139,12 +139,15 @@ npm run test
 - Documentation index: [docs/README.md](docs/README.md)
 - API setup guide: [docs/api/import-and-setup.md](docs/api/import-and-setup.md)
 - Package docs: [docs/packages/](docs/packages/)
+- Release governance: [docs/release/README.md](docs/release/README.md)
 - Playground source: [examples/basic-playground/](examples/basic-playground/)
 - Docs app source: [apps/docs/](apps/docs/)
 - Agent context: [AGENTS.md](AGENTS.md) and [.ai/AI_CONTEXT.md](.ai/AI_CONTEXT.md)
 - Changelog: [CHANGELOG.md](CHANGELOG.md)
 
 Public GitHub Pages links are intentionally omitted until Pages deployment is complete.
+
+Release policy, versioning, publication procedure, deprecation rules, and release readiness are documented under [docs/release/](docs/release/).
 
 ## Contribution And Security
 

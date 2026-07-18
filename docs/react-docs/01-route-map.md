@@ -104,3 +104,15 @@ Markdown files remain the source of truth. The React docs app is only a viewer a
 - Grid docs should focus only on grid behavior.
 - Pattern pages should demonstrate real product composition.
 - AI pages should provide machine-readable guidance and examples.
+
+## GitHub Pages routing
+
+The docs app and playground use hash routing for the current GitHub Pages deployment model.
+
+- Documentation is built for `/vyrnforge-ui/` and served at the Pages artifact root.
+- Playground is built for `/vyrnforge-ui/playground/` and copied into the `playground/` artifact directory.
+- Documentation routes use `#/route-id`.
+- Playground routes use `#/route/path` or the matching route id.
+- Refreshing a hash route loads the same `index.html` file, so no server rewrite is required.
+
+The Vite base path remains configurable through `VITE_BASE_PATH`; production defaults are set in each app's Vite config for the expected Pages paths.
