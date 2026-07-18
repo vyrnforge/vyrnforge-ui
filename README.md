@@ -6,11 +6,16 @@ VyrnForge UI is not only a data-grid library. The data grid is one specialized p
 
 ## Maturity
 
-VyrnForge UI is currently pre-alpha.
+VyrnForge UI is currently in an early alpha prerelease stage.
 
 - APIs may still change.
 - Packages are not yet ready for production use.
-- The first npm alpha release has not yet been completed.
+- `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease.
+- `0.1.0-alpha.1` is the coordinated corrective prerelease candidate; manual
+  release steps must still publish all three packages with the `alpha` tag.
+  `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier
+  public prerelease.
+- `latest` must remain absent for prerelease packages.
 - VyrnForge UI is source-available under the VyrnForge Source License 1.0.
 - Production use and commercial use require a separate written commercial license.
 
@@ -30,13 +35,15 @@ Intended dependency direction:
 
 ## Installation
 
-The packages are not published for public npm installation yet. The intended command for the first alpha release is:
+Package availability is currently package-specific. Use the explicit `alpha`
+dist-tag for registry installations after the applicable manual release steps:
 
 ```bash
 npm install @vyrnforge/ui-core @vyrnforge/ui-components @vyrnforge/ui-data-grid
 ```
 
-This command is planned for the first npm alpha and should not be read as a claim that the packages are already available on the public npm registry.
+This is the coordinated alpha install shape and does not claim that every
+package version is already available on the public npm registry.
 
 ## CSS Setup
 

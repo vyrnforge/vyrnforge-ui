@@ -8,13 +8,14 @@ This package exposes generic contracts, pure core helpers, controlled/uncontroll
 
 ## Package Status
 
-VyrnForge UI is pre-alpha. This package is prepared as the `0.1.0-alpha.0`
-candidate, but it has not been published for public npm installation and is not
-ready for production use.
+VyrnForge UI is currently in an early alpha prerelease stage. For registry
+installations, use the explicit `alpha` dist-tag while the public APIs,
+accessibility behavior, and package boundaries continue to be evaluated. This
+package is not yet intended for production use.
 
 VyrnForge UI is source-available under the VyrnForge Source License 1.0. Source inspection, local evaluation, and temporary non-production prototypes are permitted. Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license.
 
-Public package entry points are prepared for the first approved alpha:
+Public package entry points use the package root and CSS subpath exports:
 
 ```ts
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";

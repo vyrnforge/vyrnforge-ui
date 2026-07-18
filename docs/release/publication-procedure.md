@@ -6,6 +6,16 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0. Product
 
 Do not include real npm tokens in repository files, workflows, docs, or examples.
 
+## Current alpha history
+
+- `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease.
+- `0.1.0-alpha.1` is the coordinated corrective prerelease candidate for all
+  three publishable packages and remains pending the approved manual steps.
+  `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier
+  public prerelease.
+- Use the `alpha` dist-tag for alpha publication. Do not assign `latest` to an
+  alpha package.
+
 ## Prerequisites
 
 - Release scope is approved.

@@ -1,6 +1,6 @@
 # Versioning Policy
 
-VyrnForge UI intends to follow Semantic Versioning for public packages once public releases begin. The current synchronized candidate is `0.1.0-alpha.0` for the three publishable packages. It remains a prerelease, is source-available under the VyrnForge Source License 1.0, and has not been published to npm.
+VyrnForge UI intends to follow Semantic Versioning for public packages once public releases begin. `@vyrnforge/ui-core@0.1.0-alpha.0` remains the historical first public prerelease. The current synchronized corrective candidate is `0.1.0-alpha.1` for all three publishable packages; it remains prerelease, source-available, and pending the manual alpha release steps. `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier public prerelease.
 
 ## Packages
 
@@ -20,7 +20,7 @@ During the early lifecycle, package versions should remain synchronized unless a
 | `beta` | Later validation releases with mostly stable APIs. |
 | `rc` | Release candidates when a stable release is being finalized. |
 
-Initial prereleases should use the matching npm tag: `alpha` for alpha, `beta` for beta. The `latest` tag is reserved for explicitly approved stable releases.
+Initial prereleases should use the matching npm tag: `alpha` for alpha, `beta` for beta. The `latest` tag is reserved for explicitly approved stable releases and must remain absent for the alpha series.
 
 ## Inter-package alignment
 

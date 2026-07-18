@@ -1,6 +1,6 @@
 import "./styles/index.css";
 
-export const vyrnForgeUiCoreVersion = "0.1.0-alpha.0";
+export const vyrnForgeUiCoreVersion = "0.1.0-alpha.1";
 
 export {
   createVyrnForgeTheme,
