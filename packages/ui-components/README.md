@@ -44,6 +44,14 @@ import "@vyrnforge/ui-components/styles/index.css";
 - Navigation: `SideNav`, `TopNav`, `Breadcrumbs`, `Tabs`
 - Overlays: `Popover`, `Menu`, `Dropdown`, `Tooltip`, `Dialog`, `Drawer`, `ConfirmDialog`
 
+## Maturity
+
+`docs/metadata/component-status.json` is the canonical maturity index. The
+action aliases `CloseButton`, `ClearButton`, `RefreshButton`, and `MoreButton`
+are stable convenience wrappers. `Toast`, `ToastProvider`, `ToastAction`, and
+`useToast` are experimental. `ToastProvider` owns its internal viewport; do
+not import `ToastViewport` as an application API.
+
 ## Examples
 
 ```tsx

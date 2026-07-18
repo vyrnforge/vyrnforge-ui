@@ -28,6 +28,7 @@ Internal API includes:
 - non-exported hooks
 - grid coordination hooks such as column resize/reorder, generic controlled
   state, and debounced value handling
+- `ToastViewport`, which `ToastProvider` renders internally
 - non-exported utilities
 - implementation details inside `src/components`, `src/core`, `src/hooks`, and `src/adapters`
 - internal class names not documented in `css-class-reference.md`
@@ -36,6 +37,14 @@ Internal API includes:
 - docs-app-only classes such as `vf-docs-*`
 
 Internal APIs may change without a compatibility guarantee.
+
+## Maturity
+
+Public component maturity is recorded in
+`docs/metadata/component-status.json`: `stable`, `experimental`, `planned`,
+or `deprecated`. Internal APIs are listed separately in that file and are not
+supported package-root imports. `stable` and `experimental` items may be
+imported from package roots; `planned` items are not implemented public APIs.
 
 ## Agent Rules
 

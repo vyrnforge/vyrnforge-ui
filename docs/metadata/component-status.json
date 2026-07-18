@@ -8,6 +8,10 @@
   "@vyrnforge/ui-components": {
     "Button": "stable",
     "IconButton": "stable",
+    "ClearButton": "stable",
+    "CloseButton": "stable",
+    "MoreButton": "stable",
+    "RefreshButton": "stable",
     "ToolbarButton": "stable",
     "ButtonGroup": "experimental",
     "SegmentedControl": "stable",
@@ -66,6 +70,9 @@
     "Autocomplete": "experimental",
     "TransferList": "experimental",
     "Toast": "experimental",
+    "ToastAction": "experimental",
+    "ToastProvider": "experimental",
+    "useToast": "experimental",
     "Progress": "planned",
     "DescriptionList": "planned",
     "KeyValueList": "planned",
@@ -90,5 +97,16 @@
     "AdvancedFilterDrawer": "planned",
     "SavedViewSelector": "planned",
     "ExportPreviewPanel": "planned"
+  },
+  "internal": {
+    "@vyrnforge/ui-components": [
+      "ToastViewport"
+    ],
+    "@vyrnforge/ui-data-grid": [
+      "useColumnResize",
+      "useColumnReorder",
+      "useControlledState",
+      "useDebouncedValue"
+    ]
   }
 }

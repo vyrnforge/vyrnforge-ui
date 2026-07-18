@@ -37,7 +37,6 @@ import {
   ToolbarButton,
   Toast,
   ToastAction,
-  ToastViewport,
   ToggleButton,
   ToggleButtonGroup,
   TransferList,
@@ -67,6 +66,7 @@ import {
   getToastDuration,
   getVisibleToasts
 } from "../Toast/toast.utils";
+import { ToastViewport } from "../Toast/ToastViewport";
 
 describe("@vyrnforge/ui-components primitives", () => {
   it("disables Button while loading and marks it busy", () => {

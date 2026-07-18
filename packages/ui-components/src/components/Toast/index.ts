@@ -1,7 +1,6 @@
 export { Toast } from "./Toast";
 export { ToastAction } from "./ToastAction";
 export { ToastProvider } from "./ToastProvider";
-export { ToastViewport } from "./ToastViewport";
 export { useToast } from "./useToast";
 export type {
   ToastActionProps,
@@ -11,6 +10,5 @@ export type {
   ToastProps,
   ToastProviderProps,
   ToastRecord,
-  ToastTone,
-  ToastViewportProps
+  ToastTone
 } from "./Toast.types";
