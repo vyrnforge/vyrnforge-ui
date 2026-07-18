@@ -19,6 +19,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Typecheck passes.
 - [ ] Tests pass.
 - [ ] Package builds pass.
+- [ ] `npm run verify:packages` passes.
 - [ ] Type declaration output is present and reviewable.
 - [ ] CSS imports, `--vf-*`, `vf-*`, `--udg-*`, and `udg-*` contracts are reviewed.
 - [ ] Package tarballs are reviewed before publication.

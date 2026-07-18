@@ -7,15 +7,17 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
-    "build:packages": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid",
+    "build": "npm run build:packages && npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "build:packages": "npm run clean:packages && npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid",
     "build:docs": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-docs",
-    "build:playground": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "build:playground": "npm run build:packages && npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "clean:packages": "node scripts/clean-package-dist.mjs",
     "dev:docs": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run dev --workspace @vyrnforge/ui-docs",
     "dev:playground": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run dev --workspace @vyrnforge/ui-data-grid-basic-playground",
-    "quality": "npm run typecheck && npm run test && npm run build && npm run build:docs",
+    "quality": "npm run lint --if-present && npm run typecheck && npm run test && npm run verify:packages && npm run build:docs && npm run build:playground",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "verify:packages": "node scripts/verify-packages.mjs"
   },
   "packageManager": "npm@11.10.0",
   "engines": {

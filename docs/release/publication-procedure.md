@@ -12,7 +12,7 @@ Do not include real npm tokens in repository files, workflows, docs, or examples
 - No credentials, private URLs, internal documents, generated archives, logs, or environment files are included.
 - Changelog and release notes are prepared.
 - Migration notes are prepared for breaking changes.
-- `npm ci`, lint, typecheck, tests, package builds, docs build, and playground build pass.
+- `npm ci`, lint, typecheck, tests, package builds, package verification, docs build, and playground build pass.
 - Package tarballs are reviewed before publication.
 - npm organization access and package visibility are confirmed.
 
@@ -43,8 +43,8 @@ The `latest` tag must not point to unfinished alpha packages.
 2. Confirm licensing gate is closed.
 3. Start from a clean checkout.
 4. Run required validation.
-5. Build packages.
-6. Create package tarballs with npm dry-run or pack review.
+5. Build packages with `npm run build:packages`.
+6. Verify package contents with `npm run verify:packages`.
 7. Inspect package contents for expected declarations, CSS files, README files, and package metadata.
 8. Publish in dependency order using the approved npm tag.
 9. Verify each package appears in the registry with the expected version and tag.

@@ -4,9 +4,20 @@ Native-first VyrnForge UI component primitives built with React, TypeScript, and
 
 ## Install
 
+VyrnForge UI is pre-alpha and is not yet published for public npm installation. The intended first-alpha install shape is:
+
 ```bash
 npm install @vyrnforge/ui-core @vyrnforge/ui-components
 ```
+
+Public package entry points are prepared for the first approved alpha:
+
+```ts
+import { Button } from "@vyrnforge/ui-components";
+import "@vyrnforge/ui-components/styles/index.css";
+```
+
+The package is built from `dist` output. Public exports do not point at internal `src` files. React and ReactDOM are peer dependencies and are not bundled as duplicate runtimes.
 
 Import core tokens first, then component styles:
 
@@ -293,7 +304,6 @@ Dialog and drawer:
 ## Current Overlay Limitations
 
 - Anchored overlays use fixed portal positioning with viewport shifting, basic flipping, and scroll/resize updates; this is intentionally smaller than a general positioning engine.
-- Menu does not support nested menus yet.
 - Menu does not support nested menus yet.
 
 ## UX Guidance

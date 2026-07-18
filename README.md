@@ -127,11 +127,13 @@ npm run build
 npm run build:packages
 npm run build:docs
 npm run build:playground
+npm run clean:packages
 npm run dev:docs
 npm run dev:playground
 npm run quality
 npm run typecheck
 npm run test
+npm run verify:packages
 ```
 
 ## Documentation And Playground

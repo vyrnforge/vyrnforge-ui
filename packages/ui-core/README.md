@@ -4,6 +4,19 @@ Shared VyrnForge UI foundation package for native-first design tokens, CSS varia
 
 `@vyrnforge/ui-core` owns tokens and utilities only. It does not own React components, data-grid behavior, app state, adapters, or a global store.
 
+## Package Status
+
+VyrnForge UI is pre-alpha. This package is private in the repository until release, versioning, and licensing gates are complete.
+
+Public package entry points are prepared for the first approved alpha:
+
+```ts
+import { createVyrnForgeTheme } from "@vyrnforge/ui-core";
+import "@vyrnforge/ui-core/styles/index.css";
+```
+
+The package is built from `dist` output. Public exports do not point at internal `src` files.
+
 ## CSS
 
 ```tsx

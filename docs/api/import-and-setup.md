@@ -31,6 +31,21 @@ import { Button, Card } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
 
+Package JavaScript and TypeScript entry points resolve through built package output:
+
+| Package | JavaScript entry | Type declarations |
+| --- | --- | --- |
+| `@vyrnforge/ui-core` | `dist/index.js` / `dist/index.cjs` | `dist/index.d.ts` |
+| `@vyrnforge/ui-components` | `dist/index.js` / `dist/index.cjs` | `dist/index.d.ts` |
+| `@vyrnforge/ui-data-grid` | `dist/index.js` / `dist/index.cjs` | `dist/index.d.ts` |
+
+Public exports must not point at internal `src` files. Package verification is available from the repository root:
+
+```bash
+npm run build:packages
+npm run verify:packages
+```
+
 ## Theme Overrides
 
 Use `--vf-*` tokens for app-wide theming:

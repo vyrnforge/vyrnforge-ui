@@ -6,12 +6,25 @@ This package exposes generic contracts, pure core helpers, controlled/uncontroll
 
 `@vyrnforge/ui-data-grid` now consumes shared VyrnForge primitives from `@vyrnforge/ui-components` for common controls such as buttons, icon buttons, search inputs, selects, checkboxes, badges, menus, and feedback states. The grid remains a specialized data-management package: use `@vyrnforge/ui-components` for shared UI outside grids, and use `@vyrnforge/ui-data-grid` for grid-specific APIs, state, column behavior, selection, grouping, resizing, and persistence.
 
+## Package Status
+
+VyrnForge UI is pre-alpha and is not yet published for public npm installation. This package remains private in the repository until release, versioning, and licensing gates are complete.
+
+Public package entry points are prepared for the first approved alpha:
+
+```ts
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
+import "@vyrnforge/ui-data-grid/styles/index.css";
+```
+
+The package is built from `dist` output. Public exports do not point at internal `src` files. React and ReactDOM are peer dependencies and are not bundled as duplicate runtimes.
+
 ## CSS
 
 Import the package CSS once in the consuming app:
 
 ```tsx
-import "@vyrnforge/ui-data-grid/style.css";
+import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 The data-grid stylesheet includes the shared core/component layers for standalone use. When using the full VyrnForge UI workspace, the recommended explicit import order is still:
@@ -44,7 +57,7 @@ Override `--udg-*` tokens when only the grid should change:
 
 ## Theme System
 
-Built-in `light`, `dark`, `system`, and `enterprise` themes are production-ready starting points. Use them through props:
+Built-in `light`, `dark`, `system`, and `enterprise` themes are package-provided starting points. Use them through props:
 
 ```tsx
 <UniversalDataGrid
