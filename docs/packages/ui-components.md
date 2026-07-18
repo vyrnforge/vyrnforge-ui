@@ -34,6 +34,17 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
+## Package readiness
+
+- JavaScript entry: `@vyrnforge/ui-components` resolves to built `dist/index.js` or `dist/index.cjs`.
+- Type declarations: `dist/index.d.ts`.
+- CSS entry: `@vyrnforge/ui-components/styles/index.css` resolves to built `dist/index.css`.
+- Published file whitelist: `dist` and `README.md`; package metadata is included by npm automatically.
+- CSS side effect: `./dist/index.css`.
+- Peer dependencies: React and ReactDOM.
+- Internal dependency: `@vyrnforge/ui-core`.
+- License approval remains deferred to RG-002 before publication.
+
 ## Usage principle
 
 Use text buttons for primary business actions. Use IconButton/ToolbarButton for repeated utility actions. Every icon-only action must have an accessible label.

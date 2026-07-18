@@ -34,6 +34,16 @@ It should remain dependency-light and should not own React components.
 import "@vyrnforge/ui-core/styles/index.css";
 ```
 
+## Package readiness
+
+- JavaScript entry: `@vyrnforge/ui-core` resolves to built `dist/index.js` or `dist/index.cjs`.
+- Type declarations: `dist/index.d.ts`.
+- CSS entry: `@vyrnforge/ui-core/styles/index.css` resolves to built `dist/index.css`.
+- Published file whitelist: `dist` and `README.md`; package metadata is included by npm automatically.
+- CSS side effect: `./dist/index.css`.
+- Runtime dependencies: none.
+- License approval remains deferred to RG-002 before publication.
+
 ## Theme override example
 
 ```css

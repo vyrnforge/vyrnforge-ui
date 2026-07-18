@@ -1,6 +1,7 @@
 {
   "name": "@vyrnforge/ui-components",
   "version": "0.1.0",
+  "description": "Native-first VyrnForge UI React primitives and application components.",
   "private": true,
   "type": "module",
   "main": "./dist/index.cjs",
@@ -20,6 +21,25 @@
     "dist",
     "README.md"
   ],
+  "sideEffects": [
+    "./dist/index.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vyrnforge/vyrnforge-ui.git",
+    "directory": "packages/ui-components"
+  },
+  "homepage": "https://github.com/vyrnforge/vyrnforge-ui#readme",
+  "bugs": {
+    "url": "https://github.com/vyrnforge/vyrnforge-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.12 <25",
+    "npm": ">=10 <12"
+  },
   "scripts": {
     "build": "tsup",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core",
@@ -30,8 +50,8 @@
     "@vyrnforge/ui-core": "0.1.0"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": ">=18 <20",
+    "react-dom": ">=18 <20"
   },
   "devDependencies": {
     "@types/react": "latest",

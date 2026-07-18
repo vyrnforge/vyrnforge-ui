@@ -42,11 +42,13 @@ npm run build
 npm run build:packages
 npm run build:docs
 npm run build:playground
+npm run clean:packages
 npm run dev:docs
 npm run dev:playground
 npm run quality
 npm run typecheck
 npm run test
+npm run verify:packages
 ```
 
 Do not document or rely on commands that are not present in the root `package.json`.
@@ -62,7 +64,7 @@ Do not document or rely on commands that are not present in the root `package.js
 | `examples/basic-playground` | Interactive playground source for component and grid examples. |
 | `apps/docs` | React documentation viewer over the markdown docs and metadata. |
 | `.github` | Repository workflows for CI and Pages build/deploy automation. |
-| `scripts` | No root `scripts/` directory exists currently; automation lives in `package.json`, workspace scripts, and `.github/workflows`. |
+| `scripts` | Repository verification helpers such as package cleanup and package artifact checks. |
 
 Tests currently live beside package source, mostly under `packages/ui-components/src/components/__tests__` and `packages/ui-data-grid/src/**` test files.
 
