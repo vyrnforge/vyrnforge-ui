@@ -108,7 +108,8 @@
         "DataGridEmptyState",
         "DataGridErrorState",
         "DataGridPagination",
-        "DataGrid state/adapters"
+        "DataGrid state/adapters",
+        "useDataGridState"
       ],
       "planned": [
         "DataGridBulkActionBar",

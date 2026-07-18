@@ -818,6 +818,23 @@
       "aiUsageNotes": "Do not store row data in grid state."
     },
     {
+      "id": "use-data-grid-state",
+      "name": "useDataGridState",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "Data Grid",
+      "status": "experimental",
+      "purpose": "Controlled or uncontrolled coordinator for complete DataGridState outside UniversalDataGrid.",
+      "useWhen": "Use when application code needs to own and pass complete grid view state through documented package-root APIs.",
+      "avoidWhen": "Avoid for row data, fetching, auth, permissions, business workflows, or internal resize/reorder coordination.",
+      "relatedComponents": ["UniversalDataGrid", "DataGrid state/adapters"],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { useDataGridState } from '@vyrnforge/ui-data-grid';",
+      "basicUsageExample": "const [state, setState] = useDataGridState({ defaultState: { density: 'compact' } });",
+      "accessibilityNotes": "The hook is non-visual; consumers must preserve accessible grid controls when applying state.",
+      "aiUsageNotes": "Experimental public API. Use only from the package root and pass complete next state back in controlled mode. Do not import internal grid hooks."
+    },
+    {
       "id": "data-grid-bulk-action-bar",
       "name": "DataGridBulkActionBar",
       "package": "@vyrnforge/ui-data-grid",

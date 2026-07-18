@@ -84,6 +84,7 @@
     "DataGridEmptyState": "stable",
     "DataGridErrorState": "stable",
     "DataGridPagination": "stable",
+    "useDataGridState": "experimental",
     "DataGridBulkActionBar": "planned",
     "DataGrid state/adapters": "stable",
     "AdvancedFilterDrawer": "planned",
