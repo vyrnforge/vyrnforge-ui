@@ -1,6 +1,6 @@
 # Versioning Policy
 
-VyrnForge UI intends to follow Semantic Versioning for public packages once public releases begin. `@vyrnforge/ui-core@0.1.0-alpha.0` remains the historical first public prerelease. The current synchronized corrective candidate is `0.1.0-alpha.1` for all three publishable packages; it remains prerelease, source-available, and pending the manual alpha release steps. `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier public prerelease.
+VyrnForge UI intends to follow Semantic Versioning for public packages once public releases begin. `@vyrnforge/ui-core@0.1.0-alpha.0` remains the historical first public prerelease. `0.1.0-alpha.1` is the initial coordinated alpha, manually published for all three publishable packages. Future synchronized prereleases remain source-available and use the controlled manually dispatched trusted-publishing workflow.
 
 ## Packages
 

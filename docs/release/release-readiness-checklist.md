@@ -31,6 +31,10 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Migration notes exist for breaking changes.
 - [ ] SECURITY.md reporting route is accurate.
 - [ ] npm organization access and package visibility are confirmed.
+- [ ] The controlled release workflow is manually dispatched from current `main`.
+- [ ] Verify mode summary is reviewed before publish mode is approved.
+- [ ] The protected `npm-release` environment is approved for publish mode.
+- [ ] npm trusted publishers are configured for each publishable package; no long-lived npm token is stored.
 - [ ] Rollback or corrective-release plan is documented.
 
 ## Recommended checks

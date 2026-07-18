@@ -1,6 +1,7 @@
 # Publication Procedure
 
-VyrnForge UI packages are not publicly published yet. This document describes the intended process after release approval is complete.
+VyrnForge UI packages are available as early alpha prereleases. This document
+defines the controlled process for future approved releases.
 
 VyrnForge UI is source-available under the VyrnForge Source License 1.0. Production use and commercial use require a separate written commercial license. Do not publish packages until the release checklist passes and package tarballs still include the approved license text.
 
@@ -9,10 +10,10 @@ Do not include real npm tokens in repository files, workflows, docs, or examples
 ## Current alpha history
 
 - `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease.
-- `0.1.0-alpha.1` is the coordinated corrective prerelease candidate for all
-  three publishable packages and remains pending the approved manual steps.
-  `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier
-  public prerelease.
+- `0.1.0-alpha.1` is the initial coordinated alpha, manually published for all
+  three packages.
+- The first trusted publication will use a future coordinated prerelease such
+  as `0.1.0-alpha.2`.
 - Use the `alpha` dist-tag for alpha publication. Do not assign `latest` to an
   alpha package.
 
@@ -49,29 +50,33 @@ Do not publish a package that depends on a package version that has not been pub
 
 The `latest` tag must not point to unfinished alpha packages.
 
-## Initial controlled/manual publication
+## Controlled trusted publication
 
-1. Confirm release issue and checklist approval.
-2. Confirm the VyrnForge Source License 1.0 gate remains closed.
-3. Start from a clean checkout.
-4. Run required validation.
-5. Build packages with `npm run build:packages`.
-6. Verify package contents with `npm run verify:packages`.
-7. Inspect package contents for expected declarations, CSS files, README files, and package metadata.
-8. Publish in dependency order using the approved npm tag.
-9. Verify each package appears in the registry with the expected version and tag.
-10. Verify a fresh consumer project can install and import the packages.
-11. Update release notes and GitHub release material only after publication is confirmed.
+1. Confirm release issue, checklist approval, and a clean checkout on current `main`.
+2. Manually dispatch `Controlled npm Release` with the synchronized version,
+   prerelease dist-tag, and `verify` mode. Verify mode never publishes and does
+   not attach the `npm-release` environment or request OIDC.
+3. Review the verification summary, registry availability checks, package
+   payloads, and external-consumer evidence.
+4. Manually dispatch the same candidate in `publish` mode only after approval.
+   The job requires the protected `npm-release` environment.
+5. npm trusted publishing uses GitHub Actions OIDC. No long-lived npm token is
+   stored in the repository, workflow, or GitHub Actions secrets.
+6. Packages publish in dependency order: `ui-core`, `ui-components`, then
+   `ui-data-grid`. The workflow verifies registry propagation and exact internal
+   dependencies after each required step.
+7. Trusted publishing generates provenance automatically; do not add
+   `--provenance` manually.
+8. Verify registry versions and dist-tags, then update release notes or GitHub
+   release material only when separately approved.
 
-## Future trusted-publishing/OIDC publication
+## Trusted-publishing configuration
 
-Future trusted publishing should use GitHub Actions OIDC and npm trusted publishing when that workstream is explicitly implemented. Until then:
-
-- Do not claim trusted publishing is configured.
-- Do not add npm tokens to repository secrets as part of this document.
-- Do not replace manual approval gates with automatic publication.
-
-The future workflow should still keep the package order, release checklist, tarball review, npm tag policy, and post-release verification.
+Before the first trusted publication, configure npm trusted publishers for each
+publishable package to trust this repository and the `release.yml` workflow.
+Keep the protected `npm-release` environment approval in place. Do not add npm
+tokens, `NODE_AUTH_TOKEN`, personal access tokens, or other long-lived registry
+credentials as a substitute for GitHub OIDC.
 
 ## Partial publication handling
 

@@ -1,6 +1,6 @@
 # Release Policy
 
-VyrnForge UI releases must be explicit, reviewable, and source-of-truth oriented. The current project status is early alpha: APIs may change, and packages are not stable or production-ready. `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease. The synchronized `0.1.0-alpha.1` package set is the corrective candidate and remains pending manual alpha publication for all three packages; `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier public prerelease. VyrnForge UI is source-available under the VyrnForge Source License 1.0, and production or commercial use requires a separate written commercial license.
+VyrnForge UI releases must be explicit, reviewable, and source-of-truth oriented. The current project status is early alpha: APIs may change, and packages are not stable or production-ready. `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease. The synchronized `0.1.0-alpha.1` package set is the initial coordinated alpha, manually published for all three packages. Future publication requires the controlled manually dispatched trusted-publishing workflow. VyrnForge UI is source-available under the VyrnForge Source License 1.0, and production or commercial use requires a separate written commercial license.
 
 The `latest` npm tag must not point to unfinished alpha packages.
 

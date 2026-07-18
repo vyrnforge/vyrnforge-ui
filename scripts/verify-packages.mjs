@@ -111,7 +111,9 @@ const packageByName = new Map(
 );
 const rootPackageJson = readJson(path.join(root, "package.json"));
 const licenseValue = "SEE LICENSE IN LICENSE";
-const releaseVersion = "0.1.0-alpha.1";
+const releaseVersion =
+  process.env.VYRNFORGE_RELEASE_VERSION ??
+  packageByName.get("@vyrnforge/ui-core").version;
 const rootLicensePath = path.join(root, "LICENSE");
 const rootLicenseText = readFileSync(rootLicensePath, "utf8");
 const conflictingSpdxLicenses = new Set(["MIT", "Apache-2.0", "GPL-2.0", "GPL-3.0", "AGPL-3.0", "ISC"]);

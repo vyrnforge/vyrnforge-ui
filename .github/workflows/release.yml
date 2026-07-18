@@ -1,0 +1,222 @@
+name: Controlled npm Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Coordinated prerelease version, for example 0.1.0-alpha.2
+        required: true
+        type: string
+      mode:
+        description: Verify the candidate or publish it after approval
+        required: true
+        default: verify
+        type: choice
+        options:
+          - verify
+          - publish
+      dist-tag:
+        description: npm dist-tag for the coordinated prerelease
+        required: true
+        default: alpha
+        type: choice
+        options:
+          - alpha
+          - beta
+          - next
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vyrnforge-npm-release
+  cancel-in-progress: false
+
+jobs:
+  verify-release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_TAG: ${{ inputs.dist-tag }}
+      VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
+
+    steps:
+      - name: Checkout selected commit
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Confirm current main release candidate
+        shell: bash
+        run: |
+          git fetch origin main --depth=1
+          test "$GITHUB_SHA" = "$(git rev-parse origin/main)"
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Use supported npm CLI
+        shell: bash
+        run: |
+          npm install --global npm@11.10.0
+          node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 22 || (major === 22 && minor < 14)) process.exit(1)'
+          node -e 'const [major, minor] = require("child_process").execFileSync("npm", ["--version"], { encoding: "utf8" }).trim().split(".").map(Number); if (major < 11 || (major === 11 && minor < 5)) process.exit(1)'
+
+      - name: Configure public registry
+        run: npm config set registry https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify release candidate inputs and registry availability
+        run: node scripts/verify-release-candidate.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+
+      - name: Run authoritative release validation
+        run: npm run quality
+
+      - name: Verify clean generated-artifact state
+        shell: bash
+        run: |
+          git diff --check
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Write verification summary
+        shell: bash
+        run: |
+          {
+            echo "## VyrnForge npm release verification"
+            echo
+            echo "- Candidate version: \`$RELEASE_VERSION\`"
+            echo "- Dist-tag: \`$RELEASE_TAG\`"
+            echo "- Mode: \`verify\`"
+            echo "- Commit: \`$GITHUB_SHA\`"
+            echo "- Packages: \`@vyrnforge/ui-core -> @vyrnforge/ui-components -> @vyrnforge/ui-data-grid\`"
+            echo "- Internal dependencies: exact \`$RELEASE_VERSION\`"
+            echo "- Validation: metadata, typecheck, tests, package payloads, consumer, docs, and playground passed"
+            echo "- Registry: candidate versions are not yet published"
+            echo "- Credentials: no token secret used; verify mode did not request OIDC or publish"
+            echo
+            echo "### Package dist sizes"
+            du -sh packages/ui-core/dist packages/ui-components/dist packages/ui-data-grid/dist
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  publish-packages:
+    if: inputs.mode == 'publish'
+    needs: verify-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: npm-release
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_TAG: ${{ inputs.dist-tag }}
+      VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
+
+    steps:
+      - name: Checkout selected commit
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Confirm current main release candidate
+        shell: bash
+        run: |
+          git fetch origin main --depth=1
+          test "$GITHUB_SHA" = "$(git rev-parse origin/main)"
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Use supported npm CLI
+        shell: bash
+        run: |
+          npm install --global npm@11.10.0
+          node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 22 || (major === 22 && minor < 14)) process.exit(1)'
+          node -e 'const [major, minor] = require("child_process").execFileSync("npm", ["--version"], { encoding: "utf8" }).trim().split(".").map(Number); if (major < 11 || (major === 11 && minor < 5)) process.exit(1)'
+
+      - name: Configure public registry
+        run: npm config set registry https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify release-critical package state
+        run: |
+          node scripts/verify-release-candidate.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+          npm run verify:packages
+
+      - name: Publish ui-core
+        run: npm publish ./packages/ui-core --access public --tag "$RELEASE_TAG"
+
+      - name: Verify ui-core registry propagation
+        shell: bash
+        run: |
+          for attempt in {1..12}; do
+            if test "$(npm view "@vyrnforge/ui-core@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "ui-core publication did not propagate"
+          exit 1
+
+      - name: Publish ui-components
+        run: npm publish ./packages/ui-components --access public --tag "$RELEASE_TAG"
+
+      - name: Verify ui-components registry propagation
+        shell: bash
+        run: |
+          for attempt in {1..12}; do
+            if test "$(npm view "@vyrnforge/ui-components@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
+              npm view "@vyrnforge/ui-components@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION ? 0 : 1); })'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "ui-components publication did not propagate with the expected ui-core dependency"
+          exit 1
+
+      - name: Publish ui-data-grid
+        run: npm publish ./packages/ui-data-grid --access public --tag "$RELEASE_TAG"
+
+      - name: Verify ui-data-grid registry propagation and dist-tags
+        shell: bash
+        run: |
+          for attempt in {1..12}; do
+            if test "$(npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
+              npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION && dependencies["@vyrnforge/ui-components"] === process.env.RELEASE_VERSION ? 0 : 1); })'
+              for package_name in @vyrnforge/ui-core @vyrnforge/ui-components @vyrnforge/ui-data-grid; do
+                npm view "$package_name" dist-tags --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const tags = JSON.parse(input); process.exit(tags[process.env.RELEASE_TAG] === process.env.RELEASE_VERSION ? 0 : 1); })'
+              done
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "ui-data-grid publication did not propagate with the expected dependencies and dist-tag"
+          exit 1
+
+      - name: Write publication summary
+        shell: bash
+        run: |
+          {
+            echo "## VyrnForge npm publication"
+            echo
+            echo "- Candidate version: \`$RELEASE_VERSION\`"
+            echo "- Dist-tag: \`$RELEASE_TAG\`"
+            echo "- Mode: \`publish\`"
+            echo "- Commit: \`$GITHUB_SHA\`"
+            echo "- Published in order: ui-core, ui-components, ui-data-grid"
+            echo "- Registry propagation and exact internal dependencies verified"
+            echo "- Credentials: GitHub OIDC trusted publishing only; no token secret used"
+          } >> "$GITHUB_STEP_SUMMARY"

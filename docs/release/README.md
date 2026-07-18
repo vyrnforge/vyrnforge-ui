@@ -2,7 +2,7 @@
 
 This directory is the source of truth for VyrnForge UI release governance.
 
-VyrnForge UI is currently in an early alpha prerelease stage and is source-available under the VyrnForge Source License 1.0. `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease. `0.1.0-alpha.1` is the coordinated corrective prerelease candidate and remains pending manual publication for all three packages; `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid` have no earlier public prerelease. Alpha publication uses the `alpha` tag, and `latest` must remain absent. These documents define the intended release process and gates, but they do not claim stable support, trusted publishing, or commercial licensing infrastructure.
+VyrnForge UI is currently in an early alpha prerelease stage and is source-available under the VyrnForge Source License 1.0. `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease. `0.1.0-alpha.1` is the initial coordinated alpha, manually published for all three packages. Future coordinated prereleases use the manually dispatched trusted-publishing workflow and the protected `npm-release` environment. Alpha publication uses the `alpha` tag; release policy prohibits assigning `latest` to prerelease packages. These documents define the intended release process and gates, but they do not claim stable support or commercial licensing infrastructure.
 
 | Document | Purpose |
 | --- | --- |
