@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vyrnforge/ui-components": "0.1.0",
-    "@vyrnforge/ui-core": "0.1.0",
+    "@vyrnforge/ui-components": "0.1.0-alpha.0",
+    "@vyrnforge/ui-core": "0.1.0-alpha.0",
     "react": "latest",
     "react-dom": "latest"
   },

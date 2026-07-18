@@ -1,6 +1,6 @@
 # Release Policy
 
-VyrnForge UI releases must be explicit, reviewable, and source-of-truth oriented. The current project status is pre-alpha: APIs may change and public npm publication has not started. VyrnForge UI is source-available under the VyrnForge Source License 1.0, and production or commercial use requires a separate written commercial license.
+VyrnForge UI releases must be explicit, reviewable, and source-of-truth oriented. The current project status is pre-alpha: APIs may change and public npm publication has not started. The synchronized `0.1.0-alpha.0` package set is an unpublished alpha candidate, not a stable or production-ready release. VyrnForge UI is source-available under the VyrnForge Source License 1.0, and production or commercial use requires a separate written commercial license.
 
 The `latest` npm tag must not point to unfinished alpha packages.
 

@@ -1,8 +1,7 @@
 {
   "name": "@vyrnforge/ui-core",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.0",
   "description": "Native-first VyrnForge UI design tokens, themes, density, utilities, and shared CSS foundations.",
-  "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "./dist/index.cjs",
