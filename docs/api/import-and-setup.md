@@ -2,6 +2,8 @@
 
 VyrnForge UI is package-based. Import only the packages and CSS that your app uses.
 
+VyrnForge UI is source-available under the root [VyrnForge Source License 1.0](../../LICENSE). Source inspection, local evaluation, and temporary non-production prototypes are permitted. Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license.
+
 ## Recommended CSS Order
 
 ```ts

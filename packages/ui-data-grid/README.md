@@ -8,7 +8,9 @@ This package exposes generic contracts, pure core helpers, controlled/uncontroll
 
 ## Package Status
 
-VyrnForge UI is pre-alpha and is not yet published for public npm installation. This package remains private in the repository until release, versioning, and licensing gates are complete.
+VyrnForge UI is pre-alpha and is not yet published for public npm installation. This package remains private in the repository until release and versioning gates are complete.
+
+VyrnForge UI is source-available under the VyrnForge Source License 1.0. Source inspection, local evaluation, and temporary non-production prototypes are permitted. Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license.
 
 Public package entry points are prepared for the first approved alpha:
 
@@ -18,6 +20,7 @@ import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
 The package is built from `dist` output. Public exports do not point at internal `src` files. React and ReactDOM are peer dependencies and are not bundled as duplicate runtimes.
+Package metadata uses `SEE LICENSE IN LICENSE`, and the npm artifact includes a package-local LICENSE that matches the repository root license.
 
 ## CSS
 

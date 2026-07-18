@@ -8,6 +8,8 @@ It is not only a data-grid package.
 
 Use `docs/README.md` as the canonical documentation entrypoint.
 
+VyrnForge UI is source-available under the VyrnForge Source License 1.0, not open source. Source inspection, local evaluation, and temporary non-production prototypes are permitted; production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license.
+
 ## Packages
 
 | Package | Owns |

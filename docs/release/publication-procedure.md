@@ -1,13 +1,15 @@
 # Publication Procedure
 
-VyrnForge UI packages are not publicly published yet. This document describes the intended process after licensing and release approval are complete.
+VyrnForge UI packages are not publicly published yet. This document describes the intended process after release approval is complete.
+
+VyrnForge UI is source-available under the VyrnForge Source License 1.0. Production use and commercial use require a separate written commercial license. Do not publish packages until the release checklist passes and package tarballs still include the approved license text.
 
 Do not include real npm tokens in repository files, workflows, docs, or examples.
 
 ## Prerequisites
 
 - Release scope is approved.
-- Licensing approval is complete.
+- VyrnForge Source License 1.0 metadata and package-local LICENSE files are verified.
 - Repository is on a clean checkout of the intended commit.
 - No credentials, private URLs, internal documents, generated archives, logs, or environment files are included.
 - Changelog and release notes are prepared.
@@ -40,7 +42,7 @@ The `latest` tag must not point to unfinished alpha packages.
 ## Initial controlled/manual publication
 
 1. Confirm release issue and checklist approval.
-2. Confirm licensing gate is closed.
+2. Confirm the VyrnForge Source License 1.0 gate remains closed.
 3. Start from a clean checkout.
 4. Run required validation.
 5. Build packages with `npm run build:packages`.

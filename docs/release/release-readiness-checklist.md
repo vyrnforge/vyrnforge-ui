@@ -8,7 +8,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Version is selected.
 - [ ] npm tag is selected: `alpha`, `beta`, candidate tag, or `latest` only for approved stable releases.
 - [ ] Package versions remain synchronized unless an approved policy says otherwise.
-- [ ] Licensing approval is complete.
+- [ ] VyrnForge Source License 1.0 metadata and package-local LICENSE files are verified.
 
 ## Mandatory blockers
 
@@ -20,6 +20,8 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Tests pass.
 - [ ] Package builds pass.
 - [ ] `npm run verify:packages` passes.
+- [ ] Package manifests use `SEE LICENSE IN LICENSE`.
+- [ ] Package tarballs include LICENSE and no unrelated legal drafts or internal legal notes.
 - [ ] Type declaration output is present and reviewable.
 - [ ] CSS imports, `--vf-*`, `vf-*`, `--udg-*`, and `udg-*` contracts are reviewed.
 - [ ] Package tarballs are reviewed before publication.

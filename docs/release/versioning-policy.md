@@ -56,7 +56,8 @@ Breaking changes include:
 
 Before a 1.0 release is considered, the project must have:
 
-- Approved licensing and publication status.
+- Approved publication status.
+- VyrnForge Source License 1.0 package metadata and package-local LICENSE files remain verified.
 - Stable package entry points and CSS imports.
 - Documented public APIs.
 - Completed migration guidance for known breaking changes.

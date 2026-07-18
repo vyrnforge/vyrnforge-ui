@@ -19,6 +19,8 @@ import "@vyrnforge/ui-components/styles/index.css";
 
 The package is built from `dist` output. Public exports do not point at internal `src` files. React and ReactDOM are peer dependencies and are not bundled as duplicate runtimes.
 
+VyrnForge UI is source-available under the VyrnForge Source License 1.0. Source inspection, local evaluation, and temporary non-production prototypes are permitted. Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license. Package metadata uses `SEE LICENSE IN LICENSE`, and the npm artifact includes a package-local LICENSE that matches the repository root license.
+
 Import core tokens first, then component styles:
 
 ```tsx
