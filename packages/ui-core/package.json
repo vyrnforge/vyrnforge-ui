@@ -46,8 +46,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "devDependencies": {
-    "tsup": "latest",
-    "typescript": "latest",
-    "vitest": "latest"
+    "tsup": "*",
+    "typescript": "^7.0.2",
+    "vitest": "*"
   }
 }
