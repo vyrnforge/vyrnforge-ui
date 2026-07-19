@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -18,6 +18,94 @@ function read(relativePath) {
 function assertNoLongLivedToken(text, file) {
   for (const forbidden of ["NPM_TOKEN", "NODE_AUTH_TOKEN", "PERSONAL_ACCESS_TOKEN"]) {
     assert(!text.includes(forbidden), `${file}: forbidden long-lived credential reference ${forbidden}`);
+  }
+}
+
+/**
+ * Parse every GitHub Actions `uses:` reference from a workflow.
+ *
+ * Supported references:
+ * - Local reusable workflows/actions: ./path/to/action
+ * - Remote actions/workflows: owner/repository[/path]@ref
+ *
+ * A human-readable version comment can follow the reference, for example:
+ * actions/checkout@<40-character-sha> # v7
+ */
+function parseActionUses(text) {
+  const references = [];
+  const pattern = /^\s*(?:-\s*)?uses:\s*([^\s#]+)(?:\s+#\s*(\S+))?\s*$/gm;
+
+  for (const match of text.matchAll(pattern)) {
+    const spec = match[1];
+    const versionComment = match[2] ?? null;
+
+    if (spec.startsWith("./")) {
+      references.push({
+        type: "local",
+        spec,
+        action: spec,
+        ref: null,
+        versionComment
+      });
+      continue;
+    }
+
+    const separator = spec.lastIndexOf("@");
+    assert(separator > 0, `invalid external action reference: ${spec}`);
+
+    references.push({
+      type: "external",
+      spec,
+      action: spec.slice(0, separator),
+      ref: spec.slice(separator + 1),
+      versionComment
+    });
+  }
+
+  return references;
+}
+
+/**
+ * Require every external GitHub Action to use an immutable full commit SHA.
+ * Local reusable workflows/actions remain valid without SHA pinning.
+ */
+function assertPinnedExternalActions(text, file) {
+  for (const reference of parseActionUses(text)) {
+    if (reference.type === "local") continue;
+
+    assert(
+      /^[0-9a-f]{40}$/.test(reference.ref),
+      `${file}: ${reference.action} must be pinned to a full 40-character commit SHA`
+    );
+
+    assert(
+      reference.versionComment,
+      `${file}: ${reference.action}@${reference.ref} must preserve a readable version comment`
+    );
+  }
+}
+
+/**
+ * Verify that a specific Action exists, is SHA-pinned, and keeps the expected
+ * human-readable version comment used by Dependabot and reviewers.
+ */
+function assertPinnedActionVersion(text, file, action, expectedVersion) {
+  const references = parseActionUses(text).filter(
+    (reference) => reference.type === "external" && reference.action === action
+  );
+
+  assert(references.length > 0, `${file} must use ${action}`);
+
+  for (const reference of references) {
+    assert(
+      /^[0-9a-f]{40}$/.test(reference.ref),
+      `${file}: ${action} must be pinned to a full 40-character commit SHA`
+    );
+
+    assert(
+      reference.versionComment === expectedVersion,
+      `${file}: ${action} must preserve the version comment # ${expectedVersion}`
+    );
   }
 }
 
@@ -51,11 +139,11 @@ assert(pages.includes("workflow_run:"), "pages.yml must deploy only after the ma
 assert(pages.includes('workflows: ["VyrnForge CI"]'), "pages.yml must be gated by VyrnForge CI");
 assert(!/^\s*push:/m.test(pages), "pages.yml must not race CI through an independent push trigger");
 assert(pages.includes("github.event.workflow_run.conclusion == 'success'"), "pages.yml must require successful CI");
-assert(pages.includes('git rev-parse origin/main'), "pages.yml must reject stale main commits");
+assert(pages.includes("git rev-parse origin/main"), "pages.yml must reject stale main commits");
 assert(pages.includes("pages: write"), "pages.yml deploy job must have pages: write");
-assert(pages.includes("actions/configure-pages@v6.0.0"), "pages.yml must use the Node 24 configure-pages action");
-assert(pages.includes("actions/upload-pages-artifact@v5.0.0"), "pages.yml must use the Node 24 Pages artifact action");
-assert(pages.includes("actions/deploy-pages@v5.0.0"), "pages.yml must remain the only Pages deploy workflow");
+assertPinnedActionVersion(pages, "pages.yml", "actions/configure-pages", "v6.0.0");
+assertPinnedActionVersion(pages, "pages.yml", "actions/upload-pages-artifact", "v5.0.0");
+assertPinnedActionVersion(pages, "pages.yml", "actions/deploy-pages", "v5.0.0");
 assert(!pages.includes("npm publish"), "pages.yml must not publish packages");
 assertNoLongLivedToken(pages, "pages.yml");
 
@@ -92,32 +180,29 @@ assertNoLongLivedToken(release, "release.yml");
 const nightly = read(".github/workflows/nightly.yml");
 assert(nightly.includes("schedule:"), "nightly.yml must define a schedule");
 assert(nightly.includes("workflow_dispatch:"), "nightly.yml must allow manual execution");
-assert(nightly.includes("node-version: \"22\""), "nightly.yml must cover Node 22");
-assert(nightly.includes("node-version: \"24\""), "nightly.yml must cover Node 24");
+assert(nightly.includes('node-version: "22"'), "nightly.yml must cover Node 22");
+assert(nightly.includes('node-version: "24"'), "nightly.yml must cover Node 24");
 assert(nightly.includes("name: nightly-gate"), "nightly.yml must expose a final gate");
 assert(!nightly.includes("npm publish"), "nightly.yml must not publish packages");
 assert(!nightly.includes("id-token: write"), "nightly.yml must not request OIDC");
 assertNoLongLivedToken(nightly, "nightly.yml");
 
+// Validate every workflow file, including future workflows added to this directory.
+const workflowFiles = readdirSync(workflowsDir)
+  .filter((file) => file.endsWith(".yml") || file.endsWith(".yaml"))
+  .sort();
 
-for (const workflow of [
-  "ci.yml",
-  "_quality.yml",
-  "_packages.yml",
-  "_consumer.yml",
-  "_docs.yml",
-  "pages.yml",
-  "release.yml",
-  "nightly.yml"
-]) {
+for (const workflow of workflowFiles) {
   const text = read(`.github/workflows/${workflow}`);
-  assert(!text.includes("actions/checkout@v6"), `${workflow} must not use the retired checkout v6 action`);
-  assert(!text.includes("actions/setup-node@v6"), `${workflow} must not use the retired setup-node v6 action`);
-  if (text.includes("actions/checkout@")) {
-    assert(text.includes("actions/checkout@v7"), `${workflow} must use checkout v7`);
+
+  assertPinnedExternalActions(text, workflow);
+
+  if (text.includes("uses: actions/checkout@")) {
+    assertPinnedActionVersion(text, workflow, "actions/checkout", "v7");
   }
-  if (text.includes("actions/setup-node@")) {
-    assert(text.includes("actions/setup-node@v7"), `${workflow} must use setup-node v7`);
+
+  if (text.includes("uses: actions/setup-node@")) {
+    assertPinnedActionVersion(text, workflow, "actions/setup-node", "v7");
   }
 }
 
