@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Checkout selected commit
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
 
@@ -59,7 +59,7 @@ jobs:
           test "$GITHUB_SHA" = "$(git rev-parse origin/main)"
 
       - name: Setup Node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "24"
           registry-url: https://registry.npmjs.org
@@ -125,7 +125,7 @@ jobs:
 
     steps:
       - name: Checkout selected commit
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
 
@@ -136,7 +136,7 @@ jobs:
           test "$GITHUB_SHA" = "$(git rev-parse origin/main)"
 
       - name: Setup Node for trusted publishing
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "24"
           registry-url: https://registry.npmjs.org
@@ -236,10 +236,10 @@ jobs:
 
     steps:
       - name: Checkout published commit
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Setup Node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "24"
           registry-url: https://registry.npmjs.org
@@ -279,12 +279,12 @@ jobs:
 
     steps:
       - name: Checkout published commit
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
 
       - name: Setup Node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "24"
           package-manager-cache: false
