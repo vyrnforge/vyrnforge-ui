@@ -6,7 +6,7 @@ on:
       node-version:
         description: Supported Node.js major used for the clean runner
         required: false
-        default: "22"
+        default: "24.18.0"
         type: string
       full:
         required: false

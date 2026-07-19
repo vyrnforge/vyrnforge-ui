@@ -87,7 +87,7 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: "22"
+      node-version: "24.18.0"
       full: ${{ needs.plan.outputs.full == 'true' }}
       metadata: ${{ needs.plan.outputs.metadata == 'true' }}
       ui-core: ${{ needs.plan.outputs.ui_core == 'true' }}
@@ -102,7 +102,7 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: "22"
+      node-version: "24.18.0"
 
   consumer-checks:
     name: consumer-checks
@@ -112,7 +112,7 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: "22"
+      node-version: "24.18.0"
 
   docs-checks:
     name: docs-checks
@@ -122,7 +122,7 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: "22"
+      node-version: "24.18.0"
       build-docs: ${{ needs.plan.outputs.docs == 'true' }}
       build-playground: ${{ needs.plan.outputs.playground == 'true' }}
 

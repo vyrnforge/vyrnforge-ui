@@ -1,7 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const maturityValues = new Set([
@@ -44,36 +43,29 @@ function addFailure(message) {
 
 function getRootExports(relativePath) {
   const source = readFileSync(path.join(root, relativePath), "utf8");
-  const sourceFile = ts.createSourceFile(
-    relativePath,
-    source,
-    ts.ScriptTarget.Latest,
-    true
-  );
   const exports = new Set();
 
-  for (const statement of sourceFile.statements) {
-    if (ts.isExportDeclaration(statement) && statement.exportClause) {
-      if (ts.isNamedExports(statement.exportClause)) {
-        for (const element of statement.exportClause.elements) {
-          exports.add(element.name.text);
-        }
-      }
-      continue;
-    }
+  // TypeScript 7's native compiler package no longer exposes the historical
+  // JavaScript compiler API used here. Package entry points are intentionally
+  // declarative, so extract their named re-exports without adding a parser
+  // dependency to repository verification.
+  for (const match of source.matchAll(/\bexport\s+(?:type\s+)?\{([\s\S]*?)\}\s+from\s+["'][^"']+["']/g)) {
+    for (const rawSpecifier of match[1].split(",")) {
+      const specifier = rawSpecifier.trim();
+      if (!specifier) continue;
 
-    if (
-      ts.isVariableStatement(statement) &&
-      statement.modifiers?.some(
-        (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
-      )
-    ) {
-      for (const declaration of statement.declarationList.declarations) {
-        if (ts.isIdentifier(declaration.name)) {
-          exports.add(declaration.name.text);
-        }
+      const aliasMatch = /^(?:type\s+)?([A-Za-z_$][\w$]*)(?:\s+as\s+([A-Za-z_$][\w$]*))?$/.exec(specifier);
+      if (!aliasMatch) {
+        addFailure(`${relativePath} contains an unsupported export specifier: ${specifier}`);
+        continue;
       }
+
+      exports.add(aliasMatch[2] ?? aliasMatch[1]);
     }
+  }
+
+  for (const match of source.matchAll(/\bexport\s+(?:declare\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*)/g)) {
+    exports.add(match[1]);
   }
 
   return exports;

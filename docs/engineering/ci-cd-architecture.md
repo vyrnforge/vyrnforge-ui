@@ -34,10 +34,22 @@ not own product behavior, application state, public APIs, or styling contracts.
 | `.github/workflows/_docs.yml` | `workflow_call` | Documentation and playground builds | None |
 | `.github/workflows/pages.yml` | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only | Pages deployment only |
 | `.github/workflows/release.yml` | Manual | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release | Split by job |
-| `.github/workflows/nightly.yml` | Weekly schedule, manual | Full Node 22/24 validation and high-severity dependency audit | None |
+| `.github/workflows/nightly.yml` | Weekly schedule, manual | Full pinned Node 24 LTS validation and high-severity dependency audit | None |
 
 Reusable workflow files live directly in `.github/workflows/` because GitHub
 Actions does not support reusable workflow subdirectories.
+
+## Toolchain baseline
+
+Repository development, pull-request CI, Pages, release verification, and nightly validation use:
+
+- Node.js `24.18.0`, pinned by `.nvmrc` and `.node-version`;
+- npm `11.16.0`, pinned by the root `packageManager`;
+- TypeScript `7.0.2`, pinned exactly in the root and every workspace manifest.
+
+`scripts/verify-toolchain.mjs` prevents version drift across manifests, the lockfile, and workflows. The published packages retain Node `>=22.12 <25` and npm `>=10 <12` consumer engine ranges because this repository-toolchain migration does not introduce a Node 24 runtime requirement into generated package output.
+
+TypeScript 7 package builds separate runtime and declaration responsibilities. `tsup` emits ESM, CommonJS, and CSS with declaration bundling disabled. The native TypeScript CLI runs with each package's `tsconfig.build.json` to emit declaration-only output, and `scripts/prepare-package-declarations.mjs` removes CSS-only declaration imports and verifies that relative declaration references resolve before package verification. This avoids relying on declaration-bundling plugins built against the legacy TypeScript JavaScript compiler API.
 
 ## Package dependency impact
 
@@ -248,8 +260,7 @@ order, OIDC publication, and registry-consumer evidence.
 The weekly nightly workflow runs at 02:17 UTC on Monday, away from the top of
 the hour. It validates:
 
-- full quality on Node 22;
-- full quality on Node 24;
+- full quality on the pinned Node `24.18.0` LTS baseline;
 - package payloads;
 - packed external consumer;
 - docs and playground;
@@ -261,6 +272,7 @@ Nightly never publishes, deploys, creates tags, or writes repository contents.
 ## Local commands
 
 ```bash
+npm run verify:toolchain
 npm run test:ci-scope
 npm run verify:workflows
 npm run verify:templates

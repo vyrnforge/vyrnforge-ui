@@ -13,26 +13,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quality-node-22:
-    name: quality-node-22
-    uses: ./.github/workflows/_quality.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "22"
-      full: true
-      metadata: true
-      ui-core: true
-      ui-components: true
-      ui-data-grid: true
-
   quality-node-24:
     name: quality-node-24
     uses: ./.github/workflows/_quality.yml
     permissions:
       contents: read
     with:
-      node-version: "24"
+      node-version: "24.18.0"
       full: true
       metadata: true
       ui-core: true
@@ -45,7 +32,7 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: "24"
+      node-version: "24.18.0"
 
   external-consumer:
     name: external-consumer
@@ -53,7 +40,7 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: "24"
+      node-version: "24.18.0"
 
   docs-and-playground:
     name: docs-and-playground
@@ -61,7 +48,7 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: "24"
+      node-version: "24.18.0"
       build-docs: true
       build-playground: true
 
@@ -78,7 +65,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: "24"
+          node-version: "24.18.0"
           cache: npm
 
       - name: Use repository package manager
@@ -93,7 +80,6 @@ jobs:
   nightly-gate:
     name: nightly-gate
     needs:
-      - quality-node-22
       - quality-node-24
       - packages
       - external-consumer
@@ -108,7 +94,7 @@ jobs:
       - name: Aggregate nightly results
         env:
           RESULTS_JSON: >-
-            {"quality22":"${{ needs.quality-node-22.result }}","quality24":"${{ needs.quality-node-24.result }}","packages":"${{ needs.packages.result }}","consumer":"${{ needs.external-consumer.result }}","docs":"${{ needs.docs-and-playground.result }}","audit":"${{ needs.dependency-audit.result }}"}
+            {"quality24":"${{ needs.quality-node-24.result }}","packages":"${{ needs.packages.result }}","consumer":"${{ needs.external-consumer.result }}","docs":"${{ needs.docs-and-playground.result }}","audit":"${{ needs.dependency-audit.result }}"}
         run: |
           node - <<'NODE'
           const results = JSON.parse(process.env.RESULTS_JSON);

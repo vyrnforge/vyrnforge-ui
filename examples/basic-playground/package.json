@@ -21,7 +21,7 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "@vitejs/plugin-react": "*",
-    "typescript": "*",
+    "typescript": "7.0.2",
     "vite": "^8.1.5"
   }
 }

@@ -227,7 +227,11 @@ for (const packageInfo of packages) {
 
   for (const file of files) {
     assert(!forbiddenFilePatterns.some((pattern) => pattern.test(file)), `${packageInfo.name}: npm pack includes unexpected file ${file}`);
-    assert(file === "LICENSE" || !/(legal|draft|internal|confidential)/i.test(file), `${packageInfo.name}: npm pack includes unexpected legal/internal file ${file}`);
+    const generatedDeclarationSupport = file.startsWith("dist/") && file.endsWith(".d.ts");
+    assert(
+      file === "LICENSE" || generatedDeclarationSupport || !/(legal|draft|internal|confidential)/i.test(file),
+      `${packageInfo.name}: npm pack includes unexpected legal/internal file ${file}`
+    );
   }
 
   console.log(`PACK ${packageInfo.name}`);

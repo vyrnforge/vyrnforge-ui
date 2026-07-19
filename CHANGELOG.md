@@ -12,8 +12,10 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 ### Added
 
 - Added dependency-aware CI planning, reusable quality/package/consumer/docs
-  workflows, a stable `ci-gate`, Node 22/24 nightly validation, and a
+  workflows, a stable `ci-gate`, a pinned Node 24 LTS nightly baseline, and a
   high-severity dependency audit.
+- Added repository toolchain verification for Node `24.18.0`, npm `11.16.0`,
+  and TypeScript `7.0.2`.
 - Added post-publication registry consumer verification, npm signature and
   provenance-attestation verification, and automated annotated Git tag plus
   GitHub prerelease creation with separated permissions.
@@ -26,6 +28,9 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   `main` commit, preventing stale CI runs from deploying older documentation.
 - Updated GitHub-maintained workflow actions to their Node 24 generations,
   including the current checkout, setup-node, and Pages action releases.
+- Migrated the repository development and CI toolchain to Node `24.18.0`, npm
+  `11.16.0`, and an exact TypeScript `7.0.2` workspace pin while preserving the
+  published packages' existing Node 22/24 consumer compatibility range.
 - Made the explicit prerelease dist-tag authoritative during alpha; npm's
   registry-managed `latest` tag is not treated as a stability signal.
 
