@@ -61,16 +61,23 @@ Do not add these unless explicitly approved:
 
 ## Validation
 
-Run after implementation changes:
+Use dependency-aware validation during implementation and the authoritative
+root gate before a pull request:
 
 ```bash
-npm run build
-npm run typecheck
-npm run test
-npm run build:playground
+npm run test:ci-scope
+npm run verify:workflows
+npm run quality
 ```
 
-For documentation-only changes, validate file placement, links, and `git diff --check`.
+For documentation-only changes, run the relevant docs build plus
+`git diff --check`. Do not add workflow-level path filters to the required CI
+workflow. Preserve `ci-gate`, keep normal CI read-only, and keep npm OIDC,
+Pages deployment, and repository write permissions in separate jobs.
+
+The CI/CD source of truth is
+`docs/engineering/ci-cd-architecture.md`; release ownership is defined in
+`docs/release/release-responsibility-matrix.md`.
 
 ## Documentation
 

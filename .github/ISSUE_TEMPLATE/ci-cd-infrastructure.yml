@@ -1,0 +1,168 @@
+name: CI/CD or repository infrastructure
+description: Report or propose a focused change to CI, delivery, release automation, Pages, or repository governance.
+title: "[CI/CD]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for repository infrastructure. Use the product feature, bug, or accessibility forms for UI runtime behavior. Never include secrets, tokens, private registry credentials, or customer data.
+
+  - type: dropdown
+    id: request-type
+    attributes:
+      label: Request type
+      options:
+        - Defect or regression
+        - Improvement
+        - Standardization
+        - Incident follow-up
+        - Investigation
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Infrastructure area
+      options:
+        - Pull-request CI and ci-gate
+        - Change-impact planner
+        - Package quality or payload verification
+        - Packed external consumer verification
+        - Documentation or GitHub Pages
+        - npm trusted publishing and OIDC
+        - Registry propagation, signatures, or provenance
+        - Git tags or GitHub Releases
+        - Nightly or scheduled validation
+        - Branch protection or required checks
+        - Repository scripts, templates, or governance
+    validations:
+      required: true
+
+  - type: input
+    id: affected-workflow
+    attributes:
+      label: Affected workflow, script, or setting
+      placeholder: ".github/workflows/ci.yml, scripts/detect-ci-scope.mjs, or main branch protection"
+    validations:
+      required: true
+
+  - type: input
+    id: run-url
+    attributes:
+      label: Workflow run or pull-request URL
+      description: Add the GitHub run, pull request, or release URL when one exists.
+
+  - type: input
+    id: revision
+    attributes:
+      label: Branch, tag, version, or commit SHA
+      placeholder: "main, v0.1.0-alpha.2, or commit SHA"
+
+  - type: dropdown
+    id: trigger
+    attributes:
+      label: Trigger or execution context
+      options:
+        - Pull request
+        - Push to main
+        - Manual workflow dispatch
+        - GitHub Pages deployment
+        - npm release publish mode
+        - Scheduled or nightly run
+        - Repository settings or branch protection
+        - Local verification
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or improvement objective
+      description: Describe the infrastructure problem, wasted work, missing guard, or standardization goal.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior or current limitation
+      description: For proposals, describe the current workflow and why it is insufficient.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Impact level
+      options:
+        - Blocks all pull requests or releases
+        - Blocks one package, workflow, or deployment
+        - Security or permission concern
+        - Reliability or maintainability risk
+        - Performance or GitHub Actions efficiency
+        - Documentation or governance gap
+    validations:
+      required: true
+
+  - type: dropdown
+    id: delivery-impact
+    attributes:
+      label: Publish or deployment impact
+      options:
+        - No publish or deployment impact
+        - Pull-request merge gate only
+        - GitHub Pages
+        - npm package publication
+        - Registry verification or provenance
+        - Git tag or GitHub Release
+        - Multiple delivery stages
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: permission-impact
+    attributes:
+      label: Permission, secret, OIDC, or branch-protection impact
+      description: State required permission changes and confirm why less privilege is insufficient. Write "None" when not applicable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction or evidence
+      description: Include run steps, planner output, logs with secrets removed, screenshots, or exact repository settings.
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Define the observable result, required checks, and failure behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: Explicitly out of scope
+      description: List package runtime, version, publication, UI, or governance work that must not be mixed into this issue.
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing infrastructure and release-readiness issues.
+          required: true
+        - label: I removed secrets, credentials, private registry data, and customer information from all evidence.
+          required: true

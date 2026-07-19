@@ -8,7 +8,7 @@ Run:
 npm run verify:consumer
 ```
 
-GitHub Actions runs this command in the separate `external-consumer` CI job for pull requests targeting `main` and pushes to `main`.
+GitHub Actions invokes the reusable consumer workflow when the dependency-aware planner detects a public package, package payload, or consumer-fixture impact. The compatibility check `external-consumer` remains stable while branch protection migrates to the single `ci-gate`.
 
 The command:
 

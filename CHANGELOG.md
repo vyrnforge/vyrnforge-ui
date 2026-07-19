@@ -11,7 +11,23 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Added
 
+- Added dependency-aware CI planning, reusable quality/package/consumer/docs
+  workflows, a stable `ci-gate`, Node 22/24 nightly validation, and a
+  high-severity dependency audit.
+- Added post-publication registry consumer verification, npm signature and
+  provenance-attestation verification, and automated annotated Git tag plus
+  GitHub prerelease creation with separated permissions.
+
 ### Changed
+
+- Split normal CI, GitHub Pages deployment, npm OIDC publication, registry
+  verification, and GitHub release recording into explicit responsibilities.
+- Gated automatic GitHub Pages deployment on successful CI for the current
+  `main` commit, preventing stale CI runs from deploying older documentation.
+- Updated GitHub-maintained workflow actions to their Node 24 generations,
+  including the current checkout, setup-node, and Pages action releases.
+- Made the explicit prerelease dist-tag authoritative during alpha; npm's
+  registry-managed `latest` tag is not treated as a stability signal.
 
 - Prepared `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and
   `@vyrnforge/ui-data-grid` as the synchronized `0.1.0-alpha.1` corrective

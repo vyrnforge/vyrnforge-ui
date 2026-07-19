@@ -26,6 +26,7 @@ Do not create new top-level documentation without linking it from this file. If 
 | `architecture/05-accessibility-standards.md` | Accessibility baseline. |
 | `architecture/06-css-architecture.md` | CSS ownership, split policy, prefixes, and package-level style imports. |
 | `architecture/07-overlay-and-focus.md` | Portal, dismissal, focus, scroll-lock, positioning, and z-index rules for overlays. |
+| `engineering/ci-cd-architecture.md` | Dependency-aware CI, reusable workflows, permission boundaries, Pages, releases, and nightly validation. |
 
 ## 3. Roadmap
 
@@ -88,17 +89,18 @@ Q1 quality docs define the stabilization bar for current components. They do not
 
 ## 8. Release Governance
 
-Release docs define the publication, versioning, deprecation, and release-readiness process. They do not claim that public package publication, stable support, or trusted publishing is complete.
+Release docs define the implemented alpha publication, versioning, deprecation, registry verification, release-record, and release-readiness process. They do not claim stable or production-ready support.
 
 | Document | Purpose |
 | --- | --- |
 | `release/README.md` | Release documentation index. |
 | `release/release-policy.md` | Release maturity stages and expectations. |
 | `release/versioning-policy.md` | Package versioning and prerelease rules. |
-| `release/publication-procedure.md` | Manual publication and future trusted-publishing procedure. |
+| `release/publication-procedure.md` | Controlled OIDC publication, registry verification, and release-record procedure. |
 | `release/deprecation-and-migration-policy.md` | Public API, CSS, behavior, and migration rules. |
 | `release/release-readiness-checklist.md` | Reusable alpha, beta, and stable release checklist. |
 | `release/external-consumer-verification.md` | Packed package consumer fixture and verification command. |
+| `release/release-responsibility-matrix.md` | CI, package, deployment, npm publication, registry verification, and release-record ownership. |
 
 ## 9. Legal
 

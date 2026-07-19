@@ -20,7 +20,7 @@ During the early lifecycle, package versions should remain synchronized unless a
 | `beta` | Later validation releases with mostly stable APIs. |
 | `rc` | Release candidates when a stable release is being finalized. |
 
-Initial prereleases should use the matching npm tag: `alpha` for alpha, `beta` for beta. The `latest` tag is reserved for explicitly approved stable releases and must remain absent for the alpha series.
+Initial prereleases use the matching npm tag: `alpha` for alpha and `beta` for beta. Consumers must install through the explicit prerelease tag. npm may retain a registry-managed `latest` tag for package metadata, but VyrnForge does not treat it as a stable-release signal before stable approval.
 
 ## Inter-package alignment
 

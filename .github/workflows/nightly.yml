@@ -1,0 +1,117 @@
+name: VyrnForge Nightly
+
+on:
+  schedule:
+    - cron: "17 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vyrnforge-nightly
+  cancel-in-progress: true
+
+jobs:
+  quality-node-22:
+    name: quality-node-22
+    uses: ./.github/workflows/_quality.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "22"
+      full: true
+      metadata: true
+      ui-core: true
+      ui-components: true
+      ui-data-grid: true
+
+  quality-node-24:
+    name: quality-node-24
+    uses: ./.github/workflows/_quality.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "24"
+      full: true
+      metadata: true
+      ui-core: true
+      ui-components: true
+      ui-data-grid: true
+
+  packages:
+    name: packages
+    uses: ./.github/workflows/_packages.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "24"
+
+  external-consumer:
+    name: external-consumer
+    uses: ./.github/workflows/_consumer.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "24"
+
+  docs-and-playground:
+    name: docs-and-playground
+    uses: ./.github/workflows/_docs.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "24"
+      build-docs: true
+      build-playground: true
+
+  dependency-audit:
+    name: dependency-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit high-severity dependency findings
+        run: npm audit --audit-level=high
+
+  nightly-gate:
+    name: nightly-gate
+    needs:
+      - quality-node-22
+      - quality-node-24
+      - packages
+      - external-consumer
+      - docs-and-playground
+      - dependency-audit
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Aggregate nightly results
+        env:
+          RESULTS_JSON: >-
+            {"quality22":"${{ needs.quality-node-22.result }}","quality24":"${{ needs.quality-node-24.result }}","packages":"${{ needs.packages.result }}","consumer":"${{ needs.external-consumer.result }}","docs":"${{ needs.docs-and-playground.result }}","audit":"${{ needs.dependency-audit.result }}"}
+        run: |
+          node - <<'NODE'
+          const results = JSON.parse(process.env.RESULTS_JSON);
+          console.log(results);
+          if (Object.values(results).some((result) => result !== "success")) process.exit(1);
+          NODE

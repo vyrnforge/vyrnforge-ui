@@ -46,6 +46,7 @@ tests/package-consumer/node_modules/
 tests/package-consumer/dist/
 tests/package-consumer/package-lock.json
 tests/package-consumer/.tmp-packages/
+tests/package-consumer/.tmp-registry/
 
 # Editor metadata
 .idea/

@@ -15,12 +15,18 @@
     "clean:packages": "node scripts/clean-package-dist.mjs",
     "dev:docs": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run dev --workspace @vyrnforge/ui-docs",
     "dev:playground": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run dev --workspace @vyrnforge/ui-data-grid-basic-playground",
-    "quality": "npm run verify:metadata && npm run lint --if-present && npm run typecheck && npm run test && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
+    "quality": "npm run verify:ci && npm run verify:metadata && npm run lint --if-present && npm run typecheck && npm run test && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "verify:metadata": "node scripts/verify-component-metadata.mjs",
     "verify:packages": "node scripts/verify-packages.mjs",
-    "verify:consumer": "node scripts/verify-consumer.mjs"
+    "verify:consumer": "node scripts/verify-consumer.mjs",
+    "ci:plan": "node scripts/detect-ci-scope.mjs --full",
+    "test:ci-scope": "node --test scripts/detect-ci-scope.test.mjs",
+    "verify:workflows": "node scripts/verify-workflows.mjs",
+    "verify:ci": "npm run test:ci-scope && npm run verify:workflows && npm run verify:templates",
+    "verify:registry-release": "node scripts/verify-registry-release.mjs",
+    "verify:templates": "node scripts/verify-repository-templates.mjs"
   },
   "packageManager": "npm@11.10.0",
   "engines": {

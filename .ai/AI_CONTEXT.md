@@ -33,6 +33,8 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 | Public API usage | `docs/api/README.md` |
 | Benchmarks | `docs/benchmark/` |
 | AI-readable metadata | `docs/metadata/` and `.ai/COMPONENT_MAP.json` |
+| CI/CD architecture | `docs/engineering/ci-cd-architecture.md` |
+| Release responsibilities | `docs/release/release-responsibility-matrix.md` |
 
 ## Hard Rules
 
@@ -66,13 +68,14 @@ Forbidden:
 
 ## Required Validation
 
-Run after implementation changes:
+Run targeted checks during implementation, then use the repository gate:
 
 ```bash
-npm run build
-npm run typecheck
-npm run test
-npm run build:playground
+npm run verify:ci
+npm run quality
 ```
 
-For documentation-only changes, validate file placement, links, and `git diff --check`.
+For documentation-only changes, run the relevant docs build and
+`git diff --check`. CI/CD changes must preserve the stable `ci-gate`, read-only
+normal CI, and separate Pages, npm OIDC, registry-verification, and
+release-record responsibilities.

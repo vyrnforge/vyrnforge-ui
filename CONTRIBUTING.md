@@ -164,29 +164,106 @@ Add or update tests for:
 
 Avoid tests that depend heavily on private implementation details. Prefer testing the public behavior that consuming apps rely on.
 
-## Continuous Integration
+## Pull Requests And Repository Infrastructure Issues
 
-Pull requests targeting `main` and pushes to `main` run the `VyrnForge CI` workflow. The expected status checks are:
+Use the focused pull-request template that matches the change responsibility:
 
-- `quality`: installs with `npm ci`, then runs lint, typecheck, tests, package build, package verification, root build, docs build, and playground build.
-- `external-consumer`: runs on a separate clean runner and executes `npm run verify:consumer`, which installs locally packed package artifacts into the isolated consumer fixture.
+- component, package, token, hook, or data-grid work:
+  `.github/PULL_REQUEST_TEMPLATE/component-or-package.md`;
+- documentation, metadata, docs app, playground, or examples:
+  `.github/PULL_REQUEST_TEMPLATE/docs-and-examples.md`;
+- CI/CD, Pages, workflow permissions, branch protection, or release automation:
+  `.github/PULL_REQUEST_TEMPLATE/ci-cd-infrastructure.md`;
+- coordinated package candidates and trusted publication:
+  `.github/PULL_REQUEST_TEMPLATE/release.md`;
+- dependencies, tooling, cleanup, configuration, or non-runtime maintenance:
+  `.github/PULL_REQUEST_TEMPLATE/repository-maintenance.md`.
 
-Reproduce CI locally with:
+The compact `.github/pull_request_template.md` remains the automatic fallback
+when no focused template is selected. GitHub selects a focused template through
+the `template` query parameter. Append a value such as the following to the
+compare URL:
 
-```bash
-npm ci
-npm run lint --if-present
-npm run typecheck
-npm run test
-npm run build:packages
-npm run verify:packages
-npm run verify:consumer
-npm run build
-npm run build:docs
-npm run build:playground
+```text
+?quick_pull=1&template=ci-cd-infrastructure.md
 ```
 
-CI uses read-only repository permissions. It does not publish packages, create GitHub releases, deploy GitHub Pages, or use npm registry tokens. GitHub Pages deployment remains in the separate Pages workflow.
+Package-specific templates are intentionally not split into three independent
+forms because one change may affect upstream and downstream packages. The
+component/package template records all affected libraries in one dependency-aware
+review. Template selection and author checkboxes are review evidence;
+`scripts/detect-ci-scope.mjs` remains authoritative for executed checks.
+
+Use the focused GitHub issue forms:
+
+- product and component defects: `bug.yml`;
+- reusable UI proposals: `feature.yml`;
+- accessibility concerns: `accessibility.yml`;
+- CI, Pages, release automation, branch protection, and repository governance:
+  `ci-cd-infrastructure.yml`;
+- a specific candidate or published package release problem:
+  `release-readiness.yml`.
+
+Do not use the product feature form for workflow redesign. Do not use the
+release-readiness form for general CI architecture proposals.
+
+For CI/CD or repository-template changes, run:
+
+```bash
+npm run verify:ci
+```
+
+During implementation, run only relevant targeted checks. Run the complete
+`npm run quality` suite once before merge when full repository validation is
+required.
+
+## Continuous Integration
+
+Pull requests targeting `main` and pushes to `main` always run the `VyrnForge
+CI` orchestrator. It detects the affected scope and invokes reusable workflows
+for quality, package payloads, the packed consumer, documentation, and the
+playground.
+
+The long-term required status check is:
+
+```text
+ci-gate
+```
+
+The compatibility checks `quality` and `external-consumer` remain temporarily
+while branch protection migrates to `ci-gate`.
+
+Key behavior:
+
+- docs-only changes build docs without running package runtime tests;
+- ui-core changes validate ui-core, ui-components, ui-data-grid, the packed
+  consumer, docs, and playground;
+- ui-components changes validate components, data-grid, the consumer, docs,
+  and playground;
+- ui-data-grid changes validate data-grid, the consumer, docs, and playground;
+- shared manifests, lockfiles, build scripts, and workflow changes run full CI;
+- unknown paths use a safe full-validation fallback.
+
+Useful local commands:
+
+```bash
+npm run test:ci-scope
+npm run verify:workflows
+npm run verify:templates
+npm run verify:ci
+npm run quality
+```
+
+CI uses read-only repository permissions and never publishes, deploys Pages,
+creates tags, or creates GitHub Releases. Automatic Pages deployment starts only
+after CI succeeds for the current `main` commit. Pages deployment, npm OIDC
+publication, registry verification, and release recording are separate jobs or
+workflows with narrowly scoped permissions.
+
+See
+[docs/engineering/ci-cd-architecture.md](docs/engineering/ci-cd-architecture.md)
+and
+[docs/release/release-responsibility-matrix.md](docs/release/release-responsibility-matrix.md).
 
 ## Documentation Requirements
 
@@ -230,9 +307,9 @@ Before requesting review, confirm:
 - [ ] Documentation and metadata were updated where relevant.
 - [ ] Accessibility behavior was reviewed.
 - [ ] Theme and density behavior were reviewed.
-- [ ] `npm run typecheck` passed.
-- [ ] `npm run test` passed.
-- [ ] `npm run build` passed.
+- [ ] Relevant targeted checks passed during implementation.
+- [ ] `npm run verify:ci` passed when infrastructure or repository-template contracts changed.
+- [ ] `npm run quality` passed once when full repository validation is required.
 - [ ] No sensitive files, generated output, archives, logs, credentials, or `node_modules` were committed.
 - [ ] Breaking changes are intentional and documented with migration notes.
 

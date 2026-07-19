@@ -1,0 +1,66 @@
+name: Reusable quality checks
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Supported Node.js major used for the clean runner
+        required: false
+        default: "22"
+        type: string
+      full:
+        required: false
+        default: false
+        type: boolean
+      metadata:
+        required: false
+        default: false
+        type: boolean
+      ui-core:
+        required: false
+        default: false
+        type: boolean
+      ui-components:
+        required: false
+        default: false
+        type: boolean
+      ui-data-grid:
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  quality-scope:
+    name: scoped-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    env:
+      CI_SCOPE_FULL: ${{ inputs.full }}
+      CI_SCOPE_METADATA: ${{ inputs.metadata }}
+      CI_SCOPE_UI_CORE: ${{ inputs['ui-core'] }}
+      CI_SCOPE_UI_COMPONENTS: ${{ inputs['ui-components'] }}
+      CI_SCOPE_UI_DATA_GRID: ${{ inputs['ui-data-grid'] }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run scoped quality checks
+        run: node scripts/run-scoped-quality.mjs

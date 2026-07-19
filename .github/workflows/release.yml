@@ -34,6 +34,7 @@ concurrency:
 
 jobs:
   verify-release:
+    name: verify-release
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -42,11 +43,12 @@ jobs:
     env:
       RELEASE_VERSION: ${{ inputs.version }}
       RELEASE_TAG: ${{ inputs.dist-tag }}
+      RELEASE_MODE: ${{ inputs.mode }}
       VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
 
     steps:
       - name: Checkout selected commit
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -57,9 +59,11 @@ jobs:
           test "$GITHUB_SHA" = "$(git rev-parse origin/main)"
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
 
       - name: Use supported npm CLI
         shell: bash
@@ -67,9 +71,6 @@ jobs:
           npm install --global npm@11.10.0
           node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 22 || (major === 22 && minor < 14)) process.exit(1)'
           node -e 'const [major, minor] = require("child_process").execFileSync("npm", ["--version"], { encoding: "utf8" }).trim().split(".").map(Number); if (major < 11 || (major === 11 && minor < 5)) process.exit(1)'
-
-      - name: Configure public registry
-        run: npm config set registry https://registry.npmjs.org
 
       - name: Install dependencies
         run: npm ci
@@ -94,19 +95,20 @@ jobs:
             echo
             echo "- Candidate version: \`$RELEASE_VERSION\`"
             echo "- Dist-tag: \`$RELEASE_TAG\`"
-            echo "- Mode: \`verify\`"
+            echo "- Requested mode: \`$RELEASE_MODE\`"
             echo "- Commit: \`$GITHUB_SHA\`"
             echo "- Packages: \`@vyrnforge/ui-core -> @vyrnforge/ui-components -> @vyrnforge/ui-data-grid\`"
             echo "- Internal dependencies: exact \`$RELEASE_VERSION\`"
-            echo "- Validation: metadata, typecheck, tests, package payloads, consumer, docs, and playground passed"
+            echo "- Validation: workflow contracts, metadata, typecheck, tests, package payloads, consumer, docs, and playground passed"
             echo "- Registry: candidate versions are not yet published"
-            echo "- Credentials: no token secret used; verify mode did not request OIDC or publish"
+            echo "- Credentials: no token secret used; verification did not request OIDC or publish"
             echo
             echo "### Package dist sizes"
             du -sh packages/ui-core/dist packages/ui-components/dist packages/ui-data-grid/dist
           } >> "$GITHUB_STEP_SUMMARY"
 
   publish-packages:
+    name: publish-packages
     if: inputs.mode == 'publish'
     needs: verify-release
     runs-on: ubuntu-latest
@@ -123,7 +125,7 @@ jobs:
 
     steps:
       - name: Checkout selected commit
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -133,10 +135,12 @@ jobs:
           git fetch origin main --depth=1
           test "$GITHUB_SHA" = "$(git rev-parse origin/main)"
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Setup Node for trusted publishing
+        uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
 
       - name: Use supported npm CLI
         shell: bash
@@ -144,9 +148,6 @@ jobs:
           npm install --global npm@11.10.0
           node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 22 || (major === 22 && minor < 14)) process.exit(1)'
           node -e 'const [major, minor] = require("child_process").execFileSync("npm", ["--version"], { encoding: "utf8" }).trim().split(".").map(Number); if (major < 11 || (major === 11 && minor < 5)) process.exit(1)'
-
-      - name: Configure public registry
-        run: npm config set registry https://registry.npmjs.org
 
       - name: Install dependencies
         run: npm ci
@@ -156,7 +157,7 @@ jobs:
           node scripts/verify-release-candidate.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
           npm run verify:packages
 
-      - name: Publish ui-core
+      - name: Publish ui-core through npm OIDC
         run: npm publish ./packages/ui-core --access public --tag "$RELEASE_TAG"
 
       - name: Verify ui-core registry propagation
@@ -171,7 +172,7 @@ jobs:
           echo "ui-core publication did not propagate"
           exit 1
 
-      - name: Publish ui-components
+      - name: Publish ui-components through npm OIDC
         run: npm publish ./packages/ui-components --access public --tag "$RELEASE_TAG"
 
       - name: Verify ui-components registry propagation
@@ -187,10 +188,10 @@ jobs:
           echo "ui-components publication did not propagate with the expected ui-core dependency"
           exit 1
 
-      - name: Publish ui-data-grid
+      - name: Publish ui-data-grid through npm OIDC
         run: npm publish ./packages/ui-data-grid --access public --tag "$RELEASE_TAG"
 
-      - name: Verify ui-data-grid registry propagation and dist-tags
+      - name: Verify ui-data-grid registry propagation and selected dist-tag
         shell: bash
         run: |
           for attempt in {1..12}; do
@@ -214,9 +215,119 @@ jobs:
             echo
             echo "- Candidate version: \`$RELEASE_VERSION\`"
             echo "- Dist-tag: \`$RELEASE_TAG\`"
-            echo "- Mode: \`publish\`"
             echo "- Commit: \`$GITHUB_SHA\`"
             echo "- Published in order: ui-core, ui-components, ui-data-grid"
             echo "- Registry propagation and exact internal dependencies verified"
             echo "- Credentials: GitHub OIDC trusted publishing only; no token secret used"
+            echo "- Provenance: generated automatically by npm trusted publishing"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  verify-registry-release:
+    name: verify-registry-release
+    if: inputs.mode == 'publish'
+    needs: publish-packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_TAG: ${{ inputs.dist-tag }}
+
+    steps:
+      - name: Checkout published commit
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Verify registry metadata and fresh consumer
+        run: node scripts/verify-registry-release.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+
+      - name: Write registry verification summary
+        run: |
+          {
+            echo "## Registry and consumer verification"
+            echo
+            echo "- Exact version: \`$RELEASE_VERSION\`"
+            echo "- Authoritative prerelease tag: \`$RELEASE_TAG\`"
+            echo "- Package metadata and exact dependency graph verified"
+            echo "- npm registry signatures and provenance attestations verified"
+            echo "- Fresh registry consumer typecheck and production build passed"
+            echo "- Any registry-managed \`latest\` tag is informational during prerelease; consumers must use the explicit prerelease tag"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  create-release-record:
+    name: create-release-record
+    if: inputs.mode == 'publish'
+    needs: verify-registry-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_TAG: ${{ inputs.dist-tag }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Checkout published commit
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Confirm release record does not already exist
+        shell: bash
+        run: |
+          TAG="v$RELEASE_VERSION"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Git tag already exists: $TAG"
+            exit 1
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "GitHub Release already exists: $TAG"
+            exit 1
+          fi
+
+      - name: Generate release notes
+        run: node scripts/create-release-notes.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --commit "$GITHUB_SHA" --output release-notes.md
+
+      - name: Create annotated tag and GitHub prerelease
+        shell: bash
+        run: |
+          TAG="v$RELEASE_VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" "$GITHUB_SHA" -m "VyrnForge UI $RELEASE_VERSION"
+          git push origin "$TAG"
+          if ! gh release create "$TAG" \
+            --target "$GITHUB_SHA" \
+            --title "VyrnForge UI $RELEASE_VERSION" \
+            --prerelease \
+            --notes-file release-notes.md; then
+            git push origin ":refs/tags/$TAG" || true
+            exit 1
+          fi
+
+      - name: Write release-record summary
+        run: |
+          {
+            echo "## GitHub release record"
+            echo
+            echo "- Tag: \`v$RELEASE_VERSION\`"
+            echo "- GitHub Release: created as prerelease"
+            echo "- Permission separation: this job has repository write access and no npm OIDC permission"
           } >> "$GITHUB_STEP_SUMMARY"

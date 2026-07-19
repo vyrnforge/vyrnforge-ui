@@ -1,60 +1,150 @@
 name: Release-readiness issue
-description: Report package, build, export, CSS, docs, or consumer issues that may block release readiness.
+description: Report package, workflow, registry, provenance, or consumer evidence that may block a coordinated release.
 title: "[Release readiness]: "
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for a specific release candidate or published prerelease. Use the CI/CD infrastructure form for general workflow redesign or branch-protection changes. Never include npm tokens, OIDC credentials, or private customer data.
+
   - type: dropdown
     id: package
     attributes:
-      label: Affected package
+      label: Affected release area
       options:
+        - Coordinated VyrnForge release
         - "@vyrnforge/ui-core"
         - "@vyrnforge/ui-components"
         - "@vyrnforge/ui-data-grid"
-        - "Repository or workspace"
+        - Repository or workspace
+        - Documentation or playground
     validations:
       required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Candidate or published version
+      placeholder: "0.1.0-alpha.2"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: dist-tag
+    attributes:
+      label: Expected npm dist-tag
+      options:
+        - alpha
+        - beta
+        - next
+        - latest
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Failing or questioned release stage
+      options:
+        - Candidate version and manifest verification
+        - Package quality or payload verification
+        - Protected environment approval
+        - npm OIDC publication
+        - Registry propagation and internal dependency verification
+        - Registry signatures or provenance attestations
+        - Fresh consumer install, typecheck, or build
+        - npm dist-tag verification
+        - Git tag or GitHub Release creation
+        - Changelog, release notes, or documentation
+    validations:
+      required: true
+
   - type: checkboxes
     id: area
     attributes:
-      label: Affected area
+      label: Affected evidence
       options:
-        - label: Packaging
-        - label: Exports
-        - label: Declarations
-        - label: CSS
-        - label: Installation
-        - label: Documentation
-        - label: Consumer integration
+        - label: Packaging or files whitelist
+        - label: Exports or runtime entry points
+        - label: TypeScript declarations
+        - label: CSS imports, variables, or public classes
+        - label: Exact internal package dependencies
+        - label: Installation or external consumer
+        - label: Trusted publishing or OIDC
+        - label: Registry propagation
+        - label: Registry signatures or provenance
+        - label: npm dist-tags
+        - label: Git tag or GitHub Release
+        - label: Documentation or migration guidance
+
+  - type: input
+    id: run-url
+    attributes:
+      label: Release workflow run or pull-request URL
+      description: Add the relevant GitHub Actions run, candidate pull request, tag, or release URL.
+
+  - type: input
+    id: commit
+    attributes:
+      label: Source commit SHA
+      placeholder: "Commit intended for the coordinated release"
+
   - type: textarea
     id: reproduction
     attributes:
-      label: Packed or registry artifact reproduction
-      description: Provide `npm pack --dry-run`, install, import, or consumer-app steps when available.
+      label: Reproduction or registry evidence
+      description: Provide verify-mode output, `npm view`, `npm pack --dry-run`, install, import, provenance, or consumer-app evidence with secrets removed.
     validations:
       required: true
+
+  - type: dropdown
+    id: partial-publication
+    attributes:
+      label: Did any package, dist-tag, Git tag, or GitHub Release already change?
+      options:
+        - No
+        - Yes, package publication is partial
+        - Yes, registry is complete but release record is incomplete
+        - Yes, only dist-tags changed
+        - Yes, only Git tag or GitHub Release changed
+        - Not sure
+    validations:
+      required: true
+
   - type: dropdown
     id: severity
     attributes:
       label: Severity
       options:
-        - "Blocks release"
-        - "High"
-        - "Medium"
-        - "Low"
+        - Blocks release
+        - High
+        - Medium
+        - Low
     validations:
       required: true
+
   - type: dropdown
     id: blocks-release
     attributes:
-      label: Does this block a release?
+      label: Does this block the current release candidate?
       options:
-        - "Yes"
-        - "No"
-        - "Not sure"
+        - Yes
+        - No
+        - Not sure
     validations:
       required: true
+
+  - type: textarea
+    id: expected-registry-state
+    attributes:
+      label: Expected final state
+      description: Describe the required package versions, dependency alignment, dist-tag, provenance, consumer result, and release record.
+    validations:
+      required: true
+
   - type: textarea
     id: validation
     attributes:
-      label: Validation commands already run
-      placeholder: "npm run build, npm run typecheck, npm pack --dry-run --workspace ..."
+      label: Validation commands and checks already run
+      placeholder: "npm run verify:ci, npm run quality, verify-mode workflow, npm view, fresh consumer build"

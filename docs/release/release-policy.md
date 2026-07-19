@@ -2,7 +2,7 @@
 
 VyrnForge UI releases must be explicit, reviewable, and source-of-truth oriented. The current project status is early alpha: APIs may change, and packages are not stable or production-ready. `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease. The synchronized `0.1.0-alpha.1` package set is the initial coordinated alpha, manually published for all three packages. Future publication requires the controlled manually dispatched trusted-publishing workflow. VyrnForge UI is source-available under the VyrnForge Source License 1.0, and production or commercial use requires a separate written commercial license.
 
-The `latest` npm tag must not point to unfinished alpha packages.
+The explicit prerelease dist-tag is authoritative during alpha. npm may retain a registry-managed `latest` tag, but it is not a stable-release signal and documentation must use `@alpha`.
 
 ## Maturity stages
 

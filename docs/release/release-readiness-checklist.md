@@ -21,7 +21,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Package builds pass.
 - [ ] `npm run verify:packages` passes.
 - [ ] `npm run verify:consumer` passes.
-- [ ] CI status checks `quality` and `external-consumer` pass.
+- [ ] The stable `ci-gate` check passes. During migration, compatibility checks `quality` and `external-consumer` also pass.
 - [ ] Package manifests use `SEE LICENSE IN LICENSE`.
 - [ ] Package tarballs include LICENSE and no unrelated legal drafts or internal legal notes.
 - [ ] Type declaration output is present and reviewable.
@@ -54,10 +54,12 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 ## Post-release checks
 
 - [ ] Registry shows every package with the expected version.
+- [ ] The explicit prerelease dist-tag points to the expected coordinated version.
 - [ ] npm tag points to the intended version.
 - [ ] Fresh consumer install succeeds.
 - [ ] Fresh consumer TypeScript import succeeds.
 - [ ] CSS import order works in a fresh consumer app.
-- [ ] GitHub release notes are published when appropriate.
+- [ ] Annotated `v<version>` tag and GitHub prerelease were created only after registry verification.
+- [ ] `npm audit signatures` verifies registry signatures and trusted-publishing provenance attestations for the published packages.
 - [ ] Changelog links are updated after versioned releases begin.
 - [ ] Known issues or corrective-release needs are documented.

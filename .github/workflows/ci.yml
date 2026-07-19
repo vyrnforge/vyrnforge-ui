@@ -17,73 +17,201 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  quality:
-    name: quality
+  plan:
+    name: plan
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      quality: ${{ steps.scope.outputs.quality }}
+      metadata: ${{ steps.scope.outputs.metadata }}
+      ui_core: ${{ steps.scope.outputs.ui_core }}
+      ui_components: ${{ steps.scope.outputs.ui_components }}
+      ui_data_grid: ${{ steps.scope.outputs.ui_data_grid }}
+      packages: ${{ steps.scope.outputs.packages }}
+      consumer: ${{ steps.scope.outputs.consumer }}
+      docs: ${{ steps.scope.outputs.docs }}
+      playground: ${{ steps.scope.outputs.playground }}
+      full: ${{ steps.scope.outputs.full }}
+      docs_only: ${{ steps.scope.outputs.docs_only }}
+      plan_json: ${{ steps.scope.outputs.plan_json }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Checkout with history
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: npm
+          package-manager-cache: false
 
-      - name: Use package manager version
+      - name: Detect affected CI scopes
+        id: scope
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
         run: |
-          npm install -g "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
+          else
+            node scripts/detect-ci-scope.mjs \
+              --base "$BASE_SHA" \
+              --head "$HEAD_SHA" \
+              --github-output "$GITHUB_OUTPUT"
+          fi
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Write CI plan summary
+        shell: bash
+        env:
+          PLAN_JSON: ${{ steps.scope.outputs.plan_json }}
+        run: |
+          {
+            echo "## Dependency-aware CI plan"
+            echo
+            echo '```json'
+            echo "$PLAN_JSON"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Lint
-        run: npm run lint --if-present
+  quality-checks:
+    name: quality-checks
+    needs: plan
+    if: needs.plan.outputs.quality == 'true'
+    uses: ./.github/workflows/_quality.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "22"
+      full: ${{ needs.plan.outputs.full == 'true' }}
+      metadata: ${{ needs.plan.outputs.metadata == 'true' }}
+      ui-core: ${{ needs.plan.outputs.ui_core == 'true' }}
+      ui-components: ${{ needs.plan.outputs.ui_components == 'true' }}
+      ui-data-grid: ${{ needs.plan.outputs.ui_data_grid == 'true' }}
 
-      - name: Typecheck
-        run: npm run typecheck
+  package-checks:
+    name: package-checks
+    needs: plan
+    if: needs.plan.outputs.packages == 'true'
+    uses: ./.github/workflows/_packages.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "22"
 
-      - name: Test
-        run: npm run test
+  consumer-checks:
+    name: consumer-checks
+    needs: plan
+    if: needs.plan.outputs.consumer == 'true'
+    uses: ./.github/workflows/_consumer.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "22"
 
-      - name: Build packages
-        run: npm run build:packages
+  docs-checks:
+    name: docs-checks
+    needs: plan
+    if: needs.plan.outputs.docs == 'true' || needs.plan.outputs.playground == 'true'
+    uses: ./.github/workflows/_docs.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "22"
+      build-docs: ${{ needs.plan.outputs.docs == 'true' }}
+      build-playground: ${{ needs.plan.outputs.playground == 'true' }}
 
-      - name: Verify packages
-        run: npm run verify:packages
-
-      - name: Build repository
-        run: npm run build
-
-      - name: Build docs
-        run: npm run build:docs
-
-      - name: Build playground
-        run: npm run build:playground
+  # Compatibility checks preserve the existing branch-protection names while
+  # the repository transitions to requiring only ci-gate.
+  quality:
+    name: quality
+    needs:
+      - plan
+      - quality-checks
+      - package-checks
+      - docs-checks
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Aggregate quality-related results
+        env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          QUALITY_RESULT: ${{ needs.quality-checks.result }}
+          PACKAGE_RESULT: ${{ needs.package-checks.result }}
+          DOCS_RESULT: ${{ needs.docs-checks.result }}
+        run: |
+          node - <<'NODE'
+          const results = {
+            plan: process.env.PLAN_RESULT,
+            quality: process.env.QUALITY_RESULT,
+            packages: process.env.PACKAGE_RESULT,
+            docs: process.env.DOCS_RESULT
+          };
+          const failed = Object.entries(results).filter(([, result]) =>
+            ["failure", "cancelled"].includes(result)
+          );
+          console.log(results);
+          if (failed.length) process.exit(1);
+          NODE
 
   external-consumer:
     name: external-consumer
+    needs:
+      - plan
+      - consumer-checks
+    if: always()
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
+    timeout-minutes: 5
+    permissions:
+      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: Use package manager version
+      - name: Aggregate external-consumer result
+        env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          CONSUMER_RESULT: ${{ needs.consumer-checks.result }}
         run: |
-          npm install -g "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+          node - <<'NODE'
+          const results = {
+            plan: process.env.PLAN_RESULT,
+            consumer: process.env.CONSUMER_RESULT
+          };
+          console.log(results);
+          if (Object.values(results).some((result) => ["failure", "cancelled"].includes(result))) {
+            process.exit(1);
+          }
+          NODE
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Verify packed consumer
-        run: npm run verify:consumer
+  ci-gate:
+    name: ci-gate
+    needs:
+      - quality
+      - external-consumer
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Enforce the stable required gate
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          CONSUMER_RESULT: ${{ needs.external-consumer.result }}
+        run: |
+          node - <<'NODE'
+          const results = {
+            quality: process.env.QUALITY_RESULT,
+            externalConsumer: process.env.CONSUMER_RESULT
+          };
+          console.log(results);
+          if (Object.values(results).some((result) => result !== "success")) {
+            process.exit(1);
+          }
+          NODE

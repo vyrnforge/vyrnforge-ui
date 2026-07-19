@@ -14,8 +14,9 @@ Do not include real npm tokens in repository files, workflows, docs, or examples
   three packages.
 - The first trusted publication will use a future coordinated prerelease such
   as `0.1.0-alpha.2`.
-- Use the `alpha` dist-tag for alpha publication. Do not assign `latest` to an
-  alpha package.
+- Use the `alpha` dist-tag for alpha publication. The explicit prerelease tag
+  is authoritative; npm may retain a registry-managed `latest` tag, which is
+  not a stable-release signal during alpha.
 
 ## Prerequisites
 
@@ -46,9 +47,11 @@ Do not publish a package that depends on a package version that has not been pub
 | Alpha | `alpha` |
 | Beta | `beta` |
 | Release candidate | `next` or an explicitly approved candidate tag |
-| Stable | `latest` only after stable release approval |
+| Stable | `latest` after stable release approval |
 
-The `latest` tag must not point to unfinished alpha packages.
+During prerelease, installation docs must use the explicit prerelease tag.
+Registry-managed `latest` metadata is informational and must not be described as
+stable.
 
 ## Controlled trusted publication
 
@@ -67,8 +70,27 @@ The `latest` tag must not point to unfinished alpha packages.
    dependencies after each required step.
 7. Trusted publishing generates provenance automatically; do not add
    `--provenance` manually.
-8. Verify registry versions and dist-tags, then update release notes or GitHub
-   release material only when separately approved.
+8. A read-only job installs the exact published versions from the public
+   registry, verifies metadata and internal dependencies, requires provenance
+   attestation metadata, cryptographically verifies npm registry signatures and
+   attestations with `npm audit signatures`, and runs the external consumer
+   typecheck and production build.
+9. Only after registry verification passes, a separate job with
+   `contents: write` creates the annotated `v<version>` tag and GitHub
+   prerelease. That job has no npm OIDC permission.
+
+
+## Responsibility separation
+
+- Candidate verification has read-only repository access and no OIDC.
+- npm publication has read-only repository access plus `id-token: write` and is
+  protected by the `npm-release` environment.
+- Registry verification is read-only and consumes public npm artifacts.
+- Tag and GitHub Release creation has `contents: write` but no npm OIDC.
+- Normal CI and Pages deployment cannot publish npm packages or create release
+  records.
+
+See [release-responsibility-matrix.md](release-responsibility-matrix.md).
 
 ## Trusted-publishing configuration
 

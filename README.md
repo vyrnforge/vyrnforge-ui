@@ -13,8 +13,12 @@ VyrnForge UI is currently in an early alpha prerelease stage.
 - `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease.
 - `0.1.0-alpha.1` is the initial coordinated alpha prerelease, published
   manually for all three packages with the `alpha` tag.
-- Future coordinated prereleases use the controlled GitHub Actions workflow
-  and must never assign `latest` to a prerelease package.
+- Future coordinated prereleases use the controlled GitHub Actions workflow,
+  npm OIDC trusted publishing, registry verification, and an automated Git tag
+  plus GitHub prerelease record.
+- The explicit prerelease tag (`alpha`, `beta`, or `next`) is authoritative.
+  npm may retain a registry-managed `latest` tag, but it is not a stability
+  signal during prerelease.
 - VyrnForge UI is source-available under the VyrnForge Source License 1.0.
 - Production use and commercial use require a separate written commercial license.
 
@@ -34,15 +38,15 @@ Intended dependency direction:
 
 ## Installation
 
-Package availability is currently package-specific. Use the explicit `alpha`
-dist-tag for registry installations after the applicable manual release steps:
+The coordinated packages are available as an early alpha prerelease. Install
+through the explicit prerelease channel:
 
 ```bash
-npm install @vyrnforge/ui-core @vyrnforge/ui-components @vyrnforge/ui-data-grid
+npm install @vyrnforge/ui-core@alpha @vyrnforge/ui-components@alpha @vyrnforge/ui-data-grid@alpha
 ```
 
-This is the coordinated alpha install shape and does not claim that every
-package version is already available on the public npm registry.
+Do not treat a bare install or npm's registry-managed `latest` tag as a stable
+release signal while VyrnForge UI remains in alpha.
 
 ## CSS Setup
 
@@ -152,12 +156,14 @@ npm run verify:packages
 - Commercial licensing overview: [docs/legal/commercial-licensing.md](docs/legal/commercial-licensing.md)
 - Release governance: [docs/release/README.md](docs/release/README.md)
 - External consumer verification: [docs/release/external-consumer-verification.md](docs/release/external-consumer-verification.md)
+- CI/CD architecture: [docs/engineering/ci-cd-architecture.md](docs/engineering/ci-cd-architecture.md)
+- Release responsibility matrix: [docs/release/release-responsibility-matrix.md](docs/release/release-responsibility-matrix.md)
 - Playground source: [examples/basic-playground/](examples/basic-playground/)
 - Docs app source: [apps/docs/](apps/docs/)
+- Public documentation: [vyrnforge.github.io/vyrnforge-ui/](https://vyrnforge.github.io/vyrnforge-ui/)
+- Public playground: [vyrnforge.github.io/vyrnforge-ui/playground/](https://vyrnforge.github.io/vyrnforge-ui/playground/)
 - Agent context: [AGENTS.md](AGENTS.md) and [.ai/AI_CONTEXT.md](.ai/AI_CONTEXT.md)
 - Changelog: [CHANGELOG.md](CHANGELOG.md)
-
-Public GitHub Pages links are intentionally omitted until Pages deployment is complete.
 
 Release policy, versioning, publication procedure, deprecation rules, and release readiness are documented under [docs/release/](docs/release/).
 

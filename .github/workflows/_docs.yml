@@ -1,0 +1,62 @@
+name: Reusable docs and playground verification
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        default: "22"
+        type: string
+      build-docs:
+        required: false
+        default: false
+        type: boolean
+      build-playground:
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-builds:
+    name: documentation-builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package prerequisites
+        shell: bash
+        run: |
+          if [[ "${{ inputs['build-playground'] }}" == "true" ]]; then
+            npm run build:packages
+          elif [[ "${{ inputs['build-docs'] }}" == "true" ]]; then
+            npm run build --workspace @vyrnforge/ui-core
+            npm run build --workspace @vyrnforge/ui-components
+          fi
+
+      - name: Build documentation application
+        if: inputs['build-docs']
+        run: npm run build --workspace @vyrnforge/ui-docs
+
+      - name: Build playground
+        if: inputs['build-playground']
+        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
