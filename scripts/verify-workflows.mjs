@@ -180,8 +180,8 @@ assertNoLongLivedToken(release, "release.yml");
 const nightly = read(".github/workflows/nightly.yml");
 assert(nightly.includes("schedule:"), "nightly.yml must define a schedule");
 assert(nightly.includes("workflow_dispatch:"), "nightly.yml must allow manual execution");
-assert(nightly.includes('node-version: "22"'), "nightly.yml must cover Node 22");
-assert(nightly.includes('node-version: "24"'), "nightly.yml must cover Node 24");
+assert(!nightly.includes('node-version: "22"'), "nightly.yml must not use the retired Node 22 development baseline");
+assert(nightly.includes('node-version: "24.18.0"'), "nightly.yml must use the pinned Node 24 LTS baseline");
 assert(nightly.includes("name: nightly-gate"), "nightly.yml must expose a final gate");
 assert(!nightly.includes("npm publish"), "nightly.yml must not publish packages");
 assert(!nightly.includes("id-token: write"), "nightly.yml must not request OIDC");
@@ -196,6 +196,20 @@ for (const workflow of workflowFiles) {
   const text = read(`.github/workflows/${workflow}`);
 
   assertPinnedExternalActions(text, workflow);
+
+  assert(
+    !text.includes('node-version: "22"') && !text.includes('default: "22"'),
+    `${workflow} must not use the retired Node 22 development baseline`
+  );
+
+  for (const match of text.matchAll(/node-version:[ \t]*["']?([^\s"']+)["']?/g)) {
+    const value = match[1];
+    if (value.startsWith("${{")) continue;
+    assert(
+      value === "24.18.0",
+      `${workflow}: explicit Node version must be 24.18.0, received ${value}`
+    );
+  }
 
   if (text.includes("uses: actions/checkout@")) {
     assertPinnedActionVersion(text, workflow, "actions/checkout", "v7");

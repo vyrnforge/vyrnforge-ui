@@ -30,6 +30,7 @@ const rootDocumentationFiles = new Set([
 
 const fullValidationFiles = new Set([
   ".nvmrc",
+  ".node-version",
   "package.json",
   "package-lock.json",
   "tsconfig.base.json"
@@ -99,7 +100,7 @@ function classifyPackageFile(file, scope, reasons) {
 
   const [, packageName, packagePath] = match;
 
-  if (["package.json", "tsconfig.json", "tsup.config.ts"].includes(packagePath)) {
+  if (["package.json", "tsconfig.json", "tsconfig.build.json", "tsup.config.ts"].includes(packagePath)) {
     markPackageRuntime(scope, packageName);
     reasons.add(`${packageName} package configuration`);
     return true;

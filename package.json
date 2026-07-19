@@ -24,13 +24,20 @@
     "ci:plan": "node scripts/detect-ci-scope.mjs --full",
     "test:ci-scope": "node --test scripts/detect-ci-scope.test.mjs",
     "verify:workflows": "node scripts/verify-workflows.mjs",
-    "verify:ci": "npm run test:ci-scope && npm run verify:workflows && npm run verify:templates",
+    "verify:ci": "npm run verify:toolchain && npm run test:ci-scope && npm run verify:workflows && npm run verify:templates",
     "verify:registry-release": "node scripts/verify-registry-release.mjs",
-    "verify:templates": "node scripts/verify-repository-templates.mjs"
+    "verify:templates": "node scripts/verify-repository-templates.mjs",
+    "verify:toolchain": "node scripts/verify-toolchain.mjs"
   },
-  "packageManager": "npm@11.10.0",
+  "packageManager": "npm@11.16.0",
   "engines": {
-    "node": ">=22.12 <25",
-    "npm": ">=10 <12"
+    "node": ">=24.18 <25",
+    "npm": ">=11.16 <12"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true
   }
 }

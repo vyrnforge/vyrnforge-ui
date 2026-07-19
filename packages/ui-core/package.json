@@ -41,13 +41,13 @@
     "npm": ">=10 <12"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
   "devDependencies": {
     "tsup": "latest",
-    "typescript": "latest",
+    "typescript": "7.0.2",
     "vitest": "latest"
   }
 }

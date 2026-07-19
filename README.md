@@ -122,8 +122,9 @@ Package tests live beside package source where present.
 
 Prerequisites:
 
-- Node.js `>=22.12 <25`; `.nvmrc` pins the default development major to Node 22.
-- npm `>=10 <12`; this repository uses npm workspaces and `package-lock.json`.
+- Node.js `>=24.18 <25`; `.nvmrc` and `.node-version` pin Node `24.18.0`.
+- npm `>=11.16 <12`; `packageManager` pins npm `11.16.0`.
+- TypeScript is pinned to `7.0.2` across the workspace. Published package runtime compatibility remains `Node.js >=22.12 <25` because the generated browser-library output does not require Node 24.
 
 Install dependencies:
 
@@ -146,6 +147,7 @@ npm run typecheck
 npm run test
 npm run verify:consumer
 npm run verify:packages
+npm run verify:toolchain
 ```
 
 ## Documentation And Playground

@@ -41,7 +41,7 @@
     "npm": ">=10 <12"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
@@ -60,7 +60,7 @@
     "react": "latest",
     "react-dom": "latest",
     "tsup": "latest",
-    "typescript": "latest",
+    "typescript": "7.0.2",
     "vitest": "latest"
   }
 }

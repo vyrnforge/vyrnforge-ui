@@ -27,7 +27,7 @@ Useful starting points:
 
 ## Development Setup
 
-Use Node.js `>=22.12 <25`; `.nvmrc` pins the default development major to Node 22 to match current GitHub Actions workflows. Use npm `>=10 <12`; this repository uses `package-lock.json` and npm workspaces.
+Use Node.js `>=24.18 <25`; `.nvmrc` and `.node-version` pin Node `24.18.0` to match GitHub Actions. Use npm `>=11.16 <12`; `packageManager` pins npm `11.16.0`. TypeScript is pinned to `7.0.2` across every workspace. The published packages retain their existing Node `>=22.12 <25` consumer compatibility range because this toolchain migration does not change runtime output requirements.
 
 ```bash
 git clone https://github.com/vyrnforge/vyrnforge-ui.git
@@ -50,6 +50,7 @@ npm run typecheck
 npm run test
 npm run verify:consumer
 npm run verify:packages
+npm run verify:toolchain
 ```
 
 Do not document or rely on commands that are not present in the root `package.json`.
