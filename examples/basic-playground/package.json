@@ -13,15 +13,15 @@
     "@vyrnforge/ui-components": "0.1.0-alpha.1",
     "@vyrnforge/ui-core": "0.1.0-alpha.1",
     "@vyrnforge/ui-data-grid": "0.1.0-alpha.1",
-    "react": "latest",
-    "react-dom": "latest",
+    "react": "*",
+    "react-dom": "*",
     "react-live": "^4.1.8"
   },
   "devDependencies": {
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "@vitejs/plugin-react": "latest",
-    "typescript": "latest",
-    "vite": "latest"
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@vitejs/plugin-react": "*",
+    "typescript": "*",
+    "vite": "^8.1.5"
   }
 }
