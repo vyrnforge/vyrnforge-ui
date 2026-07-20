@@ -17,6 +17,7 @@ Do not create new top-level documentation without linking it from this file. If 
 | `governance/component-maturity-model.md` | Canonical component lifecycle, evidence, promotion, demotion, and release expectations. |
 | `governance/repository-hygiene.md` | Tracked-artifact hygiene policy and the latest cleanup record. |
 | `governance/repository-inventory.md` | Generated evidence-led inventory of repository structure, public components, tests, workflows, and ownership. |
+| `governance/controlled-implementation-rules.md` | Operational task, scope, review, and merge rules for controlled implementation work. |
 
 ## 2. Architecture
 
