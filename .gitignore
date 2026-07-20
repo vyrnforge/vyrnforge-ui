@@ -40,6 +40,22 @@ Thumbs.db
 
 # Package artifacts
 *.tgz
+*.tar
+*.tar.gz
+*.zip
+*.rar
+
+# Browser-test and temporary artifacts
+playwright-report/
+test-results/
+blob-report/
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+*.pid
 
 # External package consumer verification
 tests/package-consumer/node_modules/

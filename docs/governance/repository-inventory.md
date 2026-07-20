@@ -227,6 +227,11 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 
 ## I. Ownership Matrix
 
+The detailed accountable-owner, review, escalation, public API, token/CSS,
+accessibility, documentation, and release rules are canonical in
+[`ownership-and-review-model.md`](ownership-and-review-model.md). This
+inventory retains only the abbreviated workstream map below.
+
 | Owner group | Suggested accountability |
 | --- | --- |
 | UI Platform | `@vyrnforge/ui-core`, shared tokens/themes/density/utilities, base CSS, package-boundary enforcement. |
