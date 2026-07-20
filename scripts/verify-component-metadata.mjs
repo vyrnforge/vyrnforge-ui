@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const maturityValues = new Set([
   "stable",
+  "beta-stable",
+  "alpha-stable",
   "experimental",
   "planned",
   "deprecated",
@@ -12,6 +14,8 @@ const maturityValues = new Set([
 ]);
 const publicMaturityValues = new Set([
   "stable",
+  "beta-stable",
+  "alpha-stable",
   "experimental",
   "planned",
   "deprecated"
@@ -225,7 +229,7 @@ const totals = [...publicStatuses.values()].reduce(
     ...result,
     [maturity]: result[maturity] + 1
   }),
-  { stable: 0, experimental: 0, planned: 0, deprecated: 0 }
+  { stable: 0, "beta-stable": 0, "alpha-stable": 0, experimental: 0, planned: 0, deprecated: 0 }
 );
 
 console.log(
