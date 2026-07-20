@@ -22,6 +22,7 @@ This document defines the minimum quality bar for shipped VyrnForge UI component
 | Layout and scrolling | Components own predictable `min-width: 0`, `min-height: 0`, overflow, sticky offsets, and avoid clipped focus or double scrollbars. |
 | Theme and density support | Static visuals use `--vf-*` tokens in components and `--udg-*` in the grid. Density names are `compact`, `standard`, and `comfortable`. |
 | CSS ownership | `ui-core` owns tokens/utilities, `ui-components` owns reusable `vf-*` component styles, `ui-data-grid` owns `udg-*`, docs use `vf-docs-*`, and playground uses `vf-playground-*`. |
+| CSS verification | `npm run lint:css` rejects malformed CSS, unknown properties, duplicate declarations, and custom properties outside the `--vf-*` or `--udg-*` policy. |
 | Documentation | Public components have API docs, metadata, playground examples, and AI usage notes when public enough for agents to consume. |
 | Testing | Stable components have meaningful tests for rendering contract, ARIA, state helpers, disabled/read-only behavior, or grid state behavior where practical. |
 | Production readiness | Stable components have no known P0/P1 issue and are represented accurately in metadata and playground badges. |
