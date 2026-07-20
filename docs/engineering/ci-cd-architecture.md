@@ -273,12 +273,17 @@ Nightly never publishes, deploys, creates tags, or writes repository contents.
 
 ```bash
 npm run verify:toolchain
+npm run format:check
+npm run format
 npm run test:ci-scope
 npm run verify:workflows
 npm run verify:templates
 npm run verify:ci
 npm run quality
 ```
+
+`npm run format:check` verifies supported repository files without changing
+them. `npm run format` applies the same formatter configuration.
 
 To inspect a full planner result locally:
 

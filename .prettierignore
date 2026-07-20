@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+packages/*/node_modules/
+tests/package-consumer/node_modules/
+
+# Generated build output
+dist/
+packages/*/dist/
+build/
+lib/
+
+# Generated documentation output
+generated/
+docs-generated/
+
+# Caches and temporary files
+.cache/
+.turbo/
+.vite/
+.vitest/
+.parcel-cache/
+.tmp/
+.temp/
+tmp/
+temp/
+*.tsbuildinfo
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+blob-report/
+tests/package-consumer/.tmp-packages/
+tests/package-consumer/.tmp-registry/
