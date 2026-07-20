@@ -42,6 +42,8 @@
   },
   "scripts": {
     "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
+    "lint": "eslint . --config ../../eslint.config.mjs",
+    "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
