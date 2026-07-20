@@ -15,6 +15,8 @@
     "clean:packages": "node scripts/clean-package-dist.mjs",
     "dev:docs": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run dev --workspace @vyrnforge/ui-docs",
     "dev:playground": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && npm run dev --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "inventory:repository": "node scripts/governance/generate-repository-inventory.mjs",
     "quality": "npm run verify:ci && npm run verify:metadata && npm run lint && npm run typecheck && npm run test && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
     "lint": "eslint eslint.config.mjs scripts tests/package-consumer --config eslint.config.mjs && npm run lint --workspace @vyrnforge/ui-core && npm run lint --workspace @vyrnforge/ui-components && npm run lint --workspace @vyrnforge/ui-data-grid && npm run lint --workspace @vyrnforge/ui-docs && npm run lint --workspace @vyrnforge/ui-data-grid-basic-playground",
@@ -46,6 +48,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.7.0",
+    "prettier": "3.9.5",
     "typescript": "7.0.2"
   },
   "allowScripts": {
