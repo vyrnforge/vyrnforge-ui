@@ -38,3 +38,25 @@ Allowed statuses are:
 | deprecated | Available only for migration away. |
 
 New or recently expanded components should remain `experimental` until keyboard, accessibility, visual, docs, metadata, playground, and test coverage have been reviewed together.
+
+## DOM Interaction Test Conventions
+
+`@vyrnforge/ui-components` runs DOM interaction tests in jsdom through its
+Vitest configuration. Tests import `render`, `screen`, `createUser`, and
+`getPortalRoot` from `packages/ui-components/test/dom`; use the returned
+`portalRoot` with a component's documented `portalContainer` prop when an
+overlay needs an isolated portal boundary.
+
+The package peer range remains React `>=18 <20`; React Testing Library uses
+the standard React renderer, so this setup applies to React 18 and the current
+React 19 development runtime.
+
+The shared setup automatically unmounts Testing Library renders, removes the
+test portal root, restores mocks, clears timers, and returns to real timers
+after every test. Prefer real timers. A test that needs fake timers must call
+`vi.useFakeTimers()` locally, use `createUserWithFakeTimers()`, and flush the
+timers it owns before its assertions complete.
+
+This jsdom harness is DOM evidence, not browser or visual-regression evidence;
+browser testing remains scoped to VF-2001. Automated accessibility scanning is
+not part of this setup and remains scoped to VF-1007.
