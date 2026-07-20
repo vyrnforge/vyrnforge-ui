@@ -18,9 +18,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "inventory:repository": "node scripts/governance/generate-repository-inventory.mjs",
-    "quality": "npm run verify:ci && npm run verify:metadata && npm run lint && npm run typecheck && npm run test && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
+    "quality": "npm run verify:ci && npm run verify:metadata && npm run lint && npm run lint:css && npm run typecheck && npm run test && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
     "lint": "eslint eslint.config.mjs scripts tests/package-consumer --config eslint.config.mjs && npm run lint --workspace @vyrnforge/ui-core && npm run lint --workspace @vyrnforge/ui-components && npm run lint --workspace @vyrnforge/ui-data-grid && npm run lint --workspace @vyrnforge/ui-docs && npm run lint --workspace @vyrnforge/ui-data-grid-basic-playground",
     "lint:fix": "eslint eslint.config.mjs scripts tests/package-consumer --config eslint.config.mjs --fix && npm run lint:fix --workspace @vyrnforge/ui-core && npm run lint:fix --workspace @vyrnforge/ui-components && npm run lint:fix --workspace @vyrnforge/ui-data-grid && npm run lint:fix --workspace @vyrnforge/ui-docs && npm run lint:fix --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "lint:css": "stylelint \"{packages,apps,examples,tests}/**/*.css\"",
+    "lint:css:fix": "npm run lint:css -- --fix",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "verify:metadata": "node scripts/verify-component-metadata.mjs",
@@ -49,6 +51,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.7.0",
     "prettier": "3.9.5",
+    "stylelint": "^17.14.1",
     "typescript": "7.0.2"
   },
   "allowScripts": {
