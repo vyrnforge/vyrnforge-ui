@@ -35,6 +35,7 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 | AI-readable metadata | `docs/metadata/` and `.ai/COMPONENT_MAP.json` |
 | CI/CD architecture | `docs/engineering/ci-cd-architecture.md` |
 | Release responsibilities | `docs/release/release-responsibility-matrix.md` |
+| Controlled implementation workflow | `docs/governance/controlled-implementation-rules.md` |
 
 ## Hard Rules
 
