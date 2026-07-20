@@ -31,7 +31,7 @@ if (metadata) {
   runNpm(["run", "verify:metadata"]);
 }
 
-runNpm(["run", "lint", "--if-present"]);
+runNpm(["run", "lint"]);
 
 if (full) {
   runNpm(["run", "typecheck"]);
