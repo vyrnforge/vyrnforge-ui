@@ -27,7 +27,7 @@ Useful starting points:
 
 ## Development Setup
 
-Use Node.js `>=24.18 <25`; `.nvmrc` and `.node-version` pin Node `24.18.0` to match GitHub Actions. Use npm `>=11.16 <12`; `packageManager` pins npm `11.16.0`. TypeScript is pinned to `7.0.2` across every workspace. The published packages retain their existing Node `>=22.12 <25` consumer compatibility range because this toolchain migration does not change runtime output requirements.
+Use Node.js `>=24.18 <25`; `.nvmrc` and `.node-version` pin Node `24.18.0` to match GitHub Actions. Use npm `>=11.16 <12`; `packageManager` pins npm `11.16.0`. TypeScript is pinned to `7.0.2` across every workspace. Published packages declare Node.js `>=22.12 <25` as their intended consumer compatibility target; complete Node 22 and Node 24 verification is deferred to VF-7001 and VF-7002.
 
 ```bash
 git clone https://github.com/vyrnforge/vyrnforge-ui.git
