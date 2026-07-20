@@ -7,6 +7,7 @@ This is the compact fallback template. Prefer a focused template from
 .github/PULL_REQUEST_TEMPLATE when the change is clearly one of these:
 - component-or-package.md
 - docs-and-examples.md
+- change-manifest.md
 - ci-cd-infrastructure.md
 - release.md
 - repository-maintenance.md
