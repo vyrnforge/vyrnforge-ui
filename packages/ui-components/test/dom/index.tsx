@@ -49,4 +49,10 @@ export function createUserWithFakeTimers() {
   });
 }
 
+export {
+  assertNoAccessibilityViolations,
+  formatAccessibilityViolations,
+  runAccessibilityCheck,
+  type AccessibilityTarget
+} from "./accessibility";
 export { screen, within };
