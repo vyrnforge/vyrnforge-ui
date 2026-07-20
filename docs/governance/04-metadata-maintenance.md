@@ -11,7 +11,7 @@ Markdown docs remain the source of truth for project direction. Metadata files a
 | File | Update when |
 | --- | --- |
 | `docs/metadata/packages.json` | Package ownership, dependencies, CSS imports, or public entry points change. |
-| `docs/metadata/components.json` | A public component/contract is added, renamed, deprecated, removed, or materially changes usage guidance. |
+| `docs/metadata/components.json` | A public component/contract is added, renamed, deprecated, removed, materially changes usage guidance, or gains maturity evidence. |
 | `docs/metadata/component-status.json` | Component maturity changes between stable, experimental, planned, deprecated, or internal. |
 | `docs/metadata/css-imports.json` | CSS import paths, import order, class prefixes, or token ownership changes. |
 | `docs/metadata/state-contracts.json` | State ownership, Redux policy, persistence, server query, or export request contracts change. |
@@ -41,7 +41,7 @@ Before merging metadata changes:
 5. Confirm state rules still match `docs/architecture/02-state-and-adapter-ownership.md`.
 6. Confirm AI rules do not permit forbidden dependencies.
 7. Confirm the docs app still builds.
-8. Run `npm run verify:metadata`.
+8. Run `npm run verify:metadata` and `npm run verify:component-maturity` when maturity evidence changes.
 
 ## AI Notes
 

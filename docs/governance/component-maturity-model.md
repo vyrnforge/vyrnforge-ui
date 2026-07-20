@@ -214,30 +214,34 @@ notes, and have tests when it affects runtime behavior, types, imports, or
 CSS. An alias inherits the accessibility obligations of the behavior it
 exposes and must not keep an inaccessible legacy interaction alive.
 
-## Future machine-readable evidence fields (proposal only)
+## Machine-readable evidence fields
 
-The current metadata schema is unchanged. A future approved schema could add a
-separate maturity-evidence record with fields such as:
+`docs/metadata/components.json` now contains the `maturityEvidence` schema.
+It is a structured index of the evidence required by this model; Markdown,
+review records, and release records remain the human sources of truth. Each
+record uses repository-visible references and the following field families:
 
 | Field | Purpose |
 | --- | --- |
-| `maturityState` | One of the six states in this model. |
-| `ownerRole` and `reviewedBy` | Accountable owner and required reviewers. |
-| `publicApiReviewedAt`, `exportVerifiedAt` | Public API and package-export evidence. |
-| `testEvidence` | Links or identifiers for logic, DOM, browser, regression, and consumer checks. |
-| `accessibilityEvidence` | Automated scan, keyboard-contract link, manual-review disposition, and exceptions. |
-| `themeDensityEvidence` | Light/dark and compact/standard/comfortable validation references. |
+| `maturityState`, `category`, `owner` | Lifecycle state, conditional category, and accountable owner. |
+| `publicApiReview`, `publicExportVerification` | Public API and package-export evidence. |
+| `logicUnitTests`, `domInteractionTests`, `browserTests` | Logic, DOM interaction, and browser evidence. |
+| `automatedAccessibility`, `keyboardContract`, `acceptedAccessibilityReview` | Automated scan, documented keyboard behavior, and accepted review. |
+| `lightThemeValidation`, `darkThemeValidation`, `densityValidation` | Light, dark, and density validation references. |
+| `documentation`, `playgroundExample`, `knownLimitations` | Public documentation, example, and limitations record. |
 | `supportedBrowserEvidence` | Browser/version matrix and validation date. |
-| `consumerValidation` | Consuming application, package compatibility, and validation date without exposing sensitive consumer data. |
-| `knownDefects` | Open severity, disposition, and promotion-blocking status. |
-| `compatibilityWindow`, `migrationGuide`, `deprecationRemovalCondition` | Compatibility promise, migration reference, and removal planning. |
-| `releaseEvidence` | Release cycle references demonstrating stability over time. |
-| `lastPromotionDecision` | Decision date, source record, and approving roles. |
+| `consumingApplication`, `compatibilityEvidence`, `criticalDefects` | Consumer, compatibility, and unresolved-critical-defect evidence. |
+| `migrationInformation`, `deprecationPolicyCompliance` | Migration and deprecation-policy evidence. |
+| `releaseApiStability`, `maintainerCommitment` | Release-cycle API stability and ongoing ownership. |
+| `replacementOrReason`, `deprecationVersion`, `migrationGuidance`, `intendedRemovalWindow` | Deprecation replacement/reason, version, guidance, and removal plan. |
 
-Any schema proposal must preserve the markdown documents as the human source of
-truth, define ownership and privacy boundaries, be reviewed by Architecture
-and Documentation, and be implemented in a separate task with metadata
-validation updates.
+The deterministic `npm run verify:component-maturity` command enforces the
+state- and category-specific requirements, reports each missing or pending
+field with the component and maturity state, and does not infer evidence from
+repository-wide quality checks. It applies the documented `new-promotions-only`
+transition policy: entries present before the schema are explicitly listed as
+legacy unverified, with no evidence fabricated. Future promotions must attach
+the corresponding entry and references.
 
 ## Related documents
 
