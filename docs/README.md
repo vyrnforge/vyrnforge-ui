@@ -14,6 +14,7 @@ Do not create new top-level documentation without linking it from this file. If 
 | `governance/03-naming-and-terminology.md` | Required package names, prefixes, and vocabulary. |
 | `governance/04-metadata-maintenance.md` | Rules for keeping AI-readable metadata aligned with docs and package APIs. |
 | `governance/ownership-and-review-model.md` | Canonical workstream accountability, review triggers, and escalation model. |
+| `governance/component-maturity-model.md` | Canonical component lifecycle, evidence, promotion, demotion, and release expectations. |
 | `governance/repository-hygiene.md` | Tracked-artifact hygiene policy and the latest cleanup record. |
 | `governance/repository-inventory.md` | Generated evidence-led inventory of repository structure, public components, tests, workflows, and ownership. |
 
