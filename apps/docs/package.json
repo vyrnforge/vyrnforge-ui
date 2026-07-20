@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "lint": "eslint . --config ../../eslint.config.mjs",
+    "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "typecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && tsc --noEmit",
     "preview": "vite preview"
   },

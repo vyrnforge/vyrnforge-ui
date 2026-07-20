@@ -45,6 +45,8 @@ npm run build:playground
 npm run clean:packages
 npm run dev:docs
 npm run dev:playground
+npm run lint
+npm run lint:fix
 npm run quality
 npm run typecheck
 npm run test
