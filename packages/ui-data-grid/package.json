@@ -46,7 +46,8 @@
     "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "test:coverage": "vitest run --coverage --passWithNoTests"
   },
   "peerDependencies": {
     "react": ">=18 <20",

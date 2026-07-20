@@ -25,6 +25,7 @@
     "lint:css:fix": "npm run lint:css -- --fix",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspace @vyrnforge/ui-core && npm run test:coverage --workspace @vyrnforge/ui-components && npm run test:coverage --workspace @vyrnforge/ui-data-grid",
     "verify:metadata": "node scripts/verify-component-metadata.mjs",
     "verify:package-boundaries": "node scripts/verify-package-boundaries.mjs",
     "verify:packages": "node scripts/verify-packages.mjs",
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^8.0.1",
     "@eslint/js": "^9.39.5",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
