@@ -47,7 +47,7 @@ Repository development, pull-request CI, Pages, release verification, and nightl
 - npm `11.16.0`, pinned by the root `packageManager`;
 - TypeScript `7.0.2`, pinned exactly in the root and every workspace manifest.
 
-`scripts/verify-toolchain.mjs` prevents version drift across manifests, the lockfile, and workflows. The published packages retain Node `>=22.12 <25` and npm `>=10 <12` consumer engine ranges because this repository-toolchain migration does not introduce a Node 24 runtime requirement into generated package output.
+`scripts/verify-toolchain.mjs` prevents version drift across manifests, the lockfile, and workflows. Development-only workspaces require Node `>=24.18 <25` and npm `>=11.16 <12`; published packages require npm `>=11.16 <12` and declare Node `>=22.12 <25` as the intended consumer compatibility target. Complete Node 22 and Node 24 verification is deferred to VF-7001 and VF-7002.
 
 TypeScript 7 package builds separate runtime and declaration responsibilities. `tsup` emits ESM, CommonJS, and CSS with declaration bundling disabled. The native TypeScript CLI runs with each package's `tsconfig.build.json` to emit declaration-only output, and `scripts/prepare-package-declarations.mjs` removes CSS-only declaration imports and verifies that relative declaration references resolve before package verification. This avoids relying on declaration-bundling plugins built against the legacy TypeScript JavaScript compiler API.
 

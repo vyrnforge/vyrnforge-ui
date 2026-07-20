@@ -38,7 +38,7 @@
   },
   "engines": {
     "node": ">=22.12 <25",
-    "npm": ">=10 <12"
+    "npm": ">=11.16 <12"
   },
   "scripts": {
     "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",

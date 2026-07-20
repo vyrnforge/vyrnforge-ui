@@ -12,7 +12,7 @@ const expected = Object.freeze({
   npmRange: ">=11.16 <12",
   typescript: "7.0.2",
   publishedNodeRange: ">=22.12 <25",
-  publishedNpmRange: ">=10 <12"
+  publishedNpmRange: ">=11.16 <12"
 });
 
 const workspaceManifests = [
@@ -203,6 +203,18 @@ for (const manifestPath of workspaceManifests) {
     manifest.devDependencies?.typescript === expected.typescript,
     `${manifestPath}: TypeScript must be pinned exactly to ${expected.typescript}`
   );
+
+  if (!publishableManifests.includes(manifestPath)) {
+    assert(
+      manifest.engines?.node === expected.nodeRange,
+      `${manifestPath}: development Node engine range mismatch`
+    );
+
+    assert(
+      manifest.engines?.npm === expected.npmRange,
+      `${manifestPath}: development npm engine range mismatch`
+    );
+  }
 }
 
 for (const manifestPath of publishableManifests) {
@@ -285,6 +297,35 @@ assert(
   lockfile.packages?.[""]?.engines?.npm === expected.npmRange,
   "lockfile root npm engine mismatch"
 );
+
+for (const manifestPath of workspaceManifests) {
+  const lockfileWorkspacePath = manifestPath.replace(/\/package\.json$/, "");
+  const lockfileManifest = lockfile.packages?.[lockfileWorkspacePath];
+
+  assert(lockfileManifest, `${manifestPath}: missing lockfile workspace entry`);
+
+  if (publishableManifests.includes(manifestPath)) {
+    assert(
+      lockfileManifest.engines?.node === expected.publishedNodeRange,
+      `${manifestPath}: lockfile published Node engine mismatch`
+    );
+
+    assert(
+      lockfileManifest.engines?.npm === expected.publishedNpmRange,
+      `${manifestPath}: lockfile published npm engine mismatch`
+    );
+  } else {
+    assert(
+      lockfileManifest.engines?.node === expected.nodeRange,
+      `${manifestPath}: lockfile development Node engine mismatch`
+    );
+
+    assert(
+      lockfileManifest.engines?.npm === expected.npmRange,
+      `${manifestPath}: lockfile development npm engine mismatch`
+    );
+  }
+}
 
 assert(
   lockfile.packages?.[""]?.devDependencies?.typescript === expected.typescript,

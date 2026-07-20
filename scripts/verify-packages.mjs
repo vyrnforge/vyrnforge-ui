@@ -150,7 +150,7 @@ for (const packageInfo of packages) {
   assert(packageJson.bugs?.url === "https://github.com/vyrnforge/vyrnforge-ui/issues", `${packageInfo.name}: missing bugs URL`);
   assert(packageJson.publishConfig?.access === "public", `${packageInfo.name}: missing public publishConfig access`);
   assert(packageJson.engines?.node === ">=22.12 <25", `${packageInfo.name}: node engine mismatch`);
-  assert(packageJson.engines?.npm === ">=10 <12", `${packageInfo.name}: npm engine mismatch`);
+  assert(packageJson.engines?.npm === ">=11.16 <12", `${packageInfo.name}: npm engine mismatch`);
   assert(existsSync(packageLicensePath), `${packageInfo.name}: missing top-level LICENSE`);
   assert(readFileSync(packageLicensePath, "utf8") === rootLicenseText, `${packageInfo.name}: package LICENSE must exactly match root LICENSE`);
   const readmeText = readFileSync(path.join(packageDir, "README.md"), "utf8");
