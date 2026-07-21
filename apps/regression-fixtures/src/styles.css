@@ -47,3 +47,37 @@ body {
   display: grid;
   gap: var(--vf-space-4);
 }
+
+.vf-fixture__popover-surface,
+.vf-fixture__tooltip-surface {
+  min-height: 240px;
+  position: relative;
+}
+
+.vf-fixture__popover-surface {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vf-fixture__popover-anchor {
+  align-self: flex-start;
+}
+
+.vf-fixture__popover-content {
+  display: grid;
+  gap: var(--vf-space-3);
+  max-width: 280px;
+  padding: var(--vf-space-4);
+}
+
+.vf-fixture__popover-content p {
+  margin: 0;
+}
+
+.vf-fixture__tooltip-surface {
+  align-items: flex-end;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--vf-space-8);
+}

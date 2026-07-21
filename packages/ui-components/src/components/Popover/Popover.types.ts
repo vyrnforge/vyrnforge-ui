@@ -17,6 +17,8 @@ export type PopoverProps = {
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   trigger: ReactNode;
+  triggerAriaHasPopup?:
+    boolean | "menu" | "listbox" | "tree" | "grid" | "dialog";
   children: ReactNode;
   placement?: PopoverPlacement;
   align?: PopoverAlign;

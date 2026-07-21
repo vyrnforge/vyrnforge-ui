@@ -193,7 +193,7 @@ describe("@vyrnforge/ui-components primitives", () => {
 
     expect(markup).toContain("vf-toggle-button-group--single");
     expect(markup).toContain("vf-toggle-button-group--multiple");
-    expect(markup.match(/aria-pressed=\"true\"/g)).toHaveLength(3);
+    expect(markup.match(/aria-pressed="true"/g)).toHaveLength(3);
   });
 
   it("renders ButtonGroup orientation and size", () => {
@@ -250,7 +250,7 @@ describe("@vyrnforge/ui-components primitives", () => {
 
     expect(markup).toContain("for=\"name\"");
     expect(markup).toContain("id=\"name\"");
-    expect(markup).toMatch(/aria-describedby=\"name-description [^\"]+-message\"/);
+    expect(markup).toMatch(/aria-describedby="name-description [^"]+-message"/);
     expect(markup).toContain("aria-invalid=\"true\"");
     expect(markup).toContain("aria-required=\"true\"");
     expect(markup).toContain("Helper text");

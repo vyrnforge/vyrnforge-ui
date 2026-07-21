@@ -903,7 +903,7 @@ export function UniversalDataGrid<
       {hasQuery && (
         <div className="udg-summary" role="status">
           Showing {resolvedTotalRows} result{resolvedTotalRows === 1 ? "" : "s"}
-          {gridState.search && <> for "{gridState.search}"</>}
+          {gridState.search && <> for &ldquo;{gridState.search}&rdquo;</>}
           {gridState.filters.length > 0 && (
             <> with {gridState.filters.length} active filter{gridState.filters.length === 1 ? "" : "s"}</>
           )}

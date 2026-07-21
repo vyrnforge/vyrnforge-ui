@@ -78,6 +78,9 @@ jobs:
       - name: Verify release candidate inputs and registry availability
         run: node scripts/verify-release-candidate.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
 
+      - name: Install Chromium for browser validation
+        run: npx playwright install --with-deps chromium
+
       - name: Run authoritative release validation
         run: npm run quality
 

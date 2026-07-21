@@ -16,8 +16,9 @@ export const scopeKeys = [
   "docs",
   "playground",
   "fixtures",
+  "browser",
   "full",
-  "docs_only"
+  "docs_only",
 ];
 
 const rootDocumentationFiles = new Set([
@@ -26,7 +27,7 @@ const rootDocumentationFiles = new Set([
   "CONTRIBUTING.md",
   "MIGRATION.md",
   "README.md",
-  "SECURITY.md"
+  "SECURITY.md",
 ]);
 
 const fullValidationFiles = new Set([
@@ -34,7 +35,7 @@ const fullValidationFiles = new Set([
   ".node-version",
   "package.json",
   "package-lock.json",
-  "tsconfig.base.json"
+  "tsconfig.base.json",
 ]);
 
 function createScope() {
@@ -46,7 +47,9 @@ function normalizeFile(file) {
 }
 
 function isPackageTest(file) {
-  return /(?:^|\/)(?:__tests__\/|[^/]+\.(?:test|spec)\.[cm]?[jt]sx?$)/.test(file);
+  return /(?:^|\/)(?:__tests__\/|[^/]+\.(?:test|spec)\.[cm]?[jt]sx?$)/.test(
+    file,
+  );
 }
 
 function markPackageRuntime(scope, packageName) {
@@ -56,6 +59,7 @@ function markPackageRuntime(scope, packageName) {
   scope.docs = true;
   scope.playground = true;
   scope.fixtures = true;
+  scope.browser = true;
 
   if (packageName === "ui-core") {
     scope.ui_core = true;
@@ -95,14 +99,23 @@ function markFull(scope) {
 }
 
 function classifyPackageFile(file, scope, reasons) {
-  const match = /^packages\/(ui-core|ui-components|ui-data-grid)\/(.+)$/.exec(file);
+  const match = /^packages\/(ui-core|ui-components|ui-data-grid)\/(.+)$/.exec(
+    file,
+  );
   if (!match) {
     return false;
   }
 
   const [, packageName, packagePath] = match;
 
-  if (["package.json", "tsconfig.json", "tsconfig.build.json", "tsup.config.ts"].includes(packagePath)) {
+  if (
+    [
+      "package.json",
+      "tsconfig.json",
+      "tsconfig.build.json",
+      "tsup.config.ts",
+    ].includes(packagePath)
+  ) {
     markPackageRuntime(scope, packageName);
     reasons.add(`${packageName} package configuration`);
     return true;
@@ -126,13 +139,19 @@ function classifyPackageFile(file, scope, reasons) {
 }
 
 export function planCiScope(files, { forceFull = false } = {}) {
-  const changedFiles = [...new Set(files.map(normalizeFile).filter(Boolean))].sort();
+  const changedFiles = [
+    ...new Set(files.map(normalizeFile).filter(Boolean)),
+  ].sort();
   const scope = createScope();
   const reasons = new Set();
 
   if (forceFull || changedFiles.length === 0) {
     markFull(scope);
-    reasons.add(forceFull ? "manual full validation" : "no diff available; safe full fallback");
+    reasons.add(
+      forceFull
+        ? "manual full validation"
+        : "no diff available; safe full fallback",
+    );
     return { ...scope, changed_files: changedFiles, reasons: [...reasons] };
   }
 
@@ -179,7 +198,15 @@ export function planCiScope(files, { forceFull = false } = {}) {
     if (file.startsWith("apps/regression-fixtures/")) {
       scope.quality = true;
       scope.fixtures = true;
+      scope.browser = true;
       reasons.add("regression fixture application");
+      continue;
+    }
+
+    if (file === "playwright.config.ts" || file.startsWith("tests/browser/")) {
+      scope.quality = true;
+      scope.browser = true;
+      reasons.add("browser test infrastructure or contract");
       continue;
     }
 
@@ -191,7 +218,10 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (file.startsWith("docs/metadata/") || file === ".ai/COMPONENT_MAP.json") {
+    if (
+      file.startsWith("docs/metadata/") ||
+      file === ".ai/COMPONENT_MAP.json"
+    ) {
       scope.quality = true;
       scope.metadata = true;
       scope.docs = true;
@@ -199,7 +229,11 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (file.startsWith("docs/") || rootDocumentationFiles.has(file) || file.startsWith(".ai/")) {
+    if (
+      file.startsWith("docs/") ||
+      rootDocumentationFiles.has(file) ||
+      file.startsWith(".ai/")
+    ) {
       scope.docs = true;
       reasons.add("documentation or AI context");
       continue;
@@ -254,10 +288,12 @@ function readChangedFiles({ base, head, filesFrom }) {
     return execFileSync(
       "git",
       ["diff", "--name-only", "--diff-filter=ACDMRTUXB", base, head, "--"],
-      { cwd: root, encoding: "utf8" }
+      { cwd: root, encoding: "utf8" },
     ).split(/\r?\n/);
   } catch (error) {
-    console.warn(`Unable to calculate CI diff; using safe full validation: ${error.message}`);
+    console.warn(
+      `Unable to calculate CI diff; using safe full validation: ${error.message}`,
+    );
     return [];
   }
 }
@@ -267,11 +303,17 @@ function writeGitHubOutput(outputPath, plan) {
     appendFileSync(outputPath, `${key}=${plan[key] ? "true" : "false"}\n`);
   }
   appendFileSync(outputPath, `changed_count=${plan.changed_files.length}\n`);
-  appendFileSync(outputPath, `plan_json<<VYRNFORGE_CI_PLAN\n${JSON.stringify(plan)}\nVYRNFORGE_CI_PLAN\n`);
+  appendFileSync(
+    outputPath,
+    `plan_json<<VYRNFORGE_CI_PLAN\n${JSON.stringify(plan)}\nVYRNFORGE_CI_PLAN\n`,
+  );
 }
 
 function isMainModule() {
-  return process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+  return (
+    process.argv[1] &&
+    path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+  );
 }
 
 if (isMainModule()) {
@@ -279,9 +321,12 @@ if (isMainModule()) {
   const base = readArgument("--base") ?? process.env.CI_BASE_SHA;
   const head = readArgument("--head") ?? process.env.CI_HEAD_SHA;
   const filesFrom = readArgument("--files-from");
-  const githubOutput = readArgument("--github-output") ?? process.env.GITHUB_OUTPUT;
+  const githubOutput =
+    readArgument("--github-output") ?? process.env.GITHUB_OUTPUT;
   const files = readChangedFiles({ base, head, filesFrom });
-  const plan = planCiScope(files, { forceFull: forceFull || isZeroSha(base) || !head });
+  const plan = planCiScope(files, {
+    forceFull: forceFull || isZeroSha(base) || !head,
+  });
 
   if (githubOutput) {
     writeGitHubOutput(githubOutput, plan);

@@ -45,7 +45,7 @@ export function FocusScope({
     previousFocusRef.current = document.activeElement instanceof HTMLElement
       ? document.activeElement
       : null;
-    const mountEvent = new Event("dv:mount-auto-focus", { cancelable: true });
+    const mountEvent = new Event("vf:mount-auto-focus", { cancelable: true });
     onMountAutoFocus?.(mountEvent);
 
     if (autoFocus && !mountEvent.defaultPrevented) {
@@ -54,7 +54,7 @@ export function FocusScope({
     }
 
     return () => {
-      const unmountEvent = new Event("dv:unmount-auto-focus", { cancelable: true });
+      const unmountEvent = new Event("vf:unmount-auto-focus", { cancelable: true });
       onUnmountAutoFocus?.(unmountEvent);
       const previous = previousFocusRef.current;
       if (restoreFocus && !unmountEvent.defaultPrevented && previous?.isConnected) {

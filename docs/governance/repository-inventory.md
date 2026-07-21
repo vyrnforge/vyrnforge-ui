@@ -11,9 +11,9 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, `@vyrnforge/ui-data-grid` |
-| Documentation | 79 active Markdown files; 23 archived Markdown files |
-| Scripts | 38 root npm scripts; repository automation under `scripts/` |
-| GitHub workflows | 8 workflow files, including 4 reusable workflows |
+| Documentation | 81 active Markdown files; 23 archived Markdown files |
+| Scripts | 46 root npm scripts; repository automation under `scripts/` |
+| GitHub workflows | 9 workflow files, including 5 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
 ## B. Package Inventory
@@ -165,7 +165,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 79 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 81 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
@@ -183,17 +183,18 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Pure/unit | 25 test files without static-render calls; primarily grid core, state, adapters, and theme helpers. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 2 detected test files with DOM interaction helpers. |
-| Browser | 0 detected browser-test files. |
+| Browser | 1 detected browser-test files. |
 | Accessibility | 2 detected automated accessibility-test files. |
 | Visual regression | No visual-regression test/configuration evidence found. |
 | Coverage | Root `test:coverage` is configured with package-specific V8 coverage reports and thresholds. |
 | Regression fixtures | Root `fixtures:verify` builds and tests the deterministic regression fixture application. |
-| Missing/silently skipped quality | Browser and visual-regression evidence remains pending S2. Current DOM and axe checks do not replace real-browser or assistive-technology review. |
+| Missing/silently skipped quality | No gap detected by inventory. |
 
 ## G. CI/CD and Release Inventory
 
 | Workflow | Purpose | Classification |
 | --- | --- | --- |
+| `.github/workflows/_browser.yml` | Requires verification | Reusable workflow |
 | `.github/workflows/_consumer.yml` | Reusable packed external-consumer verification | Reusable workflow |
 | `.github/workflows/_docs.yml` | Reusable documentation and playground builds | Reusable workflow |
 | `.github/workflows/_packages.yml` | Reusable package payload verification | Reusable workflow |
@@ -250,11 +251,11 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Repository test files | 27 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 2 |
-| Browser test files | 0 |
+| Browser test files | 1 |
 | Automated accessibility-test files | 2 |
-| Workflow files | 8 |
-| Reusable workflows | 4 |
-| Active Markdown documentation files | 79 |
+| Workflow files | 9 |
+| Reusable workflows | 5 |
+| Active Markdown documentation files | 81 |
 | Stable metadata entries | 47 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |

@@ -8,7 +8,7 @@ export function ResizingPage() {
       <div className="vf-playground-section-heading">
         <div>
           <h2>Resizable columns</h2>
-          <GridNote>Columns define min widths and opt into the package's resize handling.</GridNote>
+          <GridNote>Columns define min widths and opt into the package’s resize handling.</GridNote>
         </div>
       </div>
       <UniversalDataGrid

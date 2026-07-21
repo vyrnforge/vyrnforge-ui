@@ -5,7 +5,8 @@ export type AccessibilityTarget = Element | Document;
 function formatViolation(violation: axe.Result) {
   const nodes = violation.nodes.map((node) => {
     const target = node.target.join(" > ");
-    const summary = node.failureSummary?.replace(/\s+/g, " ").trim() ?? node.html;
+    const summary =
+      node.failureSummary?.replace(/\s+/g, " ").trim() ?? node.html;
 
     return `  - ${target}: ${summary}`;
   });
@@ -13,27 +14,27 @@ function formatViolation(violation: axe.Result) {
   return [
     `${violation.id} (${violation.impact ?? "unknown"}): ${violation.help}`,
     violation.helpUrl,
-    ...nodes
+    ...nodes,
   ].join("\n");
 }
 
 export function formatAccessibilityViolations(violations: axe.Result[]) {
   return [
     "Accessibility violations found:",
-    ...violations.map(formatViolation)
+    ...violations.map(formatViolation),
   ].join("\n\n");
 }
 
-export async function runAccessibilityCheck(
+export function runAccessibilityCheck(
   target: AccessibilityTarget,
-  options?: axe.RunOptions
-) {
-  return axe.run(target, options);
+  options?: axe.RunOptions,
+): Promise<axe.AxeResults> {
+  return options ? axe.run(target, options) : axe.run(target);
 }
 
 export async function assertNoAccessibilityViolations(
   target: AccessibilityTarget,
-  options?: axe.RunOptions
+  options?: axe.RunOptions,
 ) {
   const results = await runAccessibilityCheck(target, options);
 

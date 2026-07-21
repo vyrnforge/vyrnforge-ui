@@ -89,10 +89,6 @@ function runNpm(args, options = {}) {
   });
 }
 
-function relativePackagePath(packageInfo, target) {
-  return path.join(packageInfo.dir, target).replaceAll("\\", "/");
-}
-
 console.log("Building packages from clean generated output...");
 runNpm(["run", "build:packages"], {
   stdio: "inherit"

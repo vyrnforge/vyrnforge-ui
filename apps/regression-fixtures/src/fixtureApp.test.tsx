@@ -37,11 +37,11 @@ describe("regression fixture application", () => {
     });
   });
 
-  it("renders representative control, form, overlay, and grid fixtures", () => {
+  it("renders representative control, form, overlay, and grid fixtures", async () => {
+    const user = createUser();
     const cases = [
       ["/fixtures/button/basic", "button", "Create case"],
       ["/fixtures/text-input/validation", "textbox", "Case title"],
-      ["/fixtures/dialog/focus", "dialog", "Confirm case update"],
       ["/fixtures/data-grid/selection", "region", "Fixture cases"],
     ] as const;
 
@@ -51,6 +51,15 @@ describe("regression fixture application", () => {
       expect(screen.getByRole(role, { name })).toBeTruthy();
       result.unmount();
     });
+
+    const dialogResult = render(
+      <FixtureApp initialPathname="/fixtures/dialog/focus" />,
+    );
+    await user.click(screen.getByRole("button", { name: "Open confirmation" }));
+    expect(
+      screen.getByRole("dialog", { name: "Confirm case update" }),
+    ).toBeTruthy();
+    dialogResult.unmount();
   });
 
   it("applies fixture theme and density controls", async () => {
@@ -82,11 +91,26 @@ describe("regression fixture application", () => {
     ).toBeTruthy();
   });
 
-  it("has no automated accessibility violations for the basic button fixture", async () => {
-    const { container } = render(
-      <FixtureApp initialPathname="/fixtures/button/basic" />,
+  it("has no automated accessibility violations for representative overlay fixtures", async () => {
+    const user = createUser();
+    const dialog = render(
+      <FixtureApp initialPathname="/fixtures/dialog/focus" />,
     );
+    await user.click(screen.getByRole("button", { name: "Open confirmation" }));
+    await assertNoAccessibilityViolations(document.body);
+    dialog.unmount();
 
-    await assertNoAccessibilityViolations(container);
+    const menu = render(
+      <FixtureApp initialPathname="/fixtures/menu/keyboard" />,
+    );
+    await user.click(screen.getByRole("button", { name: "Open case actions" }));
+    await assertNoAccessibilityViolations(document.body, {
+      rules: {
+        // Component portals intentionally render beside the app landmark. Page-level
+        // landmark coverage remains a browser-audit responsibility.
+        region: { enabled: false },
+      },
+    });
+    menu.unmount();
   });
 });

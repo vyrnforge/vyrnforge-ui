@@ -35,6 +35,7 @@ jobs:
       docs: ${{ steps.scope.outputs.docs }}
       playground: ${{ steps.scope.outputs.playground }}
       fixtures: ${{ steps.scope.outputs.fixtures }}
+      browser: ${{ steps.scope.outputs.browser }}
       full: ${{ steps.scope.outputs.full }}
       docs_only: ${{ steps.scope.outputs.docs_only }}
       plan_json: ${{ steps.scope.outputs.plan_json }}
@@ -97,6 +98,16 @@ jobs:
       ui-data-grid: ${{ needs.plan.outputs.ui_data_grid == 'true' }}
       fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}
 
+  browser-checks:
+    name: browser-checks
+    needs: plan
+    if: needs.plan.outputs.browser == 'true'
+    uses: ./.github/workflows/_browser.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "24.18.0"
+
   package-checks:
     name: package-checks
     needs: plan
@@ -136,6 +147,7 @@ jobs:
     needs:
       - plan
       - quality-checks
+      - browser-checks
       - package-checks
       - docs-checks
     if: always()
@@ -148,6 +160,7 @@ jobs:
         env:
           PLAN_RESULT: ${{ needs.plan.result }}
           QUALITY_RESULT: ${{ needs.quality-checks.result }}
+          BROWSER_RESULT: ${{ needs.browser-checks.result }}
           PACKAGE_RESULT: ${{ needs.package-checks.result }}
           DOCS_RESULT: ${{ needs.docs-checks.result }}
         run: |
@@ -155,6 +168,7 @@ jobs:
           const results = {
             plan: process.env.PLAN_RESULT,
             quality: process.env.QUALITY_RESULT,
+            browser: process.env.BROWSER_RESULT,
             packages: process.env.PACKAGE_RESULT,
             docs: process.env.DOCS_RESULT
           };
@@ -197,6 +211,7 @@ jobs:
     needs:
       - plan
       - quality-checks
+      - browser-checks
       - package-checks
       - consumer-checks
       - docs-checks
@@ -211,6 +226,8 @@ jobs:
           PLAN_RESULT: ${{ needs.plan.result }}
           QUALITY_REQUIRED: ${{ needs.plan.outputs.quality }}
           QUALITY_RESULT: ${{ needs.quality-checks.result }}
+          BROWSER_REQUIRED: ${{ needs.plan.outputs.browser }}
+          BROWSER_RESULT: ${{ needs.browser-checks.result }}
           PACKAGES_REQUIRED: ${{ needs.plan.outputs.packages }}
           PACKAGES_RESULT: ${{ needs.package-checks.result }}
           CONSUMER_REQUIRED: ${{ needs.plan.outputs.consumer }}
@@ -226,6 +243,10 @@ jobs:
             quality: {
               required: process.env.QUALITY_REQUIRED === "true",
               result: process.env.QUALITY_RESULT
+            },
+            browser: {
+              required: process.env.BROWSER_REQUIRED === "true",
+              result: process.env.BROWSER_RESULT
             },
             packages: {
               required: process.env.PACKAGES_REQUIRED === "true",
