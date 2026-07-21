@@ -13,7 +13,7 @@ import {
   IconButtonPage,
   SegmentedControlPage,
   TabsPage,
-  ToolbarButtonPage
+  ToolbarButtonPage,
 } from "../pages/reference/PriorityComponentPages";
 import {
   CheckboxReferencePage,
@@ -27,7 +27,7 @@ import {
   SwitchPage,
   TextareaPage,
   TextInputReferencePage,
-  ValidationMessagePage
+  ValidationMessagePage,
 } from "../pages/reference/FormComponentPages";
 import { AutocompletePage } from "../pages/reference/AutocompletePage";
 import { TransferListPage } from "../pages/reference/TransferListPage";
@@ -35,7 +35,7 @@ import {
   RatingPage,
   SliderPage,
   ToggleButtonGroupPage,
-  ToggleButtonPage
+  ToggleButtonPage,
 } from "../pages/reference/S3B1ComponentPages";
 import {
   ConfirmDialogPage,
@@ -44,7 +44,7 @@ import {
   DropdownPage,
   MenuPage,
   PopoverPage,
-  TooltipPage
+  TooltipPage,
 } from "../pages/reference/OverlayComponentPages";
 import { ToastPage } from "../pages/reference/ToastPage";
 import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
@@ -72,12 +72,24 @@ export type PlaygroundRoute = {
   label: string;
   title: string;
   description: string;
-  group: "Overview" | "Foundations" | "Components" | "Data Grid" | "Patterns" | "Quality";
-  subgroup?: "Actions" | "Forms" | "Data Management" | "Feedback" | "Layout" | "Navigation" | "Overlays";
+  group:
+    | "Overview"
+    | "Foundations"
+    | "Components"
+    | "Data Grid"
+    | "Patterns"
+    | "Quality";
+  subgroup?:
+    | "Actions"
+    | "Forms"
+    | "Data Management"
+    | "Feedback"
+    | "Layout"
+    | "Navigation"
+    | "Overlays";
   gallery?: boolean;
   path?: string;
   packageName?: "@vyrnforge/ui-components" | "@vyrnforge/ui-data-grid";
-  status?: "stable" | "experimental" | "planned";
   Component: ComponentType;
 };
 
@@ -86,17 +98,19 @@ export const routes: PlaygroundRoute[] = [
     id: "overview",
     label: "Overview",
     title: "VyrnForge UI Overview",
-    description: "Workspace purpose, package boundaries, and maturity at a glance.",
+    description:
+      "Workspace purpose, package boundaries, and maturity at a glance.",
     group: "Overview",
-    Component: OverviewPage
+    Component: OverviewPage,
   },
   {
     id: "tokens",
     label: "Theme Tokens",
     title: "Theme Tokens",
-    description: "Shared dv tokens for color, surfaces, typography, spacing, and status.",
+    description:
+      "Shared dv tokens for color, surfaces, typography, spacing, and status.",
     group: "Foundations",
-    Component: ThemeTokensPage
+    Component: ThemeTokensPage,
   },
   {
     id: "modes",
@@ -104,7 +118,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Theme Modes",
     description: "Light, dark, enterprise, and system theme behavior.",
     group: "Foundations",
-    Component: ThemeModesPage
+    Component: ThemeModesPage,
   },
   {
     id: "density",
@@ -112,15 +126,16 @@ export const routes: PlaygroundRoute[] = [
     title: "Density",
     description: "Compact, standard, and comfortable sizing across controls.",
     group: "Foundations",
-    Component: DensityPage
+    Component: DensityPage,
   },
   {
     id: "overrides",
     label: "CSS Overrides",
     title: "CSS Overrides",
-    description: "Global dv overrides, local scopes, and grid-only udg overrides.",
+    description:
+      "Global dv overrides, local scopes, and grid-only udg overrides.",
     group: "Foundations",
-    Component: CssOverridePage
+    Component: CssOverridePage,
   },
   {
     id: "button",
@@ -132,8 +147,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/button",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: ButtonPage
+    Component: ButtonPage,
   },
   {
     id: "icon-button",
@@ -145,8 +159,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/icon-button",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: IconButtonPage
+    Component: IconButtonPage,
   },
   {
     id: "button-group",
@@ -158,8 +171,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/button-group",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: ButtonGroupPage
+    Component: ButtonGroupPage,
   },
   {
     id: "toolbar-button",
@@ -171,8 +183,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/toolbar-button",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: ToolbarButtonPage
+    Component: ToolbarButtonPage,
   },
   {
     id: "segmented-control",
@@ -184,8 +195,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/segmented-control",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: SegmentedControlPage
+    Component: SegmentedControlPage,
   },
   {
     id: "toggle-button",
@@ -197,8 +207,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/toggle-button",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: ToggleButtonPage
+    Component: ToggleButtonPage,
   },
   {
     id: "toggle-button-group",
@@ -210,8 +219,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/actions/toggle-button-group",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: ToggleButtonGroupPage
+    Component: ToggleButtonGroupPage,
   },
   {
     id: "text-input",
@@ -223,21 +231,20 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/text-input",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: TextInputReferencePage
+    Component: TextInputReferencePage,
   },
   {
     id: "autocomplete",
     label: "Autocomplete",
     title: "Autocomplete",
-    description: "Searchable single-value combobox for larger known option sets.",
+    description:
+      "Searchable single-value combobox for larger known option sets.",
     group: "Components",
     subgroup: "Forms",
     gallery: true,
     path: "/components/forms/autocomplete",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: AutocompletePage
+    Component: AutocompletePage,
   },
   {
     id: "transfer-list",
@@ -249,8 +256,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/data-management/transfer-list",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: TransferListPage
+    Component: TransferListPage,
   },
   {
     id: "select",
@@ -262,8 +268,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/select",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: SelectReferencePage
+    Component: SelectReferencePage,
   },
   {
     id: "checkbox",
@@ -275,8 +280,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/checkbox",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: CheckboxReferencePage
+    Component: CheckboxReferencePage,
   },
   {
     id: "field",
@@ -288,8 +292,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/field",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: FieldReferencePage
+    Component: FieldReferencePage,
   },
   {
     id: "validation-message",
@@ -301,8 +304,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/validation-message",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: ValidationMessagePage
+    Component: ValidationMessagePage,
   },
   {
     id: "radio",
@@ -314,8 +316,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/radio",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: RadioPage
+    Component: RadioPage,
   },
   {
     id: "radio-group",
@@ -327,8 +328,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/radio-group",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: RadioGroupPage
+    Component: RadioGroupPage,
   },
   {
     id: "switch",
@@ -340,8 +340,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/switch",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: SwitchPage
+    Component: SwitchPage,
   },
   {
     id: "number-input",
@@ -353,8 +352,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/number-input",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: NumberInputPage
+    Component: NumberInputPage,
   },
   {
     id: "date-input",
@@ -366,8 +364,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/date-input",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: DateInputPage
+    Component: DateInputPage,
   },
   {
     id: "datetime-input",
@@ -379,8 +376,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/datetime-input",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: DateTimeInputPage
+    Component: DateTimeInputPage,
   },
   {
     id: "textarea",
@@ -392,8 +388,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/textarea",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: TextareaPage
+    Component: TextareaPage,
   },
   {
     id: "rating",
@@ -405,8 +400,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/rating",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: RatingPage
+    Component: RatingPage,
   },
   {
     id: "slider",
@@ -418,8 +412,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/forms/slider",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: SliderPage
+    Component: SliderPage,
   },
   {
     id: "popover",
@@ -431,8 +424,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/overlays/popover",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: PopoverPage
+    Component: PopoverPage,
   },
   {
     id: "menu",
@@ -444,8 +436,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/overlays/menu",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: MenuPage
+    Component: MenuPage,
   },
   {
     id: "dropdown",
@@ -457,8 +448,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/overlays/dropdown",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: DropdownPage
+    Component: DropdownPage,
   },
   {
     id: "tooltip",
@@ -470,8 +460,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/overlays/tooltip",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: TooltipPage
+    Component: TooltipPage,
   },
   {
     id: "dialog",
@@ -483,8 +472,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/overlays/dialog",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: DialogPage
+    Component: DialogPage,
   },
   {
     id: "drawer",
@@ -496,8 +484,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/overlays/drawer",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: DrawerPage
+    Component: DrawerPage,
   },
   {
     id: "confirm-dialog",
@@ -509,8 +496,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/overlays/confirm-dialog",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: ConfirmDialogPage
+    Component: ConfirmDialogPage,
   },
   {
     id: "badge",
@@ -522,21 +508,20 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/feedback/badge",
     packageName: "@vyrnforge/ui-components",
-    status: "stable",
-    Component: BadgePage
+    Component: BadgePage,
   },
   {
     id: "toast",
     label: "Toast",
     title: "Toast",
-    description: "Transient operation feedback with provider-owned queue and timers.",
+    description:
+      "Transient operation feedback with provider-owned queue and timers.",
     group: "Components",
     subgroup: "Feedback",
     gallery: true,
     path: "/components/feedback/toast",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: ToastPage
+    Component: ToastPage,
   },
   {
     id: "app-shell",
@@ -548,8 +533,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/layout/app-shell",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: AppShellPage
+    Component: AppShellPage,
   },
   {
     id: "tabs",
@@ -561,8 +545,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/components/navigation/tabs",
     packageName: "@vyrnforge/ui-components",
-    status: "experimental",
-    Component: TabsPage
+    Component: TabsPage,
   },
   {
     id: "grid-basic",
@@ -573,8 +556,7 @@ export const routes: PlaygroundRoute[] = [
     gallery: true,
     path: "/data-grid/basic",
     packageName: "@vyrnforge/ui-data-grid",
-    status: "stable",
-    Component: BasicGridReferencePage
+    Component: BasicGridReferencePage,
   },
   {
     id: "grid-columns",
@@ -582,15 +564,16 @@ export const routes: PlaygroundRoute[] = [
     title: "Column Management",
     description: "Visibility, order, density, and reset behavior.",
     group: "Data Grid",
-    Component: ColumnsPage
+    Component: ColumnsPage,
   },
   {
     id: "grid-filtering",
     label: "Filtering",
     title: "Filtering",
-    description: "Search and filter state examples without adding new grid features.",
+    description:
+      "Search and filter state examples without adding new grid features.",
     group: "Data Grid",
-    Component: FilteringPage
+    Component: FilteringPage,
   },
   {
     id: "grid-selection",
@@ -598,7 +581,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Selection",
     description: "Selectable rows, disabled rows, and bulk actions.",
     group: "Data Grid",
-    Component: SelectionPage
+    Component: SelectionPage,
   },
   {
     id: "grid-grouping",
@@ -606,7 +589,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Grouping",
     description: "Client-side grouping examples.",
     group: "Data Grid",
-    Component: GroupingPage
+    Component: GroupingPage,
   },
   {
     id: "grid-resizing",
@@ -614,7 +597,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Column Resizing",
     description: "Resizable columns, long text, and horizontal overflow.",
     group: "Data Grid",
-    Component: ResizingPage
+    Component: ResizingPage,
   },
   {
     id: "grid-themes",
@@ -622,15 +605,16 @@ export const routes: PlaygroundRoute[] = [
     title: "Grid Themes",
     description: "Light, dark, enterprise, and shared token alignment.",
     group: "Data Grid",
-    Component: ThemesGridPage
+    Component: ThemesGridPage,
   },
   {
     id: "grid-states",
     label: "Grid States",
     title: "Grid States",
-    description: "Empty, error, and loading states rendered through the grid package.",
+    description:
+      "Empty, error, and loading states rendered through the grid package.",
     group: "Data Grid",
-    Component: GridStatesPage
+    Component: GridStatesPage,
   },
   {
     id: "grid-stress",
@@ -638,7 +622,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Stress Grid",
     description: "Many rows and columns without introducing virtualization.",
     group: "Data Grid",
-    Component: StressGridPage
+    Component: StressGridPage,
   },
   {
     id: "resource-list",
@@ -646,7 +630,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Resource List",
     description: "Compact enterprise lists with metadata, actions, and badges.",
     group: "Patterns",
-    Component: ResourceListPage
+    Component: ResourceListPage,
   },
   {
     id: "detail",
@@ -654,7 +638,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Detail Page",
     description: "Header, metadata, status, key-value sections, and actions.",
     group: "Patterns",
-    Component: DetailPage
+    Component: DetailPage,
   },
   {
     id: "settings",
@@ -662,15 +646,16 @@ export const routes: PlaygroundRoute[] = [
     title: "Settings",
     description: "Sectioned settings with checkboxes and explanatory text.",
     group: "Patterns",
-    Component: SettingsPage
+    Component: SettingsPage,
   },
   {
     id: "form",
     label: "Form",
     title: "Form",
-    description: "Fields, validation, disabled controls, and submission actions.",
+    description:
+      "Fields, validation, disabled controls, and submission actions.",
     group: "Patterns",
-    Component: FormPage
+    Component: FormPage,
   },
   {
     id: "filter-form",
@@ -678,7 +663,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Filter Form",
     description: "Search, select, native date range, and filter actions.",
     group: "Patterns",
-    Component: FilterFormPage
+    Component: FilterFormPage,
   },
   {
     id: "assignment-patterns",
@@ -686,15 +671,16 @@ export const routes: PlaygroundRoute[] = [
     title: "Assignment Patterns",
     description: "Bounded dual-list assignment flows with TransferList.",
     group: "Patterns",
-    Component: AssignmentPatternsPage
+    Component: AssignmentPatternsPage,
   },
   {
     id: "overlay-stress",
     label: "Overlay Stress Test",
     title: "Overlay Stress Test",
-    description: "Nested portal, focus, dismissal, scroll, and z-index exercise.",
+    description:
+      "Nested portal, focus, dismissal, scroll, and z-index exercise.",
     group: "Patterns",
-    Component: OverlayStressPage
+    Component: OverlayStressPage,
   },
   {
     id: "empty-error-loading",
@@ -702,32 +688,42 @@ export const routes: PlaygroundRoute[] = [
     title: "Empty, Error, and Loading",
     description: "Full-page feedback states for enterprise workflows.",
     group: "Patterns",
-    Component: EmptyErrorLoadingPage
+    Component: EmptyErrorLoadingPage,
   },
   {
     id: "admin-shell",
     label: "Admin Shell",
     title: "Admin Shell",
-    description: "A complete admin app frame using AppShell, TopNav, SideNav, PageHeader, and PageToolbar.",
+    description:
+      "A complete admin app frame using AppShell, TopNav, SideNav, PageHeader, and PageToolbar.",
     group: "Patterns",
-    Component: AdminShellPage
+    Component: AdminShellPage,
   },
   {
     id: "customer-portal-shell",
     label: "Customer Portal",
     title: "Customer Portal Shell",
-    description: "A customer-facing portal frame with enterprise theme, breadcrumbs, and tabs.",
+    description:
+      "A customer-facing portal frame with enterprise theme, breadcrumbs, and tabs.",
     group: "Patterns",
-    Component: CustomerPortalShellPage
+    Component: CustomerPortalShellPage,
   },
   {
     id: "quality-component-matrix",
     label: "Component Matrix",
     title: "Quality / Component Matrix",
-    description: "Controlled review surface for component states, themes, densities, overlays, layouts, and grid behavior.",
+    description:
+      "Controlled review surface for component states, themes, densities, overlays, layouts, and grid behavior.",
     group: "Quality",
-    Component: ComponentMatrixPage
-  }
+    Component: ComponentMatrixPage,
+  },
 ];
 
-export const routeGroups = ["Overview", "Foundations", "Components", "Data Grid", "Patterns", "Quality"] as const;
+export const routeGroups = [
+  "Overview",
+  "Foundations",
+  "Components",
+  "Data Grid",
+  "Patterns",
+  "Quality",
+] as const;

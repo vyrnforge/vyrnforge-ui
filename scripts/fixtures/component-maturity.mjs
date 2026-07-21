@@ -23,16 +23,21 @@ const alphaEvidence = {
 function metadataFor(status, evidence) {
   return {
     catalog: {
+      components: [
+        {
+          id: "component",
+          maturity: status,
+        },
+      ],
       maturityEvidence: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         transitionPolicy: {
           mode: "new-promotions-only",
           legacyUnverifiedEntries: [],
         },
-        entries: { "@fixture/ui:Component": evidence },
+        entries: { component: evidence },
       },
     },
-    statuses: { "@fixture/ui": { Component: status } },
   };
 }
 
@@ -47,7 +52,7 @@ export const maturityFixtures = {
   ),
   alphaNonInteractiveWithoutKeyboard: metadataFor("alpha-stable", {
     ...alphaEvidence,
-    category: "non-interactive",
+    category: "primitive",
     browserEvidenceRequired: false,
     domInteractionTests: undefined,
     keyboardContract: undefined,
@@ -83,7 +88,7 @@ export const maturityFixtures = {
   }),
   deprecatedWithoutMigration: metadataFor("deprecated", {
     maturityState: "deprecated",
-    category: "non-interactive",
+    category: "primitive",
     replacementOrReason: complete("docs/replacement"),
     deprecationVersion: complete("releases/1.0"),
     intendedRemovalWindow: complete("releases/2.0"),

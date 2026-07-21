@@ -40,10 +40,10 @@ Internal APIs may change without a compatibility guarantee.
 
 ## Maturity
 
-Public component maturity is recorded in
-`docs/metadata/component-status.json`: `planned`, `experimental`,
-`alpha-stable`, `beta-stable`, `stable`, or `deprecated`. Internal APIs are
-listed separately in that file and are not supported package-root imports.
+Public component maturity is recorded in `docs/metadata/components.json`:
+`planned`, `experimental`, `alpha-stable`, `beta-stable`, `stable`, or
+`deprecated`. Internal records in that catalog are not supported package-root
+imports.
 `stable` and `experimental` items may be imported from package roots; `planned`
 items are not implemented public APIs. Evidence for a higher-maturity claim is
 recorded in `docs/metadata/components.json` and checked with
