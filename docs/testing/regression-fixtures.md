@@ -48,3 +48,11 @@ validation, and release-candidate verification. Fixture and published-runtime
 changes also plan the Chromium browser job. A fixture change must not be merged
 when either fixture verification or required browser validation is skipped or
 failing.
+
+## S2 interaction fixtures
+
+The controlled S2 fixture set includes stable routes for Autocomplete,
+MultiSelect, Transfer List, Slider and Rating, Tabs and Toggle Button, and
+Toast lifecycle behavior. Combined routes may exercise a closely related
+component pair, but each browser specification records its assertions
+explicitly and does not infer evidence for untested behavior.

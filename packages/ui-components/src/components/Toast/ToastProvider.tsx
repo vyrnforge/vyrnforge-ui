@@ -1,18 +1,9 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef
-} from "react";
-import {
-  initialToastState,
-  toastReducer
-} from "./toast.reducer";
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import { initialToastState, toastReducer } from "./toast.reducer";
 import {
   createToastId,
   getToastDuration,
-  getVisibleToasts
+  getVisibleToasts,
 } from "./toast.utils";
 import { ToastViewport } from "./ToastViewport";
 import type {
@@ -20,7 +11,7 @@ import type {
   ToastOptions,
   ToastProviderProps,
   ToastShortcutOptions,
-  ToastTone
+  ToastTone,
 } from "./Toast.types";
 import { ToastContext } from "./useToast";
 
@@ -38,14 +29,14 @@ export function ToastProvider({
   pauseOnFocus = true,
   pauseOnHover = true,
   position = "bottom-end",
-  viewportLabel = "Notifications"
+  viewportLabel = "Notifications",
 }: ToastProviderProps) {
   const [state, dispatch] = useReducer(toastReducer, initialToastState);
   const timersRef = useRef(new Map<string, TimerState>());
   const pausedRef = useRef(new Map<string, number>());
   const visibleToasts = useMemo(
     () => getVisibleToasts(state.toasts, maxVisible, newestOnTop),
-    [maxVisible, newestOnTop, state.toasts]
+    [maxVisible, newestOnTop, state.toasts],
   );
 
   const dismiss = useCallback((id: string) => {
@@ -65,14 +56,17 @@ export function ToastProvider({
     dispatch({ type: "dismissAll" });
   }, []);
 
-  const scheduleDismiss = useCallback((id: string, remaining: number) => {
-    const timeoutId = setTimeout(() => dismiss(id), remaining);
-    timersRef.current.set(id, {
-      remaining,
-      startedAt: Date.now(),
-      timeoutId
-    });
-  }, [dismiss]);
+  const scheduleDismiss = useCallback(
+    (id: string, remaining: number) => {
+      const timeoutId = setTimeout(() => dismiss(id), remaining);
+      timersRef.current.set(id, {
+        remaining,
+        startedAt: Date.now(),
+        timeoutId,
+      });
+    },
+    [dismiss],
+  );
 
   const pauseToast = useCallback((id: string) => {
     const timer = timersRef.current.get(id);
@@ -84,60 +78,73 @@ export function ToastProvider({
     timersRef.current.delete(id);
     pausedRef.current.set(
       id,
-      Math.max(0, timer.remaining - (Date.now() - timer.startedAt))
+      Math.max(0, timer.remaining - (Date.now() - timer.startedAt)),
     );
   }, []);
 
-  const resumeToast = useCallback((id: string) => {
-    if (!pausedRef.current.has(id) || timersRef.current.has(id)) {
-      return;
-    }
-
-    const remaining = pausedRef.current.get(id) ?? 0;
-    pausedRef.current.delete(id);
-    if (remaining > 0) {
-      scheduleDismiss(id, remaining);
-    } else {
-      dismiss(id);
-    }
-  }, [dismiss, scheduleDismiss]);
-
-  const toast = useCallback((options: ToastOptions) => {
-    const id = options.id ?? createToastId();
-    const createdAt = Date.now();
-
-    dispatch({
-      type: "add",
-      toast: {
-        dismissible: true,
-        duration: options.duration ?? defaultDuration,
-        tone: "neutral",
-        ...options,
-        id,
-        createdAt
+  const resumeToast = useCallback(
+    (id: string) => {
+      if (!pausedRef.current.has(id) || timersRef.current.has(id)) {
+        return;
       }
-    });
 
-    return id;
-  }, [defaultDuration]);
+      const remaining = pausedRef.current.get(id) ?? 0;
+      pausedRef.current.delete(id);
+      if (remaining > 0) {
+        scheduleDismiss(id, remaining);
+      } else {
+        dismiss(id);
+      }
+    },
+    [dismiss, scheduleDismiss],
+  );
 
-  const shortcut = useCallback((tone: ToastTone, options: ToastShortcutOptions) =>
-    toast({ ...options, tone }), [toast]);
+  const toast = useCallback(
+    (options: ToastOptions) => {
+      const id = options.id ?? createToastId();
+      const createdAt = Date.now();
+
+      dispatch({
+        type: "add",
+        toast: {
+          dismissible: true,
+          duration:
+            options.duration === undefined ? defaultDuration : options.duration,
+          tone: "neutral",
+          ...options,
+          id,
+          createdAt,
+        },
+      });
+
+      return id;
+    },
+    [defaultDuration],
+  );
+
+  const shortcut = useCallback(
+    (tone: ToastTone, options: ToastShortcutOptions) =>
+      toast({ ...options, tone }),
+    [toast],
+  );
 
   const update = useCallback((id: string, options: Partial<ToastOptions>) => {
     dispatch({ type: "update", id, toast: options });
   }, []);
 
-  const controller = useMemo<ToastController>(() => ({
-    dismiss,
-    dismissAll,
-    error: (options) => shortcut("error", options),
-    info: (options) => shortcut("info", options),
-    success: (options) => shortcut("success", options),
-    toast,
-    update,
-    warning: (options) => shortcut("warning", options)
-  }), [dismiss, dismissAll, shortcut, toast, update]);
+  const controller = useMemo<ToastController>(
+    () => ({
+      dismiss,
+      dismissAll,
+      error: (options) => shortcut("error", options),
+      info: (options) => shortcut("info", options),
+      success: (options) => shortcut("success", options),
+      toast,
+      update,
+      warning: (options) => shortcut("warning", options),
+    }),
+    [dismiss, dismissAll, shortcut, toast, update],
+  );
 
   useEffect(() => {
     const visibleIds = new Set(visibleToasts.map((toastItem) => toastItem.id));
@@ -158,7 +165,12 @@ export function ToastProvider({
     visibleToasts.forEach((toastItem) => {
       const duration = getToastDuration(toastItem, defaultDuration);
 
-      if (duration === null || duration <= 0 || timersRef.current.has(toastItem.id) || pausedRef.current.has(toastItem.id)) {
+      if (
+        duration === null ||
+        duration <= 0 ||
+        timersRef.current.has(toastItem.id) ||
+        pausedRef.current.has(toastItem.id)
+      ) {
         return;
       }
 
@@ -166,11 +178,14 @@ export function ToastProvider({
     });
   }, [defaultDuration, scheduleDismiss, visibleToasts]);
 
-  useEffect(() => () => {
-    timersRef.current.forEach((timer) => clearTimeout(timer.timeoutId));
-    timersRef.current.clear();
-    pausedRef.current.clear();
-  }, []);
+  useEffect(
+    () => () => {
+      timersRef.current.forEach((timer) => clearTimeout(timer.timeoutId));
+      timersRef.current.clear();
+      pausedRef.current.clear();
+    },
+    [],
+  );
 
   return (
     <ToastContext.Provider value={controller}>

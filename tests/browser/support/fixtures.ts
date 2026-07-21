@@ -5,13 +5,19 @@ export type BrowserFixtureId =
   (typeof browserFixtureIds)[keyof typeof browserFixtureIds];
 
 export const browserFixtureIds = {
+  autocompleteControlled: "autocomplete-controlled",
   buttonBasic: "button-basic",
   dataGridSelection: "data-grid-selection",
   dialogFocus: "dialog-focus",
   drawerFocus: "drawer-focus",
   menuKeyboard: "menu-keyboard",
+  multiSelectKeyboard: "multi-select-keyboard",
   popoverPosition: "popover-position",
+  sliderRatingKeyboard: "slider-rating-keyboard",
+  tabsToggleKeyboard: "tabs-toggle-keyboard",
+  toastLifecycle: "toast-lifecycle",
   tooltipFocusHover: "tooltip-focus-hover",
+  transferListAssignment: "transfer-list-assignment",
 } as const;
 
 export async function openFixture(page: Page, fixtureId: string) {
