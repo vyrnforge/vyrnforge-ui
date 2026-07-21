@@ -36,3 +36,6 @@ test-results/
 blob-report/
 tests/package-consumer/.tmp-packages/
 tests/package-consumer/.tmp-registry/
+
+# Deterministic generated governance artifacts
+docs/governance/repository-inventory.md

@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import { useControllableState } from "../../hooks";
 import { joinClassNames } from "../../utils/classNames";
 import { Popover } from "../Popover";
@@ -12,18 +18,21 @@ export function Menu({
   open,
   placement = "bottom-start",
   size = "md",
-  trigger
+  trigger,
 }: MenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [isOpen, setIsOpen] = useControllableState({
     value: open,
     defaultValue: defaultOpen,
-    onChange: onOpenChange
+    onChange: onOpenChange,
   });
   const enabledIndexes = useMemo(
-    () => items.map((item, index) => (item.disabled ? -1 : index)).filter((index) => index >= 0),
-    [items]
+    () =>
+      items
+        .map((item, index) => (item.disabled ? -1 : index))
+        .filter((index) => index >= 0),
+    [items],
   );
   const [activeIndex, setActiveIndex] = useState(enabledIndexes[0] ?? -1);
 
@@ -34,7 +43,9 @@ export function Menu({
 
     const firstEnabled = enabledIndexes[0] ?? -1;
     setActiveIndex(firstEnabled);
-    const frame = window.requestAnimationFrame(() => itemRefs.current[firstEnabled]?.focus());
+    const frame = window.requestAnimationFrame(() =>
+      itemRefs.current[firstEnabled]?.focus(),
+    );
     return () => window.cancelAnimationFrame(frame);
   }, [enabledIndexes, isOpen]);
 
@@ -49,7 +60,9 @@ export function Menu({
     }
 
     const currentPosition = Math.max(enabledIndexes.indexOf(activeIndex), 0);
-    const nextPosition = (currentPosition + direction + enabledIndexes.length) % enabledIndexes.length;
+    const nextPosition =
+      (currentPosition + direction + enabledIndexes.length) %
+      enabledIndexes.length;
     setActiveItem(enabledIndexes[nextPosition]);
   };
 
@@ -103,6 +116,7 @@ export function Menu({
       open={isOpen}
       placement={placement}
       trigger={trigger}
+      triggerAriaHasPopup="menu"
     >
       <div
         aria-label="Menu"
@@ -114,13 +128,13 @@ export function Menu({
       >
         {items.map((item, index) => (
           <button
+            aria-current={item.selected ? "true" : undefined}
             aria-disabled={item.disabled || undefined}
-            aria-selected={item.selected || undefined}
             className={joinClassNames(
               "vf-menu-item",
               item.danger && "vf-menu-item--danger",
               item.selected && "vf-menu-item--selected",
-              activeIndex === index && "vf-menu-item--active"
+              activeIndex === index && "vf-menu-item--active",
             )}
             disabled={item.disabled}
             key={item.id}
@@ -140,10 +154,14 @@ export function Menu({
             <span className="vf-menu-item__main">
               <span className="vf-menu-item__label">{item.label}</span>
               {item.description && (
-                <span className="vf-menu-item__description">{item.description}</span>
+                <span className="vf-menu-item__description">
+                  {item.description}
+                </span>
               )}
             </span>
-            {item.shortcut && <span className="vf-menu-item__shortcut">{item.shortcut}</span>}
+            {item.shortcut && (
+              <span className="vf-menu-item__shortcut">{item.shortcut}</span>
+            )}
           </button>
         ))}
       </div>

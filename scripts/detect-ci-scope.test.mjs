@@ -25,7 +25,8 @@ test("ui-core runtime changes validate all downstream packages and consumers", (
     "packages",
     "consumer",
     "docs",
-    "playground"
+    "playground",
+    "browser",
   ]);
   assert.equal(plan.full, false);
 });
@@ -39,7 +40,8 @@ test("ui-components runtime changes validate components, grid, and consumers", (
     "packages",
     "consumer",
     "docs",
-    "playground"
+    "playground",
+    "browser",
   ]);
   expectDisabled(plan, ["ui_core", "full"]);
 });
@@ -59,19 +61,38 @@ test("package README changes verify the published payload and consumer", () => {
 test("canonical docs-only changes build docs without package runtime checks", () => {
   const plan = planCiScope(["docs/release/publication-procedure.md"]);
   expectEnabled(plan, ["docs", "docs_only"]);
-  expectDisabled(plan, ["quality", "packages", "consumer", "playground", "full"]);
+  expectDisabled(plan, [
+    "quality",
+    "packages",
+    "consumer",
+    "playground",
+    "full",
+  ]);
 });
 
 test("metadata changes verify metadata and build docs", () => {
   const plan = planCiScope(["docs/metadata/components.json"]);
   expectEnabled(plan, ["quality", "metadata", "docs"]);
-  expectDisabled(plan, ["packages", "consumer", "playground", "full", "docs_only"]);
+  expectDisabled(plan, [
+    "packages",
+    "consumer",
+    "playground",
+    "full",
+    "docs_only",
+  ]);
 });
 
 test("playground-only changes build only the playground", () => {
   const plan = planCiScope(["examples/basic-playground/src/App.tsx"]);
   expectEnabled(plan, ["playground"]);
-  expectDisabled(plan, ["quality", "packages", "consumer", "docs", "full"]);
+  expectDisabled(plan, [
+    "quality",
+    "packages",
+    "consumer",
+    "docs",
+    "browser",
+    "full",
+  ]);
 });
 
 test("consumer fixture changes run only the packed-consumer gate", () => {
@@ -84,7 +105,7 @@ test("repository template changes run CI contract verification only", () => {
   for (const file of [
     ".github/pull_request_template.md",
     ".github/PULL_REQUEST_TEMPLATE/ci-cd-infrastructure.md",
-    ".github/ISSUE_TEMPLATE/ci-cd-infrastructure.yml"
+    ".github/ISSUE_TEMPLATE/ci-cd-infrastructure.yml",
   ]) {
     const plan = planCiScope([file]);
     expectEnabled(plan, ["quality"]);
@@ -97,14 +118,19 @@ test("repository template changes run CI contract verification only", () => {
       "consumer",
       "docs",
       "playground",
+      "browser",
       "full",
-      "docs_only"
+      "docs_only",
     ]);
   }
 });
 
 test("root manifests and workflows force full validation", () => {
-  for (const file of ["package-lock.json", ".github/workflows/ci.yml", "scripts/verify-packages.mjs"]) {
+  for (const file of [
+    "package-lock.json",
+    ".github/workflows/ci.yml",
+    "scripts/verify-packages.mjs",
+  ]) {
     const plan = planCiScope([file]);
     expectEnabled(plan, [
       "quality",
@@ -116,7 +142,7 @@ test("root manifests and workflows force full validation", () => {
       "consumer",
       "docs",
       "playground",
-      "full"
+      "full",
     ]);
   }
 });
@@ -131,12 +157,12 @@ test("missing diff uses safe full validation", () => {
   assert.equal(plan.full, true);
 });
 
-
 test("regression fixture changes run fixture quality without full fallback", () => {
   const plan = planCiScope(["apps/regression-fixtures/src/FixtureApp.tsx"]);
 
   assert.equal(plan.quality, true);
   assert.equal(plan.fixtures, true);
+  assert.equal(plan.browser, true);
   assert.equal(plan.full, false);
 });
 
@@ -147,4 +173,13 @@ test("shared DOM test utility changes run components and fixtures", () => {
   assert.equal(plan.fixtures, true);
   assert.equal(plan.ui_components, true);
   assert.equal(plan.full, false);
+});
+
+test("browser contract changes run browser and quality checks", () => {
+  for (const file of ["tests/browser/dialog.spec.ts", "playwright.config.ts"]) {
+    const plan = planCiScope([file]);
+    assert.equal(plan.quality, true);
+    assert.equal(plan.browser, true);
+    assert.equal(plan.full, false);
+  }
 });

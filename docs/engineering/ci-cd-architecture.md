@@ -28,7 +28,7 @@ not own product behavior, application state, public APIs, or styling contracts.
 | Workflow                          | Trigger                                                 | Responsibility                                                                                         | Write capability      |
 | --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
 | `.github/workflows/ci.yml`        | Pull request, push to `main`, manual                    | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate` | None                  |
-| `.github/workflows/_quality.yml`  | `workflow_call`                                         | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification   | None                  |
+| `.github/workflows/_quality.yml`  | `workflow_call`                                         | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification  | None                  |
 | `.github/workflows/_packages.yml` | `workflow_call`                                         | Clean package builds, package payload validation, declarations, CSS, LICENSE, and dry-run packs        | None                  |
 | `.github/workflows/_consumer.yml` | `workflow_call`                                         | Packed-artifact consumer installation and production build                                             | None                  |
 | `.github/workflows/_docs.yml`     | `workflow_call`                                         | Documentation and playground builds                                                                    | None                  |
@@ -67,18 +67,18 @@ The change planner uses the following impact rules:
 
 Changes under `apps/regression-fixtures/**` are explicitly classified as fixture quality work. Changes under `tests/dom/**` run both shared component tests and regression fixtures. Package runtime changes also run fixtures because the fixture app validates public-package integration.
 
-| Changed area | Package quality | Package payloads | Consumer | Docs | Playground | Fixtures |
-| --- | --- | --- | --- | --- | --- | --- |
-| `ui-core` runtime/public surface | core, components, data-grid | all | yes | yes | yes | yes |
-| `ui-components` runtime/public surface | components, data-grid | all | yes | yes | yes | yes |
-| `ui-data-grid` runtime/public surface | data-grid | all | yes | yes | yes | yes |
-| Package test only | changed package | no | no | no | no | when shared DOM utilities change |
-| Package README or package LICENSE | no | all coordinated payloads | yes | no | no | no |
-| Consumer fixture | no | included by consumer verifier | yes | no | no | no |
-| Regression fixture app | fixture quality | no | no | no | no | yes |
-| Metadata | metadata | no | no | yes | no | no |
-| Docs | no | no | no | yes | no | no |
-| Playground | no | no | no | no | yes | no |
+| Changed area                           | Package quality             | Package payloads              | Consumer | Docs | Playground | Fixtures                         | Browser  |
+| -------------------------------------- | --------------------------- | ----------------------------- | -------- | ---- | ---------- | -------------------------------- | -------- |
+| `ui-core` runtime/public surface       | core, components, data-grid | all                           | yes      | yes  | yes        | yes                              | Chromium |
+| `ui-components` runtime/public surface | components, data-grid       | all                           | yes      | yes  | yes        | yes                              | Chromium |
+| `ui-data-grid` runtime/public surface  | data-grid                   | all                           | yes      | yes  | yes        | yes                              | Chromium |
+| Package test only                      | changed package             | no                            | no       | no   | no         | when shared DOM utilities change | no       |
+| Package README or package LICENSE      | no                          | all coordinated payloads      | yes      | no   | no         | no                               | no       |
+| Consumer fixture                       | no                          | included by consumer verifier | yes      | no   | no         | no                               | no       |
+| Regression fixture app                 | fixture quality             | no                            | no       | no   | no         | yes                              | Chromium |
+| Metadata                               | metadata                    | no                            | no       | yes  | no         | no                               | no       |
+| Docs                                   | no                          | no                            | no       | yes  | no         | no                               | no       |
+| Playground                             | no                          | no                            | no       | no   | yes        | no                               | no       |
 
 The planner is implemented by `scripts/detect-ci-scope.mjs`. Its machine outputs
 are:
@@ -93,6 +93,7 @@ are:
 - `docs`
 - `playground`
 - `fixtures`
+- `browser`
 - `full`
 - `docs_only`
 
@@ -128,11 +129,12 @@ The G1 quality checks aggregated by `ci-gate` are:
 - ESLint, formatting, and CSS lint;
 - TypeScript typechecking;
 - unit and DOM interaction tests, including automated axe accessibility tests;
+- Chromium browser contracts for affected runtime, fixture, and browser-test changes;
 - package coverage thresholds;
 - normalized component metadata and component-maturity verification; and
 - documentation and playground builds whenever the planner requires them.
 
-Node/React compatibility matrices, dependency audit, npm publication,
+Cross-version Node/React compatibility matrices, dependency audit, npm publication,
 registry-consumer verification, Pages deployment, and release-record creation
 remain later compatibility or release checks. They are intentionally outside
 the pull-request `ci-gate`; the nightly and release workflows own them.
@@ -167,6 +169,22 @@ builds required package prerequisites once and suppresses repeated
 `pretypecheck` rebuilds.
 
 A full scope runs the authoritative root typecheck command.
+
+### Browser contracts
+
+`.github/workflows/_browser.yml` owns the mandatory Chromium project. It installs
+Chromium and its system dependencies, starts the deterministic regression fixture
+application through Playwright `webServer`, runs `npm run test:browser`, and uploads
+HTML reports, traces, screenshots, and JSON results when the job fails.
+
+Browser work is independently planned through the `browser` scope. Runtime package
+changes, fixture changes, `tests/browser/**`, and `playwright.config.ts` require the
+browser job. Documentation-only work does not. `ci-gate` treats a required skipped
+browser job as a failure.
+
+The release verification workflow installs Chromium before running the authoritative
+`npm run quality` command. Nightly validation also runs the same reusable browser
+workflow.
 
 ### Package payloads
 

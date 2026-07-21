@@ -9,7 +9,7 @@ export function GroupingPage() {
       <div className="vf-playground-section-heading">
         <div>
           <h2>Grouping</h2>
-          <GridNote>Grouping starts by team and status using the grid's current grouping behavior.</GridNote>
+          <GridNote>Grouping starts by team and status using the grid’s current grouping behavior.</GridNote>
         </div>
       </div>
       <UniversalDataGrid

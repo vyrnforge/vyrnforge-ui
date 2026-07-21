@@ -94,11 +94,62 @@ export const fixtureRegistry: readonly FixtureCase[] = [
     route: "/fixtures/dialog/focus",
     renderKey: "dialog-focus",
     purpose:
-      "Renders an open modal dialog for deterministic focus and dismissal checks.",
+      "Opens a modal dialog from a stable trigger for focus, dismissal, and restoration checks.",
     supportedTestModes: allTestModes,
     themes: allThemes,
     densities: allDensities,
-    notes: "Browser tests should cover real focus loops and scroll locking.",
+  },
+  {
+    id: "drawer-focus",
+    title: "Drawer focus",
+    componentMetadataId: "drawer",
+    category: "overlay",
+    route: "/fixtures/drawer/focus",
+    renderKey: "drawer-focus",
+    purpose:
+      "Opens a modal drawer from a stable trigger for focus, dismissal, and restoration checks.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+  },
+  {
+    id: "menu-keyboard",
+    title: "Menu keyboard",
+    componentMetadataId: "menu",
+    category: "overlay",
+    route: "/fixtures/menu/keyboard",
+    renderKey: "menu-keyboard",
+    purpose:
+      "Provides enabled, disabled, selected, and destructive menu items for keyboard navigation checks.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+  },
+  {
+    id: "popover-position",
+    title: "Popover position",
+    componentMetadataId: "popover",
+    category: "overlay",
+    route: "/fixtures/popover/position",
+    renderKey: "popover-position",
+    purpose:
+      "Places an anchored popover near a fixture boundary for viewport positioning and dismissal checks.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+  },
+  {
+    id: "tooltip-focus-hover",
+    title: "Tooltip focus and hover",
+    componentMetadataId: "tooltip",
+    category: "overlay",
+    route: "/fixtures/tooltip/focus-hover",
+    renderKey: "tooltip-focus-hover",
+    purpose:
+      "Provides a zero-delay tooltip for deterministic focus, hover, Escape, and positioning checks.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
   },
   {
     id: "data-grid-selection",
@@ -139,6 +190,10 @@ export const fixtureRegistry: readonly FixtureCase[] = [
     densities: allDensities,
   },
 ];
+
+export const fixtureById = new Map(
+  fixtureRegistry.map((fixture) => [fixture.id, fixture]),
+);
 
 export const componentMetadataById = new Map(
   componentCatalog.components.map((component) => [component.id, component]),

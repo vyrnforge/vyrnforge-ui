@@ -1,11 +1,15 @@
-import { useState, type ChangeEvent, type ReactNode } from "react";
+import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import {
   Button,
   Dialog,
+  Drawer,
   Field,
+  Menu,
+  Popover,
   Select,
   Tabs,
   TextInput,
+  Tooltip,
 } from "@vyrnforge/ui-components";
 import {
   UniversalDataGrid,
@@ -68,6 +72,7 @@ function FixtureFrame({
       data-density={density}
       data-theme={theme}
       data-vf-fixture={fixture.id}
+      data-vf-fixture-ready="true"
       data-vf-fixture-region="fixture"
     >
       <header className="vf-fixture__header">
@@ -109,7 +114,22 @@ function FixtureFrame({
 }
 
 function ButtonBasicFixture() {
-  return <Button variant="primary">Create case</Button>;
+  const [created, setCreated] = useState(false);
+
+  return (
+    <div className="vf-fixture__stack">
+      <Button
+        data-vf-fixture-action="primary"
+        onClick={() => setCreated(true)}
+        variant="primary"
+      >
+        Create case
+      </Button>
+      <output data-vf-fixture-region="result">
+        {created ? "Case created" : "No action yet"}
+      </output>
+    </div>
+  );
 }
 
 function ButtonDisabledFixture() {
@@ -146,25 +166,165 @@ function TabsFixture() {
 }
 
 function DialogFixture() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const confirmRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div>
+    <div className="vf-fixture__stack">
       <Button
         data-vf-fixture-action="open-dialog"
         onClick={() => setOpen(true)}
       >
         Open confirmation
       </Button>
+      <output data-vf-fixture-region="overlay-state">
+        Dialog {open ? "open" : "closed"}
+      </output>
       <Dialog
         description="A fixed dialog for focus and dismissal checks."
-        footer={<Button onClick={() => setOpen(false)}>Close dialog</Button>}
+        footer={
+          <>
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            <Button
+              data-vf-fixture-action="confirm-dialog"
+              onClick={() => setOpen(false)}
+              ref={confirmRef}
+              variant="primary"
+            >
+              Confirm update
+            </Button>
+          </>
+        }
+        initialFocusRef={confirmRef}
         onOpenChange={setOpen}
         open={open}
         title="Confirm case update"
       >
         Review the fixed fixture content before confirming.
       </Dialog>
+    </div>
+  );
+}
+
+function DrawerFixture() {
+  const [open, setOpen] = useState(false);
+  const ownerRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <div className="vf-fixture__stack">
+      <Button
+        data-vf-fixture-action="open-drawer"
+        onClick={() => setOpen(true)}
+      >
+        Open filters
+      </Button>
+      <output data-vf-fixture-region="overlay-state">
+        Drawer {open ? "open" : "closed"}
+      </output>
+      <Drawer
+        description="Filter the deterministic fixture cases."
+        footer={
+          <Button onClick={() => setOpen(false)} variant="primary">
+            Apply filters
+          </Button>
+        }
+        initialFocusRef={ownerRef}
+        onOpenChange={setOpen}
+        open={open}
+        title="Case filters"
+      >
+        <div className="vf-fixture__stack">
+          <label>
+            Owner
+            <TextInput aria-label="Filter owner" ref={ownerRef} />
+          </label>
+          <Button>Reset filters</Button>
+        </div>
+      </Drawer>
+    </div>
+  );
+}
+
+function MenuFixture() {
+  const [selection, setSelection] = useState("No action selected");
+
+  return (
+    <div className="vf-fixture__stack">
+      <Menu
+        items={[
+          {
+            id: "edit",
+            label: "Edit case",
+            onSelect: () => setSelection("Edit case selected"),
+          },
+          {
+            id: "duplicate",
+            label: "Duplicate case",
+            disabled: true,
+          },
+          {
+            id: "archive",
+            label: "Archive case",
+            selected: true,
+            onSelect: () => setSelection("Archive case selected"),
+          },
+          {
+            id: "delete",
+            label: "Delete case",
+            danger: true,
+            onSelect: () => setSelection("Delete case selected"),
+          },
+        ]}
+        trigger={
+          <Button data-vf-fixture-action="open-menu">Open case actions</Button>
+        }
+      />
+      <output data-vf-fixture-region="selection">{selection}</output>
+    </div>
+  );
+}
+
+function PopoverFixture() {
+  return (
+    <div className="vf-fixture__popover-surface">
+      <Button data-vf-fixture-action="outside-popover">Outside action</Button>
+      <div className="vf-fixture__popover-anchor">
+        <Popover
+          placement="bottom-end"
+          trigger={
+            <Button data-vf-fixture-action="open-popover">
+              Open case context
+            </Button>
+          }
+        >
+          <div
+            className="vf-fixture__popover-content"
+            data-vf-fixture-region="popover-content"
+          >
+            <strong>Case context</strong>
+            <p>Fixed contextual content for positioning checks.</p>
+            <Button data-vf-fixture-action="popover-action">
+              Apply context
+            </Button>
+          </div>
+        </Popover>
+      </div>
+    </div>
+  );
+}
+
+function TooltipFixture() {
+  return (
+    <div className="vf-fixture__tooltip-surface">
+      <Tooltip
+        content="Refresh the fixed case data"
+        delayMs={0}
+        placement="top"
+      >
+        <Button data-vf-fixture-action="tooltip-trigger">
+          Refresh case data
+        </Button>
+      </Tooltip>
     </div>
   );
 }
@@ -261,6 +421,14 @@ function FixtureContent({
       return <TabsFixture />;
     case "dialog-focus":
       return <DialogFixture />;
+    case "drawer-focus":
+      return <DrawerFixture />;
+    case "menu-keyboard":
+      return <MenuFixture />;
+    case "popover-position":
+      return <PopoverFixture />;
+    case "tooltip-focus-hover":
+      return <TooltipFixture />;
     case "data-grid-selection":
       return <DataGridSelectionFixture density={density} theme={theme} />;
     case "data-grid-empty":
@@ -289,7 +457,11 @@ function FixtureRoute({ fixture }: { fixture: FixtureCase }) {
 
 function FixtureNotFound({ pathname }: { pathname: string }) {
   return (
-    <main className="vf-fixture" data-vf-fixture-region="not-found">
+    <main
+      className="vf-fixture"
+      data-vf-fixture-ready="true"
+      data-vf-fixture-region="not-found"
+    >
       <h1>Fixture not found</h1>
       <p>Unknown fixture route: {pathname}</p>
     </main>

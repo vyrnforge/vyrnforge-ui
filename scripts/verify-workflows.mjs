@@ -162,6 +162,7 @@ const ciGateSection = ci.slice(ci.indexOf("  ci-gate:"));
 for (const dependency of [
   "plan",
   "quality-checks",
+  "browser-checks",
   "package-checks",
   "consumer-checks",
   "docs-checks",
@@ -174,6 +175,8 @@ for (const dependency of [
 for (const requiredToken of [
   "PLAN_RESULT",
   "QUALITY_REQUIRED",
+  "BROWSER_REQUIRED",
+  "BROWSER_RESULT",
   "PACKAGES_REQUIRED",
   "CONSUMER_REQUIRED",
   "DOCS_REQUIRED",
@@ -203,6 +206,7 @@ assertNoLongLivedToken(ci, "ci.yml");
 
 for (const workflow of [
   "_quality.yml",
+  "_browser.yml",
   "_packages.yml",
   "_consumer.yml",
   "_docs.yml",
@@ -255,12 +259,22 @@ assert(
   "CI planner must classify regression fixture changes explicitly",
 );
 assert(
-  read("scripts/verify-toolchain.mjs").includes("apps/regression-fixtures/package.json"),
+  read("scripts/verify-toolchain.mjs").includes(
+    "apps/regression-fixtures/package.json",
+  ),
   "toolchain verification must include the regression fixture workspace",
 );
 assert(
   ci.includes("fixtures: ${{ steps.scope.outputs.fixtures }}"),
   "ci.yml must expose the planned fixture scope",
+);
+assert(
+  ci.includes("browser: ${{ steps.scope.outputs.browser }}"),
+  "ci.yml must expose the planned browser scope",
+);
+assert(
+  ci.includes("if: needs.plan.outputs.browser == 'true'"),
+  "ci.yml must run browser checks only when the browser scope is planned",
 );
 assert(
   ci.includes("fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}"),
@@ -271,7 +285,31 @@ assert(
   "reusable quality workflow must pass fixture scope to the scoped runner",
 );
 assert(
-  read(".github/workflows/_docs.yml").includes("npm run verify:repository-inventory"),
+  read("scripts/detect-ci-scope.mjs").includes("tests/browser/"),
+  "CI planner must classify browser contract tests explicitly",
+);
+const browserWorkflow = read(".github/workflows/_browser.yml");
+for (const requiredBrowserToken of [
+  "playwright install --with-deps chromium",
+  "npm run test:browser",
+  "playwright-report/",
+  "test-results/",
+]) {
+  assert(
+    browserWorkflow.includes(requiredBrowserToken),
+    `_browser.yml must include ${requiredBrowserToken}`,
+  );
+}
+assertPinnedActionVersion(
+  browserWorkflow,
+  "_browser.yml",
+  "actions/upload-artifact",
+  "v7.0.1",
+);
+assert(
+  read(".github/workflows/_docs.yml").includes(
+    "npm run verify:repository-inventory",
+  ),
   "docs validation must reject stale generated repository inventory",
 );
 const rootPackage = JSON.parse(read("package.json"));
@@ -286,6 +324,7 @@ for (const command of [
   "test:coverage",
   "verify:repository-inventory",
   "fixtures:verify",
+  "test:browser",
   "verify:packages",
   "verify:consumer",
   "build:docs",
@@ -299,6 +338,7 @@ for (const command of [
 for (const workflow of [
   "ci.yml",
   "_quality.yml",
+  "_browser.yml",
   "_packages.yml",
   "_consumer.yml",
   "_docs.yml",
@@ -425,6 +465,10 @@ assert(
   "registry release verification must cryptographically verify registry signatures and attestations",
 );
 assert(
+  release.includes("playwright install --with-deps chromium"),
+  "release verification must install Chromium before the authoritative quality command",
+);
+assert(
   release.includes("scripts/create-release-notes.mjs"),
   "release.yml must generate a release record from source",
 );
@@ -443,6 +487,10 @@ assert(
 assert(
   nightly.includes('node-version: "24.18.0"'),
   "nightly.yml must use the pinned Node 24 LTS baseline",
+);
+assert(
+  nightly.includes("uses: ./.github/workflows/_browser.yml"),
+  "nightly.yml must execute the Chromium browser contract suite",
 );
 assert(
   nightly.includes("name: nightly-gate"),
@@ -490,6 +538,15 @@ for (const workflow of workflowFiles) {
 
   if (text.includes("uses: actions/setup-node@")) {
     assertPinnedActionVersion(text, workflow, "actions/setup-node", "v7");
+  }
+
+  if (text.includes("uses: actions/upload-artifact@")) {
+    assertPinnedActionVersion(
+      text,
+      workflow,
+      "actions/upload-artifact",
+      "v7.0.1",
+    );
   }
 }
 
