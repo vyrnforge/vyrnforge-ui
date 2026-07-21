@@ -92,6 +92,7 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `quality/03-known-limitations.md` | Remaining limitations, workarounds, and production-use recommendations. |
 | `quality/04-coverage-baseline.md` | V8 coverage scope, initial per-package baseline, evidence boundaries, and threshold-ratcheting policy. |
 | `quality/q1-component-quality-audit.md` | CI-004 public export inventory, component quality findings, maturity recommendations, and alpha remediation queues. |
+| `testing/regression-fixtures.md` | Deterministic fixture application for DOM, accessibility, future browser, visual, and consumer-oriented checks. |
 
 ## 8. Release Governance
 
