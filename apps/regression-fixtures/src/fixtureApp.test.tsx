@@ -42,6 +42,16 @@ describe("regression fixture application", () => {
     const cases = [
       ["/fixtures/button/basic", "button", "Create case"],
       ["/fixtures/text-input/validation", "textbox", "Case title"],
+      ["/fixtures/autocomplete/controlled", "combobox", "Workspace role"],
+      ["/fixtures/multi-select/keyboard", "button", "Workspace permissions"],
+      ["/fixtures/transfer-list/assignment", "group", "Application assignment"],
+      [
+        "/fixtures/forms/slider-rating-keyboard",
+        "slider",
+        "Approval threshold",
+      ],
+      ["/fixtures/navigation/tabs-toggle-keyboard", "tab", "Summary"],
+      ["/fixtures/toast/lifecycle", "button", "Show success"],
       ["/fixtures/data-grid/selection", "region", "Fixture cases"],
     ] as const;
 
@@ -112,5 +122,23 @@ describe("regression fixture application", () => {
       },
     });
     menu.unmount();
+
+    const autocomplete = render(
+      <FixtureApp initialPathname="/fixtures/autocomplete/controlled" />,
+    );
+    await user.click(screen.getByRole("combobox", { name: "Workspace role" }));
+    await assertNoAccessibilityViolations(document.body, {
+      rules: { region: { enabled: false } },
+    });
+    autocomplete.unmount();
+
+    const multiSelect = render(
+      <FixtureApp initialPathname="/fixtures/multi-select/keyboard" />,
+    );
+    await user.click(
+      screen.getByRole("button", { name: "Workspace permissions" }),
+    );
+    await assertNoAccessibilityViolations(document.body);
+    multiSelect.unmount();
   });
 });

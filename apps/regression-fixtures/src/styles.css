@@ -81,3 +81,14 @@ body {
   justify-content: center;
   padding-top: var(--vf-space-8);
 }
+
+.vf-fixture__button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vf-space-3);
+}
+
+.vf-fixture output {
+  color: var(--vf-text-muted);
+  font-size: var(--vf-font-size-sm);
+}

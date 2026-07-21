@@ -1,15 +1,24 @@
 import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import {
+  Autocomplete,
   Button,
   Dialog,
   Drawer,
   Field,
   Menu,
+  MultiSelect,
   Popover,
+  Rating,
   Select,
+  Slider,
   Tabs,
   TextInput,
+  ToastAction,
+  ToastProvider,
+  ToggleButton,
   Tooltip,
+  TransferList,
+  useToast,
 } from "@vyrnforge/ui-components";
 import {
   UniversalDataGrid,
@@ -48,7 +57,76 @@ const fixtureColumns: DataGridColumnDef<FixtureRow>[] = [
 
 const tabItems = [
   { id: "summary", label: "Summary", content: "Summary panel" },
+  {
+    id: "billing",
+    label: "Billing",
+    content: "Billing panel",
+    disabled: true,
+  },
   { id: "activity", label: "Activity", content: "Activity panel" },
+];
+
+const roleOptions = [
+  {
+    value: "admin",
+    label: "Administrator",
+    description: "Full workspace administration.",
+  },
+  {
+    value: "operator",
+    label: "Operator",
+    description: "Operational access managed externally.",
+    disabled: true,
+  },
+  {
+    value: "viewer",
+    label: "Viewer",
+    description: "Read-only workspace access.",
+  },
+];
+
+const permissionOptions = [
+  {
+    value: "owner",
+    label: "Owner",
+    description: "Can manage workspace settings.",
+  },
+  {
+    value: "approver",
+    label: "Approver",
+    description: "Can approve workflow requests.",
+  },
+  {
+    value: "billing",
+    label: "Billing",
+    description: "Managed by the billing service.",
+    disabled: true,
+  },
+  { value: "viewer", label: "Viewer", description: "Read-only access." },
+];
+
+const applicationOptions = [
+  {
+    value: "iam",
+    label: "Identity and Access Management",
+    description: "Authentication and role administration.",
+  },
+  {
+    value: "analytics",
+    label: "Analytics Workspace",
+    description: "Operational reporting and insight.",
+  },
+  {
+    value: "gateway",
+    label: "API Gateway",
+    description: "Managed assignment that cannot be changed here.",
+    disabled: true,
+  },
+  {
+    value: "reporting",
+    label: "Reporting Portal",
+    description: "Scheduled report access.",
+  },
 ];
 
 function FixtureFrame({
@@ -329,6 +407,204 @@ function TooltipFixture() {
   );
 }
 
+function AutocompleteFixture() {
+  const [role, setRole] = useState<string | null>(null);
+
+  return (
+    <div className="vf-fixture__stack">
+      <Field label="Workspace role">
+        {(controlProps) => (
+          <Autocomplete
+            {...controlProps}
+            ariaLabel="Workspace role"
+            onValueChange={(nextValue) => setRole(nextValue)}
+            openOnFocus
+            options={roleOptions}
+            placeholder="Select a workspace role"
+            value={role}
+          />
+        )}
+      </Field>
+      <output data-vf-fixture-region="autocomplete-value">
+        Selected role: {role ?? "none"}
+      </output>
+      <Autocomplete
+        ariaLabel="Disabled workspace role"
+        disabled
+        options={roleOptions}
+        placeholder="Managed externally"
+      />
+    </div>
+  );
+}
+
+function MultiSelectFixture() {
+  const [roles, setRoles] = useState<string[]>(["owner"]);
+
+  return (
+    <div className="vf-fixture__stack">
+      <Field label="Workspace permissions">
+        <MultiSelect
+          aria-label="Workspace permissions"
+          onValueChange={setRoles}
+          options={permissionOptions}
+          searchable
+          value={roles}
+        />
+      </Field>
+      <output data-vf-fixture-region="multi-select-value">
+        Selected permissions: {roles.length > 0 ? roles.join(", ") : "none"}
+      </output>
+    </div>
+  );
+}
+
+function TransferListFixture() {
+  const [applications, setApplications] = useState<string[]>(["analytics"]);
+
+  return (
+    <div className="vf-fixture__stack">
+      <TransferList
+        ariaLabel="Application assignment"
+        onValueChange={setApplications}
+        options={applicationOptions}
+        searchable
+        sourceTitle="Available applications"
+        targetTitle="Assigned applications"
+        value={applications}
+      />
+      <output data-vf-fixture-region="transfer-list-value">
+        Assigned applications: {applications.join(", ") || "none"}
+      </output>
+    </div>
+  );
+}
+
+function SliderRatingFixture() {
+  const [threshold, setThreshold] = useState(40);
+  const [rating, setRating] = useState(2);
+
+  return (
+    <div className="vf-fixture__stack">
+      <Slider
+        ariaLabel="Approval threshold"
+        label="Approval threshold"
+        max={100}
+        min={0}
+        onValueChange={setThreshold}
+        showValue
+        step={5}
+        value={threshold}
+      />
+      <output data-vf-fixture-region="slider-value">
+        Threshold: {threshold}
+      </output>
+      <Rating
+        allowClear
+        label="Service quality"
+        onValueChange={setRating}
+        value={rating}
+      />
+      <output data-vf-fixture-region="rating-value">Rating: {rating}</output>
+      <Rating label="Archived quality" readOnly value={4} />
+    </div>
+  );
+}
+
+function TabsToggleFixture() {
+  const [activeTab, setActiveTab] = useState("summary");
+  const [pinned, setPinned] = useState(false);
+
+  return (
+    <div className="vf-fixture__stack">
+      <Tabs items={tabItems} onValueChange={setActiveTab} value={activeTab} />
+      <output data-vf-fixture-region="tabs-value">
+        Active tab: {activeTab}
+      </output>
+      <ToggleButton
+        data-vf-fixture-action="controlled-toggle"
+        onPressedChange={setPinned}
+        pressed={pinned}
+      >
+        Pin filters
+      </ToggleButton>
+      <output data-vf-fixture-region="controlled-toggle-value">
+        Filters {pinned ? "pinned" : "not pinned"}
+      </output>
+      <ToggleButton data-vf-fixture-action="uncontrolled-toggle" defaultPressed>
+        Show archived
+      </ToggleButton>
+    </div>
+  );
+}
+
+function ToastControls() {
+  const toast = useToast();
+
+  return (
+    <div className="vf-fixture__stack">
+      <div className="vf-fixture__button-row">
+        <Button
+          data-vf-fixture-action="show-success-toast"
+          onClick={() =>
+            toast.success({
+              id: "save-success",
+              title: "Changes saved",
+              description: "The case changes were saved.",
+              duration: 900,
+            })
+          }
+        >
+          Show success
+        </Button>
+        <Button
+          data-vf-fixture-action="show-warning-toast"
+          onClick={() =>
+            toast.warning({
+              action: (
+                <ToastAction altText="Retry synchronization">Retry</ToastAction>
+              ),
+              id: "sync-warning",
+              title: "Sync delayed",
+              description: "The workspace sync is waiting for a retry.",
+              duration: null,
+            })
+          }
+        >
+          Show warning
+        </Button>
+        <Button
+          data-vf-fixture-action="show-pausable-toast"
+          onClick={() =>
+            toast.info({
+              id: "export-progress",
+              title: "Export prepared",
+              description: "The fixed export is ready.",
+              duration: 700,
+            })
+          }
+        >
+          Show pausable toast
+        </Button>
+        <Button
+          data-vf-fixture-action="dismiss-all-toasts"
+          onClick={toast.dismissAll}
+        >
+          Dismiss all
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function ToastFixture() {
+  return (
+    <ToastProvider defaultDuration={1000} viewportLabel="Fixture notifications">
+      <ToastControls />
+    </ToastProvider>
+  );
+}
+
 function DataGridSelectionFixture({
   density,
   theme,
@@ -429,6 +705,18 @@ function FixtureContent({
       return <PopoverFixture />;
     case "tooltip-focus-hover":
       return <TooltipFixture />;
+    case "autocomplete-controlled":
+      return <AutocompleteFixture />;
+    case "multi-select-keyboard":
+      return <MultiSelectFixture />;
+    case "transfer-list-assignment":
+      return <TransferListFixture />;
+    case "slider-rating-keyboard":
+      return <SliderRatingFixture />;
+    case "tabs-toggle-keyboard":
+      return <TabsToggleFixture />;
+    case "toast-lifecycle":
+      return <ToastFixture />;
     case "data-grid-selection":
       return <DataGridSelectionFixture density={density} theme={theme} />;
     case "data-grid-empty":
