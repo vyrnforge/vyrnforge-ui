@@ -18,7 +18,7 @@ npm run fixtures:build
 npm run fixtures:verify
 ```
 
-The application imports only documented package-root JavaScript and CSS exports. Its tests reuse the shared DOM interaction utilities from `packages/ui-components/test/dom`.
+The application imports only documented package-root JavaScript and CSS exports. Its tests reuse the shared DOM interaction utilities from `tests/dom`.
 
 ## Registry and routes
 
@@ -39,3 +39,11 @@ The metadata ID must already exist in `docs/metadata/components.json`; the regis
 Fixtures must not fetch data, read timestamps, generate random values, or rely on unstable DOM IDs for selectors. Use fixed rows, fixed row IDs, fixed initial component state, and stable accessible names. Theme and density are applied through the documented `data-theme` and `data-density` contracts from `@vyrnforge/ui-core`.
 
 This application prepares stable routes for future Playwright browser checks and visual-regression work; it does not add either tool. It is also not a new public documentation site, product demo, component maturity record, or replacement for the packed-package consumer fixture in `tests/package-consumer`.
+
+
+## Quality-gate integration
+
+`npm run fixtures:verify` runs the fixture tests and production build. It is
+part of `npm run quality`, scoped CI for package/fixture changes, nightly full
+validation, and release-candidate verification. A fixture change must not be
+merged when this command is skipped or failing.

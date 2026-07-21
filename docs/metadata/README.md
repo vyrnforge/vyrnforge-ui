@@ -43,8 +43,11 @@ browser evidence may be explicitly pending while browser infrastructure is
 not available; Stable cannot use pending evidence.
 
 The initial transition policy is `new-promotions-only`. The explicitly listed
-legacy entries keep their current maturity labels but are reported as
-unverified rather than being populated with invented proof. A later promotion,
-or any new higher-maturity entry, must add a complete evidence record.
+legacy entries retain their historical metadata value but are presented in
+public documentation as **Legacy stable — verification required**, not as a
+verified success state. They must be fully reviewed through `VF-2015` by Gate
+`G2` and the exception list must be empty before `1.0.0-beta.1`. A later
+promotion, or any new higher-maturity entry, must add a complete evidence
+record; invented proof is prohibited.
 
 Canonical maintenance rules live in `docs/governance/04-metadata-maintenance.md`.

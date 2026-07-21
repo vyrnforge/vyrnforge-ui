@@ -1065,7 +1065,7 @@ export function UniversalDataGrid<
                     className={[
                       "udg-header-cell",
                       `udg-align-${column.align ?? "left"}`,
-                      activeColumnId === column.id ? "is-resizing" : "",
+                      activeColumnId === column.id ? "udg-is-resizing" : "",
                       column.resizable !== false
                         ? "udg-header-cell--resizable"
                         : "",
@@ -1147,7 +1147,7 @@ export function UniversalDataGrid<
                       <span
                         className={[
                           "udg-sort-indicator",
-                          sortDirection ? "is-active" : ""
+                          sortDirection ? "udg-is-active" : ""
                         ].filter(Boolean).join(" ")}
                         aria-hidden="true"
                       >

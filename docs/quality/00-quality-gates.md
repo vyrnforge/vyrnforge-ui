@@ -1,63 +1,81 @@
 # VyrnForge UI Quality Gates
 
-This document defines the minimum quality bar for shipped VyrnForge UI components. It applies to `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid`.
+This document defines the minimum evidence expected for VyrnForge UI component
+changes. The canonical maturity definitions and promotion requirements live in
+[`../governance/component-maturity-model.md`](../governance/component-maturity-model.md).
+Do not create a second maturity definition in this document.
 
 ## Severity
 
 | Severity | Definition |
 | --- | --- |
-| P0 | Crash, data loss, unusable keyboard behavior, focus trap failure, inaccessible primary interaction, or component cannot be used. |
+| P0 | Crash, data loss, unusable keyboard behavior, focus-trap failure, inaccessible primary interaction, or component cannot be used. |
 | P1 | Major API inconsistency, major layout or scroll defect, broken controlled state, incorrect form submission, or serious theme/responsive issue. |
 | P2 | Incomplete behavior, visual inconsistency, missing secondary accessibility behavior, or incomplete documentation. |
 | P3 | Polish, optional enhancement, or future optimization. |
 
-## Gates
+## Component quality gates
 
-| Gate | Stable requirement |
+| Gate | Requirement |
 | --- | --- |
-| API consistency | Props follow existing VyrnForge conventions: `value/defaultValue`, `checked/defaultChecked`, `open/defaultOpen`, `onValueChange`, `onCheckedChange`, `onOpenChange`, `disabled`, `readOnly`, `invalid`, `required`, `size`, `density`, `className`, and `style` where relevant. |
-| Behavior correctness | Controlled mode never mutates internal business state, uncontrolled defaults apply only initially, disabled/read-only blocks mutation, and callbacks receive predictable values. |
-| Accessibility | Primary interaction has labels, ARIA relationships, visible focus, keyboard operation, expected Escape behavior, and correct live-region/modal semantics. |
+| API consistency | Props follow established VyrnForge conventions and controlled/uncontrolled behavior is explicit. |
+| Behavior correctness | Disabled/read-only states block mutation, callbacks are predictable, and business state is not silently owned by shared packages. |
+| Accessibility | Labels, ARIA relationships, visible focus, keyboard operation, Escape behavior, and live-region/modal semantics are reviewed where applicable. |
 | Visual quality | Light, dark, enterprise, compact, standard, and comfortable modes retain usable spacing, contrast, control heights, and focus visibility. |
-| Layout and scrolling | Components own predictable `min-width: 0`, `min-height: 0`, overflow, sticky offsets, and avoid clipped focus or double scrollbars. |
-| Theme and density support | Static visuals use `--vf-*` tokens in components and `--udg-*` in the grid. Density names are `compact`, `standard`, and `comfortable`. |
-| CSS ownership | `ui-core` owns tokens/utilities, `ui-components` owns reusable `vf-*` component styles, `ui-data-grid` owns `udg-*`, docs use `vf-docs-*`, and playground uses `vf-playground-*`. |
-| CSS verification | `npm run lint:css` rejects malformed CSS, unknown properties, duplicate declarations, and custom properties outside the `--vf-*` or `--udg-*` policy. |
-| Documentation | Public components have API docs, metadata, playground examples, and AI usage notes when public enough for agents to consume. |
-| Testing | Stable components have meaningful tests for rendering contract, ARIA, state helpers, disabled/read-only behavior, or grid state behavior where practical. |
-| Production readiness | Stable components have no known P0/P1 issue and are represented accurately in metadata and playground badges. |
+| Layout and scrolling | Components own predictable minimum sizes and overflow behavior and avoid clipped focus or duplicate scroll regions. |
+| Theme and density | Shared visuals use `--vf-*`; grid-only internals use `--udg-*`. |
+| CSS ownership | `ui-core` owns shared tokens/utilities, `ui-components` owns `vf-*`, `ui-data-grid` owns `udg-*`, docs own `vf-docs-*`, playground owns `vf-playground-*`, regression fixtures own `vf-fixture-*`, and external consumer fixtures use `vf-consumer-*`. |
+| CSS verification | `npm run lint:css` rejects invalid CSS, duplicate declarations, invalid custom-property names, and CSS classes outside approved VyrnForge prefixes. |
+| Documentation | Public components have metadata, appropriate guidance, examples, and honest limitations. |
+| Testing | Logic, DOM interaction, accessibility, browser, theme/density, compatibility, and consumer evidence are required according to category and maturity. |
+| Production readiness | No unresolved P0/P1 defect and no maturity claim unsupported by the canonical evidence record. |
 
-## Status Rules
+## Maturity status source of truth
 
-Allowed statuses are:
+Allowed statuses are defined only in the canonical maturity model and metadata
+schema:
 
-| Status | Meaning |
-| --- | --- |
-| stable | Meets the stable quality gates and has no known P0/P1 issues. |
-| experimental | Public enough to test and document, but still has P2/P3 limitations or limited interaction coverage. |
-| planned | Not implemented or not exported. |
-| deprecated | Available only for migration away. |
+- `planned`
+- `experimental`
+- `alpha-stable`
+- `beta-stable`
+- `stable`
+- `deprecated`
+- `internal`
 
-New or recently expanded components should remain `experimental` until keyboard, accessibility, visual, docs, metadata, playground, and test coverage have been reviewed together.
+A historical `stable` value with `evidence.status = requires-verification` is
+not displayed as verified stable. Public documentation presents it as
+**Legacy stable — verification required** until its evidence is completed. The
+legacy exception list is scheduled for closure through `VF-2015` at Gate `G2`
+and must be empty before `1.0.0-beta.1`.
 
-## DOM Interaction Test Conventions
+## DOM interaction and accessibility test conventions
 
-`@vyrnforge/ui-components` runs DOM interaction tests in jsdom through its
-Vitest configuration. Tests import `render`, `screen`, `createUser`, and
-`getPortalRoot` from `packages/ui-components/test/dom`; use the returned
-`portalRoot` with a component's documented `portalContainer` prop when an
-overlay needs an isolated portal boundary.
+Shared jsdom utilities live in `tests/dom`. Component and regression-fixture
+tests import `render`, `screen`, `createUser`, `getPortalRoot`, and
+`assertNoAccessibilityViolations` from that test-only location. Public package
+implementation must not expose these helpers.
 
-The package peer range remains React `>=18 <20`; React Testing Library uses
-the standard React renderer, so this setup applies to React 18 and the current
-React 19 development runtime.
+The shared setup automatically unmounts renders, removes the test portal root,
+restores mocks, clears timers, and returns to real timers after every test. A
+test using fake timers must enable and flush them locally.
 
-The shared setup automatically unmounts Testing Library renders, removes the
-test portal root, restores mocks, clears timers, and returns to real timers
-after every test. Prefer real timers. A test that needs fake timers must call
-`vi.useFakeTimers()` locally, use `createUserWithFakeTimers()`, and flush the
-timers it owns before its assertions complete.
+DOM interaction tests and automated axe scans are implemented and mandatory
+where applicable. They provide repeatable structural and interaction evidence,
+but they do not prove complete WCAG conformance. Browser behavior, layout,
+real focus movement, pointer interactions, visual regression, and manual
+assistive-technology review remain part of S2 and later evidence.
 
-This jsdom harness is DOM evidence, not browser or visual-regression evidence;
-browser testing remains scoped to VF-2001. Automated accessibility scanning is
-not part of this setup and remains scoped to VF-1007.
+## Repository gate
+
+The authoritative local and release command is `npm run quality`. It includes:
+
+- workflow/toolchain and governance verifiers;
+- formatting, JavaScript/TypeScript lint, and CSS lint;
+- typecheck and package coverage thresholds;
+- regression fixture test/build verification;
+- package and external-consumer verification;
+- docs and playground production builds.
+
+The GitHub `ci-gate` is the required aggregate check. Missing, cancelled,
+failed, or unexpectedly skipped mandatory work must fail the gate.

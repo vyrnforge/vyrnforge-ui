@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Button, Dialog, Field, TextInput } from "../../index";
-import { assertNoAccessibilityViolations, render } from "../../../test/dom";
+import { assertNoAccessibilityViolations, render } from "../../../../../tests/dom";
 
 describe("@vyrnforge/ui-components accessibility", () => {
   it("reports actionable rule details for an inaccessible fixture", async () => {

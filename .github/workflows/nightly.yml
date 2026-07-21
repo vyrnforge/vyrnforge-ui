@@ -25,6 +25,7 @@ jobs:
       ui-core: true
       ui-components: true
       ui-data-grid: true
+      fixtures: true
 
   packages:
     name: packages

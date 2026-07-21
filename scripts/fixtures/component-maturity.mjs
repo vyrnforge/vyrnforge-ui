@@ -42,6 +42,45 @@ function metadataFor(status, evidence) {
 }
 
 export const maturityFixtures = {
+  experimentalUsingLegacyException: {
+    catalog: {
+      components: [
+        {
+          id: "experimental-component",
+          maturity: "experimental",
+        },
+      ],
+      maturityEvidence: {
+        schemaVersion: 2,
+        transitionPolicy: {
+          mode: "new-promotions-only",
+          legacyUnverifiedEntries: ["experimental-component"],
+          closureTask: "VF-2015",
+          verificationDeadlineGate: "G2",
+          releaseBlock: "1.0.0-beta.1",
+        },
+        entries: {},
+      },
+    },
+  },
+  legacyTransitionWithoutClosure: {
+    catalog: {
+      components: [
+        {
+          id: "legacy-component",
+          maturity: "stable",
+        },
+      ],
+      maturityEvidence: {
+        schemaVersion: 2,
+        transitionPolicy: {
+          mode: "new-promotions-only",
+          legacyUnverifiedEntries: ["legacy-component"],
+        },
+        entries: {},
+      },
+    },
+  },
   alphaInteractiveWithoutDom: metadataFor(
     "alpha-stable",
     (() => {

@@ -1,6 +1,7 @@
 import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
 
 import componentMetadataRaw from "../../../docs/metadata/components.json?raw";
+import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 
 type ComponentItem = {
   id: string;
@@ -10,6 +11,7 @@ type ComponentItem = {
   maturity: string;
   purpose: string;
   knownLimitations: string[];
+  evidence?: { status?: string };
 };
 
 type ComponentCatalog = {
@@ -26,13 +28,6 @@ const componentAreas = Object.entries(
     }, {}),
 ).sort(([left], [right]) => left.localeCompare(right));
 
-function statusVariant(status: string) {
-  if (status === "stable") return "success";
-  if (status === "experimental") return "warning";
-  if (status === "deprecated") return "danger";
-  return "info";
-}
-
 export function ComponentReferencePage() {
   return (
     <div className="vf-docs-reference">
@@ -44,25 +39,33 @@ export function ComponentReferencePage() {
           <div className="vf-docs-reference__grid">
             {components
               .sort((left, right) => left.displayName.localeCompare(right.displayName))
-              .map((component) => (
-                <Card className="vf-docs-reference-card" key={component.id} padding="md">
-                  <div className="vf-docs-reference-card__header">
-                    <div>
-                      <Heading level={4} size="sm">
-                        {component.displayName}
-                      </Heading>
-                      <code>{component.package}</code>
+              .map((component) => {
+                const maturity = getComponentMaturityPresentation(component);
+
+                return (
+                  <Card
+                    className="vf-docs-reference-card"
+                    key={component.id}
+                    padding="md"
+                  >
+                    <div className="vf-docs-reference-card__header">
+                      <div>
+                        <Heading level={4} size="sm">
+                          {component.displayName}
+                        </Heading>
+                        <code>{component.package}</code>
+                      </div>
+                      <Badge size="sm" tone="subtle" variant={maturity.variant}>
+                        {maturity.label}
+                      </Badge>
                     </div>
-                    <Badge size="sm" tone="subtle" variant={statusVariant(component.maturity)}>
-                      {component.maturity}
-                    </Badge>
-                  </div>
-                  <Text>{component.purpose}</Text>
-                  <Text tone="muted" size="sm">
-                    {component.knownLimitations.join(" ")}
-                  </Text>
-                </Card>
-              ))}
+                    <Text>{component.purpose}</Text>
+                    <Text tone="muted" size="sm">
+                      {component.knownLimitations.join(" ")}
+                    </Text>
+                  </Card>
+                );
+              })}
           </div>
         </Card>
       ))}

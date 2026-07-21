@@ -9,7 +9,7 @@
   min-width: 0;
   height: 100%;
 }
-.udg-header-cell.is-resizing {
+.udg-header-cell.udg-is-resizing {
   box-shadow: inset -2px 0 0 var(--udg-primary);
 }
 .udg-header-cell--dragging {
@@ -217,7 +217,7 @@
   line-height: 1;
   opacity: 0.55;
 }
-.udg-sort-indicator.is-active {
+.udg-sort-indicator.udg-is-active {
   color: var(--udg-primary);
   opacity: 1;
 }

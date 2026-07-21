@@ -10,10 +10,10 @@ export default defineConfig({
       reporter: ["text", "html", "json", "json-summary", "lcov"],
       reportsDirectory: "../../coverage/ui-core",
       thresholds: {
-        branches: 0,
-        functions: 0,
-        lines: 0,
-        statements: 0
+        branches: 75,
+        functions: 80,
+        lines: 80,
+        statements: 80
       }
     }
   }

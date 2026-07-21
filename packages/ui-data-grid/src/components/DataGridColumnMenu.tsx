@@ -266,8 +266,8 @@ export function DataGridColumnMenu<
                 <div
                   className={[
                     "udg-column-menu__row",
-                    draggedColumnId === column.id ? "is-dragging" : "",
-                    dropColumnId === column.id ? "is-drop-target" : ""
+                    draggedColumnId === column.id ? "udg-is-dragging" : "",
+                    dropColumnId === column.id ? "udg-is-drop-target" : ""
                   ].filter(Boolean).join(" ")}
                   key={column.id}
                   onDragLeave={() => setDropColumnId(null)}

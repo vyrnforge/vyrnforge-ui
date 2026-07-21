@@ -82,7 +82,7 @@
 .udg-segmented-control button + button {
   margin-left: -1px;
 }
-.udg-segmented-control button.is-active {
+.udg-segmented-control button.udg-is-active {
   z-index: 1;
   border-color: var(--udg-primary);
   color: var(--udg-primary);
@@ -165,10 +165,10 @@
 .udg-column-menu__row:focus-within {
   background: var(--udg-surface-subtle);
 }
-.udg-column-menu__row.is-dragging {
+.udg-column-menu__row.udg-is-dragging {
   opacity: 0.62;
 }
-.udg-column-menu__row.is-drop-target {
+.udg-column-menu__row.udg-is-drop-target {
   box-shadow: inset 3px 0 0 var(--udg-primary);
 }
 .udg-column-menu__row-actions {

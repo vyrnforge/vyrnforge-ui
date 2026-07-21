@@ -45,8 +45,8 @@
     "lint": "eslint . --config ../../eslint.config.mjs",
     "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests",
-    "test:coverage": "vitest run --coverage --passWithNoTests"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "tsup": "latest",

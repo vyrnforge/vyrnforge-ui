@@ -15,6 +15,7 @@ export const scopeKeys = [
   "consumer",
   "docs",
   "playground",
+  "fixtures",
   "full",
   "docs_only"
 ];
@@ -54,6 +55,7 @@ function markPackageRuntime(scope, packageName) {
   scope.consumer = true;
   scope.docs = true;
   scope.playground = true;
+  scope.fixtures = true;
 
   if (packageName === "ui-core") {
     scope.ui_core = true;
@@ -174,6 +176,21 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
+    if (file.startsWith("apps/regression-fixtures/")) {
+      scope.quality = true;
+      scope.fixtures = true;
+      reasons.add("regression fixture application");
+      continue;
+    }
+
+    if (file.startsWith("tests/dom/")) {
+      scope.quality = true;
+      scope.fixtures = true;
+      scope.ui_components = true;
+      reasons.add("shared DOM and accessibility test utilities");
+      continue;
+    }
+
     if (file.startsWith("docs/metadata/") || file === ".ai/COMPONENT_MAP.json") {
       scope.quality = true;
       scope.metadata = true;
@@ -209,7 +226,8 @@ export function planCiScope(files, { forceFull = false } = {}) {
     !scope.quality &&
     !scope.packages &&
     !scope.consumer &&
-    !scope.playground;
+    !scope.playground &&
+    !scope.fixtures;
 
   return { ...scope, changed_files: changedFiles, reasons: [...reasons] };
 }

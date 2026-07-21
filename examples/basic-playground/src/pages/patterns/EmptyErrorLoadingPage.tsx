@@ -2,7 +2,7 @@ import { Button, EmptyState, ErrorState, Heading, Icon, LoadingState, Skeleton }
 
 export function EmptyErrorLoadingPage() {
   return (
-    <div className="vf-playground-grid three">
+    <div className="vf-playground-grid vf-playground-grid--three">
       <section className="vf-playground-card">
         <Heading size="sm">Empty page</Heading>
         <EmptyState

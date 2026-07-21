@@ -43,6 +43,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify generated repository inventory
+        if: inputs['build-docs']
+        run: npm run verify:repository-inventory
+
       - name: Build package prerequisites
         shell: bash
         run: |

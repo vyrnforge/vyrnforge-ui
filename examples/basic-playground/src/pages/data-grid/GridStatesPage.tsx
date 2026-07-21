@@ -5,7 +5,7 @@ const stateColumns = userColumns.slice(0, 5);
 
 export function GridStatesPage() {
   return (
-    <div className="vf-playground-grid three">
+    <div className="vf-playground-grid vf-playground-grid--three">
       <section className="vf-playground-card">
         <h2>Empty grid</h2>
         <UniversalDataGrid

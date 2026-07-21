@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Button, Dialog, Tabs } from "../../index";
-import { createUser, getPortalRoot, render, screen, within } from "../../../test/dom";
+import { createUser, getPortalRoot, render, screen, within } from "../../../../../tests/dom";
 
 const tabItems = [
   { id: "summary", label: "Summary", content: "Summary panel" },
