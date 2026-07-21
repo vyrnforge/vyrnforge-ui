@@ -83,7 +83,10 @@ function runNpm(args, options = {}) {
     return run(process.execPath, [npmCliPath, ...args], options);
   }
 
-  return run(process.platform === "win32" ? "npm.cmd" : "npm", args, options);
+  return run("npm", args, {
+    shell: process.platform === "win32",
+    ...options
+  });
 }
 
 function relativePackagePath(packageInfo, target) {
@@ -91,17 +94,9 @@ function relativePackagePath(packageInfo, target) {
 }
 
 console.log("Building packages from clean generated output...");
-if (npmCliPath) {
-  execFileSync(process.execPath, [npmCliPath, "run", "build:packages"], {
-    cwd: root,
-    stdio: "inherit"
-  });
-} else {
-  execFileSync(process.platform === "win32" ? "npm.cmd" : "npm", ["run", "build:packages"], {
-    cwd: root,
-    stdio: "inherit"
-  });
-}
+runNpm(["run", "build:packages"], {
+  stdio: "inherit"
+});
 
 const packageByName = new Map(
   packages.map((packageInfo) => [
