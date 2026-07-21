@@ -6,6 +6,7 @@ on:
       - main
   pull_request:
     branches:
+      - improvement/controlled-hardening
       - main
   workflow_dispatch:
 
@@ -192,8 +193,11 @@ jobs:
   ci-gate:
     name: ci-gate
     needs:
-      - quality
-      - external-consumer
+      - plan
+      - quality-checks
+      - package-checks
+      - consumer-checks
+      - docs-checks
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -202,16 +206,59 @@ jobs:
     steps:
       - name: Enforce the stable required gate
         env:
-          QUALITY_RESULT: ${{ needs.quality.result }}
-          CONSUMER_RESULT: ${{ needs.external-consumer.result }}
+          PLAN_RESULT: ${{ needs.plan.result }}
+          QUALITY_REQUIRED: ${{ needs.plan.outputs.quality }}
+          QUALITY_RESULT: ${{ needs.quality-checks.result }}
+          PACKAGES_REQUIRED: ${{ needs.plan.outputs.packages }}
+          PACKAGES_RESULT: ${{ needs.package-checks.result }}
+          CONSUMER_REQUIRED: ${{ needs.plan.outputs.consumer }}
+          CONSUMER_RESULT: ${{ needs.consumer-checks.result }}
+          DOCS_REQUIRED: ${{ needs.plan.outputs.docs }}
+          PLAYGROUND_REQUIRED: ${{ needs.plan.outputs.playground }}
+          DOCS_RESULT: ${{ needs.docs-checks.result }}
         run: |
           node - <<'NODE'
-          const results = {
-            quality: process.env.QUALITY_RESULT,
-            externalConsumer: process.env.CONSUMER_RESULT
+          const checks = {
+            plan: { required: true, result: process.env.PLAN_RESULT },
+            quality: {
+              required: process.env.QUALITY_REQUIRED === "true",
+              result: process.env.QUALITY_RESULT
+            },
+            packages: {
+              required: process.env.PACKAGES_REQUIRED === "true",
+              result: process.env.PACKAGES_RESULT
+            },
+            consumer: {
+              required: process.env.CONSUMER_REQUIRED === "true",
+              result: process.env.CONSUMER_RESULT
+            },
+            documentation: {
+              required:
+                process.env.DOCS_REQUIRED === "true" ||
+                process.env.PLAYGROUND_REQUIRED === "true",
+              result: process.env.DOCS_RESULT
+            }
           };
-          console.log(results);
-          if (Object.values(results).some((result) => result !== "success")) {
+          const failures = Object.entries(checks).flatMap(([name, check]) => {
+            if (check.required && check.result !== "success") {
+              return `${name} was required but ${check.result}`;
+            }
+            if (!check.required && !["success", "skipped"].includes(check.result)) {
+              return `${name} was not required but ${check.result}`;
+            }
+            return [];
+          });
+
+          console.log(
+            Object.fromEntries(
+              Object.entries(checks).map(([name, check]) => [
+                name,
+                `${check.required ? "required" : "not-required"}:${check.result}`
+              ])
+            )
+          );
+          if (failures.length > 0) {
+            console.error(`ci-gate failed: ${failures.join("; ")}`);
             process.exit(1);
           }
           NODE
