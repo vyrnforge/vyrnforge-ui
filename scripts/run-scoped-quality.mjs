@@ -14,28 +14,30 @@ function readBoolean(name, defaultValue = false) {
 }
 
 function runNpm(args) {
-  const command = npmCliPath ? process.execPath : process.platform === "win32" ? "npm.cmd" : "npm";
+  const command = npmCliPath
+    ? process.execPath
+    : process.platform === "win32"
+      ? "npm.cmd"
+      : "npm";
   const commandArgs = npmCliPath ? [npmCliPath, ...args] : args;
   execFileSync(command, commandArgs, { cwd: root, stdio: "inherit" });
 }
 
 const full = readBoolean("CI_SCOPE_FULL");
-const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const core = full || readBoolean("CI_SCOPE_UI_CORE");
 const components = full || readBoolean("CI_SCOPE_UI_COMPONENTS");
 const dataGrid = full || readBoolean("CI_SCOPE_UI_DATA_GRID");
 
 runNpm(["run", "verify:ci"]);
-
-if (metadata) {
-  runNpm(["run", "verify:metadata"]);
-}
-
+runNpm(["run", "format:check"]);
 runNpm(["run", "lint"]);
+runNpm(["run", "lint:css"]);
+runNpm(["run", "verify:metadata"]);
+runNpm(["run", "verify:component-maturity"]);
+runNpm(["run", "test:coverage"]);
 
 if (full) {
   runNpm(["run", "typecheck"]);
-  runNpm(["run", "test"]);
   process.exit(0);
 }
 
@@ -54,10 +56,9 @@ if (dataGrid) {
 const selected = [
   [core, "@vyrnforge/ui-core"],
   [components, "@vyrnforge/ui-components"],
-  [dataGrid, "@vyrnforge/ui-data-grid"]
+  [dataGrid, "@vyrnforge/ui-data-grid"],
 ].filter(([enabled]) => enabled);
 
 for (const [, workspace] of selected) {
   runNpm(["--ignore-scripts", "run", "typecheck", "--workspace", workspace]);
-  runNpm(["run", "test", "--workspace", workspace]);
 }

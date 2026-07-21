@@ -10,8 +10,8 @@ not own product behavior, application state, public APIs, or styling contracts.
 ## Objectives
 
 - Keep one stable branch-protection gate: `ci-gate`.
-- Run the CI orchestrator for every pull request targeting `main` and every push
-  to `main`.
+- Run the CI orchestrator for every pull request targeting
+  `improvement/controlled-hardening` or `main`, and every push to `main`.
 - Select validation from the actual changed paths without workflow-level path
   filters.
 - Validate affected packages and their downstream dependents.
@@ -25,16 +25,16 @@ not own product behavior, application state, public APIs, or styling contracts.
 
 ## Workflow map
 
-| Workflow | Trigger | Responsibility | Write capability |
-| --- | --- | --- | --- |
-| `.github/workflows/ci.yml` | Pull request, push to `main`, manual | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate` | None |
-| `.github/workflows/_quality.yml` | `workflow_call` | Metadata, lint, targeted/full typecheck, and targeted/full tests | None |
-| `.github/workflows/_packages.yml` | `workflow_call` | Clean package builds, package payload validation, declarations, CSS, LICENSE, and dry-run packs | None |
-| `.github/workflows/_consumer.yml` | `workflow_call` | Packed-artifact consumer installation and production build | None |
-| `.github/workflows/_docs.yml` | `workflow_call` | Documentation and playground builds | None |
-| `.github/workflows/pages.yml` | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only | Pages deployment only |
-| `.github/workflows/release.yml` | Manual | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release | Split by job |
-| `.github/workflows/nightly.yml` | Weekly schedule, manual | Full pinned Node 24 LTS validation and high-severity dependency audit | None |
+| Workflow                          | Trigger                                                 | Responsibility                                                                                         | Write capability      |
+| --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
+| `.github/workflows/ci.yml`        | Pull request, push to `main`, manual                    | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate` | None                  |
+| `.github/workflows/_quality.yml`  | `workflow_call`                                         | Metadata, lint, targeted/full typecheck, and targeted/full tests                                       | None                  |
+| `.github/workflows/_packages.yml` | `workflow_call`                                         | Clean package builds, package payload validation, declarations, CSS, LICENSE, and dry-run packs        | None                  |
+| `.github/workflows/_consumer.yml` | `workflow_call`                                         | Packed-artifact consumer installation and production build                                             | None                  |
+| `.github/workflows/_docs.yml`     | `workflow_call`                                         | Documentation and playground builds                                                                    | None                  |
+| `.github/workflows/pages.yml`     | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only                                                                     | Pages deployment only |
+| `.github/workflows/release.yml`   | Manual                                                  | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release        | Split by job          |
+| `.github/workflows/nightly.yml`   | Weekly schedule, manual                                 | Full pinned Node 24 LTS validation and high-severity dependency audit                                  | None                  |
 
 Reusable workflow files live directly in `.github/workflows/` because GitHub
 Actions does not support reusable workflow subdirectories.
@@ -65,20 +65,20 @@ ui-core
 
 The change planner uses the following impact rules:
 
-| Changed area | Package quality | Package payloads | Consumer | Docs | Playground |
-| --- | --- | --- | --- | --- | --- |
-| `ui-core` runtime/public surface | core, components, data-grid | all | yes | yes | yes |
-| `ui-components` runtime/public surface | components, data-grid | all | yes | yes | yes |
-| `ui-data-grid` runtime/public surface | data-grid | all | yes | yes | yes |
-| Package test only | changed package | no | no | no | no |
-| Package README or package LICENSE | no | all coordinated payloads | yes | no | no |
-| Consumer fixture | no | included by consumer verifier | yes | no | no |
-| Metadata | metadata | no | no | yes | no |
-| Canonical docs | no | no | no | yes | no |
-| Docs app | no | no | no | yes | no |
-| Playground app | no | no | no | no | yes |
-| Root manifest, lockfile, shared build config, scripts, or workflows | full | all | yes | yes | yes |
-| Unknown path | safe full fallback | all | yes | yes | yes |
+| Changed area                                                        | Package quality             | Package payloads              | Consumer | Docs | Playground |
+| ------------------------------------------------------------------- | --------------------------- | ----------------------------- | -------- | ---- | ---------- |
+| `ui-core` runtime/public surface                                    | core, components, data-grid | all                           | yes      | yes  | yes        |
+| `ui-components` runtime/public surface                              | components, data-grid       | all                           | yes      | yes  | yes        |
+| `ui-data-grid` runtime/public surface                               | data-grid                   | all                           | yes      | yes  | yes        |
+| Package test only                                                   | changed package             | no                            | no       | no   | no         |
+| Package README or package LICENSE                                   | no                          | all coordinated payloads      | yes      | no   | no         |
+| Consumer fixture                                                    | no                          | included by consumer verifier | yes      | no   | no         |
+| Metadata                                                            | metadata                    | no                            | no       | yes  | no         |
+| Canonical docs                                                      | no                          | no                            | no       | yes  | no         |
+| Docs app                                                            | no                          | no                            | no       | yes  | no         |
+| Playground app                                                      | no                          | no                            | no       | no   | yes        |
+| Root manifest, lockfile, shared build config, scripts, or workflows | full                        | all                           | yes      | yes  | yes        |
+| Unknown path                                                        | safe full fallback          | all                           | yes      | yes  | yes        |
 
 The planner is implemented by `scripts/detect-ci-scope.mjs`. Its machine outputs
 are:
@@ -115,6 +115,27 @@ The long-term required branch-protection check is:
 ci-gate
 ```
 
+`ci-gate` is the stable aggregate check. It directly evaluates the planner and
+each reusable validation result. A planned validation must succeed; a skipped
+validation is accepted only when the planner did not require it. Failed,
+cancelled, or unexpectedly skipped planned work fails `ci-gate`.
+
+The G1 quality checks aggregated by `ci-gate` are:
+
+- toolchain and workflow-contract verification;
+- package-boundary verification and package payload verification;
+- ESLint, formatting, and CSS lint;
+- TypeScript typechecking;
+- unit and DOM interaction tests, including automated axe accessibility tests;
+- package coverage thresholds;
+- normalized component metadata and component-maturity verification; and
+- documentation and playground builds whenever the planner requires them.
+
+Node/React compatibility matrices, dependency audit, npm publication,
+registry-consumer verification, Pages deployment, and release-record creation
+remain later compatibility or release checks. They are intentionally outside
+the pull-request `ci-gate`; the nightly and release workflows own them.
+
 The orchestrator temporarily preserves these compatibility checks:
 
 ```text
@@ -131,15 +152,20 @@ existing branch rule. After the new workflow has completed successfully on
 3. Remove the old `quality` and `external-consumer` requirements.
 4. Keep the compatibility jobs until a later infrastructure cleanup release.
 
+Repository administrators will later configure `ci-gate` as the single
+required repository-ruleset check after it has completed successfully on
+`main`. This workflow does not configure repository rulesets.
+
 ## Validation responsibilities
 
 ### Quality
 
-`scripts/run-scoped-quality.mjs` performs targeted package typecheck and tests
-when possible. It builds required package prerequisites once and suppresses
-repeated `pretypecheck` rebuilds.
+`scripts/run-scoped-quality.mjs` runs the mandatory repository checks and
+coverage suite, then performs targeted package typechecks when possible. It
+builds required package prerequisites once and suppresses repeated
+`pretypecheck` rebuilds.
 
-A full scope runs the authoritative root typecheck and test commands.
+A full scope runs the authoritative root typecheck command.
 
 ### Package payloads
 
