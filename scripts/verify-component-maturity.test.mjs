@@ -58,3 +58,23 @@ test("Deprecated evidence requires migration guidance", () => {
 test("Experimental evidence may remain incomplete after owner and locations are recorded", () => {
   assert.deepEqual(verifyFixture(maturityFixtures.experimentalIncomplete), []);
 });
+
+
+test("Legacy maturity exceptions require an explicit closure contract", () => {
+  const failures = verifyFixture(maturityFixtures.legacyTransitionWithoutClosure);
+
+  assert(failures.some((failure) => failure.includes("closureTask")));
+  assert(failures.some((failure) => failure.includes("verificationDeadlineGate")));
+  assert(failures.some((failure) => failure.includes("releaseBlock")));
+});
+
+
+test("Experimental components cannot use the legacy stable evidence exception", () => {
+  const failures = verifyFixture(maturityFixtures.experimentalUsingLegacyException);
+
+  assert(
+    failures.some((failure) =>
+      failure.includes("lower-maturity entries must not use the legacy evidence exception"),
+    ),
+  );
+});

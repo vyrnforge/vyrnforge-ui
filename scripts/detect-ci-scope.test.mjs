@@ -130,3 +130,21 @@ test("missing diff uses safe full validation", () => {
   const plan = planCiScope([]);
   assert.equal(plan.full, true);
 });
+
+
+test("regression fixture changes run fixture quality without full fallback", () => {
+  const plan = planCiScope(["apps/regression-fixtures/src/FixtureApp.tsx"]);
+
+  assert.equal(plan.quality, true);
+  assert.equal(plan.fixtures, true);
+  assert.equal(plan.full, false);
+});
+
+test("shared DOM test utility changes run components and fixtures", () => {
+  const plan = planCiScope(["tests/dom/index.tsx"]);
+
+  assert.equal(plan.quality, true);
+  assert.equal(plan.fixtures, true);
+  assert.equal(plan.ui_components, true);
+  assert.equal(plan.full, false);
+});

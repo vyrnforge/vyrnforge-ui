@@ -3,7 +3,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const output = "docs/governance/repository-inventory.md";
+const outputArgumentIndex = process.argv.indexOf("--output");
+const output =
+  outputArgumentIndex >= 0 && process.argv[outputArgumentIndex + 1]
+    ? process.argv[outputArgumentIndex + 1]
+    : "docs/governance/repository-inventory.md";
 const packageDirectories = ["ui-core", "ui-components", "ui-data-grid"];
 const owners = {
   "@vyrnforge/ui-core": "UI Platform",
@@ -93,9 +97,9 @@ function testFor(name, files) {
   const content = matches.map(text).join("\n");
   const types = ["pure/unit"];
   if (/renderToStaticMarkup|renderToString/.test(content)) types.push("static markup");
-  if (/createRoot|dispatchEvent|fireEvent|userEvent|@testing-library\/react/.test(content)) types.push("DOM interaction");
+  if (/createRoot|dispatchEvent|fireEvent|userEvent|createUser|@testing-library\/react/.test(content)) types.push("DOM interaction");
   if (/playwright|cypress|webdriver/i.test(content)) types.push("browser");
-  if (/axe|toHaveNoViolations|jest-axe/i.test(content)) types.push("accessibility");
+  if (/axe|toHaveNoViolations|jest-axe|assertNoAccessibilityViolations/i.test(content)) types.push("accessibility");
   return [matches.join(", "), types.join(", ")];
 }
 
@@ -105,7 +109,11 @@ const catalog = json("docs/metadata/components.json").components;
 const catalogByKey = new Map(catalog.map((item) => [`${item.package}:${item.displayName}`, item]));
 const docs = walk("docs", (file) => file.endsWith(".md") && !file.includes("/archive/"));
 const allDocs = walk("docs", (file) => file.endsWith(".md"));
-const tests = walk("packages", (file) => /\.test\.(ts|tsx|mjs)$/.test(file));
+const tests = [
+  ...walk("packages", (file) => /\.test\.(ts|tsx|mjs)$/.test(file)),
+  ...walk("apps", (file) => /\.test\.(ts|tsx|mjs)$/.test(file)),
+  ...walk("scripts", (file) => /\.test\.(ts|tsx|mjs)$/.test(file))
+].sort((a, b) => a.localeCompare(b));
 const workflows = walk(".github/workflows", (file) => file.endsWith(".yml"));
 const routes = text("examples/basic-playground/src/app/routes.ts");
 const records = packageDirectories.map((directory) => {
@@ -143,10 +151,18 @@ const components = records.filter((record) => record.directory !== "ui-core").fl
 const gridFiles = walk("packages/ui-data-grid/src", (file) => /\.(ts|tsx)$/.test(file));
 const largeGridFiles = gridFiles.map((file) => [file, countLines(file)]).sort((a, b) => b[1] - a[1]).slice(0, 5);
 const staticTests = tests.filter((file) => /renderToStaticMarkup|renderToString/.test(text(file))).length;
-const domTests = tests.filter((file) => /createRoot|dispatchEvent|fireEvent|userEvent|@testing-library\/react/.test(text(file))).length;
+const domTests = tests.filter((file) => /createRoot|dispatchEvent|fireEvent|userEvent|createUser|@testing-library\/react/.test(text(file))).length;
 const browserTests = tests.filter((file) => /playwright|cypress|webdriver/i.test(text(file))).length;
-const accessibilityTests = tests.filter((file) => /axe|toHaveNoViolations|jest-axe/i.test(text(file))).length;
-const totals = { stable: 0, experimental: 0, planned: 0, deprecated: 0, internal: 0 };
+const accessibilityTests = tests.filter((file) => /axe|toHaveNoViolations|jest-axe|assertNoAccessibilityViolations/i.test(text(file))).length;
+const totals = {
+  stable: 0,
+  "beta-stable": 0,
+  "alpha-stable": 0,
+  experimental: 0,
+  planned: 0,
+  deprecated: 0,
+  internal: 0
+};
 for (const component of catalog) if (component.maturity in totals) totals[component.maturity] += 1;
 
 const workflowPurposes = {
@@ -228,6 +244,7 @@ const outputLines = [
     ["Component metadata", "Canonical `docs/metadata/components.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`."],
     ["Playground", `Route registry ` + "`examples/basic-playground/src/app/routes.ts`; " + walk("examples/basic-playground/src/pages", (file) => file.endsWith(".tsx")).length + " page modules."],
     ["Docs app", walk("apps/docs/src", (file) => /\.(ts|tsx|css)$/.test(file)).length + " source/style files under `apps/docs/src`; it is a viewer, not canonical API truth."],
+    ["Regression fixture app", walk("apps/regression-fixtures/src", (file) => /\.(ts|tsx|css)$/.test(file)).length + " deterministic fixture source/style files; `npm run fixtures:verify` builds and tests the public-package consumer surface."],
     ["Maturity source", "`docs/metadata/components.json` is the sole structured maturity source. Playground and docs-app reference views consume it; prose remains reviewable documentation."],
     ["AI/contributor context", "`AGENTS.md`, `.ai/AI_CONTEXT.md`, `.ai/CODING_RULES.md`, `.ai/DOC_USAGE_GUIDE.md`, `.ai/REPO_MAP.md`, `CONTRIBUTING.md`, and `SECURITY.md`."],
     ["Potential conflicts", "Q1 audit documents stale `dv` terminology and planned-surface presentation as follow-up documentation work."]
@@ -236,7 +253,7 @@ const outputLines = [
   "## F. Test Inventory",
   "",
   table(["Area", "Measured evidence"], [
-    ["Runner/configuration", "Package test scripts use `vitest run --passWithNoTests`. No separate browser-test runner configuration was found."],
+    ["Runner/configuration", "Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. No separate browser-test runner configuration was found."],
     ["Test files", tests.length],
     ["Pure/unit", `${tests.length - staticTests} test files without static-render calls; primarily grid core, state, adapters, and theme helpers.`],
     ["Static markup", `${staticTests} test files use server-side static markup rendering.`],
@@ -244,8 +261,9 @@ const outputLines = [
     ["Browser", `${browserTests} detected browser-test files.`],
     ["Accessibility", `${accessibilityTests} detected automated accessibility-test files.`],
     ["Visual regression", "No visual-regression test/configuration evidence found."],
-    ["Coverage", "No coverage script or coverage configuration was detected in root scripts."],
-    ["Missing/silently skipped quality", "`--passWithNoTests` permits zero tests. `ui-core` has no discovered package test file; coverage is not enforced by a detected command."]
+    ["Coverage", rootPackage.scripts?.["test:coverage"] ? "Root `test:coverage` is configured with package-specific V8 coverage reports and thresholds." : "No root coverage command detected."],
+    ["Regression fixtures", rootPackage.scripts?.["fixtures:verify"] ? "Root `fixtures:verify` builds and tests the deterministic regression fixture application." : "Regression fixture verification is not configured."],
+    ["Missing/silently skipped quality", browserTests === 0 ? "Browser and visual-regression evidence remains pending S2. Current DOM and axe checks do not replace real-browser or assistive-technology review." : "No gap detected by inventory."]
   ]),
   "",
   "## G. CI/CD and Release Inventory",
@@ -267,8 +285,8 @@ const outputLines = [
   "",
   table(["Severity", "Workstream", "Observation", "Evidence / next verification"], [
     ["High", "Data Grid", "`UniversalDataGrid.tsx` is a large responsibility concentration.", `Measured at ${countLines("packages/ui-data-grid/src/components/UniversalDataGrid.tsx")} lines; review boundaries before future feature expansion.`],
-    ["High", "Accessibility", "No browser or automated accessibility-test evidence was detected for composite controls and grid interactions.", "Run the existing manual quality checklist and plan browser/accessibility coverage separately."],
-    ["Medium", "Quality Engineering", "Test coverage is uneven and can be silently absent.", "`vitest run --passWithNoTests`; no coverage command/configuration detected."],
+    ["High", "Accessibility", "No browser or assistive-technology evidence was detected for composite controls and grid interactions.", "Automated axe and DOM evidence exists, but S2 browser and manual screen-reader review remain required."],
+    ["Medium", "Quality Engineering", "Coverage remains uneven across packages despite an enforced baseline.", "Use package coverage reports and raise thresholds only with measured evidence; browser behavior is tracked separately."],
     ["Medium", "Documentation", "Component status has several structured and prose representations.", "Keep metadata verification authoritative for structured parity and review routes/docs prose."],
     ["Medium", "Documentation", "Known terminology and planned-surface presentation gaps remain.", "See Q1-P2-004 and Q1-P2-006 in `docs/quality/q1-component-quality-audit.md`."],
     ["Medium", "Packaging & Release", "Trusted publishing relies on external GitHub/npm configuration.", "Verify `npm-release` protection and npm trusted-publisher bindings before publish mode."],
@@ -297,7 +315,7 @@ const outputLines = [
     ["Publishable packages", records.length],
     ["Package-root export names", records.reduce((sum, record) => sum + record.exports.length, 0)],
     ["Public components inventoried", components.length],
-    ["Package test files", tests.length],
+    ["Repository test files", tests.length],
     ["Static-markup test files", staticTests],
     ["DOM interaction test files", domTests],
     ["Browser test files", browserTests],
@@ -306,6 +324,8 @@ const outputLines = [
     ["Reusable workflows", workflows.filter((file) => path.basename(file).startsWith("_")).length],
     ["Active Markdown documentation files", docs.length],
     ["Stable metadata entries", totals.stable],
+    ["Beta-stable metadata entries", totals["beta-stable"]],
+    ["Alpha-stable metadata entries", totals["alpha-stable"]],
     ["Experimental metadata entries", totals.experimental],
     ["Planned metadata entries", totals.planned],
     ["Deprecated metadata entries", totals.deprecated],
@@ -321,5 +341,6 @@ const outputLines = [
   ""
 ];
 
-writeFileSync(path.join(root, output), `${outputLines.join("\n")}\n`, "utf8");
-console.log(`Repository inventory generated: ${output}`);
+const outputPath = path.isAbsolute(output) ? output : path.join(root, output);
+writeFileSync(outputPath, `${outputLines.join("\n")}\n`, "utf8");
+console.log(`Repository inventory generated: ${outputPath}`);

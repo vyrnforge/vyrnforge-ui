@@ -21,12 +21,12 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "inventory:repository": "node scripts/governance/generate-repository-inventory.mjs",
-    "quality": "npm run verify:ci && npm run verify:metadata && npm run verify:component-maturity && npm run lint && npm run lint:css && npm run typecheck && npm run test && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
-    "lint": "eslint eslint.config.mjs scripts tests/package-consumer --config eslint.config.mjs && npm run lint --workspace @vyrnforge/ui-core && npm run lint --workspace @vyrnforge/ui-components && npm run lint --workspace @vyrnforge/ui-data-grid && npm run lint --workspace @vyrnforge/ui-docs && npm run lint --workspace @vyrnforge/ui-data-grid-basic-playground && npm run lint --workspace @vyrnforge/ui-regression-fixtures",
-    "lint:fix": "eslint eslint.config.mjs scripts tests/package-consumer --config eslint.config.mjs --fix && npm run lint:fix --workspace @vyrnforge/ui-core && npm run lint:fix --workspace @vyrnforge/ui-components && npm run lint:fix --workspace @vyrnforge/ui-data-grid && npm run lint:fix --workspace @vyrnforge/ui-docs && npm run lint:fix --workspace @vyrnforge/ui-data-grid-basic-playground && npm run lint:fix --workspace @vyrnforge/ui-regression-fixtures",
+    "quality": "npm run verify:ci && npm run verify:metadata && npm run verify:component-maturity && npm run verify:repository-inventory && npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm run test:coverage && npm run fixtures:verify && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
+    "lint": "eslint eslint.config.mjs scripts tests --config eslint.config.mjs && npm run lint --workspace @vyrnforge/ui-core && npm run lint --workspace @vyrnforge/ui-components && npm run lint --workspace @vyrnforge/ui-data-grid && npm run lint --workspace @vyrnforge/ui-docs && npm run lint --workspace @vyrnforge/ui-data-grid-basic-playground && npm run lint --workspace @vyrnforge/ui-regression-fixtures",
+    "lint:fix": "eslint eslint.config.mjs scripts tests --config eslint.config.mjs --fix && npm run lint:fix --workspace @vyrnforge/ui-core && npm run lint:fix --workspace @vyrnforge/ui-components && npm run lint:fix --workspace @vyrnforge/ui-data-grid && npm run lint:fix --workspace @vyrnforge/ui-docs && npm run lint:fix --workspace @vyrnforge/ui-data-grid-basic-playground && npm run lint:fix --workspace @vyrnforge/ui-regression-fixtures",
     "lint:css": "stylelint \"{packages,apps,examples,tests}/**/*.css\"",
     "lint:css:fix": "npm run lint:css -- --fix",
-    "typecheck": "npm run typecheck --workspace @vyrnforge/ui-core && npm run typecheck --workspace @vyrnforge/ui-components && npm run typecheck --workspace @vyrnforge/ui-data-grid && npm run typecheck --workspace @vyrnforge/ui-docs && npm run typecheck --workspace @vyrnforge/ui-data-grid-basic-playground",
+    "typecheck": "npm run typecheck --workspace @vyrnforge/ui-core && npm run typecheck --workspace @vyrnforge/ui-components && npm run typecheck --workspace @vyrnforge/ui-data-grid && npm run typecheck --workspace @vyrnforge/ui-docs && npm run typecheck --workspace @vyrnforge/ui-data-grid-basic-playground && npm run typecheck --workspace @vyrnforge/ui-regression-fixtures",
     "test": "npm run test --workspace @vyrnforge/ui-core && npm run test --workspace @vyrnforge/ui-components && npm run test --workspace @vyrnforge/ui-data-grid",
     "test:coverage": "npm run test:coverage --workspace @vyrnforge/ui-core && npm run test:coverage --workspace @vyrnforge/ui-components && npm run test:coverage --workspace @vyrnforge/ui-data-grid",
     "verify:component-metadata": "node scripts/verify-component-metadata.mjs",
@@ -44,7 +44,8 @@
     "verify:ci": "npm run verify:toolchain && npm run test:ci-scope && npm run test:package-boundaries && npm run test:component-metadata && npm run test:component-maturity && npm run verify:package-boundaries && npm run verify:workflows && npm run verify:templates",
     "verify:registry-release": "node scripts/verify-registry-release.mjs",
     "verify:templates": "node scripts/verify-repository-templates.mjs",
-    "verify:toolchain": "node scripts/verify-toolchain.mjs"
+    "verify:toolchain": "node scripts/verify-toolchain.mjs",
+    "verify:repository-inventory": "node scripts/governance/verify-repository-inventory.mjs"
   },
   "packageManager": "npm@11.16.0",
   "engines": {

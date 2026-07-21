@@ -11,8 +11,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, `@vyrnforge/ui-data-grid` |
-| Documentation | 77 active Markdown files; 23 archived Markdown files |
-| Scripts | 34 root npm scripts; repository automation under `scripts/` |
+| Documentation | 79 active Markdown files; 23 archived Markdown files |
+| Scripts | 38 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 8 workflow files, including 4 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
@@ -29,7 +29,7 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Dependencies | None |
 | Peer dependencies | None |
 | Build script | `tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .` |
-| Test script | `vitest run --passWithNoTests` |
+| Test script | `vitest run` |
 | Current apparent maturity | stable: 3 |
 | Suggested accountable owner | UI Platform |
 
@@ -74,7 +74,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Autocomplete | @vyrnforge/ui-components | packages/ui-components/src/components/Autocomplete/Autocomplete.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | /components/forms/autocomplete | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
 | Badge | @vyrnforge/ui-components | packages/ui-components/src/components/Badge/Badge.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | /components/feedback/badge | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No browser evidence; No accessibility-test evidence | Component Team |
 | Breadcrumbs | @vyrnforge/ui-components | packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx | Yes | docs/api/ui-components-api.md, docs/benchmark/06-roadmap-gap-analysis.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
-| Button | @vyrnforge/ui-components | packages/ui-components/src/components/Button/Button.tsx | Yes | docs/api/README.md, docs/api/ui-components-api.md | /components/actions/button | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No browser evidence; No accessibility-test evidence | Component Team |
+| Button | @vyrnforge/ui-components | packages/ui-components/src/components/Button/Button.tsx | Yes | docs/api/README.md, docs/api/ui-components-api.md | /components/actions/button | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction, accessibility | stable | No browser evidence | Component Team |
 | ButtonGroup | @vyrnforge/ui-components | packages/ui-components/src/components/ButtonGroup/ButtonGroup.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | /components/actions/button-group | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
 | Caption | @vyrnforge/ui-components | packages/ui-components/src/components/Typography/Caption.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | No focused test found | Requires verification | stable | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | Card | @vyrnforge/ui-components | packages/ui-components/src/components/Card/Card.tsx | Yes | docs/api/import-and-setup.md, docs/api/ui-components-api.md | No dedicated route found | No focused test found | Requires verification | stable | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
@@ -85,12 +85,12 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | ConfirmDialog | @vyrnforge/ui-components | packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | DateInput | @vyrnforge/ui-components | packages/ui-components/src/components/DateInput/DateInput.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | /components/forms/date-input | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
 | DateTimeInput | @vyrnforge/ui-components | packages/ui-components/src/components/DateTimeInput/DateTimeInput.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | /components/forms/datetime-input | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
-| Dialog | @vyrnforge/ui-components | packages/ui-components/src/components/Dialog/Dialog.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | /components/overlays/dialog | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No browser evidence; No accessibility-test evidence | Component Team |
+| Dialog | @vyrnforge/ui-components | packages/ui-components/src/components/Dialog/Dialog.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | /components/overlays/dialog | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction, accessibility | stable | No browser evidence | Component Team |
 | Drawer | @vyrnforge/ui-components | packages/ui-components/src/components/Drawer/Drawer.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | /components/overlays/drawer | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No browser evidence; No accessibility-test evidence | Component Team |
 | Dropdown | @vyrnforge/ui-components | packages/ui-components/src/components/Dropdown/Dropdown.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | /components/overlays/dropdown | No focused test found | Requires verification | stable | No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | EmptyState | @vyrnforge/ui-components | packages/ui-components/src/components/EmptyState/EmptyState.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | ErrorState | @vyrnforge/ui-components | packages/ui-components/src/components/ErrorState/ErrorState.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
-| Field | @vyrnforge/ui-components | packages/ui-components/src/components/Field/Field.tsx | Yes | docs/api/ui-components-api.md, docs/components/forms/autocomplete.md | /components/forms/field | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
+| Field | @vyrnforge/ui-components | packages/ui-components/src/components/Field/Field.tsx | Yes | docs/api/ui-components-api.md, docs/components/forms/autocomplete.md | /components/forms/field | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, accessibility | experimental | No browser evidence | Component Team |
 | Heading | @vyrnforge/ui-components | packages/ui-components/src/components/Typography/Heading.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | No focused test found | Requires verification | stable | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | Icon | @vyrnforge/ui-components | packages/ui-components/src/components/Icon/Icon.tsx | Yes | docs/api/ui-components-api.md, docs/benchmark/02-component-coverage-comparison.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | IconButton | @vyrnforge/ui-components | packages/ui-components/src/components/IconButton/IconButton.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/05-accessibility-standards.md | /components/actions/icon-button | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No browser evidence; No accessibility-test evidence | Component Team |
@@ -121,10 +121,10 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Stack | @vyrnforge/ui-components | packages/ui-components/src/components/Stack/Stack.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | No dedicated route found | No focused test found | Requires verification | stable | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | StatusBadge | @vyrnforge/ui-components | packages/ui-components/src/components/Badge/StatusBadge.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | No focused test found | Requires verification | stable | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | Switch | @vyrnforge/ui-components | packages/ui-components/src/components/Switch/Switch.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | /components/forms/switch | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
-| Tabs | @vyrnforge/ui-components | packages/ui-components/src/components/Tabs/Tabs.tsx | Yes | docs/api/ui-components-api.md, docs/benchmark/02-component-coverage-comparison.md | /components/navigation/tabs | packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
-| Text | @vyrnforge/ui-components | packages/ui-components/src/components/Typography/Text.tsx | Yes | docs/api/ui-components-api.md, docs/api/ui-core-api.md | No dedicated route found | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | stable | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
+| Tabs | @vyrnforge/ui-components | packages/ui-components/src/components/Tabs/Tabs.tsx | Yes | docs/api/ui-components-api.md, docs/benchmark/02-component-coverage-comparison.md | /components/navigation/tabs | packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction | experimental | No browser evidence; No accessibility-test evidence | Component Team |
+| Text | @vyrnforge/ui-components | packages/ui-components/src/components/Typography/Text.tsx | Yes | docs/api/ui-components-api.md, docs/api/ui-core-api.md | No dedicated route found | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction, accessibility | stable | No dedicated playground route; No browser evidence | Component Team |
 | Textarea | @vyrnforge/ui-components | packages/ui-components/src/components/Textarea/Textarea.tsx | Yes | docs/api/ui-components-api.md, docs/benchmark/02-component-coverage-comparison.md | /components/forms/textarea | No focused test found | Requires verification | experimental | No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
-| TextInput | @vyrnforge/ui-components | packages/ui-components/src/components/TextInput/TextInput.tsx | Yes | docs/api/ui-components-api.md, docs/components/forms/autocomplete.md | /components/forms/text-input | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
+| TextInput | @vyrnforge/ui-components | packages/ui-components/src/components/TextInput/TextInput.tsx | Yes | docs/api/ui-components-api.md, docs/components/forms/autocomplete.md | /components/forms/text-input | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, accessibility | experimental | No browser evidence | Component Team |
 | Toast | @vyrnforge/ui-components | packages/ui-components/src/components/Toast/Toast.tsx | Yes | docs/architecture/07-overlay-and-focus.md, docs/benchmark/02-component-coverage-comparison.md | /components/feedback/toast | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
 | ToastAction | @vyrnforge/ui-components | packages/ui-components/src/components/Toast/ToastAction.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | ToastProvider | @vyrnforge/ui-components | packages/ui-components/src/components/Toast/ToastProvider.tsx | Yes | docs/api/public-vs-internal-api.md, docs/api/ui-components-api.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
@@ -165,10 +165,11 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 77 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 79 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
-| Docs app | 14 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
+| Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
+| Regression fixture app | 7 deterministic fixture source/style files; `npm run fixtures:verify` builds and tests the public-package consumer surface. |
 | Maturity source | `docs/metadata/components.json` is the sole structured maturity source. Playground and docs-app reference views consume it; prose remains reviewable documentation. |
 | AI/contributor context | `AGENTS.md`, `.ai/AI_CONTEXT.md`, `.ai/CODING_RULES.md`, `.ai/DOC_USAGE_GUIDE.md`, `.ai/REPO_MAP.md`, `CONTRIBUTING.md`, and `SECURITY.md`. |
 | Potential conflicts | Q1 audit documents stale `dv` terminology and planned-surface presentation as follow-up documentation work. |
@@ -177,16 +178,17 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 
 | Area | Measured evidence |
 | --- | --- |
-| Runner/configuration | Package test scripts use `vitest run --passWithNoTests`. No separate browser-test runner configuration was found. |
-| Test files | 20 |
-| Pure/unit | 18 test files without static-render calls; primarily grid core, state, adapters, and theme helpers. |
+| Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. No separate browser-test runner configuration was found. |
+| Test files | 27 |
+| Pure/unit | 25 test files without static-render calls; primarily grid core, state, adapters, and theme helpers. |
 | Static markup | 2 test files use server-side static markup rendering. |
-| DOM interaction | 0 detected test files with DOM interaction helpers. |
+| DOM interaction | 2 detected test files with DOM interaction helpers. |
 | Browser | 0 detected browser-test files. |
-| Accessibility | 0 detected automated accessibility-test files. |
+| Accessibility | 2 detected automated accessibility-test files. |
 | Visual regression | No visual-regression test/configuration evidence found. |
-| Coverage | No coverage script or coverage configuration was detected in root scripts. |
-| Missing/silently skipped quality | `--passWithNoTests` permits zero tests. `ui-core` has no discovered package test file; coverage is not enforced by a detected command. |
+| Coverage | Root `test:coverage` is configured with package-specific V8 coverage reports and thresholds. |
+| Regression fixtures | Root `fixtures:verify` builds and tests the deterministic regression fixture application. |
+| Missing/silently skipped quality | Browser and visual-regression evidence remains pending S2. Current DOM and axe checks do not replace real-browser or assistive-technology review. |
 
 ## G. CI/CD and Release Inventory
 
@@ -215,8 +217,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Severity | Workstream | Observation | Evidence / next verification |
 | --- | --- | --- | --- |
 | High | Data Grid | `UniversalDataGrid.tsx` is a large responsibility concentration. | Measured at 1477 lines; review boundaries before future feature expansion. |
-| High | Accessibility | No browser or automated accessibility-test evidence was detected for composite controls and grid interactions. | Run the existing manual quality checklist and plan browser/accessibility coverage separately. |
-| Medium | Quality Engineering | Test coverage is uneven and can be silently absent. | `vitest run --passWithNoTests`; no coverage command/configuration detected. |
+| High | Accessibility | No browser or assistive-technology evidence was detected for composite controls and grid interactions. | Automated axe and DOM evidence exists, but S2 browser and manual screen-reader review remain required. |
+| Medium | Quality Engineering | Coverage remains uneven across packages despite an enforced baseline. | Use package coverage reports and raise thresholds only with measured evidence; browser behavior is tracked separately. |
 | Medium | Documentation | Component status has several structured and prose representations. | Keep metadata verification authoritative for structured parity and review routes/docs prose. |
 | Medium | Documentation | Known terminology and planned-surface presentation gaps remain. | See Q1-P2-004 and Q1-P2-006 in `docs/quality/q1-component-quality-audit.md`. |
 | Medium | Packaging & Release | Trusted publishing relies on external GitHub/npm configuration. | Verify `npm-release` protection and npm trusted-publisher bindings before publish mode. |
@@ -245,15 +247,17 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Publishable packages | 3 |
 | Package-root export names | 337 |
 | Public components inventoried | 75 |
-| Package test files | 20 |
+| Repository test files | 27 |
 | Static-markup test files | 2 |
-| DOM interaction test files | 0 |
+| DOM interaction test files | 2 |
 | Browser test files | 0 |
-| Automated accessibility-test files | 0 |
+| Automated accessibility-test files | 2 |
 | Workflow files | 8 |
 | Reusable workflows | 4 |
-| Active Markdown documentation files | 77 |
+| Active Markdown documentation files | 79 |
 | Stable metadata entries | 47 |
+| Beta-stable metadata entries | 0 |
+| Alpha-stable metadata entries | 0 |
 | Experimental metadata entries | 34 |
 | Planned metadata entries | 11 |
 | Deprecated metadata entries | 0 |

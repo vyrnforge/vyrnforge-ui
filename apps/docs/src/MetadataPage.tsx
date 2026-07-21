@@ -11,6 +11,7 @@ import {
   Text,
 } from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
+import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 
 type MetadataPageProps = {
   route: DocsRoute;
@@ -375,6 +376,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
           </div>
           {filteredComponents.map((component) => {
             const id = toText(component.id);
+            const maturity = getComponentMaturityPresentation(component);
 
             return (
               <button
@@ -387,8 +389,8 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
                 <strong>{toText(component.displayName)}</strong>
                 <span>{toText(component.package)}</span>
                 <span>{toText(component.category)}</span>
-                <Badge tone="subtle" variant={statusVariant(toText(component.maturity))}>
-                  {toText(component.maturity)}
+                <Badge tone="subtle" variant={maturity.variant}>
+                  {maturity.label}
                 </Badge>
                 <span>{toText(component.purpose)}</span>
               </button>
@@ -410,6 +412,8 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
 }
 
 function ComponentDetail({ component }: { component: MetadataRecord }) {
+  const maturity = getComponentMaturityPresentation(component);
+
   return (
     <Card
       className="vf-docs-metadata-detail"
@@ -426,8 +430,8 @@ function ComponentDetail({ component }: { component: MetadataRecord }) {
             {toText(component.package)} / {toText(component.category)}
           </Text>
         </div>
-        <Badge tone="subtle" variant={statusVariant(toText(component.maturity))}>
-          {toText(component.maturity)}
+        <Badge tone="subtle" variant={maturity.variant}>
+          {maturity.label}
         </Badge>
       </div>
 

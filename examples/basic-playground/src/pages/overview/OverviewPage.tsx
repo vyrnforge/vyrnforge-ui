@@ -35,7 +35,7 @@ export function OverviewPage() {
         </div>
       </section>
 
-      <section className="vf-playground-grid three">
+      <section className="vf-playground-grid vf-playground-grid--three">
         {cards.map((card) => (
           <article className="vf-playground-card" key={card.title}>
             <div className="vf-playground-card-heading">

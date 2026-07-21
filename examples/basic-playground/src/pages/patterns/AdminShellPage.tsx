@@ -75,7 +75,7 @@ export function AdminShellPage() {
               </>
             }
           />
-          <div className="vf-playground-grid two">
+          <div className="vf-playground-grid vf-playground-grid--two">
             <Panel title="Queue health" description="Live operational summary.">
               <Text>4 critical tickets, 8 standard tickets, 2 pending review.</Text>
             </Panel>

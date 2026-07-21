@@ -3,7 +3,7 @@ import {
   createUser,
   render,
   screen,
-} from "../../../packages/ui-components/test/dom";
+} from "../../../tests/dom";
 import { describe, expect, it } from "vitest";
 import { FixtureApp } from "./FixtureApp";
 import {

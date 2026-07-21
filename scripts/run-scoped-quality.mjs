@@ -27,6 +27,7 @@ const full = readBoolean("CI_SCOPE_FULL");
 const core = full || readBoolean("CI_SCOPE_UI_CORE");
 const components = full || readBoolean("CI_SCOPE_UI_COMPONENTS");
 const dataGrid = full || readBoolean("CI_SCOPE_UI_DATA_GRID");
+const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
 
 runNpm(["run", "verify:ci"]);
 runNpm(["run", "format:check"]);
@@ -34,7 +35,12 @@ runNpm(["run", "lint"]);
 runNpm(["run", "lint:css"]);
 runNpm(["run", "verify:metadata"]);
 runNpm(["run", "verify:component-maturity"]);
+runNpm(["run", "verify:repository-inventory"]);
 runNpm(["run", "test:coverage"]);
+
+if (core || components || dataGrid || fixtures) {
+  runNpm(["run", "fixtures:verify"]);
+}
 
 if (full) {
   runNpm(["run", "typecheck"]);

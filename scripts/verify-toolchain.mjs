@@ -17,6 +17,7 @@ const expected = Object.freeze({
 
 const workspaceManifests = [
   "apps/docs/package.json",
+  "apps/regression-fixtures/package.json",
   "examples/basic-playground/package.json",
   "packages/ui-core/package.json",
   "packages/ui-components/package.json",

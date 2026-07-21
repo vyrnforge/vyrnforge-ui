@@ -28,7 +28,7 @@ not own product behavior, application state, public APIs, or styling contracts.
 | Workflow                          | Trigger                                                 | Responsibility                                                                                         | Write capability      |
 | --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
 | `.github/workflows/ci.yml`        | Pull request, push to `main`, manual                    | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate` | None                  |
-| `.github/workflows/_quality.yml`  | `workflow_call`                                         | Metadata, lint, targeted/full typecheck, and targeted/full tests                                       | None                  |
+| `.github/workflows/_quality.yml`  | `workflow_call`                                         | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification   | None                  |
 | `.github/workflows/_packages.yml` | `workflow_call`                                         | Clean package builds, package payload validation, declarations, CSS, LICENSE, and dry-run packs        | None                  |
 | `.github/workflows/_consumer.yml` | `workflow_call`                                         | Packed-artifact consumer installation and production build                                             | None                  |
 | `.github/workflows/_docs.yml`     | `workflow_call`                                         | Documentation and playground builds                                                                    | None                  |
@@ -65,20 +65,20 @@ ui-core
 
 The change planner uses the following impact rules:
 
-| Changed area                                                        | Package quality             | Package payloads              | Consumer | Docs | Playground |
-| ------------------------------------------------------------------- | --------------------------- | ----------------------------- | -------- | ---- | ---------- |
-| `ui-core` runtime/public surface                                    | core, components, data-grid | all                           | yes      | yes  | yes        |
-| `ui-components` runtime/public surface                              | components, data-grid       | all                           | yes      | yes  | yes        |
-| `ui-data-grid` runtime/public surface                               | data-grid                   | all                           | yes      | yes  | yes        |
-| Package test only                                                   | changed package             | no                            | no       | no   | no         |
-| Package README or package LICENSE                                   | no                          | all coordinated payloads      | yes      | no   | no         |
-| Consumer fixture                                                    | no                          | included by consumer verifier | yes      | no   | no         |
-| Metadata                                                            | metadata                    | no                            | no       | yes  | no         |
-| Canonical docs                                                      | no                          | no                            | no       | yes  | no         |
-| Docs app                                                            | no                          | no                            | no       | yes  | no         |
-| Playground app                                                      | no                          | no                            | no       | no   | yes        |
-| Root manifest, lockfile, shared build config, scripts, or workflows | full                        | all                           | yes      | yes  | yes        |
-| Unknown path                                                        | safe full fallback          | all                           | yes      | yes  | yes        |
+Changes under `apps/regression-fixtures/**` are explicitly classified as fixture quality work. Changes under `tests/dom/**` run both shared component tests and regression fixtures. Package runtime changes also run fixtures because the fixture app validates public-package integration.
+
+| Changed area | Package quality | Package payloads | Consumer | Docs | Playground | Fixtures |
+| --- | --- | --- | --- | --- | --- | --- |
+| `ui-core` runtime/public surface | core, components, data-grid | all | yes | yes | yes | yes |
+| `ui-components` runtime/public surface | components, data-grid | all | yes | yes | yes | yes |
+| `ui-data-grid` runtime/public surface | data-grid | all | yes | yes | yes | yes |
+| Package test only | changed package | no | no | no | no | when shared DOM utilities change |
+| Package README or package LICENSE | no | all coordinated payloads | yes | no | no | no |
+| Consumer fixture | no | included by consumer verifier | yes | no | no | no |
+| Regression fixture app | fixture quality | no | no | no | no | yes |
+| Metadata | metadata | no | no | yes | no | no |
+| Docs | no | no | no | yes | no | no |
+| Playground | no | no | no | no | yes | no |
 
 The planner is implemented by `scripts/detect-ci-scope.mjs`. Its machine outputs
 are:
@@ -92,6 +92,7 @@ are:
 - `consumer`
 - `docs`
 - `playground`
+- `fixtures`
 - `full`
 - `docs_only`
 

@@ -28,6 +28,10 @@ on:
         required: false
         default: false
         type: boolean
+      fixtures:
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -45,6 +49,7 @@ jobs:
       CI_SCOPE_UI_CORE: ${{ inputs['ui-core'] }}
       CI_SCOPE_UI_COMPONENTS: ${{ inputs['ui-components'] }}
       CI_SCOPE_UI_DATA_GRID: ${{ inputs['ui-data-grid'] }}
+      CI_SCOPE_FIXTURES: ${{ inputs.fixtures }}
 
     steps:
       - name: Checkout

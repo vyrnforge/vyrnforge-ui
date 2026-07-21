@@ -122,7 +122,7 @@ function VerificationContent() {
 function App() {
   return (
     <div style={toVyrnForgeThemeStyle(themeOverride)}>
-      <div data-theme="light" data-density="standard" className="consumer-theme-block">
+      <div data-theme="light" data-density="standard" className="vf-consumer-theme-block">
         <AppShell
           header={<TopNav brand="Consumer Fixture" />}
           sidebar={
@@ -148,7 +148,7 @@ function App() {
         </AppShell>
       </div>
 
-      <div data-theme="dark" data-density="compact" className="consumer-theme-block">
+      <div data-theme="dark" data-density="compact" className="vf-consumer-theme-block">
         <Page
           title="Dark compact verification"
           description="The same public components render under dark theme and compact density."

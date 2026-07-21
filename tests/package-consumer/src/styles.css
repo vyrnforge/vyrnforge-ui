@@ -1,9 +1,9 @@
-.consumer-theme-block {
+.vf-consumer-theme-block {
   min-height: 420px;
   background: var(--vf-bg);
   color: var(--vf-text);
 }
 
-.consumer-theme-block + .consumer-theme-block {
+.vf-consumer-theme-block + .vf-consumer-theme-block {
   border-top: 1px solid var(--vf-border);
 }

@@ -193,9 +193,35 @@ export function verifyMaturityMetadata(catalog) {
       "components.json: unsupported maturity evidence transition policy",
     );
   }
-  const legacyEntries = new Set(
-    model.transitionPolicy.legacyUnverifiedEntries ?? [],
+  const legacyList = model.transitionPolicy.legacyUnverifiedEntries ?? [];
+  const legacyEntries = new Set(legacyList);
+  if (legacyList.length > 0) {
+    for (const field of ["closureTask", "verificationDeadlineGate", "releaseBlock"]) {
+      if (!model.transitionPolicy[field]) {
+        failures.push(
+          `components.json: legacy maturity transition requires ${field}`,
+        );
+      }
+    }
+  }
+  if (legacyEntries.size !== legacyList.length) {
+    failures.push("components.json: duplicate legacyUnverifiedEntries values");
+  }
+  const componentsById = new Map(
+    (catalog.components ?? []).map((component) => [component.id, component]),
   );
+  for (const legacyKey of legacyEntries) {
+    const component = componentsById.get(legacyKey);
+    if (!component) {
+      failures.push(`components.json: unknown legacy maturity entry ${legacyKey}`);
+      continue;
+    }
+    if (!["alpha-stable", "beta-stable", "stable", "deprecated"].includes(component.maturity)) {
+      failures.push(
+        `${legacyKey} (${component.maturity}): lower-maturity entries must not use the legacy evidence exception`,
+      );
+    }
+  }
   for (const component of catalog.components ?? []) {
     const key = component.id;
     const maturity = component.maturity;
@@ -227,7 +253,12 @@ if (
       `Component maturity verification failed:\n- ${failures.join("\n- ")}`,
     );
   }
+  const catalog = readJson(repositoryRoot, "docs/metadata/components.json");
+  const transition = catalog.maturityEvidence.transitionPolicy;
+  const legacyCount = transition.legacyUnverifiedEntries?.length ?? 0;
   console.log(
-    "Component maturity verification passed: current legacy entries remain explicitly unverified.",
+    legacyCount > 0
+      ? `Component maturity verification passed with ${legacyCount} explicitly unverified legacy entries; closure is required by ${transition.verificationDeadlineGate} through ${transition.closureTask} and before ${transition.releaseBlock}.`
+      : "Component maturity verification passed with no legacy evidence exceptions.",
   );
 }

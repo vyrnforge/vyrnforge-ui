@@ -99,7 +99,7 @@ jobs:
             echo "- Commit: \`$GITHUB_SHA\`"
             echo "- Packages: \`@vyrnforge/ui-core -> @vyrnforge/ui-components -> @vyrnforge/ui-data-grid\`"
             echo "- Internal dependencies: exact \`$RELEASE_VERSION\`"
-            echo "- Validation: workflow contracts, metadata, typecheck, tests, package payloads, consumer, docs, and playground passed"
+            echo "- Validation: workflow contracts, metadata, formatting, typecheck, coverage, accessibility, regression fixtures, package payloads, consumer, docs, and playground passed"
             echo "- Registry: candidate versions are not yet published"
             echo "- Credentials: no token secret used; verification did not request OIDC or publish"
             echo

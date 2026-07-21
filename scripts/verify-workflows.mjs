@@ -178,6 +178,7 @@ for (const requiredToken of [
   "CONSUMER_REQUIRED",
   "DOCS_REQUIRED",
   "PLAYGROUND_REQUIRED",
+  "FIXTURES_REQUIRED",
   "failures.length > 0",
 ]) {
   assert(
@@ -235,7 +236,9 @@ for (const command of [
   "lint:css",
   "verify:metadata",
   "verify:component-maturity",
+  "verify:repository-inventory",
   "test:coverage",
+  "fixtures:verify",
   "typecheck",
 ]) {
   assert(
@@ -247,6 +250,52 @@ assert(
   !scopedQuality.includes("--if-present"),
   "scoped quality must not silently skip missing mandatory scripts",
 );
+assert(
+  read("scripts/detect-ci-scope.mjs").includes("apps/regression-fixtures/"),
+  "CI planner must classify regression fixture changes explicitly",
+);
+assert(
+  read("scripts/verify-toolchain.mjs").includes("apps/regression-fixtures/package.json"),
+  "toolchain verification must include the regression fixture workspace",
+);
+assert(
+  ci.includes("fixtures: ${{ steps.scope.outputs.fixtures }}"),
+  "ci.yml must expose the planned fixture scope",
+);
+assert(
+  ci.includes("fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}"),
+  "ci.yml must pass fixture scope into the reusable quality workflow",
+);
+assert(
+  read(".github/workflows/_quality.yml").includes("CI_SCOPE_FIXTURES"),
+  "reusable quality workflow must pass fixture scope to the scoped runner",
+);
+assert(
+  read(".github/workflows/_docs.yml").includes("npm run verify:repository-inventory"),
+  "docs validation must reject stale generated repository inventory",
+);
+const rootPackage = JSON.parse(read("package.json"));
+for (const command of [
+  "verify:ci",
+  "verify:metadata",
+  "verify:component-maturity",
+  "format:check",
+  "lint",
+  "lint:css",
+  "typecheck",
+  "test:coverage",
+  "verify:repository-inventory",
+  "fixtures:verify",
+  "verify:packages",
+  "verify:consumer",
+  "build:docs",
+  "build:playground",
+]) {
+  assert(
+    rootPackage.scripts.quality.includes(`npm run ${command}`),
+    `root quality command must include ${command}`,
+  );
+}
 for (const workflow of [
   "ci.yml",
   "_quality.yml",

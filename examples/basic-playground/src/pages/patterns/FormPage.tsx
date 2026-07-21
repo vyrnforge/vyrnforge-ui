@@ -63,7 +63,7 @@ function FormPageContent() {
           { value: "change", label: "Change" }
         ]}
       />
-      <div className="vf-playground-grid two">
+      <div className="vf-playground-grid vf-playground-grid--two">
         <Field label="Priority" htmlFor="request-priority">
           <Select
             id="request-priority"
@@ -79,7 +79,7 @@ function FormPageContent() {
           <NumberInput id="risk-score" mode="integer" min={0} max={100} defaultValue={74} />
         </Field>
       </div>
-      <div className="vf-playground-grid two">
+      <div className="vf-playground-grid vf-playground-grid--two">
         <Field label="Needed by" htmlFor="needed-by" required>
           <DateInput id="needed-by" defaultValue="2026-07-17" />
         </Field>
