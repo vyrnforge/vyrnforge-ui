@@ -53,4 +53,4 @@ Only mark a component `stable` when:
 1. API, accessibility, visual, docs, metadata, playground, and tests agree.
 2. There is no known P0/P1 limitation.
 3. Known P2/P3 issues have acceptable workarounds.
-4. The status is consistent in `docs/metadata/component-status.json`, `docs/metadata/components.json`, `.ai/COMPONENT_MAP.json`, package docs, and playground badges.
+4. The status is correct in canonical `docs/metadata/components.json`; package docs and presentation views consume or accurately describe that record.

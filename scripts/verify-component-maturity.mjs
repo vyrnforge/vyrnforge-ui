@@ -8,24 +8,31 @@ const repositoryRoot = path.resolve(
 );
 const evidenceStatuses = new Set(["complete", "pending", "not-applicable"]);
 const complexCategories = new Set([
-  "composite-navigation",
+  "composite",
+  "navigation",
   "overlay",
-  "data-grid-feature",
+  "data-grid",
+  "grid-feature",
 ]);
 const interactiveCategories = new Set([
   "form-control",
-  "composite-navigation",
+  "composite",
+  "navigation",
   "overlay",
-  "data-grid-feature",
+  "data-grid",
+  "grid-feature",
 ]);
 const categories = new Set([
-  "non-interactive",
+  "primitive",
   "form-control",
-  "composite-navigation",
+  "composite",
+  "navigation",
   "overlay",
-  "feedback-status",
-  "data-grid-feature",
-  "internal-only",
+  "feedback",
+  "data-display",
+  "data-grid",
+  "grid-feature",
+  "internal",
 ]);
 const baselineFields = [
   "owner",
@@ -43,10 +50,6 @@ const baselineFields = [
 
 function readJson(root, relativePath) {
   return JSON.parse(readFileSync(path.join(root, relativePath), "utf8"));
-}
-
-function entryKey(packageName, name) {
-  return `${packageName}:${name}`;
 }
 
 function evidenceFailure(failures, key, maturity, field, reason) {
@@ -174,16 +177,16 @@ function verifyEvidenceEntry(failures, key, maturity, evidence) {
   }
 }
 
-export function verifyMaturityMetadata(catalog, statuses) {
+export function verifyMaturityMetadata(catalog) {
   const failures = [];
   const model = catalog.maturityEvidence;
   if (
     !model ||
-    model.schemaVersion !== 1 ||
+    model.schemaVersion !== 2 ||
     !model.transitionPolicy ||
     !model.entries
   ) {
-    return ["components.json: missing maturityEvidence schema version 1"];
+    return ["components.json: missing maturityEvidence schema version 2"];
   }
   if (model.transitionPolicy.mode !== "new-promotions-only") {
     failures.push(
@@ -193,23 +196,17 @@ export function verifyMaturityMetadata(catalog, statuses) {
   const legacyEntries = new Set(
     model.transitionPolicy.legacyUnverifiedEntries ?? [],
   );
-  for (const [packageName, entries] of Object.entries(statuses)) {
-    if (packageName === "schemaVersion" || packageName === "internal") continue;
-    for (const [name, maturity] of Object.entries(entries)) {
-      const key = entryKey(packageName, name);
-      const evidence = model.entries[key];
-      if (!evidence) {
-        if (
-          legacyEntries.has(key) ||
-          maturity === "planned" ||
-          maturity === "experimental"
-        )
-          continue;
-        failures.push(`${key} (${maturity}): missing maturity evidence record`);
-        continue;
-      }
-      verifyEvidenceEntry(failures, key, maturity, evidence);
+  for (const component of catalog.components ?? []) {
+    const key = component.id;
+    const maturity = component.maturity;
+    if (maturity === "internal") continue;
+    const evidence = model.entries[key];
+    if (!evidence) {
+      if (legacyEntries.has(key) || maturity === "planned" || maturity === "experimental") continue;
+      failures.push(`${key} (${maturity}): missing maturity evidence record`);
+      continue;
     }
+    verifyEvidenceEntry(failures, key, maturity, evidence);
   }
   return failures.sort();
 }
@@ -217,7 +214,6 @@ export function verifyMaturityMetadata(catalog, statuses) {
 export function verifyComponentMaturity({ root = repositoryRoot } = {}) {
   return verifyMaturityMetadata(
     readJson(root, "docs/metadata/components.json"),
-    readJson(root, "docs/metadata/component-status.json"),
   );
 }
 

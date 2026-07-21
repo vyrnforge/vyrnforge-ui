@@ -31,11 +31,10 @@ any existing component status, metadata entry, implementation, test, workflow,
 or release version. It also does not promise production rights or support;
 those remain subject to the VyrnForge Source License and the release policy.
 
-`docs/metadata/component-status.json` currently uses the coarse values
-`planned`, `experimental`, `stable`, and `deprecated`, with a separate internal
-registry. The finer Alpha Stable and Beta Stable states defined here are policy
-states until a future metadata schema is approved. Existing `stable` entries
-are not implicitly reclassified by this document.
+`docs/metadata/components.json` is the canonical normalized component catalog.
+It supports `planned`, `experimental`, `alpha-stable`, `beta-stable`, `stable`,
+`deprecated`, and `internal`. Existing entries are not implicitly reclassified
+by this document.
 
 ## Evidence and decision rules
 
@@ -216,7 +215,7 @@ exposes and must not keep an inaccessible legacy interaction alive.
 
 ## Machine-readable evidence fields
 
-`docs/metadata/components.json` now contains the `maturityEvidence` schema.
+`docs/metadata/components.json` contains the `maturityEvidence` schema.
 It is a structured index of the evidence required by this model; Markdown,
 review records, and release records remain the human sources of truth. Each
 record uses repository-visible references and the following field families:
@@ -239,7 +238,7 @@ The deterministic `npm run verify:component-maturity` command enforces the
 state- and category-specific requirements, reports each missing or pending
 field with the component and maturity state, and does not infer evidence from
 repository-wide quality checks. It applies the documented `new-promotions-only`
-transition policy: entries present before the schema are explicitly listed as
+transition policy: migrated entries are explicitly listed as
 legacy unverified, with no evidence fabricated. Future promotions must attach
 the corresponding entry and references.
 

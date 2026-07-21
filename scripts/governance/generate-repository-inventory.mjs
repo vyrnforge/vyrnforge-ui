@@ -10,7 +10,6 @@ const owners = {
   "@vyrnforge/ui-components": "Component Team",
   "@vyrnforge/ui-data-grid": "Data Grid Team"
 };
-const aggregates = new Set(["Theme tokens", "Density tokens", "Utility classes", "DataGrid state/adapters"]);
 const aliases = {
   ClearButton: "components/IconButton/ActionButtons.tsx",
   CloseButton: "components/IconButton/ActionButtons.tsx",
@@ -102,9 +101,8 @@ function testFor(name, files) {
 
 const rootPackage = json("package.json");
 const packageMetadata = json("docs/metadata/packages.json").packages;
-const status = json("docs/metadata/component-status.json");
 const catalog = json("docs/metadata/components.json").components;
-const catalogByKey = new Map(catalog.map((item) => [`${item.package}:${item.name}`, item]));
+const catalogByKey = new Map(catalog.map((item) => [`${item.package}:${item.displayName}`, item]));
 const docs = walk("docs", (file) => file.endsWith(".md") && !file.includes("/archive/"));
 const allDocs = walk("docs", (file) => file.endsWith(".md"));
 const tests = walk("packages", (file) => /\.test\.(ts|tsx|mjs)$/.test(file));
@@ -113,7 +111,7 @@ const routes = text("examples/basic-playground/src/app/routes.ts");
 const records = packageDirectories.map((directory) => {
   const manifest = json(`packages/${directory}/package.json`);
   const exports = exportsFrom(`packages/${directory}/src/index.ts`);
-  const maturity = Object.values(status[manifest.name] ?? {}).reduce((result, value) => ({ ...result, [value]: (result[value] ?? 0) + 1 }), {});
+  const maturity = catalog.filter((component) => component.package === manifest.name).reduce((result, component) => ({ ...result, [component.maturity]: (result[component.maturity] ?? 0) + 1 }), {});
   return { directory, manifest, exports, maturity };
 });
 
@@ -122,11 +120,8 @@ const components = records.filter((record) => record.directory !== "ui-core").fl
   const packageTests = tests.filter((file) => file.startsWith(`packages/${record.directory}/`));
   const exported = new Set(record.exports);
   const names = new Set();
-  for (const name of Object.keys(status[record.manifest.name] ?? {})) {
-    if (!aggregates.has(name) && exported.has(name) && /^[A-Z]/.test(name)) names.add(name);
-  }
   for (const component of catalog) {
-    if (component.package === record.manifest.name && exported.has(component.name) && /^[A-Z]/.test(component.name)) names.add(component.name);
+    if (component.package === record.manifest.name && component.publicExport && exported.has(component.displayName) && /^[A-Z]/.test(component.displayName)) names.add(component.displayName);
   }
   return [...names].sort((a, b) => a.localeCompare(b)).map((name) => {
     const source = sourceFor(name, record.directory, files);
@@ -141,7 +136,7 @@ const components = records.filter((record) => record.directory !== "ui-core").fl
       !testTypes.includes("browser") && "No browser evidence",
       !testTypes.includes("accessibility") && "No accessibility-test evidence"
     ].filter(Boolean).join("; ") || "No gap detected by inventory";
-    return [name, record.manifest.name, source, "Yes", documentation, playground, testFiles, testTypes, status[record.manifest.name]?.[name] ?? catalogByKey.get(`${record.manifest.name}:${name}`)?.status ?? "Requires verification", gaps, owners[record.manifest.name]];
+    return [name, record.manifest.name, source, "Yes", documentation, playground, testFiles, testTypes, catalogByKey.get(`${record.manifest.name}:${name}`)?.maturity ?? "Requires verification", gaps, owners[record.manifest.name]];
   });
 });
 
@@ -152,11 +147,7 @@ const domTests = tests.filter((file) => /createRoot|dispatchEvent|fireEvent|user
 const browserTests = tests.filter((file) => /playwright|cypress|webdriver/i.test(text(file))).length;
 const accessibilityTests = tests.filter((file) => /axe|toHaveNoViolations|jest-axe/i.test(text(file))).length;
 const totals = { stable: 0, experimental: 0, planned: 0, deprecated: 0, internal: 0 };
-for (const [packageName, entries] of Object.entries(status)) {
-  if (packageName === "schemaVersion" || packageName === "internal") continue;
-  for (const value of Object.values(entries)) if (value in totals) totals[value] += 1;
-}
-for (const entries of Object.values(status.internal ?? {})) totals.internal += entries.length;
+for (const component of catalog) if (component.maturity in totals) totals[component.maturity] += 1;
 
 const workflowPurposes = {
   "_consumer.yml": "Reusable packed external-consumer verification",
@@ -234,12 +225,12 @@ const outputLines = [
   table(["Area", "Inventory"], [
     ["Canonical entrypoint", "`docs/README.md`"],
     ["Documentation sources", `${docs.length} active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks.`],
-    ["Component metadata", "`docs/metadata/components.json`, `docs/metadata/component-status.json`, `.ai/COMPONENT_MAP.json`, `docs/metadata/packages.json`, `docs/metadata/css-imports.json`, `docs/metadata/state-contracts.json`, and `docs/metadata/ai-usage-rules.json`."],
+    ["Component metadata", "Canonical `docs/metadata/components.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`."],
     ["Playground", `Route registry ` + "`examples/basic-playground/src/app/routes.ts`; " + walk("examples/basic-playground/src/pages", (file) => file.endsWith(".tsx")).length + " page modules."],
     ["Docs app", walk("apps/docs/src", (file) => /\.(ts|tsx|css)$/.test(file)).length + " source/style files under `apps/docs/src`; it is a viewer, not canonical API truth."],
-    ["Hard-coded/duplicate status sources", "Maturity appears in full metadata, compact status metadata, AI component map, package/API docs, playground routes, and docs-app reference data. `npm run verify:metadata` verifies structured consistency, not all prose/presentation."],
+    ["Maturity source", "`docs/metadata/components.json` is the sole structured maturity source. Playground and docs-app reference views consume it; prose remains reviewable documentation."],
     ["AI/contributor context", "`AGENTS.md`, `.ai/AI_CONTEXT.md`, `.ai/CODING_RULES.md`, `.ai/DOC_USAGE_GUIDE.md`, `.ai/REPO_MAP.md`, `CONTRIBUTING.md`, and `SECURITY.md`."],
-    ["Potential conflicts", "Q1 audit documents stale `dv` terminology and planned-surface presentation as follow-up documentation work. Route and prose status remain separate from structured metadata."]
+    ["Potential conflicts", "Q1 audit documents stale `dv` terminology and planned-surface presentation as follow-up documentation work."]
   ]),
   "",
   "## F. Test Inventory",

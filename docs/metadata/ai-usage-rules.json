@@ -70,7 +70,6 @@
   "lookupOrder": [
     "docs/README.md",
     "docs/api/README.md",
-    "docs/metadata/component-status.json",
     "docs/metadata/components.json",
     "docs/metadata/packages.json",
     ".ai/AI_CONTEXT.md"

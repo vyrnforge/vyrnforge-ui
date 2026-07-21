@@ -5,7 +5,7 @@ import { maturityFixtures } from "./fixtures/component-maturity.mjs";
 import { verifyMaturityMetadata } from "./verify-component-maturity.mjs";
 
 function verifyFixture(fixture) {
-  return verifyMaturityMetadata(fixture.catalog, fixture.statuses);
+  return verifyMaturityMetadata(fixture.catalog);
 }
 
 test("Alpha Stable interactive evidence requires DOM interaction proof", () => {

@@ -49,7 +49,7 @@ import "@vyrnforge/ui-components/styles/index.css";
 
 ## Maturity
 
-`docs/metadata/component-status.json` is the canonical maturity index. The
+`docs/metadata/components.json` is the canonical component metadata and maturity index. The
 action aliases `CloseButton`, `ClearButton`, `RefreshButton`, and `MoreButton`
 are stable convenience wrappers. `Toast`, `ToastProvider`, `ToastAction`, and
 `useToast` are experimental. `ToastProvider` owns its internal viewport; do

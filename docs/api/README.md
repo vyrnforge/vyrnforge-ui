@@ -54,12 +54,12 @@ Machine-readable metadata lives in `docs/metadata/`. It complements these API do
 
 Markdown docs remain the human source of truth. Metadata is a structured index and must not contradict the API docs.
 
-Component maturity is canonical in `metadata/component-status.json`. Public
+Component maturity is canonical in `metadata/components.json`. Public
 components are `planned`, `experimental`, `alpha-stable`, `beta-stable`,
-`stable`, or `deprecated`; internal items are recorded separately and must not
-be imported from package roots. The evidence required to claim Alpha Stable,
-Beta Stable, Stable, or Deprecated is recorded in
-`metadata/components.json` and verified by `npm run verify:component-maturity`.
+`stable`, or `deprecated`; internal records must not be imported from package
+roots. The VF-1009 evidence required to claim Alpha Stable, Beta Stable,
+Stable, or Deprecated is recorded in the same catalog and verified by
+`npm run verify:component-maturity`.
 
 ## Internal API
 

@@ -151,12 +151,12 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | Metadata | Purpose |
 | --- | --- |
 | `metadata/packages.json` | Package ownership, dependencies, CSS imports, and public entry points. |
-| `metadata/components.json` | Full component and public contract catalog. |
-| `metadata/component-status.json` | Compact component status lookup. |
+| `metadata/components.json` | Canonical normalized component and public-contract catalog, including maturity, ownership, routes, exports, and evidence. |
+| `metadata/component-schema.md` | Canonical component metadata schema and contributor workflow. |
 | `metadata/css-imports.json` | CSS import order and styling ownership. |
 | `metadata/state-contracts.json` | State ownership and adapter policies. |
 | `metadata/ai-usage-rules.json` | AI-specific usage rules and dependency constraints. |
-| `../.ai/COMPONENT_MAP.json` | Compact AI quick map aligned to the full component catalog. |
+| `../.ai/COMPONENT_MAP.json` | Compact AI navigation and usage notes; it consumes the canonical component catalog rather than repeating component maturity. |
 
 ## 13. Templates
 

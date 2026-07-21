@@ -51,8 +51,8 @@ Use text buttons for primary business actions. Use IconButton/ToolbarButton for 
 
 ## Maturity
 
-The canonical maturity map is `docs/metadata/component-status.json`. Action
-aliases are stable; toast APIs are experimental. `ToastProvider` owns the
+The canonical component metadata, including maturity, is
+`docs/metadata/components.json`. Action aliases are stable; toast APIs are experimental. `ToastProvider` owns the
 internal `ToastViewport`, which is not a package-root application API.
 
 Use `AppShell` `scrollMode`, `headerPosition`, and `sidebarPosition` props for persistent enterprise navigation. Do not patch app-specific sidebar stickiness when the shell API can express the layout.

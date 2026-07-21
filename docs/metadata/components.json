@@ -1,14 +1,10 @@
 {
-  "schemaVersion": 1,
-  "sourceOfTruth": [
-    "docs/roadmap/01-component-inventory.md",
-    "docs/packages/ui-core.md",
-    "docs/packages/ui-components.md",
-    "docs/packages/ui-data-grid.md",
-    "docs/api/ui-core-api.md",
-    "docs/api/ui-components-api.md",
-    "docs/api/ui-data-grid-api.md"
-  ],
+  "schemaVersion": 2,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "component metadata, maturity, routes, exports, ownership, and evidence",
+    "documentation": "docs/metadata/README.md"
+  },
   "apiDocs": {
     "@vyrnforge/ui-core": "docs/api/ui-core-api.md",
     "@vyrnforge/ui-components": "docs/api/ui-components-api.md",
@@ -17,59 +13,120 @@
     "cssClasses": "docs/api/css-class-reference.md",
     "publicVsInternal": "docs/api/public-vs-internal-api.md"
   },
+  "schema": {
+    "categories": [
+      "primitive",
+      "form-control",
+      "composite",
+      "navigation",
+      "overlay",
+      "feedback",
+      "data-display",
+      "data-grid",
+      "grid-feature",
+      "internal"
+    ],
+    "maturity": [
+      "planned",
+      "experimental",
+      "alpha-stable",
+      "beta-stable",
+      "stable",
+      "deprecated",
+      "internal"
+    ],
+    "unresolvedValues": [
+      "pending",
+      "requires-verification",
+      "not-applicable"
+    ]
+  },
   "maturityEvidence": {
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "transitionPolicy": {
       "mode": "new-promotions-only",
-      "description": "Evidence fields are optional for metadata entries that existed when this schema was introduced. Any Alpha Stable, Beta Stable, Stable, or Deprecated entry not listed below must provide the required evidence before it can be claimed.",
       "legacyUnverifiedEntries": [
-        "@vyrnforge/ui-core:Theme tokens",
-        "@vyrnforge/ui-core:Density tokens",
-        "@vyrnforge/ui-core:Utility classes",
-        "@vyrnforge/ui-components:Button",
-        "@vyrnforge/ui-components:IconButton",
-        "@vyrnforge/ui-components:ClearButton",
-        "@vyrnforge/ui-components:CloseButton",
-        "@vyrnforge/ui-components:MoreButton",
-        "@vyrnforge/ui-components:RefreshButton",
-        "@vyrnforge/ui-components:ToolbarButton",
-        "@vyrnforge/ui-components:SegmentedControl",
-        "@vyrnforge/ui-components:Icon",
-        "@vyrnforge/ui-components:Text",
-        "@vyrnforge/ui-components:Heading",
-        "@vyrnforge/ui-components:Label",
-        "@vyrnforge/ui-components:Caption",
-        "@vyrnforge/ui-components:CodeText",
-        "@vyrnforge/ui-components:Badge",
-        "@vyrnforge/ui-components:StatusBadge",
-        "@vyrnforge/ui-components:Alert",
-        "@vyrnforge/ui-components:InlineMessage",
-        "@vyrnforge/ui-components:EmptyState",
-        "@vyrnforge/ui-components:ErrorState",
-        "@vyrnforge/ui-components:LoadingState",
-        "@vyrnforge/ui-components:Skeleton",
-        "@vyrnforge/ui-components:Card",
-        "@vyrnforge/ui-components:Panel",
-        "@vyrnforge/ui-components:Stack",
-        "@vyrnforge/ui-components:Inline",
-        "@vyrnforge/ui-components:Section",
-        "@vyrnforge/ui-components:Popover",
-        "@vyrnforge/ui-components:Menu",
-        "@vyrnforge/ui-components:Dropdown",
-        "@vyrnforge/ui-components:Tooltip",
-        "@vyrnforge/ui-components:Dialog",
-        "@vyrnforge/ui-components:Drawer",
-        "@vyrnforge/ui-components:ConfirmDialog",
-        "@vyrnforge/ui-data-grid:UniversalDataGrid",
-        "@vyrnforge/ui-data-grid:DataGridToolbar",
-        "@vyrnforge/ui-data-grid:DataGridSearch",
-        "@vyrnforge/ui-data-grid:DataGridFilterBar",
-        "@vyrnforge/ui-data-grid:DataGridColumnMenu",
-        "@vyrnforge/ui-data-grid:DataGridSkeletonRows",
-        "@vyrnforge/ui-data-grid:DataGridEmptyState",
-        "@vyrnforge/ui-data-grid:DataGridErrorState",
-        "@vyrnforge/ui-data-grid:DataGridPagination",
-        "@vyrnforge/ui-data-grid:DataGrid state/adapters"
+        "theme-tokens",
+        "density-tokens",
+        "utility-classes",
+        "button",
+        "icon-button",
+        "toolbar-button",
+        "button-group",
+        "segmented-control",
+        "toggle-button",
+        "toggle-button-group",
+        "icon",
+        "text",
+        "heading",
+        "label",
+        "caption",
+        "code-text",
+        "field",
+        "validation-message",
+        "text-input",
+        "search-input",
+        "select",
+        "checkbox",
+        "textarea",
+        "badge",
+        "status-badge",
+        "inline-message",
+        "alert",
+        "empty-state",
+        "error-state",
+        "loading-state",
+        "skeleton",
+        "card",
+        "panel",
+        "stack",
+        "inline",
+        "section",
+        "popover",
+        "menu",
+        "dropdown",
+        "tooltip",
+        "dialog",
+        "drawer",
+        "confirm-dialog",
+        "universal-data-grid",
+        "data-grid-toolbar",
+        "data-grid-column-menu",
+        "data-grid-state-adapters",
+        "use-data-grid-state",
+        "app-shell",
+        "page",
+        "page-header",
+        "page-toolbar",
+        "side-nav",
+        "top-nav",
+        "breadcrumbs",
+        "tabs",
+        "radio",
+        "radio-group",
+        "switch",
+        "number-input",
+        "date-input",
+        "datetime-input",
+        "rating",
+        "slider",
+        "multi-select",
+        "autocomplete",
+        "transfer-list",
+        "toast",
+        "clear-button",
+        "close-button",
+        "more-button",
+        "refresh-button",
+        "toast-action",
+        "toast-provider",
+        "use-toast",
+        "data-grid-search",
+        "data-grid-filter-bar",
+        "data-grid-skeleton-rows",
+        "data-grid-empty-state",
+        "data-grid-error-state",
+        "data-grid-pagination"
       ]
     },
     "entries": {}
@@ -77,16 +134,45 @@
   "components": [
     {
       "id": "theme-tokens",
-      "name": "Theme tokens",
+      "displayName": "Theme tokens",
       "package": "@vyrnforge/ui-core",
-      "category": "Core",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "UI Platform",
+      "sourcePath": "packages/ui-core/src/index.ts",
+      "publicExport": false,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-core-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "theme-tokens",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-core-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not use raw theme token files as component behavior."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Shared design values for color, surfaces, text, spacing, radius, shadow, focus, and status colors.",
       "useWhen": "Use for app-wide visual theming and package alignment.",
       "avoidWhen": "Do not use raw theme token files as component behavior.",
-      "relatedComponents": ["Density tokens", "Utility classes"],
+      "relatedComponents": [
+        "Density tokens",
+        "Utility classes"
+      ],
       "cssClasses": [],
-      "cssVariables": ["--vf-bg", "--vf-surface", "--vf-text", "--vf-border", "--vf-primary"],
+      "cssVariables": [
+        "--vf-bg",
+        "--vf-surface",
+        "--vf-text",
+        "--vf-border",
+        "--vf-primary"
+      ],
       "importExample": "import '@vyrnforge/ui-core/styles/index.css';",
       "basicUsageExample": ".my-app { --vf-primary: #003b71; }",
       "accessibilityNotes": "Focus and status tokens must preserve contrast.",
@@ -94,16 +180,42 @@
     },
     {
       "id": "density-tokens",
-      "name": "Density tokens",
+      "displayName": "Density tokens",
       "package": "@vyrnforge/ui-core",
-      "category": "Core",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "UI Platform",
+      "sourcePath": "packages/ui-core/src/index.ts",
+      "publicExport": false,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-core-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "density-tokens",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-core-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not invent unrelated density names."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Shared compact, standard, and comfortable sizing tokens.",
       "useWhen": "Use to align repeated controls and grid density.",
       "avoidWhen": "Do not invent unrelated density names.",
-      "relatedComponents": ["Theme tokens", "UniversalDataGrid"],
+      "relatedComponents": [
+        "Theme tokens",
+        "UniversalDataGrid"
+      ],
       "cssClasses": [],
-      "cssVariables": ["--vf-control-height", "--vf-row-height"],
+      "cssVariables": [
+        "--vf-control-height",
+        "--vf-row-height"
+      ],
       "importExample": "import '@vyrnforge/ui-core/styles/index.css';",
       "basicUsageExample": "[data-density='compact'] { --vf-control-height: 30px; }",
       "accessibilityNotes": "Compact density must remain keyboard and touch usable.",
@@ -111,16 +223,46 @@
     },
     {
       "id": "utility-classes",
-      "name": "Utility classes",
+      "displayName": "Utility classes",
       "package": "@vyrnforge/ui-core",
-      "category": "Core",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "UI Platform",
+      "sourcePath": "packages/ui-core/src/index.ts",
+      "publicExport": false,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-core-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "utility-classes",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-core-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not move component-specific styles into ui-core."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Small shared utility classes for text, truncation, screen-reader text, and focus rings.",
       "useWhen": "Use for cross-component non-visual behavior utilities.",
       "avoidWhen": "Do not move component-specific styles into ui-core.",
-      "relatedComponents": ["Theme tokens"],
-      "cssClasses": ["vf-text-muted", "vf-text-strong", "vf-truncate", "vf-sr-only", "vf-focus-ring"],
-      "cssVariables": ["--vf-focus-ring"],
+      "relatedComponents": [
+        "Theme tokens"
+      ],
+      "cssClasses": [
+        "vf-text-muted",
+        "vf-text-strong",
+        "vf-truncate",
+        "vf-sr-only",
+        "vf-focus-ring"
+      ],
+      "cssVariables": [
+        "--vf-focus-ring"
+      ],
       "importExample": "import '@vyrnforge/ui-core/styles/index.css';",
       "basicUsageExample": "<span className='vf-sr-only'>Selected</span>",
       "accessibilityNotes": "Use vf-sr-only for assistive-only labels.",
@@ -128,15 +270,41 @@
     },
     {
       "id": "button",
-      "name": "Button",
+      "displayName": "Button",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Button/Button.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/actions/button",
+      "evidence": {
+        "maturityEvidenceKey": "button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Text action control for primary, secondary, subtle, danger, and ghost actions.",
       "useWhen": "Use for primary business actions such as Save, Submit, Create, or Cancel.",
       "avoidWhen": "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead.",
-      "relatedComponents": ["IconButton", "ToolbarButton", "ButtonGroup"],
-      "cssClasses": ["vf-button"],
+      "relatedComponents": [
+        "IconButton",
+        "ToolbarButton",
+        "ButtonGroup"
+      ],
+      "cssClasses": [
+        "vf-button"
+      ],
       "cssVariables": [],
       "importExample": "import { Button } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Button variant='primary'>Save</Button>",
@@ -145,15 +313,41 @@
     },
     {
       "id": "icon-button",
-      "name": "IconButton",
+      "displayName": "IconButton",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/IconButton/IconButton.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/actions/icon-button",
+      "evidence": {
+        "maturityEvidenceKey": "icon-button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for destructive or primary business actions without visible text."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Compact icon-only action control.",
       "useWhen": "Use for repeated utility actions like refresh, close, clear, and more.",
       "avoidWhen": "Avoid for destructive or primary business actions without visible text.",
-      "relatedComponents": ["Icon", "ToolbarButton", "Button"],
-      "cssClasses": ["vf-icon-button"],
+      "relatedComponents": [
+        "Icon",
+        "ToolbarButton",
+        "Button"
+      ],
+      "cssClasses": [
+        "vf-icon-button"
+      ],
       "cssVariables": [],
       "importExample": "import { IconButton, Icon } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<IconButton aria-label='Refresh'><Icon name='Refresh' /></IconButton>",
@@ -162,15 +356,41 @@
     },
     {
       "id": "toolbar-button",
-      "name": "ToolbarButton",
+      "displayName": "ToolbarButton",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/ToolbarButton/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/actions/toolbar-button",
+      "evidence": {
+        "maturityEvidenceKey": "toolbar-button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for standalone page-level primary actions."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Dense toolbar action that can show icon and label.",
       "useWhen": "Use inside repeated toolbars or compact command rows.",
       "avoidWhen": "Avoid for standalone page-level primary actions.",
-      "relatedComponents": ["Button", "IconButton", "ButtonGroup"],
-      "cssClasses": ["vf-toolbar-button"],
+      "relatedComponents": [
+        "Button",
+        "IconButton",
+        "ButtonGroup"
+      ],
+      "cssClasses": [
+        "vf-toolbar-button"
+      ],
       "cssVariables": [],
       "importExample": "import { ToolbarButton, Icon } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ToolbarButton icon={<Icon name='Filter' />} label='Filters' />",
@@ -179,15 +399,41 @@
     },
     {
       "id": "button-group",
-      "name": "ButtonGroup",
+      "displayName": "ButtonGroup",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "experimental",
+      "category": "primitive",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/ButtonGroup/ButtonGroup.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/actions/button-group",
+      "evidence": {
+        "maturityEvidenceKey": "button-group",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for unrelated actions."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Groups related buttons together.",
       "useWhen": "Use for adjacent related actions or attached toolbar controls.",
       "avoidWhen": "Avoid for unrelated actions.",
-      "relatedComponents": ["Button", "ToolbarButton", "SegmentedControl"],
-      "cssClasses": ["vf-button-group"],
+      "relatedComponents": [
+        "Button",
+        "ToolbarButton",
+        "SegmentedControl"
+      ],
+      "cssClasses": [
+        "vf-button-group"
+      ],
       "cssVariables": [],
       "importExample": "import { ButtonGroup, Button } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ButtonGroup><Button>One</Button><Button>Two</Button></ButtonGroup>",
@@ -196,15 +442,40 @@
     },
     {
       "id": "segmented-control",
-      "name": "SegmentedControl",
+      "displayName": "SegmentedControl",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/SegmentedControl/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/actions/segmented-control",
+      "evidence": {
+        "maturityEvidenceKey": "segmented-control",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for large option sets; use Select instead."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Small mutually exclusive mode selector.",
       "useWhen": "Use for density, theme preview, or view mode selection.",
       "avoidWhen": "Avoid for large option sets; use Select instead.",
-      "relatedComponents": ["ButtonGroup", "Select"],
-      "cssClasses": ["vf-segmented-control"],
+      "relatedComponents": [
+        "ButtonGroup",
+        "Select"
+      ],
+      "cssClasses": [
+        "vf-segmented-control"
+      ],
       "cssVariables": [],
       "importExample": "import { SegmentedControl } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<SegmentedControl aria-label='Density' value={density} onChange={setDensity} options={options} />",
@@ -213,15 +484,44 @@
     },
     {
       "id": "toggle-button",
-      "name": "ToggleButton",
+      "displayName": "ToggleButton",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "experimental",
+      "category": "primitive",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/ToggleButton/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/actions/toggle-button",
+      "evidence": {
+        "maturityEvidenceKey": "toggle-button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for persistent settings; use Switch. Avoid navigation links."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native pressable tool, formatting, or view action with controlled or uncontrolled pressed state.",
       "useWhen": "Use for an active tool, formatting option, or current-surface view action.",
       "avoidWhen": "Avoid for persistent settings; use Switch. Avoid navigation links.",
-      "relatedComponents": ["Switch", "Button", "IconButton", "SegmentedControl", "ToggleButtonGroup"],
-      "cssClasses": ["vf-toggle-button", "vf-toggle-button--pressed"],
+      "relatedComponents": [
+        "Switch",
+        "Button",
+        "IconButton",
+        "SegmentedControl",
+        "ToggleButtonGroup"
+      ],
+      "cssClasses": [
+        "vf-toggle-button",
+        "vf-toggle-button--pressed"
+      ],
       "cssVariables": [],
       "importExample": "import { ToggleButton } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ToggleButton defaultPressed>Pin column</ToggleButton>",
@@ -230,15 +530,44 @@
     },
     {
       "id": "toggle-button-group",
-      "name": "ToggleButtonGroup",
+      "displayName": "ToggleButtonGroup",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "experimental",
+      "category": "primitive",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/ToggleButtonGroup/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/actions/toggle-button-group",
+      "evidence": {
+        "maturityEvidenceKey": "toggle-button-group",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for long form choice labels or descriptions; use RadioGroup."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Joined native ToggleButton collection with single or multiple selection state.",
       "useWhen": "Use for compact related tool or view choices.",
       "avoidWhen": "Avoid for long form choice labels or descriptions; use RadioGroup.",
-      "relatedComponents": ["ToggleButton", "SegmentedControl", "RadioGroup", "ButtonGroup"],
-      "cssClasses": ["vf-toggle-button-group", "vf-toggle-button-group--single", "vf-toggle-button-group--multiple"],
+      "relatedComponents": [
+        "ToggleButton",
+        "SegmentedControl",
+        "RadioGroup",
+        "ButtonGroup"
+      ],
+      "cssClasses": [
+        "vf-toggle-button-group",
+        "vf-toggle-button-group--single",
+        "vf-toggle-button-group--multiple"
+      ],
       "cssVariables": [],
       "importExample": "import { ToggleButton, ToggleButtonGroup } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ToggleButtonGroup defaultValue='table'><ToggleButton value='table'>Table</ToggleButton></ToggleButtonGroup>",
@@ -247,15 +576,40 @@
     },
     {
       "id": "icon",
-      "name": "Icon",
+      "displayName": "Icon",
       "package": "@vyrnforge/ui-components",
-      "category": "Actions",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Icon/Icon.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "icon",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid adding external icon libraries by default."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Small built-in symbol component used by VyrnForge controls.",
       "useWhen": "Use supported icon names with VyrnForge buttons and toolbar controls.",
       "avoidWhen": "Avoid adding external icon libraries by default.",
-      "relatedComponents": ["IconButton", "ToolbarButton"],
-      "cssClasses": ["vf-icon"],
+      "relatedComponents": [
+        "IconButton",
+        "ToolbarButton"
+      ],
+      "cssClasses": [
+        "vf-icon"
+      ],
       "cssVariables": [],
       "importExample": "import { Icon } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Icon name='Search' decorative />",
@@ -264,15 +618,41 @@
     },
     {
       "id": "text",
-      "name": "Text",
+      "displayName": "Text",
       "package": "@vyrnforge/ui-components",
-      "category": "Typography",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Typography/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "text",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for headings; use Heading."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Body text primitive with size and tone options.",
       "useWhen": "Use for paragraphs and supporting copy.",
       "avoidWhen": "Avoid for headings; use Heading.",
-      "relatedComponents": ["Heading", "Caption", "Label"],
-      "cssClasses": ["vf-text"],
+      "relatedComponents": [
+        "Heading",
+        "Caption",
+        "Label"
+      ],
+      "cssClasses": [
+        "vf-text"
+      ],
       "cssVariables": [],
       "importExample": "import { Text } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Text tone='muted'>Updated just now</Text>",
@@ -281,15 +661,40 @@
     },
     {
       "id": "heading",
-      "name": "Heading",
+      "displayName": "Heading",
       "package": "@vyrnforge/ui-components",
-      "category": "Typography",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Typography/Heading.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "heading",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid using large display type inside compact panels."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Semantic heading primitive.",
       "useWhen": "Use for section and page headings.",
       "avoidWhen": "Avoid using large display type inside compact panels.",
-      "relatedComponents": ["Text", "Caption"],
-      "cssClasses": ["vf-heading"],
+      "relatedComponents": [
+        "Text",
+        "Caption"
+      ],
+      "cssClasses": [
+        "vf-heading"
+      ],
       "cssVariables": [],
       "importExample": "import { Heading } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Heading level={2}>Settings</Heading>",
@@ -298,15 +703,40 @@
     },
     {
       "id": "label",
-      "name": "Label",
+      "displayName": "Label",
       "package": "@vyrnforge/ui-components",
-      "category": "Typography",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Typography/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "label",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid as general body text."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Form and metadata label primitive.",
       "useWhen": "Use to label controls or dense metadata.",
       "avoidWhen": "Avoid as general body text.",
-      "relatedComponents": ["Field", "TextInput"],
-      "cssClasses": ["vf-label"],
+      "relatedComponents": [
+        "Field",
+        "TextInput"
+      ],
+      "cssClasses": [
+        "vf-label"
+      ],
       "cssVariables": [],
       "importExample": "import { Label } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Label htmlFor='email'>Email</Label>",
@@ -315,15 +745,40 @@
     },
     {
       "id": "caption",
-      "name": "Caption",
+      "displayName": "Caption",
       "package": "@vyrnforge/ui-components",
-      "category": "Typography",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Typography/Caption.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "caption",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for required error text; use ValidationMessage or InlineMessage."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Small supporting text.",
       "useWhen": "Use for hints, metadata, and timestamps.",
       "avoidWhen": "Avoid for required error text; use ValidationMessage or InlineMessage.",
-      "relatedComponents": ["Text", "ValidationMessage"],
-      "cssClasses": ["vf-caption"],
+      "relatedComponents": [
+        "Text",
+        "ValidationMessage"
+      ],
+      "cssClasses": [
+        "vf-caption"
+      ],
       "cssVariables": [],
       "importExample": "import { Caption } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Caption>Optional</Caption>",
@@ -332,15 +787,39 @@
     },
     {
       "id": "code-text",
-      "name": "CodeText",
+      "displayName": "CodeText",
       "package": "@vyrnforge/ui-components",
-      "category": "Typography",
-      "status": "stable",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Typography/CodeText.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "code-text",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for long code examples; use pre/code in docs."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Inline or block code-like text primitive.",
       "useWhen": "Use for tokens, paths, commands, and code identifiers.",
       "avoidWhen": "Avoid for long code examples; use pre/code in docs.",
-      "relatedComponents": ["Text"],
-      "cssClasses": ["vf-code-text"],
+      "relatedComponents": [
+        "Text"
+      ],
+      "cssClasses": [
+        "vf-code-text"
+      ],
       "cssVariables": [],
       "importExample": "import { CodeText } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<CodeText>--vf-primary</CodeText>",
@@ -349,15 +828,42 @@
     },
     {
       "id": "field",
-      "name": "Field",
+      "displayName": "Field",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Field/Field.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/field",
+      "evidence": {
+        "maturityEvidenceKey": "field",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid duplicating label and validation layout manually."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Form field wrapper for labels, descriptions, validation, and safe control relationships.",
       "useWhen": "Use around form controls that need label/help/error text.",
       "avoidWhen": "Avoid duplicating label and validation layout manually.",
-      "relatedComponents": ["TextInput", "Select", "Checkbox", "ValidationMessage"],
-      "cssClasses": ["vf-field"],
+      "relatedComponents": [
+        "TextInput",
+        "Select",
+        "Checkbox",
+        "ValidationMessage"
+      ],
+      "cssClasses": [
+        "vf-field"
+      ],
       "cssVariables": [],
       "importExample": "import { Field, TextInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Field id='email' label='Email'>{(controlProps) => <TextInput {...controlProps} />}</Field>",
@@ -366,15 +872,40 @@
     },
     {
       "id": "validation-message",
-      "name": "ValidationMessage",
+      "displayName": "ValidationMessage",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/ValidationMessage/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/validation-message",
+      "evidence": {
+        "maturityEvidenceKey": "validation-message",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for page-level blocking messages; use InlineMessage or ErrorState."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Inline validation or supporting message with error, warning, success, and info tones.",
       "useWhen": "Use with aria-describedby or near fields for validation and form feedback.",
       "avoidWhen": "Avoid for page-level blocking messages; use InlineMessage or ErrorState.",
-      "relatedComponents": ["Field", "InlineMessage"],
-      "cssClasses": ["vf-validation-message"],
+      "relatedComponents": [
+        "Field",
+        "InlineMessage"
+      ],
+      "cssClasses": [
+        "vf-validation-message"
+      ],
       "cssVariables": [],
       "importExample": "import { ValidationMessage } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ValidationMessage tone='error' id='email-error'>Email is required</ValidationMessage>",
@@ -383,15 +914,41 @@
     },
     {
       "id": "text-input",
-      "name": "TextInput",
+      "displayName": "TextInput",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/TextInput/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/text-input",
+      "evidence": {
+        "maturityEvidenceKey": "text-input",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for long multi-line input; use Textarea."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native text input with VyrnForge styling.",
       "useWhen": "Use for short text values.",
       "avoidWhen": "Avoid for long multi-line input; use Textarea.",
-      "relatedComponents": ["Field", "SearchInput", "Textarea"],
-      "cssClasses": ["vf-input"],
+      "relatedComponents": [
+        "Field",
+        "SearchInput",
+        "Textarea"
+      ],
+      "cssClasses": [
+        "vf-input"
+      ],
       "cssVariables": [],
       "importExample": "import { TextInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<TextInput id='name' />",
@@ -400,15 +957,41 @@
     },
     {
       "id": "search-input",
-      "name": "SearchInput",
+      "displayName": "SearchInput",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/SearchInput/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "search-input",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for general text entry."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Search-specific native input.",
       "useWhen": "Use for filtering lists, tables, or page content.",
       "avoidWhen": "Avoid for general text entry.",
-      "relatedComponents": ["TextInput", "DataGridSearch"],
-      "cssClasses": ["vf-input", "vf-search-input"],
+      "relatedComponents": [
+        "TextInput",
+        "DataGridSearch"
+      ],
+      "cssClasses": [
+        "vf-input",
+        "vf-search-input"
+      ],
       "cssVariables": [],
       "importExample": "import { SearchInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<SearchInput value={search} onChange={(event) => setSearch(event.target.value)} />",
@@ -417,15 +1000,40 @@
     },
     {
       "id": "select",
-      "name": "Select",
+      "displayName": "Select",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Select/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/select",
+      "evidence": {
+        "maturityEvidenceKey": "select",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for multi-select until MultiSelect exists."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native select control with VyrnForge styling.",
       "useWhen": "Use for small to medium option lists.",
       "avoidWhen": "Avoid for multi-select until MultiSelect exists.",
-      "relatedComponents": ["Field", "SegmentedControl"],
-      "cssClasses": ["vf-select"],
+      "relatedComponents": [
+        "Field",
+        "SegmentedControl"
+      ],
+      "cssClasses": [
+        "vf-select"
+      ],
       "cssVariables": [],
       "importExample": "import { Select } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Select value={value} onChange={(event) => setValue(event.currentTarget.value)} options={options} />",
@@ -434,15 +1042,40 @@
     },
     {
       "id": "checkbox",
-      "name": "Checkbox",
+      "displayName": "Checkbox",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Checkbox/Checkbox.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/checkbox",
+      "evidence": {
+        "maturityEvidenceKey": "checkbox",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for mutually exclusive sets; use Radio when available."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native checkbox control.",
       "useWhen": "Use for independent binary choices.",
       "avoidWhen": "Avoid for mutually exclusive sets; use Radio when available.",
-      "relatedComponents": ["Field", "UniversalDataGrid"],
-      "cssClasses": ["vf-checkbox"],
+      "relatedComponents": [
+        "Field",
+        "UniversalDataGrid"
+      ],
+      "cssClasses": [
+        "vf-checkbox"
+      ],
       "cssVariables": [],
       "importExample": "import { Checkbox } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Checkbox checked={enabled} onChange={(event) => setEnabled(event.currentTarget.checked)} label='Enabled' />",
@@ -451,15 +1084,40 @@
     },
     {
       "id": "textarea",
-      "name": "Textarea",
+      "displayName": "Textarea",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Textarea/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/textarea",
+      "evidence": {
+        "maturityEvidenceKey": "textarea",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for short single-line values."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native multi-line text control.",
       "useWhen": "Use for longer text values and comments.",
       "avoidWhen": "Avoid for short single-line values.",
-      "relatedComponents": ["Field", "TextInput"],
-      "cssClasses": ["vf-textarea"],
+      "relatedComponents": [
+        "Field",
+        "TextInput"
+      ],
+      "cssClasses": [
+        "vf-textarea"
+      ],
       "cssVariables": [],
       "importExample": "import { Textarea } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Textarea rows={4} />",
@@ -468,15 +1126,40 @@
     },
     {
       "id": "badge",
-      "name": "Badge",
+      "displayName": "Badge",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Badge/Badge.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/feedback/badge",
+      "evidence": {
+        "maturityEvidenceKey": "badge",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for long messages; use InlineMessage or Alert."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Compact status or metadata label.",
       "useWhen": "Use for short neutral, info, success, warning, or danger labels.",
       "avoidWhen": "Avoid for long messages; use InlineMessage or Alert.",
-      "relatedComponents": ["StatusBadge", "InlineMessage"],
-      "cssClasses": ["vf-badge"],
+      "relatedComponents": [
+        "StatusBadge",
+        "InlineMessage"
+      ],
+      "cssClasses": [
+        "vf-badge"
+      ],
       "cssVariables": [],
       "importExample": "import { Badge } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Badge variant='success'>Active</Badge>",
@@ -485,15 +1168,39 @@
     },
     {
       "id": "status-badge",
-      "name": "StatusBadge",
+      "displayName": "StatusBadge",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Badge/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "status-badge",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid when the content is not a status."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Status-oriented badge with status mapping.",
       "useWhen": "Use for consistent entity or workflow statuses.",
       "avoidWhen": "Avoid when the content is not a status.",
-      "relatedComponents": ["Badge"],
-      "cssClasses": ["vf-badge"],
+      "relatedComponents": [
+        "Badge"
+      ],
+      "cssClasses": [
+        "vf-badge"
+      ],
       "cssVariables": [],
       "importExample": "import { StatusBadge } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<StatusBadge status='active' />",
@@ -502,15 +1209,40 @@
     },
     {
       "id": "inline-message",
-      "name": "InlineMessage",
+      "displayName": "InlineMessage",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/InlineMessage/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "inline-message",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for page-level blocking errors; use ErrorState."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Inline contextual feedback message.",
       "useWhen": "Use near forms or content sections for local info/warning/error/success messages.",
       "avoidWhen": "Avoid for page-level blocking errors; use ErrorState.",
-      "relatedComponents": ["Alert", "ValidationMessage"],
-      "cssClasses": ["vf-inline-message"],
+      "relatedComponents": [
+        "Alert",
+        "ValidationMessage"
+      ],
+      "cssClasses": [
+        "vf-inline-message"
+      ],
       "cssVariables": [],
       "importExample": "import { InlineMessage } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<InlineMessage variant='info'>Changes are saved locally.</InlineMessage>",
@@ -519,15 +1251,41 @@
     },
     {
       "id": "alert",
-      "name": "Alert",
+      "displayName": "Alert",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/InlineMessage/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "alert",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for tiny metadata; use Badge or Caption."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Alert-style feedback surface.",
       "useWhen": "Use for important messages that need stronger visual weight.",
       "avoidWhen": "Avoid for tiny metadata; use Badge or Caption.",
-      "relatedComponents": ["InlineMessage", "ErrorState"],
-      "cssClasses": ["vf-inline-message", "vf-alert"],
+      "relatedComponents": [
+        "InlineMessage",
+        "ErrorState"
+      ],
+      "cssClasses": [
+        "vf-inline-message",
+        "vf-alert"
+      ],
       "cssVariables": [],
       "importExample": "import { Alert } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Alert variant='warning'>Check required fields.</Alert>",
@@ -536,15 +1294,40 @@
     },
     {
       "id": "empty-state",
-      "name": "EmptyState",
+      "displayName": "EmptyState",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/EmptyState/EmptyState.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "empty-state",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for loading or error states."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Empty content placeholder.",
       "useWhen": "Use when a list, grid, or panel has no records.",
       "avoidWhen": "Avoid for loading or error states.",
-      "relatedComponents": ["LoadingState", "ErrorState"],
-      "cssClasses": ["vf-empty-state"],
+      "relatedComponents": [
+        "LoadingState",
+        "ErrorState"
+      ],
+      "cssClasses": [
+        "vf-empty-state"
+      ],
       "cssVariables": [],
       "importExample": "import { EmptyState } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<EmptyState title='No results' description='Try another search.' />",
@@ -553,15 +1336,40 @@
     },
     {
       "id": "error-state",
-      "name": "ErrorState",
+      "displayName": "ErrorState",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/ErrorState/ErrorState.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "error-state",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for inline validation; use ValidationMessage."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Error placeholder or blocking error surface.",
       "useWhen": "Use when content failed to load or a section cannot render.",
       "avoidWhen": "Avoid for inline validation; use ValidationMessage.",
-      "relatedComponents": ["EmptyState", "Alert"],
-      "cssClasses": ["vf-error-state"],
+      "relatedComponents": [
+        "EmptyState",
+        "Alert"
+      ],
+      "cssClasses": [
+        "vf-error-state"
+      ],
       "cssVariables": [],
       "importExample": "import { ErrorState } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ErrorState title='Could not load data' />",
@@ -570,15 +1378,40 @@
     },
     {
       "id": "loading-state",
-      "name": "LoadingState",
+      "displayName": "LoadingState",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/LoadingState/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "loading-state",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for skeleton row placeholders; use Skeleton or grid skeleton rows."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Loading placeholder.",
       "useWhen": "Use while content is being fetched or prepared.",
       "avoidWhen": "Avoid for skeleton row placeholders; use Skeleton or grid skeleton rows.",
-      "relatedComponents": ["Skeleton", "DataGridSkeletonRows"],
-      "cssClasses": ["vf-loading-state"],
+      "relatedComponents": [
+        "Skeleton",
+        "DataGridSkeletonRows"
+      ],
+      "cssClasses": [
+        "vf-loading-state"
+      ],
       "cssVariables": [],
       "importExample": "import { LoadingState } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<LoadingState label='Loading users' />",
@@ -587,15 +1420,39 @@
     },
     {
       "id": "skeleton",
-      "name": "Skeleton",
+      "displayName": "Skeleton",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "stable",
+      "category": "feedback",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Skeleton/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "skeleton",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid when a text loading label is clearer."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Skeleton placeholder block.",
       "useWhen": "Use for placeholder UI while content loads.",
       "avoidWhen": "Avoid when a text loading label is clearer.",
-      "relatedComponents": ["LoadingState"],
-      "cssClasses": ["vf-skeleton"],
+      "relatedComponents": [
+        "LoadingState"
+      ],
+      "cssClasses": [
+        "vf-skeleton"
+      ],
       "cssVariables": [],
       "importExample": "import { Skeleton } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Skeleton width='100%' height={24} />",
@@ -604,15 +1461,40 @@
     },
     {
       "id": "card",
-      "name": "Card",
+      "displayName": "Card",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "stable",
+      "category": "composite",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Card/Card.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "card",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid nesting cards inside cards or using cards as page sections."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Framed content container.",
       "useWhen": "Use for individual repeated items or genuinely framed tools.",
       "avoidWhen": "Avoid nesting cards inside cards or using cards as page sections.",
-      "relatedComponents": ["Panel", "Section"],
-      "cssClasses": ["vf-card"],
+      "relatedComponents": [
+        "Panel",
+        "Section"
+      ],
+      "cssClasses": [
+        "vf-card"
+      ],
       "cssVariables": [],
       "importExample": "import { Card } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Card padding='md'>Content</Card>",
@@ -621,15 +1503,40 @@
     },
     {
       "id": "panel",
-      "name": "Panel",
+      "displayName": "Panel",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "stable",
+      "category": "composite",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Panel/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "panel",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for tiny inline content."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Section container with optional title, description, and actions.",
       "useWhen": "Use for titled settings or content panels.",
       "avoidWhen": "Avoid for tiny inline content.",
-      "relatedComponents": ["Card", "Section"],
-      "cssClasses": ["vf-panel"],
+      "relatedComponents": [
+        "Card",
+        "Section"
+      ],
+      "cssClasses": [
+        "vf-panel"
+      ],
       "cssVariables": [],
       "importExample": "import { Panel } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Panel title='Settings'>Content</Panel>",
@@ -638,15 +1545,39 @@
     },
     {
       "id": "stack",
-      "name": "Stack",
+      "displayName": "Stack",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "stable",
+      "category": "composite",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Stack/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "stack",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for horizontal layouts; use Inline."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Vertical layout primitive.",
       "useWhen": "Use for consistent vertical spacing.",
       "avoidWhen": "Avoid for horizontal layouts; use Inline.",
-      "relatedComponents": ["Inline"],
-      "cssClasses": ["vf-stack"],
+      "relatedComponents": [
+        "Inline"
+      ],
+      "cssClasses": [
+        "vf-stack"
+      ],
       "cssVariables": [],
       "importExample": "import { Stack } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Stack gap='md'>...</Stack>",
@@ -655,15 +1586,39 @@
     },
     {
       "id": "inline",
-      "name": "Inline",
+      "displayName": "Inline",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "stable",
+      "category": "composite",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Inline/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "inline",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for vertical layout; use Stack."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Horizontal layout primitive.",
       "useWhen": "Use for compact rows of controls or metadata.",
       "avoidWhen": "Avoid for vertical layout; use Stack.",
-      "relatedComponents": ["Stack"],
-      "cssClasses": ["vf-inline"],
+      "relatedComponents": [
+        "Stack"
+      ],
+      "cssClasses": [
+        "vf-inline"
+      ],
       "cssVariables": [],
       "importExample": "import { Inline } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Inline gap='sm'>...</Inline>",
@@ -672,15 +1627,40 @@
     },
     {
       "id": "section",
-      "name": "Section",
+      "displayName": "Section",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "stable",
+      "category": "composite",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Section/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "section",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid when a framed component is required; use Panel or Card."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Page section wrapper.",
       "useWhen": "Use for unframed page sections.",
       "avoidWhen": "Avoid when a framed component is required; use Panel or Card.",
-      "relatedComponents": ["Panel", "Card"],
-      "cssClasses": ["vf-section"],
+      "relatedComponents": [
+        "Panel",
+        "Card"
+      ],
+      "cssClasses": [
+        "vf-section"
+      ],
       "cssVariables": [],
       "importExample": "import { Section } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Section title='Users'>Content</Section>",
@@ -689,15 +1669,41 @@
     },
     {
       "id": "popover",
-      "name": "Popover",
+      "displayName": "Popover",
       "package": "@vyrnforge/ui-components",
-      "category": "Overlays",
-      "status": "stable",
+      "category": "overlay",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Popover/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/overlays/popover",
+      "evidence": {
+        "maturityEvidenceKey": "popover",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for complex forms; use Dialog or Drawer."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Shared-foundation anchored floating content with portal rendering and optional modal behavior.",
       "useWhen": "Use for contextual controls or short information.",
       "avoidWhen": "Avoid for complex forms; use Dialog or Drawer.",
-      "relatedComponents": ["Menu", "Tooltip", "Dialog"],
-      "cssClasses": ["vf-popover"],
+      "relatedComponents": [
+        "Menu",
+        "Tooltip",
+        "Dialog"
+      ],
+      "cssClasses": [
+        "vf-popover"
+      ],
       "cssVariables": [],
       "importExample": "import { Popover } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Popover trigger={<Button>Open</Button>}>Content</Popover>",
@@ -706,15 +1712,40 @@
     },
     {
       "id": "menu",
-      "name": "Menu",
+      "displayName": "Menu",
       "package": "@vyrnforge/ui-components",
-      "category": "Overlays",
-      "status": "stable",
+      "category": "overlay",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Menu/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/overlays/menu",
+      "evidence": {
+        "maturityEvidenceKey": "menu",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for navigation trees or complex forms."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Action menu.",
       "useWhen": "Use for compact action lists.",
       "avoidWhen": "Avoid for navigation trees or complex forms.",
-      "relatedComponents": ["Dropdown", "Popover"],
-      "cssClasses": ["vf-menu"],
+      "relatedComponents": [
+        "Dropdown",
+        "Popover"
+      ],
+      "cssClasses": [
+        "vf-menu"
+      ],
       "cssVariables": [],
       "importExample": "import { Menu } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Menu trigger={<Button>Actions</Button>} items={items} />",
@@ -723,15 +1754,40 @@
     },
     {
       "id": "dropdown",
-      "name": "Dropdown",
+      "displayName": "Dropdown",
       "package": "@vyrnforge/ui-components",
-      "category": "Overlays",
-      "status": "stable",
+      "category": "overlay",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Dropdown/Dropdown.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/overlays/dropdown",
+      "evidence": {
+        "maturityEvidenceKey": "dropdown",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for native form select choices; use Select."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Generic Popover composition for trigger-controlled floating content.",
       "useWhen": "Use for compact option/action surfaces.",
       "avoidWhen": "Avoid for native form select choices; use Select.",
-      "relatedComponents": ["Menu", "Popover"],
-      "cssClasses": ["vf-dropdown"],
+      "relatedComponents": [
+        "Menu",
+        "Popover"
+      ],
+      "cssClasses": [
+        "vf-dropdown"
+      ],
       "cssVariables": [],
       "importExample": "import { Dropdown } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Dropdown trigger={<Button>Open</Button>}>Content</Dropdown>",
@@ -740,15 +1796,40 @@
     },
     {
       "id": "tooltip",
-      "name": "Tooltip",
+      "displayName": "Tooltip",
       "package": "@vyrnforge/ui-components",
-      "category": "Overlays",
-      "status": "stable",
+      "category": "overlay",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Tooltip/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/overlays/tooltip",
+      "evidence": {
+        "maturityEvidenceKey": "tooltip",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for required instructions."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Short contextual help.",
       "useWhen": "Use to clarify compact controls.",
       "avoidWhen": "Avoid for required instructions.",
-      "relatedComponents": ["IconButton", "ToolbarButton"],
-      "cssClasses": ["vf-tooltip"],
+      "relatedComponents": [
+        "IconButton",
+        "ToolbarButton"
+      ],
+      "cssClasses": [
+        "vf-tooltip"
+      ],
       "cssVariables": [],
       "importExample": "import { Tooltip } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Tooltip content='Refresh'><Button>Refresh</Button></Tooltip>",
@@ -757,15 +1838,40 @@
     },
     {
       "id": "dialog",
-      "name": "Dialog",
+      "displayName": "Dialog",
       "package": "@vyrnforge/ui-components",
-      "category": "Overlays",
-      "status": "stable",
+      "category": "overlay",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Dialog/Dialog.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/overlays/dialog",
+      "evidence": {
+        "maturityEvidenceKey": "dialog",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for large workflows; use Drawer or a page."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Modal dialog surface.",
       "useWhen": "Use for focused decisions, confirmations, and short forms.",
       "avoidWhen": "Avoid for large workflows; use Drawer or a page.",
-      "relatedComponents": ["ConfirmDialog", "Drawer"],
-      "cssClasses": ["vf-dialog"],
+      "relatedComponents": [
+        "ConfirmDialog",
+        "Drawer"
+      ],
+      "cssClasses": [
+        "vf-dialog"
+      ],
       "cssVariables": [],
       "importExample": "import { Dialog } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Dialog open={open} onOpenChange={setOpen} title='Edit'>Content</Dialog>",
@@ -774,15 +1880,40 @@
     },
     {
       "id": "drawer",
-      "name": "Drawer",
+      "displayName": "Drawer",
       "package": "@vyrnforge/ui-components",
-      "category": "Overlays",
-      "status": "stable",
+      "category": "overlay",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Drawer/Drawer.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/overlays/drawer",
+      "evidence": {
+        "maturityEvidenceKey": "drawer",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for tiny contextual actions; use Popover or Menu."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Side panel overlay.",
       "useWhen": "Use for secondary workflows, filters, or detail panels.",
       "avoidWhen": "Avoid for tiny contextual actions; use Popover or Menu.",
-      "relatedComponents": ["Dialog", "Popover"],
-      "cssClasses": ["vf-drawer"],
+      "relatedComponents": [
+        "Dialog",
+        "Popover"
+      ],
+      "cssClasses": [
+        "vf-drawer"
+      ],
       "cssVariables": [],
       "importExample": "import { Drawer } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Drawer open={open} onOpenChange={setOpen} title='Filters'>Content</Drawer>",
@@ -791,15 +1922,40 @@
     },
     {
       "id": "confirm-dialog",
-      "name": "ConfirmDialog",
+      "displayName": "ConfirmDialog",
       "package": "@vyrnforge/ui-components",
-      "category": "Overlays",
-      "status": "stable",
+      "category": "overlay",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/overlays/confirm-dialog",
+      "evidence": {
+        "maturityEvidenceKey": "confirm-dialog",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for routine low-risk actions."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Confirmation dialog for important actions.",
       "useWhen": "Use before destructive or high-impact actions.",
       "avoidWhen": "Avoid for routine low-risk actions.",
-      "relatedComponents": ["Dialog", "Button"],
-      "cssClasses": ["vf-confirm-dialog"],
+      "relatedComponents": [
+        "Dialog",
+        "Button"
+      ],
+      "cssClasses": [
+        "vf-confirm-dialog"
+      ],
       "cssVariables": [],
       "importExample": "import { ConfirmDialog } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ConfirmDialog open={open} onOpenChange={setOpen} title='Delete item?' onConfirm={onConfirm} />",
@@ -808,16 +1964,47 @@
     },
     {
       "id": "universal-data-grid",
-      "name": "UniversalDataGrid",
+      "displayName": "UniversalDataGrid",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid",
-      "status": "stable",
+      "category": "data-grid",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/UniversalDataGrid.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "universal-data-grid",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid as a generic layout table or simple key-value display."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Specialized enterprise data-management grid.",
       "useWhen": "Use for data-heavy tables requiring search, sort, pagination, columns, selection, grouping, or adapters.",
       "avoidWhen": "Avoid as a generic layout table or simple key-value display.",
-      "relatedComponents": ["DataGridToolbar", "DataGridColumnMenu", "DataGrid state/adapters"],
-      "cssClasses": ["udg"],
-      "cssVariables": ["--udg-bg", "--udg-surface", "--udg-row-height", "--udg-header-bg"],
+      "relatedComponents": [
+        "DataGridToolbar",
+        "DataGridColumnMenu",
+        "DataGrid state/adapters"
+      ],
+      "cssClasses": [
+        "udg"
+      ],
+      "cssVariables": [
+        "--udg-bg",
+        "--udg-surface",
+        "--udg-row-height",
+        "--udg-header-bg"
+      ],
       "importExample": "import { UniversalDataGrid } from '@vyrnforge/ui-data-grid';",
       "basicUsageExample": "<UniversalDataGrid tableId='users' columns={columns} rows={rows} />",
       "accessibilityNotes": "Grid controls need labels, keyboard access, and visible focus.",
@@ -825,15 +2012,40 @@
     },
     {
       "id": "data-grid-toolbar",
-      "name": "DataGridToolbar",
+      "displayName": "DataGridToolbar",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid",
-      "status": "stable",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridToolbar.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-toolbar",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for generic page toolbars; use ui-components primitives."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Grid-specific toolbar surface.",
       "useWhen": "Use inside grid workflows when exposed by the grid package.",
       "avoidWhen": "Avoid for generic page toolbars; use ui-components primitives.",
-      "relatedComponents": ["UniversalDataGrid", "ToolbarButton"],
-      "cssClasses": ["udg-toolbar"],
+      "relatedComponents": [
+        "UniversalDataGrid",
+        "ToolbarButton"
+      ],
+      "cssClasses": [
+        "udg-toolbar"
+      ],
       "cssVariables": [],
       "importExample": "import { DataGridToolbar } from '@vyrnforge/ui-data-grid';",
       "basicUsageExample": "<DataGridToolbar>...</DataGridToolbar>",
@@ -842,15 +2054,41 @@
     },
     {
       "id": "data-grid-column-menu",
-      "name": "DataGridColumnMenu",
+      "displayName": "DataGridColumnMenu",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid",
-      "status": "stable",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridColumnMenu.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-column-menu",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for generic menus outside grids."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Column visibility, density, order, and reset menu.",
       "useWhen": "Use for grid column management.",
       "avoidWhen": "Avoid for generic menus outside grids.",
-      "relatedComponents": ["UniversalDataGrid", "Menu", "Checkbox"],
-      "cssClasses": ["udg-column-menu"],
+      "relatedComponents": [
+        "UniversalDataGrid",
+        "Menu",
+        "Checkbox"
+      ],
+      "cssClasses": [
+        "udg-column-menu"
+      ],
       "cssVariables": [],
       "importExample": "import { DataGridColumnMenu } from '@vyrnforge/ui-data-grid';",
       "basicUsageExample": "<DataGridColumnMenu columns={columns} state={state} />",
@@ -859,14 +2097,36 @@
     },
     {
       "id": "data-grid-state-adapters",
-      "name": "DataGrid state/adapters",
+      "displayName": "DataGrid state/adapters",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid",
-      "status": "stable",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/index.ts",
+      "publicExport": false,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-state-adapters",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid using them as a global app store or file generator."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Public grid state helpers and persistence/server/export adapter contracts.",
       "useWhen": "Use for controlled grid state, persistence preferences, server query contracts, and export requests.",
       "avoidWhen": "Avoid using them as a global app store or file generator.",
-      "relatedComponents": ["UniversalDataGrid"],
+      "relatedComponents": [
+        "UniversalDataGrid"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "import { createGridState, buildDataGridServerQuery } from '@vyrnforge/ui-data-grid';",
@@ -876,14 +2136,37 @@
     },
     {
       "id": "use-data-grid-state",
-      "name": "useDataGridState",
+      "displayName": "useDataGridState",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid",
-      "status": "experimental",
+      "category": "grid-feature",
+      "maturity": "experimental",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/hooks/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "use-data-grid-state",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for row data, fetching, auth, permissions, business workflows, or internal resize/reorder coordination."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Controlled or uncontrolled coordinator for complete DataGridState outside UniversalDataGrid.",
       "useWhen": "Use when application code needs to own and pass complete grid view state through documented package-root APIs.",
       "avoidWhen": "Avoid for row data, fetching, auth, permissions, business workflows, or internal resize/reorder coordination.",
-      "relatedComponents": ["UniversalDataGrid", "DataGrid state/adapters"],
+      "relatedComponents": [
+        "UniversalDataGrid",
+        "DataGrid state/adapters"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "import { useDataGridState } from '@vyrnforge/ui-data-grid';",
@@ -893,15 +2176,39 @@
     },
     {
       "id": "data-grid-bulk-action-bar",
-      "name": "DataGridBulkActionBar",
+      "displayName": "DataGridBulkActionBar",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid",
-      "status": "planned",
+      "category": "grid-feature",
+      "maturity": "planned",
+      "owner": "Data Grid Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-bulk-action-bar",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Do not import today; bulk actions are configured through UniversalDataGrid props."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Dedicated public bulk-action bar component.",
       "useWhen": "Use later if exported publicly.",
       "avoidWhen": "Do not import today; bulk actions are configured through UniversalDataGrid props.",
-      "relatedComponents": ["UniversalDataGrid"],
-      "cssClasses": ["udg-bulk-actions"],
+      "relatedComponents": [
+        "UniversalDataGrid"
+      ],
+      "cssClasses": [
+        "udg-bulk-actions"
+      ],
       "cssVariables": [],
       "importExample": "Not publicly exported today.",
       "basicUsageExample": "<UniversalDataGrid bulkActions={bulkActions} />",
@@ -910,14 +2217,38 @@
     },
     {
       "id": "app-shell",
-      "name": "AppShell",
+      "displayName": "AppShell",
       "package": "@vyrnforge/ui-components",
-      "category": "Navigation",
-      "status": "experimental",
+      "category": "navigation",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/AppShell/AppShell.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/layout/app-shell",
+      "evidence": {
+        "maturityEvidenceKey": "app-shell",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for small inline layouts or when an app-specific router shell already owns all regions."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Application shell layout with optional header, sidebar, footer, and explicit page/content/split scroll behavior.",
       "useWhen": "Use for admin portals, customer portals, and enterprise apps that need a consistent shell without routing assumptions.",
       "avoidWhen": "Avoid for small inline layouts or when an app-specific router shell already owns all regions.",
-      "relatedComponents": ["Page", "SideNav", "TopNav"],
+      "relatedComponents": [
+        "Page",
+        "SideNav",
+        "TopNav"
+      ],
       "cssClasses": [
         "vf-app-shell",
         "vf-app-shell--scroll-page",
@@ -944,15 +2275,41 @@
     },
     {
       "id": "page",
-      "name": "Page",
+      "displayName": "Page",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "experimental",
+      "category": "composite",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Page/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "page",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Page composition wrapper with optional title, description, status, actions, toolbar, density, and max-width.",
       "useWhen": "Use for top-level app pages that need consistent header, toolbar, and content spacing.",
       "avoidWhen": "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive.",
-      "relatedComponents": ["PageHeader", "PageToolbar", "Section"],
-      "cssClasses": ["vf-page"],
+      "relatedComponents": [
+        "PageHeader",
+        "PageToolbar",
+        "Section"
+      ],
+      "cssClasses": [
+        "vf-page"
+      ],
       "cssVariables": [],
       "importExample": "import { Page } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Page title='Orders' toolbar={<PageToolbar />}>Content</Page>",
@@ -961,15 +2318,42 @@
     },
     {
       "id": "page-header",
-      "name": "PageHeader",
+      "displayName": "PageHeader",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "experimental",
+      "category": "composite",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/PageHeader/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "page-header",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for small panel headings; use Panel or Section title props instead."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Reusable page header with title, description, eyebrow, status, metadata, breadcrumbs, and actions.",
       "useWhen": "Use for route/page headers or major workflow headers.",
       "avoidWhen": "Avoid for small panel headings; use Panel or Section title props instead.",
-      "relatedComponents": ["Page", "Breadcrumbs", "Button", "ToolbarButton"],
-      "cssClasses": ["vf-page-header"],
+      "relatedComponents": [
+        "Page",
+        "Breadcrumbs",
+        "Button",
+        "ToolbarButton"
+      ],
+      "cssClasses": [
+        "vf-page-header"
+      ],
       "cssVariables": [],
       "importExample": "import { PageHeader } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<PageHeader title='Orders' actions={<Button>Create</Button>} />",
@@ -978,15 +2362,41 @@
     },
     {
       "id": "page-toolbar",
-      "name": "PageToolbar",
+      "displayName": "PageToolbar",
       "package": "@vyrnforge/ui-components",
-      "category": "Layout",
-      "status": "experimental",
+      "category": "composite",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/PageToolbar/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "page-toolbar",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for primary page actions that belong in PageHeader actions."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Standard page-level toolbar for search, filters, refresh, export, view controls, and secondary actions.",
       "useWhen": "Use below a page header for dense enterprise page controls.",
       "avoidWhen": "Avoid for primary page actions that belong in PageHeader actions.",
-      "relatedComponents": ["Page", "ToolbarButton", "SearchInput"],
-      "cssClasses": ["vf-page-toolbar"],
+      "relatedComponents": [
+        "Page",
+        "ToolbarButton",
+        "SearchInput"
+      ],
+      "cssClasses": [
+        "vf-page-toolbar"
+      ],
       "cssVariables": [],
       "importExample": "import { PageToolbar } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<PageToolbar left={<SearchInput aria-label='Search' />} right={<ToolbarButton label='Refresh' />} />",
@@ -995,15 +2405,42 @@
     },
     {
       "id": "side-nav",
-      "name": "SideNav",
+      "displayName": "SideNav",
       "package": "@vyrnforge/ui-components",
-      "category": "Navigation",
-      "status": "experimental",
+      "category": "navigation",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/SideNav/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "side-nav",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for complex tree navigation or data-grid column menus."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Sidebar navigation for admin and customer portals with active, disabled, badge, icon, collapsed, header/footer slots, internal list scrolling, and one-level nested items.",
       "useWhen": "Use for app-level sidebar navigation without coupling to a router.",
       "avoidWhen": "Avoid for complex tree navigation or data-grid column menus.",
-      "relatedComponents": ["AppShell", "TopNav"],
-      "cssClasses": ["vf-side-nav", "vf-side-nav__scroll", "vf-side-nav__item"],
+      "relatedComponents": [
+        "AppShell",
+        "TopNav"
+      ],
+      "cssClasses": [
+        "vf-side-nav",
+        "vf-side-nav__scroll",
+        "vf-side-nav__item"
+      ],
       "cssVariables": [],
       "importExample": "import { SideNav } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<SideNav activeId='orders' items={[{ id: 'orders', label: 'Orders' }]} />",
@@ -1012,15 +2449,40 @@
     },
     {
       "id": "top-nav",
-      "name": "TopNav",
+      "displayName": "TopNav",
       "package": "@vyrnforge/ui-components",
-      "category": "Navigation",
-      "status": "experimental",
+      "category": "navigation",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/TopNav/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "top-nav",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid when the application needs a fully custom marketing or public-site header."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Compact top navigation/header bar with brand, navigation, actions, and user area slots.",
       "useWhen": "Use as the header region for enterprise app shells.",
       "avoidWhen": "Avoid when the application needs a fully custom marketing or public-site header.",
-      "relatedComponents": ["AppShell", "SideNav"],
-      "cssClasses": ["vf-top-nav"],
+      "relatedComponents": [
+        "AppShell",
+        "SideNav"
+      ],
+      "cssClasses": [
+        "vf-top-nav"
+      ],
       "cssVariables": [],
       "importExample": "import { TopNav } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<TopNav brand='Admin Portal' actions={<Button>Invite</Button>} />",
@@ -1029,15 +2491,39 @@
     },
     {
       "id": "breadcrumbs",
-      "name": "Breadcrumbs",
+      "displayName": "Breadcrumbs",
       "package": "@vyrnforge/ui-components",
-      "category": "Navigation",
-      "status": "experimental",
+      "category": "navigation",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "breadcrumbs",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for linear step progress or unrelated tabs."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Hierarchical location trail with current page marking and optional link/button items.",
       "useWhen": "Use in nested admin or customer portal pages to show location.",
       "avoidWhen": "Avoid for linear step progress or unrelated tabs.",
-      "relatedComponents": ["PageHeader"],
-      "cssClasses": ["vf-breadcrumbs"],
+      "relatedComponents": [
+        "PageHeader"
+      ],
+      "cssClasses": [
+        "vf-breadcrumbs"
+      ],
       "cssVariables": [],
       "importExample": "import { Breadcrumbs } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Orders', current: true }]} />",
@@ -1046,15 +2532,41 @@
     },
     {
       "id": "tabs",
-      "name": "Tabs",
+      "displayName": "Tabs",
       "package": "@vyrnforge/ui-components",
-      "category": "Navigation",
-      "status": "experimental",
+      "category": "navigation",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Tabs/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/navigation/tabs",
+      "evidence": {
+        "maturityEvidenceKey": "tabs",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for simple view modes; use SegmentedControl instead."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Controlled or uncontrolled tab navigation with line, contained, and pills variants.",
       "useWhen": "Use for dense workflow sections with related tab panels.",
       "avoidWhen": "Avoid for simple view modes; use SegmentedControl instead.",
-      "relatedComponents": ["SegmentedControl"],
-      "cssClasses": ["vf-tabs", "vf-tabs__tab", "vf-tabs__panel"],
+      "relatedComponents": [
+        "SegmentedControl"
+      ],
+      "cssClasses": [
+        "vf-tabs",
+        "vf-tabs__tab",
+        "vf-tabs__panel"
+      ],
       "cssVariables": [],
       "importExample": "import { Tabs } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Tabs defaultValue='summary' items={[{ id: 'summary', label: 'Summary', content: 'Summary' }]} />",
@@ -1063,15 +2575,42 @@
     },
     {
       "id": "radio",
-      "name": "Radio",
+      "displayName": "Radio",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Radio/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/radio",
+      "evidence": {
+        "maturityEvidenceKey": "radio",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for binary settings; use Checkbox or Switch."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native radio input with optional label, description, invalid, disabled, controlled, and uncontrolled states.",
       "useWhen": "Use for single-choice options, usually inside RadioGroup.",
       "avoidWhen": "Avoid for binary settings; use Checkbox or Switch.",
-      "relatedComponents": ["RadioGroup", "Checkbox", "SegmentedControl"],
-      "cssClasses": ["vf-radio", "vf-radio-field"],
+      "relatedComponents": [
+        "RadioGroup",
+        "Checkbox",
+        "SegmentedControl"
+      ],
+      "cssClasses": [
+        "vf-radio",
+        "vf-radio-field"
+      ],
       "cssVariables": [],
       "importExample": "import { Radio } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Radio name='cycle' value='monthly' label='Monthly' />",
@@ -1080,15 +2619,41 @@
     },
     {
       "id": "radio-group",
-      "name": "RadioGroup",
+      "displayName": "RadioGroup",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/RadioGroup/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/radio-group",
+      "evidence": {
+        "maturityEvidenceKey": "radio-group",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for long option lists; use Select instead."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Fieldset-based radio group with label, description, error, orientation, disabled, required, controlled, and uncontrolled state.",
       "useWhen": "Use for mutually exclusive choice sets in forms and settings.",
       "avoidWhen": "Avoid for long option lists; use Select instead.",
-      "relatedComponents": ["Radio", "Field", "ValidationMessage"],
-      "cssClasses": ["vf-radio-group"],
+      "relatedComponents": [
+        "Radio",
+        "Field",
+        "ValidationMessage"
+      ],
+      "cssClasses": [
+        "vf-radio-group"
+      ],
       "cssVariables": [],
       "importExample": "import { RadioGroup } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<RadioGroup label='Cycle' value={cycle} onValueChange={setCycle} options={options} />",
@@ -1097,15 +2662,39 @@
     },
     {
       "id": "switch",
-      "name": "Switch",
+      "displayName": "Switch",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Switch/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/switch",
+      "evidence": {
+        "maturityEvidenceKey": "switch",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for multi-step confirmation or non-immediate choices."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native checkbox-backed switch for immediate on/off settings.",
       "useWhen": "Use for settings that take effect as enabled/disabled toggles.",
       "avoidWhen": "Avoid for multi-step confirmation or non-immediate choices.",
-      "relatedComponents": ["Checkbox"],
-      "cssClasses": ["vf-switch"],
+      "relatedComponents": [
+        "Checkbox"
+      ],
+      "cssClasses": [
+        "vf-switch"
+      ],
       "cssVariables": [],
       "importExample": "import { Switch } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Switch checked={enabled} onCheckedChange={setEnabled} label='Enabled' />",
@@ -1114,15 +2703,41 @@
     },
     {
       "id": "number-input",
-      "name": "NumberInput",
+      "displayName": "NumberInput",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/NumberInput/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/number-input",
+      "evidence": {
+        "maturityEvidenceKey": "number-input",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for formatted currency or masked values."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native input type='number' control aligned with VyrnForge input styling, with integer and decimal typing modes.",
       "useWhen": "Use for numeric settings, quantities, limits, and scores.",
       "avoidWhen": "Avoid for formatted currency or masked values.",
-      "relatedComponents": ["TextInput", "Field"],
-      "cssClasses": ["vf-number-input", "vf-input"],
+      "relatedComponents": [
+        "TextInput",
+        "Field"
+      ],
+      "cssClasses": [
+        "vf-number-input",
+        "vf-input"
+      ],
       "cssVariables": [],
       "importExample": "import { NumberInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<NumberInput mode='integer' min={0} max={100} defaultValue={50} />",
@@ -1131,15 +2746,41 @@
     },
     {
       "id": "date-input",
-      "name": "DateInput",
+      "displayName": "DateInput",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/DateInput/DateInput.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/date-input",
+      "evidence": {
+        "maturityEvidenceKey": "date-input",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid when complex calendar range picking is required."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native input type='date' control aligned with VyrnForge input styling.",
       "useWhen": "Use for simple date values where the browser native picker is acceptable.",
       "avoidWhen": "Avoid when complex calendar range picking is required.",
-      "relatedComponents": ["TextInput", "Field"],
-      "cssClasses": ["vf-date-input", "vf-input"],
+      "relatedComponents": [
+        "TextInput",
+        "Field"
+      ],
+      "cssClasses": [
+        "vf-date-input",
+        "vf-input"
+      ],
       "cssVariables": [],
       "importExample": "import { DateInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<DateInput defaultValue='2026-07-10' />",
@@ -1148,15 +2789,41 @@
     },
     {
       "id": "datetime-input",
-      "name": "DateTimeInput",
+      "displayName": "DateTimeInput",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/DateTimeInput/DateTimeInput.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/datetime-input",
+      "evidence": {
+        "maturityEvidenceKey": "datetime-input",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for timezone-heavy scheduling workflows."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native input type='datetime-local' control aligned with VyrnForge input styling.",
       "useWhen": "Use for simple local date/time scheduling values.",
       "avoidWhen": "Avoid for timezone-heavy scheduling workflows.",
-      "relatedComponents": ["DateInput", "Field"],
-      "cssClasses": ["vf-datetime-input", "vf-input"],
+      "relatedComponents": [
+        "DateInput",
+        "Field"
+      ],
+      "cssClasses": [
+        "vf-datetime-input",
+        "vf-input"
+      ],
       "cssVariables": [],
       "importExample": "import { DateTimeInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<DateTimeInput defaultValue='2026-07-10T09:30' />",
@@ -1165,15 +2832,42 @@
     },
     {
       "id": "rating",
-      "name": "Rating",
+      "displayName": "Rating",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Rating/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/rating",
+      "evidence": {
+        "maturityEvidenceKey": "rating",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for continuous bounded ranges; use Slider."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Discrete whole-number rating control backed by native radio behavior when editable.",
       "useWhen": "Use for small qualitative scores such as quality, satisfaction, or review ratings.",
       "avoidWhen": "Avoid for continuous bounded ranges; use Slider.",
-      "relatedComponents": ["RadioGroup", "Slider"],
-      "cssClasses": ["vf-rating", "vf-rating__item", "vf-rating__icon"],
+      "relatedComponents": [
+        "RadioGroup",
+        "Slider"
+      ],
+      "cssClasses": [
+        "vf-rating",
+        "vf-rating__item",
+        "vf-rating__icon"
+      ],
       "cssVariables": [],
       "importExample": "import { Rating } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Rating label='Quality score' defaultValue={4} />",
@@ -1182,15 +2876,42 @@
     },
     {
       "id": "slider",
-      "name": "Slider",
+      "displayName": "Slider",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Slider/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/slider",
+      "evidence": {
+        "maturityEvidenceKey": "slider",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for formatted or direct numeric entry; use NumberInput."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Native bounded numeric range input with optional displayed value.",
       "useWhen": "Use for a bounded numeric setting where range interaction is useful.",
       "avoidWhen": "Avoid for formatted or direct numeric entry; use NumberInput.",
-      "relatedComponents": ["NumberInput", "Rating"],
-      "cssClasses": ["vf-slider", "vf-slider__control", "vf-slider__value"],
+      "relatedComponents": [
+        "NumberInput",
+        "Rating"
+      ],
+      "cssClasses": [
+        "vf-slider",
+        "vf-slider__control",
+        "vf-slider__value"
+      ],
       "cssVariables": [],
       "importExample": "import { Slider } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Slider ariaLabel='Approval threshold' defaultValue={65} showValue />",
@@ -1199,15 +2920,40 @@
     },
     {
       "id": "multi-select",
-      "name": "MultiSelect",
+      "displayName": "MultiSelect",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/MultiSelect/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "multi-select",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for async, virtualized, creatable, or very large option sets."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Simple multi-value selection control with chips, optional search, clear action, and native checkbox options.",
       "useWhen": "Use for small multi-value option sets in forms and settings.",
       "avoidWhen": "Avoid for async, virtualized, creatable, or very large option sets.",
-      "relatedComponents": ["Select", "Checkbox"],
-      "cssClasses": ["vf-multi-select"],
+      "relatedComponents": [
+        "Select",
+        "Checkbox"
+      ],
+      "cssClasses": [
+        "vf-multi-select"
+      ],
       "cssVariables": [],
       "importExample": "import { MultiSelect } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<MultiSelect value={roles} onValueChange={setRoles} options={options} searchable />",
@@ -1216,15 +2962,47 @@
     },
     {
       "id": "autocomplete",
-      "name": "Autocomplete",
+      "displayName": "Autocomplete",
       "package": "@vyrnforge/ui-components",
-      "category": "Forms",
-      "status": "experimental",
+      "category": "form-control",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/forms/autocomplete",
+      "evidence": {
+        "maturityEvidenceKey": "autocomplete",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Searchable single-value combobox with serializable options and shared overlay behavior.",
       "useWhen": "Use for larger known option sets where typing part of a label reduces selection effort.",
       "avoidWhen": "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values.",
-      "relatedComponents": ["Select", "TextInput", "SearchInput", "MultiSelect", "Popover"],
-      "cssClasses": ["vf-autocomplete", "vf-autocomplete__control", "vf-autocomplete__input", "vf-autocomplete__listbox", "vf-autocomplete__option"],
+      "relatedComponents": [
+        "Select",
+        "TextInput",
+        "SearchInput",
+        "MultiSelect",
+        "Popover"
+      ],
+      "cssClasses": [
+        "vf-autocomplete",
+        "vf-autocomplete__control",
+        "vf-autocomplete__input",
+        "vf-autocomplete__listbox",
+        "vf-autocomplete__option"
+      ],
       "cssVariables": [],
       "importExample": "import { Autocomplete } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Autocomplete options={[{ value: 'admin', label: 'Administrator' }]} placeholder='Select a role' />",
@@ -1233,15 +3011,47 @@
     },
     {
       "id": "transfer-list",
-      "name": "TransferList",
+      "displayName": "TransferList",
       "package": "@vyrnforge/ui-components",
-      "category": "Data Management",
-      "status": "experimental",
+      "category": "data-display",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/TransferList/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/data-management/transfer-list",
+      "evidence": {
+        "maturityEvidenceKey": "transfer-list",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for thousands of items, server pagination, complex IAM permission inheritance, hierarchical resources, approval/audit workflows, or data-grid use cases."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Dual-list assignment component for moving a moderate known collection between available and assigned states.",
       "useWhen": "Use for bounded known collections where users need to see available and assigned items simultaneously and move items reversibly.",
       "avoidWhen": "Avoid for thousands of items, server pagination, complex IAM permission inheritance, hierarchical resources, approval/audit workflows, or data-grid use cases.",
-      "relatedComponents": ["Checkbox", "MultiSelect", "Autocomplete", "Select", "UniversalDataGrid"],
-      "cssClasses": ["vf-transfer-list", "vf-transfer-list__panel", "vf-transfer-list__options", "vf-transfer-list__option", "vf-transfer-list__actions"],
+      "relatedComponents": [
+        "Checkbox",
+        "MultiSelect",
+        "Autocomplete",
+        "Select",
+        "UniversalDataGrid"
+      ],
+      "cssClasses": [
+        "vf-transfer-list",
+        "vf-transfer-list__panel",
+        "vf-transfer-list__options",
+        "vf-transfer-list__option",
+        "vf-transfer-list__actions"
+      ],
       "cssVariables": [],
       "importExample": "import { TransferList } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<TransferList options={[{ value: 'iam', label: 'Identity and Access Management' }]} defaultValue={['iam']} />",
@@ -1250,15 +3060,48 @@
     },
     {
       "id": "toast",
-      "name": "Toast",
+      "displayName": "Toast",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback",
-      "status": "experimental",
+      "category": "feedback",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "/components/feedback/toast",
+      "evidence": {
+        "maturityEvidenceKey": "toast",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Provider-owned transient feedback for successful operations, failures, warnings, and informational events.",
       "useWhen": "Use for brief operation feedback such as saved changes, copy completion, export lifecycle updates, and background operation completion.",
       "avoidWhen": "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history.",
-      "relatedComponents": ["InlineMessage", "Alert", "ValidationMessage", "Dialog", "ConfirmDialog", "Badge"],
-      "cssClasses": ["vf-toast", "vf-toast__content", "vf-toast__action", "vf-toast__dismiss", "vf-toast-viewport"],
+      "relatedComponents": [
+        "InlineMessage",
+        "Alert",
+        "ValidationMessage",
+        "Dialog",
+        "ConfirmDialog",
+        "Badge"
+      ],
+      "cssClasses": [
+        "vf-toast",
+        "vf-toast__content",
+        "vf-toast__action",
+        "vf-toast__dismiss",
+        "vf-toast-viewport"
+      ],
       "cssVariables": [],
       "importExample": "import { ToastProvider, ToastAction, useToast } from '@vyrnforge/ui-components';",
       "basicUsageExample": "const toast = useToast(); toast.success({ title: 'Saved', description: 'Changes were saved.' });",
@@ -1267,14 +3110,37 @@
     },
     {
       "id": "progress",
-      "name": "Progress",
+      "displayName": "Progress",
       "package": "@vyrnforge/ui-components",
-      "category": "Feedback planned",
-      "status": "planned",
+      "category": "feedback",
+      "maturity": "planned",
+      "owner": "Component Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "progress",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Progress indicator.",
       "useWhen": "Use later for determinate or indeterminate progress.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["LoadingState", "Skeleton"],
+      "relatedComponents": [
+        "LoadingState",
+        "Skeleton"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1284,14 +3150,37 @@
     },
     {
       "id": "description-list",
-      "name": "DescriptionList",
+      "displayName": "DescriptionList",
       "package": "@vyrnforge/ui-components",
-      "category": "Data display planned",
-      "status": "planned",
+      "category": "data-display",
+      "maturity": "planned",
+      "owner": "Component Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "description-list",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Read-only term/value data display.",
       "useWhen": "Use later for resource details.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["KeyValueList", "PropertyTable"],
+      "relatedComponents": [
+        "KeyValueList",
+        "PropertyTable"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1301,14 +3190,37 @@
     },
     {
       "id": "key-value-list",
-      "name": "KeyValueList",
+      "displayName": "KeyValueList",
       "package": "@vyrnforge/ui-components",
-      "category": "Data display planned",
-      "status": "planned",
+      "category": "data-display",
+      "maturity": "planned",
+      "owner": "Component Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "key-value-list",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Compact key/value metadata list.",
       "useWhen": "Use later for dense metadata.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["DescriptionList", "PropertyTable"],
+      "relatedComponents": [
+        "DescriptionList",
+        "PropertyTable"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1318,14 +3230,37 @@
     },
     {
       "id": "property-table",
-      "name": "PropertyTable",
+      "displayName": "PropertyTable",
       "package": "@vyrnforge/ui-components",
-      "category": "Data display planned",
-      "status": "planned",
+      "category": "data-display",
+      "maturity": "planned",
+      "owner": "Component Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "property-table",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Structured read-only property table.",
       "useWhen": "Use later for comparable resource properties.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["DescriptionList", "UniversalDataGrid"],
+      "relatedComponents": [
+        "DescriptionList",
+        "UniversalDataGrid"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1335,14 +3270,37 @@
     },
     {
       "id": "resource-list",
-      "name": "ResourceList",
+      "displayName": "ResourceList",
       "package": "@vyrnforge/ui-components",
-      "category": "Data display planned",
-      "status": "planned",
+      "category": "data-display",
+      "maturity": "planned",
+      "owner": "Component Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "resource-list",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "List of resource summary items.",
       "useWhen": "Use later for non-tabular resource lists.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["Card", "UniversalDataGrid"],
+      "relatedComponents": [
+        "Card",
+        "UniversalDataGrid"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1352,14 +3310,36 @@
     },
     {
       "id": "timeline",
-      "name": "Timeline",
+      "displayName": "Timeline",
       "package": "@vyrnforge/ui-components",
-      "category": "Data display planned",
-      "status": "planned",
+      "category": "data-display",
+      "maturity": "planned",
+      "owner": "Component Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "timeline",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Chronological event display.",
       "useWhen": "Use later for audit/activity history.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["ActivityLog"],
+      "relatedComponents": [
+        "ActivityLog"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1369,14 +3349,36 @@
     },
     {
       "id": "activity-log",
-      "name": "ActivityLog",
+      "displayName": "ActivityLog",
       "package": "@vyrnforge/ui-components",
-      "category": "Data display planned",
-      "status": "planned",
+      "category": "data-display",
+      "maturity": "planned",
+      "owner": "Component Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "activity-log",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Operational activity feed.",
       "useWhen": "Use later for recent changes and user activity.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["Timeline"],
+      "relatedComponents": [
+        "Timeline"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1386,14 +3388,37 @@
     },
     {
       "id": "advanced-filter-drawer",
-      "name": "AdvancedFilterDrawer",
+      "displayName": "AdvancedFilterDrawer",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid planned",
-      "status": "planned",
+      "category": "grid-feature",
+      "maturity": "planned",
+      "owner": "Data Grid Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "advanced-filter-drawer",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Advanced multi-condition grid filtering surface.",
       "useWhen": "Use later for complex filter criteria.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["UniversalDataGrid", "Drawer"],
+      "relatedComponents": [
+        "UniversalDataGrid",
+        "Drawer"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1403,14 +3428,36 @@
     },
     {
       "id": "saved-view-selector",
-      "name": "SavedViewSelector",
+      "displayName": "SavedViewSelector",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid planned",
-      "status": "planned",
+      "category": "grid-feature",
+      "maturity": "planned",
+      "owner": "Data Grid Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "saved-view-selector",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Saved grid view selector and manager entry point.",
       "useWhen": "Use later for user preference presets.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["UniversalDataGrid"],
+      "relatedComponents": [
+        "UniversalDataGrid"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
@@ -1420,20 +3467,709 @@
     },
     {
       "id": "export-preview-panel",
-      "name": "ExportPreviewPanel",
+      "displayName": "ExportPreviewPanel",
       "package": "@vyrnforge/ui-data-grid",
-      "category": "Data Grid planned",
-      "status": "planned",
+      "category": "grid-feature",
+      "maturity": "planned",
+      "owner": "Data Grid Team",
+      "sourcePath": "not-applicable",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "export-preview-panel",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "Do not import until implemented."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
       "purpose": "Export request preview and confirmation shell.",
       "useWhen": "Use later for export workflows.",
       "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["UniversalDataGrid", "DataGrid state/adapters"],
+      "relatedComponents": [
+        "UniversalDataGrid",
+        "DataGrid state/adapters"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
       "basicUsageExample": "Planned.",
       "accessibilityNotes": "Export scope and format must be explicit.",
       "aiUsageNotes": "Grid emits export requests; it does not generate files by default."
+    },
+    {
+      "id": "clear-button",
+      "displayName": "ClearButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "clear-button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "close-button",
+      "displayName": "CloseButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "close-button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "more-button",
+      "displayName": "MoreButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "more-button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "refresh-button",
+      "displayName": "RefreshButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "stable",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "refresh-button",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "toast-action",
+      "displayName": "ToastAction",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "toast-action",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "toast-provider",
+      "displayName": "ToastProvider",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "toast-provider",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "use-toast",
+      "displayName": "useToast",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "use-toast",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "data-grid-search",
+      "displayName": "DataGridSearch",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridSearch.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-search",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "data-grid-filter-bar",
+      "displayName": "DataGridFilterBar",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridFilterBar.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-filter-bar",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "data-grid-skeleton-rows",
+      "displayName": "DataGridSkeletonRows",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridSkeletonRows.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-skeleton-rows",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "data-grid-empty-state",
+      "displayName": "DataGridEmptyState",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridEmptyState.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-empty-state",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "data-grid-error-state",
+      "displayName": "DataGridErrorState",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridErrorState.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-error-state",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "data-grid-pagination",
+      "displayName": "DataGridPagination",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "grid-feature",
+      "maturity": "stable",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridPagination.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "data-grid-pagination",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "requires-verification"
+      },
+      "knownLimitations": [
+        "requires-verification"
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "useWhen": "requires-verification",
+      "avoidWhen": "requires-verification",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "requires-verification",
+      "basicUsageExample": "requires-verification",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "requires-verification"
+    },
+    {
+      "id": "toast-viewport",
+      "displayName": "ToastViewport",
+      "package": "@vyrnforge/ui-components",
+      "category": "internal",
+      "maturity": "internal",
+      "owner": "Component Team",
+      "sourcePath": "packages/ui-components/src/components/Toast/ToastViewport.tsx",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "toast-viewport",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-components-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import from package internals."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Internal implementation detail; not a public package contract.",
+      "useWhen": "not-applicable",
+      "avoidWhen": "Do not import from package internals.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "not-applicable",
+      "basicUsageExample": "not-applicable",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "Do not use undocumented internal APIs."
+    },
+    {
+      "id": "use-column-resize",
+      "displayName": "useColumnResize",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "internal",
+      "maturity": "internal",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/hooks/index.ts",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "use-column-resize",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import from package internals."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Internal implementation detail; not a public package contract.",
+      "useWhen": "not-applicable",
+      "avoidWhen": "Do not import from package internals.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "not-applicable",
+      "basicUsageExample": "not-applicable",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "Do not use undocumented internal APIs."
+    },
+    {
+      "id": "use-column-reorder",
+      "displayName": "useColumnReorder",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "internal",
+      "maturity": "internal",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/hooks/useColumnReorder.ts",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "use-column-reorder",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import from package internals."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Internal implementation detail; not a public package contract.",
+      "useWhen": "not-applicable",
+      "avoidWhen": "Do not import from package internals.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "not-applicable",
+      "basicUsageExample": "not-applicable",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "Do not use undocumented internal APIs."
+    },
+    {
+      "id": "use-controlled-state",
+      "displayName": "useControlledState",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "internal",
+      "maturity": "internal",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/hooks/useControlledState.ts",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "use-controlled-state",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import from package internals."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Internal implementation detail; not a public package contract.",
+      "useWhen": "not-applicable",
+      "avoidWhen": "Do not import from package internals.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "not-applicable",
+      "basicUsageExample": "not-applicable",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "Do not use undocumented internal APIs."
+    },
+    {
+      "id": "use-debounced-value",
+      "displayName": "useDebouncedValue",
+      "package": "@vyrnforge/ui-data-grid",
+      "category": "internal",
+      "maturity": "internal",
+      "owner": "Data Grid Team",
+      "sourcePath": "packages/ui-data-grid/src/hooks/useDebouncedValue.ts",
+      "publicExport": false,
+      "since": "not-applicable",
+      "docsPath": "docs/api/ui-data-grid-api.md",
+      "playgroundPath": "not-applicable",
+      "evidence": {
+        "maturityEvidenceKey": "use-debounced-value",
+        "status": "requires-verification"
+      },
+      "accessibility": {
+        "documentationPath": "docs/api/ui-data-grid-api.md",
+        "keyboardDocumentation": "not-applicable"
+      },
+      "knownLimitations": [
+        "Do not import from package internals."
+      ],
+      "deprecation": {
+        "status": "not-applicable"
+      },
+      "purpose": "Internal implementation detail; not a public package contract.",
+      "useWhen": "not-applicable",
+      "avoidWhen": "Do not import from package internals.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "not-applicable",
+      "basicUsageExample": "not-applicable",
+      "accessibilityNotes": "requires-verification",
+      "aiUsageNotes": "Do not use undocumented internal APIs."
     }
   ]
 }
