@@ -58,6 +58,53 @@ screen-reader announcements, contrast, zoom/reflow, reduced motion, responsive
 overflow, and assistive-technology behavior. Overlays and composite controls
 require the browser evidence described in the component maturity model.
 
+Manual screen-reader status is canonical in
+`docs/metadata/assistive-technology-reviews.json`. Use
+`npm run verify:assistive-technology` during development and
+`npm run verify:assistive-technology:release` for beta or stable promotion. A
+pending record is not a failure of the current alpha implementation, but it is
+not evidence of a manual pass.
+
+## Manual assistive-technology review
+
+VF-2014 defines two initial environments: Windows with NVDA and Chrome, and
+Windows with NVDA and Firefox. Record the exact operating-system, browser, and
+NVDA versions when the session is executed. The structured file contains the
+fixture IDs, component IDs, contracts, required environments, and current
+result status.
+
+For each environment:
+
+1. Check out the exact commit under review and run `npm ci`.
+2. Start the deterministic application with `npm run fixtures:serve`.
+3. Use the fixture routes declared in the structured evidence file.
+4. Test with keyboard and NVDA; do not substitute mouse operation for a
+   keyboard contract.
+5. Repeat relevant scenarios in light and dark themes and at compact and
+   comfortable density.
+6. Record exact announcements, focus movement, virtual-cursor behavior, and
+   limitations. A passing Playwright test is not a manual screen-reader pass.
+
+Detailed session notes belong under
+`docs/quality/assistive-technology-results/` and should be immutable after
+review. Each structured result requires an environment ID, `passed`, `failed`,
+or `conditional` outcome, reviewer, `YYYY-MM-DD` execution date,
+repository-relative note reference, and concise observations. P0/P1 findings
+block the relevant promotion or release.
+
+Development validation allows schema-valid pending records:
+
+```bash
+npm run verify:assistive-technology
+```
+
+Beta and stable promotion requires every declared environment and scenario to
+be complete and every result to be `passed`:
+
+```bash
+npm run verify:assistive-technology:release
+```
+
 ## AI guidance
 
 When AI creates or modifies a component, it must include accessible labels and keyboard behavior for every interactive element.

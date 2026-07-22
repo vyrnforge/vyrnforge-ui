@@ -240,6 +240,8 @@ for (const command of [
   "lint:css",
   "verify:metadata",
   "verify:component-maturity",
+  "verify:maturity-closure",
+  "verify:assistive-technology",
   "verify:repository-inventory",
   "test:coverage",
   "fixtures:verify",
@@ -317,6 +319,8 @@ for (const command of [
   "verify:ci",
   "verify:metadata",
   "verify:component-maturity",
+  "verify:maturity-closure",
+  "verify:assistive-technology",
   "format:check",
   "lint",
   "lint:css",
@@ -467,6 +471,10 @@ assert(
 assert(
   release.includes("playwright install --with-deps chromium"),
   "release verification must install Chromium before the authoritative quality command",
+);
+assert(
+  release.includes("npm run verify:assistive-technology:release"),
+  "beta release verification must require complete manual assistive-technology evidence",
 );
 assert(
   release.includes("scripts/create-release-notes.mjs"),

@@ -22,6 +22,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] `npm run verify:packages` passes.
 - [ ] `npm run verify:consumer` passes.
 - [ ] The stable `ci-gate` check passes. During migration, compatibility checks `quality` and `external-consumer` also pass.
+- [ ] For beta or stable promotion, `npm run verify:assistive-technology:release` passes.
 - [ ] Package manifests use `SEE LICENSE IN LICENSE`.
 - [ ] Package tarballs include LICENSE and no unrelated legal drafts or internal legal notes.
 - [ ] Type declaration output is present and reviewable.
