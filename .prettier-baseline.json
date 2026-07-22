@@ -168,7 +168,6 @@
     "examples/basic-playground/vite.config.ts": "7d6006804be1b41fa69123d3f3915367a0feb59e0933a5fe1d846e6d1af5a396",
     "packages/ui-components/README.md": "545c517e058497f5bc151237c6f65f2f580a10f5e18ff31356a30f79fc7e98fe",
     "packages/ui-components/src/components/__tests__/accessibility.test.tsx": "840218ff574e63b7d78af32118e0ef158770d350e0b88c8bb703fa5465bb27a0",
-    "packages/ui-components/src/components/__tests__/primitives.test.tsx": "0c8719285067d437be04572c39637bf0dbef8db23c5d6a8e5f40e75e852f9bc2",
     "packages/ui-components/src/components/AppShell/AppShell.tsx": "2825d17ac3204ff7f9270c7b30630ff86b12d91d82ae1a056328686d8f275673",
     "packages/ui-components/src/components/AppShell/index.ts": "3f6b22813dea508dd185400bb81b0e3eccfda564f421076f272d2d703e821251",
     "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx": "471ce8f186d34ff8e5ef0c202a1b5addd26b01413852c6ecc45543bb6dd948d1",
