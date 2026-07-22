@@ -215,3 +215,21 @@ exception.
 Do not introduce new package CSS references to historical aliases such as
 `--vf-primary`, `--vf-text`, or `--vf-surface`. These remain compatibility
 sources for consuming applications only.
+
+## G3 contract evidence
+
+The semantic-token contract, package adoption, and visual matrix are verified
+through the following repository commands:
+
+```bash
+npm run verify:design-tokens
+npm run verify:token-adoption
+npm run verify:visual-regression
+npm run test:visual
+npm run verify:g3-closure
+```
+
+The machine-readable sources are `docs/metadata/design-tokens.json`,
+`docs/metadata/visual-regression-matrix.json`, and
+`docs/metadata/g3-closure.json`. The final human-readable evidence report is
+`docs/quality/s3-g3-closure.md`.

@@ -13,6 +13,8 @@ queryable repository facts and evidence records.
 | `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                       |
 | `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                           |
 | `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges. |
+| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.     |
+| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                    |
 | `css-imports.json`                  | Required CSS import order and styling ownership.                                                   |
 | `state-contracts.json`              | State ownership levels and adapter policies.                                                       |
 | `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                           |
@@ -70,3 +72,22 @@ npm run verify:design-tokens
 The verifier rejects missing categories, duplicate names, incomplete theme
 presets, broken compatibility bridges, missing density aliases, invalid layer
 order, and incomplete reduced-motion behavior.
+
+## Visual regression and G3 closure metadata
+
+`visual-regression-matrix.json` owns the deterministic VF-3011 case matrix. It
+combines a blocking computed-style-to-token comparison with successful-run PNG
+and observation artifacts. `g3-closure.json` records the complete VF-3001
+through VF-3012 evidence chain without treating a local metadata edit as a
+substitute for the required GitHub `ci-gate`.
+
+```bash
+npm run test:visual-regression
+npm run verify:visual-regression
+npm run test:visual
+npm run test:g3-closure
+npm run verify:g3-closure
+```
+
+Maintenance guidance lives in `docs/quality/s3-visual-regression.md`; the final
+evidence decision is documented in `docs/quality/s3-g3-closure.md`.

@@ -95,6 +95,9 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `quality/05-formatting-baseline.md`     | Hash-pinned transition baseline that rejects new or modified formatting debt.                                       |
 | `quality/q1-component-quality-audit.md` | CI-004 public export inventory, component quality findings, maturity recommendations, and alpha remediation queues. |
 | `quality/s3-semantic-token-audit.md`    | VF-3001 styling decision inventory, token gaps, migration debt, and S3 foundation outcome.                          |
+| `quality/s3-token-adoption-report.md`   | VF-3009/VF-3010 package adoption evidence and documented exceptions.                                                |
+| `quality/s3-visual-regression.md`       | VF-3011 theme/density visual matrix, computed-style baselines, and screenshot artifacts.                            |
+| `quality/s3-g3-closure.md`              | VF-3012 final evidence chain, accepted exceptions, and G3 closure rule.                                             |
 | `testing/regression-fixtures.md`        | Deterministic fixture application for DOM, accessibility, browser, future visual, and consumer-oriented checks.     |
 | `testing/browser-testing.md`            | Playwright browser-test commands, fixture contracts, selector rules, artifacts, and evidence boundaries.            |
 
@@ -153,16 +156,18 @@ npm run build:docs
 
 Markdown docs are the human source of truth. Metadata files are structured indexes for AI agents and the React docs app. Update metadata whenever public components, APIs, CSS imports, state contracts, package boundaries, or AI usage rules change.
 
-| Metadata                        | Purpose                                                                                                                      |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `metadata/packages.json`        | Package ownership, dependencies, CSS imports, and public entry points.                                                       |
-| `metadata/components.json`      | Canonical normalized component and public-contract catalog, including maturity, ownership, routes, exports, and evidence.    |
-| `metadata/design-tokens.json`   | Canonical semantic token categories, theme coverage, density aliases, motion, layers, and compatibility bridges.             |
-| `metadata/component-schema.md`  | Canonical component metadata schema and contributor workflow.                                                                |
-| `metadata/css-imports.json`     | CSS import order and styling ownership.                                                                                      |
-| `metadata/state-contracts.json` | State ownership and adapter policies.                                                                                        |
-| `metadata/ai-usage-rules.json`  | AI-specific usage rules and dependency constraints.                                                                          |
-| `../.ai/COMPONENT_MAP.json`     | Compact AI navigation and usage notes; it consumes the canonical component catalog rather than repeating component maturity. |
+| Metadata                                 | Purpose                                                                                                                      |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `metadata/packages.json`                 | Package ownership, dependencies, CSS imports, and public entry points.                                                       |
+| `metadata/components.json`               | Canonical normalized component and public-contract catalog, including maturity, ownership, routes, exports, and evidence.    |
+| `metadata/design-tokens.json`            | Canonical semantic token categories, theme coverage, density aliases, motion, layers, and compatibility bridges.             |
+| `metadata/visual-regression-matrix.json` | Canonical VF-3011 visual suites, theme/density dimensions, targets, and token expectations.                                  |
+| `metadata/g3-closure.json`               | Machine-readable VF-3012 task/evidence inventory and G3 closure state.                                                       |
+| `metadata/component-schema.md`           | Canonical component metadata schema and contributor workflow.                                                                |
+| `metadata/css-imports.json`              | CSS import order and styling ownership.                                                                                      |
+| `metadata/state-contracts.json`          | State ownership and adapter policies.                                                                                        |
+| `metadata/ai-usage-rules.json`           | AI-specific usage rules and dependency constraints.                                                                          |
+| `../.ai/COMPONENT_MAP.json`              | Compact AI navigation and usage notes; it consumes the canonical component catalog rather than repeating component maturity. |
 
 ## 13. Templates
 

@@ -48,8 +48,15 @@
   top: 0;
   z-index: var(--udg-layer-header);
   height: var(--udg-header-height);
-  border-bottom-color: var(--udg-border-strong);
-  background: var(--udg-header-bg);
+  border-bottom: 0;
+  background-color: var(--udg-header-bg);
+  background-image: linear-gradient(
+    var(--udg-border-strong),
+    var(--udg-border-strong)
+  );
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
   color: var(--udg-header-text);
   font-size: var(--udg-font-size-xs);
   font-weight: var(--udg-font-weight-semibold);

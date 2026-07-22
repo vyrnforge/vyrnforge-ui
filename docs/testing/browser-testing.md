@@ -18,6 +18,8 @@ npm run test:browser
 npm run test:browser:headed
 npm run test:browser:debug
 npm run test:browser:report
+npm run test:visual
+npm run verify:visual-regression
 ```
 
 When Chromium is already installed outside Playwright, set
@@ -64,7 +66,9 @@ The Chromium project records:
 - a JSON result file in CI.
 
 GitHub Actions uploads the report and `test-results` directory when the browser
-job fails.
+job fails. VF-3011 also uploads `test-results/visual-evidence` on every browser
+run so successful theme/density screenshots and computed-style records remain
+reviewable.
 
 ## Evidence boundaries
 
@@ -95,3 +99,12 @@ The current component contract specifications are:
 
 Automated axe scans, DOM interaction tests, and Playwright browser tests are
 complementary; none should be presented as a substitute for the others.
+
+## S3 visual regression
+
+`tests/browser/visual-regression.spec.ts` consumes the canonical matrix in
+`docs/metadata/visual-regression-matrix.json`. Fourteen cases cover shared
+components, UniversalDataGrid, and Dialog across light/dark and required
+densities. Computed-style token expectations are the blocking cross-platform
+baseline; PNG screenshots are attached as human-review evidence. See
+`../quality/s3-visual-regression.md`.

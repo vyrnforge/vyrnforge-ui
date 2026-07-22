@@ -183,3 +183,14 @@ test("browser contract changes run browser and quality checks", () => {
     assert.equal(plan.full, false);
   }
 });
+
+test("visual regression metadata runs browser, fixture, quality, and docs checks", () => {
+  for (const file of [
+    "docs/metadata/visual-regression-matrix.json",
+    "docs/metadata/g3-closure.json",
+  ]) {
+    const plan = planCiScope([file]);
+    expectEnabled(plan, ["quality", "metadata", "docs", "fixtures", "browser"]);
+    expectDisabled(plan, ["full", "docs_only"]);
+  }
+});

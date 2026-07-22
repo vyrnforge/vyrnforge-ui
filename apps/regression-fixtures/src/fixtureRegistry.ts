@@ -232,6 +232,21 @@ export const fixtureRegistry: readonly FixtureCase[] = [
     densities: allDensities,
   },
   {
+    id: "visual-components",
+    title: "Semantic component gallery",
+    componentMetadataId: "button",
+    category: "basic-control",
+    route: "/fixtures/visual/components",
+    renderKey: "visual-components",
+    purpose:
+      "Renders deterministic shared component states for cross-theme and cross-density visual regression.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+    notes:
+      "The visual gallery exercises Button, TextInput, Select, Badge, ToggleButton, Tabs, and Rating through public exports.",
+  },
+  {
     id: "data-grid-keyboard",
     title: "Data grid keyboard",
     componentMetadataId: "universal-data-grid",

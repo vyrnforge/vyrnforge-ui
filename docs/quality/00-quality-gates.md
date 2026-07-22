@@ -71,7 +71,7 @@ tracked honestly by `docs/metadata/assistive-technology-reviews.json`.
 
 The authoritative local and release command is `npm run quality`. It includes:
 
-- workflow/toolchain, maturity-closure, and assistive-technology schema verifiers;
+- workflow/toolchain, token, visual-regression, G3-closure, maturity-closure, and assistive-technology schema verifiers;
 - formatting, JavaScript/TypeScript lint, and CSS lint;
 - typecheck, package coverage thresholds, and Chromium browser contracts;
 - regression fixture test/build verification;
@@ -92,5 +92,18 @@ npm run verify:design-tokens
 
 The contract verifier checks category completeness, typed exports, theme
 coverage, density aliases, compatibility bridges, reduced motion, and
-deterministic layers. Broad component and grid migration remains owned by
-VF-3009 and VF-3010.
+deterministic layers. Component and grid adoption is enforced by `npm run verify:token-adoption`.
+VF-3011 and VF-3012 add the final evidence and closure checks:
+
+```bash
+npm run test:visual-regression
+npm run verify:visual-regression
+npm run test:visual
+npm run test:g3-closure
+npm run verify:g3-closure
+```
+
+The computed-style matrix is blocking and cross-platform. PNG screenshots and
+JSON observations are uploaded from successful browser runs as review evidence.
+G3 is complete only after the aggregate GitHub `ci-gate` passes for the closure
+PR; the metadata record alone does not declare a CI result.

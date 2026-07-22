@@ -6,7 +6,9 @@
     "contractVersion": "0.4-alpha",
     "gate": "G3",
     "implementation": "packages/ui-core/src/styles/tokens.css",
-    "typedExport": "packages/ui-core/src/theme/tokenContract.ts"
+    "typedExport": "packages/ui-core/src/theme/tokenContract.ts",
+    "gateState": "evidence-complete",
+    "closureTask": "VF-3012"
   },
   "categories": [
     {
@@ -1025,5 +1027,11 @@
     "componentLocal": "Component-local variables may describe measured geometry or private composition, but must not redefine shared semantic color, focus, status, density, typography, motion, or layer roles.",
     "gridLocal": "Grid-only behavior uses --udg-* and should map shared decisions to canonical --vf-* roles.",
     "applicationLocal": "Docs, playgrounds, and consuming apps may use their approved class prefixes and scoped overrides without becoming package defaults."
+  },
+  "evidence": {
+    "foundation": "docs/quality/s3-semantic-token-audit.md",
+    "adoption": "docs/quality/s3-token-adoption-report.md",
+    "visualRegression": "docs/metadata/visual-regression-matrix.json",
+    "closure": "docs/metadata/g3-closure.json"
   }
 }

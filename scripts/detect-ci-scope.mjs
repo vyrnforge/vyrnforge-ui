@@ -219,6 +219,19 @@ export function planCiScope(files, { forceFull = false } = {}) {
     }
 
     if (
+      file === "docs/metadata/visual-regression-matrix.json" ||
+      file === "docs/metadata/g3-closure.json"
+    ) {
+      scope.quality = true;
+      scope.metadata = true;
+      scope.docs = true;
+      scope.fixtures = true;
+      scope.browser = true;
+      reasons.add("visual regression or G3 closure metadata");
+      continue;
+    }
+
+    if (
       file.startsWith("docs/metadata/") ||
       file === ".ai/COMPONENT_MAP.json"
     ) {
