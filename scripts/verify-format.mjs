@@ -26,7 +26,12 @@ function normalizePath(filePath) {
 
 function hashFile(relativePath) {
   const absolutePath = path.join(root, relativePath);
-  return createHash("sha256").update(readFileSync(absolutePath)).digest("hex");
+  const normalizedContent = readFileSync(absolutePath, "utf8").replace(
+    /\r\n?/gu,
+    "\n",
+  );
+
+  return createHash("sha256").update(normalizedContent, "utf8").digest("hex");
 }
 
 function listUnformattedFiles() {
