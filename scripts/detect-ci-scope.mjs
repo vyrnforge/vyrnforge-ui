@@ -183,6 +183,15 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
+    if (file.startsWith("tests/consumers/")) {
+      scope.quality = true;
+      scope.metadata = true;
+      scope.consumer = true;
+      scope.docs = true;
+      reasons.add("multi-framework consumer architecture fixture");
+      continue;
+    }
+
     if (file.startsWith("apps/docs/")) {
       scope.docs = true;
       reasons.add("documentation application");

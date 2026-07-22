@@ -1,0 +1,10 @@
+{
+  "id": "react",
+  "supportClaim": "architecture-fixture-only",
+  "rendererPackages": ["@vyrnforge/ui-components", "@vyrnforge/ui-elements"],
+  "requiredPatterns": [
+    "@vyrnforge/ui-components",
+    "@vyrnforge/ui-elements/register",
+    "<vf-button"
+  ]
+}

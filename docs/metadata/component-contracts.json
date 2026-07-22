@@ -1,0 +1,281 @@
+{
+  "$schema": "./component-contract.schema.json",
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "framework-neutral properties, attributes, events, slots, methods, accessibility, and form association",
+    "documentation": "docs/architecture/09-component-contracts-and-events.md"
+  },
+  "eventVocabulary": [
+    {
+      "name": "vf-value-change",
+      "purpose": "A component value changed after a user or programmatic controller transition.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": false,
+      "detailFields": ["value", "previousValue", "reason"]
+    },
+    {
+      "name": "vf-open-change",
+      "purpose": "An overlay or expandable surface changed open state.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": false,
+      "detailFields": ["open", "previousOpen", "reason"]
+    },
+    {
+      "name": "vf-selection-change",
+      "purpose": "A single or multiple selection model changed.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": false,
+      "detailFields": ["selection", "previousSelection", "reason"]
+    },
+    {
+      "name": "vf-checked-change",
+      "purpose": "A checked or mixed state changed.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": false,
+      "detailFields": ["checked", "previousChecked", "reason"]
+    },
+    {
+      "name": "vf-pressed-change",
+      "purpose": "A pressed or selected tool state changed.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": false,
+      "detailFields": ["pressed", "previousPressed", "reason"]
+    },
+    {
+      "name": "vf-action",
+      "purpose": "A primary component action was invoked.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": true,
+      "detailFields": ["action", "value", "reason"]
+    },
+    {
+      "name": "vf-dismiss",
+      "purpose": "A dismissible surface requested closure.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": true,
+      "detailFields": ["reason"]
+    },
+    {
+      "name": "vf-invalid",
+      "purpose": "A form-associated component reported invalid state.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": true,
+      "detailFields": ["validity", "validationMessage"]
+    },
+    {
+      "name": "vf-reset",
+      "purpose": "A component restored its initial form or controller state.",
+      "bubbles": true,
+      "composed": true,
+      "cancelable": false,
+      "detailFields": ["value", "reason"]
+    }
+  ],
+  "slotVocabulary": [
+    {
+      "name": "default",
+      "purpose": "Primary content or label."
+    },
+    {
+      "name": "label",
+      "purpose": "Visible control or region label."
+    },
+    {
+      "name": "description",
+      "purpose": "Supporting description or help text."
+    },
+    {
+      "name": "prefix",
+      "purpose": "Leading decorative or actionable content."
+    },
+    {
+      "name": "suffix",
+      "purpose": "Trailing decorative or actionable content."
+    },
+    {
+      "name": "trigger",
+      "purpose": "Element that controls a composite or overlay."
+    },
+    {
+      "name": "content",
+      "purpose": "Primary composite or overlay content."
+    },
+    {
+      "name": "header",
+      "purpose": "Header region."
+    },
+    {
+      "name": "footer",
+      "purpose": "Footer region."
+    },
+    {
+      "name": "actions",
+      "purpose": "Action region."
+    },
+    {
+      "name": "item",
+      "purpose": "Collection item template or projected item."
+    },
+    {
+      "name": "empty",
+      "purpose": "Empty-state content."
+    },
+    {
+      "name": "loading",
+      "purpose": "Loading-state content."
+    }
+  ],
+  "formAssociation": {
+    "modes": ["none", "value", "submitter"],
+    "requiredProperties": ["name", "disabled"],
+    "valueModeProperties": ["value", "required"],
+    "requiredMethods": ["checkValidity", "reportValidity"],
+    "requiredCallbacks": [
+      "formAssociatedCallback",
+      "formDisabledCallback",
+      "formResetCallback",
+      "formStateRestoreCallback"
+    ],
+    "implementation": "ElementInternals",
+    "fallbackPolicy": "A fallback may be added only for a documented target-browser gap and must preserve the same public contract."
+  },
+  "representativeContracts": [
+    {
+      "id": "button",
+      "category": "action",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Button",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "tag": "vf-button",
+        "status": "planned"
+      },
+      "properties": ["variant", "disabled", "loading", "type", "name", "value"],
+      "attributes": ["variant", "disabled", "loading", "type", "name", "value"],
+      "events": ["vf-action"],
+      "slots": ["default", "prefix", "suffix"],
+      "methods": ["focus", "click"],
+      "formAssociation": "submitter",
+      "accessibility": [
+        "native button semantics",
+        "disabled state",
+        "accessible name"
+      ]
+    },
+    {
+      "id": "tabs",
+      "category": "navigation",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Tabs",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "tag": "vf-tabs",
+        "status": "planned"
+      },
+      "properties": [
+        "value",
+        "orientation",
+        "activationMode",
+        "disabledValues"
+      ],
+      "attributes": ["value", "orientation", "activation-mode"],
+      "events": ["vf-value-change"],
+      "slots": ["default"],
+      "methods": ["focus"],
+      "formAssociation": "none",
+      "accessibility": [
+        "tablist semantics",
+        "roving focus",
+        "aria-controls",
+        "aria-selected"
+      ]
+    },
+    {
+      "id": "autocomplete",
+      "category": "form-control",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Autocomplete",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "tag": "vf-autocomplete",
+        "status": "planned"
+      },
+      "properties": [
+        "name",
+        "value",
+        "options",
+        "disabled",
+        "required",
+        "open"
+      ],
+      "attributes": ["name", "value", "disabled", "required", "open"],
+      "events": ["vf-value-change", "vf-open-change", "vf-invalid", "vf-reset"],
+      "slots": [
+        "label",
+        "description",
+        "prefix",
+        "suffix",
+        "empty",
+        "loading",
+        "item"
+      ],
+      "methods": ["focus", "checkValidity", "reportValidity"],
+      "formAssociation": "value",
+      "accessibility": [
+        "combobox semantics",
+        "listbox ownership",
+        "active descendant",
+        "accessible validation"
+      ]
+    },
+    {
+      "id": "dialog",
+      "category": "overlay",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Dialog",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "tag": "vf-dialog",
+        "status": "planned"
+      },
+      "properties": ["open", "modal", "closeOnEscape", "closeOnOutsidePointer"],
+      "attributes": [
+        "open",
+        "modal",
+        "close-on-escape",
+        "close-on-outside-pointer"
+      ],
+      "events": ["vf-open-change", "vf-dismiss"],
+      "slots": ["trigger", "header", "content", "actions", "footer"],
+      "methods": ["show", "close", "focus"],
+      "formAssociation": "none",
+      "accessibility": [
+        "dialog semantics",
+        "label relationship",
+        "focus containment",
+        "focus restoration"
+      ]
+    }
+  ]
+}

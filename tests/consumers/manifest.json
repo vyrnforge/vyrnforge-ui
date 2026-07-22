@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "supportClaim": "architecture-fixture-only",
+  "runtimeBuildGate": "GMF4",
+  "fixtures": [
+    {
+      "id": "react",
+      "framework": "React",
+      "directory": "tests/consumers/react",
+      "contractFile": "fixture.json",
+      "exampleFiles": ["example.tsx"]
+    },
+    {
+      "id": "native-html",
+      "framework": "Native HTML",
+      "directory": "tests/consumers/native-html",
+      "contractFile": "fixture.json",
+      "exampleFiles": ["index.html"]
+    },
+    {
+      "id": "angular",
+      "framework": "Angular",
+      "directory": "tests/consumers/angular",
+      "contractFile": "fixture.json",
+      "exampleFiles": ["example.component.ts", "example.component.html"]
+    },
+    {
+      "id": "vue",
+      "framework": "Vue",
+      "directory": "tests/consumers/vue",
+      "contractFile": "fixture.json",
+      "exampleFiles": ["App.vue", "vite.config.ts"]
+    }
+  ]
+}

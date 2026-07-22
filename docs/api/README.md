@@ -11,13 +11,36 @@ Public API means the parts of VyrnForge UI that consuming applications may rely 
 - documented data-grid state and adapter contracts
 - documented metadata JSON files
 
-The public packages are:
+The currently implemented public packages are:
 
-| Package                    | Public role                                                     |
-| -------------------------- | --------------------------------------------------------------- |
-| `@vyrnforge/ui-core`       | Shared tokens, themes, density, utilities, and theme helpers.   |
-| `@vyrnforge/ui-components` | Native-first reusable React components.                         |
-| `@vyrnforge/ui-data-grid`  | Specialized enterprise data-management grid and grid contracts. |
+| Package                    | Public role                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, utilities, and theme helpers.         |
+| `@vyrnforge/ui-components` | First-class reusable React components.                                           |
+| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track. |
+
+Approved but not yet implemented public package boundaries are:
+
+| Package                   | Planned role                                                                |
+| ------------------------- | --------------------------------------------------------------------------- |
+| `@vyrnforge/ui-behaviors` | Framework-neutral component controllers and state transitions.              |
+| `@vyrnforge/ui-elements`  | Native Custom Elements for plain HTML and verified Angular/Vue consumption. |
+
+Planned packages must not be imported until their package directories and
+published entry points exist.
+
+## Multi-framework contract
+
+The public cross-framework architecture is defined by:
+
+- `../architecture/adr-004-multi-framework-web-support.md`;
+- `../architecture/09-component-contracts-and-events.md`;
+- `../architecture/10-custom-elements-and-form-association.md`;
+- `../metadata/multi-framework.json`;
+- `../metadata/component-contracts.json`.
+
+Architecture metadata is public documentation, but it is not a runtime package
+support claim. Native HTML, Angular, and Vue support requires GMF4 evidence.
 
 ## Importing Packages
 

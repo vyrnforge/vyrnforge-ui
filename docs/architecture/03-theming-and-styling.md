@@ -124,3 +124,17 @@ invent local heights or padding.
 
 Historical tokens such as `--vf-primary` remain compatibility sources during
 S3. New work should use canonical semantic roles.
+
+## Multi-framework styling policy
+
+The same `--vf-*` semantic roles and `vf-*` class ownership apply to React and
+native Custom Element renderers. Framework adapters must not create parallel
+Angular- or Vue-specific token systems.
+
+Native elements use Light DOM by default so theme, density, typography, and
+application overrides inherit predictably. Shadow DOM requires an explicit
+component-level exception and a documented public styling surface.
+
+Planned `@vyrnforge/ui-elements` CSS loads after `ui-core` and must consume the
+same semantic roles. It must not copy theme palettes into renderer-local
+variables.

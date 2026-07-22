@@ -1,30 +1,99 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "stateOwnership": {
     "localTransientState": {
-      "owner": "component or hook",
-      "examples": ["menu open", "popover open", "hover", "focus", "drag session", "resize session"],
-      "rules": ["Keep local", "Do not persist", "Do not expose as application business state"]
+      "owner": "renderer or DOM adapter",
+      "examples": [
+        "menu open",
+        "popover open",
+        "hover",
+        "focus",
+        "drag session",
+        "resize session"
+      ],
+      "rules": [
+        "Keep browser-only session state local to the renderer or DOM adapter",
+        "Do not persist",
+        "Do not expose as application business state",
+        "Do not move DOM focus or observer state into ui-behaviors"
+      ]
     },
     "componentViewState": {
       "owner": "VyrnForge component in uncontrolled mode or consuming app in controlled mode",
-      "examples": ["search", "filters", "sort", "pagination", "density", "column visibility", "column order", "column sizing", "grouping", "selected rows"],
-      "rules": ["Support controlled props", "Support uncontrolled defaults", "Emit callbacks when state changes"]
+      "examples": [
+        "search",
+        "filters",
+        "sort",
+        "pagination",
+        "density",
+        "column visibility",
+        "column order",
+        "column sizing",
+        "grouping",
+        "selected rows"
+      ],
+      "rules": [
+        "Support controlled props",
+        "Support uncontrolled defaults",
+        "Emit callbacks when state changes"
+      ]
     },
     "persistedPreferenceState": {
       "owner": "adapter or consuming app storage decision",
-      "examples": ["column setup", "density", "page size", "saved filters", "saved views later"],
-      "rules": ["Store preferences only", "Do not store row data", "Do not persist selected rows by default"]
+      "examples": [
+        "column setup",
+        "density",
+        "page size",
+        "saved filters",
+        "saved views later"
+      ],
+      "rules": [
+        "Store preferences only",
+        "Do not store row data",
+        "Do not persist selected rows by default"
+      ]
     },
     "serverQueryState": {
       "owner": "grid query contract and consuming app fetch behavior",
       "examples": ["search/filter/sort/page/group emitted for API"],
-      "rules": ["Build serializable query contracts", "Do not fetch directly by default", "Do not own cache"]
+      "rules": [
+        "Build serializable query contracts",
+        "Do not fetch directly by default",
+        "Do not own cache"
+      ]
     },
     "businessApplicationState": {
       "owner": "consuming application",
-      "examples": ["API rows", "auth", "tenant", "permissions", "backend actions", "export jobs", "mutations"],
-      "rules": ["Never owned globally by VyrnForge packages", "Keep backend workflows in the app"]
+      "examples": [
+        "API rows",
+        "auth",
+        "tenant",
+        "permissions",
+        "backend actions",
+        "export jobs",
+        "mutations"
+      ],
+      "rules": [
+        "Never owned globally by VyrnForge packages",
+        "Keep backend workflows in the app"
+      ]
+    },
+    "frameworkNeutralControllerState": {
+      "owner": "planned @vyrnforge/ui-behaviors controller or consuming app in controlled mode",
+      "examples": [
+        "controlled value transitions",
+        "collection ordering",
+        "active item",
+        "selection",
+        "open reason",
+        "validation state"
+      ],
+      "rules": [
+        "Do not import framework runtimes",
+        "Do not execute DOM APIs",
+        "Use stable reasoned events",
+        "Allow renderer-specific adapters"
+      ]
     }
   },
   "policies": {
@@ -35,19 +104,42 @@
     },
     "controlledUncontrolled": {
       "summary": "Components should support app-controlled state and local uncontrolled state where appropriate.",
-      "rules": ["Controlled props make the app source of truth", "Uncontrolled state is view state only", "Callbacks report changes"]
+      "rules": [
+        "Controlled props make the app source of truth",
+        "Uncontrolled state is view state only",
+        "Callbacks report changes"
+      ]
     },
     "persistenceAdapter": {
       "summary": "Persistence stores preference state only.",
-      "rules": ["Do not store rows", "Do not persist selected rows by default", "Storage failures must not break the grid"]
+      "rules": [
+        "Do not store rows",
+        "Do not persist selected rows by default",
+        "Storage failures must not break the grid"
+      ]
     },
     "serverQueryAdapter": {
       "summary": "Server adapters build query contracts only.",
-      "rules": ["Do not fetch", "Do not own auth/retry/cache", "App owns API clients"]
+      "rules": [
+        "Do not fetch",
+        "Do not own auth/retry/cache",
+        "App owns API clients"
+      ]
     },
     "exportRequestAdapter": {
       "summary": "Export adapters build request contracts only.",
-      "rules": ["Do not generate files by default", "App or future optional adapter owns file generation"]
+      "rules": [
+        "Do not generate files by default",
+        "App or future optional adapter owns file generation"
+      ]
+    },
+    "multiFrameworkControllers": {
+      "summary": "Portable component decisions belong in ui-behaviors; renderer lifecycle and DOM execution stay outside it.",
+      "rules": [
+        "React public props remain compatible",
+        "Native events use canonical vf-* names",
+        "Angular and Vue adapters translate rather than duplicate behavior"
+      ]
     }
   }
 }

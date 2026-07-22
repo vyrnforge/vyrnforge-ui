@@ -2,30 +2,60 @@
 
 ## Purpose
 
-`@vyrnforge/ui-components` provides reusable native-first React components for enterprise apps.
+`@vyrnforge/ui-components` is the first-class React renderer for reusable
+VyrnForge UI primitives and enterprise application components.
+
+The package name remains stable through the multi-framework beta. Do not rename
+it to `@vyrnforge/ui-react` during behavior extraction.
 
 ## Component groups
 
-- actions: Button, IconButton, ToolbarButton, ButtonGroup, SegmentedControl
-- typography: Text, Heading, Label, Caption, CodeText
-- forms: Field, TextInput, SearchInput, Select, Autocomplete, Checkbox, Radio, RadioGroup, Switch, NumberInput, DateInput, DateTimeInput, MultiSelect, Textarea, ValidationMessage
-- data management: TransferList
-- feedback: Badge, Alert/InlineMessage, Toast, EmptyState, ErrorState, LoadingState, Skeleton, planned Progress
-- overlays: Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, ConfirmDialog
-- layout: Card, Panel, Stack, Inline, Section, AppShell, Page, PageHeader, PageToolbar
-- navigation: SideNav, TopNav, Breadcrumbs, Tabs
+- actions: Button, IconButton, ToolbarButton, ButtonGroup, SegmentedControl;
+- typography: Text, Heading, Label, Caption, CodeText;
+- forms: Field, TextInput, SearchInput, Select, Autocomplete, Checkbox, Radio,
+  RadioGroup, Switch, NumberInput, DateInput, DateTimeInput, MultiSelect,
+  Textarea, ValidationMessage;
+- data management: TransferList;
+- feedback: Badge, Alert/InlineMessage, Toast, EmptyState, ErrorState,
+  LoadingState, Skeleton;
+- overlays: Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, ConfirmDialog;
+- layout: Card, Panel, Stack, Inline, Section, AppShell, Page, PageHeader,
+  PageToolbar;
+- navigation: SideNav, TopNav, Breadcrumbs, Tabs.
 
-## Owns
+## Multi-framework role
 
-- `vf-*` classes
-- native React component APIs
-- accessibility behavior for shared primitives
+React remains the reference renderer. During S5, portable state transitions and
+controller rules move into planned `@vyrnforge/ui-behaviors` without changing
+the documented React public API.
 
-## Does not own
+React owns:
 
-- data-grid algorithms
-- backend data
-- app/global state
+- React props and callbacks;
+- hooks and lifecycle integration;
+- refs, JSX, children, and render callbacks;
+- React-specific DOM adapters;
+- current component CSS and `vf-*` class structure.
+
+React must not become the implementation runtime for Angular, Vue, or native
+HTML consumers.
+
+## Dependencies
+
+Current:
+
+- `@vyrnforge/ui-core`
+- React and React DOM as peer dependencies
+
+Planned after S5:
+
+- `@vyrnforge/ui-behaviors`
+
+Forbidden:
+
+- `@vyrnforge/ui-elements`
+- `@vyrnforge/ui-data-grid`
+- required Redux, TanStack, MUI, Radix, Tailwind, or other large UI runtimes
 
 ## Import
 
@@ -34,25 +64,14 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-## Package readiness
+## Release direction
 
-- JavaScript entry: `@vyrnforge/ui-components` resolves to built `dist/index.js` or `dist/index.cjs`.
-- Type declarations: `dist/index.d.ts`.
-- CSS entry: `@vyrnforge/ui-components/styles/index.css` resolves to built `dist/index.css`.
-- Published file whitelist: `dist` and `README.md`; package metadata and top-level `LICENSE` are included by npm automatically.
-- CSS side effect: `./dist/index.css`.
-- Peer dependencies: React and ReactDOM.
-- Internal dependency: `@vyrnforge/ui-core`.
-- License metadata: `SEE LICENSE IN LICENSE`.
+All public non-grid React components are in the coordinated beta scope. Their
+promotion requires React parity after behavior extraction and the normal
+component maturity evidence.
 
-## Usage principle
+See:
 
-Use text buttons for primary business actions. Use IconButton/ToolbarButton for repeated utility actions. Every icon-only action must have an accessible label.
-
-## Maturity
-
-The canonical component metadata, including maturity, is
-`docs/metadata/components.json`. Action aliases are stable; toast APIs are experimental. `ToastProvider` owns the
-internal `ToastViewport`, which is not a package-root application API.
-
-Use `AppShell` `scrollMode`, `headerPosition`, and `sidebarPosition` props for persistent enterprise navigation. Do not patch app-specific sidebar stickiness when the shell API can express the layout.
+- `../architecture/adr-004-multi-framework-web-support.md`
+- `../architecture/09-component-contracts-and-events.md`
+- `../metadata/multi-framework.json`

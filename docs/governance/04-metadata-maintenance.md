@@ -8,15 +8,17 @@ Markdown docs remain the source of truth for project direction. Metadata files a
 
 ## Metadata Files
 
-| File                                 | Update when                                                                                                                                                            |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `docs/metadata/packages.json`        | Package ownership, dependencies, CSS imports, or public entry points change.                                                                                           |
-| `docs/metadata/components.json`      | A component/contract is added, renamed, deprecated, removed, materially changes usage guidance, or changes maturity, ownership, routes, exports, or maturity evidence. |
-| `docs/metadata/css-imports.json`     | CSS import paths, import order, class prefixes, or token ownership changes.                                                                                            |
-| `docs/metadata/design-tokens.json`   | Semantic token categories, theme roles, density aliases, motion rules, layering, compatibility bridges, or token ownership changes.                                    |
-| `docs/metadata/state-contracts.json` | State ownership, Redux policy, persistence, server query, or export request contracts change.                                                                          |
-| `docs/metadata/ai-usage-rules.json`  | Agent rules, dependency constraints, or recommended usage patterns change.                                                                                             |
-| `.ai/COMPONENT_MAP.json`             | Component/package quick lookup changes; keep it compact and aligned to `docs/metadata/components.json`.                                                                |
+| File                                     | Update when                                                                                                                                                            |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/metadata/packages.json`            | Package ownership, dependencies, CSS imports, or public entry points change.                                                                                           |
+| `docs/metadata/multi-framework.json`     | Framework support levels, renderer status, release groups, package topology, or fixture policy changes.                                                                |
+| `docs/metadata/component-contracts.json` | Canonical properties/events/slots/form association or representative cross-framework contracts change.                                                                 |
+| `docs/metadata/components.json`          | A component/contract is added, renamed, deprecated, removed, materially changes usage guidance, or changes maturity, ownership, routes, exports, or maturity evidence. |
+| `docs/metadata/css-imports.json`         | CSS import paths, import order, class prefixes, or token ownership changes.                                                                                            |
+| `docs/metadata/design-tokens.json`       | Semantic token categories, theme roles, density aliases, motion rules, layering, compatibility bridges, or token ownership changes.                                    |
+| `docs/metadata/state-contracts.json`     | State ownership, Redux policy, persistence, server query, or export request contracts change.                                                                          |
+| `docs/metadata/ai-usage-rules.json`      | Agent rules, dependency constraints, or recommended usage patterns change.                                                                                             |
+| `.ai/COMPONENT_MAP.json`                 | Component/package quick lookup changes; keep it compact and aligned to `docs/metadata/components.json`.                                                                |
 
 ## Rules
 
@@ -48,3 +50,15 @@ Before merging metadata changes:
 ## AI Notes
 
 AI agents should read metadata only as an index. For decisions, read the canonical markdown docs linked from `docs/README.md`.
+
+## Multi-framework metadata
+
+Changes to renderer scope, planned packages, canonical events, slots, form
+association, or consumer fixtures require:
+
+```bash
+npm run test:multi-framework
+npm run verify:multi-framework
+```
+
+Do not mark a framework supported in metadata before GMF4 evidence exists.

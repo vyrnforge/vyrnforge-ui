@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vyrnforge.dev/schemas/component-contracts.schema.json",
+  "title": "VyrnForge Multi-Framework Component Contracts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sourceOfTruth",
+    "eventVocabulary",
+    "slotVocabulary",
+    "formAssociation",
+    "representativeContracts"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "sourceOfTruth": {
+      "type": "object",
+      "required": ["canonical", "scope", "documentation"],
+      "properties": {
+        "canonical": { "const": true },
+        "scope": { "type": "string", "minLength": 1 },
+        "documentation": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "eventVocabulary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/event" }
+    },
+    "slotVocabulary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/slot" }
+    },
+    "formAssociation": { "$ref": "#/$defs/formAssociation" },
+    "representativeContracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/component" }
+    }
+  },
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "purpose",
+        "bubbles",
+        "composed",
+        "cancelable",
+        "detailFields"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "purpose": { "type": "string", "minLength": 1 },
+        "bubbles": { "const": true },
+        "composed": { "const": true },
+        "cancelable": { "type": "boolean" },
+        "detailFields": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "purpose"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 }
+      }
+    },
+    "renderer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package", "status"],
+      "properties": {
+        "package": { "type": "string", "pattern": "^@vyrnforge/" },
+        "export": { "type": "string", "minLength": 1 },
+        "tag": {
+          "type": "string",
+          "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "status": { "enum": ["current", "planned"] }
+      }
+    },
+    "formAssociation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modes",
+        "requiredProperties",
+        "valueModeProperties",
+        "requiredMethods",
+        "requiredCallbacks",
+        "implementation",
+        "fallbackPolicy"
+      ],
+      "properties": {
+        "modes": {
+          "type": "array",
+          "items": { "enum": ["none", "value", "submitter"] },
+          "uniqueItems": true
+        },
+        "requiredProperties": { "$ref": "#/$defs/stringArray" },
+        "valueModeProperties": { "$ref": "#/$defs/stringArray" },
+        "requiredMethods": { "$ref": "#/$defs/stringArray" },
+        "requiredCallbacks": { "$ref": "#/$defs/stringArray" },
+        "implementation": { "const": "ElementInternals" },
+        "fallbackPolicy": { "type": "string", "minLength": 1 }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "react",
+        "native",
+        "properties",
+        "attributes",
+        "events",
+        "slots",
+        "methods",
+        "formAssociation",
+        "accessibility"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "category": { "type": "string", "minLength": 1 },
+        "react": { "$ref": "#/$defs/renderer" },
+        "native": { "$ref": "#/$defs/renderer" },
+        "properties": { "$ref": "#/$defs/stringArray" },
+        "attributes": { "$ref": "#/$defs/stringArray" },
+        "events": { "$ref": "#/$defs/stringArray" },
+        "slots": { "$ref": "#/$defs/stringArray" },
+        "methods": { "$ref": "#/$defs/stringArray" },
+        "formAssociation": { "enum": ["none", "value", "submitter"] },
+        "accessibility": { "$ref": "#/$defs/stringArray" }
+      }
+    }
+  }
+}

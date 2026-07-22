@@ -101,6 +101,18 @@ test("consumer fixture changes run only the packed-consumer gate", () => {
   expectDisabled(plan, ["quality", "packages", "docs", "playground", "full"]);
 });
 
+test("multi-framework fixture changes run architecture, consumer, and docs checks", () => {
+  const plan = planCiScope(["tests/consumers/angular/example.component.ts"]);
+  expectEnabled(plan, ["quality", "metadata", "consumer", "docs"]);
+  expectDisabled(plan, [
+    "packages",
+    "playground",
+    "browser",
+    "full",
+    "docs_only",
+  ]);
+});
+
 test("repository template changes run CI contract verification only", () => {
   for (const file of [
     ".github/pull_request_template.md",

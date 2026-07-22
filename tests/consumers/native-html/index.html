@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VyrnForge native HTML contract fixture</title>
+  </head>
+  <body>
+    <vf-button id="save" variant="primary">Save</vf-button>
+    <script type="module">
+      import "@vyrnforge/ui-elements/register";
+
+      document.querySelector("#save")?.addEventListener("vf-action", () => {
+        console.log("save");
+      });
+    </script>
+  </body>
+</html>

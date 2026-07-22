@@ -1,0 +1,6 @@
+{
+  "id": "vue",
+  "supportClaim": "architecture-fixture-only",
+  "rendererPackages": ["@vyrnforge/ui-elements"],
+  "requiredPatterns": ["isCustomElement", "<vf-button", "@vf-action"]
+}

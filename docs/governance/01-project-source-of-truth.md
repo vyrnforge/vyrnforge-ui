@@ -2,53 +2,66 @@
 
 ## Canonical positioning
 
-VyrnForge UI is a **native-first enterprise UI foundation** for internal tools, admin portals, customer portals, data-heavy applications, and workflow systems.
+VyrnForge UI is a **native-first enterprise UI foundation** for internal tools,
+admin portals, customer portals, data-heavy applications, and workflow systems.
+It is not only a data-grid package and it is no longer architected as a
+React-only library.
 
-VyrnForge UI is not only a data grid package.
+The first multi-framework beta focuses on all public non-grid components:
 
-The data grid is the first strategic specialized component, but the project direction is broader:
-
-- shared tokens
-- reusable application components
-- specialized enterprise data-management surfaces
-- clean state contracts
-- AI-friendly documentation and examples
+- first-class React components;
+- first-class native HTML Custom Elements;
+- verified Angular and Vue consumption;
+- framework-neutral behavior contracts;
+- shared design tokens and CSS-variable styling.
 
 ## Package roles
 
-| Package | Role | Owns | Does not own |
-| --- | --- | --- | --- |
-| `@vyrnforge/ui-core` | Shared foundation | tokens, themes, density, utilities, CSS variables | React components, data grid logic, app state |
-| `@vyrnforge/ui-components` | Reusable UI layer | native React primitives, application components, shared `vf-*` styles | data-grid algorithms, backend data, global store |
-| `@vyrnforge/ui-data-grid` | Specialized data package | UniversalDataGrid, grid state contracts, grid algorithms, adapters, `udg-*` styles | backend fetching, report generation, business workflows |
+| Package                    | Role                                                                                 | Release direction           |
+| -------------------------- | ------------------------------------------------------------------------------------ | --------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, typography, motion, layers, and utilities | Non-grid beta               |
+| `@vyrnforge/ui-behaviors`  | Planned framework-neutral component controllers and state rules                      | Non-grid beta               |
+| `@vyrnforge/ui-components` | First-class React renderer                                                           | Non-grid beta               |
+| `@vyrnforge/ui-elements`   | Planned native Custom Element renderer                                               | Non-grid beta               |
+| `@vyrnforge/ui-data-grid`  | Existing specialized React data-grid package                                         | Independent alpha; deferred |
+
+## Framework support policy
+
+React and native HTML are first-class target renderers. Angular and Vue become
+officially supported only after clean consumer and browser evidence passes
+GMF4. Mobile-native platforms are outside this web beta program.
+
+Architecture examples and fixtures are not support claims.
 
 ## Principles
 
-- Native-first.
-- CSS-variable theming.
+- Native-first and browser-standards-oriented.
+- CSS-variable theming with `--vf-*` shared tokens.
 - Dependency-minimal.
 - Store-agnostic.
-- Controlled/uncontrolled component state.
-- Adapter-based persistence/server/export integration.
-- Enterprise density.
+- Framework-neutral behavior where reuse is valuable.
+- Thin idiomatic renderer adapters.
+- Controlled and uncontrolled state contracts.
+- Light DOM by default.
 - Accessibility by default.
-- Data-management strength.
+- Enterprise density and data-management strength.
+- Documentation and metadata as one source of truth.
 
 ## Non-goals
 
 VyrnForge does not aim to be:
 
-- a CSS framework replacement
-- a Material Design clone
-- an Ant Design clone
-- a Tailwind requirement
-- a Radix wrapper
-- a TanStack wrapper
-- a Redux framework
-- a spreadsheet clone
-- a BI/pivot/chart platform
-- an export/report generation engine inside the grid
+- a Material or Ant Design clone;
+- a Tailwind, Radix, or TanStack wrapper;
+- a required Redux framework;
+- four independent framework-specific implementations;
+- a React application embedded inside Angular or Vue;
+- a mobile-native cross-platform renderer in the first beta;
+- a spreadsheet, BI pivot, chart, or report-generation platform.
 
-## North star
+## Beta north star
 
-VyrnForge should become the smallest credible enterprise UI foundation that can build a full data-heavy product interface without forcing teams into a large third-party design system.
+VyrnForge should publish the smallest credible multi-framework enterprise UI
+foundation that can build complete non-grid application surfaces without
+forcing teams into a large third-party design system. The data grid can mature
+on its own release track after that foundation is released.

@@ -8,7 +8,12 @@ import themingAndStyling from "../../../docs/architecture/03-theming-and-styling
 import cleanCodeBoundaries from "../../../docs/architecture/04-clean-code-boundaries.md?raw";
 import accessibilityStandards from "../../../docs/architecture/05-accessibility-standards.md?raw";
 import semanticTokenContract from "../../../docs/architecture/08-semantic-token-contract.md?raw";
+import multiFrameworkDecision from "../../../docs/architecture/adr-004-multi-framework-web-support.md?raw";
+import componentContracts from "../../../docs/architecture/09-component-contracts-and-events.md?raw";
+import customElementsAndForms from "../../../docs/architecture/10-custom-elements-and-form-association.md?raw";
+import multiFrameworkFixtures from "../../../docs/testing/multi-framework-consumer-fixtures.md?raw";
 import semanticTokenAudit from "../../../docs/quality/s3-semantic-token-audit.md?raw";
+import multiFrameworkArchitectureEvidence from "../../../docs/quality/s4-multi-framework-architecture.md?raw";
 import masterRoadmap from "../../../docs/roadmap/00-master-roadmap.md?raw";
 import componentInventory from "../../../docs/roadmap/01-component-inventory.md?raw";
 import gapAnalysis from "../../../docs/roadmap/02-gap-analysis.md?raw";
@@ -20,7 +25,9 @@ import publicationProcedure from "../../../docs/release/publication-procedure.md
 import deprecationPolicy from "../../../docs/release/deprecation-and-migration-policy.md?raw";
 import releaseReadinessChecklist from "../../../docs/release/release-readiness-checklist.md?raw";
 import uiCoreDoc from "../../../docs/packages/ui-core.md?raw";
+import uiBehaviorsDoc from "../../../docs/packages/ui-behaviors.md?raw";
 import uiComponentsDoc from "../../../docs/packages/ui-components.md?raw";
+import uiElementsDoc from "../../../docs/packages/ui-elements.md?raw";
 import uiDataGridDoc from "../../../docs/packages/ui-data-grid.md?raw";
 import apiOverview from "../../../docs/api/README.md?raw";
 import apiImportSetup from "../../../docs/api/import-and-setup.md?raw";
@@ -43,6 +50,9 @@ import componentMapJson from "../../../.ai/COMPONENT_MAP.json?raw";
 import metadataPackages from "../../../docs/metadata/packages.json?raw";
 import metadataComponents from "../../../docs/metadata/components.json?raw";
 import metadataDesignTokens from "../../../docs/metadata/design-tokens.json?raw";
+import metadataMultiFramework from "../../../docs/metadata/multi-framework.json?raw";
+import metadataComponentContracts from "../../../docs/metadata/component-contracts.json?raw";
+import metadataComponentContractSchema from "../../../docs/metadata/component-contract.schema.json?raw";
 import metadataCssImports from "../../../docs/metadata/css-imports.json?raw";
 import metadataStateContracts from "../../../docs/metadata/state-contracts.json?raw";
 import metadataAiUsageRules from "../../../docs/metadata/ai-usage-rules.json?raw";
@@ -180,6 +190,57 @@ export const docsRoutes: DocsRoute[] = [
     content: semanticTokenContract,
   },
   {
+    id: "multi-framework-decision",
+    title: "Multi-Framework Web Support",
+    group: "Architecture",
+    description:
+      "Accepted React/native-first web support decision and deferred data-grid scope.",
+    sourcePath: "docs/architecture/adr-004-multi-framework-web-support.md",
+    aiPurpose:
+      "Use this before changing renderer scope, package identity, or framework support claims.",
+    tags: ["canonical", "architecture", "multi-framework", "adr"],
+    canonical: true,
+    content: multiFrameworkDecision,
+  },
+  {
+    id: "component-contracts-events",
+    title: "Component Contracts And Events",
+    group: "Architecture",
+    description:
+      "Canonical properties, events, slots, methods, accessibility, and renderer mappings.",
+    sourcePath: "docs/architecture/09-component-contracts-and-events.md",
+    aiPurpose:
+      "Use this before adding or changing cross-framework component contracts.",
+    tags: ["canonical", "architecture", "contracts", "events", "slots"],
+    canonical: true,
+    content: componentContracts,
+  },
+  {
+    id: "custom-elements-forms",
+    title: "Custom Elements And Forms",
+    group: "Architecture",
+    description:
+      "Light DOM, Custom Element lifecycle, and native form-association policy.",
+    sourcePath: "docs/architecture/10-custom-elements-and-form-association.md",
+    aiPurpose:
+      "Use this before implementing native elements, reflection, or form integration.",
+    tags: ["canonical", "architecture", "custom-elements", "forms"],
+    canonical: true,
+    content: customElementsAndForms,
+  },
+  {
+    id: "multi-framework-fixtures",
+    title: "Multi-Framework Consumer Fixtures",
+    group: "Testing",
+    description:
+      "React, native HTML, Angular, and Vue fixture ownership and GMF4 evidence rules.",
+    sourcePath: "docs/testing/multi-framework-consumer-fixtures.md",
+    aiPurpose:
+      "Use this before changing consumer fixtures or making framework support claims.",
+    tags: ["testing", "multi-framework", "consumer"],
+    content: multiFrameworkFixtures,
+  },
+  {
     id: "s3-semantic-token-audit",
     title: "S3 Semantic Token Audit",
     group: "Quality",
@@ -190,6 +251,18 @@ export const docsRoutes: DocsRoute[] = [
       "Use this to distinguish completed token foundation work from VF-3009 and VF-3010 migration debt.",
     tags: ["quality", "tokens", "audit", "s3"],
     content: semanticTokenAudit,
+  },
+  {
+    id: "s4-multi-framework-architecture",
+    title: "S4 Multi-Framework Architecture Evidence",
+    group: "Quality",
+    description:
+      "MF-4001 through MF-4008 evidence and the explicit GMF1 support-claim boundary.",
+    sourcePath: "docs/quality/s4-multi-framework-architecture.md",
+    aiPurpose:
+      "Use this to review what S4 proves and what remains deferred to later gates.",
+    tags: ["quality", "multi-framework", "s4", "evidence"],
+    content: multiFrameworkArchitectureEvidence,
   },
   {
     id: "master-roadmap",
@@ -313,6 +386,18 @@ export const docsRoutes: DocsRoute[] = [
     content: uiCoreDoc,
   },
   {
+    id: "ui-behaviors",
+    title: "ui-behaviors",
+    group: "Packages",
+    description: "Planned framework-neutral controller and state boundary.",
+    sourcePath: "docs/packages/ui-behaviors.md",
+    aiPurpose:
+      "Use this before extracting portable component behavior from React.",
+    tags: ["package", "ui-behaviors", "planned"],
+    canonical: true,
+    content: uiBehaviorsDoc,
+  },
+  {
     id: "ui-components",
     title: "ui-components",
     group: "Packages",
@@ -322,6 +407,18 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["package", "ui-components"],
     canonical: true,
     content: uiComponentsDoc,
+  },
+  {
+    id: "ui-elements",
+    title: "ui-elements",
+    group: "Packages",
+    description: "Planned native Custom Element renderer boundary.",
+    sourcePath: "docs/packages/ui-elements.md",
+    aiPurpose:
+      "Use this before implementing native elements or framework consumer adapters.",
+    tags: ["package", "ui-elements", "custom-elements", "planned"],
+    canonical: true,
+    content: uiElementsDoc,
   },
   {
     id: "ui-data-grid",
@@ -346,6 +443,44 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["metadata", "packages", "json"],
     kind: "metadata",
     content: metadataPackages,
+  },
+  {
+    id: "metadata-multi-framework",
+    title: "Metadata / Multi-Framework",
+    group: "Metadata",
+    description:
+      "Machine-readable renderer support, package topology, release groups, and fixture policy.",
+    sourcePath: "docs/metadata/multi-framework.json",
+    aiPurpose:
+      "Use this for approved framework support and package topology lookup.",
+    tags: ["metadata", "multi-framework", "packages", "json"],
+    kind: "metadata",
+    content: metadataMultiFramework,
+  },
+  {
+    id: "metadata-component-contracts",
+    title: "Metadata / Component Contracts",
+    group: "Metadata",
+    description:
+      "Machine-readable events, slots, form association, and representative component contracts.",
+    sourcePath: "docs/metadata/component-contracts.json",
+    aiPurpose:
+      "Use this before adding renderer-specific component APIs or event names.",
+    tags: ["metadata", "contracts", "events", "slots", "json"],
+    kind: "metadata",
+    content: metadataComponentContracts,
+  },
+  {
+    id: "metadata-component-contract-schema",
+    title: "Metadata / Component Contract Schema",
+    group: "Metadata",
+    description:
+      "JSON Schema for the cross-framework component contract catalog.",
+    sourcePath: "docs/metadata/component-contract.schema.json",
+    aiPurpose: "Use this to validate new canonical component-contract records.",
+    tags: ["metadata", "schema", "contracts", "json"],
+    kind: "metadata",
+    content: metadataComponentContractSchema,
   },
   {
     id: "metadata-design-tokens",

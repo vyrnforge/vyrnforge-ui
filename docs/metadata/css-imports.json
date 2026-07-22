@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceOfTruth": "docs/api/import-and-setup.md",
   "recommendedOrder": [
     "@vyrnforge/ui-core/styles/index.css",
@@ -60,6 +60,13 @@
     "Do not import internal package CSS module files directly.",
     "Override canonical --vf-* semantic roles for app-wide theme changes.",
     "Use --udg-* only for genuinely grid-specific changes.",
-    "Do not edit package CSS directly in consuming apps."
-  ]
+    "Do not edit package CSS directly in consuming apps.",
+    "React and native element renderers must consume the same canonical --vf-* semantic roles.",
+    "Light DOM is the default for ui-elements; Shadow DOM requires an approved component-level exception."
+  ],
+  "plannedNativeRendererOrder": [
+    "@vyrnforge/ui-core/styles/index.css",
+    "@vyrnforge/ui-elements/styles/index.css"
+  ],
+  "plannedNativeRendererStatus": "architecture-approved; package not implemented"
 }

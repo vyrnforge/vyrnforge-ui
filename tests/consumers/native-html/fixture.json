@@ -1,0 +1,10 @@
+{
+  "id": "native-html",
+  "supportClaim": "architecture-fixture-only",
+  "rendererPackages": ["@vyrnforge/ui-elements"],
+  "requiredPatterns": [
+    "@vyrnforge/ui-elements/register",
+    "<vf-button",
+    "vf-action"
+  ]
+}

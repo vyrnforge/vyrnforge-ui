@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "multi-framework web support, package topology, renderer status, and consumer-fixture policy",
+    "documentation": "docs/architecture/adr-004-multi-framework-web-support.md"
+  },
+  "program": {
+    "name": "VyrnForge non-grid multi-framework beta",
+    "gate": "GMF1",
+    "status": "architecture-approved",
+    "firstClassRenderers": ["react", "native-html"],
+    "verifiedConsumers": ["angular", "vue"],
+    "excludedPlatforms": [
+      "react-native",
+      "flutter",
+      "native-android",
+      "native-ios",
+      "desktop-native"
+    ],
+    "deferredPackages": ["@vyrnforge/ui-data-grid"]
+  },
+  "packages": [
+    {
+      "name": "@vyrnforge/ui-core",
+      "directory": "packages/ui-core",
+      "status": "current",
+      "betaIncluded": true,
+      "runtime": "framework-neutral",
+      "dependsOn": [],
+      "owns": [
+        "semantic tokens",
+        "themes",
+        "density",
+        "typography",
+        "motion",
+        "layers",
+        "utilities"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-behaviors",
+      "directory": "packages/ui-behaviors",
+      "status": "planned",
+      "betaIncluded": true,
+      "runtime": "framework-neutral",
+      "dependsOn": ["@vyrnforge/ui-core"],
+      "owns": [
+        "controlled and uncontrolled state transitions",
+        "collection models",
+        "selection models",
+        "keyboard decision models",
+        "validation state",
+        "canonical controller events"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-components",
+      "directory": "packages/ui-components",
+      "status": "current",
+      "betaIncluded": true,
+      "runtime": "react",
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "notes": "The ui-behaviors dependency is architectural and becomes active during S5. The existing React public package name remains stable through beta."
+    },
+    {
+      "name": "@vyrnforge/ui-elements",
+      "directory": "packages/ui-elements",
+      "status": "planned",
+      "betaIncluded": true,
+      "runtime": "custom-elements",
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "owns": [
+        "native Custom Element renderers",
+        "property and attribute reflection",
+        "typed DOM events",
+        "form-associated element integration",
+        "explicit registration entry points"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-data-grid",
+      "directory": "packages/ui-data-grid",
+      "status": "react-alpha-deferred",
+      "betaIncluded": false,
+      "runtime": "react",
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
+      "notes": "Grid implementation, decomposition, performance work, and multi-framework rendering are outside the non-grid beta critical path."
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "react",
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-components",
+      "fixture": "tests/consumers/react",
+      "betaClaim": "planned"
+    },
+    {
+      "id": "native-html",
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-elements",
+      "fixture": "tests/consumers/native-html",
+      "betaClaim": "planned"
+    },
+    {
+      "id": "angular",
+      "supportLevel": "verified-consumer",
+      "renderer": "@vyrnforge/ui-elements",
+      "fixture": "tests/consumers/angular",
+      "betaClaim": "planned"
+    },
+    {
+      "id": "vue",
+      "supportLevel": "verified-consumer",
+      "renderer": "@vyrnforge/ui-elements",
+      "fixture": "tests/consumers/vue",
+      "betaClaim": "planned"
+    }
+  ],
+  "styling": {
+    "defaultDomMode": "light-dom",
+    "sharedTokens": "--vf-*",
+    "sharedClasses": "vf-*",
+    "gridTokens": "--udg-*",
+    "gridClasses": "udg-*",
+    "shadowDomPolicy": "component-level-exception-only"
+  },
+  "consumerFixturePolicy": {
+    "manifest": "tests/consumers/manifest.json",
+    "currentClaim": "architecture-fixture-only",
+    "runtimeBuildGate": "GMF4",
+    "rule": "Fixture presence in S4 proves the integration contract and CI ownership only. It does not claim runtime framework support before GMF4."
+  }
+}
