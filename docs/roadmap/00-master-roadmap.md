@@ -51,7 +51,12 @@ beta release group.
 - MF-4007: form-associated element contract
 - MF-4008: React, native HTML, Angular, and Vue fixture foundation
 
-S4 does not port components or create a framework support claim.
+- MF-4009: create the `@vyrnforge/ui-behaviors` package foundation
+- MF-4010: create the `@vyrnforge/ui-elements` package foundation
+- MF-4011: add complete framework-parity catalog metadata
+- MF-4012: complete GMF1 architecture gate evidence
+
+S4 establishes real package foundations but does not port public components or create a framework support claim.
 
 ## Deferred data-grid track
 

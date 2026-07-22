@@ -9,7 +9,8 @@
     "stateContracts": "docs/metadata/state-contracts.json",
     "aiUsageRules": "docs/metadata/ai-usage-rules.json",
     "multiFramework": "docs/metadata/multi-framework.json",
-    "componentContracts": "docs/metadata/component-contracts.json"
+    "componentContracts": "docs/metadata/component-contracts.json",
+    "gmf1Closure": "docs/metadata/gmf1-closure.json"
   },
   "packages": {
     "@vyrnforge/ui-core": {
@@ -27,7 +28,7 @@
       "css": ["@vyrnforge/ui-core/styles/index.css"]
     },
     "@vyrnforge/ui-behaviors": {
-      "status": "planned",
+      "status": "current-foundation",
       "releaseTrack": "non-grid-beta",
       "owns": [
         "framework-neutral controllers",
@@ -58,7 +59,7 @@
       ]
     },
     "@vyrnforge/ui-elements": {
-      "status": "planned",
+      "status": "current-foundation",
       "renderer": "custom-elements",
       "releaseTrack": "non-grid-beta",
       "owns": [

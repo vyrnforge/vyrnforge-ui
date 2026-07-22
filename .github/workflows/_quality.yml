@@ -20,7 +20,15 @@ on:
         required: false
         default: false
         type: boolean
+      ui-behaviors:
+        required: false
+        default: false
+        type: boolean
       ui-components:
+        required: false
+        default: false
+        type: boolean
+      ui-elements:
         required: false
         default: false
         type: boolean
@@ -47,7 +55,9 @@ jobs:
       CI_SCOPE_FULL: ${{ inputs.full }}
       CI_SCOPE_METADATA: ${{ inputs.metadata }}
       CI_SCOPE_UI_CORE: ${{ inputs['ui-core'] }}
+      CI_SCOPE_UI_BEHAVIORS: ${{ inputs['ui-behaviors'] }}
       CI_SCOPE_UI_COMPONENTS: ${{ inputs['ui-components'] }}
+      CI_SCOPE_UI_ELEMENTS: ${{ inputs['ui-elements'] }}
       CI_SCOPE_UI_DATA_GRID: ${{ inputs['ui-data-grid'] }}
       CI_SCOPE_FIXTURES: ${{ inputs.fixtures }}
 

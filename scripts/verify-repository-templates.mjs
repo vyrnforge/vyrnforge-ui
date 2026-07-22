@@ -10,13 +10,19 @@ function assert(condition, message) {
 
 function read(relativePath) {
   const absolutePath = path.join(root, relativePath);
-  assert(existsSync(absolutePath), `missing repository template: ${relativePath}`);
+  assert(
+    existsSync(absolutePath),
+    `missing repository template: ${relativePath}`,
+  );
   return readFileSync(absolutePath, "utf8").replaceAll("\r\n", "\n");
 }
 
 function requireText(content, relativePath, requiredText) {
   for (const required of requiredText) {
-    assert(content.includes(required), `${relativePath} must include: ${required}`);
+    assert(
+      content.includes(required),
+      `${relativePath} must include: ${required}`,
+    );
   }
 }
 
@@ -26,24 +32,26 @@ const pullRequestTemplates = {
     "scripts/detect-ci-scope.mjs",
     "ci-gate",
     "npm run verify:ci",
-    "npm run quality"
+    "npm run quality",
   ],
   ".github/PULL_REQUEST_TEMPLATE/component-or-package.md": [
     "## Package scope",
     "@vyrnforge/ui-core",
+    "@vyrnforge/ui-behaviors",
     "@vyrnforge/ui-components",
+    "@vyrnforge/ui-elements",
     "@vyrnforge/ui-data-grid",
     "## Contract impact",
     "native-first",
     "store-agnostic",
-    "Packed package and external-consumer verification"
+    "Packed package and external-consumer verification",
   ],
   ".github/PULL_REQUEST_TEMPLATE/docs-and-examples.md": [
     "## Documentation scope",
     "## Source-of-truth review",
     "Documentation or metadata only",
     "package and consumer verification",
-    "generated CI plan"
+    "generated CI plan",
   ],
   ".github/PULL_REQUEST_TEMPLATE/ci-cd-infrastructure.md": [
     "## Infrastructure scope",
@@ -52,7 +60,7 @@ const pullRequestTemplates = {
     "job-scoped",
     "No long-lived npm token",
     "npm run verify:ci",
-    "## Rollout and rollback"
+    "## Rollout and rollback",
   ],
   ".github/PULL_REQUEST_TEMPLATE/release.md": [
     "## Release identity",
@@ -61,21 +69,25 @@ const pullRequestTemplates = {
     "job-scoped OIDC",
     "ui-core` → `ui-components` → `ui-data-grid",
     "signatures/provenance",
-    "Git tag and GitHub Release"
+    "Git tag and GitHub Release",
   ],
   ".github/PULL_REQUEST_TEMPLATE/repository-maintenance.md": [
     "## Maintenance scope",
     "Dependency or lockfile update",
     "The change is not disguising a feature",
-    "No package version, npm publication, dist-tag, Git tag, or GitHub Release changed"
-  ]
+    "No package version, npm publication, dist-tag, Git tag, or GitHub Release changed",
+  ],
 };
 
 const loadedPullRequestTemplates = new Map();
 for (const [relativePath, required] of Object.entries(pullRequestTemplates)) {
   const content = read(relativePath);
   loadedPullRequestTemplates.set(relativePath, content);
-  requireText(content, relativePath, ["## Summary", "## Validation", ...required]);
+  requireText(content, relativePath, [
+    "## Summary",
+    "## Validation",
+    ...required,
+  ]);
 }
 
 for (const [relativePath, content] of loadedPullRequestTemplates) {
@@ -83,24 +95,30 @@ for (const [relativePath, content] of loadedPullRequestTemplates) {
     "`npm run lint --if-present` passed.",
     "`npm run typecheck` passed.",
     "`npm run test` passed.",
-    "`npm run build` passed."
+    "`npm run build` passed.",
   ]) {
     assert(
       !content.includes(obsolete),
-      `${relativePath} must not duplicate the quality suite: ${obsolete}`
+      `${relativePath} must not duplicate the quality suite: ${obsolete}`,
     );
   }
 }
 
-const infrastructureIssue = read(".github/ISSUE_TEMPLATE/ci-cd-infrastructure.yml");
-requireText(infrastructureIssue, ".github/ISSUE_TEMPLATE/ci-cd-infrastructure.yml", [
-  "name: CI/CD or repository infrastructure",
-  "Pull-request CI and ci-gate",
-  "npm trusted publishing and OIDC",
-  "Registry propagation, signatures, or provenance",
-  "Permission, secret, OIDC, or branch-protection impact",
-  "Explicitly out of scope"
-]);
+const infrastructureIssue = read(
+  ".github/ISSUE_TEMPLATE/ci-cd-infrastructure.yml",
+);
+requireText(
+  infrastructureIssue,
+  ".github/ISSUE_TEMPLATE/ci-cd-infrastructure.yml",
+  [
+    "name: CI/CD or repository infrastructure",
+    "Pull-request CI and ci-gate",
+    "npm trusted publishing and OIDC",
+    "Registry propagation, signatures, or provenance",
+    "Permission, secret, OIDC, or branch-protection impact",
+    "Explicitly out of scope",
+  ],
+);
 
 const releaseIssue = read(".github/ISSUE_TEMPLATE/release-readiness.yml");
 requireText(releaseIssue, ".github/ISSUE_TEMPLATE/release-readiness.yml", [
@@ -110,14 +128,17 @@ requireText(releaseIssue, ".github/ISSUE_TEMPLATE/release-readiness.yml", [
   "npm OIDC publication",
   "Registry signatures or provenance attestations",
   "Did any package, dist-tag, Git tag, or GitHub Release already change?",
-  "Expected final state"
+  "Expected final state",
 ]);
 
 const issueConfig = read(".github/ISSUE_TEMPLATE/config.yml");
-assert(issueConfig.includes("blank_issues_enabled: false"), "blank GitHub issues must stay disabled");
+assert(
+  issueConfig.includes("blank_issues_enabled: false"),
+  "blank GitHub issues must stay disabled",
+);
 assert(
   issueConfig.includes("security/advisories/new"),
-  "private security reporting link must remain configured"
+  "private security reporting link must remain configured",
 );
 
 const contributing = read("CONTRIBUTING.md");
@@ -129,7 +150,7 @@ requireText(contributing, "CONTRIBUTING.md", [
   "release.md",
   "repository-maintenance.md",
   "?quick_pull=1&template=",
-  "`scripts/detect-ci-scope.mjs` remains authoritative"
+  "`scripts/detect-ci-scope.mjs` remains authoritative",
 ]);
 
 console.log("Repository pull-request and issue-template contracts passed");

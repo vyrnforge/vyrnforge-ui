@@ -26,7 +26,7 @@ Separate release track:
 @vyrnforge/ui-data-grid — existing React alpha data-grid package
 ```
 
-`ui-behaviors` and `ui-elements` are planned package boundaries approved by
+`ui-behaviors` and `ui-elements` are implemented package foundations approved by
 GMF1. Their runtime work begins after this architecture sprint.
 
 ## Support levels

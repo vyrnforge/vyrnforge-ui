@@ -1,30 +1,23 @@
-# `@vyrnforge/ui-behaviors` — Planned
+# `@vyrnforge/ui-behaviors` — Foundation Current
 
 ## Purpose
 
-`@vyrnforge/ui-behaviors` is the approved framework-neutral behavior boundary
-for public non-grid components. The package does not exist yet; implementation
-begins in S5 after GMF1.
-
-## Planned ownership
-
-- controlled and uncontrolled state transitions;
-- collection registration and ordering;
-- active-item and keyboard decision models;
-- single and multiple selection models;
-- validation state;
-- canonical controller events and transition reasons.
+Framework-neutral behavior boundary for public non-grid components. The S4
+foundation now exists and exposes controller, subscription, transition-reason,
+and behavior-event contracts.
 
 ## Boundary
 
-The package may depend on `@vyrnforge/ui-core` only. It must not import React,
-React DOM, Vue, Angular, `HTMLElement`, `document`, or `window` execution.
+The package may depend on `@vyrnforge/ui-core` only and is compiled with an
+ES-only TypeScript library. Repository verification rejects renderer imports
+and DOM identifiers.
 
-DOM focus, positioning, observers, and rendering remain renderer or DOM-adapter
-concerns.
+## Current scope
 
-## Release direction
+- behavior event and transition reason types;
+- controller, listener, and unsubscribe contracts;
+- immutable `createBehaviorEvent` helper;
+- build, declarations, tests, coverage, packaging, and consumer verification.
 
-The package is included in the planned coordinated non-grid beta release group.
-It cannot be published until its public API, package payload, tests, and React
-parity are approved under GMF2.
+Component-specific state, collection, selection, form, navigation, and overlay
+controllers remain S5 work under GMF2.

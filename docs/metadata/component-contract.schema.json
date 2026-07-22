@@ -10,42 +10,68 @@
     "eventVocabulary",
     "slotVocabulary",
     "formAssociation",
-    "representativeContracts"
+    "componentContracts"
   ],
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "const": 1 },
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
     "sourceOfTruth": {
       "type": "object",
       "required": ["canonical", "scope", "documentation"],
       "properties": {
-        "canonical": { "const": true },
-        "scope": { "type": "string", "minLength": 1 },
-        "documentation": { "type": "string", "minLength": 1 }
+        "canonical": {
+          "const": true
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "documentation": {
+          "type": "string",
+          "minLength": 1
+        }
       },
       "additionalProperties": false
     },
     "eventVocabulary": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/event" }
+      "items": {
+        "$ref": "#/$defs/event"
+      }
     },
     "slotVocabulary": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/slot" }
+      "items": {
+        "$ref": "#/$defs/slot"
+      }
     },
-    "formAssociation": { "$ref": "#/$defs/formAssociation" },
-    "representativeContracts": {
+    "formAssociation": {
+      "$ref": "#/$defs/formAssociation"
+    },
+    "componentContracts": {
       "type": "array",
-      "minItems": 1,
-      "items": { "$ref": "#/$defs/component" }
+      "minItems": 4,
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    },
+    "catalogCoverage": {
+      "type": "object"
     }
   },
   "$defs": {
     "stringArray": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 },
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
       "uniqueItems": true
     },
     "event": {
@@ -64,11 +90,22 @@
           "type": "string",
           "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$"
         },
-        "purpose": { "type": "string", "minLength": 1 },
-        "bubbles": { "const": true },
-        "composed": { "const": true },
-        "cancelable": { "type": "boolean" },
-        "detailFields": { "$ref": "#/$defs/stringArray" }
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bubbles": {
+          "const": true
+        },
+        "composed": {
+          "const": true
+        },
+        "cancelable": {
+          "type": "boolean"
+        },
+        "detailFields": {
+          "$ref": "#/$defs/stringArray"
+        }
       }
     },
     "slot": {
@@ -76,8 +113,14 @@
       "additionalProperties": false,
       "required": ["name", "purpose"],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
-        "purpose": { "type": "string", "minLength": 1 }
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "renderer": {
@@ -85,13 +128,21 @@
       "additionalProperties": false,
       "required": ["package", "status"],
       "properties": {
-        "package": { "type": "string", "pattern": "^@vyrnforge/" },
-        "export": { "type": "string", "minLength": 1 },
+        "package": {
+          "type": "string",
+          "pattern": "^@vyrnforge/"
+        },
+        "export": {
+          "type": "string",
+          "minLength": 1
+        },
         "tag": {
           "type": "string",
           "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$"
         },
-        "status": { "enum": ["current", "planned"] }
+        "status": {
+          "enum": ["current", "foundation-current", "planned"]
+        }
       }
     },
     "formAssociation": {
@@ -109,15 +160,30 @@
       "properties": {
         "modes": {
           "type": "array",
-          "items": { "enum": ["none", "value", "submitter"] },
+          "items": {
+            "enum": ["none", "value", "submitter"]
+          },
           "uniqueItems": true
         },
-        "requiredProperties": { "$ref": "#/$defs/stringArray" },
-        "valueModeProperties": { "$ref": "#/$defs/stringArray" },
-        "requiredMethods": { "$ref": "#/$defs/stringArray" },
-        "requiredCallbacks": { "$ref": "#/$defs/stringArray" },
-        "implementation": { "const": "ElementInternals" },
-        "fallbackPolicy": { "type": "string", "minLength": 1 }
+        "requiredProperties": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "valueModeProperties": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "requiredMethods": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "requiredCallbacks": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "implementation": {
+          "const": "ElementInternals"
+        },
+        "fallbackPolicy": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "component": {
@@ -137,17 +203,44 @@
         "accessibility"
       ],
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-        "category": { "type": "string", "minLength": 1 },
-        "react": { "$ref": "#/$defs/renderer" },
-        "native": { "$ref": "#/$defs/renderer" },
-        "properties": { "$ref": "#/$defs/stringArray" },
-        "attributes": { "$ref": "#/$defs/stringArray" },
-        "events": { "$ref": "#/$defs/stringArray" },
-        "slots": { "$ref": "#/$defs/stringArray" },
-        "methods": { "$ref": "#/$defs/stringArray" },
-        "formAssociation": { "enum": ["none", "value", "submitter"] },
-        "accessibility": { "$ref": "#/$defs/stringArray" }
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "react": {
+          "$ref": "#/$defs/renderer"
+        },
+        "native": {
+          "$ref": "#/$defs/renderer"
+        },
+        "properties": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "attributes": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "events": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "slots": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "methods": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "formAssociation": {
+          "enum": ["none", "value", "submitter"]
+        },
+        "accessibility": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "representative": {
+          "type": "boolean"
+        }
       }
     }
   }

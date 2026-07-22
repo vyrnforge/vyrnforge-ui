@@ -1,0 +1,54 @@
+{
+  "name": "@vyrnforge/ui-behaviors",
+  "version": "0.1.0-alpha.1",
+  "description": "Framework-neutral VyrnForge UI controller contracts, transition reasons, and behavior events.",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vyrnforge/vyrnforge-ui.git",
+    "directory": "packages/ui-behaviors"
+  },
+  "homepage": "https://github.com/vyrnforge/vyrnforge-ui#readme",
+  "bugs": {
+    "url": "https://github.com/vyrnforge/vyrnforge-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.12 <25",
+    "npm": ">=11.16 <12"
+  },
+  "scripts": {
+    "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
+    "lint": "eslint . --config ../../eslint.config.mjs",
+    "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@vyrnforge/ui-core": "0.1.0-alpha.1"
+  },
+  "devDependencies": {
+    "tsup": "latest",
+    "typescript": "7.0.2",
+    "vitest": "latest"
+  }
+}

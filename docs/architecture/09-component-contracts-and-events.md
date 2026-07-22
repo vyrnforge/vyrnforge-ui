@@ -133,9 +133,9 @@ renderer must provide equivalent:
 
 Equivalent behavior does not require identical DOM trees.
 
-## Current representative records
+## Current catalog and representative records
 
-S4 records Button, Tabs, Autocomplete, and Dialog as representative contracts.
+S4 records framework-parity metadata for every public React non-grid component and keeps Button, Tabs, Autocomplete, and Dialog as detailed representative contracts.
 They prove the schema across action, navigation, form-control, and overlay
 families. They do not claim that the native elements are implemented.
 

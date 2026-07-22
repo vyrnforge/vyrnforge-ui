@@ -12,7 +12,7 @@ Describe the documentation, metadata, example, playground, or contributor-guidan
 - [ ] Docs application
 - [ ] Playground or example
 
-**Related package:** None / `ui-core` / `ui-components` / `ui-data-grid` / multiple
+**Related package:** None / `ui-core` / `ui-behaviors` / `ui-components` / `ui-elements` / `ui-data-grid` / multiple
 
 ## Source-of-truth review
 

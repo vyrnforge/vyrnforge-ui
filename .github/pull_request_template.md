@@ -23,7 +23,9 @@ Select every affected area.
 - [ ] Documentation or repository text
 - [ ] Playground or examples
 - [ ] `@vyrnforge/ui-core`
+- [ ] `@vyrnforge/ui-behaviors`
 - [ ] `@vyrnforge/ui-components`
+- [ ] `@vyrnforge/ui-elements`
 - [ ] `@vyrnforge/ui-data-grid`
 - [ ] Workspace, tooling, or repository maintenance
 - [ ] CI/CD, Pages, release automation, or governance

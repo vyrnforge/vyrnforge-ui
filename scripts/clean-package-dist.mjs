@@ -5,8 +5,10 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packageDirs = [
   "packages/ui-core",
+  "packages/ui-behaviors",
   "packages/ui-components",
-  "packages/ui-data-grid"
+  "packages/ui-elements",
+  "packages/ui-data-grid",
 ];
 
 for (const packageDir of packageDirs) {

@@ -5,9 +5,9 @@
 VyrnForge UI is a native-first enterprise UI foundation. It includes:
 
 - `@vyrnforge/ui-core`
-- planned `@vyrnforge/ui-behaviors`
+- `@vyrnforge/ui-behaviors` foundation
 - `@vyrnforge/ui-components` as the React renderer
-- planned `@vyrnforge/ui-elements` as the native Custom Element renderer
+- `@vyrnforge/ui-elements` foundation as the native Custom Element renderer
 - `@vyrnforge/ui-data-grid` on a separate React alpha track
 
 Do not treat this repository as only a data-grid project.
@@ -42,9 +42,9 @@ Do not add these unless explicitly approved:
 ## Package Boundaries
 
 - `ui-core` must not depend on another VyrnForge package or framework runtime.
-- planned `ui-behaviors` may depend on `ui-core` only and must remain framework- and DOM-neutral.
-- `ui-components` may depend on `ui-core` and planned `ui-behaviors`; it must not depend on `ui-elements` or `ui-data-grid`.
-- planned `ui-elements` may depend on `ui-core` and `ui-behaviors`; it must not depend on React, Vue, Angular, `ui-components`, or `ui-data-grid`.
+- `ui-behaviors` may depend on `ui-core` only and must remain framework- and DOM-neutral.
+- `ui-components` may depend on `ui-core` and `ui-behaviors`; it must not depend on `ui-elements` or `ui-data-grid`.
+- `ui-elements` may depend on `ui-core` and `ui-behaviors`; it must not depend on React, Vue, Angular, `ui-components`, or `ui-data-grid`.
 - `ui-data-grid` may depend on `ui-core` and `ui-components` and remains outside the non-grid beta release group.
 
 ## Styling Rules

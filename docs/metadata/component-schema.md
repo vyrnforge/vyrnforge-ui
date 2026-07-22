@@ -70,3 +70,12 @@ runtime behavior.
 Compact AI and playground views must derive from this catalog or omit the
 field; they must not carry their own maturity, route, ownership, or evidence
 declarations.
+
+## Framework parity metadata
+
+Every public `@vyrnforge/ui-components` record must include `frameworkParity`.
+The record identifies the current React export, the shared behavior foundation,
+the planned native strategy or mapping, Angular/Vue consumer targets, and beta
+scope. This is catalog coverage, not a runtime support claim. Detailed
+properties, events, slots, methods, form behavior, and accessibility remain in
+`component-contracts.json` and expand family-by-family before GMF3.

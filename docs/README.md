@@ -223,3 +223,11 @@ Archived docs are historical only. They preserve useful context but do not guide
 | Component inventory              | `roadmap/01-component-inventory.md`                   |
 | Benchmark positioning            | `benchmark/01-VyrnForge-positioning.md`               |
 | AI context                       | `../.ai/AI_CONTEXT.md`                                |
+
+## Multi-framework package foundations
+
+| Document                            | Purpose                                                   |
+| ----------------------------------- | --------------------------------------------------------- |
+| `api/ui-behaviors-api.md`           | Framework-neutral S4 package foundation API.              |
+| `api/ui-elements-api.md`            | Native Custom Element S4 foundation API and entry points. |
+| `testing/gmf1-architecture-gate.md` | GMF1 closure evidence and remaining release conditions.   |

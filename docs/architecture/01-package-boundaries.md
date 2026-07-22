@@ -41,7 +41,7 @@ Must not own:
 
 Allowed VyrnForge dependencies: none.
 
-## `@vyrnforge/ui-behaviors` — planned
+## `@vyrnforge/ui-behaviors` — foundation current
 
 Owns:
 
@@ -77,7 +77,7 @@ Owns:
 Allowed VyrnForge dependencies:
 
 - `@vyrnforge/ui-core`
-- `@vyrnforge/ui-behaviors` after S5 creates it
+- `@vyrnforge/ui-behaviors` after S5 adopts its component-specific controllers
 
 Must not depend on:
 
@@ -88,7 +88,7 @@ Must not depend on:
 The React package remains the reference implementation and keeps the
 `@vyrnforge/ui-components` name through beta.
 
-## `@vyrnforge/ui-elements` — planned
+## `@vyrnforge/ui-elements` — foundation current
 
 Owns:
 

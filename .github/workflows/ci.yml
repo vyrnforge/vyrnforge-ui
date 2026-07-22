@@ -28,7 +28,9 @@ jobs:
       quality: ${{ steps.scope.outputs.quality }}
       metadata: ${{ steps.scope.outputs.metadata }}
       ui_core: ${{ steps.scope.outputs.ui_core }}
+      ui_behaviors: ${{ steps.scope.outputs.ui_behaviors }}
       ui_components: ${{ steps.scope.outputs.ui_components }}
+      ui_elements: ${{ steps.scope.outputs.ui_elements }}
       ui_data_grid: ${{ steps.scope.outputs.ui_data_grid }}
       packages: ${{ steps.scope.outputs.packages }}
       consumer: ${{ steps.scope.outputs.consumer }}
@@ -94,7 +96,9 @@ jobs:
       full: ${{ needs.plan.outputs.full == 'true' }}
       metadata: ${{ needs.plan.outputs.metadata == 'true' }}
       ui-core: ${{ needs.plan.outputs.ui_core == 'true' }}
+      ui-behaviors: ${{ needs.plan.outputs.ui_behaviors == 'true' }}
       ui-components: ${{ needs.plan.outputs.ui_components == 'true' }}
+      ui-elements: ${{ needs.plan.outputs.ui_elements == 'true' }}
       ui-data-grid: ${{ needs.plan.outputs.ui_data_grid == 'true' }}
       fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}
 

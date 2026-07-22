@@ -323,7 +323,6 @@
     "packages/ui-data-grid/tsconfig.build.json": "0f673da6ba319a4a0a3d3ceca3a9ab754f7fe98b95ea12f66248a94b0dc9ef36",
     "packages/ui-data-grid/tsconfig.json": "64af114411d49a107ea123942970124e46ba24ee5a4b4fd552a75249cd5bff1a",
     "packages/ui-data-grid/tsup.config.ts": "72f72473df6fa15418f935240b474a0b0ca8f6cb35a89825e2b3dd8d02f201d8",
-    "scripts/clean-package-dist.mjs": "7d52ad1d5a64332b394ff2754b80c58d9563d45f9549d288182fea6224ac385d",
     "scripts/create-release-notes.mjs": "02dae6da06bcf9dd290a9b11cbc256f25d3d774fd8bebba8bf9f8f0e93a72e52",
     "scripts/fixtures/package-boundaries/invalid/packages/ui-components/package.json": "7295c27d418372dee53440963e91f13faa0f07f15f3f5e891000b75936c58fcc",
     "scripts/fixtures/package-boundaries/invalid/packages/ui-core/package.json": "893a2e9e6471adb9b79ff87d2fdf65044054303d02c7ee295406695704163c13",
@@ -335,19 +334,14 @@
     "scripts/prepare-package-declarations.mjs": "b62626cfd444f8c545e88fb0820023b7c3d5d93667845fd000fcb3636188d183",
     "scripts/verify-component-maturity.mjs": "fc32d55f775c4acafaf3ccf935d4c90bec8b863c16d3fc5b008c056211c2e2b1",
     "scripts/verify-component-maturity.test.mjs": "25d427ad2c09c3842d2596b30ee3bacb32c7abe4d8effd8ea46aa768363ede9a",
-    "scripts/verify-component-metadata.mjs": "d529a154d755659b78d3f5900d27790581ce76cd08fe0c8b3b2e4ba7912ebc8d",
     "scripts/verify-component-metadata.test.mjs": "d117a280d152695e0734f8fcf2f6dd2631e0e308be0332126c42544c5ab0fdb3",
-    "scripts/verify-consumer.mjs": "c6594bb9f7fecf05237dde26e14d5c1a72cbd62037ce6cf51009cc3a4247b30e",
-    "scripts/verify-packages.mjs": "cd83cd10f3dcb704ab7d01234ff4cd4672034a36cc4d1e36e8f24863ab84946c",
     "scripts/verify-registry-release.mjs": "cfe936c791de30d7d5ba7b6f347cd05daf3a27d40ff3ff93a3bb722904ad1b3e",
     "scripts/verify-release-candidate.mjs": "e458087a1746190244aeca7566fe3bbb7de88aba41e90fcdd5718aec3568ab4d",
-    "scripts/verify-repository-templates.mjs": "978db2da60dceecc90fec5252eb6d5591e9a1bd18c0957a15f0fdfe78611ffee",
     "scripts/verify-toolchain.mjs": "02193fed0d28e9164282309a5663d139ef40cac65f4db39f3274cfcbe5ce10b5",
     "SECURITY.md": "6bee3168383b6e8f5079f3cd4ecba7143f3b5f900f4d4b0ac119269304cb4cb3",
     "stylelint.config.mjs": "524166a7b28b76ac0b80c2833fd9803361dcd32127b94693b9aeaa8b6ed00cd2",
     "tests/dom/index.tsx": "014a3fadda2042f5753d7500690acdb9d02ae4b0e2dbec3acce58c55d4311e6f",
     "tests/package-consumer/README.md": "be539ea69cc370dd3ba57f97e458dcf41eb29792b329eac2a1b68bb11a989122",
-    "tests/package-consumer/src/main.tsx": "f791c7705550fdb86ac4b130b87dfcd57e467b993ae7e81a3d9e6a3350475d8a",
     "tests/package-consumer/vite.config.ts": "42e7a35e12a6854ac0901887d0ec1df6a7bb4959ff277216ad8a0f9f18f4a4c2"
   }
 }

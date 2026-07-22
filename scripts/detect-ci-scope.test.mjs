@@ -20,7 +20,9 @@ test("ui-core runtime changes validate all downstream packages and consumers", (
   expectEnabled(plan, [
     "quality",
     "ui_core",
+    "ui_behaviors",
     "ui_components",
+    "ui_elements",
     "ui_data_grid",
     "packages",
     "consumer",
@@ -29,6 +31,40 @@ test("ui-core runtime changes validate all downstream packages and consumers", (
     "browser",
   ]);
   assert.equal(plan.full, false);
+});
+
+test("ui-behaviors runtime changes validate behavior consumers and both renderers", () => {
+  const plan = planCiScope(["packages/ui-behaviors/src/index.ts"]);
+  expectEnabled(plan, [
+    "quality",
+    "ui_behaviors",
+    "ui_components",
+    "ui_elements",
+    "packages",
+    "consumer",
+    "docs",
+    "browser",
+  ]);
+  expectDisabled(plan, ["ui_core", "ui_data_grid", "full"]);
+});
+
+test("ui-elements runtime changes validate the native package and consumers", () => {
+  const plan = planCiScope(["packages/ui-elements/src/index.ts"]);
+  expectEnabled(plan, [
+    "quality",
+    "ui_elements",
+    "packages",
+    "consumer",
+    "docs",
+    "browser",
+  ]);
+  expectDisabled(plan, [
+    "ui_core",
+    "ui_behaviors",
+    "ui_components",
+    "ui_data_grid",
+    "full",
+  ]);
 });
 
 test("ui-components runtime changes validate components, grid, and consumers", () => {
@@ -124,7 +160,9 @@ test("repository template changes run CI contract verification only", () => {
     expectDisabled(plan, [
       "metadata",
       "ui_core",
+      "ui_behaviors",
       "ui_components",
+      "ui_elements",
       "ui_data_grid",
       "packages",
       "consumer",
@@ -148,7 +186,9 @@ test("root manifests and workflows force full validation", () => {
       "quality",
       "metadata",
       "ui_core",
+      "ui_behaviors",
       "ui_components",
+      "ui_elements",
       "ui_data_grid",
       "packages",
       "consumer",
