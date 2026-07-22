@@ -13,7 +13,10 @@ test.describe("VF-2006 Autocomplete browser contract", () => {
   test("filters, skips disabled options, selects, and clears from the keyboard", async ({
     page,
   }) => {
-    const input = page.getByRole("combobox", { name: "Workspace role" });
+    const input = page.getByRole("combobox", {
+      name: "Workspace role",
+      exact: true,
+    });
     await input.focus();
     await input.fill("");
     await page.keyboard.press("ArrowDown");
@@ -48,7 +51,10 @@ test.describe("VF-2006 Autocomplete browser contract", () => {
   test("filters by typing and restores the selected label after Escape", async ({
     page,
   }) => {
-    const input = page.getByRole("combobox", { name: "Workspace role" });
+    const input = page.getByRole("combobox", {
+      name: "Workspace role",
+      exact: true,
+    });
     await input.fill("admin");
     await expect(
       page.getByRole("option", { name: /Administrator/ }),
