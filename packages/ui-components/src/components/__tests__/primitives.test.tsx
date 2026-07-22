@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
+import { render, screen, within } from "../../../../../tests/dom";
 import {
   AppShell,
   Autocomplete,
@@ -42,13 +43,13 @@ import {
   TransferList,
   useToast,
   ButtonGroup,
-  ValidationMessage
+  ValidationMessage,
 } from "../../index";
 import {
   defaultAutocompleteFilter,
   getFirstEnabledIndex,
   getLastEnabledIndex,
-  getNextEnabledIndex
+  getNextEnabledIndex,
 } from "../Autocomplete/useAutocomplete";
 import {
   defaultTransferListFilter,
@@ -56,16 +57,10 @@ import {
   mergeTargetValues,
   normalizeTransferValues,
   removeTargetValues,
-  selectedEnabledValues
+  selectedEnabledValues,
 } from "../TransferList/transferList.utils";
-import {
-  initialToastState,
-  toastReducer
-} from "../Toast/toast.reducer";
-import {
-  getToastDuration,
-  getVisibleToasts
-} from "../Toast/toast.utils";
+import { initialToastState, toastReducer } from "../Toast/toast.reducer";
+import { getToastDuration, getVisibleToasts } from "../Toast/toast.utils";
 import { ToastViewport } from "../Toast/ToastViewport";
 
 describe("@vyrnforge/ui-components primitives", () => {
@@ -73,11 +68,11 @@ describe("@vyrnforge/ui-components primitives", () => {
     const markup = renderToStaticMarkup(
       <Button loading onClick={() => undefined} variant="primary">
         Save
-      </Button>
+      </Button>,
     );
 
-    expect(markup).toContain("disabled=\"\"");
-    expect(markup).toContain("aria-busy=\"true\"");
+    expect(markup).toContain('disabled=""');
+    expect(markup).toContain('aria-busy="true"');
     expect(markup).toContain("vf-button__spinner");
   });
 
@@ -85,18 +80,18 @@ describe("@vyrnforge/ui-components primitives", () => {
     const markup = renderToStaticMarkup(
       <IconButton aria-label="Refresh" title="Refresh">
         R
-      </IconButton>
+      </IconButton>,
     );
 
-    expect(markup).toContain("aria-label=\"Refresh\"");
+    expect(markup).toContain('aria-label="Refresh"');
   });
 
   it("renders first-party Icon title when not decorative", () => {
     const markup = renderToStaticMarkup(
-      <Icon decorative={false} name="Search" title="Search icon" />
+      <Icon decorative={false} name="Search" title="Search icon" />,
     );
 
-    expect(markup).toContain("role=\"img\"");
+    expect(markup).toContain('role="img"');
     expect(markup).toContain("Search icon");
   });
 
@@ -104,20 +99,20 @@ describe("@vyrnforge/ui-components primitives", () => {
     const markup = renderToStaticMarkup(
       <IconButton aria-label="Refresh" loading>
         <Icon name="Refresh" />
-      </IconButton>
+      </IconButton>,
     );
 
-    expect(markup).toContain("disabled=\"\"");
-    expect(markup).toContain("aria-busy=\"true\"");
+    expect(markup).toContain('disabled=""');
+    expect(markup).toContain('aria-busy="true"');
   });
 
   it("renders ToolbarButton active state", () => {
     const markup = renderToStaticMarkup(
-      <ToolbarButton active icon={<Icon name="Filter" />} label="Filters" />
+      <ToolbarButton active icon={<Icon name="Filter" />} label="Filters" />,
     );
 
     expect(markup).toContain("vf-toolbar-button--active");
-    expect(markup).toContain("aria-pressed=\"true\"");
+    expect(markup).toContain('aria-pressed="true"');
   });
 
   it("renders SegmentedControl selected option", () => {
@@ -128,13 +123,13 @@ describe("@vyrnforge/ui-components primitives", () => {
         onChange={() => undefined}
         options={[
           { value: "compact", label: "Compact" },
-          { value: "standard", label: "Standard" }
+          { value: "standard", label: "Standard" },
         ]}
-      />
+      />,
     );
 
-    expect(markup).toContain("role=\"radiogroup\"");
-    expect(markup).toContain("aria-checked=\"true\"");
+    expect(markup).toContain('role="radiogroup"');
+    expect(markup).toContain('aria-checked="true"');
   });
 
   it("renders Rating controlled, read-only, disabled, and accessible radio labels", () => {
@@ -143,24 +138,31 @@ describe("@vyrnforge/ui-components primitives", () => {
         <Rating label="Quality" max={5} value={3} />
         <Rating label="Archived quality" readOnly value={4} />
         <Rating disabled label="Unavailable quality" defaultValue={2} />
-      </>
+      </>,
     );
 
-    expect(markup).toContain("type=\"radio\"");
-    expect(markup).toContain("aria-label=\"3 of 5 stars\"");
+    expect(markup).toContain('type="radio"');
+    expect(markup).toContain('aria-label="3 of 5 stars"');
     expect(markup).toContain("vf-rating--read-only");
     expect(markup).toContain("vf-rating--disabled");
   });
 
   it("renders Slider with native range constraints and displayed controlled value", () => {
     const markup = renderToStaticMarkup(
-      <Slider ariaLabel="Allocation" max={50} min={0} showValue step={5} value={25} />
+      <Slider
+        ariaLabel="Allocation"
+        max={50}
+        min={0}
+        showValue
+        step={5}
+        value={25}
+      />,
     );
 
-    expect(markup).toContain("type=\"range\"");
-    expect(markup).toContain("min=\"0\"");
-    expect(markup).toContain("max=\"50\"");
-    expect(markup).toContain("step=\"5\"");
+    expect(markup).toContain('type="range"');
+    expect(markup).toContain('min="0"');
+    expect(markup).toContain('max="50"');
+    expect(markup).toContain('step="5"');
     expect(markup).toContain(">25</output>");
   });
 
@@ -169,12 +171,12 @@ describe("@vyrnforge/ui-components primitives", () => {
       <>
         <ToggleButton pressed>Show archived</ToggleButton>
         <ToggleButton disabled>Managed</ToggleButton>
-      </>
+      </>,
     );
 
-    expect(markup).toContain("aria-pressed=\"true\"");
+    expect(markup).toContain('aria-pressed="true"');
     expect(markup).toContain("vf-toggle-button--pressed");
-    expect(markup).toContain("disabled=\"\"");
+    expect(markup).toContain('disabled=""');
   });
 
   it("renders ToggleButtonGroup single and multiple default selections", () => {
@@ -184,11 +186,15 @@ describe("@vyrnforge/ui-components primitives", () => {
           <ToggleButton value="table">Table</ToggleButton>
           <ToggleButton value="board">Board</ToggleButton>
         </ToggleButtonGroup>
-        <ToggleButtonGroup ariaLabel="Formatting" defaultValue={["bold", "italic"]} type="multiple">
+        <ToggleButtonGroup
+          ariaLabel="Formatting"
+          defaultValue={["bold", "italic"]}
+          type="multiple"
+        >
           <ToggleButton value="bold">Bold</ToggleButton>
           <ToggleButton value="italic">Italic</ToggleButton>
         </ToggleButtonGroup>
-      </>
+      </>,
     );
 
     expect(markup).toContain("vf-toggle-button-group--single");
@@ -200,10 +206,10 @@ describe("@vyrnforge/ui-components primitives", () => {
     const markup = renderToStaticMarkup(
       <ButtonGroup orientation="vertical" size="sm">
         <Button>One</Button>
-      </ButtonGroup>
+      </ButtonGroup>,
     );
 
-    expect(markup).toContain("aria-orientation=\"vertical\"");
+    expect(markup).toContain('aria-orientation="vertical"');
     expect(markup).toContain("vf-button-group--sm");
   });
 
@@ -230,7 +236,9 @@ describe("@vyrnforge/ui-components primitives", () => {
   });
 
   it("renders Badge variant classes", () => {
-    const markup = renderToStaticMarkup(<Badge variant="success">Active</Badge>);
+    const markup = renderToStaticMarkup(
+      <Badge variant="success">Active</Badge>,
+    );
 
     expect(markup).toContain("vf-badge--success");
   });
@@ -245,24 +253,24 @@ describe("@vyrnforge/ui-components primitives", () => {
         required
       >
         {(controlProps) => <TextInput {...controlProps} />}
-      </Field>
+      </Field>,
     );
 
-    expect(markup).toContain("for=\"name\"");
-    expect(markup).toContain("id=\"name\"");
+    expect(markup).toContain('for="name"');
+    expect(markup).toContain('id="name"');
     expect(markup).toMatch(/aria-describedby="name-description [^"]+-message"/);
-    expect(markup).toContain("aria-invalid=\"true\"");
-    expect(markup).toContain("aria-required=\"true\"");
+    expect(markup).toContain('aria-invalid="true"');
+    expect(markup).toContain('aria-required="true"');
     expect(markup).toContain("Helper text");
     expect(markup).toContain("Required");
-    expect(markup).toContain("role=\"alert\"");
+    expect(markup).toContain('role="alert"');
   });
 
   it("renders Field warning and horizontal orientation", () => {
     const markup = renderToStaticMarkup(
       <Field label="Limit" orientation="horizontal" warning="Close to limit">
         <NumberInput defaultValue={80} />
-      </Field>
+      </Field>,
     );
 
     expect(markup).toContain("vf-field--horizontal");
@@ -272,13 +280,15 @@ describe("@vyrnforge/ui-components primitives", () => {
 
   it("renders Radio checked and invalid state", () => {
     const onChange = vi.fn();
-    const radio = <Radio checked invalid label="Email" onChange={onChange} value="email" />;
+    const radio = (
+      <Radio checked invalid label="Email" onChange={onChange} value="email" />
+    );
     const markup = renderToStaticMarkup(radio);
 
     expect(radio.props.onChange).toBe(onChange);
-    expect(markup).toContain("type=\"radio\"");
-    expect(markup).toContain("checked=\"\"");
-    expect(markup).toContain("aria-invalid=\"true\"");
+    expect(markup).toContain('type="radio"');
+    expect(markup).toContain('checked=""');
+    expect(markup).toContain('aria-invalid="true"');
   });
 
   it("renders RadioGroup controlled selection and error", () => {
@@ -289,32 +299,38 @@ describe("@vyrnforge/ui-components primitives", () => {
         name="delivery"
         options={[
           { value: "standard", label: "Standard" },
-          { value: "express", label: "Express", disabled: true }
+          { value: "express", label: "Express", disabled: true },
         ]}
         value="standard"
-      />
+      />,
     );
 
     expect(markup).toContain("<fieldset");
     expect(markup).toContain("<legend");
-    expect(markup).toContain("checked=\"\"");
+    expect(markup).toContain('checked=""');
     expect(markup).toContain("Choose one");
-    expect(markup).toContain("disabled=\"\"");
+    expect(markup).toContain('disabled=""');
   });
 
   it("renders Switch checked state and accessible role", () => {
     const markup = renderToStaticMarkup(
-      <Switch checked label="Enabled" onCheckedChange={() => undefined} />
+      <Switch checked label="Enabled" onCheckedChange={() => undefined} />,
     );
 
-    expect(markup).toContain("role=\"switch\"");
-    expect(markup).toContain("aria-checked=\"true\"");
+    expect(markup).toContain('role="switch"');
+    expect(markup).toContain('aria-checked="true"');
     expect(markup).toContain("Enabled");
   });
 
   it("forwards native Switch change handlers alongside onCheckedChange", () => {
     const onChange = vi.fn();
-    const switchElement = <Switch label="Enabled" onChange={onChange} onCheckedChange={() => undefined} />;
+    const switchElement = (
+      <Switch
+        label="Enabled"
+        onChange={onChange}
+        onCheckedChange={() => undefined}
+      />
+    );
 
     expect(switchElement.props.onChange).toBe(onChange);
   });
@@ -326,14 +342,14 @@ describe("@vyrnforge/ui-components primitives", () => {
         <NumberInput defaultValue={12.5} mode="decimal" />
         <DateInput defaultValue="2026-07-10" />
         <DateTimeInput defaultValue="2026-07-10T09:30" />
-      </>
+      </>,
     );
 
-    expect(markup).toContain("type=\"number\"");
-    expect(markup).toContain("inputMode=\"decimal\"");
-    expect(markup).toContain("step=\"any\"");
-    expect(markup).toContain("type=\"date\"");
-    expect(markup).toContain("type=\"datetime-local\"");
+    expect(markup).toContain('type="number"');
+    expect(markup).toContain('inputMode="decimal"');
+    expect(markup).toContain('step="any"');
+    expect(markup).toContain('type="date"');
+    expect(markup).toContain('type="datetime-local"');
   });
 
   it("renders MultiSelect selected chips and disabled options", () => {
@@ -342,18 +358,18 @@ describe("@vyrnforge/ui-components primitives", () => {
         value={["admin"]}
         options={[
           { value: "admin", label: "Admin" },
-          { value: "viewer", label: "Viewer", disabled: true }
+          { value: "viewer", label: "Viewer", disabled: true },
         ]}
-      />
+      />,
     );
 
     expect(markup).toContain("vf-multi-select__chip");
     expect(markup).toContain("Admin");
-    expect(markup).toContain("aria-expanded=\"false\"");
+    expect(markup).toContain('aria-expanded="false"');
   });
 
   it("renders Autocomplete combobox, hidden form value, and listbox semantics", () => {
-    const markup = renderToStaticMarkup(
+    const { container } = render(
       <Autocomplete
         defaultInputValue=""
         defaultOpen
@@ -363,30 +379,36 @@ describe("@vyrnforge/ui-components primitives", () => {
         options={[
           { value: "admin", label: "Administrator" },
           { value: "operator", label: "Operator" },
-          { value: "viewer", label: "Viewer", disabled: true }
+          { value: "viewer", label: "Viewer", disabled: true },
         ]}
         required
-      />
+      />,
     );
 
-    expect(markup).toContain("role=\"combobox\"");
-    expect(markup).toContain("aria-autocomplete=\"list\"");
-    expect(markup).toContain("aria-expanded=\"true\"");
-    expect(markup).toContain("role=\"listbox\"");
-    expect(markup).toContain("role=\"option\"");
-    expect(markup).toContain("aria-selected=\"true\"");
-    expect(markup).toContain("aria-disabled=\"true\"");
-    expect(markup).toContain("name=\"role\"");
-    expect(markup).toContain("value=\"operator\"");
-    expect(markup).toContain("aria-invalid=\"true\"");
-    expect(markup).toContain("aria-required=\"true\"");
+    const combobox = screen.getByRole("combobox");
+    const listbox = screen.getByRole("listbox");
+    const operator = within(listbox).getByRole("option", {
+      name: "Operator",
+    });
+    const viewer = within(listbox).getByRole("option", { name: "Viewer" });
+    const hiddenValue = container.querySelector<HTMLInputElement>(
+      'input[type="hidden"][name="role"]',
+    );
+
+    expect(combobox).toHaveAttribute("aria-autocomplete", "list");
+    expect(combobox).toHaveAttribute("aria-expanded", "true");
+    expect(combobox).toHaveAttribute("aria-invalid", "true");
+    expect(combobox).toHaveAttribute("aria-required", "true");
+    expect(operator).toHaveAttribute("aria-selected", "true");
+    expect(viewer).toHaveAttribute("aria-disabled", "true");
+    expect(hiddenValue).toHaveValue("operator");
   });
 
   it("filters Autocomplete options and skips disabled navigation targets", () => {
     const options = [
       { value: "admin", label: "Administrator", keywords: ["owner"] },
       { value: "operator", label: "Operator", disabled: true },
-      { value: "viewer", label: "Viewer", keywords: ["read"] }
+      { value: "viewer", label: "Viewer", keywords: ["read"] },
     ];
 
     expect(defaultAutocompleteFilter(options, "ADMIN")).toHaveLength(1);
@@ -406,37 +428,41 @@ describe("@vyrnforge/ui-components primitives", () => {
           {
             value: "iam",
             label: "Identity and Access Management",
-            description: "Authentication and roles."
+            description: "Authentication and roles.",
           },
           {
             value: "analytics",
             label: "Analytics Workspace",
-            description: "Operational insight."
+            description: "Operational insight.",
           },
           {
             value: "api-gateway",
             label: "API Gateway",
-            disabled: true
-          }
+            disabled: true,
+          },
         ]}
         required
         searchable
         sourceTitle="Available applications"
         targetTitle="Assigned applications"
-      />
+      />,
     );
 
-    expect(markup).toContain("role=\"group\"");
+    expect(markup).toContain('role="group"');
     expect(markup).toContain("Available applications");
     expect(markup).toContain("Assigned applications");
     expect(markup).toContain("Identity and Access Management");
     expect(markup).toContain("Operational insight.");
-    expect(markup).toContain("aria-label=\"Move selected items to Assigned applications\"");
-    expect(markup).toContain("aria-label=\"Move all items to Available applications\"");
-    expect(markup).toContain("name=\"applicationIds\"");
-    expect(markup).toContain("value=\"analytics\"");
-    expect(markup).not.toContain("value=\"missing\"");
-    expect(markup).toContain("aria-required=\"true\"");
+    expect(markup).toContain(
+      'aria-label="Move selected items to Assigned applications"',
+    );
+    expect(markup).toContain(
+      'aria-label="Move all items to Available applications"',
+    );
+    expect(markup).toContain('name="applicationIds"');
+    expect(markup).toContain('value="analytics"');
+    expect(markup).not.toContain('value="missing"');
+    expect(markup).toContain('aria-required="true"');
   });
 
   it("does not submit TransferList hidden values while disabled", () => {
@@ -445,13 +471,11 @@ describe("@vyrnforge/ui-components primitives", () => {
         defaultValue={["analytics"]}
         disabled
         name="applicationIds"
-        options={[
-          { value: "analytics", label: "Analytics Workspace" }
-        ]}
-      />
+        options={[{ value: "analytics", label: "Analytics Workspace" }]}
+      />,
     );
 
-    expect(markup).not.toContain("name=\"applicationIds\"");
+    expect(markup).not.toContain('name="applicationIds"');
     expect(markup).toContain("vf-transfer-list--disabled");
   });
 
@@ -460,20 +484,41 @@ describe("@vyrnforge/ui-components primitives", () => {
       { value: "iam", label: "Identity" },
       { value: "analytics", label: "Analytics" },
       { value: "api-gateway", label: "API Gateway", disabled: true },
-      { value: "reports", label: "Reports", keywords: ["analytics"] }
+      { value: "reports", label: "Reports", keywords: ["analytics"] },
     ];
 
-    expect(normalizeTransferValues(["reports", "missing", "iam", "reports"], options)).toEqual(["iam", "reports"]);
-    expect(mergeTargetValues(["analytics"], ["reports", "iam"], options)).toEqual(["iam", "analytics", "reports"]);
-    expect(removeTargetValues(["iam", "analytics", "reports"], ["analytics"], options)).toEqual(["iam", "reports"]);
-    expect(enabledOptionValues(options)).toEqual(["iam", "analytics", "reports"]);
-    expect(selectedEnabledValues(["api-gateway", "reports"], options)).toEqual(["reports"]);
-    expect(defaultTransferListFilter(options, "analytics", "source")[0]?.value).toBe("analytics");
+    expect(
+      normalizeTransferValues(
+        ["reports", "missing", "iam", "reports"],
+        options,
+      ),
+    ).toEqual(["iam", "reports"]);
+    expect(
+      mergeTargetValues(["analytics"], ["reports", "iam"], options),
+    ).toEqual(["iam", "analytics", "reports"]);
+    expect(
+      removeTargetValues(
+        ["iam", "analytics", "reports"],
+        ["analytics"],
+        options,
+      ),
+    ).toEqual(["iam", "reports"]);
+    expect(enabledOptionValues(options)).toEqual([
+      "iam",
+      "analytics",
+      "reports",
+    ]);
+    expect(selectedEnabledValues(["api-gateway", "reports"], options)).toEqual([
+      "reports",
+    ]);
+    expect(
+      defaultTransferListFilter(options, "analytics", "source")[0]?.value,
+    ).toBe("analytics");
   });
 
   it("renders ValidationMessage tone", () => {
     const markup = renderToStaticMarkup(
-      <ValidationMessage tone="info">Helpful message</ValidationMessage>
+      <ValidationMessage tone="info">Helpful message</ValidationMessage>,
     );
 
     expect(markup).toContain("vf-validation-message--info");
@@ -488,10 +533,10 @@ describe("@vyrnforge/ui-components primitives", () => {
 
   it("renders EmptyState and ErrorState actions", () => {
     const emptyMarkup = renderToStaticMarkup(
-      <EmptyState actions={<Button>New</Button>} title="No records" />
+      <EmptyState actions={<Button>New</Button>} title="No records" />,
     );
     const errorMarkup = renderToStaticMarkup(
-      <ErrorState retryAction={<Button>Retry</Button>} title="Failed" />
+      <ErrorState retryAction={<Button>Retry</Button>} title="Failed" />,
     );
 
     expect(emptyMarkup).toContain("New");
@@ -507,57 +552,58 @@ describe("@vyrnforge/ui-components primitives", () => {
         onDismiss={() => undefined}
         title="Export failed"
         tone="error"
-      />
+      />,
     );
 
     expect(markup).toContain("vf-toast--error");
-    expect(markup).toContain("role=\"alert\"");
-    expect(markup).toContain("aria-live=\"assertive\"");
+    expect(markup).toContain('role="alert"');
+    expect(markup).toContain('aria-live="assertive"');
     expect(markup).toContain("Export failed");
     expect(markup).toContain("The report export failed.");
-    expect(markup).toContain("aria-label=\"Retry export\"");
-    expect(markup).toContain("aria-label=\"Dismiss notification\"");
+    expect(markup).toContain('aria-label="Retry export"');
+    expect(markup).toContain('aria-label="Dismiss notification"');
   });
 
-  it("renders ToastViewport position and toast items through the portal fallback", () => {
-    const markup = renderToStaticMarkup(
+  it("renders ToastViewport position and toast items after portal mount", () => {
+    render(
       <ToastViewport
         onDismiss={() => undefined}
         position="top-center"
-        toasts={[
-          { id: "saved", title: "Saved", tone: "success" }
-        ]}
-      />
+        toasts={[{ id: "saved", title: "Saved", tone: "success" }]}
+      />,
     );
 
-    expect(markup).toContain("vf-toast-viewport--top-center");
-    expect(markup).toContain("aria-label=\"Notifications\"");
-    expect(markup).toContain("Saved");
+    const viewport = screen.getByLabelText("Notifications");
+
+    expect(viewport).toHaveClass("vf-toast-viewport--top-center");
+    expect(screen.getByText("Saved")).toBeInTheDocument();
   });
 
   it("updates duplicate Toast IDs, dismisses queued records, and orders visible toasts", () => {
     const firstState = toastReducer(initialToastState, {
       type: "add",
-      toast: { id: "one", title: "One", tone: "neutral" }
+      toast: { id: "one", title: "One", tone: "neutral" },
     });
     const duplicateState = toastReducer(firstState, {
       type: "add",
-      toast: { id: "one", title: "Updated", tone: "success" }
+      toast: { id: "one", title: "Updated", tone: "success" },
     });
     const queuedState = toastReducer(duplicateState, {
       type: "add",
-      toast: { id: "two", title: "Two", tone: "info" }
+      toast: { id: "two", title: "Two", tone: "info" },
     });
     const dismissedState = toastReducer(queuedState, {
       type: "dismiss",
-      id: "one"
+      id: "one",
     });
 
     expect(duplicateState.toasts).toHaveLength(1);
     expect(duplicateState.toasts[0]?.title).toBe("Updated");
     expect(duplicateState.toasts[0]?.tone).toBe("success");
     expect(getVisibleToasts(queuedState.toasts, 1, false)[0]?.id).toBe("one");
-    expect(getVisibleToasts(queuedState.toasts, 2, true).map((toast) => toast.id)).toEqual(["two", "one"]);
+    expect(
+      getVisibleToasts(queuedState.toasts, 2, true).map((toast) => toast.id),
+    ).toEqual(["two", "one"]);
     expect(dismissedState.toasts.map((toast) => toast.id)).toEqual(["two"]);
   });
 
@@ -574,40 +620,39 @@ describe("@vyrnforge/ui-components primitives", () => {
     }
 
     expect(() => renderToStaticMarkup(<MissingProvider />)).toThrow(
-      "useToast must be used within a ToastProvider."
+      "useToast must be used within a ToastProvider.",
     );
   });
 
   it("renders Popover content when uncontrolled defaultOpen is true", () => {
-    const markup = renderToStaticMarkup(
+    render(
       <Popover defaultOpen trigger={<Button>Open</Button>}>
         Popover content
-      </Popover>
+      </Popover>,
     );
 
-    expect(markup).toContain("Popover content");
-    expect(markup).toContain("vf-popover__content");
+    expect(screen.getByText("Popover content")).toBeInTheDocument();
+    expect(document.querySelector(".vf-popover__content")).not.toBeNull();
   });
 
   it("renders Menu items and disabled state", () => {
-    const markup = renderToStaticMarkup(
+    render(
       <Menu
         defaultOpen
         trigger={<Button>Menu</Button>}
         items={[
           { id: "edit", label: "Edit" },
-          { id: "delete", label: "Delete", danger: true, disabled: true }
+          { id: "delete", label: "Delete", danger: true, disabled: true },
         ]}
-      />
+      />,
     );
 
-    expect(markup).toContain("Edit");
-    expect(markup).toContain("Delete");
-    expect(markup).toContain("disabled=\"\"");
+    expect(screen.getByRole("menuitem", { name: "Edit" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Delete" })).toBeDisabled();
   });
 
   it("renders Dialog markup when open", () => {
-    const markup = renderToStaticMarkup(
+    render(
       <Dialog
         description="Dialog description"
         onOpenChange={() => undefined}
@@ -615,59 +660,67 @@ describe("@vyrnforge/ui-components primitives", () => {
         title="Dialog title"
       >
         Dialog body
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(markup).toContain("role=\"dialog\"");
-    expect(markup).toContain("aria-modal=\"true\"");
-    expect(markup).toContain("Dialog body");
-    expect(markup).toContain("vf-dialog__layer");
-    expect(markup).toContain("data-vf-focus-fallback");
+    const dialog = screen.getByRole("dialog", { name: "Dialog title" });
+
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog).toHaveTextContent("Dialog body");
+    expect(dialog).toHaveAttribute("data-vf-focus-fallback");
+    expect(document.querySelector(".vf-dialog__layer")).not.toBeNull();
   });
 
   it("renders modal Drawer through the shared overlay layer", () => {
-    const markup = renderToStaticMarkup(
+    render(
       <Drawer onOpenChange={() => undefined} open side="top" title="Review">
         Drawer body
-      </Drawer>
+      </Drawer>,
     );
 
-    expect(markup).toContain("vf-drawer--top");
-    expect(markup).toContain("aria-modal=\"true\"");
-    expect(markup).toContain("vf-drawer__layer");
+    const drawer = screen.getByRole("dialog", { name: "Review" });
+
+    expect(drawer).toHaveAttribute("aria-modal", "true");
+    expect(drawer).toHaveTextContent("Drawer body");
+    expect(document.querySelector(".vf-drawer--top")).not.toBeNull();
+    expect(document.querySelector(".vf-drawer__layer")).not.toBeNull();
   });
 
   it("renders Popover portal-ready dismissal content", () => {
-    const markup = renderToStaticMarkup(
+    render(
       <Popover defaultOpen matchTriggerWidth trigger={<Button>Open</Button>}>
         Content
-      </Popover>
+      </Popover>,
     );
 
-    expect(markup).toContain("vf-dismissable-layer");
-    expect(markup).toContain("vf-popover__content");
+    expect(document.querySelector(".vf-dismissable-layer")).not.toBeNull();
+    expect(document.querySelector(".vf-popover__content")).not.toBeNull();
   });
 
   it("renders ConfirmDialog actions", () => {
-    const markup = renderToStaticMarkup(
+    render(
       <ConfirmDialog
         onConfirm={() => undefined}
         onOpenChange={() => undefined}
         open
         title="Confirm action"
         variant="danger"
-      />
+      />,
     );
 
-    expect(markup).toContain("Confirm action");
-    expect(markup).toContain("vf-button--danger");
+    expect(
+      screen.getByRole("dialog", { name: "Confirm action" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Confirm" })).toHaveClass(
+      "vf-button--danger",
+    );
   });
 
   it("does not render Tooltip content before interaction", () => {
     const markup = renderToStaticMarkup(
       <Tooltip content="Helpful hint">
         <button type="button">Focus me</button>
-      </Tooltip>
+      </Tooltip>,
     );
 
     expect(markup).not.toContain("Helpful hint");
@@ -677,7 +730,7 @@ describe("@vyrnforge/ui-components primitives", () => {
     const markup = renderToStaticMarkup(
       <AppShell header="Header" sidebar="Sidebar">
         Content
-      </AppShell>
+      </AppShell>,
     );
 
     expect(markup).toContain("vf-app-shell--with-sidebar");
@@ -702,7 +755,7 @@ describe("@vyrnforge/ui-components primitives", () => {
         sidebarWidth={260}
       >
         Content
-      </AppShell>
+      </AppShell>,
     );
 
     expect(markup).toContain("vf-app-shell--scroll-split");
@@ -721,7 +774,7 @@ describe("@vyrnforge/ui-components primitives", () => {
         actions={<Button>Approve</Button>}
         status={<Badge variant="success">Active</Badge>}
         title="Customer"
-      />
+      />,
     );
 
     expect(markup).toContain("Customer");
@@ -734,12 +787,12 @@ describe("@vyrnforge/ui-components primitives", () => {
       <Breadcrumbs
         items={[
           { id: "home", label: "Home", href: "/" },
-          { id: "orders", label: "Orders", current: true }
+          { id: "orders", label: "Orders", current: true },
         ]}
-      />
+      />,
     );
 
-    expect(markup).toContain("aria-current=\"page\"");
+    expect(markup).toContain('aria-current="page"');
     expect(markup).toContain("Orders");
   });
 
@@ -749,9 +802,9 @@ describe("@vyrnforge/ui-components primitives", () => {
       activeId: "orders",
       items: [
         { id: "overview", label: "Overview" },
-        { id: "orders", label: "Orders" }
+        { id: "orders", label: "Orders" },
       ],
-      onSelect
+      onSelect,
     });
     const markup = renderToStaticMarkup(element);
     const scroll = Array.isArray(element.props.children)
@@ -768,7 +821,7 @@ describe("@vyrnforge/ui-components primitives", () => {
 
     expect(markup).toContain("vf-side-nav__item--active");
     expect(markup).toContain("vf-side-nav__scroll");
-    expect(markup).toContain("aria-current=\"page\"");
+    expect(markup).toContain('aria-current="page"');
     expect(onSelect).toHaveBeenCalledWith({ id: "orders", label: "Orders" });
   });
 
@@ -779,7 +832,7 @@ describe("@vyrnforge/ui-components primitives", () => {
         footer="Workspace"
         header="VyrnForge"
         items={[{ id: "overview", label: "Overview" }]}
-      />
+      />,
     );
 
     expect(markup).toContain("vf-side-nav--collapsed");
@@ -796,14 +849,14 @@ describe("@vyrnforge/ui-components primitives", () => {
         items={[
           { id: "summary", label: "Summary", content: "Summary panel" },
           { id: "details", label: "Details", content: "Details panel" },
-          { id: "history", label: "History", disabled: true }
+          { id: "history", label: "History", disabled: true },
         ]}
-      />
+      />,
     );
 
-    expect(markup).toContain("role=\"tablist\"");
-    expect(markup).toContain("aria-selected=\"true\"");
+    expect(markup).toContain('role="tablist"');
+    expect(markup).toContain('aria-selected="true"');
     expect(markup).toContain("Details panel");
-    expect(markup).toContain("disabled=\"\"");
+    expect(markup).toContain('disabled=""');
   });
 });

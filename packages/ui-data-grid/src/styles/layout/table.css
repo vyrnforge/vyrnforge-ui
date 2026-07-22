@@ -10,7 +10,7 @@
   background: var(--udg-surface);
   box-shadow: var(--udg-shadow-sm);
 }
-.udg[data-variant=plain] .udg-table-wrap {
+.udg[data-variant="plain"] .udg-table-wrap {
   border-radius: var(--udg-radius-sm);
 }
 .udg-table {
@@ -55,4 +55,17 @@
   font-weight: var(--udg-font-weight-semibold);
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.udg-table-wrap {
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scroll-padding-top: var(--udg-header-height);
+}
+
+.udg-table [role="gridcell"]:focus-visible {
+  position: relative;
+  z-index: 2;
+  outline: 2px solid var(--udg-focus-ring);
+  outline-offset: -2px;
 }

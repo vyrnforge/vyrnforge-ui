@@ -55,6 +55,79 @@ const fixtureColumns: DataGridColumnDef<FixtureRow>[] = [
   { id: "status", header: "Status", accessorKey: "status", width: 140 },
 ];
 
+type GridInteractionRow = {
+  id: string;
+  owner: string;
+  status: "Open" | "Review" | "Closed";
+  priority: "Low" | "Medium" | "High";
+  region: string;
+  updated: string;
+};
+
+const gridInteractionRows: GridInteractionRow[] = Array.from(
+  { length: 18 },
+  (_, index) => ({
+    id: `case-${String(index + 1).padStart(3, "0")}`,
+    owner: ["Access team", "Workflow team", "Operations team"][index % 3],
+    status: ["Open", "Review", "Closed"][index % 3] as
+      "Open" | "Review" | "Closed",
+    priority: ["High", "Medium", "Low"][index % 3] as "Low" | "Medium" | "High",
+    region: ["West", "Central", "East"][index % 3],
+    updated: `2026-07-${String((index % 18) + 1).padStart(2, "0")}`,
+  }),
+);
+
+const gridInteractionColumns: DataGridColumnDef<GridInteractionRow>[] = [
+  {
+    id: "id",
+    header: "Case",
+    accessorKey: "id",
+    width: 160,
+    minWidth: 120,
+    maxWidth: 260,
+  },
+  {
+    id: "owner",
+    header: "Owner",
+    accessorKey: "owner",
+    width: 280,
+    minWidth: 180,
+    maxWidth: 420,
+  },
+  {
+    id: "status",
+    header: "Status",
+    accessorKey: "status",
+    width: 180,
+    minWidth: 120,
+    maxWidth: 260,
+  },
+  {
+    id: "priority",
+    header: "Priority",
+    accessorKey: "priority",
+    width: 180,
+    minWidth: 120,
+    maxWidth: 260,
+  },
+  {
+    id: "region",
+    header: "Region",
+    accessorKey: "region",
+    width: 220,
+    minWidth: 140,
+    maxWidth: 320,
+  },
+  {
+    id: "updated",
+    header: "Updated",
+    accessorKey: "updated",
+    width: 220,
+    minWidth: 160,
+    maxWidth: 300,
+  },
+];
+
 const tabItems = [
   { id: "summary", label: "Summary", content: "Summary panel" },
   {
@@ -605,6 +678,71 @@ function ToastFixture() {
   );
 }
 
+function DataGridKeyboardFixture({
+  density,
+  theme,
+}: {
+  density: FixtureDensity;
+  theme: FixtureTheme;
+}) {
+  const [selectedRowIds, setSelectedRowIds] = useState<(string | number)[]>([
+    "case-100",
+  ]);
+  const [activatedRowId, setActivatedRowId] = useState("none");
+
+  return (
+    <div className="vf-fixture__stack">
+      <UniversalDataGrid
+        columns={fixtureColumns}
+        density={density}
+        enableRowClickSelection
+        getRowId={(row) => row.id}
+        getRowSelectable={(row) => row.status !== "Closed"}
+        onRowClick={(row) => setActivatedRowId(row.id)}
+        onSelectedRowIdsChange={setSelectedRowIds}
+        rows={fixtureRows}
+        selectedRowIds={selectedRowIds}
+        selectable
+        tableId="vf-regression-grid-keyboard"
+        theme={theme}
+        title="Keyboard fixture cases"
+        variant="bordered"
+      />
+      <output data-vf-fixture-region="grid-selected-rows">
+        Selected rows: {selectedRowIds.join(", ") || "none"}
+      </output>
+      <output data-vf-fixture-region="grid-activated-row">
+        Activated row: {activatedRowId}
+      </output>
+    </div>
+  );
+}
+
+function DataGridInteractionsFixture({
+  density,
+  theme,
+}: {
+  density: FixtureDensity;
+  theme: FixtureTheme;
+}) {
+  return (
+    <UniversalDataGrid
+      columns={gridInteractionColumns}
+      defaultSelectedRowIds={["case-001"]}
+      defaultState={{ pagination: { pageIndex: 0, pageSize: 25 } }}
+      density={density}
+      getRowId={(row) => row.id}
+      height={420}
+      rows={gridInteractionRows}
+      selectable
+      tableId="vf-regression-grid-interactions"
+      theme={theme}
+      title="Interaction fixture cases"
+      variant="bordered"
+    />
+  );
+}
+
 function DataGridSelectionFixture({
   density,
   theme,
@@ -717,6 +855,10 @@ function FixtureContent({
       return <TabsToggleFixture />;
     case "toast-lifecycle":
       return <ToastFixture />;
+    case "data-grid-keyboard":
+      return <DataGridKeyboardFixture density={density} theme={theme} />;
+    case "data-grid-interactions":
+      return <DataGridInteractionsFixture density={density} theme={theme} />;
     case "data-grid-selection":
       return <DataGridSelectionFixture density={density} theme={theme} />;
     case "data-grid-empty":

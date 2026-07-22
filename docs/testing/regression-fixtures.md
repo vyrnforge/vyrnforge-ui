@@ -56,3 +56,17 @@ MultiSelect, Transfer List, Slider and Rating, Tabs and Toggle Button, and
 Toast lifecycle behavior. Combined routes may exercise a closely related
 component pair, but each browser specification records its assertions
 explicitly and does not infer evidence for untested behavior.
+
+## S2 data-grid fixtures
+
+The final S2 fixture set adds two focused UniversalDataGrid routes:
+
+- `/fixtures/data-grid/keyboard` proves roving cell focus, Arrow/Home/End
+  navigation, row activation and selection, keyboard sorting, separator resize,
+  and keyboard column-reorder fallback.
+- `/fixtures/data-grid/interactions` proves pointer resize, native drag reorder,
+  sticky header and selection regions, and deterministic two-axis scrolling.
+
+The fixtures use fixed rows, fixed dimensions, public package exports, and
+semantic grid roles. They do not introduce virtualization, editing, application
+state stores, or backend behavior.

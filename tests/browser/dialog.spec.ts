@@ -42,6 +42,8 @@ test.describe("VF-2002 Dialog browser contract", () => {
 
   test("dismisses from the overlay and restores focus", async ({ page }) => {
     const opener = fixtureAction(page, "open-dialog");
+    await opener.focus();
+    await expect(opener).toBeFocused();
     await opener.click();
     await expect(page.getByRole("dialog")).toBeVisible();
 

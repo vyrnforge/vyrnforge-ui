@@ -39,7 +39,7 @@ test.describe("VF-2009 Slider and Rating browser contract", () => {
     await expect(third).toBeChecked();
     await expect(fixtureRegion(page, "rating-value")).toHaveText("Rating: 3");
 
-    await third.click();
+    await page.locator("label.vf-rating__item").filter({ has: third }).click();
     await expect(fixtureRegion(page, "rating-value")).toHaveText("Rating: 0");
     await expect(
       page.getByRole("img", { name: "Archived quality: 4 of 5 stars" }),

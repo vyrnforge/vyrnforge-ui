@@ -1,5 +1,5 @@
 import {
-  useEffect,
+  useCallback,
   useMemo,
   useRef,
   useState,
@@ -20,8 +20,8 @@ export function Menu({
   size = "md",
   trigger,
 }: MenuProps) {
-  const menuRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const focusFrameRef = useRef<number | null>(null);
   const [isOpen, setIsOpen] = useControllableState({
     value: open,
     defaultValue: defaultOpen,
@@ -36,18 +36,35 @@ export function Menu({
   );
   const [activeIndex, setActiveIndex] = useState(enabledIndexes[0] ?? -1);
 
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+  const firstEnabledIndex = enabledIndexes[0] ?? -1;
 
-    const firstEnabled = enabledIndexes[0] ?? -1;
-    setActiveIndex(firstEnabled);
-    const frame = window.requestAnimationFrame(() =>
-      itemRefs.current[firstEnabled]?.focus(),
-    );
-    return () => window.cancelAnimationFrame(frame);
-  }, [enabledIndexes, isOpen]);
+  const handleMenuRef = useCallback(
+    (element: HTMLDivElement | null) => {
+      if (focusFrameRef.current !== null) {
+        window.cancelAnimationFrame(focusFrameRef.current);
+        focusFrameRef.current = null;
+      }
+
+      if (!element || !isOpen || firstEnabledIndex < 0) {
+        return;
+      }
+
+      setActiveIndex(firstEnabledIndex);
+
+      focusFrameRef.current = window.requestAnimationFrame(() => {
+        focusFrameRef.current = null;
+
+        if (!element.isConnected) {
+          return;
+        }
+
+        itemRefs.current[firstEnabledIndex]?.focus({
+          preventScroll: true,
+        });
+      });
+    },
+    [firstEnabledIndex, isOpen],
+  );
 
   const setActiveItem = (nextIndex: number) => {
     setActiveIndex(nextIndex);
@@ -122,7 +139,7 @@ export function Menu({
         aria-label="Menu"
         className={joinClassNames("vf-menu", `vf-menu--${size}`)}
         onKeyDown={handleKeyDown}
-        ref={menuRef}
+        ref={handleMenuRef}
         role="menu"
         tabIndex={-1}
       >
@@ -149,6 +166,7 @@ export function Menu({
               itemRefs.current[index] = element;
             }}
             role="menuitem"
+            tabIndex={activeIndex === index ? 0 : -1}
             type="button"
           >
             <span className="vf-menu-item__main">

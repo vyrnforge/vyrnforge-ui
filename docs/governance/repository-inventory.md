@@ -150,15 +150,16 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Evidence-led inventory |
 | --- | --- |
 | Public entry points | 126 package-root names; CSS: `./style.css`, `./index.css`, `./styles/index.css` |
-| Main component | `packages/ui-data-grid/src/components/UniversalDataGrid.tsx` is 1477 lines and concentrates rendering, state coordination, column behavior, grouping, selection, pagination, and feature composition. |
+| Main component | `packages/ui-data-grid/src/components/UniversalDataGrid.tsx` is 1697 lines and concentrates rendering, state coordination, column behavior, grouping, selection, pagination, and feature composition. |
 | Supporting components | `DataGridColumnMenu.tsx`, `DataGridEmptyState.tsx`, `DataGridErrorState.tsx`, `DataGridFilterBar.tsx`, `DataGridPagination.tsx`, `DataGridSearch.tsx`, `DataGridSkeletonRows.tsx`, `DataGridToolbar.tsx`, `UniversalDataGrid.tsx` |
 | Logic modules | `core/` algorithms; `state/` defaults/merge/reducer/actions/selectors; `hooks/` React coordination; `adapters/` persistence/server-query/export-request; plus theme, types, and grid CSS. |
 | Controlled and server modes | Controlled/uncontrolled state is documented. `adapters/server/` builds server-query contracts; no grid-owned fetching was found. |
 | Persistence | `adapters/persistence/` contains localStorage persistence and persistable-state helpers. |
 | Capabilities | Search, filters, sorting, grouping, pagination, selection, column visibility/order/sizing, density/theme, persistence, server-query construction, and export-request construction. |
-| Existing tests | 17 grid test files, concentrated in pure core/state/adapter/theme modules plus public-hook coverage. |
-| Large-file concentration | `packages/ui-data-grid/src/components/UniversalDataGrid.tsx` (1477 lines); `packages/ui-data-grid/src/components/DataGridColumnMenu.tsx` (405 lines); `packages/ui-data-grid/src/core/applyGrouping.ts` (311 lines); `packages/ui-data-grid/src/types/dataGrid.types.ts` (222 lines); `packages/ui-data-grid/src/core/columnManagement.test.ts` (191 lines) |
-| Missing evidence | No detected browser, assistive-technology, visual-regression, or performance benchmark coverage. Pointer resize/reorder, sticky layout, responsive overflow, focus behavior, and large-row performance require verification. |
+| Existing tests | 19 grid test files, concentrated in pure core/state/adapter/theme modules plus public-hook coverage. |
+| Large-file concentration | `packages/ui-data-grid/src/components/UniversalDataGrid.tsx` (1697 lines); `packages/ui-data-grid/src/components/DataGridColumnMenu.tsx` (405 lines); `packages/ui-data-grid/src/core/applyGrouping.ts` (311 lines); `packages/ui-data-grid/src/types/dataGrid.types.ts` (222 lines); `packages/ui-data-grid/src/hooks/useGridKeyboardNavigation.test.tsx` (216 lines) |
+| Browser evidence | 2 Playwright contract files cover keyboard navigation, selection, sorting, resizing, reordering, sticky regions, and two-axis scrolling through deterministic regression fixtures. |
+| Missing evidence | Manual assistive-technology review, visual regression, responsive matrix coverage, and large-row performance benchmarks remain pending. |
 
 ## E. Documentation Inventory
 
@@ -178,13 +179,13 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 
 | Area | Measured evidence |
 | --- | --- |
-| Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. No separate browser-test runner configuration was found. |
-| Test files | 27 |
-| Pure/unit | 25 test files without static-render calls; primarily grid core, state, adapters, and theme helpers. |
+| Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
+| Test files | 42 |
+| Pure/unit | 24 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
-| DOM interaction | 2 detected test files with DOM interaction helpers. |
-| Browser | 1 detected browser-test files. |
-| Accessibility | 2 detected automated accessibility-test files. |
+| DOM interaction | 3 detected test files with DOM interaction helpers. |
+| Browser | 13 detected browser-test files. |
+| Accessibility | 3 detected automated accessibility-test files. |
 | Visual regression | No visual-regression test/configuration evidence found. |
 | Coverage | Root `test:coverage` is configured with package-specific V8 coverage reports and thresholds. |
 | Regression fixtures | Root `fixtures:verify` builds and tests the deterministic regression fixture application. |
@@ -206,7 +207,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 
 | Area | Inventory |
 | --- | --- |
-| CI aggregate gates | `ci.yml` exposes `quality`, `external-consumer`, and `ci-gate`; `nightly.yml` exposes `nightly-gate`. |
+| CI aggregate gates | `ci.yml` exposes `quality`, `browser-checks`, `external-consumer`, and `ci-gate`; `nightly.yml` exposes `browser-chromium` and `nightly-gate`. |
 | Consumer fixtures | `tests/package-consumer/` is verified by `scripts/verify-consumer.mjs` using packed artifacts. |
 | Package verification | `scripts/verify-packages.mjs`, `scripts/prepare-package-declarations.mjs`, and package workflows validate build outputs, declarations, CSS, and LICENSE presence. |
 | Release governance | `docs/release/`, `scripts/verify-release-candidate.mjs`, `scripts/verify-registry-release.mjs`, and `scripts/create-release-notes.mjs`. |
@@ -217,8 +218,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 
 | Severity | Workstream | Observation | Evidence / next verification |
 | --- | --- | --- | --- |
-| High | Data Grid | `UniversalDataGrid.tsx` is a large responsibility concentration. | Measured at 1477 lines; review boundaries before future feature expansion. |
-| High | Accessibility | No browser or assistive-technology evidence was detected for composite controls and grid interactions. | Automated axe and DOM evidence exists, but S2 browser and manual screen-reader review remain required. |
+| High | Data Grid | `UniversalDataGrid.tsx` is a large responsibility concentration. | Measured at 1697 lines; review boundaries before future feature expansion. |
+| Medium | Accessibility | Automated Chromium contracts now cover composite controls and data-grid interactions, but manual assistive-technology evidence is still pending. | Retain browser-checks as a required gate and complete screen-reader review before stable release. |
 | Medium | Quality Engineering | Coverage remains uneven across packages despite an enforced baseline. | Use package coverage reports and raise thresholds only with measured evidence; browser behavior is tracked separately. |
 | Medium | Documentation | Component status has several structured and prose representations. | Keep metadata verification authoritative for structured parity and review routes/docs prose. |
 | Medium | Documentation | Known terminology and planned-surface presentation gaps remain. | See Q1-P2-004 and Q1-P2-006 in `docs/quality/q1-component-quality-audit.md`. |
@@ -248,11 +249,11 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Publishable packages | 3 |
 | Package-root export names | 337 |
 | Public components inventoried | 75 |
-| Repository test files | 27 |
+| Repository test files | 42 |
 | Static-markup test files | 2 |
-| DOM interaction test files | 2 |
-| Browser test files | 1 |
-| Automated accessibility-test files | 2 |
+| DOM interaction test files | 3 |
+| Browser test files | 13 |
+| Automated accessibility-test files | 3 |
 | Workflow files | 9 |
 | Reusable workflows | 5 |
 | Active Markdown documentation files | 81 |
@@ -267,7 +268,6 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 ## Unresolved Uncertainties
 
 - GitHub branch protection, CODEOWNERS enforcement, environment approvers, Pages configuration, npm organization access, and npm trusted-publisher binding are external configuration and require verification.
-- Browser, screen-reader, visual-regression, and performance evidence was not detected by repository scanning; absence of detected tests is not proof that manual validation has never happened.
+- Automated Chromium contracts are detected, but manual screen-reader, visual-regression, responsive-matrix, and performance evidence still require explicit review.
 - Components without a dedicated route or component-specific document can still be covered by grouped pages or package/API reference; confirm during public-surface changes.
 - This inventory does not change product implementation, package architecture, CSS ownership, dependencies, or CI/CD behavior.
-

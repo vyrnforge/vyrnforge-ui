@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type InputHTMLAttributes
+  type InputHTMLAttributes,
 } from "react";
 import {
   Badge,
@@ -14,7 +14,7 @@ import {
   Icon,
   IconButton,
   Menu,
-  Select
+  Select,
 } from "@vyrnforge/ui-components";
 import { applyFilters } from "../core/applyFilters";
 import {
@@ -24,17 +24,18 @@ import {
   flattenGroupedRows,
   normalizeGrouping,
   resolveGroupableColumns,
-  toggleGroupExpanded
+  toggleGroupExpanded,
 } from "../core/applyGrouping";
 import { applyPagination } from "../core/applyPagination";
 import { applySearch } from "../core/applySearch";
 import { applySorting } from "../core/applySorting";
 import {
+  clampColumnWidth,
   resetAllColumnSizes,
   resetColumnSize,
   resolveColumnMaxWidth,
   resolveColumnMinWidth,
-  resolveColumnWidth
+  resolveColumnWidth,
 } from "../core/columnSizing";
 import {
   defaultPersistKeys,
@@ -44,7 +45,7 @@ import {
   resolveOrderedColumns,
   resolveVisibleColumns,
   showAllColumns,
-  updateColumnVisibility
+  updateColumnVisibility,
 } from "../core/columnManagement";
 import {
   clearSelection,
@@ -55,21 +56,22 @@ import {
   isRowSelected,
   resolveSelectedRows,
   selectRows,
-  toggleRowSelection
+  toggleRowSelection,
 } from "../core/rowSelection";
 import {
   createGridState,
   pickPersistableGridState,
-  resetGridViewState
+  resetGridViewState,
 } from "../state";
 import { toDataGridThemeStyle } from "../theme/createDataGridTheme";
 import { useColumnResize, useDataGridState } from "../hooks";
+import { useGridKeyboardNavigation } from "../hooks/useGridKeyboardNavigation";
 import type { DataGridColumnDef } from "../types/column.types";
 import type {
   DataGridDisplayRow,
   DataGridGroupRow,
   DataGridRowId,
-  UniversalDataGridProps
+  UniversalDataGridProps,
 } from "../types/dataGrid.types";
 import type { DataGridSort } from "../types/filter.types";
 import { DataGridColumnMenu } from "./DataGridColumnMenu";
@@ -82,7 +84,7 @@ import { DataGridToolbar } from "./DataGridToolbar";
 
 const getCellValue = <RowData extends Record<string, unknown>>(
   row: RowData,
-  column: DataGridColumnDef<RowData>
+  column: DataGridColumnDef<RowData>,
 ) => {
   if (column.accessorFn) {
     return column.accessorFn(row);
@@ -127,7 +129,7 @@ function IndeterminateCheckbox({
 }
 
 export function UniversalDataGrid<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 >({
   tableId,
   columns,
@@ -169,42 +171,46 @@ export function UniversalDataGrid<
   height,
   maxHeight,
   className,
-  style
+  style,
 }: UniversalDataGridProps<RowData>) {
   const resolvedDefaultState = useMemo(
     () => ({
       ...defaultState,
       grouping: defaultGrouping ?? defaultState?.grouping,
-      expandedGroupIds:
-        Array.isArray(defaultExpandedGroups)
-          ? defaultExpandedGroups
-          : defaultState?.expandedGroupIds,
-      selectedRowIds:
-        defaultSelectedRowIds ?? defaultState?.selectedRowIds
+      expandedGroupIds: Array.isArray(defaultExpandedGroups)
+        ? defaultExpandedGroups
+        : defaultState?.expandedGroupIds,
+      selectedRowIds: defaultSelectedRowIds ?? defaultState?.selectedRowIds,
     }),
-    [defaultExpandedGroups, defaultGrouping, defaultSelectedRowIds, defaultState]
+    [
+      defaultExpandedGroups,
+      defaultGrouping,
+      defaultSelectedRowIds,
+      defaultState,
+    ],
   );
   const [gridState, setGridState] = useDataGridState({
     state,
     defaultState: resolvedDefaultState,
-    onStateChange
+    onStateChange,
   });
   const hasLoadedPersistedState = useRef(!persistState || Boolean(state));
   const [headerDragColumnId, setHeaderDragColumnId] = useState<string | null>(
-    null
+    null,
   );
   const [headerDropTarget, setHeaderDropTarget] = useState<{
     columnId: string;
     placement: "before" | "after";
   } | null>(null);
   const [menuColumnId, setMenuColumnId] = useState<string | null>(null);
+  const [interactionAnnouncement, setInteractionAnnouncement] = useState("");
   const defaultExpandedGroupingRef = useRef<string | null>(null);
   const selectionEnabled = selectable && selectionMode !== "none";
   const resolvedSelectedRowIds = selectedRowIds ?? gridState.selectedRowIds;
 
   const visibleColumns = useMemo(
     () => resolveVisibleColumns(columns, gridState.columnVisibility),
-    [columns, gridState.columnVisibility]
+    [columns, gridState.columnVisibility],
   );
 
   const orderedColumns = useMemo(() => {
@@ -213,7 +219,7 @@ export function UniversalDataGrid<
 
   const groupableColumns = useMemo(
     () => resolveGroupableColumns(visibleColumns),
-    [visibleColumns]
+    [visibleColumns],
   );
 
   const normalizedGrouping = useMemo(
@@ -221,7 +227,7 @@ export function UniversalDataGrid<
       enableGrouping && !serverMode
         ? normalizeGrouping(columns, gridState.grouping)
         : [],
-    [columns, enableGrouping, gridState.grouping, serverMode]
+    [columns, enableGrouping, gridState.grouping, serverMode],
   );
 
   const groupingActive = normalizedGrouping.length > 0;
@@ -232,14 +238,15 @@ export function UniversalDataGrid<
         column,
         width: resolveColumnWidth(column, gridState.columnSizing),
         minWidth: resolveColumnMinWidth(column),
-        maxWidth: resolveColumnMaxWidth(column)
+        maxWidth: resolveColumnMaxWidth(column),
       })),
-    [gridState.columnSizing, orderedColumns]
+    [gridState.columnSizing, orderedColumns],
   );
 
   const tableMinWidth = useMemo(
-    () => columnWidths.reduce((totalWidth, column) => totalWidth + column.width, 0),
-    [columnWidths]
+    () =>
+      columnWidths.reduce((totalWidth, column) => totalWidth + column.width, 0),
+    [columnWidths],
   );
 
   const clientRows = useMemo(() => {
@@ -251,7 +258,7 @@ export function UniversalDataGrid<
     const filteredRows = applyFilters(
       searchedRows,
       orderedColumns,
-      gridState.filters
+      gridState.filters,
     );
     return applySorting(filteredRows, orderedColumns, gridState.sort);
   }, [
@@ -260,7 +267,7 @@ export function UniversalDataGrid<
     gridState.sort,
     orderedColumns,
     rows,
-    serverMode
+    serverMode,
   ]);
 
   const groupedRows = useMemo(
@@ -271,7 +278,7 @@ export function UniversalDataGrid<
         grouping: normalizedGrouping,
         expandedGroupIds: gridState.expandedGroupIds,
         getRowId,
-        getGroupId
+        getGroupId,
       }),
     [
       clientRows,
@@ -279,13 +286,13 @@ export function UniversalDataGrid<
       getGroupId,
       getRowId,
       gridState.expandedGroupIds,
-      normalizedGrouping
-    ]
+      normalizedGrouping,
+    ],
   );
 
   const displayRows = useMemo<DataGridDisplayRow<RowData>[]>(
     () => (groupingActive ? flattenGroupedRows(groupedRows) : groupedRows),
-    [groupedRows, groupingActive]
+    [groupedRows, groupingActive],
   );
 
   const renderedRows = useMemo(
@@ -293,55 +300,84 @@ export function UniversalDataGrid<
       serverMode
         ? buildGroupedRows({ rows, columns, grouping: [], getRowId })
         : applyPagination(displayRows, gridState.pagination),
-    [columns, displayRows, getRowId, gridState.pagination, rows, serverMode]
+    [columns, displayRows, getRowId, gridState.pagination, rows, serverMode],
+  );
+  const keyboardRows = useMemo(
+    () =>
+      renderedRows.flatMap((displayRow) => {
+        if (displayRow.type === "group") {
+          return [];
+        }
+
+        return [
+          {
+            id: displayRow.id,
+            row: displayRow.row,
+            sourceRowIndex: displayRow.index,
+            selectable: isRowSelectable(
+              displayRow.row,
+              displayRow.index,
+              getRowSelectable,
+            ),
+          },
+        ];
+      }),
+    [getRowSelectable, renderedRows],
+  );
+  const keyboardRowIndexById = useMemo(
+    () =>
+      new Map(
+        keyboardRows.map((keyboardRow, keyboardRowIndex) => [
+          keyboardRow.id,
+          keyboardRowIndex,
+        ]),
+      ),
+    [keyboardRows],
+  );
+  const keyboardColumnIds = useMemo(
+    () => orderedColumns.map((column) => column.id),
+    [orderedColumns],
   );
 
   const resolvedTotalRows =
     totalRows ?? (serverMode ? rows.length : displayRows.length);
   const visibleColumnCount = orderedColumns.length + (selectionEnabled ? 1 : 0);
   const selectionColumnWidth = selectionEnabled ? 44 : 0;
-  const pageSelectableRowIds = useMemo(
-    () => {
-      if (!selectionEnabled) {
-        return [];
+  const pageSelectableRowIds = useMemo(() => {
+    if (!selectionEnabled) {
+      return [];
+    }
+
+    return renderedRows.reduce<DataGridRowId[]>((rowIds, displayRow) => {
+      if (displayRow.type === "group") {
+        return rowIds;
       }
 
-      return renderedRows.reduce<DataGridRowId[]>((rowIds, displayRow) => {
-        if (displayRow.type === "group") {
-          return rowIds;
-        }
+      const { row, index: sourceRowIndex } = displayRow;
 
-        const { row, index: sourceRowIndex } = displayRow;
-
-        if (!isRowSelectable(row, sourceRowIndex, getRowSelectable)) {
-          return rowIds;
-        }
-
-        rowIds.push(getRowIdValue(row, sourceRowIndex, getRowId));
+      if (!isRowSelectable(row, sourceRowIndex, getRowSelectable)) {
         return rowIds;
-      }, []);
-    },
-    [
-      getRowId,
-      getRowSelectable,
-      renderedRows,
-      selectionEnabled
-    ]
-  );
+      }
+
+      rowIds.push(getRowIdValue(row, sourceRowIndex, getRowId));
+      return rowIds;
+    }, []);
+  }, [getRowId, getRowSelectable, renderedRows, selectionEnabled]);
   const pageSelectionState = useMemo(
-    () => getSelectionStateForPage(resolvedSelectedRowIds, pageSelectableRowIds),
-    [pageSelectableRowIds, resolvedSelectedRowIds]
+    () =>
+      getSelectionStateForPage(resolvedSelectedRowIds, pageSelectableRowIds),
+    [pageSelectableRowIds, resolvedSelectedRowIds],
   );
   const selectedRows = useMemo(
     () => resolveSelectedRows(rows, resolvedSelectedRowIds, getRowId),
-    [getRowId, resolvedSelectedRowIds, rows]
+    [getRowId, resolvedSelectedRowIds, rows],
   );
   const gridStateWithSelection = useMemo(
     () => ({
       ...gridState,
-      selectedRowIds: resolvedSelectedRowIds
+      selectedRowIds: resolvedSelectedRowIds,
     }),
-    [gridState, resolvedSelectedRowIds]
+    [gridState, resolvedSelectedRowIds],
   );
   const bulkActionContext = useMemo(
     () => ({
@@ -349,9 +385,9 @@ export function UniversalDataGrid<
       selectedRowIds: resolvedSelectedRowIds,
       selectedRows,
       selectionScope: "page" as const,
-      state: gridStateWithSelection
+      state: gridStateWithSelection,
     }),
-    [gridStateWithSelection, resolvedSelectedRowIds, selectedRows, tableId]
+    [gridStateWithSelection, resolvedSelectedRowIds, selectedRows, tableId],
   );
   const visibleBulkActions = useMemo(
     () =>
@@ -363,7 +399,7 @@ export function UniversalDataGrid<
 
         return !hidden;
       }),
-    [bulkActionContext, bulkActions]
+    [bulkActionContext, bulkActions],
   );
   const rootClassName = ["udg", className].filter(Boolean).join(" ");
   const resolvedDensity = density ?? gridState.density;
@@ -371,9 +407,10 @@ export function UniversalDataGrid<
     ...toDataGridThemeStyle(themeVars),
     ...(height === undefined ? {} : { height }),
     ...(maxHeight === undefined ? {} : { maxHeight }),
-    ...style
+    ...style,
   };
-  const hasQuery = gridState.search.trim().length > 0 || gridState.filters.length > 0;
+  const hasQuery =
+    gridState.search.trim().length > 0 || gridState.filters.length > 0;
 
   useEffect(() => {
     onQueryChange?.({
@@ -381,7 +418,7 @@ export function UniversalDataGrid<
       filters: gridState.filters,
       sort: gridState.sort,
       grouping: gridState.grouping,
-      pagination: gridState.pagination
+      pagination: gridState.pagination,
     });
   }, [
     gridState.filters,
@@ -389,7 +426,7 @@ export function UniversalDataGrid<
     gridState.pagination,
     gridState.search,
     gridState.sort,
-    onQueryChange
+    onQueryChange,
   ]);
 
   useEffect(() => {
@@ -416,9 +453,9 @@ export function UniversalDataGrid<
             ...persistedState,
             pagination: {
               ...currentState.pagination,
-              ...persistedState.pagination
-            }
-          })
+              ...persistedState.pagination,
+            },
+          }),
         );
       })
       .catch(() => {
@@ -434,13 +471,17 @@ export function UniversalDataGrid<
   }, [persistenceAdapter, persistState, setGridState, state, tableId]);
 
   useEffect(() => {
-    if (!persistState || !persistenceAdapter || !hasLoadedPersistedState.current) {
+    if (
+      !persistState ||
+      !persistenceAdapter ||
+      !hasLoadedPersistedState.current
+    ) {
       return;
     }
 
     void persistenceAdapter.save(
       tableId,
-      pickPersistableGridState(gridState, persistKeys)
+      pickPersistableGridState(gridState, persistKeys),
     );
   }, [gridState, persistKeys, persistenceAdapter, persistState, tableId]);
 
@@ -475,7 +516,7 @@ export function UniversalDataGrid<
 
     setGridState((currentState) => ({
       ...currentState,
-      expandedGroupIds: expandAllGroups(groupedRows)
+      expandedGroupIds: expandAllGroups(groupedRows),
     }));
   }, [
     defaultExpandedGroups,
@@ -483,24 +524,27 @@ export function UniversalDataGrid<
     groupingActive,
     gridState.expandedGroupIds.length,
     normalizedGrouping,
-    setGridState
+    setGridState,
   ]);
 
-  const updateSearch = useCallback((search: string) => {
-    setGridState((currentState) => ({
-      ...currentState,
-      search,
-      pagination: {
-        ...currentState.pagination,
-        pageIndex: 0
-      }
-    }));
-  }, [setGridState]);
+  const updateSearch = useCallback(
+    (search: string) => {
+      setGridState((currentState) => ({
+        ...currentState,
+        search,
+        pagination: {
+          ...currentState.pagination,
+          pageIndex: 0,
+        },
+      }));
+    },
+    [setGridState],
+  );
 
   const updateSorting = (columnId: string) => {
     setGridState((currentState) => {
       const currentSort = currentState.sort.find(
-        (sort) => sort.columnId === columnId
+        (sort) => sort.columnId === columnId,
       );
       const nextSort =
         currentSort?.direction === "asc"
@@ -511,25 +555,25 @@ export function UniversalDataGrid<
 
       return {
         ...currentState,
-        sort: nextSort
+        sort: nextSort,
       };
     });
   };
 
   const setColumnSort = (
     columnId: string,
-    direction: DataGridSort["direction"] | null
+    direction: DataGridSort["direction"] | null,
   ) => {
     setGridState((currentState) => ({
       ...currentState,
-      sort: direction ? [{ columnId, direction }] : []
+      sort: direction ? [{ columnId, direction }] : [],
     }));
   };
 
   const updateDensity = (nextDensity: typeof gridState.density) => {
     setGridState((currentState) => ({
       ...currentState,
-      density: nextDensity
+      density: nextDensity,
     }));
   };
 
@@ -540,14 +584,14 @@ export function UniversalDataGrid<
         columns,
         currentState.columnVisibility,
         columnId,
-        visible
-      )
+        visible,
+      ),
     }));
   };
 
   const moveColumn = (
     columnId: string,
-    direction: "up" | "down" | "first" | "last"
+    direction: "up" | "down" | "first" | "last",
   ) => {
     setGridState((currentState) => ({
       ...currentState,
@@ -555,15 +599,23 @@ export function UniversalDataGrid<
         columns.map((column) => column.id),
         currentState.columnOrder,
         columnId,
-        direction
-      )
+        direction,
+      ),
     }));
+
+    const columnLabel =
+      columns.find((column) => column.id === columnId)?.header ?? columnId;
+    const directionLabel =
+      direction === "up" ? "left" : direction === "down" ? "right" : direction;
+    setInteractionAnnouncement(
+      `${columnLabel} column moved ${directionLabel}.`,
+    );
   };
 
   const updateColumnOrder = (columnOrder: string[]) => {
     setGridState((currentState) => ({
       ...currentState,
-      columnOrder
+      columnOrder,
     }));
   };
 
@@ -571,33 +623,29 @@ export function UniversalDataGrid<
     (columnSizing: typeof gridState.columnSizing) => {
       setGridState((currentState) => ({
         ...currentState,
-        columnSizing
+        columnSizing,
       }));
     },
-    [setGridState]
+    [setGridState],
   );
 
-  const {
-    activeColumnId,
-    resizeBy,
-    startResize
-  } = useColumnResize({
+  const { activeColumnId, resizeBy, startResize } = useColumnResize({
     columns,
     columnSizing: gridState.columnSizing,
-    onColumnSizingChange: updateColumnSizing
+    onColumnSizingChange: updateColumnSizing,
   });
 
   const resetGridColumnSize = (columnId: string) => {
     setGridState((currentState) => ({
       ...currentState,
-      columnSizing: resetColumnSize(currentState.columnSizing, columnId)
+      columnSizing: resetColumnSize(currentState.columnSizing, columnId),
     }));
   };
 
   const resetAllGridColumnSizes = () => {
     setGridState((currentState) => ({
       ...currentState,
-      columnSizing: resetAllColumnSizes()
+      columnSizing: resetAllColumnSizes(),
     }));
   };
 
@@ -606,13 +654,13 @@ export function UniversalDataGrid<
       ...currentState,
       columnVisibility: createGridState(defaultState).columnVisibility,
       columnOrder: [],
-      columnSizing: resetAllColumnSizes()
+      columnSizing: resetAllColumnSizes(),
     }));
   };
 
   const reorderHeaderColumn = (
     targetColumnId: string,
-    placement: "before" | "after"
+    placement: "before" | "after",
   ) => {
     if (!headerDragColumnId || headerDragColumnId === targetColumnId) {
       return;
@@ -625,29 +673,42 @@ export function UniversalDataGrid<
         currentState.columnOrder,
         headerDragColumnId,
         targetColumnId,
-        placement
-      )
+        placement,
+      ),
     }));
+
+    const movedLabel =
+      columns.find((column) => column.id === headerDragColumnId)?.header ??
+      headerDragColumnId;
+    const targetLabel =
+      columns.find((column) => column.id === targetColumnId)?.header ??
+      targetColumnId;
+    setInteractionAnnouncement(
+      `${movedLabel} column moved ${placement} ${targetLabel}.`,
+    );
   };
 
   const showAllGridColumns = () => {
     setGridState((currentState) => ({
       ...currentState,
-      columnVisibility: showAllColumns(columns, currentState.columnVisibility)
+      columnVisibility: showAllColumns(columns, currentState.columnVisibility),
     }));
   };
 
   const hideOptionalGridColumns = () => {
     setGridState((currentState) => ({
       ...currentState,
-      columnVisibility: hideOptionalColumns(columns, currentState.columnVisibility)
+      columnVisibility: hideOptionalColumns(
+        columns,
+        currentState.columnVisibility,
+      ),
     }));
   };
 
   const resetColumnOrder = () => {
     setGridState((currentState) => ({
       ...currentState,
-      columnOrder: []
+      columnOrder: [],
     }));
   };
 
@@ -668,18 +729,19 @@ export function UniversalDataGrid<
           grouping,
           expandedGroupIds: [],
           getRowId,
-          getGroupId
-        })
+          getGroupId,
+        }),
       );
     },
-    [clientRows, columns, defaultExpandedGroups, getGroupId, getRowId]
+    [clientRows, columns, defaultExpandedGroups, getGroupId, getRowId],
   );
 
   const updateGrouping = useCallback(
     (nextGrouping: string[]) => {
       const normalizedNextGrouping = normalizeGrouping(columns, nextGrouping);
-      const nextExpandedGroupIds =
-        resolveDefaultExpandedGroupIds(normalizedNextGrouping);
+      const nextExpandedGroupIds = resolveDefaultExpandedGroupIds(
+        normalizedNextGrouping,
+      );
 
       setGridState((currentState) => ({
         ...currentState,
@@ -687,12 +749,12 @@ export function UniversalDataGrid<
         expandedGroupIds: nextExpandedGroupIds,
         pagination: {
           ...currentState.pagination,
-          pageIndex: 0
-        }
+          pageIndex: 0,
+        },
       }));
       onGroupingChange?.(normalizedNextGrouping);
     },
-    [columns, onGroupingChange, resolveDefaultExpandedGroupIds, setGridState]
+    [columns, onGroupingChange, resolveDefaultExpandedGroupIds, setGridState],
   );
 
   const addGroupingColumn = (columnId: string) => {
@@ -705,7 +767,9 @@ export function UniversalDataGrid<
 
   const removeGroupingColumn = (columnId: string) => {
     updateGrouping(
-      normalizedGrouping.filter((groupingColumnId) => groupingColumnId !== columnId)
+      normalizedGrouping.filter(
+        (groupingColumnId) => groupingColumnId !== columnId,
+      ),
     );
   };
 
@@ -716,14 +780,14 @@ export function UniversalDataGrid<
   const expandAllGridGroups = () => {
     setGridState((currentState) => ({
       ...currentState,
-      expandedGroupIds: expandAllGroups(groupedRows)
+      expandedGroupIds: expandAllGroups(groupedRows),
     }));
   };
 
   const collapseAllGridGroups = () => {
     setGridState((currentState) => ({
       ...currentState,
-      expandedGroupIds: collapseAllGroups()
+      expandedGroupIds: collapseAllGroups(),
     }));
   };
 
@@ -732,16 +796,17 @@ export function UniversalDataGrid<
       ...currentState,
       expandedGroupIds: toggleGroupExpanded(
         currentState.expandedGroupIds,
-        groupId
-      )
+        groupId,
+      ),
     }));
   };
 
   const resetView = () => {
-    const nextSelectedRowIds = createGridState(resolvedDefaultState).selectedRowIds;
+    const nextSelectedRowIds =
+      createGridState(resolvedDefaultState).selectedRowIds;
 
     setGridState((currentState) =>
-      resetGridViewState(currentState, resolvedDefaultState)
+      resetGridViewState(currentState, resolvedDefaultState),
     );
     onSelectedRowIdsChange?.(nextSelectedRowIds);
     onGroupingChange?.(createGridState(resolvedDefaultState).grouping);
@@ -753,34 +818,75 @@ export function UniversalDataGrid<
     (nextSelectedRowIds: DataGridRowId[]) => {
       setGridState((currentState) => ({
         ...currentState,
-        selectedRowIds: nextSelectedRowIds
+        selectedRowIds: nextSelectedRowIds,
       }));
       onSelectedRowIdsChange?.(nextSelectedRowIds);
     },
-    [onSelectedRowIdsChange, setGridState]
+    [onSelectedRowIdsChange, setGridState],
   );
 
   const toggleSingleRowSelection = useCallback(
     (rowId: DataGridRowId) => {
       updateSelectedRows(
-        toggleRowSelection(resolvedSelectedRowIds, rowId, selectionMode)
+        toggleRowSelection(resolvedSelectedRowIds, rowId, selectionMode),
       );
     },
-    [resolvedSelectedRowIds, selectionMode, updateSelectedRows]
+    [resolvedSelectedRowIds, selectionMode, updateSelectedRows],
   );
+
+  const activateKeyboardRow = useCallback(
+    (rowId: DataGridRowId) => {
+      const keyboardRow = keyboardRows.find(
+        (candidate) => candidate.id === rowId,
+      );
+
+      if (!keyboardRow) {
+        return;
+      }
+
+      onRowClick?.(keyboardRow.row, keyboardRow.sourceRowIndex);
+
+      if (
+        selectionEnabled &&
+        enableRowClickSelection &&
+        keyboardRow.selectable
+      ) {
+        toggleSingleRowSelection(rowId);
+      }
+    },
+    [
+      enableRowClickSelection,
+      keyboardRows,
+      onRowClick,
+      selectionEnabled,
+      toggleSingleRowSelection,
+    ],
+  );
+
+  const { activeCell, getCellProps } = useGridKeyboardNavigation({
+    rows: keyboardRows,
+    columnIds: keyboardColumnIds,
+    selectionEnabled,
+    onActivateRow: activateKeyboardRow,
+    onToggleRowSelection: toggleSingleRowSelection,
+  });
 
   const togglePageSelection = useCallback(() => {
     updateSelectedRows(
       pageSelectionState.allSelected
         ? deselectRows(resolvedSelectedRowIds, pageSelectableRowIds)
-        : selectRows(resolvedSelectedRowIds, pageSelectableRowIds, selectionMode)
+        : selectRows(
+            resolvedSelectedRowIds,
+            pageSelectableRowIds,
+            selectionMode,
+          ),
     );
   }, [
     pageSelectableRowIds,
     pageSelectionState.allSelected,
     resolvedSelectedRowIds,
     selectionMode,
-    updateSelectedRows
+    updateSelectedRows,
   ]);
 
   const clearSelectedRows = useCallback(() => {
@@ -816,6 +922,14 @@ export function UniversalDataGrid<
       data-variant={variant}
       style={rootStyle}
     >
+      <div
+        aria-live="polite"
+        className="udg-sr-only"
+        data-udg-region="interaction-status"
+        role="status"
+      >
+        {interactionAnnouncement}
+      </div>
       {title && <h2 className="udg-title">{title}</h2>}
 
       <DataGridToolbar>
@@ -840,7 +954,9 @@ export function UniversalDataGrid<
                   >
                     <option value="">Select column</option>
                     {groupableColumns
-                      .filter((column) => !normalizedGrouping.includes(column.id))
+                      .filter(
+                        (column) => !normalizedGrouping.includes(column.id),
+                      )
                       .map((column) => (
                         <option key={column.id} value={column.id}>
                           {column.header}
@@ -905,7 +1021,11 @@ export function UniversalDataGrid<
           Showing {resolvedTotalRows} result{resolvedTotalRows === 1 ? "" : "s"}
           {gridState.search && <> for &ldquo;{gridState.search}&rdquo;</>}
           {gridState.filters.length > 0 && (
-            <> with {gridState.filters.length} active filter{gridState.filters.length === 1 ? "" : "s"}</>
+            <>
+              {" "}
+              with {gridState.filters.length} active filter
+              {gridState.filters.length === 1 ? "" : "s"}
+            </>
           )}
         </div>
       )}
@@ -914,7 +1034,9 @@ export function UniversalDataGrid<
         <div className="udg-group-chips" aria-label="Active grouping">
           <span className="udg-group-chips__label">Grouped by</span>
           {normalizedGrouping.map((columnId) => {
-            const column = columns.find((candidate) => candidate.id === columnId);
+            const column = columns.find(
+              (candidate) => candidate.id === columnId,
+            );
             const label = column?.header ?? columnId;
 
             return (
@@ -961,8 +1083,10 @@ export function UniversalDataGrid<
                 <Button
                   className={[
                     "udg-bulk-action",
-                    action.variant ? `udg-bulk-action--${action.variant}` : ""
-                  ].filter(Boolean).join(" ")}
+                    action.variant ? `udg-bulk-action--${action.variant}` : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   disabled={disabled}
                   key={action.id}
                   size="sm"
@@ -989,38 +1113,54 @@ export function UniversalDataGrid<
         </div>
       )}
 
-      <div className="udg-table-wrap">
+      <div className="udg-table-wrap" data-udg-region="scroll-container">
         <table
+          aria-colcount={visibleColumnCount}
+          aria-label={`${title ?? "Data grid"} data`}
+          aria-multiselectable={
+            selectionEnabled && selectionMode === "multiple" ? true : undefined
+          }
+          aria-rowcount={resolvedTotalRows + 1}
           className="udg-table"
-          style={{
-            "--udg-table-min-width": `${tableMinWidth + selectionColumnWidth}px`
-          } as DataGridRuntimeStyle}
+          data-udg-region="table"
+          role="grid"
+          style={
+            {
+              "--udg-table-min-width": `${tableMinWidth + selectionColumnWidth}px`,
+            } as DataGridRuntimeStyle
+          }
         >
           <colgroup>
             {selectionEnabled && (
               <col
                 className="udg-selection-col"
-                style={{
-                  "--udg-selection-column-width": `${selectionColumnWidth}px`
-                } as DataGridRuntimeStyle}
+                style={
+                  {
+                    "--udg-selection-column-width": `${selectionColumnWidth}px`,
+                  } as DataGridRuntimeStyle
+                }
               />
             )}
             {columnWidths.map(({ column, maxWidth, minWidth, width }) => (
               <col
                 className="udg-column-col"
                 key={column.id}
-                style={{
-                  "--udg-column-width": `${width}px`,
-                  "--udg-column-min-width": `${minWidth}px`,
-                  "--udg-column-max-width": `${maxWidth}px`
-                } as DataGridRuntimeStyle}
+                style={
+                  {
+                    "--udg-column-width": `${width}px`,
+                    "--udg-column-min-width": `${minWidth}px`,
+                    "--udg-column-max-width":
+                      maxWidth === undefined ? undefined : `${maxWidth}px`,
+                  } as DataGridRuntimeStyle
+                }
               />
             ))}
           </colgroup>
           <thead>
-            <tr>
+            <tr aria-rowindex={1}>
               {selectionEnabled && (
                 <th
+                  aria-colindex={1}
                   className="udg-selection-cell udg-selection-cell--header"
                   scope="col"
                 >
@@ -1029,8 +1169,8 @@ export function UniversalDataGrid<
                       selectionMode !== "multiple"
                         ? "Page selection is unavailable in single selection mode"
                         : pageSelectionState.allSelected
-                        ? "Deselect rows on this page"
-                        : "Select rows on this page"
+                          ? "Deselect rows on this page"
+                          : "Select rows on this page"
                     }
                     checked={
                       selectionMode === "multiple" &&
@@ -1048,255 +1188,311 @@ export function UniversalDataGrid<
                   />
                 </th>
               )}
-              {columnWidths.map(({ column, maxWidth, minWidth, width }) => {
-                const sortDirection = getSortDirection(column.id);
-                const menuOpen = menuColumnId === column.id;
+              {columnWidths.map(
+                ({ column, maxWidth, minWidth, width }, columnIndex) => {
+                  const sortDirection = getSortDirection(column.id);
+                  const menuOpen = menuColumnId === column.id;
 
-                return (
-                  <th
-                    key={column.id}
-                    aria-sort={
-                      sortDirection === "asc"
-                        ? "ascending"
-                        : sortDirection === "desc"
-                          ? "descending"
-                          : "none"
-                    }
-                    className={[
-                      "udg-header-cell",
-                      `udg-align-${column.align ?? "left"}`,
-                      activeColumnId === column.id ? "udg-is-resizing" : "",
-                      column.resizable !== false
-                        ? "udg-header-cell--resizable"
-                        : "",
-                      sortDirection ? "udg-header-cell--sorted" : "",
-                      menuOpen
-                        ? "udg-header-cell--actions-visible"
-                        : "",
-                      headerDragColumnId === column.id
-                        ? "udg-header-cell--dragging"
-                        : "",
-                      headerDropTarget?.columnId === column.id &&
-                      headerDropTarget.placement === "before"
-                        ? "udg-header-cell--drop-before"
-                        : "",
-                      headerDropTarget?.columnId === column.id &&
-                      headerDropTarget.placement === "after"
-                        ? "udg-header-cell--drop-after"
-                        : ""
-                    ].filter(Boolean).join(" ")}
-                    style={{
-                      "--udg-column-width": `${width}px`,
-                      "--udg-column-min-width": `${minWidth}px`,
-                      "--udg-column-max-width": `${maxWidth}px`
-                    } as DataGridRuntimeStyle}
-                    scope="col"
-                    onDragLeave={() => setHeaderDropTarget(null)}
-                    onDragOver={(event) => {
-                      if (!headerDragColumnId) {
-                        return;
+                  return (
+                    <th
+                      key={column.id}
+                      aria-colindex={columnIndex + (selectionEnabled ? 2 : 1)}
+                      data-udg-column-id={column.id}
+                      aria-sort={
+                        sortDirection === "asc"
+                          ? "ascending"
+                          : sortDirection === "desc"
+                            ? "descending"
+                            : "none"
                       }
+                      className={[
+                        "udg-header-cell",
+                        `udg-align-${column.align ?? "left"}`,
+                        activeColumnId === column.id ? "udg-is-resizing" : "",
+                        column.resizable !== false
+                          ? "udg-header-cell--resizable"
+                          : "",
+                        sortDirection ? "udg-header-cell--sorted" : "",
+                        menuOpen ? "udg-header-cell--actions-visible" : "",
+                        headerDragColumnId === column.id
+                          ? "udg-header-cell--dragging"
+                          : "",
+                        headerDropTarget?.columnId === column.id &&
+                        headerDropTarget.placement === "before"
+                          ? "udg-header-cell--drop-before"
+                          : "",
+                        headerDropTarget?.columnId === column.id &&
+                        headerDropTarget.placement === "after"
+                          ? "udg-header-cell--drop-after"
+                          : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      style={
+                        {
+                          "--udg-column-width": `${width}px`,
+                          "--udg-column-min-width": `${minWidth}px`,
+                          "--udg-column-max-width":
+                            maxWidth === undefined
+                              ? undefined
+                              : `${maxWidth}px`,
+                        } as DataGridRuntimeStyle
+                      }
+                      scope="col"
+                      onDragLeave={() => setHeaderDropTarget(null)}
+                      onDragOver={(event) => {
+                        if (!headerDragColumnId) {
+                          return;
+                        }
 
-                      event.preventDefault();
-                      const rect = event.currentTarget.getBoundingClientRect();
-                      const placement =
-                        event.clientX < rect.left + rect.width / 2
-                          ? "before"
-                          : "after";
+                        event.preventDefault();
+                        const rect =
+                          event.currentTarget.getBoundingClientRect();
+                        const placement =
+                          event.clientX < rect.left + rect.width / 2
+                            ? "before"
+                            : "after";
 
-                      setHeaderDropTarget({
-                        columnId: column.id,
-                        placement
-                      });
-                    }}
-                    onDrop={(event) => {
-                      event.preventDefault();
-                      const placement = headerDropTarget?.placement ?? "before";
-                      reorderHeaderColumn(column.id, placement);
-                      setHeaderDragColumnId(null);
-                      setHeaderDropTarget(null);
-                    }}
-                  >
-                    <div className="udg-header-cell__content">
-                    <button
-                      aria-label={`Reorder ${column.header} column`}
-                      className="udg-header-drag-grip"
-                      draggable
-                      title="Drag to reorder"
-                      type="button"
-                      onClick={(event) => event.stopPropagation()}
-                      onDragEnd={() => {
+                        setHeaderDropTarget({
+                          columnId: column.id,
+                          placement,
+                        });
+                      }}
+                      onDrop={(event) => {
+                        event.preventDefault();
+                        const placement =
+                          headerDropTarget?.placement ?? "before";
+                        reorderHeaderColumn(column.id, placement);
                         setHeaderDragColumnId(null);
                         setHeaderDropTarget(null);
                       }}
-                      onDragStart={(event) => {
-                        event.stopPropagation();
-                        event.dataTransfer.effectAllowed = "move";
-                        setHeaderDragColumnId(column.id);
-                      }}
                     >
-                      <Icon name="DragHandle" size="xs" />
-                    </button>
-                    <button
-                      className="udg-header-button"
-                      type="button"
-                      onClick={() => updateSorting(column.id)}
-                      disabled={column.sortable === false}
-                    >
-                      <span className="udg-header-label">{column.header}</span>
-                      <span
-                        className={[
-                          "udg-sort-indicator",
-                          sortDirection ? "udg-is-active" : ""
-                        ].filter(Boolean).join(" ")}
-                        aria-hidden="true"
-                      >
-                        <Icon name={getSortIconName(column.id)} size="xs" />
-                      </span>
-                    </button>
-                    <div className="udg-header-cell__actions">
-                      <Menu
-                        className="udg-header-menu"
-                        open={menuOpen}
-                        onOpenChange={(nextOpen) =>
-                          setMenuColumnId(nextOpen ? column.id : null)
-                        }
-                        items={[
-                          {
-                            id: "sort-asc",
-                            label: "Sort ascending",
-                            onSelect: () => {
-                              setColumnSort(column.id, "asc");
-                              setMenuColumnId(null);
+                      <div className="udg-header-cell__content">
+                        <button
+                          aria-keyshortcuts="Alt+Shift+ArrowLeft Alt+Shift+ArrowRight"
+                          aria-label={`Reorder ${column.header} column`}
+                          className="udg-header-drag-grip"
+                          draggable
+                          title="Drag to reorder. Use Alt+Shift+Left or Right for keyboard reorder."
+                          type="button"
+                          onClick={(event) => event.stopPropagation()}
+                          onKeyDown={(event) => {
+                            if (
+                              !event.altKey ||
+                              !event.shiftKey ||
+                              (event.key !== "ArrowLeft" &&
+                                event.key !== "ArrowRight")
+                            ) {
+                              return;
                             }
-                          },
-                          {
-                            id: "sort-desc",
-                            label: "Sort descending",
-                            onSelect: () => {
-                              setColumnSort(column.id, "desc");
-                              setMenuColumnId(null);
-                            }
-                          },
-                          {
-                            id: "clear-sort",
-                            label: "Clear sort",
-                            onSelect: () => {
-                              setColumnSort(column.id, null);
-                              setMenuColumnId(null);
-                            }
-                          },
-                          ...(enableGrouping &&
-                          !serverMode &&
-                          column.groupable !== false
-                            ? [
-                                {
-                                  id: "group",
-                                  label: "Group by this column",
-                                  disabled: normalizedGrouping.includes(column.id),
-                                  onSelect: () => {
-                                    addGroupingColumn(column.id);
-                                    setMenuColumnId(null);
-                                  }
-                                }
-                              ]
-                            : []),
-                          ...(column.hideable !== false
-                            ? [
-                                {
-                                  id: "hide",
-                                  label: "Hide column",
-                                  onSelect: () => {
-                                    updateVisibility(column.id, false);
-                                    setMenuColumnId(null);
-                                  }
-                                }
-                              ]
-                            : []),
-                          ...(column.resizable !== false
-                            ? [
-                                {
-                                  id: "reset-size",
-                                  label: "Reset size",
-                                  onSelect: () => {
-                                    resetGridColumnSize(column.id);
-                                    setMenuColumnId(null);
-                                  }
-                                }
-                              ]
-                            : []),
-                          {
-                            id: "move-left",
-                            label: "Move left",
-                            onSelect: () => {
-                              moveColumn(column.id, "up");
-                              setMenuColumnId(null);
-                            }
-                          },
-                          {
-                            id: "move-right",
-                            label: "Move right",
-                            onSelect: () => {
-                              moveColumn(column.id, "down");
-                              setMenuColumnId(null);
-                            }
-                          }
-                        ]}
-                        placement="bottom-end"
-                        size="sm"
-                        trigger={
-                          <IconButton
-                            aria-label={`Open ${column.header} column actions`}
-                            className="udg-header-cell__menu-button"
-                            size="xs"
-                            tooltip="Column actions"
-                            type="button"
-                            variant="ghost"
-                          >
-                            <Icon name="MoreHorizontal" size="xs" />
-                          </IconButton>
-                        }
-                      />
-                    </div>
-                    {column.resizable !== false && (
-                      <button
-                        aria-label={`Resize ${column.header} column`}
-                        className={[
-                          "udg-column-resizer",
-                          activeColumnId === column.id
-                            ? "udg-column-resizer--active"
-                            : ""
-                        ].filter(Boolean).join(" ")}
-                        title="Drag to resize. Double click to reset."
-                        type="button"
-                        onClick={(event) => event.stopPropagation()}
-                        onDoubleClick={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          resetGridColumnSize(column.id);
-                        }}
-                        onKeyDown={(event) => {
-                          if (
-                            event.key !== "ArrowLeft" &&
-                            event.key !== "ArrowRight"
-                          ) {
-                            return;
-                          }
 
-                          event.preventDefault();
-                          event.stopPropagation();
-                          const direction = event.key === "ArrowLeft" ? -1 : 1;
-                          resizeBy(column, direction * (event.shiftKey ? 24 : 8));
-                        }}
-                        onPointerDown={(event) =>
-                          startResize(event, column, width)
-                        }
-                      />
-                    )}
-                  </div>
-                </th>
-                );
-              })}
+                            event.preventDefault();
+                            event.stopPropagation();
+                            moveColumn(
+                              column.id,
+                              event.key === "ArrowLeft" ? "up" : "down",
+                            );
+                          }}
+                          onDragEnd={() => {
+                            setHeaderDragColumnId(null);
+                            setHeaderDropTarget(null);
+                          }}
+                          onDragStart={(event) => {
+                            event.stopPropagation();
+                            event.dataTransfer.effectAllowed = "move";
+                            event.dataTransfer.setData("text/plain", column.id);
+                            setHeaderDragColumnId(column.id);
+                          }}
+                        >
+                          <Icon name="DragHandle" size="xs" />
+                        </button>
+                        <button
+                          className="udg-header-button"
+                          type="button"
+                          onClick={() => updateSorting(column.id)}
+                          disabled={column.sortable === false}
+                        >
+                          <span className="udg-header-label">
+                            {column.header}
+                          </span>
+                          <span
+                            className={[
+                              "udg-sort-indicator",
+                              sortDirection ? "udg-is-active" : "",
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                            aria-hidden="true"
+                          >
+                            <Icon name={getSortIconName(column.id)} size="xs" />
+                          </span>
+                        </button>
+                        <div className="udg-header-cell__actions">
+                          <Menu
+                            className="udg-header-menu"
+                            open={menuOpen}
+                            onOpenChange={(nextOpen) =>
+                              setMenuColumnId(nextOpen ? column.id : null)
+                            }
+                            items={[
+                              {
+                                id: "sort-asc",
+                                label: "Sort ascending",
+                                onSelect: () => {
+                                  setColumnSort(column.id, "asc");
+                                  setMenuColumnId(null);
+                                },
+                              },
+                              {
+                                id: "sort-desc",
+                                label: "Sort descending",
+                                onSelect: () => {
+                                  setColumnSort(column.id, "desc");
+                                  setMenuColumnId(null);
+                                },
+                              },
+                              {
+                                id: "clear-sort",
+                                label: "Clear sort",
+                                onSelect: () => {
+                                  setColumnSort(column.id, null);
+                                  setMenuColumnId(null);
+                                },
+                              },
+                              ...(enableGrouping &&
+                              !serverMode &&
+                              column.groupable !== false
+                                ? [
+                                    {
+                                      id: "group",
+                                      label: "Group by this column",
+                                      disabled: normalizedGrouping.includes(
+                                        column.id,
+                                      ),
+                                      onSelect: () => {
+                                        addGroupingColumn(column.id);
+                                        setMenuColumnId(null);
+                                      },
+                                    },
+                                  ]
+                                : []),
+                              ...(column.hideable !== false
+                                ? [
+                                    {
+                                      id: "hide",
+                                      label: "Hide column",
+                                      onSelect: () => {
+                                        updateVisibility(column.id, false);
+                                        setMenuColumnId(null);
+                                      },
+                                    },
+                                  ]
+                                : []),
+                              ...(column.resizable !== false
+                                ? [
+                                    {
+                                      id: "reset-size",
+                                      label: "Reset size",
+                                      onSelect: () => {
+                                        resetGridColumnSize(column.id);
+                                        setMenuColumnId(null);
+                                      },
+                                    },
+                                  ]
+                                : []),
+                              {
+                                id: "move-left",
+                                label: "Move left",
+                                onSelect: () => {
+                                  moveColumn(column.id, "up");
+                                  setMenuColumnId(null);
+                                },
+                              },
+                              {
+                                id: "move-right",
+                                label: "Move right",
+                                onSelect: () => {
+                                  moveColumn(column.id, "down");
+                                  setMenuColumnId(null);
+                                },
+                              },
+                            ]}
+                            placement="bottom-end"
+                            size="sm"
+                            trigger={
+                              <IconButton
+                                aria-label={`Open ${column.header} column actions`}
+                                className="udg-header-cell__menu-button"
+                                size="xs"
+                                tooltip="Column actions"
+                                type="button"
+                                variant="ghost"
+                              >
+                                <Icon name="MoreHorizontal" size="xs" />
+                              </IconButton>
+                            }
+                          />
+                        </div>
+                        {column.resizable !== false && (
+                          <span
+                            aria-label={`Resize ${column.header} column`}
+                            aria-orientation="vertical"
+                            aria-valuemax={maxWidth}
+                            aria-valuemin={minWidth}
+                            aria-valuenow={width}
+                            className={[
+                              "udg-column-resizer",
+                              activeColumnId === column.id
+                                ? "udg-column-resizer--active"
+                                : "",
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                            role="separator"
+                            tabIndex={0}
+                            title="Drag to resize. Use Left or Right arrow keys. Double click to reset."
+                            onClick={(event) => event.stopPropagation()}
+                            onDoubleClick={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              resetGridColumnSize(column.id);
+                            }}
+                            onKeyDown={(event) => {
+                              if (
+                                event.key !== "ArrowLeft" &&
+                                event.key !== "ArrowRight"
+                              ) {
+                                return;
+                              }
+
+                              event.preventDefault();
+                              event.stopPropagation();
+                              const direction =
+                                event.key === "ArrowLeft" ? -1 : 1;
+                              const delta =
+                                direction * (event.shiftKey ? 24 : 8);
+                              const nextWidth = clampColumnWidth(
+                                width + delta,
+                                {
+                                  minWidth,
+                                  maxWidth,
+                                },
+                              );
+                              resizeBy(column, delta);
+                              setInteractionAnnouncement(
+                                `${column.header} column width ${nextWidth} pixels.`,
+                              );
+                            }}
+                            onPointerDown={(event) =>
+                              startResize(event, column, width)
+                            }
+                          />
+                        )}
+                      </div>
+                    </th>
+                  );
+                },
+              )}
             </tr>
           </thead>
           <tbody>
@@ -1320,60 +1516,63 @@ export function UniversalDataGrid<
                 if (displayRow.type === "group") {
                   const group = displayRow as DataGridGroupRow<RowData>;
                   const column = columns.find(
-                    (candidate) => candidate.id === group.columnId
+                    (candidate) => candidate.id === group.columnId,
                   );
                   const groupLabelText = String(group.value ?? "blank");
-                  const groupHeader =
-                    renderGroupHeader?.({
-                      group,
-                      state: gridStateWithSelection
-                    }) ?? (
-                      <>
-                        <button
-                          aria-expanded={group.isExpanded}
-                          aria-label={`${
-                            group.isExpanded ? "Collapse" : "Expand"
-                          } ${column?.header ?? group.columnId} ${groupLabelText} group`}
-                          className="udg-group-row__toggle"
-                          type="button"
-                          onClick={() => toggleGridGroup(group.id)}
-                        >
-                          {group.isExpanded ? "-" : "+"}
-                        </button>
-                        <span className="udg-group-row__label">
-                          <span className="udg-group-row__column">
-                            {column?.header ?? group.columnId}
-                          </span>
-                          <span>{group.label}</span>
+                  const groupHeader = renderGroupHeader?.({
+                    group,
+                    state: gridStateWithSelection,
+                  }) ?? (
+                    <>
+                      <button
+                        aria-expanded={group.isExpanded}
+                        aria-label={`${
+                          group.isExpanded ? "Collapse" : "Expand"
+                        } ${column?.header ?? group.columnId} ${groupLabelText} group`}
+                        className="udg-group-row__toggle"
+                        type="button"
+                        onClick={() => toggleGridGroup(group.id)}
+                      >
+                        {group.isExpanded ? "-" : "+"}
+                      </button>
+                      <span className="udg-group-row__label">
+                        <span className="udg-group-row__column">
+                          {column?.header ?? group.columnId}
                         </span>
-                        <span className="udg-group-row__count">
-                          {group.rowCount} row{group.rowCount === 1 ? "" : "s"}
-                        </span>
-                      </>
-                    );
+                        <span>{group.label}</span>
+                      </span>
+                      <span className="udg-group-row__count">
+                        {group.rowCount} row{group.rowCount === 1 ? "" : "s"}
+                      </span>
+                    </>
+                  );
 
                   return (
                     <tr
+                      aria-rowindex={rowIndex + 2}
                       className={[
                         "udg-group-row",
                         group.isExpanded
                           ? "udg-group-row--expanded"
-                          : "udg-group-row--collapsed"
+                          : "udg-group-row--collapsed",
                       ].join(" ")}
                       key={group.id}
                     >
                       {selectionEnabled && (
-                        <td className="udg-selection-cell" />
+                        <td aria-colindex={1} className="udg-selection-cell" />
                       )}
                       <td
+                        aria-colindex={selectionEnabled ? 2 : 1}
                         className="udg-group-row__cell"
                         colSpan={Math.max(1, orderedColumns.length)}
                       >
                         <div
                           className="udg-group-row__content"
-                          style={{
-                            "--udg-group-depth": group.depth
-                          } as DataGridRuntimeStyle}
+                          style={
+                            {
+                              "--udg-group-depth": group.depth,
+                            } as DataGridRuntimeStyle
+                          }
                         >
                           {groupHeader}
                         </div>
@@ -1382,20 +1581,28 @@ export function UniversalDataGrid<
                   );
                 }
 
-                const { id: rowId, index: sourceRowIndex, row, depth } = displayRow;
+                const {
+                  id: rowId,
+                  index: sourceRowIndex,
+                  row,
+                  depth,
+                } = displayRow;
                 const rowSelectable = isRowSelectable(
                   row,
                   sourceRowIndex,
-                  getRowSelectable
+                  getRowSelectable,
                 );
                 const rowSelected = isRowSelected(
                   resolvedSelectedRowIds,
-                  rowId
+                  rowId,
                 );
+                const keyboardRowIndex = keyboardRowIndexById.get(rowId) ?? 0;
 
                 return (
                   <tr
+                    aria-rowindex={rowIndex + 2}
                     aria-selected={selectionEnabled ? rowSelected : undefined}
+                    data-udg-row-id={String(rowId)}
                     className={[
                       rowSelected ? "udg-row--selected" : "",
                       groupingActive ? "udg-row--grouped" : "",
@@ -1404,23 +1611,15 @@ export function UniversalDataGrid<
                         : "",
                       enableRowClickSelection && rowSelectable
                         ? "udg-row--clickable"
-                        : ""
-                    ].filter(Boolean).join(" ")}
+                        : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
                     key={rowId}
-                    onClick={() => {
-                      onRowClick?.(row, sourceRowIndex);
-
-                      if (
-                        selectionEnabled &&
-                        enableRowClickSelection &&
-                        rowSelectable
-                      ) {
-                        toggleSingleRowSelection(rowId);
-                      }
-                    }}
+                    onClick={() => activateKeyboardRow(rowId)}
                   >
                     {selectionEnabled && (
-                      <td className="udg-selection-cell">
+                      <td aria-colindex={1} className="udg-selection-cell">
                         <IndeterminateCheckbox
                           aria-label={`Select row ${rowIndex + 1}`}
                           checked={rowSelected}
@@ -1430,20 +1629,41 @@ export function UniversalDataGrid<
                         />
                       </td>
                     )}
-                    {orderedColumns.map((column) => {
+                    {orderedColumns.map((column, columnIndex) => {
                       const value = getCellValue(row, column);
+                      const cellProps = getCellProps(
+                        rowId,
+                        column.id,
+                        keyboardRowIndex,
+                        columnIndex,
+                      );
+                      const cellActive =
+                        activeCell?.rowId === rowId &&
+                        activeCell.columnId === column.id;
 
                       return (
                         <td
-                          className={`udg-align-${column.align ?? "left"}`}
+                          {...cellProps}
+                          aria-colindex={
+                            columnIndex + (selectionEnabled ? 2 : 1)
+                          }
+                          className={[
+                            `udg-align-${column.align ?? "left"}`,
+                            cellActive ? "udg-cell--active" : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
+                          data-udg-cell="true"
+                          data-udg-column-id={column.id}
                           key={column.id}
+                          role="gridcell"
                         >
                           <span
                             className="udg-cell-content"
                             style={
                               column.id === orderedColumns[0]?.id && depth > 0
                                 ? ({
-                                    "--udg-group-depth": depth
+                                    "--udg-group-depth": depth,
                                   } as DataGridRuntimeStyle)
                                 : undefined
                             }
@@ -1468,7 +1688,7 @@ export function UniversalDataGrid<
         onChange={(pagination) =>
           setGridState((currentState) => ({
             ...currentState,
-            pagination
+            pagination,
           }))
         }
       />

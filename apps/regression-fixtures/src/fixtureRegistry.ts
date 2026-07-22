@@ -232,6 +232,32 @@ export const fixtureRegistry: readonly FixtureCase[] = [
     densities: allDensities,
   },
   {
+    id: "data-grid-keyboard",
+    title: "Data grid keyboard",
+    componentMetadataId: "universal-data-grid",
+    category: "data-grid",
+    route: "/fixtures/data-grid/keyboard",
+    renderKey: "data-grid-keyboard",
+    purpose:
+      "Provides roving cell focus, row activation, selection, sorting, resizing, and keyboard column reordering.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+  },
+  {
+    id: "data-grid-interactions",
+    title: "Data grid pointer and scrolling",
+    componentMetadataId: "universal-data-grid",
+    category: "data-grid",
+    route: "/fixtures/data-grid/interactions",
+    renderKey: "data-grid-interactions",
+    purpose:
+      "Provides deterministic pointer resize, drag reorder, sticky header and selection, and two-axis scrolling behavior.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+  },
+  {
     id: "data-grid-selection",
     title: "Data grid selection",
     componentMetadataId: "universal-data-grid",
