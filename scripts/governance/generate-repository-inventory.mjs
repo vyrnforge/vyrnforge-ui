@@ -487,7 +487,7 @@ const outputLines = [
       ],
       [
         "Missing evidence",
-        "Manual assistive-technology review, visual regression, responsive matrix coverage, and large-row performance benchmarks remain pending.",
+        "The VF-2014 manual assistive-technology matrix is schema-validated but pending execution; visual regression, responsive matrix coverage, and large-row performance benchmarks also remain pending.",
       ],
     ],
   ),
@@ -504,7 +504,7 @@ const outputLines = [
       ],
       [
         "Component metadata",
-        "Canonical `docs/metadata/components.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`.",
+        "Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`.",
       ],
       [
         "Playground",
@@ -651,8 +651,8 @@ const outputLines = [
       [
         "Medium",
         "Accessibility",
-        "Automated Chromium contracts now cover composite controls and data-grid interactions, but manual assistive-technology evidence is still pending.",
-        "Retain browser-checks as a required gate and complete screen-reader review before stable release.",
+        "Automated Chromium contracts cover composite controls and data-grid interactions; the canonical manual assistive-technology matrix is pending named execution.",
+        "Retain browser-checks, run `npm run verify:assistive-technology`, and require the strict evidence gate before beta or stable promotion.",
       ],
       [
         "Medium",

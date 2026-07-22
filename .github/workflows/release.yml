@@ -84,6 +84,10 @@ jobs:
       - name: Run authoritative release validation
         run: npm run quality
 
+      - name: Require complete assistive-technology evidence for beta
+        if: inputs.dist-tag == 'beta'
+        run: npm run verify:assistive-technology:release
+
       - name: Verify clean generated-artifact state
         shell: bash
         run: |

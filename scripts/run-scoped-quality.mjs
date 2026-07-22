@@ -35,6 +35,8 @@ runNpm(["run", "lint"]);
 runNpm(["run", "lint:css"]);
 runNpm(["run", "verify:metadata"]);
 runNpm(["run", "verify:component-maturity"]);
+runNpm(["run", "verify:maturity-closure"]);
+runNpm(["run", "verify:assistive-technology"]);
 runNpm(["run", "verify:repository-inventory"]);
 runNpm(["run", "test:coverage"]);
 

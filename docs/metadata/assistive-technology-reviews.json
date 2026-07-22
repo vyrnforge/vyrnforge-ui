@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "manual screen-reader and assistive-technology review evidence",
+    "documentation": "docs/architecture/05-accessibility-standards.md"
+  },
+  "statuses": ["pending", "complete", "blocked"],
+  "outcomes": ["passed", "failed", "conditional"],
+  "releasePolicy": {
+    "alpha": "Schema-valid pending scenarios are permitted when component maturity remains Experimental or Alpha Stable.",
+    "beta": "Every scenario covering a promoted component must have complete, passing results for all required environments.",
+    "stable": "Complete, passing supported-browser evidence and Accessibility owner acceptance are required in component maturity evidence."
+  },
+  "environments": {
+    "windows-nvda-chrome": {
+      "status": "pending",
+      "operatingSystem": {
+        "name": "Windows",
+        "version": "pending"
+      },
+      "browser": {
+        "name": "Chrome",
+        "version": "pending"
+      },
+      "assistiveTechnology": {
+        "name": "NVDA",
+        "version": "pending"
+      },
+      "inputModes": ["keyboard", "screen-reader"],
+      "rationale": "Record exact versions, reviewer, and execution date when the manual session is performed."
+    },
+    "windows-nvda-firefox": {
+      "status": "pending",
+      "operatingSystem": {
+        "name": "Windows",
+        "version": "pending"
+      },
+      "browser": {
+        "name": "Firefox",
+        "version": "pending"
+      },
+      "assistiveTechnology": {
+        "name": "NVDA",
+        "version": "pending"
+      },
+      "inputModes": ["keyboard", "screen-reader"],
+      "rationale": "Record exact versions, reviewer, and execution date when the manual session is performed."
+    }
+  },
+  "scenarios": [
+    {
+      "id": "AT-001",
+      "title": "Button and validation announcements",
+      "componentIds": ["button", "text-input"],
+      "fixtureIds": [
+        "button-basic",
+        "button-disabled",
+        "text-input-validation"
+      ],
+      "contracts": [
+        "Controls are announced by accessible name and role.",
+        "Disabled state is conveyed and cannot be activated.",
+        "Invalid input and its error relationship are announced without relying on color."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-002",
+      "title": "Dialog and Drawer focus lifecycle",
+      "componentIds": ["dialog", "drawer"],
+      "fixtureIds": ["dialog-focus", "drawer-focus"],
+      "contracts": [
+        "The overlay name, role, description, and modal state are announced.",
+        "Virtual and keyboard focus remain within the active modal surface.",
+        "Escape and explicit dismissal return focus to the opener."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-003",
+      "title": "Menu navigation and selection",
+      "componentIds": ["menu"],
+      "fixtureIds": ["menu-keyboard"],
+      "contracts": [
+        "The trigger conveys that it opens a menu.",
+        "Arrow, Home, and End movement are announced in the expected item order.",
+        "Disabled, selected, and destructive item meaning is understandable."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-004",
+      "title": "Popover and Tooltip relationships",
+      "componentIds": ["popover", "tooltip"],
+      "fixtureIds": ["popover-position", "tooltip-focus-hover"],
+      "contracts": [
+        "Popover content is reachable without creating an unexplained focus jump.",
+        "Tooltip text is associated with its trigger and is announced once.",
+        "Dismissal does not strand focus."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-005",
+      "title": "Autocomplete and MultiSelect composite controls",
+      "componentIds": ["autocomplete", "multi-select"],
+      "fixtureIds": ["autocomplete-controlled", "multi-select-keyboard"],
+      "contracts": [
+        "Expanded state, option count, active option, disabled options, and selection changes are understandable.",
+        "Typing and arrow navigation do not cause duplicate or stale announcements.",
+        "Clear and removal actions have meaningful accessible names."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-006",
+      "title": "Transfer List assignment workflow",
+      "componentIds": ["transfer-list"],
+      "fixtureIds": ["transfer-list-assignment"],
+      "contracts": [
+        "Available and assigned groups are distinguishable.",
+        "Selection and movement actions announce meaningful state changes.",
+        "Disabled items remain identifiable and protected from movement."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-007",
+      "title": "Slider and Rating value changes",
+      "componentIds": ["slider", "rating"],
+      "fixtureIds": ["slider-rating-keyboard"],
+      "contracts": [
+        "Range value, minimum, maximum, and increments are announced.",
+        "Rating choices expose position and checked state.",
+        "Clearing a rating produces an understandable state."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-008",
+      "title": "Tabs and Toggle Button state",
+      "componentIds": ["tabs", "toggle-button"],
+      "fixtureIds": ["tabs-toggle-keyboard"],
+      "contracts": [
+        "Tab position, selected state, disabled state, and panel relationship are announced.",
+        "Automatic activation does not produce confusing duplicate announcements.",
+        "Pressed state changes are conveyed for controlled and uncontrolled toggles."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-009",
+      "title": "Toast live-region lifecycle",
+      "componentIds": ["toast"],
+      "fixtureIds": ["toast-lifecycle"],
+      "contracts": [
+        "Polite and assertive messages are announced at the intended urgency.",
+        "Persistent and timed messages remain understandable without stealing focus.",
+        "Dismiss controls are discoverable and pause behavior does not repeat announcements."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    },
+    {
+      "id": "AT-010",
+      "title": "Data grid navigation, selection, and state",
+      "componentIds": ["universal-data-grid"],
+      "fixtureIds": [
+        "data-grid-keyboard",
+        "data-grid-interactions",
+        "data-grid-selection",
+        "data-grid-empty",
+        "data-grid-loading"
+      ],
+      "contracts": [
+        "Grid name, row and column counts, headers, cell coordinates, and sort state are understandable.",
+        "Roving focus, selection, row activation, resizing, and reordering have meaningful feedback.",
+        "Empty and loading states are announced without exposing placeholder rows as real data."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
+      "results": []
+    }
+  ]
+}
