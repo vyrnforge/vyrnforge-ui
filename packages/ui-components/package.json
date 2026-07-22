@@ -66,6 +66,7 @@
     "jsdom": "^29.1.1",
     "react": "latest",
     "react-dom": "latest",
+    "redent": "3.0.0",
     "tsup": "latest",
     "typescript": "7.0.2",
     "vitest": "latest"

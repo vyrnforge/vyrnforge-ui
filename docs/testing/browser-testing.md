@@ -73,10 +73,10 @@ asserts. It does not automatically provide complete browser evidence for every
 component shown by that fixture.
 
 Component-level evidence is recorded only after its dedicated contract suite is
-implemented and accepted. VF-2002 through VF-2011 cover Dialog, Drawer, Menu,
+implemented and accepted. VF-2002 through VF-2013 cover Dialog, Drawer, Menu,
 Popover, Tooltip, Autocomplete, MultiSelect, Transfer List, Slider, Rating,
-Tabs, Toggle Button, and Toast. Grid keyboard, pointer, and scrolling evidence
-remains in VF-2012 and VF-2013.
+Tabs, Toggle Button, Toast, and UniversalDataGrid keyboard, pointer, reorder,
+resize, sticky-region, and scrolling behavior.
 
 The current component contract specifications are:
 
@@ -90,6 +90,8 @@ The current component contract specifications are:
 - `tests/browser/slider-rating.spec.ts`
 - `tests/browser/tabs-toggle.spec.ts`
 - `tests/browser/toast.spec.ts`
+- `tests/browser/data-grid-keyboard.spec.ts`
+- `tests/browser/data-grid-interactions.spec.ts`
 
 Automated axe scans, DOM interaction tests, and Playwright browser tests are
 complementary; none should be presented as a substitute for the others.

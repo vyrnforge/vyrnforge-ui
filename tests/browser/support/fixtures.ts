@@ -7,6 +7,8 @@ export type BrowserFixtureId =
 export const browserFixtureIds = {
   autocompleteControlled: "autocomplete-controlled",
   buttonBasic: "button-basic",
+  dataGridInteractions: "data-grid-interactions",
+  dataGridKeyboard: "data-grid-keyboard",
   dataGridSelection: "data-grid-selection",
   dialogFocus: "dialog-focus",
   drawerFocus: "drawer-focus",
@@ -40,6 +42,12 @@ export function fixtureAction(page: Page, action: string) {
 
 export function fixtureRegion(page: Page, region: string) {
   return page.locator(`[data-vf-fixture-region="${region}"]`);
+}
+
+export function gridCell(page: Page, rowId: string, columnId: string) {
+  return page.locator(
+    `[data-udg-row-id="${rowId}"] [data-udg-column-id="${columnId}"]`,
+  );
 }
 
 export async function setFixtureTheme(page: Page, theme: "light" | "dark") {

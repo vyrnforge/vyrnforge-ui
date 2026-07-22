@@ -17,15 +17,16 @@ All interactive components should support:
 
 ## Component-specific expectations
 
-| Component type | Requirement |
-| --- | --- |
-| IconButton | `aria-label` required |
-| Menu | arrow navigation, Enter/Space select, Escape close |
-| Dialog/Drawer | role, aria-modal, focus return, Escape close |
-| Tooltip | hover and focus support |
-| Grid header | sort/filter/menu/resize controls accessible |
-| Grid selection | checkbox labels, indeterminate state visible |
-| Group rows | `aria-expanded`, keyboard toggle |
+| Component type | Requirement                                                                              |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| IconButton     | `aria-label` required                                                                    |
+| Menu           | arrow navigation, Enter/Space select, Escape close                                       |
+| Dialog/Drawer  | role, aria-modal, focus return, Escape close                                             |
+| Tooltip        | hover and focus support                                                                  |
+| Grid header    | sort/filter/menu/resize controls accessible; pointer actions have keyboard fallbacks     |
+| Grid body      | roving cell focus with Arrow/Home/End navigation and visible focus                       |
+| Grid selection | checkbox labels, indeterminate state visible, Space selection on focused selectable rows |
+| Group rows     | `aria-expanded`, keyboard toggle                                                         |
 
 ## Accessibility QA checklist
 

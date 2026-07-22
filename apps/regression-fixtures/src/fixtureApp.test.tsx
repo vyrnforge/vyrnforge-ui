@@ -4,6 +4,7 @@ import {
   render,
   screen,
 } from "../../../tests/dom";
+import { fireEvent } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { FixtureApp } from "./FixtureApp";
 import {
@@ -52,6 +53,7 @@ describe("regression fixture application", () => {
       ],
       ["/fixtures/navigation/tabs-toggle-keyboard", "tab", "Summary"],
       ["/fixtures/toast/lifecycle", "button", "Show success"],
+      ["/fixtures/data-grid/keyboard", "grid", "Keyboard fixture cases data"],
       ["/fixtures/data-grid/selection", "region", "Fixture cases"],
     ] as const;
 
@@ -70,6 +72,59 @@ describe("regression fixture application", () => {
       screen.getByRole("dialog", { name: "Confirm case update" }),
     ).toBeTruthy();
     dialogResult.unmount();
+  });
+
+  it("exercises the data-grid keyboard contract through the fixture", () => {
+    render(<FixtureApp initialPathname="/fixtures/data-grid/keyboard" />);
+
+    const cell = (rowId: string, columnId: string) => {
+      const element = document.querySelector<HTMLTableCellElement>(
+        `[data-udg-row-id="${rowId}"] [data-udg-column-id="${columnId}"]`,
+      );
+      expect(element).not.toBeNull();
+      return element!;
+    };
+
+    const firstCell = cell("case-100", "id");
+    expect(firstCell.tabIndex).toBe(0);
+    firstCell.focus();
+    fireEvent.keyDown(firstCell, { key: "ArrowRight" });
+    expect(cell("case-100", "owner")).toHaveFocus();
+    fireEvent.keyDown(document.activeElement!, { key: "ArrowDown" });
+    expect(cell("case-200", "owner")).toHaveFocus();
+
+    fireEvent.keyDown(document.activeElement!, { key: "Enter" });
+    expect(screen.getByText("Activated row: case-200")).toBeTruthy();
+    expect(screen.getByText("Selected rows: case-100, case-200")).toBeTruthy();
+
+    fireEvent.keyDown(document.activeElement!, { key: " " });
+    expect(screen.getByText("Selected rows: case-100")).toBeTruthy();
+
+    const separator = screen.getByRole("separator", {
+      name: "Resize Owner column",
+    });
+    separator.focus();
+    fireEvent.keyDown(separator, { key: "ArrowRight" });
+    fireEvent.keyDown(separator, { key: "ArrowRight", shiftKey: true });
+    expect(separator).toHaveAttribute("aria-valuenow", "252");
+
+    const reorder = screen.getByRole("button", {
+      name: "Reorder Owner column",
+    });
+    reorder.focus();
+    fireEvent.keyDown(reorder, {
+      key: "ArrowLeft",
+      altKey: true,
+      shiftKey: true,
+    });
+    expect(
+      [...document.querySelectorAll(".udg-header-label")].map(
+        (element) => element.textContent,
+      ),
+    ).toEqual(["Owner", "Case", "Status"]);
+    expect(
+      document.querySelector('[data-udg-region="interaction-status"]'),
+    ).toHaveTextContent("Owner column moved left.");
   });
 
   it("applies fixture theme and density controls", async () => {
@@ -140,5 +195,11 @@ describe("regression fixture application", () => {
     );
     await assertNoAccessibilityViolations(document.body);
     multiSelect.unmount();
+
+    const grid = render(
+      <FixtureApp initialPathname="/fixtures/data-grid/keyboard" />,
+    );
+    await assertNoAccessibilityViolations(document.body);
+    grid.unmount();
   });
 });

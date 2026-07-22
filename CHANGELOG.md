@@ -39,6 +39,9 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   prerelease. It corrects registry-facing package status text and aligns all
   three package versions.
 
+- Added UniversalDataGrid browser contracts for keyboard cell navigation,
+  pointer resize, drag reorder, sticky regions, and two-axis scrolling.
+
 ### Fixed
 
 ### Deprecated
@@ -53,6 +56,13 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   infrastructure, not an application API.
 
 ### Accessibility
+
+- Added a roving body-cell focus model with Arrow/Home/End navigation, keyboard
+  row activation and selection, semantic resize separators, keyboard column
+  reorder fallback, visible focused-cell styling, and polite interaction
+  announcements.
+- Kept the grid header and selection column visible during vertical and
+  horizontal scrolling.
 
 ### Security
 

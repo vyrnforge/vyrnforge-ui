@@ -157,14 +157,14 @@
   border: 0;
   border-radius: 0;
   padding: 0;
-  background:
-    linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 4px,
-      var(--udg-border-strong) 4px,
-      var(--udg-border-strong) 6px,
-      transparent 6px);
+  background: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 4px,
+    var(--udg-border-strong) 4px,
+    var(--udg-border-strong) 6px,
+    transparent 6px
+  );
   cursor: col-resize;
   opacity: 0;
   touch-action: none;
@@ -179,14 +179,14 @@
 .udg-column-resizer--active {
   outline: 2px solid var(--udg-focus-ring);
   outline-offset: -2px;
-  background:
-    linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 4px,
-      var(--udg-primary) 4px,
-      var(--udg-primary) 6px,
-      transparent 6px);
+  background: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 4px,
+    var(--udg-primary) 4px,
+    var(--udg-primary) 6px,
+    transparent 6px
+  );
 }
 .udg-is-resizing,
 .udg-is-resizing * {
@@ -220,4 +220,12 @@
 .udg-sort-indicator.udg-is-active {
   color: var(--udg-primary);
   opacity: 1;
+}
+
+.udg-table thead .udg-selection-cell--header {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: var(--udg-header-bg);
+  box-shadow: 1px 0 0 var(--udg-border-strong);
 }
