@@ -487,7 +487,7 @@ const outputLines = [
       ],
       [
         "Missing evidence",
-        "The VF-2014 manual assistive-technology matrix is schema-validated but pending execution; visual regression, responsive matrix coverage, and large-row performance benchmarks also remain pending.",
+        "The VF-2014 manual assistive-technology matrix is schema-validated but pending execution; VF-3011 visual regression is implemented, while responsive matrix coverage and large-row performance benchmarks remain pending.",
       ],
     ],
   ),

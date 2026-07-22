@@ -20,6 +20,7 @@ export const browserFixtureIds = {
   toastLifecycle: "toast-lifecycle",
   tooltipFocusHover: "tooltip-focus-hover",
   transferListAssignment: "transfer-list-assignment",
+  visualComponents: "visual-components",
 } as const;
 
 export async function openFixture(page: Page, fixtureId: string) {

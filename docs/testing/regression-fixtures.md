@@ -38,7 +38,7 @@ The metadata ID must already exist in `docs/metadata/components.json`; the regis
 
 Fixtures must not fetch data, read timestamps, generate random values, or rely on unstable DOM IDs for selectors. Use fixed rows, fixed row IDs, fixed initial component state, and stable accessible names. Theme and density are applied through the documented `data-theme` and `data-density` contracts from `@vyrnforge/ui-core`.
 
-The application is the source of stable routes for Playwright browser checks and future visual-regression work. Browser tests live under `tests/browser` and consume this registry; the fixture app does not own browser evidence or component maturity by itself. It is also not a new public documentation site, product demo, component maturity record, or replacement for the packed-package consumer fixture in `tests/package-consumer`.
+The application is the source of stable routes for Playwright browser checks and visual-regression work. Browser tests live under `tests/browser` and consume this registry; the fixture app does not own browser evidence or component maturity by itself. It is also not a new public documentation site, product demo, component maturity record, or replacement for the packed-package consumer fixture in `tests/package-consumer`.
 
 ## Quality-gate integration
 
@@ -70,3 +70,10 @@ The final S2 fixture set adds two focused UniversalDataGrid routes:
 The fixtures use fixed rows, fixed dimensions, public package exports, and
 semantic grid roles. They do not introduce virtualization, editing, application
 state stores, or backend behavior.
+
+## S3 visual fixture
+
+`/fixtures/visual/components` provides the deterministic shared-component gallery
+used by VF-3011. Theme and density are also synchronized to the document root so
+portalled overlays inherit the same semantic contract as in-document fixture
+content. The fixture remains a test surface, not a public component catalog.

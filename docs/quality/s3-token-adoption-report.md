@@ -54,7 +54,9 @@ The checks prove:
 6. representative components and the grid resolve the same roles in real light
    and dark browser contexts.
 
-## Deferred
+## Closure follow-up
 
-- VF-3011: broad visual regression coverage for theme and density combinations.
-- VF-3012: final token documentation audit and G3 closure.
+- VF-3011 added the fourteen-case visual regression matrix and successful PNG/JSON evidence artifacts.
+- VF-3012 aligned metadata, documentation, verification, CI scope, and the final G3 closure record.
+
+See `s3-visual-regression.md` and `s3-g3-closure.md`.

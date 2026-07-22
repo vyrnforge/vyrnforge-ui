@@ -1,6 +1,13 @@
-import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type ReactNode,
+} from "react";
 import {
   Autocomplete,
+  Badge,
   Button,
   Dialog,
   Drawer,
@@ -53,6 +60,25 @@ const fixtureColumns: DataGridColumnDef<FixtureRow>[] = [
   { id: "id", header: "Case", accessorKey: "id", width: 140 },
   { id: "owner", header: "Owner", accessorKey: "owner", width: 220 },
   { id: "status", header: "Status", accessorKey: "status", width: 140 },
+];
+
+const visualTabItems = [
+  {
+    id: "summary",
+    label: "Summary",
+    content: "Summary content",
+  },
+  {
+    id: "activity",
+    label: "Activity",
+    content: "Activity content",
+  },
+  {
+    id: "audit",
+    label: "Audit",
+    content: "Audit content",
+    disabled: true,
+  },
 ];
 
 type GridInteractionRow = {
@@ -611,6 +637,114 @@ function TabsToggleFixture() {
   );
 }
 
+function VisualComponentsFixture() {
+  return (
+    <div
+      className="vf-fixture__visual-gallery"
+      data-vf-visual-id="component-gallery"
+    >
+      <section className="vf-fixture__visual-card">
+        <div className="vf-fixture__visual-heading">
+          <h2>Actions</h2>
+          <p>Primary, neutral, disabled, and selected interaction roles.</p>
+        </div>
+        <div className="vf-fixture__button-row">
+          <Button data-vf-visual-id="button-primary" variant="primary">
+            Create record
+          </Button>
+          <Button data-vf-visual-id="button-default">Review</Button>
+          <Button data-vf-visual-id="button-disabled" disabled>
+            Disabled
+          </Button>
+          <ToggleButton data-vf-visual-id="toggle-selected" pressed>
+            Filters pinned
+          </ToggleButton>
+        </div>
+      </section>
+
+      <section className="vf-fixture__visual-card">
+        <div className="vf-fixture__visual-heading">
+          <h2>Form controls</h2>
+          <p>Default, validation, and selection surfaces.</p>
+        </div>
+        <div className="vf-fixture__visual-form-grid">
+          <label>
+            Workspace name
+            <TextInput
+              aria-label="Visual workspace name"
+              data-vf-visual-id="input-default"
+              readOnly
+              value="Atlas operations"
+            />
+          </label>
+          <label>
+            Invalid code
+            <TextInput
+              aria-label="Visual invalid code"
+              data-vf-visual-id="input-invalid"
+              invalid
+              readOnly
+              value="Duplicate code"
+            />
+          </label>
+          <label>
+            Environment
+            <Select
+              aria-label="Visual environment"
+              data-vf-visual-id="select-default"
+              defaultValue="production"
+              options={[
+                { label: "Production", value: "production" },
+                { label: "Staging", value: "staging" },
+              ]}
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="vf-fixture__visual-card">
+        <div className="vf-fixture__visual-heading">
+          <h2>Status</h2>
+          <p>Semantic feedback roles remain consistent across themes.</p>
+        </div>
+        <div className="vf-fixture__button-row">
+          <Badge data-vf-visual-id="badge-success" variant="success">
+            Healthy
+          </Badge>
+          <Badge data-vf-visual-id="badge-warning" variant="warning">
+            Review
+          </Badge>
+          <Badge data-vf-visual-id="badge-danger" variant="danger">
+            Blocked
+          </Badge>
+          <Badge data-vf-visual-id="badge-info" variant="info">
+            Scheduled
+          </Badge>
+        </div>
+      </section>
+
+      <section className="vf-fixture__visual-card">
+        <div className="vf-fixture__visual-heading">
+          <h2>Navigation and rating</h2>
+          <p>Contained selection and read-only feedback.</p>
+        </div>
+        <Tabs
+          data-vf-visual-id="tabs-contained"
+          defaultValue="summary"
+          items={visualTabItems}
+          variant="contained"
+        />
+        <Rating
+          data-vf-visual-id="rating-read-only"
+          label="Visual quality"
+          readOnly
+          value={4}
+        />
+      </section>
+    </div>
+  );
+}
+
 function ToastControls() {
   const toast = useToast();
 
@@ -855,6 +989,8 @@ function FixtureContent({
       return <TabsToggleFixture />;
     case "toast-lifecycle":
       return <ToastFixture />;
+    case "visual-components":
+      return <VisualComponentsFixture />;
     case "data-grid-keyboard":
       return <DataGridKeyboardFixture density={density} theme={theme} />;
     case "data-grid-interactions":
@@ -871,6 +1007,29 @@ function FixtureContent({
 function FixtureRoute({ fixture }: { fixture: FixtureCase }) {
   const [theme, setTheme] = useState<FixtureTheme>("light");
   const [density, setDensity] = useState<FixtureDensity>("standard");
+
+  useEffect(() => {
+    const rootElement = document.documentElement;
+    const previousTheme = rootElement.getAttribute("data-theme");
+    const previousDensity = rootElement.getAttribute("data-density");
+
+    rootElement.setAttribute("data-theme", theme);
+    rootElement.setAttribute("data-density", density);
+
+    return () => {
+      if (previousTheme === null) {
+        rootElement.removeAttribute("data-theme");
+      } else {
+        rootElement.setAttribute("data-theme", previousTheme);
+      }
+
+      if (previousDensity === null) {
+        rootElement.removeAttribute("data-density");
+      } else {
+        rootElement.setAttribute("data-density", previousDensity);
+      }
+    };
+  }, [density, theme]);
 
   return (
     <FixtureFrame

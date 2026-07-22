@@ -138,6 +138,9 @@ semantic base layer.
 npm run test:design-tokens
 npm run verify:design-tokens
 npm run test:browser -- tests/browser/semantic-tokens.spec.ts
+npm run verify:visual-regression
+npm run test:visual
+npm run verify:g3-closure
 ```
 
 The verifier rejects missing categories, duplicate token names, incomplete
@@ -174,3 +177,13 @@ npm run verify:token-adoption
 The verifier rejects legacy shared token references in package CSS, hard-coded
 component colors, duplicated grid theme maps, literal motion timings, missing
 grid-to-core mappings, and typed grid presets that duplicate theme colors.
+
+## VF-3011 and VF-3012 closure
+
+The semantic contract is now backed by the canonical visual matrix,
+fourteen Chromium cases, per-case PNG/JSON evidence, and the machine-readable
+G3 closure record. See `../quality/s3-visual-regression.md`,
+`../quality/s3-g3-closure.md`, and `../metadata/g3-closure.json`.
+
+The metadata state is `evidence-complete`; the authoritative merge decision
+remains the final pull-request `ci-gate`.

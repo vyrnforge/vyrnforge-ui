@@ -241,6 +241,8 @@ for (const command of [
   "verify:metadata",
   "verify:design-tokens",
   "verify:token-adoption",
+  "verify:visual-regression",
+  "verify:g3-closure",
   "verify:component-maturity",
   "verify:maturity-closure",
   "verify:assistive-technology",
@@ -298,6 +300,8 @@ for (const requiredBrowserToken of [
   "npm run test:browser",
   "playwright-report/",
   "test-results/",
+  "Upload visual regression evidence",
+  "test-results/visual-evidence/",
 ]) {
   assert(
     browserWorkflow.includes(requiredBrowserToken),
@@ -317,11 +321,18 @@ assert(
   "docs validation must reject stale generated repository inventory",
 );
 const rootPackage = JSON.parse(read("package.json"));
+assert(
+  rootPackage.scripts["test:visual"] ===
+    "playwright test tests/browser/visual-regression.spec.ts --project=chromium",
+  "package.json must expose the canonical visual-regression browser command",
+);
 for (const command of [
   "verify:ci",
   "verify:metadata",
   "verify:design-tokens",
   "verify:token-adoption",
+  "verify:visual-regression",
+  "verify:g3-closure",
   "verify:component-maturity",
   "verify:maturity-closure",
   "verify:assistive-technology",

@@ -53,6 +53,7 @@ describe("regression fixture application", () => {
       ],
       ["/fixtures/navigation/tabs-toggle-keyboard", "tab", "Summary"],
       ["/fixtures/toast/lifecycle", "button", "Show success"],
+      ["/fixtures/visual/components", "button", "Create record"],
       ["/fixtures/data-grid/keyboard", "grid", "Keyboard fixture cases data"],
       ["/fixtures/data-grid/selection", "region", "Fixture cases"],
     ] as const;
@@ -143,6 +144,10 @@ describe("regression fixture application", () => {
     const fixture = document.querySelector('[data-vf-fixture="button-basic"]');
     expect(fixture?.getAttribute("data-theme")).toBe("dark");
     expect(fixture?.getAttribute("data-density")).toBe("compact");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+    expect(document.documentElement.getAttribute("data-density")).toBe(
+      "compact",
+    );
   });
 
   it("renders a deterministic not-found state for an unknown route", () => {

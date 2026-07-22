@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "task": "VF-3012",
+  "gate": "G3",
+  "state": "evidence-complete",
+  "closedBy": "S3 semantic token program",
+  "closedAt": "2026-07-22",
+  "ciGateRequired": true,
+  "tasks": [
+    "VF-3001",
+    "VF-3002",
+    "VF-3003",
+    "VF-3004",
+    "VF-3005",
+    "VF-3006",
+    "VF-3007",
+    "VF-3008",
+    "VF-3009",
+    "VF-3010",
+    "VF-3011",
+    "VF-3012"
+  ],
+  "evidence": [
+    {
+      "id": "token-contract",
+      "path": "docs/metadata/design-tokens.json",
+      "command": "npm run verify:design-tokens"
+    },
+    {
+      "id": "token-adoption",
+      "path": "docs/quality/s3-token-adoption-report.md",
+      "command": "npm run verify:token-adoption"
+    },
+    {
+      "id": "visual-regression",
+      "path": "docs/metadata/visual-regression-matrix.json",
+      "command": "npm run verify:visual-regression"
+    },
+    {
+      "id": "visual-browser",
+      "path": "tests/browser/visual-regression.spec.ts",
+      "command": "npm run test:visual"
+    },
+    {
+      "id": "closure-report",
+      "path": "docs/quality/s3-g3-closure.md",
+      "command": "npm run verify:g3-closure"
+    }
+  ],
+  "requiredChecks": [
+    "verify:design-tokens",
+    "verify:token-adoption",
+    "verify:visual-regression",
+    "test:visual",
+    "ci-gate"
+  ],
+  "blockers": [],
+  "deferredOutsideGate": [
+    "Manual Windows/NVDA result execution remains release evidence under VF-2014 and is not part of G3.",
+    "A shared high-contrast ui-core theme remains deferred; ui-data-grid retains its documented package-specific exception."
+  ]
+}
