@@ -21,7 +21,7 @@
     "format": "prettier --write .",
     "format:check": "node scripts/verify-format.mjs",
     "inventory:repository": "node scripts/governance/generate-repository-inventory.mjs",
-    "quality": "npm run verify:ci && npm run verify:metadata && npm run verify:component-maturity && npm run verify:maturity-closure && npm run verify:assistive-technology && npm run verify:repository-inventory && npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm run test:coverage && npm run fixtures:verify && npm run test:browser && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
+    "quality": "npm run verify:ci && npm run verify:metadata && npm run verify:design-tokens && npm run verify:component-maturity && npm run verify:maturity-closure && npm run verify:assistive-technology && npm run verify:repository-inventory && npm run format:check && npm run lint && npm run lint:css && npm run typecheck && npm run test:coverage && npm run fixtures:verify && npm run test:browser && npm run verify:packages && npm run verify:consumer && npm run build:docs && npm run build:playground",
     "lint": "eslint eslint.config.mjs scripts tests --config eslint.config.mjs && npm run lint --workspace @vyrnforge/ui-core && npm run lint --workspace @vyrnforge/ui-components && npm run lint --workspace @vyrnforge/ui-data-grid && npm run lint --workspace @vyrnforge/ui-docs && npm run lint --workspace @vyrnforge/ui-data-grid-basic-playground && npm run lint --workspace @vyrnforge/ui-regression-fixtures",
     "lint:fix": "eslint eslint.config.mjs scripts tests --config eslint.config.mjs --fix && npm run lint:fix --workspace @vyrnforge/ui-core && npm run lint:fix --workspace @vyrnforge/ui-components && npm run lint:fix --workspace @vyrnforge/ui-data-grid && npm run lint:fix --workspace @vyrnforge/ui-docs && npm run lint:fix --workspace @vyrnforge/ui-data-grid-basic-playground && npm run lint:fix --workspace @vyrnforge/ui-regression-fixtures",
     "lint:css": "stylelint \"{packages,apps,examples,tests}/**/*.css\"",
@@ -46,7 +46,7 @@
     "test:assistive-technology": "node --test scripts/verify-assistive-technology-evidence.test.mjs",
     "test:component-metadata": "node --test scripts/verify-component-metadata.test.mjs",
     "verify:workflows": "node scripts/verify-workflows.mjs",
-    "verify:ci": "npm run verify:toolchain && npm run test:ci-scope && npm run test:package-boundaries && npm run test:component-metadata && npm run test:component-maturity && npm run test:maturity-closure && npm run test:assistive-technology && npm run verify:maturity-closure && npm run verify:assistive-technology && npm run verify:package-boundaries && npm run verify:workflows && npm run verify:templates",
+    "verify:ci": "npm run verify:toolchain && npm run test:ci-scope && npm run test:package-boundaries && npm run test:component-metadata && npm run test:component-maturity && npm run test:design-tokens && npm run test:maturity-closure && npm run test:assistive-technology && npm run verify:design-tokens && npm run verify:maturity-closure && npm run verify:assistive-technology && npm run verify:package-boundaries && npm run verify:workflows && npm run verify:templates",
     "verify:registry-release": "node scripts/verify-registry-release.mjs",
     "verify:templates": "node scripts/verify-repository-templates.mjs",
     "verify:toolchain": "node scripts/verify-toolchain.mjs",
@@ -58,7 +58,9 @@
     "test:browser:report": "playwright show-report",
     "test:browser:install": "playwright install chromium",
     "typecheck:browser": "tsc -p tests/browser/tsconfig.json --noEmit",
-    "format:baseline": "node scripts/verify-format.mjs --write-baseline"
+    "format:baseline": "node scripts/verify-format.mjs --write-baseline",
+    "verify:design-tokens": "node scripts/verify-design-token-contract.mjs",
+    "test:design-tokens": "node --test scripts/verify-design-token-contract.test.mjs"
   },
   "packageManager": "npm@11.16.0",
   "engines": {

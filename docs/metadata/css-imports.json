@@ -17,21 +17,39 @@
     {
       "package": "@vyrnforge/ui-core",
       "importPath": "@vyrnforge/ui-core/styles/index.css",
-      "requiredFor": ["shared --vf-* tokens", "theme presets", "density tokens", "utility classes"],
-      "mustComeBefore": ["@vyrnforge/ui-components/styles/index.css", "@vyrnforge/ui-data-grid/styles/index.css"],
-      "notes": "ui-core owns shared --vf-* design tokens, reset, density, utilities, and accessibility helpers."
+      "requiredFor": [
+        "shared --vf-* semantic tokens",
+        "theme presets",
+        "density contract",
+        "typography roles",
+        "motion and reduced-motion behavior",
+        "layering model",
+        "utility classes"
+      ],
+      "mustComeBefore": [
+        "@vyrnforge/ui-components/styles/index.css",
+        "@vyrnforge/ui-data-grid/styles/index.css"
+      ],
+      "notes": "ui-core owns shared --vf-* primitive and semantic tokens, reset, themes, density, typography, motion, layers, utilities, and accessibility helpers."
     },
     {
       "package": "@vyrnforge/ui-components",
       "importPath": "@vyrnforge/ui-components/styles/index.css",
-      "requiredFor": ["vf-* component classes", "shared component visual states"],
+      "requiredFor": [
+        "vf-* component classes",
+        "shared component visual states"
+      ],
       "mustComeBefore": ["@vyrnforge/ui-data-grid/styles/index.css"],
       "notes": "ui-components consumes --vf-* variables and owns vf-* component classes split by component family internally."
     },
     {
       "package": "@vyrnforge/ui-data-grid",
       "importPath": "@vyrnforge/ui-data-grid/styles/index.css",
-      "requiredFor": ["udg-* grid classes", "--udg-* grid variables", "grid layout and density"],
+      "requiredFor": [
+        "udg-* grid classes",
+        "--udg-* grid variables",
+        "grid layout and density"
+      ],
       "mustComeBefore": [],
       "notes": "ui-data-grid owns udg-* classes and --udg-* variables. The grid should work with fallback values but aligns best when ui-core is imported."
     }
@@ -40,8 +58,8 @@
     "Import ui-core styles before ui-components styles.",
     "Import ui-components styles before ui-data-grid styles.",
     "Do not import internal package CSS module files directly.",
-    "Override --vf-* tokens for app-wide theme changes.",
-    "Override --udg-* variables for grid-specific changes.",
+    "Override canonical --vf-* semantic roles for app-wide theme changes.",
+    "Use --udg-* only for genuinely grid-specific changes.",
     "Do not edit package CSS directly in consuming apps."
   ]
 }

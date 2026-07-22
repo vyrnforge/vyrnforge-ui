@@ -1,70 +1,304 @@
 :root {
+  /* Primitive color palette. Semantic roles below are the supported app contract. */
   --vf-color-white: #ffffff;
+  --vf-color-black: #000000;
   --vf-color-slate-50: #f8fafc;
   --vf-color-slate-100: #f1f5f9;
   --vf-color-slate-200: #e2e8f0;
   --vf-color-slate-300: #cbd5e1;
+  --vf-color-slate-400: #94a3b8;
   --vf-color-slate-500: #64748b;
+  --vf-color-slate-600: #475569;
   --vf-color-slate-700: #334155;
+  --vf-color-slate-800: #1e293b;
   --vf-color-slate-900: #0f172a;
+  --vf-color-slate-950: #020617;
   --vf-color-blue-50: #eff6ff;
   --vf-color-blue-100: #dbeafe;
+  --vf-color-blue-200: #bfdbfe;
+  --vf-color-blue-500: #3b82f6;
   --vf-color-blue-600: #2563eb;
   --vf-color-blue-700: #1d4ed8;
+  --vf-color-blue-800: #1e40af;
+  --vf-color-red-50: #fef2f2;
+  --vf-color-red-100: #fee2e2;
+  --vf-color-red-200: #fecaca;
   --vf-color-red-600: #dc2626;
+  --vf-color-red-700: #b91c1c;
+  --vf-color-red-800: #991b1b;
+  --vf-color-amber-50: #fffbeb;
+  --vf-color-amber-100: #fef3c7;
+  --vf-color-amber-200: #fde68a;
   --vf-color-amber-600: #d97706;
+  --vf-color-amber-700: #b45309;
+  --vf-color-amber-800: #92400e;
+  --vf-color-green-50: #ecfdf5;
+  --vf-color-green-100: #dcfce7;
+  --vf-color-green-200: #bbf7d0;
   --vf-color-green-600: #059669;
+  --vf-color-green-700: #047857;
+  --vf-color-green-800: #065f46;
+  --vf-color-sky-50: #f0f9ff;
+  --vf-color-sky-100: #e0f2fe;
+  --vf-color-sky-200: #bae6fd;
   --vf-color-sky-600: #0284c7;
-  --vf-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vf-color-sky-700: #0369a1;
+  --vf-color-sky-800: #075985;
+  --vf-color-violet-50: #f5f3ff;
+  --vf-color-violet-100: #ede9fe;
+  --vf-color-violet-200: #ddd6fe;
+  --vf-color-violet-600: #7c3aed;
+  --vf-color-violet-700: #6d28d9;
+  --vf-color-violet-800: #5b21b6;
+
+  /* Primitive typography and spacing scale. */
+  --vf-font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vf-font-family-mono:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --vf-font-size-2xs: 11px;
   --vf-font-size-xs: 12px;
   --vf-font-size-sm: 13px;
   --vf-font-size-md: 14px;
   --vf-font-size-lg: 16px;
   --vf-font-size-xl: 20px;
+  --vf-font-size-2xl: 24px;
+  --vf-font-size-3xl: 30px;
+  --vf-line-height-none: 1;
   --vf-line-height-tight: 1.25;
+  --vf-line-height-snug: 1.375;
   --vf-line-height-md: 1.5;
+  --vf-line-height-relaxed: 1.625;
+  --vf-font-weight-regular: 400;
+  --vf-font-weight-medium: 500;
+  --vf-font-weight-semibold: 600;
+  --vf-font-weight-bold: 700;
+  --vf-letter-spacing-tight: -0.02em;
+  --vf-letter-spacing-normal: 0;
+  --vf-letter-spacing-wide: 0.02em;
+  --vf-space-0: 0;
   --vf-space-1: 4px;
   --vf-space-2: 8px;
   --vf-space-3: 12px;
   --vf-space-4: 16px;
   --vf-space-5: 20px;
   --vf-space-6: 24px;
+  --vf-space-7: 28px;
+  --vf-space-8: 32px;
+  --vf-space-10: 40px;
+  --vf-space-12: 48px;
+  --vf-radius-none: 0;
   --vf-radius-sm: 4px;
   --vf-radius-md: 6px;
   --vf-radius-lg: 8px;
+  --vf-radius-xl: 12px;
+  --vf-radius-full: 9999px;
   --vf-shadow-sm: 0 1px 2px rgb(15 23 42 / 8%);
   --vf-shadow-md: 0 10px 24px rgb(15 23 42 / 10%);
-  --vf-z-base: 0;
-  --vf-z-sticky: 20;
-  --vf-z-dropdown: 40;
-  --vf-z-popover: 50;
-  --vf-z-tooltip: 60;
-  --vf-z-overlay: 70;
-  --vf-z-dialog: 80;
-  --vf-z-toast: 90;
-  --vf-transition-fast: 140ms ease;
+  --vf-shadow-lg: 0 20px 48px rgb(15 23 42 / 16%);
+
+  /*
+   * Compatibility source tokens.
+   * Existing app overrides continue to feed the canonical semantic roles.
+   */
   --vf-bg: var(--vf-color-slate-50);
   --vf-surface: var(--vf-color-white);
   --vf-surface-subtle: var(--vf-color-slate-100);
   --vf-surface-raised: var(--vf-color-white);
   --vf-text: #172033;
-  --vf-text-muted: #64748b;
-  --vf-text-strong: #0f172a;
+  --vf-text-muted: var(--vf-color-slate-500);
+  --vf-text-strong: var(--vf-color-slate-900);
   --vf-border: #d8e0ea;
   --vf-border-strong: #b8c4d4;
   --vf-primary: var(--vf-color-blue-600);
   --vf-primary-hover: var(--vf-color-blue-700);
   --vf-primary-soft: var(--vf-color-blue-100);
   --vf-danger: var(--vf-color-red-600);
-  --vf-danger-soft: #fee2e2;
+  --vf-danger-soft: var(--vf-color-red-100);
   --vf-warning: var(--vf-color-amber-600);
-  --vf-warning-soft: #fef3c7;
+  --vf-warning-soft: var(--vf-color-amber-100);
   --vf-success: var(--vf-color-green-600);
-  --vf-success-soft: #dcfce7;
+  --vf-success-soft: var(--vf-color-green-100);
   --vf-info: var(--vf-color-sky-600);
-  --vf-info-soft: #e0f2fe;
-  --vf-focus-ring: #2563eb;
-  --vf-control-height: 36px;
-  --vf-control-padding-x: 12px;
-  --vf-row-height: 44px;
+  --vf-info-soft: var(--vf-color-sky-100);
+  --vf-focus-ring: var(--vf-color-blue-600);
+
+  /* VF-3002: semantic surfaces, text hierarchy, borders, and dividers. */
+  --vf-surface-page: var(--vf-bg);
+  --vf-surface-canvas: var(--vf-surface-subtle);
+  --vf-surface-default: var(--vf-surface);
+  --vf-surface-muted: var(--vf-color-slate-100);
+  --vf-surface-overlay: var(--vf-surface-raised);
+  --vf-surface-sunken: var(--vf-color-slate-100);
+  --vf-surface-scrim: rgb(15 23 42 / 48%);
+  --vf-text-primary: var(--vf-text);
+  --vf-text-secondary: var(--vf-text-muted);
+  --vf-text-tertiary: var(--vf-color-slate-500);
+  --vf-text-inverse: var(--vf-color-white);
+  --vf-text-disabled: var(--vf-color-slate-400);
+  --vf-text-link: var(--vf-primary);
+  --vf-text-link-hover: var(--vf-primary-hover);
+  --vf-border-subtle: var(--vf-color-slate-200);
+  --vf-border-default: var(--vf-border);
+  --vf-border-emphasis: var(--vf-border-strong);
+  --vf-divider: var(--vf-border-subtle);
+
+  /* VF-3003: interactive, selected, disabled, and focus semantics. */
+  --vf-interactive-primary: var(--vf-primary);
+  --vf-interactive-primary-hover: var(--vf-primary-hover);
+  --vf-interactive-primary-active: var(--vf-color-blue-800);
+  --vf-interactive-primary-text: var(--vf-text-inverse);
+  --vf-interactive-selected-background: var(--vf-primary-soft);
+  --vf-interactive-selected-border: var(--vf-primary);
+  --vf-interactive-selected-text: var(--vf-color-blue-800);
+  --vf-interactive-neutral-hover: var(--vf-surface-subtle);
+  --vf-interactive-neutral-active: var(--vf-surface-muted);
+  --vf-control-background: var(--vf-surface-default);
+  --vf-control-background-hover: var(--vf-surface-subtle);
+  --vf-control-background-active: var(--vf-surface-muted);
+  --vf-control-border: var(--vf-border-default);
+  --vf-control-border-hover: var(--vf-border-emphasis);
+  --vf-control-disabled-background: var(--vf-surface-muted);
+  --vf-control-disabled-border: var(--vf-border-subtle);
+  --vf-control-disabled-text: var(--vf-text-disabled);
+  --vf-focus-color: var(--vf-focus-ring);
+  --vf-focus-width: 2px;
+  --vf-focus-offset: 2px;
+  --vf-focus-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--vf-focus-color) 24%, transparent);
+
+  /* VF-3004: status roles include text, background, border, and indicator. */
+  --vf-status-success-text: var(--vf-color-green-700);
+  --vf-status-success-background: var(--vf-success-soft);
+  --vf-status-success-border: var(--vf-color-green-200);
+  --vf-status-success-indicator: var(--vf-success);
+  --vf-status-warning-text: var(--vf-color-amber-700);
+  --vf-status-warning-background: var(--vf-warning-soft);
+  --vf-status-warning-border: var(--vf-color-amber-200);
+  --vf-status-warning-indicator: var(--vf-warning);
+  --vf-status-error-text: var(--vf-color-red-700);
+  --vf-status-error-background: var(--vf-danger-soft);
+  --vf-status-error-border: var(--vf-color-red-200);
+  --vf-status-error-indicator: var(--vf-danger);
+  --vf-status-info-text: var(--vf-color-sky-700);
+  --vf-status-info-background: var(--vf-info-soft);
+  --vf-status-info-border: var(--vf-color-sky-200);
+  --vf-status-info-indicator: var(--vf-info);
+  --vf-status-pending-text: var(--vf-color-violet-700);
+  --vf-status-pending-background: var(--vf-color-violet-50);
+  --vf-status-pending-border: var(--vf-color-violet-200);
+  --vf-status-pending-indicator: var(--vf-color-violet-600);
+  --vf-status-neutral-text: var(--vf-color-slate-700);
+  --vf-status-neutral-background: var(--vf-color-slate-100);
+  --vf-status-neutral-border: var(--vf-color-slate-300);
+  --vf-status-neutral-indicator: var(--vf-color-slate-500);
+
+  /* VF-3005: one density and control-size contract. */
+  --vf-hit-target-min: 24px;
+  --vf-control-height-sm: 30px;
+  --vf-control-height-md: 36px;
+  --vf-control-height-lg: 42px;
+  --vf-control-padding-x-sm: 10px;
+  --vf-control-padding-x-md: 12px;
+  --vf-control-padding-x-lg: 14px;
+  --vf-control-padding-y-sm: 4px;
+  --vf-control-padding-y-md: 6px;
+  --vf-control-padding-y-lg: 8px;
+  --vf-icon-size-sm: 14px;
+  --vf-icon-size-md: 16px;
+  --vf-icon-size-lg: 20px;
+  --vf-row-height-sm: 36px;
+  --vf-row-height-md: 44px;
+  --vf-row-height-lg: 52px;
+  --vf-control-height: var(--vf-control-height-md);
+  --vf-control-padding-x: var(--vf-control-padding-x-md);
+  --vf-control-padding-y: var(--vf-control-padding-y-md);
+  --vf-icon-size: var(--vf-icon-size-md);
+  --vf-row-height: var(--vf-row-height-md);
+  --vf-component-gap: var(--vf-space-2);
+
+  /* VF-3006: named typography roles. */
+  --vf-type-display-font-family: var(--vf-font-family);
+  --vf-type-display-font-size: var(--vf-font-size-3xl);
+  --vf-type-display-font-weight: var(--vf-font-weight-bold);
+  --vf-type-display-line-height: 1.2;
+  --vf-type-display-letter-spacing: var(--vf-letter-spacing-tight);
+  --vf-type-page-title-font-family: var(--vf-font-family);
+  --vf-type-page-title-font-size: var(--vf-font-size-2xl);
+  --vf-type-page-title-font-weight: var(--vf-font-weight-bold);
+  --vf-type-page-title-line-height: var(--vf-line-height-tight);
+  --vf-type-page-title-letter-spacing: var(--vf-letter-spacing-tight);
+  --vf-type-section-title-font-family: var(--vf-font-family);
+  --vf-type-section-title-font-size: var(--vf-font-size-lg);
+  --vf-type-section-title-font-weight: var(--vf-font-weight-semibold);
+  --vf-type-section-title-line-height: var(--vf-line-height-snug);
+  --vf-type-section-title-letter-spacing: var(--vf-letter-spacing-normal);
+  --vf-type-label-font-family: var(--vf-font-family);
+  --vf-type-label-font-size: var(--vf-font-size-sm);
+  --vf-type-label-font-weight: var(--vf-font-weight-semibold);
+  --vf-type-label-line-height: var(--vf-line-height-md);
+  --vf-type-label-letter-spacing: var(--vf-letter-spacing-normal);
+  --vf-type-body-font-family: var(--vf-font-family);
+  --vf-type-body-font-size: var(--vf-font-size-md);
+  --vf-type-body-font-weight: var(--vf-font-weight-regular);
+  --vf-type-body-line-height: var(--vf-line-height-md);
+  --vf-type-body-letter-spacing: var(--vf-letter-spacing-normal);
+  --vf-type-caption-font-family: var(--vf-font-family);
+  --vf-type-caption-font-size: var(--vf-font-size-xs);
+  --vf-type-caption-font-weight: var(--vf-font-weight-regular);
+  --vf-type-caption-line-height: var(--vf-line-height-snug);
+  --vf-type-caption-letter-spacing: var(--vf-letter-spacing-normal);
+  --vf-type-code-font-family: var(--vf-font-family-mono);
+  --vf-type-code-font-size: var(--vf-font-size-sm);
+  --vf-type-code-font-weight: var(--vf-font-weight-regular);
+  --vf-type-code-line-height: var(--vf-line-height-md);
+  --vf-type-code-letter-spacing: var(--vf-letter-spacing-normal);
+  --vf-type-numeric-font-family: var(--vf-font-family);
+  --vf-type-numeric-font-size: var(--vf-font-size-md);
+  --vf-type-numeric-font-weight: var(--vf-font-weight-semibold);
+  --vf-type-numeric-line-height: var(--vf-line-height-md);
+  --vf-type-numeric-letter-spacing: var(--vf-letter-spacing-normal);
+
+  /* VF-3007: motion semantics. */
+  --vf-motion-duration-instant: 0ms;
+  --vf-motion-duration-fast: 120ms;
+  --vf-motion-duration-standard: 180ms;
+  --vf-motion-duration-slow: 280ms;
+  --vf-motion-duration-deliberate: 420ms;
+  --vf-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --vf-motion-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --vf-motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --vf-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --vf-motion-transition-color:
+    color var(--vf-motion-duration-fast) var(--vf-motion-easing-standard),
+    background-color var(--vf-motion-duration-fast)
+      var(--vf-motion-easing-standard),
+    border-color var(--vf-motion-duration-fast) var(--vf-motion-easing-standard),
+    box-shadow var(--vf-motion-duration-fast) var(--vf-motion-easing-standard);
+  --vf-motion-transition-opacity: opacity var(--vf-motion-duration-standard)
+    var(--vf-motion-easing-standard);
+  --vf-motion-transition-transform: transform var(--vf-motion-duration-standard)
+    var(--vf-motion-easing-standard);
+  --vf-transition-fast: var(--vf-motion-duration-fast)
+    var(--vf-motion-easing-standard);
+
+  /* VF-3008: deterministic layering. */
+  --vf-layer-base: 0;
+  --vf-layer-raised: 10;
+  --vf-layer-sticky: 20;
+  --vf-layer-dropdown: 40;
+  --vf-layer-popover: 50;
+  --vf-layer-tooltip: 60;
+  --vf-layer-scrim: 70;
+  --vf-layer-modal: 80;
+  --vf-layer-toast: 90;
+  --vf-layer-debug: 9999;
+  --vf-z-base: var(--vf-layer-base);
+  --vf-z-sticky: var(--vf-layer-sticky);
+  --vf-z-dropdown: var(--vf-layer-dropdown);
+  --vf-z-popover: var(--vf-layer-popover);
+  --vf-z-tooltip: var(--vf-layer-tooltip);
+  --vf-z-overlay: var(--vf-layer-scrim);
+  --vf-z-dialog: var(--vf-layer-modal);
+  --vf-z-toast: var(--vf-layer-toast);
 }

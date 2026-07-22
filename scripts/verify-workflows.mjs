@@ -239,6 +239,7 @@ for (const command of [
   "lint",
   "lint:css",
   "verify:metadata",
+  "verify:design-tokens",
   "verify:component-maturity",
   "verify:maturity-closure",
   "verify:assistive-technology",
@@ -318,6 +319,7 @@ const rootPackage = JSON.parse(read("package.json"));
 for (const command of [
   "verify:ci",
   "verify:metadata",
+  "verify:design-tokens",
   "verify:component-maturity",
   "verify:maturity-closure",
   "verify:assistive-technology",

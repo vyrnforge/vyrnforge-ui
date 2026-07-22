@@ -4,13 +4,37 @@
   "packages": [
     {
       "name": "@vyrnforge/ui-core",
-      "purpose": "Shared VyrnForge design foundation for tokens, themes, density, utilities, and theme helpers.",
-      "owns": ["tokens", "themes", "density", "utility classes", "theme helper contracts"],
-      "doesNotOwn": ["React components", "data grid behavior", "app state", "backend fetching", "business workflows"],
+      "purpose": "Shared VyrnForge design foundation for semantic tokens, themes, density, typography, motion, layers, utilities, and theme helpers.",
+      "owns": [
+        "primitive tokens",
+        "semantic tokens",
+        "themes",
+        "density",
+        "typography roles",
+        "motion and reduced-motion contract",
+        "layering model",
+        "utility classes",
+        "theme helper contracts"
+      ],
+      "doesNotOwn": [
+        "React components",
+        "data grid behavior",
+        "app state",
+        "backend fetching",
+        "business workflows"
+      ],
       "cssImport": "@vyrnforge/ui-core/styles/index.css",
       "apiDoc": "docs/api/ui-core-api.md",
       "dependsOn": [],
-      "mustNotDependOn": ["@vyrnforge/ui-components", "@vyrnforge/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-data-grid",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
       "status": "current",
       "publicEntryPoints": [
         "@vyrnforge/ui-core",
@@ -18,17 +42,39 @@
         "@vyrnforge/ui-core/style.css",
         "@vyrnforge/ui-core/index.css"
       ],
-      "notes": "Lowest-level package. Keep dependency-free apart from build/dev tooling."
+      "notes": "Lowest-level dependency-free runtime package. Canonical semantic token metadata lives in docs/metadata/design-tokens.json."
     },
     {
       "name": "@vyrnforge/ui-components",
       "purpose": "Reusable native-first React primitives and application components.",
-      "owns": ["actions", "typography", "forms", "data management", "feedback", "layout", "overlays", "shared vf-* classes"],
-      "doesNotOwn": ["data grid algorithms", "grid row models", "backend data", "global store", "tenant/auth/permissions"],
+      "owns": [
+        "actions",
+        "typography",
+        "forms",
+        "data management",
+        "feedback",
+        "layout",
+        "overlays",
+        "shared vf-* classes"
+      ],
+      "doesNotOwn": [
+        "data grid algorithms",
+        "grid row models",
+        "backend data",
+        "global store",
+        "tenant/auth/permissions"
+      ],
       "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",
       "dependsOn": ["@vyrnforge/ui-core"],
-      "mustNotDependOn": ["@vyrnforge/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-data-grid",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
       "status": "current",
       "publicEntryPoints": [
         "@vyrnforge/ui-components",
@@ -41,8 +87,20 @@
     {
       "name": "@vyrnforge/ui-data-grid",
       "purpose": "Specialized enterprise data-management grid and grid contracts.",
-      "owns": ["UniversalDataGrid", "grid-specific udg-* styles", "grid state contracts", "grid core helpers", "persistence/server/export adapters"],
-      "doesNotOwn": ["API calls", "export file generation by default", "report engine", "global store", "backend business workflows"],
+      "owns": [
+        "UniversalDataGrid",
+        "grid-specific udg-* styles",
+        "grid state contracts",
+        "grid core helpers",
+        "persistence/server/export adapters"
+      ],
+      "doesNotOwn": [
+        "API calls",
+        "export file generation by default",
+        "report engine",
+        "global store",
+        "backend business workflows"
+      ],
       "cssImport": "@vyrnforge/ui-data-grid/styles/index.css",
       "apiDoc": "docs/api/ui-data-grid-api.md",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],

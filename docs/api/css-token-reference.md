@@ -1,92 +1,194 @@
 # CSS Token Reference
 
-VyrnForge UI uses CSS variables as the public styling contract.
+VyrnForge UI uses CSS custom properties as the public styling contract.
 
-Use shared `--vf-*` tokens for app-wide theme customization. Use grid-specific `--udg-*` variables only for data-grid overrides.
+- Shared semantic roles use `--vf-*` and are owned by `@vyrnforge/ui-core`.
+- Grid-only roles use `--udg-*` and are owned by
+  `@vyrnforge/ui-data-grid`.
+- Component classes use `vf-*`; grid classes use `udg-*`.
 
-Package CSS may be split internally, but token ownership does not change: `@vyrnforge/ui-core` owns shared `--vf-*` tokens and `@vyrnforge/ui-data-grid` owns grid-specific `--udg-*` variables.
+The machine-readable canonical inventory is
+`docs/metadata/design-tokens.json`. The typed JavaScript inventory is exported
+from `@vyrnforge/ui-core`.
 
-## Shared dv Tokens
+## Semantic surfaces
 
-| Token | Purpose |
-| --- | --- |
-| `--vf-bg` | App/page background. |
-| `--vf-surface` | Default component surface. |
-| `--vf-surface-subtle` | Subtle surface or low-emphasis background. |
-| `--vf-surface-raised` | Raised surface. |
-| `--vf-text` | Default text. |
-| `--vf-text-muted` | Secondary text. |
-| `--vf-text-strong` | Strong/high-emphasis text. |
-| `--vf-border` | Default border. |
-| `--vf-border-strong` | Stronger border. |
-| `--vf-primary` | Primary brand/action color. |
-| `--vf-primary-hover` | Primary hover color. |
-| `--vf-primary-soft` | Soft primary background. |
-| `--vf-danger` | Danger status color. |
-| `--vf-danger-soft` | Soft danger background. |
-| `--vf-warning` | Warning status color. |
-| `--vf-warning-soft` | Soft warning background. |
-| `--vf-success` | Success status color. |
-| `--vf-success-soft` | Soft success background. |
-| `--vf-info` | Info status color. |
-| `--vf-info-soft` | Soft info background. |
-| `--vf-focus-ring` | Focus outline/ring color. |
-| `--vf-radius-sm` | Small radius. |
-| `--vf-radius-md` | Medium radius. |
-| `--vf-radius-lg` | Large radius. |
-| `--vf-shadow-sm` | Small shadow. |
-| `--vf-shadow-md` | Medium shadow. |
-| `--vf-font-family` | Default font stack. |
-| `--vf-control-height` | Standard control height by density. |
-| `--vf-row-height` | Standard row height by density. |
+| Token                  | Purpose                                        |
+| ---------------------- | ---------------------------------------------- |
+| `--vf-surface-page`    | Application/page background.                   |
+| `--vf-surface-canvas`  | Secondary canvas or workspace background.      |
+| `--vf-surface-default` | Default component surface.                     |
+| `--vf-surface-muted`   | Muted or disabled surface.                     |
+| `--vf-surface-overlay` | Menus, popovers, dialogs, and raised overlays. |
+| `--vf-surface-sunken`  | Inset or recessed region.                      |
+| `--vf-surface-scrim`   | Modal backdrop/scrim.                          |
 
-## Grid udg Tokens
+## Text and borders
 
-`--udg-*` variables are grid-specific. They should be overridden only for grid layout and visual behavior.
+| Token                  | Purpose                              |
+| ---------------------- | ------------------------------------ |
+| `--vf-text-primary`    | Default high-emphasis text.          |
+| `--vf-text-secondary`  | Supporting text.                     |
+| `--vf-text-tertiary`   | Low-emphasis metadata.               |
+| `--vf-text-inverse`    | Text on strong/inverse backgrounds.  |
+| `--vf-text-disabled`   | Disabled text.                       |
+| `--vf-text-link`       | Link text.                           |
+| `--vf-text-link-hover` | Hovered link text.                   |
+| `--vf-border-subtle`   | Low-emphasis boundary.               |
+| `--vf-border-default`  | Standard control/component boundary. |
+| `--vf-border-emphasis` | Strong boundary or hover emphasis.   |
+| `--vf-divider`         | Section/list divider.                |
 
-Stable public grid variables include:
+## Interactive and focus roles
 
-| Token | Purpose |
-| --- | --- |
-| `--udg-bg` | Grid background. |
-| `--udg-surface` | Grid surface. |
-| `--udg-header-bg` | Header background. |
-| `--udg-row-bg` | Row background. |
-| `--udg-row-hover-bg` | Row hover background. |
-| `--udg-row-selected-bg` | Selected row background. |
-| `--udg-text` | Grid text. |
-| `--udg-text-muted` | Muted grid text. |
-| `--udg-border` | Grid border. |
-| `--udg-primary` | Grid primary color. |
-| `--udg-focus-ring` | Grid focus ring. |
-| `--udg-radius` | Grid radius. |
-| `--udg-row-height` | Grid row height. |
-| `--udg-header-height` | Grid header height. |
-| `--udg-control-height` | Grid toolbar/control height. |
+| Token family                  | Purpose                                                |
+| ----------------------------- | ------------------------------------------------------ |
+| `--vf-interactive-primary*`   | Primary default, hover, active, and text roles.        |
+| `--vf-interactive-selected-*` | Selected background, border, and text.                 |
+| `--vf-interactive-neutral-*`  | Neutral hover and active feedback.                     |
+| `--vf-control-background*`    | Default, hover, active, and disabled control surfaces. |
+| `--vf-control-border*`        | Default, hover, and disabled control borders.          |
+| `--vf-control-disabled-text`  | Disabled control content.                              |
+| `--vf-focus-color`            | Visible focus color.                                   |
+| `--vf-focus-width`            | Focus outline width.                                   |
+| `--vf-focus-offset`           | Focus outline offset.                                  |
+| `--vf-focus-shadow`           | Optional focus halo.                                   |
 
-Grid variables should fallback to `--vf-*` tokens where practical so shared themes affect the grid.
+Focus must remain visible in light, dark, and enterprise themes. Do not replace
+focus with a color-only state.
 
-## App-Wide Override
+## Status and feedback roles
+
+Each status provides text, background, border, and indicator variants:
+
+```text
+--vf-status-{role}-text
+--vf-status-{role}-background
+--vf-status-{role}-border
+--vf-status-{role}-indicator
+```
+
+Supported roles:
+
+- `success`
+- `warning`
+- `error`
+- `info`
+- `pending`
+- `neutral`
+
+Status components must also provide text, iconography, shape, or another
+non-color cue.
+
+## Density and control sizing
+
+Fixed scale tokens:
+
+- `--vf-control-height-sm|md|lg`
+- `--vf-control-padding-x-sm|md|lg`
+- `--vf-control-padding-y-sm|md|lg`
+- `--vf-icon-size-sm|md|lg`
+- `--vf-row-height-sm|md|lg`
+- `--vf-hit-target-min`
+
+Active density aliases:
+
+- `--vf-control-height`
+- `--vf-control-padding-x`
+- `--vf-control-padding-y`
+- `--vf-icon-size`
+- `--vf-row-height`
+- `--vf-component-gap`
+
+Canonical density selectors are `compact`, `balanced`, and `spacious`.
+`standard` aliases `balanced`; `comfortable` aliases `spacious`.
+
+## Typography roles
+
+Every role exposes `font-family`, `font-size`, `font-weight`, `line-height`,
+and `letter-spacing` tokens:
+
+```text
+--vf-type-{role}-{property}
+```
+
+Supported roles:
+
+- `display`
+- `page-title`
+- `section-title`
+- `label`
+- `body`
+- `caption`
+- `code`
+- `numeric`
+
+Matching utility classes are available as `.vf-type-{role}`.
+
+## Motion
+
+| Token                              | Purpose                                |
+| ---------------------------------- | -------------------------------------- |
+| `--vf-motion-duration-instant`     | Immediate state updates.               |
+| `--vf-motion-duration-fast`        | Small color or control feedback.       |
+| `--vf-motion-duration-standard`    | Standard visibility/position change.   |
+| `--vf-motion-duration-slow`        | Larger contextual transition.          |
+| `--vf-motion-duration-deliberate`  | Rare deliberate transition.            |
+| `--vf-motion-easing-standard`      | Standard motion easing.                |
+| `--vf-motion-easing-enter`         | Entrance easing.                       |
+| `--vf-motion-easing-exit`          | Exit easing.                           |
+| `--vf-motion-easing-emphasized`    | Emphasized but non-essential motion.   |
+| `--vf-motion-transition-color`     | Shared color/border/shadow transition. |
+| `--vf-motion-transition-opacity`   | Shared opacity transition.             |
+| `--vf-motion-transition-transform` | Shared transform transition.           |
+
+`prefers-reduced-motion: reduce`, `[data-motion="reduced"]`, and
+`.vf-motion-reduced` shorten non-essential durations and use linear easing.
+
+## Layering
+
+| Token                 | Level | Intended use                                     |
+| --------------------- | ----: | ------------------------------------------------ |
+| `--vf-layer-base`     |     0 | Normal document flow.                            |
+| `--vf-layer-raised`   |    10 | Raised cards and local elevation.                |
+| `--vf-layer-sticky`   |    20 | Sticky headers/columns.                          |
+| `--vf-layer-dropdown` |    40 | Dropdown content.                                |
+| `--vf-layer-popover`  |    50 | Popovers and menus requiring stronger elevation. |
+| `--vf-layer-tooltip`  |    60 | Tooltips.                                        |
+| `--vf-layer-scrim`    |    70 | Modal backdrop.                                  |
+| `--vf-layer-modal`    |    80 | Dialogs and modal drawers.                       |
+| `--vf-layer-toast`    |    90 | Toast viewport.                                  |
+| `--vf-layer-debug`    |  9999 | Development/debug overlays only.                 |
+
+Historical `--vf-z-*` tokens remain aliases during migration.
+
+## Compatibility sources
+
+Existing app overrides using `--vf-bg`, `--vf-surface`, `--vf-text`,
+`--vf-primary`, status aliases, and `--vf-focus-ring` continue to feed the new
+semantic roles. New work should prefer canonical names.
+
+## App override
 
 ```css
 .my-app {
-  --vf-primary: #003b71;
+  --vf-interactive-primary: #003b71;
+  --vf-interactive-primary-hover: #002f5b;
+  --vf-focus-color: #005ea8;
   --vf-radius-md: 10px;
 }
 ```
 
-## Grid-Specific Override
+During the compatibility period, apps with old component versions may also
+retain their existing `--vf-primary*` overrides.
+
+## Grid override
 
 ```css
 .my-app .udg {
   --udg-row-height: 42px;
-  --udg-header-bg: #f8fafc;
+  --udg-header-bg: var(--vf-surface-canvas);
 }
 ```
 
-## Rules
-
-- Prefer semantic `--vf-*` tokens over hard-coded colors.
-- Use `--udg-*` only for grid-specific behavior or visuals.
-- Keep overrides scoped to the app or feature area.
-- Do not edit package CSS directly.
+Use `--udg-*` only for decisions that are genuinely grid-specific.

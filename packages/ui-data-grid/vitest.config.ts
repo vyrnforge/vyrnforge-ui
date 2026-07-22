@@ -2,6 +2,22 @@ import { defineConfig } from "vitest/config";
 import { fileURLToPath } from "node:url";
 
 export default defineConfig({
+  resolve: {
+    alias: [
+      {
+        find: /^@vyrnforge\/ui-components$/,
+        replacement: fileURLToPath(
+          new URL("../ui-components/src/index.ts", import.meta.url),
+        ),
+      },
+      {
+        find: /^@vyrnforge\/ui-core$/,
+        replacement: fileURLToPath(
+          new URL("../ui-core/src/index.ts", import.meta.url),
+        ),
+      },
+    ],
+  },
   test: {
     coverage: {
       all: true,
@@ -22,21 +38,5 @@ export default defineConfig({
         statements: 38,
       },
     },
-  },
-  resolve: {
-    alias: [
-      {
-        find: /^@vyrnforge\/ui-components$/,
-        replacement: fileURLToPath(
-          new URL("../ui-components/src/index.ts", import.meta.url),
-        ),
-      },
-      {
-        find: /^@vyrnforge\/ui-core$/,
-        replacement: fileURLToPath(
-          new URL("../ui-core/src/index.ts", import.meta.url),
-        ),
-      },
-    ],
   },
 });

@@ -4,8 +4,17 @@ const packages = [
   {
     name: "@vyrnforge/ui-core",
     role: "Shared foundation",
-    owns: ["tokens", "themes", "density", "utilities"],
-    notes: "Must stay dependency-light and must not own React components or grid behavior."
+    owns: [
+      "semantic tokens",
+      "themes",
+      "density",
+      "typography",
+      "motion",
+      "layers",
+      "utilities",
+    ],
+    notes:
+      "Must stay dependency-light and must not own React components or grid behavior.",
   },
   {
     name: "@vyrnforge/ui-components",
@@ -15,9 +24,9 @@ const packages = [
       "application components",
       "overlays",
       "forms",
-      "feedback"
+      "feedback",
     ],
-    notes: "May depend on ui-core. Must not depend on ui-data-grid."
+    notes: "May depend on ui-core. Must not depend on ui-data-grid.",
   },
   {
     name: "@vyrnforge/ui-data-grid",
@@ -26,10 +35,11 @@ const packages = [
       "UniversalDataGrid",
       "grid state",
       "grid adapters",
-      "grid-specific styles"
+      "grid-specific styles",
     ],
-    notes: "May depend on ui-core and ui-components. Apps own fetching and business state."
-  }
+    notes:
+      "May depend on ui-core and ui-components. Apps own fetching and business state.",
+  },
 ];
 
 const dependencyRules = [
@@ -37,7 +47,7 @@ const dependencyRules = [
   "ui-data-grid -> ui-core",
   "ui-data-grid -> ui-components",
   "never ui-core -> ui-components or ui-data-grid",
-  "never ui-components -> ui-data-grid"
+  "never ui-components -> ui-data-grid",
 ];
 
 export function PackageReferencePage() {
@@ -45,7 +55,11 @@ export function PackageReferencePage() {
     <div className="vf-docs-reference">
       <div className="vf-docs-package-grid">
         {packages.map((packageInfo) => (
-          <Card className="vf-docs-package-card" key={packageInfo.name} padding="lg">
+          <Card
+            className="vf-docs-package-card"
+            key={packageInfo.name}
+            padding="lg"
+          >
             <div className="vf-docs-package-card__header">
               <Heading level={3} size="md">
                 {packageInfo.name}

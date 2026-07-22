@@ -6,15 +6,16 @@ queryable repository facts and evidence records.
 
 ## Files
 
-| File                                | Purpose                                                                                  |
-| ----------------------------------- | ---------------------------------------------------------------------------------------- |
-| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                   |
-| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence. |
-| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.             |
-| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                 |
-| `css-imports.json`                  | Required CSS import order and styling ownership.                                         |
-| `state-contracts.json`              | State ownership levels and adapter policies.                                             |
-| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                 |
+| File                                | Purpose                                                                                            |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                             |
+| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.           |
+| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                       |
+| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                           |
+| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges. |
+| `css-imports.json`                  | Required CSS import order and styling ownership.                                                   |
+| `state-contracts.json`              | State ownership levels and adapter policies.                                                       |
+| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                           |
 
 ## Component metadata maintenance
 
@@ -54,3 +55,18 @@ npm run verify:assistive-technology:release
 Canonical maintenance rules live in
 `docs/governance/04-metadata-maintenance.md`; accessibility execution rules live
 in `docs/architecture/05-accessibility-standards.md`.
+
+## Design token metadata
+
+`design-tokens.json` is the structured S3 contract for shared semantic roles.
+It is aligned with `packages/ui-core/src/theme/tokenContract.ts` and the
+`ui-core` CSS foundation.
+
+```bash
+npm run test:design-tokens
+npm run verify:design-tokens
+```
+
+The verifier rejects missing categories, duplicate names, incomplete theme
+presets, broken compatibility bridges, missing density aliases, invalid layer
+order, and incomplete reduced-motion behavior.
