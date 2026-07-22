@@ -12,10 +12,18 @@ const output =
   outputArgumentIndex >= 0 && process.argv[outputArgumentIndex + 1]
     ? process.argv[outputArgumentIndex + 1]
     : "docs/governance/repository-inventory.md";
-const packageDirectories = ["ui-core", "ui-components", "ui-data-grid"];
+const packageDirectories = [
+  "ui-core",
+  "ui-behaviors",
+  "ui-components",
+  "ui-elements",
+  "ui-data-grid",
+];
 const owners = {
   "@vyrnforge/ui-core": "UI Platform",
+  "@vyrnforge/ui-behaviors": "Multi-Framework Team",
   "@vyrnforge/ui-components": "Component Team",
+  "@vyrnforge/ui-elements": "Web Components Team",
   "@vyrnforge/ui-data-grid": "Data Grid Team",
 };
 const aliases = {

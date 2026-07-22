@@ -9,7 +9,9 @@ export const scopeKeys = [
   "quality",
   "metadata",
   "ui_core",
+  "ui_behaviors",
   "ui_components",
+  "ui_elements",
   "ui_data_grid",
   "packages",
   "consumer",
@@ -63,11 +65,19 @@ function markPackageRuntime(scope, packageName) {
 
   if (packageName === "ui-core") {
     scope.ui_core = true;
+    scope.ui_behaviors = true;
     scope.ui_components = true;
+    scope.ui_elements = true;
     scope.ui_data_grid = true;
+  } else if (packageName === "ui-behaviors") {
+    scope.ui_behaviors = true;
+    scope.ui_components = true;
+    scope.ui_elements = true;
   } else if (packageName === "ui-components") {
     scope.ui_components = true;
     scope.ui_data_grid = true;
+  } else if (packageName === "ui-elements") {
+    scope.ui_elements = true;
   } else {
     scope.ui_data_grid = true;
   }
@@ -75,13 +85,11 @@ function markPackageRuntime(scope, packageName) {
 
 function markPackageTests(scope, packageName) {
   scope.quality = true;
-  if (packageName === "ui-core") {
-    scope.ui_core = true;
-  } else if (packageName === "ui-components") {
-    scope.ui_components = true;
-  } else {
-    scope.ui_data_grid = true;
-  }
+  if (packageName === "ui-core") scope.ui_core = true;
+  else if (packageName === "ui-behaviors") scope.ui_behaviors = true;
+  else if (packageName === "ui-components") scope.ui_components = true;
+  else if (packageName === "ui-elements") scope.ui_elements = true;
+  else scope.ui_data_grid = true;
 }
 
 function markPackagePayload(scope) {
@@ -99,9 +107,10 @@ function markFull(scope) {
 }
 
 function classifyPackageFile(file, scope, reasons) {
-  const match = /^packages\/(ui-core|ui-components|ui-data-grid)\/(.+)$/.exec(
-    file,
-  );
+  const match =
+    /^packages\/(ui-core|ui-behaviors|ui-components|ui-elements|ui-data-grid)\/(.+)$/.exec(
+      file,
+    );
   if (!match) {
     return false;
   }

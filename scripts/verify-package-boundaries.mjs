@@ -17,8 +17,16 @@ const packageDefinitions = [
   {
     name: "@vyrnforge/ui-behaviors",
     directory: "packages/ui-behaviors",
-    required: false,
+    required: true,
     allowedDependencies: new Set(["@vyrnforge/ui-core"]),
+    forbiddenDomIdentifiers: [
+      "HTMLElement",
+      "ElementInternals",
+      "CustomEvent",
+      "document",
+      "window",
+      "customElements",
+    ],
     forbiddenFrameworkSpecifiers: ["react", "react-dom", "vue", "@angular/"],
   },
   {
@@ -34,7 +42,7 @@ const packageDefinitions = [
   {
     name: "@vyrnforge/ui-elements",
     directory: "packages/ui-elements",
-    required: false,
+    required: true,
     allowedDependencies: new Set([
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
@@ -52,6 +60,10 @@ const packageDefinitions = [
     forbiddenFrameworkSpecifiers: [],
   },
 ];
+for (const packageDefinition of packageDefinitions) {
+  packageDefinition.forbiddenDomIdentifiers ??= [];
+}
+
 const sourceExtensions = new Set([
   ".ts",
   ".tsx",
@@ -227,6 +239,14 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
     for (const sourceFile of collectSourceFiles(sourceDirectory)) {
       const source = readFileSync(sourceFile, "utf8");
       const sourceFilePath = relativePath(root, sourceFile);
+
+      for (const identifier of packageDefinition.forbiddenDomIdentifiers) {
+        if (new RegExp(`\\b${identifier}\\b`).test(source)) {
+          failures.push(
+            `${sourceFilePath}: ${packageDefinition.name} must remain DOM-neutral and must not reference ${identifier}`,
+          );
+        }
+      }
 
       for (const specifier of extractImportSpecifiers(
         source,

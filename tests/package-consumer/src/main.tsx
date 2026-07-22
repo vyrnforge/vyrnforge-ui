@@ -3,7 +3,11 @@ import { createRoot } from "react-dom/client";
 
 import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
+
+import { createBehaviorEvent } from "@vyrnforge/ui-behaviors";
+import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 
 import {
   AppShell,
@@ -17,19 +21,26 @@ import {
   Stack,
   Text,
   TextInput,
-  TopNav
+  TopNav,
 } from "@vyrnforge/ui-components";
 import {
   createVyrnForgeTheme,
-  toVyrnForgeThemeStyle
+  toVyrnForgeThemeStyle,
 } from "@vyrnforge/ui-core";
 import {
   UniversalDataGrid,
   useDataGridState,
-  type DataGridColumnDef
+  type DataGridColumnDef,
 } from "@vyrnforge/ui-data-grid";
 
 import "./styles.css";
+
+registerVyrnForgeElements();
+const foundationEvent = createBehaviorEvent(
+  "consumer-foundation",
+  { package: "@vyrnforge/ui-behaviors" },
+  "programmatic",
+);
 
 type Ticket = {
   id: string;
@@ -41,31 +52,37 @@ type Ticket = {
 const rows: Ticket[] = [
   { id: "TCK-1001", owner: "Access team", status: "Open", priority: 2 },
   { id: "TCK-1002", owner: "Workflow team", status: "Review", priority: 1 },
-  { id: "TCK-1003", owner: "Operations team", status: "Closed", priority: 3 }
+  { id: "TCK-1003", owner: "Operations team", status: "Closed", priority: 3 },
 ];
 
 const columns: DataGridColumnDef<Ticket>[] = [
   { id: "id", header: "Ticket", accessorKey: "id", width: 120 },
   { id: "owner", header: "Owner", accessorKey: "owner", searchable: true },
   { id: "status", header: "Status", accessorKey: "status", dataType: "status" },
-  { id: "priority", header: "Priority", accessorKey: "priority", dataType: "number", align: "right" }
+  {
+    id: "priority",
+    header: "Priority",
+    accessorKey: "priority",
+    dataType: "number",
+    align: "right",
+  },
 ];
 
 const themeOverride = createVyrnForgeTheme({
   "--vf-primary": "#2563eb",
-  "--vf-focus-ring": "0 0 0 3px rgba(37, 99, 235, 0.3)"
+  "--vf-focus-ring": "0 0 0 3px rgba(37, 99, 235, 0.3)",
 });
 
 function VerificationContent() {
   const [gridState] = useDataGridState({
     defaultState: {
       density: "compact",
-      pagination: { pageIndex: 0, pageSize: 25 }
-    }
+      pagination: { pageIndex: 0, pageSize: 25 },
+    },
   });
 
   return (
-    <Stack gap="lg">
+    <Stack gap="lg" data-behavior-reason={foundationEvent.reason}>
       <Inline gap="sm">
         <Button variant="primary">Create ticket</Button>
         <Button variant="subtle">Review queue</Button>
@@ -95,7 +112,7 @@ function VerificationContent() {
               options={[
                 { value: "access-review", label: "Access review" },
                 { value: "asset-check", label: "Asset check" },
-                { value: "service-queue", label: "Service queue" }
+                { value: "service-queue", label: "Service queue" },
               ]}
               clearable
               openOnFocus
@@ -122,7 +139,11 @@ function VerificationContent() {
 function App() {
   return (
     <div style={toVyrnForgeThemeStyle(themeOverride)}>
-      <div data-theme="light" data-density="standard" className="vf-consumer-theme-block">
+      <div
+        data-theme="light"
+        data-density="standard"
+        className="vf-consumer-theme-block"
+      >
         <AppShell
           header={<TopNav brand="Consumer Fixture" />}
           sidebar={
@@ -130,7 +151,7 @@ function App() {
               activeId="tickets"
               items={[
                 { id: "tickets", label: "Tickets" },
-                { id: "reports", label: "Reports" }
+                { id: "reports", label: "Reports" },
               ]}
             />
           }
@@ -148,7 +169,11 @@ function App() {
         </AppShell>
       </div>
 
-      <div data-theme="dark" data-density="compact" className="vf-consumer-theme-block">
+      <div
+        data-theme="dark"
+        data-density="compact"
+        className="vf-consumer-theme-block"
+      >
         <Page
           title="Dark compact verification"
           description="The same public components render under dark theme and compact density."
@@ -156,7 +181,8 @@ function App() {
           maxWidth="xl"
         >
           <Text tone="muted">
-            This block verifies CSS variables and focus styling in a second theme scope.
+            This block verifies CSS variables and focus styling in a second
+            theme scope.
           </Text>
           <VerificationContent />
         </Page>
@@ -168,5 +194,5 @@ function App() {
 createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

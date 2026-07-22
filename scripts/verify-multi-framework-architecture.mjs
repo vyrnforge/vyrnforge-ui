@@ -15,7 +15,7 @@ const expectedPackages = new Map([
   [
     "@vyrnforge/ui-behaviors",
     {
-      status: "planned",
+      status: "current",
       betaIncluded: true,
       dependsOn: ["@vyrnforge/ui-core"],
     },
@@ -31,7 +31,7 @@ const expectedPackages = new Map([
   [
     "@vyrnforge/ui-elements",
     {
-      status: "planned",
+      status: "current",
       betaIncluded: true,
       dependsOn: ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
     },
@@ -89,6 +89,9 @@ const requiredDocuments = [
   "docs/metadata/multi-framework.json",
   "docs/metadata/component-contracts.json",
   "docs/metadata/component-contract.schema.json",
+  "docs/metadata/gmf1-closure.json",
+  "docs/api/ui-behaviors-api.md",
+  "docs/api/ui-elements-api.md",
   "tests/consumers/manifest.json",
 ];
 
@@ -216,10 +219,10 @@ function verifyPackageTopology(root, failures, architecture) {
 }
 
 function verifyFrameworkSupport(failures, architecture) {
-  if (architecture.program?.status !== "architecture-approved") {
+  if (architecture.program?.status !== "architecture-foundation-implemented") {
     addFailure(
       failures,
-      "multi-framework program status must be architecture-approved",
+      "multi-framework program status must be architecture-foundation-implemented",
     );
   }
   if (architecture.program?.gate !== "GMF1") {
@@ -348,14 +351,14 @@ function verifyComponentContracts(failures, contracts) {
   }
 
   const representativeIds = new Set();
-  for (const contract of contracts.representativeContracts ?? []) {
+  for (const contract of contracts.componentContracts ?? []) {
     if (representativeIds.has(contract.id)) {
       addFailure(
         failures,
         `duplicate representative contract ${String(contract.id)}`,
       );
     }
-    representativeIds.add(contract.id);
+    if (contract.representative === true) representativeIds.add(contract.id);
     if (!contract.react?.package || contract.react.status !== "current") {
       addFailure(
         failures,
@@ -499,6 +502,24 @@ export function verifyMultiFrameworkArchitecture({
   verifyPackageTopology(root, failures, architecture);
   verifyFrameworkSupport(failures, architecture);
   verifyComponentContracts(failures, contracts);
+  const componentCatalog = readJson(root, "docs/metadata/components.json");
+  const publicNonGrid = (componentCatalog.components ?? []).filter(
+    (component) =>
+      component.package === "@vyrnforge/ui-components" &&
+      component.publicExport === true,
+  );
+  if (
+    contracts.catalogCoverage?.publicNonGridComponents !== publicNonGrid.length
+  ) {
+    addFailure(failures, "component-contract catalog coverage count is stale");
+  }
+  for (const component of publicNonGrid) {
+    if (!component.frameworkParity)
+      addFailure(
+        failures,
+        `${component.id} is missing frameworkParity metadata`,
+      );
+  }
   verifyConsumerFixtures(root, failures, architecture);
 
   return failures.sort();

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "gate": "GMF1",
+  "status": "evidence-complete",
+  "program": "VyrnForge non-grid multi-framework beta",
+  "requiredCiGate": "ci-gate",
+  "tasks": [
+    {
+      "id": "MF-4001",
+      "status": "done"
+    },
+    {
+      "id": "MF-4002",
+      "status": "done"
+    },
+    {
+      "id": "MF-4003",
+      "status": "done"
+    },
+    {
+      "id": "MF-4004",
+      "status": "done"
+    },
+    {
+      "id": "MF-4005",
+      "status": "done"
+    },
+    {
+      "id": "MF-4006",
+      "status": "done"
+    },
+    {
+      "id": "MF-4007",
+      "status": "done"
+    },
+    {
+      "id": "MF-4008",
+      "status": "done"
+    },
+    {
+      "id": "MF-4009",
+      "status": "done"
+    },
+    {
+      "id": "MF-4010",
+      "status": "done"
+    },
+    {
+      "id": "MF-4011",
+      "status": "done"
+    },
+    {
+      "id": "MF-4012",
+      "status": "done"
+    }
+  ],
+  "packageFoundations": {
+    "@vyrnforge/ui-behaviors": {
+      "status": "current",
+      "directory": "packages/ui-behaviors"
+    },
+    "@vyrnforge/ui-elements": {
+      "status": "current",
+      "directory": "packages/ui-elements"
+    }
+  },
+  "evidence": [
+    "docs/architecture/adr-004-multi-framework-web-support.md",
+    "docs/architecture/01-package-boundaries.md",
+    "docs/architecture/09-component-contracts-and-events.md",
+    "docs/architecture/10-custom-elements-and-form-association.md",
+    "docs/metadata/multi-framework.json",
+    "docs/metadata/components.json",
+    "packages/ui-behaviors/package.json",
+    "packages/ui-elements/package.json",
+    "tests/consumers/manifest.json"
+  ],
+  "requiredCommands": ["npm run verify:ci", "npm run quality"],
+  "unresolvedBlockers": [],
+  "deferred": [
+    "component-specific behavior extraction remains S5 / GMF2",
+    "public native component renderers remain S6 / GMF3",
+    "Angular and Vue support claims remain S7 / GMF4",
+    "data-grid multi-framework work remains outside the non-grid beta critical path"
+  ]
+}

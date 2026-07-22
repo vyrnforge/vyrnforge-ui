@@ -5,6 +5,8 @@
   "requiredPatterns": [
     "@vyrnforge/ui-elements/register",
     "<vf-button",
-    "vf-action"
+    "vf-action",
+    "@vyrnforge/ui-elements",
+    "vf-architecture-probe"
   ]
 }

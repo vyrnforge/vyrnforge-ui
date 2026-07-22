@@ -121,3 +121,21 @@ test("checks CSS imports and ignores test fixtures", () => {
     ),
   );
 });
+
+test("rejects DOM globals from framework-neutral behaviors", () => {
+  const failures = verifyFixture("invalid");
+  assert(
+    failures.some((failure) =>
+      failure.includes(
+        "dom-leak.ts: @vyrnforge/ui-behaviors must remain DOM-neutral and must not reference HTMLElement",
+      ),
+    ),
+  );
+  assert(
+    failures.some((failure) =>
+      failure.includes(
+        "dom-leak.ts: @vyrnforge/ui-behaviors must remain DOM-neutral and must not reference document",
+      ),
+    ),
+  );
+});

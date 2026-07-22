@@ -111,7 +111,7 @@ accessibility, typing, packaging, and documentation evidence passes GMF4.
 This ADR does not:
 
 - claim Angular or Vue beta support today;
-- create the planned `ui-behaviors` or `ui-elements` runtime packages;
+- port public component behavior or native component renderers;
 - port any component;
 - change existing React public APIs;
 - change data-grid behavior;

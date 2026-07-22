@@ -15,7 +15,7 @@
       "framework": "Native HTML",
       "directory": "tests/consumers/native-html",
       "contractFile": "fixture.json",
-      "exampleFiles": ["index.html"]
+      "exampleFiles": ["index.html", "architecture-probe.ts"]
     },
     {
       "id": "angular",

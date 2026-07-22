@@ -52,6 +52,16 @@
       ],
       "mustComeBefore": [],
       "notes": "ui-data-grid owns udg-* classes and --udg-* variables. The grid should work with fallback values but aligns best when ui-core is imported."
+    },
+    {
+      "package": "@vyrnforge/ui-elements",
+      "importPath": "@vyrnforge/ui-elements/styles/index.css",
+      "requiredFor": [
+        "native vf-* element foundation styling",
+        "shared ui-core token inheritance"
+      ],
+      "mustComeBefore": [],
+      "notes": "ui-elements uses Light DOM and imports the shared ui-core style foundation. Public component-specific styles are added during S6."
     }
   ],
   "rules": [
@@ -68,5 +78,5 @@
     "@vyrnforge/ui-core/styles/index.css",
     "@vyrnforge/ui-elements/styles/index.css"
   ],
-  "plannedNativeRendererStatus": "architecture-approved; package not implemented"
+  "plannedNativeRendererStatus": "foundation implemented; public non-grid element renderers remain planned for S6"
 }

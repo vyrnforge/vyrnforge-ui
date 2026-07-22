@@ -54,7 +54,7 @@
     },
     {
       "name": "@vyrnforge/ui-behaviors",
-      "purpose": "Planned framework-neutral component controllers, state transitions, collection models, selection rules, validation state, and canonical behavior events.",
+      "purpose": "Framework-neutral controller foundations, transition reasons, subscriptions, and behavior events for public non-grid components.",
       "owns": [
         "controlled and uncontrolled state transitions",
         "collection registration and ordering",
@@ -72,7 +72,7 @@
         "backend workflows"
       ],
       "cssImport": "not-applicable",
-      "apiDoc": "planned: docs/api/ui-behaviors-api.md",
+      "apiDoc": "docs/api/ui-behaviors-api.md",
       "dependsOn": ["@vyrnforge/ui-core"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
@@ -88,10 +88,10 @@
         "Radix",
         "Tailwind"
       ],
-      "status": "planned",
+      "status": "current",
       "releaseTrack": "non-grid-beta",
-      "publicEntryPoints": [],
-      "notes": "Created in S5 after GMF1. It must remain framework- and DOM-neutral."
+      "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
+      "notes": "S4 package foundation is implemented. Component-specific controllers and React adoption remain S5 work."
     },
     {
       "name": "@vyrnforge/ui-components",
@@ -132,12 +132,12 @@
         "@vyrnforge/ui-components/style.css",
         "@vyrnforge/ui-components/index.css"
       ],
-      "notes": "The ui-behaviors dependency is planned for S5. The public React package name remains stable through beta.",
+      "notes": "The ui-behaviors package foundation is current; React component adoption begins in S5. The public React package name remains stable through beta.",
       "releaseTrack": "non-grid-beta"
     },
     {
       "name": "@vyrnforge/ui-elements",
-      "purpose": "Planned browser-native Custom Element renderer for VyrnForge non-grid components and plain HTML consumption.",
+      "purpose": "Browser-native Custom Element foundations, idempotent registration, typed vf-* events, Light DOM CSS, and future non-grid renderers.",
       "owns": [
         "vf-* Custom Elements",
         "property and attribute reflection",
@@ -154,8 +154,8 @@
         "backend workflows",
         "data grid rendering"
       ],
-      "cssImport": "@vyrnforge/ui-elements/styles/index.css (planned)",
-      "apiDoc": "planned: docs/api/ui-elements-api.md",
+      "cssImport": "@vyrnforge/ui-elements/styles/index.css",
+      "apiDoc": "docs/api/ui-elements-api.md",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
@@ -170,10 +170,16 @@
         "Radix",
         "Tailwind"
       ],
-      "status": "planned",
+      "status": "current",
       "releaseTrack": "non-grid-beta",
-      "publicEntryPoints": [],
-      "notes": "Created after GMF2. Light DOM is the default and runtime framework dependencies are forbidden."
+      "publicEntryPoints": [
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-elements/register",
+        "@vyrnforge/ui-elements/styles/index.css",
+        "@vyrnforge/ui-elements/style.css",
+        "@vyrnforge/ui-elements/index.css"
+      ],
+      "notes": "S4 package foundation is implemented. Public component renderers remain planned for S6 after GMF2."
     },
     {
       "name": "@vyrnforge/ui-data-grid",

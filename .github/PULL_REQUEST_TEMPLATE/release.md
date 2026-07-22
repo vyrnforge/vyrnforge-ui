@@ -13,7 +13,9 @@ Describe the coordinated VyrnForge release, the included user-visible changes, a
 **Included packages:**
 
 - [ ] `@vyrnforge/ui-core`
+- [ ] `@vyrnforge/ui-behaviors`
 - [ ] `@vyrnforge/ui-components`
+- [ ] `@vyrnforge/ui-elements`
 - [ ] `@vyrnforge/ui-data-grid`
 
 ## Candidate integrity

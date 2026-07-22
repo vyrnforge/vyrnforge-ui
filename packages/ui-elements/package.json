@@ -1,0 +1,68 @@
+{
+  "name": "@vyrnforge/ui-elements",
+  "version": "0.1.0-alpha.1",
+  "description": "Browser-native VyrnForge UI Custom Element foundations, registration, and typed DOM events.",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./register": {
+      "types": "./dist/register.d.ts",
+      "import": "./dist/register.js",
+      "require": "./dist/register.cjs"
+    },
+    "./style.css": "./dist/index.css",
+    "./index.css": "./dist/index.css",
+    "./styles/index.css": "./dist/index.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./dist/index.css",
+    "./dist/register.js",
+    "./dist/register.cjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vyrnforge/vyrnforge-ui.git",
+    "directory": "packages/ui-elements"
+  },
+  "homepage": "https://github.com/vyrnforge/vyrnforge-ui#readme",
+  "bugs": {
+    "url": "https://github.com/vyrnforge/vyrnforge-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.12 <25",
+    "npm": ">=11.16 <12"
+  },
+  "scripts": {
+    "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
+    "lint": "eslint . --config ../../eslint.config.mjs",
+    "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
+    "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@vyrnforge/ui-core": "0.1.0-alpha.1",
+    "@vyrnforge/ui-behaviors": "0.1.0-alpha.1"
+  },
+  "devDependencies": {
+    "tsup": "latest",
+    "typescript": "7.0.2",
+    "vitest": "latest"
+  }
+}

@@ -23,7 +23,9 @@ jobs:
       full: true
       metadata: true
       ui-core: true
+      ui-behaviors: true
       ui-components: true
+      ui-elements: true
       ui-data-grid: true
       fixtures: true
 

@@ -16,9 +16,9 @@ examples/
 
 ```txt
 packages/ui-core/
-packages/ui-behaviors/   # planned after GMF1
+packages/ui-behaviors/   # foundation current
 packages/ui-components/
-packages/ui-elements/    # planned after GMF2
+packages/ui-elements/    # foundation current; public renderers after GMF2
 packages/ui-data-grid/   # independent React alpha
 ```
 
@@ -48,9 +48,9 @@ tests/consumers/
 | Work                       | Location                                            |
 | -------------------------- | --------------------------------------------------- |
 | Shared tokens/themes       | `packages/ui-core`                                  |
-| Framework-neutral behavior | planned `packages/ui-behaviors`                     |
+| Framework-neutral behavior | `packages/ui-behaviors`                             |
 | React component            | `packages/ui-components/src/components/<Component>` |
-| Native Custom Element      | planned `packages/ui-elements`                      |
+| Native Custom Element      | `packages/ui-elements`                              |
 | Grid-specific behavior     | `packages/ui-data-grid` (deferred release track)    |
 | Docs app example           | `examples/basic-playground` or future docs app      |
 | Architecture docs          | `docs/architecture`                                 |

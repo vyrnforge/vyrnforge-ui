@@ -8,7 +8,7 @@
   "program": {
     "name": "VyrnForge non-grid multi-framework beta",
     "gate": "GMF1",
-    "status": "architecture-approved",
+    "status": "architecture-foundation-implemented",
     "firstClassRenderers": ["react", "native-html"],
     "verifiedConsumers": ["angular", "vue"],
     "excludedPlatforms": [
@@ -41,7 +41,7 @@
     {
       "name": "@vyrnforge/ui-behaviors",
       "directory": "packages/ui-behaviors",
-      "status": "planned",
+      "status": "current",
       "betaIncluded": true,
       "runtime": "framework-neutral",
       "dependsOn": ["@vyrnforge/ui-core"],
@@ -52,7 +52,8 @@
         "keyboard decision models",
         "validation state",
         "canonical controller events"
-      ]
+      ],
+      "foundationStage": "implemented"
     },
     {
       "name": "@vyrnforge/ui-components",
@@ -66,7 +67,7 @@
     {
       "name": "@vyrnforge/ui-elements",
       "directory": "packages/ui-elements",
-      "status": "planned",
+      "status": "current",
       "betaIncluded": true,
       "runtime": "custom-elements",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
@@ -76,7 +77,8 @@
         "typed DOM events",
         "form-associated element integration",
         "explicit registration entry points"
-      ]
+      ],
+      "foundationStage": "implemented"
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -101,7 +103,8 @@
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/native-html",
-      "betaClaim": "planned"
+      "betaClaim": "planned",
+      "rendererFoundation": "implemented"
     },
     {
       "id": "angular",

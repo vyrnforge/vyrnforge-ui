@@ -1,0 +1,5 @@
+:where([data-vf-element]) {
+  box-sizing: border-box;
+  color: var(--vf-text-primary, currentColor);
+  font-family: var(--vf-font-family, system-ui, sans-serif);
+}

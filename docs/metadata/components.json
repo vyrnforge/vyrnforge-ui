@@ -1009,7 +1009,34 @@
       "importExample": "import { Button } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Button variant='primary'>Save</Button>",
       "accessibilityNotes": "Button renders a native button and supports disabled/loading states.",
-      "aiUsageNotes": "Use visible text for important actions."
+      "aiUsageNotes": "Use visible text for important actions.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Button",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "icon-button",
@@ -1046,7 +1073,34 @@
       "importExample": "import { IconButton, Icon } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<IconButton aria-label='Refresh'><Icon name='Refresh' /></IconButton>",
       "accessibilityNotes": "Every icon-only button must have an aria-label.",
-      "aiUsageNotes": "Do not create unlabeled icon-only controls."
+      "aiUsageNotes": "Do not create unlabeled icon-only controls.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "IconButton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-icon-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "toolbar-button",
@@ -1081,7 +1135,34 @@
       "importExample": "import { ToolbarButton, Icon } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ToolbarButton icon={<Icon name='Filter' />} label='Filters' />",
       "accessibilityNotes": "Keep label meaningful even when visual space is compact.",
-      "aiUsageNotes": "Prefer ToolbarButton for dense repeated utility commands."
+      "aiUsageNotes": "Prefer ToolbarButton for dense repeated utility commands.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ToolbarButton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-toolbar-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "button-group",
@@ -1116,7 +1197,34 @@
       "importExample": "import { ButtonGroup, Button } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ButtonGroup><Button>One</Button><Button>Two</Button></ButtonGroup>",
       "accessibilityNotes": "Keep grouped controls individually labelled.",
-      "aiUsageNotes": "Use only when grouping clarifies action relationship."
+      "aiUsageNotes": "Use only when grouping clarifies action relationship.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ButtonGroup",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-button-group"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "segmented-control",
@@ -1151,7 +1259,34 @@
       "importExample": "import { SegmentedControl } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<SegmentedControl aria-label='Density' value={density} onChange={setDensity} options={options} />",
       "accessibilityNotes": "Provide an accessible label.",
-      "aiUsageNotes": "Use for compact mode choices, not multi-select."
+      "aiUsageNotes": "Use for compact mode choices, not multi-select.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "SegmentedControl",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-segmented-control"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "toggle-button",
@@ -1194,7 +1329,34 @@
       "importExample": "import { ToggleButton } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ToggleButton defaultPressed>Pin column</ToggleButton>",
       "accessibilityNotes": "Renders a native button with aria-pressed. Icon-only usage requires aria-label.",
-      "aiUsageNotes": "Do not substitute ToggleButton for a persistent Switch setting or navigation link."
+      "aiUsageNotes": "Do not substitute ToggleButton for a persistent Switch setting or navigation link.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ToggleButton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-toggle-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "toggle-button-group",
@@ -1240,7 +1402,34 @@
       "importExample": "import { ToggleButton, ToggleButtonGroup } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ToggleButtonGroup defaultValue='table'><ToggleButton value='table'>Table</ToggleButton></ToggleButtonGroup>",
       "accessibilityNotes": "Use ToggleButton children with unique values. The group does not clone arbitrary children and supports arrow-key focus movement.",
-      "aiUsageNotes": "Use type='single' for exclusive tools and type='multiple' for independent active tools."
+      "aiUsageNotes": "Use type='single' for exclusive tools and type='multiple' for independent active tools.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ToggleButtonGroup",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-toggle-button-group"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "icon",
@@ -1275,7 +1464,34 @@
       "importExample": "import { Icon } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Icon name='Search' decorative />",
       "accessibilityNotes": "Use decorative icons unless the icon itself carries meaning.",
-      "aiUsageNotes": "Do not introduce an icon dependency for one-off symbols."
+      "aiUsageNotes": "Do not introduce an icon dependency for one-off symbols.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Icon",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-icon"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "text",
@@ -1310,7 +1526,34 @@
       "importExample": "import { Text } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Text tone='muted'>Updated just now</Text>",
       "accessibilityNotes": "Choose semantic element through the as prop when needed.",
-      "aiUsageNotes": "Prefer Text over ad hoc paragraph classes."
+      "aiUsageNotes": "Prefer Text over ad hoc paragraph classes.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Text",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-text"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "heading",
@@ -1347,7 +1590,34 @@
       "importExample": "import { Heading } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Heading level={2}>Settings</Heading>",
       "accessibilityNotes": "Keep heading levels logical.",
-      "aiUsageNotes": "Match heading size to container density."
+      "aiUsageNotes": "Match heading size to container density.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Heading",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-heading"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "label",
@@ -1382,7 +1652,34 @@
       "importExample": "import { Label } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Label htmlFor='email'>Email</Label>",
       "accessibilityNotes": "Connect labels to controls using htmlFor.",
-      "aiUsageNotes": "Prefer Field for full form field composition."
+      "aiUsageNotes": "Prefer Field for full form field composition.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Label",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-label"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "caption",
@@ -1419,7 +1716,34 @@
       "importExample": "import { Caption } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Caption>Optional</Caption>",
       "accessibilityNotes": "Do not make critical instructions too small to read.",
-      "aiUsageNotes": "Use muted tone for secondary details."
+      "aiUsageNotes": "Use muted tone for secondary details.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Caption",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-caption"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "code-text",
@@ -1456,7 +1780,34 @@
       "importExample": "import { CodeText } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<CodeText>--vf-primary</CodeText>",
       "accessibilityNotes": "Keep code labels readable and copyable when important.",
-      "aiUsageNotes": "Use for literal identifiers in UI copy."
+      "aiUsageNotes": "Use for literal identifiers in UI copy.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "CodeText",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-code-text"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "field",
@@ -1498,7 +1849,34 @@
       "importExample": "import { Field, TextInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Field id='email' label='Email'>{(controlProps) => <TextInput {...controlProps} />}</Field>",
       "accessibilityNotes": "Use Field's render function to receive a stable control id, aria-describedby, invalid, required, and disabled props. Static children remain compatible through htmlFor plus a matching control id.",
-      "aiUsageNotes": "Prefer Field for standard form composition. Do not expect Field to clone or mutate arbitrary child controls."
+      "aiUsageNotes": "Prefer Field for standard form composition. Do not expect Field to clone or mutate arbitrary child controls.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Field",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-field"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "validation-message",
@@ -1535,7 +1913,34 @@
       "importExample": "import { ValidationMessage } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ValidationMessage tone='error' id='email-error'>Email is required</ValidationMessage>",
       "accessibilityNotes": "Error tone uses alert semantics and can be referenced by aria-describedby.",
-      "aiUsageNotes": "Use Field error for standard field errors; use ValidationMessage for custom form compositions."
+      "aiUsageNotes": "Use Field error for standard field errors; use ValidationMessage for custom form compositions.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ValidationMessage",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-validation-message"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "text-input",
@@ -1570,7 +1975,34 @@
       "importExample": "import { TextInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<TextInput id='name' />",
       "accessibilityNotes": "Provide an associated label.",
-      "aiUsageNotes": "Keep validation in Field/ValidationMessage."
+      "aiUsageNotes": "Keep validation in Field/ValidationMessage.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "TextInput",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-text-input"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "search-input",
@@ -1605,7 +2037,34 @@
       "importExample": "import { SearchInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<SearchInput value={search} onChange={(event) => setSearch(event.target.value)} />",
       "accessibilityNotes": "Label search inputs clearly.",
-      "aiUsageNotes": "Use for search/filter intent only."
+      "aiUsageNotes": "Use for search/filter intent only.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "SearchInput",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-search-input"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "select",
@@ -1640,7 +2099,34 @@
       "importExample": "import { Select } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Select value={value} onChange={(event) => setValue(event.currentTarget.value)} options={options} />",
       "accessibilityNotes": "Provide label and meaningful option text.",
-      "aiUsageNotes": "Use native select before inventing custom dropdowns."
+      "aiUsageNotes": "Use native select before inventing custom dropdowns.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Select",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-select"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "checkbox",
@@ -1677,7 +2163,34 @@
       "importExample": "import { Checkbox } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Checkbox checked={enabled} onChange={(event) => setEnabled(event.currentTarget.checked)} label='Enabled' />",
       "accessibilityNotes": "Ensure label text describes the checked state.",
-      "aiUsageNotes": "Use for true/false preferences and row selection."
+      "aiUsageNotes": "Use for true/false preferences and row selection.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Checkbox",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-checkbox"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "textarea",
@@ -1712,7 +2225,34 @@
       "importExample": "import { Textarea } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Textarea rows={4} />",
       "accessibilityNotes": "Use Field for label and error text.",
-      "aiUsageNotes": "Prefer Textarea over contenteditable."
+      "aiUsageNotes": "Prefer Textarea over contenteditable.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Textarea",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-textarea"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "badge",
@@ -1749,7 +2289,34 @@
       "importExample": "import { Badge } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Badge variant='success'>Active</Badge>",
       "accessibilityNotes": "Do not rely on color alone for meaning.",
-      "aiUsageNotes": "Keep badge text short."
+      "aiUsageNotes": "Keep badge text short.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Badge",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-badge"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "status-badge",
@@ -1784,7 +2351,34 @@
       "importExample": "import { StatusBadge } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<StatusBadge status='active' />",
       "accessibilityNotes": "Status text should be explicit.",
-      "aiUsageNotes": "Use status prop for known statuses."
+      "aiUsageNotes": "Use status prop for known statuses.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "StatusBadge",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-mapping",
+          "target": "vf-badge"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "inline-message",
@@ -1821,7 +2415,34 @@
       "importExample": "import { InlineMessage } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<InlineMessage variant='info'>Changes are saved locally.</InlineMessage>",
       "accessibilityNotes": "Danger validation messages should be announced where needed.",
-      "aiUsageNotes": "Use InlineMessage for local feedback."
+      "aiUsageNotes": "Use InlineMessage for local feedback.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "InlineMessage",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-inline-message"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "alert",
@@ -1856,7 +2477,34 @@
       "importExample": "import { Alert } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Alert variant='warning'>Check required fields.</Alert>",
       "accessibilityNotes": "Use appropriate role for urgent messages.",
-      "aiUsageNotes": "Use sparingly for important feedback."
+      "aiUsageNotes": "Use sparingly for important feedback.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Alert",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-mapping",
+          "target": "vf-inline-message"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "empty-state",
@@ -1891,7 +2539,34 @@
       "importExample": "import { EmptyState } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<EmptyState title='No results' description='Try another search.' />",
       "accessibilityNotes": "Message should explain what happened and possible next action.",
-      "aiUsageNotes": "Use for empty content, not as decoration."
+      "aiUsageNotes": "Use for empty content, not as decoration.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "EmptyState",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-empty-state"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "error-state",
@@ -1928,7 +2603,34 @@
       "importExample": "import { ErrorState } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ErrorState title='Could not load data' />",
       "accessibilityNotes": "Error states should be understandable without color.",
-      "aiUsageNotes": "Use for failed content areas."
+      "aiUsageNotes": "Use for failed content areas.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ErrorState",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-error-state"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "loading-state",
@@ -1965,7 +2667,34 @@
       "importExample": "import { LoadingState } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<LoadingState label='Loading users' />",
       "accessibilityNotes": "Use aria-busy where relevant.",
-      "aiUsageNotes": "Use label text for loading context."
+      "aiUsageNotes": "Use label text for loading context.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "LoadingState",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-loading-state"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "skeleton",
@@ -2000,7 +2729,34 @@
       "importExample": "import { Skeleton } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Skeleton width='100%' height={24} />",
       "accessibilityNotes": "Respect reduced motion.",
-      "aiUsageNotes": "Use sparingly for structure placeholders."
+      "aiUsageNotes": "Use sparingly for structure placeholders.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Skeleton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-skeleton"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "card",
@@ -2037,7 +2793,34 @@
       "importExample": "import { Card } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Card padding='md'>Content</Card>",
       "accessibilityNotes": "Use semantic children inside Card.",
-      "aiUsageNotes": "Do not turn whole pages into stacks of decorative cards."
+      "aiUsageNotes": "Do not turn whole pages into stacks of decorative cards.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Card",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-card"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "panel",
@@ -2072,7 +2855,34 @@
       "importExample": "import { Panel } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Panel title='Settings'>Content</Panel>",
       "accessibilityNotes": "Panel title should describe the section.",
-      "aiUsageNotes": "Use Panel for titled content regions."
+      "aiUsageNotes": "Use Panel for titled content regions.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Panel",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-panel"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "stack",
@@ -2107,7 +2917,34 @@
       "importExample": "import { Stack } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Stack gap='md'>...</Stack>",
       "accessibilityNotes": "Stack does not add semantics by itself.",
-      "aiUsageNotes": "Prefer Stack over ad hoc margin chains."
+      "aiUsageNotes": "Prefer Stack over ad hoc margin chains.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Stack",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-stack"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "inline",
@@ -2142,7 +2979,34 @@
       "importExample": "import { Inline } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Inline gap='sm'>...</Inline>",
       "accessibilityNotes": "Inline does not add semantics by itself.",
-      "aiUsageNotes": "Use for control rows and action clusters."
+      "aiUsageNotes": "Use for control rows and action clusters.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Inline",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-inline"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "section",
@@ -2179,7 +3043,34 @@
       "importExample": "import { Section } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Section title='Users'>Content</Section>",
       "accessibilityNotes": "Use meaningful headings.",
-      "aiUsageNotes": "Use Section for full-width page structure."
+      "aiUsageNotes": "Use Section for full-width page structure.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Section",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-section"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "popover",
@@ -2214,7 +3105,34 @@
       "importExample": "import { Popover } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Popover trigger={<Button>Open</Button>}>Content</Popover>",
       "accessibilityNotes": "Non-modal by default; Escape/outside dismissal is topmost-safe and focus restores to the trigger on close.",
-      "aiUsageNotes": "Keep popover content compact. Use modal only when a focus boundary is intentionally required."
+      "aiUsageNotes": "Keep popover content compact. Use modal only when a focus boundary is intentionally required.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Popover",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-popover"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "menu",
@@ -2249,7 +3167,34 @@
       "importExample": "import { Menu } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Menu trigger={<Button>Actions</Button>} items={items} />",
       "accessibilityNotes": "Uses menu roles and ArrowUp/ArrowDown, Home, End, Enter, Space, and Escape navigation while skipping disabled items.",
-      "aiUsageNotes": "Use for actions, not form values. Do not hide destructive actions behind unclear labels."
+      "aiUsageNotes": "Use for actions, not form values. Do not hide destructive actions behind unclear labels.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Menu",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-menu"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "dropdown",
@@ -2284,7 +3229,34 @@
       "importExample": "import { Dropdown } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Dropdown trigger={<Button>Open</Button>}>Content</Dropdown>",
       "accessibilityNotes": "Trigger should expose expanded state.",
-      "aiUsageNotes": "Use Dropdown for generic composed content. Use Menu for actions and Select for form value selection."
+      "aiUsageNotes": "Use Dropdown for generic composed content. Use Menu for actions and Select for form value selection.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Dropdown",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-dropdown"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "tooltip",
@@ -2319,7 +3291,34 @@
       "importExample": "import { Tooltip } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Tooltip content='Refresh'><Button>Refresh</Button></Tooltip>",
       "accessibilityNotes": "Tooltip opens from hover/focus and is not a substitute for an accessible name. Content must not be interactive.",
-      "aiUsageNotes": "Use tooltip as supporting help only."
+      "aiUsageNotes": "Use tooltip as supporting help only.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Tooltip",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-tooltip"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "dialog",
@@ -2354,7 +3353,34 @@
       "importExample": "import { Dialog } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Dialog open={open} onOpenChange={setOpen} title='Edit'>Content</Dialog>",
       "accessibilityNotes": "Portal modal with title/description relationships, topmost Escape/outside dismissal, trapped focus, restoration, and scroll locking.",
-      "aiUsageNotes": "Use title and description for context. Use initialFocusRef for deliberate first focus."
+      "aiUsageNotes": "Use title and description for context. Use initialFocusRef for deliberate first focus.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Dialog",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-dialog"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "drawer",
@@ -2391,7 +3417,34 @@
       "importExample": "import { Drawer } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Drawer open={open} onOpenChange={setOpen} title='Filters'>Content</Drawer>",
       "accessibilityNotes": "Modal by default with Dialog-equivalent focus and scroll behavior; its body scrolls independently from header/footer.",
-      "aiUsageNotes": "Use Drawer for larger secondary surfaces. Use non-modal mode only for an intentional advanced composition."
+      "aiUsageNotes": "Use Drawer for larger secondary surfaces. Use non-modal mode only for an intentional advanced composition.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Drawer",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-drawer"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "confirm-dialog",
@@ -2426,7 +3479,34 @@
       "importExample": "import { ConfirmDialog } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<ConfirmDialog open={open} onOpenChange={setOpen} title='Delete item?' onConfirm={onConfirm} />",
       "accessibilityNotes": "Composes Dialog, including modal focus containment and restoration. Confirm and cancel actions must be clear.",
-      "aiUsageNotes": "Use for destructive confirmation flows; it must not create separate portal or focus logic."
+      "aiUsageNotes": "Use for destructive confirmation flows; it must not create separate portal or focus logic.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ConfirmDialog",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-confirm-dialog"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "universal-data-grid",
@@ -2709,7 +3789,34 @@
       "importExample": "import { AppShell } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<AppShell scrollMode='content' headerPosition='sticky' sidebarPosition='sticky' header={<TopNav />} sidebar={<SideNav items={items} />}>Content</AppShell>",
       "accessibilityNotes": "Pass meaningful header/sidebar content and avoid duplicate main landmarks inside shell content unless Page owns the main region.",
-      "aiUsageNotes": "Use scrollMode='page' for simple pages, 'content' for admin/docs apps with persistent navigation, and 'split' for independently scrollable nav/content. Do not add router integration, global state, or one-off app CSS for persistent navigation when AppShell props can express it."
+      "aiUsageNotes": "Use scrollMode='page' for simple pages, 'content' for admin/docs apps with persistent navigation, and 'split' for independently scrollable nav/content. Do not add router integration, global state, or one-off app CSS for persistent navigation when AppShell props can express it.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "AppShell",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-app-shell"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "page",
@@ -2746,7 +3853,34 @@
       "importExample": "import { Page } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Page title='Orders' toolbar={<PageToolbar />}>Content</Page>",
       "accessibilityNotes": "Page renders a main landmark; avoid nesting it inside another main landmark.",
-      "aiUsageNotes": "Use Page for route-level composition, not repeated item cards."
+      "aiUsageNotes": "Use Page for route-level composition, not repeated item cards.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Page",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-page"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "page-header",
@@ -2783,7 +3917,34 @@
       "importExample": "import { PageHeader } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<PageHeader title='Orders' actions={<Button>Create</Button>} />",
       "accessibilityNotes": "Title renders as an h1; preserve heading order in surrounding pages.",
-      "aiUsageNotes": "Use PageHeader for route-level headers and keep action labels explicit."
+      "aiUsageNotes": "Use PageHeader for route-level headers and keep action labels explicit.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "PageHeader",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-page-header"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "page-toolbar",
@@ -2820,7 +3981,34 @@
       "importExample": "import { PageToolbar } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<PageToolbar left={<SearchInput aria-label='Search' />} right={<ToolbarButton label='Refresh' />} />",
       "accessibilityNotes": "Toolbar controls must keep accessible names and visible labels where practical.",
-      "aiUsageNotes": "Use PageToolbar for page controls; do not add grid-specific toolbar behavior here."
+      "aiUsageNotes": "Use PageToolbar for page controls; do not add grid-specific toolbar behavior here.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "PageToolbar",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-page-toolbar"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "side-nav",
@@ -2857,7 +4045,34 @@
       "importExample": "import { SideNav } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<SideNav activeId='orders' items={[{ id: 'orders', label: 'Orders' }]} />",
       "accessibilityNotes": "Navigation should use nav landmark and current-page state.",
-      "aiUsageNotes": "Keep route state in the app and pass activeId/onSelect; do not add router dependencies. Use inside AppShell for persistent sidebars; SideNav keeps header/footer visible while the item list scrolls inside vf-side-nav__scroll."
+      "aiUsageNotes": "Keep route state in the app and pass activeId/onSelect; do not add router dependencies. Use inside AppShell for persistent sidebars; SideNav keeps header/footer visible while the item list scrolls inside vf-side-nav__scroll.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "SideNav",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-side-nav"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "top-nav",
@@ -2894,7 +4109,34 @@
       "importExample": "import { TopNav } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<TopNav brand='Admin Portal' actions={<Button>Invite</Button>} />",
       "accessibilityNotes": "Navigation items need clear labels.",
-      "aiUsageNotes": "TopNav does not own auth or user state; pass user UI through userArea."
+      "aiUsageNotes": "TopNav does not own auth or user state; pass user UI through userArea.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "TopNav",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-top-nav"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "breadcrumbs",
@@ -2929,7 +4171,34 @@
       "importExample": "import { Breadcrumbs } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Orders', current: true }]} />",
       "accessibilityNotes": "Breadcrumb nav should use aria-label.",
-      "aiUsageNotes": "Keep routing in the app; pass href/onClick through items."
+      "aiUsageNotes": "Keep routing in the app; pass href/onClick through items.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Breadcrumbs",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-breadcrumbs"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "tabs",
@@ -2966,7 +4235,34 @@
       "importExample": "import { Tabs } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Tabs defaultValue='summary' items={[{ id: 'summary', label: 'Summary', content: 'Summary' }]} />",
       "accessibilityNotes": "Tabs need keyboard and aria-selected behavior.",
-      "aiUsageNotes": "Use controlled value/onValueChange when tab state belongs to the app."
+      "aiUsageNotes": "Use controlled value/onValueChange when tab state belongs to the app.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Tabs",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-tabs"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "radio",
@@ -3003,7 +4299,34 @@
       "importExample": "import { Radio } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Radio name='cycle' value='monthly' label='Monthly' />",
       "accessibilityNotes": "Provide label or aria-label; group related radios with RadioGroup where practical.",
-      "aiUsageNotes": "Use native Radio for simple choices and keep app state controlled when needed."
+      "aiUsageNotes": "Use native Radio for simple choices and keep app state controlled when needed.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Radio",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-radio"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "radio-group",
@@ -3038,7 +4361,34 @@
       "importExample": "import { RadioGroup } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<RadioGroup label='Cycle' value={cycle} onValueChange={setCycle} options={options} />",
       "accessibilityNotes": "Uses fieldset/legend and native radio keyboard behavior.",
-      "aiUsageNotes": "Prefer RadioGroup over hand-built radio collections."
+      "aiUsageNotes": "Prefer RadioGroup over hand-built radio collections.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "RadioGroup",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-radio-group"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "switch",
@@ -3075,7 +4425,34 @@
       "importExample": "import { Switch } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Switch checked={enabled} onCheckedChange={setEnabled} label='Enabled' />",
       "accessibilityNotes": "Uses role='switch' and aria-checked for controlled checked state.",
-      "aiUsageNotes": "Use Switch for settings; use Checkbox for acknowledgements and forms requiring checkbox semantics."
+      "aiUsageNotes": "Use Switch for settings; use Checkbox for acknowledgements and forms requiring checkbox semantics.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Switch",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-switch"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "number-input",
@@ -3110,7 +4487,34 @@
       "importExample": "import { NumberInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<NumberInput mode='integer' min={0} max={100} defaultValue={50} />",
       "accessibilityNotes": "Numeric constraints need clear labels and validation.",
-      "aiUsageNotes": "Use mode='integer' for whole numbers and mode='decimal' with step for decimal values; do not build custom spinner UI."
+      "aiUsageNotes": "Use mode='integer' for whole numbers and mode='decimal' with step for decimal values; do not build custom spinner UI.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "NumberInput",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-number-input"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "date-input",
@@ -3147,7 +4551,34 @@
       "importExample": "import { DateInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<DateInput defaultValue='2026-07-10' />",
       "accessibilityNotes": "Date formats need clear guidance.",
-      "aiUsageNotes": "Do not add a date picker or date library for basic date input."
+      "aiUsageNotes": "Do not add a date picker or date library for basic date input.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "DateInput",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-date-input"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "datetime-input",
@@ -3182,7 +4613,34 @@
       "importExample": "import { DateTimeInput } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<DateTimeInput defaultValue='2026-07-10T09:30' />",
       "accessibilityNotes": "Label the control and explain expected timezone context where needed.",
-      "aiUsageNotes": "Use native datetime-local behavior; do not add date libraries."
+      "aiUsageNotes": "Use native datetime-local behavior; do not add date libraries.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "DateTimeInput",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-datetime-input"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "rating",
@@ -3217,7 +4675,34 @@
       "importExample": "import { Rating } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Rating label='Quality score' defaultValue={4} />",
       "accessibilityNotes": "Editable ratings use labelled native radio inputs. Read-only ratings are exposed as non-editable text equivalents.",
-      "aiUsageNotes": "Keep Rating whole-number only. Do not add half-star precision or an icon library."
+      "aiUsageNotes": "Keep Rating whole-number only. Do not add half-star precision or an icon library.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Rating",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-rating"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "slider",
@@ -3254,7 +4739,34 @@
       "importExample": "import { Slider } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Slider ariaLabel='Approval threshold' defaultValue={65} showValue />",
       "accessibilityNotes": "Uses native input type='range'; provide Field label or ariaLabel.",
-      "aiUsageNotes": "Do not add dual-thumb ranges, tooltip positioning, or custom drag mathematics."
+      "aiUsageNotes": "Do not add dual-thumb ranges, tooltip positioning, or custom drag mathematics.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Slider",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-slider"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "multi-select",
@@ -3291,7 +4803,34 @@
       "importExample": "import { MultiSelect } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<MultiSelect value={roles} onValueChange={setRoles} options={options} searchable />",
       "accessibilityNotes": "Multi-select needs clear keyboard and announcement behavior.",
-      "aiUsageNotes": "Keep S3 MultiSelect simple; do not add async loading, creatable options, or virtualization."
+      "aiUsageNotes": "Keep S3 MultiSelect simple; do not add async loading, creatable options, or virtualization.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "MultiSelect",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-multi-select"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "autocomplete",
@@ -3340,7 +4879,34 @@
       "importExample": "import { Autocomplete } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<Autocomplete options={[{ value: 'admin', label: 'Administrator' }]} placeholder='Select a role' />",
       "accessibilityNotes": "Uses combobox/listbox/option roles, aria-activedescendant navigation, disabled-option skipping, topmost Escape/outside dismissal, and hidden form value support through name.",
-      "aiUsageNotes": "Use only for one known selected value. Apps own async fetching, debounce, cancellation, caching, and errors. Reuse built-in filtering or filterOptions; do not add multiple selection, free-solo, grouping, virtualization, or another overlay engine."
+      "aiUsageNotes": "Use only for one known selected value. Apps own async fetching, debounce, cancellation, caching, and errors. Reuse built-in filtering or filterOptions; do not add multiple selection, free-solo, grouping, virtualization, or another overlay engine.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Autocomplete",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-autocomplete"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "transfer-list",
@@ -3389,7 +4955,34 @@
       "importExample": "import { TransferList } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<TransferList options={[{ value: 'iam', label: 'Identity and Access Management' }]} defaultValue={['iam']} />",
       "accessibilityNotes": "Uses labelled groups, native checkboxes, and native buttons. Option descriptions are associated with checkboxes. It intentionally avoids incorrect listbox semantics for checkbox-based multi-selection.",
-      "aiUsageNotes": "Use only for bounded local assignment. Apps own backend fetching, server search, pagination, approvals, and persistence. Do not use as a UniversalDataGrid replacement, IAM permission catalog, tree transfer, drag-and-drop transfer, or virtualized selector."
+      "aiUsageNotes": "Use only for bounded local assignment. Apps own backend fetching, server search, pagination, approvals, and persistence. Do not use as a UniversalDataGrid replacement, IAM permission catalog, tree transfer, drag-and-drop transfer, or virtualized selector.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "TransferList",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-transfer-list"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "toast",
@@ -3439,7 +5032,34 @@
       "importExample": "import { ToastProvider, ToastAction, useToast } from '@vyrnforge/ui-components';",
       "basicUsageExample": "const toast = useToast(); toast.success({ title: 'Saved', description: 'Changes were saved.' });",
       "accessibilityNotes": "ToastProvider renders a Portal viewport. Neutral, info, and success toasts use polite status announcements; warning and error use alert semantics. Focus does not move automatically.",
-      "aiUsageNotes": "Wrap app areas in ToastProvider before calling useToast. Use toast/update/dismiss for transient feedback only. Do not use Toast as field validation, persistent contextual feedback, destructive confirmation, or notification history."
+      "aiUsageNotes": "Wrap app areas in ToastProvider before calling useToast. Use toast/update/dismiss for transient feedback only. Do not use Toast as field validation, persistent contextual feedback, destructive confirmation, or notification history.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Toast",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-toast"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "progress",
@@ -3824,7 +5444,34 @@
       "importExample": "requires-verification",
       "basicUsageExample": "requires-verification",
       "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "aiUsageNotes": "requires-verification",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ClearButton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-mapping",
+          "target": "vf-icon-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "close-button",
@@ -3859,7 +5506,34 @@
       "importExample": "requires-verification",
       "basicUsageExample": "requires-verification",
       "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "aiUsageNotes": "requires-verification",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "CloseButton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-mapping",
+          "target": "vf-icon-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "more-button",
@@ -3894,7 +5568,34 @@
       "importExample": "requires-verification",
       "basicUsageExample": "requires-verification",
       "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "aiUsageNotes": "requires-verification",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "MoreButton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-mapping",
+          "target": "vf-icon-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "refresh-button",
@@ -3929,7 +5630,34 @@
       "importExample": "requires-verification",
       "basicUsageExample": "requires-verification",
       "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "aiUsageNotes": "requires-verification",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "RefreshButton",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-mapping",
+          "target": "vf-icon-button"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "toast-action",
@@ -3964,7 +5692,34 @@
       "importExample": "requires-verification",
       "basicUsageExample": "requires-verification",
       "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "aiUsageNotes": "requires-verification",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ToastAction",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "direct-element",
+          "target": "vf-toast-action"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "toast-provider",
@@ -3999,7 +5754,34 @@
       "importExample": "requires-verification",
       "basicUsageExample": "requires-verification",
       "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "aiUsageNotes": "requires-verification",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "ToastProvider",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-mapping",
+          "target": "vf-toast-viewport"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "use-toast",
@@ -4034,7 +5816,34 @@
       "importExample": "requires-verification",
       "basicUsageExample": "requires-verification",
       "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "aiUsageNotes": "requires-verification",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "useToast",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "planned-s5"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "planned-s6",
+          "strategy": "renderer-service",
+          "target": "toast-service"
+        },
+        "angular": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        },
+        "vue": {
+          "status": "planned-gmf4",
+          "consumes": "@vyrnforge/ui-elements"
+        }
+      }
     },
     {
       "id": "data-grid-search",

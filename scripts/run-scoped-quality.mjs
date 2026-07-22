@@ -25,7 +25,9 @@ function runNpm(args) {
 
 const full = readBoolean("CI_SCOPE_FULL");
 const core = full || readBoolean("CI_SCOPE_UI_CORE");
+const behaviors = full || readBoolean("CI_SCOPE_UI_BEHAVIORS");
 const components = full || readBoolean("CI_SCOPE_UI_COMPONENTS");
+const elements = full || readBoolean("CI_SCOPE_UI_ELEMENTS");
 const dataGrid = full || readBoolean("CI_SCOPE_UI_DATA_GRID");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
 
@@ -44,7 +46,7 @@ runNpm(["run", "verify:assistive-technology"]);
 runNpm(["run", "verify:repository-inventory"]);
 runNpm(["run", "test:coverage"]);
 
-if (core || components || dataGrid || fixtures) {
+if (core || behaviors || components || elements || dataGrid || fixtures) {
   runNpm(["run", "fixtures:verify"]);
 }
 
@@ -55,11 +57,17 @@ if (full) {
 
 // Build package prerequisites once, then suppress pretypecheck scripts so targeted
 // package checks do not repeatedly rebuild the same dependency chain.
-if (core || components || dataGrid) {
+if (core || behaviors || components || elements || dataGrid) {
   runNpm(["run", "build", "--workspace", "@vyrnforge/ui-core"]);
+}
+if (behaviors || components || elements) {
+  runNpm(["run", "build", "--workspace", "@vyrnforge/ui-behaviors"]);
 }
 if (components || dataGrid) {
   runNpm(["run", "build", "--workspace", "@vyrnforge/ui-components"]);
+}
+if (elements) {
+  runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"]);
 }
 if (dataGrid) {
   runNpm(["run", "build", "--workspace", "@vyrnforge/ui-data-grid"]);
@@ -67,7 +75,9 @@ if (dataGrid) {
 
 const selected = [
   [core, "@vyrnforge/ui-core"],
+  [behaviors, "@vyrnforge/ui-behaviors"],
   [components, "@vyrnforge/ui-components"],
+  [elements, "@vyrnforge/ui-elements"],
   [dataGrid, "@vyrnforge/ui-data-grid"],
 ].filter(([enabled]) => enabled);
 
