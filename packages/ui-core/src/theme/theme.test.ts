@@ -67,9 +67,10 @@ describe("VyrnForge theme helpers", () => {
       vyrnForgeEnterpriseTheme,
     ]) {
       for (const token of vyrnForgeThemeColorTokens) {
-        expect(theme[token], `${token} must exist in every theme preset`).toBe(
-          expect.any(String),
-        );
+        expect(
+          theme[token],
+          `${token} must exist in every theme preset`,
+        ).toEqual(expect.any(String));
       }
     }
   });
