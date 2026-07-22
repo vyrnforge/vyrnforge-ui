@@ -5,23 +5,26 @@
   gap: var(--vf-space-4);
   min-height: 56px;
   padding: 0 var(--vf-space-5);
-  color: var(--vf-text);
-  background: var(--vf-surface);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-default);
 }
 .vf-top-nav__brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--vf-space-2);
+  gap: var(--vf-component-gap);
   min-width: 0;
-  color: var(--vf-text-strong);
-  font-weight: 780;
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-section-title-font-family);
+  font-size: var(--vf-type-section-title-font-size);
+  font-weight: var(--vf-type-section-title-font-weight);
+  line-height: var(--vf-type-section-title-line-height);
 }
 .vf-top-nav__navigation,
 .vf-top-nav__actions,
 .vf-top-nav__user {
   display: inline-flex;
   align-items: center;
-  gap: var(--vf-space-2);
+  gap: var(--vf-component-gap);
   min-width: 0;
 }
 .vf-top-nav__navigation {

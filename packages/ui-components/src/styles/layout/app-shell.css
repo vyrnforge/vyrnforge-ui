@@ -2,12 +2,15 @@
   --vf-app-shell-header-height: 64px;
   --vf-app-shell-min-height: 100dvh;
   --vf-app-shell-sidebar-width: 280px;
-  --vf-app-shell-sidebar-collapsed-width: var(--vf-app-shell-collapsed-sidebar-width, 64px);
+  --vf-app-shell-sidebar-collapsed-width: var(
+    --vf-app-shell-collapsed-sidebar-width,
+    64px
+  );
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   min-height: var(--vf-app-shell-min-height);
-  color: var(--vf-text);
-  background: var(--vf-bg);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-page);
 }
 .vf-app-shell--full-height {
   height: var(--vf-app-shell-min-height);
@@ -21,10 +24,10 @@
   overflow: visible;
 }
 .vf-app-shell__header {
-  z-index: 30;
+  z-index: calc(var(--vf-layer-sticky) + 2);
   min-height: var(--vf-app-shell-header-height);
-  border-bottom: 1px solid var(--vf-border);
-  background: var(--vf-surface);
+  border-bottom: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-default);
 }
 .vf-app-shell--header-static .vf-app-shell__header {
   position: static;
@@ -54,16 +57,19 @@
   grid-template-columns: var(--vf-app-shell-sidebar-width) minmax(0, 1fr);
 }
 .vf-app-shell--sidebar-collapsed .vf-app-shell__body {
-  grid-template-columns: var(--vf-app-shell-sidebar-collapsed-width) minmax(0, 1fr);
+  grid-template-columns: var(--vf-app-shell-sidebar-collapsed-width) minmax(
+      0,
+      1fr
+    );
 }
 .vf-app-shell__sidebar {
   position: relative;
-  z-index: 20;
+  z-index: var(--vf-layer-sticky);
   display: grid;
   min-width: 0;
   min-height: 0;
-  border-right: 1px solid var(--vf-border);
-  background: var(--vf-surface);
+  border-right: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-default);
   overflow: hidden;
 }
 .vf-app-shell__sidebar-scroll {
@@ -99,7 +105,8 @@
   inset-block-start: var(--vf-app-shell-header-height);
   height: calc(100dvh - var(--vf-app-shell-header-height));
 }
-.vf-app-shell--sidebar-collapsed.vf-app-shell--sidebar-fixed .vf-app-shell__sidebar {
+.vf-app-shell--sidebar-collapsed.vf-app-shell--sidebar-fixed
+  .vf-app-shell__sidebar {
   width: var(--vf-app-shell-sidebar-collapsed-width);
 }
 .vf-app-shell--scroll-content .vf-app-shell__sidebar,
@@ -133,7 +140,7 @@
   min-height: 0;
 }
 .vf-app-shell__footer {
-  z-index: 25;
-  border-top: 1px solid var(--vf-border);
-  background: var(--vf-surface);
+  z-index: calc(var(--vf-layer-sticky) + 1);
+  border-top: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-default);
 }

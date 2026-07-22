@@ -2,45 +2,44 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--vf-space-1);
+  gap: var(--vf-component-gap);
   min-height: var(--vf-control-height);
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-control-border);
   border-radius: var(--vf-radius-md);
-  padding: 0 var(--vf-control-padding-x);
-  color: var(--vf-text);
-  background: var(--vf-surface);
-  font: inherit;
-  font-size: var(--vf-font-size-md);
-  font-weight: 680;
+  padding: var(--vf-control-padding-y) var(--vf-control-padding-x);
+  color: var(--vf-text-primary);
+  background: var(--vf-control-background);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
+  letter-spacing: var(--vf-type-label-letter-spacing);
   cursor: pointer;
-  transition:
-    border-color var(--vf-transition-fast),
-    background-color var(--vf-transition-fast),
-    box-shadow var(--vf-transition-fast);
+  transition: var(--vf-motion-transition-color);
 }
 
 .vf-toggle-button--sm {
-  min-height: 30px;
-  padding-inline: 10px;
-  font-size: var(--vf-font-size-sm);
+  min-height: var(--vf-control-height-sm);
+  padding-inline: var(--vf-control-padding-x-sm);
+  font-size: var(--vf-type-caption-font-size);
 }
 
 .vf-toggle-button--lg {
-  min-height: 42px;
-  padding-inline: 14px;
-  font-size: var(--vf-font-size-lg);
+  min-height: var(--vf-control-height-lg);
+  padding-inline: var(--vf-control-padding-x-lg);
+  font-size: var(--vf-type-section-title-font-size);
 }
 
 .vf-toggle-button:hover:not(:disabled) {
-  border-color: var(--vf-border-strong);
-  background: var(--vf-surface-subtle);
+  border-color: var(--vf-control-border-hover);
+  background: var(--vf-control-background-hover);
 }
 
 .vf-toggle-button--pressed {
-  border-color: var(--vf-primary);
-  color: var(--vf-primary);
-  background: var(--vf-primary-soft);
-  box-shadow: inset 0 0 0 1px var(--vf-primary);
+  border-color: var(--vf-interactive-selected-border);
+  color: var(--vf-interactive-selected-text);
+  background: var(--vf-interactive-selected-background);
+  box-shadow: inset 0 0 0 1px var(--vf-interactive-selected-border);
 }
 
 .vf-toggle-button--quiet {
@@ -58,6 +57,8 @@
 }
 
 .vf-toggle-button:disabled {
+  color: var(--vf-control-disabled-text);
+  background: var(--vf-control-disabled-background);
   cursor: not-allowed;
-  opacity: 0.56;
+  opacity: 1;
 }

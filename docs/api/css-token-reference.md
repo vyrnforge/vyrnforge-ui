@@ -192,3 +192,26 @@ retain their existing `--vf-primary*` overrides.
 ```
 
 Use `--udg-*` only for decisions that are genuinely grid-specific.
+
+## Package consumption rules
+
+`@vyrnforge/ui-components` consumes canonical `--vf-*` roles directly.
+`@vyrnforge/ui-data-grid` exposes grid-facing `--udg-*` roles that map to these
+shared roles by default. Override canonical tokens when an application-wide
+decision should change; override a `--udg-*` role only for a grid-specific
+exception.
+
+```css
+.my-app {
+  --vf-interactive-primary: #003b71;
+  --vf-focus-color: #005ea8;
+}
+
+.my-app .udg {
+  --udg-row-height: 40px;
+}
+```
+
+Do not introduce new package CSS references to historical aliases such as
+`--vf-primary`, `--vf-text`, or `--vf-surface`. These remain compatibility
+sources for consuming applications only.

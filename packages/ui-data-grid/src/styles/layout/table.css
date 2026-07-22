@@ -46,7 +46,7 @@
 .udg-header-cell {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: var(--udg-layer-header);
   height: var(--udg-header-height);
   border-bottom-color: var(--udg-border-strong);
   background: var(--udg-header-bg);
@@ -65,7 +65,7 @@
 
 .udg-table [role="gridcell"]:focus-visible {
   position: relative;
-  z-index: 2;
-  outline: 2px solid var(--udg-focus-ring);
+  z-index: var(--udg-layer-header-control);
+  outline: var(--vf-focus-width) solid var(--udg-focus-ring);
   outline-offset: -2px;
 }

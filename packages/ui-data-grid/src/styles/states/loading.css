@@ -6,14 +6,15 @@
   width: 100%;
   height: 14px;
   border-radius: 999px;
-  background:
-    linear-gradient(
-      90deg,
-      var(--udg-skeleton-highlight) 0%,
-      var(--udg-skeleton-base) 45%,
-      var(--udg-skeleton-highlight) 90%);
+  background: linear-gradient(
+    90deg,
+    var(--udg-skeleton-highlight) 0%,
+    var(--udg-skeleton-base) 45%,
+    var(--udg-skeleton-highlight) 90%
+  );
   background-size: 220% 100%;
-  animation: udg-skeleton-pulse 1.2s ease-in-out infinite;
+  animation: udg-skeleton-pulse var(--vf-motion-duration-deliberate)
+    var(--vf-motion-easing-standard) infinite;
 }
 
 @keyframes udg-skeleton-pulse {

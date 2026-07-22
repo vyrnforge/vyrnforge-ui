@@ -6,11 +6,11 @@
   background: transparent;
 }
 .vf-card--bordered {
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-border-default);
 }
 .vf-card--elevated {
-  border: 1px solid var(--vf-border);
-  background: var(--vf-surface-raised);
+  border: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-overlay);
   box-shadow: var(--vf-shadow-md);
 }
 .vf-card--padding-none {

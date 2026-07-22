@@ -20,7 +20,7 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  z-index: 6;
+  z-index: var(--udg-layer-menu);
   display: grid;
   gap: var(--udg-space-2);
   width: min(280px, calc(100vw - 32px));
@@ -78,7 +78,8 @@
   min-height: 26px;
   align-items: center;
   gap: var(--udg-space-1);
-  border: 1px solid color-mix(in srgb, var(--udg-primary) 32%, var(--udg-border));
+  border: 1px solid
+    color-mix(in srgb, var(--udg-primary) 32%, var(--udg-border));
   border-radius: 999px;
   padding: 2px 4px 2px 9px;
   color: var(--udg-primary);
@@ -117,7 +118,11 @@
   background: color-mix(in srgb, var(--udg-header-bg) 72%, var(--udg-surface));
 }
 .udg-table tbody tr.udg-group-row:hover {
-  background: color-mix(in srgb, var(--udg-header-bg) 84%, var(--udg-row-hover-bg));
+  background: color-mix(
+    in srgb,
+    var(--udg-header-bg) 84%,
+    var(--udg-row-hover-bg)
+  );
 }
 .udg-group-row__cell {
   border-bottom-color: var(--udg-border);

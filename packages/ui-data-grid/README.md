@@ -41,13 +41,14 @@ import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
-`@vyrnforge/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--vf-*` variables when `@vyrnforge/ui-core` CSS is present, so app-level VyrnForge tokens can theme components and grid together.
+`@vyrnforge/ui-data-grid` remains backward compatible with `--udg-*` variables. Grid-facing roles now map to canonical semantic `--vf-*` roles from `@vyrnforge/ui-core`, so components and grid share one theme source. Light, dark, enterprise, and system grid themes inherit ui-core; only the documented grid high-contrast compatibility theme keeps explicit values.
 
 Override shared `--vf-*` tokens when components and grid should move together:
 
 ```css
 .my-app {
-  --vf-primary: #003b71;
+  --vf-interactive-primary: #003b71;
+  --vf-focus-color: #005ea8;
   --vf-radius-md: 10px;
 }
 ```
@@ -56,10 +57,16 @@ Override `--udg-*` tokens when only the grid should change:
 
 ```css
 .my-app .udg {
-  --udg-header-bg: #f8fafc;
+  --udg-header-bg: var(--vf-surface-muted);
   --udg-row-height: 42px;
 }
 ```
+
+Typed presets such as `dataGridLightTheme` are derived from ui-core theme
+presets. Custom shared themes can use
+`createDataGridThemeFromVyrnForgeTheme(name, themeVars)` when a concrete grid
+inline-variable object is required. Prefer scoped CSS semantic overrides for
+normal application theming.
 
 ## Theme System
 

@@ -11,8 +11,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, `@vyrnforge/ui-data-grid` |
-| Documentation | 84 active Markdown files; 23 archived Markdown files |
-| Scripts | 53 root npm scripts; repository automation under `scripts/` |
+| Documentation | 85 active Markdown files; 23 archived Markdown files |
+| Scripts | 55 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 9 workflow files, including 5 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
@@ -54,7 +54,7 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | --- | --- |
 | Purpose | Specialized enterprise data-management grid and grid contracts. |
 | Main source directories | `src/adapters`, `src/components`, `src/core`, `src/hooks`, `src/state`, `src/styles`, `src/theme`, `src/types` |
-| Public exports | 126 root names. `AdapterLocalStorageGridPersistenceOptions`, `applyFilters`, `applyGrouping`, `applyPagination`, `applySearch`, `applySorting`, `buildDataGridExportRequest`, `BuildDataGridExportRequestParams`, `buildDataGridServerQuery`, `BuildDataGridServerQueryParams`, `buildGroupedRows`, `clampColumnWidth`, `clearSelection`, `collapseAllGroups`, `createDataGridTheme`, `createGridState`, `createGroupId`, `createLocalStorageGridPersistence`, `DataGridAggregationContext`, `DataGridAggregationDef`, `DataGridAggregationType`, `DataGridBulkAction`, `DataGridBulkActionContext`, `DataGridBulkActionVariant`, `DataGridColumnDataType`, `DataGridColumnDef`, `DataGridColumnMenu`, `DataGridColumnSizingState`, `DataGridColumnVisibilityState`, `DataGridCssVar`, `dataGridDarkTheme`, `DataGridDefaultExpandedGroups`, `DataGridDensity`, `DataGridDisplayRow`, `DataGridEmptyState`, `dataGridEnterpriseTheme`, `DataGridErrorState`, `DataGridExportColumn`, `DataGridExportFormat`, `DataGridExportRequest`, `DataGridExportScope`, `DataGridFilter`, `DataGridFilterBar`, `DataGridFilterOperator`, `DataGridGroupHeaderContext`, `DataGridGroupIdContext`, `DataGridGroupingState`, `DataGridGroupPathItem`, `DataGridGroupRow`, `DataGridLeafRow`, `dataGridLightTheme`, `DataGridPageSelectionState`, `DataGridPagination`, `DataGridPaginationState`, `DataGridPersistedState`, `DataGridPersistenceAdapter`, `DataGridPersistKey`, `DataGridRowId`, `DataGridRowIdGetter`, `DataGridRowSelectableGetter`, `DataGridSearch`, `DataGridSelectionMode`, `DataGridSelectionScope`, `DataGridServerQuery`, `DataGridSkeletonRows`, `DataGridSort`, `DataGridState`, `DataGridTheme`, `DataGridThemePreset`, `DataGridThemeVars`, `DataGridToolbar`, `DataGridVariant`, `defaultColumnMinWidth`, `defaultColumnWidth`, `defaultDataGridState`, `defaultPersistKeys`, `deselectRows`, `expandAllGroups`, `filterColumnMenuColumns`, `flattenGroupedRows`, `getColumnFilter`, `getGroupLeafRowIds`, `getGroupLeafRows`, `getRowIdValue`, `getSelectableRowIds`, `getSelectionStateForPage`, `GridStateAction`, `gridStateActions`, `gridStateReducer`, `hideOptionalColumns`, `isColumnResizable`, `isRowSelectable`, `isRowSelected`, `LocalStorageGridPersistenceOptions`, `mergeDataGridTheme`, `mergeGridState`, `moveColumnBefore`, `moveColumnOrder`, `normalizeGrouping`, `pickPersistableGridState`, `removeColumnFilter`, `resetAllColumnSizes`, `resetColumnSize`, `resetGridViewState`, `resolveColumnMaxWidth`, `resolveColumnMinWidth`, `resolveColumnSizing`, `resolveColumnWidth`, `resolveGroupableColumns`, `resolveOrderedColumns`, `resolveSelectedRows`, `resolveVisibleColumns`, `selectGridQueryState`, `selectRows`, `setColumnSize`, `showAllColumns`, `toDataGridThemeStyle`, `toggleGroupExpanded`, `toggleRowSelection`, `UniversalDataGrid`, `UniversalDataGridProps`, `updateColumnVisibility`, `upsertColumnFilter`, `useDataGridState`, `UseDataGridStateOptions`, `UseDataGridStateResult` |
+| Public exports | 127 root names. `AdapterLocalStorageGridPersistenceOptions`, `applyFilters`, `applyGrouping`, `applyPagination`, `applySearch`, `applySorting`, `buildDataGridExportRequest`, `BuildDataGridExportRequestParams`, `buildDataGridServerQuery`, `BuildDataGridServerQueryParams`, `buildGroupedRows`, `clampColumnWidth`, `clearSelection`, `collapseAllGroups`, `createDataGridTheme`, `createDataGridThemeFromVyrnForgeTheme`, `createGridState`, `createGroupId`, `createLocalStorageGridPersistence`, `DataGridAggregationContext`, `DataGridAggregationDef`, `DataGridAggregationType`, `DataGridBulkAction`, `DataGridBulkActionContext`, `DataGridBulkActionVariant`, `DataGridColumnDataType`, `DataGridColumnDef`, `DataGridColumnMenu`, `DataGridColumnSizingState`, `DataGridColumnVisibilityState`, `DataGridCssVar`, `dataGridDarkTheme`, `DataGridDefaultExpandedGroups`, `DataGridDensity`, `DataGridDisplayRow`, `DataGridEmptyState`, `dataGridEnterpriseTheme`, `DataGridErrorState`, `DataGridExportColumn`, `DataGridExportFormat`, `DataGridExportRequest`, `DataGridExportScope`, `DataGridFilter`, `DataGridFilterBar`, `DataGridFilterOperator`, `DataGridGroupHeaderContext`, `DataGridGroupIdContext`, `DataGridGroupingState`, `DataGridGroupPathItem`, `DataGridGroupRow`, `DataGridLeafRow`, `dataGridLightTheme`, `DataGridPageSelectionState`, `DataGridPagination`, `DataGridPaginationState`, `DataGridPersistedState`, `DataGridPersistenceAdapter`, `DataGridPersistKey`, `DataGridRowId`, `DataGridRowIdGetter`, `DataGridRowSelectableGetter`, `DataGridSearch`, `DataGridSelectionMode`, `DataGridSelectionScope`, `DataGridServerQuery`, `DataGridSkeletonRows`, `DataGridSort`, `DataGridState`, `DataGridTheme`, `DataGridThemePreset`, `DataGridThemeVars`, `DataGridToolbar`, `DataGridVariant`, `defaultColumnMinWidth`, `defaultColumnWidth`, `defaultDataGridState`, `defaultPersistKeys`, `deselectRows`, `expandAllGroups`, `filterColumnMenuColumns`, `flattenGroupedRows`, `getColumnFilter`, `getGroupLeafRowIds`, `getGroupLeafRows`, `getRowIdValue`, `getSelectableRowIds`, `getSelectionStateForPage`, `GridStateAction`, `gridStateActions`, `gridStateReducer`, `hideOptionalColumns`, `isColumnResizable`, `isRowSelectable`, `isRowSelected`, `LocalStorageGridPersistenceOptions`, `mergeDataGridTheme`, `mergeGridState`, `moveColumnBefore`, `moveColumnOrder`, `normalizeGrouping`, `pickPersistableGridState`, `removeColumnFilter`, `resetAllColumnSizes`, `resetColumnSize`, `resetGridViewState`, `resolveColumnMaxWidth`, `resolveColumnMinWidth`, `resolveColumnSizing`, `resolveColumnWidth`, `resolveGroupableColumns`, `resolveOrderedColumns`, `resolveSelectedRows`, `resolveVisibleColumns`, `selectGridQueryState`, `selectRows`, `setColumnSize`, `showAllColumns`, `toDataGridThemeStyle`, `toggleGroupExpanded`, `toggleRowSelection`, `UniversalDataGrid`, `UniversalDataGridProps`, `updateColumnVisibility`, `upsertColumnFilter`, `useDataGridState`, `UseDataGridStateOptions`, `UseDataGridStateResult` |
 | CSS entry points | `./index.css`, `./style.css`, `./styles/index.css` |
 | Dependencies | `@vyrnforge/ui-components@0.1.0-alpha.1`, `@vyrnforge/ui-core@0.1.0-alpha.1` |
 | Peer dependencies | `react@>=18 <20`, `react-dom@>=18 <20` |
@@ -149,7 +149,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 
 | Area | Evidence-led inventory |
 | --- | --- |
-| Public entry points | 126 package-root names; CSS: `./style.css`, `./index.css`, `./styles/index.css` |
+| Public entry points | 127 package-root names; CSS: `./style.css`, `./index.css`, `./styles/index.css` |
 | Main component | `packages/ui-data-grid/src/components/UniversalDataGrid.tsx` is 1697 lines and concentrates rendering, state coordination, column behavior, grouping, selection, pagination, and feature composition. |
 | Supporting components | `DataGridColumnMenu.tsx`, `DataGridEmptyState.tsx`, `DataGridErrorState.tsx`, `DataGridFilterBar.tsx`, `DataGridPagination.tsx`, `DataGridSearch.tsx`, `DataGridSkeletonRows.tsx`, `DataGridToolbar.tsx`, `UniversalDataGrid.tsx` |
 | Logic modules | `core/` algorithms; `state/` defaults/merge/reducer/actions/selectors; `hooks/` React coordination; `adapters/` persistence/server-query/export-request; plus theme, types, and grid CSS. |
@@ -166,7 +166,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 84 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 85 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
@@ -180,8 +180,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 47 |
-| Pure/unit | 28 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 48 |
+| Pure/unit | 29 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 3 detected test files with DOM interaction helpers. |
 | Browser | 14 detected browser-test files. |
@@ -247,16 +247,16 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Metric | Count |
 | --- | --- |
 | Publishable packages | 3 |
-| Package-root export names | 348 |
+| Package-root export names | 349 |
 | Public components inventoried | 75 |
-| Repository test files | 47 |
+| Repository test files | 48 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 3 |
 | Browser test files | 14 |
 | Automated accessibility-test files | 3 |
 | Workflow files | 9 |
 | Reusable workflows | 5 |
-| Active Markdown documentation files | 84 |
+| Active Markdown documentation files | 85 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |

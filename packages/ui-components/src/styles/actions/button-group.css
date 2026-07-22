@@ -3,7 +3,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--vf-space-2);
+  gap: var(--vf-component-gap);
 }
 .vf-button-group--attached {
   gap: 0;
@@ -15,8 +15,8 @@
 .vf-button-group--sm .vf-button,
 .vf-button-group--sm .vf-icon-button,
 .vf-button-group--sm .vf-toolbar-button {
-  min-height: 30px;
-  font-size: var(--vf-font-size-sm);
+  min-height: var(--vf-control-height-sm);
+  font-size: var(--vf-type-caption-font-size);
 }
 .vf-button-group--attached .vf-button:not(:first-child),
 .vf-button-group--attached .vf-icon-button:not(:first-child),

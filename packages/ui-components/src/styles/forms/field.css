@@ -1,6 +1,6 @@
 .vf-field {
   display: grid;
-  gap: var(--vf-space-2);
+  gap: var(--vf-component-gap);
   min-width: 0;
 }
 .vf-field--horizontal {
@@ -12,23 +12,30 @@
 .vf-field--horizontal .vf-field__message {
   grid-column: 2;
 }
-.vf-field--horizontal > :not(.vf-field__label, .vf-field__description, .vf-field__message) {
+.vf-field--horizontal
+  > :not(.vf-field__label, .vf-field__description, .vf-field__message) {
   grid-column: 2;
 }
 .vf-field__label {
-  color: var(--vf-text-strong);
-  font-size: var(--vf-font-size-sm);
-  font-weight: 720;
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
+  letter-spacing: var(--vf-type-label-letter-spacing);
 }
 .vf-field__required {
-  color: var(--vf-danger);
+  color: var(--vf-status-error-text);
 }
 .vf-field__description,
 .vf-field__message {
-  color: var(--vf-text-muted);
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-text-secondary);
+  font-family: var(--vf-type-caption-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  font-weight: var(--vf-type-caption-font-weight);
+  line-height: var(--vf-type-caption-line-height);
+  letter-spacing: var(--vf-type-caption-letter-spacing);
 }
 .vf-field--disabled {
-  opacity: 0.68;
+  color: var(--vf-text-disabled);
 }
