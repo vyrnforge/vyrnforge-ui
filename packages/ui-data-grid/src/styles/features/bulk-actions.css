@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--udg-space-3);
-  border: 1px solid color-mix(in srgb, var(--udg-primary) 28%, var(--udg-border));
+  border: 1px solid
+    color-mix(in srgb, var(--udg-primary) 28%, var(--udg-border));
   border-radius: var(--udg-radius-md);
   margin-bottom: var(--udg-space-3);
   padding: var(--udg-space-2) var(--udg-space-3);
@@ -53,7 +54,7 @@
 }
 .udg-bulk-action--primary {
   border-color: var(--udg-primary);
-  color: #ffffff;
+  color: var(--udg-primary-text);
   background: var(--udg-primary);
 }
 .udg-bulk-action--primary:hover:not(:disabled) {

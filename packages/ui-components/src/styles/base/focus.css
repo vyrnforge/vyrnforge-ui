@@ -2,8 +2,6 @@
 .vf-icon-button:focus-visible,
 .vf-toolbar-button:focus-visible,
 .vf-toggle-button:focus-visible,
-.vf-toggle-button:focus-visible,
-.vf-toggle-button:focus-visible,
 .vf-segmented-control__item:focus-visible,
 .vf-input:focus-visible,
 .vf-select:focus-visible,
@@ -18,6 +16,6 @@
 .vf-side-nav__item:focus-visible,
 .vf-breadcrumbs__link:focus-visible,
 .vf-tabs__tab:focus-visible {
-  outline: 2px solid var(--vf-focus-ring);
-  outline-offset: 2px;
+  outline: var(--vf-focus-width) solid var(--vf-focus-color);
+  outline-offset: var(--vf-focus-offset);
 }

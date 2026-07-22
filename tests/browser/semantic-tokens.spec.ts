@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 import {
   browserFixtureIds,
+  fixtureAction,
   fixtureRegion,
   openFixture,
   setFixtureDensity,
@@ -43,7 +44,21 @@ async function readCustomProperties(
   );
 }
 
-test.describe("VF-3002 through VF-3008 semantic token contract", () => {
+async function resolveColorToken(
+  locator: ReturnType<typeof fixtureRegion>,
+  token: string,
+) {
+  return locator.evaluate((element, tokenName) => {
+    const probe = document.createElement("span");
+    probe.style.color = `var(${tokenName})`;
+    element.append(probe);
+    const color = getComputedStyle(probe).color;
+    probe.remove();
+    return color;
+  }, token);
+}
+
+test.describe("VF-3002 through VF-3010 semantic token contract", () => {
   test("resolves the same semantic roles in light and dark themes", async ({
     page,
   }) => {
@@ -172,5 +187,49 @@ test.describe("VF-3002 through VF-3008 semantic token contract", () => {
 
     expect(levels).toEqual([...levels].sort((left, right) => left - right));
     expect(new Set(levels).size).toBe(levels.length);
+  });
+
+  test("applies semantic interaction roles to shared components", async ({
+    page,
+  }) => {
+    await openFixture(page, browserFixtureIds.buttonBasic);
+    const fixture = fixtureRegion(page, "fixture");
+    const button = fixtureAction(page, "primary");
+
+    const lightExpected = await resolveColorToken(
+      fixture,
+      "--vf-interactive-primary",
+    );
+    await expect(button).toHaveCSS("background-color", lightExpected);
+
+    await setFixtureTheme(page, "dark");
+    const darkExpected = await resolveColorToken(
+      fixture,
+      "--vf-interactive-primary",
+    );
+    await expect(button).toHaveCSS("background-color", darkExpected);
+    expect(darkExpected).not.toBe(lightExpected);
+  });
+
+  test("maps data-grid roles to shared semantic tokens in every theme", async ({
+    page,
+  }) => {
+    await openFixture(page, browserFixtureIds.dataGridKeyboard);
+    const grid = page.locator(".udg");
+
+    for (const [gridToken, sharedToken] of [
+      ["--udg-bg", "--vf-surface-page"],
+      ["--udg-text", "--vf-text-primary"],
+      ["--udg-primary", "--vf-interactive-primary"],
+      ["--udg-row-selected-bg", "--vf-interactive-selected-background"],
+    ] as const) {
+      const values = await readCustomProperties(grid, [gridToken, sharedToken]);
+      expect(values[gridToken]).toBe(values[sharedToken]);
+    }
+
+    const lightBackground = await readCustomProperties(grid, ["--udg-bg"]);
+    await setFixtureTheme(page, "dark");
+    const darkBackground = await readCustomProperties(grid, ["--udg-bg"]);
+    expect(darkBackground["--udg-bg"]).not.toBe(lightBackground["--udg-bg"]);
   });
 });

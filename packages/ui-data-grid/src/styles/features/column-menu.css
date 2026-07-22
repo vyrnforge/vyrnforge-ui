@@ -17,7 +17,7 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  z-index: 5;
+  z-index: var(--udg-layer-menu);
   display: grid;
   grid-template-rows: auto auto auto auto minmax(0, 1fr);
   width: min(350px, calc(100vw - 32px));
@@ -83,7 +83,7 @@
   margin-left: -1px;
 }
 .udg-segmented-control button.udg-is-active {
-  z-index: 1;
+  z-index: var(--udg-layer-cell);
   border-color: var(--udg-primary);
   color: var(--udg-primary);
   background: var(--udg-primary-soft);
@@ -121,7 +121,7 @@
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  z-index: 6;
+  z-index: var(--udg-layer-menu-nested);
   display: grid;
   min-width: 148px;
   gap: 2px;
@@ -175,13 +175,14 @@
   position: absolute;
   top: 50%;
   right: var(--udg-space-1);
-  z-index: 2;
+  z-index: var(--udg-layer-frozen-cell);
   display: inline-flex;
   justify-content: flex-end;
   gap: 2px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 120ms ease;
+  transition: opacity var(--vf-motion-duration-fast)
+    var(--vf-motion-easing-standard);
   transform: translateY(-50%);
 }
 .udg-column-menu__row:hover .udg-column-menu__row-actions,
@@ -217,7 +218,7 @@
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  z-index: 7;
+  z-index: var(--udg-layer-menu-nested);
   display: grid;
   min-width: 140px;
   gap: 2px;

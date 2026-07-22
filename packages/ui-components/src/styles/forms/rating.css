@@ -1,38 +1,35 @@
 .vf-rating {
   display: inline-grid;
-  gap: var(--vf-space-2);
+  gap: var(--vf-component-gap);
   min-width: 0;
   margin: 0;
   border: 0;
   padding: 0;
-  color: var(--vf-text);
+  color: var(--vf-text-primary);
 }
-
 .vf-rating__label {
   padding: 0;
-  color: var(--vf-text-strong);
-  font-size: var(--vf-font-size-sm);
-  font-weight: 720;
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
 }
-
 .vf-rating__items {
   display: inline-flex;
   align-items: center;
   gap: 2px;
 }
-
 .vf-rating__item {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--vf-text-muted);
+  color: var(--vf-text-tertiary);
 }
-
 .vf-rating:not(.vf-rating--read-only) .vf-rating__item {
   cursor: pointer;
 }
-
 .vf-rating__input {
   position: absolute;
   width: 1px;
@@ -41,7 +38,6 @@
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
-
 .vf-rating__icon {
   display: inline-flex;
   align-items: center;
@@ -49,34 +45,28 @@
   width: calc(var(--vf-control-height) - 6px);
   height: calc(var(--vf-control-height) - 6px);
   border-radius: var(--vf-radius-sm);
+  transition: var(--vf-motion-transition-color);
 }
-
 .vf-rating__item--selected {
-  color: var(--vf-warning);
+  color: var(--vf-status-warning-indicator);
 }
-
 .vf-rating__item--selected .vf-icon {
   fill: currentColor;
 }
-
 .vf-rating__item:hover .vf-rating__icon {
-  color: var(--vf-warning);
-  background: var(--vf-warning-soft);
+  color: var(--vf-status-warning-indicator);
+  background: var(--vf-status-warning-background);
 }
-
 .vf-rating__input:focus-visible + .vf-rating__icon {
-  outline: 2px solid var(--vf-focus-ring);
-  outline-offset: 2px;
+  outline: var(--vf-focus-width) solid var(--vf-focus-color);
+  outline-offset: var(--vf-focus-offset);
 }
-
 .vf-rating--disabled {
-  opacity: 0.62;
+  color: var(--vf-text-disabled);
 }
-
 .vf-rating--disabled .vf-rating__item {
   cursor: not-allowed;
 }
-
 .vf-rating--read-only {
   gap: var(--vf-space-1);
 }

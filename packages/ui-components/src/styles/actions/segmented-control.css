@@ -2,39 +2,42 @@
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-border-default);
   border-radius: var(--vf-radius-md);
   padding: 2px;
-  background: var(--vf-surface-subtle);
+  background: var(--vf-surface-muted);
 }
 .vf-segmented-control__item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--vf-space-1);
-  min-height: 28px;
+  gap: var(--vf-component-gap);
+  min-height: var(--vf-control-height-sm);
   border: 1px solid transparent;
   border-radius: calc(var(--vf-radius-md) - 2px);
-  padding: 0 10px;
-  color: var(--vf-text-muted);
+  padding: var(--vf-control-padding-y-sm) var(--vf-control-padding-x-sm);
+  color: var(--vf-text-secondary);
   background: transparent;
-  font: inherit;
-  font-size: var(--vf-font-size-sm);
-  font-weight: 700;
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
+  letter-spacing: var(--vf-type-label-letter-spacing);
   cursor: pointer;
+  transition: var(--vf-motion-transition-color);
 }
 .vf-segmented-control--md .vf-segmented-control__item {
-  min-height: 32px;
-  padding-inline: 12px;
-  font-size: var(--vf-font-size-md);
+  min-height: var(--vf-control-height-md);
+  padding-inline: var(--vf-control-padding-x-md);
+  font-size: var(--vf-type-label-font-size);
 }
 .vf-segmented-control__item:hover:not(:disabled) {
-  color: var(--vf-text);
-  background: var(--vf-surface);
+  color: var(--vf-text-primary);
+  background: var(--vf-control-background-hover);
 }
 .vf-segmented-control__item--selected {
-  border-color: var(--vf-border);
-  color: var(--vf-text-strong);
-  background: var(--vf-surface);
+  border-color: var(--vf-interactive-selected-border);
+  color: var(--vf-interactive-selected-text);
+  background: var(--vf-interactive-selected-background);
   box-shadow: var(--vf-shadow-sm);
 }

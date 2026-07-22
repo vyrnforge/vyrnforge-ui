@@ -1,26 +1,28 @@
 .udg[data-density="compact"] {
-  --udg-toolbar-height: 40px;
-  --udg-header-height: 36px;
-  --udg-row-height: var(--vf-row-height, 36px);
-  --udg-control-height: var(--vf-control-height, 32px);
-  --udg-cell-padding-x: 10px;
-  --udg-cell-padding-y: 6px;
+  --udg-toolbar-height: calc(var(--vf-control-height-sm) + var(--vf-space-2));
+  --udg-header-height: var(--vf-row-height-sm);
+  --udg-row-height: var(--vf-row-height-sm);
+  --udg-control-height: var(--vf-control-height-sm);
+  --udg-cell-padding-x: var(--vf-control-padding-x-sm);
+  --udg-cell-padding-y: var(--vf-control-padding-y-sm);
 }
 
+.udg[data-density="balanced"],
 .udg[data-density="standard"] {
-  --udg-toolbar-height: 48px;
-  --udg-header-height: 42px;
-  --udg-row-height: var(--vf-row-height, 44px);
-  --udg-control-height: var(--vf-control-height, 34px);
-  --udg-cell-padding-x: 12px;
-  --udg-cell-padding-y: 9px;
+  --udg-toolbar-height: calc(var(--vf-control-height-md) + var(--vf-space-3));
+  --udg-header-height: var(--vf-row-height-md);
+  --udg-row-height: var(--vf-row-height-md);
+  --udg-control-height: var(--vf-control-height-md);
+  --udg-cell-padding-x: var(--vf-control-padding-x-md);
+  --udg-cell-padding-y: var(--vf-control-padding-y-md);
 }
 
+.udg[data-density="spacious"],
 .udg[data-density="comfortable"] {
-  --udg-toolbar-height: 56px;
-  --udg-header-height: 48px;
-  --udg-row-height: var(--vf-row-height, 52px);
-  --udg-control-height: var(--vf-control-height, 38px);
-  --udg-cell-padding-x: 16px;
-  --udg-cell-padding-y: 12px;
+  --udg-toolbar-height: calc(var(--vf-control-height-lg) + var(--vf-space-4));
+  --udg-header-height: var(--vf-row-height-lg);
+  --udg-row-height: var(--vf-row-height-lg);
+  --udg-control-height: var(--vf-control-height-lg);
+  --udg-cell-padding-x: var(--vf-control-padding-x-lg);
+  --udg-cell-padding-y: var(--vf-control-padding-y-lg);
 }

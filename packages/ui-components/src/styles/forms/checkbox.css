@@ -1,22 +1,25 @@
 .vf-checkbox-field {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--vf-space-2);
-  color: var(--vf-text);
-  font-size: var(--vf-font-size-md);
-  line-height: var(--vf-line-height-md);
+  gap: var(--vf-component-gap);
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-body-font-family);
+  font-size: var(--vf-type-body-font-size);
+  font-weight: var(--vf-type-body-font-weight);
+  line-height: var(--vf-type-body-line-height);
+  letter-spacing: var(--vf-type-body-letter-spacing);
 }
 .vf-checkbox {
-  width: 16px;
-  height: 16px;
+  width: var(--vf-icon-size-md);
+  height: var(--vf-icon-size-md);
   margin: 2px 0 0;
-  accent-color: var(--vf-primary);
+  accent-color: var(--vf-interactive-primary);
 }
 .vf-checkbox--sm {
-  width: 14px;
-  height: 14px;
+  width: var(--vf-icon-size-sm);
+  height: var(--vf-icon-size-sm);
 }
 .vf-checkbox--lg {
-  width: 18px;
-  height: 18px;
+  width: var(--vf-icon-size-lg);
+  height: var(--vf-icon-size-lg);
 }

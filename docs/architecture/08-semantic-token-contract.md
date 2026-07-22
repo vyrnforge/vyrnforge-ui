@@ -52,9 +52,11 @@ The historical tokens such as `--vf-bg`, `--vf-surface`, `--vf-text`,
 migration. Canonical roles read from them, so existing app overrides continue
 to influence new semantic tokens.
 
-New component work should use the canonical role names. VF-3009 and VF-3010
-will migrate component and grid CSS. Compatibility sources are not removed in
-S3.
+New component work must use the canonical role names. VF-3009 and VF-3010
+completed package adoption: shared components now consume semantic roles and
+the data grid maps its package-owned roles to the shared contract. Compatibility
+sources are not removed in S3 because consuming applications may still override
+them.
 
 ## Themes
 
@@ -79,8 +81,9 @@ Canonical density names are:
 - `spacious`
 
 `standard` remains an alias of `balanced`; `comfortable` remains an alias of
-`spacious`. These aliases preserve current component and grid APIs until their
-migration tasks are complete.
+`spacious`. Components and grid CSS accept both canonical and compatibility
+names. Public TypeScript grid density values remain unchanged during alpha to
+avoid an unrelated API migration in VF-3010.
 
 The active density contract controls:
 
@@ -140,3 +143,34 @@ npm run test:browser -- tests/browser/semantic-tokens.spec.ts
 The verifier rejects missing categories, duplicate token names, incomplete
 theme presets, broken compatibility bridges, missing density aliases, invalid
 layer order, and missing reduced-motion fallbacks.
+
+## Package adoption status
+
+VF-3009 and VF-3010 enforce the following boundary:
+
+- `@vyrnforge/ui-components` consumes canonical `--vf-*` semantic roles for
+  shared surfaces, text, borders, interaction, status, controls, typography,
+  motion, focus, and layers.
+- Component-local custom properties are limited to private geometry or dynamic
+  state, such as slider progress and measured overlay coordinates.
+- `@vyrnforge/ui-data-grid` retains `--udg-*` only as grid-facing role and
+  geometry contracts. Their defaults map to canonical `--vf-*` roles.
+- Light, dark, enterprise, and system grid themes inherit ui-core. The explicit
+  grid high-contrast theme remains a documented exception until ui-core owns a
+  shared high-contrast preset.
+- Typed data-grid presets derive from the exported ui-core theme objects rather
+  than duplicating color literals.
+
+The historical `--udg-surface-ra-sm` spelling remains as a compatibility alias
+of `--udg-surface-raised`. New code must use the correctly named role.
+
+## Adoption verification
+
+```bash
+npm run test:token-adoption
+npm run verify:token-adoption
+```
+
+The verifier rejects legacy shared token references in package CSS, hard-coded
+component colors, duplicated grid theme maps, literal motion timings, missing
+grid-to-core mappings, and typed grid presets that duplicate theme colors.

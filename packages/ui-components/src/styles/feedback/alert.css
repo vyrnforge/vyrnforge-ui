@@ -1,33 +1,53 @@
 .vf-inline-message {
   display: grid;
-  gap: var(--vf-space-1);
-  border: 1px solid var(--vf-border);
+  gap: var(--vf-component-gap);
+  border: 1px solid var(--vf-border-default);
   border-radius: var(--vf-radius-md);
   padding: var(--vf-space-3);
-  color: var(--vf-text);
-  background: var(--vf-surface-subtle);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-muted);
 }
 .vf-inline-message__title {
-  color: var(--vf-text-strong);
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
+  letter-spacing: var(--vf-type-label-letter-spacing);
 }
 .vf-inline-message__content {
-  color: var(--vf-text-muted);
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-text-secondary);
+  font-family: var(--vf-type-body-font-family);
+  font-size: var(--vf-type-body-font-size);
+  font-weight: var(--vf-type-body-font-weight);
+  line-height: var(--vf-type-body-line-height);
+  letter-spacing: var(--vf-type-body-letter-spacing);
 }
 .vf-inline-message--success {
-  border-color: color-mix(in srgb, var(--vf-success) 35%, var(--vf-border));
-  background: var(--vf-success-soft);
+  border-color: var(--vf-status-success-border);
+  background: var(--vf-status-success-background);
+}
+.vf-inline-message--success .vf-inline-message__title {
+  color: var(--vf-status-success-text);
 }
 .vf-inline-message--warning {
-  border-color: color-mix(in srgb, var(--vf-warning) 35%, var(--vf-border));
-  background: var(--vf-warning-soft);
+  border-color: var(--vf-status-warning-border);
+  background: var(--vf-status-warning-background);
+}
+.vf-inline-message--warning .vf-inline-message__title {
+  color: var(--vf-status-warning-text);
 }
 .vf-inline-message--danger {
-  border-color: color-mix(in srgb, var(--vf-danger) 35%, var(--vf-border));
-  background: var(--vf-danger-soft);
+  border-color: var(--vf-status-error-border);
+  background: var(--vf-status-error-background);
+}
+.vf-inline-message--danger .vf-inline-message__title {
+  color: var(--vf-status-error-text);
 }
 .vf-inline-message--info {
-  border-color: color-mix(in srgb, var(--vf-info) 35%, var(--vf-border));
-  background: var(--vf-info-soft);
+  border-color: var(--vf-status-info-border);
+  background: var(--vf-status-info-background);
+}
+.vf-inline-message--info .vf-inline-message__title {
+  color: var(--vf-status-info-text);
 }

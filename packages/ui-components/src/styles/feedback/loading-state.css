@@ -1,8 +1,12 @@
 .vf-loading-state--sm {
   padding: var(--vf-space-3);
-  font-size: var(--vf-font-size-sm);
+  font-family: var(--vf-type-caption-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
 }
 .vf-loading-state--lg {
   padding: var(--vf-space-6);
-  font-size: var(--vf-font-size-lg);
+  font-family: var(--vf-type-section-title-font-family);
+  font-size: var(--vf-type-section-title-font-size);
+  line-height: var(--vf-type-section-title-line-height);
 }

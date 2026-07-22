@@ -22,8 +22,8 @@
 .vf-checkbox:disabled,
 .vf-radio:disabled,
 .vf-switch__input:disabled {
+  color: var(--vf-control-disabled-text);
   cursor: not-allowed;
-  opacity: 0.56;
 }
 
 @media (max-width: 780px) {
@@ -39,7 +39,7 @@
     width: auto;
     max-height: 320px;
     border-right: 0;
-    border-bottom: 1px solid var(--vf-border);
+    border-bottom: 1px solid var(--vf-border-default);
   }
   .vf-app-shell__sidebar-scroll {
     max-height: 320px;
@@ -49,7 +49,8 @@
     inset: auto;
     width: auto;
   }
-  .vf-app-shell--with-header.vf-app-shell--sidebar-fixed .vf-app-shell__sidebar {
+  .vf-app-shell--with-header.vf-app-shell--sidebar-fixed
+    .vf-app-shell__sidebar {
     inset-block-start: auto;
   }
   .vf-page {
@@ -65,7 +66,8 @@
   }
   .vf-field--horizontal .vf-field__description,
   .vf-field--horizontal .vf-field__message,
-  .vf-field--horizontal > :not(.vf-field__label, .vf-field__description, .vf-field__message) {
+  .vf-field--horizontal
+    > :not(.vf-field__label, .vf-field__description, .vf-field__message) {
     grid-column: auto;
   }
   .vf-page-header__actions,

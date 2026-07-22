@@ -35,6 +35,7 @@ runNpm(["run", "lint"]);
 runNpm(["run", "lint:css"]);
 runNpm(["run", "verify:metadata"]);
 runNpm(["run", "verify:design-tokens"]);
+runNpm(["run", "verify:token-adoption"]);
 runNpm(["run", "verify:component-maturity"]);
 runNpm(["run", "verify:maturity-closure"]);
 runNpm(["run", "verify:assistive-technology"]);

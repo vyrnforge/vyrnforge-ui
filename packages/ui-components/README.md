@@ -31,7 +31,7 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-`@vyrnforge/ui-components` consumes shared `--vf-*` variables from `@vyrnforge/ui-core`, so light, dark, enterprise, density, and scoped token overrides flow through the primitives.
+`@vyrnforge/ui-components` consumes canonical semantic `--vf-*` roles from `@vyrnforge/ui-core`, so light, dark, enterprise, density, motion, focus, status, and scoped token overrides flow consistently through the primitives. Historical broad aliases remain app compatibility inputs but are not used by package CSS.
 
 `@vyrnforge/ui-components` owns reusable UI primitives only. It does not own app business state, backend data, grid behavior, or a global store.
 
@@ -64,7 +64,7 @@ import {
   Card,
   Field,
   Stack,
-  TextInput
+  TextInput,
 } from "@vyrnforge/ui-components";
 
 export function Example() {
@@ -217,7 +217,7 @@ import {
   SearchInput,
   SideNav,
   Tabs,
-  TopNav
+  TopNav,
 } from "@vyrnforge/ui-components";
 
 <AppShell
@@ -227,14 +227,16 @@ import {
   sidebar={<SideNav activeId="orders" items={navItems} />}
   sidebarPosition="sticky"
 >
-  <Page toolbar={<PageToolbar left={<SearchInput aria-label="Search orders" />} />}>
+  <Page
+    toolbar={<PageToolbar left={<SearchInput aria-label="Search orders" />} />}
+  >
     <PageHeader
       breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
       title="Orders"
     />
     <Tabs defaultValue="open" items={tabs} />
   </Page>
-</AppShell>
+</AppShell>;
 ```
 
 `AppShell` layout modes:

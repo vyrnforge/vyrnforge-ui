@@ -1,133 +1,115 @@
-import type { DataGridThemePreset } from "./dataGridTheme.types";
+import {
+  vyrnForgeDarkTheme,
+  vyrnForgeEnterpriseTheme,
+  vyrnForgeLightTheme,
+  type VyrnForgeCssVar,
+  type VyrnForgeThemeVars,
+} from "@vyrnforge/ui-core";
+import type {
+  DataGridCssVar,
+  DataGridThemePreset,
+  DataGridThemeVars,
+} from "./dataGridTheme.types";
 
-export const dataGridLightTheme: DataGridThemePreset = {
-  name: "light",
-  vars: {
-    "--udg-bg": "#f8fafc",
-    "--udg-surface": "#ffffff",
-    "--udg-surface-ra-sm": "#ffffff",
-    "--udg-surface-subtle": "#f1f5f9",
-    "--udg-surface-muted": "#f8fafc",
-    "--udg-popover-bg": "#ffffff",
-    "--udg-toolbar-bg": "#ffffff",
-    "--udg-text": "#1e293b",
-    "--udg-text-muted": "#64748b",
-    "--udg-text-strong": "#0f172a",
-    "--udg-border": "#d8e1ec",
-    "--udg-border-strong": "#b6c4d6",
-    "--udg-primary": "#2563eb",
-    "--udg-primary-hover": "#1d4ed8",
-    "--udg-primary-soft": "#e8f1ff",
-    "--udg-danger": "#b42318",
-    "--udg-danger-soft": "#fff1f0",
-    "--udg-warning": "#a15c07",
-    "--udg-warning-soft": "#fff7d6",
-    "--udg-success": "#067647",
-    "--udg-success-soft": "#e7f8ef",
-    "--udg-info": "#0369a1",
-    "--udg-info-soft": "#e7f6ff",
-    "--udg-focus-ring": "#2563eb",
-    "--udg-control-bg": "#ffffff",
-    "--udg-control-border": "#cbd5e1",
-    "--udg-control-hover-border": "#94a3b8",
-    "--udg-control-disabled-bg": "#f1f5f9",
-    "--udg-control-disabled-text": "#94a3b8",
-    "--udg-header-bg": "#f1f5f9",
-    "--udg-header-text": "#334155",
-    "--udg-row-bg": "#ffffff",
-    "--udg-row-hover-bg": "#f8fafc",
-    "--udg-row-selected-bg": "#eff6ff",
-    "--udg-row-border": "#d8e1ec",
-    "--udg-skeleton-base": "#e2e8f0",
-    "--udg-skeleton-highlight": "#f8fafc",
-    "--udg-shadow-md": "0 10px 24px rgb(15 23 42 / 9%)"
-  }
-};
+const semanticGridTokenMap = {
+  "--udg-bg": "--vf-surface-page",
+  "--udg-surface": "--vf-surface-default",
+  "--udg-surface-raised": "--vf-surface-overlay",
+  "--udg-surface-ra-sm": "--vf-surface-overlay",
+  "--udg-surface-subtle": "--vf-surface-muted",
+  "--udg-surface-muted": "--vf-surface-canvas",
+  "--udg-popover-bg": "--vf-surface-overlay",
+  "--udg-toolbar-bg": "--vf-surface-default",
+  "--udg-text": "--vf-text-primary",
+  "--udg-text-muted": "--vf-text-secondary",
+  "--udg-text-strong": "--vf-text-primary",
+  "--udg-border": "--vf-border-default",
+  "--udg-border-strong": "--vf-border-emphasis",
+  "--udg-primary": "--vf-interactive-primary",
+  "--udg-primary-hover": "--vf-interactive-primary-hover",
+  "--udg-primary-soft": "--vf-interactive-selected-background",
+  "--udg-primary-text": "--vf-interactive-primary-text",
+  "--udg-danger": "--vf-status-error-text",
+  "--udg-danger-soft": "--vf-status-error-background",
+  "--udg-warning": "--vf-status-warning-text",
+  "--udg-warning-soft": "--vf-status-warning-background",
+  "--udg-success": "--vf-status-success-text",
+  "--udg-success-soft": "--vf-status-success-background",
+  "--udg-info": "--vf-status-info-text",
+  "--udg-info-soft": "--vf-status-info-background",
+  "--udg-focus-ring": "--vf-focus-color",
+  "--udg-control-bg": "--vf-control-background",
+  "--udg-control-border": "--vf-control-border",
+  "--udg-control-hover-border": "--vf-control-border-hover",
+  "--udg-control-disabled-bg": "--vf-control-disabled-background",
+  "--udg-control-disabled-text": "--vf-control-disabled-text",
+  "--udg-control-focus": "--vf-focus-color",
+  "--udg-control-focus-border": "--vf-interactive-selected-border",
+  "--udg-header-bg": "--vf-surface-muted",
+  "--udg-header-text": "--vf-text-primary",
+  "--udg-row-bg": "--vf-surface-default",
+  "--udg-row-hover-bg": "--vf-interactive-neutral-hover",
+  "--udg-row-selected-bg": "--vf-interactive-selected-background",
+  "--udg-row-border": "--vf-divider",
+  "--udg-skeleton-base": "--vf-border-subtle",
+  "--udg-skeleton-highlight": "--vf-surface-canvas",
+  "--udg-shadow-md": "--vf-shadow-md",
+} satisfies Partial<Record<DataGridCssVar, VyrnForgeCssVar>>;
 
-export const dataGridEnterpriseTheme: DataGridThemePreset = {
-  name: "enterprise",
-  vars: {
-    "--udg-bg": "#f7f9fc",
-    "--udg-surface": "#ffffff",
-    "--udg-surface-ra-sm": "#f4f7fb",
-    "--udg-surface-subtle": "#eef3f8",
-    "--udg-surface-muted": "#f7f9fc",
-    "--udg-popover-bg": "#ffffff",
-    "--udg-toolbar-bg": "#ffffff",
-    "--udg-text": "#172033",
-    "--udg-text-muted": "#5e6e82",
-    "--udg-text-strong": "#0b1220",
-    "--udg-border": "#cfdae8",
-    "--udg-border-strong": "#9fb0c4",
-    "--udg-primary": "#155eef",
-    "--udg-primary-hover": "#124fc9",
-    "--udg-primary-soft": "#e7efff",
-    "--udg-danger": "#b42318",
-    "--udg-danger-soft": "#fff1f0",
-    "--udg-warning": "#a15c07",
-    "--udg-warning-soft": "#fff7d6",
-    "--udg-success": "#067647",
-    "--udg-success-soft": "#e7f8ef",
-    "--udg-info": "#0369a1",
-    "--udg-info-soft": "#e7f6ff",
-    "--udg-focus-ring": "#155eef",
-    "--udg-control-bg": "#ffffff",
-    "--udg-control-border": "#c8d5e5",
-    "--udg-control-hover-border": "#95a8be",
-    "--udg-control-disabled-bg": "#eef3f8",
-    "--udg-control-disabled-text": "#8a99aa",
-    "--udg-header-bg": "#edf2f8",
-    "--udg-header-text": "#26364d",
-    "--udg-row-bg": "#ffffff",
-    "--udg-row-hover-bg": "#f3f7fb",
-    "--udg-row-selected-bg": "#e8f0ff",
-    "--udg-row-border": "#cfdae8",
-    "--udg-skeleton-base": "#dce5f0",
-    "--udg-skeleton-highlight": "#f8fbff",
-    "--udg-shadow-md": "0 10px 24px rgb(15 23 42 / 8%)"
-  }
-};
+const variableReferencePattern = /^var\((--vf-[a-z0-9-]+)\)$/u;
 
-export const dataGridDarkTheme: DataGridThemePreset = {
-  name: "dark",
-  vars: {
-    "--udg-bg": "#0f172a",
-    "--udg-surface": "#111827",
-    "--udg-surface-ra-sm": "#172033",
-    "--udg-surface-subtle": "#1e293b",
-    "--udg-surface-muted": "#172033",
-    "--udg-popover-bg": "#111c2e",
-    "--udg-toolbar-bg": "#111827",
-    "--udg-text": "#e5e7eb",
-    "--udg-text-muted": "#94a3b8",
-    "--udg-text-strong": "#f8fafc",
-    "--udg-border": "#334155",
-    "--udg-border-strong": "#475569",
-    "--udg-primary": "#60a5fa",
-    "--udg-primary-hover": "#93c5fd",
-    "--udg-primary-soft": "#1e3a5f",
-    "--udg-danger": "#f97066",
-    "--udg-danger-soft": "#4a1f1d",
-    "--udg-warning": "#fbbf24",
-    "--udg-warning-soft": "#3f2f12",
-    "--udg-success": "#34d399",
-    "--udg-success-soft": "#153d32",
-    "--udg-info": "#7dd3fc",
-    "--udg-info-soft": "#12364a",
-    "--udg-focus-ring": "#93c5fd",
-    "--udg-control-bg": "#111c2e",
-    "--udg-control-border": "#475569",
-    "--udg-control-hover-border": "#64748b",
-    "--udg-control-disabled-bg": "#172033",
-    "--udg-control-disabled-text": "#64748b",
-    "--udg-header-bg": "#1e293b",
-    "--udg-header-text": "#cbd5e1",
-    "--udg-row-bg": "#111827",
-    "--udg-row-hover-bg": "#1e293b",
-    "--udg-row-selected-bg": "#1e3a5f",
-    "--udg-row-border": "#26364d",
-    "--udg-skeleton-base": "#26364d",
-    "--udg-skeleton-highlight": "#334155",
-    "--udg-shadow-md": "0 18px 36px rgb(2 6 23 / 34%)"
+function resolveThemeValue(
+  theme: VyrnForgeThemeVars,
+  token: VyrnForgeCssVar,
+  resolving = new Set<VyrnForgeCssVar>(),
+): string {
+  if (resolving.has(token)) {
+    throw new Error(`Circular VyrnForge theme variable reference: ${token}`);
   }
-};
+
+  const value = theme[token];
+  if (value === undefined) {
+    return `var(${token})`;
+  }
+
+  const normalizedValue = String(value);
+  const reference = variableReferencePattern.exec(normalizedValue)?.[1] as
+    VyrnForgeCssVar | undefined;
+
+  if (!reference) {
+    return normalizedValue;
+  }
+
+  const nextResolving = new Set(resolving);
+  nextResolving.add(token);
+  return resolveThemeValue(theme, reference, nextResolving);
+}
+
+export function createDataGridThemeFromVyrnForgeTheme(
+  name: string,
+  theme: VyrnForgeThemeVars,
+): DataGridThemePreset {
+  const vars = Object.fromEntries(
+    Object.entries(semanticGridTokenMap).map(([gridToken, sharedToken]) => [
+      gridToken,
+      resolveThemeValue(theme, sharedToken),
+    ]),
+  ) as DataGridThemeVars;
+
+  return { name, vars };
+}
+
+export const dataGridLightTheme = createDataGridThemeFromVyrnForgeTheme(
+  "light",
+  vyrnForgeLightTheme,
+);
+
+export const dataGridEnterpriseTheme = createDataGridThemeFromVyrnForgeTheme(
+  "enterprise",
+  vyrnForgeEnterpriseTheme,
+);
+
+export const dataGridDarkTheme = createDataGridThemeFromVyrnForgeTheme(
+  "dark",
+  vyrnForgeDarkTheme,
+);

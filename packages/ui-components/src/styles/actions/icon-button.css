@@ -4,15 +4,15 @@
   padding: 0;
 }
 .vf-icon-button--xs {
-  width: 24px;
-  height: 24px;
+  width: var(--vf-hit-target-min);
+  height: var(--vf-hit-target-min);
   border-radius: var(--vf-radius-sm);
 }
 .vf-icon-button--sm {
-  width: 30px;
-  height: 30px;
+  width: var(--vf-control-height-sm);
+  height: var(--vf-control-height-sm);
 }
 .vf-icon-button--lg {
-  width: 42px;
-  height: 42px;
+  width: var(--vf-control-height-lg);
+  height: var(--vf-control-height-lg);
 }

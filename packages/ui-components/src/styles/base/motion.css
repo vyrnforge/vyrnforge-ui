@@ -5,9 +5,8 @@
   border: 2px solid currentColor;
   border-right-color: transparent;
   border-radius: 999px;
-  animation: vf-spin 800ms linear infinite;
+  animation: vf-spin var(--vf-motion-duration-deliberate) linear infinite;
 }
-
 @keyframes vf-spin {
   to {
     transform: rotate(360deg);
@@ -19,14 +18,5 @@
   }
   100% {
     background-position: -100% 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vf-button__spinner,
-  .vf-loading-state__spinner,
-  .vf-skeleton,
-  .vf-tooltip__content {
-    animation: none;
-    transition: none;
   }
 }

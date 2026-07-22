@@ -1,82 +1,102 @@
 .vf-text {
   margin: 0;
-  color: var(--vf-text);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-body-font-family);
+  font-size: var(--vf-type-body-font-size);
+  font-weight: var(--vf-type-body-font-weight);
+  line-height: var(--vf-type-body-line-height);
+  letter-spacing: var(--vf-type-body-letter-spacing);
 }
 .vf-text--sm {
-  font-size: var(--vf-font-size-sm);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
 }
 .vf-text--md {
-  font-size: var(--vf-font-size-md);
+  font-size: var(--vf-type-body-font-size);
 }
 .vf-text--lg {
-  font-size: var(--vf-font-size-lg);
+  font-size: var(--vf-type-section-title-font-size);
+  line-height: var(--vf-type-section-title-line-height);
 }
 .vf-text--muted {
-  color: var(--vf-text-muted);
+  color: var(--vf-text-secondary);
 }
 .vf-text--strong {
-  color: var(--vf-text-strong);
-  font-weight: 700;
+  color: var(--vf-text-primary);
+  font-weight: var(--vf-font-weight-bold);
 }
 .vf-text--danger {
-  color: var(--vf-danger);
+  color: var(--vf-status-error-text);
 }
 .vf-text--success {
-  color: var(--vf-success);
+  color: var(--vf-status-success-text);
 }
 .vf-text--warning {
-  color: var(--vf-warning);
+  color: var(--vf-status-warning-text);
 }
 .vf-heading {
   margin: 0;
-  color: var(--vf-text-strong);
-  font-weight: 760;
-  line-height: var(--vf-line-height-tight);
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-section-title-font-family);
+  font-size: var(--vf-type-section-title-font-size);
+  font-weight: var(--vf-type-section-title-font-weight);
+  line-height: var(--vf-type-section-title-line-height);
+  letter-spacing: var(--vf-type-section-title-letter-spacing);
 }
 .vf-heading--sm {
-  font-size: var(--vf-font-size-lg);
+  font-size: var(--vf-type-section-title-font-size);
 }
 .vf-heading--md {
-  font-size: var(--vf-font-size-xl);
+  font-family: var(--vf-type-page-title-font-family);
+  font-size: var(--vf-type-page-title-font-size);
+  font-weight: var(--vf-type-page-title-font-weight);
+  line-height: var(--vf-type-page-title-line-height);
+  letter-spacing: var(--vf-type-page-title-letter-spacing);
 }
 .vf-heading--lg {
-  font-size: 24px;
+  font-family: var(--vf-type-display-font-family);
+  font-size: var(--vf-type-display-font-size);
+  font-weight: var(--vf-type-display-font-weight);
+  line-height: var(--vf-type-display-line-height);
+  letter-spacing: var(--vf-type-display-letter-spacing);
 }
 .vf-label {
   display: inline-flex;
-  gap: var(--vf-space-1);
-  color: var(--vf-text-strong);
-  font-weight: 720;
-  line-height: var(--vf-line-height-md);
+  gap: var(--vf-component-gap);
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
+  letter-spacing: var(--vf-type-label-letter-spacing);
 }
 .vf-label--sm,
 .vf-caption {
-  font-size: var(--vf-font-size-sm);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
 }
 .vf-label--md {
-  font-size: var(--vf-font-size-md);
+  font-size: var(--vf-type-label-font-size);
 }
 .vf-caption {
   display: inline-block;
   margin: 0;
-  color: var(--vf-text-muted);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-text-secondary);
+  font-family: var(--vf-type-caption-font-family);
+  font-weight: var(--vf-type-caption-font-weight);
+  letter-spacing: var(--vf-type-caption-letter-spacing);
 }
 .vf-code-text {
   display: inline-flex;
   width: fit-content;
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-border-default);
   border-radius: var(--vf-radius-sm);
   padding: 2px 6px;
-  color: var(--vf-text-strong);
-  background: var(--vf-surface-subtle);
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Consolas,
-    "Liberation Mono",
-    monospace;
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-muted);
+  font-family: var(--vf-type-code-font-family);
+  font-size: var(--vf-type-code-font-size);
+  font-weight: var(--vf-type-code-font-weight);
+  line-height: var(--vf-type-code-line-height);
+  letter-spacing: var(--vf-type-code-letter-spacing);
 }

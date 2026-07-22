@@ -1,18 +1,20 @@
+.vf-validation-message {
+  font-family: var(--vf-type-caption-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  font-weight: var(--vf-type-caption-font-weight);
+  line-height: var(--vf-type-caption-line-height);
+  letter-spacing: var(--vf-type-caption-letter-spacing);
+}
 .vf-validation-message--success {
-  color: var(--vf-success);
+  color: var(--vf-status-success-text);
 }
 .vf-validation-message--error,
 .vf-validation-message--danger {
-  color: var(--vf-danger);
+  color: var(--vf-status-error-text);
 }
 .vf-validation-message--info {
-  color: var(--vf-info);
+  color: var(--vf-status-info-text);
 }
-
 .vf-validation-message--warning {
-  color: var(--vf-warning);
-}
-.vf-validation-message {
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-status-warning-text);
 }

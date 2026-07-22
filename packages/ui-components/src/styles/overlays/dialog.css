@@ -2,14 +2,14 @@
 .vf-drawer {
   position: fixed;
   inset: 0;
-  z-index: var(--vf-z-dialog);
+  z-index: var(--vf-layer-modal);
 }
 .vf-dialog__overlay,
 .vf-drawer__overlay {
   position: fixed;
   inset: 0;
   display: grid;
-  background: rgb(15 23 42 / 45%);
+  background: var(--vf-surface-scrim);
 }
 .vf-dialog__overlay {
   place-items: center;
@@ -27,9 +27,9 @@
   grid-template-rows: auto minmax(0, 1fr) auto;
   min-width: 0;
   max-height: calc(100vh - 32px);
-  border: 1px solid var(--vf-border);
-  color: var(--vf-text);
-  background: var(--vf-surface);
+  border: 1px solid var(--vf-border-default);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-overlay);
   box-shadow: var(--vf-shadow-md);
 }
 .vf-dialog__panel {
@@ -58,27 +58,31 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--vf-space-4);
-  border-bottom: 1px solid var(--vf-border);
+  border-bottom: 1px solid var(--vf-divider);
   padding: var(--vf-space-4);
 }
 .vf-dialog__heading,
 .vf-drawer__heading {
   display: grid;
-  gap: var(--vf-space-1);
+  gap: var(--vf-component-gap);
 }
 .vf-dialog__title,
 .vf-drawer__title {
   margin: 0;
-  color: var(--vf-text-strong);
-  font-size: var(--vf-font-size-lg);
-  line-height: var(--vf-line-height-tight);
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-section-title-font-family);
+  font-size: var(--vf-type-section-title-font-size);
+  font-weight: var(--vf-type-section-title-font-weight);
+  line-height: var(--vf-type-section-title-line-height);
+  letter-spacing: var(--vf-type-section-title-letter-spacing);
 }
 .vf-dialog__description,
 .vf-drawer__description {
   margin: 0;
-  color: var(--vf-text-muted);
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-text-secondary);
+  font-family: var(--vf-type-body-font-family);
+  font-size: var(--vf-type-body-font-size);
+  line-height: var(--vf-type-body-line-height);
 }
 .vf-dialog__body,
 .vf-drawer__body {
@@ -88,25 +92,26 @@
 }
 .vf-dialog__footer,
 .vf-drawer__footer {
-  border-top: 1px solid var(--vf-border);
+  border-top: 1px solid var(--vf-divider);
   padding: var(--vf-space-4);
 }
 .vf-overlay-close {
   display: inline-grid;
-  width: 30px;
-  height: 30px;
+  width: var(--vf-control-height-sm);
+  height: var(--vf-control-height-sm);
   place-items: center;
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-control-border);
   border-radius: var(--vf-radius-md);
-  color: var(--vf-text-muted);
-  background: var(--vf-surface);
+  color: var(--vf-text-secondary);
+  background: var(--vf-control-background);
   cursor: pointer;
+  transition: var(--vf-motion-transition-color);
 }
 .vf-overlay-close:hover {
-  color: var(--vf-text);
-  background: var(--vf-surface-subtle);
+  color: var(--vf-text-primary);
+  background: var(--vf-control-background-hover);
 }
 .vf-overlay-close:focus-visible {
-  outline: 2px solid var(--vf-focus-ring);
-  outline-offset: 2px;
+  outline: var(--vf-focus-width) solid var(--vf-focus-color);
+  outline-offset: var(--vf-focus-offset);
 }

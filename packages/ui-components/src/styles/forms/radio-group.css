@@ -1,45 +1,42 @@
 .vf-radio-group {
   display: grid;
-  gap: var(--vf-space-2);
+  gap: var(--vf-component-gap);
   min-width: 0;
   margin: 0;
   border: 0;
   padding: 0;
-  color: var(--vf-text);
+  color: var(--vf-text-primary);
 }
-
 .vf-radio-group__legend {
   margin: 0 0 var(--vf-space-1);
   padding: 0;
-  color: var(--vf-text-strong);
-  font-weight: 720;
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
 }
-
 .vf-radio-group__description,
 .vf-radio-group__error {
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  font-family: var(--vf-type-caption-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
 }
-
 .vf-radio-group__description {
-  color: var(--vf-text-muted);
+  color: var(--vf-text-secondary);
 }
-
 .vf-radio-group__error {
-  color: var(--vf-danger);
+  color: var(--vf-status-error-text);
 }
-
 .vf-radio-group__options {
   display: grid;
-  gap: var(--vf-space-2);
+  gap: var(--vf-component-gap);
 }
-
 .vf-radio-group--horizontal .vf-radio-group__options {
   display: flex;
   flex-wrap: wrap;
   gap: var(--vf-space-3);
 }
-
 .vf-radio-group--disabled {
-  opacity: 0.68;
+  color: var(--vf-text-disabled);
 }
