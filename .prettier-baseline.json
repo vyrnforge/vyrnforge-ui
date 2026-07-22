@@ -278,7 +278,6 @@
     "packages/ui-components/src/components/ValidationMessage/ValidationMessage.types.ts": "2e53e72b5fdc5d8b15b977ebe650ef714e9e413fa3220e90ef6282e85a1bfd96",
     "packages/ui-components/src/index.ts": "f7af269f82667bfcbf8fa9d793a100f24ee1ea9dc18da25fa0f0dfae946f3d4f",
     "packages/ui-components/src/internal/overlay/DismissableLayer.tsx": "15089e6d03c4d68a86b51a84cccd9ee5e286536fee3ec28ad2587ea0e22307d5",
-    "packages/ui-components/src/internal/overlay/FocusScope.tsx": "682dbf9373f4c5baa8f351074f3a2847c4227837ce0f045e28d9123a9ab3302d",
     "packages/ui-components/src/internal/overlay/index.ts": "5d8357348daa0543200ea1fbf02226d9d1e23ef65f678fae3b0cf7552bfa5587",
     "packages/ui-components/src/internal/overlay/overlayStack.ts": "ff695b4be7720686bff309394b3848bc07c920b237231c6698087138959e0694",
     "packages/ui-components/src/internal/overlay/useAnchoredPosition.ts": "021a3ef72e214d366ad83f8b5388aaa2ee864eef011c63745a67e31377e3d022",
