@@ -378,7 +378,6 @@
     "packages/ui-data-grid/tsconfig.build.json": "0f673da6ba319a4a0a3d3ceca3a9ab754f7fe98b95ea12f66248a94b0dc9ef36",
     "packages/ui-data-grid/tsconfig.json": "64af114411d49a107ea123942970124e46ba24ee5a4b4fd552a75249cd5bff1a",
     "packages/ui-data-grid/tsup.config.ts": "72f72473df6fa15418f935240b474a0b0ca8f6cb35a89825e2b3dd8d02f201d8",
-    "packages/ui-data-grid/vitest.config.ts": "92f21ff178fb8ae15ab43598a2170978d07dca5ab02c0af18f01f8b7c105a822",
     "README.md": "f0ba1526fbdf370b15dbfcb426f0aeb096654fc1dee4af6cd3f0360dc5b4be38",
     "scripts/clean-package-dist.mjs": "7d52ad1d5a64332b394ff2754b80c58d9563d45f9549d288182fea6224ac385d",
     "scripts/create-release-notes.mjs": "02dae6da06bcf9dd290a9b11cbc256f25d3d774fd8bebba8bf9f8f0e93a72e52",
