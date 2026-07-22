@@ -1,12 +1,18 @@
 import {
   vyrnForgeDarkTheme,
   vyrnForgeEnterpriseTheme,
-  vyrnForgeLightTheme
+  vyrnForgeLightTheme,
 } from "./themePresets";
-import type { VyrnForgeThemeName, VyrnForgeThemeVars } from "./theme.types";
+import { vyrnForgeDensityAliases } from "./tokenContract";
+import type {
+  VyrnForgeCanonicalDensity,
+  VyrnForgeDensity,
+  VyrnForgeThemeName,
+  VyrnForgeThemeVars,
+} from "./theme.types";
 
 export function getVyrnForgeThemePreset(
-  theme: VyrnForgeThemeName
+  theme: VyrnForgeThemeName,
 ): VyrnForgeThemeVars {
   if (theme === "dark") {
     return vyrnForgeDarkTheme;
@@ -17,4 +23,14 @@ export function getVyrnForgeThemePreset(
   }
 
   return vyrnForgeLightTheme;
+}
+
+export function normalizeVyrnForgeDensity(
+  density: VyrnForgeDensity,
+): VyrnForgeCanonicalDensity {
+  if (density === "standard" || density === "comfortable") {
+    return vyrnForgeDensityAliases[density];
+  }
+
+  return density;
 }

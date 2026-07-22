@@ -2,31 +2,32 @@
 
 ## Purpose
 
-`@vyrnforge/ui-core` is the shared foundation package.
+`@vyrnforge/ui-core` is the dependency-free shared design foundation.
 
 It provides:
 
-- design tokens
-- theme variables
-- density variables
-- utility classes
-- theme helper contracts
+- primitive and semantic design tokens
+- light, dark, enterprise, and system themes
+- compact, balanced, and spacious density contracts
+- typography roles
+- motion and reduced-motion behavior
+- deterministic layer levels
+- shared utility classes
+- typed token and theme helper contracts
 
-It should remain dependency-light and should not own React components.
+It does not own React components, grid behavior, application state, adapters,
+or business workflows.
 
-## Owns
+## Ownership
 
-- `--vf-*` CSS variables
-- `vf-*` utility classes where not component-specific
-- theme presets: light, dark, system, enterprise
-- density presets: compact, standard, comfortable
+- `--vf-*` primitive and semantic variables
+- shared non-component `vf-*` utility classes
+- theme presets and complete theme-scoped token maps
+- density sizing and compatibility aliases
+- typography, motion, focus, status, and layer roles
 
-## Does not own
-
-- React components
-- grid behavior
-- backend data
-- app state
+The machine-readable token source is
+`docs/metadata/design-tokens.json`.
 
 ## Import
 
@@ -34,13 +35,27 @@ It should remain dependency-light and should not own React components.
 import "@vyrnforge/ui-core/styles/index.css";
 ```
 
+Import core styles before components and grid styles.
+
+## Density names
+
+Canonical:
+
+- `compact`
+- `balanced`
+- `spacious`
+
+Compatibility:
+
+- `standard` → `balanced`
+- `comfortable` → `spacious`
+
 ## Package readiness
 
-- JavaScript entry: `@vyrnforge/ui-core` resolves to built `dist/index.js` or `dist/index.cjs`.
+- JavaScript entry: built `dist/index.js` and `dist/index.cjs`.
 - Type declarations: `dist/index.d.ts`.
-- CSS entry: `@vyrnforge/ui-core/styles/index.css` resolves to built `dist/index.css`.
-- Published file whitelist: `dist` and `README.md`; package metadata and top-level `LICENSE` are included by npm automatically.
-- CSS side effect: `./dist/index.css`.
+- CSS entry: built `dist/index.css`.
+- Published whitelist: `dist` and `README.md`.
 - Runtime dependencies: none.
 - License metadata: `SEE LICENSE IN LICENSE`.
 
@@ -48,7 +63,12 @@ import "@vyrnforge/ui-core/styles/index.css";
 
 ```css
 .my-app {
-  --vf-primary: #003b71;
+  --vf-interactive-primary: #003b71;
+  --vf-interactive-primary-hover: #002f5b;
+  --vf-focus-color: #005ea8;
   --vf-radius-md: 10px;
 }
 ```
+
+See `../architecture/08-semantic-token-contract.md` for ownership and
+compatibility rules.

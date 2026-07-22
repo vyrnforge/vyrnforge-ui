@@ -1,0 +1,1029 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "owner": "@vyrnforge/ui-core",
+    "contractVersion": "0.4-alpha",
+    "gate": "G3",
+    "implementation": "packages/ui-core/src/styles/tokens.css",
+    "typedExport": "packages/ui-core/src/theme/tokenContract.ts"
+  },
+  "categories": [
+    {
+      "id": "surface",
+      "task": "VF-3002",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Page, canvas, component, overlay, sunken, and scrim surfaces.",
+      "tokens": [
+        {
+          "name": "--vf-surface-page",
+          "purpose": "Surface page.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-surface-canvas",
+          "purpose": "Surface canvas.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-surface-default",
+          "purpose": "Surface default.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-surface-muted",
+          "purpose": "Surface muted.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-surface-overlay",
+          "purpose": "Surface overlay.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-surface-sunken",
+          "purpose": "Surface sunken.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-surface-scrim",
+          "purpose": "Surface scrim.",
+          "themeScoped": true
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "task": "VF-3002",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Primary, secondary, tertiary, inverse, disabled, and link text.",
+      "tokens": [
+        {
+          "name": "--vf-text-primary",
+          "purpose": "Text primary.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-text-secondary",
+          "purpose": "Text secondary.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-text-tertiary",
+          "purpose": "Text tertiary.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-text-inverse",
+          "purpose": "Text inverse.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-text-disabled",
+          "purpose": "Text disabled.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-text-link",
+          "purpose": "Text link.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-text-link-hover",
+          "purpose": "Text link hover.",
+          "themeScoped": true
+        }
+      ]
+    },
+    {
+      "id": "border",
+      "task": "VF-3002",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Subtle, default, emphasis, and divider boundaries.",
+      "tokens": [
+        {
+          "name": "--vf-border-subtle",
+          "purpose": "Border subtle.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-border-default",
+          "purpose": "Border default.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-border-emphasis",
+          "purpose": "Border emphasis.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-divider",
+          "purpose": "Divider.",
+          "themeScoped": true
+        }
+      ]
+    },
+    {
+      "id": "interactive",
+      "task": "VF-3003",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Hover, active, selected, disabled, control, and focus behavior.",
+      "tokens": [
+        {
+          "name": "--vf-interactive-primary",
+          "purpose": "Interactive primary.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-primary-hover",
+          "purpose": "Interactive primary hover.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-primary-active",
+          "purpose": "Interactive primary active.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-primary-text",
+          "purpose": "Interactive primary text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-selected-background",
+          "purpose": "Interactive selected background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-selected-border",
+          "purpose": "Interactive selected border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-selected-text",
+          "purpose": "Interactive selected text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-neutral-hover",
+          "purpose": "Interactive neutral hover.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-interactive-neutral-active",
+          "purpose": "Interactive neutral active.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-background",
+          "purpose": "Control background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-background-hover",
+          "purpose": "Control background hover.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-background-active",
+          "purpose": "Control background active.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-border",
+          "purpose": "Control border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-border-hover",
+          "purpose": "Control border hover.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-disabled-background",
+          "purpose": "Control disabled background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-disabled-border",
+          "purpose": "Control disabled border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-control-disabled-text",
+          "purpose": "Control disabled text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-focus-color",
+          "purpose": "Focus color.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-focus-width",
+          "purpose": "Focus width.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-focus-offset",
+          "purpose": "Focus offset.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-focus-shadow",
+          "purpose": "Focus shadow.",
+          "themeScoped": false
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "task": "VF-3004",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Success, warning, error, info, pending, and neutral feedback roles.",
+      "tokens": [
+        {
+          "name": "--vf-status-success-text",
+          "purpose": "Status success text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-success-background",
+          "purpose": "Status success background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-success-border",
+          "purpose": "Status success border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-success-indicator",
+          "purpose": "Status success indicator.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-warning-text",
+          "purpose": "Status warning text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-warning-background",
+          "purpose": "Status warning background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-warning-border",
+          "purpose": "Status warning border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-warning-indicator",
+          "purpose": "Status warning indicator.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-error-text",
+          "purpose": "Status error text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-error-background",
+          "purpose": "Status error background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-error-border",
+          "purpose": "Status error border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-error-indicator",
+          "purpose": "Status error indicator.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-info-text",
+          "purpose": "Status info text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-info-background",
+          "purpose": "Status info background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-info-border",
+          "purpose": "Status info border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-info-indicator",
+          "purpose": "Status info indicator.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-pending-text",
+          "purpose": "Status pending text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-pending-background",
+          "purpose": "Status pending background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-pending-border",
+          "purpose": "Status pending border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-pending-indicator",
+          "purpose": "Status pending indicator.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-neutral-text",
+          "purpose": "Status neutral text.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-neutral-background",
+          "purpose": "Status neutral background.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-neutral-border",
+          "purpose": "Status neutral border.",
+          "themeScoped": true
+        },
+        {
+          "name": "--vf-status-neutral-indicator",
+          "purpose": "Status neutral indicator.",
+          "themeScoped": true
+        }
+      ]
+    },
+    {
+      "id": "density",
+      "task": "VF-3005",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Control sizes, padding, icons, row heights, hit targets, and active density values.",
+      "tokens": [
+        {
+          "name": "--vf-hit-target-min",
+          "purpose": "Hit target min.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-height-sm",
+          "purpose": "Control height sm.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-height-md",
+          "purpose": "Control height md.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-height-lg",
+          "purpose": "Control height lg.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-x-sm",
+          "purpose": "Control padding x sm.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-x-md",
+          "purpose": "Control padding x md.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-x-lg",
+          "purpose": "Control padding x lg.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-y-sm",
+          "purpose": "Control padding y sm.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-y-md",
+          "purpose": "Control padding y md.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-y-lg",
+          "purpose": "Control padding y lg.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-icon-size-sm",
+          "purpose": "Icon size sm.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-icon-size-md",
+          "purpose": "Icon size md.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-icon-size-lg",
+          "purpose": "Icon size lg.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-row-height-sm",
+          "purpose": "Row height sm.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-row-height-md",
+          "purpose": "Row height md.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-row-height-lg",
+          "purpose": "Row height lg.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-height",
+          "purpose": "Control height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-x",
+          "purpose": "Control padding x.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-control-padding-y",
+          "purpose": "Control padding y.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-icon-size",
+          "purpose": "Icon size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-row-height",
+          "purpose": "Row height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-component-gap",
+          "purpose": "Component gap.",
+          "themeScoped": false
+        }
+      ]
+    },
+    {
+      "id": "typography",
+      "task": "VF-3006",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Display, title, label, body, caption, code, and numeric hierarchy.",
+      "tokens": [
+        {
+          "name": "--vf-type-display-font-family",
+          "purpose": "Type display font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-display-font-size",
+          "purpose": "Type display font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-display-font-weight",
+          "purpose": "Type display font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-display-line-height",
+          "purpose": "Type display line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-display-letter-spacing",
+          "purpose": "Type display letter spacing.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-page-title-font-family",
+          "purpose": "Type page title font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-page-title-font-size",
+          "purpose": "Type page title font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-page-title-font-weight",
+          "purpose": "Type page title font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-page-title-line-height",
+          "purpose": "Type page title line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-page-title-letter-spacing",
+          "purpose": "Type page title letter spacing.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-section-title-font-family",
+          "purpose": "Type section title font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-section-title-font-size",
+          "purpose": "Type section title font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-section-title-font-weight",
+          "purpose": "Type section title font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-section-title-line-height",
+          "purpose": "Type section title line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-section-title-letter-spacing",
+          "purpose": "Type section title letter spacing.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-label-font-family",
+          "purpose": "Type label font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-label-font-size",
+          "purpose": "Type label font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-label-font-weight",
+          "purpose": "Type label font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-label-line-height",
+          "purpose": "Type label line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-label-letter-spacing",
+          "purpose": "Type label letter spacing.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-body-font-family",
+          "purpose": "Type body font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-body-font-size",
+          "purpose": "Type body font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-body-font-weight",
+          "purpose": "Type body font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-body-line-height",
+          "purpose": "Type body line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-body-letter-spacing",
+          "purpose": "Type body letter spacing.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-caption-font-family",
+          "purpose": "Type caption font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-caption-font-size",
+          "purpose": "Type caption font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-caption-font-weight",
+          "purpose": "Type caption font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-caption-line-height",
+          "purpose": "Type caption line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-caption-letter-spacing",
+          "purpose": "Type caption letter spacing.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-code-font-family",
+          "purpose": "Type code font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-code-font-size",
+          "purpose": "Type code font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-code-font-weight",
+          "purpose": "Type code font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-code-line-height",
+          "purpose": "Type code line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-code-letter-spacing",
+          "purpose": "Type code letter spacing.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-numeric-font-family",
+          "purpose": "Type numeric font family.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-numeric-font-size",
+          "purpose": "Type numeric font size.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-numeric-font-weight",
+          "purpose": "Type numeric font weight.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-numeric-line-height",
+          "purpose": "Type numeric line height.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-type-numeric-letter-spacing",
+          "purpose": "Type numeric letter spacing.",
+          "themeScoped": false
+        }
+      ]
+    },
+    {
+      "id": "motion",
+      "task": "VF-3007",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Durations, easing, transitions, and reduced-motion behavior.",
+      "tokens": [
+        {
+          "name": "--vf-motion-duration-instant",
+          "purpose": "Motion duration instant.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-duration-fast",
+          "purpose": "Motion duration fast.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-duration-standard",
+          "purpose": "Motion duration standard.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-duration-slow",
+          "purpose": "Motion duration slow.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-duration-deliberate",
+          "purpose": "Motion duration deliberate.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-easing-standard",
+          "purpose": "Motion easing standard.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-easing-enter",
+          "purpose": "Motion easing enter.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-easing-exit",
+          "purpose": "Motion easing exit.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-easing-emphasized",
+          "purpose": "Motion easing emphasized.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-transition-color",
+          "purpose": "Motion transition color.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-transition-opacity",
+          "purpose": "Motion transition opacity.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-motion-transition-transform",
+          "purpose": "Motion transition transform.",
+          "themeScoped": false
+        }
+      ]
+    },
+    {
+      "id": "layer",
+      "task": "VF-3008",
+      "sourceFile": "packages/ui-core/src/styles/tokens.css",
+      "purpose": "Deterministic base, raised, sticky, overlay, modal, toast, and debug layers.",
+      "tokens": [
+        {
+          "name": "--vf-layer-base",
+          "purpose": "Layer base.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-raised",
+          "purpose": "Layer raised.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-sticky",
+          "purpose": "Layer sticky.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-dropdown",
+          "purpose": "Layer dropdown.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-popover",
+          "purpose": "Layer popover.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-tooltip",
+          "purpose": "Layer tooltip.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-scrim",
+          "purpose": "Layer scrim.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-modal",
+          "purpose": "Layer modal.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-toast",
+          "purpose": "Layer toast.",
+          "themeScoped": false
+        },
+        {
+          "name": "--vf-layer-debug",
+          "purpose": "Layer debug.",
+          "themeScoped": false
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "required": ["light", "dark", "enterprise", "system"],
+    "themeScopedTokens": "all entries with themeScoped=true",
+    "systemBehavior": "System uses light defaults and the complete dark role set when prefers-color-scheme is dark."
+  },
+  "densities": {
+    "canonical": ["compact", "balanced", "spacious"],
+    "compatibilityAliases": {
+      "standard": "balanced",
+      "comfortable": "spacious"
+    },
+    "policy": "Balanced is the default. Standard and comfortable remain supported until consuming package APIs migrate."
+  },
+  "motion": {
+    "explicitReducedSelectors": [
+      "[data-motion=\"reduced\"]",
+      ".vf-motion-reduced"
+    ],
+    "automaticMediaQuery": "(prefers-reduced-motion: reduce)",
+    "policy": "No essential state change may depend on animation."
+  },
+  "layers": [
+    {
+      "name": "--vf-layer-base",
+      "level": 0
+    },
+    {
+      "name": "--vf-layer-raised",
+      "level": 10
+    },
+    {
+      "name": "--vf-layer-sticky",
+      "level": 20
+    },
+    {
+      "name": "--vf-layer-dropdown",
+      "level": 40
+    },
+    {
+      "name": "--vf-layer-popover",
+      "level": 50
+    },
+    {
+      "name": "--vf-layer-tooltip",
+      "level": 60
+    },
+    {
+      "name": "--vf-layer-scrim",
+      "level": 70
+    },
+    {
+      "name": "--vf-layer-modal",
+      "level": 80
+    },
+    {
+      "name": "--vf-layer-toast",
+      "level": 90
+    },
+    {
+      "name": "--vf-layer-debug",
+      "level": 9999
+    }
+  ],
+  "compatibilityBridges": [
+    {
+      "legacy": "--vf-bg",
+      "canonical": "--vf-surface-page",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-surface",
+      "canonical": "--vf-surface-default",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-surface-subtle",
+      "canonical": "--vf-surface-canvas",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-surface-raised",
+      "canonical": "--vf-surface-overlay",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-text",
+      "canonical": "--vf-text-primary",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-text-muted",
+      "canonical": "--vf-text-secondary",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-border",
+      "canonical": "--vf-border-default",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-border-strong",
+      "canonical": "--vf-border-emphasis",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-primary",
+      "canonical": "--vf-interactive-primary",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-primary-hover",
+      "canonical": "--vf-interactive-primary-hover",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-primary-soft",
+      "canonical": "--vf-interactive-selected-background",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-focus-ring",
+      "canonical": "--vf-focus-color",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-success",
+      "canonical": "--vf-status-success-indicator",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-success-soft",
+      "canonical": "--vf-status-success-background",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-warning",
+      "canonical": "--vf-status-warning-indicator",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-warning-soft",
+      "canonical": "--vf-status-warning-background",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-danger",
+      "canonical": "--vf-status-error-indicator",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-danger-soft",
+      "canonical": "--vf-status-error-background",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-info",
+      "canonical": "--vf-status-info-indicator",
+      "direction": "canonical-reads-legacy"
+    },
+    {
+      "legacy": "--vf-info-soft",
+      "canonical": "--vf-status-info-background",
+      "direction": "canonical-reads-legacy"
+    }
+  ],
+  "compatibilityAliases": [
+    {
+      "name": "--vf-z-base",
+      "target": "--vf-layer-base"
+    },
+    {
+      "name": "--vf-z-sticky",
+      "target": "--vf-layer-sticky"
+    },
+    {
+      "name": "--vf-z-dropdown",
+      "target": "--vf-layer-dropdown"
+    },
+    {
+      "name": "--vf-z-popover",
+      "target": "--vf-layer-popover"
+    },
+    {
+      "name": "--vf-z-tooltip",
+      "target": "--vf-layer-tooltip"
+    },
+    {
+      "name": "--vf-z-overlay",
+      "target": "--vf-layer-scrim"
+    },
+    {
+      "name": "--vf-z-dialog",
+      "target": "--vf-layer-modal"
+    },
+    {
+      "name": "--vf-z-toast",
+      "target": "--vf-layer-toast"
+    },
+    {
+      "name": "--vf-transition-fast",
+      "target": "--vf-motion-duration-fast"
+    }
+  ],
+  "ownershipPolicy": {
+    "shared": "Shared semantic decisions use --vf-* and are owned by @vyrnforge/ui-core.",
+    "componentLocal": "Component-local variables may describe measured geometry or private composition, but must not redefine shared semantic color, focus, status, density, typography, motion, or layer roles.",
+    "gridLocal": "Grid-only behavior uses --udg-* and should map shared decisions to canonical --vf-* roles.",
+    "applicationLocal": "Docs, playgrounds, and consuming apps may use their approved class prefixes and scoped overrides without becoming package defaults."
+  }
+}

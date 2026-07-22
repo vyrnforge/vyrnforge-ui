@@ -33,6 +33,9 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   published packages' existing Node 22/24 consumer compatibility range.
 - Made the explicit prerelease dist-tag authoritative during alpha; npm's
   registry-managed `latest` tag is not treated as a stability signal.
+- Standardized canonical density names as `compact`, `balanced`, and
+  `spacious` while retaining `standard` and `comfortable` as compatibility
+  aliases for existing consumers.
 
 - Prepared `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and
   `@vyrnforge/ui-data-grid` as the synchronized `0.1.0-alpha.1` corrective
@@ -41,6 +44,9 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 - Added UniversalDataGrid browser contracts for keyboard cell navigation,
   pointer resize, drag reorder, sticky regions, and two-axis scrolling.
+- Added the S3 semantic token foundation for shared surfaces, text, borders,
+  interaction, status, density, typography, motion, and deterministic layers,
+  with typed exports and machine-verifiable metadata.
 
 ### Fixed
 

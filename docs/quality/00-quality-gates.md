@@ -23,7 +23,7 @@ Do not create a second maturity definition in this document.
 | Accessibility        | Labels, ARIA relationships, visible focus, keyboard operation, Escape behavior, and live-region/modal semantics are reviewed where applicable.                                                                                                         |
 | Visual quality       | Light, dark, enterprise, compact, standard, and comfortable modes retain usable spacing, contrast, control heights, and focus visibility.                                                                                                              |
 | Layout and scrolling | Components own predictable minimum sizes and overflow behavior and avoid clipped focus or duplicate scroll regions.                                                                                                                                    |
-| Theme and density    | Shared visuals use `--vf-*`; grid-only internals use `--udg-*`.                                                                                                                                                                                        |
+| Theme and density    | Shared visuals use the canonical semantic roles in `docs/metadata/design-tokens.json`; grid-only internals use `--udg-*`.                                                                                                                              |
 | CSS ownership        | `ui-core` owns shared tokens/utilities, `ui-components` owns `vf-*`, `ui-data-grid` owns `udg-*`, docs own `vf-docs-*`, playground owns `vf-playground-*`, regression fixtures own `vf-fixture-*`, and external consumer fixtures use `vf-consumer-*`. |
 | CSS verification     | `npm run lint:css` rejects invalid CSS, duplicate declarations, invalid custom-property names, and CSS classes outside approved VyrnForge prefixes.                                                                                                    |
 | Documentation        | Public components have metadata, appropriate guidance, examples, and honest limitations.                                                                                                                                                               |
@@ -80,3 +80,17 @@ The authoritative local and release command is `npm run quality`. It includes:
 
 The GitHub `ci-gate` is the required aggregate check. Missing, cancelled,
 failed, or unexpectedly skipped mandatory work must fail the gate.
+
+## Semantic token gate
+
+S3 token changes must pass:
+
+```bash
+npm run test:design-tokens
+npm run verify:design-tokens
+```
+
+The contract verifier checks category completeness, typed exports, theme
+coverage, density aliases, compatibility bridges, reduced motion, and
+deterministic layers. Broad component and grid migration remains owned by
+VF-3009 and VF-3010.

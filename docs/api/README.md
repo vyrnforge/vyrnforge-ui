@@ -13,11 +13,11 @@ Public API means the parts of VyrnForge UI that consuming applications may rely 
 
 The public packages are:
 
-| Package | Public role |
-| --- | --- |
-| `@vyrnforge/ui-core` | Shared tokens, themes, density, utilities, and theme helpers. |
-| `@vyrnforge/ui-components` | Native-first reusable React components. |
-| `@vyrnforge/ui-data-grid` | Specialized enterprise data-management grid and grid contracts. |
+| Package                    | Public role                                                     |
+| -------------------------- | --------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Shared tokens, themes, density, utilities, and theme helpers.   |
+| `@vyrnforge/ui-components` | Native-first reusable React components.                         |
+| `@vyrnforge/ui-data-grid`  | Specialized enterprise data-management grid and grid contracts. |
 
 ## Importing Packages
 
@@ -38,15 +38,15 @@ import "@vyrnforge/ui-data-grid/styles/index.css";
 
 ## API Documents
 
-| Document | Purpose |
-| --- | --- |
-| `import-and-setup.md` | Installation, import order, and CSS setup. |
-| `ui-core-api.md` | Public token, theme, density, and utility API. |
-| `ui-components-api.md` | Public React component API overview. |
-| `ui-data-grid-api.md` | Public grid component, state, adapter, and styling API overview. |
-| `css-token-reference.md` | Stable public CSS variables. |
-| `css-class-reference.md` | Public class naming and extension rules. |
-| `public-vs-internal-api.md` | What apps may rely on and what remains private. |
+| Document                    | Purpose                                                          |
+| --------------------------- | ---------------------------------------------------------------- |
+| `import-and-setup.md`       | Installation, import order, and CSS setup.                       |
+| `ui-core-api.md`            | Public token, theme, density, and utility API.                   |
+| `ui-components-api.md`      | Public React component API overview.                             |
+| `ui-data-grid-api.md`       | Public grid component, state, adapter, and styling API overview. |
+| `css-token-reference.md`    | Stable public CSS variables.                                     |
+| `css-class-reference.md`    | Public class naming and extension rules.                         |
+| `public-vs-internal-api.md` | What apps may rely on and what remains private.                  |
 
 ## Metadata
 
@@ -64,3 +64,10 @@ Stable, or Deprecated is recorded in the same catalog and verified by
 ## Internal API
 
 Anything not exported from a package entry point or documented here is internal unless explicitly stated otherwise. Do not depend on non-exported helpers, internal class names, implementation files, tests, or docs-app-only classes.
+
+## Semantic token contract
+
+The complete S3 token roles and compatibility policy live in
+`../architecture/08-semantic-token-contract.md`. Use
+`css-token-reference.md` for public variable names and
+`../metadata/design-tokens.json` for machine-readable tooling.

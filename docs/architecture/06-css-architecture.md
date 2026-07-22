@@ -1,8 +1,10 @@
 # CSS Architecture
 
-VyrnForge CSS is package-owned and imported through stable package entry files. Internal CSS files may be split by component group or feature, but consuming apps should keep using package-level imports.
+VyrnForge CSS is package-owned and imported through stable package entry
+files. Internal CSS may be split by concern, but consuming applications use
+package-level imports.
 
-## Stable Imports
+## Stable imports
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
@@ -12,27 +14,38 @@ import "@vyrnforge/ui-data-grid/styles/index.css";
 
 ## Ownership
 
-| Area | Prefix | Owns | Must not own |
-| --- | --- | --- | --- |
-| `@vyrnforge/ui-core` | `--vf-*`, shared `vf-*` utilities | reset, tokens, themes, density, generic utilities, accessibility helpers | component classes, grid classes, app-specific classes |
-| `@vyrnforge/ui-components` | `vf-*` | shared component styles for actions, forms, feedback, layout, navigation, overlays, typography | `udg-*`, docs/playground styling |
-| `@vyrnforge/ui-data-grid` | `udg-*`, `--udg-*` | grid shell, table, header, body, toolbar, pagination, grid features, grid states | generic button/input/badge/card styles |
-| `apps/docs` | `vf-docs-*` | docs shell, sidebar, markdown, metadata, code block presentation | package component styles |
-| `examples/basic-playground` | `vf-playground-*` | demo layout and example helpers | package component styles |
+| Area                        | Prefix                            | Owns                                                                                                                    | Must not own                                          |
+| --------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `@vyrnforge/ui-core`        | `--vf-*`, shared `vf-*` utilities | reset, primitive tokens, semantic tokens, themes, density, typography, motion, layers, utilities, accessibility helpers | component classes, grid classes, app-specific classes |
+| `@vyrnforge/ui-components`  | `vf-*`                            | reusable component styles                                                                                               | `udg-*`, app styling, shared token redefinitions      |
+| `@vyrnforge/ui-data-grid`   | `udg-*`, `--udg-*`                | grid shell, row/header behavior, grid-specific state and layout                                                         | generic component styles, duplicated shared semantics |
+| `apps/docs`                 | `vf-docs-*`                       | docs presentation                                                                                                       | package defaults                                      |
+| `examples/basic-playground` | `vf-playground-*`                 | demo presentation                                                                                                       | package defaults                                      |
+| `apps/regression-fixtures`  | `vf-fixture-*`                    | deterministic test layout                                                                                               | package defaults                                      |
 
-## Split Policy
+## Semantic decision rule
 
-| Size | Action |
-| --- | --- |
-| Over 600 LOC | Review for ownership and possible split. |
-| Over 1000 LOC | Split into package/component-group modules. |
-| Over 3000 LOC | Must be split before further growth. |
+A reusable visual role belongs in `ui-core`. A component-local variable is
+allowed for measured geometry or private composition. A grid-local variable is
+allowed for behavior that has no meaning outside a data-management grid.
 
-Do not split tiny files just to mirror a theoretical folder tree. Create CSS files when a component or feature exists or when a module improves reviewability.
+The canonical contract is
+`08-semantic-token-contract.md`; the structured inventory is
+`../metadata/design-tokens.json`.
 
-## Package Structure
+## Split policy
 
-`ui-core` styles should stay foundation-only:
+| Size          | Action                                 |
+| ------------- | -------------------------------------- |
+| Over 600 LOC  | Review ownership and possible split.   |
+| Over 1000 LOC | Split by package or component concern. |
+| Over 3000 LOC | Must be split before further growth.   |
+
+Do not split small files only to mirror an abstract folder tree.
+
+## Foundation files
+
+`ui-core` keeps the stable package import while using these internal concerns:
 
 - `reset.css`
 - `tokens.css`
@@ -41,33 +54,18 @@ Do not split tiny files just to mirror a theoretical folder tree. Create CSS fil
 - `utilities.css`
 - `accessibility.css`
 
-`ui-components` styles are grouped by component family:
-
-- `base/`
-- `actions/`
-- `typography/`
-- `forms/`
-- `feedback/`
-- `layout/`
-- `navigation/`
-- `overlays/`
-
-`ui-data-grid` styles are grouped by grid concern:
-
-- `tokens/`
-- `layout/`
-- `features/`
-- `states/`
-- `utilities/`
+`tokens.css` owns primitive scales, canonical semantic roles, compatibility
+bridges, motion, and layers. Theme and density files override role values
+without redefining ownership.
 
 ## Rules
 
 - Keep static visual styling in CSS, not TSX.
-- Use CSS variables for theming and instance dimensions.
+- Use canonical `--vf-*` roles for shared semantics.
+- Use `--udg-*` only for grid-specific behavior.
 - Preserve package-level import paths.
 - Do not expose internal CSS modules as required public API.
 - Do not duplicate generic component styling in docs, playground, or grid CSS.
-- Map `--udg-*` variables to `--vf-*` fallbacks where practical.
-- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `vf-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `vf-side-nav__scroll`.
-- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `vf-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `vf-side-nav__scroll`.
-- Persistent shell scrolling belongs to component CSS: `AppShell` owns the sidebar viewport with `vf-app-shell__sidebar-scroll`, and `SideNav` owns its list viewport with `vf-side-nav__scroll`.
+- Map grid color, focus, density, typography, motion, and layer decisions to
+  `--vf-*` roles.
+- Persistent shell scrolling belongs to the owning component CSS.

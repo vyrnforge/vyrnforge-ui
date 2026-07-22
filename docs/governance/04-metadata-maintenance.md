@@ -8,14 +8,15 @@ Markdown docs remain the source of truth for project direction. Metadata files a
 
 ## Metadata Files
 
-| File | Update when |
-| --- | --- |
-| `docs/metadata/packages.json` | Package ownership, dependencies, CSS imports, or public entry points change. |
-| `docs/metadata/components.json` | A component/contract is added, renamed, deprecated, removed, materially changes usage guidance, or changes maturity, ownership, routes, exports, or maturity evidence. |
-| `docs/metadata/css-imports.json` | CSS import paths, import order, class prefixes, or token ownership changes. |
-| `docs/metadata/state-contracts.json` | State ownership, Redux policy, persistence, server query, or export request contracts change. |
-| `docs/metadata/ai-usage-rules.json` | Agent rules, dependency constraints, or recommended usage patterns change. |
-| `.ai/COMPONENT_MAP.json` | Component/package quick lookup changes; keep it compact and aligned to `docs/metadata/components.json`. |
+| File                                 | Update when                                                                                                                                                            |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/metadata/packages.json`        | Package ownership, dependencies, CSS imports, or public entry points change.                                                                                           |
+| `docs/metadata/components.json`      | A component/contract is added, renamed, deprecated, removed, materially changes usage guidance, or changes maturity, ownership, routes, exports, or maturity evidence. |
+| `docs/metadata/css-imports.json`     | CSS import paths, import order, class prefixes, or token ownership changes.                                                                                            |
+| `docs/metadata/design-tokens.json`   | Semantic token categories, theme roles, density aliases, motion rules, layering, compatibility bridges, or token ownership changes.                                    |
+| `docs/metadata/state-contracts.json` | State ownership, Redux policy, persistence, server query, or export request contracts change.                                                                          |
+| `docs/metadata/ai-usage-rules.json`  | Agent rules, dependency constraints, or recommended usage patterns change.                                                                                             |
+| `.ai/COMPONENT_MAP.json`             | Component/package quick lookup changes; keep it compact and aligned to `docs/metadata/components.json`.                                                                |
 
 ## Rules
 
@@ -37,10 +38,12 @@ Before merging metadata changes:
 2. Confirm each JSON file parses.
 3. Confirm canonical component maturity and public-export status match package exports and roadmap docs.
 4. Confirm CSS import order still matches package docs.
-5. Confirm state rules still match `docs/architecture/02-state-and-adapter-ownership.md`.
-6. Confirm AI rules do not permit forbidden dependencies.
-7. Confirm the docs app still builds.
-8. Run `npm run verify:component-metadata` and `npm run verify:component-maturity` when component metadata or evidence changes.
+5. Confirm the semantic-token catalog matches `@vyrnforge/ui-core`, including theme, density, motion, compatibility, and layer contracts.
+6. Confirm state rules still match `docs/architecture/02-state-and-adapter-ownership.md`.
+7. Confirm AI rules do not permit forbidden dependencies.
+8. Confirm the docs app still builds.
+9. Run `npm run verify:design-tokens` and `npm run test:design-tokens` when the token contract or metadata changes.
+10. Run `npm run verify:component-metadata` and `npm run verify:component-maturity` when component metadata or evidence changes.
 
 ## AI Notes
 

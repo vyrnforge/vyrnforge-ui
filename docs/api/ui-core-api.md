@@ -1,36 +1,37 @@
 # @vyrnforge/ui-core API
 
-`@vyrnforge/ui-core` is the shared design foundation for VyrnForge UI.
+`@vyrnforge/ui-core` is the dependency-free shared design foundation for
+VyrnForge UI.
 
-It owns:
+It owns CSS variables, semantic tokens, theme presets, density contracts,
+typography roles, motion, layering, utilities, and theme helpers. It does not
+own React components, data-grid behavior, app state, or business workflows.
 
-- CSS variables and token defaults
-- theme presets
-- density tokens
-- utility classes
-- theme helper contracts
-
-It does not own React components, data-grid behavior, app state, backend fetching, or business workflows.
-
-## CSS Import
+## CSS import
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
 ```
 
-Import `ui-core` CSS before `ui-components` and `ui-data-grid` CSS.
+Import core CSS before component and grid CSS.
 
-## Public Exports
+## Public exports
 
 ```ts
 import {
   createVyrnForgeTheme,
+  getVyrnForgeThemePreset,
   mergeVyrnForgeTheme,
+  normalizeVyrnForgeDensity,
   toVyrnForgeThemeStyle,
-  vyrnForgeLightTheme,
+  vyrnForgeCanonicalDensities,
   vyrnForgeDarkTheme,
+  vyrnForgeDensityAliases,
   vyrnForgeEnterpriseTheme,
-  getVyrnForgeThemePreset
+  vyrnForgeLayerOrder,
+  vyrnForgeLightTheme,
+  vyrnForgeSemanticTokenGroups,
+  vyrnForgeThemeColorTokens,
 } from "@vyrnforge/ui-core";
 ```
 
@@ -41,58 +42,84 @@ Public types include:
 - `VyrnForgeThemeVars`
 - `VyrnForgeCssVar`
 - `VyrnForgeDensity`
+- `VyrnForgeCanonicalDensity`
+- `VyrnForgeLegacyDensity`
+- `VyrnForgeSemanticToken`
+- `VyrnForgeSemanticTokenGroup`
+- `VyrnForgeLayerToken`
 - `VyrnForgeVariant`
 
-## Theme Model
+## Theme model
 
-Themes are CSS-variable maps using the `--vf-*` namespace. Apps can use preset themes or create scoped overrides.
+Theme presets are complete maps for every theme-scoped semantic role.
 
 ```tsx
-import { vyrnForgeEnterpriseTheme, toVyrnForgeThemeStyle } from "@vyrnforge/ui-core";
+import {
+  mergeVyrnForgeTheme,
+  toVyrnForgeThemeStyle,
+  vyrnForgeEnterpriseTheme,
+} from "@vyrnforge/ui-core";
 
-export function AppShell() {
-  return <div style={toVyrnForgeThemeStyle(vyrnForgeEnterpriseTheme)}>...</div>;
+const productTheme = mergeVyrnForgeTheme(vyrnForgeEnterpriseTheme, {
+  "--vf-interactive-primary": "#003b71",
+  "--vf-focus-color": "#005ea8",
+});
+
+export function ProductRoot() {
+  return <div style={toVyrnForgeThemeStyle(productTheme)}>...</div>;
 }
 ```
 
-Use `mergeVyrnForgeTheme` to extend a preset without losing defaults.
+`system` resolves to the light JavaScript preset; CSS applies the complete dark
+role set when the operating system requests dark mode.
 
-## Density Model
+## Density model
 
-VyrnForge uses these density names:
+Canonical names:
 
 - `compact`
-- `standard`
-- `comfortable`
+- `balanced`
+- `spacious`
 
-Density is represented through reusable tokens such as `--vf-control-height` and `--vf-row-height`.
+Compatibility names:
 
-## Public Token Categories
+- `standard` → `balanced`
+- `comfortable` → `spacious`
 
-| Category | Examples |
-| --- | --- |
-| Color | `--vf-primary`, `--vf-primary-hover`, `--vf-primary-soft` |
-| Surface | `--vf-bg`, `--vf-surface`, `--vf-surface-subtle`, `--vf-surface-raised` |
-| Text | `--vf-text`, `--vf-text-muted`, `--vf-text-strong` |
-| Border | `--vf-border`, `--vf-border-strong` |
-| Focus | `--vf-focus-ring` |
-| Status | `--vf-danger`, `--vf-warning`, `--vf-success`, `--vf-info` and soft variants |
-| Spacing | shared spacing values used by package CSS |
-| Radius | `--vf-radius-sm`, `--vf-radius-md`, `--vf-radius-lg` |
-| Shadow | `--vf-shadow-sm`, `--vf-shadow-md` |
-| Typography | `--vf-font-family`, font-size tokens |
-| Density | `--vf-control-height`, `--vf-row-height` |
+```ts
+normalizeVyrnForgeDensity("standard"); // "balanced"
+```
 
-See `css-token-reference.md` for the stable token list.
+The CSS selectors support both canonical and compatibility names.
 
-## Utility Classes
+## Typed token inventory
 
-Public utility classes include:
+`vyrnForgeSemanticTokenGroups` exposes the nine semantic categories without
+requiring applications to parse CSS. It is useful for documentation, token
+inspectors, and controlled theme tooling.
+
+`vyrnForgeLayerOrder` exposes the deterministic layer contract.
+
+Do not use these exports to generate runtime component state or introduce a
+global store.
+
+## Utility classes
+
+Public utilities include:
 
 - `vf-text-muted`
 - `vf-text-strong`
 - `vf-truncate`
 - `vf-sr-only`
 - `vf-focus-ring`
+- `vf-type-display`
+- `vf-type-page-title`
+- `vf-type-section-title`
+- `vf-type-label`
+- `vf-type-body`
+- `vf-type-caption`
+- `vf-type-code`
+- `vf-type-numeric`
 
-Use utilities for small shared behavior only. Do not move package-specific component styles into `ui-core`.
+See `css-token-reference.md` and
+`../architecture/08-semantic-token-contract.md` for the complete contract.

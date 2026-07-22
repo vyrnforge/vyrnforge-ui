@@ -7,6 +7,8 @@ import stateAndAdapters from "../../../docs/architecture/02-state-and-adapter-ow
 import themingAndStyling from "../../../docs/architecture/03-theming-and-styling.md?raw";
 import cleanCodeBoundaries from "../../../docs/architecture/04-clean-code-boundaries.md?raw";
 import accessibilityStandards from "../../../docs/architecture/05-accessibility-standards.md?raw";
+import semanticTokenContract from "../../../docs/architecture/08-semantic-token-contract.md?raw";
+import semanticTokenAudit from "../../../docs/quality/s3-semantic-token-audit.md?raw";
 import masterRoadmap from "../../../docs/roadmap/00-master-roadmap.md?raw";
 import componentInventory from "../../../docs/roadmap/01-component-inventory.md?raw";
 import gapAnalysis from "../../../docs/roadmap/02-gap-analysis.md?raw";
@@ -40,6 +42,7 @@ import codingRules from "../../../.ai/CODING_RULES.md?raw";
 import componentMapJson from "../../../.ai/COMPONENT_MAP.json?raw";
 import metadataPackages from "../../../docs/metadata/packages.json?raw";
 import metadataComponents from "../../../docs/metadata/components.json?raw";
+import metadataDesignTokens from "../../../docs/metadata/design-tokens.json?raw";
 import metadataCssImports from "../../../docs/metadata/css-imports.json?raw";
 import metadataStateContracts from "../../../docs/metadata/state-contracts.json?raw";
 import metadataAiUsageRules from "../../../docs/metadata/ai-usage-rules.json?raw";
@@ -75,7 +78,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Start here to locate canonical docs by topic.",
     tags: ["canonical", "index"],
     canonical: true,
-    content: docsIndex
+    content: docsIndex,
   },
   {
     id: "source-of-truth",
@@ -86,7 +89,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this to understand what VyrnForge UI is and is not.",
     tags: ["canonical", "governance", "identity"],
     canonical: true,
-    content: sourceOfTruth
+    content: sourceOfTruth,
   },
   {
     id: "ai-usage-guide",
@@ -96,7 +99,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: ".ai/DOC_USAGE_GUIDE.md",
     aiPurpose: "Use this before changing documentation.",
     tags: ["ai", "docs"],
-    content: aiUsageGuide
+    content: aiUsageGuide,
   },
   {
     id: "system-overview",
@@ -107,7 +110,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing package relationships.",
     tags: ["architecture", "packages"],
     canonical: true,
-    content: systemOverview
+    content: systemOverview,
   },
   {
     id: "package-boundaries",
@@ -118,7 +121,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this to prevent package dependency leaks.",
     tags: ["canonical", "architecture", "packages"],
     canonical: true,
-    content: packageBoundaries
+    content: packageBoundaries,
   },
   {
     id: "state-and-adapters",
@@ -126,10 +129,11 @@ export const docsRoutes: DocsRoute[] = [
     group: "Architecture",
     description: "State ownership, Redux policy, and adapter boundaries.",
     sourcePath: "docs/architecture/02-state-and-adapter-ownership.md",
-    aiPurpose: "Use this before adding state, persistence, server, or export behavior.",
+    aiPurpose:
+      "Use this before adding state, persistence, server, or export behavior.",
     tags: ["canonical", "architecture", "state", "adapters"],
     canonical: true,
-    content: stateAndAdapters
+    content: stateAndAdapters,
   },
   {
     id: "theming-and-styling",
@@ -140,7 +144,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing CSS or token behavior.",
     tags: ["canonical", "architecture", "styling", "theme"],
     canonical: true,
-    content: themingAndStyling
+    content: themingAndStyling,
   },
   {
     id: "clean-code-boundaries",
@@ -150,7 +154,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/architecture/04-clean-code-boundaries.md",
     aiPurpose: "Use this to place implementation code in the right layer.",
     tags: ["architecture", "clean-code"],
-    content: cleanCodeBoundaries
+    content: cleanCodeBoundaries,
   },
   {
     id: "accessibility-standards",
@@ -160,7 +164,32 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/architecture/05-accessibility-standards.md",
     aiPurpose: "Use this before changing interactive UI.",
     tags: ["architecture", "accessibility"],
-    content: accessibilityStandards
+    content: accessibilityStandards,
+  },
+  {
+    id: "semantic-token-contract",
+    title: "Semantic Token Contract",
+    group: "Architecture",
+    description:
+      "Canonical surfaces, text, interaction, status, density, typography, motion, and layer roles.",
+    sourcePath: "docs/architecture/08-semantic-token-contract.md",
+    aiPurpose:
+      "Use this before introducing or migrating shared visual decisions.",
+    tags: ["canonical", "architecture", "tokens", "theme"],
+    canonical: true,
+    content: semanticTokenContract,
+  },
+  {
+    id: "s3-semantic-token-audit",
+    title: "S3 Semantic Token Audit",
+    group: "Quality",
+    description:
+      "VF-3001 inventory of shared token gaps, hard-coded decisions, and deferred migration debt.",
+    sourcePath: "docs/quality/s3-semantic-token-audit.md",
+    aiPurpose:
+      "Use this to distinguish completed token foundation work from VF-3009 and VF-3010 migration debt.",
+    tags: ["quality", "tokens", "audit", "s3"],
+    content: semanticTokenAudit,
   },
   {
     id: "master-roadmap",
@@ -171,7 +200,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this for roadmap sequencing.",
     tags: ["canonical", "roadmap"],
     canonical: true,
-    content: masterRoadmap
+    content: masterRoadmap,
   },
   {
     id: "component-inventory",
@@ -179,10 +208,11 @@ export const docsRoutes: DocsRoute[] = [
     group: "Roadmap",
     description: "Current and planned component maturity.",
     sourcePath: "docs/roadmap/01-component-inventory.md",
-    aiPurpose: "Use this to know whether a component is current, planned, or later.",
+    aiPurpose:
+      "Use this to know whether a component is current, planned, or later.",
     tags: ["canonical", "components", "roadmap"],
     canonical: true,
-    content: componentInventory
+    content: componentInventory,
   },
   {
     id: "gap-analysis",
@@ -190,9 +220,10 @@ export const docsRoutes: DocsRoute[] = [
     group: "Roadmap",
     description: "Missing areas and priorities.",
     sourcePath: "docs/roadmap/02-gap-analysis.md",
-    aiPurpose: "Use this to understand priority gaps without inventing a new roadmap.",
+    aiPurpose:
+      "Use this to understand priority gaps without inventing a new roadmap.",
     tags: ["roadmap", "gaps"],
-    content: gapAnalysis
+    content: gapAnalysis,
   },
   {
     id: "do-not-build-yet",
@@ -202,7 +233,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/roadmap/03-do-not-build-yet.md",
     aiPurpose: "Use this to avoid premature features.",
     tags: ["roadmap", "non-goals"],
-    content: doNotBuildYet
+    content: doNotBuildYet,
   },
   {
     id: "release-docs",
@@ -210,10 +241,11 @@ export const docsRoutes: DocsRoute[] = [
     group: "Release",
     description: "Release governance index.",
     sourcePath: "docs/release/README.md",
-    aiPurpose: "Use this before planning publication, versioning, or release readiness work.",
+    aiPurpose:
+      "Use this before planning publication, versioning, or release readiness work.",
     tags: ["release", "index"],
     canonical: true,
-    content: releaseDocsIndex
+    content: releaseDocsIndex,
   },
   {
     id: "release-policy",
@@ -221,9 +253,10 @@ export const docsRoutes: DocsRoute[] = [
     group: "Release",
     description: "Maturity stages and release expectations.",
     sourcePath: "docs/release/release-policy.md",
-    aiPurpose: "Use this to understand pre-alpha, alpha, beta, 0.x, and 1.x expectations.",
+    aiPurpose:
+      "Use this to understand pre-alpha, alpha, beta, 0.x, and 1.x expectations.",
     tags: ["release", "policy"],
-    content: releasePolicy
+    content: releasePolicy,
   },
   {
     id: "versioning-policy",
@@ -231,9 +264,10 @@ export const docsRoutes: DocsRoute[] = [
     group: "Release",
     description: "Package versioning, prerelease, and compatibility rules.",
     sourcePath: "docs/release/versioning-policy.md",
-    aiPurpose: "Use this before changing package versions or public compatibility contracts.",
+    aiPurpose:
+      "Use this before changing package versions or public compatibility contracts.",
     tags: ["release", "versioning"],
-    content: versioningPolicy
+    content: versioningPolicy,
   },
   {
     id: "publication-procedure",
@@ -243,7 +277,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/release/publication-procedure.md",
     aiPurpose: "Use this before package publication planning.",
     tags: ["release", "publication"],
-    content: publicationProcedure
+    content: publicationProcedure,
   },
   {
     id: "deprecation-policy",
@@ -251,9 +285,10 @@ export const docsRoutes: DocsRoute[] = [
     group: "Release",
     description: "Deprecation, compatibility, migration, and removal rules.",
     sourcePath: "docs/release/deprecation-and-migration-policy.md",
-    aiPurpose: "Use this before breaking public APIs, CSS contracts, or behavior.",
+    aiPurpose:
+      "Use this before breaking public APIs, CSS contracts, or behavior.",
     tags: ["release", "migration"],
-    content: deprecationPolicy
+    content: deprecationPolicy,
   },
   {
     id: "release-readiness",
@@ -261,9 +296,10 @@ export const docsRoutes: DocsRoute[] = [
     group: "Release",
     description: "Reusable release checklist.",
     sourcePath: "docs/release/release-readiness-checklist.md",
-    aiPurpose: "Use this to validate alpha, beta, and stable release readiness.",
+    aiPurpose:
+      "Use this to validate alpha, beta, and stable release readiness.",
     tags: ["release", "checklist"],
-    content: releaseReadinessChecklist
+    content: releaseReadinessChecklist,
   },
   {
     id: "ui-core",
@@ -274,7 +310,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing shared token/theme behavior.",
     tags: ["package", "ui-core"],
     canonical: true,
-    content: uiCoreDoc
+    content: uiCoreDoc,
   },
   {
     id: "ui-components",
@@ -285,7 +321,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing shared components.",
     tags: ["package", "ui-components"],
     canonical: true,
-    content: uiComponentsDoc
+    content: uiComponentsDoc,
   },
   {
     id: "ui-data-grid",
@@ -296,18 +332,33 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing grid behavior.",
     tags: ["package", "ui-data-grid"],
     canonical: true,
-    content: uiDataGridDoc
+    content: uiDataGridDoc,
   },
   {
     id: "metadata-packages",
     title: "Metadata / Packages",
     group: "Metadata",
-    description: "Machine-readable package ownership, dependencies, CSS imports, and entry points.",
+    description:
+      "Machine-readable package ownership, dependencies, CSS imports, and entry points.",
     sourcePath: "docs/metadata/packages.json",
-    aiPurpose: "Use this for package ownership and dependency direction lookup.",
+    aiPurpose:
+      "Use this for package ownership and dependency direction lookup.",
     tags: ["metadata", "packages", "json"],
     kind: "metadata",
-    content: metadataPackages
+    content: metadataPackages,
+  },
+  {
+    id: "metadata-design-tokens",
+    title: "Metadata / Design Tokens",
+    group: "Metadata",
+    description:
+      "Machine-readable semantic token categories, themes, density, motion, layers, and compatibility bridges.",
+    sourcePath: "docs/metadata/design-tokens.json",
+    aiPurpose:
+      "Use this before changing shared token names, roles, aliases, or ownership.",
+    tags: ["metadata", "tokens", "theme", "json"],
+    kind: "metadata",
+    content: metadataDesignTokens,
   },
   {
     id: "api-overview",
@@ -318,7 +369,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before consuming VyrnForge public APIs.",
     tags: ["api", "canonical"],
     canonical: true,
-    content: apiOverview
+    content: apiOverview,
   },
   {
     id: "api-import-and-setup",
@@ -328,7 +379,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/api/import-and-setup.md",
     aiPurpose: "Use this before importing package CSS or components.",
     tags: ["api", "imports", "css"],
-    content: apiImportSetup
+    content: apiImportSetup,
   },
   {
     id: "api-ui-core",
@@ -338,7 +389,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/api/ui-core-api.md",
     aiPurpose: "Use this before consuming ui-core tokens or theme helpers.",
     tags: ["api", "ui-core"],
-    content: apiUiCore
+    content: apiUiCore,
   },
   {
     id: "api-ui-components",
@@ -348,7 +399,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/api/ui-components-api.md",
     aiPurpose: "Use this before using VyrnForge components.",
     tags: ["api", "ui-components"],
-    content: apiUiComponents
+    content: apiUiComponents,
   },
   {
     id: "api-ui-data-grid",
@@ -358,7 +409,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/api/ui-data-grid-api.md",
     aiPurpose: "Use this before consuming grid components, state, or adapters.",
     tags: ["api", "ui-data-grid"],
-    content: apiUiDataGrid
+    content: apiUiDataGrid,
   },
   {
     id: "api-css-tokens",
@@ -368,7 +419,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/api/css-token-reference.md",
     aiPurpose: "Use this before overriding VyrnForge CSS variables.",
     tags: ["api", "css", "tokens"],
-    content: apiCssTokens
+    content: apiCssTokens,
   },
   {
     id: "api-css-classes",
@@ -378,17 +429,18 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/api/css-class-reference.md",
     aiPurpose: "Use this before relying on VyrnForge class names.",
     tags: ["api", "css", "classes"],
-    content: apiCssClasses
+    content: apiCssClasses,
   },
   {
     id: "api-public-vs-internal",
     title: "Public vs Internal API",
     group: "API Reference",
-    description: "Defines stable public API and private implementation details.",
+    description:
+      "Defines stable public API and private implementation details.",
     sourcePath: "docs/api/public-vs-internal-api.md",
     aiPurpose: "Use this before importing non-obvious APIs or deep paths.",
     tags: ["api", "boundaries"],
-    content: apiPublicVsInternal
+    content: apiPublicVsInternal,
   },
   {
     id: "metadata-components",
@@ -396,10 +448,11 @@ export const docsRoutes: DocsRoute[] = [
     group: "Metadata",
     description: "Machine-readable component and public contract catalog.",
     sourcePath: "docs/metadata/components.json",
-    aiPurpose: "Use this to understand components, status, usage rules, classes, and imports.",
+    aiPurpose:
+      "Use this to understand components, status, usage rules, classes, and imports.",
     tags: ["metadata", "components", "json"],
     kind: "metadata",
-    content: metadataComponents
+    content: metadataComponents,
   },
   {
     id: "metadata-css-imports",
@@ -410,7 +463,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing or consuming VyrnForge styles.",
     tags: ["metadata", "css", "json"],
     kind: "metadata",
-    content: metadataCssImports
+    content: metadataCssImports,
   },
   {
     id: "metadata-state-contracts",
@@ -418,10 +471,11 @@ export const docsRoutes: DocsRoute[] = [
     group: "Metadata",
     description: "State ownership and adapter policy metadata.",
     sourcePath: "docs/metadata/state-contracts.json",
-    aiPurpose: "Use this before adding state, persistence, server, or export behavior.",
+    aiPurpose:
+      "Use this before adding state, persistence, server, or export behavior.",
     tags: ["metadata", "state", "adapters", "json"],
     kind: "metadata",
-    content: metadataStateContracts
+    content: metadataStateContracts,
   },
   {
     id: "metadata-ai-usage-rules",
@@ -432,7 +486,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this for quick AI implementation guardrails.",
     tags: ["metadata", "ai", "json"],
     kind: "metadata",
-    content: metadataAiUsageRules
+    content: metadataAiUsageRules,
   },
   {
     id: "docs-app-spec",
@@ -442,7 +496,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/react-docs/00-react-docs-app-spec.md",
     aiPurpose: "Use this before changing the docs app.",
     tags: ["react-docs"],
-    content: docsAppSpec
+    content: docsAppSpec,
   },
   {
     id: "route-map",
@@ -452,7 +506,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/react-docs/01-route-map.md",
     aiPurpose: "Use this to align docs navigation.",
     tags: ["react-docs", "routes"],
-    content: routeMap
+    content: routeMap,
   },
   {
     id: "example-standards",
@@ -462,7 +516,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/react-docs/02-example-standards.md",
     aiPurpose: "Use this before adding docs examples.",
     tags: ["react-docs", "examples"],
-    content: exampleStandards
+    content: exampleStandards,
   },
   {
     id: "ai-readable-docs",
@@ -472,7 +526,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/react-docs/03-ai-readable-docs.md",
     aiPurpose: "Use this before adding AI-facing docs metadata.",
     tags: ["react-docs", "ai"],
-    content: aiReadableDocs
+    content: aiReadableDocs,
   },
   {
     id: "ai-documentation-strategy",
@@ -482,7 +536,7 @@ export const docsRoutes: DocsRoute[] = [
     sourcePath: "docs/ai/00-ai-documentation-strategy.md",
     aiPurpose: "Use this to keep AI docs useful and non-duplicative.",
     tags: ["ai", "docs"],
-    content: aiDocumentationStrategy
+    content: aiDocumentationStrategy,
   },
   {
     id: "agent-rules",
@@ -493,7 +547,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before all agent work.",
     tags: ["ai", "agent"],
     kind: "ai",
-    content: agents
+    content: agents,
   },
   {
     id: "repo-map",
@@ -504,7 +558,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this to locate code and docs.",
     tags: ["ai", "repo"],
     kind: "ai",
-    content: repoMap
+    content: repoMap,
   },
   {
     id: "coding-rules",
@@ -515,7 +569,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing code.",
     tags: ["ai", "implementation"],
     kind: "ai",
-    content: codingRules
+    content: codingRules,
   },
   {
     id: "component-map",
@@ -526,7 +580,7 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this as structured component metadata.",
     tags: ["ai", "json", "components"],
     kind: "json",
-    content: componentMapJson
+    content: componentMapJson,
   },
   {
     id: "ai-context",
@@ -538,7 +592,7 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["ai", "canonical"],
     kind: "ai",
     canonical: true,
-    content: aiContext
+    content: aiContext,
   },
   {
     id: "component-reference",
@@ -546,9 +600,10 @@ export const docsRoutes: DocsRoute[] = [
     group: "Start Here",
     description: "Generated viewer summary of current and planned components.",
     sourcePath: "docs/roadmap/01-component-inventory.md",
-    aiPurpose: "Use this as a navigable summary. The markdown inventory remains source of truth.",
+    aiPurpose:
+      "Use this as a navigable summary. The markdown inventory remains source of truth.",
     tags: ["components", "reference"],
-    kind: "component-reference"
+    kind: "component-reference",
   },
   {
     id: "package-reference",
@@ -556,10 +611,11 @@ export const docsRoutes: DocsRoute[] = [
     group: "Start Here",
     description: "Generated viewer summary of package responsibilities.",
     sourcePath: "docs/architecture/01-package-boundaries.md",
-    aiPurpose: "Use this as a navigable summary. Architecture docs remain source of truth.",
+    aiPurpose:
+      "Use this as a navigable summary. Architecture docs remain source of truth.",
     tags: ["packages", "reference"],
-    kind: "package-reference"
-  }
+    kind: "package-reference",
+  },
 ];
 
 export const docsGroups = [
@@ -571,7 +627,7 @@ export const docsGroups = [
   "API Reference",
   "Metadata",
   "React Docs",
-  "AI"
+  "AI",
 ];
 
 export function getRouteById(id: string) {
