@@ -62,9 +62,24 @@
       "reason": "Only documented exports, props, tokens, and adapter contracts are stable public API."
     },
     {
+      "id": "multi-framework-contracts",
+      "rule": "Use the canonical component event, slot, form, and renderer contracts before adding framework-specific APIs.",
+      "reason": "Shared contracts prevent React, native HTML, Angular, and Vue behavior from drifting."
+    },
+    {
+      "id": "framework-support-claims",
+      "rule": "Do not describe Angular, Vue, or native elements as beta-supported until GMF4 evidence passes.",
+      "reason": "Architecture fixtures document the intended integration but are not runtime support evidence."
+    },
+    {
+      "id": "defer-grid-roadmap",
+      "rule": "Do not resume data-grid feature expansion unless it is explicitly reprioritized.",
+      "reason": "The active critical path is the non-grid multi-framework beta."
+    },
+    {
       "id": "follow-boundaries",
-      "rule": "Follow package boundaries.",
-      "reason": "ui-core must stay lowest-level, ui-components must not depend on ui-data-grid."
+      "rule": "Follow the approved multi-framework package boundaries.",
+      "reason": "ui-core is lowest-level; ui-behaviors is framework-neutral; ui-components and ui-elements are independent renderers; shared packages must not depend on ui-data-grid."
     }
   ],
   "lookupOrder": [
@@ -72,6 +87,8 @@
     "docs/api/README.md",
     "docs/metadata/components.json",
     "docs/metadata/packages.json",
+    "docs/metadata/multi-framework.json",
+    "docs/metadata/component-contracts.json",
     ".ai/AI_CONTEXT.md"
   ]
 }

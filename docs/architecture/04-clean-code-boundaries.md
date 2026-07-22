@@ -1,62 +1,60 @@
 # Clean Code Boundaries
 
-## Data grid internal structure
+## Placement rule
 
-Recommended structure:
+Place code according to the most stable concern it owns, not according to the
+first framework that needs it.
 
-```txt
-packages/ui-data-grid/src/
-  components/
-  state/
-  core/
-  adapters/
-  hooks/
-  styles/
-  types/
-```
+| Concern                                               | Owner                                                              |
+| ----------------------------------------------------- | ------------------------------------------------------------------ |
+| Tokens, themes, density, typography, motion, layers   | `ui-core`                                                          |
+| State transitions, collections, selection, validation | `ui-behaviors`                                                     |
+| Browser focus, events, observers, positioning         | renderer-owned DOM adapter until a shared DOM package is justified |
+| React lifecycle and rendering                         | `ui-components`                                                    |
+| Custom Element lifecycle and Light DOM rendering      | `ui-elements`                                                      |
+| Grid-specific behavior and rendering                  | `ui-data-grid`                                                     |
+| Authentication, permissions, requests, workflows      | consuming application                                              |
 
-## Responsibility split
+## Controller boundary
 
-| Area | Responsibility |
-| --- | --- |
-| components | render UI and wire events |
-| hooks | coordinate interaction behavior |
-| state | reducer, defaults, selectors, merge/reset logic |
-| core | pure data transforms and algorithms |
-| adapters | persistence/server/export integration contracts |
-| styles | visual design and theme behavior |
-| types | public and internal TypeScript contracts |
+A framework-neutral controller:
 
-## Core rules
+- accepts serializable state and callbacks;
+- returns state, commands, derived values, and stable event reasons;
+- does not import a renderer framework;
+- does not read or mutate the DOM;
+- can be tested without a browser or framework runtime.
 
-Core functions must be:
+Controllers decide **what should happen**. DOM adapters decide **how browser
+focus and events are executed**. Renderers decide **how output is produced**.
 
-- pure
-- unit-testable
-- independent from React
-- independent from DOM
-- independent from localStorage
-- independent from CSS
+## Renderer boundary
 
-## Hook rules
+React components may use React hooks, refs, JSX, children, and render callbacks.
+Custom Elements may use browser lifecycle callbacks, properties, attributes,
+slots, and Light DOM. These renderer surfaces do not belong in shared behavior
+contracts.
 
-Hooks may use React but should not contain large business logic.
+## DOM boundary
 
-Hooks should delegate to:
+Focus scopes, dismissal listeners, anchored positioning, observers, scroll
+locking, and portal/overlay roots are DOM concerns. They may be shared later,
+but they must not be moved into `ui-behaviors`.
 
-- `core` for algorithms
-- `state` for reducer/selectors
-- `adapters` for integration contracts
+## Framework integration boundary
 
-## Component rules
+Angular forms and Vue `v-model` adapters may translate framework conventions to
+canonical properties and events. They must not duplicate rendering, keyboard,
+selection, validation, or accessibility behavior.
 
-Components should not own business state or backend behavior.
+## Public API rule
 
-Components should:
+Internal extraction must preserve the documented React package API unless a
+separate public migration is approved. Shared controller APIs are not public
+merely because a renderer consumes them.
 
-- render native elements
-- use shared components when possible
-- expose controlled/uncontrolled APIs
-- use accessible labels
-- apply state classes
-- avoid static inline styling
+## Data-grid rule
+
+Do not move grid-specific models into the non-grid behavior package. The data
+grid remains on a deferred independent track until its own framework-neutral
+architecture is approved.

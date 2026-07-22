@@ -1,6 +1,6 @@
 # VyrnForge UI
 
-VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundation. It is built for reusable application surfaces such as administration portals, customer portals, IAM and access-management applications, workflow systems, reporting and analytics screens, and data-heavy enterprise applications.
+VyrnForge UI is a native-first, dependency-minimal enterprise UI foundation with a first-class React renderer and a planned native Custom Element renderer. It is built for reusable application surfaces such as administration portals, customer portals, IAM and access-management applications, workflow systems, reporting and analytics screens, and data-heavy enterprise applications.
 
 VyrnForge UI is not only a data-grid library. The data grid is one specialized package inside a broader UI foundation.
 
@@ -24,17 +24,35 @@ VyrnForge UI is currently in an early alpha prerelease stage.
 
 ## Packages
 
-| Package | Responsibility |
-| --- | --- |
-| `@vyrnforge/ui-core` | Design tokens, themes, density, CSS variables, utilities, and shared foundations. |
-| `@vyrnforge/ui-components` | Reusable React primitives and application components. |
-| `@vyrnforge/ui-data-grid` | Enterprise data-management grid functionality. |
+| Package                    | Responsibility                                                                                                   |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared foundations. |
+| `@vyrnforge/ui-behaviors`  | Planned framework-neutral controllers, collections, selection, validation, and behavior events.                  |
+| `@vyrnforge/ui-components` | First-class React primitives and application components.                                                         |
+| `@vyrnforge/ui-elements`   | Planned native Custom Elements for plain HTML and verified Angular/Vue consumption.                              |
+| `@vyrnforge/ui-data-grid`  | Existing React enterprise data-management grid on a separate alpha track.                                        |
 
 Intended dependency direction:
 
-- `@vyrnforge/ui-core` remains independent.
-- `@vyrnforge/ui-components` may depend on `@vyrnforge/ui-core`.
-- `@vyrnforge/ui-data-grid` may depend on `@vyrnforge/ui-core` and `@vyrnforge/ui-components`.
+- `@vyrnforge/ui-core` remains independent and framework-neutral.
+- planned `@vyrnforge/ui-behaviors` may depend on `@vyrnforge/ui-core` only.
+- `@vyrnforge/ui-components` may depend on `ui-core` and planned `ui-behaviors`.
+- planned `@vyrnforge/ui-elements` may depend on `ui-core` and `ui-behaviors` without a framework runtime.
+- `@vyrnforge/ui-data-grid` may depend on `ui-core` and `ui-components` and remains outside the non-grid beta group.
+
+## Multi-Framework Beta Direction
+
+The active release program prioritizes all public non-grid components:
+
+- React remains the reference renderer through `@vyrnforge/ui-components`.
+- Native HTML becomes first-class through planned `@vyrnforge/ui-elements`.
+- Angular and Vue are verified consumers of the native element surface.
+- Shared component state and behavior move into planned `@vyrnforge/ui-behaviors`.
+- The data grid remains usable as a React alpha and does not block the non-grid beta.
+
+Architecture fixtures do not claim framework support. Clean consumer builds,
+browser behavior, accessibility, typing, packaging, and documentation must pass
+GMF4 before a framework is marked beta-supported.
 
 ## Installation
 
@@ -70,7 +88,7 @@ import "@vyrnforge/ui-data-grid/styles/index.css";
 import { Button, Card, Stack } from "@vyrnforge/ui-components";
 import {
   UniversalDataGrid,
-  type DataGridColumnDef
+  type DataGridColumnDef,
 } from "@vyrnforge/ui-data-grid";
 
 type AccessRequest = {
@@ -81,12 +99,12 @@ type AccessRequest = {
 
 const rows: AccessRequest[] = [
   { id: "REQ-1001", requester: "Workspace owner", status: "Pending" },
-  { id: "REQ-1002", requester: "Security reviewer", status: "Approved" }
+  { id: "REQ-1002", requester: "Security reviewer", status: "Approved" },
 ];
 
 const columns: DataGridColumnDef<AccessRequest>[] = [
   { id: "requester", header: "Requester", accessorKey: "requester" },
-  { id: "status", header: "Status", accessorKey: "status" }
+  { id: "status", header: "Status", accessorKey: "status" },
 ];
 
 export function AccessRequestsPanel() {
@@ -108,13 +126,14 @@ export function AccessRequestsPanel() {
 
 ## Repository Structure
 
-| Path | Purpose |
-| --- | --- |
-| `packages/` | Package workspaces for `ui-core`, `ui-components`, and `ui-data-grid`. |
-| `docs/` | Canonical markdown documentation and AI-readable metadata. |
-| `examples/basic-playground/` | Interactive playground source for component and grid examples. |
-| `apps/docs/` | React documentation viewer over the markdown docs. |
-| `.github/` | Repository automation and workflow configuration. |
+| Path                         | Purpose                                                                                          |
+| ---------------------------- | ------------------------------------------------------------------------------------------------ |
+| `packages/`                  | Current package workspaces plus the approved future `ui-behaviors` and `ui-elements` boundaries. |
+| `docs/`                      | Canonical markdown documentation and AI-readable metadata.                                       |
+| `examples/basic-playground/` | Interactive playground source for component and grid examples.                                   |
+| `apps/docs/`                 | React documentation viewer over the markdown docs.                                               |
+| `tests/consumers/`           | React, native HTML, Angular, and Vue integration-contract fixtures.                              |
+| `.github/`                   | Repository automation and workflow configuration.                                                |
 
 Package tests live beside package source where present.
 
@@ -147,6 +166,7 @@ npm run typecheck
 npm run test
 npm run verify:consumer
 npm run verify:packages
+npm run verify:multi-framework
 npm run verify:toolchain
 ```
 

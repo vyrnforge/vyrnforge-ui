@@ -1,0 +1,6 @@
+{
+  "id": "angular",
+  "supportClaim": "architecture-fixture-only",
+  "rendererPackages": ["@vyrnforge/ui-elements"],
+  "requiredPatterns": ["CUSTOM_ELEMENTS_SCHEMA", "<vf-button", "(vf-action)"]
+}

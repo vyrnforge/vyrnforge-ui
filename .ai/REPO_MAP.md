@@ -16,8 +16,10 @@ examples/
 
 ```txt
 packages/ui-core/
+packages/ui-behaviors/   # planned after GMF1
 packages/ui-components/
-packages/ui-data-grid/
+packages/ui-elements/    # planned after GMF2
+packages/ui-data-grid/   # independent React alpha
 ```
 
 ## Documentation
@@ -38,19 +40,22 @@ docs/react-docs/
 docs/ai/
 docs/templates/
 docs/prompts/
+tests/consumers/
 ```
 
 ## Where To Put Code
 
-| Work | Location |
-| --- | --- |
-| Shared tokens/themes | `packages/ui-core` |
-| Reusable component | `packages/ui-components/src/components/<Component>` |
-| Grid-specific behavior | `packages/ui-data-grid` |
-| Docs app example | `examples/basic-playground` or future docs app |
-| Architecture docs | `docs/architecture` |
-| Public API docs | `docs/api` |
-| Component docs | Component README plus docs app page |
+| Work                       | Location                                            |
+| -------------------------- | --------------------------------------------------- |
+| Shared tokens/themes       | `packages/ui-core`                                  |
+| Framework-neutral behavior | planned `packages/ui-behaviors`                     |
+| React component            | `packages/ui-components/src/components/<Component>` |
+| Native Custom Element      | planned `packages/ui-elements`                      |
+| Grid-specific behavior     | `packages/ui-data-grid` (deferred release track)    |
+| Docs app example           | `examples/basic-playground` or future docs app      |
+| Architecture docs          | `docs/architecture`                                 |
+| Public API docs            | `docs/api`                                          |
+| Component docs             | Component README plus docs app page                 |
 
 ## Before Creating New Docs
 

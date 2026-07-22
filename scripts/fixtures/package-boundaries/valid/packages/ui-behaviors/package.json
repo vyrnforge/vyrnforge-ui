@@ -1,0 +1,6 @@
+{
+  "name": "@vyrnforge/ui-behaviors",
+  "dependencies": {
+    "@vyrnforge/ui-core": "1.0.0"
+  }
+}

@@ -7,7 +7,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Release scope is approved.
 - [ ] Version is selected.
 - [ ] npm tag is selected: `alpha`, `beta`, candidate tag, or `latest` only for approved stable releases.
-- [ ] Package versions remain synchronized unless an approved policy says otherwise.
+- [ ] Package versions remain synchronized within the approved release group; the data-grid alpha is not promoted with the non-grid beta.
 - [ ] VyrnForge Source License 1.0 metadata and package-local LICENSE files are verified.
 
 ## Mandatory blockers
@@ -21,6 +21,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Package builds pass.
 - [ ] `npm run verify:packages` passes.
 - [ ] `npm run verify:consumer` passes.
+- [ ] `npm run verify:multi-framework` passes for a multi-framework release.
 - [ ] The stable `ci-gate` check passes. During migration, compatibility checks `quality` and `external-consumer` also pass.
 - [ ] For beta or stable promotion, `npm run verify:assistive-technology:release` passes.
 - [ ] Package manifests use `SEE LICENSE IN LICENSE`.
@@ -41,6 +42,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 ## Recommended checks
 
 - [ ] External package-consumer fixture installs the package tarballs.
+- [ ] React, native HTML, Angular, and Vue consumer fixtures pass when required by GMF4.
 - [ ] Real application validation is complete.
 - [ ] Documentation build passes.
 - [ ] Playground build passes.

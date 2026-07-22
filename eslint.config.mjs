@@ -32,7 +32,7 @@ export default [
           babelrc: false,
           configFile: false,
           parserOpts: {
-            plugins: ["typescript", "jsx"],
+            plugins: ["typescript", "jsx", "decorators-legacy"],
           },
         },
       },

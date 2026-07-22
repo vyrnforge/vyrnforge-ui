@@ -11,6 +11,15 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Added
 
+- Added the accepted multi-framework web architecture for a first-class React
+  renderer, planned native Custom Elements, verified Angular/Vue consumption,
+  and framework-neutral behavior contracts.
+- Added machine-readable component contracts for canonical `vf-*` events,
+  semantic composition regions, form association, and representative action,
+  navigation, form-control, and overlay components.
+- Added React, native HTML, Angular, and Vue architecture fixtures plus
+  verification that prevents those fixtures from overstating runtime support.
+
 - Added dependency-aware CI planning, reusable quality/package/consumer/docs
   workflows, a stable `ci-gate`, a pinned Node 24 LTS nightly baseline, and a
   high-severity dependency audit.
@@ -21,6 +30,14 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   GitHub prerelease creation with separated permissions.
 
 ### Changed
+
+- Replaced the next grid-focused roadmap phase with the non-grid
+  multi-framework beta program. `@vyrnforge/ui-data-grid` remains an
+  independently versioned React alpha and does not block the beta release
+  group.
+- Reserved the planned `@vyrnforge/ui-behaviors` and
+  `@vyrnforge/ui-elements` package boundaries while retaining
+  `@vyrnforge/ui-components` as the public React package through beta.
 
 - Split normal CI, GitHub Pages deployment, npm OIDC publication, registry
   verification, and GitHub release recording into explicit responsibilities.

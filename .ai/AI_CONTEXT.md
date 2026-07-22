@@ -12,36 +12,44 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 ## Packages
 
-| Package | Owns |
-| --- | --- |
-| `@vyrnforge/ui-core` | tokens, themes, density, utilities |
-| `@vyrnforge/ui-components` | reusable native React components |
-| `@vyrnforge/ui-data-grid` | UniversalDataGrid and grid-specific behavior |
+| Package                    | Owns                                                                             | Status                 |
+| -------------------------- | -------------------------------------------------------------------------------- | ---------------------- |
+| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                   | current; non-grid beta |
+| `@vyrnforge/ui-behaviors`  | framework-neutral controllers, collections, selection, validation, event reasons | planned; non-grid beta |
+| `@vyrnforge/ui-components` | first-class React renderer                                                       | current; non-grid beta |
+| `@vyrnforge/ui-elements`   | native Custom Elements, properties, events, Light DOM, form association          | planned; non-grid beta |
+| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                     | React alpha; deferred  |
+
+React and native HTML are first-class beta targets. Angular and Vue require
+verified consumer evidence. Mobile-native rendering is outside this program.
 
 ## Canonical Docs
 
-| Topic | Source |
-| --- | --- |
-| Project identity | `docs/governance/01-project-source-of-truth.md` |
-| Package boundaries | `docs/architecture/01-package-boundaries.md` |
-| State and Redux policy | `docs/architecture/02-state-and-adapter-ownership.md` |
-| Styling and themes | `docs/architecture/03-theming-and-styling.md` |
-| CSS architecture | `docs/architecture/06-css-architecture.md` |
-| Clean code boundaries | `docs/architecture/04-clean-code-boundaries.md` |
-| Roadmap | `docs/roadmap/00-master-roadmap.md` |
-| Component inventory | `docs/roadmap/01-component-inventory.md` |
-| Public API usage | `docs/api/README.md` |
-| Benchmarks | `docs/benchmark/` |
-| AI-readable metadata | `docs/metadata/` and `.ai/COMPONENT_MAP.json` |
-| CI/CD architecture | `docs/engineering/ci-cd-architecture.md` |
-| Release responsibilities | `docs/release/release-responsibility-matrix.md` |
-| Controlled implementation workflow | `docs/governance/controlled-implementation-rules.md` |
+| Topic                              | Source                                                         |
+| ---------------------------------- | -------------------------------------------------------------- |
+| Project identity                   | `docs/governance/01-project-source-of-truth.md`                |
+| Package boundaries                 | `docs/architecture/01-package-boundaries.md`                   |
+| Multi-framework support            | `docs/architecture/adr-004-multi-framework-web-support.md`     |
+| Component contracts and events     | `docs/architecture/09-component-contracts-and-events.md`       |
+| Native elements and forms          | `docs/architecture/10-custom-elements-and-form-association.md` |
+| State and Redux policy             | `docs/architecture/02-state-and-adapter-ownership.md`          |
+| Styling and themes                 | `docs/architecture/03-theming-and-styling.md`                  |
+| CSS architecture                   | `docs/architecture/06-css-architecture.md`                     |
+| Clean code boundaries              | `docs/architecture/04-clean-code-boundaries.md`                |
+| Roadmap                            | `docs/roadmap/00-master-roadmap.md`                            |
+| Component inventory                | `docs/roadmap/01-component-inventory.md`                       |
+| Public API usage                   | `docs/api/README.md`                                           |
+| Benchmarks                         | `docs/benchmark/`                                              |
+| AI-readable metadata               | `docs/metadata/` and `.ai/COMPONENT_MAP.json`                  |
+| CI/CD architecture                 | `docs/engineering/ci-cd-architecture.md`                       |
+| Release responsibilities           | `docs/release/release-responsibility-matrix.md`                |
+| Controlled implementation workflow | `docs/governance/controlled-implementation-rules.md`           |
 
 ## Hard Rules
 
 - Do not add Redux/Zustand/TanStack state inside VyrnForge packages.
 - Do not add MUI, AntD, Tailwind, Radix, Headless UI, styled-components, Emotion, or icon libraries by default.
-- Keep native React + TypeScript + CSS.
+- Keep React as the reference renderer and use browser-native Custom Elements for native HTML.
 - Keep static visual styling in CSS, not TSX.
 - Use `--vf-*` tokens for shared design.
 - Use `--udg-*` variables only for grid-specific styling.
@@ -58,14 +66,20 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 Allowed:
 
+- `ui-behaviors -> ui-core`
 - `ui-components -> ui-core`
+- `ui-components -> ui-behaviors` after S5
+- `ui-elements -> ui-core`
+- `ui-elements -> ui-behaviors`
 - `ui-data-grid -> ui-core`
 - `ui-data-grid -> ui-components`
 
 Forbidden:
 
-- `ui-core -> ui-components`
-- `ui-components -> ui-data-grid`
+- `ui-core -> any VyrnForge package`
+- `ui-behaviors -> renderer packages or framework runtimes`
+- `ui-components <-> ui-elements`
+- shared non-grid packages -> `ui-data-grid`
 
 ## Required Validation
 

@@ -21,18 +21,21 @@ Do not create new top-level documentation without linking it from this file. If 
 
 ## 2. Architecture
 
-| Document                                         | Purpose                                                                                                  |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `architecture/00-system-overview.md`             | High-level package architecture.                                                                         |
-| `architecture/01-package-boundaries.md`          | What each package owns and must not own.                                                                 |
-| `architecture/02-state-and-adapter-ownership.md` | State distribution, adapters, and Redux policy.                                                          |
-| `architecture/03-theming-and-styling.md`         | CSS variable, token, and styling rules.                                                                  |
-| `architecture/04-clean-code-boundaries.md`       | Components vs hooks vs core vs adapters.                                                                 |
-| `architecture/05-accessibility-standards.md`     | Accessibility baseline.                                                                                  |
-| `architecture/06-css-architecture.md`            | CSS ownership, split policy, prefixes, and package-level style imports.                                  |
-| `architecture/07-overlay-and-focus.md`           | Portal, dismissal, focus, scroll-lock, positioning, and z-index rules for overlays.                      |
-| `architecture/08-semantic-token-contract.md`     | Canonical S3 semantic roles, compatibility bridges, density, typography, motion, and layers.             |
-| `engineering/ci-cd-architecture.md`              | Dependency-aware CI, reusable workflows, permission boundaries, Pages, releases, and nightly validation. |
+| Document                                                  | Purpose                                                                                                  |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `architecture/00-system-overview.md`                      | High-level package architecture.                                                                         |
+| `architecture/01-package-boundaries.md`                   | What each package owns and must not own.                                                                 |
+| `architecture/02-state-and-adapter-ownership.md`          | State distribution, adapters, and Redux policy.                                                          |
+| `architecture/03-theming-and-styling.md`                  | CSS variable, token, and styling rules.                                                                  |
+| `architecture/04-clean-code-boundaries.md`                | Components vs hooks vs core vs adapters.                                                                 |
+| `architecture/05-accessibility-standards.md`              | Accessibility baseline.                                                                                  |
+| `architecture/06-css-architecture.md`                     | CSS ownership, split policy, prefixes, and package-level style imports.                                  |
+| `architecture/07-overlay-and-focus.md`                    | Portal, dismissal, focus, scroll-lock, positioning, and z-index rules for overlays.                      |
+| `architecture/08-semantic-token-contract.md`              | Canonical S3 semantic roles, compatibility bridges, density, typography, motion, and layers.             |
+| `architecture/adr-004-multi-framework-web-support.md`     | Accepted React/native-first web support decision and deferred grid scope.                                |
+| `architecture/09-component-contracts-and-events.md`       | Canonical properties, events, composition regions, methods, and renderer mapping.                        |
+| `architecture/10-custom-elements-and-form-association.md` | Light DOM, Custom Element lifecycle, and native form-association policy.                                 |
+| `engineering/ci-cd-architecture.md`                       | Dependency-aware CI, reusable workflows, permission boundaries, Pages, releases, and nightly validation. |
 
 ## 3. Roadmap
 
@@ -45,11 +48,13 @@ Do not create new top-level documentation without linking it from this file. If 
 
 ## 4. Package Docs
 
-| Document                    | Purpose                                             |
-| --------------------------- | --------------------------------------------------- |
-| `packages/ui-core.md`       | Tokens, themes, density, utilities.                 |
-| `packages/ui-components.md` | Shared React primitives and application components. |
-| `packages/ui-data-grid.md`  | UniversalDataGrid package scope and API direction.  |
+| Document                    | Purpose                                                  |
+| --------------------------- | -------------------------------------------------------- |
+| `packages/ui-core.md`       | Tokens, themes, density, utilities.                      |
+| `packages/ui-behaviors.md`  | Planned framework-neutral controller and state boundary. |
+| `packages/ui-components.md` | Shared React primitives and application components.      |
+| `packages/ui-elements.md`   | Planned native Custom Element renderer boundary.         |
+| `packages/ui-data-grid.md`  | UniversalDataGrid package scope and API direction.       |
 
 ## 5. API Reference
 
@@ -85,21 +90,23 @@ API docs define public package usage for humans and AI agents. Use `api/README.m
 
 Q1 quality docs define the stabilization bar for current components. They do not replace the roadmap; they gate promotion to stable.
 
-| Document                                | Purpose                                                                                                             |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `quality/00-quality-gates.md`           | Component quality gates, severity definitions, and status rules.                                                    |
-| `quality/01-current-component-audit.md` | Current component audit across packages, docs, metadata, playground routes, and tests.                              |
-| `quality/02-remediation-plan.md`        | Prioritized Q1 hardening plan and non-goals.                                                                        |
-| `quality/03-known-limitations.md`       | Remaining limitations, workarounds, and production-use recommendations.                                             |
-| `quality/04-coverage-baseline.md`       | V8 coverage scope, initial per-package baseline, evidence boundaries, and threshold-ratcheting policy.              |
-| `quality/05-formatting-baseline.md`     | Hash-pinned transition baseline that rejects new or modified formatting debt.                                       |
-| `quality/q1-component-quality-audit.md` | CI-004 public export inventory, component quality findings, maturity recommendations, and alpha remediation queues. |
-| `quality/s3-semantic-token-audit.md`    | VF-3001 styling decision inventory, token gaps, migration debt, and S3 foundation outcome.                          |
-| `quality/s3-token-adoption-report.md`   | VF-3009/VF-3010 package adoption evidence and documented exceptions.                                                |
-| `quality/s3-visual-regression.md`       | VF-3011 theme/density visual matrix, computed-style baselines, and screenshot artifacts.                            |
-| `quality/s3-g3-closure.md`              | VF-3012 final evidence chain, accepted exceptions, and G3 closure rule.                                             |
-| `testing/regression-fixtures.md`        | Deterministic fixture application for DOM, accessibility, browser, future visual, and consumer-oriented checks.     |
-| `testing/browser-testing.md`            | Playwright browser-test commands, fixture contracts, selector rules, artifacts, and evidence boundaries.            |
+| Document                                       | Purpose                                                                                                             |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `quality/00-quality-gates.md`                  | Component quality gates, severity definitions, and status rules.                                                    |
+| `quality/01-current-component-audit.md`        | Current component audit across packages, docs, metadata, playground routes, and tests.                              |
+| `quality/02-remediation-plan.md`               | Prioritized Q1 hardening plan and non-goals.                                                                        |
+| `quality/03-known-limitations.md`              | Remaining limitations, workarounds, and production-use recommendations.                                             |
+| `quality/04-coverage-baseline.md`              | V8 coverage scope, initial per-package baseline, evidence boundaries, and threshold-ratcheting policy.              |
+| `quality/05-formatting-baseline.md`            | Hash-pinned transition baseline that rejects new or modified formatting debt.                                       |
+| `quality/q1-component-quality-audit.md`        | CI-004 public export inventory, component quality findings, maturity recommendations, and alpha remediation queues. |
+| `quality/s3-semantic-token-audit.md`           | VF-3001 styling decision inventory, token gaps, migration debt, and S3 foundation outcome.                          |
+| `quality/s3-token-adoption-report.md`          | VF-3009/VF-3010 package adoption evidence and documented exceptions.                                                |
+| `quality/s3-visual-regression.md`              | VF-3011 theme/density visual matrix, computed-style baselines, and screenshot artifacts.                            |
+| `quality/s3-g3-closure.md`                     | VF-3012 final evidence chain, accepted exceptions, and G3 closure rule.                                             |
+| `quality/s4-multi-framework-architecture.md`   | MF-4001–MF-4008 architecture evidence and explicit GMF1 support-claim boundary.                                     |
+| `testing/regression-fixtures.md`               | Deterministic fixture application for DOM, accessibility, browser, future visual, and consumer-oriented checks.     |
+| `testing/multi-framework-consumer-fixtures.md` | React, native HTML, Angular, and Vue architecture fixtures and GMF4 evidence rules.                                 |
+| `testing/browser-testing.md`                   | Playwright browser-test commands, fixture contracts, selector rules, artifacts, and evidence boundaries.            |
 
 ## 8. Release Governance
 
@@ -156,18 +163,21 @@ npm run build:docs
 
 Markdown docs are the human source of truth. Metadata files are structured indexes for AI agents and the React docs app. Update metadata whenever public components, APIs, CSS imports, state contracts, package boundaries, or AI usage rules change.
 
-| Metadata                                 | Purpose                                                                                                                      |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `metadata/packages.json`                 | Package ownership, dependencies, CSS imports, and public entry points.                                                       |
-| `metadata/components.json`               | Canonical normalized component and public-contract catalog, including maturity, ownership, routes, exports, and evidence.    |
-| `metadata/design-tokens.json`            | Canonical semantic token categories, theme coverage, density aliases, motion, layers, and compatibility bridges.             |
-| `metadata/visual-regression-matrix.json` | Canonical VF-3011 visual suites, theme/density dimensions, targets, and token expectations.                                  |
-| `metadata/g3-closure.json`               | Machine-readable VF-3012 task/evidence inventory and G3 closure state.                                                       |
-| `metadata/component-schema.md`           | Canonical component metadata schema and contributor workflow.                                                                |
-| `metadata/css-imports.json`              | CSS import order and styling ownership.                                                                                      |
-| `metadata/state-contracts.json`          | State ownership and adapter policies.                                                                                        |
-| `metadata/ai-usage-rules.json`           | AI-specific usage rules and dependency constraints.                                                                          |
-| `../.ai/COMPONENT_MAP.json`              | Compact AI navigation and usage notes; it consumes the canonical component catalog rather than repeating component maturity. |
+| Metadata                                  | Purpose                                                                                                                      |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `metadata/packages.json`                  | Package ownership, dependencies, CSS imports, and public entry points.                                                       |
+| `metadata/multi-framework.json`           | Renderer support levels, beta release groups, planned package topology, and fixture policy.                                  |
+| `metadata/component-contracts.json`       | Framework-neutral events, slots, form association, and representative component contracts.                                   |
+| `metadata/component-contract.schema.json` | JSON Schema for the canonical multi-framework component contract catalog.                                                    |
+| `metadata/components.json`                | Canonical normalized component and public-contract catalog, including maturity, ownership, routes, exports, and evidence.    |
+| `metadata/design-tokens.json`             | Canonical semantic token categories, theme coverage, density aliases, motion, layers, and compatibility bridges.             |
+| `metadata/visual-regression-matrix.json`  | Canonical VF-3011 visual suites, theme/density dimensions, targets, and token expectations.                                  |
+| `metadata/g3-closure.json`                | Machine-readable VF-3012 task/evidence inventory and G3 closure state.                                                       |
+| `metadata/component-schema.md`            | Canonical component metadata schema and contributor workflow.                                                                |
+| `metadata/css-imports.json`               | CSS import order and styling ownership.                                                                                      |
+| `metadata/state-contracts.json`           | State ownership and adapter policies.                                                                                        |
+| `metadata/ai-usage-rules.json`            | AI-specific usage rules and dependency constraints.                                                                          |
+| `../.ai/COMPONENT_MAP.json`               | Compact AI navigation and usage notes; it consumes the canonical component catalog rather than repeating component maturity. |
 
 ## 13. Templates
 
@@ -198,16 +208,18 @@ Archived docs are historical only. They preserve useful context but do not guide
 
 ## Source Of Truth Map
 
-| Topic                            | Canonical document                               |
-| -------------------------------- | ------------------------------------------------ |
-| Project identity                 | `governance/01-project-source-of-truth.md`       |
-| Package boundaries               | `architecture/01-package-boundaries.md`          |
-| State ownership and Redux policy | `architecture/02-state-and-adapter-ownership.md` |
-| Styling and theme rules          | `architecture/03-theming-and-styling.md`         |
-| Public API usage                 | `api/README.md`                                  |
-| Release governance               | `release/README.md`                              |
-| Code boundaries                  | `architecture/04-clean-code-boundaries.md`       |
-| Roadmap                          | `roadmap/00-master-roadmap.md`                   |
-| Component inventory              | `roadmap/01-component-inventory.md`              |
-| Benchmark positioning            | `benchmark/01-VyrnForge-positioning.md`          |
-| AI context                       | `../.ai/AI_CONTEXT.md`                           |
+| Topic                            | Canonical document                                    |
+| -------------------------------- | ----------------------------------------------------- |
+| Project identity                 | `governance/01-project-source-of-truth.md`            |
+| Package boundaries               | `architecture/01-package-boundaries.md`               |
+| Multi-framework support          | `architecture/adr-004-multi-framework-web-support.md` |
+| Component interoperability       | `architecture/09-component-contracts-and-events.md`   |
+| State ownership and Redux policy | `architecture/02-state-and-adapter-ownership.md`      |
+| Styling and theme rules          | `architecture/03-theming-and-styling.md`              |
+| Public API usage                 | `api/README.md`                                       |
+| Release governance               | `release/README.md`                                   |
+| Code boundaries                  | `architecture/04-clean-code-boundaries.md`            |
+| Roadmap                          | `roadmap/00-master-roadmap.md`                        |
+| Component inventory              | `roadmap/01-component-inventory.md`                   |
+| Benchmark positioning            | `benchmark/01-VyrnForge-positioning.md`               |
+| AI context                       | `../.ai/AI_CONTEXT.md`                                |

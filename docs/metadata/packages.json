@@ -18,6 +18,8 @@
       ],
       "doesNotOwn": [
         "React components",
+        "Custom Element renderers",
+        "component behavior controllers",
         "data grid behavior",
         "app state",
         "backend fetching",
@@ -27,8 +29,13 @@
       "apiDoc": "docs/api/ui-core-api.md",
       "dependsOn": [],
       "mustNotDependOn": [
+        "@vyrnforge/ui-behaviors",
         "@vyrnforge/ui-components",
+        "@vyrnforge/ui-elements",
         "@vyrnforge/ui-data-grid",
+        "React",
+        "Vue",
+        "Angular",
         "Redux",
         "TanStack",
         "MUI",
@@ -42,11 +49,53 @@
         "@vyrnforge/ui-core/style.css",
         "@vyrnforge/ui-core/index.css"
       ],
-      "notes": "Lowest-level dependency-free runtime package. Canonical semantic token metadata lives in docs/metadata/design-tokens.json."
+      "notes": "Lowest-level dependency-free runtime package. Canonical semantic token metadata lives in docs/metadata/design-tokens.json.",
+      "releaseTrack": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-behaviors",
+      "purpose": "Planned framework-neutral component controllers, state transitions, collection models, selection rules, validation state, and canonical behavior events.",
+      "owns": [
+        "controlled and uncontrolled state transitions",
+        "collection registration and ordering",
+        "selection models",
+        "keyboard decision models",
+        "validation state",
+        "canonical controller events"
+      ],
+      "doesNotOwn": [
+        "React rendering",
+        "Custom Element rendering",
+        "DOM focus execution",
+        "DOM positioning",
+        "application state",
+        "backend workflows"
+      ],
+      "cssImport": "not-applicable",
+      "apiDoc": "planned: docs/api/ui-behaviors-api.md",
+      "dependsOn": ["@vyrnforge/ui-core"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "React DOM",
+        "Vue",
+        "Angular",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
+      "status": "planned",
+      "releaseTrack": "non-grid-beta",
+      "publicEntryPoints": [],
+      "notes": "Created in S5 after GMF1. It must remain framework- and DOM-neutral."
     },
     {
       "name": "@vyrnforge/ui-components",
-      "purpose": "Reusable native-first React primitives and application components.",
+      "purpose": "First-class React renderer for reusable VyrnForge primitives and application components.",
       "owns": [
         "actions",
         "typography",
@@ -66,8 +115,9 @@
       ],
       "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",
-      "dependsOn": ["@vyrnforge/ui-core"],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "mustNotDependOn": [
+        "@vyrnforge/ui-elements",
         "@vyrnforge/ui-data-grid",
         "Redux",
         "TanStack",
@@ -82,7 +132,48 @@
         "@vyrnforge/ui-components/style.css",
         "@vyrnforge/ui-components/index.css"
       ],
-      "notes": "Use for reusable UI outside specialized grid behavior."
+      "notes": "The ui-behaviors dependency is planned for S5. The public React package name remains stable through beta.",
+      "releaseTrack": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-elements",
+      "purpose": "Planned browser-native Custom Element renderer for VyrnForge non-grid components and plain HTML consumption.",
+      "owns": [
+        "vf-* Custom Elements",
+        "property and attribute reflection",
+        "typed vf-* DOM events",
+        "Light DOM rendering",
+        "form-associated element integration",
+        "explicit registration entry points"
+      ],
+      "doesNotOwn": [
+        "React rendering",
+        "Angular component rendering",
+        "Vue component rendering",
+        "application state",
+        "backend workflows",
+        "data grid rendering"
+      ],
+      "cssImport": "@vyrnforge/ui-elements/styles/index.css (planned)",
+      "apiDoc": "planned: docs/api/ui-elements-api.md",
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "React DOM",
+        "Vue",
+        "Angular",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
+      "status": "planned",
+      "releaseTrack": "non-grid-beta",
+      "publicEntryPoints": [],
+      "notes": "Created after GMF2. Light DOM is the default and runtime framework dependencies are forbidden."
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -105,21 +196,34 @@
       "apiDoc": "docs/api/ui-data-grid-api.md",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
       "mustNotDependOn": ["Redux", "TanStack", "MUI", "Radix", "Tailwind"],
-      "status": "current",
+      "status": "react-alpha-deferred",
       "publicEntryPoints": [
         "@vyrnforge/ui-data-grid",
         "@vyrnforge/ui-data-grid/styles/index.css",
         "@vyrnforge/ui-data-grid/style.css",
         "@vyrnforge/ui-data-grid/index.css"
       ],
-      "notes": "Apps own rows, fetching, permissions, business actions, and file generation."
+      "notes": "Apps own rows, fetching, permissions, business actions, and file generation. Grid decomposition, scale work, and multi-framework rendering are deferred until after the non-grid beta.",
+      "releaseTrack": "independent-alpha"
     }
   ],
   "dependencyRules": [
     "ui-core depends on no VyrnForge package",
-    "ui-components may depend on ui-core",
+    "ui-behaviors may depend on ui-core only",
+    "ui-components may depend on ui-core and ui-behaviors",
+    "ui-elements may depend on ui-core and ui-behaviors",
     "ui-data-grid may depend on ui-core and ui-components",
-    "ui-core must never depend on ui-components or ui-data-grid",
-    "ui-components must never depend on ui-data-grid"
-  ]
+    "ui-core and ui-behaviors must not depend on React, Vue, Angular, or a DOM renderer",
+    "ui-components and ui-elements must not depend on ui-data-grid",
+    "ui-data-grid remains outside the non-grid beta release group"
+  ],
+  "releaseGroups": {
+    "nonGridBeta": [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-elements"
+    ],
+    "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
+  }
 }

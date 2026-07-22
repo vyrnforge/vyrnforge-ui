@@ -11,8 +11,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, `@vyrnforge/ui-data-grid` |
-| Documentation | 87 active Markdown files; 23 archived Markdown files |
-| Scripts | 60 root npm scripts; repository automation under `scripts/` |
+| Documentation | 94 active Markdown files; 23 archived Markdown files |
+| Scripts | 62 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 9 workflow files, including 5 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
@@ -37,7 +37,7 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 
 | Field | Inventory |
 | --- | --- |
-| Purpose | Reusable native-first React primitives and application components. |
+| Purpose | First-class React renderer for reusable VyrnForge primitives and application components. |
 | Main source directories | `src/components`, `src/hooks`, `src/internal`, `src/styles`, `src/utils` |
 | Public exports | 197 root names. `ActionIconButtonProps`, `Alert`, `AppShell`, `AppShellHeaderPosition`, `AppShellProps`, `AppShellScrollMode`, `AppShellSidebarPosition`, `Autocomplete`, `AutocompleteFilterFunction`, `AutocompleteOptionData`, `AutocompletePlacement`, `AutocompleteProps`, `Badge`, `BadgeProps`, `BadgeSize`, `BadgeTone`, `BadgeVariant`, `BreadcrumbItem`, `Breadcrumbs`, `BreadcrumbsProps`, `Button`, `ButtonGroup`, `ButtonGroupProps`, `ButtonProps`, `ButtonSize`, `ButtonVariant`, `Caption`, `CaptionProps`, `Card`, `CardPadding`, `CardProps`, `CardVariant`, `Checkbox`, `CheckboxProps`, `ClearButton`, `CloseButton`, `CodeText`, `CodeTextProps`, `ConfirmDialog`, `ConfirmDialogProps`, `ConfirmDialogVariant`, `DateInput`, `DateInputProps`, `DateTimeInput`, `DateTimeInputProps`, `Dialog`, `DialogProps`, `DialogSize`, `Drawer`, `DrawerProps`, `DrawerSide`, `DrawerSize`, `Dropdown`, `DropdownProps`, `EmptyState`, `EmptyStateProps`, `ErrorState`, `ErrorStateProps`, `Field`, `FieldChildren`, `FieldControlProps`, `FieldProps`, `Heading`, `HeadingProps`, `HeadingSize`, `Icon`, `IconButton`, `IconButtonProps`, `IconButtonSize`, `IconButtonVariant`, `IconName`, `IconProps`, `IconSize`, `Inline`, `InlineMessage`, `InlineMessageProps`, `InlineMessageVariant`, `InlineProps`, `Label`, `LabelProps`, `LoadingState`, `LoadingStateProps`, `LoadingStateSize`, `Menu`, `MenuItem`, `MenuProps`, `MenuSize`, `MoreButton`, `MultiSelect`, `MultiSelectOption`, `MultiSelectProps`, `NumberInput`, `NumberInputMode`, `NumberInputProps`, `Page`, `PageDensity`, `PageHeader`, `PageHeaderProps`, `PageMaxWidth`, `PageProps`, `PageToolbar`, `PageToolbarDensity`, `PageToolbarProps`, `Panel`, `PanelProps`, `Popover`, `PopoverAlign`, `PopoverPlacement`, `PopoverProps`, `Radio`, `RadioGroup`, `RadioGroupOption`, `RadioGroupOrientation`, `RadioGroupProps`, `RadioProps`, `Rating`, `RatingProps`, `RefreshButton`, `SearchInput`, `SearchInputProps`, `Section`, `SectionProps`, `SegmentedControl`, `SegmentedControlOption`, `SegmentedControlProps`, `SegmentedControlSize`, `Select`, `SelectOption`, `SelectProps`, `SideNav`, `SideNavItem`, `SideNavProps`, `Skeleton`, `SkeletonProps`, `Slider`, `SliderProps`, `Stack`, `StackAlign`, `StackGap`, `StackJustify`, `StackProps`, `StatusBadge`, `StatusBadgeProps`, `StatusBadgeStatus`, `Switch`, `SwitchProps`, `TabItem`, `Tabs`, `TabsProps`, `TabsSize`, `TabsVariant`, `Text`, `Textarea`, `TextareaProps`, `TextInput`, `TextInputProps`, `TextInputSize`, `TextProps`, `TextSize`, `TextTone`, `Toast`, `ToastAction`, `ToastActionProps`, `ToastController`, `ToastOptions`, `ToastPosition`, `ToastProps`, `ToastProvider`, `ToastProviderProps`, `ToastRecord`, `ToastTone`, `ToggleButton`, `ToggleButtonGroup`, `ToggleButtonGroupProps`, `ToggleButtonGroupType`, `ToggleButtonGroupValue`, `ToggleButtonProps`, `ToggleButtonSize`, `ToggleButtonVariant`, `ToolbarButton`, `ToolbarButtonProps`, `ToolbarButtonSize`, `Tooltip`, `TooltipPlacement`, `TooltipProps`, `TopNav`, `TopNavProps`, `TransferList`, `TransferListFilterFunction`, `TransferListOptionData`, `TransferListProps`, `useToast`, `ValidationMessage`, `ValidationMessageProps`, `ValidationMessageTone`, `VyrnForgeComponentStatus`, `vyrnForgeUiComponentsVersion` |
 | CSS entry points | `./index.css`, `./style.css`, `./styles/index.css` |
@@ -103,7 +103,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | MultiSelect | @vyrnforge/ui-components | packages/ui-components/src/components/MultiSelect/MultiSelect.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | packages/ui-components/src/components/__tests__/dom-interactions.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | NumberInput | @vyrnforge/ui-components | packages/ui-components/src/components/NumberInput/NumberInput.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | /components/forms/number-input | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
 | Page | @vyrnforge/ui-components | packages/ui-components/src/components/Page/Page.tsx | Yes | docs/api/ui-components-api.md, docs/benchmark/02-component-coverage-comparison.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
-| PageHeader | @vyrnforge/ui-components | packages/ui-components/src/components/PageHeader/PageHeader.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/01-package-boundaries.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
+| PageHeader | @vyrnforge/ui-components | packages/ui-components/src/components/PageHeader/PageHeader.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | PageToolbar | @vyrnforge/ui-components | packages/ui-components/src/components/PageToolbar/PageToolbar.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | No focused test found | Requires verification | experimental | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | Panel | @vyrnforge/ui-components | packages/ui-components/src/components/Panel/Panel.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | No focused test found | Requires verification | experimental | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | Popover | @vyrnforge/ui-components | packages/ui-components/src/components/Popover/Popover.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/07-overlay-and-focus.md | /components/overlays/popover | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup | experimental | No browser evidence; No accessibility-test evidence | Component Team |
@@ -166,7 +166,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 87 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 94 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
@@ -180,8 +180,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 51 |
-| Pure/unit | 31 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 52 |
+| Pure/unit | 32 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 3 detected test files with DOM interaction helpers. |
 | Browser | 15 detected browser-test files. |
@@ -249,14 +249,14 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Publishable packages | 3 |
 | Package-root export names | 349 |
 | Public components inventoried | 75 |
-| Repository test files | 51 |
+| Repository test files | 52 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 3 |
 | Browser test files | 15 |
 | Automated accessibility-test files | 3 |
 | Workflow files | 9 |
 | Reusable workflows | 5 |
-| Active Markdown documentation files | 87 |
+| Active Markdown documentation files | 94 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |

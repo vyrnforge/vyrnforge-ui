@@ -6,18 +6,44 @@ queryable repository facts and evidence records.
 
 ## Files
 
-| File                                | Purpose                                                                                            |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                             |
-| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.           |
-| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                       |
-| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                           |
-| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges. |
-| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.     |
-| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                    |
-| `css-imports.json`                  | Required CSS import order and styling ownership.                                                   |
-| `state-contracts.json`              | State ownership levels and adapter policies.                                                       |
-| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                           |
+| File                                | Purpose                                                                                                |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                                 |
+| `multi-framework.json`              | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy. |
+| `component-contracts.json`          | Canonical cross-framework events, slots, form association, and representative component contracts.     |
+| `component-contract.schema.json`    | JSON Schema for the canonical multi-framework component contract catalog.                              |
+| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.               |
+| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                           |
+| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                               |
+| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.     |
+| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.         |
+| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                        |
+| `css-imports.json`                  | Required CSS import order and styling ownership.                                                       |
+| `state-contracts.json`              | State ownership levels and adapter policies.                                                           |
+| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                               |
+
+## Multi-framework architecture metadata
+
+`multi-framework.json` records the approved React/native-first web strategy,
+planned package topology, Angular/Vue verification status, Light DOM policy,
+and deferred data-grid release track. `component-contracts.json` owns the
+canonical `vf-*` event vocabulary, semantic slot regions, form-association
+contract, and representative renderer-neutral component records.
+
+Architecture fixtures remain `architecture-fixture-only` until runtime consumer
+evidence passes GMF4.
+
+```bash
+npm run test:multi-framework
+npm run verify:multi-framework
+```
+
+The human-readable sources are:
+
+- `docs/architecture/adr-004-multi-framework-web-support.md`;
+- `docs/architecture/09-component-contracts-and-events.md`;
+- `docs/architecture/10-custom-elements-and-form-association.md`;
+- `docs/testing/multi-framework-consumer-fixtures.md`.
 
 ## Component metadata maintenance
 

@@ -1,37 +1,115 @@
 {
   "project": "VyrnForge UI",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceOfTruth": {
     "docsIndex": "docs/README.md",
     "componentMetadata": "docs/metadata/components.json",
     "packageMetadata": "docs/metadata/packages.json",
     "cssImports": "docs/metadata/css-imports.json",
     "stateContracts": "docs/metadata/state-contracts.json",
-    "aiUsageRules": "docs/metadata/ai-usage-rules.json"
+    "aiUsageRules": "docs/metadata/ai-usage-rules.json",
+    "multiFramework": "docs/metadata/multi-framework.json",
+    "componentContracts": "docs/metadata/component-contracts.json"
   },
   "packages": {
     "@vyrnforge/ui-core": {
-      "owns": ["tokens", "themes", "density", "utilities"],
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "owns": [
+        "tokens",
+        "themes",
+        "density",
+        "typography",
+        "motion",
+        "layers",
+        "utilities"
+      ],
       "css": ["@vyrnforge/ui-core/styles/index.css"]
     },
+    "@vyrnforge/ui-behaviors": {
+      "status": "planned",
+      "releaseTrack": "non-grid-beta",
+      "owns": [
+        "framework-neutral controllers",
+        "collections",
+        "selection",
+        "validation",
+        "behavior events"
+      ],
+      "css": []
+    },
     "@vyrnforge/ui-components": {
-      "owns": ["actions", "typography", "forms", "feedback", "layout", "overlays", "navigation", "data management"],
-      "css": ["@vyrnforge/ui-core/styles/index.css", "@vyrnforge/ui-components/styles/index.css"]
+      "status": "current",
+      "renderer": "react",
+      "releaseTrack": "non-grid-beta",
+      "owns": [
+        "actions",
+        "typography",
+        "forms",
+        "feedback",
+        "layout",
+        "overlays",
+        "navigation",
+        "data management"
+      ],
+      "css": [
+        "@vyrnforge/ui-core/styles/index.css",
+        "@vyrnforge/ui-components/styles/index.css"
+      ]
+    },
+    "@vyrnforge/ui-elements": {
+      "status": "planned",
+      "renderer": "custom-elements",
+      "releaseTrack": "non-grid-beta",
+      "owns": [
+        "native elements",
+        "property reflection",
+        "vf-* DOM events",
+        "form association",
+        "registration"
+      ],
+      "css": [
+        "@vyrnforge/ui-core/styles/index.css",
+        "@vyrnforge/ui-elements/styles/index.css"
+      ]
     },
     "@vyrnforge/ui-data-grid": {
-      "owns": ["UniversalDataGrid", "grid behavior", "grid state", "grid adapters", "grid-specific styles"],
-      "css": ["@vyrnforge/ui-core/styles/index.css", "@vyrnforge/ui-components/styles/index.css", "@vyrnforge/ui-data-grid/styles/index.css"]
+      "status": "react-alpha-deferred",
+      "renderer": "react",
+      "releaseTrack": "independent-alpha",
+      "owns": [
+        "UniversalDataGrid",
+        "grid behavior",
+        "grid state",
+        "grid adapters",
+        "grid-specific styles"
+      ],
+      "css": [
+        "@vyrnforge/ui-core/styles/index.css",
+        "@vyrnforge/ui-components/styles/index.css",
+        "@vyrnforge/ui-data-grid/styles/index.css"
+      ]
     }
   },
   "rules": {
     "state": "store-agnostic controlled/uncontrolled; no Redux dependency",
     "styling": "CSS variables and package CSS; no static visual inline styles",
     "dependencies": "native-first, dependency-minimal",
-    "componentMetadata": "Read docs/metadata/components.json for component maturity, ownership, export status, routes, evidence, accessibility guidance, and limitations."
+    "componentMetadata": "Read docs/metadata/components.json for component maturity, ownership, export status, routes, evidence, accessibility guidance, and limitations.",
+    "multiFramework": "React and native HTML are first-class beta targets; Angular and Vue require verified consumer evidence; data grid is deferred."
   },
   "componentUsageNotes": {
     "AppShell": {
-      "layoutProps": ["scrollMode", "headerPosition", "sidebarPosition", "headerHeight", "sidebarWidth", "collapsedSidebarWidth", "minHeight", "fullHeight"],
+      "layoutProps": [
+        "scrollMode",
+        "headerPosition",
+        "sidebarPosition",
+        "headerHeight",
+        "sidebarWidth",
+        "collapsedSidebarWidth",
+        "minHeight",
+        "fullHeight"
+      ],
       "rule": "Do not fix persistent navigation with one-off app CSS when AppShell props can express the layout."
     },
     "Field": {

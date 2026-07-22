@@ -3,51 +3,80 @@ import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 const packages = [
   {
     name: "@vyrnforge/ui-core",
-    role: "Shared foundation",
+    role: "Framework-neutral foundation",
+    status: "Current",
     owns: [
       "semantic tokens",
-      "themes",
-      "density",
-      "typography",
-      "motion",
-      "layers",
-      "utilities",
+      "themes and density",
+      "typography and motion",
+      "layers and utilities",
     ],
     notes:
-      "Must stay dependency-light and must not own React components or grid behavior.",
+      "Lowest-level package. It must not depend on a renderer, behavior package, or grid package.",
+  },
+  {
+    name: "@vyrnforge/ui-behaviors",
+    role: "Shared behavior layer",
+    status: "Planned",
+    owns: [
+      "controller state transitions",
+      "collections and selection",
+      "keyboard decisions",
+      "validation and event reasons",
+    ],
+    notes:
+      "Created in S5. It may depend on ui-core only and must remain framework- and DOM-neutral.",
   },
   {
     name: "@vyrnforge/ui-components",
-    role: "Reusable UI layer",
+    role: "First-class React renderer",
+    status: "Current",
     owns: [
-      "reusable primitives",
-      "application components",
-      "overlays",
-      "forms",
-      "feedback",
+      "React components and hooks",
+      "React props and callbacks",
+      "React DOM adapters",
+      "shared component CSS",
     ],
-    notes: "May depend on ui-core. Must not depend on ui-data-grid.",
+    notes:
+      "Keeps its current package name through beta and consumes shared behaviors after S5.",
+  },
+  {
+    name: "@vyrnforge/ui-elements",
+    role: "Native Custom Element renderer",
+    status: "Planned",
+    owns: [
+      "vf-* Custom Elements",
+      "property and attribute reflection",
+      "canonical DOM events",
+      "form association and registration",
+    ],
+    notes:
+      "Created after shared behavior parity. Light DOM is the default and framework runtimes are forbidden.",
   },
   {
     name: "@vyrnforge/ui-data-grid",
-    role: "Specialized data-management grid",
+    role: "Specialized React data grid",
+    status: "Deferred alpha",
     owns: [
       "UniversalDataGrid",
-      "grid state",
-      "grid adapters",
-      "grid-specific styles",
+      "grid state and adapters",
+      "grid-specific behavior",
+      "udg-* styles",
     ],
     notes:
-      "May depend on ui-core and ui-components. Apps own fetching and business state.",
+      "Remains independently versioned and outside the non-grid beta critical path.",
   },
 ];
 
 const dependencyRules = [
-  "ui-components -> ui-core",
-  "ui-data-grid -> ui-core",
-  "ui-data-grid -> ui-components",
-  "never ui-core -> ui-components or ui-data-grid",
-  "never ui-components -> ui-data-grid",
+  "ui-behaviors -> ui-core",
+  "ui-components -> ui-core + ui-behaviors",
+  "ui-elements -> ui-core + ui-behaviors",
+  "ui-data-grid -> ui-core + ui-components",
+  "never ui-core -> another VyrnForge package",
+  "never ui-behaviors -> a renderer or framework runtime",
+  "never ui-components <-> ui-elements",
+  "never shared non-grid packages -> ui-data-grid",
 ];
 
 export function PackageReferencePage() {
@@ -64,10 +93,14 @@ export function PackageReferencePage() {
               <Heading level={3} size="md">
                 {packageInfo.name}
               </Heading>
-              <Badge tone="subtle" variant="info">
-                {packageInfo.role}
+              <Badge
+                tone="subtle"
+                variant={packageInfo.status === "Current" ? "success" : "info"}
+              >
+                {packageInfo.status}
               </Badge>
             </div>
+            <Text className="vf-text-strong">{packageInfo.role}</Text>
             <ul>
               {packageInfo.owns.map((item) => (
                 <li key={item}>{item}</li>
