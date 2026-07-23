@@ -1,16 +1,145 @@
 # `@vyrnforge/ui-behaviors` API
 
-The S4 foundation exposes renderer-neutral contracts only. Component-specific
-controllers are introduced during S5.
-
-## Public exports
-
-- `vyrnForgeUiBehaviorsVersion`
-- `BehaviorChangeReason`
-- `BehaviorEvent`
-- `BehaviorListener`
-- `BehaviorUnsubscribe`
-- `BehaviorController`
-- `createBehaviorEvent(type, detail, reason)`
+Framework-neutral state, collection, selection, and controller-event
+foundations for public non-grid components.
 
 The package has no CSS, DOM, React, Vue, or Angular surface.
+
+## Controller contracts
+
+### `BehaviorController<TSnapshot, TCommand>`
+
+Every behavior controller exposes:
+
+- `getSnapshot()` for the current immutable snapshot;
+- `subscribe(listener)` for committed snapshot changes;
+- `dispatch(command)` for renderer-neutral command integration.
+
+### Snapshot and event channels
+
+- `createBehaviorSnapshotChannel<TSnapshot>()`
+- `createBehaviorEventChannel<TEvent>()`
+
+Subscriptions are idempotently removable. Publication uses a stable listener
+snapshot, so listeners may unsubscribe while an event is being emitted.
+
+## Canonical controller events
+
+```ts
+createBehaviorEvent(type, detail, reason);
+```
+
+Events are immutable plain objects. They are not DOM `CustomEvent` instances.
+
+Canonical reasons:
+
+- `user`
+- `programmatic`
+- `keyboard`
+- `pointer`
+- `selection`
+- `collection-change`
+- `clear`
+- `reset`
+- `restore`
+
+Renderer adapters translate behavior events into the canonical public
+`vf-*` DOM events or framework callbacks.
+
+## Controllable state
+
+```ts
+const controller = createControllableState({
+  defaultValue,
+  value,
+  equals,
+  onChange,
+});
+```
+
+`value` is optional. Its **presence** selects controlled mode, including an
+explicit `value: undefined`.
+
+Public methods:
+
+- `setValue(valueOrUpdater, reason?)`
+- `syncValue(value)`
+- `reset(reason?)`
+- `subscribeEvent(listener)`
+- standard `BehaviorController` methods
+
+In uncontrolled mode, `setValue` commits to the snapshot and emits a change
+event. In controlled mode, it emits a proposal while the external source of
+truth remains unchanged until `syncValue` is called.
+
+## Collection and active item
+
+```ts
+const collection = createCollectionController({
+  initialItems,
+  activeKey,
+  loop,
+  onEvent,
+});
+```
+
+Collection items define `key`, `data`, optional `disabled`, and optional numeric
+`order`.
+
+Public methods:
+
+- `upsertItem(item, reason?)`
+- `removeItem(key, reason?)`
+- `clear(reason?)`
+- `setActiveKey(key, reason?)`
+- `moveActive("first" | "last" | "next" | "previous", options?)`
+- `getItem(key)`
+- `subscribeEvent(listener)`
+- standard `BehaviorController` methods
+
+Ordering is deterministic. Navigation skips disabled items and may clamp or
+loop. Removing or disabling the active item reconciles to the nearest remaining
+enabled item.
+
+## Selection
+
+```ts
+const selection = createSelectionController({
+  mode: "single" | "multiple",
+  selectedKeys,
+  defaultSelectedKeys,
+  allowEmpty,
+  orderedKeys,
+  isDisabled,
+  onSelectionChange,
+});
+```
+
+Public methods:
+
+- `select(key, reason?)`
+- `deselect(key, reason?)`
+- `toggle(key, reason?)`
+- `selectRange(key, options?)`
+- `replace(keys, reason?)`
+- `clear(reason?)`
+- `syncSelectedKeys(keys)`
+- `setAnchorKey(key)`
+- `isSelected(key)`
+- `subscribeEvent(listener)`
+- standard `BehaviorController` methods
+
+Selection keys are unique. Disabled keys are rejected. Single mode retains at
+most one key. Range selection uses the configured ordered key source and skips
+disabled keys.
+
+## Public export groups
+
+The package entry point exports:
+
+- controller and subscription types;
+- canonical reasons, events, and event channels;
+- controllable-state types and controller factory;
+- collection types and controller factory;
+- selection types and controller factory;
+- `vyrnForgeUiBehaviorsVersion`.

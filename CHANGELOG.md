@@ -11,6 +11,11 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Added
 
+- Added MF-5001 through MF-5004 framework-neutral behavior foundations for
+  controllable state, deterministic collections and active-item navigation,
+  single/multiple/toggle/range selection, and canonical reasoned controller
+  events.
+
 - Added the accepted multi-framework web architecture for a first-class React
   renderer, planned native Custom Elements, verified Angular/Vue consumption,
   and framework-neutral behavior contracts.
@@ -35,9 +40,9 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   multi-framework beta program. `@vyrnforge/ui-data-grid` remains an
   independently versioned React alpha and does not block the beta release
   group.
-- Reserved the planned `@vyrnforge/ui-behaviors` and
-  `@vyrnforge/ui-elements` package boundaries while retaining
-  `@vyrnforge/ui-components` as the public React package through beta.
+- Established the `@vyrnforge/ui-behaviors` and `@vyrnforge/ui-elements`
+  package foundations while retaining `@vyrnforge/ui-components` as the public
+  React package through beta.
 
 - Split normal CI, GitHub Pages deployment, npm OIDC publication, registry
   verification, and GitHub release recording into explicit responsibilities.

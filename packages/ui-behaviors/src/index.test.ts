@@ -1,24 +1,26 @@
 import { describe, expect, it } from "vitest";
 
-import { createBehaviorEvent, vyrnForgeUiBehaviorsVersion } from "./index";
+import {
+  behaviorChangeReasons,
+  createBehaviorEvent,
+  createCollectionController,
+  createControllableState,
+  createSelectionController,
+  vyrnForgeUiBehaviorsVersion,
+} from "./index";
 
-describe("ui-behaviors foundation", () => {
+describe("ui-behaviors public surface", () => {
   it("exposes the coordinated package version", () => {
     expect(vyrnForgeUiBehaviorsVersion).toBe("0.1.0-alpha.1");
   });
 
-  it("creates immutable framework-neutral behavior events", () => {
-    const event = createBehaviorEvent(
-      "value-change",
-      { value: "approved" },
-      "user",
-    );
-
-    expect(event).toEqual({
-      type: "value-change",
-      detail: { value: "approved" },
-      reason: "user",
-    });
-    expect(Object.isFrozen(event)).toBe(true);
+  it("exports the behavior foundations through the package entry point", () => {
+    expect(createBehaviorEvent("change", {}, "user").type).toBe("change");
+    expect(
+      createControllableState({ defaultValue: 1 }).getSnapshot().value,
+    ).toBe(1);
+    expect(createCollectionController().getSnapshot().items).toEqual([]);
+    expect(createSelectionController().getSnapshot().selectedKeys).toEqual([]);
+    expect(behaviorChangeReasons).toContain("keyboard");
   });
 });

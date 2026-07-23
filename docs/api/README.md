@@ -13,21 +13,17 @@ Public API means the parts of VyrnForge UI that consuming applications may rely 
 
 The currently implemented public packages are:
 
-| Package                    | Public role                                                                      |
-| -------------------------- | -------------------------------------------------------------------------------- |
-| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, utilities, and theme helpers.         |
-| `@vyrnforge/ui-components` | First-class reusable React components.                                           |
-| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track. |
+| Package                    | Public role                                                                                   |
+| -------------------------- | --------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, utilities, and theme helpers.                      |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral controllable state, collections, selection, and reasoned controller events. |
+| `@vyrnforge/ui-components` | First-class reusable React components.                                                        |
+| `@vyrnforge/ui-elements`   | Native Custom Element foundation; public component renderers remain S6 work.                  |
+| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track.              |
 
-Approved but not yet implemented public package boundaries are:
-
-| Package                   | Planned role                                                                |
-| ------------------------- | --------------------------------------------------------------------------- |
-| `@vyrnforge/ui-behaviors` | Framework-neutral component controllers and state transitions.              |
-| `@vyrnforge/ui-elements`  | Native Custom Elements for plain HTML and verified Angular/Vue consumption. |
-
-Planned packages must not be imported until their package directories and
-published entry points exist.
+Package existence does not itself claim completed framework parity. Native
+component renderers and Angular/Vue verification still require GMF3 and GMF4
+evidence.
 
 ## Multi-framework contract
 
@@ -45,6 +41,10 @@ support claim. Native HTML, Angular, and Vue support requires GMF4 evidence.
 ## Importing Packages
 
 ```ts
+import {
+  createControllableState,
+  createSelectionController,
+} from "@vyrnforge/ui-behaviors";
 import { Button } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
@@ -61,15 +61,17 @@ import "@vyrnforge/ui-data-grid/styles/index.css";
 
 ## API Documents
 
-| Document                    | Purpose                                                          |
-| --------------------------- | ---------------------------------------------------------------- |
-| `import-and-setup.md`       | Installation, import order, and CSS setup.                       |
-| `ui-core-api.md`            | Public token, theme, density, and utility API.                   |
-| `ui-components-api.md`      | Public React component API overview.                             |
-| `ui-data-grid-api.md`       | Public grid component, state, adapter, and styling API overview. |
-| `css-token-reference.md`    | Stable public CSS variables.                                     |
-| `css-class-reference.md`    | Public class naming and extension rules.                         |
-| `public-vs-internal-api.md` | What apps may rely on and what remains private.                  |
+| Document                    | Purpose                                                               |
+| --------------------------- | --------------------------------------------------------------------- |
+| `import-and-setup.md`       | Installation, import order, and CSS setup.                            |
+| `ui-core-api.md`            | Public token, theme, density, and utility API.                        |
+| `ui-behaviors-api.md`       | Public framework-neutral state, collection, selection, and event API. |
+| `ui-components-api.md`      | Public React component API overview.                                  |
+| `ui-elements-api.md`        | Native Custom Element foundation API and registration entry points.   |
+| `ui-data-grid-api.md`       | Public grid component, state, adapter, and styling API overview.      |
+| `css-token-reference.md`    | Stable public CSS variables.                                          |
+| `css-class-reference.md`    | Public class naming and extension rules.                              |
+| `public-vs-internal-api.md` | What apps may rely on and what remains private.                       |
 
 ## Metadata
 

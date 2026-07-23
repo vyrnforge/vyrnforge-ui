@@ -79,7 +79,7 @@
       ]
     },
     "frameworkNeutralControllerState": {
-      "owner": "planned @vyrnforge/ui-behaviors controller or consuming app in controlled mode",
+      "owner": "@vyrnforge/ui-behaviors controller or consuming app in controlled mode",
       "examples": [
         "controlled value transitions",
         "collection ordering",
@@ -140,6 +140,28 @@
         "Native events use canonical vf-* names",
         "Angular and Vue adapters translate rather than duplicate behavior"
       ]
+    }
+  },
+  "behaviorPrimitives": {
+    "controllableState": {
+      "owner": "@vyrnforge/ui-behaviors",
+      "rule": "Controlled changes are proposals until the renderer or app synchronizes the external value.",
+      "factory": "createControllableState"
+    },
+    "collection": {
+      "owner": "@vyrnforge/ui-behaviors",
+      "rule": "Collection order and active-item decisions are framework-neutral; DOM focus execution stays in renderer or DOM adapters.",
+      "factory": "createCollectionController"
+    },
+    "selection": {
+      "owner": "@vyrnforge/ui-behaviors",
+      "rule": "Single, multiple, toggle, and range selection operate on keys and reject disabled keys.",
+      "factory": "createSelectionController"
+    },
+    "events": {
+      "owner": "@vyrnforge/ui-behaviors",
+      "rule": "Controller events are immutable plain records; renderers translate them into framework callbacks or vf-* DOM events.",
+      "factory": "createBehaviorEvent"
     }
   }
 }

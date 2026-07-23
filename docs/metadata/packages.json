@@ -54,7 +54,7 @@
     },
     {
       "name": "@vyrnforge/ui-behaviors",
-      "purpose": "Framework-neutral controller foundations, transition reasons, subscriptions, and behavior events for public non-grid components.",
+      "purpose": "Framework-neutral controllable state, collection, active-item, selection, subscription, and reasoned event foundations for public non-grid components.",
       "owns": [
         "controlled and uncontrolled state transitions",
         "collection registration and ordering",
@@ -91,7 +91,7 @@
       "status": "current",
       "releaseTrack": "non-grid-beta",
       "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
-      "notes": "S4 package foundation is implemented. Component-specific controllers and React adoption remain S5 work."
+      "notes": "MF-5001 through MF-5004 are implemented. Component-specific controllers and React adoption continue through the remaining S5 work."
     },
     {
       "name": "@vyrnforge/ui-components",

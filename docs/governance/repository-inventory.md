@@ -11,8 +11,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
-| Documentation | 97 active Markdown files; 23 archived Markdown files |
-| Scripts | 64 root npm scripts; repository automation under `scripts/` |
+| Documentation | 99 active Markdown files; 23 archived Markdown files |
+| Scripts | 66 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 9 workflow files, including 5 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
@@ -37,9 +37,9 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 
 | Field | Inventory |
 | --- | --- |
-| Purpose | Framework-neutral controller foundations, transition reasons, subscriptions, and behavior events for public non-grid components. |
+| Purpose | Framework-neutral controllable state, collection, active-item, selection, subscription, and reasoned event foundations for public non-grid components. |
 | Main source directories | None |
-| Public exports | 7 root names. `BehaviorChangeReason`, `BehaviorController`, `BehaviorEvent`, `BehaviorListener`, `BehaviorUnsubscribe`, `createBehaviorEvent`, `vyrnForgeUiBehaviorsVersion` |
+| Public exports | 44 root names. `ActiveItemChangeDetail`, `BehaviorChangeReason`, `behaviorChangeReasons`, `BehaviorController`, `BehaviorEvent`, `BehaviorEventChannel`, `BehaviorEventListener`, `BehaviorListener`, `BehaviorSnapshotChannel`, `BehaviorSnapshotUnsubscribe`, `BehaviorUnsubscribe`, `CollectionChangeDetail`, `CollectionCommand`, `CollectionController`, `CollectionControllerEvent`, `CollectionControllerOptions`, `CollectionItem`, `CollectionKey`, `CollectionMoveIntent`, `CollectionMutation`, `CollectionSnapshot`, `ControllableStateChangeDetail`, `ControllableStateChangeEvent`, `ControllableStateCommand`, `ControllableStateController`, `ControllableStateOptions`, `ControllableStateSnapshot`, `createBehaviorEvent`, `createBehaviorEventChannel`, `createBehaviorSnapshotChannel`, `createCollectionController`, `createControllableState`, `createSelectionController`, `SelectionChangeDetail`, `SelectionChangeEvent`, `SelectionCommand`, `SelectionController`, `SelectionControllerOptions`, `SelectionKey`, `SelectionMode`, `SelectionOperation`, `SelectionSnapshot`, `StateUpdater`, `vyrnForgeUiBehaviorsVersion` |
 | CSS entry points | None |
 | Dependencies | `@vyrnforge/ui-core@0.1.0-alpha.1` |
 | Peer dependencies | None |
@@ -196,7 +196,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 97 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 99 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
@@ -210,8 +210,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 55 |
-| Pure/unit | 35 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 61 |
+| Pure/unit | 41 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 3 detected test files with DOM interaction helpers. |
 | Browser | 15 detected browser-test files. |
@@ -277,16 +277,16 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Metric | Count |
 | --- | --- |
 | Publishable packages | 5 |
-| Package-root export names | 367 |
+| Package-root export names | 404 |
 | Public components inventoried | 75 |
-| Repository test files | 55 |
+| Repository test files | 61 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 3 |
 | Browser test files | 15 |
 | Automated accessibility-test files | 3 |
 | Workflow files | 9 |
 | Reusable workflows | 5 |
-| Active Markdown documentation files | 97 |
+| Active Markdown documentation files | 99 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |
