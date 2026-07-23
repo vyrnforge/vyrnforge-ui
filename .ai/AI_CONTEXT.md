@@ -12,13 +12,13 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 ## Packages
 
-| Package                    | Owns                                                                                     | Status                            |
-| -------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------- |
-| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                           | current; non-grid beta            |
-| `@vyrnforge/ui-behaviors`  | framework-neutral controller contracts, transitions, subscriptions, and behavior events  | foundation current; non-grid beta |
-| `@vyrnforge/ui-components` | first-class React renderer                                                               | current; non-grid beta            |
-| `@vyrnforge/ui-elements`   | native Custom Element base, registration, events, Light DOM, and future form association | foundation current; non-grid beta |
-| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                             | React alpha; deferred             |
+| Package                    | Owns                                                                                         | Status                                |
+| -------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                               | current; non-grid beta                |
+| `@vyrnforge/ui-behaviors`  | controllable state, collections, active items, selection, subscriptions, and behavior events | S5 foundations current; non-grid beta |
+| `@vyrnforge/ui-components` | first-class React renderer                                                                   | current; non-grid beta                |
+| `@vyrnforge/ui-elements`   | native Custom Element base, registration, events, Light DOM, and future form association     | foundation current; non-grid beta     |
+| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                 | React alpha; deferred                 |
 
 React and native HTML are first-class beta targets. Angular and Vue require
 verified consumer evidence. Mobile-native rendering is outside this program.
@@ -68,7 +68,7 @@ Allowed:
 
 - `ui-behaviors -> ui-core`
 - `ui-components -> ui-core`
-- `ui-components -> ui-behaviors` after S5
+- `ui-components -> ui-behaviors` during controlled S5 migrations
 - `ui-elements -> ui-core`
 - `ui-elements -> ui-behaviors`
 - `ui-data-grid -> ui-core`

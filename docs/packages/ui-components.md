@@ -26,7 +26,7 @@ it to `@vyrnforge/ui-react` during behavior extraction.
 ## Multi-framework role
 
 React remains the reference renderer. During S5, portable state transitions and
-controller rules move into planned `@vyrnforge/ui-behaviors` without changing
+controller rules move into `@vyrnforge/ui-behaviors` without changing
 the documented React public API.
 
 React owns:

@@ -58,6 +58,33 @@ beta release group.
 
 S4 establishes real package foundations but does not port public components or create a framework support claim.
 
+## S5 behavior tasks
+
+### Foundation batch — implemented
+
+- MF-5001: controllable state primitives
+- MF-5002: collection and active-item primitives
+- MF-5003: single, multiple, toggle, and range selection models
+- MF-5004: canonical controller event model
+
+The foundation batch is framework- and DOM-neutral. It does not migrate React
+components or complete GMF2.
+
+### Remaining GMF2 work
+
+- MF-5005: simple action and toggle behaviors
+- MF-5006: simple form-control behaviors
+- MF-5007: Tabs and composite navigation behavior
+- MF-5008: Autocomplete behavior
+- MF-5009: MultiSelect behavior
+- MF-5010: Transfer List behavior
+- MF-5011: Menu and SideNav navigation behavior
+- MF-5012: overlay lifecycle and DOM-adapter boundary
+- MF-5013: Dialog, Drawer, Popover, and Tooltip controllers
+- MF-5014: Toast and ConfirmDialog behavior
+- MF-5015: React component adoption
+- MF-5016: shared behavior parity gate
+
 ## Deferred data-grid track
 
 The previously planned grid decomposition and scale work moves to a separate

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S5",
+    "batch": "MF-5001-MF-5004",
+    "status": "implemented",
+    "gate": "GMF2",
+    "gateStatus": "in-progress",
+    "package": "@vyrnforge/ui-behaviors"
+  },
+  "tasks": [
+    {
+      "id": "MF-5001",
+      "name": "Controllable state primitives",
+      "status": "done"
+    },
+    {
+      "id": "MF-5002",
+      "name": "Collection and active-item primitives",
+      "status": "done"
+    },
+    {
+      "id": "MF-5003",
+      "name": "Selection models",
+      "status": "done"
+    },
+    {
+      "id": "MF-5004",
+      "name": "Canonical controller event model",
+      "status": "done"
+    }
+  ],
+  "contracts": {
+    "controllableState": {
+      "factory": "createControllableState",
+      "controlledDetection": "property-presence",
+      "committedSnapshotMethods": ["getSnapshot", "subscribe", "syncValue"],
+      "changeRequestMethods": ["setValue", "reset"],
+      "event": "value-change"
+    },
+    "collection": {
+      "factory": "createCollectionController",
+      "keyTypes": ["string", "number"],
+      "navigation": ["first", "last", "next", "previous"],
+      "rules": [
+        "deterministic-order",
+        "disabled-items-skipped",
+        "loop-or-clamp",
+        "active-item-reconciled-after-mutation"
+      ],
+      "events": ["collection-change", "active-change"]
+    },
+    "selection": {
+      "factory": "createSelectionController",
+      "modes": ["single", "multiple"],
+      "operations": [
+        "select",
+        "deselect",
+        "toggle",
+        "range",
+        "replace",
+        "clear"
+      ],
+      "rules": [
+        "unique-keys",
+        "disabled-keys-rejected",
+        "ordered-range-source",
+        "controlled-proposals-require-sync"
+      ],
+      "event": "selection-change"
+    },
+    "events": {
+      "factory": "createBehaviorEvent",
+      "channelFactory": "createBehaviorEventChannel",
+      "snapshotChannelFactory": "createBehaviorSnapshotChannel",
+      "reasons": [
+        "user",
+        "programmatic",
+        "keyboard",
+        "pointer",
+        "selection",
+        "collection-change",
+        "clear",
+        "reset",
+        "restore"
+      ],
+      "rules": [
+        "immutable-event-record",
+        "stable-listener-snapshot",
+        "idempotent-unsubscribe"
+      ]
+    }
+  },
+  "boundaries": {
+    "allowedPackageDependencies": ["@vyrnforge/ui-core"],
+    "forbiddenRuntimes": ["react", "react-dom", "vue", "@angular/*"],
+    "forbiddenDomIdentifiers": [
+      "HTMLElement",
+      "ElementInternals",
+      "CustomEvent",
+      "document",
+      "window",
+      "customElements"
+    ],
+    "ownsCss": false
+  },
+  "requiredCommands": [
+    "npm run test:behavior-foundations",
+    "npm run verify:behavior-foundations",
+    "npm run test:coverage --workspace @vyrnforge/ui-behaviors",
+    "npm run verify:package-boundaries",
+    "npm run quality"
+  ],
+  "remainingGmf2Tasks": [
+    "MF-5005",
+    "MF-5006",
+    "MF-5007",
+    "MF-5008",
+    "MF-5009",
+    "MF-5010",
+    "MF-5011",
+    "MF-5012",
+    "MF-5013",
+    "MF-5014",
+    "MF-5015",
+    "MF-5016"
+  ]
+}

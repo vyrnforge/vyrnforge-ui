@@ -1,35 +1,55 @@
 export const vyrnForgeUiBehaviorsVersion = "0.1.0-alpha.1";
 
-export type BehaviorChangeReason =
-  "user" | "programmatic" | "reset" | "restore";
-
-export interface BehaviorEvent<
-  TType extends string = string,
-  TDetail = unknown,
-  TReason extends string = BehaviorChangeReason,
-> {
-  readonly type: TType;
-  readonly detail: TDetail;
-  readonly reason: TReason;
-}
-
-export type BehaviorListener<TSnapshot> = (snapshot: TSnapshot) => void;
-export type BehaviorUnsubscribe = () => void;
-
-export interface BehaviorController<TSnapshot, TCommand = never> {
-  getSnapshot(): TSnapshot;
-  subscribe(listener: BehaviorListener<TSnapshot>): BehaviorUnsubscribe;
-  dispatch(command: TCommand): void;
-}
-
-export function createBehaviorEvent<
-  TType extends string,
-  TDetail,
-  TReason extends string = BehaviorChangeReason,
->(
-  type: TType,
-  detail: TDetail,
-  reason: TReason,
-): BehaviorEvent<TType, TDetail, TReason> {
-  return Object.freeze({ type, detail, reason });
-}
+export {
+  createBehaviorSnapshotChannel,
+  type BehaviorController,
+  type BehaviorListener,
+  type BehaviorSnapshotChannel,
+  type BehaviorUnsubscribe as BehaviorSnapshotUnsubscribe,
+} from "./controller";
+export {
+  behaviorChangeReasons,
+  createBehaviorEvent,
+  createBehaviorEventChannel,
+  type BehaviorChangeReason,
+  type BehaviorEvent,
+  type BehaviorEventChannel,
+  type BehaviorEventListener,
+  type BehaviorUnsubscribe,
+} from "./events";
+export {
+  createControllableState,
+  type ControllableStateChangeDetail,
+  type ControllableStateChangeEvent,
+  type ControllableStateCommand,
+  type ControllableStateController,
+  type ControllableStateOptions,
+  type ControllableStateSnapshot,
+  type StateUpdater,
+} from "./controllable-state";
+export {
+  createCollectionController,
+  type ActiveItemChangeDetail,
+  type CollectionChangeDetail,
+  type CollectionCommand,
+  type CollectionController,
+  type CollectionControllerEvent,
+  type CollectionControllerOptions,
+  type CollectionItem,
+  type CollectionKey,
+  type CollectionMoveIntent,
+  type CollectionMutation,
+  type CollectionSnapshot,
+} from "./collection";
+export {
+  createSelectionController,
+  type SelectionChangeDetail,
+  type SelectionChangeEvent,
+  type SelectionCommand,
+  type SelectionController,
+  type SelectionControllerOptions,
+  type SelectionKey,
+  type SelectionMode,
+  type SelectionOperation,
+  type SelectionSnapshot,
+} from "./selection";

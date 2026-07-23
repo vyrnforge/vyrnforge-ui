@@ -2,18 +2,18 @@
 
 ## State levels
 
-| Level                              | Examples                                                                            | Owner                                                                 |
-| ---------------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Renderer-local transient state     | hover, focus observation, pointer session, portal mount, DOM measurement            | React/native renderer or DOM adapter                                  |
-| Framework-neutral controller state | controlled value, collection order, active item, selection, open reason, validation | planned `ui-behaviors` controller or consuming app in controlled mode |
-| Component view state               | search, filters, pagination, density, grouping, selected values                     | component uncontrolled or app controlled                              |
-| Persisted preference state         | density, column setup, page size, saved filters/views                               | adapter or app storage                                                |
-| Server query state                 | search/filter/sort/page/group emitted for API                                       | package query contract; app fetch behavior                            |
-| Business state                     | API rows, auth, tenant, permissions, export jobs, mutations                         | consuming application                                                 |
+| Level                              | Examples                                                                            | Owner                                                         |
+| ---------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Renderer-local transient state     | hover, focus observation, pointer session, portal mount, DOM measurement            | React/native renderer or DOM adapter                          |
+| Framework-neutral controller state | controlled value, collection order, active item, selection, open reason, validation | `ui-behaviors` controller or consuming app in controlled mode |
+| Component view state               | search, filters, pagination, density, grouping, selected values                     | component uncontrolled or app controlled                      |
+| Persisted preference state         | density, column setup, page size, saved filters/views                               | adapter or app storage                                        |
+| Server query state                 | search/filter/sort/page/group emitted for API                                       | package query contract; app fetch behavior                    |
+| Business state                     | API rows, auth, tenant, permissions, export jobs, mutations                         | consuming application                                         |
 
 ## Framework-neutral controller policy
 
-Portable state transitions belong in planned `@vyrnforge/ui-behaviors` when
+Portable state transitions belong in `@vyrnforge/ui-behaviors` when
 they are reused by React and native renderers.
 
 A shared controller may own:

@@ -18,7 +18,8 @@
       "native-ios",
       "desktop-native"
     ],
-    "deferredPackages": ["@vyrnforge/ui-data-grid"]
+    "deferredPackages": ["@vyrnforge/ui-data-grid"],
+    "currentSprint": "S5"
   },
   "packages": [
     {
@@ -134,5 +135,13 @@
     "currentClaim": "architecture-fixture-only",
     "runtimeBuildGate": "GMF4",
     "rule": "Fixture presence in S4 proves the integration contract and CI ownership only. It does not claim runtime framework support before GMF4."
+  },
+  "behaviorFoundation": {
+    "package": "@vyrnforge/ui-behaviors",
+    "status": "implemented",
+    "tasks": ["MF-5001", "MF-5002", "MF-5003", "MF-5004"],
+    "metadata": "docs/metadata/behavior-foundations.json",
+    "gate": "GMF2",
+    "gateStatus": "in-progress"
   }
 }
