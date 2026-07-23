@@ -143,3 +143,28 @@ The package entry point exports:
 - collection types and controller factory;
 - selection types and controller factory;
 - `vyrnForgeUiBehaviorsVersion`.
+
+## Action and toggle controls
+
+- `resolveActionState()` derives loading, disabled, interactive, and busy state.
+- `createToggleController()` owns controlled or uncontrolled boolean state.
+- `createToggleGroupController()` provides single and multiple toggle selection.
+- `resolveToggleInputState()` preserves native Checkbox and Switch semantics.
+
+## Choice controls
+
+`createChoiceController()` provides deterministic items, disabled-choice
+rejection, selected value, active value, and first/last/next/previous movement.
+It is used by SegmentedControl and RadioGroup adapters.
+
+## Numeric controls
+
+`createNumericValueController()` and `normalizeNumericValue()` provide finite
+number normalization, range clamping, optional step alignment, controlled
+proposals, and increment/decrement commands for Slider and Rating adapters.
+
+## Tabs
+
+`createTabsController()` owns selected and focused value intent, disabled-tab
+skipping, looping, Home/End movement, and automatic or manual activation. It
+does not own DOM nodes or call `focus()`.

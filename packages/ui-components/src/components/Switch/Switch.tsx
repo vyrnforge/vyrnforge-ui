@@ -1,27 +1,46 @@
+import { resolveToggleInputState } from "@vyrnforge/ui-behaviors";
 import { forwardRef, type ChangeEvent } from "react";
 import { joinClassNames } from "../../utils/classNames";
 import type { SwitchProps } from "./Switch.types";
 
-export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch({
-  className,
-  description,
-  invalid = false,
-  label,
-  onChange,
-  onCheckedChange,
-  style,
-  ...props
-}, ref) {
+export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
+  {
+    checked,
+    className,
+    defaultChecked,
+    description,
+    disabled,
+    invalid = false,
+    label,
+    onChange,
+    onCheckedChange,
+    readOnly,
+    style,
+    ...props
+  },
+  ref,
+) {
+  const state = resolveToggleInputState({
+    checked,
+    defaultChecked,
+    disabled,
+    readOnly,
+  });
+
   return (
     <label className={joinClassNames("vf-switch", className)} style={style}>
       <input
-        aria-checked={props.checked ?? props.defaultChecked}
+        aria-checked={state.checked}
         aria-invalid={invalid || undefined}
+        checked={checked}
         className="vf-switch__input"
+        defaultChecked={defaultChecked}
+        disabled={state.disabled}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
           onChange?.(event);
           onCheckedChange?.(event.currentTarget.checked);
         }}
+        readOnly={readOnly}
         ref={ref}
         role="switch"
         type="checkbox"

@@ -24,13 +24,13 @@ VyrnForge UI is currently in an early alpha prerelease stage.
 
 ## Packages
 
-| Package                    | Responsibility                                                                                                   |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared foundations. |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral controllable state, collections, active items, selection, subscriptions, and behavior events.  |
-| `@vyrnforge/ui-components` | First-class React primitives and application components.                                                         |
-| `@vyrnforge/ui-elements`   | Native Custom Element foundation for plain HTML and future verified Angular/Vue consumption.                     |
-| `@vyrnforge/ui-data-grid`  | Existing React enterprise data-management grid on a separate alpha track.                                        |
+| Package                    | Responsibility                                                                                                              |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared foundations.            |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, action, toggle, choice, numeric, Tabs, subscriptions, and behavior events. |
+| `@vyrnforge/ui-components` | First-class React primitives and application components.                                                                    |
+| `@vyrnforge/ui-elements`   | Native Custom Element foundation for plain HTML and future verified Angular/Vue consumption.                                |
+| `@vyrnforge/ui-data-grid`  | Existing React enterprise data-management grid on a separate alpha track.                                                   |
 
 Intended dependency direction:
 
@@ -47,7 +47,7 @@ The active release program prioritizes all public non-grid components:
 - React remains the reference renderer through `@vyrnforge/ui-components`.
 - Native HTML becomes first-class through `@vyrnforge/ui-elements` foundation.
 - Angular and Vue are verified consumers of the native element surface.
-- Shared component state and behavior move into `@vyrnforge/ui-behaviors`; MF-5001–MF-5004 foundations are implemented.
+- Shared component state and behavior move into `@vyrnforge/ui-behaviors`; MF-5001–MF-5007 foundations and the first React adapter migrations are implemented.
 - The data grid remains usable as a React alpha and does not block the non-grid beta.
 
 Architecture fixtures do not claim framework support. Clean consumer builds,

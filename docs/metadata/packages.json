@@ -54,11 +54,12 @@
     },
     {
       "name": "@vyrnforge/ui-behaviors",
-      "purpose": "Framework-neutral controllable state, collection, active-item, selection, subscription, and reasoned event foundations for public non-grid components.",
+      "purpose": "Framework-neutral state, collection, selection, action, toggle, choice, numeric, Tabs, subscription, and reasoned event contracts for public non-grid components.",
       "owns": [
         "controlled and uncontrolled state transitions",
         "collection registration and ordering",
         "selection models",
+        "action, toggle, choice, numeric, and Tabs decision models",
         "keyboard decision models",
         "validation state",
         "canonical controller events"
@@ -91,7 +92,7 @@
       "status": "current",
       "releaseTrack": "non-grid-beta",
       "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
-      "notes": "MF-5001 through MF-5004 are implemented. Component-specific controllers and React adoption continue through the remaining S5 work."
+      "notes": "MF-5001 through MF-5007 are implemented. The first React adapter batch covers action, toggle, native form, choice, numeric, and Tabs components; remaining composite and overlay migrations continue through S5."
     },
     {
       "name": "@vyrnforge/ui-components",

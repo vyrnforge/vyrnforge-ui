@@ -343,3 +343,10 @@ Dialog and drawer:
 ## Dependency Policy
 
 This package is intentionally dependency-minimal. Do not add MUI, Radix, Headless UI, TanStack, Redux, Tailwind, styled-components, Emotion, icon libraries, CSS frameworks, or new runtime dependencies without review.
+
+## Shared behavior adoption
+
+Button, toggle controls, Checkbox, Switch, RadioGroup, Slider, Rating, and Tabs
+now consume framework-neutral decisions from `@vyrnforge/ui-behaviors`. The
+React package retains its existing public API and remains responsible for DOM
+rendering, native inputs, refs, focus execution, and React events.

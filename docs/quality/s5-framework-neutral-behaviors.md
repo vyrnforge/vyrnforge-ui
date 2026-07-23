@@ -17,6 +17,16 @@ controllers:
 | MF-5002 | collection ordering and active-item navigation    | implemented |
 | MF-5003 | single, multiple, toggle, and range selection     | implemented |
 | MF-5004 | canonical controller events and reason vocabulary | implemented |
+| MF-5005 | simple action and toggle behaviors                | implemented |
+| MF-5006 | simple form-control behaviors                     | implemented |
+| MF-5007 | Tabs and composite navigation behavior            | implemented |
+
+## First React adoption batch
+
+MF-5005 through MF-5007 migrate representative action, toggle, native form,
+choice, numeric, and composite navigation components onto the shared behavior
+package without changing their public React APIs. React still owns DOM focus,
+native element rendering, refs, and event translation.
 
 ## Required invariants
 
@@ -32,7 +42,7 @@ controllers:
 
 ## Non-scope
 
-- React component migration;
+- React migration beyond MF-5005 through MF-5007;
 - native Custom Element rendering;
 - DOM focus execution;
 - overlay positioning;
@@ -41,5 +51,6 @@ controllers:
 
 ## Gate relationship
 
-This batch does not complete GMF2. GMF2 requires component migrations and React
-parity through MF-5016.
+MF-5001 through MF-5007 do not complete GMF2. Autocomplete, MultiSelect,
+Transfer List, Menu, SideNav, overlays, Toast, ConfirmDialog, final React
+migration audit, and the closing parity gate remain scheduled through MF-5016.

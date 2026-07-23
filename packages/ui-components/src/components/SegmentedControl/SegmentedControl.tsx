@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { useChoiceBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import type { SegmentedControlProps } from "./SegmentedControl.types";
 
@@ -7,35 +9,46 @@ export function SegmentedControl({
   onChange,
   options,
   size = "sm",
-  value
+  value,
 }: SegmentedControlProps) {
+  const items = useMemo(
+    () =>
+      options.map((option, order) => ({
+        value: option.value,
+        disabled: option.disabled,
+        order,
+      })),
+    [options],
+  );
+  const behavior = useChoiceBehavior({
+    items,
+    onValueChange: onChange,
+    value,
+  });
+
   return (
     <div
       aria-label={ariaLabel}
       className={joinClassNames(
         "vf-segmented-control",
         `vf-segmented-control--${size}`,
-        className
+        className,
       )}
       role="radiogroup"
     >
       {options.map((option) => {
-        const selected = option.value === value;
+        const selected = option.value === behavior.value;
 
         return (
           <button
             aria-checked={selected}
             className={joinClassNames(
               "vf-segmented-control__item",
-              selected && "vf-segmented-control__item--selected"
+              selected && "vf-segmented-control__item--selected",
             )}
             disabled={option.disabled}
             key={option.value}
-            onClick={() => {
-              if (!option.disabled) {
-                onChange(option.value);
-              }
-            }}
+            onClick={() => behavior.select(option.value, "pointer")}
             role="radio"
             type="button"
           >

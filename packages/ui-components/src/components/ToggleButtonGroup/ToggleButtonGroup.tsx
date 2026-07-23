@@ -1,15 +1,7 @@
-import { useControllableState } from "../../hooks";
+import { useToggleGroupBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import { ToggleButtonGroupContext } from "./ToggleButtonGroup.context";
-import type { ToggleButtonGroupProps, ToggleButtonGroupValue } from "./ToggleButtonGroup.types";
-
-function normalizeValue(value: ToggleButtonGroupValue | undefined, type: "single" | "multiple") {
-  if (type === "multiple") {
-    return Array.isArray(value) ? value : value ? [value] : [];
-  }
-
-  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
-}
+import type { ToggleButtonGroupProps } from "./ToggleButtonGroup.types";
 
 export function ToggleButtonGroup({
   ariaLabel,
@@ -26,27 +18,22 @@ export function ToggleButtonGroup({
   value,
   ...props
 }: ToggleButtonGroupProps) {
-  const [currentValue, setCurrentValue] = useControllableState({
-    value: value === undefined ? undefined : normalizeValue(value, type),
-    defaultValue: normalizeValue(defaultValue, type),
-    onChange: onValueChange
+  const behavior = useToggleGroupBehavior({
+    defaultValue,
+    onValueChange,
+    type,
+    value,
   });
-  const isPressed = (itemValue: string) =>
-    Array.isArray(currentValue) ? currentValue.includes(itemValue) : currentValue === itemValue;
-  const toggle = (itemValue: string) => {
-    if (type === "multiple") {
-      const values = Array.isArray(currentValue) ? currentValue : [];
-      setCurrentValue(values.includes(itemValue)
-        ? values.filter((valueItem) => valueItem !== itemValue)
-        : [...values, itemValue]);
-      return;
-    }
-
-    setCurrentValue(currentValue === itemValue ? "" : itemValue);
-  };
 
   return (
-    <ToggleButtonGroupContext.Provider value={{ disabled, isPressed, size, toggle }}>
+    <ToggleButtonGroupContext.Provider
+      value={{
+        disabled,
+        isPressed: behavior.isPressed,
+        size,
+        toggle: behavior.toggle,
+      }}
+    >
       <div
         aria-label={ariaLabel}
         aria-orientation={orientation}
@@ -55,23 +42,35 @@ export function ToggleButtonGroup({
           `vf-toggle-button-group--${orientation}`,
           `vf-toggle-button-group--${type}`,
           disabled && "vf-toggle-button-group--disabled",
-          className
+          className,
         )}
         onKeyDown={(event) => {
           onKeyDown?.(event);
-          if (event.defaultPrevented || !["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+          if (
+            event.defaultPrevented ||
+            !["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(
+              event.key,
+            )
+          ) {
             return;
           }
 
-          const buttons = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>(".vf-toggle-button:not(:disabled)"));
-          const currentIndex = buttons.indexOf(document.activeElement as HTMLButtonElement);
-          if (currentIndex < 0 || buttons.length === 0) {
-            return;
-          }
+          const buttons = Array.from(
+            event.currentTarget.querySelectorAll(
+              ".vf-toggle-button:not(:disabled)",
+            ),
+          ) as HTMLButtonElement[];
+          const currentIndex = buttons.indexOf(
+            document.activeElement as HTMLButtonElement,
+          );
+          if (currentIndex < 0 || buttons.length === 0) return;
 
           event.preventDefault();
-          const backwards = event.key === "ArrowLeft" || event.key === "ArrowUp";
-          const nextIndex = (currentIndex + (backwards ? -1 : 1) + buttons.length) % buttons.length;
+          const backwards =
+            event.key === "ArrowLeft" || event.key === "ArrowUp";
+          const nextIndex =
+            (currentIndex + (backwards ? -1 : 1) + buttons.length) %
+            buttons.length;
           buttons[nextIndex]?.focus();
         }}
         role="group"

@@ -72,9 +72,9 @@ components or complete GMF2.
 
 ### Remaining GMF2 work
 
-- MF-5005: simple action and toggle behaviors
-- MF-5006: simple form-control behaviors
-- MF-5007: Tabs and composite navigation behavior
+- MF-5005: simple action and toggle behaviors — implemented
+- MF-5006: simple form-control behaviors — implemented
+- MF-5007: Tabs and composite navigation behavior — implemented
 - MF-5008: Autocomplete behavior
 - MF-5009: MultiSelect behavior
 - MF-5010: Transfer List behavior
