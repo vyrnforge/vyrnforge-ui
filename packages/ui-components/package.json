@@ -41,15 +41,17 @@
     "npm": ">=11.16 <12"
   },
   "scripts": {
+    "prebuild": "npm run build --workspace @vyrnforge/ui-behaviors",
     "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
     "lint": "eslint . --config ../../eslint.config.mjs",
     "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
-    "pretypecheck": "npm run build --workspace @vyrnforge/ui-core",
+    "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "test:coverage": "vitest run --coverage --passWithNoTests"
   },
   "dependencies": {
+    "@vyrnforge/ui-behaviors": "0.1.0-alpha.1",
     "@vyrnforge/ui-core": "0.1.0-alpha.1"
   },
   "peerDependencies": {

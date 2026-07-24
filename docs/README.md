@@ -48,13 +48,13 @@ Do not create new top-level documentation without linking it from this file. If 
 
 ## 4. Package Docs
 
-| Document                    | Purpose                                                                        |
-| --------------------------- | ------------------------------------------------------------------------------ |
-| `packages/ui-core.md`       | Tokens, themes, density, utilities.                                            |
-| `packages/ui-behaviors.md`  | Current framework-neutral state, collection, selection, and event foundations. |
-| `packages/ui-components.md` | Shared React primitives and application components.                            |
-| `packages/ui-elements.md`   | Planned native Custom Element renderer boundary.                               |
-| `packages/ui-data-grid.md`  | UniversalDataGrid package scope and API direction.                             |
+| Document                    | Purpose                                                                            |
+| --------------------------- | ---------------------------------------------------------------------------------- |
+| `packages/ui-core.md`       | Tokens, themes, density, utilities.                                                |
+| `packages/ui-behaviors.md`  | Current framework-neutral behavior foundations and first React adapter migrations. |
+| `packages/ui-components.md` | Shared React primitives and application components.                                |
+| `packages/ui-elements.md`   | Planned native Custom Element renderer boundary.                                   |
+| `packages/ui-data-grid.md`  | UniversalDataGrid package scope and API direction.                                 |
 
 ## 5. API Reference
 
@@ -65,7 +65,7 @@ API docs define public package usage for humans and AI agents. Use `api/README.m
 | `api/README.md`                               | Public API overview and index.                                                   |
 | `api/import-and-setup.md`                     | Package import and CSS setup order.                                              |
 | `api/ui-core-api.md`                          | Public `@vyrnforge/ui-core` token, theme, density, and utility API.              |
-| `api/ui-behaviors-api.md`                     | Public framework-neutral state, collection, selection, and event API.            |
+| `api/ui-behaviors-api.md`                     | Public framework-neutral state, action, choice, numeric, Tabs, and event API.    |
 | `api/ui-components-api.md`                    | Public `@vyrnforge/ui-components` component API overview.                        |
 | `api/ui-data-grid-api.md`                     | Public `@vyrnforge/ui-data-grid` grid, state, adapter, and styling API overview. |
 | `api/css-token-reference.md`                  | Stable public CSS variables.                                                     |
@@ -227,10 +227,11 @@ Archived docs are historical only. They preserve useful context but do not guide
 
 ## Multi-framework package foundations
 
-| Document                                    | Purpose                                                           |
-| ------------------------------------------- | ----------------------------------------------------------------- |
-| `api/ui-behaviors-api.md`                   | Framework-neutral S5 state, collection, selection, and event API. |
-| `api/ui-elements-api.md`                    | Native Custom Element S4 foundation API and entry points.         |
-| `testing/gmf1-architecture-gate.md`         | GMF1 closure evidence and remaining release conditions.           |
-| `quality/s5-framework-neutral-behaviors.md` | S5 scope, invariants, non-scope, and GMF2 relationship.           |
-| `testing/behavior-foundation-contracts.md`  | MF-5001–MF-5004 package and repository evidence.                  |
+| Document                                    | Purpose                                                                   |
+| ------------------------------------------- | ------------------------------------------------------------------------- |
+| `api/ui-behaviors-api.md`                   | Framework-neutral S5 state, action, choice, numeric, Tabs, and event API. |
+| `api/ui-elements-api.md`                    | Native Custom Element S4 foundation API and entry points.                 |
+| `testing/gmf1-architecture-gate.md`         | GMF1 closure evidence and remaining release conditions.                   |
+| `quality/s5-framework-neutral-behaviors.md` | S5 scope, invariants, non-scope, and GMF2 relationship.                   |
+| `testing/behavior-foundation-contracts.md`  | MF-5001–MF-5004 package and repository evidence.                          |
+| `testing/behavior-react-parity.md`          | MF-5005–MF-5007 React adapter parity evidence.                            |

@@ -1,11 +1,7 @@
 import { useId, type ChangeEvent, type CSSProperties } from "react";
-import { useControllableState } from "../../hooks";
+import { useNumericBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import type { SliderProps } from "./Slider.types";
-
-function clamp(value: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, value));
-}
 
 export function Slider({
   ariaLabel,
@@ -29,32 +25,54 @@ export function Slider({
   const generatedId = useId();
   const controlId = props.id ?? generatedId;
   const rangeMax = Math.max(min, max);
-  const initialValue = defaultValue ?? min;
-  const [currentValue, setCurrentValue] = useControllableState({
-    value: value === undefined ? undefined : clamp(value, min, rangeMax),
-    defaultValue: clamp(initialValue, min, rangeMax),
-    onChange: onValueChange
+  const behavior = useNumericBehavior({
+    defaultValue: defaultValue ?? min,
+    max: rangeMax,
+    min,
+    onValueChange,
+    step,
+    value,
   });
+  const currentValue = behavior.value;
   const descriptionId = description ? `${controlId}-description` : undefined;
-  const describedBy = [props["aria-describedby"], descriptionId].filter(Boolean).join(" ") || undefined;
-  const percentage = rangeMax === min ? 0 : ((currentValue - min) / (rangeMax - min)) * 100;
+  const describedBy =
+    [props["aria-describedby"], descriptionId].filter(Boolean).join(" ") ||
+    undefined;
+  const percentage =
+    rangeMax === min ? 0 : ((currentValue - min) / (rangeMax - min)) * 100;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setCurrentValue(Number(event.currentTarget.value));
+    behavior.setValue(Number(event.currentTarget.value), "pointer");
   };
 
   return (
-    <div className={joinClassNames("vf-slider", disabled && "vf-slider--disabled", className)} style={style}>
+    <div
+      className={joinClassNames(
+        "vf-slider",
+        disabled && "vf-slider--disabled",
+        className,
+      )}
+      style={style}
+    >
       {(label || showValue) && (
         <div className="vf-slider__header">
           {label && <span className="vf-slider__label">{label}</span>}
-          {showValue && <output className="vf-slider__value" htmlFor={controlId}>{formatValue?.(currentValue) ?? currentValue}</output>}
+          {showValue && (
+            <output className="vf-slider__value" htmlFor={controlId}>
+              {formatValue?.(currentValue) ?? currentValue}
+            </output>
+          )}
         </div>
       )}
-      <span className="vf-slider__track" style={{ "--vf-slider-progress": `${percentage}%` } as CSSProperties}>
+      <span
+        className="vf-slider__track"
+        style={{ "--vf-slider-progress": `${percentage}%` } as CSSProperties}
+      >
         <input
           aria-describedby={describedBy}
-          aria-label={ariaLabel ?? (typeof label === "string" ? label : undefined)}
+          aria-label={
+            ariaLabel ?? (typeof label === "string" ? label : undefined)
+          }
           className="vf-slider__control"
           disabled={disabled}
           id={controlId}
@@ -69,7 +87,11 @@ export function Slider({
           {...props}
         />
       </span>
-      {description && <span className="vf-slider__description" id={descriptionId}>{description}</span>}
+      {description && (
+        <span className="vf-slider__description" id={descriptionId}>
+          {description}
+        </span>
+      )}
     </div>
   );
 }

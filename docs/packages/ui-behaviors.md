@@ -59,3 +59,10 @@ npm run test:coverage --workspace @vyrnforge/ui-behaviors
 npm run verify:behavior-foundations
 npm run verify:package-boundaries
 ```
+
+## React adoption status
+
+The first adopted component families are Button, ToggleButton,
+ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider,
+Rating, and Tabs. React remains responsible for rendering and DOM execution;
+`ui-behaviors` owns only portable state and transition decisions.

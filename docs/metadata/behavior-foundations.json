@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S5",
-    "batch": "MF-5001-MF-5004",
+    "batch": "MF-5001-MF-5007",
     "status": "implemented",
     "gate": "GMF2",
     "gateStatus": "in-progress",
@@ -27,6 +27,21 @@
     {
       "id": "MF-5004",
       "name": "Canonical controller event model",
+      "status": "done"
+    },
+    {
+      "id": "MF-5005",
+      "name": "Simple action and toggle behaviors",
+      "status": "done"
+    },
+    {
+      "id": "MF-5006",
+      "name": "Simple form-control behaviors",
+      "status": "done"
+    },
+    {
+      "id": "MF-5007",
+      "name": "Tabs and composite navigation behavior",
       "status": "done"
     }
   ],
@@ -89,6 +104,63 @@
         "stable-listener-snapshot",
         "idempotent-unsubscribe"
       ]
+    },
+    "actionToggle": {
+      "factories": [
+        "resolveActionState",
+        "createToggleController",
+        "createToggleGroupController"
+      ],
+      "reactAdapters": [
+        "Button",
+        "ToggleButton",
+        "ToggleButtonGroup",
+        "SegmentedControl"
+      ],
+      "rules": [
+        "loading-disables-action",
+        "controlled-toggle-proposals",
+        "single-and-multiple-toggle-groups"
+      ]
+    },
+    "choice": {
+      "factory": "createChoiceController",
+      "reactAdapters": ["SegmentedControl", "RadioGroup"],
+      "rules": [
+        "disabled-choice-rejected",
+        "deterministic-order",
+        "active-navigation-skips-disabled"
+      ]
+    },
+    "numeric": {
+      "factory": "createNumericValueController",
+      "normalizer": "normalizeNumericValue",
+      "reactAdapters": ["Slider", "Rating"],
+      "rules": [
+        "clamp-range",
+        "finite-values",
+        "optional-step-alignment",
+        "controlled-proposals-require-sync"
+      ]
+    },
+    "tabs": {
+      "factory": "createTabsController",
+      "reactAdapter": "Tabs",
+      "rules": [
+        "disabled-tabs-skipped",
+        "home-end-navigation",
+        "automatic-activation",
+        "dom-focus-owned-by-renderer"
+      ]
+    },
+    "nativeToggleInputs": {
+      "resolver": "resolveToggleInputState",
+      "reactAdapters": ["Checkbox", "Switch"],
+      "rules": [
+        "native-input-state-preserved",
+        "form-reset-remains-native",
+        "disabled-and-readonly-interactivity"
+      ]
     }
   },
   "boundaries": {
@@ -109,12 +181,11 @@
     "npm run verify:behavior-foundations",
     "npm run test:coverage --workspace @vyrnforge/ui-behaviors",
     "npm run verify:package-boundaries",
+    "npm run test:coverage --workspace @vyrnforge/ui-components",
+    "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run quality"
   ],
   "remainingGmf2Tasks": [
-    "MF-5005",
-    "MF-5006",
-    "MF-5007",
     "MF-5008",
     "MF-5009",
     "MF-5010",

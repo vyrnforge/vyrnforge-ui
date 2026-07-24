@@ -16,7 +16,7 @@ examples/
 
 ```txt
 packages/ui-core/
-packages/ui-behaviors/   # foundation current
+packages/ui-behaviors/   # MF-5001–MF-5007 current
 packages/ui-components/
 packages/ui-elements/    # foundation current; public renderers after GMF2
 packages/ui-data-grid/   # independent React alpha

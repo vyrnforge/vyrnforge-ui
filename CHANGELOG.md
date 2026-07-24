@@ -11,6 +11,11 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Added
 
+- MF-5005 through MF-5007 framework-neutral action, toggle, choice, numeric, and Tabs controllers.
+- React behavior adapters and parity tests for Button, ToggleButton, ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider, Rating, and Tabs.
+
+### Added
+
 - Added MF-5001 through MF-5004 framework-neutral behavior foundations for
   controllable state, deterministic collections and active-item navigation,
   single/multiple/toggle/range selection, and canonical reasoned controller

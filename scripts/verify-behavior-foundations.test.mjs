@@ -20,7 +20,12 @@ const repositoryRoot = path.resolve(
 
 function createFixture() {
   const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-behaviors-"));
-  for (const entry of ["docs", "packages/ui-behaviors", "scripts"]) {
+  for (const entry of [
+    "docs",
+    "packages/ui-behaviors",
+    "packages/ui-components",
+    "scripts",
+  ]) {
     cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
       recursive: true,
     });
@@ -41,12 +46,12 @@ test("rejects an incomplete task record", () => {
   try {
     const file = path.join(root, "docs/metadata/behavior-foundations.json");
     const value = JSON.parse(readFileSync(file, "utf8"));
-    value.tasks.find((task) => task.id === "MF-5003").status = "pending";
+    value.tasks.find((task) => task.id === "MF-5006").status = "pending";
     writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 
     assert(
       verifyBehaviorFoundations({ root }).some((failure) =>
-        failure.includes("MF-5003 must be done"),
+        failure.includes("MF-5006 must be done"),
       ),
     );
   } finally {
@@ -84,6 +89,28 @@ test("rejects missing quality integration", () => {
     assert(
       verifyBehaviorFoundations({ root }).some((failure) =>
         failure.includes("verify:metadata must include behavior-foundations"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects missing React behavior dependency", () => {
+  const root = createFixture();
+  try {
+    const file = path.join(root, "packages/ui-components/package.json");
+    const value = JSON.parse(readFileSync(file, "utf8"));
+    delete value.dependencies["@vyrnforge/ui-behaviors"];
+    writeFileSync(
+      file,
+      `${JSON.stringify(value, null, 2)}
+`,
+    );
+
+    assert(
+      verifyBehaviorFoundations({ root }).some((failure) =>
+        failure.includes("pinned ui-behaviors runtime dependency"),
       ),
     );
   } finally {

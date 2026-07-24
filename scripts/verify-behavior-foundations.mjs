@@ -7,7 +7,15 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-const expectedTasks = ["MF-5001", "MF-5002", "MF-5003", "MF-5004"];
+const expectedTasks = [
+  "MF-5001",
+  "MF-5002",
+  "MF-5003",
+  "MF-5004",
+  "MF-5005",
+  "MF-5006",
+  "MF-5007",
+];
 const expectedReasons = [
   "user",
   "programmatic",
@@ -25,6 +33,11 @@ const requiredSourceFiles = [
   "packages/ui-behaviors/src/controllable-state.ts",
   "packages/ui-behaviors/src/collection.ts",
   "packages/ui-behaviors/src/selection.ts",
+  "packages/ui-behaviors/src/action-toggle.ts",
+  "packages/ui-behaviors/src/choice.ts",
+  "packages/ui-behaviors/src/numeric.ts",
+  "packages/ui-behaviors/src/toggle-group.ts",
+  "packages/ui-behaviors/src/tabs.ts",
   "packages/ui-behaviors/src/index.ts",
 ];
 const requiredDocuments = [
@@ -33,6 +46,7 @@ const requiredDocuments = [
   "docs/packages/ui-behaviors.md",
   "docs/quality/s5-framework-neutral-behaviors.md",
   "docs/testing/behavior-foundation-contracts.md",
+  "docs/testing/behavior-react-parity.md",
   "docs/metadata/behavior-foundations.json",
 ];
 
@@ -86,8 +100,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S5") {
     failures.push("behavior foundation sprint must be S5");
   }
-  if (metadata.program?.batch !== "MF-5001-MF-5004") {
-    failures.push("behavior foundation batch must be MF-5001-MF-5004");
+  if (metadata.program?.batch !== "MF-5001-MF-5007") {
+    failures.push("behavior foundation batch must be MF-5001-MF-5007");
   }
   if (metadata.program?.status !== "implemented") {
     failures.push("behavior foundation status must be implemented");
@@ -121,6 +135,9 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     ["collection", "createCollectionController"],
     ["selection", "createSelectionController"],
     ["events", "createBehaviorEvent"],
+    ["choice", "createChoiceController"],
+    ["numeric", "createNumericValueController"],
+    ["tabs", "createTabsController"],
   ];
   for (const [contractName, factory] of expectedFactories) {
     if (metadata.contracts?.[contractName]?.factory !== factory) {
@@ -157,6 +174,13 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "createBehaviorEvent",
     "createBehaviorEventChannel",
     "createBehaviorSnapshotChannel",
+    "resolveActionState",
+    "createToggleController",
+    "createToggleGroupController",
+    "createChoiceController",
+    "createNumericValueController",
+    "normalizeNumericValue",
+    "createTabsController",
   ]);
 
   const eventSource = read(root, "packages/ui-behaviors/src/events.ts");
@@ -173,6 +197,10 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "Collection and active item",
     "Selection",
     "Canonical controller events",
+    "Action and toggle controls",
+    "Choice controls",
+    "Numeric controls",
+    "Tabs",
   ]);
 
   const roadmap = read(root, "docs/roadmap/00-master-roadmap.md");
@@ -181,6 +209,55 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     roadmap,
     "docs/roadmap/00-master-roadmap.md",
     expectedTasks,
+  );
+
+  const componentPackage = readJson(
+    root,
+    "packages/ui-components/package.json",
+  );
+  if (
+    componentPackage?.dependencies?.["@vyrnforge/ui-behaviors"] !==
+    "0.1.0-alpha.1"
+  ) {
+    failures.push(
+      "ui-components must declare the pinned ui-behaviors runtime dependency",
+    );
+  }
+
+  const migratedComponents = new Map([
+    ["Button", "resolveActionState"],
+    ["ToggleButton", "useToggleBehavior"],
+    ["ToggleButtonGroup", "useToggleGroupBehavior"],
+    ["SegmentedControl", "useChoiceBehavior"],
+    ["Checkbox", "resolveToggleInputState"],
+    ["Switch", "resolveToggleInputState"],
+    ["RadioGroup", "useChoiceBehavior"],
+    ["Slider", "useNumericBehavior"],
+    ["Rating", "useNumericBehavior"],
+    ["Tabs", "useTabsBehavior"],
+  ]);
+  for (const [component, marker] of migratedComponents) {
+    const source = read(
+      root,
+      `packages/ui-components/src/components/${component}/${component}.tsx`,
+    );
+    requireIncludes(
+      failures,
+      source,
+      `packages/ui-components/src/components/${component}/${component}.tsx`,
+      [marker],
+    );
+  }
+
+  const parityTest = read(
+    root,
+    "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
+  );
+  requireIncludes(
+    failures,
+    parityTest,
+    "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
+    ["React adapters preserve shared behavior parity", "Tabs", "RadioGroup"],
   );
 
   const rootPackage = readJson(root, "package.json");
@@ -208,6 +285,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "npm run test:behavior-foundations",
     "npm run verify:behavior-foundations",
     "npm run test:coverage --workspace @vyrnforge/ui-behaviors",
+    "npm run test:coverage --workspace @vyrnforge/ui-components",
+    "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run verify:package-boundaries",
     "npm run quality",
   ]) {
@@ -238,6 +317,6 @@ if (
 ) {
   assertBehaviorFoundations();
   console.log(
-    "Behavior foundations passed: MF-5001 through MF-5004 contracts, metadata, docs, and quality integration are complete.",
+    "Behavior foundations passed: MF-5001 through MF-5007 contracts, metadata, docs, and quality integration are complete.",
   );
 }

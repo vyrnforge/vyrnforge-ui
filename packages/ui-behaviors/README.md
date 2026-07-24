@@ -63,3 +63,11 @@ or reference React, React DOM, Vue, Angular, `HTMLElement`, `ElementInternals`,
 `CustomEvent`, `document`, `window`, or `customElements`.
 
 The package intentionally owns no CSS and performs no DOM work.
+
+## First React adapter batch
+
+MF-5005 through MF-5007 add framework-neutral behavior for action state,
+boolean toggles, toggle groups, single-choice controls, numeric controls, and
+Tabs navigation. `@vyrnforge/ui-components` consumes these contracts while
+keeping DOM focus, native form elements, refs, and React event translation in
+the renderer package.
