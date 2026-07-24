@@ -66,8 +66,16 @@ The package intentionally owns no CSS and performs no DOM work.
 
 ## First React adapter batch
 
-MF-5005 through MF-5007 add framework-neutral behavior for action state,
-boolean toggles, toggle groups, single-choice controls, numeric controls, and
-Tabs navigation. `@vyrnforge/ui-components` consumes these contracts while
-keeping DOM focus, native form elements, refs, and React event translation in
-the renderer package.
+MF-5005 through MF-5010 add framework-neutral behavior for action state,
+boolean toggles, toggle groups, single-choice controls, numeric controls, Tabs,
+Autocomplete, MultiSelect, and Transfer List. `@vyrnforge/ui-components`
+consumes these contracts while keeping DOM focus, native form elements, refs,
+portals, and React event translation in the renderer package.
+
+## Composite selection adapters
+
+MF-5008 through MF-5010 add portable controllers for Autocomplete,
+MultiSelect, and Transfer List. The controllers own filtering, selection,
+active-item intent, open/query state, and ordered transfer decisions. React
+continues to own portals, DOM focus, native form nodes, refs, and event
+translation.

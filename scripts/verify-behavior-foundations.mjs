@@ -7,15 +7,10 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-const expectedTasks = [
-  "MF-5001",
-  "MF-5002",
-  "MF-5003",
-  "MF-5004",
-  "MF-5005",
-  "MF-5006",
-  "MF-5007",
-];
+const expectedTasks = Array.from(
+  { length: 10 },
+  (_, index) => `MF-${5001 + index}`,
+);
 const expectedReasons = [
   "user",
   "programmatic",
@@ -38,6 +33,9 @@ const requiredSourceFiles = [
   "packages/ui-behaviors/src/numeric.ts",
   "packages/ui-behaviors/src/toggle-group.ts",
   "packages/ui-behaviors/src/tabs.ts",
+  "packages/ui-behaviors/src/autocomplete.ts",
+  "packages/ui-behaviors/src/multi-select.ts",
+  "packages/ui-behaviors/src/transfer-list.ts",
   "packages/ui-behaviors/src/index.ts",
 ];
 const requiredDocuments = [
@@ -100,8 +98,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S5") {
     failures.push("behavior foundation sprint must be S5");
   }
-  if (metadata.program?.batch !== "MF-5001-MF-5007") {
-    failures.push("behavior foundation batch must be MF-5001-MF-5007");
+  if (metadata.program?.batch !== "MF-5001-MF-5010") {
+    failures.push("behavior foundation batch must be MF-5001-MF-5010");
   }
   if (metadata.program?.status !== "implemented") {
     failures.push("behavior foundation status must be implemented");
@@ -138,6 +136,9 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     ["choice", "createChoiceController"],
     ["numeric", "createNumericValueController"],
     ["tabs", "createTabsController"],
+    ["autocomplete", "createAutocompleteController"],
+    ["multiSelect", "createMultiSelectController"],
+    ["transferList", "createTransferListController"],
   ];
   for (const [contractName, factory] of expectedFactories) {
     if (metadata.contracts?.[contractName]?.factory !== factory) {
@@ -181,6 +182,9 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "createNumericValueController",
     "normalizeNumericValue",
     "createTabsController",
+    "createAutocompleteController",
+    "createMultiSelectController",
+    "createTransferListController",
   ]);
 
   const eventSource = read(root, "packages/ui-behaviors/src/events.ts");
@@ -201,6 +205,9 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "Choice controls",
     "Numeric controls",
     "Tabs",
+    "Autocomplete",
+    "MultiSelect",
+    "Transfer List",
   ]);
 
   const roadmap = read(root, "docs/roadmap/00-master-roadmap.md");
@@ -224,29 +231,60 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     );
   }
 
-  const migratedComponents = new Map([
-    ["Button", "resolveActionState"],
-    ["ToggleButton", "useToggleBehavior"],
-    ["ToggleButtonGroup", "useToggleGroupBehavior"],
-    ["SegmentedControl", "useChoiceBehavior"],
-    ["Checkbox", "resolveToggleInputState"],
-    ["Switch", "resolveToggleInputState"],
-    ["RadioGroup", "useChoiceBehavior"],
-    ["Slider", "useNumericBehavior"],
-    ["Rating", "useNumericBehavior"],
-    ["Tabs", "useTabsBehavior"],
-  ]);
-  for (const [component, marker] of migratedComponents) {
-    const source = read(
-      root,
-      `packages/ui-components/src/components/${component}/${component}.tsx`,
-    );
-    requireIncludes(
-      failures,
-      source,
-      `packages/ui-components/src/components/${component}/${component}.tsx`,
-      [marker],
-    );
+  const migratedComponents = [
+    [
+      "packages/ui-components/src/components/Button/Button.tsx",
+      "resolveActionState",
+    ],
+    [
+      "packages/ui-components/src/components/ToggleButton/ToggleButton.tsx",
+      "useToggleBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/ToggleButtonGroup/ToggleButtonGroup.tsx",
+      "useToggleGroupBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx",
+      "useChoiceBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Checkbox/Checkbox.tsx",
+      "resolveToggleInputState",
+    ],
+    [
+      "packages/ui-components/src/components/Switch/Switch.tsx",
+      "resolveToggleInputState",
+    ],
+    [
+      "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
+      "useChoiceBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Slider/Slider.tsx",
+      "useNumericBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Rating/Rating.tsx",
+      "useNumericBehavior",
+    ],
+    ["packages/ui-components/src/components/Tabs/Tabs.tsx", "useTabsBehavior"],
+    [
+      "packages/ui-components/src/components/Autocomplete/useAutocomplete.ts",
+      "createAutocompleteController",
+    ],
+    [
+      "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
+      "useMultiSelectBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/TransferList/useTransferList.ts",
+      "createTransferListController",
+    ],
+  ];
+  for (const [relativePath, marker] of migratedComponents) {
+    const source = read(root, relativePath);
+    requireIncludes(failures, source, relativePath, [marker]);
   }
 
   const parityTest = read(
@@ -257,7 +295,14 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     failures,
     parityTest,
     "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
-    ["React adapters preserve shared behavior parity", "Tabs", "RadioGroup"],
+    [
+      "React adapters preserve shared behavior parity",
+      "Tabs",
+      "RadioGroup",
+      "Autocomplete",
+      "MultiSelect",
+      "TransferList",
+    ],
   );
 
   const rootPackage = readJson(root, "package.json");
@@ -317,6 +362,6 @@ if (
 ) {
   assertBehaviorFoundations();
   console.log(
-    "Behavior foundations passed: MF-5001 through MF-5007 contracts, metadata, docs, and quality integration are complete.",
+    "Behavior foundations passed: MF-5001 through MF-5010 contracts, React adapters, metadata, docs, and quality integration are complete.",
   );
 }

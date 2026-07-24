@@ -2,7 +2,7 @@
 
 ## Scope
 
-MF-5005 through MF-5007 are the first production migrations from React-owned
+MF-5005 through MF-5010 are the first production migrations from React-owned
 state decisions to `@vyrnforge/ui-behaviors`. The React package remains the
 reference renderer and keeps ownership of DOM rendering, native form elements,
 focus execution, refs, and React event translation.
@@ -18,6 +18,9 @@ focus execution, refs, and React event translation.
 | native toggle-input resolution   | Checkbox, Switch             |
 | numeric value normalization      | Slider, Rating               |
 | tabs selection and focus intent  | Tabs                         |
+| autocomplete selection/filtering | Autocomplete                 |
+| multiple selection/filtering     | MultiSelect                  |
+| ordered source/target transfer   | TransferList                 |
 
 ## Parity invariants
 
@@ -28,7 +31,9 @@ focus execution, refs, and React event translation.
 - Tabs decides the next enabled value in `ui-behaviors`, while React performs `focus()`;
 - Checkbox and Switch remain native inputs so browser form reset and submission semantics are not replaced;
 - Slider and Rating keep their existing callback shapes and range constraints;
-- Button loading still produces `disabled` and `aria-busy` output.
+- Button loading still produces `disabled` and `aria-busy` output;
+- Autocomplete, MultiSelect, and Transfer List preserve existing callback shapes,
+  filtering, disabled-item rules, and hidden/native form rendering.
 
 ## Evidence
 
@@ -41,6 +46,5 @@ focus execution, refs, and React event translation.
 
 ## Non-scope
 
-This batch does not migrate Autocomplete, MultiSelect, Transfer List, Menu,
-SideNav, overlays, Toast, ConfirmDialog, or the data grid. GMF2 remains in
-progress.
+This batch does not migrate Menu, SideNav, overlays, Toast, ConfirmDialog, or
+the data grid. GMF2 remains in progress.

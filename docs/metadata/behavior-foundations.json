@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S5",
-    "batch": "MF-5001-MF-5007",
+    "batch": "MF-5001-MF-5010",
     "status": "implemented",
     "gate": "GMF2",
     "gateStatus": "in-progress",
@@ -42,6 +42,21 @@
     {
       "id": "MF-5007",
       "name": "Tabs and composite navigation behavior",
+      "status": "done"
+    },
+    {
+      "id": "MF-5008",
+      "name": "Autocomplete behavior",
+      "status": "done"
+    },
+    {
+      "id": "MF-5009",
+      "name": "MultiSelect behavior",
+      "status": "done"
+    },
+    {
+      "id": "MF-5010",
+      "name": "Transfer List behavior",
       "status": "done"
     }
   ],
@@ -161,6 +176,39 @@
         "form-reset-remains-native",
         "disabled-and-readonly-interactivity"
       ]
+    },
+    "autocomplete": {
+      "factory": "createAutocompleteController",
+      "reactAdapter": "Autocomplete",
+      "rules": [
+        "controlled-value-input-and-open-proposals",
+        "filter-and-keyword-matching",
+        "disabled-options-skipped",
+        "selection-restores-label",
+        "dom-focus-owned-by-renderer"
+      ]
+    },
+    "multiSelect": {
+      "factory": "createMultiSelectController",
+      "reactAdapter": "MultiSelect",
+      "rules": [
+        "controlled-selection-proposals",
+        "query-filtering",
+        "disabled-options-rejected",
+        "looping-active-navigation",
+        "dom-focus-owned-by-renderer"
+      ]
+    },
+    "transferList": {
+      "factory": "createTransferListController",
+      "reactAdapter": "TransferList",
+      "rules": [
+        "ordered-source-target-partition",
+        "visible-selection",
+        "disabled-items-not-moved",
+        "controlled-target-proposals",
+        "independent-panel-filtering"
+      ]
     }
   },
   "boundaries": {
@@ -186,9 +234,6 @@
     "npm run quality"
   ],
   "remainingGmf2Tasks": [
-    "MF-5008",
-    "MF-5009",
-    "MF-5010",
     "MF-5011",
     "MF-5012",
     "MF-5013",

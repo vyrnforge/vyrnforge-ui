@@ -1,18 +1,7 @@
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type KeyboardEvent,
-} from "react";
-import { useControllableState } from "../../hooks";
+import { useEffect, useId, useMemo, useRef, type KeyboardEvent } from "react";
+import { useMultiSelectBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import type { MultiSelectOption, MultiSelectProps } from "./MultiSelect.types";
-
-function optionText(option: MultiSelectOption) {
-  return typeof option.label === "string" ? option.label : option.value;
-}
 
 function enabledOptionIndexes(options: readonly MultiSelectOption[]) {
   return options
@@ -40,28 +29,26 @@ export function MultiSelect({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [selectedValues, setSelectedValues] = useControllableState({
-    value,
+  const {
+    activeIndex,
+    clear,
+    filteredOptions,
+    isOpen,
+    query,
+    selectedValues,
+    setActiveIndex,
+    setOpen,
+    setQuery,
+    toggleValue,
+  } = useMultiSelectBehavior({
     defaultValue,
-    onChange: onValueChange,
+    onValueChange,
+    options,
+    value,
   });
   const selectedOptions = options.filter((option) =>
     selectedValues.includes(option.value),
   );
-  const filteredOptions = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-
-    if (!normalizedQuery) {
-      return options;
-    }
-
-    return options.filter((option) =>
-      optionText(option).toLowerCase().includes(normalizedQuery),
-    );
-  }, [options, query]);
   const enabledIndexes = useMemo(
     () => enabledOptionIndexes(filteredOptions),
     [filteredOptions],
@@ -72,25 +59,16 @@ export function MultiSelect({
 
     const handlePointerDown = (event: PointerEvent) => {
       if (!rootRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
-        setActiveIndex(-1);
+        setOpen(false);
       }
     };
 
     document.addEventListener("pointerdown", handlePointerDown);
     return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    if (activeIndex >= 0 && !filteredOptions[activeIndex]?.disabled) return;
-
-    setActiveIndex(enabledIndexes[0] ?? -1);
-  }, [activeIndex, enabledIndexes, filteredOptions, isOpen]);
+  }, [isOpen, setOpen]);
 
   const closeOptions = (restoreFocus = false) => {
-    setIsOpen(false);
-    setActiveIndex(-1);
+    setOpen(false);
     if (restoreFocus) {
       requestAnimationFrame(() => triggerRef.current?.focus());
     }
@@ -108,8 +86,7 @@ export function MultiSelect({
       direction === 1
         ? (enabledIndexes[0] ?? -1)
         : (enabledIndexes[enabledIndexes.length - 1] ?? -1);
-    setIsOpen(true);
-    setActiveIndex(targetIndex);
+    setOpen(true, direction);
 
     requestAnimationFrame(() => {
       if (focusOptions || !searchable) {
@@ -129,16 +106,6 @@ export function MultiSelect({
       (startPosition + direction + enabledIndexes.length) %
       enabledIndexes.length;
     focusOption(enabledIndexes[nextPosition] ?? -1);
-  };
-
-  const toggleValue = (option: MultiSelectOption) => {
-    if (disabled || option.disabled) return;
-
-    const nextValues = selectedValues.includes(option.value)
-      ? selectedValues.filter((item) => item !== option.value)
-      : [...selectedValues, option.value];
-
-    setSelectedValues(nextValues);
   };
 
   const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -220,11 +187,8 @@ export function MultiSelect({
         className="vf-multi-select__trigger"
         disabled={disabled}
         onClick={() => {
-          if (isOpen) {
-            closeOptions();
-          } else {
-            openOptions(1, false);
-          }
+          if (isOpen) closeOptions();
+          else openOptions(1, false);
         }}
         onKeyDown={handleTriggerKeyDown}
         ref={triggerRef}
@@ -322,7 +286,7 @@ export function MultiSelect({
           {clearable && selectedValues.length > 0 && (
             <button
               className="vf-multi-select__clear"
-              onClick={() => setSelectedValues([])}
+              onClick={clear}
               type="button"
             >
               Clear selection

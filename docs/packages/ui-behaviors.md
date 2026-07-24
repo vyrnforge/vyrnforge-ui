@@ -66,3 +66,16 @@ The first adopted component families are Button, ToggleButton,
 ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider,
 Rating, and Tabs. React remains responsible for rendering and DOM execution;
 `ui-behaviors` owns only portable state and transition decisions.
+
+## Composite selection adoption
+
+MF-5008 through MF-5010 are implemented:
+
+- Autocomplete uses `createAutocompleteController()` for filter, open, input,
+  selected-value, and active-option behavior;
+- MultiSelect uses `createMultiSelectController()` for query, selection,
+  open-state, and active-option behavior;
+- Transfer List uses `createTransferListController()` for source/target
+  partitioning, panel selection, filtering, and move operations.
+
+React still owns every DOM node and focus call. GMF2 remains in progress.

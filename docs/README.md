@@ -234,4 +234,4 @@ Archived docs are historical only. They preserve useful context but do not guide
 | `testing/gmf1-architecture-gate.md`         | GMF1 closure evidence and remaining release conditions.                   |
 | `quality/s5-framework-neutral-behaviors.md` | S5 scope, invariants, non-scope, and GMF2 relationship.                   |
 | `testing/behavior-foundation-contracts.md`  | MF-5001–MF-5004 package and repository evidence.                          |
-| `testing/behavior-react-parity.md`          | MF-5005–MF-5007 React adapter parity evidence.                            |
+| `testing/behavior-react-parity.md`          | MF-5005–MF-5010 React adapter parity evidence.                            |

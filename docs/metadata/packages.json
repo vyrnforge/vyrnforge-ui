@@ -92,7 +92,7 @@
       "status": "current",
       "releaseTrack": "non-grid-beta",
       "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
-      "notes": "MF-5001 through MF-5007 are implemented. The first React adapter batch covers action, toggle, native form, choice, numeric, and Tabs components; remaining composite and overlay migrations continue through S5."
+      "notes": "MF-5001 through MF-5010 are implemented. React adapters now cover action, toggle, native form, choice, numeric, Tabs, Autocomplete, MultiSelect, and Transfer List; remaining navigation and overlay migrations continue through S5."
     },
     {
       "name": "@vyrnforge/ui-components",

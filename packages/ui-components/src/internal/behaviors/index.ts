@@ -4,3 +4,4 @@ export { useNumericBehavior } from "./useNumericBehavior";
 export { useTabsBehavior } from "./useTabsBehavior";
 export { useToggleBehavior } from "./useToggleBehavior";
 export { useToggleGroupBehavior } from "./useToggleGroupBehavior";
+export { useMultiSelectBehavior } from "./useMultiSelectBehavior";
