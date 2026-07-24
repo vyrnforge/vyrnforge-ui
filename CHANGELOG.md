@@ -13,6 +13,7 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 - MF-5005 through MF-5007 framework-neutral action, toggle, choice, numeric, and Tabs controllers.
 - React behavior adapters and parity tests for Button, ToggleButton, ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider, Rating, and Tabs.
+- MF-5008 through MF-5010 framework-neutral Autocomplete, MultiSelect, and Transfer List controllers with React parity adoption.
 
 ### Added
 

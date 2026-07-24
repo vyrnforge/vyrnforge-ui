@@ -4814,7 +4814,8 @@
         "behaviors": {
           "package": "@vyrnforge/ui-behaviors",
           "status": "foundation-current",
-          "componentController": "planned-s5"
+          "componentController": "createMultiSelectController",
+          "task": "MF-5009"
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -4890,7 +4891,8 @@
         "behaviors": {
           "package": "@vyrnforge/ui-behaviors",
           "status": "foundation-current",
-          "componentController": "planned-s5"
+          "componentController": "createAutocompleteController",
+          "task": "MF-5008"
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -4966,7 +4968,8 @@
         "behaviors": {
           "package": "@vyrnforge/ui-behaviors",
           "status": "foundation-current",
-          "componentController": "planned-s5"
+          "componentController": "createTransferListController",
+          "task": "MF-5010"
         },
         "native": {
           "package": "@vyrnforge/ui-elements",

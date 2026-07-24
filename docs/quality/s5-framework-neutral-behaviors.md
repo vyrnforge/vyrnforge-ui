@@ -20,13 +20,17 @@ controllers:
 | MF-5005 | simple action and toggle behaviors                | implemented |
 | MF-5006 | simple form-control behaviors                     | implemented |
 | MF-5007 | Tabs and composite navigation behavior            | implemented |
+| MF-5008 | Autocomplete behavior                             | implemented |
+| MF-5009 | MultiSelect behavior                              | implemented |
+| MF-5010 | Transfer List behavior                            | implemented |
 
-## First React adoption batch
+## React adoption batches
 
-MF-5005 through MF-5007 migrate representative action, toggle, native form,
-choice, numeric, and composite navigation components onto the shared behavior
-package without changing their public React APIs. React still owns DOM focus,
-native element rendering, refs, and event translation.
+MF-5005 through MF-5010 migrate representative action, toggle, native form,
+choice, numeric, navigation, Autocomplete, MultiSelect, and Transfer List
+components onto the shared behavior package without changing their public React
+APIs. React still owns DOM focus, native element rendering, refs, portals, and
+event translation.
 
 ## Required invariants
 
@@ -42,7 +46,7 @@ native element rendering, refs, and event translation.
 
 ## Non-scope
 
-- React migration beyond MF-5005 through MF-5007;
+- React migration beyond MF-5005 through MF-5010;
 - native Custom Element rendering;
 - DOM focus execution;
 - overlay positioning;
@@ -51,6 +55,6 @@ native element rendering, refs, and event translation.
 
 ## Gate relationship
 
-MF-5001 through MF-5007 do not complete GMF2. Autocomplete, MultiSelect,
-Transfer List, Menu, SideNav, overlays, Toast, ConfirmDialog, final React
-migration audit, and the closing parity gate remain scheduled through MF-5016.
+MF-5001 through MF-5010 do not complete GMF2. Menu, SideNav, overlays, Toast,
+ConfirmDialog, final React migration audit, and the closing parity gate remain
+scheduled through MF-5016.

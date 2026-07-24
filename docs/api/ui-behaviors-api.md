@@ -168,3 +168,26 @@ proposals, and increment/decrement commands for Slider and Rating adapters.
 `createTabsController()` owns selected and focused value intent, disabled-tab
 skipping, looping, Home/End movement, and automatic or manual activation. It
 does not own DOM nodes or call `focus()`.
+
+## Autocomplete
+
+`createAutocompleteController()` owns framework-neutral option filtering,
+controlled or uncontrolled value/input/open state, active-option intent,
+disabled-option skipping, label restoration, and selection/clear transitions.
+The renderer keeps ownership of DOM focus, listbox positioning, portal and
+pointer execution.
+
+## MultiSelect
+
+`createMultiSelectController()` owns query filtering, controlled or
+uncontrolled selected values, open state, active-option intent, disabled-option
+rejection, clear and toggle transitions. The React adapter performs roving DOM
+focus using the controller's active-value intent.
+
+## Transfer List
+
+`createTransferListController()` owns ordered source/target partitioning,
+independent panel queries, visible selection, selected/all moves, disabled-item
+rejection, controlled target-value proposals, and panel selection events.
+Rendering, checkboxes, hidden form inputs, and pointer focus remain renderer
+responsibilities.

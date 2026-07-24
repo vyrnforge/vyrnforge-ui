@@ -2,8 +2,10 @@ import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent } from "@testing-library/react";
 import {
+  Autocomplete,
   Button,
   Checkbox,
+  MultiSelect,
   RadioGroup,
   Rating,
   SegmentedControl,
@@ -12,6 +14,7 @@ import {
   Tabs,
   ToggleButton,
   ToggleButtonGroup,
+  TransferList,
 } from "../../index";
 import { createUser, render, screen } from "../../../../../tests/dom";
 
@@ -136,6 +139,63 @@ describe("React adapters preserve shared behavior parity", () => {
     const secondStar = screen.getByRole("radio", { name: "2 of 5 stars" });
     await user.click(secondStar);
     expect(onRatingChange).toHaveBeenCalledWith(0);
+  });
+
+  it("adapts Autocomplete, MultiSelect, and TransferList behaviors", async () => {
+    const user = createUser();
+    const onAutocompleteChange = vi.fn();
+    const onMultiSelectChange = vi.fn();
+    const onTransferChange = vi.fn();
+
+    render(
+      <>
+        <Autocomplete
+          ariaLabel="Role"
+          onValueChange={onAutocompleteChange}
+          openOnFocus
+          options={[
+            { value: "admin", label: "Administrator" },
+            { value: "viewer", label: "Viewer" },
+          ]}
+        />
+        <MultiSelect
+          aria-label="Products"
+          onValueChange={onMultiSelectChange}
+          options={[
+            { value: "iam", label: "IAM" },
+            { value: "atlas", label: "Atlas" },
+          ]}
+        />
+        <TransferList
+          ariaLabel="Applications"
+          onValueChange={onTransferChange}
+          options={[
+            { value: "iam", label: "IAM" },
+            { value: "atlas", label: "Atlas" },
+          ]}
+        />
+      </>,
+    );
+
+    await user.click(screen.getByRole("combobox", { name: "Role" }));
+    await user.keyboard("{Enter}");
+    expect(onAutocompleteChange).toHaveBeenCalledWith(
+      "admin",
+      expect.objectContaining({ value: "admin" }),
+    );
+
+    await user.click(screen.getByRole("button", { name: "Products" }));
+    await user.click(screen.getByRole("option", { name: /IAM/ }));
+    expect(onMultiSelectChange).toHaveBeenCalledWith(["iam"]);
+
+    await user.click(screen.getByRole("checkbox", { name: /IAM/ }));
+    await user.click(
+      screen.getByRole("button", { name: "Move selected items to Assigned" }),
+    );
+    expect(onTransferChange).toHaveBeenCalledWith(
+      ["iam"],
+      [expect.objectContaining({ value: "iam" })],
+    );
   });
 
   it("keeps controlled Tabs synchronized through the shared tabs controller", async () => {

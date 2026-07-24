@@ -1,21 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
-import { useControllableState } from "../../hooks";
+import {
+  createTransferListController,
+  type TransferListController,
+  type TransferListFilterFunction as BehaviorTransferListFilterFunction,
+} from "@vyrnforge/ui-behaviors";
+import { useEffect, useMemo, useRef } from "react";
+import { useBehaviorSnapshot, useLatestValue } from "../../internal/behaviors";
 import type {
   TransferListFilterFunction,
   TransferListOptionData,
   TransferListPanel,
-  TransferListProps
+  TransferListProps,
 } from "./TransferList.types";
 import {
   defaultTransferListFilter,
-  enabledOptionValues,
-  filterSelectedValuesToPanel,
-  mergeTargetValues,
   normalizeTransferValues,
-  partitionTransferOptions,
-  removeTargetValues,
-  selectedEnabledValues,
-  uniqueOptions
 } from "./transferList.utils";
 
 type UseTransferListArgs = Pick<
@@ -36,185 +34,119 @@ export function useTransferList({
   onSelectionChange,
   onValueChange,
   options,
-  value
+  value,
 }: UseTransferListArgs) {
-  const normalizedOptions = useMemo(() => uniqueOptions(options), [options]);
-  const normalizedDefaultValue = useMemo(
-    () => normalizeTransferValues(defaultValue, normalizedOptions),
-    [defaultValue, normalizedOptions]
+  const valueChangeRef = useLatestValue(onValueChange);
+  const selectionChangeRef = useLatestValue(onSelectionChange);
+  const optionsRef = useLatestValue(options);
+  const behaviorFilter = useMemo<
+    BehaviorTransferListFilterFunction<TransferListOptionData>
+  >(
+    () => (items, query, panel) => filterOptions(items, query, panel),
+    [filterOptions],
   );
-  const controlledValue = useMemo(
-    () => value === undefined ? undefined : normalizeTransferValues(value, normalizedOptions),
-    [normalizedOptions, value]
-  );
-  const [targetValues, setTargetValues] = useControllableState({
-    value: controlledValue,
-    defaultValue: normalizedDefaultValue,
-    onChange: undefined
-  });
-  const normalizedTargetValues = useMemo(
-    () => normalizeTransferValues(targetValues, normalizedOptions),
-    [normalizedOptions, targetValues]
-  );
-  const { sourceOptions, targetOptions } = useMemo(
-    () => partitionTransferOptions(normalizedOptions, normalizedTargetValues),
-    [normalizedOptions, normalizedTargetValues]
-  );
-  const [sourceSelectedValues, setSourceSelectedValues] = useState<string[]>([]);
-  const [targetSelectedValues, setTargetSelectedValues] = useState<string[]>([]);
-  const [sourceActiveValue, setSourceActiveValue] = useState<string | null>(null);
-  const [targetActiveValue, setTargetActiveValue] = useState<string | null>(null);
-  const [sourceQuery, setSourceQuery] = useState("");
-  const [targetQuery, setTargetQuery] = useState("");
+  const controllerRef =
+    useRef<TransferListController<TransferListOptionData> | null>(null);
+  const isControlled = value !== undefined;
 
-  const visibleSourceOptions = useMemo(
-    () => filterOptions(sourceOptions, sourceQuery, "source"),
-    [filterOptions, sourceOptions, sourceQuery]
-  );
-  const visibleTargetOptions = useMemo(
-    () => filterOptions(targetOptions, targetQuery, "target"),
-    [filterOptions, targetOptions, targetQuery]
-  );
+  if (controllerRef.current === null) {
+    controllerRef.current = createTransferListController({
+      items: options,
+      defaultValue,
+      ...(isControlled ? { value } : {}),
+      clearSelectionAfterMove,
+      filter: behaviorFilter,
+      onEvent(event) {
+        if (event.type === "value-change") {
+          const selectedOptions = event.detail.targetValues
+            .map((targetValue) =>
+              optionsRef.current.find((option) => option.value === targetValue),
+            )
+            .filter((option): option is TransferListOptionData =>
+              Boolean(option),
+            );
+          valueChangeRef.current?.(
+            [...event.detail.targetValues],
+            selectedOptions,
+          );
+        } else if (event.type === "selection-change") {
+          selectionChangeRef.current?.({
+            source: [...event.detail.source],
+            target: [...event.detail.target],
+          });
+        }
+      },
+    });
+  }
+
+  const controller = controllerRef.current;
+  const snapshot = useBehaviorSnapshot(controller);
 
   useEffect(() => {
-    setSourceSelectedValues((selected) =>
-      filterSelectedValuesToPanel(selected, sourceOptions)
-    );
-    setTargetSelectedValues((selected) =>
-      filterSelectedValuesToPanel(selected, targetOptions)
-    );
-  }, [sourceOptions, targetOptions]);
+    controller.replaceItems(options);
+  }, [controller, options]);
 
-  const notifySelectionChange = (source: string[], target: string[]) => {
-    onSelectionChange?.({ source, target });
-  };
+  useEffect(() => {
+    controller.setFilter(behaviorFilter);
+  }, [behaviorFilter, controller]);
 
-  const setPanelSelection = (panel: TransferListPanel, values: string[]) => {
-    if (panel === "source") {
-      setSourceSelectedValues(values);
-      notifySelectionChange(values, targetSelectedValues);
-      return;
-    }
+  useEffect(() => {
+    controller.setClearSelectionAfterMove(clearSelectionAfterMove);
+  }, [clearSelectionAfterMove, controller]);
 
-    setTargetSelectedValues(values);
-    notifySelectionChange(sourceSelectedValues, values);
-  };
-
-  const togglePanelValue = (panel: TransferListPanel, valueToToggle: string) => {
-    const selectedValues = panel === "source"
-      ? sourceSelectedValues
-      : targetSelectedValues;
-    const nextValues = selectedValues.includes(valueToToggle)
-      ? selectedValues.filter((valueItem) => valueItem !== valueToToggle)
-      : [...selectedValues, valueToToggle];
-
-    setPanelSelection(panel, nextValues);
-  };
-
-  const setVisibleSelected = (
-    panel: TransferListPanel,
-    visibleOptions: readonly TransferListOptionData[],
-    selected: boolean
-  ) => {
-    const currentValues = panel === "source"
-      ? sourceSelectedValues
-      : targetSelectedValues;
-    const visibleValues = enabledOptionValues(visibleOptions);
-    const visibleSet = new Set(visibleValues);
-    const nextValues = selected
-      ? Array.from(new Set([...currentValues, ...visibleValues]))
-      : currentValues.filter((valueItem) => !visibleSet.has(valueItem));
-
-    setPanelSelection(panel, nextValues);
-  };
-
-  const commitValue = (nextTargetValues: string[]) => {
-    const nextOptions = normalizedOptions.filter((option) =>
-      nextTargetValues.includes(option.value)
-    );
-
-    setTargetValues(nextTargetValues);
-    onValueChange?.(nextTargetValues, nextOptions);
-  };
-
-  const moveSelectedToTarget = () => {
-    const movingValues = selectedEnabledValues(sourceSelectedValues, sourceOptions);
-    if (movingValues.length === 0) {
-      return;
-    }
-
-    commitValue(mergeTargetValues(normalizedTargetValues, movingValues, normalizedOptions));
-    const nextSourceSelection = clearSelectionAfterMove
-      ? sourceSelectedValues.filter((valueItem) => !movingValues.includes(valueItem))
-      : sourceSelectedValues;
-    setSourceSelectedValues(nextSourceSelection);
-    notifySelectionChange(nextSourceSelection, targetSelectedValues);
-  };
-
-  const moveSelectedToSource = () => {
-    const movingValues = selectedEnabledValues(targetSelectedValues, targetOptions);
-    if (movingValues.length === 0) {
-      return;
-    }
-
-    commitValue(removeTargetValues(normalizedTargetValues, movingValues, normalizedOptions));
-    const nextTargetSelection = clearSelectionAfterMove
-      ? targetSelectedValues.filter((valueItem) => !movingValues.includes(valueItem))
-      : targetSelectedValues;
-    setTargetSelectedValues(nextTargetSelection);
-    notifySelectionChange(sourceSelectedValues, nextTargetSelection);
-  };
-
-  const moveAllToTarget = () => {
-    const movingValues = enabledOptionValues(sourceOptions);
-    if (movingValues.length === 0) {
-      return;
-    }
-
-    commitValue(mergeTargetValues(normalizedTargetValues, movingValues, normalizedOptions));
-    const nextSourceSelection = sourceSelectedValues.filter((valueItem) =>
-      !movingValues.includes(valueItem)
-    );
-    setSourceSelectedValues(nextSourceSelection);
-    notifySelectionChange(nextSourceSelection, targetSelectedValues);
-  };
-
-  const moveAllToSource = () => {
-    const movingValues = enabledOptionValues(targetOptions);
-    if (movingValues.length === 0) {
-      return;
-    }
-
-    commitValue(removeTargetValues(normalizedTargetValues, movingValues, normalizedOptions));
-    const nextTargetSelection = targetSelectedValues.filter((valueItem) =>
-      !movingValues.includes(valueItem)
-    );
-    setTargetSelectedValues(nextTargetSelection);
-    notifySelectionChange(sourceSelectedValues, nextTargetSelection);
-  };
+  useEffect(() => {
+    if (value !== undefined) controller.syncValue(value);
+  }, [controller, value]);
 
   return {
-    moveAllToSource,
-    moveAllToTarget,
-    moveSelectedToSource,
-    moveSelectedToTarget,
-    normalizedOptions,
-    sourceActiveValue,
-    sourceOptions,
-    sourceQuery,
-    sourceSelectedValues,
-    targetActiveValue,
-    targetOptions,
-    targetQuery,
-    targetSelectedValues,
-    targetValues: normalizedTargetValues,
-    setSourceActiveValue,
-    setSourceQuery,
-    setTargetActiveValue,
-    setTargetQuery,
-    setVisibleSelected,
-    togglePanelValue,
-    visibleSourceOptions,
-    visibleTargetOptions
+    moveAllToSource() {
+      controller.moveAll("source", "selection");
+    },
+    moveAllToTarget() {
+      controller.moveAll("target", "selection");
+    },
+    moveSelectedToSource() {
+      controller.moveSelected("source", "selection");
+    },
+    moveSelectedToTarget() {
+      controller.moveSelected("target", "selection");
+    },
+    normalizedOptions: snapshot.items,
+    sourceActiveValue: snapshot.sourceActiveValue,
+    sourceOptions: snapshot.sourceItems,
+    sourceQuery: snapshot.sourceQuery,
+    sourceSelectedValues: snapshot.sourceSelectedValues,
+    targetActiveValue: snapshot.targetActiveValue,
+    targetOptions: snapshot.targetItems,
+    targetQuery: snapshot.targetQuery,
+    targetSelectedValues: snapshot.targetSelectedValues,
+    targetValues:
+      value === undefined
+        ? snapshot.targetValues
+        : normalizeTransferValues(value, options),
+    setSourceActiveValue(nextValue: string | null) {
+      controller.setActiveValue("source", nextValue, "pointer");
+    },
+    setSourceQuery(query: string) {
+      controller.setQuery("source", query);
+    },
+    setTargetActiveValue(nextValue: string | null) {
+      controller.setActiveValue("target", nextValue, "pointer");
+    },
+    setTargetQuery(query: string) {
+      controller.setQuery("target", query);
+    },
+    setVisibleSelected(
+      panel: TransferListPanel,
+      _visibleOptions: readonly TransferListOptionData[],
+      selected: boolean,
+    ) {
+      controller.setVisibleSelected(panel, selected, "selection");
+    },
+    togglePanelValue(panel: TransferListPanel, valueToToggle: string) {
+      controller.toggleSelection(panel, valueToToggle, "selection");
+    },
+    visibleSourceOptions: snapshot.visibleSourceItems,
+    visibleTargetOptions: snapshot.visibleTargetItems,
   };
 }

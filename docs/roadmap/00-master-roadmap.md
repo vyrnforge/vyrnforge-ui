@@ -75,9 +75,9 @@ components or complete GMF2.
 - MF-5005: simple action and toggle behaviors — implemented
 - MF-5006: simple form-control behaviors — implemented
 - MF-5007: Tabs and composite navigation behavior — implemented
-- MF-5008: Autocomplete behavior
-- MF-5009: MultiSelect behavior
-- MF-5010: Transfer List behavior
+- MF-5008: Autocomplete behavior — implemented
+- MF-5009: MultiSelect behavior — implemented
+- MF-5010: Transfer List behavior — implemented
 - MF-5011: Menu and SideNav navigation behavior
 - MF-5012: overlay lifecycle and DOM-adapter boundary
 - MF-5013: Dialog, Drawer, Popover, and Tooltip controllers

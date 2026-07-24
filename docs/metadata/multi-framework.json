@@ -139,9 +139,21 @@
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",
     "status": "implemented",
-    "tasks": ["MF-5001", "MF-5002", "MF-5003", "MF-5004"],
+    "tasks": [
+      "MF-5001",
+      "MF-5002",
+      "MF-5003",
+      "MF-5004",
+      "MF-5005",
+      "MF-5006",
+      "MF-5007",
+      "MF-5008",
+      "MF-5009",
+      "MF-5010"
+    ],
     "metadata": "docs/metadata/behavior-foundations.json",
     "gate": "GMF2",
-    "gateStatus": "in-progress"
+    "gateStatus": "in-progress",
+    "currentBatch": "MF-5008-MF-5010"
   }
 }

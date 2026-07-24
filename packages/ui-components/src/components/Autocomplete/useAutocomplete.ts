@@ -1,55 +1,57 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useControllableState } from "../../hooks";
+import {
+  createAutocompleteController,
+  defaultAutocompleteBehaviorFilter,
+  getFirstEnabledAutocompleteIndex,
+  getLastEnabledAutocompleteIndex,
+  getNextEnabledAutocompleteIndex,
+  type AutocompleteController,
+  type AutocompleteFilterFunction as BehaviorAutocompleteFilterFunction,
+  type AutocompleteItem,
+} from "@vyrnforge/ui-behaviors";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useBehaviorSnapshot, useLatestValue } from "../../internal/behaviors";
 import type {
   AutocompleteFilterFunction,
   AutocompleteOptionData,
-  AutocompleteProps
+  AutocompleteProps,
 } from "./Autocomplete.types";
 
-export const defaultAutocompleteFilter: AutocompleteFilterFunction = (options, query) => {
-  const normalizedQuery = query.trim().toLocaleLowerCase();
-
-  if (!normalizedQuery) {
-    return options;
-  }
-
-  return options.filter((option) =>
-    option.label.toLocaleLowerCase().includes(normalizedQuery) ||
-    option.keywords?.some((keyword) => keyword.toLocaleLowerCase().includes(normalizedQuery))
-  );
-};
-
-export function getFirstEnabledIndex(options: readonly AutocompleteOptionData[]) {
-  return options.findIndex((option) => !option.disabled);
+function toBehaviorItem(option: AutocompleteOptionData): AutocompleteItem {
+  return {
+    value: option.value,
+    label: option.label,
+    disabled: option.disabled,
+    keywords: option.keywords,
+  };
 }
 
-export function getLastEnabledIndex(options: readonly AutocompleteOptionData[]) {
-  for (let index = options.length - 1; index >= 0; index -= 1) {
-    if (!options[index]?.disabled) {
-      return index;
-    }
-  }
+export const defaultAutocompleteFilter: AutocompleteFilterFunction = (
+  options,
+  query,
+) =>
+  defaultAutocompleteBehaviorFilter(
+    options,
+    query,
+  ) as readonly AutocompleteOptionData[];
 
-  return -1;
+export function getFirstEnabledIndex(
+  options: readonly AutocompleteOptionData[],
+) {
+  return getFirstEnabledAutocompleteIndex(options);
+}
+
+export function getLastEnabledIndex(
+  options: readonly AutocompleteOptionData[],
+) {
+  return getLastEnabledAutocompleteIndex(options);
 }
 
 export function getNextEnabledIndex(
   options: readonly AutocompleteOptionData[],
   currentIndex: number,
-  direction: 1 | -1
+  direction: 1 | -1,
 ) {
-  if (options.length === 0) {
-    return -1;
-  }
-
-  for (let offset = 1; offset <= options.length; offset += 1) {
-    const index = (currentIndex + direction * offset + options.length) % options.length;
-    if (!options[index]?.disabled) {
-      return index;
-    }
-  }
-
-  return -1;
+  return getNextEnabledAutocompleteIndex(options, currentIndex, direction);
 }
 
 export function useAutocomplete({
@@ -64,7 +66,7 @@ export function useAutocomplete({
   onValueChange,
   open,
   options,
-  value
+  value,
 }: Pick<
   AutocompleteProps,
   | "autoHighlight"
@@ -80,79 +82,136 @@ export function useAutocomplete({
   | "options"
   | "value"
 >) {
-  const defaultSelectedOption = options.find((option) => option.value === defaultValue) ?? null;
-  const [selectedValue, setSelectedValue] = useControllableState<string | null>({
-    value,
-    defaultValue,
-    onChange: undefined
-  });
-  const [currentInputValue, setCurrentInputValue] = useControllableState({
-    value: inputValue,
-    defaultValue: defaultInputValue ?? defaultSelectedOption?.label ?? "",
-    onChange: onInputValueChange
-  });
-  const [isOpen, setIsOpen] = useControllableState({
-    value: open,
-    defaultValue: defaultOpen,
-    onChange: onOpenChange
-  });
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const filteredOptions = useMemo(
-    () => filterOptions(options, currentInputValue),
-    [currentInputValue, filterOptions, options]
+  const valueChangeRef = useLatestValue(onValueChange);
+  const inputChangeRef = useLatestValue(onInputValueChange);
+  const openChangeRef = useLatestValue(onOpenChange);
+  const optionsRef = useLatestValue(options);
+  const behaviorItems = useMemo(() => options.map(toBehaviorItem), [options]);
+  const behaviorFilter = useMemo<BehaviorAutocompleteFilterFunction>(
+    () => (items, query) => {
+      const sourceOptions = items
+        .map((item) =>
+          optionsRef.current.find((option) => option.value === item.value),
+        )
+        .filter((option): option is AutocompleteOptionData => Boolean(option));
+      return filterOptions(sourceOptions, query).map(toBehaviorItem);
+    },
+    [filterOptions, optionsRef],
   );
-  const selectedOption = options.find((option) => option.value === selectedValue) ?? null;
+  const controllerRef = useRef<AutocompleteController | null>(null);
+  const valueControlled = value !== undefined;
+  const inputControlled = inputValue !== undefined;
+  const openControlled = open !== undefined;
 
-  useEffect(() => {
-    if (value !== undefined && inputValue === undefined) {
-      setCurrentInputValue(selectedOption?.label ?? "");
-    }
-  }, [inputValue, selectedOption?.label, setCurrentInputValue, value]);
-
-  useEffect(() => {
-    if (!isOpen || !autoHighlight) {
-      return;
-    }
-
-    setActiveIndex((currentIndex) => {
-      const currentOption = filteredOptions[currentIndex];
-      return currentOption && !currentOption.disabled
-        ? currentIndex
-        : getFirstEnabledIndex(filteredOptions);
+  if (controllerRef.current === null) {
+    controllerRef.current = createAutocompleteController({
+      items: behaviorItems,
+      autoHighlight,
+      defaultValue,
+      defaultInputValue,
+      defaultOpen,
+      ...(valueControlled ? { value } : {}),
+      ...(inputControlled ? { inputValue } : {}),
+      ...(openControlled ? { open } : {}),
+      filter: behaviorFilter,
+      onEvent(event) {
+        if (event.type === "value-change") {
+          const option =
+            event.detail.value === null
+              ? null
+              : (optionsRef.current.find(
+                  (candidate) => candidate.value === event.detail.value,
+                ) ?? null);
+          valueChangeRef.current?.(event.detail.value, option);
+        } else if (event.type === "input-value-change") {
+          inputChangeRef.current?.(event.detail.value);
+        } else if (event.type === "open-change") {
+          openChangeRef.current?.(event.detail.open);
+        }
+      },
     });
-  }, [autoHighlight, filteredOptions, isOpen]);
+  }
 
-  const setOpenWithHighlight = useCallback((nextOpen: boolean, direction: 1 | -1 = 1) => {
-    setIsOpen(nextOpen);
-    if (nextOpen && autoHighlight) {
-      setActiveIndex(direction === 1 ? getFirstEnabledIndex(filteredOptions) : getLastEnabledIndex(filteredOptions));
-    }
-    if (!nextOpen) {
-      setActiveIndex(-1);
-    }
-  }, [autoHighlight, filteredOptions, setIsOpen]);
+  const controller = controllerRef.current;
+  const snapshot = useBehaviorSnapshot(controller);
 
-  const selectOption = useCallback((option: AutocompleteOptionData) => {
-    if (option.disabled) {
-      return;
-    }
+  useEffect(() => {
+    controller.replaceItems(behaviorItems);
+  }, [behaviorItems, controller]);
 
-    setSelectedValue(option.value);
-    onValueChange?.(option.value, option);
-    setCurrentInputValue(option.label);
-    setOpenWithHighlight(false);
-  }, [onValueChange, setCurrentInputValue, setOpenWithHighlight, setSelectedValue]);
+  useEffect(() => {
+    controller.setFilter(behaviorFilter);
+  }, [behaviorFilter, controller]);
+
+  const controlledSelectedLabel =
+    value === undefined || value === null
+      ? ""
+      : (options.find((option) => option.value === value)?.label ?? "");
+
+  useEffect(() => {
+    if (value === undefined) return;
+    controller.syncValue(value);
+    if (inputValue === undefined) {
+      controller.setInputValue(controlledSelectedLabel, "restore");
+    }
+  }, [controlledSelectedLabel, controller, inputValue, value]);
+
+  useEffect(() => {
+    if (inputValue !== undefined) controller.syncInputValue(inputValue);
+  }, [controller, inputValue]);
+
+  useEffect(() => {
+    if (open !== undefined) controller.syncOpen(open);
+  }, [controller, open]);
+
+  const selectedValue = value ?? snapshot.value;
+  const currentInputValue = inputValue ?? snapshot.inputValue;
+  const isOpen = open ?? snapshot.open;
+  const selectedOption =
+    options.find((option) => option.value === selectedValue) ?? null;
+  const filteredOptions = snapshot.filteredItems
+    .map((item) => options.find((option) => option.value === item.value))
+    .filter((option): option is AutocompleteOptionData => Boolean(option));
+  const activeIndex = filteredOptions.findIndex(
+    (option) => option.value === snapshot.activeValue,
+  );
 
   const clearSelection = useCallback(() => {
-    setSelectedValue(null);
-    onValueChange?.(null, null);
-    setCurrentInputValue("");
-    setOpenWithHighlight(false);
-  }, [onValueChange, setCurrentInputValue, setOpenWithHighlight, setSelectedValue]);
-
+    controller.clear("clear");
+  }, [controller]);
   const restoreSelectedLabel = useCallback(() => {
-    setCurrentInputValue(selectedOption?.label ?? "");
-  }, [selectedOption?.label, setCurrentInputValue]);
+    controller.restoreInputValue("restore");
+  }, [controller]);
+  const selectOption = useCallback(
+    (option: AutocompleteOptionData) => {
+      controller.select(option.value, "selection");
+    },
+    [controller],
+  );
+  const setActiveIndex = useCallback(
+    (index: number) => {
+      controller.setActiveValue(
+        index >= 0 ? (filteredOptions[index]?.value ?? null) : null,
+        "keyboard",
+      );
+    },
+    [controller, filteredOptions],
+  );
+  const setCurrentInputValue = useCallback(
+    (nextValue: string) => {
+      controller.setInputValue(nextValue, "user");
+    },
+    [controller],
+  );
+  const setOpenWithHighlight = useCallback(
+    (nextOpen: boolean, direction: 1 | -1 = 1) => {
+      controller.setOpen(nextOpen, {
+        direction,
+        reason: "programmatic",
+      });
+    },
+    [controller],
+  );
 
   return {
     activeIndex,
@@ -166,6 +225,6 @@ export function useAutocomplete({
     selectedValue,
     setActiveIndex,
     setCurrentInputValue,
-    setOpenWithHighlight
+    setOpenWithHighlight,
   };
 }
