@@ -110,6 +110,7 @@ describe("React adapters preserve shared behavior parity", () => {
             { value: "express", label: "Express" },
           ]}
         />
+        
         <Slider
           ariaLabel="Allocation"
           defaultValue={10}

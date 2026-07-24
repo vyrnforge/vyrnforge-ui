@@ -5,6 +5,12 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: /^@vyrnforge\/ui-behaviors$/,
+        replacement: fileURLToPath(
+          new URL("../ui-behaviors/src/index.ts", import.meta.url),
+        ),
+      },
+      {
         find: /^@vyrnforge\/ui-components$/,
         replacement: fileURLToPath(
           new URL("../ui-components/src/index.ts", import.meta.url),
