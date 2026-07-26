@@ -66,7 +66,7 @@ The package intentionally owns no CSS and performs no DOM work.
 
 ## First React adapter batch
 
-MF-5005 through MF-5010 add framework-neutral behavior for action state,
+MF-5005 through MF-5012 add framework-neutral behavior for action state,
 boolean toggles, toggle groups, single-choice controls, numeric controls, Tabs,
 Autocomplete, MultiSelect, and Transfer List. `@vyrnforge/ui-components`
 consumes these contracts while keeping DOM focus, native form elements, refs,
@@ -79,3 +79,20 @@ MultiSelect, and Transfer List. The controllers own filtering, selection,
 active-item intent, open/query state, and ordered transfer decisions. React
 continues to own portals, DOM focus, native form nodes, refs, and event
 translation.
+
+## Navigation and overlay foundations
+
+MF-5011 and MF-5012 add:
+
+- `createNavigationController()` for Menu and SideNav roving active intent,
+  disabled-item skipping, Home/End movement, selection events, and dismissal
+  reasons;
+- `createOverlayLifecycleController()` for controlled or uncontrolled open
+  transitions with explicit trigger and dismissal reasons;
+- `createOverlayLayerRegistry()` and `resolveOverlayPosition()` for portable
+  layer ordering and pure anchored-position decisions;
+- focus, layer, and positioning adapter contracts that keep DOM execution in
+  renderer packages.
+
+The React adapters retain refs, `focus()`, portals, focus trapping, document
+listeners, scroll locking, DOM measurement, and CSS application.

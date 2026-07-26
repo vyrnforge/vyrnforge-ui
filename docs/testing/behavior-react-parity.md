@@ -2,7 +2,7 @@
 
 ## Scope
 
-MF-5005 through MF-5010 are the first production migrations from React-owned
+MF-5005 through MF-5012 are the first production migrations from React-owned
 state decisions to `@vyrnforge/ui-behaviors`. The React package remains the
 reference renderer and keeps ownership of DOM rendering, native form elements,
 focus execution, refs, and React event translation.
@@ -21,6 +21,8 @@ focus execution, refs, and React event translation.
 | autocomplete selection/filtering | Autocomplete                 |
 | multiple selection/filtering     | MultiSelect                  |
 | ordered source/target transfer   | TransferList                 |
+| roving navigation intent         | Menu, SideNav                |
+| overlay lifecycle and adapters   | Popover, Dialog, Drawer      |
 
 ## Parity invariants
 
@@ -33,7 +35,11 @@ focus execution, refs, and React event translation.
 - Slider and Rating keep their existing callback shapes and range constraints;
 - Button loading still produces `disabled` and `aria-busy` output;
 - Autocomplete, MultiSelect, and Transfer List preserve existing callback shapes,
-  filtering, disabled-item rules, and hidden/native form rendering.
+  filtering, disabled-item rules, and hidden/native form rendering;
+- Menu and SideNav preserve roving focus behavior while React owns DOM refs and
+  `focus()` calls;
+- Popover, Dialog, and Drawer preserve public boolean callbacks while internal
+  lifecycle transitions carry explicit reasons and renderer-owned DOM work.
 
 ## Evidence
 
@@ -46,5 +52,7 @@ focus execution, refs, and React event translation.
 
 ## Non-scope
 
-This batch does not migrate Menu, SideNav, overlays, Toast, ConfirmDialog, or
-the data grid. GMF2 remains in progress.
+This batch does not implement the MF-5013 component-specific overlay
+controllers, MF-5014 Toast and ConfirmDialog behavior, the MF-5015 final React
+adoption audit, MF-5016 parity closure, or data-grid behavior. GMF2 remains in
+progress.

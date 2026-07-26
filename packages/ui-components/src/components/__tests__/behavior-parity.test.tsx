@@ -5,10 +5,13 @@ import {
   Autocomplete,
   Button,
   Checkbox,
+  Dialog,
+  Menu,
   MultiSelect,
   RadioGroup,
   Rating,
   SegmentedControl,
+  SideNav,
   Slider,
   Switch,
   Tabs,
@@ -228,5 +231,64 @@ describe("React adapters preserve shared behavior parity", () => {
     expect(screen.getByRole("tab", { name: "Activity" })).toHaveFocus();
     expect(onValueChange).toHaveBeenCalledWith("activity");
     expect(screen.getByRole("tabpanel")).toHaveTextContent("Activity panel");
+  });
+
+  it("uses shared navigation behavior for Menu and SideNav", () => {
+    const onMenuSelect = vi.fn();
+    const onSideNavSelect = vi.fn();
+
+    render(
+      <>
+        <Menu
+          defaultOpen
+          items={[
+            { id: "overview", label: "Overview" },
+            { id: "disabled", label: "Disabled", disabled: true },
+            { id: "audit", label: "Audit", onSelect: onMenuSelect },
+          ]}
+          trigger={<Button>Actions</Button>}
+        />
+        <SideNav
+          aria-label="Workspace navigation"
+          items={[
+            { id: "home", label: "Home" },
+            { id: "disabled-nav", label: "Disabled nav", disabled: true },
+            { id: "reports", label: "Reports" },
+          ]}
+          onSelect={onSideNavSelect}
+        />
+      </>,
+    );
+
+    const overview = screen.getByRole("menuitem", { name: "Overview" });
+    overview.focus();
+    fireEvent.keyDown(screen.getByRole("menu"), { key: "End" });
+    expect(screen.getByRole("menuitem", { name: "Audit" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menu"), { key: "Enter" });
+    expect(onMenuSelect).toHaveBeenCalledTimes(1);
+
+    const home = screen.getByRole("button", { name: "Home" });
+    home.focus();
+    fireEvent.keyDown(home, { key: "ArrowDown" });
+    expect(screen.getByRole("button", { name: "Reports" })).toHaveFocus();
+    fireEvent.click(screen.getByRole("button", { name: "Reports" }), {
+      detail: 0,
+    });
+    expect(onSideNavSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "reports" }),
+    );
+  });
+
+  it("routes overlay dismissal through the shared lifecycle controller", () => {
+    const onOpenChange = vi.fn();
+
+    render(
+      <Dialog onOpenChange={onOpenChange} open title="Review changes">
+        Review body
+      </Dialog>,
+    );
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });

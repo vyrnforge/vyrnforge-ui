@@ -78,8 +78,8 @@ components or complete GMF2.
 - MF-5008: Autocomplete behavior — implemented
 - MF-5009: MultiSelect behavior — implemented
 - MF-5010: Transfer List behavior — implemented
-- MF-5011: Menu and SideNav navigation behavior
-- MF-5012: overlay lifecycle and DOM-adapter boundary
+- MF-5011: Menu and SideNav navigation behavior — implemented
+- MF-5012: overlay lifecycle and DOM-adapter boundary — implemented
 - MF-5013: Dialog, Drawer, Popover, and Tooltip controllers
 - MF-5014: Toast and ConfirmDialog behavior
 - MF-5015: React component adoption

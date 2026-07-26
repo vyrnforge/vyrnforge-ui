@@ -1,55 +1,34 @@
-import { useEffect, useRef } from "react";
+import {
+  createOverlayLayerRegistry,
+  type OverlayLayerHandle,
+} from "@vyrnforge/ui-behaviors";
+import { useEffect, useRef, useState } from "react";
 
-type OverlayEntry = {
-  id: number;
-  order: number;
-};
-
-const overlays = new Map<number, OverlayEntry>();
-let nextOverlayId = 1;
-let nextOrder = 1;
-
-function registerOverlay(id: number) {
-  overlays.set(id, { id, order: nextOrder++ });
-}
-
-function unregisterOverlay(id: number) {
-  overlays.delete(id);
-}
-
-function isTopmostOverlay(id: number) {
-  let topmost: OverlayEntry | undefined;
-
-  overlays.forEach((entry) => {
-    if (!topmost || entry.order > topmost.order) {
-      topmost = entry;
-    }
-  });
-
-  return topmost?.id === id;
-}
+const overlayRegistry = createOverlayLayerRegistry({ baseStackIndex: 1000 });
 
 export function useOverlayStack(enabled: boolean) {
-  const idRef = useRef<number | undefined>(undefined);
-
-  if (idRef.current === undefined) {
-    idRef.current = nextOverlayId++;
-  }
+  const handleRef = useRef<OverlayLayerHandle | null>(null);
+  const [stackIndex, setStackIndex] = useState(1000);
 
   useEffect(() => {
     if (!enabled) {
+      handleRef.current = null;
+      setStackIndex(1000);
       return;
     }
 
-    registerOverlay(idRef.current!);
+    const handle = overlayRegistry.register();
+    handleRef.current = handle;
+    setStackIndex(handle.stackIndex);
 
     return () => {
-      unregisterOverlay(idRef.current!);
+      handle.release();
+      if (handleRef.current === handle) handleRef.current = null;
     };
   }, [enabled]);
 
   return {
-    isTopmost: () => isTopmostOverlay(idRef.current!),
-    zIndex: 1000 + idRef.current!
+    isTopmost: () => handleRef.current?.isTopmost() ?? true,
+    zIndex: stackIndex,
   };
 }

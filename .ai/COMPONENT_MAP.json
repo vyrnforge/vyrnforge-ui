@@ -35,7 +35,9 @@
         "collections",
         "selection",
         "validation",
-        "behavior events"
+        "behavior events",
+        "navigation intent",
+        "overlay lifecycle and positioning"
       ],
       "css": []
     },

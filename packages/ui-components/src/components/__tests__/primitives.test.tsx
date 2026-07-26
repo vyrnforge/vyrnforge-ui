@@ -1,3 +1,4 @@
+import { fireEvent } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "../../../../../tests/dom";
@@ -798,30 +799,23 @@ describe("@vyrnforge/ui-components primitives", () => {
 
   it("renders SideNav active state and calls onSelect", () => {
     const onSelect = vi.fn();
-    const element = SideNav({
-      activeId: "orders",
-      items: [
-        { id: "overview", label: "Overview" },
-        { id: "orders", label: "Orders" },
-      ],
-      onSelect,
-    });
-    const markup = renderToStaticMarkup(element);
-    const scroll = Array.isArray(element.props.children)
-      ? element.props.children[1]
-      : undefined;
-    const list = scroll?.props.children;
-    const entries = list?.props.children;
-    const activeEntry = Array.isArray(entries) ? entries[1] : undefined;
-    const activeButton = Array.isArray(activeEntry?.props.children)
-      ? activeEntry.props.children[0]
-      : undefined;
+    const { container } = render(
+      <SideNav
+        activeId="orders"
+        items={[
+          { id: "overview", label: "Overview" },
+          { id: "orders", label: "Orders" },
+        ]}
+        onSelect={onSelect}
+      />,
+    );
+    const activeButton = screen.getByRole("button", { name: "Orders" });
 
-    activeButton?.props.onClick();
+    fireEvent.click(activeButton);
 
-    expect(markup).toContain("vf-side-nav__item--active");
-    expect(markup).toContain("vf-side-nav__scroll");
-    expect(markup).toContain('aria-current="page"');
+    expect(activeButton).toHaveClass("vf-side-nav__item--active");
+    expect(container.querySelector(".vf-side-nav__scroll")).toBeInTheDocument();
+    expect(activeButton).toHaveAttribute("aria-current", "page");
     expect(onSelect).toHaveBeenCalledWith({ id: "orders", label: "Orders" });
   });
 

@@ -149,11 +149,13 @@
       "MF-5007",
       "MF-5008",
       "MF-5009",
-      "MF-5010"
+      "MF-5010",
+      "MF-5011",
+      "MF-5012"
     ],
     "metadata": "docs/metadata/behavior-foundations.json",
     "gate": "GMF2",
     "gateStatus": "in-progress",
-    "currentBatch": "MF-5008-MF-5010"
+    "currentBatch": "MF-5011-MF-5012"
   }
 }

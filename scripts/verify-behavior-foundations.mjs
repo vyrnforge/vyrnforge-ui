@@ -8,7 +8,7 @@ const repositoryRoot = path.resolve(
 );
 
 const expectedTasks = Array.from(
-  { length: 10 },
+  { length: 12 },
   (_, index) => `MF-${5001 + index}`,
 );
 const expectedReasons = [
@@ -36,6 +36,8 @@ const requiredSourceFiles = [
   "packages/ui-behaviors/src/autocomplete.ts",
   "packages/ui-behaviors/src/multi-select.ts",
   "packages/ui-behaviors/src/transfer-list.ts",
+  "packages/ui-behaviors/src/navigation.ts",
+  "packages/ui-behaviors/src/overlay.ts",
   "packages/ui-behaviors/src/index.ts",
 ];
 const requiredDocuments = [
@@ -98,8 +100,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S5") {
     failures.push("behavior foundation sprint must be S5");
   }
-  if (metadata.program?.batch !== "MF-5001-MF-5010") {
-    failures.push("behavior foundation batch must be MF-5001-MF-5010");
+  if (metadata.program?.batch !== "MF-5001-MF-5012") {
+    failures.push("behavior foundation batch must be MF-5001-MF-5012");
   }
   if (metadata.program?.status !== "implemented") {
     failures.push("behavior foundation status must be implemented");
@@ -139,11 +141,33 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     ["autocomplete", "createAutocompleteController"],
     ["multiSelect", "createMultiSelectController"],
     ["transferList", "createTransferListController"],
+    ["navigation", "createNavigationController"],
   ];
   for (const [contractName, factory] of expectedFactories) {
     if (metadata.contracts?.[contractName]?.factory !== factory) {
       failures.push(`${contractName} factory must be ${factory}`);
     }
+  }
+  if (
+    metadata.contracts?.overlay?.lifecycleFactory !==
+    "createOverlayLifecycleController"
+  ) {
+    failures.push(
+      "overlay lifecycleFactory must be createOverlayLifecycleController",
+    );
+  }
+  if (
+    metadata.contracts?.overlay?.layerRegistryFactory !==
+    "createOverlayLayerRegistry"
+  ) {
+    failures.push(
+      "overlay layerRegistryFactory must be createOverlayLayerRegistry",
+    );
+  }
+  if (
+    metadata.contracts?.overlay?.positionResolver !== "resolveOverlayPosition"
+  ) {
+    failures.push("overlay positionResolver must be resolveOverlayPosition");
   }
 
   const packageJson = readJson(root, "packages/ui-behaviors/package.json");
@@ -185,6 +209,10 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "createAutocompleteController",
     "createMultiSelectController",
     "createTransferListController",
+    "createNavigationController",
+    "createOverlayLifecycleController",
+    "createOverlayLayerRegistry",
+    "resolveOverlayPosition",
   ]);
 
   const eventSource = read(root, "packages/ui-behaviors/src/events.ts");
@@ -208,6 +236,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "Autocomplete",
     "MultiSelect",
     "Transfer List",
+    "Navigation",
+    "Overlay lifecycle",
   ]);
 
   const roadmap = read(root, "docs/roadmap/00-master-roadmap.md");
@@ -281,6 +311,34 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
       "packages/ui-components/src/components/TransferList/useTransferList.ts",
       "createTransferListController",
     ],
+    [
+      "packages/ui-components/src/components/Menu/Menu.tsx",
+      "useNavigationBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/SideNav/SideNav.tsx",
+      "useNavigationBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Popover/Popover.tsx",
+      "useOverlayBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Dialog/Dialog.tsx",
+      "useOverlayBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Drawer/Drawer.tsx",
+      "useOverlayBehavior",
+    ],
+    [
+      "packages/ui-components/src/internal/overlay/overlayStack.ts",
+      "createOverlayLayerRegistry",
+    ],
+    [
+      "packages/ui-components/src/internal/overlay/useAnchoredPosition.ts",
+      "resolveOverlayPosition",
+    ],
   ];
   for (const [relativePath, marker] of migratedComponents) {
     const source = read(root, relativePath);
@@ -302,6 +360,9 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
       "Autocomplete",
       "MultiSelect",
       "TransferList",
+      "Menu",
+      "SideNav",
+      "Dialog",
     ],
   );
 
@@ -362,6 +423,6 @@ if (
 ) {
   assertBehaviorFoundations();
   console.log(
-    "Behavior foundations passed: MF-5001 through MF-5010 contracts, React adapters, metadata, docs, and quality integration are complete.",
+    "Behavior foundations passed: MF-5001 through MF-5012 contracts, React adapters, metadata, docs, and quality integration are complete.",
   );
 }
