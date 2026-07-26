@@ -1,19 +1,26 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { joinClassNames } from "../../utils/classNames";
-import { useOverlayStack } from "./overlayStack";
 import { OverlayTopmostContext } from "./overlayContext";
+import { useOverlayStack } from "./overlayStack";
 import type { DismissableLayerProps } from "./overlay.types";
 
 function eventIsWithin(
   event: Event,
   layer: HTMLElement | null,
-  branches: DismissableLayerProps["branches"]
+  branches: DismissableLayerProps["branches"],
 ) {
-  const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+  const path =
+    typeof event.composedPath === "function" ? event.composedPath() : [];
   const includes = (element: HTMLElement | null | undefined) =>
-    Boolean(element && (path.includes(element) || element.contains(event.target as Node | null)));
+    Boolean(
+      element &&
+      (path.includes(element) || element.contains(event.target as Node | null)),
+    );
 
-  return includes(layer) || branches?.some((branch) => includes(branch.current));
+  return (
+    includes(layer) ||
+    (branches?.some((branch) => includes(branch.current)) ?? false)
+  );
 }
 
 export function DismissableLayer({
@@ -28,24 +35,20 @@ export function DismissableLayer({
   onEscapeKeyDown,
   onLayerChange,
   onOutsidePointerDown,
-  style
+  style,
 }: DismissableLayerProps) {
   const layerRef = useRef<HTMLDivElement>(null);
   const { isTopmost, zIndex } = useOverlayStack(enabled);
 
   useEffect(() => {
-    if (!enabled || typeof document === "undefined") {
-      return;
-    }
+    if (!enabled || typeof document === "undefined") return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || !isTopmost()) {
-        return;
-      }
+      if (event.key !== "Escape" || !isTopmost()) return;
 
       onEscapeKeyDown?.(event);
       if (dismissOnEscape && !event.defaultPrevented) {
-        onDismiss?.();
+        onDismiss?.("escape-key");
       }
     };
 
@@ -60,9 +63,7 @@ export function DismissableLayer({
       }
 
       onOutsidePointerDown?.(event);
-      if (!event.defaultPrevented) {
-        onDismiss?.();
-      }
+      if (!event.defaultPrevented) onDismiss?.("outside-pointer");
     };
 
     const handleFocusIn = (event: FocusEvent) => {
@@ -74,7 +75,7 @@ export function DismissableLayer({
         return;
       }
 
-      onDismiss?.();
+      onDismiss?.("outside-focus");
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -95,7 +96,7 @@ export function DismissableLayer({
     isTopmost,
     onDismiss,
     onEscapeKeyDown,
-    onOutsidePointerDown
+    onOutsidePointerDown,
   ]);
 
   return (
@@ -106,7 +107,9 @@ export function DismissableLayer({
           layerRef.current = element;
           onLayerChange?.(element);
         }}
-        style={{ ...style, "--vf-overlay-stack-index": zIndex } as CSSProperties}
+        style={
+          { ...style, "--vf-overlay-stack-index": zIndex } as CSSProperties
+        }
       >
         {children}
       </div>

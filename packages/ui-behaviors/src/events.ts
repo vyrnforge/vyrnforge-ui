@@ -22,11 +22,13 @@ export interface BehaviorEvent<
   readonly reason: TReason;
 }
 
-export type BehaviorEventListener<TEvent extends BehaviorEvent> = (
-  event: TEvent,
-) => void;
+export type BehaviorEventListener<
+  TEvent extends BehaviorEvent<string, unknown, string>,
+> = (event: TEvent) => void;
 
-export interface BehaviorEventChannel<TEvent extends BehaviorEvent> {
+export interface BehaviorEventChannel<
+  TEvent extends BehaviorEvent<string, unknown, string>,
+> {
   subscribe(listener: BehaviorEventListener<TEvent>): BehaviorUnsubscribe;
   emit(event: TEvent): void;
   clear(): void;
@@ -48,7 +50,7 @@ export function createBehaviorEvent<
 }
 
 export function createBehaviorEventChannel<
-  TEvent extends BehaviorEvent,
+  TEvent extends BehaviorEvent<string, unknown, string>,
 >(): BehaviorEventChannel<TEvent> {
   const listeners = new Set<BehaviorEventListener<TEvent>>();
 

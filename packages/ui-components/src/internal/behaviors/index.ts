@@ -5,3 +5,5 @@ export { useTabsBehavior } from "./useTabsBehavior";
 export { useToggleBehavior } from "./useToggleBehavior";
 export { useToggleGroupBehavior } from "./useToggleGroupBehavior";
 export { useMultiSelectBehavior } from "./useMultiSelectBehavior";
+export { useNavigationBehavior } from "./useNavigationBehavior";
+export { useOverlayBehavior } from "./useOverlayBehavior";

@@ -1,11 +1,12 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
-  useState,
   type KeyboardEvent,
 } from "react";
 import { useControllableState } from "../../hooks";
+import { useNavigationBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import { Popover } from "../Popover";
 import type { MenuItem, MenuProps } from "./Menu.types";
@@ -21,72 +22,53 @@ export function Menu({
   trigger,
 }: MenuProps) {
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const focusFrameRef = useRef<number | null>(null);
   const [isOpen, setIsOpen] = useControllableState({
     value: open,
     defaultValue: defaultOpen,
     onChange: onOpenChange,
   });
-  const enabledIndexes = useMemo(
-    () =>
-      items
-        .map((item, index) => (item.disabled ? -1 : index))
-        .filter((index) => index >= 0),
+  const navigationItems = useMemo(
+    () => items.map((item) => ({ id: item.id, disabled: item.disabled })),
     [items],
   );
-  const [activeIndex, setActiveIndex] = useState(enabledIndexes[0] ?? -1);
+  const {
+    activeId,
+    moveActive: moveBehaviorActive,
+    select: selectBehaviorItem,
+    setActiveId,
+  } = useNavigationBehavior({
+    dismissOnSelect: true,
+    items: navigationItems,
+  });
+  const activeIndex = items.findIndex((item) => item.id === activeId);
 
-  const firstEnabledIndex = enabledIndexes[0] ?? -1;
-
-  const handleMenuRef = useCallback(
-    (element: HTMLDivElement | null) => {
-      if (focusFrameRef.current !== null) {
-        window.cancelAnimationFrame(focusFrameRef.current);
-        focusFrameRef.current = null;
-      }
-
-      if (!element || !isOpen || firstEnabledIndex < 0) {
-        return;
-      }
-
-      setActiveIndex(firstEnabledIndex);
-
-      focusFrameRef.current = window.requestAnimationFrame(() => {
-        focusFrameRef.current = null;
-
-        if (!element.isConnected) {
-          return;
-        }
-
-        itemRefs.current[firstEnabledIndex]?.focus({
-          preventScroll: true,
-        });
-      });
+  const focusItem = useCallback(
+    (id: string | null, preventScroll = false) => {
+      if (id === null) return;
+      const index = items.findIndex((item) => item.id === id);
+      itemRefs.current[index]?.focus({ preventScroll });
     },
-    [firstEnabledIndex, isOpen],
+    [items],
   );
 
-  const setActiveItem = (nextIndex: number) => {
-    setActiveIndex(nextIndex);
-    itemRefs.current[nextIndex]?.focus();
+  useEffect(() => {
+    if (!isOpen || typeof window === "undefined") return;
+
+    const firstId = moveBehaviorActive("first", "programmatic");
+    if (firstId === null) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      focusItem(firstId, true);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [focusItem, isOpen, moveBehaviorActive]);
+
+  const moveActive = (intent: "first" | "last" | "next" | "previous") => {
+    focusItem(moveBehaviorActive(intent));
   };
 
-  const moveActive = (direction: 1 | -1) => {
-    if (enabledIndexes.length === 0) {
-      return;
-    }
-
-    const currentPosition = Math.max(enabledIndexes.indexOf(activeIndex), 0);
-    const nextPosition =
-      (currentPosition + direction + enabledIndexes.length) %
-      enabledIndexes.length;
-    setActiveItem(enabledIndexes[nextPosition]);
-  };
-
-  const selectItem = (item: MenuItem) => {
-    if (item.disabled) {
-      return;
-    }
+  const selectItem = (item: MenuItem, reason: "keyboard" | "pointer") => {
+    if (!selectBehaviorItem(item.id, reason)) return;
 
     item.onSelect?.();
     setIsOpen(false);
@@ -95,34 +77,28 @@ export function Menu({
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
-      moveActive(1);
+      moveActive("next");
       return;
     }
-
     if (event.key === "ArrowUp") {
       event.preventDefault();
-      moveActive(-1);
+      moveActive("previous");
       return;
     }
-
     if (event.key === "Home") {
       event.preventDefault();
-      setActiveItem(enabledIndexes[0] ?? -1);
+      moveActive("first");
       return;
     }
-
     if (event.key === "End") {
       event.preventDefault();
-      setActiveItem(enabledIndexes[enabledIndexes.length - 1] ?? -1);
+      moveActive("last");
       return;
     }
-
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       const item = items[activeIndex];
-      if (item) {
-        selectItem(item);
-      }
+      if (item) selectItem(item, "keyboard");
     }
   };
 
@@ -139,7 +115,6 @@ export function Menu({
         aria-label="Menu"
         className={joinClassNames("vf-menu", `vf-menu--${size}`)}
         onKeyDown={handleKeyDown}
-        ref={handleMenuRef}
         role="menu"
         tabIndex={-1}
       >
@@ -155,13 +130,9 @@ export function Menu({
             )}
             disabled={item.disabled}
             key={item.id}
-            onClick={() => selectItem(item)}
-            onFocus={() => setActiveIndex(index)}
-            onMouseEnter={() => {
-              if (!item.disabled) {
-                setActiveIndex(index);
-              }
-            }}
+            onClick={() => selectItem(item, "pointer")}
+            onFocus={() => setActiveId(item.id, "user")}
+            onMouseEnter={() => setActiveId(item.id, "pointer")}
             ref={(element) => {
               itemRefs.current[index] = element;
             }}

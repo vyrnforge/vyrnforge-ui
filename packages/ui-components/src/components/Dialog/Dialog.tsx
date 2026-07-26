@@ -1,5 +1,11 @@
 import { useId } from "react";
-import { DismissableLayer, FocusScope, Portal, useScrollLock } from "../../internal/overlay";
+import { useOverlayBehavior } from "../../internal/behaviors";
+import {
+  DismissableLayer,
+  FocusScope,
+  Portal,
+  useScrollLock,
+} from "../../internal/overlay";
 import { joinClassNames } from "../../utils/classNames";
 import { CloseButton } from "../IconButton";
 import type { DialogProps } from "./Dialog.types";
@@ -18,15 +24,14 @@ export function Dialog({
   open,
   portalContainer,
   size = "md",
-  title
+  title,
 }: DialogProps) {
   const titleId = useId();
   const descriptionId = useId();
-  useScrollLock(open);
+  const behavior = useOverlayBehavior({ onOpenChange, open });
+  useScrollLock(behavior.isOpen);
 
-  if (!open) {
-    return null;
-  }
+  if (!behavior.isOpen) return null;
 
   return (
     <Portal container={portalContainer}>
@@ -36,7 +41,7 @@ export function Dialog({
             className="vf-dialog__layer"
             dismissOnEscape={closeOnEscape}
             dismissOnOutsidePointer={closeOnOverlayClick}
-            onDismiss={() => onOpenChange(false)}
+            onDismiss={behavior.dismiss}
           >
             <FocusScope
               initialFocusRef={initialFocusRef}
@@ -50,14 +55,22 @@ export function Dialog({
                 aria-label={title ? undefined : "Dialog"}
                 aria-labelledby={title ? titleId : undefined}
                 aria-modal="true"
-                className={joinClassNames("vf-dialog__panel", `vf-dialog__panel--${size}`, className)}
+                className={joinClassNames(
+                  "vf-dialog__panel",
+                  `vf-dialog__panel--${size}`,
+                  className,
+                )}
                 data-vf-focus-fallback
                 role="dialog"
                 tabIndex={-1}
               >
                 <div className="vf-dialog__header">
                   <div className="vf-dialog__heading">
-                    {title && <h2 className="vf-dialog__title" id={titleId}>{title}</h2>}
+                    {title && (
+                      <h2 className="vf-dialog__title" id={titleId}>
+                        {title}
+                      </h2>
+                    )}
                     {description && (
                       <p className="vf-dialog__description" id={descriptionId}>
                         {description}
@@ -67,7 +80,7 @@ export function Dialog({
                   <CloseButton
                     aria-label="Close dialog"
                     className="vf-overlay-close"
-                    onClick={() => onOpenChange(false)}
+                    onClick={() => behavior.dismiss("close-button")}
                   />
                 </div>
                 {children && <div className="vf-dialog__body">{children}</div>}

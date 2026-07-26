@@ -7,6 +7,8 @@ import {
   createCollectionController,
   createControllableState,
   createMultiSelectController,
+  createNavigationController,
+  createOverlayLifecycleController,
   createSelectionController,
   createTransferListController,
   vyrnForgeUiBehaviorsVersion,
@@ -26,6 +28,8 @@ describe("ui-behaviors public surface", () => {
     expect(createSelectionController().getSnapshot().selectedKeys).toEqual([]);
     expect(createAutocompleteController().getSnapshot().items).toEqual([]);
     expect(createMultiSelectController().getSnapshot().items).toEqual([]);
+    expect(createNavigationController().getSnapshot().items).toEqual([]);
+    expect(createOverlayLifecycleController().getSnapshot().open).toBe(false);
     expect(createTransferListController().getSnapshot().items).toEqual([]);
     expect(behaviorChangeReasons).toContain("keyboard");
   });

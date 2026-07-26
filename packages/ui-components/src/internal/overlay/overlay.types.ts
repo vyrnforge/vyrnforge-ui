@@ -1,14 +1,11 @@
+import type {
+  OverlayDismissReason,
+  OverlayPlacement,
+  OverlayResolvedPosition,
+} from "@vyrnforge/ui-behaviors";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 
-export type OverlayPlacement =
-  | "top"
-  | "top-start"
-  | "top-end"
-  | "bottom"
-  | "bottom-start"
-  | "bottom-end"
-  | "left"
-  | "right";
+export type { OverlayPlacement } from "@vyrnforge/ui-behaviors";
 
 export type AnchoredPositionOptions = {
   anchor: HTMLElement | null;
@@ -21,10 +18,7 @@ export type AnchoredPositionOptions = {
   shift?: boolean;
 };
 
-export type AnchoredPosition = {
-  x: number;
-  y: number;
-  resolvedPlacement: OverlayPlacement;
+export type AnchoredPosition = OverlayResolvedPosition & {
   strategy: "fixed";
   ready: boolean;
   update: () => void;
@@ -42,7 +36,7 @@ export type DismissableLayerProps = {
   dismissOnEscape?: boolean;
   dismissOnOutsidePointer?: boolean;
   dismissOnOutsideFocus?: boolean;
-  onDismiss?: () => void;
+  onDismiss?: (reason: OverlayDismissReason) => void;
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
   onOutsidePointerDown?: (event: PointerEvent) => void;
   onLayerChange?: (element: HTMLDivElement | null) => void;

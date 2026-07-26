@@ -46,11 +46,29 @@ and DOM identifiers.
 - event and snapshot subscription channels;
 - reasoned collection, active-item, value, and selection events.
 
+### MF-5011 — Menu and SideNav navigation
+
+- deterministic navigation items and enabled-item projection;
+- roving active intent with first, last, next, and previous movement;
+- disabled-item skipping and selected-item synchronization;
+- explicit selection and dismissal reasons;
+- React retains refs, tab stops, and DOM focus execution.
+
+### MF-5012 — Overlay lifecycle and DOM adapters
+
+- controlled and uncontrolled open lifecycle;
+- explicit trigger, keyboard, pointer, focus, escape, outside interaction,
+  selection, close-button, and programmatic reasons;
+- framework-neutral layer ordering and pure anchored-position resolution;
+- focus, layer, and position adapter contracts;
+- React retains portals, focus trapping, global listeners, DOM measurement,
+  scroll locking, and CSS application.
+
 ## Still deferred within S5
 
-Component-specific migration begins with MF-5005. No React component uses these
-controllers merely because the foundations exist. React API and browser parity
-must remain explicit evidence for each migration batch.
+MF-5013 through MF-5016 remain. Component-specific Dialog, Drawer, Popover,
+Tooltip, Toast, and ConfirmDialog controllers, the final React adoption audit,
+and the GMF2 parity gate must remain explicit follow-up evidence.
 
 ## Validation
 
@@ -62,9 +80,10 @@ npm run verify:package-boundaries
 
 ## React adoption status
 
-The first adopted component families are Button, ToggleButton,
+The adopted component families now include Button, ToggleButton,
 ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider,
-Rating, and Tabs. React remains responsible for rendering and DOM execution;
+Rating, Tabs, Autocomplete, MultiSelect, Transfer List, Menu, SideNav, and the
+shared Popover, Dialog, and Drawer overlay lifecycle adapters. React remains responsible for rendering and DOM execution;
 `ui-behaviors` owns only portable state and transition decisions.
 
 ## Composite selection adoption

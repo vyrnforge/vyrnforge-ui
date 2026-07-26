@@ -7,7 +7,7 @@ import {
   type KeyboardEvent,
   type ReactElement,
 } from "react";
-import { useControllableState } from "../../hooks";
+import { useOverlayBehavior } from "../../internal/behaviors";
 import {
   DismissableLayer,
   FocusScope,
@@ -43,10 +43,10 @@ export function Popover({
   const [contentElement, setContentElement] = useState<HTMLDivElement | null>(
     null,
   );
-  const [isOpen, setIsOpen] = useControllableState({
-    value: open,
-    defaultValue: defaultOpen,
-    onChange: onOpenChange,
+  const { dismiss, isOpen, toggle } = useOverlayBehavior({
+    defaultOpen,
+    onOpenChange,
+    open,
   });
 
   const position = useAnchoredPosition({
@@ -73,7 +73,7 @@ export function Popover({
       onKeyDown={(event: KeyboardEvent<HTMLSpanElement>) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          setIsOpen(!isOpen);
+          toggle("keyboard");
         }
       }}
       role="button"
@@ -94,8 +94,8 @@ export function Popover({
     >
       <span
         className="vf-popover__trigger"
+        onClick={() => toggle("pointer")}
         ref={setTriggerElement}
-        onClick={() => setIsOpen(!isOpen)}
       >
         {renderedTrigger}
       </span>
@@ -111,7 +111,7 @@ export function Popover({
             dismissOnOutsidePointer={
               closeOnOutsidePointer ?? closeOnOutsideClick
             }
-            onDismiss={() => setIsOpen(false)}
+            onDismiss={dismiss}
             onLayerChange={setContentElement}
             style={
               {

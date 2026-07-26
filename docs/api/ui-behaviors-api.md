@@ -191,3 +191,25 @@ independent panel queries, visible selection, selected/all moves, disabled-item
 rejection, controlled target-value proposals, and panel selection events.
 Rendering, checkboxes, hidden form inputs, and pointer focus remain renderer
 responsibilities.
+
+## Navigation
+
+`createNavigationController()` owns renderer-neutral roving active-item intent
+for Menu and SideNav structures. It provides deterministic ordering,
+first/last/next/previous movement, disabled-item skipping, selected-item
+synchronization, and explicit selection and dismissal reasons.
+
+The controller never stores DOM nodes or calls `focus()`. Renderer adapters map
+its `activeId` to `tabIndex`, refs, and framework-specific focus execution.
+
+## Overlay lifecycle
+
+`createOverlayLifecycleController()` owns controlled or uncontrolled open state
+and explicit open/dismiss reasons. `createOverlayLayerRegistry()` provides a
+framework-neutral topmost-layer contract, while `resolveOverlayPosition()`
+performs pure anchored-position calculations.
+
+The package exports `OverlayFocusAdapter`, `OverlayLayerRegistry`, and
+`OverlayPositionAdapter` contracts. React continues to own portals, focus
+trapping/restoration, DOM measurement, global listeners, scroll locking, and
+CSS application.

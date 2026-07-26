@@ -1,15 +1,7 @@
+import type { OverlayPlacement } from "@vyrnforge/ui-behaviors";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 
-export type PopoverPlacement =
-  | "bottom"
-  | "bottom-start"
-  | "bottom-end"
-  | "top"
-  | "top-start"
-  | "top-end"
-  | "right"
-  | "left";
-
+export type PopoverPlacement = OverlayPlacement;
 export type PopoverAlign = "start" | "center" | "end";
 
 export type PopoverProps = {

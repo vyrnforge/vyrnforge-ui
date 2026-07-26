@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S5",
-    "batch": "MF-5001-MF-5010",
+    "batch": "MF-5001-MF-5012",
     "status": "implemented",
     "gate": "GMF2",
     "gateStatus": "in-progress",
@@ -57,6 +57,16 @@
     {
       "id": "MF-5010",
       "name": "Transfer List behavior",
+      "status": "done"
+    },
+    {
+      "id": "MF-5011",
+      "name": "Menu and SideNav navigation behavior",
+      "status": "done"
+    },
+    {
+      "id": "MF-5012",
+      "name": "Overlay lifecycle and DOM-adapter boundary",
       "status": "done"
     }
   ],
@@ -209,6 +219,35 @@
         "controlled-target-proposals",
         "independent-panel-filtering"
       ]
+    },
+    "navigation": {
+      "factory": "createNavigationController",
+      "reactAdapters": ["Menu", "SideNav"],
+      "rules": [
+        "roving-active-item",
+        "home-end-navigation",
+        "disabled-items-skipped",
+        "selection-reasons",
+        "dismissal-reasons"
+      ]
+    },
+    "overlay": {
+      "lifecycleFactory": "createOverlayLifecycleController",
+      "layerRegistryFactory": "createOverlayLayerRegistry",
+      "positionResolver": "resolveOverlayPosition",
+      "reactAdapters": ["Popover", "Dialog", "Drawer"],
+      "adapterContracts": [
+        "OverlayFocusAdapter",
+        "OverlayLayerRegistry",
+        "OverlayPositionAdapter"
+      ],
+      "rules": [
+        "controlled-open-proposals",
+        "explicit-dismissal-reasons",
+        "renderer-owned-focus",
+        "renderer-owned-dom-measurement",
+        "framework-neutral-layer-order"
+      ]
     }
   },
   "boundaries": {
@@ -233,12 +272,5 @@
     "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run quality"
   ],
-  "remainingGmf2Tasks": [
-    "MF-5011",
-    "MF-5012",
-    "MF-5013",
-    "MF-5014",
-    "MF-5015",
-    "MF-5016"
-  ]
+  "remainingGmf2Tasks": ["MF-5013", "MF-5014", "MF-5015", "MF-5016"]
 }
