@@ -62,6 +62,19 @@ export const fixtureRegistry: readonly FixtureCase[] = [
     densities: allDensities,
   },
   {
+    id: "native-form-foundation",
+    title: "Native form foundation",
+    componentMetadataId: "text-input",
+    category: "form-control",
+    route: "/fixtures/native/form-foundation",
+    renderKey: "native-form-foundation",
+    purpose:
+      "Proves ElementInternals submission, validity, disabled, reset, restoration, and typed event behavior in a real form.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+  },
+  {
     id: "text-input-validation",
     title: "Text input validation",
     componentMetadataId: "text-input",

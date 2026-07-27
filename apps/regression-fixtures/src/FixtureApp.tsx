@@ -32,6 +32,10 @@ import {
   type DataGridColumnDef,
 } from "@vyrnforge/ui-data-grid";
 import {
+  NativeFormProbeElement,
+  registerNativeFormProbeElement,
+} from "./nativeFormFoundation";
+import {
   fixtureDensities,
   fixtureThemes,
   resolveFixtureRoute,
@@ -314,6 +318,106 @@ function ButtonDisabledFixture() {
     <Button disabled variant="primary">
       Create case
     </Button>
+  );
+}
+
+function NativeFormFoundationFixture() {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<NativeFormProbeElement | null>(null);
+  const [eventState, setEventState] = useState("No native event yet");
+  const [submission, setSubmission] = useState("No submission yet");
+
+  useEffect(() => {
+    registerNativeFormProbeElement();
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const element = document.createElement(
+      "vf-native-form-probe",
+    ) as NativeFormProbeElement;
+    element.name = "account";
+    element.required = true;
+    element.value = "initial";
+
+    const onValueChange = (event: Event) => {
+      const detail = (event as CustomEvent<{ value: string }>).detail;
+      setEventState(`Value event: ${detail.value}`);
+    };
+    const onInvalid = (event: Event) => {
+      const detail = (event as CustomEvent<{ message: string }>).detail;
+      setEventState(`Invalid event: ${detail.message}`);
+    };
+    const onReset = () => setEventState("Reset event: form-reset");
+
+    element.addEventListener("vf-value-change", onValueChange);
+    element.addEventListener("vf-invalid", onInvalid);
+    element.addEventListener("vf-reset", onReset);
+    mount.replaceChildren(element);
+    elementRef.current = element;
+
+    return () => {
+      element.removeEventListener("vf-value-change", onValueChange);
+      element.removeEventListener("vf-invalid", onInvalid);
+      element.removeEventListener("vf-reset", onReset);
+      element.remove();
+      elementRef.current = null;
+    };
+  }, []);
+
+  return (
+    <form
+      className="vf-fixture__stack"
+      data-vf-fixture-region="native-form"
+      onSubmit={(event) => {
+        event.preventDefault();
+        const entries = [...new FormData(event.currentTarget).entries()];
+        setSubmission(
+          entries.length > 0
+            ? entries
+                .map(([name, value]) => `${name}=${String(value)}`)
+                .join(", ")
+            : "No form value",
+        );
+      }}
+    >
+      <div ref={mountRef} />
+      <div className="vf-fixture__actions">
+        <button
+          data-vf-fixture-action="native-set-value"
+          onClick={() => elementRef.current?.commitValue("updated")}
+          type="button"
+        >
+          Set native value
+        </button>
+        <button
+          data-vf-fixture-action="native-clear-value"
+          onClick={() => elementRef.current?.commitValue("")}
+          type="button"
+        >
+          Clear native value
+        </button>
+        <button
+          data-vf-fixture-action="native-toggle-disabled"
+          onClick={() => {
+            const element = elementRef.current;
+            if (element) element.disabled = !element.disabled;
+          }}
+          type="button"
+        >
+          Toggle native disabled
+        </button>
+        <button data-vf-fixture-action="native-submit" type="submit">
+          Submit native form
+        </button>
+        <button data-vf-fixture-action="native-reset" type="reset">
+          Reset native form
+        </button>
+      </div>
+      <output data-vf-fixture-region="native-form-event">{eventState}</output>
+      <output data-vf-fixture-region="native-form-submission">
+        {submission}
+      </output>
+    </form>
   );
 }
 
@@ -963,6 +1067,8 @@ function FixtureContent({
       return <ButtonBasicFixture />;
     case "button-disabled":
       return <ButtonDisabledFixture />;
+    case "native-form-foundation":
+      return <NativeFormFoundationFixture />;
     case "text-input-validation":
       return <TextInputValidationFixture />;
     case "tabs-controlled-uncontrolled":

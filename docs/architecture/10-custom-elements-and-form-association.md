@@ -47,8 +47,19 @@ opt-in primitive reflection, preserves object and array values as properties,
 and batches connected updates in a microtask. Changes made while disconnected
 are retained and processed after reconnect.
 
-This foundation does not introduce Shadow DOM, form association, focus
-management, or component-specific rendering.
+EL-6003 adds canonical typed `vf-*` event dispatchers. Events bubble and are
+composed by default, while concrete contracts may opt into cancellation or a
+more restrictive propagation policy.
+
+EL-6004 adds `VyrnForgeFormAssociatedElement`, which lazily attaches
+`ElementInternals`, reflects shared form properties, forwards form values and
+restoration state, exposes native validity APIs, and translates reset,
+disabled, association, and restoration callbacks. A deterministic fallback
+preserves the public validity contract when ElementInternals is unavailable;
+it does not create a hidden-input second form model.
+
+This foundation does not introduce Shadow DOM, focus management, or
+component-specific rendering.
 
 ## Attribute and property lifecycle
 

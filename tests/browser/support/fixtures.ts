@@ -13,6 +13,7 @@ export const browserFixtureIds = {
   dialogFocus: "dialog-focus",
   drawerFocus: "drawer-focus",
   menuKeyboard: "menu-keyboard",
+  nativeFormFoundation: "native-form-foundation",
   multiSelectKeyboard: "multi-select-keyboard",
   popoverPosition: "popover-position",
   sliderRatingKeyboard: "slider-rating-keyboard",

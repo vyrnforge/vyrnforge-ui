@@ -1,7 +1,7 @@
 # `@vyrnforge/ui-elements` API
 
-EL-6001 and EL-6002 establish the registration, lifecycle, property, attribute,
-and update foundation used by later native component ports.
+EL-6001 through EL-6004 establish the registration, lifecycle, property,
+event, and form-association foundations used by later native component ports.
 
 ## Base element
 
@@ -13,12 +13,43 @@ and update foundation used by later native component ports.
 
 Concrete elements declare reactive properties with `static properties` and
 accessors backed by `getPropertyValue()` and `setPropertyValue()`. The base
-derives `observedAttributes`, upgrades pre-definition properties, parses
-primitive attributes, optionally reflects primitive properties, batches
-updates, and exposes `updateComplete`.
+derives `observedAttributes`, upgrades pre-definition properties, parses and
+optionally reflects primitive values, batches updates, and exposes
+`updateComplete`.
 
-Object and array values remain property-only. They are never serialized to
-attributes by the base.
+## Form-associated base
+
+- `VyrnForgeFormAssociatedElement`
+- `VyrnForgeFormAssociationMode`
+- `VyrnForgeFormInternals`
+- `VyrnForgeFormState`
+- `VyrnForgeFormStateRestoreMode`
+- `VyrnForgeFormValue`
+- `VyrnForgeValidityFlags`
+
+The base declares `static formAssociated = true`, attaches `ElementInternals`
+lazily, and exposes native form, labels, validity, validation message, and
+validation methods. Concrete controls use protected utilities to forward form
+values and restoration state, capture initial reset state, and translate form
+association, disabled, reset, and restoration callbacks.
+
+`name`, `disabled`, and `required` are shared reflected properties. Object and
+array component values remain property-only and concrete controls decide their
+submitted `string`, `File`, or `FormData` shape.
+
+## Events
+
+- `assertVyrnForgeEventName(name)`
+- `createVyrnForgeEvent(name, detail, options?)`
+- `dispatchVyrnForgeEvent(target, name, detail, options?)`
+- `createVyrnForgeEventDispatcher<TEvents>()`
+- `vyrnForgeEventDispatcher`
+- canonical detail interfaces and `VyrnForgeCanonicalEventDetailMap`
+
+Events use lowercase dash-cased `vf-*` names. They bubble and are composed by
+default; cancelability and propagation may be overridden only where the
+component contract requires it. The typed dispatcher factory lets a concrete
+element define its own detail map without introducing a framework event type.
 
 ## Registration
 
@@ -30,23 +61,10 @@ attributes by the base.
 - `getVyrnForgeElementRegistry()`
 - `registerVyrnForgeElements(registry?)`
 - `vyrnForgeElementDefinitions`
-- `VyrnForgeElementDefinition`
-- `VyrnForgeElementRegistration`
-- `VyrnForgeElementRegistry`
-- `VyrnForgeElementTagName`
 
 Registration accepts only lowercase `vf-*` tags, is idempotent, and returns
-whether each definition was newly registered. The package-root import has no
+whether each definition was newly registered. Package-root import has no
 registration side effect.
-
-## Events
-
-- `createVyrnForgeEvent(name, detail, options?)`
-- `dispatchVyrnForgeEvent(target, name, detail, options?)`
-- `VyrnForgeEventName`
-- `VyrnForgeEventOptions`
-
-EL-6003 expands typed event contracts for component-specific event detail maps.
 
 ## Entry points
 

@@ -180,7 +180,7 @@
         "@vyrnforge/ui-elements/style.css",
         "@vyrnforge/ui-elements/index.css"
       ],
-      "notes": "EL-6001 and EL-6002 registration, lifecycle, observed-attribute, property-upgrade, reflection, and update scheduling foundations are implemented. Public component renderers remain later S6 work."
+      "notes": "EL-6001 through EL-6004 registration, lifecycle, property reflection, typed vf-* event dispatch, and ElementInternals form foundations are implemented. Public component renderers remain later S6 work."
     },
     {
       "name": "@vyrnforge/ui-data-grid",

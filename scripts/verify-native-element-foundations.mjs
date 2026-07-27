@@ -7,13 +7,21 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const taskIds = Array.from({ length: 18 }, (_, index) => `EL-${6001 + index}`);
+const completedTaskIds = new Set(["EL-6001", "EL-6002", "EL-6003", "EL-6004"]);
 const requiredFiles = [
   "packages/ui-elements/src/base/VyrnForgeElement.ts",
   "packages/ui-elements/src/base/VyrnForgeElement.test.ts",
+  "packages/ui-elements/src/base/VyrnForgeFormAssociatedElement.ts",
+  "packages/ui-elements/src/base/VyrnForgeFormAssociatedElement.test.ts",
+  "packages/ui-elements/src/events.ts",
+  "packages/ui-elements/src/events.test.ts",
   "packages/ui-elements/src/registry.ts",
   "packages/ui-elements/src/registry.test.ts",
   "packages/ui-elements/src/register.ts",
   "packages/ui-elements/src/index.ts",
+  "apps/regression-fixtures/src/nativeFormFoundation.ts",
+  "apps/regression-fixtures/src/FixtureApp.tsx",
+  "tests/browser/native-form-foundation.spec.ts",
   "tests/consumers/native-html/architecture-probe.ts",
   "tests/consumers/native-html/fixture.json",
   "packages/ui-elements/README.md",
@@ -68,8 +76,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S6") {
     failures.push("native element foundation sprint must be S6");
   }
-  if (metadata.program?.batch !== "EL-6001-EL-6002") {
-    failures.push("native element foundation batch must be EL-6001-EL-6002");
+  if (metadata.program?.batch !== "EL-6003-EL-6004") {
+    failures.push("native element foundation batch must be EL-6003-EL-6004");
   }
   if (metadata.program?.status !== "in-progress") {
     failures.push("native element foundation status must be in-progress");
@@ -82,8 +90,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     (metadata.tasks ?? []).map((task) => [task.id, task.status]),
   );
   for (const taskId of taskIds) {
-    const expected =
-      taskId === "EL-6001" || taskId === "EL-6002" ? "done" : "planned";
+    const expected = completedTaskIds.has(taskId) ? "done" : "planned";
     if (tasks.get(taskId) !== expected) {
       failures.push(`${taskId} must be ${expected}`);
     }
@@ -141,6 +148,62 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     }
   }
 
+  const eventMetadata = metadata.events ?? {};
+  if (eventMetadata.namePattern !== "vf-*") {
+    failures.push("native event namePattern must be vf-*");
+  }
+  if (eventMetadata.dispatcherFactory !== "createVyrnForgeEventDispatcher") {
+    failures.push(
+      "native event dispatcherFactory must be createVyrnForgeEventDispatcher",
+    );
+  }
+  if (eventMetadata.defaults?.bubbles !== true) {
+    failures.push("native events must bubble by default");
+  }
+  if (eventMetadata.defaults?.composed !== true) {
+    failures.push("native events must be composed by default");
+  }
+  for (const name of [
+    "vf-value-change",
+    "vf-open-change",
+    "vf-selection-change",
+    "vf-invalid",
+    "vf-reset",
+  ]) {
+    if (!(eventMetadata.canonicalNames ?? []).includes(name)) {
+      failures.push(`native canonical event names must include ${name}`);
+    }
+  }
+
+  const formMetadata = metadata.formAssociation ?? {};
+  if (formMetadata.class !== "VyrnForgeFormAssociatedElement") {
+    failures.push(
+      "native form association class must be VyrnForgeFormAssociatedElement",
+    );
+  }
+  if (formMetadata.implementation !== "ElementInternals") {
+    failures.push("native form association must use ElementInternals");
+  }
+  if (formMetadata.formAssociated !== true) {
+    failures.push("native form base must declare formAssociated true");
+  }
+  for (const callback of [
+    "formAssociatedCallback",
+    "formDisabledCallback",
+    "formResetCallback",
+    "formStateRestoreCallback",
+  ]) {
+    if (!(formMetadata.callbacks ?? []).includes(callback)) {
+      failures.push(`native form callbacks must include ${callback}`);
+    }
+  }
+  if (
+    formMetadata.browserEvidence !==
+    "tests/browser/native-form-foundation.spec.ts"
+  ) {
+    failures.push("native form association must record real browser evidence");
+  }
+
   const packageJson = readJson(root, "packages/ui-elements/package.json");
   if (packageJson?.name !== "@vyrnforge/ui-elements") {
     failures.push("ui-elements package name is invalid");
@@ -175,6 +238,38 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     ],
   );
 
+  const eventSource = read(root, "packages/ui-elements/src/events.ts");
+  requireIncludes(failures, eventSource, "packages/ui-elements/src/events.ts", [
+    "assertVyrnForgeEventName",
+    "createVyrnForgeEventDispatcher",
+    "vyrnForgeEventDispatcher",
+    "bubbles: options.bubbles ?? true",
+    "composed: options.composed ?? true",
+    "VyrnForgeCanonicalEventDetailMap",
+  ]);
+
+  const formSource = read(
+    root,
+    "packages/ui-elements/src/base/VyrnForgeFormAssociatedElement.ts",
+  );
+  requireIncludes(
+    failures,
+    formSource,
+    "packages/ui-elements/src/base/VyrnForgeFormAssociatedElement.ts",
+    [
+      "static readonly formAssociated = true",
+      "ElementInternals",
+      "setFormValue",
+      "setValidity",
+      "formAssociatedCallback",
+      "formDisabledCallback",
+      "formResetCallback",
+      "formStateRestoreCallback",
+      'this.dispatchFormEvent("vf-reset"',
+      'this.dispatchFormEvent("vf-invalid"',
+    ],
+  );
+
   const registrySource = read(root, "packages/ui-elements/src/registry.ts");
   requireIncludes(
     failures,
@@ -191,20 +286,14 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   );
 
   const indexSource = read(root, "packages/ui-elements/src/index.ts");
-  requireIncludes(
-    failures,
-    indexSource,
-    "packages/ui-elements/src/index.ts",
-    "tests/consumers/native-html/architecture-probe.ts",
-    "tests/consumers/native-html/fixture.json",
-    [
-      "VyrnForgePropertyDeclaration",
-      "VyrnForgeElementDefinition",
-      "VyrnForgeElementRegistration",
-      "createVyrnForgeElementRegistration",
-      "registerVyrnForgeElementDefinitions",
-    ],
-  );
+  requireIncludes(failures, indexSource, "packages/ui-elements/src/index.ts", [
+    "VyrnForgeFormAssociatedElement",
+    "VyrnForgeCanonicalEventDetailMap",
+    "createVyrnForgeEventDispatcher",
+    "VyrnForgePropertyDeclaration",
+    "VyrnForgeElementDefinition",
+    "createVyrnForgeElementRegistration",
+  ]);
 
   const nativeProbe = read(
     root,
@@ -222,6 +311,28 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     ],
   );
 
+  const fixtureSource = read(
+    root,
+    "apps/regression-fixtures/src/FixtureApp.tsx",
+  );
+  requireIncludes(
+    failures,
+    fixtureSource,
+    "apps/regression-fixtures/src/FixtureApp.tsx",
+    ["new FormData", "registerNativeFormProbeElement"],
+  );
+
+  const browserEvidence = read(
+    root,
+    "tests/browser/native-form-foundation.spec.ts",
+  );
+  requireIncludes(
+    failures,
+    browserEvidence,
+    "tests/browser/native-form-foundation.spec.ts",
+    ["reportValidity", "native-toggle-disabled", "native-reset"],
+  );
+
   const packageRoot = read(root, "package.json");
   requireIncludes(failures, packageRoot, "package.json", [
     "test:native-element-foundations",
@@ -233,10 +344,10 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     failures.push("multi-framework currentSprint must be S6");
   }
   if (
-    multiFramework?.nativeElementFoundation?.currentBatch !== "EL-6001-EL-6002"
+    multiFramework?.nativeElementFoundation?.currentBatch !== "EL-6003-EL-6004"
   ) {
     failures.push(
-      "multi-framework nativeElementFoundation currentBatch must be EL-6001-EL-6002",
+      "multi-framework nativeElementFoundation currentBatch must be EL-6003-EL-6004",
     );
   }
   if (multiFramework?.nativeElementFoundation?.status !== "in-progress") {
@@ -246,13 +357,13 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   }
 
   const remaining = new Set(metadata.remainingGmf3Tasks ?? []);
-  for (const taskId of taskIds.slice(2)) {
+  for (const taskId of taskIds.slice(4)) {
     if (!remaining.has(taskId)) {
       failures.push(`remainingGmf3Tasks must include ${taskId}`);
     }
   }
-  if (remaining.size !== 16) {
-    failures.push("remainingGmf3Tasks must contain EL-6003 through EL-6018");
+  if (remaining.size !== 14) {
+    failures.push("remainingGmf3Tasks must contain EL-6005 through EL-6018");
   }
 
   return [...new Set(failures)].sort();
@@ -273,6 +384,6 @@ if (
 ) {
   assertNativeElementFoundations();
   console.log(
-    "Native element foundations passed: EL-6001 and EL-6002 registration, lifecycle, reflection, and update contracts are complete.",
+    "Native element foundations passed: EL-6001 through EL-6004 registration, lifecycle, typed events, and ElementInternals form contracts are complete.",
   );
 }
