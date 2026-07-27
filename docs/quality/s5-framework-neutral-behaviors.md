@@ -27,6 +27,8 @@ controllers:
 | MF-5012 | overlay lifecycle and DOM-adapter boundary        | implemented |
 | MF-5013 | Dialog, Drawer, Popover, and Tooltip controllers  | implemented |
 | MF-5014 | Toast and ConfirmDialog behavior                  | implemented |
+| MF-5015 | React behavior adoption and compatibility audit   | implemented |
+| MF-5016 | Shared-behavior parity gate                       | implemented |
 
 ## React adoption batches
 
@@ -57,6 +59,4 @@ event translation.
 
 ## Gate relationship
 
-MF-5001 through MF-5014 do not complete GMF2. The final React adoption and
-compatibility audit plus the closing parity gate remain scheduled as MF-5015
-and MF-5016.
+MF-5001 through MF-5016 complete GMF2. The React adoption audit classifies every public React component, closes the remaining IconButton action-state duplication, and records compatibility evidence. The closing parity gate is enforced by `verify:gmf2-closure`.

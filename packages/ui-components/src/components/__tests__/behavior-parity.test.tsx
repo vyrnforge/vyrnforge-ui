@@ -6,6 +6,7 @@ import {
   Button,
   Checkbox,
   Dialog,
+  IconButton,
   Menu,
   MultiSelect,
   RadioGroup,
@@ -25,6 +26,13 @@ describe("React adapters preserve shared behavior parity", () => {
   it("resolves Button loading through the shared action state", () => {
     render(<Button loading>Save</Button>);
     const button = screen.getByRole("button", { name: "Save" });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("resolves IconButton loading through the shared action state", () => {
+    render(<IconButton aria-label="Refresh" loading />);
+    const button = screen.getByRole("button", { name: "Refresh" });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
   });

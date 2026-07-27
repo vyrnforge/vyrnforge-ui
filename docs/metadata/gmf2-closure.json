@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "gate": "GMF2",
+  "status": "evidence-complete",
+  "program": "VyrnForge non-grid multi-framework beta",
+  "requiredCiGate": "ci-gate",
+  "tasks": [
+    {
+      "id": "MF-5001",
+      "status": "done"
+    },
+    {
+      "id": "MF-5002",
+      "status": "done"
+    },
+    {
+      "id": "MF-5003",
+      "status": "done"
+    },
+    {
+      "id": "MF-5004",
+      "status": "done"
+    },
+    {
+      "id": "MF-5005",
+      "status": "done"
+    },
+    {
+      "id": "MF-5006",
+      "status": "done"
+    },
+    {
+      "id": "MF-5007",
+      "status": "done"
+    },
+    {
+      "id": "MF-5008",
+      "status": "done"
+    },
+    {
+      "id": "MF-5009",
+      "status": "done"
+    },
+    {
+      "id": "MF-5010",
+      "status": "done"
+    },
+    {
+      "id": "MF-5011",
+      "status": "done"
+    },
+    {
+      "id": "MF-5012",
+      "status": "done"
+    },
+    {
+      "id": "MF-5013",
+      "status": "done"
+    },
+    {
+      "id": "MF-5014",
+      "status": "done"
+    },
+    {
+      "id": "MF-5015",
+      "status": "done"
+    },
+    {
+      "id": "MF-5016",
+      "status": "done"
+    }
+  ],
+  "packageFoundations": {
+    "@vyrnforge/ui-behaviors": {
+      "status": "complete",
+      "directory": "packages/ui-behaviors"
+    },
+    "@vyrnforge/ui-components": {
+      "status": "react-parity-complete",
+      "directory": "packages/ui-components"
+    }
+  },
+  "evidence": [
+    "docs/metadata/behavior-foundations.json",
+    "docs/metadata/react-behavior-adoption.json",
+    "docs/testing/behavior-foundation-contracts.md",
+    "docs/testing/behavior-react-parity.md",
+    "docs/testing/react-behavior-adoption-audit.md",
+    "docs/testing/gmf2-behavior-parity-gate.md",
+    "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
+    "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
+    "scripts/verify-behavior-foundations.mjs",
+    "scripts/verify-react-behavior-adoption.mjs"
+  ],
+  "requiredCommands": [
+    "npm run verify:ci",
+    "npm run test:coverage --workspace @vyrnforge/ui-behaviors",
+    "npm run test:coverage --workspace @vyrnforge/ui-components",
+    "npm run verify:consumer",
+    "npm run test:browser",
+    "npm run quality"
+  ],
+  "unresolvedBlockers": [],
+  "deferred": [
+    "native Custom Element renderers remain S6 / GMF3",
+    "Angular and Vue consumer verification remains S7 / GMF4",
+    "data-grid multi-framework work remains outside the non-grid beta critical path"
+  ]
+}

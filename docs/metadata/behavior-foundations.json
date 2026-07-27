@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S5",
-    "batch": "MF-5001-MF-5014",
-    "status": "implemented",
+    "batch": "MF-5001-MF-5016",
+    "status": "complete",
     "gate": "GMF2",
-    "gateStatus": "in-progress",
+    "gateStatus": "passed",
     "package": "@vyrnforge/ui-behaviors"
   },
   "tasks": [
@@ -78,6 +78,16 @@
       "id": "MF-5014",
       "name": "Toast and ConfirmDialog behavior",
       "status": "done"
+    },
+    {
+      "id": "MF-5015",
+      "name": "React behavior adoption and compatibility audit",
+      "status": "done"
+    },
+    {
+      "id": "MF-5016",
+      "name": "Shared-behavior parity gate",
+      "status": "done"
     }
   ],
   "contracts": {
@@ -148,6 +158,7 @@
       ],
       "reactAdapters": [
         "Button",
+        "IconButton",
         "ToggleButton",
         "ToggleButtonGroup",
         "SegmentedControl"
@@ -317,7 +328,11 @@
     "npm run verify:package-boundaries",
     "npm run test:coverage --workspace @vyrnforge/ui-components",
     "npm run typecheck --workspace @vyrnforge/ui-components",
+    "npm run test:react-behavior-adoption",
+    "npm run verify:react-behavior-adoption",
+    "npm run test:gmf2-closure",
+    "npm run verify:gmf2-closure",
     "npm run quality"
   ],
-  "remainingGmf2Tasks": ["MF-5015", "MF-5016"]
+  "remainingGmf2Tasks": []
 }

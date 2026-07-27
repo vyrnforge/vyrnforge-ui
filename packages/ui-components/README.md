@@ -350,3 +350,7 @@ Button, toggle controls, Checkbox, Switch, RadioGroup, Slider, Rating, and Tabs
 now consume framework-neutral decisions from `@vyrnforge/ui-behaviors`. The
 React package retains its existing public API and remains responsible for DOM
 rendering, native inputs, refs, focus execution, and React events.
+
+## React behavior adoption audit
+
+Every public component is classified in `docs/metadata/react-behavior-adoption.json`. Behavior-owning components consume `@vyrnforge/ui-behaviors` where applicable; native and presentation components retain renderer-owned responsibilities without duplicating portable controller state.

@@ -113,3 +113,7 @@ MF-5013 and MF-5014 add:
 
 React remains responsible for timers, portals, focus execution, DOM
 measurement, native events, and rendering ReactNode payloads.
+
+## GMF2 closure
+
+MF-5001 through MF-5016 are complete. React adoption is audited in `docs/metadata/react-behavior-adoption.json`, and the shared behavior parity gate is recorded in `docs/metadata/gmf2-closure.json`.

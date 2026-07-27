@@ -2,7 +2,7 @@
 
 ## Scope
 
-MF-5005 through MF-5014 are the first production migrations from React-owned
+MF-5005 through MF-5015 complete the production migrations from React-owned
 state decisions to `@vyrnforge/ui-behaviors`. The React package remains the
 reference renderer and keeps ownership of DOM rendering, native form elements,
 focus execution, refs, and React event translation.
@@ -11,7 +11,7 @@ focus execution, refs, and React event translation.
 
 | Behavior contract                | React adapters                   |
 | -------------------------------- | -------------------------------- |
-| action availability              | Button                           |
+| action availability              | Button, IconButton               |
 | boolean toggle state             | ToggleButton                     |
 | single/multiple toggle selection | ToggleButtonGroup                |
 | single-choice selection          | SegmentedControl, RadioGroup     |
@@ -36,7 +36,7 @@ focus execution, refs, and React event translation.
 - Tabs decides the next enabled value in `ui-behaviors`, while React performs `focus()`;
 - Checkbox and Switch remain native inputs so browser form reset and submission semantics are not replaced;
 - Slider and Rating keep their existing callback shapes and range constraints;
-- Button loading still produces `disabled` and `aria-busy` output;
+- Button and IconButton loading still produce `disabled` and `aria-busy` output;
 - Autocomplete, MultiSelect, and Transfer List preserve existing callback shapes,
   filtering, disabled-item rules, and hidden/native form rendering;
 - Menu and SideNav preserve roving focus behavior while React owns DOM refs and
@@ -61,5 +61,4 @@ focus execution, refs, and React event translation.
 
 ## Non-scope
 
-This batch does not complete the MF-5015 final React adoption audit, MF-5016
-parity closure, or data-grid behavior. GMF2 remains in progress.
+MF-5015 records the complete public React component classification and MF-5016 closes GMF2. Native Custom Element parity remains S6 / GMF3, and data-grid behavior remains deferred from the non-grid beta path.
