@@ -117,3 +117,6 @@ npm run verify:g3-closure
 
 Maintenance guidance lives in `docs/quality/s3-visual-regression.md`; the final
 evidence decision is documented in `docs/quality/s3-g3-closure.md`.
+
+| `react-behavior-adoption.json` | MF-5015 classification of every public React component and compatibility evidence. |
+| `gmf2-closure.json` | MF-5016 shared behavior parity gate evidence and unresolved-blocker record. |

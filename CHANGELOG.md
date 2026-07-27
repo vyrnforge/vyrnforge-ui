@@ -1,3 +1,5 @@
+- Completed MF-5015 and MF-5016: audited every public React component, migrated IconButton action availability to the shared behavior resolver, added React adoption verification, and closed GMF2 with a canonical evidence gate.
+
 # Changelog
 
 Noteworthy public changes to VyrnForge UI will be documented here.

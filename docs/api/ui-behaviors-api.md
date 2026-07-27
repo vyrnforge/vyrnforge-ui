@@ -239,3 +239,7 @@ renderable content type. Timer scheduling remains a renderer adapter concern.
 loading and disabled action eligibility, cancel proposals, confirm events, and
 user-dismissal blocking while loading. The React adapter keeps rendering and
 button event translation.
+
+## GMF2 closure
+
+MF-5001 through MF-5016 are complete. React adoption is audited in `docs/metadata/react-behavior-adoption.json`, and the shared behavior parity gate is recorded in `docs/metadata/gmf2-closure.json`.

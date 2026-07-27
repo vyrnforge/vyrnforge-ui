@@ -1,6 +1,6 @@
 # Behavior Foundation Contract Evidence
 
-MF-5001 through MF-5014 are verified at three levels.
+MF-5001 through MF-5016 are verified at four levels.
 
 ## Package tests
 
@@ -52,3 +52,14 @@ npm run verify:package-boundaries
 The boundary verifier rejects framework imports and DOM identifiers in
 production behavior source. React retains ownership of portals, refs, focus,
 native inputs, and event translation.
+
+## React adoption and GMF2 closure
+
+```bash
+npm run test:react-behavior-adoption
+npm run verify:react-behavior-adoption
+npm run test:gmf2-closure
+npm run verify:gmf2-closure
+```
+
+The adoption verifier classifies every public React component and checks required shared behavior markers. The GMF2 closure verifier composes behavior, package-boundary, React adoption, metadata, and evidence checks.

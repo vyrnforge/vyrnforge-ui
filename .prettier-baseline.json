@@ -171,7 +171,6 @@
     "packages/ui-components/src/components/Icon/Icon.tsx": "c8a94f33e5f2d8d45ea5f75209ff8cd7653a34260b51d90006e93cce1b0a695a",
     "packages/ui-components/src/components/Icon/icons.tsx": "0f6fddfe7931528f12c4acd480a4c4cb90686ff3fb4e7f6dc39e433c220c687b",
     "packages/ui-components/src/components/IconButton/ActionButtons.tsx": "665f1b2d757d77e5640713f2df3f3047fb6787fa8976568f32f57edec266e35d",
-    "packages/ui-components/src/components/IconButton/IconButton.tsx": "ce765241ca3f2dfeedcfb25ab09e8a0f3629d631a6ef9515cca0a00d89930160",
     "packages/ui-components/src/components/IconButton/IconButton.types.ts": "9c6192f134caff78a6ee7bedbbb7597840b828750852b35824be9027f703d40c",
     "packages/ui-components/src/components/IconButton/index.ts": "7715dfb4bff3595dec25adc812ce65af78cefc4139803c248d937c22d688d0b3",
     "packages/ui-components/src/components/Inline/Inline.tsx": "746ecd075bfff9487b4b2e366bf10db7cf5d1d02e9fae8b6a7bec01a577e5495",

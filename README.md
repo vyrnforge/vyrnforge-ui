@@ -202,3 +202,7 @@ Production use, commercial use, redistribution, package republication, resale, s
 ## Ownership
 
 VyrnForge UI is maintained as part of the VyrnForge UI repository.
+
+## Current multi-framework stage
+
+S5 / GMF2 is complete through MF-5016. The next program stage is S6 native Custom Element parity; the React public package remains the reference renderer.

@@ -19,7 +19,7 @@
       "desktop-native"
     ],
     "deferredPackages": ["@vyrnforge/ui-data-grid"],
-    "currentSprint": "S5"
+    "currentSprint": "S6"
   },
   "packages": [
     {
@@ -54,7 +54,7 @@
         "validation state",
         "canonical controller events"
       ],
-      "foundationStage": "implemented"
+      "foundationStage": "complete"
     },
     {
       "name": "@vyrnforge/ui-components",
@@ -138,7 +138,7 @@
   },
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",
-    "status": "implemented",
+    "status": "complete",
     "tasks": [
       "MF-5001",
       "MF-5002",
@@ -153,11 +153,13 @@
       "MF-5011",
       "MF-5012",
       "MF-5013",
-      "MF-5014"
+      "MF-5014",
+      "MF-5015",
+      "MF-5016"
     ],
     "metadata": "docs/metadata/behavior-foundations.json",
     "gate": "GMF2",
-    "gateStatus": "in-progress",
-    "currentBatch": "MF-5013-MF-5014"
+    "gateStatus": "passed",
+    "currentBatch": "MF-5015-MF-5016"
   }
 }

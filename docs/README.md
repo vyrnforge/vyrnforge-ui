@@ -235,3 +235,5 @@ Archived docs are historical only. They preserve useful context but do not guide
 | `quality/s5-framework-neutral-behaviors.md` | S5 scope, invariants, non-scope, and GMF2 relationship.                    |
 | `testing/behavior-foundation-contracts.md`  | MF-5001–MF-5014 package and repository evidence.                           |
 | `testing/behavior-react-parity.md`          | MF-5005–MF-5014 React adapter parity evidence.                             |
+| `testing/react-behavior-adoption-audit.md`  | MF-5015 complete React adapter classification and compatibility audit.     |
+| `testing/gmf2-behavior-parity-gate.md`      | MF-5016 GMF2 evidence, required commands, and deferred scope.              |

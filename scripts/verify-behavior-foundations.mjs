@@ -8,7 +8,7 @@ const repositoryRoot = path.resolve(
 );
 
 const expectedTasks = Array.from(
-  { length: 14 },
+  { length: 16 },
   (_, index) => `MF-${5001 + index}`,
 );
 const expectedReasons = [
@@ -51,6 +51,10 @@ const requiredDocuments = [
   "docs/testing/behavior-foundation-contracts.md",
   "docs/testing/behavior-react-parity.md",
   "docs/metadata/behavior-foundations.json",
+  "docs/metadata/react-behavior-adoption.json",
+  "docs/metadata/gmf2-closure.json",
+  "docs/testing/react-behavior-adoption-audit.md",
+  "docs/testing/gmf2-behavior-parity-gate.md",
 ];
 
 function read(root, relativePath) {
@@ -103,17 +107,17 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S5") {
     failures.push("behavior foundation sprint must be S5");
   }
-  if (metadata.program?.batch !== "MF-5001-MF-5014") {
-    failures.push("behavior foundation batch must be MF-5001-MF-5014");
+  if (metadata.program?.batch !== "MF-5001-MF-5016") {
+    failures.push("behavior foundation batch must be MF-5001-MF-5016");
   }
-  if (metadata.program?.status !== "implemented") {
-    failures.push("behavior foundation status must be implemented");
+  if (metadata.program?.status !== "complete") {
+    failures.push("behavior foundation status must be complete");
   }
   if (metadata.program?.gate !== "GMF2") {
     failures.push("behavior foundation gate must be GMF2");
   }
-  if (metadata.program?.gateStatus !== "in-progress") {
-    failures.push("GMF2 must remain in-progress after the foundation batch");
+  if (metadata.program?.gateStatus !== "passed") {
+    failures.push("GMF2 must be passed after the closure batch");
   }
 
   const tasks = new Map((metadata.tasks ?? []).map((task) => [task.id, task]));
@@ -295,6 +299,10 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
       "resolveActionState",
     ],
     [
+      "packages/ui-components/src/components/IconButton/IconButton.tsx",
+      "resolveActionState",
+    ],
+    [
       "packages/ui-components/src/components/ToggleButton/ToggleButton.tsx",
       "useToggleBehavior",
     ],
@@ -396,6 +404,7 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     [
       "React adapters preserve shared behavior parity",
       "Tabs",
+      "IconButton",
       "RadioGroup",
       "Autocomplete",
       "MultiSelect",
@@ -453,6 +462,10 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "npm run test:coverage --workspace @vyrnforge/ui-components",
     "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run verify:package-boundaries",
+    "npm run test:react-behavior-adoption",
+    "npm run verify:react-behavior-adoption",
+    "npm run test:gmf2-closure",
+    "npm run verify:gmf2-closure",
     "npm run quality",
   ]) {
     if (!requiredCommands.has(command)) {
@@ -460,8 +473,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     }
   }
 
-  if ((metadata.remainingGmf2Tasks ?? []).length === 0) {
-    failures.push("remainingGmf2Tasks must document unfinished GMF2 work");
+  if ((metadata.remainingGmf2Tasks ?? []).length !== 0) {
+    failures.push("remainingGmf2Tasks must be empty after GMF2 closure");
   }
 
   return [...new Set(failures)].sort();
@@ -482,6 +495,6 @@ if (
 ) {
   assertBehaviorFoundations();
   console.log(
-    "Behavior foundations passed: MF-5001 through MF-5014 contracts, React adapters, metadata, docs, and quality integration are complete.",
+    "Behavior foundations passed: MF-5001 through MF-5016 contracts, React adoption, GMF2 closure metadata, docs, and quality integration are complete.",
   );
 }
