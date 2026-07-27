@@ -1,0 +1,60 @@
+.vf-stack {
+  display: flex;
+  flex-direction: column;
+}
+.vf-stack--gap-none,
+.vf-inline--gap-none {
+  gap: 0;
+}
+.vf-stack--gap-xs,
+.vf-inline--gap-xs {
+  gap: var(--vf-space-1);
+}
+.vf-stack--gap-sm,
+.vf-inline--gap-sm {
+  gap: var(--vf-space-2);
+}
+.vf-stack--gap-md,
+.vf-inline--gap-md {
+  gap: var(--vf-space-3);
+}
+.vf-stack--gap-lg,
+.vf-inline--gap-lg {
+  gap: var(--vf-space-4);
+}
+.vf-stack--gap-xl,
+.vf-inline--gap-xl {
+  gap: var(--vf-space-6);
+}
+.vf-stack--align-stretch,
+.vf-inline--align-stretch {
+  align-items: stretch;
+}
+.vf-stack--align-start,
+.vf-inline--align-start {
+  align-items: flex-start;
+}
+.vf-stack--align-center,
+.vf-inline--align-center {
+  align-items: center;
+}
+.vf-stack--align-end,
+.vf-inline--align-end {
+  align-items: flex-end;
+}
+.vf-stack--justify-start,
+.vf-inline--justify-start {
+  justify-content: flex-start;
+}
+.vf-stack--justify-center,
+.vf-inline--justify-center {
+  justify-content: center;
+}
+.vf-stack--justify-end,
+.vf-inline--justify-end {
+  justify-content: flex-end;
+}
+.vf-stack--justify-between,
+.vf-inline--justify-between {
+  justify-content: space-between;
+}

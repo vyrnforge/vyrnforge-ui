@@ -13,13 +13,13 @@ Public API means the parts of VyrnForge UI that consuming applications may rely 
 
 The currently implemented public packages are:
 
-| Package                    | Public role                                                                                   |
-| -------------------------- | --------------------------------------------------------------------------------------------- |
-| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, utilities, and theme helpers.                      |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral controllable state, collections, selection, and reasoned controller events. |
-| `@vyrnforge/ui-components` | First-class reusable React components.                                                        |
-| `@vyrnforge/ui-elements`   | Native Custom Element foundation; public component renderers remain S6 work.                  |
-| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track.              |
+| Package                    | Public role                                                                                                      |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, utilities, and theme helpers.                                         |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral controllable state, collections, selection, and reasoned controller events.                    |
+| `@vyrnforge/ui-components` | First-class reusable React components.                                                                           |
+| `@vyrnforge/ui-elements`   | Native Custom Element foundations plus the EL-6005–EL-6011 core renderer wave; advanced families remain S6 work. |
+| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track.                                 |
 
 Package existence does not itself claim completed framework parity. Native
 component renderers and Angular/Vue verification still require GMF3 and GMF4
@@ -53,11 +53,12 @@ Import CSS for the packages you use:
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
-`ui-core` styles should come first because they define shared `--vf-*` tokens. `ui-components` consumes those shared tokens. `ui-data-grid` owns grid-specific `--udg-*` variables and maps them to `--vf-*` tokens where practical.
+`ui-core` styles should come first because they define shared `--vf-*` tokens. `ui-elements` and `ui-components` consume those shared tokens for their respective renderers. `ui-data-grid` owns grid-specific `--udg-*` variables and maps them to `--vf-*` tokens where practical.
 
 ## API Documents
 

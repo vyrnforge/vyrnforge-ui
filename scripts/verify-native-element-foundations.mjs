@@ -7,7 +7,9 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const taskIds = Array.from({ length: 18 }, (_, index) => `EL-${6001 + index}`);
-const completedTaskIds = new Set(["EL-6001", "EL-6002", "EL-6003", "EL-6004"]);
+const completedTaskIds = new Set(
+  Array.from({ length: 11 }, (_, index) => `EL-${6001 + index}`),
+);
 const requiredFiles = [
   "packages/ui-elements/src/base/VyrnForgeElement.ts",
   "packages/ui-elements/src/base/VyrnForgeElement.test.ts",
@@ -20,8 +22,12 @@ const requiredFiles = [
   "packages/ui-elements/src/register.ts",
   "packages/ui-elements/src/index.ts",
   "apps/regression-fixtures/src/nativeFormFoundation.ts",
+  "apps/regression-fixtures/src/nativeCoreElements.tsx",
   "apps/regression-fixtures/src/FixtureApp.tsx",
   "tests/browser/native-form-foundation.spec.ts",
+  "tests/browser/native-core-elements.spec.ts",
+  "docs/metadata/native-core-elements.json",
+  "docs/testing/native-core-element-contracts.md",
   "tests/consumers/native-html/architecture-probe.ts",
   "tests/consumers/native-html/fixture.json",
   "packages/ui-elements/README.md",
@@ -76,8 +82,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S6") {
     failures.push("native element foundation sprint must be S6");
   }
-  if (metadata.program?.batch !== "EL-6003-EL-6004") {
-    failures.push("native element foundation batch must be EL-6003-EL-6004");
+  if (metadata.program?.batch !== "EL-6005-EL-6011") {
+    failures.push("native element foundation batch must be EL-6005-EL-6011");
   }
   if (metadata.program?.status !== "in-progress") {
     failures.push("native element foundation status must be in-progress");
@@ -333,6 +339,53 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     ["reportValidity", "native-toggle-disabled", "native-reset"],
   );
 
+  const coreMetadata = readJson(
+    root,
+    "docs/metadata/native-core-elements.json",
+  );
+  if (coreMetadata?.program?.batch !== "EL-6005-EL-6011") {
+    failures.push("native core element batch must be EL-6005-EL-6011");
+  }
+  if (coreMetadata?.registration?.count !== 40) {
+    failures.push("native core element registration count must be 40");
+  }
+  const coreTags = coreMetadata?.registration?.tags ?? [];
+  if (
+    new Set(coreTags).size !== 40 ||
+    coreTags.some((tag) => !/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tag))
+  ) {
+    failures.push(
+      "native core element tags must contain 40 unique lowercase vf-* names",
+    );
+  }
+
+  const coreFixture = read(
+    root,
+    "apps/regression-fixtures/src/nativeCoreElements.tsx",
+  );
+  requireIncludes(
+    failures,
+    coreFixture,
+    "apps/regression-fixtures/src/nativeCoreElements.tsx",
+    ["registerVyrnForgeElements", "new FormData", "vf-tabs", "vf-side-nav"],
+  );
+
+  const coreBrowserEvidence = read(
+    root,
+    "tests/browser/native-core-elements.spec.ts",
+  );
+  requireIncludes(
+    failures,
+    coreBrowserEvidence,
+    "tests/browser/native-core-elements.spec.ts",
+    [
+      "registers the deterministic 40-element public catalog",
+      "native-core-submission",
+      "ArrowRight",
+      "ArrowDown",
+    ],
+  );
+
   const packageRoot = read(root, "package.json");
   requireIncludes(failures, packageRoot, "package.json", [
     "test:native-element-foundations",
@@ -344,10 +397,10 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     failures.push("multi-framework currentSprint must be S6");
   }
   if (
-    multiFramework?.nativeElementFoundation?.currentBatch !== "EL-6003-EL-6004"
+    multiFramework?.nativeElementFoundation?.currentBatch !== "EL-6005-EL-6011"
   ) {
     failures.push(
-      "multi-framework nativeElementFoundation currentBatch must be EL-6003-EL-6004",
+      "multi-framework nativeElementFoundation currentBatch must be EL-6005-EL-6011",
     );
   }
   if (multiFramework?.nativeElementFoundation?.status !== "in-progress") {
@@ -357,13 +410,13 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   }
 
   const remaining = new Set(metadata.remainingGmf3Tasks ?? []);
-  for (const taskId of taskIds.slice(4)) {
+  for (const taskId of taskIds.slice(11)) {
     if (!remaining.has(taskId)) {
       failures.push(`remainingGmf3Tasks must include ${taskId}`);
     }
   }
-  if (remaining.size !== 14) {
-    failures.push("remainingGmf3Tasks must contain EL-6005 through EL-6018");
+  if (remaining.size !== 7) {
+    failures.push("remainingGmf3Tasks must contain EL-6012 through EL-6018");
   }
 
   return [...new Set(failures)].sort();
@@ -384,6 +437,6 @@ if (
 ) {
   assertNativeElementFoundations();
   console.log(
-    "Native element foundations passed: EL-6001 through EL-6004 registration, lifecycle, typed events, and ElementInternals form contracts are complete.",
+    "Native element foundations passed: EL-6001 through EL-6011 foundations and native core renderer contracts are complete.",
   );
 }

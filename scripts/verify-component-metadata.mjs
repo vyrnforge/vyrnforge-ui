@@ -285,12 +285,21 @@ export function verifyComponentMetadata(
         );
       if (
         parity?.native?.package !== "@vyrnforge/ui-elements" ||
-        parity?.native?.status !== "planned-s6"
+        !["current", "planned-s6"].includes(parity?.native?.status)
       )
         addFailure(
           failures,
           component,
-          "frameworkParity must reference planned S6 native rendering",
+          "frameworkParity must reference current or planned S6 native rendering",
+        );
+      if (
+        parity?.native?.status === "current" &&
+        parity.native.evidence !== "docs/metadata/native-core-elements.json"
+      )
+        addFailure(
+          failures,
+          component,
+          "current native frameworkParity must reference native core evidence",
         );
       if (
         parity?.angular?.status !== "planned-gmf4" ||

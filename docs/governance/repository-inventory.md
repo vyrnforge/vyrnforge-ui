@@ -11,8 +11,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
-| Documentation | 103 active Markdown files; 23 archived Markdown files |
-| Scripts | 72 root npm scripts; repository automation under `scripts/` |
+| Documentation | 104 active Markdown files; 23 archived Markdown files |
+| Scripts | 74 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 9 workflow files, including 5 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
@@ -68,8 +68,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Field | Inventory |
 | --- | --- |
 | Purpose | Browser-native Custom Element registration, lifecycle, property reflection, typed vf-* events, Light DOM CSS, form foundations, and non-grid renderers. |
-| Main source directories | `src/styles` |
-| Public exports | 46 root names. `assertVyrnForgeElementTagName`, `assertVyrnForgeEventName`, `createVyrnForgeElementRegistration`, `createVyrnForgeEvent`, `createVyrnForgeEventDispatcher`, `defineVyrnForgeElement`, `dispatchVyrnForgeEvent`, `getVyrnForgeElementRegistry`, `registerVyrnForgeElement`, `registerVyrnForgeElementDefinitions`, `registerVyrnForgeElements`, `VyrnForgeActionDetail`, `VyrnForgeAttributeType`, `VyrnForgeCanonicalEventDetailMap`, `VyrnForgeChangedProperties`, `VyrnForgeCheckedChangeDetail`, `VyrnForgeDismissDetail`, `VyrnForgeElement`, `VyrnForgeElementConstructor`, `VyrnForgeElementDefinition`, `vyrnForgeElementDefinitions`, `VyrnForgeElementRegistration`, `VyrnForgeElementRegistry`, `VyrnForgeElementTagName`, `vyrnForgeEventDispatcher`, `VyrnForgeEventMapName`, `VyrnForgeEventName`, `VyrnForgeEventOptions`, `VyrnForgeEventReason`, `VyrnForgeFormAssociatedElement`, `VyrnForgeFormAssociationMode`, `VyrnForgeFormInternals`, `VyrnForgeFormState`, `VyrnForgeFormStateRestoreMode`, `VyrnForgeFormValue`, `VyrnForgeInvalidDetail`, `VyrnForgeOpenChangeDetail`, `VyrnForgePressedChangeDetail`, `VyrnForgePropertyDeclaration`, `VyrnForgePropertyDeclarations`, `VyrnForgeResetDetail`, `VyrnForgeSelectionChangeDetail`, `VyrnForgeTypedEventDispatcher`, `vyrnForgeUiElementsVersion`, `VyrnForgeValidityFlags`, `VyrnForgeValueChangeDetail` |
+| Main source directories | `src/components`, `src/styles` |
+| Public exports | 47 root names. `assertVyrnForgeElementTagName`, `assertVyrnForgeEventName`, `createVyrnForgeElementRegistration`, `createVyrnForgeEvent`, `createVyrnForgeEventDispatcher`, `defineVyrnForgeElement`, `dispatchVyrnForgeEvent`, `getVyrnForgeElementRegistry`, `registerVyrnForgeElement`, `registerVyrnForgeElementDefinitions`, `registerVyrnForgeElements`, `VyrnForgeActionDetail`, `VyrnForgeAttributeType`, `VyrnForgeCanonicalEventDetailMap`, `VyrnForgeChangedProperties`, `VyrnForgeCheckedChangeDetail`, `VyrnForgeDismissDetail`, `VyrnForgeElement`, `VyrnForgeElementConstructor`, `VyrnForgeElementDefinition`, `vyrnForgeElementDefinitions`, `VyrnForgeElementRegistration`, `vyrnForgeElementRegistrations`, `VyrnForgeElementRegistry`, `VyrnForgeElementTagName`, `vyrnForgeEventDispatcher`, `VyrnForgeEventMapName`, `VyrnForgeEventName`, `VyrnForgeEventOptions`, `VyrnForgeEventReason`, `VyrnForgeFormAssociatedElement`, `VyrnForgeFormAssociationMode`, `VyrnForgeFormInternals`, `VyrnForgeFormState`, `VyrnForgeFormStateRestoreMode`, `VyrnForgeFormValue`, `VyrnForgeInvalidDetail`, `VyrnForgeOpenChangeDetail`, `VyrnForgePressedChangeDetail`, `VyrnForgePropertyDeclaration`, `VyrnForgePropertyDeclarations`, `VyrnForgeResetDetail`, `VyrnForgeSelectionChangeDetail`, `VyrnForgeTypedEventDispatcher`, `vyrnForgeUiElementsVersion`, `VyrnForgeValidityFlags`, `VyrnForgeValueChangeDetail` |
 | CSS entry points | `./index.css`, `./style.css`, `./styles/index.css` |
 | Dependencies | `@vyrnforge/ui-core@0.1.0-alpha.1`, `@vyrnforge/ui-behaviors@0.1.0-alpha.1` |
 | Peer dependencies | None |
@@ -120,7 +120,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Dropdown | @vyrnforge/ui-components | packages/ui-components/src/components/Dropdown/Dropdown.tsx | Yes | docs/api/css-token-reference.md, docs/api/ui-components-api.md | /components/overlays/dropdown | No focused test found | Requires verification | experimental | No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | EmptyState | @vyrnforge/ui-components | packages/ui-components/src/components/EmptyState/EmptyState.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | ErrorState | @vyrnforge/ui-components | packages/ui-components/src/components/ErrorState/ErrorState.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
-| Field | @vyrnforge/ui-components | packages/ui-components/src/components/Field/Field.tsx | Yes | docs/api/ui-components-api.md, docs/components/forms/autocomplete.md | /components/forms/field | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction, accessibility | experimental | No browser evidence | Component Team |
+| Field | @vyrnforge/ui-components | packages/ui-components/src/components/Field/Field.tsx | Yes | docs/api/ui-components-api.md, docs/api/ui-elements-api.md | /components/forms/field | packages/ui-components/src/components/__tests__/accessibility.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction, accessibility | experimental | No browser evidence | Component Team |
 | Heading | @vyrnforge/ui-components | packages/ui-components/src/components/Typography/Heading.tsx | Yes | docs/api/ui-components-api.md, docs/governance/repository-inventory.md | No dedicated route found | No focused test found | Requires verification | experimental | No dedicated playground route; No focused test evidence; No browser evidence; No accessibility-test evidence | Component Team |
 | Icon | @vyrnforge/ui-components | packages/ui-components/src/components/Icon/Icon.tsx | Yes | docs/api/ui-components-api.md, docs/benchmark/02-component-coverage-comparison.md | No dedicated route found | packages/ui-components/src/components/__tests__/behavior-parity.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction | experimental | No dedicated playground route; No browser evidence; No accessibility-test evidence | Component Team |
 | IconButton | @vyrnforge/ui-components | packages/ui-components/src/components/IconButton/IconButton.tsx | Yes | docs/api/ui-components-api.md, docs/architecture/05-accessibility-standards.md | /components/actions/icon-button | packages/ui-components/src/components/__tests__/behavior-parity.test.tsx, packages/ui-components/src/components/__tests__/primitives.test.tsx | pure/unit, static markup, DOM interaction | experimental | No browser evidence; No accessibility-test evidence | Component Team |
@@ -196,11 +196,11 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 103 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 104 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
-| Regression fixture app | 8 deterministic fixture source/style files; `npm run fixtures:verify` builds and tests the public-package consumer surface. |
+| Regression fixture app | 9 deterministic fixture source/style files; `npm run fixtures:verify` builds and tests the public-package consumer surface. |
 | Maturity source | `docs/metadata/components.json` is the sole structured maturity source. Playground and docs-app reference views consume it; prose remains reviewable documentation. |
 | AI/contributor context | `AGENTS.md`, `.ai/AI_CONTEXT.md`, `.ai/CODING_RULES.md`, `.ai/DOC_USAGE_GUIDE.md`, `.ai/REPO_MAP.md`, `CONTRIBUTING.md`, and `SECURITY.md`. |
 | Potential conflicts | Q1 audit documents stale `dv` terminology and planned-surface presentation as follow-up documentation work. |
@@ -210,11 +210,11 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 84 |
-| Pure/unit | 60 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 86 |
+| Pure/unit | 61 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
-| DOM interaction | 7 detected test files with DOM interaction helpers. |
-| Browser | 16 detected browser-test files. |
+| DOM interaction | 8 detected test files with DOM interaction helpers. |
+| Browser | 17 detected browser-test files. |
 | Accessibility | 3 detected automated accessibility-test files. |
 | Visual regression | No visual-regression test/configuration evidence found. |
 | Coverage | Root `test:coverage` is configured with package-specific V8 coverage reports and thresholds. |
@@ -277,16 +277,16 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Metric | Count |
 | --- | --- |
 | Publishable packages | 5 |
-| Package-root export names | 582 |
+| Package-root export names | 583 |
 | Public components inventoried | 75 |
-| Repository test files | 84 |
+| Repository test files | 86 |
 | Static-markup test files | 2 |
-| DOM interaction test files | 7 |
-| Browser test files | 16 |
+| DOM interaction test files | 8 |
+| Browser test files | 17 |
 | Automated accessibility-test files | 3 |
 | Workflow files | 9 |
 | Reusable workflows | 5 |
-| Active Markdown documentation files | 103 |
+| Active Markdown documentation files | 104 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |

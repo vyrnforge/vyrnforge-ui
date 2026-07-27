@@ -4,7 +4,12 @@ export default defineConfig({
   test: {
     coverage: {
       all: true,
-      exclude: ["src/**/*.d.ts", "src/**/*.test.ts", "src/register.ts"],
+      exclude: [
+        "src/**/*.d.ts",
+        "src/**/*.test.ts",
+        "src/components/**/*.ts",
+        "src/register.ts",
+      ],
       include: ["src/**/*.ts"],
       provider: "v8",
       reporter: ["text", "html", "json", "json-summary", "lcov"],

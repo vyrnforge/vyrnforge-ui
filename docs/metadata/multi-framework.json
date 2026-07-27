@@ -165,10 +165,24 @@
   "nativeElementFoundation": {
     "package": "@vyrnforge/ui-elements",
     "status": "in-progress",
-    "tasks": ["EL-6001", "EL-6002", "EL-6003", "EL-6004"],
+    "tasks": [
+      "EL-6001",
+      "EL-6002",
+      "EL-6003",
+      "EL-6004",
+      "EL-6005",
+      "EL-6006",
+      "EL-6007",
+      "EL-6008",
+      "EL-6009",
+      "EL-6010",
+      "EL-6011"
+    ],
     "metadata": "docs/metadata/native-element-foundations.json",
     "gate": "GMF3",
     "gateStatus": "in-progress",
-    "currentBatch": "EL-6003-EL-6004"
+    "currentBatch": "EL-6005-EL-6011",
+    "nativeCoreMetadata": "docs/metadata/native-core-elements.json",
+    "registeredPublicTags": 40
   }
 }

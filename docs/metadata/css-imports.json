@@ -3,6 +3,7 @@
   "sourceOfTruth": "docs/api/import-and-setup.md",
   "recommendedOrder": [
     "@vyrnforge/ui-core/styles/index.css",
+    "@vyrnforge/ui-elements/styles/index.css",
     "@vyrnforge/ui-components/styles/index.css",
     "@vyrnforge/ui-data-grid/styles/index.css"
   ],
@@ -78,5 +79,11 @@
     "@vyrnforge/ui-core/styles/index.css",
     "@vyrnforge/ui-elements/styles/index.css"
   ],
-  "plannedNativeRendererStatus": "foundation implemented; public non-grid element renderers remain planned for S6"
+  "plannedNativeRendererStatus": "foundation implemented; public non-grid element renderers remain planned for S6",
+  "nativeElements": {
+    "entry": "@vyrnforge/ui-elements/styles/index.css",
+    "status": "current",
+    "tokenSource": "@vyrnforge/ui-core/styles/index.css",
+    "notes": "Portable Light DOM component classes reuse VyrnForge tokens and class contracts without importing @vyrnforge/ui-components at runtime."
+  }
 }

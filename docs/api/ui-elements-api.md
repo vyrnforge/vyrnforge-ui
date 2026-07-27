@@ -1,77 +1,67 @@
 # `@vyrnforge/ui-elements` API
 
-EL-6001 through EL-6004 establish the registration, lifecycle, property,
-event, and form-association foundations used by later native component ports.
+EL-6001 through EL-6011 establish the native foundation and first public
+component wave.
 
-## Base element
+## Foundation exports
 
 - `VyrnForgeElement`
-- `VyrnForgeAttributeType`
-- `VyrnForgeChangedProperties`
-- `VyrnForgePropertyDeclaration`
-- `VyrnForgePropertyDeclarations`
-
-Concrete elements declare reactive properties with `static properties` and
-accessors backed by `getPropertyValue()` and `setPropertyValue()`. The base
-derives `observedAttributes`, upgrades pre-definition properties, parses and
-optionally reflects primitive values, batches updates, and exposes
-`updateComplete`.
-
-## Form-associated base
-
 - `VyrnForgeFormAssociatedElement`
-- `VyrnForgeFormAssociationMode`
-- `VyrnForgeFormInternals`
-- `VyrnForgeFormState`
-- `VyrnForgeFormStateRestoreMode`
-- `VyrnForgeFormValue`
-- `VyrnForgeValidityFlags`
+- typed event creation and dispatcher utilities
+- deterministic definition and registration utilities
+- `vyrnForgeElementDefinitions`
+- `vyrnForgeElementRegistrations`
 
-The base declares `static formAssociated = true`, attaches `ElementInternals`
-lazily, and exposes native form, labels, validity, validation message, and
-validation methods. Concrete controls use protected utilities to forward form
-values and restoration state, capture initial reset state, and translate form
-association, disabled, reset, and restoration callbacks.
+## Public native core tags
 
-`name`, `disabled`, and `required` are shared reflected properties. Object and
-array component values remain property-only and concrete controls decide their
-submitted `string`, `File`, or `FormData` shape.
+### Display and layout
+
+`vf-text`, `vf-heading`, `vf-caption`, `vf-label`, `vf-code-text`, `vf-badge`,
+`vf-card`, `vf-panel`, `vf-stack`, `vf-inline`, `vf-page`, `vf-section`,
+`vf-empty-state`, `vf-loading-state`, and `vf-error-state`.
+
+### Actions
+
+`vf-button`, `vf-icon-button`, `vf-button-group`, and `vf-toolbar-button`.
+Action adapters resolve disabled/loading state through shared behavior and emit
+`vf-action`; toggle actions also emit `vf-pressed-change`.
+
+### Form and value controls
+
+`vf-text-input`, `vf-textarea`, `vf-search-input`, `vf-number-input`,
+`vf-date-input`, `vf-datetime-input`, `vf-checkbox`, `vf-radio`,
+`vf-radio-group`, `vf-switch`, `vf-select`, `vf-slider`, `vf-rating`,
+`vf-toggle-button`, `vf-toggle-button-group`, and `vf-segmented-control`.
+Form-capable elements participate through `ElementInternals` and emit canonical
+value or checked events.
+
+### Field and navigation
+
+`vf-field`, `vf-validation-message`, `vf-tabs`, `vf-breadcrumbs`, and
+`vf-side-nav`.
+
+Array/object models such as tab items, select options, segmented options, and
+side-navigation items are property-only. They are not serialized into HTML
+attributes.
 
 ## Events
 
-- `assertVyrnForgeEventName(name)`
-- `createVyrnForgeEvent(name, detail, options?)`
-- `dispatchVyrnForgeEvent(target, name, detail, options?)`
-- `createVyrnForgeEventDispatcher<TEvents>()`
-- `vyrnForgeEventDispatcher`
-- canonical detail interfaces and `VyrnForgeCanonicalEventDetailMap`
+Public event names are lowercase dash-cased `vf-*` names. They bubble and are
+composed by default. Core elements use canonical contracts including:
 
-Events use lowercase dash-cased `vf-*` names. They bubble and are composed by
-default; cancelability and propagation may be overridden only where the
-component contract requires it. The typed dispatcher factory lets a concrete
-element define its own detail map without introducing a framework event type.
+- `vf-action`
+- `vf-value-change`
+- `vf-checked-change`
+- `vf-pressed-change`
+- `vf-invalid`
+- `vf-reset`
 
-## Registration
+## Styles
 
-- `assertVyrnForgeElementTagName(tagName)`
-- `defineVyrnForgeElement(tagName, constructor, registry?)`
-- `registerVyrnForgeElement(definition, registry?)`
-- `registerVyrnForgeElementDefinitions(definitions, registry?)`
-- `createVyrnForgeElementRegistration(definition)`
-- `getVyrnForgeElementRegistry()`
-- `registerVyrnForgeElements(registry?)`
-- `vyrnForgeElementDefinitions`
-
-Registration accepts only lowercase `vf-*` tags, is idempotent, and returns
-whether each definition was newly registered. Package-root import has no
-registration side effect.
-
-## Entry points
-
-```ts
-import "@vyrnforge/ui-elements/styles/index.css";
-import "@vyrnforge/ui-elements/register";
+```css
+@import "@vyrnforge/ui-core/styles/index.css";
+@import "@vyrnforge/ui-elements/styles/index.css";
 ```
 
-The register-all definition catalog is intentionally empty until public native
-component tags are approved in later S6 tasks.
+Styles consume shared VyrnForge tokens and retain the portable `vf-*` class
+namespace. The native package does not import React component runtime code.

@@ -1,3 +1,46 @@
+import {
+  VyrnForgeBadgeElement,
+  VyrnForgeBreadcrumbsElement,
+  VyrnForgeButtonElement,
+  VyrnForgeButtonGroupElement,
+  VyrnForgeCaptionElement,
+  VyrnForgeCardElement,
+  VyrnForgeCheckboxElement,
+  VyrnForgeCodeTextElement,
+  VyrnForgeDateInputElement,
+  VyrnForgeDateTimeInputElement,
+  VyrnForgeEmptyStateElement,
+  VyrnForgeErrorStateElement,
+  VyrnForgeFieldElement,
+  VyrnForgeHeadingElement,
+  VyrnForgeIconButtonElement,
+  VyrnForgeInlineElement,
+  VyrnForgeLabelElement,
+  VyrnForgeLoadingStateElement,
+  VyrnForgeNumberInputElement,
+  VyrnForgePageElement,
+  VyrnForgePanelElement,
+  VyrnForgeRadioElement,
+  VyrnForgeRadioGroupElement,
+  VyrnForgeRatingElement,
+  VyrnForgeSearchInputElement,
+  VyrnForgeSectionElement,
+  VyrnForgeSegmentedControlElement,
+  VyrnForgeSelectElement,
+  VyrnForgeSideNavElement,
+  VyrnForgeSliderElement,
+  VyrnForgeStackElement,
+  VyrnForgeSwitchElement,
+  VyrnForgeTabsElement,
+  VyrnForgeTextElement,
+  VyrnForgeTextInputElement,
+  VyrnForgeTextareaElement,
+  VyrnForgeToggleButtonElement,
+  VyrnForgeToggleButtonGroupElement,
+  VyrnForgeToolbarButtonElement,
+  VyrnForgeValidationMessageElement,
+} from "./components";
+
 export type VyrnForgeElementTagName = `vf-${string}`;
 export type VyrnForgeElementConstructor = CustomElementConstructor;
 
@@ -18,7 +61,149 @@ export type VyrnForgeElementRegistration = (
 const TAG_PATTERN = /^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] =
-  Object.freeze([]);
+  Object.freeze([
+    Object.freeze({ tagName: "vf-text", constructor: VyrnForgeTextElement }),
+    Object.freeze({
+      tagName: "vf-heading",
+      constructor: VyrnForgeHeadingElement,
+    }),
+    Object.freeze({
+      tagName: "vf-caption",
+      constructor: VyrnForgeCaptionElement,
+    }),
+    Object.freeze({ tagName: "vf-label", constructor: VyrnForgeLabelElement }),
+    Object.freeze({
+      tagName: "vf-code-text",
+      constructor: VyrnForgeCodeTextElement,
+    }),
+    Object.freeze({ tagName: "vf-badge", constructor: VyrnForgeBadgeElement }),
+    Object.freeze({ tagName: "vf-card", constructor: VyrnForgeCardElement }),
+    Object.freeze({ tagName: "vf-panel", constructor: VyrnForgePanelElement }),
+    Object.freeze({ tagName: "vf-stack", constructor: VyrnForgeStackElement }),
+    Object.freeze({
+      tagName: "vf-inline",
+      constructor: VyrnForgeInlineElement,
+    }),
+    Object.freeze({ tagName: "vf-page", constructor: VyrnForgePageElement }),
+    Object.freeze({
+      tagName: "vf-section",
+      constructor: VyrnForgeSectionElement,
+    }),
+    Object.freeze({
+      tagName: "vf-empty-state",
+      constructor: VyrnForgeEmptyStateElement,
+    }),
+    Object.freeze({
+      tagName: "vf-loading-state",
+      constructor: VyrnForgeLoadingStateElement,
+    }),
+    Object.freeze({
+      tagName: "vf-error-state",
+      constructor: VyrnForgeErrorStateElement,
+    }),
+    Object.freeze({
+      tagName: "vf-button",
+      constructor: VyrnForgeButtonElement,
+    }),
+    Object.freeze({
+      tagName: "vf-icon-button",
+      constructor: VyrnForgeIconButtonElement,
+    }),
+    Object.freeze({
+      tagName: "vf-button-group",
+      constructor: VyrnForgeButtonGroupElement,
+    }),
+    Object.freeze({
+      tagName: "vf-toolbar-button",
+      constructor: VyrnForgeToolbarButtonElement,
+    }),
+    Object.freeze({
+      tagName: "vf-text-input",
+      constructor: VyrnForgeTextInputElement,
+    }),
+    Object.freeze({
+      tagName: "vf-textarea",
+      constructor: VyrnForgeTextareaElement,
+    }),
+    Object.freeze({
+      tagName: "vf-search-input",
+      constructor: VyrnForgeSearchInputElement,
+    }),
+    Object.freeze({
+      tagName: "vf-number-input",
+      constructor: VyrnForgeNumberInputElement,
+    }),
+    Object.freeze({
+      tagName: "vf-date-input",
+      constructor: VyrnForgeDateInputElement,
+    }),
+    Object.freeze({
+      tagName: "vf-datetime-input",
+      constructor: VyrnForgeDateTimeInputElement,
+    }),
+    Object.freeze({
+      tagName: "vf-checkbox",
+      constructor: VyrnForgeCheckboxElement,
+    }),
+    Object.freeze({ tagName: "vf-radio", constructor: VyrnForgeRadioElement }),
+    Object.freeze({
+      tagName: "vf-radio-group",
+      constructor: VyrnForgeRadioGroupElement,
+    }),
+    Object.freeze({
+      tagName: "vf-switch",
+      constructor: VyrnForgeSwitchElement,
+    }),
+    Object.freeze({
+      tagName: "vf-select",
+      constructor: VyrnForgeSelectElement,
+    }),
+    Object.freeze({
+      tagName: "vf-slider",
+      constructor: VyrnForgeSliderElement,
+    }),
+    Object.freeze({
+      tagName: "vf-rating",
+      constructor: VyrnForgeRatingElement,
+    }),
+    Object.freeze({
+      tagName: "vf-toggle-button",
+      constructor: VyrnForgeToggleButtonElement,
+    }),
+    Object.freeze({
+      tagName: "vf-toggle-button-group",
+      constructor: VyrnForgeToggleButtonGroupElement,
+    }),
+    Object.freeze({
+      tagName: "vf-segmented-control",
+      constructor: VyrnForgeSegmentedControlElement,
+    }),
+    Object.freeze({ tagName: "vf-field", constructor: VyrnForgeFieldElement }),
+    Object.freeze({
+      tagName: "vf-validation-message",
+      constructor: VyrnForgeValidationMessageElement,
+    }),
+    Object.freeze({ tagName: "vf-tabs", constructor: VyrnForgeTabsElement }),
+    Object.freeze({
+      tagName: "vf-breadcrumbs",
+      constructor: VyrnForgeBreadcrumbsElement,
+    }),
+    Object.freeze({
+      tagName: "vf-side-nav",
+      constructor: VyrnForgeSideNavElement,
+    }),
+  ]);
+
+export const vyrnForgeElementRegistrations: Readonly<
+  Record<VyrnForgeElementTagName, VyrnForgeElementRegistration>
+> = Object.freeze(
+  Object.fromEntries(
+    vyrnForgeElementDefinitions.map((definition) => [
+      definition.tagName,
+      createVyrnForgeElementRegistration(definition),
+    ]),
+  ) as Record<VyrnForgeElementTagName, VyrnForgeElementRegistration>,
+);
 
 export function getVyrnForgeElementRegistry():
   VyrnForgeElementRegistry | undefined {

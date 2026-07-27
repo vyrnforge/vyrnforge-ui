@@ -205,4 +205,4 @@ VyrnForge UI is maintained as part of the VyrnForge UI repository.
 
 ## Current multi-framework stage
 
-S5 / GMF2 is complete through MF-5016. S6 is active: EL-6001 through EL-6004 establish native registration, lifecycle, reflection, typed DOM event, and ElementInternals form foundations; React remains the reference renderer while native ports are implemented.
+S5 / GMF2 is complete through MF-5016. S6 is active: EL-6001 through EL-6011 establish native foundations and 40 public core tags across display, actions, forms, values, fields, and navigation; React remains the reference renderer while advanced native ports are implemented.
