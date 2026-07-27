@@ -79,3 +79,11 @@ scripts/verify-native-element-foundations.mjs
 scripts/verify-native-element-foundations.test.mjs
 docs/metadata/native-element-foundations.json
 ```
+
+## EL-6005 through EL-6011 extension
+
+The foundation now supports 40 registered public native core elements. Their
+component-family contracts and browser evidence are canonicalized in
+`docs/testing/native-core-element-contracts.md` and
+`docs/metadata/native-core-elements.json`. Advanced collections and overlays
+remain outside this completed wave.

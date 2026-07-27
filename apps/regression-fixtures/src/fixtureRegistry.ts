@@ -62,6 +62,21 @@ export const fixtureRegistry: readonly FixtureCase[] = [
     densities: allDensities,
   },
   {
+    id: "native-core-elements",
+    title: "Native core elements",
+    componentMetadataId: "button",
+    category: "basic-control",
+    route: "/fixtures/native/core-elements",
+    renderKey: "native-core-elements",
+    purpose:
+      "Proves native display, action, form, value, field, and navigation elements through their public package APIs.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+    notes:
+      "Covers EL-6005 through EL-6011 while keeping complex collection and overlay families in later S6 batches.",
+  },
+  {
     id: "native-form-foundation",
     title: "Native form foundation",
     componentMetadataId: "text-input",

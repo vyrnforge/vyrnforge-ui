@@ -136,3 +136,17 @@ A fallback may be introduced only for a documented target-browser gap. It must
 preserve the same properties, methods, events, submission shape, reset
 behavior, and validation outcomes. A hidden-input workaround is not the default
 architecture.
+
+## Native core renderer wave
+
+EL-6005 through EL-6011 implement the first approved public native component
+wave. Concrete elements remain thin DOM adapters over shared VyrnForge tokens,
+behavior controllers, and form contracts. They use Light DOM and the same
+`vf-*` class namespace as the design system; they do not depend on the React
+renderer package.
+
+The public catalog is explicit and deterministic. Object-valued APIs such as
+items and options are properties, while stable primitive state may reflect to
+attributes. Native controls retain browser keyboard and form semantics, and
+composite navigation delegates portable state decisions to shared behavior
+controllers.

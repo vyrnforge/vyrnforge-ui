@@ -49,9 +49,11 @@ export {
   registerVyrnForgeElementDefinitions,
   registerVyrnForgeElements,
   vyrnForgeElementDefinitions,
+  vyrnForgeElementRegistrations,
   type VyrnForgeElementConstructor,
   type VyrnForgeElementDefinition,
   type VyrnForgeElementRegistration,
   type VyrnForgeElementRegistry,
   type VyrnForgeElementTagName,
 } from "./registry";
+export * from "./components";

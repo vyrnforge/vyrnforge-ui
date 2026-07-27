@@ -1,0 +1,27 @@
+.vf-card {
+  min-width: 0;
+  border-radius: var(--vf-radius-lg);
+}
+.vf-card--plain {
+  background: transparent;
+}
+.vf-card--bordered {
+  border: 1px solid var(--vf-border-default);
+}
+.vf-card--elevated {
+  border: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-overlay);
+  box-shadow: var(--vf-shadow-md);
+}
+.vf-card--padding-none {
+  padding: 0;
+}
+.vf-card--padding-sm {
+  padding: var(--vf-space-3);
+}
+.vf-card--padding-md {
+  padding: var(--vf-space-4);
+}
+.vf-card--padding-lg {
+  padding: var(--vf-space-6);
+}

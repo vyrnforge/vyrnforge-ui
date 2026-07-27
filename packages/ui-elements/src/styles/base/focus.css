@@ -1,0 +1,21 @@
+.vf-button:focus-visible,
+.vf-icon-button:focus-visible,
+.vf-toolbar-button:focus-visible,
+.vf-toggle-button:focus-visible,
+.vf-segmented-control__item:focus-visible,
+.vf-input:focus-visible,
+.vf-select:focus-visible,
+.vf-textarea:focus-visible,
+.vf-checkbox:focus-visible,
+.vf-radio:focus-visible,
+.vf-switch__input:focus-visible + .vf-switch__control,
+.vf-multi-select__trigger:focus-visible,
+.vf-multi-select__option input:focus-visible,
+.vf-transfer-list__option input:focus-visible,
+.vf-toast__dismiss:focus-visible,
+.vf-side-nav__item:focus-visible,
+.vf-breadcrumbs__link:focus-visible,
+.vf-tabs__tab:focus-visible {
+  outline: var(--vf-focus-width) solid var(--vf-focus-color);
+  outline-offset: var(--vf-focus-offset);
+}

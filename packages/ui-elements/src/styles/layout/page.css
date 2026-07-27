@@ -1,0 +1,39 @@
+.vf-page {
+  --vf-page-gap: var(--vf-space-4);
+  --vf-page-padding: var(--vf-space-6);
+  display: grid;
+  gap: var(--vf-page-gap);
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: var(--vf-page-padding);
+  color: var(--vf-text-primary);
+}
+.vf-page--compact {
+  --vf-page-gap: var(--vf-space-3);
+  --vf-page-padding: var(--vf-space-4);
+}
+.vf-page--comfortable {
+  --vf-page-gap: var(--vf-space-5);
+  --vf-page-padding: var(--vf-space-7, 32px);
+}
+.vf-page--max-none {
+  max-width: none;
+}
+.vf-page--max-sm {
+  max-width: 720px;
+}
+.vf-page--max-md {
+  max-width: 960px;
+}
+.vf-page--max-lg {
+  max-width: 1200px;
+}
+.vf-page--max-xl {
+  max-width: 1440px;
+}
+.vf-page__body {
+  display: grid;
+  gap: var(--vf-page-gap);
+  min-width: 0;
+}

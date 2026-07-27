@@ -6,6 +6,8 @@ import {
   defineVyrnForgeElement,
   dispatchVyrnForgeEvent,
   registerVyrnForgeElements,
+  vyrnForgeElementDefinitions,
+  vyrnForgeElementRegistrations,
   vyrnForgeUiElementsVersion,
   type VyrnForgeElementConstructor,
   type VyrnForgeElementRegistry,
@@ -87,10 +89,17 @@ describe("ui-elements foundation", () => {
     expect(listener).toHaveBeenCalledOnce();
   });
 
-  it("keeps register-all idempotent while no public elements are implemented", () => {
-    expect(registerVyrnForgeElements(createRegistry())).toEqual([]);
-    expect(Object.isFrozen(registerVyrnForgeElements(createRegistry()))).toBe(
-      true,
-    );
+  it("registers the native core catalog idempotently", () => {
+    const registry = createRegistry();
+    const first = registerVyrnForgeElements(registry);
+    const second = registerVyrnForgeElements(registry);
+
+    expect(first).toHaveLength(40);
+    expect(first[0]).toBe("vf-text");
+    expect(first[first.length - 1]).toBe("vf-side-nav");
+    expect(second).toEqual([]);
+    expect(Object.isFrozen(first)).toBe(true);
+    expect(vyrnForgeElementDefinitions).toHaveLength(40);
+    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(40);
   });
 });

@@ -1,7 +1,7 @@
 {
   "name": "@vyrnforge/ui-elements",
   "version": "0.1.0-alpha.1",
-  "description": "Browser-native VyrnForge Custom Element registration, lifecycle, property reflection, and typed DOM event foundations.",
+  "description": "Browser-native VyrnForge Custom Elements with shared behavior, typed events, ElementInternals forms, Light DOM styles, and explicit registration.",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "./dist/index.cjs",

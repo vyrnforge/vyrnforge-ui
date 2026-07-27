@@ -1,0 +1,18 @@
+.vf-icon-button {
+  width: var(--vf-control-height);
+  height: var(--vf-control-height);
+  padding: 0;
+}
+.vf-icon-button--xs {
+  width: var(--vf-hit-target-min);
+  height: var(--vf-hit-target-min);
+  border-radius: var(--vf-radius-sm);
+}
+.vf-icon-button--sm {
+  width: var(--vf-control-height-sm);
+  height: var(--vf-control-height-sm);
+}
+.vf-icon-button--lg {
+  width: var(--vf-control-height-lg);
+  height: var(--vf-control-height-lg);
+}

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S6",
-    "batch": "EL-6003-EL-6004",
+    "batch": "EL-6005-EL-6011",
     "status": "in-progress",
     "gate": "GMF3",
     "gateStatus": "in-progress"
@@ -26,31 +26,31 @@
     },
     {
       "id": "EL-6005",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6006",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6007",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6008",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6009",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6010",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6011",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6012",
@@ -124,8 +124,19 @@
     "packages/ui-elements/src/registry.test.ts",
     "packages/ui-elements/src/register.ts",
     "packages/ui-elements/src/index.ts",
+    "packages/ui-elements/src/components/dom.ts",
+    "packages/ui-elements/src/components/display.ts",
+    "packages/ui-elements/src/components/actions.ts",
+    "packages/ui-elements/src/components/inputs.ts",
+    "packages/ui-elements/src/components/selection.ts",
+    "packages/ui-elements/src/components/values.ts",
+    "packages/ui-elements/src/components/field.ts",
+    "packages/ui-elements/src/components/navigation.ts",
+    "packages/ui-elements/src/components/index.ts",
     "apps/regression-fixtures/src/nativeFormFoundation.ts",
+    "apps/regression-fixtures/src/nativeCoreElements.tsx",
     "tests/browser/native-form-foundation.spec.ts",
+    "tests/browser/native-core-elements.spec.ts",
     "tests/consumers/native-html/architecture-probe.ts",
     "tests/consumers/native-html/fixture.json"
   ],
@@ -134,7 +145,8 @@
     "docs/api/ui-elements-api.md",
     "docs/packages/ui-elements.md",
     "docs/architecture/10-custom-elements-and-form-association.md",
-    "docs/testing/native-element-foundation-contracts.md"
+    "docs/testing/native-element-foundation-contracts.md",
+    "docs/testing/native-core-element-contracts.md"
   ],
   "constraints": {
     "frameworkDependencies": [],
@@ -144,13 +156,6 @@
     "formRuntimeAtImport": false
   },
   "remainingGmf3Tasks": [
-    "EL-6005",
-    "EL-6006",
-    "EL-6007",
-    "EL-6008",
-    "EL-6009",
-    "EL-6010",
-    "EL-6011",
     "EL-6012",
     "EL-6013",
     "EL-6014",
@@ -217,5 +222,63 @@
       "unsupported-browser-fallback"
     ],
     "browserEvidence": "tests/browser/native-form-foundation.spec.ts"
+  },
+  "nativeCoreElements": {
+    "metadata": "docs/metadata/native-core-elements.json",
+    "catalog": "vyrnForgeElementDefinitions",
+    "registrationCount": 40,
+    "groups": {
+      "display-layout": [
+        "vf-text",
+        "vf-heading",
+        "vf-caption",
+        "vf-label",
+        "vf-code-text",
+        "vf-badge",
+        "vf-card",
+        "vf-panel",
+        "vf-stack",
+        "vf-inline",
+        "vf-page",
+        "vf-section",
+        "vf-empty-state",
+        "vf-loading-state",
+        "vf-error-state"
+      ],
+      "actions": [
+        "vf-button",
+        "vf-icon-button",
+        "vf-button-group",
+        "vf-toolbar-button"
+      ],
+      "text-inputs": [
+        "vf-text-input",
+        "vf-textarea",
+        "vf-search-input",
+        "vf-number-input",
+        "vf-date-input",
+        "vf-datetime-input"
+      ],
+      "selection": [
+        "vf-checkbox",
+        "vf-radio",
+        "vf-radio-group",
+        "vf-switch",
+        "vf-select"
+      ],
+      "values": [
+        "vf-slider",
+        "vf-rating",
+        "vf-toggle-button",
+        "vf-toggle-button-group",
+        "vf-segmented-control"
+      ],
+      "field-validation": ["vf-field", "vf-validation-message"],
+      "navigation": ["vf-tabs", "vf-breadcrumbs", "vf-side-nav"]
+    },
+    "browserEvidence": "tests/browser/native-core-elements.spec.ts",
+    "fixture": "apps/regression-fixtures/src/nativeCoreElements.tsx",
+    "styleEntry": "@vyrnforge/ui-elements/styles/index.css",
+    "domMode": "light-dom"
   }
 }

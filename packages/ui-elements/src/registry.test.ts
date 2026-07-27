@@ -9,6 +9,7 @@ import {
   registerVyrnForgeElementDefinitions,
   registerVyrnForgeElements,
   vyrnForgeElementDefinitions,
+  vyrnForgeElementRegistrations,
   type VyrnForgeElementConstructor,
   type VyrnForgeElementRegistry,
 } from "./registry";
@@ -89,11 +90,17 @@ describe("VyrnForge element registration", () => {
     ).toBe(true);
   });
 
-  it("keeps register-all frozen and empty before public elements land", () => {
-    expect(vyrnForgeElementDefinitions).toEqual([]);
+  it("registers the frozen native core catalog and per-element entry points", () => {
+    expect(vyrnForgeElementDefinitions).toHaveLength(40);
     expect(Object.isFrozen(vyrnForgeElementDefinitions)).toBe(true);
-    const registered = registerVyrnForgeElements(createRegistry());
-    expect(registered).toEqual([]);
+    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(40);
+
+    const registry = createRegistry();
+    const registered = registerVyrnForgeElements(registry);
+    expect(registered).toEqual(
+      vyrnForgeElementDefinitions.map(({ tagName }) => tagName),
+    );
     expect(Object.isFrozen(registered)).toBe(true);
+    expect(registerVyrnForgeElements(registry)).toEqual([]);
   });
 });

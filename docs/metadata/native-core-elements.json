@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S6",
+    "batch": "EL-6005-EL-6011",
+    "status": "implemented",
+    "gate": "GMF3",
+    "gateStatus": "in-progress"
+  },
+  "tasks": [
+    {
+      "id": "EL-6005",
+      "status": "done"
+    },
+    {
+      "id": "EL-6006",
+      "status": "done"
+    },
+    {
+      "id": "EL-6007",
+      "status": "done"
+    },
+    {
+      "id": "EL-6008",
+      "status": "done"
+    },
+    {
+      "id": "EL-6009",
+      "status": "done"
+    },
+    {
+      "id": "EL-6010",
+      "status": "done"
+    },
+    {
+      "id": "EL-6011",
+      "status": "done"
+    }
+  ],
+  "package": "@vyrnforge/ui-elements",
+  "registration": {
+    "catalog": "vyrnForgeElementDefinitions",
+    "registrations": "vyrnForgeElementRegistrations",
+    "count": 40,
+    "tags": [
+      "vf-text",
+      "vf-heading",
+      "vf-caption",
+      "vf-label",
+      "vf-code-text",
+      "vf-badge",
+      "vf-card",
+      "vf-panel",
+      "vf-stack",
+      "vf-inline",
+      "vf-page",
+      "vf-section",
+      "vf-empty-state",
+      "vf-loading-state",
+      "vf-error-state",
+      "vf-button",
+      "vf-icon-button",
+      "vf-button-group",
+      "vf-toolbar-button",
+      "vf-text-input",
+      "vf-textarea",
+      "vf-search-input",
+      "vf-number-input",
+      "vf-date-input",
+      "vf-datetime-input",
+      "vf-checkbox",
+      "vf-radio",
+      "vf-radio-group",
+      "vf-switch",
+      "vf-select",
+      "vf-slider",
+      "vf-rating",
+      "vf-toggle-button",
+      "vf-toggle-button-group",
+      "vf-segmented-control",
+      "vf-field",
+      "vf-validation-message",
+      "vf-tabs",
+      "vf-breadcrumbs",
+      "vf-side-nav"
+    ]
+  },
+  "families": {
+    "display-layout": [
+      "vf-text",
+      "vf-heading",
+      "vf-caption",
+      "vf-label",
+      "vf-code-text",
+      "vf-badge",
+      "vf-card",
+      "vf-panel",
+      "vf-stack",
+      "vf-inline",
+      "vf-page",
+      "vf-section",
+      "vf-empty-state",
+      "vf-loading-state",
+      "vf-error-state"
+    ],
+    "actions": [
+      "vf-button",
+      "vf-icon-button",
+      "vf-button-group",
+      "vf-toolbar-button"
+    ],
+    "text-inputs": [
+      "vf-text-input",
+      "vf-textarea",
+      "vf-search-input",
+      "vf-number-input",
+      "vf-date-input",
+      "vf-datetime-input"
+    ],
+    "selection": [
+      "vf-checkbox",
+      "vf-radio",
+      "vf-radio-group",
+      "vf-switch",
+      "vf-select"
+    ],
+    "values": [
+      "vf-slider",
+      "vf-rating",
+      "vf-toggle-button",
+      "vf-toggle-button-group",
+      "vf-segmented-control"
+    ],
+    "field-validation": ["vf-field", "vf-validation-message"],
+    "navigation": ["vf-tabs", "vf-breadcrumbs", "vf-side-nav"]
+  },
+  "contracts": {
+    "dom": "light-dom",
+    "styleNamespace": "vf-",
+    "events": "typed bubbling composed vf-* CustomEvent contracts",
+    "forms": "ElementInternals through VyrnForgeFormAssociatedElement",
+    "behaviorReuse": [
+      "resolveActionState",
+      "createToggleController",
+      "resolveToggleInputState",
+      "createNumericValueController",
+      "createToggleGroupController",
+      "createTabsController",
+      "createNavigationController"
+    ],
+    "frameworkDependencies": []
+  },
+  "evidence": {
+    "browser": "tests/browser/native-core-elements.spec.ts",
+    "fixture": "apps/regression-fixtures/src/nativeCoreElements.tsx",
+    "verifier": "scripts/verify-native-core-elements.mjs",
+    "verifierTests": "scripts/verify-native-core-elements.test.mjs",
+    "styles": "packages/ui-elements/src/styles/index.css"
+  },
+  "deferredFamilies": [
+    "EL-6012 autocomplete",
+    "EL-6013 multi-selection and transfer",
+    "EL-6014 modal overlays",
+    "EL-6015 anchored overlays and menus",
+    "EL-6016 toast and confirmation",
+    "EL-6017 application composition",
+    "EL-6018 GMF3 closure"
+  ]
+}

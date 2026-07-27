@@ -1,0 +1,22 @@
+.vf-button__spinner,
+.vf-loading-state__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 999px;
+  animation: vf-spin var(--vf-motion-duration-deliberate) linear infinite;
+}
+@keyframes vf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes vf-skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
