@@ -7,3 +7,11 @@ export { useToggleGroupBehavior } from "./useToggleGroupBehavior";
 export { useMultiSelectBehavior } from "./useMultiSelectBehavior";
 export { useNavigationBehavior } from "./useNavigationBehavior";
 export { useOverlayBehavior } from "./useOverlayBehavior";
+export {
+  useDialogBehavior,
+  useDrawerBehavior,
+  usePopoverBehavior,
+  useTooltipBehavior,
+} from "./useOverlayComponentBehavior";
+export { useToastBehavior } from "./useToastBehavior";
+export { useConfirmDialogBehavior } from "./useConfirmDialogBehavior";

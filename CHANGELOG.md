@@ -15,6 +15,7 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 - React behavior adapters and parity tests for Button, ToggleButton, ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider, Rating, and Tabs.
 - MF-5008 through MF-5010 framework-neutral Autocomplete, MultiSelect, and Transfer List controllers with React parity adoption.
 - MF-5011 and MF-5012 framework-neutral Menu/SideNav navigation and overlay lifecycle, layer, and positioning foundations with React adapter adoption.
+- MF-5013 and MF-5014 component-specific Dialog, Drawer, Popover, Tooltip, Toast, and ConfirmDialog controllers with React parity adoption.
 
 ### Added
 

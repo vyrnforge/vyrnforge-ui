@@ -122,10 +122,10 @@
       "rule": "Use Switch for persistent settings, ToggleButton for active tools or views, ToggleButtonGroup for related compact tools, SegmentedControl for small stable exclusive options, RadioGroup for spacious form choices, and Checkbox for independent Boolean values."
     },
     "Toast": {
-      "rule": "Use ToastProvider and useToast for transient operation feedback only."
+      "rule": "Use ToastProvider and useToast for transient operation feedback; queue, duration, pause/resume, action, and dismissal state come from ui-behaviors."
     },
     "Overlays": {
-      "rule": "Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, and ConfirmDialog use a shared private overlay foundation."
+      "rule": "Popover, Tooltip, Dialog, Drawer, and ConfirmDialog consume shared ui-behaviors controllers while React retains portals, focus, refs, timers, and DOM event translation."
     }
   }
 }

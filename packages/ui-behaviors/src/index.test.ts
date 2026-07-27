@@ -5,11 +5,16 @@ import {
   createBehaviorEvent,
   createAutocompleteController,
   createCollectionController,
+  createConfirmDialogController,
+  createDialogController,
   createControllableState,
   createMultiSelectController,
   createNavigationController,
   createOverlayLifecycleController,
+  createPopoverController,
   createSelectionController,
+  createToastController,
+  createTooltipController,
   createTransferListController,
   vyrnForgeUiBehaviorsVersion,
 } from "./index";
@@ -30,6 +35,11 @@ describe("ui-behaviors public surface", () => {
     expect(createMultiSelectController().getSnapshot().items).toEqual([]);
     expect(createNavigationController().getSnapshot().items).toEqual([]);
     expect(createOverlayLifecycleController().getSnapshot().open).toBe(false);
+    expect(createDialogController().getSnapshot().kind).toBe("dialog");
+    expect(createPopoverController().getSnapshot().kind).toBe("popover");
+    expect(createTooltipController().getSnapshot().kind).toBe("tooltip");
+    expect(createToastController().getSnapshot().records).toEqual([]);
+    expect(createConfirmDialogController().getSnapshot().open).toBe(false);
     expect(createTransferListController().getSnapshot().items).toEqual([]);
     expect(behaviorChangeReasons).toContain("keyboard");
   });

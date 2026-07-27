@@ -213,3 +213,29 @@ The package exports `OverlayFocusAdapter`, `OverlayLayerRegistry`, and
 `OverlayPositionAdapter` contracts. React continues to own portals, focus
 trapping/restoration, DOM measurement, global listeners, scroll locking, and
 CSS application.
+
+## Component overlay controllers
+
+`createDialogController()`, `createDrawerController()`,
+`createPopoverController()`, and `createTooltipController()` layer
+component-specific configuration and trigger/content relationships over the
+shared overlay lifecycle. They preserve controlled proposal semantics and
+explicit dismissal reasons without storing DOM nodes.
+
+React adapters use the controller relationship IDs for `aria-controls` and
+`aria-describedby`, while portals, focus traps, timers, event listeners, DOM
+measurement, and CSS placement remain renderer-owned.
+
+## Toast
+
+`createToastController()` owns queue insertion and replacement, visible-window
+selection, explicit duration values, pause/resume state, action events, and
+dismissal reasons. Payloads are generic so each renderer can retain its own
+renderable content type. Timer scheduling remains a renderer adapter concern.
+
+## ConfirmDialog
+
+`createConfirmDialogController()` owns controlled or uncontrolled open state,
+loading and disabled action eligibility, cancel proposals, confirm events, and
+user-dismissal blocking while loading. The React adapter keeps rendering and
+button event translation.

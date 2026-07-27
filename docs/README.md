@@ -51,7 +51,7 @@ Do not create new top-level documentation without linking it from this file. If 
 | Document                    | Purpose                                                                                      |
 | --------------------------- | -------------------------------------------------------------------------------------------- |
 | `packages/ui-core.md`       | Tokens, themes, density, utilities.                                                          |
-| `packages/ui-behaviors.md`  | Current framework-neutral behavior foundations and React adapter migrations through MF-5012. |
+| `packages/ui-behaviors.md`  | Current framework-neutral behavior foundations and React adapter migrations through MF-5014. |
 | `packages/ui-components.md` | Shared React primitives and application components.                                          |
 | `packages/ui-elements.md`   | Planned native Custom Element renderer boundary.                                             |
 | `packages/ui-data-grid.md`  | UniversalDataGrid package scope and API direction.                                           |
@@ -233,5 +233,5 @@ Archived docs are historical only. They preserve useful context but do not guide
 | `api/ui-elements-api.md`                    | Native Custom Element S4 foundation API and entry points.                  |
 | `testing/gmf1-architecture-gate.md`         | GMF1 closure evidence and remaining release conditions.                    |
 | `quality/s5-framework-neutral-behaviors.md` | S5 scope, invariants, non-scope, and GMF2 relationship.                    |
-| `testing/behavior-foundation-contracts.md`  | MF-5001–MF-5012 package and repository evidence.                           |
-| `testing/behavior-react-parity.md`          | MF-5005–MF-5012 React adapter parity evidence.                             |
+| `testing/behavior-foundation-contracts.md`  | MF-5001–MF-5014 package and repository evidence.                           |
+| `testing/behavior-react-parity.md`          | MF-5005–MF-5014 React adapter parity evidence.                             |

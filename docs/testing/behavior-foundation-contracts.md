@@ -1,6 +1,6 @@
 # Behavior Foundation Contract Evidence
 
-MF-5001 through MF-5012 are verified at three levels.
+MF-5001 through MF-5014 are verified at three levels.
 
 ## Package tests
 
@@ -25,6 +25,11 @@ MF-5001 through MF-5012 are verified at three levels.
   movement, selection events, and dismissal reasons;
 - controlled and uncontrolled overlay lifecycle, explicit dismissal reasons,
   layer ordering, positioning, flipping, and viewport shifting;
+- Dialog, Drawer, Popover, and Tooltip component-kind configuration and
+  trigger/content relationships;
+- Toast queue, visible-window, duration, pause/resume, action, and dismissal
+  transitions;
+- ConfirmDialog loading/disabled action eligibility and controlled proposals;
 - command dispatch and public entry-point exports.
 
 ## Repository contract

@@ -47,7 +47,7 @@ The active release program prioritizes all public non-grid components:
 - React remains the reference renderer through `@vyrnforge/ui-components`.
 - Native HTML becomes first-class through `@vyrnforge/ui-elements` foundation.
 - Angular and Vue are verified consumers of the native element surface.
-- Shared component state and behavior move into `@vyrnforge/ui-behaviors`; MF-5001–MF-5012 foundations and React migrations through Menu, SideNav, and the shared overlay lifecycle boundary are implemented.
+- Shared component state and behavior move into `@vyrnforge/ui-behaviors`; MF-5001–MF-5014 foundations and React migrations through Dialog, Drawer, Popover, Tooltip, ToastProvider, and ConfirmDialog are implemented.
 - The data grid remains usable as a React alpha and does not block the non-grid beta.
 
 Architecture fixtures do not claim framework support. Clean consumer builds,

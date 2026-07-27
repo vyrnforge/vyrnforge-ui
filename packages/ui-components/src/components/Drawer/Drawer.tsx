@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { useOverlayBehavior } from "../../internal/behaviors";
+import { useDrawerBehavior } from "../../internal/behaviors";
 import {
   DismissableLayer,
   FocusScope,
@@ -28,9 +28,15 @@ export function Drawer({
   size = "md",
   title,
 }: DrawerProps) {
+  const contentId = useId();
   const titleId = useId();
   const descriptionId = useId();
-  const behavior = useOverlayBehavior({ onOpenChange, open });
+  const behavior = useDrawerBehavior({
+    contentId,
+    modal,
+    onOpenChange,
+    open,
+  });
   useScrollLock(behavior.isOpen && modal);
 
   if (!behavior.isOpen) return null;
@@ -65,6 +71,7 @@ export function Drawer({
                   className,
                 )}
                 data-vf-focus-fallback
+                id={contentId}
                 role="dialog"
                 tabIndex={-1}
               >

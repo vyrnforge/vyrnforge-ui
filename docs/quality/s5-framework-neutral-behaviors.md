@@ -25,10 +25,12 @@ controllers:
 | MF-5010 | Transfer List behavior                            | implemented |
 | MF-5011 | Menu and SideNav navigation behavior              | implemented |
 | MF-5012 | overlay lifecycle and DOM-adapter boundary        | implemented |
+| MF-5013 | Dialog, Drawer, Popover, and Tooltip controllers  | implemented |
+| MF-5014 | Toast and ConfirmDialog behavior                  | implemented |
 
 ## React adoption batches
 
-MF-5005 through MF-5012 migrate representative action, toggle, native form,
+MF-5005 through MF-5014 migrate representative action, toggle, native form,
 choice, numeric, navigation, Autocomplete, MultiSelect, and Transfer List
 components onto the shared behavior package without changing their public React
 APIs. React still owns DOM focus, native element rendering, refs, portals, and
@@ -48,8 +50,6 @@ event translation.
 
 ## Non-scope
 
-- component-specific overlay controllers scheduled under MF-5013;
-- Toast and ConfirmDialog behavior scheduled under MF-5014;
 - native Custom Element rendering;
 - DOM focus execution and DOM measurement;
 - data-grid behavior;
@@ -57,7 +57,6 @@ event translation.
 
 ## Gate relationship
 
-MF-5001 through MF-5012 do not complete GMF2. Dialog, Drawer, Popover, and
-Tooltip component controllers, Toast and ConfirmDialog behavior, the final
-React adoption audit, and the closing parity gate remain scheduled through
-MF-5016.
+MF-5001 through MF-5014 do not complete GMF2. The final React adoption and
+compatibility audit plus the closing parity gate remain scheduled as MF-5015
+and MF-5016.
