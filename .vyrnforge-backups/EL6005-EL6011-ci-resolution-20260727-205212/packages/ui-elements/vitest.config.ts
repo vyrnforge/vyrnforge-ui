@@ -1,17 +1,6 @@
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  resolve: {
-    alias: [
-      {
-        find: /^@vyrnforge\/ui-behaviors$/,
-        replacement: fileURLToPath(
-          new URL("../ui-behaviors/src/index.ts", import.meta.url),
-        ),
-      },
-    ],
-  },
   test: {
     coverage: {
       all: true,
