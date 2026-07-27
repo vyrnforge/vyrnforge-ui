@@ -96,3 +96,20 @@ MF-5011 and MF-5012 add:
 
 The React adapters retain refs, `focus()`, portals, focus trapping, document
 listeners, scroll locking, DOM measurement, and CSS application.
+
+## Component overlay and feedback controllers
+
+MF-5013 and MF-5014 add:
+
+- `createDialogController()`, `createDrawerController()`,
+  `createPopoverController()`, and `createTooltipController()` for portable
+  open state, modal/disabled configuration, explicit dismissal reasons, and
+  trigger/content relationships;
+- `createToastController()` for deterministic queue state, visible-window
+  selection, explicit duration, pause/resume state, action events, and
+  dismissal reasons;
+- `createConfirmDialogController()` for controlled confirmation state,
+  loading/disabled action rules, and explicit cancel/confirm events.
+
+React remains responsible for timers, portals, focus execution, DOM
+measurement, native events, and rendering ReactNode payloads.

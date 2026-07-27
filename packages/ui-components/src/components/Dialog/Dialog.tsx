@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { useOverlayBehavior } from "../../internal/behaviors";
+import { useDialogBehavior } from "../../internal/behaviors";
 import {
   DismissableLayer,
   FocusScope,
@@ -26,9 +26,14 @@ export function Dialog({
   size = "md",
   title,
 }: DialogProps) {
+  const contentId = useId();
   const titleId = useId();
   const descriptionId = useId();
-  const behavior = useOverlayBehavior({ onOpenChange, open });
+  const behavior = useDialogBehavior({
+    contentId,
+    onOpenChange,
+    open,
+  });
   useScrollLock(behavior.isOpen);
 
   if (!behavior.isOpen) return null;
@@ -61,6 +66,7 @@ export function Dialog({
                   className,
                 )}
                 data-vf-focus-fallback
+                id={contentId}
                 role="dialog"
                 tabIndex={-1}
               >

@@ -1,3 +1,4 @@
+import { useConfirmDialogBehavior } from "../../internal/behaviors";
 import { Button } from "../Button";
 import { Dialog } from "../Dialog";
 import type { ConfirmDialogProps } from "./ConfirmDialog.types";
@@ -13,16 +14,16 @@ export function ConfirmDialog({
   onOpenChange,
   open,
   title,
-  variant = "default"
+  variant = "default",
 }: ConfirmDialogProps) {
-  const handleCancel = () => {
-    if (loading || disabled) {
-      return;
-    }
-
-    onCancel?.();
-    onOpenChange(false);
-  };
+  const behavior = useConfirmDialogBehavior({
+    disabled,
+    loading,
+    onCancel,
+    onConfirm,
+    onOpenChange,
+    open,
+  });
 
   return (
     <Dialog
@@ -32,20 +33,24 @@ export function ConfirmDialog({
       description={description}
       footer={
         <div className="vf-confirm-dialog__actions">
-          <Button disabled={loading || disabled} onClick={handleCancel} variant="subtle">
+          <Button
+            disabled={!behavior.canCancel}
+            onClick={behavior.cancel}
+            variant="subtle"
+          >
             {cancelLabel}
           </Button>
           <Button
-            disabled={disabled}
+            disabled={!behavior.canConfirm}
             loading={loading}
-            onClick={onConfirm}
+            onClick={behavior.confirm}
             variant={variant === "danger" ? "danger" : "primary"}
           >
             {confirmLabel}
           </Button>
         </div>
       }
-      onOpenChange={onOpenChange}
+      onOpenChange={behavior.setOpen}
       open={open}
       size="sm"
       title={title}

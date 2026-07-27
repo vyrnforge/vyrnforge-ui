@@ -64,11 +64,24 @@ and DOM identifiers.
 - React retains portals, focus trapping, global listeners, DOM measurement,
   scroll locking, and CSS application.
 
+### MF-5013 — Component overlay controllers
+
+- Dialog, Drawer, Popover, and Tooltip controller factories;
+- controlled open proposals and explicit dismissal reasons;
+- modal/disabled configuration and trigger/content relationships;
+- React retains timers, refs, portals, focus, listeners, and measurement.
+
+### MF-5014 — Toast and ConfirmDialog behavior
+
+- deterministic Toast queue and visible-window state;
+- explicit duration, pause/resume, action, and dismissal events;
+- controlled confirmation state and loading/disabled action rules;
+- React retains ReactNode payloads, timer execution, and rendering.
+
 ## Still deferred within S5
 
-MF-5013 through MF-5016 remain. Component-specific Dialog, Drawer, Popover,
-Tooltip, Toast, and ConfirmDialog controllers, the final React adoption audit,
-and the GMF2 parity gate must remain explicit follow-up evidence.
+MF-5015 and MF-5016 remain. The final React behavior-adoption compatibility
+audit and the GMF2 parity gate must remain explicit follow-up evidence.
 
 ## Validation
 
@@ -83,7 +96,7 @@ npm run verify:package-boundaries
 The adopted component families now include Button, ToggleButton,
 ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider,
 Rating, Tabs, Autocomplete, MultiSelect, Transfer List, Menu, SideNav, and the
-shared Popover, Dialog, and Drawer overlay lifecycle adapters. React remains responsible for rendering and DOM execution;
+Dialog, Drawer, Popover, Tooltip, ToastProvider, and ConfirmDialog adapters. React remains responsible for rendering and DOM execution;
 `ui-behaviors` owns only portable state and transition decisions.
 
 ## Composite selection adoption

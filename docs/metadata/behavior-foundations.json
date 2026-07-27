@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S5",
-    "batch": "MF-5001-MF-5012",
+    "batch": "MF-5001-MF-5014",
     "status": "implemented",
     "gate": "GMF2",
     "gateStatus": "in-progress",
@@ -67,6 +67,16 @@
     {
       "id": "MF-5012",
       "name": "Overlay lifecycle and DOM-adapter boundary",
+      "status": "done"
+    },
+    {
+      "id": "MF-5013",
+      "name": "Dialog, Drawer, Popover, and Tooltip controllers",
+      "status": "done"
+    },
+    {
+      "id": "MF-5014",
+      "name": "Toast and ConfirmDialog behavior",
       "status": "done"
     }
   ],
@@ -248,6 +258,43 @@
         "renderer-owned-dom-measurement",
         "framework-neutral-layer-order"
       ]
+    },
+    "overlayComponents": {
+      "factories": [
+        "createDialogController",
+        "createDrawerController",
+        "createPopoverController",
+        "createTooltipController"
+      ],
+      "reactAdapters": ["Dialog", "Drawer", "Popover", "Tooltip"],
+      "rules": [
+        "component-kind-contract",
+        "controlled-open-proposals",
+        "trigger-content-relationship",
+        "disabled-tooltip-rejected",
+        "renderer-owned-timers-and-dom"
+      ]
+    },
+    "toast": {
+      "factory": "createToastController",
+      "reactAdapter": "ToastProvider",
+      "rules": [
+        "deterministic-queue",
+        "visible-window",
+        "explicit-duration",
+        "pause-resume-state",
+        "action-and-dismissal-events"
+      ]
+    },
+    "confirmDialog": {
+      "factory": "createConfirmDialogController",
+      "reactAdapter": "ConfirmDialog",
+      "rules": [
+        "controlled-open-proposals",
+        "loading-blocks-user-dismissal",
+        "disabled-actions-rejected",
+        "explicit-cancel-and-confirm-events"
+      ]
     }
   },
   "boundaries": {
@@ -272,5 +319,5 @@
     "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run quality"
   ],
-  "remainingGmf2Tasks": ["MF-5013", "MF-5014", "MF-5015", "MF-5016"]
+  "remainingGmf2Tasks": ["MF-5015", "MF-5016"]
 }

@@ -7,7 +7,7 @@ import {
   type KeyboardEvent,
   type ReactElement,
 } from "react";
-import { useOverlayBehavior } from "../../internal/behaviors";
+import { usePopoverBehavior } from "../../internal/behaviors";
 import {
   DismissableLayer,
   FocusScope,
@@ -36,6 +36,7 @@ export function Popover({
   trigger,
   triggerAriaHasPopup,
 }: PopoverProps) {
+  const triggerId = useId();
   const contentId = useId();
   const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(
     null,
@@ -43,10 +44,13 @@ export function Popover({
   const [contentElement, setContentElement] = useState<HTMLDivElement | null>(
     null,
   );
-  const { dismiss, isOpen, toggle } = useOverlayBehavior({
+  const behavior = usePopoverBehavior({
+    contentId,
     defaultOpen,
+    modal,
     onOpenChange,
     open,
+    triggerId,
   });
 
   const position = useAnchoredPosition({
@@ -58,8 +62,8 @@ export function Popover({
   });
 
   const disclosureProps = {
-    "aria-controls": isOpen ? contentId : undefined,
-    "aria-expanded": isOpen,
+    "aria-controls": behavior.isOpen ? contentId : undefined,
+    "aria-expanded": behavior.isOpen,
     "aria-haspopup": triggerAriaHasPopup ?? (modal ? "dialog" : undefined),
   };
   const renderedTrigger = isValidElement(trigger) ? (
@@ -73,7 +77,7 @@ export function Popover({
       onKeyDown={(event: KeyboardEvent<HTMLSpanElement>) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          toggle("keyboard");
+          behavior.toggle("keyboard");
         }
       }}
       role="button"
@@ -87,19 +91,20 @@ export function Popover({
     <div
       className={joinClassNames(
         "vf-popover",
-        isOpen && "vf-popover--open",
+        behavior.isOpen && "vf-popover--open",
         className,
       )}
       style={style}
     >
       <span
         className="vf-popover__trigger"
-        onClick={() => toggle("pointer")}
+        id={triggerId}
+        onClick={() => behavior.toggle("pointer")}
         ref={setTriggerElement}
       >
         {renderedTrigger}
       </span>
-      {isOpen && (
+      {behavior.isOpen && (
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[{ current: triggerElement }]}
@@ -111,7 +116,7 @@ export function Popover({
             dismissOnOutsidePointer={
               closeOnOutsidePointer ?? closeOnOutsideClick
             }
-            onDismiss={dismiss}
+            onDismiss={behavior.dismiss}
             onLayerChange={setContentElement}
             style={
               {

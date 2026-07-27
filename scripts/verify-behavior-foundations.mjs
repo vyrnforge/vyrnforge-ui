@@ -8,7 +8,7 @@ const repositoryRoot = path.resolve(
 );
 
 const expectedTasks = Array.from(
-  { length: 12 },
+  { length: 14 },
   (_, index) => `MF-${5001 + index}`,
 );
 const expectedReasons = [
@@ -38,6 +38,9 @@ const requiredSourceFiles = [
   "packages/ui-behaviors/src/transfer-list.ts",
   "packages/ui-behaviors/src/navigation.ts",
   "packages/ui-behaviors/src/overlay.ts",
+  "packages/ui-behaviors/src/overlay-components.ts",
+  "packages/ui-behaviors/src/toast.ts",
+  "packages/ui-behaviors/src/confirm-dialog.ts",
   "packages/ui-behaviors/src/index.ts",
 ];
 const requiredDocuments = [
@@ -100,8 +103,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S5") {
     failures.push("behavior foundation sprint must be S5");
   }
-  if (metadata.program?.batch !== "MF-5001-MF-5012") {
-    failures.push("behavior foundation batch must be MF-5001-MF-5012");
+  if (metadata.program?.batch !== "MF-5001-MF-5014") {
+    failures.push("behavior foundation batch must be MF-5001-MF-5014");
   }
   if (metadata.program?.status !== "implemented") {
     failures.push("behavior foundation status must be implemented");
@@ -142,6 +145,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     ["multiSelect", "createMultiSelectController"],
     ["transferList", "createTransferListController"],
     ["navigation", "createNavigationController"],
+    ["toast", "createToastController"],
+    ["confirmDialog", "createConfirmDialogController"],
   ];
   for (const [contractName, factory] of expectedFactories) {
     if (metadata.contracts?.[contractName]?.factory !== factory) {
@@ -168,6 +173,20 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     metadata.contracts?.overlay?.positionResolver !== "resolveOverlayPosition"
   ) {
     failures.push("overlay positionResolver must be resolveOverlayPosition");
+  }
+
+  const overlayComponentFactories = new Set(
+    metadata.contracts?.overlayComponents?.factories ?? [],
+  );
+  for (const factory of [
+    "createDialogController",
+    "createDrawerController",
+    "createPopoverController",
+    "createTooltipController",
+  ]) {
+    if (!overlayComponentFactories.has(factory)) {
+      failures.push(`overlay component contracts must include ${factory}`);
+    }
   }
 
   const packageJson = readJson(root, "packages/ui-behaviors/package.json");
@@ -213,6 +232,12 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "createOverlayLifecycleController",
     "createOverlayLayerRegistry",
     "resolveOverlayPosition",
+    "createDialogController",
+    "createDrawerController",
+    "createPopoverController",
+    "createTooltipController",
+    "createToastController",
+    "createConfirmDialogController",
   ]);
 
   const eventSource = read(root, "packages/ui-behaviors/src/events.ts");
@@ -238,6 +263,9 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "Transfer List",
     "Navigation",
     "Overlay lifecycle",
+    "Component overlay controllers",
+    "Toast",
+    "ConfirmDialog",
   ]);
 
   const roadmap = read(root, "docs/roadmap/00-master-roadmap.md");
@@ -321,15 +349,27 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     ],
     [
       "packages/ui-components/src/components/Popover/Popover.tsx",
-      "useOverlayBehavior",
+      "usePopoverBehavior",
     ],
     [
       "packages/ui-components/src/components/Dialog/Dialog.tsx",
-      "useOverlayBehavior",
+      "useDialogBehavior",
     ],
     [
       "packages/ui-components/src/components/Drawer/Drawer.tsx",
-      "useOverlayBehavior",
+      "useDrawerBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Tooltip/Tooltip.tsx",
+      "useTooltipBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/Toast/ToastProvider.tsx",
+      "useToastBehavior",
+    ],
+    [
+      "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
+      "useConfirmDialogBehavior",
     ],
     [
       "packages/ui-components/src/internal/overlay/overlayStack.ts",
@@ -363,6 +403,25 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
       "Menu",
       "SideNav",
       "Dialog",
+    ],
+  );
+
+  const overlayFeedbackParityTest = read(
+    root,
+    "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
+  );
+  requireIncludes(
+    failures,
+    overlayFeedbackParityTest,
+    "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
+    [
+      "React overlay and feedback adapters preserve shared behavior parity",
+      "Dialog",
+      "Drawer",
+      "Popover",
+      "Tooltip",
+      "ToastProvider",
+      "ConfirmDialog",
     ],
   );
 
@@ -423,6 +482,6 @@ if (
 ) {
   assertBehaviorFoundations();
   console.log(
-    "Behavior foundations passed: MF-5001 through MF-5012 contracts, React adapters, metadata, docs, and quality integration are complete.",
+    "Behavior foundations passed: MF-5001 through MF-5014 contracts, React adapters, metadata, docs, and quality integration are complete.",
   );
 }
