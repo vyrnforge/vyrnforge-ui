@@ -138,7 +138,7 @@
     },
     {
       "name": "@vyrnforge/ui-elements",
-      "purpose": "Browser-native Custom Element foundations, idempotent registration, typed vf-* events, Light DOM CSS, and future non-grid renderers.",
+      "purpose": "Browser-native Custom Element registration, lifecycle, property reflection, typed vf-* events, Light DOM CSS, form foundations, and non-grid renderers.",
       "owns": [
         "vf-* Custom Elements",
         "property and attribute reflection",
@@ -180,7 +180,7 @@
         "@vyrnforge/ui-elements/style.css",
         "@vyrnforge/ui-elements/index.css"
       ],
-      "notes": "S4 package foundation is implemented. Public component renderers remain planned for S6 after GMF2."
+      "notes": "EL-6001 and EL-6002 registration, lifecycle, observed-attribute, property-upgrade, reflection, and update scheduling foundations are implemented. Public component renderers remain later S6 work."
     },
     {
       "name": "@vyrnforge/ui-data-grid",

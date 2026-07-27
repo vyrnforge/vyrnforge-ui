@@ -18,7 +18,7 @@ examples/
 packages/ui-core/
 packages/ui-behaviors/   # MF-5001–MF-5014 current
 packages/ui-components/
-packages/ui-elements/    # foundation current; public renderers after GMF2
+packages/ui-elements/    # S6 registration/base lifecycle current; public renderer ports in progress
 packages/ui-data-grid/   # independent React alpha
 ```
 

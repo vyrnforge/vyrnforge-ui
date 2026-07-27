@@ -79,7 +79,7 @@
         "form-associated element integration",
         "explicit registration entry points"
       ],
-      "foundationStage": "implemented"
+      "foundationStage": "registration-and-base-lifecycle-complete"
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -105,7 +105,7 @@
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/native-html",
       "betaClaim": "planned",
-      "rendererFoundation": "implemented"
+      "rendererFoundation": "registration-and-base-lifecycle-complete"
     },
     {
       "id": "angular",
@@ -161,5 +161,14 @@
     "gate": "GMF2",
     "gateStatus": "passed",
     "currentBatch": "MF-5015-MF-5016"
+  },
+  "nativeElementFoundation": {
+    "package": "@vyrnforge/ui-elements",
+    "status": "in-progress",
+    "tasks": ["EL-6001", "EL-6002"],
+    "metadata": "docs/metadata/native-element-foundations.json",
+    "gate": "GMF3",
+    "gateStatus": "in-progress",
+    "currentBatch": "EL-6001-EL-6002"
   }
 }
