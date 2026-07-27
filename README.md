@@ -29,7 +29,7 @@ VyrnForge UI is currently in an early alpha prerelease stage.
 | `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared foundations.            |
 | `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, action, toggle, choice, numeric, Tabs, subscriptions, and behavior events. |
 | `@vyrnforge/ui-components` | First-class React primitives and application components.                                                                    |
-| `@vyrnforge/ui-elements`   | Native Custom Element foundation for plain HTML and future verified Angular/Vue consumption.                                |
+| `@vyrnforge/ui-elements`   | Native Custom Element registration, lifecycle, reflection, event, form, and renderer foundation.                            |
 | `@vyrnforge/ui-data-grid`  | Existing React enterprise data-management grid on a separate alpha track.                                                   |
 
 Intended dependency direction:
@@ -205,4 +205,4 @@ VyrnForge UI is maintained as part of the VyrnForge UI repository.
 
 ## Current multi-framework stage
 
-S5 / GMF2 is complete through MF-5016. The next program stage is S6 native Custom Element parity; the React public package remains the reference renderer.
+S5 / GMF2 is complete through MF-5016. S6 is active: EL-6001 and EL-6002 establish native registration, lifecycle, reflection, and update foundations; React remains the reference renderer while native ports are implemented.

@@ -28,17 +28,17 @@ beta release group.
 
 ## Sprint plan
 
-| Sprint | Name                                      | Goal                                                                                                                      | Gate        |
-| ------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| S0     | Baseline and Change Control               | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed |
-| S1     | Quality Foundation                        | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed |
-| S2     | Interaction and Accessibility Evidence    | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed |
-| S3     | Semantic Tokens and Component Consistency | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed |
-| S4     | Multi-Framework Architecture              | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1        |
-| S5     | Framework-Neutral Behaviors               | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2        |
-| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3        |
-| S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4        |
-| S8     | Non-Grid Beta Release                     | Harden packages, canary in applications, publish beta artifacts, and complete exit review.                                | GBETA       |
+| Sprint | Name                                      | Goal                                                                                                                      | Gate          |
+| ------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| S0     | Baseline and Change Control               | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed   |
+| S1     | Quality Foundation                        | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
+| S2     | Interaction and Accessibility Evidence    | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
+| S3     | Semantic Tokens and Component Consistency | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
+| S4     | Multi-Framework Architecture              | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 - passed |
+| S5     | Framework-Neutral Behaviors               | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 - passed |
+| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3          |
+| S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4          |
+| S8     | Non-Grid Beta Release                     | Harden packages, canary in applications, publish beta artifacts, and complete exit review.                                | GBETA         |
 
 ## S4 architecture tasks
 
@@ -82,8 +82,27 @@ components or complete GMF2.
 - MF-5012: overlay lifecycle and DOM-adapter boundary — implemented
 - MF-5013: Dialog, Drawer, Popover, and Tooltip controllers — implemented
 - MF-5014: Toast and ConfirmDialog behavior — implemented
-- MF-5015: complete React behavior adoption and compatibility audit
-- MF-5016: shared behavior parity gate
+- MF-5015: complete React behavior adoption and compatibility audit - implemented
+- MF-5016: shared behavior parity gate - implemented
+
+## S6 native element tasks
+
+### Foundation batch - implemented
+
+- EL-6001: native registration and lifecycle foundation
+- EL-6002: base element and property reflection
+
+The first S6 batch establishes deterministic registration, reusable
+per-element registration functions, observed-attribute declarations,
+pre-definition property upgrade, primitive reflection, and microtask-batched
+updates. It does not yet register public component tags.
+
+### Remaining GMF3 work
+
+- EL-6003: typed event dispatch utilities
+- EL-6004: form-associated element base
+- EL-6005 through EL-6017: public non-grid native component ports
+- EL-6018: native non-grid parity gate
 
 ## Deferred data-grid track
 

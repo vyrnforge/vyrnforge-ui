@@ -33,6 +33,23 @@ Shadow DOM requires a component-level ADR or explicit architecture approval.
 The approval must define public parts, slots, CSS variables, focus behavior,
 overlay behavior, testing selectors, and server-rendering consequences.
 
+## S6 registration and base-element implementation
+
+EL-6001 and EL-6002 implement the shared registration and lifecycle foundation.
+The package exposes deterministic single-definition, definition-list,
+per-element registration-factory, and register-all utilities. Only the explicit
+`@vyrnforge/ui-elements/register` entry point performs module-import
+registration.
+
+`VyrnForgeElement` derives observed attributes from inherited declarations,
+upgrades pre-definition properties, parses primitive attributes, supports
+opt-in primitive reflection, preserves object and array values as properties,
+and batches connected updates in a microtask. Changes made while disconnected
+are retained and processed after reconnect.
+
+This foundation does not introduce Shadow DOM, form association, focus
+management, or component-specific rendering.
+
 ## Attribute and property lifecycle
 
 A base element must support:

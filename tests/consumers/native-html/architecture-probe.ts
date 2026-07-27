@@ -1,13 +1,34 @@
 import {
   VyrnForgeElement,
-  defineVyrnForgeElement,
+  createVyrnForgeElementRegistration,
+  type VyrnForgePropertyDeclarations,
 } from "@vyrnforge/ui-elements";
 
 class ArchitectureProbeElement extends VyrnForgeElement {
-  connectedCallback() {
+  static override readonly properties = Object.freeze({
+    label: { type: "string", reflect: true },
+  }) satisfies VyrnForgePropertyDeclarations;
+
+  get label(): string {
+    return this.getPropertyValue("label", "VyrnForge native foundation");
+  }
+
+  set label(value: string) {
+    this.setPropertyValue("label", value);
+  }
+
+  protected override connected(): void {
     this.setAttribute("data-vf-element", "");
-    this.textContent = "VyrnForge native foundation";
+  }
+
+  protected override update(): void {
+    this.textContent = this.label;
   }
 }
 
-defineVyrnForgeElement("vf-architecture-probe", ArchitectureProbeElement);
+export const registerArchitectureProbe = createVyrnForgeElementRegistration({
+  tagName: "vf-architecture-probe",
+  constructor: ArchitectureProbeElement,
+});
+
+registerArchitectureProbe();

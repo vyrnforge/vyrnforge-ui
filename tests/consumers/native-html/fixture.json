@@ -7,6 +7,8 @@
     "<vf-button",
     "vf-action",
     "@vyrnforge/ui-elements",
-    "vf-architecture-probe"
+    "vf-architecture-probe",
+    "createVyrnForgeElementRegistration",
+    "VyrnForgePropertyDeclarations"
   ]
 }
