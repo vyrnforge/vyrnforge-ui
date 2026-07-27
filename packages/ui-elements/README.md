@@ -2,22 +2,26 @@
 
 Browser-native Custom Element renderer foundations for VyrnForge UI.
 
-EL-6001 and EL-6002 provide:
+EL-6001 through EL-6004 provide:
 
 - explicit register-all and reusable per-element registration utilities;
 - duplicate-registration safety for the `vf-*` namespace;
 - a server-safe `VyrnForgeElement` Light DOM base;
 - inherited property declarations and derived `observedAttributes`;
-- pre-definition property upgrade;
-- typed Boolean, number, and string attribute parsing;
-- opt-in primitive property reflection;
-- property-only object and array values;
-- microtask-batched updates and `updateComplete`.
+- pre-definition property upgrade and primitive reflection;
+- microtask-batched updates and `updateComplete`;
+- canonical bubbling and composed `vf-*` CustomEvent helpers;
+- typed per-component event dispatchers;
+- an ElementInternals-backed form-associated base;
+- disabled, validity, reset, and state-restoration utilities;
+- deterministic fallbacks when ElementInternals is unavailable.
 
 ```ts
 import "@vyrnforge/ui-elements/styles/index.css";
 import {
   VyrnForgeElement,
+  VyrnForgeFormAssociatedElement,
+  createVyrnForgeEventDispatcher,
   createVyrnForgeElementRegistration,
   type VyrnForgePropertyDeclarations,
 } from "@vyrnforge/ui-elements";

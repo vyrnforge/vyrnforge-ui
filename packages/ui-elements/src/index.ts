@@ -10,10 +10,35 @@ export {
   type VyrnForgePropertyDeclarations,
 } from "./base/VyrnForgeElement";
 export {
+  VyrnForgeFormAssociatedElement,
+  type VyrnForgeFormAssociationMode,
+  type VyrnForgeFormInternals,
+  type VyrnForgeFormState,
+  type VyrnForgeFormStateRestoreMode,
+  type VyrnForgeFormValue,
+  type VyrnForgeValidityFlags,
+} from "./base/VyrnForgeFormAssociatedElement";
+export {
+  assertVyrnForgeEventName,
   createVyrnForgeEvent,
+  createVyrnForgeEventDispatcher,
   dispatchVyrnForgeEvent,
+  vyrnForgeEventDispatcher,
+  type VyrnForgeActionDetail,
+  type VyrnForgeCanonicalEventDetailMap,
+  type VyrnForgeCheckedChangeDetail,
+  type VyrnForgeDismissDetail,
+  type VyrnForgeEventMapName,
   type VyrnForgeEventName,
   type VyrnForgeEventOptions,
+  type VyrnForgeEventReason,
+  type VyrnForgeInvalidDetail,
+  type VyrnForgeOpenChangeDetail,
+  type VyrnForgePressedChangeDetail,
+  type VyrnForgeResetDetail,
+  type VyrnForgeSelectionChangeDetail,
+  type VyrnForgeTypedEventDispatcher,
+  type VyrnForgeValueChangeDetail,
 } from "./events";
 export {
   assertVyrnForgeElementTagName,

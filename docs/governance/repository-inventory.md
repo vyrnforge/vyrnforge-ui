@@ -69,7 +69,7 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | --- | --- |
 | Purpose | Browser-native Custom Element registration, lifecycle, property reflection, typed vf-* events, Light DOM CSS, form foundations, and non-grid renderers. |
 | Main source directories | `src/styles` |
-| Public exports | 23 root names. `assertVyrnForgeElementTagName`, `createVyrnForgeElementRegistration`, `createVyrnForgeEvent`, `defineVyrnForgeElement`, `dispatchVyrnForgeEvent`, `getVyrnForgeElementRegistry`, `registerVyrnForgeElement`, `registerVyrnForgeElementDefinitions`, `registerVyrnForgeElements`, `VyrnForgeAttributeType`, `VyrnForgeChangedProperties`, `VyrnForgeElement`, `VyrnForgeElementConstructor`, `VyrnForgeElementDefinition`, `vyrnForgeElementDefinitions`, `VyrnForgeElementRegistration`, `VyrnForgeElementRegistry`, `VyrnForgeElementTagName`, `VyrnForgeEventName`, `VyrnForgeEventOptions`, `VyrnForgePropertyDeclaration`, `VyrnForgePropertyDeclarations`, `vyrnForgeUiElementsVersion` |
+| Public exports | 46 root names. `assertVyrnForgeElementTagName`, `assertVyrnForgeEventName`, `createVyrnForgeElementRegistration`, `createVyrnForgeEvent`, `createVyrnForgeEventDispatcher`, `defineVyrnForgeElement`, `dispatchVyrnForgeEvent`, `getVyrnForgeElementRegistry`, `registerVyrnForgeElement`, `registerVyrnForgeElementDefinitions`, `registerVyrnForgeElements`, `VyrnForgeActionDetail`, `VyrnForgeAttributeType`, `VyrnForgeCanonicalEventDetailMap`, `VyrnForgeChangedProperties`, `VyrnForgeCheckedChangeDetail`, `VyrnForgeDismissDetail`, `VyrnForgeElement`, `VyrnForgeElementConstructor`, `VyrnForgeElementDefinition`, `vyrnForgeElementDefinitions`, `VyrnForgeElementRegistration`, `VyrnForgeElementRegistry`, `VyrnForgeElementTagName`, `vyrnForgeEventDispatcher`, `VyrnForgeEventMapName`, `VyrnForgeEventName`, `VyrnForgeEventOptions`, `VyrnForgeEventReason`, `VyrnForgeFormAssociatedElement`, `VyrnForgeFormAssociationMode`, `VyrnForgeFormInternals`, `VyrnForgeFormState`, `VyrnForgeFormStateRestoreMode`, `VyrnForgeFormValue`, `VyrnForgeInvalidDetail`, `VyrnForgeOpenChangeDetail`, `VyrnForgePressedChangeDetail`, `VyrnForgePropertyDeclaration`, `VyrnForgePropertyDeclarations`, `VyrnForgeResetDetail`, `VyrnForgeSelectionChangeDetail`, `VyrnForgeTypedEventDispatcher`, `vyrnForgeUiElementsVersion`, `VyrnForgeValidityFlags`, `VyrnForgeValueChangeDetail` |
 | CSS entry points | `./index.css`, `./style.css`, `./styles/index.css` |
 | Dependencies | `@vyrnforge/ui-core@0.1.0-alpha.1`, `@vyrnforge/ui-behaviors@0.1.0-alpha.1` |
 | Peer dependencies | None |
@@ -200,7 +200,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
-| Regression fixture app | 7 deterministic fixture source/style files; `npm run fixtures:verify` builds and tests the public-package consumer surface. |
+| Regression fixture app | 8 deterministic fixture source/style files; `npm run fixtures:verify` builds and tests the public-package consumer surface. |
 | Maturity source | `docs/metadata/components.json` is the sole structured maturity source. Playground and docs-app reference views consume it; prose remains reviewable documentation. |
 | AI/contributor context | `AGENTS.md`, `.ai/AI_CONTEXT.md`, `.ai/CODING_RULES.md`, `.ai/DOC_USAGE_GUIDE.md`, `.ai/REPO_MAP.md`, `CONTRIBUTING.md`, and `SECURITY.md`. |
 | Potential conflicts | Q1 audit documents stale `dv` terminology and planned-surface presentation as follow-up documentation work. |
@@ -210,11 +210,11 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 81 |
-| Pure/unit | 59 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 84 |
+| Pure/unit | 60 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
-| DOM interaction | 6 detected test files with DOM interaction helpers. |
-| Browser | 15 detected browser-test files. |
+| DOM interaction | 7 detected test files with DOM interaction helpers. |
+| Browser | 16 detected browser-test files. |
 | Accessibility | 3 detected automated accessibility-test files. |
 | Visual regression | No visual-regression test/configuration evidence found. |
 | Coverage | Root `test:coverage` is configured with package-specific V8 coverage reports and thresholds. |
@@ -277,12 +277,12 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Metric | Count |
 | --- | --- |
 | Publishable packages | 5 |
-| Package-root export names | 559 |
+| Package-root export names | 582 |
 | Public components inventoried | 75 |
-| Repository test files | 81 |
+| Repository test files | 84 |
 | Static-markup test files | 2 |
-| DOM interaction test files | 6 |
-| Browser test files | 15 |
+| DOM interaction test files | 7 |
+| Browser test files | 16 |
 | Automated accessibility-test files | 3 |
 | Workflow files | 9 |
 | Reusable workflows | 5 |

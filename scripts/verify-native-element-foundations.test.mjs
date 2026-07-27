@@ -20,7 +20,14 @@ const repositoryRoot = path.resolve(
 
 function createFixture() {
   const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-native-elements-"));
-  for (const entry of ["docs", "packages/ui-elements", "scripts"]) {
+  for (const entry of [
+    "apps/regression-fixtures",
+    "docs",
+    "packages/ui-elements",
+    "scripts",
+    "tests/browser",
+    "tests/consumers/native-html",
+  ]) {
     cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
       recursive: true,
     });
@@ -36,7 +43,7 @@ test("repository native element foundations are internally complete", () => {
   assert.deepEqual(verifyNativeElementFoundations(), []);
 });
 
-test("rejects an incomplete EL-6002 task", () => {
+test("rejects an incomplete EL-6004 task", () => {
   const root = createFixture();
   try {
     const file = path.join(
@@ -44,12 +51,12 @@ test("rejects an incomplete EL-6002 task", () => {
       "docs/metadata/native-element-foundations.json",
     );
     const value = JSON.parse(readFileSync(file, "utf8"));
-    value.tasks.find((task) => task.id === "EL-6002").status = "planned";
+    value.tasks.find((task) => task.id === "EL-6004").status = "planned";
     writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 
     assert(
       verifyNativeElementFoundations({ root }).some((failure) =>
-        failure.includes("EL-6002 must be done"),
+        failure.includes("EL-6004 must be done"),
       ),
     );
   } finally {
@@ -75,22 +82,62 @@ test("rejects a framework dependency in ui-elements", () => {
   }
 });
 
-test("rejects missing update scheduling evidence", () => {
+test("rejects missing typed event defaults", () => {
   const root = createFixture();
   try {
-    const file = path.join(
-      root,
-      "packages/ui-elements/src/base/VyrnForgeElement.ts",
-    );
+    const file = path.join(root, "packages/ui-elements/src/events.ts");
     const content = readFileSync(file, "utf8").replace(
-      "queueMicrotask",
-      "scheduleLater",
+      "bubbles: options.bubbles ?? true",
+      "bubbles: false",
     );
     writeFileSync(file, content);
 
     assert(
       verifyNativeElementFoundations({ root }).some((failure) =>
-        failure.includes("must include queueMicrotask"),
+        failure.includes("must include bubbles: options.bubbles ?? true"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects missing ElementInternals form association", () => {
+  const root = createFixture();
+  try {
+    const file = path.join(
+      root,
+      "packages/ui-elements/src/base/VyrnForgeFormAssociatedElement.ts",
+    );
+    const content = readFileSync(file, "utf8").replaceAll(
+      "ElementInternals",
+      "NativeInternals",
+    );
+    writeFileSync(file, content);
+
+    assert(
+      verifyNativeElementFoundations({ root }).some((failure) =>
+        failure.includes("must include ElementInternals"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects missing real-form browser evidence", () => {
+  const root = createFixture();
+  try {
+    const file = path.join(root, "apps/regression-fixtures/src/FixtureApp.tsx");
+    const content = readFileSync(file, "utf8").replace(
+      "new FormData",
+      "readFormData",
+    );
+    writeFileSync(file, content);
+
+    assert(
+      verifyNativeElementFoundations({ root }).some((failure) =>
+        failure.includes("must include new FormData"),
       ),
     );
   } finally {

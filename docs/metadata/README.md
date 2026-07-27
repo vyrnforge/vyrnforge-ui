@@ -6,22 +6,22 @@ queryable repository facts and evidence records.
 
 ## Files
 
-| File                                | Purpose                                                                                                          |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                                           |
-| `multi-framework.json`              | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy.           |
-| `native-element-foundations.json`   | EL-6001/EL-6002 registration, lifecycle, property reflection, update scheduling, and remaining GMF3 task record. |
-| `component-contracts.json`          | Canonical cross-framework events, slots, form association, and representative component contracts.               |
-| `component-contract.schema.json`    | JSON Schema for the canonical multi-framework component contract catalog.                                        |
-| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.                         |
-| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                                     |
-| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                                         |
-| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.               |
-| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.                   |
-| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                                  |
-| `css-imports.json`                  | Required CSS import order and styling ownership.                                                                 |
-| `state-contracts.json`              | State ownership levels and adapter policies.                                                                     |
-| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                                         |
+| File                                | Purpose                                                                                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                                                               |
+| `multi-framework.json`              | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy.                               |
+| `native-element-foundations.json`   | EL-6001 through EL-6004 registration, lifecycle, property reflection, typed event, form association, and remaining GMF3 task record. |
+| `component-contracts.json`          | Canonical cross-framework events, slots, form association, and representative component contracts.                                   |
+| `component-contract.schema.json`    | JSON Schema for the canonical multi-framework component contract catalog.                                                            |
+| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.                                             |
+| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                                                         |
+| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                                                             |
+| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.                                   |
+| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.                                       |
+| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                                                      |
+| `css-imports.json`                  | Required CSS import order and styling ownership.                                                                                     |
+| `state-contracts.json`              | State ownership levels and adapter policies.                                                                                         |
+| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                                                             |
 
 ## Multi-framework architecture metadata
 
