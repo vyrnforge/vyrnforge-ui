@@ -1,7 +1,7 @@
 # `@vyrnforge/ui-elements` API
 
-EL-6001 through EL-6017 establish the native foundation and the complete
-pre-GMF3 public renderer catalog.
+EL-6001 through EL-6018 establish the complete GMF3 browser-native renderer for
+the VyrnForge non-grid beta scope.
 
 ## Foundation exports
 
@@ -12,19 +12,22 @@ pre-GMF3 public renderer catalog.
 - `vyrnForgeElementDefinitions`
 - `vyrnForgeElementRegistrations`
 
-## Public native core tags
+## Public native catalog
 
-### Display and layout
+The deterministic catalog contains 58 tags.
 
-`vf-text`, `vf-heading`, `vf-caption`, `vf-label`, `vf-code-text`, `vf-badge`,
-`vf-card`, `vf-panel`, `vf-stack`, `vf-inline`, `vf-page`, `vf-section`,
-`vf-empty-state`, `vf-loading-state`, and `vf-error-state`.
+### Display, feedback, and layout
+
+`vf-text`, `vf-heading`, `vf-caption`, `vf-label`, `vf-code-text`, `vf-icon`,
+`vf-badge`, `vf-card`, `vf-panel`, `vf-stack`, `vf-inline`, `vf-page`,
+`vf-section`, `vf-empty-state`, `vf-loading-state`, `vf-error-state`,
+`vf-inline-message`, and `vf-skeleton`.
 
 ### Actions
 
 `vf-button`, `vf-icon-button`, `vf-button-group`, and `vf-toolbar-button`.
-Action adapters resolve disabled/loading state through shared behavior and emit
-`vf-action`; toggle actions also emit `vf-pressed-change`.
+Action adapters preserve native button behavior, resolve shared disabled and
+loading state, and emit canonical `vf-action` or `vf-pressed-change` events.
 
 ### Form and value controls
 
@@ -32,27 +35,66 @@ Action adapters resolve disabled/loading state through shared behavior and emit
 `vf-date-input`, `vf-datetime-input`, `vf-checkbox`, `vf-radio`,
 `vf-radio-group`, `vf-switch`, `vf-select`, `vf-slider`, `vf-rating`,
 `vf-toggle-button`, `vf-toggle-button-group`, and `vf-segmented-control`.
-Form-capable elements participate through `ElementInternals` and emit canonical
-value or checked events.
 
-### Field and navigation
+Form-capable elements participate through `ElementInternals`. Scalar controls
+submit one value; multi-value controls use repeated entries under the configured
+`name`.
 
-`vf-field`, `vf-validation-message`, `vf-tabs`, `vf-breadcrumbs`, and
-`vf-side-nav`.
+### Field, navigation, and composition
 
-Array/object models such as tab items, select options, segmented options, and
-side-navigation items are property-only. They are not serialized into HTML
+`vf-field`, `vf-validation-message`, `vf-tabs`, `vf-breadcrumbs`,
+`vf-side-nav`, `vf-app-shell`, `vf-page-header`, `vf-page-toolbar`, and
+`vf-top-nav`.
+
+Array and object models such as tab items, select options, segmented options,
+and side-navigation items are property-only and are not serialized into HTML
 attributes.
+
+### Advanced collections
+
+`vf-autocomplete`, `vf-multi-select`, and `vf-transfer-list` consume shared
+collection controllers and retain native keyboard and form contracts.
+
+### Overlays and feedback services
+
+`vf-dialog`, `vf-drawer`, `vf-popover`, `vf-menu`, and `vf-tooltip` preserve
+shared open-state, dismissal, and navigation decisions while the native adapter
+owns browser focus and event wiring.
+
+`vf-toast`, `vf-toast-viewport`, and `vf-confirm-dialog` expose queue,
+dismissal, action, confirmation, and live-region behavior. The public
+`VyrnForgeToastViewportElement` service methods are:
+
+- `add(record)`
+- `updateToast(id, patch)`
+- `dismiss(id)`
+- `dismissAll()`
+
+## Renderer mapping contracts
+
+Some React convenience exports intentionally do not require another Custom
+Element tag:
+
+| React API       | Native contract                                    |
+| --------------- | -------------------------------------------------- |
+| `Alert`         | `vf-inline-message`                                |
+| `Dropdown`      | `vf-popover` plus a `.vf-dropdown` content surface |
+| `ToastAction`   | `vf-toast` with `actionLabel` / `action-label`     |
+| `ToastProvider` | `vf-toast-viewport`                                |
+| `useToast`      | the `VyrnForgeToastViewportElement` service API    |
 
 ## Events
 
 Public event names are lowercase dash-cased `vf-*` names. They bubble and are
-composed by default. Core elements use canonical contracts including:
+composed by default. Canonical contracts include:
 
 - `vf-action`
 - `vf-value-change`
+- `vf-selection-change`
 - `vf-checked-change`
 - `vf-pressed-change`
+- `vf-open-change`
+- `vf-dismiss`
 - `vf-invalid`
 - `vf-reset`
 
@@ -63,28 +105,8 @@ composed by default. Core elements use canonical contracts including:
 @import "@vyrnforge/ui-elements/styles/index.css";
 ```
 
-Styles consume shared VyrnForge tokens and retain the portable `vf-*` class
-namespace. The native package does not import React component runtime code.
+Styles consume shared VyrnForge tokens. Native selectors are scoped to their
+Custom Element hosts so `@vyrnforge/ui-elements` and
+`@vyrnforge/ui-components` can coexist in a mixed renderer fixture.
 
-## Advanced collections
-
-`vf-autocomplete`, `vf-multi-select`, and `vf-transfer-list` consume the shared
-collection controllers. Scalar selection submits one value; multi-value
-controls submit repeated form entries under the configured `name`. Options and
-selected-value arrays remain property-only.
-
-## Overlays and feedback
-
-`vf-dialog`, `vf-drawer`, `vf-popover`, `vf-menu`, and `vf-tooltip` preserve
-shared open-state, dismissal, and navigation decisions while native adapters own
-focus execution and browser event wiring. `vf-toast`, `vf-toast-viewport`, and
-`vf-confirm-dialog` expose queue, dismissal, action, confirmation, and live
-region behavior through typed events.
-
-## Application composition
-
-`vf-app-shell`, `vf-page-header`, and `vf-page-toolbar` provide Light DOM
-enterprise composition surfaces. Named roles are expressed through stable
-`slot` attributes and VyrnForge classes rather than framework render props.
-
-The deterministic public catalog contains 54 tags after EL-6017.
+Canonical GMF3 evidence is `docs/metadata/gmf3-closure.json`.

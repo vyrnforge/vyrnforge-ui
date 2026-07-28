@@ -22,6 +22,27 @@ test("repository GMF2 evidence is internally complete", () => {
   assert.deepEqual(verifyGmf2Closure(), []);
 });
 
+test("rejects sprint regression before S6", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-gmf2-sprint-"));
+  try {
+    for (const entry of ["docs", "packages", "scripts", "package.json"]) {
+      cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
+        recursive: true,
+      });
+    }
+    const file = path.join(root, "docs/metadata/multi-framework.json");
+    const value = JSON.parse(readFileSync(file, "utf8"));
+    value.program.currentSprint = "S5";
+    writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
+    assert(
+      verifyGmf2Closure({ root }).some((failure) =>
+        failure.includes("currentSprint must be S6 or later"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 test("rejects an incomplete GMF2 task", () => {
   const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-gmf2-"));
   try {

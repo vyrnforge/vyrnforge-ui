@@ -94,12 +94,12 @@ describe("ui-elements foundation", () => {
     const first = registerVyrnForgeElements(registry);
     const second = registerVyrnForgeElements(registry);
 
-    expect(first).toHaveLength(54);
+    expect(first).toHaveLength(58);
     expect(first[0]).toBe("vf-text");
-    expect(first[first.length - 1]).toBe("vf-page-toolbar");
+    expect(first[first.length - 1]).toBe("vf-top-nav");
     expect(second).toEqual([]);
     expect(Object.isFrozen(first)).toBe(true);
-    expect(vyrnForgeElementDefinitions).toHaveLength(54);
-    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(54);
+    expect(vyrnForgeElementDefinitions).toHaveLength(58);
+    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(58);
   });
 });

@@ -59,9 +59,14 @@ export function verifyGmf2Closure({ root = repositoryRoot } = {}) {
     failures.push("behavior foundation remainingGmf2Tasks must be empty");
 
   const multiFramework = readJson(root, "docs/metadata/multi-framework.json");
-  if (multiFramework.program?.currentSprint !== "S6")
+  const currentSprint = multiFramework.program?.currentSprint;
+  const currentSprintNumber =
+    typeof currentSprint === "string"
+      ? Number.parseInt(currentSprint.match(/^S(\d+)$/)?.[1] ?? "", 10)
+      : Number.NaN;
+  if (!Number.isInteger(currentSprintNumber) || currentSprintNumber < 6)
     failures.push(
-      "multi-framework currentSprint must advance to S6 after GMF2 closure",
+      "multi-framework currentSprint must be S6 or later after GMF2 closure",
     );
   if (multiFramework.behaviorFoundation?.gateStatus !== "passed")
     failures.push(

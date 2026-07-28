@@ -6,8 +6,19 @@
     <title>VyrnForge native HTML contract fixture</title>
   </head>
   <body>
-    <vf-button id="save" variant="primary">Save</vf-button>
+    <vf-top-nav>
+      <strong slot="brand">VyrnForge</strong>
+      <a slot="navigation" href="#accounts">Accounts</a>
+    </vf-top-nav>
+    <main>
+      <vf-inline-message title="Native renderer ready" variant="success">
+        The GMF3 catalog and package styles are loaded.
+      </vf-inline-message>
+      <vf-button id="save" variant="primary">Save</vf-button>
+    </main>
     <script type="module">
+      import "@vyrnforge/ui-core/styles/index.css";
+      import "@vyrnforge/ui-elements/styles/index.css";
       import "@vyrnforge/ui-elements/register";
 
       document.querySelector("#save")?.addEventListener("vf-action", () => {

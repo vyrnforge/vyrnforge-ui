@@ -1,0 +1,14 @@
+vf-icon.vf-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: var(--vf-icon-size, 16px);
+  height: var(--vf-icon-size, 16px);
+  color: currentcolor;
+  vertical-align: middle;
+}
+
+vf-icon .vf-icon__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

@@ -29,7 +29,7 @@ VyrnForge UI is currently in an early alpha prerelease stage.
 | `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared foundations.            |
 | `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, action, toggle, choice, numeric, Tabs, subscriptions, and behavior events. |
 | `@vyrnforge/ui-components` | First-class React primitives and application components.                                                                    |
-| `@vyrnforge/ui-elements`   | Native Custom Element registration, lifecycle, reflection, event, form, and renderer foundation.                            |
+| `@vyrnforge/ui-elements`   | Complete 58-tag browser-native Custom Element renderer with Light DOM, forms, typed events, and shared behaviors.           |
 | `@vyrnforge/ui-data-grid`  | Existing React enterprise data-management grid on a separate alpha track.                                                   |
 
 Intended dependency direction:
@@ -45,7 +45,7 @@ Intended dependency direction:
 The active release program prioritizes all public non-grid components:
 
 - React remains the reference renderer through `@vyrnforge/ui-components`.
-- Native HTML becomes first-class through `@vyrnforge/ui-elements` foundation.
+- Native HTML has a GMF3-complete renderer through `@vyrnforge/ui-elements`; packed consumer support is verified in S7 / GMF4.
 - Angular and Vue are verified consumers of the native element surface.
 - Shared component state and behavior move into `@vyrnforge/ui-behaviors`; MF-5001–MF-5014 foundations and React migrations through Dialog, Drawer, Popover, Tooltip, ToastProvider, and ConfirmDialog are implemented.
 - The data grid remains usable as a React alpha and does not block the non-grid beta.
@@ -72,6 +72,7 @@ When using all packages together, import package-level CSS in this order:
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
@@ -82,6 +83,7 @@ Shared VyrnForge UI styling uses `--vf-*` CSS variables and `vf-*` classes. Data
 
 ```tsx
 import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 
@@ -205,4 +207,4 @@ VyrnForge UI is maintained as part of the VyrnForge UI repository.
 
 ## Current multi-framework stage
 
-S5 / GMF2 is complete through MF-5016. S6 is active: EL-6001 through EL-6011 establish native foundations and 40 public core tags across display, actions, forms, values, fields, and navigation; React remains the reference renderer while advanced native ports are implemented.
+S5 / GMF2 and S6 / GMF3 are complete. EL-6001 through EL-6018 provide a deterministic 58-tag native renderer plus documented mapping, composition, and service strategies for every public non-grid React record. S7 / GMF4 is active and owns packed native HTML, Angular, and Vue consumer verification.

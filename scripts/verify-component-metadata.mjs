@@ -297,6 +297,7 @@ export function verifyComponentMetadata(
         ![
           "docs/metadata/native-core-elements.json",
           "docs/metadata/native-advanced-elements.json",
+          "docs/metadata/gmf3-closure.json",
         ].includes(parity.native.evidence)
       )
         addFailure(

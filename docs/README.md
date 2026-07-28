@@ -108,6 +108,7 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `testing/regression-fixtures.md`               | Deterministic fixture application for DOM, accessibility, browser, future visual, and consumer-oriented checks.     |
 | `testing/multi-framework-consumer-fixtures.md` | React, native HTML, Angular, and Vue architecture fixtures and GMF4 evidence rules.                                 |
 | `testing/browser-testing.md`                   | Playwright browser-test commands, fixture contracts, selector rules, artifacts, and evidence boundaries.            |
+| `testing/gmf3-native-parity-gate.md`           | EL-6018 final 58-tag native renderer, mapping, browser, package, and GMF3 closure evidence.                         |
 
 ## 8. Release Governance
 
@@ -174,6 +175,7 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `metadata/design-tokens.json`             | Canonical semantic token categories, theme coverage, density aliases, motion, layers, and compatibility bridges.             |
 | `metadata/visual-regression-matrix.json`  | Canonical VF-3011 visual suites, theme/density dimensions, targets, and token expectations.                                  |
 | `metadata/g3-closure.json`                | Machine-readable VF-3012 task/evidence inventory and G3 closure state.                                                       |
+| `metadata/gmf3-closure.json`              | Machine-readable EL-6018 native non-grid parity inventory, renderer mappings, and GMF3 closure state.                        |
 | `metadata/component-schema.md`            | Canonical component metadata schema and contributor workflow.                                                                |
 | `metadata/css-imports.json`               | CSS import order and styling ownership.                                                                                      |
 | `metadata/state-contracts.json`           | State ownership and adapter policies.                                                                                        |

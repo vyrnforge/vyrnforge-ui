@@ -127,3 +127,12 @@ export {
   type VyrnForgeAppShellSidebarPosition,
   type VyrnForgePageToolbarDensity,
 } from "./composition";
+export {
+  VyrnForgeIconElement,
+  VyrnForgeInlineMessageElement,
+  VyrnForgeSkeletonElement,
+  VyrnForgeTopNavElement,
+  type VyrnForgeIconName,
+  type VyrnForgeIconSize,
+  type VyrnForgeInlineMessageVariant,
+} from "./parity";

@@ -80,10 +80,14 @@ scripts/verify-native-element-foundations.test.mjs
 docs/metadata/native-element-foundations.json
 ```
 
-## EL-6005 through EL-6011 extension
+## Renderer completion
 
-The foundation now supports 40 registered public native core elements. Their
-component-family contracts and browser evidence are canonicalized in
-`docs/testing/native-core-element-contracts.md` and
-`docs/metadata/native-core-elements.json`. Advanced collections and overlays
-remain outside this completed wave.
+The foundation now supports the complete 58-tag native non-grid catalog:
+
+- the 40-tag core wave in `docs/metadata/native-core-elements.json`;
+- the 14-tag advanced wave in `docs/metadata/native-advanced-elements.json`;
+- the four EL-6018 completion tags and renderer mappings in
+  `docs/metadata/gmf3-closure.json`.
+
+GMF3 is passed. S7 / GMF4 owns packed native HTML, Angular, and Vue consumer
+verification rather than another base-element model.

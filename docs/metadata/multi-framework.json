@@ -7,8 +7,8 @@
   },
   "program": {
     "name": "VyrnForge non-grid multi-framework beta",
-    "gate": "GMF1",
-    "status": "architecture-foundation-implemented",
+    "gate": "GMF3",
+    "status": "native-renderer-evidence-complete",
     "firstClassRenderers": ["react", "native-html"],
     "verifiedConsumers": ["angular", "vue"],
     "excludedPlatforms": [
@@ -19,7 +19,7 @@
       "desktop-native"
     ],
     "deferredPackages": ["@vyrnforge/ui-data-grid"],
-    "currentSprint": "S6"
+    "currentSprint": "S7"
   },
   "packages": [
     {
@@ -79,7 +79,7 @@
         "form-associated element integration",
         "explicit registration entry points"
       ],
-      "foundationStage": "advanced-renderers-complete"
+      "foundationStage": "gmf3-parity-complete"
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -104,8 +104,8 @@
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/native-html",
-      "betaClaim": "planned",
-      "rendererFoundation": "advanced-renderers-complete"
+      "betaClaim": "renderer-complete-pending-gmf4-consumer-gate",
+      "rendererFoundation": "gmf3-parity-complete"
     },
     {
       "id": "angular",
@@ -132,9 +132,9 @@
   },
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
-    "currentClaim": "architecture-fixture-only",
+    "currentClaim": "native-renderer-evidence-complete",
     "runtimeBuildGate": "GMF4",
-    "rule": "Fixture presence in S4 proves the integration contract and CI ownership only. It does not claim runtime framework support before GMF4."
+    "rule": "GMF3 proves the native renderer and packed-package contract. Angular and Vue runtime support claims still require GMF4 consumer evidence."
   },
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",
@@ -164,7 +164,7 @@
   },
   "nativeElementFoundation": {
     "package": "@vyrnforge/ui-elements",
-    "status": "in-progress",
+    "status": "complete",
     "tasks": [
       "EL-6001",
       "EL-6002",
@@ -182,15 +182,17 @@
       "EL-6014",
       "EL-6015",
       "EL-6016",
-      "EL-6017"
+      "EL-6017",
+      "EL-6018"
     ],
     "metadata": "docs/metadata/native-element-foundations.json",
     "gate": "GMF3",
-    "gateStatus": "in-progress",
-    "currentBatch": "EL-6012-EL-6017",
+    "gateStatus": "passed",
+    "currentBatch": "EL-6018",
     "nativeCoreMetadata": "docs/metadata/native-core-elements.json",
-    "registeredPublicTags": 54,
+    "registeredPublicTags": 58,
     "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
-    "foundationStage": "advanced-renderers-complete"
+    "foundationStage": "gmf3-parity-complete",
+    "closureMetadata": "docs/metadata/gmf3-closure.json"
   }
 }

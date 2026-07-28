@@ -91,6 +91,20 @@ export const fixtureRegistry: readonly FixtureCase[] = [
     notes: "Covers EL-6012 through EL-6017 and the 54-tag native catalog.",
   },
   {
+    id: "native-parity-elements",
+    title: "Native GMF3 parity",
+    componentMetadataId: "icon",
+    category: "basic-control",
+    route: "/fixtures/native/parity",
+    renderKey: "native-parity-elements",
+    purpose:
+      "Proves EL-6018 completion elements, renderer mappings, shared theme and density inheritance, accessibility semantics, and native service APIs.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+    notes: "Closes the 58-tag GMF3 native non-grid renderer catalog.",
+  },
+  {
     id: "native-form-foundation",
     title: "Native form foundation",
     componentMetadataId: "text-input",

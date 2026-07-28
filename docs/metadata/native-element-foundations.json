@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S6",
-    "batch": "EL-6012-EL-6017",
-    "status": "in-progress",
+    "batch": "EL-6018",
+    "status": "evidence-complete",
     "gate": "GMF3",
-    "gateStatus": "in-progress"
+    "gateStatus": "passed"
   },
   "tasks": [
     {
@@ -78,7 +78,7 @@
     },
     {
       "id": "EL-6018",
-      "status": "planned"
+      "status": "done"
     }
   ],
   "registration": {
@@ -138,7 +138,20 @@
     "tests/browser/native-form-foundation.spec.ts",
     "tests/browser/native-core-elements.spec.ts",
     "tests/consumers/native-html/architecture-probe.ts",
-    "tests/consumers/native-html/fixture.json"
+    "tests/consumers/native-html/fixture.json",
+    "packages/ui-elements/src/components/parity.ts",
+    "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
+    "apps/regression-fixtures/src/nativeParityElements.tsx",
+    "tests/browser/native-advanced-elements.spec.ts",
+    "tests/browser/native-parity.spec.ts",
+    "packages/ui-elements/src/styles/actions/icon.css",
+    "packages/ui-elements/src/styles/feedback/alert.css",
+    "packages/ui-elements/src/styles/feedback/skeleton.css",
+    "packages/ui-elements/src/styles/navigation/top-nav.css",
+    "packages/ui-elements/src/styles/overlays/dropdown.css",
+    "docs/testing/gmf3-native-parity-gate.md",
+    "scripts/verify-gmf3-closure.mjs",
+    "scripts/verify-gmf3-closure.test.mjs"
   ],
   "documents": [
     "packages/ui-elements/README.md",
@@ -146,7 +159,9 @@
     "docs/packages/ui-elements.md",
     "docs/architecture/10-custom-elements-and-form-association.md",
     "docs/testing/native-element-foundation-contracts.md",
-    "docs/testing/native-core-element-contracts.md"
+    "docs/testing/native-core-element-contracts.md",
+    "docs/testing/native-advanced-element-contracts.md",
+    "docs/testing/gmf3-native-parity-gate.md"
   ],
   "constraints": {
     "frameworkDependencies": [],
@@ -155,7 +170,7 @@
     "objectAttributeSerialization": false,
     "formRuntimeAtImport": false
   },
-  "remainingGmf3Tasks": ["EL-6018"],
+  "remainingGmf3Tasks": [],
   "events": {
     "file": "packages/ui-elements/src/events.ts",
     "namePattern": "vf-*",
@@ -273,5 +288,17 @@
     "styleEntry": "@vyrnforge/ui-elements/styles/index.css",
     "domMode": "light-dom"
   },
-  "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json"
+  "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
+  "nativeParityClosure": {
+    "metadata": "docs/metadata/gmf3-closure.json",
+    "registeredPublicTags": 58,
+    "browserEvidence": "tests/browser/native-parity.spec.ts",
+    "fixture": "apps/regression-fixtures/src/nativeParityElements.tsx",
+    "gateStatus": "passed",
+    "publicReactRecords": 67,
+    "directElements": 57,
+    "rendererMappings": 8,
+    "rendererCompositions": 1,
+    "rendererServices": 1
+  }
 }
