@@ -12,13 +12,13 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 ## Packages
 
-| Package                    | Owns                                                                                                                      | Status                                                                   |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                                                            | current; non-grid beta                                                   |
-| `@vyrnforge/ui-behaviors`  | framework-neutral state, collections, selection, navigation, overlay, feedback, subscriptions, and events                 | GMF2 complete; non-grid beta                                             |
-| `@vyrnforge/ui-components` | first-class React renderer                                                                                                | current; non-grid beta                                                   |
-| `@vyrnforge/ui-elements`   | native registration, lifecycle, observed attributes, property reflection, update scheduling, events, Light DOM, and forms | EL-6001 through EL-6011 complete; 40 native core tags current; S6 active |
-| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                                              | React alpha; deferred                                                    |
+| Package                    | Owns                                                                                                                      | Status                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                                                            | current; non-grid beta                                                                 |
+| `@vyrnforge/ui-behaviors`  | framework-neutral state, collections, selection, navigation, overlay, feedback, subscriptions, and events                 | GMF2 complete; non-grid beta                                                           |
+| `@vyrnforge/ui-components` | first-class React renderer                                                                                                | current; non-grid beta                                                                 |
+| `@vyrnforge/ui-elements`   | native registration, lifecycle, observed attributes, property reflection, update scheduling, events, Light DOM, and forms | EL-6001 through EL-6017 complete; 54 native tags current; EL-6018 GMF3 closure remains |
+| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                                              | React alpha; deferred                                                                  |
 
 React and native HTML are first-class beta targets. Angular and Vue require
 verified consumer evidence. Mobile-native rendering is outside this program.

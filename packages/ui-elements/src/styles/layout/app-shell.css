@@ -1,0 +1,150 @@
+vf-app-shell.vf-app-shell {
+  --vf-app-shell-header-height: 64px;
+  --vf-app-shell-min-height: 100dvh;
+  --vf-app-shell-sidebar-width: 280px;
+  --vf-app-shell-sidebar-collapsed-width: var(
+    --vf-app-shell-collapsed-sidebar-width,
+    64px
+  );
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: var(--vf-app-shell-min-height);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-page);
+}
+vf-app-shell.vf-app-shell--full-height {
+  height: var(--vf-app-shell-min-height);
+}
+vf-app-shell.vf-app-shell--scroll-content,
+vf-app-shell.vf-app-shell--scroll-split {
+  overflow: hidden;
+}
+vf-app-shell.vf-app-shell--scroll-page {
+  height: auto;
+  overflow: visible;
+}
+vf-app-shell .vf-app-shell__header {
+  z-index: calc(var(--vf-layer-sticky) + 2);
+  min-height: var(--vf-app-shell-header-height);
+  border-bottom: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-default);
+}
+vf-app-shell.vf-app-shell--header-static .vf-app-shell__header {
+  position: static;
+}
+vf-app-shell.vf-app-shell--header-sticky .vf-app-shell__header {
+  position: sticky;
+  top: 0;
+}
+vf-app-shell.vf-app-shell--header-fixed .vf-app-shell__header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+}
+vf-app-shell .vf-app-shell__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+vf-app-shell.vf-app-shell--scroll-content .vf-app-shell__body,
+vf-app-shell.vf-app-shell--scroll-split .vf-app-shell__body {
+  overflow: hidden;
+}
+vf-app-shell.vf-app-shell--header-fixed .vf-app-shell__body {
+  padding-top: var(--vf-app-shell-header-height);
+}
+vf-app-shell.vf-app-shell--with-sidebar .vf-app-shell__body {
+  grid-template-columns: var(--vf-app-shell-sidebar-width) minmax(0, 1fr);
+}
+vf-app-shell.vf-app-shell--sidebar-collapsed .vf-app-shell__body {
+  grid-template-columns: var(--vf-app-shell-sidebar-collapsed-width) minmax(
+      0,
+      1fr
+    );
+}
+vf-app-shell .vf-app-shell__sidebar {
+  position: relative;
+  z-index: var(--vf-layer-sticky);
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-default);
+  overflow: hidden;
+}
+vf-app-shell .vf-app-shell__sidebar-scroll {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+vf-app-shell.vf-app-shell--sidebar-static .vf-app-shell__sidebar {
+  position: relative;
+}
+vf-app-shell.vf-app-shell--sidebar-sticky .vf-app-shell__sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  max-height: 100dvh;
+}
+vf-app-shell.vf-app-shell--with-header.vf-app-shell--sidebar-sticky
+  .vf-app-shell__sidebar {
+  top: var(--vf-app-shell-header-height);
+  max-height: calc(100dvh - var(--vf-app-shell-header-height));
+}
+vf-app-shell.vf-app-shell--sidebar-fixed .vf-app-shell__sidebar {
+  position: fixed;
+  inset-block-start: 0;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: var(--vf-app-shell-sidebar-width);
+  height: 100dvh;
+}
+vf-app-shell.vf-app-shell--with-header.vf-app-shell--sidebar-fixed
+  .vf-app-shell__sidebar {
+  inset-block-start: var(--vf-app-shell-header-height);
+  height: calc(100dvh - var(--vf-app-shell-header-height));
+}
+vf-app-shell.vf-app-shell--sidebar-collapsed.vf-app-shell--sidebar-fixed
+  .vf-app-shell__sidebar {
+  width: var(--vf-app-shell-sidebar-collapsed-width);
+}
+vf-app-shell.vf-app-shell--scroll-content .vf-app-shell__sidebar,
+vf-app-shell.vf-app-shell--scroll-split .vf-app-shell__sidebar {
+  align-self: stretch;
+  height: 100%;
+}
+vf-app-shell.vf-app-shell--scroll-page .vf-app-shell__sidebar {
+  max-height: 100dvh;
+}
+vf-app-shell.vf-app-shell--scroll-page.vf-app-shell--with-header
+  .vf-app-shell__sidebar {
+  max-height: calc(100dvh - var(--vf-app-shell-header-height));
+}
+vf-app-shell .vf-app-shell__main {
+  min-width: 0;
+  min-height: 0;
+}
+vf-app-shell.vf-app-shell--scroll-content .vf-app-shell__main,
+vf-app-shell.vf-app-shell--scroll-split .vf-app-shell__main {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+vf-app-shell.vf-app-shell--scroll-page .vf-app-shell__main {
+  overflow: visible;
+}
+vf-app-shell.vf-app-shell--sidebar-fixed.vf-app-shell--with-sidebar
+  .vf-app-shell__main {
+  margin-inline-start: 0;
+}
+vf-app-shell .vf-app-shell__content {
+  min-width: 0;
+  min-height: 0;
+}
+vf-app-shell .vf-app-shell__footer {
+  z-index: calc(var(--vf-layer-sticky) + 1);
+  border-top: 1px solid var(--vf-border-default);
+  background: var(--vf-surface-default);
+}

@@ -1,0 +1,39 @@
+vf-tooltip .vf-tooltip {
+  position: absolute;
+  z-index: var(--vf-layer-tooltip);
+  bottom: calc(100% + var(--vf-tooltip-offset, 6px));
+  left: 50%;
+  max-width: 260px;
+  transform: translateX(-50%);
+  border: 1px solid var(--vf-border-default);
+  border-radius: var(--vf-radius-md);
+  padding: var(--vf-space-2) var(--vf-space-3);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-overlay);
+  box-shadow: var(--vf-shadow-sm);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
+  pointer-events: none;
+  white-space: normal;
+}
+vf-tooltip .vf-tooltip--bottom {
+  top: calc(100% + var(--vf-tooltip-offset, 6px));
+  bottom: auto;
+}
+vf-tooltip .vf-tooltip--left {
+  top: 50%;
+  right: calc(100% + var(--vf-tooltip-offset, 6px));
+  bottom: auto;
+  left: auto;
+  transform: translateY(-50%);
+}
+vf-tooltip .vf-tooltip--right {
+  top: 50%;
+  bottom: auto;
+  left: calc(100% + var(--vf-tooltip-offset, 6px));
+  transform: translateY(-50%);
+}
+
+vf-tooltip .vf-tooltip[hidden] {
+  display: none;
+}

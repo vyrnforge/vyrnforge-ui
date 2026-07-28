@@ -89,17 +89,17 @@ describe("ui-elements foundation", () => {
     expect(listener).toHaveBeenCalledOnce();
   });
 
-  it("registers the native core catalog idempotently", () => {
+  it("registers the native public catalog idempotently", () => {
     const registry = createRegistry();
     const first = registerVyrnForgeElements(registry);
     const second = registerVyrnForgeElements(registry);
 
-    expect(first).toHaveLength(40);
+    expect(first).toHaveLength(54);
     expect(first[0]).toBe("vf-text");
-    expect(first[first.length - 1]).toBe("vf-side-nav");
+    expect(first[first.length - 1]).toBe("vf-page-toolbar");
     expect(second).toEqual([]);
     expect(Object.isFrozen(first)).toBe(true);
-    expect(vyrnForgeElementDefinitions).toHaveLength(40);
-    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(40);
+    expect(vyrnForgeElementDefinitions).toHaveLength(54);
+    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(54);
   });
 });

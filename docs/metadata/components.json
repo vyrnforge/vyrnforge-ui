@@ -3149,9 +3149,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-popover"
+          "target": "vf-popover",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -3211,9 +3212,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-menu"
+          "target": "vf-menu",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -3335,9 +3337,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-tooltip"
+          "target": "vf-tooltip",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -3397,9 +3400,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-dialog"
+          "target": "vf-dialog",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -3461,9 +3465,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-drawer"
+          "target": "vf-drawer",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -3523,9 +3528,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-confirm-dialog"
+          "target": "vf-confirm-dialog",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -3833,9 +3839,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-app-shell"
+          "target": "vf-app-shell",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -3962,9 +3969,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-page-header"
+          "target": "vf-page-header",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -4026,9 +4034,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-page-toolbar"
+          "target": "vf-page-toolbar",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -4860,9 +4869,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-multi-select"
+          "target": "vf-multi-select",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -4937,9 +4947,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-autocomplete"
+          "target": "vf-autocomplete",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -5014,9 +5025,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-transfer-list"
+          "target": "vf-transfer-list",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",
@@ -5091,9 +5103,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "planned-s6",
+          "status": "current",
           "strategy": "direct-element",
-          "target": "vf-toast"
+          "target": "vf-toast",
+          "evidence": "docs/metadata/native-advanced-elements.json"
         },
         "angular": {
           "status": "planned-gmf4",

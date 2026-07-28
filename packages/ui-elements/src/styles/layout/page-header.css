@@ -1,0 +1,69 @@
+vf-page-header.vf-page-header {
+  display: grid;
+  gap: var(--vf-space-3);
+  min-width: 0;
+}
+vf-page-header .vf-page-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--vf-space-4);
+}
+vf-page-header .vf-page-header__main {
+  display: grid;
+  gap: var(--vf-component-gap);
+  min-width: 0;
+}
+vf-page-header .vf-page-header__breadcrumbs {
+  min-width: 0;
+}
+vf-page-header .vf-page-header__eyebrow {
+  color: var(--vf-text-tertiary);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
+  letter-spacing: var(--vf-type-label-letter-spacing);
+}
+vf-page-header .vf-page-header__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--vf-component-gap);
+  min-width: 0;
+}
+vf-page-header .vf-page-header__title {
+  margin: 0;
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-page-title-font-family);
+  font-size: var(--vf-type-page-title-font-size);
+  font-weight: var(--vf-type-page-title-font-weight);
+  line-height: var(--vf-type-page-title-line-height);
+  letter-spacing: var(--vf-type-page-title-letter-spacing);
+}
+vf-page-header .vf-page-header__status,
+vf-page-header .vf-page-header__metadata,
+vf-page-header .vf-page-header__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--vf-component-gap);
+}
+vf-page-header .vf-page-header__description {
+  max-width: 72ch;
+  color: var(--vf-text-secondary);
+  font-family: var(--vf-type-body-font-family);
+  font-size: var(--vf-type-body-font-size);
+  font-weight: var(--vf-type-body-font-weight);
+  line-height: var(--vf-type-body-line-height);
+  letter-spacing: var(--vf-type-body-letter-spacing);
+}
+vf-page-header .vf-page-header__metadata {
+  color: var(--vf-text-tertiary);
+  font-family: var(--vf-type-caption-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
+}
+vf-page-header .vf-page-header__actions {
+  justify-content: flex-end;
+}

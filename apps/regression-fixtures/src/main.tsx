@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 import "./styles.css";
 import { FixtureApp } from "./FixtureApp";

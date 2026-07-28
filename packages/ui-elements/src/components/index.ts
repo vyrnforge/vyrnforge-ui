@@ -87,3 +87,43 @@ export {
   type VyrnForgeToggleGroupType,
   type VyrnForgeToggleGroupValue,
 } from "./values";
+export {
+  VyrnForgeAutocompleteElement,
+  VyrnForgeMultiSelectElement,
+  VyrnForgeTransferListElement,
+  type VyrnForgeAutocompleteOption,
+  type VyrnForgeMultiSelectOption,
+  type VyrnForgeTransferListOption,
+} from "./collections";
+export {
+  VyrnForgeDialogElement,
+  VyrnForgeDrawerElement,
+  VyrnForgeMenuElement,
+  VyrnForgePopoverElement,
+  VyrnForgeTooltipElement,
+  type VyrnForgeDialogSize,
+  type VyrnForgeDrawerSide,
+  type VyrnForgeDrawerSize,
+  type VyrnForgeMenuItem,
+  type VyrnForgeMenuSize,
+  type VyrnForgePopoverAlign,
+  type VyrnForgeTooltipPlacement,
+} from "./overlays";
+export {
+  VyrnForgeConfirmDialogElement,
+  VyrnForgeToastElement,
+  VyrnForgeToastViewportElement,
+  type VyrnForgeConfirmDialogVariant,
+  type VyrnForgeToastPosition,
+  type VyrnForgeToastRecord,
+  type VyrnForgeToastTone,
+} from "./feedback";
+export {
+  VyrnForgeAppShellElement,
+  VyrnForgePageHeaderElement,
+  VyrnForgePageToolbarElement,
+  type VyrnForgeAppShellHeaderPosition,
+  type VyrnForgeAppShellScrollMode,
+  type VyrnForgeAppShellSidebarPosition,
+  type VyrnForgePageToolbarDensity,
+} from "./composition";

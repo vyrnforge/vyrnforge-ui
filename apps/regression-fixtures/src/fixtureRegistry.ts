@@ -77,6 +77,20 @@ export const fixtureRegistry: readonly FixtureCase[] = [
       "Covers EL-6005 through EL-6011 while keeping complex collection and overlay families in later S6 batches.",
   },
   {
+    id: "native-advanced-elements",
+    title: "Native advanced elements",
+    componentMetadataId: "autocomplete",
+    category: "form-control",
+    route: "/fixtures/native/advanced-elements",
+    renderKey: "native-advanced-elements",
+    purpose:
+      "Proves advanced collection, overlay, feedback, and application-composition elements through public native APIs.",
+    supportedTestModes: allTestModes,
+    themes: allThemes,
+    densities: allDensities,
+    notes: "Covers EL-6012 through EL-6017 and the 54-tag native catalog.",
+  },
+  {
     id: "native-form-foundation",
     title: "Native form foundation",
     componentMetadataId: "text-input",

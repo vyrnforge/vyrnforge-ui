@@ -1,14 +1,19 @@
 import {
+  VyrnForgeAppShellElement,
+  VyrnForgeAutocompleteElement,
   VyrnForgeBadgeElement,
   VyrnForgeBreadcrumbsElement,
   VyrnForgeButtonElement,
   VyrnForgeButtonGroupElement,
+  VyrnForgeConfirmDialogElement,
   VyrnForgeCaptionElement,
   VyrnForgeCardElement,
   VyrnForgeCheckboxElement,
   VyrnForgeCodeTextElement,
   VyrnForgeDateInputElement,
   VyrnForgeDateTimeInputElement,
+  VyrnForgeDialogElement,
+  VyrnForgeDrawerElement,
   VyrnForgeEmptyStateElement,
   VyrnForgeErrorStateElement,
   VyrnForgeFieldElement,
@@ -17,9 +22,14 @@ import {
   VyrnForgeInlineElement,
   VyrnForgeLabelElement,
   VyrnForgeLoadingStateElement,
+  VyrnForgeMenuElement,
+  VyrnForgeMultiSelectElement,
   VyrnForgeNumberInputElement,
   VyrnForgePageElement,
+  VyrnForgePageHeaderElement,
+  VyrnForgePageToolbarElement,
   VyrnForgePanelElement,
+  VyrnForgePopoverElement,
   VyrnForgeRadioElement,
   VyrnForgeRadioGroupElement,
   VyrnForgeRatingElement,
@@ -33,6 +43,10 @@ import {
   VyrnForgeSwitchElement,
   VyrnForgeTabsElement,
   VyrnForgeTextElement,
+  VyrnForgeToastElement,
+  VyrnForgeToastViewportElement,
+  VyrnForgeTooltipElement,
+  VyrnForgeTransferListElement,
   VyrnForgeTextInputElement,
   VyrnForgeTextareaElement,
   VyrnForgeToggleButtonElement,
@@ -191,6 +205,56 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
     Object.freeze({
       tagName: "vf-side-nav",
       constructor: VyrnForgeSideNavElement,
+    }),
+    Object.freeze({
+      tagName: "vf-autocomplete",
+      constructor: VyrnForgeAutocompleteElement,
+    }),
+    Object.freeze({
+      tagName: "vf-multi-select",
+      constructor: VyrnForgeMultiSelectElement,
+    }),
+    Object.freeze({
+      tagName: "vf-transfer-list",
+      constructor: VyrnForgeTransferListElement,
+    }),
+    Object.freeze({
+      tagName: "vf-dialog",
+      constructor: VyrnForgeDialogElement,
+    }),
+    Object.freeze({
+      tagName: "vf-drawer",
+      constructor: VyrnForgeDrawerElement,
+    }),
+    Object.freeze({
+      tagName: "vf-popover",
+      constructor: VyrnForgePopoverElement,
+    }),
+    Object.freeze({ tagName: "vf-menu", constructor: VyrnForgeMenuElement }),
+    Object.freeze({
+      tagName: "vf-tooltip",
+      constructor: VyrnForgeTooltipElement,
+    }),
+    Object.freeze({ tagName: "vf-toast", constructor: VyrnForgeToastElement }),
+    Object.freeze({
+      tagName: "vf-toast-viewport",
+      constructor: VyrnForgeToastViewportElement,
+    }),
+    Object.freeze({
+      tagName: "vf-confirm-dialog",
+      constructor: VyrnForgeConfirmDialogElement,
+    }),
+    Object.freeze({
+      tagName: "vf-app-shell",
+      constructor: VyrnForgeAppShellElement,
+    }),
+    Object.freeze({
+      tagName: "vf-page-header",
+      constructor: VyrnForgePageHeaderElement,
+    }),
+    Object.freeze({
+      tagName: "vf-page-toolbar",
+      constructor: VyrnForgePageToolbarElement,
     }),
   ]);
 

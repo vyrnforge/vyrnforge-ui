@@ -2,15 +2,15 @@
 
 Browser-native VyrnForge Custom Elements for framework-neutral enterprise UI.
 
-EL-6001 through EL-6011 now provide:
+EL-6001 through EL-6017 now provide:
 
 - explicit register-all and reusable per-element registration utilities;
 - duplicate-registration safety for the lowercase `vf-*` namespace;
 - a server-safe Light DOM base with property/attribute reflection and batched updates;
 - canonical typed, bubbling, composed `vf-*` DOM events;
 - an `ElementInternals`-backed form-associated base;
-- 40 public native core tags covering display/layout, actions, inputs, selection,
-  value controls, field composition, and navigation;
+- 54 public native tags covering core controls, advanced collections, overlays,
+  feedback, and enterprise application composition;
 - VyrnForge token-driven styles with no runtime dependency on React or
   `@vyrnforge/ui-components`.
 
@@ -40,5 +40,6 @@ Package-root import performs no global registration. Light DOM remains the
 portable default. The package depends only on `@vyrnforge/ui-core` and
 `@vyrnforge/ui-behaviors` at runtime.
 
-Advanced collection controls, overlays, feedback surfaces, application
-composition elements, and the GMF3 parity gate remain later S6 work.
+The native renderer implementation wave is complete. EL-6018 remains the final
+GMF3 API, browser, accessibility, theme, density, package, and consumer parity
+gate.
