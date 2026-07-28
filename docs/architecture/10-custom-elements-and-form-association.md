@@ -153,15 +153,28 @@ controllers.
 
 ## Native advanced renderer wave
 
-EL-6012 through EL-6017 complete the pre-GMF3 native renderer catalog.
-Autocomplete, MultiSelect, and Transfer List adapt shared collection controllers
-and use ElementInternals for scalar or repeated-entry form submission. Dialog,
-Drawer, Popover, Menu, Tooltip, Toast, and ConfirmDialog keep portable state and
-decision contracts in `@vyrnforge/ui-behaviors`; the native layer owns Light DOM,
-focus execution, event translation, and browser lifecycle wiring. AppShell,
-PageHeader, and PageToolbar reuse the shared token and class system for enterprise
-composition without introducing a framework-specific runtime.
+EL-6012 through EL-6017 add advanced collections, overlays, feedback, and
+application composition. Autocomplete, MultiSelect, and Transfer List adapt
+shared collection controllers and use ElementInternals for scalar or
+repeated-entry form submission. Dialog, Drawer, Popover, Menu, Tooltip, Toast,
+and ConfirmDialog keep portable state and decision contracts in
+`@vyrnforge/ui-behaviors`; the native layer owns Light DOM, focus execution,
+event translation, and browser lifecycle wiring.
 
-The canonical registration catalog now contains 54 deterministic `vf-*` tags.
-EL-6018 remains responsible for the complete GMF3 parity decision rather than
-adding another renderer architecture.
+## GMF3 renderer closure
+
+EL-6018 completes the deterministic catalog at 58 `vf-*` tags with `vf-icon`,
+`vf-inline-message`, `vf-skeleton`, and `vf-top-nav`. It also formalizes
+renderer mappings where a React convenience API should reuse an existing native
+contract rather than create a duplicate tag:
+
+- `Alert` maps to `vf-inline-message`;
+- `Dropdown` composes `vf-popover` and a `vf-dropdown` content surface;
+- `ToastAction` maps to `vf-toast[action-label]`;
+- `ToastProvider` maps to `vf-toast-viewport`;
+- `useToast` maps to the `VyrnForgeToastViewportElement` service methods.
+
+Native CSS is loaded explicitly and scoped to Custom Element hosts, allowing
+React and native renderers to coexist without class-selector leakage. Canonical
+closure evidence lives in `docs/metadata/gmf3-closure.json`. Angular and Vue
+runtime verification remains S7 / GMF4.

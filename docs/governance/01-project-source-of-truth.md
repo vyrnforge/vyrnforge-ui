@@ -20,9 +20,9 @@ The first multi-framework beta focuses on all public non-grid components:
 | Package                    | Role                                                                                 | Release direction           |
 | -------------------------- | ------------------------------------------------------------------------------------ | --------------------------- |
 | `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, typography, motion, layers, and utilities | Non-grid beta               |
-| `@vyrnforge/ui-behaviors`  | Planned framework-neutral component controllers and state rules                      | Non-grid beta               |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral component controllers, state rules, and reasoned events            | Non-grid beta               |
 | `@vyrnforge/ui-components` | First-class React renderer                                                           | Non-grid beta               |
-| `@vyrnforge/ui-elements`   | Planned native Custom Element renderer                                               | Non-grid beta               |
+| `@vyrnforge/ui-elements`   | GMF3-complete 58-tag native Custom Element renderer                                  | Non-grid beta               |
 | `@vyrnforge/ui-data-grid`  | Existing specialized React data-grid package                                         | Independent alpha; deferred |
 
 ## Framework support policy

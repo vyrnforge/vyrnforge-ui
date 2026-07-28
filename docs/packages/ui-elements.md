@@ -1,4 +1,4 @@
-# `@vyrnforge/ui-elements` - Native Renderer Current
+# `@vyrnforge/ui-elements` - Native Renderer GMF3 Complete
 
 ## Purpose
 
@@ -6,18 +6,25 @@
 non-grid components and plain HTML consumers. It adapts shared tokens and
 framework-neutral behavior contracts to standards-based Custom Elements.
 
-## Implemented through EL-6017
+## Implemented through EL-6018
 
-The package contains the EL-6001 through EL-6004 foundations and 54 public
-`vf-*` tags. The first wave covers display/layout, actions, native form
-controls, value controls, field composition, and navigation. The advanced wave
-adds Autocomplete, MultiSelect, Transfer List, modal and anchored overlays,
-Menu, Tooltip, Toast, ConfirmDialog, AppShell, PageHeader, and PageToolbar.
+EL-6001 through EL-6018 provide:
 
-Adapters use Light DOM, VyrnForge tokens and CSS custom properties, canonical
-typed events, shared behavior controllers, and native browser form semantics.
-They introduce no React, Angular, Vue, application-state, or third-party
-component-library dependency.
+- deterministic, explicit registration for 58 lowercase `vf-*` tags;
+- Light DOM lifecycle, property reflection, typed events, and update scheduling;
+- `ElementInternals`-backed form submission, reset, disabled, and validity
+  behavior;
+- display, action, form, value, navigation, collection, overlay, feedback, and
+  enterprise composition elements;
+- four GMF3 completion tags: `vf-icon`, `vf-inline-message`, `vf-skeleton`, and
+  `vf-top-nav`;
+- documented renderer mappings for `Alert`, `Dropdown`, `ToastAction`,
+  `ToastProvider`, and `useToast`.
+
+Adapters use VyrnForge tokens and CSS custom properties, canonical typed events,
+shared behavior controllers, and native browser semantics. They introduce no
+React, Angular, Vue, application-state, or third-party component-library
+dependency.
 
 ## Registration
 
@@ -25,6 +32,7 @@ Package-root import is side-effect free. Consumers choose explicit registration:
 
 ```ts
 import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
+
 registerVyrnForgeElements();
 ```
 
@@ -32,22 +40,41 @@ registerVyrnForgeElements();
 import "@vyrnforge/ui-elements/register";
 ```
 
-`vyrnForgeElementDefinitions` is the canonical 54-tag catalog and
+`vyrnForgeElementDefinitions` is the canonical 58-tag catalog and
 `vyrnForgeElementRegistrations` exposes reusable per-tag registration
 functions.
 
+## Styles
+
+Consumers load core tokens before native renderer styles:
+
+```ts
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
+```
+
+Native advanced selectors are scoped to Custom Element hosts so the native and
+React renderers can coexist in one document without class-name leakage.
+
+## Renderer mappings
+
+| React API       | Native contract                                                                 |
+| --------------- | ------------------------------------------------------------------------------- |
+| `Alert`         | `vf-inline-message`                                                             |
+| `Dropdown`      | `vf-popover` with `vf-dropdown` content                                         |
+| `ToastAction`   | `vf-toast[action-label]`                                                        |
+| `ToastProvider` | `vf-toast-viewport`                                                             |
+| `useToast`      | `VyrnForgeToastViewportElement.add`, `updateToast`, `dismiss`, and `dismissAll` |
+
 ## Evidence
 
+- `docs/metadata/gmf3-closure.json`
+- `docs/testing/gmf3-native-parity-gate.md`
 - `docs/metadata/native-element-foundations.json`
 - `docs/metadata/native-core-elements.json`
 - `docs/metadata/native-advanced-elements.json`
-- `tests/browser/native-core-elements.spec.ts`
-- `tests/browser/native-advanced-elements.spec.ts`
-- `scripts/verify-native-core-elements.mjs`
-- `scripts/verify-native-advanced-elements.mjs`
+- `tests/browser/native-parity.spec.ts`
+- `scripts/verify-gmf3-closure.mjs`
 
-## Remaining S6 work
-
-EL-6018 closes GMF3 with complete API, form, browser, accessibility, theme,
-density, package, and consumer evidence across all public non-grid native
-elements.
+GMF3 is complete. S7 / GMF4 owns packed-package runtime verification and
+documentation for native HTML, Angular, and Vue consumers.

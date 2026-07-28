@@ -16,6 +16,7 @@ export const browserFixtureIds = {
   nativeAdvancedElements: "native-advanced-elements",
   nativeCoreElements: "native-core-elements",
   nativeFormFoundation: "native-form-foundation",
+  nativeParityElements: "native-parity-elements",
   multiSelectKeyboard: "multi-select-keyboard",
   popoverPosition: "popover-position",
   sliderRatingKeyboard: "slider-rating-keyboard",

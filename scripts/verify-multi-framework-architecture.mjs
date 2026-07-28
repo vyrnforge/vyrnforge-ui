@@ -90,6 +90,7 @@ const requiredDocuments = [
   "docs/metadata/component-contracts.json",
   "docs/metadata/component-contract.schema.json",
   "docs/metadata/gmf1-closure.json",
+  "docs/metadata/gmf3-closure.json",
   "docs/api/ui-behaviors-api.md",
   "docs/api/ui-elements-api.md",
   "tests/consumers/manifest.json",
@@ -219,14 +220,17 @@ function verifyPackageTopology(root, failures, architecture) {
 }
 
 function verifyFrameworkSupport(failures, architecture) {
-  if (architecture.program?.status !== "architecture-foundation-implemented") {
+  if (architecture.program?.status !== "native-renderer-evidence-complete") {
     addFailure(
       failures,
-      "multi-framework program status must be architecture-foundation-implemented",
+      "multi-framework program status must be native-renderer-evidence-complete",
     );
   }
-  if (architecture.program?.gate !== "GMF1") {
-    addFailure(failures, "multi-framework program gate must be GMF1");
+  if (architecture.program?.gate !== "GMF3") {
+    addFailure(failures, "multi-framework program gate must be GMF3");
+  }
+  if (architecture.program?.currentSprint !== "S7") {
+    addFailure(failures, "multi-framework currentSprint must be S7");
   }
 
   const frameworks = new Map(
@@ -247,10 +251,15 @@ function verifyFrameworkSupport(failures, architecture) {
         `${frameworkId} support level must be ${supportLevel}`,
       );
     }
-    if (framework.betaClaim !== "planned") {
+
+    const expectedClaim =
+      frameworkId === "native-html"
+        ? "renderer-complete-pending-gmf4-consumer-gate"
+        : "planned";
+    if (framework.betaClaim !== expectedClaim) {
       addFailure(
         failures,
-        `${frameworkId} beta claim must remain planned until GMF4`,
+        `${frameworkId} beta claim must be ${expectedClaim}`,
       );
     }
   }
@@ -271,12 +280,15 @@ function verifyFrameworkSupport(failures, architecture) {
   }
   if (
     architecture.consumerFixturePolicy?.currentClaim !==
-    "architecture-fixture-only"
+    "native-renderer-evidence-complete"
   ) {
     addFailure(
       failures,
-      "S4 consumer fixtures must not claim runtime framework support",
+      "consumer fixture policy must record native-renderer-evidence-complete",
     );
+  }
+  if (architecture.consumerFixturePolicy?.runtimeBuildGate !== "GMF4") {
+    addFailure(failures, "consumer runtime build gate must remain GMF4");
   }
 }
 
@@ -367,12 +379,13 @@ function verifyComponentContracts(failures, contracts) {
     }
     if (
       contract.native?.package !== "@vyrnforge/ui-elements" ||
-      contract.native.status !== "planned" ||
+      contract.native.status !== "current" ||
+      contract.native.evidence !== "docs/metadata/gmf3-closure.json" ||
       !/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(contract.native.tag ?? "")
     ) {
       addFailure(
         failures,
-        `${contract.id} has an invalid planned native renderer`,
+        `${contract.id} has an invalid current native renderer`,
       );
     }
     for (const eventName of contract.events ?? []) {

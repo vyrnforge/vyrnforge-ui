@@ -3,12 +3,19 @@
   "supportClaim": "architecture-fixture-only",
   "rendererPackages": ["@vyrnforge/ui-elements"],
   "requiredPatterns": [
+    "@vyrnforge/ui-core/styles/index.css",
+    "@vyrnforge/ui-elements/styles/index.css",
     "@vyrnforge/ui-elements/register",
     "<vf-button",
+    "<vf-top-nav",
+    "<vf-inline-message",
     "vf-action",
     "@vyrnforge/ui-elements",
     "vf-architecture-probe",
     "createVyrnForgeElementRegistration",
-    "VyrnForgePropertyDeclarations"
+    "VyrnForgePropertyDeclarations",
+    "vyrnForgeElementDefinitions",
+    "registeredNativeTagCount",
+    "58"
   ]
 }

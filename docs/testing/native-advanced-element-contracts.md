@@ -33,6 +33,7 @@ ElementInternals integration, event translation, and Light DOM composition.
 4. toast and confirmation event contracts;
 5. application-shell, page-header, and page-toolbar composition.
 
-The evidence runs with the existing native core and form-foundation scenarios
-before GMF3 closure. EL-6018 remains responsible for the final cross-family API,
-accessibility, theme, density, package, and consumer parity gate.
+The evidence runs with the existing native core and form-foundation scenarios.
+EL-6018 closes the cross-family API, accessibility, theme, density, package,
+and renderer-mapping decision in `docs/testing/gmf3-native-parity-gate.md` and
+`docs/metadata/gmf3-closure.json`.

@@ -46,3 +46,9 @@ scripts/verify-native-core-elements.mjs
 scripts/verify-native-core-elements.test.mjs
 docs/metadata/native-core-elements.json
 ```
+
+## GMF3 relationship
+
+This document remains the canonical 40-tag core-wave evidence. EL-6018 combines
+it with the advanced and parity evidence without rewriting the historical
+wave count. The final gate is recorded in `docs/metadata/gmf3-closure.json`.

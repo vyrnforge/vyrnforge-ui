@@ -5,7 +5,7 @@
     "batch": "EL-6005-EL-6011",
     "status": "implemented",
     "gate": "GMF3",
-    "gateStatus": "in-progress"
+    "gateStatus": "passed"
   },
   "tasks": [
     {
@@ -157,6 +157,7 @@
     "verifierTests": "scripts/verify-native-core-elements.test.mjs",
     "styles": "packages/ui-elements/src/styles/index.css"
   },
-  "deferredFamilies": ["EL-6018 GMF3 closure"],
-  "advancedWave": "docs/metadata/native-advanced-elements.json"
+  "deferredFamilies": [],
+  "advancedWave": "docs/metadata/native-advanced-elements.json",
+  "gmf3Closure": "docs/metadata/gmf3-closure.json"
 }

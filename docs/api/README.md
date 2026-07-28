@@ -13,17 +13,17 @@ Public API means the parts of VyrnForge UI that consuming applications may rely 
 
 The currently implemented public packages are:
 
-| Package                    | Public role                                                                                                      |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, utilities, and theme helpers.                                         |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral controllable state, collections, selection, and reasoned controller events.                    |
-| `@vyrnforge/ui-components` | First-class reusable React components.                                                                           |
-| `@vyrnforge/ui-elements`   | Native Custom Element foundations plus the EL-6005–EL-6011 core renderer wave; advanced families remain S6 work. |
-| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track.                                 |
+| Package                    | Public role                                                                                       |
+| -------------------------- | ------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, utilities, and theme helpers.                          |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral controllable state, collections, selection, and reasoned controller events.     |
+| `@vyrnforge/ui-components` | First-class reusable React components.                                                            |
+| `@vyrnforge/ui-elements`   | Complete 58-tag GMF3 native Custom Element renderer, forms, events, styles, and service mappings. |
+| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track.                  |
 
-Package existence does not itself claim completed framework parity. Native
-component renderers and Angular/Vue verification still require GMF3 and GMF4
-evidence.
+GMF3 proves the complete native renderer. Angular and Vue remain planned
+consumer claims until S7 / GMF4 supplies packed-package runtime, browser,
+accessibility, typing, and documentation evidence.
 
 ## Multi-framework contract
 

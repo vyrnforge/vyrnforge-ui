@@ -10,7 +10,8 @@
     "aiUsageRules": "docs/metadata/ai-usage-rules.json",
     "multiFramework": "docs/metadata/multi-framework.json",
     "componentContracts": "docs/metadata/component-contracts.json",
-    "gmf1Closure": "docs/metadata/gmf1-closure.json"
+    "gmf1Closure": "docs/metadata/gmf1-closure.json",
+    "gmf3Closure": "docs/metadata/gmf3-closure.json"
   },
   "packages": {
     "@vyrnforge/ui-core": {
@@ -61,7 +62,7 @@
       ]
     },
     "@vyrnforge/ui-elements": {
-      "status": "current-advanced-renderers",
+      "status": "current-gmf3-parity",
       "renderer": "custom-elements",
       "releaseTrack": "non-grid-beta",
       "owns": [
@@ -75,8 +76,9 @@
         "@vyrnforge/ui-core/styles/index.css",
         "@vyrnforge/ui-elements/styles/index.css"
       ],
-      "registeredPublicTags": 54,
-      "currentBatch": "EL-6012-EL-6017"
+      "registeredPublicTags": 58,
+      "currentBatch": "EL-6018",
+      "gateStatus": "passed"
     },
     "@vyrnforge/ui-data-grid": {
       "status": "react-alpha-deferred",

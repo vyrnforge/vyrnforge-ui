@@ -19,7 +19,9 @@ import {
   VyrnForgeFieldElement,
   VyrnForgeHeadingElement,
   VyrnForgeIconButtonElement,
+  VyrnForgeIconElement,
   VyrnForgeInlineElement,
+  VyrnForgeInlineMessageElement,
   VyrnForgeLabelElement,
   VyrnForgeLoadingStateElement,
   VyrnForgeMenuElement,
@@ -35,6 +37,7 @@ import {
   VyrnForgeRatingElement,
   VyrnForgeSearchInputElement,
   VyrnForgeSectionElement,
+  VyrnForgeSkeletonElement,
   VyrnForgeSegmentedControlElement,
   VyrnForgeSelectElement,
   VyrnForgeSideNavElement,
@@ -45,6 +48,7 @@ import {
   VyrnForgeTextElement,
   VyrnForgeToastElement,
   VyrnForgeToastViewportElement,
+  VyrnForgeTopNavElement,
   VyrnForgeTooltipElement,
   VyrnForgeTransferListElement,
   VyrnForgeTextInputElement,
@@ -90,6 +94,7 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
       tagName: "vf-code-text",
       constructor: VyrnForgeCodeTextElement,
     }),
+    Object.freeze({ tagName: "vf-icon", constructor: VyrnForgeIconElement }),
     Object.freeze({ tagName: "vf-badge", constructor: VyrnForgeBadgeElement }),
     Object.freeze({ tagName: "vf-card", constructor: VyrnForgeCardElement }),
     Object.freeze({ tagName: "vf-panel", constructor: VyrnForgePanelElement }),
@@ -114,6 +119,14 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
     Object.freeze({
       tagName: "vf-error-state",
       constructor: VyrnForgeErrorStateElement,
+    }),
+    Object.freeze({
+      tagName: "vf-inline-message",
+      constructor: VyrnForgeInlineMessageElement,
+    }),
+    Object.freeze({
+      tagName: "vf-skeleton",
+      constructor: VyrnForgeSkeletonElement,
     }),
     Object.freeze({
       tagName: "vf-button",
@@ -255,6 +268,10 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
     Object.freeze({
       tagName: "vf-page-toolbar",
       constructor: VyrnForgePageToolbarElement,
+    }),
+    Object.freeze({
+      tagName: "vf-top-nav",
+      constructor: VyrnForgeTopNavElement,
     }),
   ]);
 

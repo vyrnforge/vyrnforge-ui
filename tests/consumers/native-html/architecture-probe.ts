@@ -1,8 +1,17 @@
 import {
   VyrnForgeElement,
   createVyrnForgeElementRegistration,
+  vyrnForgeElementDefinitions,
   type VyrnForgePropertyDeclarations,
 } from "@vyrnforge/ui-elements";
+
+export const registeredNativeTagCount = vyrnForgeElementDefinitions.length;
+
+if (registeredNativeTagCount !== 58) {
+  throw new Error(
+    `Expected the 58-tag GMF3 native catalog, received ${registeredNativeTagCount}.`,
+  );
+}
 
 class ArchitectureProbeElement extends VyrnForgeElement {
   static override readonly properties = Object.freeze({

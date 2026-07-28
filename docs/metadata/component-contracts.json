@@ -160,7 +160,8 @@
       "native": {
         "package": "@vyrnforge/ui-elements",
         "tag": "vf-button",
-        "status": "planned"
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
       },
       "properties": ["variant", "disabled", "loading", "type", "name", "value"],
       "attributes": ["variant", "disabled", "loading", "type", "name", "value"],
@@ -186,7 +187,8 @@
       "native": {
         "package": "@vyrnforge/ui-elements",
         "tag": "vf-tabs",
-        "status": "planned"
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
       },
       "properties": [
         "value",
@@ -218,7 +220,8 @@
       "native": {
         "package": "@vyrnforge/ui-elements",
         "tag": "vf-autocomplete",
-        "status": "planned"
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
       },
       "properties": [
         "name",
@@ -260,7 +263,8 @@
       "native": {
         "package": "@vyrnforge/ui-elements",
         "tag": "vf-dialog",
-        "status": "planned"
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
       },
       "properties": ["open", "modal", "closeOnEscape", "closeOnOutsidePointer"],
       "attributes": [
@@ -284,7 +288,10 @@
   ],
   "catalogCoverage": {
     "componentMetadata": "docs/metadata/components.json",
-    "rule": "Every public @vyrnforge/ui-components record must define frameworkParity. Detailed properties, events, slots, methods, forms, and accessibility contracts are expanded family-by-family before GMF3.",
-    "publicNonGridComponents": 67
+    "rule": "Every beta-included public @vyrnforge/ui-components record has a current native direct element, renderer mapping, renderer composition, or renderer service contract verified by GMF3.",
+    "publicNonGridComponents": 67,
+    "nativeRegisteredTags": 58,
+    "gate": "GMF3",
+    "gateStatus": "passed"
   }
 }

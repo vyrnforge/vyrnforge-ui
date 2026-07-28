@@ -180,7 +180,7 @@
         "@vyrnforge/ui-elements/style.css",
         "@vyrnforge/ui-elements/index.css"
       ],
-      "notes": "EL-6001 through EL-6011 are implemented: registration, lifecycle, typed events, ElementInternals forms, and 40 public native core tags. Advanced collections, overlays, feedback, application composition, and GMF3 closure remain later S6 work."
+      "notes": "EL-6001 through EL-6018 are evidence-complete: foundations, 58 registered public native tags, renderer mappings/services, ElementInternals forms, browser accessibility, theme/density, package, and consumer parity. Angular and Vue runtime support remain GMF4 work."
     },
     {
       "name": "@vyrnforge/ui-data-grid",

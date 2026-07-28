@@ -36,7 +36,7 @@ beta release group.
 | S3     | Semantic Tokens and Component Consistency | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
 | S4     | Multi-Framework Architecture              | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 - passed |
 | S5     | Framework-Neutral Behaviors               | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 - passed |
-| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3          |
+| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 - passed |
 | S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4          |
 | S8     | Non-Grid Beta Release                     | Harden packages, canary in applications, publish beta artifacts, and complete exit review.                                | GBETA         |
 
@@ -97,12 +97,16 @@ per-element registration functions, observed-attribute declarations,
 pre-definition property upgrade, primitive reflection, and microtask-batched
 updates. It does not yet register public component tags.
 
-### Remaining GMF3 work
+### GMF3 work - implemented
 
-- EL-6003: typed event dispatch utilities
-- EL-6004: form-associated element base
-- EL-6005 through EL-6017: public non-grid native component ports
-- EL-6018: native non-grid parity gate
+- EL-6003: typed event dispatch utilities — implemented
+- EL-6004: form-associated element base — implemented
+- EL-6005 through EL-6017: public non-grid native component ports — implemented
+- EL-6018: native non-grid parity gate — implemented
+
+S6 closes with 58 registered native tags and current direct, mapping,
+composition, or service strategies for all 67 public non-grid React records.
+S7 / GMF4 is the active cross-framework consumer-verification phase.
 
 ## Deferred data-grid track
 
