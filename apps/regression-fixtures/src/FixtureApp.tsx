@@ -35,6 +35,7 @@ import {
   NativeFormProbeElement,
   registerNativeFormProbeElement,
 } from "./nativeFormFoundation";
+import { NativeAdvancedElementsFixture } from "./nativeAdvancedElements";
 import { NativeCoreElementsFixture } from "./nativeCoreElements";
 import {
   fixtureDensities,
@@ -1072,6 +1073,8 @@ function FixtureContent({
       return <NativeFormFoundationFixture />;
     case "native-core-elements":
       return <NativeCoreElementsFixture />;
+    case "native-advanced-elements":
+      return <NativeAdvancedElementsFixture />;
     case "text-input-validation":
       return <TextInputValidationFixture />;
     case "tabs-controlled-uncontrolled":

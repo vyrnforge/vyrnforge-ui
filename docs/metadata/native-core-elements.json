@@ -157,13 +157,6 @@
     "verifierTests": "scripts/verify-native-core-elements.test.mjs",
     "styles": "packages/ui-elements/src/styles/index.css"
   },
-  "deferredFamilies": [
-    "EL-6012 autocomplete",
-    "EL-6013 multi-selection and transfer",
-    "EL-6014 modal overlays",
-    "EL-6015 anchored overlays and menus",
-    "EL-6016 toast and confirmation",
-    "EL-6017 application composition",
-    "EL-6018 GMF3 closure"
-  ]
+  "deferredFamilies": ["EL-6018 GMF3 closure"],
+  "advancedWave": "docs/metadata/native-advanced-elements.json"
 }

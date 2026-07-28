@@ -294,12 +294,15 @@ export function verifyComponentMetadata(
         );
       if (
         parity?.native?.status === "current" &&
-        parity.native.evidence !== "docs/metadata/native-core-elements.json"
+        ![
+          "docs/metadata/native-core-elements.json",
+          "docs/metadata/native-advanced-elements.json",
+        ].includes(parity.native.evidence)
       )
         addFailure(
           failures,
           component,
-          "current native frameworkParity must reference native core evidence",
+          "current native frameworkParity must reference native renderer evidence",
         );
       if (
         parity?.angular?.status !== "planned-gmf4" ||

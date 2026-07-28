@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "program": {
     "sprint": "S6",
-    "batch": "EL-6005-EL-6011",
+    "batch": "EL-6012-EL-6017",
     "status": "in-progress",
     "gate": "GMF3",
     "gateStatus": "in-progress"
@@ -54,27 +54,27 @@
     },
     {
       "id": "EL-6012",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6013",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6014",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6015",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6016",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6017",
-      "status": "planned"
+      "status": "done"
     },
     {
       "id": "EL-6018",
@@ -155,15 +155,7 @@
     "objectAttributeSerialization": false,
     "formRuntimeAtImport": false
   },
-  "remainingGmf3Tasks": [
-    "EL-6012",
-    "EL-6013",
-    "EL-6014",
-    "EL-6015",
-    "EL-6016",
-    "EL-6017",
-    "EL-6018"
-  ],
+  "remainingGmf3Tasks": ["EL-6018"],
   "events": {
     "file": "packages/ui-elements/src/events.ts",
     "namePattern": "vf-*",
@@ -280,5 +272,6 @@
     "fixture": "apps/regression-fixtures/src/nativeCoreElements.tsx",
     "styleEntry": "@vyrnforge/ui-elements/styles/index.css",
     "domMode": "light-dom"
-  }
+  },
+  "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json"
 }

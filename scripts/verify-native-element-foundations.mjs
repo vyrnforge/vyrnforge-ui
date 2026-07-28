@@ -8,7 +8,7 @@ const repositoryRoot = path.resolve(
 );
 const taskIds = Array.from({ length: 18 }, (_, index) => `EL-${6001 + index}`);
 const completedTaskIds = new Set(
-  Array.from({ length: 11 }, (_, index) => `EL-${6001 + index}`),
+  Array.from({ length: 17 }, (_, index) => `EL-${6001 + index}`),
 );
 const requiredFiles = [
   "packages/ui-elements/src/base/VyrnForgeElement.ts",
@@ -23,10 +23,13 @@ const requiredFiles = [
   "packages/ui-elements/src/index.ts",
   "apps/regression-fixtures/src/nativeFormFoundation.ts",
   "apps/regression-fixtures/src/nativeCoreElements.tsx",
+  "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
   "apps/regression-fixtures/src/FixtureApp.tsx",
   "tests/browser/native-form-foundation.spec.ts",
   "tests/browser/native-core-elements.spec.ts",
+  "tests/browser/native-advanced-elements.spec.ts",
   "docs/metadata/native-core-elements.json",
+  "docs/metadata/native-advanced-elements.json",
   "docs/testing/native-core-element-contracts.md",
   "tests/consumers/native-html/architecture-probe.ts",
   "tests/consumers/native-html/fixture.json",
@@ -82,8 +85,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   if (metadata.program?.sprint !== "S6") {
     failures.push("native element foundation sprint must be S6");
   }
-  if (metadata.program?.batch !== "EL-6005-EL-6011") {
-    failures.push("native element foundation batch must be EL-6005-EL-6011");
+  if (metadata.program?.batch !== "EL-6012-EL-6017") {
+    failures.push("native element foundation batch must be EL-6012-EL-6017");
   }
   if (metadata.program?.status !== "in-progress") {
     failures.push("native element foundation status must be in-progress");
@@ -342,6 +345,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   const coreMetadata = readJson(
     root,
     "docs/metadata/native-core-elements.json",
+    "docs/metadata/native-advanced-elements.json",
   );
   if (coreMetadata?.program?.batch !== "EL-6005-EL-6011") {
     failures.push("native core element batch must be EL-6005-EL-6011");
@@ -362,22 +366,26 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   const coreFixture = read(
     root,
     "apps/regression-fixtures/src/nativeCoreElements.tsx",
+    "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
   );
   requireIncludes(
     failures,
     coreFixture,
     "apps/regression-fixtures/src/nativeCoreElements.tsx",
+    "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
     ["registerVyrnForgeElements", "new FormData", "vf-tabs", "vf-side-nav"],
   );
 
   const coreBrowserEvidence = read(
     root,
     "tests/browser/native-core-elements.spec.ts",
+    "tests/browser/native-advanced-elements.spec.ts",
   );
   requireIncludes(
     failures,
     coreBrowserEvidence,
     "tests/browser/native-core-elements.spec.ts",
+    "tests/browser/native-advanced-elements.spec.ts",
     [
       "registers the deterministic 40-element public catalog",
       "native-core-submission",
@@ -397,10 +405,10 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     failures.push("multi-framework currentSprint must be S6");
   }
   if (
-    multiFramework?.nativeElementFoundation?.currentBatch !== "EL-6005-EL-6011"
+    multiFramework?.nativeElementFoundation?.currentBatch !== "EL-6012-EL-6017"
   ) {
     failures.push(
-      "multi-framework nativeElementFoundation currentBatch must be EL-6005-EL-6011",
+      "multi-framework nativeElementFoundation currentBatch must be EL-6012-EL-6017",
     );
   }
   if (multiFramework?.nativeElementFoundation?.status !== "in-progress") {
@@ -410,13 +418,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   }
 
   const remaining = new Set(metadata.remainingGmf3Tasks ?? []);
-  for (const taskId of taskIds.slice(11)) {
-    if (!remaining.has(taskId)) {
-      failures.push(`remainingGmf3Tasks must include ${taskId}`);
-    }
-  }
-  if (remaining.size !== 7) {
-    failures.push("remainingGmf3Tasks must contain EL-6012 through EL-6018");
+  if (!remaining.has("EL-6018") || remaining.size !== 1) {
+    failures.push("remainingGmf3Tasks must contain only EL-6018");
   }
 
   return [...new Set(failures)].sort();
@@ -437,6 +440,6 @@ if (
 ) {
   assertNativeElementFoundations();
   console.log(
-    "Native element foundations passed: EL-6001 through EL-6011 foundations and native core renderer contracts are complete.",
+    "Native element foundations passed: EL-6001 through EL-6017 and the 54-tag native renderer contracts are complete.",
   );
 }

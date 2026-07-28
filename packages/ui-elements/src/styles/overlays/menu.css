@@ -1,0 +1,53 @@
+vf-menu .vf-menu {
+  position: absolute;
+  z-index: var(--vf-layer-popover);
+  top: calc(100% + var(--vf-space-1));
+  left: 0;
+  display: grid;
+  gap: var(--vf-space-1);
+  min-width: 220px;
+  border: 1px solid var(--vf-border-default);
+  border-radius: var(--vf-radius-lg);
+  padding: var(--vf-space-2);
+  background: var(--vf-surface-overlay);
+  box-shadow: var(--vf-shadow-md);
+}
+vf-menu .vf-menu--sm {
+  min-width: 180px;
+}
+vf-menu .vf-menu--lg {
+  min-width: 280px;
+}
+vf-menu .vf-menu__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vf-space-3);
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--vf-radius-md);
+  padding: var(--vf-space-2) var(--vf-space-3);
+  color: var(--vf-text-primary);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+vf-menu .vf-menu__item:hover:not(:disabled),
+vf-menu .vf-menu__item:focus-visible {
+  background: var(--vf-interactive-neutral-hover);
+}
+vf-menu .vf-menu__item--selected {
+  background: var(--vf-interactive-selected-background);
+}
+vf-menu .vf-menu__item--danger {
+  color: var(--vf-status-error-text);
+}
+vf-menu .vf-menu__shortcut {
+  color: var(--vf-text-secondary);
+  font-size: var(--vf-type-caption-font-size);
+}
+
+vf-menu .vf-menu[hidden] {
+  display: none;
+}

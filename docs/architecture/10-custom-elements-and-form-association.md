@@ -150,3 +150,18 @@ items and options are properties, while stable primitive state may reflect to
 attributes. Native controls retain browser keyboard and form semantics, and
 composite navigation delegates portable state decisions to shared behavior
 controllers.
+
+## Native advanced renderer wave
+
+EL-6012 through EL-6017 complete the pre-GMF3 native renderer catalog.
+Autocomplete, MultiSelect, and Transfer List adapt shared collection controllers
+and use ElementInternals for scalar or repeated-entry form submission. Dialog,
+Drawer, Popover, Menu, Tooltip, Toast, and ConfirmDialog keep portable state and
+decision contracts in `@vyrnforge/ui-behaviors`; the native layer owns Light DOM,
+focus execution, event translation, and browser lifecycle wiring. AppShell,
+PageHeader, and PageToolbar reuse the shared token and class system for enterprise
+composition without introducing a framework-specific runtime.
+
+The canonical registration catalog now contains 54 deterministic `vf-*` tags.
+EL-6018 remains responsible for the complete GMF3 parity decision rather than
+adding another renderer architecture.

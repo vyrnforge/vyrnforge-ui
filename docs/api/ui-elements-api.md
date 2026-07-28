@@ -1,7 +1,7 @@
 # `@vyrnforge/ui-elements` API
 
-EL-6001 through EL-6011 establish the native foundation and first public
-component wave.
+EL-6001 through EL-6017 establish the native foundation and the complete
+pre-GMF3 public renderer catalog.
 
 ## Foundation exports
 
@@ -65,3 +65,26 @@ composed by default. Core elements use canonical contracts including:
 
 Styles consume shared VyrnForge tokens and retain the portable `vf-*` class
 namespace. The native package does not import React component runtime code.
+
+## Advanced collections
+
+`vf-autocomplete`, `vf-multi-select`, and `vf-transfer-list` consume the shared
+collection controllers. Scalar selection submits one value; multi-value
+controls submit repeated form entries under the configured `name`. Options and
+selected-value arrays remain property-only.
+
+## Overlays and feedback
+
+`vf-dialog`, `vf-drawer`, `vf-popover`, `vf-menu`, and `vf-tooltip` preserve
+shared open-state, dismissal, and navigation decisions while native adapters own
+focus execution and browser event wiring. `vf-toast`, `vf-toast-viewport`, and
+`vf-confirm-dialog` expose queue, dismissal, action, confirmation, and live
+region behavior through typed events.
+
+## Application composition
+
+`vf-app-shell`, `vf-page-header`, and `vf-page-toolbar` provide Light DOM
+enterprise composition surfaces. Named roles are expressed through stable
+`slot` attributes and VyrnForge classes rather than framework render props.
+
+The deterministic public catalog contains 54 tags after EL-6017.

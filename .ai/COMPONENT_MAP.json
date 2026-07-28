@@ -61,7 +61,7 @@
       ]
     },
     "@vyrnforge/ui-elements": {
-      "status": "current-foundation",
+      "status": "current-advanced-renderers",
       "renderer": "custom-elements",
       "releaseTrack": "non-grid-beta",
       "owns": [
@@ -74,7 +74,9 @@
       "css": [
         "@vyrnforge/ui-core/styles/index.css",
         "@vyrnforge/ui-elements/styles/index.css"
-      ]
+      ],
+      "registeredPublicTags": 54,
+      "currentBatch": "EL-6012-EL-6017"
     },
     "@vyrnforge/ui-data-grid": {
       "status": "react-alpha-deferred",
