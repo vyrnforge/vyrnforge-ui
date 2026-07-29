@@ -72,10 +72,15 @@ class ProbeFormElement extends VyrnForgeFormAssociatedElement<string> {
 
   override addEventListener(
     type: string,
-    callback: EventListenerOrEventListenerObject | null,
+    listener: unknown,
     options?: AddEventListenerOptions | boolean,
   ): void {
-    this.target.addEventListener(type, callback, options);
+    if (listener === null) return;
+    this.target.addEventListener(
+      type,
+      listener as EventListenerOrEventListenerObject,
+      options,
+    );
   }
 
   override dispatchEvent(event: Event): boolean {

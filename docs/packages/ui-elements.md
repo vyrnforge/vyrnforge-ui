@@ -76,5 +76,10 @@ React renderers can coexist in one document without class-name leakage.
 - `tests/browser/native-parity.spec.ts`
 - `scripts/verify-gmf3-closure.mjs`
 
-GMF3 is complete. S7 / GMF4 owns packed-package runtime verification and
-documentation for native HTML, Angular, and Vue consumers.
+GMF3 is complete. CF-7001 and CF-7002 provide clean packed-package runtime
+verification for native HTML and React 19 Custom Element consumers. CF-7008
+adds the typed 58-tag DOM map, canonical event listener declarations, and the
+public Custom Elements Manifest. Angular and Vue runtime verification remains
+later S7 / GMF4 work.
+
+Editor metadata is exported from `@vyrnforge/ui-elements/custom-elements.json`.

@@ -1,7 +1,12 @@
-# Native HTML consumer architecture fixture
+# Native HTML packed consumer fixture
 
-This fixture establishes explicit Custom Element registration, `vf-*` tags,
-canonical DOM events, and no framework runtime.
+CF-7001 upgrades this fixture from an architecture-only example to a clean,
+packed-package runtime consumer. It installs tarballs for
+`@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, and
+`@vyrnforge/ui-elements`, then runs TypeScript, a production Vite build, and
+Chromium interaction evidence.
 
-It is an S4 contract fixture, not a runtime support claim. Runtime build and
-browser verification become mandatory at GMF4.
+The fixture proves explicit registration, VyrnForge CSS imports, typed
+`HTMLElementTagNameMap` creation and queries, typed canonical events, slots,
+property-only models, and `ElementInternals` form submission without a
+framework runtime.

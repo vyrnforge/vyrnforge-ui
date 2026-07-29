@@ -7,8 +7,8 @@
   },
   "program": {
     "name": "VyrnForge non-grid multi-framework beta",
-    "gate": "GMF3",
-    "status": "native-renderer-evidence-complete",
+    "gate": "GMF4",
+    "status": "consumer-foundation-complete",
     "firstClassRenderers": ["react", "native-html"],
     "verifiedConsumers": ["angular", "vue"],
     "excludedPlatforms": [
@@ -97,15 +97,17 @@
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-components",
       "fixture": "tests/consumers/react",
-      "betaClaim": "planned"
+      "betaClaim": "custom-elements-consumer-verified",
+      "consumerFoundation": "CF-7002"
     },
     {
       "id": "native-html",
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/native-html",
-      "betaClaim": "renderer-complete-pending-gmf4-consumer-gate",
-      "rendererFoundation": "gmf3-parity-complete"
+      "betaClaim": "packed-consumer-verified",
+      "rendererFoundation": "gmf3-parity-complete",
+      "consumerFoundation": "CF-7001"
     },
     {
       "id": "angular",
@@ -132,9 +134,10 @@
   },
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
-    "currentClaim": "native-renderer-evidence-complete",
+    "currentClaim": "native-html-react-consumer-foundation-complete",
     "runtimeBuildGate": "GMF4",
-    "rule": "GMF3 proves the native renderer and packed-package contract. Angular and Vue runtime support claims still require GMF4 consumer evidence."
+    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. Angular and Vue runtime support claims still require later GMF4 consumer evidence.",
+    "evidence": "docs/metadata/consumer-foundations.json"
   },
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",
@@ -194,5 +197,32 @@
     "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
     "foundationStage": "gmf3-parity-complete",
     "closureMetadata": "docs/metadata/gmf3-closure.json"
+  },
+  "consumerFoundation": {
+    "status": "complete",
+    "batch": "CF-7001-CF-7002-CF-7008",
+    "tasks": [
+      {
+        "id": "CF-7001",
+        "status": "done"
+      },
+      {
+        "id": "CF-7002",
+        "status": "done"
+      },
+      {
+        "id": "CF-7008",
+        "status": "done"
+      }
+    ],
+    "metadata": "docs/metadata/consumer-foundations.json",
+    "runtimeFixtures": ["native-html", "react"],
+    "declarationContract": {
+      "tagNameMap": "VyrnForgeHTMLElementTagNameMap",
+      "typedEvents": "VyrnForgeElementEventListener",
+      "customElementsManifest": "@vyrnforge/ui-elements/custom-elements.json"
+    },
+    "gate": "GMF4",
+    "gateStatus": "in-progress"
   }
 }

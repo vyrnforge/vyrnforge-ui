@@ -192,8 +192,11 @@ export function NativeAdvancedElementsFixture() {
     ) as ElementInstance<typeof VyrnForgeToastViewportElement>;
     viewport.defaultDuration = 0;
     viewport.addEventListener("vf-toast-change", (event) => {
-      const detail = (event as CustomEvent<{ id: string }>).detail;
-      toastOutput.textContent = `Toast: ${detail.id}`;
+      const detail = event.detail;
+      toastOutput.textContent =
+        detail.action === "dismiss-all"
+          ? "Toast: dismiss-all"
+          : `Toast: ${detail.id}`;
     });
 
     const confirmOutput = createOutput(

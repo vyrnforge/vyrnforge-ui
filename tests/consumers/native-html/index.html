@@ -3,27 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VyrnForge native HTML contract fixture</title>
+    <title>VyrnForge native HTML packed consumer</title>
   </head>
   <body>
     <vf-top-nav>
       <strong slot="brand">VyrnForge</strong>
       <a slot="navigation" href="#accounts">Accounts</a>
     </vf-top-nav>
-    <main>
-      <vf-inline-message title="Native renderer ready" variant="success">
-        The GMF3 catalog and package styles are loaded.
+    <main class="vf-consumer-shell" data-consumer-root>
+      <vf-inline-message title="Native consumer ready" variant="success">
+        Packed @vyrnforge/ui-elements styles and registration are loaded.
       </vf-inline-message>
-      <vf-button id="save" variant="primary">Save</vf-button>
+
+      <vf-button id="native-save" action="save" variant="primary">
+        Save
+      </vf-button>
+
+      <vf-tabs id="native-tabs" aria-label="Consumer sections"></vf-tabs>
+
+      <form id="native-form" class="vf-consumer-form">
+        <vf-text-input
+          name="owner"
+          label="Owner"
+          value="Operations"
+          required
+        ></vf-text-input>
+        <vf-button type="submit" variant="default">Submit owner</vf-button>
+      </form>
+
+      <output aria-live="polite" data-consumer-status>Waiting</output>
     </main>
+
     <script type="module">
       import "@vyrnforge/ui-core/styles/index.css";
       import "@vyrnforge/ui-elements/styles/index.css";
       import "@vyrnforge/ui-elements/register";
-
-      document.querySelector("#save")?.addEventListener("vf-action", () => {
-        console.log("save");
-      });
+      import "/src/main.ts";
     </script>
   </body>
 </html>

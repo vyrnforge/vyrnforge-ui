@@ -11,8 +11,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
-| Documentation | 106 active Markdown files; 23 archived Markdown files |
-| Scripts | 78 root npm scripts; repository automation under `scripts/` |
+| Documentation | 107 active Markdown files; 23 archived Markdown files |
+| Scripts | 82 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 9 workflow files, including 5 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
@@ -69,11 +69,11 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | --- | --- |
 | Purpose | Browser-native Custom Element registration, lifecycle, property reflection, typed vf-* events, Light DOM CSS, form foundations, and non-grid renderers. |
 | Main source directories | `src/components`, `src/styles` |
-| Public exports | 47 root names. `assertVyrnForgeElementTagName`, `assertVyrnForgeEventName`, `createVyrnForgeElementRegistration`, `createVyrnForgeEvent`, `createVyrnForgeEventDispatcher`, `defineVyrnForgeElement`, `dispatchVyrnForgeEvent`, `getVyrnForgeElementRegistry`, `registerVyrnForgeElement`, `registerVyrnForgeElementDefinitions`, `registerVyrnForgeElements`, `VyrnForgeActionDetail`, `VyrnForgeAttributeType`, `VyrnForgeCanonicalEventDetailMap`, `VyrnForgeChangedProperties`, `VyrnForgeCheckedChangeDetail`, `VyrnForgeDismissDetail`, `VyrnForgeElement`, `VyrnForgeElementConstructor`, `VyrnForgeElementDefinition`, `vyrnForgeElementDefinitions`, `VyrnForgeElementRegistration`, `vyrnForgeElementRegistrations`, `VyrnForgeElementRegistry`, `VyrnForgeElementTagName`, `vyrnForgeEventDispatcher`, `VyrnForgeEventMapName`, `VyrnForgeEventName`, `VyrnForgeEventOptions`, `VyrnForgeEventReason`, `VyrnForgeFormAssociatedElement`, `VyrnForgeFormAssociationMode`, `VyrnForgeFormInternals`, `VyrnForgeFormState`, `VyrnForgeFormStateRestoreMode`, `VyrnForgeFormValue`, `VyrnForgeInvalidDetail`, `VyrnForgeOpenChangeDetail`, `VyrnForgePressedChangeDetail`, `VyrnForgePropertyDeclaration`, `VyrnForgePropertyDeclarations`, `VyrnForgeResetDetail`, `VyrnForgeSelectionChangeDetail`, `VyrnForgeTypedEventDispatcher`, `vyrnForgeUiElementsVersion`, `VyrnForgeValidityFlags`, `VyrnForgeValueChangeDetail` |
+| Public exports | 55 root names. `assertVyrnForgeElementTagName`, `assertVyrnForgeEventName`, `createVyrnForgeElementRegistration`, `createVyrnForgeEvent`, `createVyrnForgeEventDispatcher`, `defineVyrnForgeElement`, `dispatchVyrnForgeEvent`, `getVyrnForgeElementRegistry`, `registerVyrnForgeElement`, `registerVyrnForgeElementDefinitions`, `registerVyrnForgeElements`, `VyrnForgeActionDetail`, `VyrnForgeAttributeType`, `VyrnForgeCancelDetail`, `VyrnForgeCanonicalEventDetailMap`, `VyrnForgeChangedProperties`, `VyrnForgeCheckedChangeDetail`, `VyrnForgeConfirmDetail`, `VyrnForgeDismissDetail`, `VyrnForgeElement`, `VyrnForgeElementConstructor`, `VyrnForgeElementDefinition`, `vyrnForgeElementDefinitions`, `VyrnForgeElementEventListener`, `VyrnForgeElementForTagName`, `VyrnForgeElementRegistration`, `vyrnForgeElementRegistrations`, `VyrnForgeElementRegistry`, `VyrnForgeElementTagName`, `vyrnForgeEventDispatcher`, `VyrnForgeEventMapName`, `VyrnForgeEventName`, `VyrnForgeEventOptions`, `VyrnForgeEventReason`, `VyrnForgeFormAssociatedElement`, `VyrnForgeFormAssociationMode`, `VyrnForgeFormInternals`, `VyrnForgeFormState`, `VyrnForgeFormStateRestoreMode`, `VyrnForgeFormValue`, `VyrnForgeHTMLElementTagNameMap`, `VyrnForgeInputValueChangeDetail`, `VyrnForgeInvalidDetail`, `VyrnForgeOpenChangeDetail`, `VyrnForgePressedChangeDetail`, `VyrnForgePropertyDeclaration`, `VyrnForgePropertyDeclarations`, `VyrnForgePublicElementTagName`, `VyrnForgeResetDetail`, `VyrnForgeSelectionChangeDetail`, `VyrnForgeToastChangeDetail`, `VyrnForgeTypedEventDispatcher`, `vyrnForgeUiElementsVersion`, `VyrnForgeValidityFlags`, `VyrnForgeValueChangeDetail` |
 | CSS entry points | `./index.css`, `./style.css`, `./styles/index.css` |
 | Dependencies | `@vyrnforge/ui-core@0.1.0-alpha.1`, `@vyrnforge/ui-behaviors@0.1.0-alpha.1` |
 | Peer dependencies | None |
-| Build script | `tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .` |
+| Build script | `node ../../scripts/generate-ui-elements-manifest.mjs && tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .` |
 | Test script | `vitest run` |
 | Current apparent maturity | Requires verification |
 | Suggested accountable owner | Web Components Team |
@@ -196,7 +196,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 106 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 107 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
@@ -210,8 +210,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 90 |
-| Pure/unit | 63 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 91 |
+| Pure/unit | 64 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 8 detected test files with DOM interaction helpers. |
 | Browser | 19 detected browser-test files. |
@@ -277,16 +277,16 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Metric | Count |
 | --- | --- |
 | Publishable packages | 5 |
-| Package-root export names | 583 |
+| Package-root export names | 591 |
 | Public components inventoried | 75 |
-| Repository test files | 90 |
+| Repository test files | 91 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 8 |
 | Browser test files | 19 |
 | Automated accessibility-test files | 3 |
 | Workflow files | 9 |
 | Reusable workflows | 5 |
-| Active Markdown documentation files | 106 |
+| Active Markdown documentation files | 107 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |

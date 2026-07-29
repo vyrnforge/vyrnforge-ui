@@ -110,3 +110,35 @@ Custom Element hosts so `@vyrnforge/ui-elements` and
 `@vyrnforge/ui-components` can coexist in a mixed renderer fixture.
 
 Canonical GMF3 evidence is `docs/metadata/gmf3-closure.json`.
+
+## Consumer declarations and editor metadata
+
+Importing the package root contributes a typed DOM map for every public tag:
+
+```ts
+import type {
+  VyrnForgeElementForTagName,
+  VyrnForgeTabItem,
+} from "@vyrnforge/ui-elements";
+
+const tabs = document.createElement("vf-tabs");
+tabs.items = [
+  { id: "summary", label: "Summary", content: "Content" },
+] satisfies readonly VyrnForgeTabItem[];
+
+const sameTabs: VyrnForgeElementForTagName<"vf-tabs"> = tabs;
+```
+
+`VyrnForgeElement` also provides typed overloads for canonical `vf-*`
+events, so `event.detail` is inferred from
+`VyrnForgeCanonicalEventDetailMap`.
+
+Editor and analyzer tooling can consume the package field and public export:
+
+```text
+@vyrnforge/ui-elements/custom-elements.json
+```
+
+The manifest follows Custom Elements Manifest schema `1.0.0` and is
+generated from the deterministic 58-tag registry. Registration remains
+explicit; declaration imports do not define elements globally at runtime.

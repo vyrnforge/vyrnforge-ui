@@ -44,5 +44,14 @@ Package-root import performs no global registration. Light DOM remains the
 portable default. The package depends only on `@vyrnforge/ui-core` and
 `@vyrnforge/ui-behaviors` at runtime.
 
-GMF3 native non-grid parity is complete. S7 / GMF4 owns packed consumer
-verification for native HTML, Angular, and Vue.
+GMF3 native non-grid parity is complete. CF-7001 and CF-7002 verify clean
+packed native HTML and React 19 Custom Element consumers. Angular and Vue
+runtime verification remains later S7 / GMF4 work.
+
+Typed DOM consumers receive `VyrnForgeHTMLElementTagNameMap`,
+`VyrnForgeElementForTagName<TTagName>`, and canonical event listener overloads.
+Editor tooling can load the public Custom Elements Manifest from:
+
+```text
+@vyrnforge/ui-elements/custom-elements.json
+```

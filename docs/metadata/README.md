@@ -6,25 +6,26 @@ queryable repository facts and evidence records.
 
 ## Files
 
-| File                                | Purpose                                                                                                          |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                                           |
-| `multi-framework.json`              | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy.           |
-| `native-element-foundations.json`   | EL-6001 through EL-6018 foundation, 58-tag native catalog, form/event evidence, and passed GMF3 closure state.   |
-| `native-core-elements.json`         | EL-6005 through EL-6011 canonical 40-tag core renderer wave and browser evidence.                                |
-| `native-advanced-elements.json`     | EL-6012 through EL-6017 canonical 14-tag advanced renderer wave and browser evidence.                            |
-| `gmf3-closure.json`                 | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims. |
-| `component-contracts.json`          | Canonical cross-framework events, slots, form association, and representative component contracts.               |
-| `component-contract.schema.json`    | JSON Schema for the canonical multi-framework component contract catalog.                                        |
-| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.                         |
-| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                                     |
-| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                                         |
-| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.               |
-| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.                   |
-| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                                  |
-| `css-imports.json`                  | Required CSS import order and styling ownership.                                                                 |
-| `state-contracts.json`              | State ownership levels and adapter policies.                                                                     |
-| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                                         |
+| File                                | Purpose                                                                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                                                    |
+| `multi-framework.json`              | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy.                    |
+| `native-element-foundations.json`   | EL-6001 through EL-6018 foundation, 58-tag native catalog, form/event evidence, and passed GMF3 closure state.            |
+| `consumer-foundations.json`         | CF-7001, CF-7002, and CF-7008 packed native HTML/React consumers plus declarations and Custom Elements Manifest evidence. |
+| `native-core-elements.json`         | EL-6005 through EL-6011 canonical 40-tag core renderer wave and browser evidence.                                         |
+| `native-advanced-elements.json`     | EL-6012 through EL-6017 canonical 14-tag advanced renderer wave and browser evidence.                                     |
+| `gmf3-closure.json`                 | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims.          |
+| `component-contracts.json`          | Canonical cross-framework events, slots, form association, and representative component contracts.                        |
+| `component-contract.schema.json`    | JSON Schema for the canonical multi-framework component contract catalog.                                                 |
+| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.                                  |
+| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                                              |
+| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                                                  |
+| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.                        |
+| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.                            |
+| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                                           |
+| `css-imports.json`                  | Required CSS import order and styling ownership.                                                                          |
+| `state-contracts.json`              | State ownership levels and adapter policies.                                                                              |
+| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                                                  |
 
 ## Multi-framework architecture metadata
 

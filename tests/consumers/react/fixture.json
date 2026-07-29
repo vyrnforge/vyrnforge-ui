@@ -1,10 +1,19 @@
 {
   "id": "react",
-  "supportClaim": "architecture-fixture-only",
+  "supportClaim": "packed-custom-elements-runtime-verified",
+  "task": "CF-7002",
   "rendererPackages": ["@vyrnforge/ui-components", "@vyrnforge/ui-elements"],
+  "runtime": "react-19-custom-elements",
+  "commands": ["npm run typecheck", "npm run build", "npm run preview"],
   "requiredPatterns": [
-    "@vyrnforge/ui-components",
+    "react",
     "@vyrnforge/ui-elements/register",
-    "<vf-button"
+    "@vyrnforge/ui-elements/styles/index.css",
+    "<vf-button",
+    "<vf-tabs",
+    "items={tabs}",
+    "useRef<ButtonElement>",
+    "addEventListener(\"vf-action\"",
+    "data-consumer-ready"
   ]
 }

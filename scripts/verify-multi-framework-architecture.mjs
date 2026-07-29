@@ -53,6 +53,20 @@ const expectedFrameworks = new Map([
   ["vue", "verified-consumer"],
 ]);
 
+const expectedBetaClaims = new Map([
+  ["react", "custom-elements-consumer-verified"],
+  ["native-html", "packed-consumer-verified"],
+  ["angular", "planned"],
+  ["vue", "planned"],
+]);
+
+const expectedFixtureClaims = new Map([
+  ["react", "packed-custom-elements-runtime-verified"],
+  ["native-html", "packed-runtime-verified"],
+  ["angular", "architecture-fixture-only"],
+  ["vue", "architecture-fixture-only"],
+]);
+
 const expectedEvents = new Set([
   "vf-value-change",
   "vf-open-change",
@@ -91,6 +105,7 @@ const requiredDocuments = [
   "docs/metadata/component-contract.schema.json",
   "docs/metadata/gmf1-closure.json",
   "docs/metadata/gmf3-closure.json",
+  "docs/metadata/consumer-foundations.json",
   "docs/api/ui-behaviors-api.md",
   "docs/api/ui-elements-api.md",
   "tests/consumers/manifest.json",
@@ -220,14 +235,14 @@ function verifyPackageTopology(root, failures, architecture) {
 }
 
 function verifyFrameworkSupport(failures, architecture) {
-  if (architecture.program?.status !== "native-renderer-evidence-complete") {
+  if (architecture.program?.status !== "consumer-foundation-complete") {
     addFailure(
       failures,
-      "multi-framework program status must be native-renderer-evidence-complete",
+      "multi-framework program status must be consumer-foundation-complete",
     );
   }
-  if (architecture.program?.gate !== "GMF3") {
-    addFailure(failures, "multi-framework program gate must be GMF3");
+  if (architecture.program?.gate !== "GMF4") {
+    addFailure(failures, "multi-framework program gate must be GMF4");
   }
   if (architecture.program?.currentSprint !== "S7") {
     addFailure(failures, "multi-framework currentSprint must be S7");
@@ -252,10 +267,7 @@ function verifyFrameworkSupport(failures, architecture) {
       );
     }
 
-    const expectedClaim =
-      frameworkId === "native-html"
-        ? "renderer-complete-pending-gmf4-consumer-gate"
-        : "planned";
+    const expectedClaim = expectedBetaClaims.get(frameworkId);
     if (framework.betaClaim !== expectedClaim) {
       addFailure(
         failures,
@@ -280,11 +292,20 @@ function verifyFrameworkSupport(failures, architecture) {
   }
   if (
     architecture.consumerFixturePolicy?.currentClaim !==
-    "native-renderer-evidence-complete"
+    "native-html-react-consumer-foundation-complete"
   ) {
     addFailure(
       failures,
-      "consumer fixture policy must record native-renderer-evidence-complete",
+      "consumer fixture policy must record native-html-react-consumer-foundation-complete",
+    );
+  }
+  if (
+    architecture.consumerFixturePolicy?.evidence !==
+    "docs/metadata/consumer-foundations.json"
+  ) {
+    addFailure(
+      failures,
+      "consumer fixture policy must reference consumer-foundations.json",
     );
   }
   if (architecture.consumerFixturePolicy?.runtimeBuildGate !== "GMF4") {
@@ -432,10 +453,10 @@ function verifyConsumerFixtures(root, failures, architecture) {
   }
 
   const manifest = readJson(root, manifestPath);
-  if (manifest.supportClaim !== "architecture-fixture-only") {
+  if (manifest.supportClaim !== "partial-gmf4-runtime-evidence") {
     addFailure(
       failures,
-      "consumer fixture manifest overstates support maturity",
+      "consumer fixture manifest must record partial-gmf4-runtime-evidence",
     );
   }
   if (manifest.runtimeBuildGate !== "GMF4") {
@@ -461,8 +482,18 @@ function verifyConsumerFixtures(root, failures, architecture) {
         `${fixture.id} fixture id does not match its contract`,
       );
     }
-    if (contract.supportClaim !== "architecture-fixture-only") {
-      addFailure(failures, `${fixture.id} fixture overstates support maturity`);
+    const expectedFixtureClaim = expectedFixtureClaims.get(fixture.id);
+    if (fixture.supportClaim !== expectedFixtureClaim) {
+      addFailure(
+        failures,
+        `${fixture.id} manifest support claim must be ${expectedFixtureClaim}`,
+      );
+    }
+    if (contract.supportClaim !== expectedFixtureClaim) {
+      addFailure(
+        failures,
+        `${fixture.id} fixture support claim must be ${expectedFixtureClaim}`,
+      );
     }
     const exampleText = (fixture.exampleFiles ?? [])
       .map((file) => path.join(fixtureDirectory, file))

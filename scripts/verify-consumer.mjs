@@ -25,7 +25,12 @@ const packages = [
     dir: "packages/ui-components",
     css: true,
   },
-  { name: "@vyrnforge/ui-elements", dir: "packages/ui-elements", css: true },
+  {
+    name: "@vyrnforge/ui-elements",
+    dir: "packages/ui-elements",
+    css: true,
+    customElements: true,
+  },
   { name: "@vyrnforge/ui-data-grid", dir: "packages/ui-data-grid", css: true },
 ];
 
@@ -210,6 +215,33 @@ function verifyInstalledPackage(packageInfo) {
       resolvedCss.startsWith(packagePath),
       `${packageInfo.name}: CSS resolves outside installed package`,
     );
+
+  if (packageInfo.customElements) {
+    const manifestPath = path.join(packagePath, "custom-elements.json");
+    const manifest = readJson(manifestPath);
+    assert(
+      packageJson.customElements === "./custom-elements.json",
+      `${packageInfo.name}: customElements field mismatch`,
+    );
+    assert(
+      packageJson.exports?.["./custom-elements.json"] ===
+        "./custom-elements.json",
+      `${packageInfo.name}: missing Custom Elements Manifest export`,
+    );
+    assert(
+      packageJson.files.includes("custom-elements.json"),
+      `${packageInfo.name}: custom-elements.json is missing from files`,
+    );
+    assert(
+      manifest.vyrnforge?.registeredTagCount === 58,
+      `${packageInfo.name}: installed Custom Elements Manifest count mismatch`,
+    );
+    assert(
+      consumerRequire.resolve("@vyrnforge/ui-elements/custom-elements.json") ===
+        manifestPath,
+      `${packageInfo.name}: Custom Elements Manifest export does not resolve`,
+    );
+  }
 
   console.log(`CONSUMER ${packageInfo.name}`);
   console.log(`  tarball: ${packageInfo.filename}`);

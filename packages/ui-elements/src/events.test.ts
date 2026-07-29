@@ -90,4 +90,42 @@ describe("VyrnForge DOM event utilities", () => {
     >();
     expect(event.detail).toEqual({ open: true, reason: "trigger" });
   });
+  it("types advanced canonical component events", () => {
+    const addedToast = vyrnForgeEventDispatcher.create("vf-toast-change", {
+      action: "add",
+      id: "saved",
+    });
+    expectTypeOf(addedToast.detail).toEqualTypeOf<
+      VyrnForgeCanonicalEventDetailMap["vf-toast-change"]
+    >();
+    expect(addedToast.detail).toEqual({
+      action: "add",
+      id: "saved",
+    });
+
+    const dismissedToasts = vyrnForgeEventDispatcher.create("vf-toast-change", {
+      action: "dismiss-all",
+    });
+    expect(dismissedToasts.detail).toEqual({
+      action: "dismiss-all",
+    });
+
+    const confirmed = vyrnForgeEventDispatcher.create("vf-confirm", {
+      reason: "confirm",
+    });
+    expect(confirmed.detail.reason).toBe("confirm");
+
+    const cancelled = vyrnForgeEventDispatcher.create("vf-cancel", {
+      reason: "cancel",
+    });
+    expect(cancelled.detail.reason).toBe("cancel");
+
+    const inputChanged = vyrnForgeEventDispatcher.create(
+      "vf-input-value-change",
+      {
+        value: "atlas",
+      },
+    );
+    expect(inputChanged.detail.value).toBe("atlas");
+  });
 });

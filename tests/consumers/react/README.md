@@ -1,8 +1,11 @@
-# React consumer architecture fixture
+# React packed Custom Element consumer fixture
 
-This fixture records the two supported React integration paths: the first-class
-React renderer from `@vyrnforge/ui-components` and direct Custom Element usage
-from `@vyrnforge/ui-elements`.
+CF-7002 verifies React 19 consuming `@vyrnforge/ui-elements` directly from
+clean package tarballs. The application keeps its JSX declaration adapter
+local, so the framework-neutral native package does not depend on React.
 
-It is an S4 contract fixture, not a runtime support claim. A real clean install,
-build, typecheck, and browser suite becomes mandatory at GMF4.
+The fixture proves typed refs, non-scalar property assignment, explicit
+registration, canonical DOM events, production Vite output, and Chromium
+interaction evidence. `@vyrnforge/ui-components` remains the recommended
+first-class React renderer; this fixture validates the supported direct
+Custom Element path.
