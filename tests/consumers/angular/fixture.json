@@ -1,6 +1,26 @@
 {
   "id": "angular",
-  "supportClaim": "architecture-fixture-only",
+  "task": "CF-7003",
+  "supportClaim": "packed-angular-runtime-verified",
+  "frameworkRuntime": "Angular 22.0.8",
   "rendererPackages": ["@vyrnforge/ui-elements"],
-  "requiredPatterns": ["CUSTOM_ELEMENTS_SCHEMA", "<vf-button", "(vf-action)"]
+  "requiredPatterns": [
+    "CUSTOM_ELEMENTS_SCHEMA",
+    "@vyrnforge/ui-elements/register",
+    "(vf-action)",
+    "[items]",
+    "slot=\"status\"",
+    "new FormData",
+    "provideZonelessChangeDetection"
+  ],
+  "evidence": [
+    "clean tarball installation",
+    "Angular application build with strict template checking",
+    "CUSTOM_ELEMENTS_SCHEMA",
+    "object property binding without attribute serialization",
+    "canonical vf-action template event binding",
+    "named Light DOM composition",
+    "ElementInternals form submission",
+    "Chromium runtime verification"
+  ]
 }

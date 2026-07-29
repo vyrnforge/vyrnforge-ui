@@ -12,16 +12,17 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 ## Packages
 
-| Package                    | Owns                                                                                                                                       | Status                                                                                                                            |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                                                                             | current; non-grid beta                                                                                                            |
-| `@vyrnforge/ui-behaviors`  | framework-neutral state, collections, selection, navigation, overlay, feedback, subscriptions, and events                                  | GMF2 complete; non-grid beta                                                                                                      |
-| `@vyrnforge/ui-components` | first-class React renderer                                                                                                                 | current; non-grid beta                                                                                                            |
-| `@vyrnforge/ui-elements`   | native registration, lifecycle, observed attributes, property reflection, update scheduling, events, Light DOM, forms, and editor metadata | GMF3 passed; CF-7001/7002/7008 packed native HTML + React consumer foundation complete; Angular/Vue GMF4 runtime evidence remains |
-| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                                                               | React alpha; deferred                                                                                                             |
+| Package                    | Owns                                                                                                                                       | Status                                                                                                                              |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                                                                             | current; non-grid beta                                                                                                              |
+| `@vyrnforge/ui-behaviors`  | framework-neutral state, collections, selection, navigation, overlay, feedback, subscriptions, and events                                  | GMF2 complete; non-grid beta                                                                                                        |
+| `@vyrnforge/ui-components` | first-class React renderer                                                                                                                 | current; non-grid beta                                                                                                              |
+| `@vyrnforge/ui-elements`   | native registration, lifecycle, observed attributes, property reflection, update scheduling, events, Light DOM, forms, and editor metadata | GMF3 passed; packed native HTML and React foundation complete; CF-7003 Angular consumer verified; Vue GMF4 runtime evidence remains |
+| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                                                               | React alpha; deferred                                                                                                               |
 
-React and native HTML are first-class beta targets. Angular and Vue require
-verified consumer evidence. Mobile-native rendering is outside this program.
+React and native HTML are first-class beta targets. Angular has verified packed
+consumer evidence through CF-7003; Vue still requires its GMF4 consumer task.
+Mobile-native rendering is outside this program.
 
 ## Canonical Docs
 
@@ -33,6 +34,7 @@ verified consumer evidence. Mobile-native rendering is outside this program.
 | Component contracts and events     | `docs/architecture/09-component-contracts-and-events.md`       |
 | Native elements and forms          | `docs/architecture/10-custom-elements-and-form-association.md` |
 | Consumer foundation evidence       | `docs/metadata/consumer-foundations.json`                      |
+| Angular consumer evidence          | `docs/metadata/angular-consumer.json`                          |
 | State and Redux policy             | `docs/architecture/02-state-and-adapter-ownership.md`          |
 | Styling and themes                 | `docs/architecture/03-theming-and-styling.md`                  |
 | CSS architecture                   | `docs/architecture/06-css-architecture.md`                     |

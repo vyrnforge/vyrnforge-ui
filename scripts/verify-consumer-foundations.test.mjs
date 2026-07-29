@@ -89,6 +89,28 @@ test("rejects stale Custom Elements metadata", () => {
   );
 });
 
+test("rejects stale Custom Elements event vocabulary", () => {
+  withRepositoryFixture(
+    (root) => {
+      mutateJson(root, "packages/ui-elements/custom-elements.json", (value) => {
+        value.vyrnforge.eventVocabulary =
+          value.vyrnforge.eventVocabulary.filter(
+            (eventName) => eventName !== "vf-confirm",
+          );
+      });
+    },
+    (root) => {
+      assert(
+        verifyConsumerFoundations({ root }).some((failure) =>
+          failure.includes(
+            "event vocabulary must match the canonical event detail map",
+          ),
+        ),
+      );
+    },
+  );
+});
+
 test("rejects a React dependency in the native package", () => {
   withRepositoryFixture(
     (root) => {

@@ -56,14 +56,14 @@ const expectedFrameworks = new Map([
 const expectedBetaClaims = new Map([
   ["react", "custom-elements-consumer-verified"],
   ["native-html", "packed-consumer-verified"],
-  ["angular", "planned"],
+  ["angular", "packed-consumer-verified"],
   ["vue", "planned"],
 ]);
 
 const expectedFixtureClaims = new Map([
   ["react", "packed-custom-elements-runtime-verified"],
   ["native-html", "packed-runtime-verified"],
-  ["angular", "architecture-fixture-only"],
+  ["angular", "packed-angular-runtime-verified"],
   ["vue", "architecture-fixture-only"],
 ]);
 
@@ -106,6 +106,7 @@ const requiredDocuments = [
   "docs/metadata/gmf1-closure.json",
   "docs/metadata/gmf3-closure.json",
   "docs/metadata/consumer-foundations.json",
+  "docs/metadata/angular-consumer.json",
   "docs/api/ui-behaviors-api.md",
   "docs/api/ui-elements-api.md",
   "tests/consumers/manifest.json",
@@ -292,11 +293,11 @@ function verifyFrameworkSupport(failures, architecture) {
   }
   if (
     architecture.consumerFixturePolicy?.currentClaim !==
-    "native-html-react-consumer-foundation-complete"
+    "native-html-react-angular-consumer-foundation-complete"
   ) {
     addFailure(
       failures,
-      "consumer fixture policy must record native-html-react-consumer-foundation-complete",
+      "consumer fixture policy must record native-html-react-angular-consumer-foundation-complete",
     );
   }
   if (
@@ -306,6 +307,15 @@ function verifyFrameworkSupport(failures, architecture) {
     addFailure(
       failures,
       "consumer fixture policy must reference consumer-foundations.json",
+    );
+  }
+  if (
+    architecture.consumerFixturePolicy?.angularEvidence !==
+    "docs/metadata/angular-consumer.json"
+  ) {
+    addFailure(
+      failures,
+      "consumer fixture policy must reference angular-consumer.json",
     );
   }
   if (architecture.consumerFixturePolicy?.runtimeBuildGate !== "GMF4") {

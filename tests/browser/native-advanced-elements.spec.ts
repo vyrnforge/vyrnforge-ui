@@ -110,6 +110,20 @@ test.describe("EL-6012 through EL-6017 native advanced elements", () => {
   test("dispatches feedback contracts and renders composition surfaces", async ({
     page,
   }) => {
+    const shell = fixtureRegion(page, "native-advanced-composition");
+    await expect(shell).toContainText("Enterprise header");
+    await expect(shell).toContainText("Enterprise navigation");
+    await expect(page.locator("vf-page-header")).toContainText("Accounts");
+
+    await fixtureAction(page, "advanced-page-header-action").click();
+    await expect(
+      fixtureRegion(page, "native-advanced-page-header-action"),
+    ).toHaveText("Reconnected page-header action received");
+
+    await expect(page.locator("vf-page-toolbar")).toContainText(
+      "Create account",
+    );
+
     await fixtureAction(page, "advanced-add-toast").click();
     await expect(fixtureRegion(page, "native-advanced-toast")).toHaveText(
       "Toast: saved",
@@ -129,14 +143,6 @@ test.describe("EL-6012 through EL-6017 native advanced elements", () => {
       .click();
     await expect(fixtureRegion(page, "native-advanced-confirm")).toHaveText(
       "Confirmation: confirmed",
-    );
-
-    const shell = fixtureRegion(page, "native-advanced-composition");
-    await expect(shell).toContainText("Enterprise header");
-    await expect(shell).toContainText("Enterprise navigation");
-    await expect(page.locator("vf-page-header")).toContainText("Accounts");
-    await expect(page.locator("vf-page-toolbar")).toContainText(
-      "Create account",
     );
   });
 });

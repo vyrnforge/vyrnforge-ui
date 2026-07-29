@@ -34,8 +34,15 @@
       "framework": "Angular",
       "directory": "tests/consumers/angular",
       "contractFile": "fixture.json",
-      "exampleFiles": ["example.component.ts", "example.component.html"],
-      "supportClaim": "architecture-fixture-only"
+      "exampleFiles": [
+        "package.json",
+        "angular.json",
+        "src/main.ts",
+        "src/app/app.component.ts",
+        "src/app/app.component.html",
+        "architecture-probe.ts"
+      ],
+      "supportClaim": "packed-angular-runtime-verified"
     },
     {
       "id": "vue",
@@ -46,5 +53,5 @@
       "supportClaim": "architecture-fixture-only"
     }
   ],
-  "currentBatch": "CF-7001-CF-7002-CF-7008"
+  "currentBatch": "CF-7003"
 }

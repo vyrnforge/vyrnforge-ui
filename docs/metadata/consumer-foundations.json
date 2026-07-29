@@ -120,10 +120,18 @@
   ],
   "unresolvedBlockers": [],
   "deferred": [
-    "Angular runtime consumer verification",
+    "Angular framework forms adapter decision",
     "Vue runtime consumer verification",
     "cross-framework forms adapter verification",
     "GMF4 closure and compatibility matrix sign-off",
     "data-grid multi-framework work remains outside the non-grid beta critical path"
+  ],
+  "followOnEvidence": [
+    {
+      "task": "CF-7003",
+      "status": "done",
+      "evidence": "docs/metadata/angular-consumer.json",
+      "claim": "packed-angular-runtime-verified"
+    }
   ]
 }

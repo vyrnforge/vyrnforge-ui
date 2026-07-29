@@ -14,18 +14,21 @@ const expectedTasks = new Map([
   ["CF-7008", 5],
 ]);
 
-const expectedFixtureClaims = new Map([
-  ["native-html", "packed-runtime-verified"],
-  ["react", "packed-custom-elements-runtime-verified"],
-  ["angular", "architecture-fixture-only"],
-  ["vue", "architecture-fixture-only"],
+const allowedFixtureClaims = new Map([
+  ["native-html", new Set(["packed-runtime-verified"])],
+  ["react", new Set(["packed-custom-elements-runtime-verified"])],
+  [
+    "angular",
+    new Set(["architecture-fixture-only", "packed-angular-runtime-verified"]),
+  ],
+  ["vue", new Set(["architecture-fixture-only"])],
 ]);
 
-const expectedBetaClaims = new Map([
-  ["native-html", "packed-consumer-verified"],
-  ["react", "custom-elements-consumer-verified"],
-  ["angular", "planned"],
-  ["vue", "planned"],
+const allowedBetaClaims = new Map([
+  ["native-html", new Set(["packed-consumer-verified"])],
+  ["react", new Set(["custom-elements-consumer-verified"])],
+  ["angular", new Set(["planned", "packed-consumer-verified"])],
+  ["vue", new Set(["planned"])],
 ]);
 
 const requiredDocuments = [
@@ -53,6 +56,17 @@ function readJson(root, relativePath) {
 
 function addFailure(failures, message) {
   failures.push(message);
+}
+
+function collectCanonicalEventNames(text) {
+  const detailMap = text.match(
+    /export interface VyrnForgeCanonicalEventDetailMap\s*\{([\s\S]*?)\n\}/,
+  );
+  return detailMap
+    ? [...detailMap[1].matchAll(/readonly\s+"([^"]+)"\s*:/g)].map(
+        (match) => match[1],
+      )
+    : [];
 }
 
 function collectRegistryDefinitions(text) {
@@ -112,6 +126,7 @@ function verifyPackageContract(root, failures, closure) {
   const packageJson = readJson(root, "packages/ui-elements/package.json");
   const rootPackageJson = readJson(root, "package.json");
   const registryText = read(root, "packages/ui-elements/src/registry.ts");
+  const eventsText = read(root, "packages/ui-elements/src/events.ts");
   const typeMapText = read(root, "packages/ui-elements/src/custom-elements.ts");
   const baseText = read(
     root,
@@ -172,6 +187,19 @@ function verifyPackageContract(root, failures, closure) {
   }
   if (manifest.vyrnforge?.registeredTagCount !== 58) {
     addFailure(failures, "custom-elements.json must record 58 tags");
+  }
+
+  const canonicalEventNames = collectCanonicalEventNames(eventsText);
+  if (canonicalEventNames.length === 0) {
+    addFailure(failures, "canonical event detail map is missing or empty");
+  } else if (
+    JSON.stringify(manifest.vyrnforge?.eventVocabulary ?? []) !==
+    JSON.stringify(canonicalEventNames)
+  ) {
+    addFailure(
+      failures,
+      "custom-elements.json event vocabulary must match the canonical event detail map",
+    );
   }
   if (
     manifest.vyrnforge?.typeDeclarations?.tagNameMap !==
@@ -248,7 +276,9 @@ function verifyFixtures(root, failures, closure, architecture) {
       "consumer manifest must record partial-gmf4-runtime-evidence",
     );
   }
-  if (manifest.currentBatch !== "CF-7001-CF-7002-CF-7008") {
+  if (
+    !new Set(["CF-7001-CF-7002-CF-7008", "CF-7003"]).has(manifest.currentBatch)
+  ) {
     addFailure(failures, "consumer manifest currentBatch is invalid");
   }
 
@@ -257,11 +287,11 @@ function verifyFixtures(root, failures, closure, architecture) {
   );
 
   for (const fixture of manifest.fixtures ?? []) {
-    const expectedClaim = expectedFixtureClaims.get(fixture.id);
-    if (fixture.supportClaim !== expectedClaim) {
+    const allowedClaims = allowedFixtureClaims.get(fixture.id);
+    if (!allowedClaims?.has(fixture.supportClaim)) {
       addFailure(
         failures,
-        `${fixture.id} manifest support claim must be ${expectedClaim}`,
+        `${fixture.id} manifest support claim is not an allowed progression`,
       );
     }
 
@@ -276,10 +306,10 @@ function verifyFixtures(root, failures, closure, architecture) {
     }
 
     const contract = JSON.parse(readFileSync(contractPath, "utf8"));
-    if (contract.supportClaim !== expectedClaim) {
+    if (!allowedClaims?.has(contract.supportClaim)) {
       addFailure(
         failures,
-        `${fixture.id} fixture support claim must be ${expectedClaim}`,
+        `${fixture.id} fixture support claim is not an allowed progression`,
       );
     }
 
@@ -330,11 +360,11 @@ function verifyFixtures(root, failures, closure, architecture) {
       framework,
     ]),
   );
-  for (const [frameworkId, expectedClaim] of expectedBetaClaims) {
-    if (frameworks.get(frameworkId)?.betaClaim !== expectedClaim) {
+  for (const [frameworkId, allowedClaims] of allowedBetaClaims) {
+    if (!allowedClaims.has(frameworks.get(frameworkId)?.betaClaim)) {
       addFailure(
         failures,
-        `${frameworkId} beta claim must be ${expectedClaim}`,
+        `${frameworkId} beta claim is not an allowed progression`,
       );
     }
   }

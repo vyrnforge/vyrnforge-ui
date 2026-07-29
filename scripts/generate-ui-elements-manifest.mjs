@@ -15,6 +15,10 @@ const componentMetadataPath = path.join(
   repositoryRoot,
   "docs/metadata/components.json",
 );
+const eventsPath = path.join(
+  repositoryRoot,
+  "packages/ui-elements/src/events.ts",
+);
 const outputPath = path.join(
   repositoryRoot,
   "packages/ui-elements/custom-elements.json",
@@ -37,6 +41,21 @@ function collectDefinitions(registryText) {
   }
 
   return definitions;
+}
+
+function normalizeLineEndings(value) {
+  return value.replace(/\r\n?/g, "\n");
+}
+
+function collectCanonicalEvents(eventsText) {
+  const detailMap = eventsText.match(
+    /export interface VyrnForgeCanonicalEventDetailMap\s*\{([\s\S]*?)\n\}/,
+  );
+  assert(detailMap, "VyrnForgeCanonicalEventDetailMap is missing.");
+
+  return [...detailMap[1].matchAll(/readonly\s+"([^"]+)"\s*:/g)].map(
+    (match) => match[1],
+  );
 }
 
 function componentDescriptions(metadata) {
@@ -71,19 +90,7 @@ function componentDescriptions(metadata) {
   return descriptions;
 }
 
-function createManifest(definitions, descriptions) {
-  const canonicalEvents = [
-    "vf-value-change",
-    "vf-open-change",
-    "vf-selection-change",
-    "vf-checked-change",
-    "vf-pressed-change",
-    "vf-action",
-    "vf-dismiss",
-    "vf-invalid",
-    "vf-reset",
-  ];
-
+function createManifest(definitions, descriptions, canonicalEvents) {
   return {
     schemaVersion: "1.0.0",
     readme: "README.md",
@@ -141,14 +148,32 @@ assert(
   "Custom Element registry contains duplicate constructor exports.",
 );
 
+const eventsText = readFileSync(eventsPath, "utf8");
+const canonicalEvents = collectCanonicalEvents(eventsText);
+assert(canonicalEvents.length > 0, "Canonical event map is empty.");
+assert(
+  new Set(canonicalEvents).size === canonicalEvents.length,
+  "Canonical event map contains duplicate names.",
+);
+for (const eventName of canonicalEvents) {
+  assert(
+    /^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(eventName),
+    `Invalid canonical event name: ${eventName}.`,
+  );
+}
+
 const metadata = readJson(componentMetadataPath);
-const manifest = createManifest(definitions, componentDescriptions(metadata));
+const manifest = createManifest(
+  definitions,
+  componentDescriptions(metadata),
+  canonicalEvents,
+);
 const serialized = `${JSON.stringify(manifest, null, 2)}\n`;
 
 if (checkOnly) {
   assert(existsSync(outputPath), "custom-elements.json is missing.");
   assert(
-    readFileSync(outputPath, "utf8") === serialized,
+    normalizeLineEndings(readFileSync(outputPath, "utf8")) === serialized,
     "custom-elements.json is stale; run npm run generate:custom-elements.",
   );
   console.log(

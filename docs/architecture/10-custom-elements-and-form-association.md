@@ -181,5 +181,7 @@ closure evidence lives in `docs/metadata/gmf3-closure.json`.
 CF-7008 adds `VyrnForgeHTMLElementTagNameMap`, typed canonical event listener
 overloads, and the package's `custom-elements.json` export without introducing
 a framework dependency. CF-7001 and CF-7002 prove clean packed native HTML and
-React 19 Custom Element consumption. Angular and Vue runtime verification
-remains S7 / GMF4.
+React 19 Custom Element consumption. CF-7003 proves Angular 22 packed runtime,
+property/event binding, named Light DOM composition, and native form
+submission. Vue runtime verification and Angular Forms adaptation remain S7 /
+GMF4.
