@@ -56,10 +56,12 @@ adapters. Store integration must not leak into `ui-core`, `ui-behaviors`,
 | Renderer adapter      | maps framework props/events/lifecycle to a controller               | redefine shared behavior                    |
 | DOM adapter           | executes focus, events, observers, positioning, and scroll behavior | own domain state or application workflows   |
 | Angular forms adapter | maps Angular forms state to native element properties/events        | re-render or duplicate the native component |
-| Vue model adapter     | maps `modelValue` and update events to the canonical value contract | own selection or validation logic           |
-| Persistence           | stores selected preference state                                    | store row data or business state            |
-| Server query          | builds serializable query contracts                                 | fetch data or own cache                     |
-| Export request        | builds export request contracts                                     | generate files by default                   |
+
+CF-7004 implements this boundary as an opt-in standalone directive in the isolated Angular consumer fixture. It maps `ControlValueAccessor` and `Validator` callbacks to native properties, canonical events, and ElementInternals validity. It is reference integration evidence, not a new renderer or release-group package.
+| Vue model adapter | maps `modelValue` and update events to the canonical value contract | own selection or validation logic |
+| Persistence | stores selected preference state | store row data or business state |
+| Server query | builds serializable query contracts | fetch data or own cache |
+| Export request | builds export request contracts | generate files by default |
 
 ## Practical implementation rules
 

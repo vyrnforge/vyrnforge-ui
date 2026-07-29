@@ -40,9 +40,11 @@
         "src/main.ts",
         "src/app/app.component.ts",
         "src/app/app.component.html",
-        "architecture-probe.ts"
+        "architecture-probe.ts",
+        "src/app/vyrnforge-form-control.directive.ts"
       ],
-      "supportClaim": "packed-angular-runtime-verified"
+      "supportClaim": "packed-angular-runtime-verified",
+      "formsSupportClaim": "angular-forms-adapter-verified"
     },
     {
       "id": "vue",
@@ -53,5 +55,5 @@
       "supportClaim": "architecture-fixture-only"
     }
   ],
-  "currentBatch": "CF-7003"
+  "currentBatch": "CF-7004"
 }

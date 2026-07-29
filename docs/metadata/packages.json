@@ -181,7 +181,7 @@
         "@vyrnforge/ui-elements/index.css",
         "@vyrnforge/ui-elements/custom-elements.json"
       ],
-      "notes": "EL-6001 through EL-6018 are evidence-complete. CF-7001, CF-7002, and CF-7008 add clean packed native HTML and React 19 Custom Element consumers, typed DOM/event declarations, and the public Custom Elements Manifest. CF-7003 adds clean Angular 22 packed consumer evidence. Vue runtime support remains GMF4 work."
+      "notes": "EL-6001 through EL-6018 are evidence-complete. CF-7001, CF-7002, and CF-7008 add clean packed native HTML and React 19 Custom Element consumers, typed DOM/event declarations, and the public Custom Elements Manifest. CF-7003 adds clean Angular 22 packed consumer evidence. CF-7004 adds an isolated Angular Forms reference adapter over the native value, checked, disabled, validity, and canonical event contracts without adding Angular to this package. Vue runtime support remains GMF4 work."
     },
     {
       "name": "@vyrnforge/ui-data-grid",

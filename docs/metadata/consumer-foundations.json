@@ -120,7 +120,6 @@
   ],
   "unresolvedBlockers": [],
   "deferred": [
-    "Angular framework forms adapter decision",
     "Vue runtime consumer verification",
     "cross-framework forms adapter verification",
     "GMF4 closure and compatibility matrix sign-off",
@@ -132,6 +131,12 @@
       "status": "done",
       "evidence": "docs/metadata/angular-consumer.json",
       "claim": "packed-angular-runtime-verified"
+    },
+    {
+      "task": "CF-7004",
+      "status": "done",
+      "evidence": "docs/metadata/angular-forms-adapter.json",
+      "claim": "angular-forms-adapter-verified"
     }
   ]
 }

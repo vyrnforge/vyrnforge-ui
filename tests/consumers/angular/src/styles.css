@@ -21,3 +21,27 @@ body {
   gap: var(--vf-space-3);
   max-width: 30rem;
 }
+
+.vf-consumer-angular-section {
+  display: grid;
+  gap: var(--vf-space-3);
+  padding: var(--vf-space-4);
+  border-radius: var(--vf-radius-lg);
+  background: var(--vf-surface);
+}
+
+.vf-consumer-angular-section h2 {
+  margin: 0;
+  font-size: var(--vf-font-size-lg);
+}
+
+.vf-consumer-angular-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vf-space-2);
+}
+
+.vf-consumer-angular-section output {
+  display: block;
+  font-family: var(--vf-font-family-mono);
+}

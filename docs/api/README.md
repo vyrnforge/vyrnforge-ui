@@ -23,8 +23,10 @@ The currently implemented public packages are:
 
 GMF3 proves the complete native renderer. CF-7003 adds Angular 22
 packed-package, build, property/event, slot, native-form, and Chromium evidence.
-Vue plus the remaining accessibility, typing, documentation, and GMF4 closure
-evidence remain planned.
+CF-7004 adds an isolated Angular Forms reference directive over the same public
+properties, events, disabled state, and native validity; it is not a new
+published package. Vue plus the remaining accessibility, typing, documentation,
+and GMF4 closure evidence remain planned.
 
 ## Multi-framework contract
 

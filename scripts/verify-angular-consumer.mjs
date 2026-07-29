@@ -157,8 +157,8 @@ function verifyFixture(root, failures) {
       }
     }
   }
-  if (manifest.currentBatch !== "CF-7003") {
-    addFailure(failures, "consumer manifest currentBatch must be CF-7003");
+  if (manifest.currentBatch !== "CF-7004") {
+    addFailure(failures, "consumer manifest currentBatch must be CF-7004");
   }
 
   const expectedAngularPackages = [
@@ -166,6 +166,7 @@ function verifyFixture(root, failures) {
     "@angular/compiler",
     "@angular/core",
     "@angular/platform-browser",
+    "@angular/forms",
   ];
   for (const packageName of expectedAngularPackages) {
     if (packageJson.dependencies?.[packageName] !== angularVersion) {
@@ -364,7 +365,7 @@ function verifyArchitecture(root, failures) {
   const policy = architecture.consumerFixturePolicy ?? {};
   if (
     policy.currentClaim !==
-    "native-html-react-angular-consumer-foundation-complete"
+    "native-html-react-angular-forms-consumer-foundation-complete"
   ) {
     addFailure(failures, "consumer fixture policy must include Angular");
   }
