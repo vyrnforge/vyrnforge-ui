@@ -107,6 +107,7 @@ const requiredDocuments = [
   "docs/metadata/gmf3-closure.json",
   "docs/metadata/consumer-foundations.json",
   "docs/metadata/angular-consumer.json",
+  "docs/metadata/angular-forms-adapter.json",
   "docs/api/ui-behaviors-api.md",
   "docs/api/ui-elements-api.md",
   "tests/consumers/manifest.json",
@@ -293,11 +294,11 @@ function verifyFrameworkSupport(failures, architecture) {
   }
   if (
     architecture.consumerFixturePolicy?.currentClaim !==
-    "native-html-react-angular-consumer-foundation-complete"
+    "native-html-react-angular-forms-consumer-foundation-complete"
   ) {
     addFailure(
       failures,
-      "consumer fixture policy must record native-html-react-angular-consumer-foundation-complete",
+      "consumer fixture policy must record native-html-react-angular-forms-consumer-foundation-complete",
     );
   }
   if (
@@ -316,6 +317,15 @@ function verifyFrameworkSupport(failures, architecture) {
     addFailure(
       failures,
       "consumer fixture policy must reference angular-consumer.json",
+    );
+  }
+  if (
+    architecture.consumerFixturePolicy?.angularFormsEvidence !==
+    "docs/metadata/angular-forms-adapter.json"
+  ) {
+    addFailure(
+      failures,
+      "consumer fixture policy must reference angular-forms-adapter.json",
     );
   }
   if (architecture.consumerFixturePolicy?.runtimeBuildGate !== "GMF4") {

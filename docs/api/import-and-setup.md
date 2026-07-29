@@ -87,3 +87,12 @@ Use `--udg-*` tokens for grid-specific overrides:
 - Prefer component props and CSS variables before custom class overrides.
 - Keep app-specific styles scoped to the consuming application.
 - Do not import forbidden UI frameworks to style VyrnForge components.
+
+## Angular Forms reference adapter
+
+Angular consumers that need `formControlName`, reactive Forms, or `ngModel` use
+the CF-7004 opt-in `vfFormControl` directive demonstrated under
+`tests/consumers/angular`. The directive maps Angular Forms to the public native
+element contract; it is not exported from `@vyrnforge/ui-elements` and does not
+change package dependencies. See
+`docs/testing/angular-forms-adapter-contract.md`.

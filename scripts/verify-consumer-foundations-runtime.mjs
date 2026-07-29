@@ -414,6 +414,102 @@ async function verifyBrowserFixture(browser, fixture) {
           .isVisible(),
         "Angular named actions slot did not compose in Light DOM",
       );
+
+      const reactiveOwner = page.locator('vf-text-input[name="reactiveOwner"]');
+      const reactiveOwnerInput = reactiveOwner.locator("input");
+      assert(
+        (await reactiveOwnerInput.inputValue()) === "Operations",
+        "Angular reactive FormControl did not write its initial value",
+      );
+      assert(
+        (await page.locator("[data-reactive-value]").textContent())?.includes(
+          "Operations",
+        ),
+        "Angular reactive form model did not expose its initial value",
+      );
+
+      await reactiveOwnerInput.fill("Platform Forms");
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-reactive-value]")
+          ?.textContent?.includes("Platform Forms"),
+      );
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-reactive-state]")
+          ?.textContent?.includes("dirty=true"),
+      );
+
+      await page
+        .locator("#disable-reactive-owner > button[data-vf-action-control]")
+        .click();
+      await page.waitForFunction(() => {
+        const element = document.querySelector(
+          'vf-text-input[name="reactiveOwner"]',
+        );
+        const state = document.querySelector("[data-reactive-state]");
+        return (
+          element?.disabled === true &&
+          state?.textContent?.includes("touched=true") === true &&
+          state.textContent.includes("disabled=true")
+        );
+      });
+
+      await page
+        .locator("#enable-reactive-owner > button[data-vf-action-control]")
+        .click();
+      await page.waitForFunction(() => {
+        const element = document.querySelector(
+          'vf-text-input[name="reactiveOwner"]',
+        );
+        return element?.disabled === false;
+      });
+
+      await reactiveOwnerInput.fill("");
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-reactive-state]")
+          ?.textContent?.includes("vyrnForgeError=true"),
+      );
+      assert(
+        await reactiveOwner.evaluate((element) =>
+          typeof element.checkValidity === "function"
+            ? !element.checkValidity()
+            : false,
+        ),
+        "Angular reactive adapter did not expose native invalid state",
+      );
+
+      await reactiveOwnerInput.fill("Validated Owner");
+      await page.waitForFunction(() => {
+        const value = document.querySelector("[data-reactive-value]");
+        const state = document.querySelector("[data-reactive-state]");
+        return (
+          value?.textContent?.includes("Validated Owner") === true &&
+          state?.textContent?.includes("status=VALID") === true &&
+          state.textContent.includes("vyrnForgeError=false")
+        );
+      });
+
+      const notifications = page.locator('vf-checkbox[name="notifications"]');
+      const notificationsInput = notifications.locator(
+        "input[data-vf-choice-control]",
+      );
+      assert(
+        await notificationsInput.isChecked(),
+        "Angular ngModel did not write the initial checked value",
+      );
+      await notificationsInput.click();
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-template-value]")
+          ?.textContent?.includes("false"),
+      );
+      assert(
+        (await notifications.evaluate((element) => element.checked)) === false,
+        "Angular ngModel did not receive vf-checked-change",
+      );
+
       assert(
         await page
           .locator('vf-text-input[name="owner"]')

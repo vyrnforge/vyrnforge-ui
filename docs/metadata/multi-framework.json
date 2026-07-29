@@ -115,7 +115,9 @@
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/angular",
       "betaClaim": "packed-consumer-verified",
-      "consumerFoundation": "CF-7003"
+      "consumerFoundation": "CF-7003",
+      "formsIntegration": "angular-forms-adapter-verified",
+      "formsAdapter": "CF-7004"
     },
     {
       "id": "vue",
@@ -135,11 +137,12 @@
   },
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
-    "currentClaim": "native-html-react-angular-consumer-foundation-complete",
+    "currentClaim": "native-html-react-angular-forms-consumer-foundation-complete",
     "runtimeBuildGate": "GMF4",
-    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. Vue runtime support still requires later GMF4 consumer evidence.",
+    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. CF-7004 proves a thin Angular Forms bridge without changing the renderer or package topology. Vue runtime support still requires later GMF4 evidence.",
     "evidence": "docs/metadata/consumer-foundations.json",
-    "angularEvidence": "docs/metadata/angular-consumer.json"
+    "angularEvidence": "docs/metadata/angular-consumer.json",
+    "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json"
   },
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",
@@ -235,6 +238,18 @@
     "metadata": "docs/metadata/angular-consumer.json",
     "runtimeFixture": "tests/consumers/angular",
     "supportClaim": "packed-angular-runtime-verified",
+    "gate": "GMF4",
+    "gateStatus": "in-progress"
+  },
+  "angularFormsAdapter": {
+    "status": "complete",
+    "task": "CF-7004",
+    "storyPoints": 5,
+    "frameworkVersion": "22.0.8",
+    "metadata": "docs/metadata/angular-forms-adapter.json",
+    "runtimeFixture": "tests/consumers/angular",
+    "supportClaim": "angular-forms-adapter-verified",
+    "publishedPackage": null,
     "gate": "GMF4",
     "gateStatus": "in-progress"
   }

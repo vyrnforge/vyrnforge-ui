@@ -11,7 +11,12 @@
     "[items]",
     "slot=\"status\"",
     "new FormData",
-    "provideZonelessChangeDetection"
+    "provideZonelessChangeDetection",
+    "vfFormControl",
+    "formControlName",
+    "[(ngModel)]",
+    "NG_VALUE_ACCESSOR",
+    "NG_VALIDATORS"
   ],
   "evidence": [
     "clean tarball installation",
@@ -21,6 +26,12 @@
     "canonical vf-action template event binding",
     "named Light DOM composition",
     "ElementInternals form submission",
-    "Chromium runtime verification"
-  ]
+    "Chromium runtime verification",
+    "Angular reactive FormGroup value and state synchronization",
+    "Angular template-driven ngModel checked synchronization",
+    "disabled and touched propagation through ControlValueAccessor",
+    "native validity mapped through Angular Validator"
+  ],
+  "formsAdapterTask": "CF-7004",
+  "formsSupportClaim": "angular-forms-adapter-verified"
 }

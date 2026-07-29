@@ -54,7 +54,6 @@
     "npm run quality"
   ],
   "deferred": [
-    "CF-7004 Angular reactive and template-driven forms adapter decision",
     "Vue runtime verification",
     "cross-framework browser and accessibility matrix",
     "GMF4 closure",
@@ -65,5 +64,15 @@
     "https://angular.dev/reference/versions",
     "https://angular.dev/guide/components/advanced-configuration",
     "https://angular.dev/tools/cli/build-system-migration"
-  ]
+  ],
+  "formsAdapter": {
+    "task": "CF-7004",
+    "status": "evidence-complete",
+    "supportClaim": "angular-forms-adapter-verified",
+    "metadata": "docs/metadata/angular-forms-adapter.json",
+    "directive": "tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts",
+    "reactiveForms": true,
+    "templateDrivenForms": true,
+    "publishedPackage": null
+  }
 }

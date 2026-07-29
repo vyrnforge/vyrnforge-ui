@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S7",
+    "task": "CF-7004",
+    "title": "Add Angular forms integration adapter",
+    "storyPoints": 5,
+    "status": "evidence-complete",
+    "gate": "GMF4",
+    "gateStatus": "in-progress",
+    "baseCommit": "1eadbb59a7cf3b63d9797a65bbb0d979cb0f0205"
+  },
+  "adapter": {
+    "framework": "Angular",
+    "version": "22.0.8",
+    "supportClaim": "angular-forms-adapter-verified",
+    "directive": "VyrnForgeFormControlDirective",
+    "selectorAttribute": "vfFormControl",
+    "renderer": "@vyrnforge/ui-elements",
+    "location": "tests/consumers/angular",
+    "publishedPackage": null,
+    "standalone": true,
+    "duplicatesRendering": false,
+    "duplicatesValidation": false,
+    "supportedTags": [
+      "vf-autocomplete",
+      "vf-checkbox",
+      "vf-date-input",
+      "vf-datetime-input",
+      "vf-multi-select",
+      "vf-number-input",
+      "vf-rating",
+      "vf-search-input",
+      "vf-select",
+      "vf-slider",
+      "vf-switch",
+      "vf-text-input",
+      "vf-textarea",
+      "vf-transfer-list"
+    ],
+    "excludedTags": ["vf-radio", "vf-radio-group"]
+  },
+  "contracts": [
+    "ControlValueAccessor",
+    "Validator",
+    "NG_VALUE_ACCESSOR",
+    "NG_VALIDATORS",
+    "vf-value-change",
+    "vf-checked-change",
+    "focusout",
+    "validity",
+    "validationMessage"
+  ],
+  "valueMapping": {
+    "string": [
+      "vf-autocomplete",
+      "vf-date-input",
+      "vf-datetime-input",
+      "vf-number-input",
+      "vf-search-input",
+      "vf-select",
+      "vf-text-input",
+      "vf-textarea"
+    ],
+    "number": ["vf-rating", "vf-slider"],
+    "boolean": ["vf-checkbox", "vf-switch"],
+    "stringArray": ["vf-multi-select", "vf-transfer-list"],
+    "mixedCheckedValue": "null"
+  },
+  "evidence": [
+    "reactive FormGroup and formControlName value synchronization",
+    "template-driven ngModel boolean synchronization",
+    "dirty and touched state propagation",
+    "disabled state propagation through setDisabledState",
+    "native ElementInternals validity mapped through Validator",
+    "packed Angular production build and Chromium interaction",
+    "no Angular dependency in VyrnForge packages",
+    "approved four-package non-grid beta release group remains unchanged"
+  ],
+  "requiredCommands": [
+    "npm run test:angular-forms-adapter",
+    "npm run verify:angular-forms-adapter",
+    "npm run verify:angular-consumer:runtime",
+    "npm run quality"
+  ],
+  "unresolvedBlockers": [],
+  "deferred": [
+    "Vue packed consumer verification",
+    "Vue v-model adapter decision",
+    "cross-framework browser and accessibility matrix",
+    "GMF4 closure",
+    "published framework integration package topology",
+    "data-grid multi-framework work"
+  ],
+  "sources": [
+    "https://angular.dev/api/forms/ControlValueAccessor",
+    "https://angular.dev/api/forms/NG_VALUE_ACCESSOR",
+    "https://angular.dev/api/forms/NG_VALIDATORS",
+    "https://angular.dev/guide/forms"
+  ]
+}

@@ -34,10 +34,11 @@ compiler is TypeScript 7.
 
 ## Form boundary
 
-CF-7003 verifies native form association inside an Angular application. It does
-not claim Angular `ControlValueAccessor`, reactive forms, template-driven forms,
-touched-state, or validation-message integration. CF-7004 uses this evidence to
-decide whether a thin Angular forms adapter is required.
+CF-7003 verifies native form association inside an Angular application. CF-7004
+adds the separate opt-in `VyrnForgeFormControlDirective` reference adapter for
+Angular `ControlValueAccessor`, reactive forms, template-driven forms, touched
+and disabled state, and native validation integration. The canonical adapter
+contract is `docs/testing/angular-forms-adapter-contract.md`.
 
 ## Required commands
 

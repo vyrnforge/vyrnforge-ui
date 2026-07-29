@@ -183,5 +183,7 @@ overloads, and the package's `custom-elements.json` export without introducing
 a framework dependency. CF-7001 and CF-7002 prove clean packed native HTML and
 React 19 Custom Element consumption. CF-7003 proves Angular 22 packed runtime,
 property/event binding, named Light DOM composition, and native form
-submission. Vue runtime verification and Angular Forms adaptation remain S7 /
-GMF4.
+submission. CF-7004 proves an opt-in standalone ControlValueAccessor/Validator
+directive that maps Angular Forms to the existing native value, checked,
+disabled, validity, and canonical event contracts. Vue runtime verification
+remains S7 / GMF4 work.

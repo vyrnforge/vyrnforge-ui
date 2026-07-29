@@ -5,11 +5,19 @@ import {
   ElementRef,
   ViewChild,
 } from "@angular/core";
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import type {
   VyrnForgeActionDetail,
   VyrnForgeElementForTagName,
   VyrnForgeTabItem,
 } from "@vyrnforge/ui-elements";
+
+import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
 
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
@@ -17,6 +25,7 @@ type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 @Component({
   selector: "app-root",
   standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, VyrnForgeFormControlDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: "./app.component.html",
 })
@@ -28,6 +37,9 @@ export class AppComponent implements AfterViewInit {
   private ownerInputRef?: ElementRef<TextInputElement>;
 
   readonly owner = "Operations";
+  readonly profileForm = new FormGroup({
+    owner: new FormControl("Operations", { nonNullable: true }),
+  });
   readonly tabs = [
     {
       id: "summary",
@@ -41,7 +53,12 @@ export class AppComponent implements AfterViewInit {
     },
   ] satisfies readonly VyrnForgeTabItem[];
 
+  notifications = true;
   status = "Waiting";
+
+  get ownerControl(): FormControl<string> {
+    return this.profileForm.controls.owner;
+  }
 
   ngAfterViewInit(): void {
     queueMicrotask(() => {
@@ -88,6 +105,14 @@ export class AppComponent implements AfterViewInit {
     document
       .querySelector("[data-angular-consumer]")
       ?.setAttribute("data-consumer-action", "received");
+  }
+
+  disableOwner(): void {
+    this.ownerControl.disable();
+  }
+
+  enableOwner(): void {
+    this.ownerControl.enable();
   }
 
   handleSubmit(event: Event): void {
