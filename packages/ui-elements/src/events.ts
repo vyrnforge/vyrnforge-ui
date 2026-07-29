@@ -47,6 +47,27 @@ export interface VyrnForgeResetDetail {
   readonly reason: "form-reset";
 }
 
+export interface VyrnForgeInputValueChangeDetail {
+  readonly value: string;
+}
+
+export type VyrnForgeToastChangeDetail =
+  | {
+      readonly action: "add" | "update";
+      readonly id: string;
+    }
+  | {
+      readonly action: "dismiss-all";
+    };
+
+export interface VyrnForgeConfirmDetail {
+  readonly reason: "confirm";
+}
+
+export interface VyrnForgeCancelDetail {
+  readonly reason: "cancel";
+}
+
 export interface VyrnForgeCanonicalEventDetailMap {
   readonly "vf-action": VyrnForgeActionDetail;
   readonly "vf-checked-change": VyrnForgeCheckedChangeDetail;
@@ -56,6 +77,10 @@ export interface VyrnForgeCanonicalEventDetailMap {
   readonly "vf-pressed-change": VyrnForgePressedChangeDetail;
   readonly "vf-reset": VyrnForgeResetDetail;
   readonly "vf-selection-change": VyrnForgeSelectionChangeDetail;
+  readonly "vf-cancel": VyrnForgeCancelDetail;
+  readonly "vf-confirm": VyrnForgeConfirmDetail;
+  readonly "vf-input-value-change": VyrnForgeInputValueChangeDetail;
+  readonly "vf-toast-change": VyrnForgeToastChangeDetail;
   readonly "vf-value-change": VyrnForgeValueChangeDetail;
 }
 

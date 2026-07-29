@@ -176,5 +176,10 @@ contract rather than create a duplicate tag:
 
 Native CSS is loaded explicitly and scoped to Custom Element hosts, allowing
 React and native renderers to coexist without class-selector leakage. Canonical
-closure evidence lives in `docs/metadata/gmf3-closure.json`. Angular and Vue
-runtime verification remains S7 / GMF4.
+closure evidence lives in `docs/metadata/gmf3-closure.json`.
+
+CF-7008 adds `VyrnForgeHTMLElementTagNameMap`, typed canonical event listener
+overloads, and the package's `custom-elements.json` export without introducing
+a framework dependency. CF-7001 and CF-7002 prove clean packed native HTML and
+React 19 Custom Element consumption. Angular and Vue runtime verification
+remains S7 / GMF4.

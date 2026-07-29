@@ -62,7 +62,7 @@
       ]
     },
     "@vyrnforge/ui-elements": {
-      "status": "current-gmf3-parity",
+      "status": "current-gmf4-consumer-foundation",
       "renderer": "custom-elements",
       "releaseTrack": "non-grid-beta",
       "owns": [
@@ -70,15 +70,18 @@
         "property reflection",
         "vf-* DOM events",
         "form association",
-        "registration"
+        "registration",
+        "Custom Elements Manifest"
       ],
       "css": [
         "@vyrnforge/ui-core/styles/index.css",
         "@vyrnforge/ui-elements/styles/index.css"
       ],
       "registeredPublicTags": 58,
-      "currentBatch": "EL-6018",
-      "gateStatus": "passed"
+      "currentBatch": "CF-7001-CF-7002-CF-7008",
+      "gateStatus": "gmf4-in-progress",
+      "publicMetadata": "@vyrnforge/ui-elements/custom-elements.json",
+      "consumerEvidence": ["native-html", "react-custom-elements"]
     },
     "@vyrnforge/ui-data-grid": {
       "status": "react-alpha-deferred",

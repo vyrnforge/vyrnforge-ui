@@ -20,11 +20,13 @@
     },
     "./style.css": "./dist/index.css",
     "./index.css": "./dist/index.css",
-    "./styles/index.css": "./dist/index.css"
+    "./styles/index.css": "./dist/index.css",
+    "./custom-elements.json": "./custom-elements.json"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "custom-elements.json"
   ],
   "sideEffects": [
     "./dist/index.css",
@@ -48,7 +50,7 @@
     "npm": ">=11.16 <12"
   },
   "scripts": {
-    "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
+    "build": "node ../../scripts/generate-ui-elements-manifest.mjs && tsup && tsc -p tsconfig.build.json && node ../../scripts/prepare-package-declarations.mjs .",
     "lint": "eslint . --config ../../eslint.config.mjs",
     "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors",
@@ -64,5 +66,6 @@
     "tsup": "latest",
     "typescript": "7.0.2",
     "vitest": "latest"
-  }
+  },
+  "customElements": "./custom-elements.json"
 }

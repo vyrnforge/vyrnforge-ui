@@ -14,15 +14,17 @@ tests/consumers/vue/
 
 `tests/consumers/manifest.json` is the fixture registry.
 
-## S4 claim
+## Current claim
 
-The S4 fixtures are **architecture fixtures only**. They record package usage,
-registration, event syntax, compiler/schema configuration, and ownership. They
-do not claim that planned packages exist or that a framework build passes.
+The original S4 fixtures recorded architecture only. CF-7001 and CF-7002 now
+upgrade native HTML and React to packed runtime evidence. Angular and Vue
+remain `architecture-fixture-only` until their later GMF4 tasks.
 
-`npm run verify:multi-framework` verifies the fixture contract. Actual clean
-installation and runtime verification begins after `@vyrnforge/ui-elements`
-exists and is required for GMF4.
+`npm run verify:multi-framework` verifies fixture claims and structure.
+`npm run verify:consumer-foundations:runtime` performs clean tarball
+installation, type checking, production builds, and Chromium evidence for the
+native HTML and React fixtures. See
+`docs/testing/consumer-foundation-contracts.md`.
 
 ## Required final evidence
 

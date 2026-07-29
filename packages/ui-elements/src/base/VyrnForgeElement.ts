@@ -1,3 +1,8 @@
+import type {
+  VyrnForgeCanonicalEventDetailMap,
+  VyrnForgeEventMapName,
+} from "../events";
+
 const ServerSafeHTMLElement = (globalThis.HTMLElement ??
   class {}) as typeof HTMLElement;
 
@@ -14,6 +19,14 @@ export type VyrnForgePropertyDeclarations = Readonly<
 >;
 
 export type VyrnForgeChangedProperties = ReadonlyMap<string, unknown>;
+
+export type VyrnForgeElementEventListener<
+  TTarget extends EventTarget,
+  TName extends VyrnForgeEventMapName<VyrnForgeCanonicalEventDetailMap>,
+> = (
+  this: TTarget,
+  event: CustomEvent<VyrnForgeCanonicalEventDetailMap[TName]>,
+) => void;
 
 function propertyToAttribute(propertyName: string): string {
   return propertyName.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
@@ -105,6 +118,56 @@ export abstract class VyrnForgeElement extends ServerSafeHTMLElement {
 
   get updateComplete(): Promise<void> {
     return this.#updateComplete;
+  }
+
+  addEventListener<
+    TName extends VyrnForgeEventMapName<VyrnForgeCanonicalEventDetailMap>,
+  >(
+    type: TName,
+    listener: VyrnForgeElementEventListener<this, TName> | null,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  addEventListener<TKey extends keyof HTMLElementEventMap>(
+    type: TKey,
+    listener: (this: this, event: HTMLElementEventMap[TKey]) => void,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  override addEventListener(
+    type: string,
+    listener: unknown,
+    options?: boolean | AddEventListenerOptions,
+  ): void {
+    if (listener === null) return;
+    super.addEventListener(
+      type,
+      listener as EventListenerOrEventListenerObject,
+      options,
+    );
+  }
+
+  removeEventListener<
+    TName extends VyrnForgeEventMapName<VyrnForgeCanonicalEventDetailMap>,
+  >(
+    type: TName,
+    listener: VyrnForgeElementEventListener<this, TName> | null,
+    options?: boolean | EventListenerOptions,
+  ): void;
+  removeEventListener<TKey extends keyof HTMLElementEventMap>(
+    type: TKey,
+    listener: (this: this, event: HTMLElementEventMap[TKey]) => void,
+    options?: boolean | EventListenerOptions,
+  ): void;
+  override removeEventListener(
+    type: string,
+    listener: unknown,
+    options?: boolean | EventListenerOptions,
+  ): void {
+    if (listener === null) return;
+    super.removeEventListener(
+      type,
+      listener as EventListenerOrEventListenerObject,
+      options,
+    );
   }
 
   connectedCallback(): void {

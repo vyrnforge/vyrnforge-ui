@@ -178,9 +178,10 @@
         "@vyrnforge/ui-elements/register",
         "@vyrnforge/ui-elements/styles/index.css",
         "@vyrnforge/ui-elements/style.css",
-        "@vyrnforge/ui-elements/index.css"
+        "@vyrnforge/ui-elements/index.css",
+        "@vyrnforge/ui-elements/custom-elements.json"
       ],
-      "notes": "EL-6001 through EL-6018 are evidence-complete: foundations, 58 registered public native tags, renderer mappings/services, ElementInternals forms, browser accessibility, theme/density, package, and consumer parity. Angular and Vue runtime support remain GMF4 work."
+      "notes": "EL-6001 through EL-6018 are evidence-complete. CF-7001, CF-7002, and CF-7008 add clean packed native HTML and React 19 Custom Element consumers, typed DOM/event declarations, and the public Custom Elements Manifest. Angular and Vue runtime support remain GMF4 work."
     },
     {
       "name": "@vyrnforge/ui-data-grid",

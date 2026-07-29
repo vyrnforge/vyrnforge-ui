@@ -36,6 +36,7 @@ const packages = [
       "dist/register.cjs",
       "dist/register.d.ts",
     ],
+    extraRootFiles: ["custom-elements.json"],
   },
   {
     name: "@vyrnforge/ui-data-grid",
@@ -194,14 +195,18 @@ for (const packageInfo of packages) {
     packageJson.types === "./dist/index.d.ts",
     `${packageInfo.name}: unexpected types`,
   );
+  const expectedPackageFiles = [
+    "dist",
+    "README.md",
+    ...(packageInfo.extraRootFiles ?? []),
+  ];
   assert(
     Array.isArray(packageJson.files) &&
-      packageJson.files.includes("dist") &&
-      packageJson.files.includes("README.md"),
-    `${packageInfo.name}: files whitelist must include only dist and README.md`,
+      expectedPackageFiles.every((file) => packageJson.files.includes(file)),
+    `${packageInfo.name}: files whitelist is missing a supported package artifact`,
   );
   assert(
-    packageJson.files.length === 2,
+    packageJson.files.length === expectedPackageFiles.length,
     `${packageInfo.name}: files whitelist is too broad`,
   );
   if (packageInfo.css) {
@@ -399,6 +404,7 @@ for (const packageInfo of packages) {
     "README.md",
     "LICENSE",
     ...requiredDistFiles,
+    ...(packageInfo.extraRootFiles ?? []),
   ]) {
     assert(
       files.includes(file),

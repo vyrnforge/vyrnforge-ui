@@ -63,6 +63,8 @@ tests/package-consumer/dist/
 tests/package-consumer/package-lock.json
 tests/package-consumer/.tmp-packages/
 tests/package-consumer/.tmp-registry/
+tests/consumers/*/package-lock.json
+tests/consumers/.tmp-packages/
 
 # Editor metadata
 .idea/

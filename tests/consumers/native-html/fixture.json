@@ -1,7 +1,10 @@
 {
   "id": "native-html",
-  "supportClaim": "architecture-fixture-only",
+  "supportClaim": "packed-runtime-verified",
+  "task": "CF-7001",
   "rendererPackages": ["@vyrnforge/ui-elements"],
+  "runtime": "browser-native",
+  "commands": ["npm run typecheck", "npm run build", "npm run preview"],
   "requiredPatterns": [
     "@vyrnforge/ui-core/styles/index.css",
     "@vyrnforge/ui-elements/styles/index.css",
@@ -16,6 +19,9 @@
     "VyrnForgePropertyDeclarations",
     "vyrnForgeElementDefinitions",
     "registeredNativeTagCount",
-    "58"
+    "58",
+    "VyrnForgeElementForTagName",
+    "document.createElement(\"vf-button\")",
+    "new FormData(form)"
   ]
 }

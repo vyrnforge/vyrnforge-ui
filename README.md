@@ -45,7 +45,7 @@ Intended dependency direction:
 The active release program prioritizes all public non-grid components:
 
 - React remains the reference renderer through `@vyrnforge/ui-components`.
-- Native HTML has a GMF3-complete renderer through `@vyrnforge/ui-elements`; packed consumer support is verified in S7 / GMF4.
+- Native HTML has a GMF3-complete renderer through `@vyrnforge/ui-elements`; CF-7001 verifies clean packed native HTML consumption and CF-7002 verifies direct React 19 Custom Element consumption.
 - Angular and Vue are verified consumers of the native element surface.
 - Shared component state and behavior move into `@vyrnforge/ui-behaviors`; MF-5001–MF-5014 foundations and React migrations through Dialog, Drawer, Popover, Tooltip, ToastProvider, and ConfirmDialog are implemented.
 - The data grid remains usable as a React alpha and does not block the non-grid beta.
@@ -207,4 +207,4 @@ VyrnForge UI is maintained as part of the VyrnForge UI repository.
 
 ## Current multi-framework stage
 
-S5 / GMF2 and S6 / GMF3 are complete. EL-6001 through EL-6018 provide a deterministic 58-tag native renderer plus documented mapping, composition, and service strategies for every public non-grid React record. S7 / GMF4 is active and owns packed native HTML, Angular, and Vue consumer verification.
+S5 / GMF2 and S6 / GMF3 are complete. EL-6001 through EL-6018 provide a deterministic 58-tag native renderer plus documented mapping, composition, and service strategies for every public non-grid React record. S7 / GMF4 is active. CF-7001, CF-7002, and CF-7008 establish packed native HTML and React Custom Element consumers plus declaration and editor metadata; Angular and Vue runtime verification remains.

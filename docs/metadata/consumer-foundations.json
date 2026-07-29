@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S7",
+    "batch": "CF-7001-CF-7002-CF-7008",
+    "status": "evidence-complete",
+    "gate": "GMF4",
+    "gateStatus": "in-progress",
+    "baseCommit": "f55828e9fe4fbb2e16b2d28bfc8d3f1732bdfa8a"
+  },
+  "tasks": [
+    {
+      "id": "CF-7001",
+      "status": "done",
+      "title": "Verify plain HTML consumer",
+      "storyPoints": 3,
+      "evidence": "tests/consumers/native-html"
+    },
+    {
+      "id": "CF-7002",
+      "status": "done",
+      "title": "Verify React consumption of ui-elements",
+      "storyPoints": 3,
+      "evidence": "tests/consumers/react"
+    },
+    {
+      "id": "CF-7008",
+      "status": "done",
+      "title": "Verify declarations and Custom Element metadata",
+      "storyPoints": 5,
+      "evidence": "packages/ui-elements/custom-elements.json"
+    }
+  ],
+  "packageContract": {
+    "package": "@vyrnforge/ui-elements",
+    "packedPackages": [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements"
+    ],
+    "runtimeDependencies": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+    "frameworkDependencies": [],
+    "registration": "explicit",
+    "domMode": "light-dom",
+    "formAssociation": "ElementInternals"
+  },
+  "consumerFixtures": [
+    {
+      "id": "native-html",
+      "task": "CF-7001",
+      "supportClaim": "packed-runtime-verified",
+      "frameworkRuntime": "none",
+      "directory": "tests/consumers/native-html",
+      "evidence": [
+        "clean tarball installation",
+        "TypeScript typecheck",
+        "production Vite build",
+        "Chromium canonical-event interaction",
+        "property-only tabs model",
+        "ElementInternals form submission",
+        "theme and density CSS imports"
+      ]
+    },
+    {
+      "id": "react",
+      "task": "CF-7002",
+      "supportClaim": "packed-custom-elements-runtime-verified",
+      "frameworkRuntime": "React 19",
+      "directory": "tests/consumers/react",
+      "evidence": [
+        "clean tarball installation",
+        "TypeScript typecheck",
+        "production Vite build",
+        "Chromium canonical-event interaction",
+        "React Custom Element property assignment",
+        "typed refs and application-owned JSX declarations",
+        "explicit native registration"
+      ]
+    }
+  ],
+  "declarationContract": {
+    "task": "CF-7008",
+    "globalTagMap": {
+      "export": "VyrnForgeHTMLElementTagNameMap",
+      "global": "HTMLElementTagNameMap",
+      "registeredTags": 58,
+      "source": "packages/ui-elements/src/custom-elements.ts"
+    },
+    "typedEvents": {
+      "listener": "VyrnForgeElementEventListener",
+      "detailMap": "VyrnForgeCanonicalEventDetailMap",
+      "source": "packages/ui-elements/src/base/VyrnForgeElement.ts"
+    },
+    "customElementsManifest": {
+      "packageField": "customElements",
+      "export": "@vyrnforge/ui-elements/custom-elements.json",
+      "schemaVersion": "1.0.0",
+      "registeredTags": 58,
+      "source": "packages/ui-elements/custom-elements.json",
+      "generator": "scripts/generate-ui-elements-manifest.mjs"
+    }
+  },
+  "requiredCommands": [
+    "npm run test:consumer-foundations",
+    "npm run verify:consumer-foundations",
+    "npm run verify:consumer-foundations:runtime",
+    "npm run verify:packages",
+    "npm run quality"
+  ],
+  "evidence": [
+    "tests/consumers/manifest.json",
+    "tests/consumers/native-html/fixture.json",
+    "tests/consumers/react/fixture.json",
+    "packages/ui-elements/src/custom-elements.ts",
+    "packages/ui-elements/custom-elements.json",
+    "scripts/generate-ui-elements-manifest.mjs",
+    "scripts/verify-consumer-foundations.mjs",
+    "scripts/verify-consumer-foundations-runtime.mjs",
+    "docs/testing/consumer-foundation-contracts.md"
+  ],
+  "unresolvedBlockers": [],
+  "deferred": [
+    "Angular runtime consumer verification",
+    "Vue runtime consumer verification",
+    "cross-framework forms adapter verification",
+    "GMF4 closure and compatibility matrix sign-off",
+    "data-grid multi-framework work remains outside the non-grid beta critical path"
+  ]
+}

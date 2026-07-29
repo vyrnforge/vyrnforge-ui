@@ -2,10 +2,17 @@ import "./styles/index.css";
 
 export const vyrnForgeUiElementsVersion = "0.1.0-alpha.1";
 
+export type {
+  VyrnForgeElementForTagName,
+  VyrnForgeHTMLElementTagNameMap,
+  VyrnForgePublicElementTagName,
+} from "./custom-elements";
+
 export {
   VyrnForgeElement,
   type VyrnForgeAttributeType,
   type VyrnForgeChangedProperties,
+  type VyrnForgeElementEventListener,
   type VyrnForgePropertyDeclaration,
   type VyrnForgePropertyDeclarations,
 } from "./base/VyrnForgeElement";
@@ -26,17 +33,21 @@ export {
   vyrnForgeEventDispatcher,
   type VyrnForgeActionDetail,
   type VyrnForgeCanonicalEventDetailMap,
+  type VyrnForgeCancelDetail,
   type VyrnForgeCheckedChangeDetail,
+  type VyrnForgeConfirmDetail,
   type VyrnForgeDismissDetail,
   type VyrnForgeEventMapName,
   type VyrnForgeEventName,
   type VyrnForgeEventOptions,
   type VyrnForgeEventReason,
+  type VyrnForgeInputValueChangeDetail,
   type VyrnForgeInvalidDetail,
   type VyrnForgeOpenChangeDetail,
   type VyrnForgePressedChangeDetail,
   type VyrnForgeResetDetail,
   type VyrnForgeSelectionChangeDetail,
+  type VyrnForgeToastChangeDetail,
   type VyrnForgeTypedEventDispatcher,
   type VyrnForgeValueChangeDetail,
 } from "./events";

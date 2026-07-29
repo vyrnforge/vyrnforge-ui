@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "supportClaim": "architecture-fixture-only",
+  "supportClaim": "partial-gmf4-runtime-evidence",
   "runtimeBuildGate": "GMF4",
   "fixtures": [
     {
@@ -8,28 +8,43 @@
       "framework": "React",
       "directory": "tests/consumers/react",
       "contractFile": "fixture.json",
-      "exampleFiles": ["example.tsx"]
+      "exampleFiles": [
+        "example.tsx",
+        "src/main.tsx",
+        "src/vyrnforge-elements.d.ts",
+        "package.json"
+      ],
+      "supportClaim": "packed-custom-elements-runtime-verified"
     },
     {
       "id": "native-html",
       "framework": "Native HTML",
       "directory": "tests/consumers/native-html",
       "contractFile": "fixture.json",
-      "exampleFiles": ["index.html", "architecture-probe.ts"]
+      "exampleFiles": [
+        "index.html",
+        "architecture-probe.ts",
+        "src/main.ts",
+        "package.json"
+      ],
+      "supportClaim": "packed-runtime-verified"
     },
     {
       "id": "angular",
       "framework": "Angular",
       "directory": "tests/consumers/angular",
       "contractFile": "fixture.json",
-      "exampleFiles": ["example.component.ts", "example.component.html"]
+      "exampleFiles": ["example.component.ts", "example.component.html"],
+      "supportClaim": "architecture-fixture-only"
     },
     {
       "id": "vue",
       "framework": "Vue",
       "directory": "tests/consumers/vue",
       "contractFile": "fixture.json",
-      "exampleFiles": ["App.vue", "vite.config.ts"]
+      "exampleFiles": ["App.vue", "vite.config.ts"],
+      "supportClaim": "architecture-fixture-only"
     }
-  ]
+  ],
+  "currentBatch": "CF-7001-CF-7002-CF-7008"
 }
