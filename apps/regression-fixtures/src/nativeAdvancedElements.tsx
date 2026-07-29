@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import {
   VyrnForgeAppShellElement,
   VyrnForgeAutocompleteElement,
+  VyrnForgeButtonElement,
   VyrnForgeConfirmDialogElement,
   VyrnForgeDialogElement,
   VyrnForgeDrawerElement,
@@ -259,6 +260,24 @@ export function NativeAdvancedElementsFixture() {
     pageHeader.title = "Accounts";
     pageHeader.description = "Manage enterprise identities";
 
+    const pageHeaderActionOutput = createOutput(
+      document,
+      "native-advanced-page-header-action",
+      "No reconnected page-header action yet",
+    );
+    const pageHeaderAction = document.createElement(
+      "vf-button",
+    ) as ElementInstance<typeof VyrnForgeButtonElement>;
+    pageHeaderAction.slot = "actions";
+    pageHeaderAction.action = "page-header-save";
+    pageHeaderAction.textContent = "Save page header";
+    pageHeaderAction.dataset.vfFixtureAction = "advanced-page-header-action";
+    pageHeaderAction.addEventListener("vf-action", () => {
+      pageHeaderActionOutput.textContent =
+        "Reconnected page-header action received";
+    });
+    pageHeader.append(pageHeaderAction);
+
     const pageToolbar = document.createElement(
       "vf-page-toolbar",
     ) as ElementInstance<typeof VyrnForgePageToolbarElement>;
@@ -283,6 +302,7 @@ export function NativeAdvancedElementsFixture() {
       confirmOutput,
       overlayState,
       pageHeader,
+      pageHeaderActionOutput,
       pageToolbar,
       shell,
     );

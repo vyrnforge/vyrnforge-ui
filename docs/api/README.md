@@ -21,9 +21,10 @@ The currently implemented public packages are:
 | `@vyrnforge/ui-elements`   | Complete 58-tag GMF3 native Custom Element renderer, forms, events, styles, and service mappings. |
 | `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track.                  |
 
-GMF3 proves the complete native renderer. Angular and Vue remain planned
-consumer claims until S7 / GMF4 supplies packed-package runtime, browser,
-accessibility, typing, and documentation evidence.
+GMF3 proves the complete native renderer. CF-7003 adds Angular 22
+packed-package, build, property/event, slot, native-form, and Chromium evidence.
+Vue plus the remaining accessibility, typing, documentation, and GMF4 closure
+evidence remain planned.
 
 ## Multi-framework contract
 

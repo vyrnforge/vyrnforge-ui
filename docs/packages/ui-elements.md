@@ -75,11 +75,16 @@ React renderers can coexist in one document without class-name leakage.
 - `docs/metadata/native-advanced-elements.json`
 - `tests/browser/native-parity.spec.ts`
 - `scripts/verify-gmf3-closure.mjs`
+- `docs/metadata/angular-consumer.json`
+- `tests/consumers/angular/fixture.json`
+- `scripts/verify-angular-consumer.mjs`
 
 GMF3 is complete. CF-7001 and CF-7002 provide clean packed-package runtime
 verification for native HTML and React 19 Custom Element consumers. CF-7008
 adds the typed 58-tag DOM map, canonical event listener declarations, and the
-public Custom Elements Manifest. Angular and Vue runtime verification remains
-later S7 / GMF4 work.
+public Custom Elements Manifest. CF-7003 verifies a clean Angular 22 packed
+consumer with property/event binding, named Light DOM composition, native form
+submission, and Chromium evidence. Vue runtime verification remains later S7 /
+GMF4 work.
 
 Editor metadata is exported from `@vyrnforge/ui-elements/custom-elements.json`.

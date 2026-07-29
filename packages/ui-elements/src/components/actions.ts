@@ -189,7 +189,11 @@ export abstract class VyrnForgeActionElement extends VyrnForgeDomElement {
   }
 
   private ensureButton(): HTMLButtonElement | null {
-    if (this.#button?.isConnected) return this.#button;
+    if (this.#button?.isConnected) {
+      this.#button.removeEventListener("click", this.handleClick);
+      this.#button.addEventListener("click", this.handleClick);
+      return this.#button;
+    }
     const document = this.resolveDocument();
     if (!document) return null;
 
@@ -198,6 +202,7 @@ export abstract class VyrnForgeActionElement extends VyrnForgeDomElement {
     );
     const button = existing ?? document.createElement("button");
     button.dataset.vfActionControl = "";
+    button.removeEventListener("click", this.handleClick);
     button.addEventListener("click", this.handleClick);
 
     let spinner = button.querySelector<HTMLSpanElement>(

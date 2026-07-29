@@ -11,8 +11,10 @@ This batch verifies two packed-package consumers:
 - native HTML with no framework runtime;
 - React 19 consuming `@vyrnforge/ui-elements` directly.
 
-Angular and Vue remain architecture fixtures until their own runtime tasks
-are complete. The data grid remains outside the non-grid beta gate.
+Angular is now verified separately by CF-7003 and
+`docs/metadata/angular-consumer.json`. Vue remains an architecture fixture until
+its runtime task is complete. The data grid remains outside the non-grid beta
+gate.
 
 ## Clean package rule
 
@@ -75,10 +77,13 @@ registry, declarations, manifest, fixture claims, and program metadata.
 npm run test:consumer-foundations
 npm run verify:consumer-foundations
 npm run verify:consumer-foundations:runtime
+npm run test:angular-consumer
+npm run verify:angular-consumer
+npm run verify:angular-consumer:runtime
 npm run verify:packages
 npm run quality
 ```
 
-GMF4 remains in progress after this batch. Angular, Vue, cross-framework
-form adapters, compatibility documentation, and final gate sign-off remain
-S7 work.
+GMF4 remains in progress. CF-7003 adds Angular runtime evidence; Vue,
+cross-framework form adapters, compatibility documentation, and final gate
+sign-off remain S7 work.

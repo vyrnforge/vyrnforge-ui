@@ -1,0 +1,43 @@
+<main class="vf-consumer-angular" data-angular-consumer>
+  <vf-page-header
+    eyebrow="GMF4 consumer evidence"
+    title="Angular packed consumer"
+    description="Angular 22 consumes the native VyrnForge package directly."
+  >
+    <span slot="status" data-angular-slot="status">Angular 22</span>
+    <vf-button
+      id="angular-save"
+      slot="actions"
+      action="angular-save"
+      variant="primary"
+      (vf-action)="handleAction($event)"
+    >
+      Save from Angular
+    </vf-button>
+  </vf-page-header>
+
+  <vf-tabs
+    #tabsElement
+    aria-label="Angular consumer sections"
+    [items]="tabs"
+  ></vf-tabs>
+
+  <form
+    id="angular-form"
+    class="vf-consumer-angular-form"
+    (submit)="handleSubmit($event)"
+  >
+    <vf-text-input
+      #ownerInput
+      label="Owner"
+      name="owner"
+      required
+      [value]="owner"
+    ></vf-text-input>
+    <vf-button type="submit" variant="secondary">
+      Submit Angular form
+    </vf-button>
+  </form>
+
+  <output aria-live="polite" data-consumer-status>{{ status }}</output>
+</main>

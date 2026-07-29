@@ -114,7 +114,8 @@
       "supportLevel": "verified-consumer",
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/angular",
-      "betaClaim": "planned"
+      "betaClaim": "packed-consumer-verified",
+      "consumerFoundation": "CF-7003"
     },
     {
       "id": "vue",
@@ -134,10 +135,11 @@
   },
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
-    "currentClaim": "native-html-react-consumer-foundation-complete",
+    "currentClaim": "native-html-react-angular-consumer-foundation-complete",
     "runtimeBuildGate": "GMF4",
-    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. Angular and Vue runtime support claims still require later GMF4 consumer evidence.",
-    "evidence": "docs/metadata/consumer-foundations.json"
+    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. Vue runtime support still requires later GMF4 consumer evidence.",
+    "evidence": "docs/metadata/consumer-foundations.json",
+    "angularEvidence": "docs/metadata/angular-consumer.json"
   },
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",
@@ -222,6 +224,17 @@
       "typedEvents": "VyrnForgeElementEventListener",
       "customElementsManifest": "@vyrnforge/ui-elements/custom-elements.json"
     },
+    "gate": "GMF4",
+    "gateStatus": "in-progress"
+  },
+  "angularConsumer": {
+    "status": "complete",
+    "task": "CF-7003",
+    "storyPoints": 8,
+    "frameworkVersion": "22.0.8",
+    "metadata": "docs/metadata/angular-consumer.json",
+    "runtimeFixture": "tests/consumers/angular",
+    "supportClaim": "packed-angular-runtime-verified",
     "gate": "GMF4",
     "gateStatus": "in-progress"
   }

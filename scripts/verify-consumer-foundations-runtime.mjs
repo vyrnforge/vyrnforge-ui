@@ -32,18 +32,38 @@ const packageDefinitions = [
   },
 ];
 
-const fixtures = [
+const allFixtures = [
   {
     id: "native-html",
     directory: "tests/consumers/native-html",
+    outputDirectory: "dist",
     port: 4181,
   },
   {
     id: "react",
     directory: "tests/consumers/react",
+    outputDirectory: "dist",
     port: 4182,
   },
+  {
+    id: "angular",
+    directory: "tests/consumers/angular",
+    outputDirectory: "dist/vyrnforge-angular-consumer-fixture/browser",
+    port: 4183,
+  },
 ];
+
+const fixtureArgumentIndex = process.argv.indexOf("--fixture");
+const requestedFixture =
+  fixtureArgumentIndex >= 0 ? process.argv[fixtureArgumentIndex + 1] : null;
+const fixtures = requestedFixture
+  ? allFixtures.filter((fixture) => fixture.id === requestedFixture)
+  : allFixtures;
+
+assert(
+  fixtures.length > 0,
+  `Unknown consumer fixture ${String(requestedFixture)}`,
+);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -72,7 +92,13 @@ function runNpm(args, options = {}) {
 }
 
 function removeFixtureOutput(fixtureDirectory) {
-  for (const target of ["node_modules", "dist", "package-lock.json", ".vite"]) {
+  for (const target of [
+    "node_modules",
+    "dist",
+    "package-lock.json",
+    ".vite",
+    ".angular",
+  ]) {
     rmSync(path.join(fixtureDirectory, target), {
       force: true,
       recursive: true,
@@ -168,17 +194,27 @@ function verifyInstalledPackages(fixtureDirectory, tarballs) {
   }
 }
 
-function verifyBuiltCss(fixtureDirectory) {
-  const assetsDirectory = path.join(fixtureDirectory, "dist/assets");
-  const cssFiles = readdirSync(assetsDirectory)
-    .filter((file) => file.endsWith(".css"))
-    .map((file) => path.join(assetsDirectory, file));
-  assert(cssFiles.length > 0, "consumer build did not emit CSS");
+function collectCssFiles(directory) {
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) return collectCssFiles(entryPath);
+    return entry.isFile() && entry.name.endsWith(".css") ? [entryPath] : [];
+  });
+}
+
+function verifyBuiltCss(fixtureDirectory, fixture) {
+  const outputDirectory = path.join(fixtureDirectory, fixture.outputDirectory);
+  const cssFiles = collectCssFiles(outputDirectory);
+  assert(cssFiles.length > 0, `${fixture.id} consumer build did not emit CSS`);
   const css = cssFiles.map((file) => readFileSync(file, "utf8")).join("\n");
-  assert(css.includes("--vf-"), "consumer CSS is missing VyrnForge tokens");
+  assert(
+    css.includes("--vf-"),
+    `${fixture.id} consumer CSS is missing VyrnForge tokens`,
+  );
   assert(
     !css.includes("--udg-"),
-    "non-grid consumer CSS must not import data-grid tokens",
+    `${fixture.id} non-grid consumer CSS must not import data-grid tokens`,
   );
 }
 
@@ -308,7 +344,7 @@ async function verifyBrowserFixture(browser, fixture) {
         await page.locator('[data-consumer-created="true"]').isVisible(),
         "typed document.createElement consumer evidence is missing",
       );
-    } else {
+    } else if (fixture.id === "react") {
       await page.waitForSelector('[data-consumer-ready="true"]');
       const actionControl = page.locator(
         "vf-button > button[data-vf-action-control]",
@@ -336,6 +372,78 @@ async function verifyBrowserFixture(browser, fixture) {
           "Operations",
         "React did not assign the vf-text-input value property",
       );
+    } else if (fixture.id === "angular") {
+      await page.waitForSelector('[data-consumer-ready="true"]');
+      await page.waitForSelector('[data-consumer-property="verified"]');
+      const actionControl = page.locator(
+        "#angular-save > button[data-vf-action-control]",
+      );
+      await actionControl.waitFor({ state: "visible" });
+      await actionControl.click();
+      await page.waitForSelector('[data-consumer-action="received"]');
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-consumer-status]")
+          ?.textContent?.includes("angular-save"),
+      );
+      assert(
+        (await page.locator("[data-consumer-status]").textContent())?.includes(
+          "angular-save",
+        ),
+        "Angular consumer did not render the vf-action state update",
+      );
+      assert(
+        await page.getByRole("tab", { name: "Summary" }).isVisible(),
+        "Angular did not assign the vf-tabs items property",
+      );
+      assert(
+        (await page
+          .locator('vf-text-input[name="owner"] input')
+          .inputValue()) === "Operations",
+        "Angular did not assign the vf-text-input value property",
+      );
+      assert(
+        await page
+          .locator('.vf-page-header__status [data-angular-slot="status"]')
+          .isVisible(),
+        "Angular named status slot did not compose in Light DOM",
+      );
+      assert(
+        await page
+          .locator(".vf-page-header__actions #angular-save")
+          .isVisible(),
+        "Angular named actions slot did not compose in Light DOM",
+      );
+      assert(
+        await page
+          .locator('vf-text-input[name="owner"]')
+          .evaluate((element) =>
+            typeof element.checkValidity === "function"
+              ? element.checkValidity()
+              : false,
+          ),
+        "Angular native form control did not expose valid ElementInternals state",
+      );
+      await page.locator('vf-text-input[name="owner"] input').fill("Platform");
+      await page
+        .locator(
+          '#angular-form vf-button[type="submit"] > button[data-vf-action-control]',
+        )
+        .click();
+      await page.waitForSelector('[data-consumer-form="submitted"]');
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-consumer-status]")
+          ?.textContent?.includes("Platform"),
+      );
+      assert(
+        (await page.locator("[data-consumer-status]").textContent())?.includes(
+          "Platform",
+        ),
+        "Angular consumer did not submit ElementInternals form data",
+      );
+    } else {
+      throw new Error(`Unhandled consumer fixture ${fixture.id}`);
     }
 
     await page.close();
@@ -396,7 +504,7 @@ try {
       cwd: fixtureDirectory,
       stdio: "inherit",
     });
-    verifyBuiltCss(fixtureDirectory);
+    verifyBuiltCss(fixtureDirectory, fixture);
   }
 
   const browser = await chromium.launch({
@@ -412,7 +520,7 @@ try {
   }
 
   console.log(
-    "Consumer foundation runtime passed for native HTML and React 19 Custom Elements.",
+    `Consumer runtime passed for ${fixtures.map((fixture) => fixture.id).join(", ")}.`,
   );
 } finally {
   removeAllGeneratedOutput();

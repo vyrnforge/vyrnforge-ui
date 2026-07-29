@@ -17,14 +17,16 @@ tests/consumers/vue/
 ## Current claim
 
 The original S4 fixtures recorded architecture only. CF-7001 and CF-7002 now
-upgrade native HTML and React to packed runtime evidence. Angular and Vue
-remain `architecture-fixture-only` until their later GMF4 tasks.
+upgrade native HTML and React to packed runtime evidence. CF-7003 upgrades
+Angular to `packed-angular-runtime-verified`; Vue remains
+`architecture-fixture-only` until its later GMF4 task.
 
 `npm run verify:multi-framework` verifies fixture claims and structure.
 `npm run verify:consumer-foundations:runtime` performs clean tarball
 installation, type checking, production builds, and Chromium evidence for the
-native HTML and React fixtures. See
-`docs/testing/consumer-foundation-contracts.md`.
+native HTML, React, and Angular fixtures. See
+`docs/testing/consumer-foundation-contracts.md` and
+`docs/testing/angular-consumer-contract.md`.
 
 ## Required final evidence
 
@@ -68,10 +70,10 @@ hidden React, Vue, or Angular runtime.
 
 ## Angular fixture
 
-The Angular fixture records Custom Element schema configuration, property and
-DOM-event binding, projection, and later forms-adapter scenarios. Framework
-forms integration is verified separately from the native form-association
-contract.
+CF-7003 verifies the Angular 22 fixture from clean packed dependencies with
+Custom Element schema configuration, property and DOM-event binding, named
+Light DOM composition, native form submission, production build, and Chromium
+evidence. Angular Forms integration remains the separate CF-7004 decision.
 
 ## Vue fixture
 

@@ -657,15 +657,19 @@
     "domMode": "light-dom",
     "registeredTagCount": 58,
     "eventVocabulary": [
-      "vf-value-change",
-      "vf-open-change",
-      "vf-selection-change",
-      "vf-checked-change",
-      "vf-pressed-change",
       "vf-action",
+      "vf-checked-change",
       "vf-dismiss",
       "vf-invalid",
-      "vf-reset"
+      "vf-open-change",
+      "vf-pressed-change",
+      "vf-reset",
+      "vf-selection-change",
+      "vf-cancel",
+      "vf-confirm",
+      "vf-input-value-change",
+      "vf-toast-change",
+      "vf-value-change"
     ],
     "typeDeclarations": {
       "tagNameMap": "VyrnForgeHTMLElementTagNameMap",
