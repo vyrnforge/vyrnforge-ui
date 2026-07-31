@@ -266,5 +266,14 @@
     "supportClaim": "packed-vue-runtime-verified",
     "gate": "GMF4",
     "gateStatus": "in-progress"
+  },
+  "ssrBundlerCompatibility": {
+    "status": "complete",
+    "task": "CF-7007",
+    "storyPoints": 5,
+    "metadata": "docs/metadata/ssr-bundler-compatibility.json",
+    "supportClaim": "ssr-bundler-verified",
+    "gate": "GMF4",
+    "gateStatus": "in-progress"
   }
 }
