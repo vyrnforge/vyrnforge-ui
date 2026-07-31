@@ -5,7 +5,7 @@
     "task": "CF-7005",
     "title": "Verify Vue consumer",
     "storyPoints": 8,
-    "status": "requires-verification",
+    "status": "evidence-complete",
     "gate": "GMF4",
     "gateStatus": "in-progress",
     "baseCommit": "59201986b6b3d6255901ff1942cb3e347e6f30cc"
@@ -25,7 +25,7 @@
   },
   "fixture": {
     "directory": "tests/consumers/vue",
-    "supportClaim": "packed-vue-runtime-ready",
+    "supportClaim": "packed-vue-runtime-verified",
     "buildSystem": "vite",
     "previewPort": 4184,
     "packedPackages": [
@@ -49,13 +49,7 @@
     "shared token CSS without data-grid tokens",
     "runtime verifier integration for the Vue fixture"
   ],
-  "pendingRuntimeEvidence": [
-    "clean Vue dependency installation",
-    "clean VyrnForge tarball installation without workspace symlinks",
-    "strict vue-tsc template and script type checking",
-    "Vite production application build",
-    "Chromium property, event, slot, and native-form interaction evidence"
-  ],
+  "pendingRuntimeEvidence": [],
   "requiredCommands": [
     "npm run test:vue-consumer",
     "npm run verify:vue-consumer",
@@ -75,12 +69,17 @@
     "GMF4 closure",
     "data-grid multi-framework work"
   ],
-  "unresolvedBlockers": [
-    "CF-7005 cannot be promoted to packed-vue-runtime-verified until the clean packed install, vue-tsc, Vite production build, and Chromium matrix pass in the supported Node 24/npm 11 environment with registry access."
-  ],
+  "unresolvedBlockers": [],
   "sources": [
     "https://www.npmjs.com/package/vue",
     "https://www.npmjs.com/package/@vitejs/plugin-vue",
     "https://www.npmjs.com/package/vue-tsc"
+  ],
+  "completedRuntimeEvidence": [
+    "clean Vue dependency installation",
+    "clean VyrnForge tarball installation without workspace symlinks",
+    "strict vue-tsc template and script type checking",
+    "Vite production application build",
+    "Chromium property, event, slot, and native-form interaction evidence"
   ]
 }

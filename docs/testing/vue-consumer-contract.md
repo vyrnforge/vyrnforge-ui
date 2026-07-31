@@ -1,6 +1,6 @@
 # Vue Consumer Contract
 
-CF-7005 prepares and verifies the static contract for Vue as a packed consumer
+CF-7005 verifies Vue as a packed consumer
 of the framework-neutral native renderer. The machine-readable source of truth is
 `docs/metadata/vue-consumer.json`.
 
@@ -21,7 +21,7 @@ framework-neutral and does not publish Vue-specific declarations.
 
 ## Runtime contract
 
-`tests/consumers/vue` is implementation-ready and must still prove:
+`tests/consumers/vue` proves:
 
 1. clean Vue dependency installation;
 2. clean installation of packed `ui-core`, `ui-behaviors`, and `ui-elements`;
@@ -55,7 +55,8 @@ npm run verify:vue-consumer:runtime
 npm run quality
 ```
 
-GMF4 remains in progress. CF-7005 is not promoted to runtime-verified until
-`npm run verify:vue-consumer:runtime` passes from a clean packed installation.
-The Vue model adapter, shared browser and accessibility matrices, documentation
-generation, and final compatibility review remain S7 work.
+GMF4 remains in progress. CF-7005 is `packed-vue-runtime-verified` after the
+clean packed installation, strict `vue-tsc`, production Vite build, and
+Chromium matrix pass. The Vue model adapter, shared browser and accessibility
+matrices, documentation generation, and final compatibility review remain S7
+work.

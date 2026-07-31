@@ -89,6 +89,6 @@ npm run quality
 ```
 
 GMF4 remains in progress. CF-7003 adds Angular runtime evidence, while CF-7005
-adds the Vue fixture and runtime verifier. Vue clean build and Chromium evidence,
-`v-model`, cross-framework matrices, compatibility documentation, and final gate
-sign-off remain S7 work.
+completes the Vue clean packed build and Chromium evidence. Vue `v-model`,
+cross-framework matrices, compatibility documentation, and final gate sign-off
+remain S7 work.

@@ -1,11 +1,11 @@
 # Vue packed consumer fixture
 
-CF-7005 prepares Vue as a clean packed consumer of `@vyrnforge/ui-elements`.
+CF-7005 verifies Vue as a clean packed consumer of `@vyrnforge/ui-elements`.
 The fixture configures the Vue compiler to treat every `vf-*` tag as a Custom
 Element and covers object-valued property binding, canonical DOM events, named
 Light DOM composition, native form participation, production output, and
-Chromium interaction. The support claim remains runtime-pending until the clean
-install, build, and browser matrix pass.
+Chromium interaction. The clean install, strict template typecheck, production build, and Chromium
+matrix are verified.
 
 The fixture intentionally remains outside the root npm workspace. The runtime
 verifier installs Vue tooling first, then installs packed VyrnForge tarballs so

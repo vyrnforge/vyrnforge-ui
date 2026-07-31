@@ -57,14 +57,14 @@ const expectedBetaClaims = new Map([
   ["react", "custom-elements-consumer-verified"],
   ["native-html", "packed-consumer-verified"],
   ["angular", "packed-consumer-verified"],
-  ["vue", "runtime-verification-pending"],
+  ["vue", "packed-consumer-verified"],
 ]);
 
 const expectedFixtureClaims = new Map([
   ["react", "packed-custom-elements-runtime-verified"],
   ["native-html", "packed-runtime-verified"],
   ["angular", "packed-angular-runtime-verified"],
-  ["vue", "packed-vue-runtime-ready"],
+  ["vue", "packed-vue-runtime-verified"],
 ]);
 
 const expectedEvents = new Set([
@@ -296,11 +296,11 @@ function verifyFrameworkSupport(failures, architecture) {
   }
   if (
     architecture.consumerFixturePolicy?.currentClaim !==
-    "native-html-react-angular-consumer-foundation-complete-vue-runtime-ready"
+    "native-html-react-angular-vue-consumer-foundation-complete"
   ) {
     addFailure(
       failures,
-      "consumer fixture policy must record native-html-react-angular-consumer-foundation-complete-vue-runtime-ready",
+      "consumer fixture policy must record native-html-react-angular-vue-consumer-foundation-complete",
     );
   }
   if (

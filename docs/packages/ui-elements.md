@@ -86,7 +86,7 @@ public Custom Elements Manifest. CF-7003 verifies a clean Angular 22 packed
 consumer with property/event binding, named Light DOM composition, native form
 submission, and Chromium evidence. CF-7005 adds the isolated Vue 3 fixture and
 verifier for compiler recognition, property/event binding, slots, native forms,
-and the runtime matrix. Clean build and Chromium evidence remain pending; Vue
+and the runtime matrix. Clean build and Chromium evidence are complete; Vue
 `v-model` translation remains CF-7006 work.
 
 Editor metadata is exported from `@vyrnforge/ui-elements/custom-elements.json`.

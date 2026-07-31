@@ -186,6 +186,6 @@ property/event binding, named Light DOM composition, and native form
 submission. CF-7004 proves an opt-in standalone ControlValueAccessor/Validator
 directive that maps Angular Forms to the existing native value, checked,
 disabled, validity, and canonical event contracts. CF-7005 supplies the Vue 3
-packed-consumer fixture and runtime verifier over the same native contracts;
-clean build and Chromium evidence remain pending, and Vue `v-model` translation
+packed-consumer fixture and runtime verifier over the same native contracts.
+The clean build and Chromium evidence are complete; Vue `v-model` translation
 remains CF-7006 work.

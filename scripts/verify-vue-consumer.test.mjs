@@ -56,7 +56,7 @@ test("rejects a regressed Vue support claim", () => {
     (failures) => {
       assert(
         failures.some((failure) =>
-          failure.includes("support claim must be packed-vue-runtime-ready"),
+          failure.includes("support claim must be packed-vue-runtime-verified"),
         ),
       );
     },

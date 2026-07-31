@@ -1,7 +1,7 @@
 {
   "id": "vue",
   "task": "CF-7005",
-  "supportClaim": "packed-vue-runtime-ready",
+  "supportClaim": "packed-vue-runtime-verified",
   "frameworkRuntime": "Vue 3.5.40",
   "rendererPackages": ["@vyrnforge/ui-elements"],
   "commands": ["npm run typecheck", "npm run build", "npm run preview"],
@@ -18,7 +18,7 @@
     "data-consumer-ready"
   ],
   "modelAdapterDecision": "separate-cf-7006-adapter-required",
-  "verificationStatus": "runtime-pending",
+  "verificationStatus": "runtime-verified",
   "requiredEvidence": [
     "clean tarball installation",
     "vue-tsc strict template typecheck",
@@ -31,10 +31,17 @@
     "Chromium runtime verification",
     "shared token CSS without data-grid tokens"
   ],
-  "pendingEvidence": [
-    "clean packed dependency install",
-    "vue-tsc strict typecheck",
+  "pendingEvidence": [],
+  "completedEvidence": [
+    "clean tarball installation",
+    "vue-tsc strict template typecheck",
     "Vite production build",
-    "Chromium property, event, slot, and native-form matrix"
+    "vf-* compiler custom-element recognition",
+    "object property binding without attribute serialization",
+    "canonical vf-action and vf-value-change event bindings",
+    "named Light DOM composition",
+    "ElementInternals form submission",
+    "Chromium runtime verification",
+    "shared token CSS without data-grid tokens"
   ]
 }

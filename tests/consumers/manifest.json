@@ -61,9 +61,9 @@
         "src/App.vue",
         "src/styles.css"
       ],
-      "supportClaim": "packed-vue-runtime-ready",
-      "verificationStatus": "runtime-pending"
+      "supportClaim": "packed-vue-runtime-verified",
+      "verificationStatus": "runtime-verified"
     }
   ],
-  "currentBatch": "CF-7005"
+  "currentBatch": "CF-7006-CF-7007"
 }
