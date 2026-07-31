@@ -15,9 +15,13 @@
     "slot=\"status\"",
     "@vf-value-change",
     "new FormData",
-    "data-consumer-ready"
+    "data-consumer-ready",
+    "v-model=\"modelOwner\"",
+    "v-model=\"modelNotifications\"",
+    "update:modelValue",
+    "vf-checked-change"
   ],
-  "modelAdapterDecision": "separate-cf-7006-adapter-required",
+  "modelAdapterDecision": "cf-7006-adapter-verified",
   "verificationStatus": "runtime-verified",
   "requiredEvidence": [
     "clean tarball installation",
@@ -42,6 +46,19 @@
     "named Light DOM composition",
     "ElementInternals form submission",
     "Chromium runtime verification",
-    "shared token CSS without data-grid tokens"
-  ]
+    "shared token CSS without data-grid tokens",
+    "CF-7006 packed Vue v-model string synchronization",
+    "CF-7006 packed Vue v-model boolean synchronization",
+    "CF-7006 programmatic parent-to-native model synchronization"
+  ],
+  "modelAdapter": {
+    "task": "CF-7006",
+    "supportClaim": "vue-model-adapter-verified",
+    "location": "src/adapters",
+    "publishedPackage": null,
+    "protocol": "modelValue/update:modelValue",
+    "canonicalEvents": ["vf-value-change", "vf-checked-change"],
+    "coveredModels": ["string value", "boolean checked"],
+    "verificationStatus": "runtime-verified"
+  }
 }

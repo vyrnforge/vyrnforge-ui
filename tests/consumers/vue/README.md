@@ -11,7 +11,7 @@ The fixture intentionally remains outside the root npm workspace. The runtime
 verifier installs Vue tooling first, then installs packed VyrnForge tarballs so
 no workspace symlink or repository-source import can satisfy the test.
 
-Vue's built-in `v-model` protocol does not map the VyrnForge canonical
-`vf-value-change` and `vf-checked-change` events automatically. CF-7006 owns the
-thin adapter decision and implementation; it must translate framework syntax
-without duplicating native rendering or form logic.
+CF-7006 verifies a thin consumer-local `v-model` adapter under `src/adapters/`. It
+translates `modelValue` / `update:modelValue` to native `value` / `checked`
+properties and the canonical `vf-value-change` / `vf-checked-change` events.
+It does not duplicate native rendering, validation, accessibility, or form logic.

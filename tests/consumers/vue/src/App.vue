@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from "vue";
+
+import VyrnForgeCheckboxModel from "./adapters/VyrnForgeCheckboxModel.vue";
+import VyrnForgeTextInputModel from "./adapters/VyrnForgeTextInputModel.vue";
 import type {
   VyrnForgeActionDetail,
   VyrnForgeElementForTagName,
@@ -15,6 +18,8 @@ const tabsElement = ref<TabsElement | null>(null);
 const ownerElement = ref<TextInputElement | null>(null);
 const owner = ref("Operations");
 const status = ref("Waiting");
+const modelOwner = ref("Model Operations");
+const modelNotifications = ref(true);
 
 const tabs = [
   {
@@ -40,6 +45,12 @@ function handleOwnerValueChange(event: Event): void {
     .detail;
   owner.value = detail.value;
   consumerRoot.value?.setAttribute("data-consumer-value", "received");
+}
+
+function applyProgrammaticModel(): void {
+  modelOwner.value = "Programmatic Vue";
+  modelNotifications.value = true;
+  consumerRoot.value?.setAttribute("data-vue-model-programmatic", "applied");
 }
 
 function handleSubmit(event: Event): void {
@@ -123,6 +134,34 @@ onMounted(async () => {
         @vf-value-change="handleOwnerValueChange"
       ></vf-text-input>
       <output data-vue-value>{{ owner }}</output>
+    </section>
+
+    <section class="vf-consumer-vue-section" aria-labelledby="model-title">
+      <h2 id="model-title">Vue v-model adapter</h2>
+      <label for="vue-model-owner">Model owner</label>
+      <VyrnForgeTextInputModel
+        id="vue-model-owner"
+        v-model="modelOwner"
+        name="modelOwner"
+      />
+      <output data-vue-model-value>{{ modelOwner }}</output>
+
+      <VyrnForgeCheckboxModel
+        id="vue-model-notifications"
+        v-model="modelNotifications"
+        name="modelNotifications"
+        label="Notifications"
+      />
+      <output data-vue-model-checked>{{ modelNotifications }}</output>
+
+      <vf-button
+        id="vue-model-programmatic"
+        action="programmatic-model"
+        variant="default"
+        @vf-action="applyProgrammaticModel"
+      >
+        Apply model from Vue
+      </vf-button>
     </section>
 
     <section class="vf-consumer-vue-section" aria-labelledby="native-title">

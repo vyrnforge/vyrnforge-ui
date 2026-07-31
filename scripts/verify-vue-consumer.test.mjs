@@ -105,7 +105,7 @@ test("rejects an invalid v-model adapter decision", () => {
       });
     },
     (failures) => {
-      assert(failures.includes("Vue model adapter decision must be required"));
+      assert(failures.includes("Vue model adapter decision status is invalid"));
     },
   );
 });

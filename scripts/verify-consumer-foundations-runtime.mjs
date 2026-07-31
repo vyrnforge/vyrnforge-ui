@@ -601,6 +601,49 @@ async function verifyBrowserFixture(browser, fixture) {
         "Vue consumer did not receive vf-value-change",
       );
 
+      const modelOwner = page.locator("#vue-model-owner input");
+      assert(
+        (await modelOwner.inputValue()) === "Model Operations",
+        "Vue v-model adapter did not write the initial value property",
+      );
+      await modelOwner.fill("Model Platform");
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-vue-model-value]")
+          ?.textContent?.includes("Model Platform"),
+      );
+
+      const modelNotifications = page.locator(
+        "#vue-model-notifications input[data-vf-choice-control]",
+      );
+      assert(
+        await modelNotifications.isChecked(),
+        "Vue v-model adapter did not write the initial checked property",
+      );
+      await modelNotifications.click();
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-vue-model-checked]")
+          ?.textContent?.includes("false"),
+      );
+
+      await page
+        .locator("#vue-model-programmatic > button[data-vf-action-control]")
+        .click();
+      await page.waitForSelector('[data-vue-model-programmatic="applied"]');
+      await page.waitForFunction(() => {
+        const owner = document.querySelector("#vue-model-owner");
+        const checkbox = document.querySelector("#vue-model-notifications");
+        return (
+          owner?.value === "Programmatic Vue" && checkbox?.checked === true
+        );
+      });
+      assert(
+        (await modelOwner.inputValue()) === "Programmatic Vue" &&
+          (await modelNotifications.isChecked()),
+        "Vue model state did not propagate back to native value and checked properties",
+      );
+
       assert(
         await page
           .locator('vf-text-input[name="owner"]')

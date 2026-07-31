@@ -129,8 +129,12 @@ function verifyMetadata(root, failures) {
   if (metadata.modelAdapterDecision?.task !== "CF-7006") {
     addFailure(failures, "Vue model adapter decision must reference CF-7006");
   }
-  if (metadata.modelAdapterDecision?.status !== "required") {
-    addFailure(failures, "Vue model adapter decision must be required");
+  if (
+    !new Set(["required", "runtime-ready", "verified"]).has(
+      metadata.modelAdapterDecision?.status,
+    )
+  ) {
+    addFailure(failures, "Vue model adapter decision status is invalid");
   }
   if (metadata.modelAdapterDecision?.publishedPackage !== null) {
     addFailure(failures, "CF-7005 must not publish a Vue adapter package");
@@ -174,11 +178,14 @@ function verifyFixture(root, failures) {
       "Vue fixture verification status must be runtime-verified",
     );
   }
-  if (fixture.modelAdapterDecision !== "separate-cf-7006-adapter-required") {
-    addFailure(
-      failures,
-      "Vue fixture must defer v-model translation to CF-7006",
-    );
+  if (
+    !new Set([
+      "separate-cf-7006-adapter-required",
+      "cf-7006-adapter-runtime-ready",
+      "cf-7006-adapter-verified",
+    ]).has(fixture.modelAdapterDecision)
+  ) {
+    addFailure(failures, "Vue fixture CF-7006 adapter status is invalid");
   }
 
   const manifestFixture = (manifest.fixtures ?? []).find(

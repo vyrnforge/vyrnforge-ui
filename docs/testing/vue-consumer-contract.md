@@ -42,9 +42,9 @@ CF-7005 defines direct property and canonical event consumption. Vue's
 component-oriented `v-model` protocol expects `modelValue` and
 `update:modelValue`, which does not automatically map to native VyrnForge
 `value`/`checked` properties and `vf-value-change`/`vf-checked-change` events.
-CF-7006 therefore owns a separate thin integration adapter. That adapter may
-translate Vue syntax, but it must not duplicate native rendering, validation,
-selection, or form-association behavior.
+CF-7006 supplies the separate thin integration adapter described in
+`vue-model-adapter-contract.md`. It translates Vue syntax without duplicating
+native rendering, validation, selection, or form-association behavior.
 
 ## Required commands
 
