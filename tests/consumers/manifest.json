@@ -51,9 +51,19 @@
       "framework": "Vue",
       "directory": "tests/consumers/vue",
       "contractFile": "fixture.json",
-      "exampleFiles": ["App.vue", "vite.config.ts"],
-      "supportClaim": "architecture-fixture-only"
+      "exampleFiles": [
+        "package.json",
+        "index.html",
+        "tsconfig.json",
+        "vite.config.ts",
+        "architecture-probe.ts",
+        "src/main.ts",
+        "src/App.vue",
+        "src/styles.css"
+      ],
+      "supportClaim": "packed-vue-runtime-ready",
+      "verificationStatus": "runtime-pending"
     }
   ],
-  "currentBatch": "CF-7004"
+  "currentBatch": "CF-7005"
 }

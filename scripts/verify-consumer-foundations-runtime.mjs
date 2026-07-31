@@ -51,6 +51,12 @@ const allFixtures = [
     outputDirectory: "dist/vyrnforge-angular-consumer-fixture/browser",
     port: 4183,
   },
+  {
+    id: "vue",
+    directory: "tests/consumers/vue",
+    outputDirectory: "dist",
+    port: 4184,
+  },
 ];
 
 const fixtureArgumentIndex = process.argv.indexOf("--fixture");
@@ -537,6 +543,91 @@ async function verifyBrowserFixture(browser, fixture) {
           "Platform",
         ),
         "Angular consumer did not submit ElementInternals form data",
+      );
+    } else if (fixture.id === "vue") {
+      await page.waitForSelector('[data-consumer-ready="true"]');
+      await page.waitForSelector('[data-consumer-property="verified"]');
+      const actionControl = page.locator(
+        "#vue-save > button[data-vf-action-control]",
+      );
+      await actionControl.waitFor({ state: "visible" });
+      await actionControl.click();
+      await page.waitForSelector('[data-consumer-action="received"]');
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-consumer-status]")
+          ?.textContent?.includes("vue-save"),
+      );
+      assert(
+        (await page.locator("[data-consumer-status]").textContent())?.includes(
+          "vue-save",
+        ),
+        "Vue consumer did not render the vf-action state update",
+      );
+      assert(
+        await page.getByRole("tab", { name: "Summary" }).isVisible(),
+        "Vue did not assign the vf-tabs items property",
+      );
+      assert(
+        (await page
+          .locator('vf-text-input[name="ownerPreview"] input')
+          .inputValue()) === "Operations",
+        "Vue did not assign the vf-text-input value property",
+      );
+      assert(
+        await page
+          .locator('.vf-page-header__status [data-vue-slot="status"]')
+          .isVisible(),
+        "Vue named status slot did not compose in Light DOM",
+      );
+      assert(
+        await page.locator(".vf-page-header__actions #vue-save").isVisible(),
+        "Vue named actions slot did not compose in Light DOM",
+      );
+
+      await page
+        .locator('vf-text-input[name="ownerPreview"] input')
+        .fill("Vue Platform");
+      await page.waitForSelector('[data-consumer-value="received"]');
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-vue-value]")
+          ?.textContent?.includes("Vue Platform"),
+      );
+      assert(
+        (await page.locator("[data-vue-value]").textContent())?.includes(
+          "Vue Platform",
+        ),
+        "Vue consumer did not receive vf-value-change",
+      );
+
+      assert(
+        await page
+          .locator('vf-text-input[name="owner"]')
+          .evaluate((element) =>
+            typeof element.checkValidity === "function"
+              ? element.checkValidity()
+              : false,
+          ),
+        "Vue native form control did not expose valid ElementInternals state",
+      );
+      await page.locator('vf-text-input[name="owner"] input').fill("Vue Forms");
+      await page
+        .locator(
+          '#vue-form vf-button[type="submit"] > button[data-vf-action-control]',
+        )
+        .click();
+      await page.waitForSelector('[data-consumer-form="submitted"]');
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-consumer-status]")
+          ?.textContent?.includes("Vue Forms"),
+      );
+      assert(
+        (await page.locator("[data-consumer-status]").textContent())?.includes(
+          "Vue Forms",
+        ),
+        "Vue consumer did not submit ElementInternals form data",
       );
     } else {
       throw new Error(`Unhandled consumer fixture ${fixture.id}`);

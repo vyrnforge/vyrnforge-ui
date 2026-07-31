@@ -21,14 +21,28 @@ const allowedFixtureClaims = new Map([
     "angular",
     new Set(["architecture-fixture-only", "packed-angular-runtime-verified"]),
   ],
-  ["vue", new Set(["architecture-fixture-only"])],
+  [
+    "vue",
+    new Set([
+      "architecture-fixture-only",
+      "packed-vue-runtime-ready",
+      "packed-vue-runtime-verified",
+    ]),
+  ],
 ]);
 
 const allowedBetaClaims = new Map([
   ["native-html", new Set(["packed-consumer-verified"])],
   ["react", new Set(["custom-elements-consumer-verified"])],
   ["angular", new Set(["planned", "packed-consumer-verified"])],
-  ["vue", new Set(["planned"])],
+  [
+    "vue",
+    new Set([
+      "planned",
+      "runtime-verification-pending",
+      "packed-consumer-verified",
+    ]),
+  ],
 ]);
 
 const requiredDocuments = [
@@ -42,6 +56,10 @@ const requiredDocuments = [
   "tests/consumers/react/package.json",
   "tests/consumers/react/src/main.tsx",
   "tests/consumers/react/src/vyrnforge-elements.d.ts",
+  "tests/consumers/vue/package.json",
+  "tests/consumers/vue/src/main.ts",
+  "tests/consumers/vue/src/App.vue",
+  "docs/metadata/vue-consumer.json",
   "scripts/generate-ui-elements-manifest.mjs",
   "scripts/verify-consumer-foundations-runtime.mjs",
 ];
@@ -277,7 +295,7 @@ function verifyFixtures(root, failures, closure, architecture) {
     );
   }
   if (
-    !new Set(["CF-7001-CF-7002-CF-7008", "CF-7003", "CF-7004"]).has(
+    !new Set(["CF-7001-CF-7002-CF-7008", "CF-7003", "CF-7004", "CF-7005"]).has(
       manifest.currentBatch,
     )
   ) {
@@ -345,6 +363,13 @@ function verifyFixtures(root, failures, closure, architecture) {
           `consumer foundation metadata is missing ${fixture.id}`,
         );
       }
+    }
+
+    if (
+      fixture.id === "native-html" ||
+      fixture.id === "react" ||
+      fixture.id === "vue"
+    ) {
       for (const file of ["package.json", "tsconfig.json", "vite.config.ts"]) {
         if (!existsSync(path.join(fixtureDirectory, file))) {
           addFailure(

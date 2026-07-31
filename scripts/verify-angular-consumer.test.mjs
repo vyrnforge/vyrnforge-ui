@@ -131,7 +131,7 @@ test("rejects missing Angular global VyrnForge styles", () => {
     (root) => {
       const file = path.join(root, "tests/consumers/angular/src/styles.css");
       const value = readFileSync(file, "utf8").replace(
-        '@import "@vyrnforge/ui-elements/styles/index.css";\n',
+        '@import "@vyrnforge/ui-elements/styles/index.css";',
         "",
       );
       writeFileSync(file, value);

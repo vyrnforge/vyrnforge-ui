@@ -104,6 +104,10 @@
     "npm run test:consumer-foundations",
     "npm run verify:consumer-foundations",
     "npm run verify:consumer-foundations:runtime",
+    "npm run test:angular-consumer",
+    "npm run verify:angular-consumer",
+    "npm run test:vue-consumer",
+    "npm run verify:vue-consumer",
     "npm run verify:packages",
     "npm run quality"
   ],
@@ -116,11 +120,14 @@
     "scripts/generate-ui-elements-manifest.mjs",
     "scripts/verify-consumer-foundations.mjs",
     "scripts/verify-consumer-foundations-runtime.mjs",
-    "docs/testing/consumer-foundation-contracts.md"
+    "docs/testing/consumer-foundation-contracts.md",
+    "tests/consumers/vue/fixture.json",
+    "docs/metadata/vue-consumer.json",
+    "docs/testing/vue-consumer-contract.md"
   ],
   "unresolvedBlockers": [],
   "deferred": [
-    "Vue runtime consumer verification",
+    "Vue v-model adapter verification",
     "cross-framework forms adapter verification",
     "GMF4 closure and compatibility matrix sign-off",
     "data-grid multi-framework work remains outside the non-grid beta critical path"
@@ -137,6 +144,13 @@
       "status": "done",
       "evidence": "docs/metadata/angular-forms-adapter.json",
       "claim": "angular-forms-adapter-verified"
+    },
+    {
+      "task": "CF-7005",
+      "status": "in-progress",
+      "evidence": "docs/metadata/vue-consumer.json",
+      "claim": "packed-vue-runtime-ready",
+      "pending": "clean install, vue-tsc, Vite production build, and Chromium runtime matrix"
     }
   ]
 }

@@ -10,7 +10,7 @@
     "gate": "GMF4",
     "status": "consumer-foundation-complete",
     "firstClassRenderers": ["react", "native-html"],
-    "verifiedConsumers": ["angular", "vue"],
+    "verifiedConsumers": ["angular"],
     "excludedPlatforms": [
       "react-native",
       "flutter",
@@ -19,7 +19,8 @@
       "desktop-native"
     ],
     "deferredPackages": ["@vyrnforge/ui-data-grid"],
-    "currentSprint": "S7"
+    "currentSprint": "S7",
+    "runtimeVerificationCandidates": ["vue"]
   },
   "packages": [
     {
@@ -124,7 +125,8 @@
       "supportLevel": "verified-consumer",
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/vue",
-      "betaClaim": "planned"
+      "betaClaim": "runtime-verification-pending",
+      "consumerFoundation": "CF-7005"
     }
   ],
   "styling": {
@@ -137,12 +139,13 @@
   },
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
-    "currentClaim": "native-html-react-angular-forms-consumer-foundation-complete",
+    "currentClaim": "native-html-react-angular-consumer-foundation-complete-vue-runtime-ready",
     "runtimeBuildGate": "GMF4",
-    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. CF-7004 proves a thin Angular Forms bridge without changing the renderer or package topology. Vue runtime support still requires later GMF4 evidence.",
+    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. CF-7004 proves a thin Angular Forms bridge without changing the renderer or package topology. CF-7005 supplies the Vue 3 packed-consumer fixture and verifier; its clean install, production build, and Chromium evidence remain required before the Vue support claim is promoted.",
     "evidence": "docs/metadata/consumer-foundations.json",
     "angularEvidence": "docs/metadata/angular-consumer.json",
-    "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json"
+    "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json",
+    "vueEvidence": "docs/metadata/vue-consumer.json"
   },
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",

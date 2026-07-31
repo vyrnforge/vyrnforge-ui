@@ -19,15 +19,17 @@ tests/consumers/vue/
 The original S4 fixtures recorded architecture only. CF-7001 and CF-7002 now
 upgrade native HTML and React to packed runtime evidence. CF-7003 upgrades
 Angular to `packed-angular-runtime-verified`. CF-7004 adds the
-`angular-forms-adapter-verified` reference integration; Vue remains
-`architecture-fixture-only` until its later GMF4 task.
+`angular-forms-adapter-verified` reference integration. CF-7005 upgrades Vue to
+`packed-vue-runtime-ready`; the claim remains runtime-pending until the clean
+build and Chromium matrix pass. Vue `v-model` translation remains CF-7006 work.
 
 `npm run verify:multi-framework` verifies fixture claims and structure.
 `npm run verify:consumer-foundations:runtime` performs clean tarball
 installation, type checking, production builds, and Chromium evidence for the
-native HTML, React, and Angular fixtures. See
+native HTML, React, Angular, and Vue fixtures. See
 `docs/testing/consumer-foundation-contracts.md` and
-`docs/testing/angular-consumer-contract.md`.
+`docs/testing/angular-consumer-contract.md` and
+`docs/testing/vue-consumer-contract.md`.
 
 ## Required final evidence
 
@@ -80,8 +82,12 @@ duplicating the native renderer.
 
 ## Vue fixture
 
-The Vue fixture records `vf-*` Custom Element compiler recognition, property
-and DOM-event binding, slots, and later `v-model` adapter scenarios.
+CF-7005 supplies the Vue 3 fixture and runtime verifier for clean packed
+dependencies, `vf-*` compiler recognition, forced DOM property binding,
+canonical DOM events, named Light DOM composition, native form submission,
+production Vite output, and Chromium interaction. The clean build and browser
+run remain required evidence. CF-7006 owns the thin `v-model` translation
+adapter.
 
 ## CI ownership
 

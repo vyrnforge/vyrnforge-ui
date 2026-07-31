@@ -157,8 +157,8 @@ function verifyFixture(root, failures) {
       }
     }
   }
-  if (manifest.currentBatch !== "CF-7004") {
-    addFailure(failures, "consumer manifest currentBatch must be CF-7004");
+  if (manifest.currentBatch !== "CF-7005") {
+    addFailure(failures, "consumer manifest currentBatch must be CF-7005");
   }
 
   const expectedAngularPackages = [
@@ -365,7 +365,7 @@ function verifyArchitecture(root, failures) {
   const policy = architecture.consumerFixturePolicy ?? {};
   if (
     policy.currentClaim !==
-    "native-html-react-angular-forms-consumer-foundation-complete"
+    "native-html-react-angular-consumer-foundation-complete-vue-runtime-ready"
   ) {
     addFailure(failures, "consumer fixture policy must include Angular");
   }

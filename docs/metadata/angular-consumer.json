@@ -54,7 +54,7 @@
     "npm run quality"
   ],
   "deferred": [
-    "Vue runtime verification",
+    "Vue v-model adapter implementation",
     "cross-framework browser and accessibility matrix",
     "GMF4 closure",
     "data-grid multi-framework work"
