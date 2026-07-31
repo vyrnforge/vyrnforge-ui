@@ -104,7 +104,7 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `quality/s3-token-adoption-report.md`          | VF-3009/VF-3010 package adoption evidence and documented exceptions.                                                |
 | `quality/s3-visual-regression.md`              | VF-3011 theme/density visual matrix, computed-style baselines, and screenshot artifacts.                            |
 | `quality/s3-g3-closure.md`                     | VF-3012 final evidence chain, accepted exceptions, and G3 closure rule.                                             |
-| `quality/s4-multi-framework-architecture.md`   | MF-4001–MF-4008 architecture evidence and explicit GMF1 support-claim boundary.                                     |
+| `quality/s4-multi-framework-architecture.md`   | MF-4001â€“MF-4008 architecture evidence and explicit GMF1 support-claim boundary.                                   |
 | `testing/regression-fixtures.md`               | Deterministic fixture application for DOM, accessibility, browser, future visual, and consumer-oriented checks.     |
 | `testing/multi-framework-consumer-fixtures.md` | React, native HTML, Angular, and Vue architecture fixtures and GMF4 evidence rules.                                 |
 | `testing/browser-testing.md`                   | Playwright browser-test commands, fixture contracts, selector rules, artifacts, and evidence boundaries.            |
@@ -184,6 +184,7 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `metadata/angular-consumer.json`          | Machine-readable CF-7003 Angular 22 packed consumer and GMF4 evidence.                                                       |
 | `metadata/angular-forms-adapter.json`     | Machine-readable CF-7004 Angular Forms adapter scope, contracts, supported tags, and evidence.                               |
 | `metadata/vue-consumer.json`              | Machine-readable CF-7005 Vue 3 fixture, verifier, adapter decision, and completed runtime evidence.                          |
+| `metadata/ssr-bundler-compatibility.json` | Machine-readable CF-7007 server import and bundler matrix evidence.                                                          |
 | `metadata/component-schema.md`            | Canonical component metadata schema and contributor workflow.                                                                |
 | `metadata/css-imports.json`               | CSS import order and styling ownership.                                                                                      |
 | `metadata/state-contracts.json`           | State ownership and adapter policies.                                                                                        |
@@ -243,7 +244,7 @@ Archived docs are historical only. They preserve useful context but do not guide
 | `api/ui-elements-api.md`                    | Native Custom Element registration, base lifecycle, reflection, events, and entry points. |
 | `testing/gmf1-architecture-gate.md`         | GMF1 closure evidence and remaining release conditions.                                   |
 | `quality/s5-framework-neutral-behaviors.md` | S5 scope, invariants, non-scope, and GMF2 relationship.                                   |
-| `testing/behavior-foundation-contracts.md`  | MF-5001–MF-5014 package and repository evidence.                                          |
-| `testing/behavior-react-parity.md`          | MF-5005–MF-5014 React adapter parity evidence.                                            |
+| `testing/behavior-foundation-contracts.md`  | MF-5001â€“MF-5014 package and repository evidence.                                        |
+| `testing/behavior-react-parity.md`          | MF-5005â€“MF-5014 React adapter parity evidence.                                          |
 | `testing/react-behavior-adoption-audit.md`  | MF-5015 complete React adapter classification and compatibility audit.                    |
 | `testing/gmf2-behavior-parity-gate.md`      | MF-5016 GMF2 evidence, required commands, and deferred scope.                             |

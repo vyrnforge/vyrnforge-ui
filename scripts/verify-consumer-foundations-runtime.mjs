@@ -25,6 +25,7 @@ const tempPackageDir = path.join(
 const packageDefinitions = [
   { name: "@vyrnforge/ui-core", directory: "packages/ui-core" },
   { name: "@vyrnforge/ui-behaviors", directory: "packages/ui-behaviors" },
+  { name: "@vyrnforge/ui-components", directory: "packages/ui-components" },
   {
     name: "@vyrnforge/ui-elements",
     directory: "packages/ui-elements",
@@ -38,24 +39,45 @@ const allFixtures = [
     directory: "tests/consumers/native-html",
     outputDirectory: "dist",
     port: 4181,
+    packageNames: [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
+    ],
   },
   {
     id: "react",
     directory: "tests/consumers/react",
     outputDirectory: "dist",
     port: 4182,
+    packageNames: [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-elements",
+    ],
   },
   {
     id: "angular",
     directory: "tests/consumers/angular",
     outputDirectory: "dist/vyrnforge-angular-consumer-fixture/browser",
     port: 4183,
+    packageNames: [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
+    ],
   },
   {
     id: "vue",
     directory: "tests/consumers/vue",
     outputDirectory: "dist",
     port: 4184,
+    packageNames: [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
+    ],
   },
 ];
 
@@ -65,6 +87,7 @@ const requestedFixture =
 const fixtures = requestedFixture
   ? allFixtures.filter((fixture) => fixture.id === requestedFixture)
   : allFixtures;
+const buildOnly = process.argv.includes("--build-only");
 
 assert(
   fixtures.length > 0,
@@ -198,6 +221,60 @@ function verifyInstalledPackages(fixtureDirectory, tarballs) {
       );
     }
   }
+}
+
+function selectFixtureTarballs(fixture, tarballs) {
+  const packageNames = new Set(fixture.packageNames);
+  return tarballs.filter((tarball) => packageNames.has(tarball.name));
+}
+
+function verifyServerSafeImports(fixtureDirectory, fixture) {
+  const packageNames = [...fixture.packageNames];
+  if (packageNames.includes("@vyrnforge/ui-elements")) {
+    packageNames.push("@vyrnforge/ui-elements/register");
+  }
+
+  const esmProbe = `
+    delete globalThis.window;
+    delete globalThis.document;
+    delete globalThis.customElements;
+    delete globalThis.HTMLElement;
+    delete globalThis.ElementInternals;
+    for (const packageName of ${JSON.stringify(packageNames)}) {
+      await import(packageName);
+    }
+    if (globalThis.document !== undefined || globalThis.customElements !== undefined) {
+      throw new Error("package import created DOM globals");
+    }
+    ${
+      fixture.id === "react"
+        ? `
+      const React = await import("react");
+      const { renderToStaticMarkup } = await import("react-dom/server");
+      const { Button } = await import("@vyrnforge/ui-components");
+      const markup = renderToStaticMarkup(React.createElement(Button, { variant: "primary" }, "SSR"));
+      if (!markup.includes("SSR")) throw new Error("React server render failed");
+    `
+        : ""
+    }
+  `;
+  run(process.execPath, ["--input-type=module", "--eval", esmProbe], {
+    cwd: fixtureDirectory,
+  });
+
+  const cjsProbe = `
+    delete global.window;
+    delete global.document;
+    delete global.customElements;
+    delete global.HTMLElement;
+    delete global.ElementInternals;
+    for (const packageName of ${JSON.stringify(packageNames)}) require(packageName);
+    if (global.document !== undefined || global.customElements !== undefined) {
+      throw new Error("package require created DOM globals");
+    }
+  `;
+  run(process.execPath, ["--eval", cjsProbe], { cwd: fixtureDirectory });
+  console.log(`SSR ${fixture.id}: ESM/CJS package imports passed.`);
 }
 
 function collectCssFiles(directory) {
@@ -656,11 +733,16 @@ try {
   runNpm(["run", "build", "--workspace", "@vyrnforge/ui-behaviors"], {
     stdio: "inherit",
   });
+  runNpm(["run", "build", "--workspace", "@vyrnforge/ui-components"], {
+    stdio: "inherit",
+  });
   runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {
     stdio: "inherit",
   });
 
-  console.log("Packing ui-core, ui-behaviors, and ui-elements...");
+  console.log(
+    "Packing ui-core, ui-behaviors, ui-components, and ui-elements...",
+  );
   const tarballs = packPackages();
 
   for (const fixture of fixtures) {
@@ -670,19 +752,21 @@ try {
       cwd: fixtureDirectory,
       stdio: "inherit",
     });
+    const fixtureTarballs = selectFixtureTarballs(fixture, tarballs);
     runNpm(
       [
         "install",
         "--no-package-lock",
         "--no-save",
-        ...tarballs.map((tarball) => tarball.tarballPath),
+        ...fixtureTarballs.map((tarball) => tarball.tarballPath),
       ],
       {
         cwd: fixtureDirectory,
         stdio: "inherit",
       },
     );
-    verifyInstalledPackages(fixtureDirectory, tarballs);
+    verifyInstalledPackages(fixtureDirectory, fixtureTarballs);
+    verifyServerSafeImports(fixtureDirectory, fixture);
     runNpm(["run", "typecheck"], {
       cwd: fixtureDirectory,
       stdio: "inherit",
@@ -694,20 +778,24 @@ try {
     verifyBuiltCss(fixtureDirectory, fixture);
   }
 
-  const browser = await chromium.launch({
-    executablePath:
-      process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
-  });
-  try {
-    for (const fixture of fixtures) {
-      await verifyBrowserFixture(browser, fixture);
+  if (!buildOnly) {
+    const browser = await chromium.launch({
+      executablePath:
+        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
+    });
+    try {
+      for (const fixture of fixtures) {
+        await verifyBrowserFixture(browser, fixture);
+      }
+    } finally {
+      await browser.close();
     }
-  } finally {
-    await browser.close();
   }
 
   console.log(
-    `Consumer runtime passed for ${fixtures.map((fixture) => fixture.id).join(", ")}.`,
+    `${buildOnly ? "Consumer build/SSR matrix" : "Consumer runtime"} passed for ${fixtures
+      .map((fixture) => fixture.id)
+      .join(", ")}.`,
   );
 } finally {
   removeAllGeneratedOutput();
