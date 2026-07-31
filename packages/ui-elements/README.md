@@ -40,8 +40,10 @@ For explicit side-effect registration:
 import "@vyrnforge/ui-elements/register";
 ```
 
-Package-root import performs no global registration. Light DOM remains the
-portable default. The package depends only on `@vyrnforge/ui-core` and
+Package-root import performs no global registration. The package root and explicit
+registration entry point are designed to remain import-safe when browser DOM globals are
+unavailable; CF-7007 verifies the clean ESM/CommonJS server-import evidence. Light DOM remains
+the portable default. The package depends only on `@vyrnforge/ui-core` and
 `@vyrnforge/ui-behaviors` at runtime.
 
 GMF3 native non-grid parity is complete. CF-7001 and CF-7002 verify clean
