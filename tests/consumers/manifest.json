@@ -59,10 +59,14 @@
         "architecture-probe.ts",
         "src/main.ts",
         "src/App.vue",
-        "src/styles.css"
+        "src/styles.css",
+        "src/adapters/useVyrnForgeModel.ts",
+        "src/adapters/VyrnForgeTextInputModel.vue",
+        "src/adapters/VyrnForgeCheckboxModel.vue"
       ],
       "supportClaim": "packed-vue-runtime-verified",
-      "verificationStatus": "runtime-verified"
+      "verificationStatus": "runtime-verified",
+      "modelSupportClaim": "vue-model-adapter-verified"
     }
   ],
   "currentBatch": "CF-7006-CF-7007"

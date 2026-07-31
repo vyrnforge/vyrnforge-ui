@@ -113,6 +113,7 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `testing/angular-consumer-contract.md`         | CF-7003 Angular 22 packed consumer contract, native form boundary, and runtime evidence.                            |
 | `testing/angular-forms-adapter-contract.md`    | CF-7004 Angular reactive/template-driven Forms bridge, ownership boundary, and browser evidence.                    |
 | `testing/vue-consumer-contract.md`             | CF-7005 Vue 3 packed-consumer contract and completed runtime evidence.                                              |
+| `testing/vue-model-adapter-contract.md`        | CF-7006 thin Vue `v-model` reference adapter contract and runtime evidence boundary.                                |
 
 ## 8. Release Governance
 
@@ -184,6 +185,7 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `metadata/angular-consumer.json`          | Machine-readable CF-7003 Angular 22 packed consumer and GMF4 evidence.                                                       |
 | `metadata/angular-forms-adapter.json`     | Machine-readable CF-7004 Angular Forms adapter scope, contracts, supported tags, and evidence.                               |
 | `metadata/vue-consumer.json`              | Machine-readable CF-7005 Vue 3 fixture, verifier, adapter decision, and completed runtime evidence.                          |
+| `metadata/vue-model-adapter.json`         | Machine-readable CF-7006 Vue `v-model` adapter ownership, contracts, and verification status.                                |
 | `metadata/ssr-bundler-compatibility.json` | Machine-readable CF-7007 server import and bundler matrix evidence.                                                          |
 | `metadata/component-schema.md`            | Canonical component metadata schema and contributor workflow.                                                                |
 | `metadata/css-imports.json`               | CSS import order and styling ownership.                                                                                      |

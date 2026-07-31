@@ -1,5 +1,6 @@
 import type {
   VyrnForgeActionDetail,
+  VyrnForgeCheckedChangeDetail,
   VyrnForgeElementForTagName,
   VyrnForgeValueChangeDetail,
 } from "@vyrnforge/ui-elements";
@@ -24,6 +25,7 @@ type VyrnForgeVueCustomElement<
   readonly $emit: VueEmit<TEvents>;
 };
 
+type CheckboxElement = VyrnForgeElementForTagName<"vf-checkbox">;
 type ButtonElement = VyrnForgeElementForTagName<"vf-button">;
 type PageHeaderElement = VyrnForgeElementForTagName<"vf-page-header">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
@@ -33,12 +35,29 @@ type ActionEvents = {
   "vf-action": CustomEvent<VyrnForgeActionDetail>;
 };
 
+type CheckedEvents = {
+  "vf-checked-change": CustomEvent<VyrnForgeCheckedChangeDetail>;
+};
+
 type ValueEvents = {
   "vf-value-change": CustomEvent<VyrnForgeValueChangeDetail<string>>;
 };
 
 declare module "vue" {
   interface GlobalComponents {
+    "vf-checkbox": VyrnForgeVueCustomElement<
+      CheckboxElement,
+      | "checked"
+      | "disabled"
+      | "indeterminate"
+      | "label"
+      | "name"
+      | "readOnly"
+      | "required"
+      | "size"
+      | "value",
+      CheckedEvents
+    >;
     "vf-button": VyrnForgeVueCustomElement<
       ButtonElement,
       "action" | "disabled" | "loading" | "type" | "value" | "variant",

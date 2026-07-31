@@ -98,6 +98,9 @@
     "verify:vue-consumer": "node scripts/verify-vue-consumer.mjs",
     "test:vue-consumer": "node --test scripts/verify-vue-consumer.test.mjs",
     "verify:vue-consumer:runtime": "node scripts/verify-consumer-foundations-runtime.mjs --fixture vue",
+    "verify:vue-model-adapter": "node scripts/verify-vue-model-adapter.mjs",
+    "test:vue-model-adapter": "node --test scripts/verify-vue-model-adapter.test.mjs",
+    "verify:vue-model-adapter:runtime": "node scripts/verify-consumer-foundations-runtime.mjs --fixture vue"
     "verify:ssr-bundler": "node scripts/verify-ssr-bundler-compatibility.mjs",
     "test:ssr-bundler": "node --test scripts/verify-ssr-bundler-compatibility.test.mjs",
     "verify:ssr-bundler:runtime": "node scripts/verify-consumer-foundations-runtime.mjs --build-only"
