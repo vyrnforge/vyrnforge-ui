@@ -12,17 +12,19 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 ## Packages
 
-| Package                    | Owns                                                                                                                                       | Status                                                                                                                                                                          |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                                                                             | current; non-grid beta                                                                                                                                                          |
-| `@vyrnforge/ui-behaviors`  | framework-neutral state, collections, selection, navigation, overlay, feedback, subscriptions, and events                                  | GMF2 complete; non-grid beta                                                                                                                                                    |
-| `@vyrnforge/ui-components` | first-class React renderer                                                                                                                 | current; non-grid beta                                                                                                                                                          |
-| `@vyrnforge/ui-elements`   | native registration, lifecycle, observed attributes, property reflection, update scheduling, events, Light DOM, forms, and editor metadata | GMF3 passed; packed native HTML and React foundation complete; CF-7003 Angular consumer and CF-7004 Angular Forms reference adapter verified; Vue GMF4 runtime evidence remains |
-| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                                                               | React alpha; deferred                                                                                                                                                           |
+| Package                    | Owns                                                                                                                                       | Status                                                                                                                                                                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                                                                             | current; non-grid beta                                                                                                                                                                                                                 |
+| `@vyrnforge/ui-behaviors`  | framework-neutral state, collections, selection, navigation, overlay, feedback, subscriptions, and events                                  | GMF2 complete; non-grid beta                                                                                                                                                                                                           |
+| `@vyrnforge/ui-components` | first-class React renderer                                                                                                                 | current; non-grid beta                                                                                                                                                                                                                 |
+| `@vyrnforge/ui-elements`   | native registration, lifecycle, observed attributes, property reflection, update scheduling, events, Light DOM, forms, and editor metadata | GMF3 passed; packed native HTML and React foundation complete; CF-7003 Angular consumer and CF-7004 Angular Forms reference adapter verified; CF-7005 Vue fixture and verifier runtime-ready, with build and Chromium evidence pending |
+| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                                                               | React alpha; deferred                                                                                                                                                                                                                  |
 
 React and native HTML are first-class beta targets. Angular has verified packed
 consumer evidence through CF-7003 and a thin Forms reference adapter through
-CF-7004; Vue still requires its GMF4 consumer task.
+CF-7004. CF-7005 supplies the isolated Vue fixture and runtime verifier, but
+its clean build and Chromium evidence remain pending. Vue `v-model` translation
+remains CF-7006 work.
 Mobile-native rendering is outside this program.
 
 ## Canonical Docs
@@ -37,6 +39,7 @@ Mobile-native rendering is outside this program.
 | Consumer foundation evidence       | `docs/metadata/consumer-foundations.json`                      |
 | Angular consumer evidence          | `docs/metadata/angular-consumer.json`                          |
 | Angular Forms adapter evidence     | `docs/metadata/angular-forms-adapter.json`                     |
+| Vue consumer evidence              | `docs/metadata/vue-consumer.json`                              |
 | State and Redux policy             | `docs/architecture/02-state-and-adapter-ownership.md`          |
 | Styling and themes                 | `docs/architecture/03-theming-and-styling.md`                  |
 | CSS architecture                   | `docs/architecture/06-css-architecture.md`                     |

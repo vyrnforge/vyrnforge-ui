@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S7",
+    "task": "CF-7005",
+    "title": "Verify Vue consumer",
+    "storyPoints": 8,
+    "status": "requires-verification",
+    "gate": "GMF4",
+    "gateStatus": "in-progress",
+    "baseCommit": "59201986b6b3d6255901ff1942cb3e347e6f30cc"
+  },
+  "framework": {
+    "name": "Vue",
+    "version": "3.5.40",
+    "supportLevel": "verified-consumer",
+    "renderer": "@vyrnforge/ui-elements",
+    "buildTool": "Vite 8.1.5",
+    "compilerPlugin": "@vitejs/plugin-vue 6.0.8",
+    "templateTypecheck": "vue-tsc 3.3.8",
+    "fixtureTypeScript": "6.0.3",
+    "workspaceIsolation": true,
+    "customElementRecognition": "tag.startsWith(\"vf-\")",
+    "templateTypeBridge": "consumer-local Vue GlobalComponents augmentation"
+  },
+  "fixture": {
+    "directory": "tests/consumers/vue",
+    "supportClaim": "packed-vue-runtime-ready",
+    "buildSystem": "vite",
+    "previewPort": 4184,
+    "packedPackages": [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements"
+    ],
+    "templateTypeBridge": "src/vyrnforge-elements.d.ts"
+  },
+  "completedStaticEvidence": [
+    "isolated Vue fixture without VyrnForge workspace dependencies",
+    "pinned Vue, Vite, plugin, vue-tsc, and TypeScript versions",
+    "vf-* Custom Element compiler recognition configuration",
+    "explicit native registration entry point",
+    "consumer-local Vue GlobalComponents, canonical event, slot, and data-* template type bridge",
+    "object-valued property binding patterns",
+    "canonical vf-action and vf-value-change template event binding patterns",
+    "named Light DOM composition patterns",
+    "native FormData submission path",
+    "typed DOM architecture probe",
+    "shared token CSS without data-grid tokens",
+    "runtime verifier integration for the Vue fixture"
+  ],
+  "pendingRuntimeEvidence": [
+    "clean Vue dependency installation",
+    "clean VyrnForge tarball installation without workspace symlinks",
+    "strict vue-tsc template and script type checking",
+    "Vite production application build",
+    "Chromium property, event, slot, and native-form interaction evidence"
+  ],
+  "requiredCommands": [
+    "npm run test:vue-consumer",
+    "npm run verify:vue-consumer",
+    "npm run verify:vue-consumer:runtime",
+    "npm run quality"
+  ],
+  "modelAdapterDecision": {
+    "task": "CF-7006",
+    "status": "required",
+    "reason": "Vue v-model expects modelValue and update:modelValue, while native VyrnForge controls expose value or checked properties plus canonical vf-value-change or vf-checked-change DOM events.",
+    "boundary": "A thin Vue-only directive, composable, or wrapper may translate the protocol but must not duplicate rendering, validation, selection, or form-association logic.",
+    "publishedPackage": null
+  },
+  "deferred": [
+    "Vue v-model adapter implementation",
+    "shared cross-framework browser and accessibility matrix",
+    "GMF4 closure",
+    "data-grid multi-framework work"
+  ],
+  "unresolvedBlockers": [
+    "CF-7005 cannot be promoted to packed-vue-runtime-verified until the clean packed install, vue-tsc, Vite production build, and Chromium matrix pass in the supported Node 24/npm 11 environment with registry access."
+  ],
+  "sources": [
+    "https://www.npmjs.com/package/vue",
+    "https://www.npmjs.com/package/@vitejs/plugin-vue",
+    "https://www.npmjs.com/package/vue-tsc"
+  ]
+}

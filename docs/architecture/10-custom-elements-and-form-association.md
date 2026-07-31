@@ -185,5 +185,7 @@ React 19 Custom Element consumption. CF-7003 proves Angular 22 packed runtime,
 property/event binding, named Light DOM composition, and native form
 submission. CF-7004 proves an opt-in standalone ControlValueAccessor/Validator
 directive that maps Angular Forms to the existing native value, checked,
-disabled, validity, and canonical event contracts. Vue runtime verification
-remains S7 / GMF4 work.
+disabled, validity, and canonical event contracts. CF-7005 supplies the Vue 3
+packed-consumer fixture and runtime verifier over the same native contracts;
+clean build and Chromium evidence remain pending, and Vue `v-model` translation
+remains CF-7006 work.

@@ -45,8 +45,11 @@ portable default. The package depends only on `@vyrnforge/ui-core` and
 `@vyrnforge/ui-behaviors` at runtime.
 
 GMF3 native non-grid parity is complete. CF-7001 and CF-7002 verify clean
-packed native HTML and React 19 Custom Element consumers. Angular and Vue
-runtime verification remains later S7 / GMF4 work.
+packed native HTML and React 19 Custom Element consumers. CF-7003 verifies
+Angular 22 and CF-7004 verifies the Angular Forms reference adapter. CF-7005
+supplies the Vue 3 packed-consumer fixture and verifier; clean build and
+Chromium evidence remain pending. Vue `v-model` translation remains CF-7006
+work.
 
 Typed DOM consumers receive `VyrnForgeHTMLElementTagNameMap`,
 `VyrnForgeElementForTagName<TTagName>`, and canonical event listener overloads.

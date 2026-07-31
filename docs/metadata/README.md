@@ -14,6 +14,7 @@ queryable repository facts and evidence records.
 | `consumer-foundations.json`         | CF-7001, CF-7002, and CF-7008 packed native HTML/React consumers plus declarations and Custom Elements Manifest evidence. |
 | `angular-consumer.json`             | CF-7003 Angular 22 packed consumer, property/event, slot, form, build, and Chromium evidence.                             |
 | `angular-forms-adapter.json`        | CF-7004 Angular Forms reference adapter, supported value categories, ownership boundary, and runtime evidence.            |
+| `vue-consumer.json`                 | CF-7005 Vue 3 fixture, compiler/property/event/slot/form contract, verifier, and pending runtime evidence.                |
 | `native-core-elements.json`         | EL-6005 through EL-6011 canonical 40-tag core renderer wave and browser evidence.                                         |
 | `native-advanced-elements.json`     | EL-6012 through EL-6017 canonical 14-tag advanced renderer wave and browser evidence.                                     |
 | `gmf3-closure.json`                 | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims.          |
@@ -40,8 +41,9 @@ contract, and representative renderer-neutral component records.
 GMF3 marks the native renderer evidence complete. React and native HTML have
 packed runtime evidence, CF-7003 adds Angular 22 packed runtime evidence, and
 CF-7004 adds Angular reactive/template-driven Forms adapter evidence without a
-new published package.
-Vue remains `architecture-fixture-only`; GMF4 is still in progress.
+new published package. CF-7005 adds the Vue 3 packed-consumer fixture and
+verifier and records the separate CF-7006 `v-model` adapter boundary. Vue clean
+build and Chromium evidence remain pending, so GMF4 is still in progress.
 
 ```bash
 npm run test:multi-framework

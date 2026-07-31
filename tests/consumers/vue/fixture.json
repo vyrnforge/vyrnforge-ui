@@ -1,6 +1,40 @@
 {
   "id": "vue",
-  "supportClaim": "architecture-fixture-only",
+  "task": "CF-7005",
+  "supportClaim": "packed-vue-runtime-ready",
+  "frameworkRuntime": "Vue 3.5.40",
   "rendererPackages": ["@vyrnforge/ui-elements"],
-  "requiredPatterns": ["isCustomElement", "<vf-button", "@vf-action"]
+  "commands": ["npm run typecheck", "npm run build", "npm run preview"],
+  "requiredPatterns": [
+    "isCustomElement",
+    "@vyrnforge/ui-elements/register",
+    "@vyrnforge/ui-elements/styles/index.css",
+    "<vf-button",
+    "@vf-action",
+    ":items.prop",
+    "slot=\"status\"",
+    "@vf-value-change",
+    "new FormData",
+    "data-consumer-ready"
+  ],
+  "modelAdapterDecision": "separate-cf-7006-adapter-required",
+  "verificationStatus": "runtime-pending",
+  "requiredEvidence": [
+    "clean tarball installation",
+    "vue-tsc strict template typecheck",
+    "Vite production build",
+    "vf-* compiler custom-element recognition",
+    "object property binding without attribute serialization",
+    "canonical vf-action and vf-value-change event bindings",
+    "named Light DOM composition",
+    "ElementInternals form submission",
+    "Chromium runtime verification",
+    "shared token CSS without data-grid tokens"
+  ],
+  "pendingEvidence": [
+    "clean packed dependency install",
+    "vue-tsc strict typecheck",
+    "Vite production build",
+    "Chromium property, event, slot, and native-form matrix"
+  ]
 }

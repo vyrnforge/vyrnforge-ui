@@ -84,7 +84,9 @@ verification for native HTML and React 19 Custom Element consumers. CF-7008
 adds the typed 58-tag DOM map, canonical event listener declarations, and the
 public Custom Elements Manifest. CF-7003 verifies a clean Angular 22 packed
 consumer with property/event binding, named Light DOM composition, native form
-submission, and Chromium evidence. Vue runtime verification remains later S7 /
-GMF4 work.
+submission, and Chromium evidence. CF-7005 adds the isolated Vue 3 fixture and
+verifier for compiler recognition, property/event binding, slots, native forms,
+and the runtime matrix. Clean build and Chromium evidence remain pending; Vue
+`v-model` translation remains CF-7006 work.
 
 Editor metadata is exported from `@vyrnforge/ui-elements/custom-elements.json`.
