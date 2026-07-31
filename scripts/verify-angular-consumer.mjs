@@ -157,8 +157,8 @@ function verifyFixture(root, failures) {
       }
     }
   }
-  if (manifest.currentBatch !== "CF-7005") {
-    addFailure(failures, "consumer manifest currentBatch must be CF-7005");
+  if (!new Set(["CF-7005", "CF-7006-CF-7007"]).has(manifest.currentBatch)) {
+    addFailure(failures, "consumer manifest currentBatch is invalid");
   }
 
   const expectedAngularPackages = [
@@ -365,7 +365,7 @@ function verifyArchitecture(root, failures) {
   const policy = architecture.consumerFixturePolicy ?? {};
   if (
     policy.currentClaim !==
-    "native-html-react-angular-consumer-foundation-complete-vue-runtime-ready"
+    "native-html-react-angular-vue-consumer-foundation-complete"
   ) {
     addFailure(failures, "consumer fixture policy must include Angular");
   }

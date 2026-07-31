@@ -128,7 +128,8 @@
   "unresolvedBlockers": [],
   "deferred": [
     "Vue v-model adapter verification",
-    "cross-framework forms adapter verification",
+    "cross-framework SSR and bundler verification",
+    "cross-framework browser and accessibility matrices",
     "GMF4 closure and compatibility matrix sign-off",
     "data-grid multi-framework work remains outside the non-grid beta critical path"
   ],
@@ -147,10 +148,9 @@
     },
     {
       "task": "CF-7005",
-      "status": "in-progress",
+      "status": "done",
       "evidence": "docs/metadata/vue-consumer.json",
-      "claim": "packed-vue-runtime-ready",
-      "pending": "clean install, vue-tsc, Vite production build, and Chromium runtime matrix"
+      "claim": "packed-vue-runtime-verified"
     }
   ]
 }

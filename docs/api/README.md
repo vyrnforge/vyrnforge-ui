@@ -27,7 +27,7 @@ CF-7004 adds an isolated Angular Forms reference directive over the same public
 properties, events, disabled state, and native validity; it is not a new
 published package. CF-7005 adds the isolated Vue 3 fixture and verifier for
 compiler, property/event, slot, native-form, production-build, and Chromium
-coverage. Its clean build and browser evidence remain pending. Vue `v-model`,
+coverage. The clean build and Chromium evidence are complete. Vue `v-model`,
 accessibility, documentation, and final GMF4 closure evidence remain planned.
 
 ## Multi-framework contract
@@ -41,9 +41,8 @@ The public cross-framework architecture is defined by:
 - `../metadata/component-contracts.json`.
 
 Architecture metadata is public documentation, but final beta support still
-requires GMF4 closure. Native HTML and Angular have packed runtime consumer
-evidence. Vue is runtime-ready through CF-7005 but is not promoted until its
-clean packed build and Chromium matrix pass. Remaining adapter, matrix,
+requires GMF4 closure. Native HTML, Angular, and Vue have packed runtime consumer evidence. Remaining
+adapter, matrix,
 accessibility, and documentation gates still control the release claim.
 
 ## Importing Packages

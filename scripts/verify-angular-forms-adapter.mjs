@@ -265,8 +265,8 @@ function verifyFixture(root, failures) {
   }
 
   const manifest = readJson(root, "tests/consumers/manifest.json");
-  if (manifest.currentBatch !== "CF-7005") {
-    addFailure(failures, "consumer manifest currentBatch must be CF-7005");
+  if (!new Set(["CF-7005", "CF-7006-CF-7007"]).has(manifest.currentBatch)) {
+    addFailure(failures, "consumer manifest currentBatch is invalid");
   }
   const angularFixture = (manifest.fixtures ?? []).find(
     (entry) => entry.id === "angular",

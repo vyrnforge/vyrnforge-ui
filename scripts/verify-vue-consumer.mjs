@@ -12,8 +12,8 @@ const viteVersion = "8.1.5";
 const pluginVueVersion = "6.0.8";
 const vueTscVersion = "3.3.8";
 const fixtureTypeScriptVersion = "6.0.3";
-const expectedFixtureClaim = "packed-vue-runtime-ready";
-const expectedBetaClaim = "runtime-verification-pending";
+const expectedFixtureClaim = "packed-vue-runtime-verified";
+const expectedBetaClaim = "packed-consumer-verified";
 
 const requiredFiles = [
   "docs/metadata/vue-consumer.json",
@@ -57,8 +57,8 @@ function verifyMetadata(root, failures) {
   if (program.storyPoints !== 8) {
     addFailure(failures, "CF-7005 story points must be 8");
   }
-  if (program.status !== "requires-verification") {
-    addFailure(failures, "CF-7005 status must be requires-verification");
+  if (program.status !== "evidence-complete") {
+    addFailure(failures, "CF-7005 status must be evidence-complete");
   }
   if (program.gate !== "GMF4" || program.gateStatus !== "in-progress") {
     addFailure(failures, "CF-7005 must keep GMF4 in-progress");
@@ -135,14 +135,14 @@ function verifyMetadata(root, failures) {
   if (metadata.modelAdapterDecision?.publishedPackage !== null) {
     addFailure(failures, "CF-7005 must not publish a Vue adapter package");
   }
-  if ((metadata.unresolvedBlockers ?? []).length !== 1) {
-    addFailure(
-      failures,
-      "CF-7005 must record the pending runtime-evidence blocker",
-    );
+  if ((metadata.unresolvedBlockers ?? []).length !== 0) {
+    addFailure(failures, "CF-7005 unresolved blockers must be empty");
   }
-  if ((metadata.pendingRuntimeEvidence ?? []).length !== 5) {
-    addFailure(failures, "CF-7005 pending runtime evidence is incomplete");
+  if ((metadata.pendingRuntimeEvidence ?? []).length !== 0) {
+    addFailure(failures, "CF-7005 pending runtime evidence must be empty");
+  }
+  if ((metadata.completedRuntimeEvidence ?? []).length !== 5) {
+    addFailure(failures, "CF-7005 completed runtime evidence is incomplete");
   }
   if ((metadata.completedStaticEvidence ?? []).length < 10) {
     addFailure(failures, "CF-7005 completed static evidence is incomplete");
@@ -168,10 +168,10 @@ function verifyFixture(root, failures) {
   if (fixture.frameworkRuntime !== `Vue ${vueVersion}`) {
     addFailure(failures, `Vue fixture runtime must be Vue ${vueVersion}`);
   }
-  if (fixture.verificationStatus !== "runtime-pending") {
+  if (fixture.verificationStatus !== "runtime-verified") {
     addFailure(
       failures,
-      "Vue fixture verification status must be runtime-pending",
+      "Vue fixture verification status must be runtime-verified",
     );
   }
   if (fixture.modelAdapterDecision !== "separate-cf-7006-adapter-required") {
@@ -196,10 +196,10 @@ function verifyFixture(root, failures) {
     if (manifestFixture.directory !== "tests/consumers/vue") {
       addFailure(failures, "Vue manifest directory is invalid");
     }
-    if (manifestFixture.verificationStatus !== "runtime-pending") {
+    if (manifestFixture.verificationStatus !== "runtime-verified") {
       addFailure(
         failures,
-        "Vue manifest verification status must be runtime-pending",
+        "Vue manifest verification status must be runtime-verified",
       );
     }
     for (const file of manifestFixture.exampleFiles ?? []) {
@@ -208,8 +208,11 @@ function verifyFixture(root, failures) {
       }
     }
   }
-  if (manifest.currentBatch !== "CF-7005") {
-    addFailure(failures, "consumer manifest currentBatch must be CF-7005");
+  if (manifest.currentBatch !== "CF-7006-CF-7007") {
+    addFailure(
+      failures,
+      "consumer manifest currentBatch must be CF-7006-CF-7007",
+    );
   }
 
   if (packageJson.dependencies?.vue !== vueVersion) {
@@ -396,18 +399,15 @@ function verifyRepositoryIntegration(root, failures) {
   const framework = (architecture.frameworks ?? []).find(
     (entry) => entry.id === "vue",
   );
-  if ((architecture.program?.verifiedConsumers ?? []).includes("vue")) {
-    addFailure(
-      failures,
-      "Vue must not be listed as verified before runtime passes",
-    );
+  if (!(architecture.program?.verifiedConsumers ?? []).includes("vue")) {
+    addFailure(failures, "Vue must be listed as a verified consumer");
   }
   if (
-    !(architecture.program?.runtimeVerificationCandidates ?? []).includes("vue")
+    (architecture.program?.runtimeVerificationCandidates ?? []).includes("vue")
   ) {
     addFailure(
       failures,
-      "Vue must be listed as a runtime verification candidate",
+      "Vue must not remain a runtime verification candidate",
     );
   }
   if (framework?.betaClaim !== expectedBetaClaim) {
@@ -430,7 +430,7 @@ function verifyRepositoryIntegration(root, failures) {
     (entry) => entry.task === "CF-7005",
   );
   if (
-    followOn?.status !== "in-progress" ||
+    followOn?.status !== "done" ||
     followOn?.claim !== expectedFixtureClaim ||
     followOn?.evidence !== "docs/metadata/vue-consumer.json"
   ) {
@@ -450,10 +450,10 @@ function verifyRepositoryIntegration(root, failures) {
       addFailure(failures, `consumer runtime is missing Vue marker ${marker}`);
     }
   }
-  if (!docsText.includes("packed-vue-runtime-ready")) {
+  if (!docsText.includes("packed-vue-runtime-verified")) {
     addFailure(
       failures,
-      "consumer fixture documentation must record Vue runtime readiness",
+      "consumer fixture documentation must record Vue runtime verification",
     );
   }
 }

@@ -49,7 +49,7 @@ npm run verify:angular-consumer:runtime
 npm run quality
 ```
 
-GMF4 remains in progress. CF-7005 supplies the Vue packed-consumer fixture and
-runtime verifier, but clean build and Chromium evidence remain pending. Vue
+GMF4 remains in progress. CF-7005 verifies the Vue packed consumer through clean build and Chromium
+evidence. Vue
 `v-model`, the shared browser and accessibility matrices, documentation
 generation, and final compatibility review remain S7 work.

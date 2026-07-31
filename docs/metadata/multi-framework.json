@@ -10,7 +10,7 @@
     "gate": "GMF4",
     "status": "consumer-foundation-complete",
     "firstClassRenderers": ["react", "native-html"],
-    "verifiedConsumers": ["angular"],
+    "verifiedConsumers": ["angular", "vue"],
     "excludedPlatforms": [
       "react-native",
       "flutter",
@@ -20,7 +20,7 @@
     ],
     "deferredPackages": ["@vyrnforge/ui-data-grid"],
     "currentSprint": "S7",
-    "runtimeVerificationCandidates": ["vue"]
+    "runtimeVerificationCandidates": []
   },
   "packages": [
     {
@@ -125,7 +125,7 @@
       "supportLevel": "verified-consumer",
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/vue",
-      "betaClaim": "runtime-verification-pending",
+      "betaClaim": "packed-consumer-verified",
       "consumerFoundation": "CF-7005"
     }
   ],
@@ -139,9 +139,9 @@
   },
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
-    "currentClaim": "native-html-react-angular-consumer-foundation-complete-vue-runtime-ready",
+    "currentClaim": "native-html-react-angular-vue-consumer-foundation-complete",
     "runtimeBuildGate": "GMF4",
-    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. CF-7004 proves a thin Angular Forms bridge without changing the renderer or package topology. CF-7005 supplies the Vue 3 packed-consumer fixture and verifier; its clean install, production build, and Chromium evidence remain required before the Vue support claim is promoted.",
+    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. CF-7004 proves a thin Angular Forms bridge without changing the renderer or package topology. CF-7005 proves the Vue 3 packed consumer with strict vue-tsc, production Vite output, canonical property/event/slot/native-form behavior, and Chromium evidence.",
     "evidence": "docs/metadata/consumer-foundations.json",
     "angularEvidence": "docs/metadata/angular-consumer.json",
     "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json",
@@ -253,6 +253,17 @@
     "runtimeFixture": "tests/consumers/angular",
     "supportClaim": "angular-forms-adapter-verified",
     "publishedPackage": null,
+    "gate": "GMF4",
+    "gateStatus": "in-progress"
+  },
+  "vueConsumer": {
+    "status": "complete",
+    "task": "CF-7005",
+    "storyPoints": 8,
+    "frameworkVersion": "3.5.40",
+    "metadata": "docs/metadata/vue-consumer.json",
+    "runtimeFixture": "tests/consumers/vue",
+    "supportClaim": "packed-vue-runtime-verified",
     "gate": "GMF4",
     "gateStatus": "in-progress"
   }

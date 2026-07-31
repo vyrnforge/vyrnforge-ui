@@ -295,9 +295,13 @@ function verifyFixtures(root, failures, closure, architecture) {
     );
   }
   if (
-    !new Set(["CF-7001-CF-7002-CF-7008", "CF-7003", "CF-7004", "CF-7005"]).has(
-      manifest.currentBatch,
-    )
+    !new Set([
+      "CF-7001-CF-7002-CF-7008",
+      "CF-7003",
+      "CF-7004",
+      "CF-7005",
+      "CF-7006-CF-7007",
+    ]).has(manifest.currentBatch)
   ) {
     addFailure(failures, "consumer manifest currentBatch is invalid");
   }
