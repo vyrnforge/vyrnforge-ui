@@ -13,8 +13,8 @@
     "@vyrnforge/ui-components": "0.1.0-alpha.1",
     "@vyrnforge/ui-core": "0.1.0-alpha.1",
     "@vyrnforge/ui-data-grid": "0.1.0-alpha.1",
-    "react": "*",
-    "react-dom": "*",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-live": "^4.1.8"
   },
   "devDependencies": {
