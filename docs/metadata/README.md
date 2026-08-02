@@ -6,29 +6,31 @@ queryable repository facts and evidence records.
 
 ## Files
 
-| File                                | Purpose                                                                                                                   |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `packages.json`                     | Package ownership, dependencies, CSS imports, and public entry points.                                                    |
-| `multi-framework.json`              | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy.                    |
-| `native-element-foundations.json`   | EL-6001 through EL-6018 foundation, 58-tag native catalog, form/event evidence, and passed GMF3 closure state.            |
-| `consumer-foundations.json`         | CF-7001, CF-7002, and CF-7008 packed native HTML/React consumers plus declarations and Custom Elements Manifest evidence. |
-| `angular-consumer.json`             | CF-7003 Angular 22 packed consumer, property/event, slot, form, build, and Chromium evidence.                             |
-| `angular-forms-adapter.json`        | CF-7004 Angular Forms reference adapter, supported value categories, ownership boundary, and runtime evidence.            |
-| `vue-consumer.json`                 | CF-7005 Vue 3 fixture, compiler/property/event/slot/form contract, verifier, and completed runtime evidence.              |
-| `native-core-elements.json`         | EL-6005 through EL-6011 canonical 40-tag core renderer wave and browser evidence.                                         |
-| `native-advanced-elements.json`     | EL-6012 through EL-6017 canonical 14-tag advanced renderer wave and browser evidence.                                     |
-| `gmf3-closure.json`                 | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims.          |
-| `component-contracts.json`          | Canonical cross-framework events, slots, form association, and representative component contracts.                        |
-| `component-contract.schema.json`    | JSON Schema for the canonical multi-framework component contract catalog.                                                 |
-| `components.json`                   | Canonical normalized component and public-contract catalog, including maturity evidence.                                  |
-| `component-schema.md`               | Field definitions and contributor workflow for canonical component metadata.                                              |
-| `assistive-technology-reviews.json` | Canonical manual screen-reader environment, scenario, and result status.                                                  |
-| `design-tokens.json`                | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.                        |
-| `visual-regression-matrix.json`     | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.                            |
-| `g3-closure.json`                   | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                                           |
-| `css-imports.json`                  | Required CSS import order and styling ownership.                                                                          |
-| `state-contracts.json`              | State ownership levels and adapter policies.                                                                              |
-| `ai-usage-rules.json`               | AI-specific usage rules and constraints.                                                                                  |
+| File                                  | Purpose                                                                                                                   |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `packages.json`                       | Package ownership, dependencies, CSS imports, and public entry points.                                                    |
+| `multi-framework.json`                | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy.                    |
+| `native-element-foundations.json`     | EL-6001 through EL-6018 foundation, 58-tag native catalog, form/event evidence, and passed GMF3 closure state.            |
+| `consumer-foundations.json`           | CF-7001, CF-7002, and CF-7008 packed native HTML/React consumers plus declarations and Custom Elements Manifest evidence. |
+| `angular-consumer.json`               | CF-7003 Angular 22 packed consumer, property/event, slot, form, build, and Chromium evidence.                             |
+| `angular-forms-adapter.json`          | CF-7004 Angular Forms reference adapter, supported value categories, ownership boundary, and runtime evidence.            |
+| `vue-consumer.json`                   | CF-7005 Vue 3 fixture, compiler/property/event/slot/form contract, verifier, and completed runtime evidence.              |
+| `cross-framework-browser-matrix.json` | CF-7009 shared packed browser matrix, normalized report, trace artifact, and support-claim status.                        |
+| `component-reference-program.json`    | CF-7011/CF-7012 generated framework-tab and component-contract reference verification status.                             |
+| `native-core-elements.json`           | EL-6005 through EL-6011 canonical 40-tag core renderer wave and browser evidence.                                         |
+| `native-advanced-elements.json`       | EL-6012 through EL-6017 canonical 14-tag advanced renderer wave and browser evidence.                                     |
+| `gmf3-closure.json`                   | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims.          |
+| `component-contracts.json`            | Canonical cross-framework events, slots, form association, and representative component contracts.                        |
+| `component-contract.schema.json`      | JSON Schema for the canonical multi-framework component contract catalog.                                                 |
+| `components.json`                     | Canonical normalized component and public-contract catalog, including maturity evidence.                                  |
+| `component-schema.md`                 | Field definitions and contributor workflow for canonical component metadata.                                              |
+| `assistive-technology-reviews.json`   | Canonical manual screen-reader environment, scenario, and result status.                                                  |
+| `design-tokens.json`                  | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.                        |
+| `visual-regression-matrix.json`       | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.                            |
+| `g3-closure.json`                     | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                                           |
+| `css-imports.json`                    | Required CSS import order and styling ownership.                                                                          |
+| `state-contracts.json`                | State ownership levels and adapter policies.                                                                              |
+| `ai-usage-rules.json`                 | AI-specific usage rules and constraints.                                                                                  |
 
 ## Multi-framework architecture metadata
 
@@ -41,9 +43,10 @@ contract, and representative renderer-neutral component records.
 GMF3 marks the native renderer evidence complete. React and native HTML have
 packed runtime evidence, CF-7003 adds Angular 22 packed runtime evidence, and
 CF-7004 adds Angular reactive/template-driven Forms adapter evidence without a
-new published package. CF-7005 verifies the Vue 3 packed consumer and records the separate CF-7006
-`v-model` adapter boundary. The clean build and Chromium matrix pass; GMF4
-remains in progress for the remaining S7 work.
+new published package. CF-7005 verifies the Vue 3 packed consumer and CF-7006 verifies the thin
+`v-model` reference adapter. CF-7007 verifies SSR/bundler compatibility. CF-7009
+adds the shared cross-framework packed browser matrix while GMF4 remains in
+progress for the remaining S7 work.
 
 ```bash
 npm run test:multi-framework

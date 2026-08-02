@@ -114,6 +114,8 @@ Q1 quality docs define the stabilization bar for current components. They do not
 | `testing/angular-forms-adapter-contract.md`    | CF-7004 Angular reactive/template-driven Forms bridge, ownership boundary, and browser evidence.                    |
 | `testing/vue-consumer-contract.md`             | CF-7005 Vue 3 packed-consumer contract and completed runtime evidence.                                              |
 | `testing/vue-model-adapter-contract.md`        | CF-7006 thin Vue `v-model` reference adapter contract and runtime evidence boundary.                                |
+| `testing/cross-framework-browser-matrix.md`    | CF-7009 shared packed browser scenarios, normalized report, and Playwright trace evidence.                          |
+| `testing/generated-component-reference.md`     | CF-7011/CF-7012 generated framework tabs and contract-reference derivation rules.                                   |
 
 ## 8. Release Governance
 
@@ -148,12 +150,13 @@ npm run dev:docs
 npm run build:docs
 ```
 
-| Document                               | Purpose                                                 |
-| -------------------------------------- | ------------------------------------------------------- |
-| `react-docs/00-react-docs-app-spec.md` | Specification for the human-facing docs/playground app. |
-| `react-docs/01-route-map.md`           | Required route structure.                               |
-| `react-docs/02-example-standards.md`   | Rules for examples, snippets, and use-case pages.       |
-| `react-docs/03-ai-readable-docs.md`    | How docs should expose machine-readable context.        |
+| Document                               | Purpose                                                                                                 |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `react-docs/00-react-docs-app-spec.md` | Specification for the human-facing docs/playground app.                                                 |
+| `react-docs/01-route-map.md`           | Required route structure.                                                                               |
+| `react-docs/02-example-standards.md`   | Rules for examples, snippets, and use-case pages.                                                       |
+| `react-docs/03-ai-readable-docs.md`    | How docs should expose machine-readable context.                                                        |
+| `generated/component-reference.json`   | Generated CF-7011/CF-7012 component framework usage and contract reference consumed by the docs viewer. |
 
 ## 11. AI Documentation
 
@@ -170,28 +173,30 @@ npm run build:docs
 
 Markdown docs are the human source of truth. Metadata files are structured indexes for AI agents and the React docs app. Update metadata whenever public components, APIs, CSS imports, state contracts, package boundaries, or AI usage rules change.
 
-| Metadata                                  | Purpose                                                                                                                      |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `metadata/packages.json`                  | Package ownership, dependencies, CSS imports, and public entry points.                                                       |
-| `metadata/multi-framework.json`           | Renderer support levels, beta release groups, planned package topology, and fixture policy.                                  |
-| `metadata/component-contracts.json`       | Framework-neutral events, slots, form association, and representative component contracts.                                   |
-| `metadata/component-contract.schema.json` | JSON Schema for the canonical multi-framework component contract catalog.                                                    |
-| `metadata/components.json`                | Canonical normalized component and public-contract catalog, including maturity, ownership, routes, exports, and evidence.    |
-| `metadata/design-tokens.json`             | Canonical semantic token categories, theme coverage, density aliases, motion, layers, and compatibility bridges.             |
-| `metadata/visual-regression-matrix.json`  | Canonical VF-3011 visual suites, theme/density dimensions, targets, and token expectations.                                  |
-| `metadata/g3-closure.json`                | Machine-readable VF-3012 task/evidence inventory and G3 closure state.                                                       |
-| `metadata/gmf3-closure.json`              | Machine-readable EL-6018 native non-grid parity inventory, renderer mappings, and GMF3 closure state.                        |
-| `metadata/consumer-foundations.json`      | Machine-readable CF-7001, CF-7002, and CF-7008 packed consumer, declaration, and Custom Elements Manifest evidence.          |
-| `metadata/angular-consumer.json`          | Machine-readable CF-7003 Angular 22 packed consumer and GMF4 evidence.                                                       |
-| `metadata/angular-forms-adapter.json`     | Machine-readable CF-7004 Angular Forms adapter scope, contracts, supported tags, and evidence.                               |
-| `metadata/vue-consumer.json`              | Machine-readable CF-7005 Vue 3 fixture, verifier, adapter decision, and completed runtime evidence.                          |
-| `metadata/vue-model-adapter.json`         | Machine-readable CF-7006 Vue `v-model` adapter ownership, contracts, and verification status.                                |
-| `metadata/ssr-bundler-compatibility.json` | Machine-readable CF-7007 server import and bundler matrix evidence.                                                          |
-| `metadata/component-schema.md`            | Canonical component metadata schema and contributor workflow.                                                                |
-| `metadata/css-imports.json`               | CSS import order and styling ownership.                                                                                      |
-| `metadata/state-contracts.json`           | State ownership and adapter policies.                                                                                        |
-| `metadata/ai-usage-rules.json`            | AI-specific usage rules and dependency constraints.                                                                          |
-| `../.ai/COMPONENT_MAP.json`               | Compact AI navigation and usage notes; it consumes the canonical component catalog rather than repeating component maturity. |
+| Metadata                                       | Purpose                                                                                                                      |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `metadata/packages.json`                       | Package ownership, dependencies, CSS imports, and public entry points.                                                       |
+| `metadata/multi-framework.json`                | Renderer support levels, beta release groups, planned package topology, and fixture policy.                                  |
+| `metadata/component-contracts.json`            | Framework-neutral events, slots, form association, and representative component contracts.                                   |
+| `metadata/component-contract.schema.json`      | JSON Schema for the canonical multi-framework component contract catalog.                                                    |
+| `metadata/components.json`                     | Canonical normalized component and public-contract catalog, including maturity, ownership, routes, exports, and evidence.    |
+| `metadata/design-tokens.json`                  | Canonical semantic token categories, theme coverage, density aliases, motion, layers, and compatibility bridges.             |
+| `metadata/visual-regression-matrix.json`       | Canonical VF-3011 visual suites, theme/density dimensions, targets, and token expectations.                                  |
+| `metadata/g3-closure.json`                     | Machine-readable VF-3012 task/evidence inventory and G3 closure state.                                                       |
+| `metadata/gmf3-closure.json`                   | Machine-readable EL-6018 native non-grid parity inventory, renderer mappings, and GMF3 closure state.                        |
+| `metadata/consumer-foundations.json`           | Machine-readable CF-7001, CF-7002, and CF-7008 packed consumer, declaration, and Custom Elements Manifest evidence.          |
+| `metadata/angular-consumer.json`               | Machine-readable CF-7003 Angular 22 packed consumer and GMF4 evidence.                                                       |
+| `metadata/angular-forms-adapter.json`          | Machine-readable CF-7004 Angular Forms adapter scope, contracts, supported tags, and evidence.                               |
+| `metadata/vue-consumer.json`                   | Machine-readable CF-7005 Vue 3 fixture, verifier, adapter decision, and completed runtime evidence.                          |
+| `metadata/vue-model-adapter.json`              | Machine-readable CF-7006 Vue `v-model` adapter ownership, contracts, and verification status.                                |
+| `metadata/ssr-bundler-compatibility.json`      | Machine-readable CF-7007 server import and bundler matrix evidence.                                                          |
+| `metadata/cross-framework-browser-matrix.json` | Machine-readable CF-7009 shared browser scenarios, trace/report paths, and runtime evidence status.                          |
+| `metadata/component-reference-program.json`    | Machine-readable CF-7011/CF-7012 generated framework-tab and contract-reference verification status.                         |
+| `metadata/component-schema.md`                 | Canonical component metadata schema and contributor workflow.                                                                |
+| `metadata/css-imports.json`                    | CSS import order and styling ownership.                                                                                      |
+| `metadata/state-contracts.json`                | State ownership and adapter policies.                                                                                        |
+| `metadata/ai-usage-rules.json`                 | AI-specific usage rules and dependency constraints.                                                                          |
+| `../.ai/COMPONENT_MAP.json`                    | Compact AI navigation and usage notes; it consumes the canonical component catalog rather than repeating component maturity. |
 
 ## 13. Templates
 
