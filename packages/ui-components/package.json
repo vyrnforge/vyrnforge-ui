@@ -54,12 +54,12 @@
     "react-dom": ">=18 <20"
   },
   "devDependencies": {
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "tsup": "latest",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tsup": "*",
     "typescript": "7.0.2",
-    "vitest": "latest"
+    "vitest": "*"
   }
 }
