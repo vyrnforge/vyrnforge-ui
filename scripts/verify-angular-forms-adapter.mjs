@@ -2,6 +2,8 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { isConsumerBatchAtLeast } from "./consumer-batch-progression.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -265,7 +267,7 @@ function verifyFixture(root, failures) {
   }
 
   const manifest = readJson(root, "tests/consumers/manifest.json");
-  if (!new Set(["CF-7005", "CF-7006-CF-7007"]).has(manifest.currentBatch)) {
+  if (!isConsumerBatchAtLeast(manifest.currentBatch, "CF-7005")) {
     addFailure(failures, "consumer manifest currentBatch is invalid");
   }
   const angularFixture = (manifest.fixtures ?? []).find(

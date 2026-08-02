@@ -3,6 +3,8 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { currentConsumerBatch } from "./consumer-batch-progression.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -294,16 +296,11 @@ function verifyFixtures(root, failures, closure, architecture) {
       "consumer manifest must record partial-gmf4-runtime-evidence",
     );
   }
-  if (
-    !new Set([
-      "CF-7001-CF-7002-CF-7008",
-      "CF-7003",
-      "CF-7004",
-      "CF-7005",
-      "CF-7006-CF-7007",
-    ]).has(manifest.currentBatch)
-  ) {
-    addFailure(failures, "consumer manifest currentBatch is invalid");
+  if (manifest.currentBatch !== currentConsumerBatch) {
+    addFailure(
+      failures,
+      `consumer manifest currentBatch must be ${currentConsumerBatch}`,
+    );
   }
 
   const closureFixtures = new Map(

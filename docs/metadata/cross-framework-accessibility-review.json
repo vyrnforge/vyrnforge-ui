@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "task": "CF-7010",
+    "sprint": "S7",
+    "storyPoints": 8,
+    "gate": "GMF4",
+    "status": "evidence-complete"
+  },
+  "supportClaim": "cross-framework-accessibility-verified",
+  "predecessors": ["CF-7009"],
+  "consumers": ["native-html", "react", "angular", "vue"],
+  "representativeComponents": ["button", "tabs", "text-input"],
+  "automatedReview": {
+    "command": "npm run verify:cross-framework-accessibility:runtime",
+    "report": "test-results/cross-framework-matrix/accessibility-report.json",
+    "artifactName": "cross-framework-browser-matrix",
+    "scenarios": [
+      {
+        "id": "axe-serious-critical",
+        "expectation": "Axe reports no serious or critical violation on the representative packed-consumer page."
+      },
+      {
+        "id": "keyboard-action-activation",
+        "expectation": "The primary VyrnForge action is focusable and activates from Enter with observable consumer state."
+      },
+      {
+        "id": "keyboard-tabs-navigation",
+        "expectation": "Arrow navigation moves focus and selected state between the first two enabled tabs, then restores the first tab."
+      },
+      {
+        "id": "text-input-accessible-name",
+        "expectation": "The representative text input exposes the accessible name Owner and accepts keyboard focus."
+      }
+    ]
+  },
+  "manualReview": {
+    "required": true,
+    "assistiveTechnology": "NVDA",
+    "browser": "Chrome",
+    "operatingSystem": "Windows",
+    "evidence": "docs/quality/assistive-technology-results/cf-7010-cross-framework-nvda.json",
+    "status": "complete",
+    "checklist": "docs/testing/cross-framework-accessibility-review.md"
+  },
+  "requiredCommands": [
+    "npm run verify:cross-framework-accessibility",
+    "npm run test:cross-framework-accessibility",
+    "npm run verify:cross-framework-accessibility:runtime",
+    "npm run review:cross-framework-accessibility",
+    "npm run quality"
+  ],
+  "evidence": [
+    "docs/testing/cross-framework-accessibility-review.md",
+    "scripts/verify-cross-framework-accessibility.mjs",
+    "scripts/serve-cross-framework-accessibility-review.mjs",
+    "scripts/verify-consumer-foundations-runtime.mjs",
+    ".github/workflows/_consumer.yml"
+  ],
+  "unresolvedBlockers": [],
+  "completedEvidence": [
+    "Axe reported no serious or critical violation in each packed consumer.",
+    "Representative action, tabs, and text-input keyboard checks passed in all four consumers.",
+    "A named Windows + Chrome + NVDA review passed for Native HTML, React, Angular, and Vue.",
+    "Accessibility owner approval is recorded in the canonical CF-7010 evidence file."
+  ]
+}

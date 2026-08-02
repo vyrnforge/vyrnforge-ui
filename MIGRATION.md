@@ -14,6 +14,16 @@ Breaking changes may happen in minor releases before `1.0.0`, including changes 
 
 Consumers should pin exact versions during `0.x` adoption and review the changelog before upgrading.
 
+## Multi-Framework Beta Migration
+
+The canonical React, Native HTML, Angular, and Vue migration and limitations guide is:
+
+```text
+docs/release/multi-framework-migration-and-limitations.md
+```
+
+Use it to choose React components versus native elements, apply the verified Angular Forms and Vue `v-model` adapter boundaries, and understand the current SSR, mobile-native, and data-grid exclusions.
+
 ## Native-First Direction
 
 This package is intentionally native-first and lightweight. It does not depend on MUI, TanStack Table, TanStack Virtual, Redux, RTK Query, or other runtime frameworks.

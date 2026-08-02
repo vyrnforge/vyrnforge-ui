@@ -31,7 +31,8 @@ vf-inline-message.vf-inline-message--success {
   background: var(--vf-status-success-background);
 }
 
-vf-inline-message.vf-inline-message--success .vf-inline-message__title {
+vf-inline-message.vf-inline-message--success .vf-inline-message__title,
+vf-inline-message.vf-inline-message--success .vf-inline-message__content {
   color: var(--vf-status-success-text);
 }
 
@@ -40,7 +41,8 @@ vf-inline-message.vf-inline-message--warning {
   background: var(--vf-status-warning-background);
 }
 
-vf-inline-message.vf-inline-message--warning .vf-inline-message__title {
+vf-inline-message.vf-inline-message--warning .vf-inline-message__title,
+vf-inline-message.vf-inline-message--warning .vf-inline-message__content {
   color: var(--vf-status-warning-text);
 }
 
@@ -49,7 +51,8 @@ vf-inline-message.vf-inline-message--danger {
   background: var(--vf-status-error-background);
 }
 
-vf-inline-message.vf-inline-message--danger .vf-inline-message__title {
+vf-inline-message.vf-inline-message--danger .vf-inline-message__title,
+vf-inline-message.vf-inline-message--danger .vf-inline-message__content {
   color: var(--vf-status-error-text);
 }
 
@@ -58,6 +61,7 @@ vf-inline-message.vf-inline-message--info {
   background: var(--vf-status-info-background);
 }
 
-vf-inline-message.vf-inline-message--info .vf-inline-message__title {
+vf-inline-message.vf-inline-message--info .vf-inline-message__title,
+vf-inline-message.vf-inline-message--info .vf-inline-message__content {
   color: var(--vf-status-info-text);
 }

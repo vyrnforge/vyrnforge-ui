@@ -23,6 +23,7 @@ import releasePolicy from "../../../docs/release/release-policy.md?raw";
 import versioningPolicy from "../../../docs/release/versioning-policy.md?raw";
 import publicationProcedure from "../../../docs/release/publication-procedure.md?raw";
 import deprecationPolicy from "../../../docs/release/deprecation-and-migration-policy.md?raw";
+import multiFrameworkMigrationGuide from "../../../docs/release/multi-framework-migration-and-limitations.md?raw";
 import releaseReadinessChecklist from "../../../docs/release/release-readiness-checklist.md?raw";
 import uiCoreDoc from "../../../docs/packages/ui-core.md?raw";
 import uiBehaviorsDoc from "../../../docs/packages/ui-behaviors.md?raw";
@@ -54,6 +55,8 @@ import metadataMultiFramework from "../../../docs/metadata/multi-framework.json?
 import metadataComponentContracts from "../../../docs/metadata/component-contracts.json?raw";
 import metadataComponentContractSchema from "../../../docs/metadata/component-contract.schema.json?raw";
 import metadataCrossFrameworkBrowserMatrix from "../../../docs/metadata/cross-framework-browser-matrix.json?raw";
+import metadataCrossFrameworkAccessibility from "../../../docs/metadata/cross-framework-accessibility-review.json?raw";
+import metadataMultiFrameworkMigrationGuide from "../../../docs/metadata/multi-framework-migration-guide.json?raw";
 import metadataComponentReferenceProgram from "../../../docs/metadata/component-reference-program.json?raw";
 import metadataCssImports from "../../../docs/metadata/css-imports.json?raw";
 import metadataStateContracts from "../../../docs/metadata/state-contracts.json?raw";
@@ -366,6 +369,19 @@ export const docsRoutes: DocsRoute[] = [
     content: deprecationPolicy,
   },
   {
+    id: "multi-framework-migration-guide",
+    title: "Multi-Framework Migration and Limitations",
+    group: "Release",
+    description:
+      "CF-7013 guidance for choosing React components or native elements, integrating Angular and Vue, and understanding beta exclusions.",
+    sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
+    aiPurpose:
+      "Use this before migrating an application to VyrnForge across React, Native HTML, Angular, or Vue.",
+    tags: ["release", "migration", "multi-framework", "gmf4"],
+    canonical: true,
+    content: multiFrameworkMigrationGuide,
+  },
+  {
     id: "release-readiness",
     title: "Release Readiness",
     group: "Release",
@@ -471,6 +487,32 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["metadata", "multi-framework", "browser", "gmf4", "json"],
     kind: "metadata",
     content: metadataCrossFrameworkBrowserMatrix,
+  },
+  {
+    id: "metadata-cross-framework-accessibility",
+    title: "Metadata / Cross-Framework Accessibility",
+    group: "Metadata",
+    description:
+      "CF-7010 Axe, keyboard, and manual Windows + Chrome + NVDA evidence state across four packed consumers.",
+    sourcePath: "docs/metadata/cross-framework-accessibility-review.json",
+    aiPurpose:
+      "Use this to determine whether cross-framework accessibility automation and named NVDA evidence are complete.",
+    tags: ["metadata", "accessibility", "multi-framework", "gmf4", "json"],
+    kind: "metadata",
+    content: metadataCrossFrameworkAccessibility,
+  },
+  {
+    id: "metadata-multi-framework-migration-guide",
+    title: "Metadata / Multi-Framework Migration Guide",
+    group: "Metadata",
+    description:
+      "CF-7013 migration and limitations guide review status and required coverage.",
+    sourcePath: "docs/metadata/multi-framework-migration-guide.json",
+    aiPurpose:
+      "Use this to verify the canonical multi-framework migration guide and its review evidence.",
+    tags: ["metadata", "migration", "multi-framework", "gmf4", "json"],
+    kind: "metadata",
+    content: metadataMultiFrameworkMigrationGuide,
   },
   {
     id: "metadata-component-reference-program",

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "task": "CF-7010",
+  "baseCommit": "5f08dbf85b3fa63c046c942eb822776938e318e5",
+  "reviewedWorkingTreeDiffHash": "8167bbd75c153e9b635c7f9e2a1f014821254431",
+  "environment": {
+    "reviewer": "DraglideX",
+    "testedAt": "2026-08-02",
+    "operatingSystem": "Windows",
+    "operatingSystemVersion": "10.0.26200 Build 26200",
+    "browser": "Chrome",
+    "browserVersion": "-",
+    "assistiveTechnology": "NVDA",
+    "nvdaVersion": "2026.1.1"
+  },
+  "consumers": [
+    {
+      "id": "native-html",
+      "outcome": "passed",
+      "checks": [
+        "Page landmark and success message were understandable without visual-only context.",
+        "Save action name, button role, keyboard activation, and updated status were understandable.",
+        "Tabs exposed names, selected state, position, arrow movement, and panel relationship.",
+        "Owner input exposed its name and current value.",
+        "Focus order and announcements had no framework-specific duplicate, missing, or stale behavior."
+      ],
+      "notes": "-"
+    },
+    {
+      "id": "react",
+      "outcome": "passed",
+      "checks": [
+        "Page landmark and success message were understandable without visual-only context.",
+        "Save action name, button role, keyboard activation, and updated status were understandable.",
+        "Tabs exposed names, selected state, position, arrow movement, and panel relationship.",
+        "Owner input exposed its name and current value.",
+        "Focus order and announcements had no framework-specific duplicate, missing, or stale behavior."
+      ],
+      "notes": "-"
+    },
+    {
+      "id": "angular",
+      "outcome": "passed",
+      "checks": [
+        "Page landmark and success message were understandable without visual-only context.",
+        "Save action name, button role, keyboard activation, and updated status were understandable.",
+        "Tabs exposed names, selected state, position, arrow movement, and panel relationship.",
+        "Owner input exposed its name and current value.",
+        "Focus order and announcements had no framework-specific duplicate, missing, or stale behavior."
+      ],
+      "notes": "-"
+    },
+    {
+      "id": "vue",
+      "outcome": "passed",
+      "checks": [
+        "Page landmark and success message were understandable without visual-only context.",
+        "Save action name, button role, keyboard activation, and updated status were understandable.",
+        "Tabs exposed names, selected state, position, arrow movement, and panel relationship.",
+        "Owner input exposed its name and current value.",
+        "Focus order and announcements had no framework-specific duplicate, missing, or stale behavior."
+      ],
+      "notes": "-"
+    }
+  ],
+  "approval": {
+    "approvedBy": "draglide",
+    "approvedAt": "2026-08-02"
+  },
+  "automatedReport": "test-results/cross-framework-matrix/accessibility-report.json"
+}

@@ -20,6 +20,7 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
     Object.freeze({
       autocomplete: { reflect: true, type: "string" },
       invalid: { reflect: true, type: "boolean" },
+      label: { reflect: true, type: "string" },
       max: { reflect: true, type: "number" },
       min: { reflect: true, type: "number" },
       mode: { reflect: true, type: "string" },
@@ -44,6 +45,13 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
   }
   set invalid(value: boolean) {
     this.setPropertyValue("invalid", Boolean(value));
+  }
+
+  get label(): string {
+    return this.getPropertyValue("label", "");
+  }
+  set label(value: string) {
+    this.setPropertyValue("label", value);
   }
 
   get max(): number | null {
@@ -159,6 +167,14 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
       control.setAttribute("autocomplete", this.autocomplete);
     else control.removeAttribute("autocomplete");
     control.setAttribute("aria-invalid", String(this.invalid));
+    const accessibleLabel =
+      this.label ||
+      Array.from(this.labels ?? [])
+        .map((label) => label.textContent?.trim() ?? "")
+        .filter(Boolean)
+        .join(" ");
+    if (accessibleLabel) control.setAttribute("aria-label", accessibleLabel);
+    else control.removeAttribute("aria-label");
 
     if (control instanceof HTMLInputElement) {
       control.type =

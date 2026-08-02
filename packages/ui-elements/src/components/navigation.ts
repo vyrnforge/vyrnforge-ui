@@ -32,6 +32,7 @@ export class VyrnForgeTabsElement extends VyrnForgeDomElement {
     });
 
   #controller: TabsController | null = null;
+  #pendingFocusValue: string | null = null;
   readonly #id = `vf-tabs-${++tabsSequence}`;
 
   get activationMode(): "automatic" | "manual" {
@@ -140,6 +141,15 @@ export class VyrnForgeTabsElement extends VyrnForgeDomElement {
         selected?.content === undefined ? "" : String(selected.content);
 
     this.replaceChildren(list, panel);
+
+    const pendingFocusValue = this.#pendingFocusValue;
+    this.#pendingFocusValue = null;
+    if (pendingFocusValue) {
+      this.querySelector<HTMLButtonElement>(
+        `[data-tab-id="${CSS.escape(pendingFocusValue)}"]`,
+      )?.focus();
+    }
+
     this.setAttribute("data-vf-element", "");
   }
 
@@ -187,6 +197,7 @@ export class VyrnForgeTabsElement extends VyrnForgeDomElement {
       this.activationMode === "manual"
     ) {
       event.preventDefault();
+      this.#pendingFocusValue = tab.dataset.tabId ?? null;
       this.select(tab.dataset.tabId ?? "", "keyboard");
       return;
     }
@@ -198,6 +209,7 @@ export class VyrnForgeTabsElement extends VyrnForgeDomElement {
       `[data-tab-id="${CSS.escape(next)}"]`,
     )?.focus();
     if (this.activationMode === "automatic") {
+      this.#pendingFocusValue = next;
       this.commitSelection(next, "keyboard");
     }
   };

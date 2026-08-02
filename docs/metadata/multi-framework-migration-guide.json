@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "task": "CF-7013",
+    "sprint": "S7",
+    "storyPoints": 5,
+    "gate": "GMF4",
+    "status": "evidence-complete"
+  },
+  "supportClaim": "multi-framework-migration-guide-verified",
+  "predecessors": ["CF-7011", "CF-7012"],
+  "guide": "docs/release/multi-framework-migration-and-limitations.md",
+  "reviewEvidence": "docs/quality/documentation-reviews/cf-7013-multi-framework-migration-guide.json",
+  "requiredTopics": [
+    "React components versus native elements",
+    "Native HTML setup",
+    "Angular integration and Forms adapter boundary",
+    "Vue integration and v-model adapter boundary",
+    "beta guarantees and exclusions",
+    "SSR and bundler limitations",
+    "data-grid deferred scope",
+    "state-management independence",
+    "0.x migration and version pinning"
+  ],
+  "requiredCommands": [
+    "npm run verify:multi-framework-migration-guide",
+    "npm run test:multi-framework-migration-guide",
+    "npm run build:docs",
+    "npm run quality"
+  ],
+  "unresolvedBlockers": [],
+  "completedEvidence": [
+    "The canonical guide is published in the release documentation and docs application.",
+    "React versus native-element selection and Native HTML, Angular, and Vue migration paths are documented.",
+    "Beta guarantees, SSR limitations, state-management independence, and deferred data-grid scope are explicit.",
+    "A named documentation reviewer confirmed every required topic."
+  ]
+}
