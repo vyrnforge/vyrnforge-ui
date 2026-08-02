@@ -78,10 +78,15 @@
         "@vyrnforge/ui-elements/styles/index.css"
       ],
       "registeredPublicTags": 58,
-      "currentBatch": "CF-7001-CF-7002-CF-7008",
+      "currentBatch": "CF-7009-CF-7011-CF-7012",
       "gateStatus": "gmf4-in-progress",
       "publicMetadata": "@vyrnforge/ui-elements/custom-elements.json",
-      "consumerEvidence": ["native-html", "react-custom-elements"]
+      "consumerEvidence": [
+        "native-html",
+        "react-custom-elements",
+        "angular",
+        "vue"
+      ]
     },
     "@vyrnforge/ui-data-grid": {
       "status": "react-alpha-deferred",

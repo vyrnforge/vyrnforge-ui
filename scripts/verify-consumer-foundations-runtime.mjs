@@ -7,6 +7,7 @@ import {
   readFileSync,
   readdirSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -89,9 +90,27 @@ const fixtures = requestedFixture
   : allFixtures;
 const buildOnly = process.argv.includes("--build-only");
 
+function readCliValue(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
+}
+
+const matrixReportArgument = readCliValue("--matrix-report");
+const traceDirectoryArgument = readCliValue("--trace-dir");
+const matrixMode = Boolean(matrixReportArgument || traceDirectoryArgument);
+const matrixResults = [];
+
 assert(
   fixtures.length > 0,
   `Unknown consumer fixture ${String(requestedFixture)}`,
+);
+assert(
+  !matrixMode || !requestedFixture,
+  "Cross-framework matrix mode must run all consumer fixtures together.",
+);
+assert(
+  !matrixMode || (matrixReportArgument && traceDirectoryArgument),
+  "Cross-framework matrix mode requires both --matrix-report and --trace-dir.",
 );
 
 function assert(condition, message) {
@@ -333,9 +352,31 @@ async function waitForServer(url, processHandle) {
   throw new Error(`Timed out waiting for ${url}`);
 }
 
-function stopProcess(processHandle) {
-  if (!processHandle || processHandle.exitCode !== null) return;
+function waitForProcessExit(processHandle, timeoutMs) {
+  if (!processHandle || processHandle.exitCode !== null) {
+    return Promise.resolve(true);
+  }
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = (exited) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      processHandle.off("exit", onExit);
+      resolve(exited);
+    };
+    const onExit = () => finish(true);
+    const timer = setTimeout(() => finish(false), timeoutMs);
+    processHandle.once("exit", onExit);
+  });
+}
+
+async function stopProcess(processHandle) {
+  if (!processHandle) return;
+
   if (process.platform === "win32") {
+    if (processHandle.exitCode !== null) return;
     try {
       execFileSync(
         "taskkill",
@@ -345,9 +386,101 @@ function stopProcess(processHandle) {
     } catch {
       processHandle.kill();
     }
-  } else {
-    processHandle.kill("SIGTERM");
+    await waitForProcessExit(processHandle, 5_000);
+    return;
   }
+
+  const signalProcessGroup = (signal) => {
+    try {
+      process.kill(-processHandle.pid, signal);
+    } catch {
+      try {
+        processHandle.kill(signal);
+      } catch {
+        // The preview process already exited between checks.
+      }
+    }
+  };
+
+  signalProcessGroup("SIGTERM");
+  if (
+    processHandle.exitCode === null &&
+    !(await waitForProcessExit(processHandle, 5_000))
+  ) {
+    signalProcessGroup("SIGKILL");
+    await waitForProcessExit(processHandle, 5_000);
+  }
+}
+
+async function waitForSharedMatrixStatus(page, expectedText) {
+  await page.waitForFunction(
+    ({ selector, expectedText: text }) =>
+      document.querySelector(selector)?.textContent?.includes(text) === true,
+    { selector: "[data-consumer-status]", expectedText },
+  );
+}
+
+const matrixSelectors = Object.freeze({
+  "native-html": {
+    action: "#native-save > button[data-vf-action-control]",
+    input: 'vf-text-input[name="owner"] input',
+    actionText: "Action: save",
+  },
+  react: {
+    action: "vf-button > button[data-vf-action-control]",
+    input: "vf-text-input input",
+    actionText: "react-save",
+  },
+  angular: {
+    action: "#angular-save > button[data-vf-action-control]",
+    input: 'vf-text-input[name="owner"] input',
+    actionText: "angular-save",
+  },
+  vue: {
+    action: "#vue-save > button[data-vf-action-control]",
+    input: 'vf-text-input[name="ownerPreview"] input',
+    actionText: "vue-save",
+  },
+});
+
+async function verifySharedMatrixScenario(page, fixture) {
+  const selectors = matrixSelectors[fixture.id];
+  assert(selectors, `Missing shared matrix selectors for ${fixture.id}`);
+
+  await page.waitForSelector('[data-consumer-ready="true"]');
+
+  const actionControl = page.locator(selectors.action);
+  await actionControl.waitFor({ state: "visible" });
+  await actionControl.click();
+  await page.waitForSelector('[data-consumer-action="received"]');
+  await waitForSharedMatrixStatus(page, selectors.actionText);
+
+  const statusText =
+    (await page.locator("[data-consumer-status]").textContent()) ?? "";
+  assert(
+    statusText.includes(selectors.actionText),
+    `${fixture.id}: canonical vf-action scenario diverged`,
+  );
+
+  assert(
+    await page.getByRole("tab", { name: "Summary" }).isVisible(),
+    `${fixture.id}: vf-tabs items property scenario diverged`,
+  );
+
+  const inputValue = await page.locator(selectors.input).inputValue();
+  assert(
+    inputValue === "Operations",
+    `${fixture.id}: vf-text-input value property scenario diverged`,
+  );
+
+  return Object.freeze({
+    consumer: fixture.id,
+    scenarios: Object.freeze({
+      "canonical-action-event": true,
+      "tabs-property-assignment": true,
+      "text-input-value-property": true,
+    }),
+  });
 }
 
 async function verifyBrowserFixture(browser, fixture) {
@@ -367,10 +500,12 @@ async function verifyBrowserFixture(browser, fixture) {
     cwd: fixtureDirectory,
     env: process.env,
     stdio: ["ignore", "pipe", "pipe"],
+    detached: process.platform !== "win32",
   });
 
   let serverOutput = "";
   const browserDiagnostics = [];
+  let context = null;
   server.stdout?.on("data", (chunk) => {
     serverOutput += chunk.toString();
   });
@@ -380,7 +515,15 @@ async function verifyBrowserFixture(browser, fixture) {
 
   try {
     await waitForServer(url, server);
-    const page = await browser.newPage();
+    context = await browser.newContext();
+    if (matrixMode) {
+      await context.tracing.start({
+        screenshots: true,
+        snapshots: true,
+        sources: true,
+      });
+    }
+    const page = await context.newPage();
     page.on("console", (message) => {
       if (message.type() === "error" || message.type() === "warning") {
         browserDiagnostics.push(`console.${message.type()}: ${message.text()}`);
@@ -391,6 +534,10 @@ async function verifyBrowserFixture(browser, fixture) {
     });
 
     await page.goto(url, { waitUntil: "networkidle" });
+
+    if (matrixMode) {
+      matrixResults.push(await verifySharedMatrixScenario(page, fixture));
+    }
 
     if (fixture.id === "native-html") {
       await page.waitForSelector('[data-consumer-ready="true"]');
@@ -754,6 +901,17 @@ async function verifyBrowserFixture(browser, fixture) {
     }
 
     await page.close();
+    if (matrixMode) {
+      const traceDirectory = path.resolve(
+        repositoryRoot,
+        traceDirectoryArgument,
+      );
+      mkdirSync(traceDirectory, { recursive: true });
+      await context.tracing.stop({
+        path: path.join(traceDirectory, `${fixture.id}.zip`),
+      });
+    }
+    await context.close();
     console.log(`RUNTIME ${fixture.id}: packed build and Chromium passed.`);
   } catch (error) {
     const diagnostics =
@@ -762,7 +920,29 @@ async function verifyBrowserFixture(browser, fixture) {
       `${fixture.id} browser verification failed: ${error.message}\n${serverOutput}${diagnostics}`,
     );
   } finally {
-    stopProcess(server);
+    if (context) {
+      try {
+        if (matrixMode) {
+          const traceDirectory = path.resolve(
+            repositoryRoot,
+            traceDirectoryArgument,
+          );
+          mkdirSync(traceDirectory, { recursive: true });
+          const tracePath = path.join(traceDirectory, `${fixture.id}.zip`);
+          if (!existsSync(tracePath)) {
+            await context.tracing.stop({ path: tracePath });
+          }
+        }
+        await context.close();
+      } catch {
+        // Preserve the original browser verification error.
+      }
+    }
+    console.log(`RUNTIME ${fixture.id}: stopping preview process tree...`);
+    await stopProcess(server);
+    server.stdout?.destroy();
+    server.stderr?.destroy();
+    console.log(`RUNTIME ${fixture.id}: preview process tree stopped.`);
   }
 }
 
@@ -833,6 +1013,49 @@ try {
     } finally {
       await browser.close();
     }
+  }
+
+  if (matrixMode) {
+    const expectedScenarioIds = [
+      "canonical-action-event",
+      "tabs-property-assignment",
+      "text-input-value-property",
+    ];
+    assert(
+      matrixResults.length === allFixtures.length,
+      "Cross-framework matrix did not record every consumer.",
+    );
+    for (const scenarioId of expectedScenarioIds) {
+      assert(
+        matrixResults.every((result) => result.scenarios[scenarioId] === true),
+        `Cross-framework matrix diverged for ${scenarioId}`,
+      );
+    }
+
+    const reportPath = path.resolve(repositoryRoot, matrixReportArgument);
+    mkdirSync(path.dirname(reportPath), { recursive: true });
+    writeFileSync(
+      reportPath,
+      `${JSON.stringify(
+        {
+          schemaVersion: 1,
+          task: "CF-7009",
+          status: "passed",
+          consumers: matrixResults,
+          scenarios: expectedScenarioIds,
+        },
+        null,
+        2,
+      )}
+`,
+      "utf8",
+    );
+    console.log(
+      `Cross-framework matrix report written to ${path.relative(
+        repositoryRoot,
+        reportPath,
+      )}.`,
+    );
   }
 
   console.log(

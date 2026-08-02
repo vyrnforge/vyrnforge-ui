@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S7",
+    "gate": "GMF4",
+    "status": "evidence-complete",
+    "tasks": [
+      {
+        "id": "CF-7011",
+        "title": "Add framework tabs to component documentation",
+        "status": "done"
+      },
+      {
+        "id": "CF-7012",
+        "title": "Generate component contract reference",
+        "status": "done"
+      }
+    ]
+  },
+  "supportClaim": "multi-framework-component-reference-verified",
+  "sourceOfTruth": [
+    "docs/metadata/components.json",
+    "docs/metadata/component-contracts.json",
+    "packages/ui-elements/custom-elements.json"
+  ],
+  "generatedArtifact": "docs/generated/component-reference.json",
+  "frameworkTabs": ["react", "native-html", "angular", "vue"],
+  "policy": {
+    "preserveCanonicalParityStatuses": true,
+    "inventMissingContracts": false,
+    "frameworkSpecificRenderingDuplicated": false
+  },
+  "requiredCommands": [
+    "npm run generate:component-reference",
+    "npm run test:component-reference",
+    "npm run verify:component-reference",
+    "npm run build:docs",
+    "npm run quality"
+  ],
+  "evidence": [
+    "docs/testing/generated-component-reference.md",
+    "docs/generated/component-reference.json",
+    "apps/docs/src/ComponentReferencePage.tsx",
+    "scripts/generate-component-reference.mjs",
+    "scripts/verify-component-reference.mjs"
+  ],
+  "completedEvidence": [
+    "generated component reference covers the canonical beta-scope inventory",
+    "React, Native HTML, Angular, and Vue usage tabs are present without duplicating component implementations",
+    "per-component Angular and Vue parity statuses remain sourced from canonical components.json metadata",
+    "detailed contract fields are emitted only from the canonical component-contract catalog",
+    "documentation application production build passed"
+  ],
+  "unresolvedBlockers": []
+}

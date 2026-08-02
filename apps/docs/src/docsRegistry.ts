@@ -53,6 +53,8 @@ import metadataDesignTokens from "../../../docs/metadata/design-tokens.json?raw"
 import metadataMultiFramework from "../../../docs/metadata/multi-framework.json?raw";
 import metadataComponentContracts from "../../../docs/metadata/component-contracts.json?raw";
 import metadataComponentContractSchema from "../../../docs/metadata/component-contract.schema.json?raw";
+import metadataCrossFrameworkBrowserMatrix from "../../../docs/metadata/cross-framework-browser-matrix.json?raw";
+import metadataComponentReferenceProgram from "../../../docs/metadata/component-reference-program.json?raw";
 import metadataCssImports from "../../../docs/metadata/css-imports.json?raw";
 import metadataStateContracts from "../../../docs/metadata/state-contracts.json?raw";
 import metadataAiUsageRules from "../../../docs/metadata/ai-usage-rules.json?raw";
@@ -458,6 +460,39 @@ export const docsRoutes: DocsRoute[] = [
     content: metadataMultiFramework,
   },
   {
+    id: "metadata-cross-framework-browser-matrix",
+    title: "Metadata / Cross-Framework Browser Matrix",
+    group: "Metadata",
+    description:
+      "CF-7009 packed Native HTML, React, Angular, and Vue shared browser scenarios and runtime evidence.",
+    sourcePath: "docs/metadata/cross-framework-browser-matrix.json",
+    aiPurpose:
+      "Use this for the current shared browser matrix scenarios, report path, and trace evidence status.",
+    tags: ["metadata", "multi-framework", "browser", "gmf4", "json"],
+    kind: "metadata",
+    content: metadataCrossFrameworkBrowserMatrix,
+  },
+  {
+    id: "metadata-component-reference-program",
+    title: "Metadata / Component Reference Program",
+    group: "Metadata",
+    description:
+      "CF-7011/CF-7012 generated framework usage tabs and component-contract reference status.",
+    sourcePath: "docs/metadata/component-reference-program.json",
+    aiPurpose:
+      "Use this to determine the verification state and source-of-truth policy for generated multi-framework component documentation.",
+    tags: [
+      "metadata",
+      "components",
+      "reference",
+      "multi-framework",
+      "gmf4",
+      "json",
+    ],
+    kind: "metadata",
+    content: metadataComponentReferenceProgram,
+  },
+  {
     id: "metadata-component-contracts",
     title: "Metadata / Component Contracts",
     group: "Metadata",
@@ -733,11 +768,12 @@ export const docsRoutes: DocsRoute[] = [
     id: "component-reference",
     title: "Component Reference",
     group: "Start Here",
-    description: "Generated viewer summary of current and planned components.",
-    sourcePath: "docs/roadmap/01-component-inventory.md",
+    description:
+      "Generated multi-framework usage and framework-neutral contract reference.",
+    sourcePath: "docs/generated/component-reference.json",
     aiPurpose:
-      "Use this as a navigable summary. The markdown inventory remains source of truth.",
-    tags: ["components", "reference"],
+      "Use this as a generated viewer. Canonical component, contract, and Custom Element metadata remain the source of truth.",
+    tags: ["components", "reference", "multi-framework", "generated"],
     kind: "component-reference",
   },
   {

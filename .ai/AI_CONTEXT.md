@@ -23,8 +23,11 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 React and native HTML are first-class beta targets. Angular has verified packed
 consumer evidence through CF-7003 and a thin Forms reference adapter through
 CF-7004. CF-7005 verifies the isolated Vue packed consumer through strict template typing,
-production Vite output, canonical interaction, and Chromium evidence. Vue
-`v-model` translation remains CF-7006 work.
+production Vite output, canonical interaction, and Chromium evidence. CF-7006
+verifies the thin Vue `v-model` reference adapter and CF-7007 verifies server-safe
+imports and the supported bundler matrix. The current coherent GMF4 batch is
+CF-7009 + CF-7011 + CF-7012: cross-framework browser parity plus generated
+multi-framework component usage and contract reference documentation.
 Mobile-native rendering is outside this program.
 
 ## Canonical Docs
@@ -40,6 +43,9 @@ Mobile-native rendering is outside this program.
 | Angular consumer evidence          | `docs/metadata/angular-consumer.json`                          |
 | Angular Forms adapter evidence     | `docs/metadata/angular-forms-adapter.json`                     |
 | Vue consumer evidence              | `docs/metadata/vue-consumer.json`                              |
+| Cross-framework browser matrix     | `docs/metadata/cross-framework-browser-matrix.json`            |
+| Generated component reference      | `docs/generated/component-reference.json`                      |
+| Component reference program        | `docs/metadata/component-reference-program.json`               |
 | State and Redux policy             | `docs/architecture/02-state-and-adapter-ownership.md`          |
 | Styling and themes                 | `docs/architecture/03-theming-and-styling.md`                  |
 | CSS architecture                   | `docs/architecture/06-css-architecture.md`                     |

@@ -15,7 +15,7 @@ jobs:
   packed-consumer:
     name: packed-consumer
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 50
     permissions:
       contents: read
 
@@ -37,3 +37,17 @@ jobs:
 
       - name: Verify packed external consumer
         run: npm run verify:consumer
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run cross-framework packed browser matrix
+        run: npm run verify:cross-framework-matrix:runtime
+
+      - name: Upload cross-framework browser matrix
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cross-framework-browser-matrix
+          path: test-results/cross-framework-matrix/
+          if-no-files-found: error
