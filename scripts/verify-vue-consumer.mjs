@@ -2,6 +2,8 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { isConsumerBatchAtLeast } from "./consumer-batch-progression.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -215,11 +217,8 @@ function verifyFixture(root, failures) {
       }
     }
   }
-  if (manifest.currentBatch !== "CF-7006-CF-7007") {
-    addFailure(
-      failures,
-      "consumer manifest currentBatch must be CF-7006-CF-7007",
-    );
+  if (!isConsumerBatchAtLeast(manifest.currentBatch, "CF-7006-CF-7007")) {
+    addFailure(failures, "consumer manifest currentBatch is invalid");
   }
 
   if (packageJson.dependencies?.vue !== vueVersion) {

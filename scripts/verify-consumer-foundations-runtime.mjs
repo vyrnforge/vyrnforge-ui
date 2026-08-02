@@ -17,6 +17,8 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
+const rootRequire = createRequire(import.meta.url);
+const axeSource = rootRequire("axe-core").source;
 const npmCliPath = process.env.npm_execpath;
 const tempPackageDir = path.join(
   repositoryRoot,
@@ -97,8 +99,18 @@ function readCliValue(name) {
 
 const matrixReportArgument = readCliValue("--matrix-report");
 const traceDirectoryArgument = readCliValue("--trace-dir");
+const accessibilityReportArgument = readCliValue("--accessibility-report");
+const accessibilitySmoke = process.argv.includes("--accessibility-smoke");
+const preserveBuiltFixtures = process.argv.includes(
+  "--preserve-built-fixtures",
+);
 const matrixMode = Boolean(matrixReportArgument || traceDirectoryArgument);
+const accessibilityMode = Boolean(
+  accessibilityReportArgument || accessibilitySmoke,
+);
 const matrixResults = [];
+const accessibilityResults = [];
+let preserveGeneratedOutput = preserveBuiltFixtures;
 
 assert(
   fixtures.length > 0,
@@ -111,6 +123,10 @@ assert(
 assert(
   !matrixMode || (matrixReportArgument && traceDirectoryArgument),
   "Cross-framework matrix mode requires both --matrix-report and --trace-dir.",
+);
+assert(
+  !accessibilityReportArgument || !requestedFixture,
+  "Cross-framework accessibility report mode must run all consumer fixtures together.",
 );
 
 function assert(condition, message) {
@@ -483,6 +499,136 @@ async function verifySharedMatrixScenario(page, fixture) {
   });
 }
 
+async function assertTabKeyboardState(page, fixtureId, expectedIndex, key) {
+  try {
+    await page.waitForFunction(
+      (index) => {
+        const tabs = [...document.querySelectorAll('[role="tab"]')];
+        return (
+          tabs.length > index &&
+          document.activeElement === tabs[index] &&
+          tabs[index]?.getAttribute("aria-selected") === "true"
+        );
+      },
+      expectedIndex,
+      { timeout: 3000 },
+    );
+  } catch (error) {
+    const state = await page.evaluate(() => ({
+      activeElement: {
+        tag: document.activeElement?.tagName ?? null,
+        role: document.activeElement?.getAttribute("role") ?? null,
+        text: document.activeElement?.textContent?.trim() ?? null,
+      },
+      tabs: [...document.querySelectorAll('[role="tab"]')].map(
+        (tab, index) => ({
+          index,
+          selected: tab.getAttribute("aria-selected"),
+          tabIndex: tab.getAttribute("tabindex"),
+          text: tab.textContent?.trim() ?? "",
+        }),
+      ),
+    }));
+
+    throw new Error(
+      `${fixtureId}: ${key} did not preserve focus and selected state within 3 seconds: ${JSON.stringify(state)}`,
+      { cause: error },
+    );
+  }
+}
+
+async function verifySharedAccessibilityScenario(page, fixture) {
+  const selectors = matrixSelectors[fixture.id];
+  assert(selectors, `Missing accessibility selectors for ${fixture.id}`);
+
+  await page.addScriptTag({ content: axeSource });
+  const axe = await page.evaluate(async () => {
+    const result = await globalThis.axe.run(document, {
+      resultTypes: ["violations"],
+    });
+    return {
+      violations: result.violations.map((violation) => ({
+        id: violation.id,
+        impact: violation.impact,
+        description: violation.description,
+        help: violation.help,
+        nodes: violation.nodes.length,
+        targets: violation.nodes.slice(0, 5).map((node) => ({
+          target: node.target,
+          html: node.html,
+          failureSummary: node.failureSummary,
+        })),
+      })),
+    };
+  });
+  const blockers = axe.violations.filter((violation) =>
+    ["serious", "critical"].includes(violation.impact),
+  );
+  assert(
+    blockers.length === 0,
+    `${fixture.id}: Axe found serious/critical violations: ${blockers
+      .map((violation) => {
+        const targets = violation.targets
+          .map((node) => node.target.join(" "))
+          .join(", ");
+        return `${violation.id} (${violation.impact}) [${targets}]`;
+      })
+      .join(", ")}`,
+  );
+
+  const action = page.locator(selectors.action);
+  await action.focus();
+  assert(
+    await action.evaluate((element) => document.activeElement === element),
+    `${fixture.id}: primary action did not receive keyboard focus`,
+  );
+  await action.press("Enter");
+  await page.waitForSelector('[data-consumer-action="received"]');
+  await waitForSharedMatrixStatus(page, selectors.actionText);
+
+  const accessibilityTabs = page.getByRole("tab");
+  const accessibilityTabCount = await accessibilityTabs.count();
+  assert(
+    accessibilityTabCount >= 2,
+    `${fixture.id}: expected at least two tabs for keyboard navigation`,
+  );
+
+  const firstTab = accessibilityTabs.nth(0);
+  const secondTab = accessibilityTabs.nth(1);
+
+  await firstTab.focus();
+  await firstTab.press("ArrowRight");
+  await assertTabKeyboardState(page, fixture.id, 1, "ArrowRight");
+
+  await secondTab.press("ArrowLeft");
+  await assertTabKeyboardState(page, fixture.id, 0, "ArrowLeft");
+
+  const input = page
+    .getByRole("textbox", { name: "Owner", exact: true })
+    .first();
+  await input.waitFor({ state: "visible" });
+  await input.focus();
+  assert(
+    await input.evaluate((element) => document.activeElement === element),
+    `${fixture.id}: Owner input did not receive keyboard focus`,
+  );
+
+  return Object.freeze({
+    consumer: fixture.id,
+    axe: Object.freeze({
+      violationCount: axe.violations.length,
+      seriousOrCriticalCount: blockers.length,
+      violations: axe.violations,
+    }),
+    scenarios: Object.freeze({
+      "axe-serious-critical": true,
+      "keyboard-action-activation": true,
+      "keyboard-tabs-navigation": true,
+      "text-input-accessible-name": true,
+    }),
+  });
+}
+
 async function verifyBrowserFixture(browser, fixture) {
   const fixtureDirectory = path.join(repositoryRoot, fixture.directory);
   const url = `http://127.0.0.1:${fixture.port}`;
@@ -534,6 +680,12 @@ async function verifyBrowserFixture(browser, fixture) {
     });
 
     await page.goto(url, { waitUntil: "networkidle" });
+
+    if (accessibilityMode) {
+      accessibilityResults.push(
+        await verifySharedAccessibilityScenario(page, fixture),
+      );
+    }
 
     if (matrixMode) {
       matrixResults.push(await verifySharedMatrixScenario(page, fixture));
@@ -1058,11 +1210,67 @@ try {
     );
   }
 
+  if (accessibilityReportArgument) {
+    const expectedAccessibilityScenarioIds = [
+      "axe-serious-critical",
+      "keyboard-action-activation",
+      "keyboard-tabs-navigation",
+      "text-input-accessible-name",
+    ];
+    assert(
+      accessibilityResults.length === allFixtures.length,
+      "Cross-framework accessibility review did not record every consumer.",
+    );
+    for (const scenarioId of expectedAccessibilityScenarioIds) {
+      assert(
+        accessibilityResults.every(
+          (result) => result.scenarios[scenarioId] === true,
+        ),
+        `Cross-framework accessibility review diverged for ${scenarioId}`,
+      );
+    }
+
+    const accessibilityReportPath = path.resolve(
+      repositoryRoot,
+      accessibilityReportArgument,
+    );
+    mkdirSync(path.dirname(accessibilityReportPath), { recursive: true });
+    writeFileSync(
+      accessibilityReportPath,
+      `${JSON.stringify(
+        {
+          schemaVersion: 1,
+          task: "CF-7010",
+          status: "automated-passed",
+          consumers: accessibilityResults,
+          scenarios: expectedAccessibilityScenarioIds,
+          manualReviewRequired: true,
+        },
+        null,
+        2,
+      )}\n`,
+      "utf8",
+    );
+    console.log(
+      `Cross-framework accessibility report written to ${path.relative(
+        repositoryRoot,
+        accessibilityReportPath,
+      )}.`,
+    );
+  }
+
+  preserveGeneratedOutput = preserveBuiltFixtures;
   console.log(
     `${buildOnly ? "Consumer build/SSR matrix" : "Consumer runtime"} passed for ${fixtures
       .map((fixture) => fixture.id)
       .join(", ")}.`,
   );
 } finally {
-  removeAllGeneratedOutput();
+  if (preserveGeneratedOutput) {
+    console.log(
+      "Packed consumer build output was preserved for the manual accessibility review.",
+    );
+  } else {
+    removeAllGeneratedOutput();
+  }
 }

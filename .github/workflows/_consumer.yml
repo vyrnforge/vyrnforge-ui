@@ -41,8 +41,11 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run cross-framework packed browser matrix
-        run: npm run verify:cross-framework-matrix:runtime
+      - name: Run cross-framework accessibility browser matrix
+        # CF-7009 compatibility entrypoint: npm run verify:cross-framework-matrix:runtime
+        run: |
+          npm run verify:cross-framework-accessibility:runtime
+          test -f test-results/cross-framework-matrix/accessibility-report.json
 
       - name: Upload cross-framework browser matrix
         if: always()

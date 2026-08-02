@@ -11,7 +11,9 @@
     "multiFramework": "docs/metadata/multi-framework.json",
     "componentContracts": "docs/metadata/component-contracts.json",
     "gmf1Closure": "docs/metadata/gmf1-closure.json",
-    "gmf3Closure": "docs/metadata/gmf3-closure.json"
+    "gmf3Closure": "docs/metadata/gmf3-closure.json",
+    "crossFrameworkAccessibility": "docs/metadata/cross-framework-accessibility-review.json",
+    "multiFrameworkMigrationGuide": "docs/metadata/multi-framework-migration-guide.json"
   },
   "packages": {
     "@vyrnforge/ui-core": {
@@ -78,8 +80,8 @@
         "@vyrnforge/ui-elements/styles/index.css"
       ],
       "registeredPublicTags": 58,
-      "currentBatch": "CF-7009-CF-7011-CF-7012",
-      "gateStatus": "gmf4-in-progress",
+      "currentBatch": "CF-7010-CF-7013",
+      "gateStatus": "gmf4-accessibility-and-migration-review",
       "publicMetadata": "@vyrnforge/ui-elements/custom-elements.json",
       "consumerEvidence": [
         "native-html",

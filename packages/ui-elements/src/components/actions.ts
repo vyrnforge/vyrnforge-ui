@@ -41,6 +41,7 @@ export abstract class VyrnForgeActionElement extends VyrnForgeDomElement {
 
   #button: HTMLButtonElement | null = null;
   #content: HTMLSpanElement | null = null;
+  #contentObserver: MutationObserver | null = null;
   #spinner: HTMLSpanElement | null = null;
   readonly #toggle = createToggleController();
 
@@ -136,10 +137,14 @@ export abstract class VyrnForgeActionElement extends VyrnForgeDomElement {
 
   protected override connected(): void {
     this.ensureButton();
+    this.observeExternalContent();
+    this.syncExternalContent();
   }
 
   protected override disconnected(): void {
     this.#button?.removeEventListener("click", this.handleClick);
+    this.#contentObserver?.disconnect();
+    this.#contentObserver = null;
   }
 
   protected override update(): void {
@@ -186,6 +191,31 @@ export abstract class VyrnForgeActionElement extends VyrnForgeDomElement {
 
   private get elementConfig(): VyrnForgeActionElementConfig {
     return (this.constructor as typeof VyrnForgeActionElement).elementConfig;
+  }
+
+  private observeExternalContent(): void {
+    if (this.#contentObserver) return;
+
+    const MutationObserverConstructor =
+      this.ownerDocument?.defaultView?.MutationObserver ??
+      globalThis.MutationObserver;
+    if (!MutationObserverConstructor) return;
+
+    this.#contentObserver = new MutationObserverConstructor(() => {
+      this.syncExternalContent();
+    });
+    this.#contentObserver.observe(this, { childList: true });
+  }
+
+  private syncExternalContent(): void {
+    const button = this.#button;
+    const content = this.#content;
+    if (!button || !content) return;
+
+    const externalNodes = [...this.childNodes].filter(
+      (node) => node !== button,
+    );
+    for (const node of externalNodes) content.append(node);
   }
 
   private ensureButton(): HTMLButtonElement | null {
@@ -236,6 +266,7 @@ export abstract class VyrnForgeActionElement extends VyrnForgeDomElement {
     this.#button = button;
     this.#content = content;
     this.#spinner = spinner;
+    this.syncExternalContent();
     return button;
   }
 

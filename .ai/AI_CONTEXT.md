@@ -25,9 +25,10 @@ consumer evidence through CF-7003 and a thin Forms reference adapter through
 CF-7004. CF-7005 verifies the isolated Vue packed consumer through strict template typing,
 production Vite output, canonical interaction, and Chromium evidence. CF-7006
 verifies the thin Vue `v-model` reference adapter and CF-7007 verifies server-safe
-imports and the supported bundler matrix. The current coherent GMF4 batch is
-CF-7009 + CF-7011 + CF-7012: cross-framework browser parity plus generated
-multi-framework component usage and contract reference documentation.
+imports and the supported bundler matrix. CF-7009, CF-7011, and CF-7012
+complete the shared browser matrix and generated component reference. The
+current coherent GMF4 batch is CF-7010 + CF-7013: cross-framework
+Axe/keyboard/NVDA review plus the canonical migration and limitations guide.
 Mobile-native rendering is outside this program.
 
 ## Canonical Docs
@@ -43,6 +44,8 @@ Mobile-native rendering is outside this program.
 | Angular consumer evidence          | `docs/metadata/angular-consumer.json`                          |
 | Angular Forms adapter evidence     | `docs/metadata/angular-forms-adapter.json`                     |
 | Vue consumer evidence              | `docs/metadata/vue-consumer.json`                              |
+| Cross-framework accessibility      | `docs/metadata/cross-framework-accessibility-review.json`      |
+| Multi-framework migration guide    | `docs/release/multi-framework-migration-and-limitations.md`    |
 | Cross-framework browser matrix     | `docs/metadata/cross-framework-browser-matrix.json`            |
 | Generated component reference      | `docs/generated/component-reference.json`                      |
 | Component reference program        | `docs/metadata/component-reference-program.json`               |
