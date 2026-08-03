@@ -1,10 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  getReleasePackageMap,
-  readReleaseGroups,
-} from "./release-groups.mjs";
+import { getReleasePackageMap, readReleaseGroups } from "./release-groups.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -128,7 +125,9 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
   );
   const packageMap = getReleasePackageMap(manifest);
   if (releasePackageEntries.length !== 5 || packageMap.size !== 5) {
-    failures.push("release groups must classify all five publishable packages once");
+    failures.push(
+      "release groups must classify all five publishable packages once",
+    );
   }
   if (
     manifest.rules?.nonGridBetaPackageCount !== 4 ||
@@ -168,7 +167,9 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
       if (!dependencyName.startsWith("@vyrnforge/")) continue;
       const targetPackage = packageMap.get(dependencyName);
       if (!targetPackage) {
-        failures.push(`${packageName}: unknown VyrnForge dependency ${dependencyName}`);
+        failures.push(
+          `${packageName}: unknown VyrnForge dependency ${dependencyName}`,
+        );
         continue;
       }
       if (dependencyVersion !== targetPackage.version) {
@@ -223,7 +224,10 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
           `${relativePath}: ${dependencyName} must be ${targetPackage.version}`,
         );
       }
-      if (targetPackage && lockEntry?.dependencies?.[dependencyName] !== targetPackage.version) {
+      if (
+        targetPackage &&
+        lockEntry?.dependencies?.[dependencyName] !== targetPackage.version
+      ) {
         failures.push(
           `package-lock.json: ${lockEntryPath} ${dependencyName} must be ${targetPackage.version}`,
         );
@@ -251,8 +255,7 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
 
   const betaScope = readJson(root, "docs/metadata/non-grid-beta-scope.json");
   if (
-    betaScope.program?.targetVersion !==
-    expectedGroups["non-grid-beta"].version
+    betaScope.program?.targetVersion !== expectedGroups["non-grid-beta"].version
   ) {
     failures.push("BT-8001 targetVersion must match the beta release group");
   }

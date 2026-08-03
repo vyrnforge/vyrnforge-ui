@@ -10,9 +10,7 @@ export const repositoryRoot = path.resolve(
 export const releaseGroupsPath = "docs/metadata/release-groups.json";
 
 export function readReleaseGroups({ root = repositoryRoot } = {}) {
-  return JSON.parse(
-    readFileSync(path.join(root, releaseGroupsPath), "utf8"),
-  );
+  return JSON.parse(readFileSync(path.join(root, releaseGroupsPath), "utf8"));
 }
 
 export function getReleaseGroup(
