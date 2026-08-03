@@ -91,32 +91,33 @@ API docs define public package usage for humans and AI agents. Use `api/README.m
 
 Q1 quality docs define the stabilization bar for current components. They do not replace the roadmap; they gate promotion to stable.
 
-| Document                                          | Purpose                                                                                                             |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `quality/00-quality-gates.md`                     | Component quality gates, severity definitions, and status rules.                                                    |
-| `quality/01-current-component-audit.md`           | Current component audit across packages, docs, metadata, playground routes, and tests.                              |
-| `quality/02-remediation-plan.md`                  | Prioritized Q1 hardening plan and non-goals.                                                                        |
-| `quality/03-known-limitations.md`                 | Remaining limitations, workarounds, and production-use recommendations.                                             |
-| `quality/04-coverage-baseline.md`                 | V8 coverage scope, initial per-package baseline, evidence boundaries, and threshold-ratcheting policy.              |
-| `quality/05-formatting-baseline.md`               | Hash-pinned transition baseline that rejects new or modified formatting debt.                                       |
-| `quality/q1-component-quality-audit.md`           | CI-004 public export inventory, component quality findings, maturity recommendations, and alpha remediation queues. |
-| `quality/s3-semantic-token-audit.md`              | VF-3001 styling decision inventory, token gaps, migration debt, and S3 foundation outcome.                          |
-| `quality/s3-token-adoption-report.md`             | VF-3009/VF-3010 package adoption evidence and documented exceptions.                                                |
-| `quality/s3-visual-regression.md`                 | VF-3011 theme/density visual matrix, computed-style baselines, and screenshot artifacts.                            |
-| `quality/s3-g3-closure.md`                        | VF-3012 final evidence chain, accepted exceptions, and G3 closure rule.                                             |
-| `quality/s4-multi-framework-architecture.md`      | MF-4001â€“MF-4008 architecture evidence and explicit GMF1 support-claim boundary.                                   |
-| `testing/regression-fixtures.md`                  | Deterministic fixture application for DOM, accessibility, browser, future visual, and consumer-oriented checks.     |
-| `testing/multi-framework-consumer-fixtures.md`    | React, native HTML, Angular, and Vue architecture fixtures and GMF4 evidence rules.                                 |
-| `testing/browser-testing.md`                      | Playwright browser-test commands, fixture contracts, selector rules, artifacts, and evidence boundaries.            |
-| `testing/gmf3-native-parity-gate.md`              | EL-6018 final 58-tag native renderer, mapping, browser, package, and GMF3 closure evidence.                         |
-| `testing/consumer-foundation-contracts.md`        | CF-7001, CF-7002, and CF-7008 packed native HTML/React runtime and declaration metadata evidence.                   |
-| `testing/angular-consumer-contract.md`            | CF-7003 Angular 22 packed consumer contract, native form boundary, and runtime evidence.                            |
-| `testing/angular-forms-adapter-contract.md`       | CF-7004 Angular reactive/template-driven Forms bridge, ownership boundary, and browser evidence.                    |
-| `testing/vue-consumer-contract.md`                | CF-7005 Vue 3 packed-consumer contract and completed runtime evidence.                                              |
-| `testing/vue-model-adapter-contract.md`           | CF-7006 thin Vue `v-model` reference adapter contract and runtime evidence boundary.                                |
-| `testing/cross-framework-accessibility-review.md` | CF-7010 Axe, keyboard, and named Windows + Chrome + NVDA review across packed consumers.                            |
-| `testing/cross-framework-browser-matrix.md`       | CF-7009 shared packed browser scenarios, normalized report, and Playwright trace evidence.                          |
-| `testing/generated-component-reference.md`        | CF-7011/CF-7012 generated framework tabs and contract-reference derivation rules.                                   |
+| Document                                             | Purpose                                                                                                                       |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `quality/00-quality-gates.md`                        | Component quality gates, severity definitions, and status rules.                                                              |
+| `quality/01-current-component-audit.md`              | Current component audit across packages, docs, metadata, playground routes, and tests.                                        |
+| `quality/02-remediation-plan.md`                     | Prioritized Q1 hardening plan and non-goals.                                                                                  |
+| `quality/03-known-limitations.md`                    | Remaining limitations, workarounds, and production-use recommendations.                                                       |
+| `quality/04-coverage-baseline.md`                    | V8 coverage scope, initial per-package baseline, evidence boundaries, and threshold-ratcheting policy.                        |
+| `quality/05-formatting-baseline.md`                  | Hash-pinned transition baseline that rejects new or modified formatting debt.                                                 |
+| `quality/q1-component-quality-audit.md`              | CI-004 public export inventory, component quality findings, maturity recommendations, and alpha remediation queues.           |
+| `quality/s3-semantic-token-audit.md`                 | VF-3001 styling decision inventory, token gaps, migration debt, and S3 foundation outcome.                                    |
+| `quality/s3-token-adoption-report.md`                | VF-3009/VF-3010 package adoption evidence and documented exceptions.                                                          |
+| `quality/s3-visual-regression.md`                    | VF-3011 theme/density visual matrix, computed-style baselines, and screenshot artifacts.                                      |
+| `quality/s3-g3-closure.md`                           | VF-3012 final evidence chain, accepted exceptions, and G3 closure rule.                                                       |
+| `quality/s4-multi-framework-architecture.md`         | MF-4001â€“MF-4008 architecture evidence and explicit GMF1 support-claim boundary.                                             |
+| `testing/regression-fixtures.md`                     | Deterministic fixture application for DOM, accessibility, browser, future visual, and consumer-oriented checks.               |
+| `testing/multi-framework-consumer-fixtures.md`       | React, native HTML, Angular, and Vue architecture fixtures and GMF4 evidence rules.                                           |
+| `testing/browser-testing.md`                         | Playwright browser-test commands, fixture contracts, selector rules, artifacts, and evidence boundaries.                      |
+| `testing/gmf3-native-parity-gate.md`                 | EL-6018 final 58-tag native renderer, mapping, browser, package, and GMF3 closure evidence.                                   |
+| `testing/consumer-foundation-contracts.md`           | CF-7001, CF-7002, and CF-7008 packed native HTML/React runtime and declaration metadata evidence.                             |
+| `testing/angular-consumer-contract.md`               | CF-7003 Angular 22 packed consumer contract, native form boundary, and runtime evidence.                                      |
+| `testing/angular-forms-adapter-contract.md`          | CF-7004 Angular reactive/template-driven Forms bridge, ownership boundary, and browser evidence.                              |
+| `testing/vue-consumer-contract.md`                   | CF-7005 Vue 3 packed-consumer contract and completed runtime evidence.                                                        |
+| `testing/vue-model-adapter-contract.md`              | CF-7006 thin Vue `v-model` reference adapter contract and runtime evidence boundary.                                          |
+| `testing/cross-framework-accessibility-review.md`    | CF-7010 Axe, keyboard, and named Windows + Chrome + NVDA review across packed consumers.                                      |
+| `testing/cross-framework-browser-matrix.md`          | CF-7009 shared packed browser scenarios, normalized report, and Playwright trace evidence.                                    |
+| `testing/generated-component-reference.md`           | CF-7011/CF-7012 generated framework tabs and contract-reference derivation rules.                                             |
+| `testing/gmf4-cross-framework-compatibility-gate.md` | CF-7014 final four-consumer compatibility decision, package boundary review, blockers, deferred grid scope, and GMF4 closure. |
 
 ## 8. Release Governance
 
@@ -186,6 +187,7 @@ Markdown docs are the human source of truth. Metadata files are structured index
 | `metadata/visual-regression-matrix.json`             | Canonical VF-3011 visual suites, theme/density dimensions, targets, and token expectations.                                  |
 | `metadata/g3-closure.json`                           | Machine-readable VF-3012 task/evidence inventory and G3 closure state.                                                       |
 | `metadata/gmf3-closure.json`                         | Machine-readable EL-6018 native non-grid parity inventory, renderer mappings, and GMF3 closure state.                        |
+| `metadata/gmf4-closure.json`                         | Machine-readable CF-7001 through CF-7014 task, support, evidence, package, blocker, and GMF4 closure record.                 |
 | `metadata/consumer-foundations.json`                 | Machine-readable CF-7001, CF-7002, and CF-7008 packed consumer, declaration, and Custom Elements Manifest evidence.          |
 | `metadata/angular-consumer.json`                     | Machine-readable CF-7003 Angular 22 packed consumer and GMF4 evidence.                                                       |
 | `metadata/angular-forms-adapter.json`                | Machine-readable CF-7004 Angular Forms adapter scope, contracts, supported tags, and evidence.                               |

@@ -111,3 +111,14 @@ For documentation-only changes, run the relevant docs build and
 `git diff --check`. CI/CD changes must preserve the stable `ci-gate`, read-only
 normal CI, and separate Pages, npm OIDC, registry-verification, and
 release-record responsibilities.
+
+## GMF4 compatibility closure
+
+- GMF4 is evidence-complete through CF-7014.
+- Native HTML and React are first-class web renderers.
+- Angular and Vue are verified consumers of `@vyrnforge/ui-elements`.
+- The non-grid beta release group is `ui-core`, `ui-behaviors`,
+  `ui-components`, and `ui-elements`.
+- `@vyrnforge/ui-data-grid` remains React alpha and is deferred.
+- S7 is complete at 84/84 story points; S8 begins with BT-8001.
+- Canonical closure evidence: `docs/metadata/gmf4-closure.json`.

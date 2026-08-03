@@ -391,8 +391,12 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   ]);
 
   const multiFramework = readJson(root, "docs/metadata/multi-framework.json");
-  if (multiFramework?.program?.currentSprint !== "S7") {
-    failures.push("multi-framework currentSprint must be S7");
+  const currentSprint = multiFramework?.program?.currentSprint;
+  const currentSprintNumber = /^S\d+$/.test(currentSprint ?? "")
+    ? Number(currentSprint.slice(1))
+    : Number.NaN;
+  if (!Number.isInteger(currentSprintNumber) || currentSprintNumber < 7) {
+    failures.push("multi-framework currentSprint must not regress before S7");
   }
   const foundation = multiFramework?.nativeElementFoundation ?? {};
   if (

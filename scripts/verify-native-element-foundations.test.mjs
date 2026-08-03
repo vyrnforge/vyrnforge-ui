@@ -144,3 +144,37 @@ test("rejects missing real-form browser evidence", () => {
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("accepts later sprints without weakening the S7 minimum", () => {
+  const laterRoot = createFixture();
+  try {
+    const file = path.join(laterRoot, "docs/metadata/multi-framework.json");
+    const value = JSON.parse(readFileSync(file, "utf8"));
+    value.program.currentSprint = "S9";
+    writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
+
+    assert(
+      !verifyNativeElementFoundations({ root: laterRoot }).some((failure) =>
+        failure.includes("currentSprint"),
+      ),
+    );
+  } finally {
+    rmSync(laterRoot, { recursive: true, force: true });
+  }
+
+  const regressedRoot = createFixture();
+  try {
+    const file = path.join(regressedRoot, "docs/metadata/multi-framework.json");
+    const value = JSON.parse(readFileSync(file, "utf8"));
+    value.program.currentSprint = "S6";
+    writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
+
+    assert(
+      verifyNativeElementFoundations({ root: regressedRoot }).some((failure) =>
+        failure.includes("currentSprint must not regress before S7"),
+      ),
+    );
+  } finally {
+    rmSync(regressedRoot, { recursive: true, force: true });
+  }
+});

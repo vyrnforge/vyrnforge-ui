@@ -15,7 +15,8 @@
         "title": "Generate component contract reference",
         "status": "done"
       }
-    ]
+    ],
+    "gateStatus": "passed"
   },
   "supportClaim": "multi-framework-component-reference-verified",
   "sourceOfTruth": [

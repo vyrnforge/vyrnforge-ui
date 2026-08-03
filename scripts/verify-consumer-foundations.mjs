@@ -113,8 +113,8 @@ function verifyTasks(root, failures, closure) {
   if (closure.program?.gate !== "GMF4") {
     addFailure(failures, "consumer foundation gate must be GMF4");
   }
-  if (closure.program?.gateStatus !== "in-progress") {
-    addFailure(failures, "GMF4 must remain in-progress");
+  if (closure.program?.gateStatus !== "passed") {
+    addFailure(failures, "GMF4 must be passed");
   }
 
   const tasks = new Map((closure.tasks ?? []).map((task) => [task.id, task]));
@@ -290,10 +290,17 @@ function verifyPackageContract(root, failures, closure) {
 
 function verifyFixtures(root, failures, closure, architecture) {
   const manifest = readJson(root, "tests/consumers/manifest.json");
-  if (manifest.supportClaim !== "partial-gmf4-runtime-evidence") {
+  const completedGmf4 =
+    architecture.program?.status === "gmf4-evidence-complete" &&
+    architecture.program?.gateStatus === "passed";
+  const expectedManifestSupportClaim = completedGmf4
+    ? "gmf4-runtime-evidence-complete"
+    : "partial-gmf4-runtime-evidence";
+
+  if (manifest.supportClaim !== expectedManifestSupportClaim) {
     addFailure(
       failures,
-      "consumer manifest must record partial-gmf4-runtime-evidence",
+      `consumer manifest must record ${expectedManifestSupportClaim}`,
     );
   }
   if (manifest.currentBatch !== currentConsumerBatch) {
@@ -397,10 +404,23 @@ function verifyFixtures(root, failures, closure, architecture) {
     }
   }
 
-  if (architecture.program?.status !== "consumer-foundation-complete") {
+  const allowedProgramStatuses = new Set([
+    "consumer-foundation-complete",
+    "gmf4-evidence-complete",
+  ]);
+  if (!allowedProgramStatuses.has(architecture.program?.status)) {
     addFailure(
       failures,
-      "multi-framework program must be consumer-foundation-complete",
+      "multi-framework program must record consumer-foundation-complete or gmf4-evidence-complete",
+    );
+  }
+  if (
+    (manifest.supportClaim === "gmf4-runtime-evidence-complete") !==
+    completedGmf4
+  ) {
+    addFailure(
+      failures,
+      "consumer manifest and multi-framework program completion state must agree",
     );
   }
   if (architecture.program?.gate !== "GMF4") {

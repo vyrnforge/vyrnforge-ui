@@ -8,7 +8,7 @@
   "program": {
     "name": "VyrnForge non-grid multi-framework beta",
     "gate": "GMF4",
-    "status": "consumer-foundation-complete",
+    "status": "gmf4-evidence-complete",
     "firstClassRenderers": ["react", "native-html"],
     "verifiedConsumers": ["angular", "vue"],
     "excludedPlatforms": [
@@ -19,8 +19,10 @@
       "desktop-native"
     ],
     "deferredPackages": ["@vyrnforge/ui-data-grid"],
-    "currentSprint": "S7",
-    "runtimeVerificationCandidates": []
+    "currentSprint": "S8",
+    "runtimeVerificationCandidates": [],
+    "gateStatus": "passed",
+    "closureMetadata": "docs/metadata/gmf4-closure.json"
   },
   "packages": [
     {
@@ -231,7 +233,7 @@
       "customElementsManifest": "@vyrnforge/ui-elements/custom-elements.json"
     },
     "gate": "GMF4",
-    "gateStatus": "in-progress"
+    "gateStatus": "passed"
   },
   "angularConsumer": {
     "status": "complete",
@@ -242,7 +244,7 @@
     "runtimeFixture": "tests/consumers/angular",
     "supportClaim": "packed-angular-runtime-verified",
     "gate": "GMF4",
-    "gateStatus": "in-progress"
+    "gateStatus": "passed"
   },
   "angularFormsAdapter": {
     "status": "complete",
@@ -254,7 +256,7 @@
     "supportClaim": "angular-forms-adapter-verified",
     "publishedPackage": null,
     "gate": "GMF4",
-    "gateStatus": "in-progress"
+    "gateStatus": "passed"
   },
   "vueConsumer": {
     "status": "complete",
@@ -265,7 +267,7 @@
     "runtimeFixture": "tests/consumers/vue",
     "supportClaim": "packed-vue-runtime-verified",
     "gate": "GMF4",
-    "gateStatus": "in-progress"
+    "gateStatus": "passed"
   },
   "ssrBundlerCompatibility": {
     "status": "complete",
@@ -274,6 +276,54 @@
     "metadata": "docs/metadata/ssr-bundler-compatibility.json",
     "supportClaim": "ssr-bundler-verified",
     "gate": "GMF4",
-    "gateStatus": "in-progress"
+    "gateStatus": "passed"
+  },
+  "vueModelAdapter": {
+    "status": "complete",
+    "task": "CF-7006",
+    "storyPoints": 5,
+    "metadata": "docs/metadata/vue-model-adapter.json",
+    "supportClaim": "vue-model-adapter-verified",
+    "publishedPackage": null,
+    "gate": "GMF4",
+    "gateStatus": "passed"
+  },
+  "crossFrameworkMatrix": {
+    "status": "complete",
+    "task": "CF-7009",
+    "metadata": "docs/metadata/cross-framework-browser-matrix.json",
+    "gate": "GMF4",
+    "gateStatus": "passed"
+  },
+  "componentReference": {
+    "status": "complete",
+    "tasks": ["CF-7011", "CF-7012"],
+    "metadata": "docs/metadata/component-reference-program.json",
+    "gate": "GMF4",
+    "gateStatus": "passed"
+  },
+  "accessibilityReview": {
+    "status": "complete",
+    "task": "CF-7010",
+    "metadata": "docs/metadata/cross-framework-accessibility-review.json",
+    "gate": "GMF4",
+    "gateStatus": "passed"
+  },
+  "migrationGuide": {
+    "status": "complete",
+    "task": "CF-7013",
+    "metadata": "docs/metadata/multi-framework-migration-guide.json",
+    "gate": "GMF4",
+    "gateStatus": "passed"
+  },
+  "gmf4Closure": {
+    "status": "complete",
+    "task": "CF-7014",
+    "storyPoints": 5,
+    "metadata": "docs/metadata/gmf4-closure.json",
+    "gate": "GMF4",
+    "gateStatus": "passed",
+    "nextSprint": "S8",
+    "nextTask": "BT-8001"
   }
 }

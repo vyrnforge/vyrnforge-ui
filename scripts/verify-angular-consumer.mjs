@@ -60,8 +60,8 @@ function verifyMetadata(root, failures) {
   if (program.status !== "evidence-complete") {
     addFailure(failures, "CF-7003 status must be evidence-complete");
   }
-  if (program.gate !== "GMF4" || program.gateStatus !== "in-progress") {
-    addFailure(failures, "CF-7003 must keep GMF4 in-progress");
+  if (program.gate !== "GMF4" || program.gateStatus !== "passed") {
+    addFailure(failures, "CF-7003 must record passed GMF4");
   }
   if (program.baseCommit !== "9edddc68e403da770c9c435a3a626bc3ea595052") {
     addFailure(failures, "CF-7003 base commit is invalid");

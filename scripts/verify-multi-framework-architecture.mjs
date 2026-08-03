@@ -105,6 +105,7 @@ const requiredDocuments = [
   "docs/metadata/component-contract.schema.json",
   "docs/metadata/gmf1-closure.json",
   "docs/metadata/gmf3-closure.json",
+  "docs/metadata/gmf4-closure.json",
   "docs/metadata/consumer-foundations.json",
   "docs/metadata/angular-consumer.json",
   "docs/metadata/angular-forms-adapter.json",
@@ -239,17 +240,17 @@ function verifyPackageTopology(root, failures, architecture) {
 }
 
 function verifyFrameworkSupport(failures, architecture) {
-  if (architecture.program?.status !== "consumer-foundation-complete") {
+  if (architecture.program?.status !== "gmf4-evidence-complete") {
     addFailure(
       failures,
-      "multi-framework program status must be consumer-foundation-complete",
+      "multi-framework program status must be gmf4-evidence-complete",
     );
   }
   if (architecture.program?.gate !== "GMF4") {
     addFailure(failures, "multi-framework program gate must be GMF4");
   }
-  if (architecture.program?.currentSprint !== "S7") {
-    addFailure(failures, "multi-framework currentSprint must be S7");
+  if (architecture.program?.currentSprint !== "S8") {
+    addFailure(failures, "multi-framework currentSprint must be S8");
   }
 
   const frameworks = new Map(
@@ -475,10 +476,10 @@ function verifyConsumerFixtures(root, failures, architecture) {
   }
 
   const manifest = readJson(root, manifestPath);
-  if (manifest.supportClaim !== "partial-gmf4-runtime-evidence") {
+  if (manifest.supportClaim !== "gmf4-runtime-evidence-complete") {
     addFailure(
       failures,
-      "consumer fixture manifest must record partial-gmf4-runtime-evidence",
+      "consumer fixture manifest must record gmf4-runtime-evidence-complete",
     );
   }
   if (manifest.runtimeBuildGate !== "GMF4") {

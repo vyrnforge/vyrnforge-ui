@@ -5,7 +5,8 @@
     "sprint": "S7",
     "storyPoints": 5,
     "gate": "GMF4",
-    "status": "evidence-complete"
+    "status": "evidence-complete",
+    "gateStatus": "passed"
   },
   "supportClaim": "multi-framework-migration-guide-verified",
   "predecessors": ["CF-7011", "CF-7012"],
