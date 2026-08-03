@@ -39,16 +39,16 @@ not promoted with the non-grid beta release group.
 
 ## Component inventory
 
-| Category | Count | Included public components |
-| --- | ---: | --- |
-| Primitive | 20 | Button, ButtonGroup, Caption, ClearButton, CloseButton, CodeText, Heading, Icon, IconButton, Label, MoreButton, RefreshButton, SegmentedControl, Text, ToastAction, ToastProvider, ToggleButton, ToggleButtonGroup, ToolbarButton, useToast |
-| Form control | 17 | Autocomplete, Checkbox, DateInput, DateTimeInput, Field, MultiSelect, NumberInput, Radio, RadioGroup, Rating, SearchInput, Select, Slider, Switch, TextInput, Textarea, ValidationMessage |
-| Feedback | 9 | Alert, Badge, EmptyState, ErrorState, InlineMessage, LoadingState, Skeleton, StatusBadge, Toast |
-| Composite | 8 | Card, Inline, Page, PageHeader, PageToolbar, Panel, Section, Stack |
-| Overlay | 7 | ConfirmDialog, Dialog, Drawer, Dropdown, Menu, Popover, Tooltip |
-| Navigation | 5 | AppShell, Breadcrumbs, SideNav, Tabs, TopNav |
-| Data display | 1 | TransferList |
-| **Total** | **67** | Every package-root public non-grid export is included. |
+| Category     |  Count | Included public components                                                                                                                                                                                                                  |
+| ------------ | -----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Primitive    |     20 | Button, ButtonGroup, Caption, ClearButton, CloseButton, CodeText, Heading, Icon, IconButton, Label, MoreButton, RefreshButton, SegmentedControl, Text, ToastAction, ToastProvider, ToggleButton, ToggleButtonGroup, ToolbarButton, useToast |
+| Form control |     17 | Autocomplete, Checkbox, DateInput, DateTimeInput, Field, MultiSelect, NumberInput, Radio, RadioGroup, Rating, SearchInput, Select, Slider, Switch, TextInput, Textarea, ValidationMessage                                                   |
+| Feedback     |      9 | Alert, Badge, EmptyState, ErrorState, InlineMessage, LoadingState, Skeleton, StatusBadge, Toast                                                                                                                                             |
+| Composite    |      8 | Card, Inline, Page, PageHeader, PageToolbar, Panel, Section, Stack                                                                                                                                                                          |
+| Overlay      |      7 | ConfirmDialog, Dialog, Drawer, Dropdown, Menu, Popover, Tooltip                                                                                                                                                                             |
+| Navigation   |      5 | AppShell, Breadcrumbs, SideNav, Tabs, TopNav                                                                                                                                                                                                |
+| Data display |      1 | TransferList                                                                                                                                                                                                                                |
+| **Total**    | **67** | Every package-root public non-grid export is included.                                                                                                                                                                                      |
 
 The complete per-component list, renderer mapping, maturity, documentation
 path, evidence state, limitations, and decision rationale are recorded in the

@@ -15,13 +15,15 @@ function readJson(root, relativePath) {
 
 function countBy(values, keyOf) {
   return Object.fromEntries(
-    [...values.reduce((counts, value) => {
-      const key = keyOf(value);
-      counts.set(key, (counts.get(key) ?? 0) + 1);
-      return counts;
-    }, new Map()).entries()].sort(([left], [right]) =>
-      left.localeCompare(right),
-    ),
+    [
+      ...values
+        .reduce((counts, value) => {
+          const key = keyOf(value);
+          counts.set(key, (counts.get(key) ?? 0) + 1);
+          return counts;
+        }, new Map())
+        .entries(),
+    ].sort(([left], [right]) => left.localeCompare(right)),
   );
 }
 
@@ -261,7 +263,10 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
 export function writeBetaScope({ root = repositoryRoot } = {}) {
   const output = path.join(root, outputPath);
   mkdirSync(path.dirname(output), { recursive: true });
-  writeFileSync(output, `${JSON.stringify(buildBetaScope({ root }), null, 2)}\n`);
+  writeFileSync(
+    output,
+    `${JSON.stringify(buildBetaScope({ root }), null, 2)}\n`,
+  );
   return output;
 }
 

@@ -87,7 +87,9 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
     failures.push("every public non-grid component must be included");
   }
   if (actual.summary?.deferredNonGridComponents !== 0) {
-    failures.push("BT-8001 must explicitly report zero deferred non-grid components");
+    failures.push(
+      "BT-8001 must explicitly report zero deferred non-grid components",
+    );
   }
 
   const customElements = readJson(
@@ -107,10 +109,14 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
     }
     ids.add(component.id);
     if (component.decision !== "included") {
-      failures.push(`${component.id}: public non-grid component must be included`);
+      failures.push(
+        `${component.id}: public non-grid component must be included`,
+      );
     }
     if (component.package !== "@vyrnforge/ui-components") {
-      failures.push(`${component.id}: beta component must come from ui-components`);
+      failures.push(
+        `${component.id}: beta component must come from ui-components`,
+      );
     }
     if (component.react?.status !== "current") {
       failures.push(`${component.id}: React renderer must be current`);
@@ -126,8 +132,7 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
     }
     for (const framework of ["angular", "vue"]) {
       if (
-        component[framework]?.evidence !==
-        "docs/metadata/gmf4-closure.json"
+        component[framework]?.evidence !== "docs/metadata/gmf4-closure.json"
       ) {
         failures.push(
           `${component.id}: ${framework} must reference GMF4 closure evidence`,
@@ -150,9 +155,7 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
   }
 
   const gridExclusions = actual.exclusions?.publicGridComponents ?? [];
-  if (
-    gridExclusions.length !== actual.summary?.publicGridComponentsDeferred
-  ) {
+  if (gridExclusions.length !== actual.summary?.publicGridComponentsDeferred) {
     failures.push("public grid exclusion list is incomplete");
   }
   for (const component of gridExclusions) {

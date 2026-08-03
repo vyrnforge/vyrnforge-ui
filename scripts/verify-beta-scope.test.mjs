@@ -50,9 +50,7 @@ test("rejects a stale component scope manifest", () =>
       });
     },
     (failures) =>
-      assert(
-        failures.some((failure) => failure.includes("manifest is stale")),
-      ),
+      assert(failures.some((failure) => failure.includes("manifest is stale"))),
   ));
 
 test("rejects adding ui-data-grid to the beta release group", () =>
