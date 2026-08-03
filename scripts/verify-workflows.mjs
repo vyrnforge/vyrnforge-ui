@@ -424,6 +424,20 @@ assert(
   "release.yml must be manually dispatched",
 );
 assert(
+  release.includes("release-group:"),
+  "release.yml must require an explicit BT-8002 release group",
+);
+for (const releaseGroup of ["non-grid-beta", "data-grid-alpha"]) {
+  assert(
+    release.includes(releaseGroup),
+    `release.yml must expose the ${releaseGroup} release group`,
+  );
+}
+assert(
+  release.includes('--release-group "$RELEASE_GROUP"'),
+  "release.yml must pass the selected release group to release tooling",
+);
+assert(
   !/^\s*(push|pull_request|schedule):/m.test(release),
   "release.yml must not publish from automatic triggers",
 );
@@ -473,6 +487,20 @@ assert(
 assert(
   release.includes("scripts/verify-registry-release.mjs"),
   "release.yml must run fresh registry-consumer verification",
+);
+for (const packageName of ["ui-behaviors", "ui-elements"]) {
+  assert(
+    publishSection.includes(`Publish ${packageName} through npm OIDC`),
+    `non-grid beta publication must include ${packageName}`,
+  );
+}
+assert(
+  publishSection.includes("if: inputs.release-group == 'non-grid-beta'"),
+  "beta package publication must be guarded by the non-grid release group",
+);
+assert(
+  publishSection.includes("if: inputs.release-group == 'data-grid-alpha'"),
+  "ui-data-grid publication must be guarded by the independent alpha group",
 );
 const registryVerifier = read("scripts/verify-registry-release.mjs");
 assert(

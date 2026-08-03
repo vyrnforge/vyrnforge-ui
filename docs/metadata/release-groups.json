@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "task": "BT-8002",
+    "documentation": "docs/release/versioning-policy.md"
+  },
+  "task": {
+    "id": "BT-8002",
+    "title": "Set beta release groups and versions",
+    "status": "done",
+    "unlocks": ["BT-8003"]
+  },
+  "groups": {
+    "non-grid-beta": {
+      "channel": "beta",
+      "version": "0.2.0-beta.1",
+      "distTag": "beta",
+      "synchronized": true,
+      "publishTogether": true,
+      "packages": [
+        {
+          "name": "@vyrnforge/ui-core",
+          "directory": "packages/ui-core",
+          "hasCss": true,
+          "dependencies": {}
+        },
+        {
+          "name": "@vyrnforge/ui-behaviors",
+          "directory": "packages/ui-behaviors",
+          "hasCss": false,
+          "dependencies": {
+            "@vyrnforge/ui-core": "0.2.0-beta.1"
+          }
+        },
+        {
+          "name": "@vyrnforge/ui-components",
+          "directory": "packages/ui-components",
+          "hasCss": true,
+          "dependencies": {
+            "@vyrnforge/ui-core": "0.2.0-beta.1",
+            "@vyrnforge/ui-behaviors": "0.2.0-beta.1"
+          }
+        },
+        {
+          "name": "@vyrnforge/ui-elements",
+          "directory": "packages/ui-elements",
+          "hasCss": true,
+          "dependencies": {
+            "@vyrnforge/ui-core": "0.2.0-beta.1",
+            "@vyrnforge/ui-behaviors": "0.2.0-beta.1"
+          }
+        }
+      ]
+    },
+    "data-grid-alpha": {
+      "channel": "alpha",
+      "version": "0.1.0-alpha.2",
+      "distTag": "alpha",
+      "synchronized": false,
+      "publishTogether": false,
+      "packages": [
+        {
+          "name": "@vyrnforge/ui-data-grid",
+          "directory": "packages/ui-data-grid",
+          "hasCss": true,
+          "dependencies": {
+            "@vyrnforge/ui-core": "0.2.0-beta.1",
+            "@vyrnforge/ui-components": "0.2.0-beta.1"
+          }
+        }
+      ]
+    }
+  },
+  "rules": {
+    "nonGridBetaPackageCount": 4,
+    "dataGridAlphaPackageCount": 1,
+    "exactInternalVersions": true,
+    "dataGridExcludedFromNonGridBeta": true,
+    "releaseWorkflowRequiresGroupSelection": true
+  }
+}

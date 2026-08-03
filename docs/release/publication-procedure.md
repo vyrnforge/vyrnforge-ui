@@ -7,16 +7,16 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0. Product
 
 Do not include real npm tokens in repository files, workflows, docs, or examples.
 
-## Current alpha history
+## Current release history and next versions
 
 - `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease.
-- `0.1.0-alpha.1` is the initial coordinated alpha, manually published for all
-  three packages.
-- The first trusted publication will use a future coordinated prerelease such
-  as `0.1.0-alpha.2`.
-- Use the `alpha` dist-tag for alpha publication. The explicit prerelease tag
-  is authoritative; npm may retain a registry-managed `latest` tag, which is
-  not a stable-release signal during alpha.
+- `0.1.0-alpha.1` is the initial coordinated alpha, manually published for the
+  original `ui-core`, `ui-components`, and `ui-data-grid` package set.
+- BT-8002 defines `non-grid-beta` at `0.2.0-beta.1` and `data-grid-alpha` at
+  `0.1.0-alpha.2` in `docs/metadata/release-groups.json`.
+- Use the `beta` dist-tag only for `non-grid-beta` and the `alpha` dist-tag only
+  for `data-grid-alpha`. Registry-managed `latest` is not a stable-release
+  signal during prerelease.
 
 ## Prerequisites
 
@@ -32,22 +32,31 @@ Do not include real npm tokens in repository files, workflows, docs, or examples
 
 ## Package order
 
-Publish packages in dependency order:
+Select one canonical release group before verification or publication.
+
+For `non-grid-beta`, publish in dependency order:
 
 1. `@vyrnforge/ui-core`
-2. `@vyrnforge/ui-components`
-3. `@vyrnforge/ui-data-grid`
+2. `@vyrnforge/ui-behaviors`
+3. `@vyrnforge/ui-components`
+4. `@vyrnforge/ui-elements`
 
-Do not publish a package that depends on a package version that has not been published or otherwise verified in the registry.
+For `data-grid-alpha`, publish only `@vyrnforge/ui-data-grid`. Its exact
+`ui-core` and `ui-components` beta dependencies must already exist in the
+registry.
+
+Do not publish a package that depends on a package version that has not been
+published or otherwise verified in the registry. Never publish
+`ui-data-grid` as part of `non-grid-beta`.
 
 ## npm tags
 
-| Release stage | npm tag |
-| --- | --- |
-| Alpha | `alpha` |
-| Beta | `beta` |
+| Release stage     | npm tag                                        |
+| ----------------- | ---------------------------------------------- |
+| Alpha             | `alpha`                                        |
+| Beta              | `beta`                                         |
 | Release candidate | `next` or an explicitly approved candidate tag |
-| Stable | `latest` after stable release approval |
+| Stable            | `latest` after stable release approval         |
 
 During prerelease, installation docs must use the explicit prerelease tag.
 Registry-managed `latest` metadata is informational and must not be described as
@@ -56,18 +65,20 @@ stable.
 ## Controlled trusted publication
 
 1. Confirm release issue, checklist approval, and a clean checkout on current `main`.
-2. Manually dispatch `Controlled npm Release` with the synchronized version,
-   prerelease dist-tag, and `verify` mode. Verify mode never publishes and does
-   not attach the `npm-release` environment or request OIDC.
+2. Manually dispatch `Controlled npm Release` with the canonical release group,
+   its exact version, matching prerelease dist-tag, and `verify` mode. Verify
+   mode never publishes and does not attach the `npm-release` environment or
+   request OIDC.
 3. Review the verification summary, registry availability checks, package
    payloads, and external-consumer evidence.
 4. Manually dispatch the same candidate in `publish` mode only after approval.
    The job requires the protected `npm-release` environment.
 5. npm trusted publishing uses GitHub Actions OIDC. No long-lived npm token is
    stored in the repository, workflow, or GitHub Actions secrets.
-6. Packages publish in dependency order: `ui-core`, `ui-components`, then
-   `ui-data-grid`. The workflow verifies registry propagation and exact internal
-   dependencies after each required step.
+6. Packages publish in the dependency order declared by the selected release
+   group. `non-grid-beta` publishes core, behaviors, components, and elements;
+   `data-grid-alpha` publishes only the grid. The workflow verifies registry
+   propagation and exact manifest dependencies after each required step.
 7. Trusted publishing generates provenance automatically; do not add
    `--provenance` manually.
 8. A read-only job installs the exact published versions from the public
@@ -78,7 +89,6 @@ stable.
 9. Only after registry verification passes, a separate job with
    `contents: write` creates the annotated `v<version>` tag and GitHub
    prerelease. That job has no npm OIDC permission.
-
 
 ## Responsibility separation
 

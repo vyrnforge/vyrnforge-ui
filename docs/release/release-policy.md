@@ -8,8 +8,10 @@ The explicit prerelease dist-tag is authoritative during alpha. npm may retain a
 
 The first beta program applies to `ui-core`, `ui-behaviors`, `ui-components`,
 and `ui-elements`. BT-8001 freezes the component-level boundary in
-`docs/metadata/non-grid-beta-scope.json`. The data-grid package remains an
-independent React alpha and is not a beta blocker.
+`docs/metadata/non-grid-beta-scope.json`. BT-8002 synchronizes that release
+group at `0.2.0-beta.1` and keeps `ui-data-grid` on the independent
+`0.1.0-alpha.2` line through `docs/metadata/release-groups.json`. The data-grid
+package is not a beta blocker and cannot be published by the beta release path.
 
 React and native HTML are first-class beta targets. Angular and Vue are
 GMF4-verified consumers of the native renderer; they are not separate

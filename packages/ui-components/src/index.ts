@@ -1,9 +1,13 @@
 import "./styles/index.css";
 
-export const vyrnForgeUiComponentsVersion = "0.1.0-alpha.1";
+export const vyrnForgeUiComponentsVersion = "0.2.0-beta.1";
 
 export { Button } from "./components/Button";
-export type { ButtonProps, ButtonSize, ButtonVariant } from "./components/Button";
+export type {
+  ButtonProps,
+  ButtonSize,
+  ButtonVariant,
+} from "./components/Button";
 export { ButtonGroup } from "./components/ButtonGroup";
 export type { ButtonGroupProps } from "./components/ButtonGroup";
 export { Icon } from "./components/Icon";
@@ -13,38 +17,44 @@ export {
   CloseButton,
   IconButton,
   MoreButton,
-  RefreshButton
+  RefreshButton,
 } from "./components/IconButton";
 export type {
   ActionIconButtonProps,
   IconButtonProps,
   IconButtonSize,
-  IconButtonVariant
+  IconButtonVariant,
 } from "./components/IconButton";
 export { ToolbarButton } from "./components/ToolbarButton";
 export type {
   ToolbarButtonProps,
-  ToolbarButtonSize
+  ToolbarButtonSize,
 } from "./components/ToolbarButton";
 export { ToggleButton } from "./components/ToggleButton";
 export type {
   ToggleButtonProps,
   ToggleButtonSize,
-  ToggleButtonVariant
+  ToggleButtonVariant,
 } from "./components/ToggleButton";
 export { ToggleButtonGroup } from "./components/ToggleButtonGroup";
 export type {
   ToggleButtonGroupProps,
   ToggleButtonGroupType,
-  ToggleButtonGroupValue
+  ToggleButtonGroupValue,
 } from "./components/ToggleButtonGroup";
 export { SegmentedControl } from "./components/SegmentedControl";
 export type {
   SegmentedControlOption,
   SegmentedControlProps,
-  SegmentedControlSize
+  SegmentedControlSize,
 } from "./components/SegmentedControl";
-export { Caption, CodeText, Heading, Label, Text } from "./components/Typography";
+export {
+  Caption,
+  CodeText,
+  Heading,
+  Label,
+  Text,
+} from "./components/Typography";
 export type {
   CaptionProps,
   CodeTextProps,
@@ -53,7 +63,7 @@ export type {
   LabelProps,
   TextProps,
   TextSize,
-  TextTone
+  TextTone,
 } from "./components/Typography";
 export { Badge, StatusBadge } from "./components/Badge";
 export type {
@@ -62,10 +72,14 @@ export type {
   BadgeTone,
   BadgeVariant,
   StatusBadgeProps,
-  StatusBadgeStatus
+  StatusBadgeStatus,
 } from "./components/Badge";
 export { Field } from "./components/Field";
-export type { FieldChildren, FieldControlProps, FieldProps } from "./components/Field";
+export type {
+  FieldChildren,
+  FieldControlProps,
+  FieldProps,
+} from "./components/Field";
 export { TextInput } from "./components/TextInput";
 export type { TextInputProps, TextInputSize } from "./components/TextInput";
 export { SearchInput } from "./components/SearchInput";
@@ -80,37 +94,43 @@ export { RadioGroup } from "./components/RadioGroup";
 export type {
   RadioGroupOption,
   RadioGroupOrientation,
-  RadioGroupProps
+  RadioGroupProps,
 } from "./components/RadioGroup";
 export { Switch } from "./components/Switch";
 export type { SwitchProps } from "./components/Switch";
 export { NumberInput } from "./components/NumberInput";
-export type { NumberInputMode, NumberInputProps } from "./components/NumberInput";
+export type {
+  NumberInputMode,
+  NumberInputProps,
+} from "./components/NumberInput";
 export { DateInput } from "./components/DateInput";
 export type { DateInputProps } from "./components/DateInput";
 export { DateTimeInput } from "./components/DateTimeInput";
 export type { DateTimeInputProps } from "./components/DateTimeInput";
 export { MultiSelect } from "./components/MultiSelect";
-export type { MultiSelectOption, MultiSelectProps } from "./components/MultiSelect";
+export type {
+  MultiSelectOption,
+  MultiSelectProps,
+} from "./components/MultiSelect";
 export { Autocomplete } from "./components/Autocomplete";
 export type {
   AutocompleteFilterFunction,
   AutocompleteOptionData,
   AutocompletePlacement,
-  AutocompleteProps
+  AutocompleteProps,
 } from "./components/Autocomplete";
 export { TransferList } from "./components/TransferList";
 export type {
   TransferListFilterFunction,
   TransferListOptionData,
-  TransferListProps
+  TransferListProps,
 } from "./components/TransferList";
 export { Textarea } from "./components/Textarea";
 export type { TextareaProps } from "./components/Textarea";
 export { ValidationMessage } from "./components/ValidationMessage";
 export type {
   ValidationMessageProps,
-  ValidationMessageTone
+  ValidationMessageTone,
 } from "./components/ValidationMessage";
 export { Rating } from "./components/Rating";
 export type { RatingProps } from "./components/Rating";
@@ -123,13 +143,13 @@ export type { ErrorStateProps } from "./components/ErrorState";
 export { Alert, InlineMessage } from "./components/InlineMessage";
 export type {
   InlineMessageProps,
-  InlineMessageVariant
+  InlineMessageVariant,
 } from "./components/InlineMessage";
 export {
   Toast,
   ToastAction,
   ToastProvider,
-  useToast
+  useToast,
 } from "./components/Toast";
 export type {
   ToastActionProps,
@@ -139,10 +159,13 @@ export type {
   ToastProps,
   ToastProviderProps,
   ToastRecord,
-  ToastTone
+  ToastTone,
 } from "./components/Toast";
 export { LoadingState } from "./components/LoadingState";
-export type { LoadingStateProps, LoadingStateSize } from "./components/LoadingState";
+export type {
+  LoadingStateProps,
+  LoadingStateSize,
+} from "./components/LoadingState";
 export { Skeleton } from "./components/Skeleton";
 export type { SkeletonProps } from "./components/Skeleton";
 export { Card } from "./components/Card";
@@ -154,7 +177,7 @@ export type {
   StackAlign,
   StackGap,
   StackJustify,
-  StackProps
+  StackProps,
 } from "./components/Stack";
 export { Inline } from "./components/Inline";
 export type { InlineProps } from "./components/Inline";
@@ -165,27 +188,38 @@ export type {
   AppShellHeaderPosition,
   AppShellProps,
   AppShellScrollMode,
-  AppShellSidebarPosition
+  AppShellSidebarPosition,
 } from "./components/AppShell";
 export { Page } from "./components/Page";
 export type { PageDensity, PageMaxWidth, PageProps } from "./components/Page";
 export { PageHeader } from "./components/PageHeader";
 export type { PageHeaderProps } from "./components/PageHeader";
 export { PageToolbar } from "./components/PageToolbar";
-export type { PageToolbarDensity, PageToolbarProps } from "./components/PageToolbar";
+export type {
+  PageToolbarDensity,
+  PageToolbarProps,
+} from "./components/PageToolbar";
 export { SideNav } from "./components/SideNav";
 export type { SideNavItem, SideNavProps } from "./components/SideNav";
 export { TopNav } from "./components/TopNav";
 export type { TopNavProps } from "./components/TopNav";
 export { Breadcrumbs } from "./components/Breadcrumbs";
-export type { BreadcrumbItem, BreadcrumbsProps } from "./components/Breadcrumbs";
+export type {
+  BreadcrumbItem,
+  BreadcrumbsProps,
+} from "./components/Breadcrumbs";
 export { Tabs } from "./components/Tabs";
-export type { TabItem, TabsProps, TabsSize, TabsVariant } from "./components/Tabs";
+export type {
+  TabItem,
+  TabsProps,
+  TabsSize,
+  TabsVariant,
+} from "./components/Tabs";
 export { Popover } from "./components/Popover";
 export type {
   PopoverAlign,
   PopoverPlacement,
-  PopoverProps
+  PopoverProps,
 } from "./components/Popover";
 export { Menu } from "./components/Menu";
 export type { MenuItem, MenuProps, MenuSize } from "./components/Menu";
@@ -200,6 +234,6 @@ export type { DrawerProps, DrawerSide, DrawerSize } from "./components/Drawer";
 export { ConfirmDialog } from "./components/ConfirmDialog";
 export type {
   ConfirmDialogProps,
-  ConfirmDialogVariant
+  ConfirmDialogVariant,
 } from "./components/ConfirmDialog";
 export type VyrnForgeComponentStatus = "candidate" | "experimental" | "stable";

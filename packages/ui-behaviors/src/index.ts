@@ -1,4 +1,4 @@
-export const vyrnForgeUiBehaviorsVersion = "0.1.0-alpha.1";
+export const vyrnForgeUiBehaviorsVersion = "0.2.0-beta.1";
 
 export {
   createBehaviorSnapshotChannel,

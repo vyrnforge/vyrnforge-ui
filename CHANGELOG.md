@@ -48,6 +48,12 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Changed
 
+- Established the BT-8002 release manifest: `ui-core`, `ui-behaviors`,
+  `ui-components`, and `ui-elements` are synchronized at `0.2.0-beta.1`, while
+  `ui-data-grid` remains independently versioned at `0.1.0-alpha.2`.
+- Made release verification, trusted publication, registry checks, and release
+  notes require an explicit `non-grid-beta` or `data-grid-alpha` selection so
+  the grid cannot be promoted with the beta group.
 - Replaced the next grid-focused roadmap phase with the non-grid
   multi-framework beta program. `@vyrnforge/ui-data-grid` remains an
   independently versioned React alpha and does not block the beta release

@@ -286,7 +286,7 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   );
   if (
     componentPackage?.dependencies?.["@vyrnforge/ui-behaviors"] !==
-    "0.1.0-alpha.1"
+    "0.2.0-beta.1"
   ) {
     failures.push(
       "ui-components must declare the pinned ui-behaviors runtime dependency",

@@ -12,7 +12,7 @@ GitHub Actions invokes the reusable consumer workflow when the dependency-aware 
 
 The command:
 
-1. runs package verification, which cleans and builds `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and `@vyrnforge/ui-data-grid`;
+1. runs package verification, which cleans and builds all five publishable packages across the non-grid beta and independent grid-alpha groups;
 2. creates local package tarballs in an ignored temporary directory;
 3. installs those tarballs into `tests/package-consumer`;
 4. installs React and ReactDOM as normal consumer dependencies;
@@ -28,10 +28,19 @@ The consumer fixture may import only public package entry points:
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 
+import { createBehaviorEvent } from "@vyrnforge/ui-behaviors";
 import { createVyrnForgeTheme } from "@vyrnforge/ui-core";
-import { Button, TextInput, AppShell, Page, Autocomplete } from "@vyrnforge/ui-components";
+import {
+  Button,
+  TextInput,
+  AppShell,
+  Page,
+  Autocomplete,
+} from "@vyrnforge/ui-components";
+import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "@vyrnforge/ui-data-grid",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Native-first enterprise data-management grid for VyrnForge UI.",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
@@ -54,8 +54,8 @@
     "react-dom": ">=18 <20"
   },
   "dependencies": {
-    "@vyrnforge/ui-components": "0.1.0-alpha.1",
-    "@vyrnforge/ui-core": "0.1.0-alpha.1"
+    "@vyrnforge/ui-components": "0.2.0-beta.1",
+    "@vyrnforge/ui-core": "0.2.0-beta.1"
   },
   "devDependencies": {
     "@types/react": "latest",
