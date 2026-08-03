@@ -1030,12 +1030,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1095,12 +1097,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1158,12 +1162,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1221,12 +1227,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1284,12 +1292,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1355,12 +1365,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1429,12 +1441,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1492,12 +1506,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1555,12 +1571,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1620,12 +1638,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1683,12 +1703,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1748,12 +1770,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1813,12 +1837,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1883,12 +1909,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -1948,12 +1976,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2011,12 +2041,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2074,12 +2106,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2137,12 +2171,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2202,12 +2238,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2265,12 +2303,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2330,12 +2370,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2393,12 +2435,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2458,12 +2502,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2521,12 +2567,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2584,12 +2632,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2649,12 +2699,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2714,12 +2766,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2777,12 +2831,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2842,12 +2898,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2905,12 +2963,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -2968,12 +3028,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3031,12 +3093,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3096,12 +3160,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3159,12 +3225,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3222,12 +3290,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3285,12 +3355,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3348,12 +3420,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3411,12 +3485,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3476,12 +3552,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3539,12 +3617,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3850,12 +3930,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3915,12 +3997,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -3980,12 +4064,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4045,12 +4131,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4110,12 +4198,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4175,12 +4265,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4238,12 +4330,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4303,12 +4397,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4368,12 +4464,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4431,12 +4529,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4496,12 +4596,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4559,12 +4661,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4624,12 +4728,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4687,12 +4793,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4750,12 +4858,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4815,12 +4925,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4881,12 +4993,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -4959,12 +5073,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5037,12 +5153,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5115,12 +5233,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5528,12 +5648,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5591,12 +5713,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5654,12 +5778,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5717,12 +5843,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5780,12 +5908,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5843,12 +5973,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },
@@ -5906,12 +6038,14 @@
           "evidence": "docs/metadata/gmf3-closure.json"
         },
         "angular": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         },
         "vue": {
-          "status": "planned-gmf4",
-          "consumes": "@vyrnforge/ui-elements"
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/gmf4-closure.json"
         }
       }
     },

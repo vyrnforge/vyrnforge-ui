@@ -23,6 +23,7 @@ queryable repository facts and evidence records.
 | `native-advanced-elements.json`             | EL-6012 through EL-6017 canonical 14-tag advanced renderer wave and browser evidence.                                       |
 | `gmf3-closure.json`                         | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims.            |
 | `gmf4-closure.json`                         | CF-7014 final Native HTML, React, Angular, and Vue compatibility gate, package-boundary decision, evidence, and S7 closure. |
+| `non-grid-beta-scope.json`                  | BT-8001 frozen 67-component non-grid beta scope, renderer mappings, maturity, exclusions, and downstream release gaps.      |
 | `component-contracts.json`                  | Canonical cross-framework events, slots, form association, and representative component contracts.                          |
 | `component-contract.schema.json`            | JSON Schema for the canonical multi-framework component contract catalog.                                                   |
 | `components.json`                           | Canonical normalized component and public-contract catalog, including maturity evidence.                                    |
@@ -50,11 +51,13 @@ new published package. CF-7005 verifies the Vue 3 packed consumer and CF-7006 ve
 `v-model` reference adapter. CF-7007 verifies SSR/bundler compatibility.
 CF-7009 adds the shared cross-framework packed browser matrix. CF-7010 adds
 the Axe, keyboard, and named NVDA review contract, while CF-7013 publishes
-the framework migration and limitations guide. GMF4 is evidence-complete through CF-7014. The final compatibility gate closes S7 at 84/84 story points and advances the program to S8 / BT-8001.
+the framework migration and limitations guide. GMF4 is evidence-complete through CF-7014. BT-8001 then freezes the 67-component non-grid beta scope, records explicit exclusions, aligns Angular/Vue component parity with the completed GMF4 consumer claim, and unlocks BT-8002.
 
 ```bash
 npm run test:multi-framework
 npm run verify:multi-framework
+npm run test:beta-scope
+npm run verify:beta-scope
 ```
 
 The human-readable sources are:

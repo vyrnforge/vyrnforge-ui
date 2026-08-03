@@ -58,19 +58,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-card></vf-card>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-card></vf-card>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -113,19 +113,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-inline></vf-inline>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-inline></vf-inline>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -168,19 +168,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-page></vf-page>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-page></vf-page>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -223,19 +223,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-page-header></vf-page-header>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-page-header></vf-page-header>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -278,19 +278,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-page-toolbar></vf-page-toolbar>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-page-toolbar></vf-page-toolbar>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -333,19 +333,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-panel></vf-panel>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-panel></vf-panel>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -388,19 +388,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-section></vf-section>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-section></vf-section>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -443,19 +443,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-stack></vf-stack>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-stack></vf-stack>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -498,19 +498,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-transfer-list></vf-transfer-list>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-transfer-list></vf-transfer-list>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -553,19 +553,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-inline-message></vf-inline-message>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-inline-message></vf-inline-message>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -608,19 +608,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-badge></vf-badge>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-badge></vf-badge>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -663,19 +663,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-empty-state></vf-empty-state>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-empty-state></vf-empty-state>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -718,19 +718,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-error-state></vf-error-state>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-error-state></vf-error-state>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -773,19 +773,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-inline-message></vf-inline-message>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-inline-message></vf-inline-message>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -828,19 +828,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-loading-state></vf-loading-state>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-loading-state></vf-loading-state>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -883,19 +883,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-skeleton></vf-skeleton>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-skeleton></vf-skeleton>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -938,19 +938,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-badge></vf-badge>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-badge></vf-badge>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -993,19 +993,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-toast></vf-toast>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-toast></vf-toast>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1048,19 +1048,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-autocomplete></vf-autocomplete>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-autocomplete></vf-autocomplete>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": {
@@ -1146,19 +1146,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-checkbox></vf-checkbox>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-checkbox></vf-checkbox>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1201,19 +1201,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-date-input></vf-date-input>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-date-input></vf-date-input>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1256,19 +1256,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-datetime-input></vf-datetime-input>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-datetime-input></vf-datetime-input>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1311,19 +1311,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-field></vf-field>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-field></vf-field>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1366,19 +1366,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-multi-select></vf-multi-select>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-multi-select></vf-multi-select>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1421,19 +1421,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-number-input></vf-number-input>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-number-input></vf-number-input>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1476,19 +1476,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-radio></vf-radio>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-radio></vf-radio>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1531,19 +1531,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-radio-group></vf-radio-group>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-radio-group></vf-radio-group>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1586,19 +1586,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-rating></vf-rating>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-rating></vf-rating>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1641,19 +1641,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-search-input></vf-search-input>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-search-input></vf-search-input>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1696,19 +1696,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-select></vf-select>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-select></vf-select>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1751,19 +1751,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-slider></vf-slider>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-slider></vf-slider>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1806,19 +1806,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-switch></vf-switch>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-switch></vf-switch>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1861,19 +1861,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-textarea></vf-textarea>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-textarea></vf-textarea>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1916,19 +1916,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-text-input></vf-text-input>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-text-input></vf-text-input>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -1971,19 +1971,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-validation-message></vf-validation-message>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-validation-message></vf-validation-message>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2026,19 +2026,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-app-shell></vf-app-shell>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-app-shell></vf-app-shell>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2081,19 +2081,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-breadcrumbs></vf-breadcrumbs>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-breadcrumbs></vf-breadcrumbs>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2136,19 +2136,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-side-nav></vf-side-nav>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-side-nav></vf-side-nav>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2191,19 +2191,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-tabs></vf-tabs>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-tabs></vf-tabs>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": {
@@ -2274,19 +2274,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-top-nav></vf-top-nav>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-top-nav></vf-top-nav>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2329,19 +2329,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-confirm-dialog></vf-confirm-dialog>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-confirm-dialog></vf-confirm-dialog>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2384,19 +2384,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-dialog></vf-dialog>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-dialog></vf-dialog>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": {
@@ -2475,19 +2475,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-drawer></vf-drawer>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-drawer></vf-drawer>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2530,19 +2530,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-popover></vf-popover>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-popover></vf-popover>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2585,19 +2585,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-menu></vf-menu>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-menu></vf-menu>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2640,19 +2640,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-popover></vf-popover>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-popover></vf-popover>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2695,19 +2695,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-tooltip></vf-tooltip>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-tooltip></vf-tooltip>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2750,19 +2750,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-button></vf-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-button></vf-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": {
@@ -2840,19 +2840,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-button-group></vf-button-group>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-button-group></vf-button-group>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2895,19 +2895,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-caption></vf-caption>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-caption></vf-caption>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -2950,19 +2950,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3005,19 +3005,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3060,19 +3060,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-code-text></vf-code-text>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-code-text></vf-code-text>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3115,19 +3115,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-heading></vf-heading>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-heading></vf-heading>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3170,19 +3170,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-icon></vf-icon>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-icon></vf-icon>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3225,19 +3225,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3280,19 +3280,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-label></vf-label>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-label></vf-label>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3335,19 +3335,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3390,19 +3390,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3445,19 +3445,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-segmented-control></vf-segmented-control>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-segmented-control></vf-segmented-control>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3500,19 +3500,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-text></vf-text>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-text></vf-text>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3551,19 +3551,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-toast[action-label]></vf-toast[action-label]>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-toast[action-label]></vf-toast[action-label]>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3606,19 +3606,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-toast-viewport></vf-toast-viewport>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-toast-viewport></vf-toast-viewport>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3661,19 +3661,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-toggle-button></vf-toggle-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-toggle-button></vf-toggle-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3716,19 +3716,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-toggle-button-group></vf-toggle-button-group>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-toggle-button-group></vf-toggle-button-group>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3771,19 +3771,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<vf-toolbar-button></vf-toolbar-button>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<vf-toolbar-button></vf-toolbar-button>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null
@@ -3822,19 +3822,19 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
           "example": "<VyrnForgeToastViewportElement service API></VyrnForgeToastViewportElement service API>",
-          "note": "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
+          "note": "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration."
         },
         "vue": {
           "label": "Vue",
-          "status": "planned-gmf4",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-elements",
           "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
           "example": "<VyrnForgeToastViewportElement service API></VyrnForgeToastViewportElement service API>",
-          "note": "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
+          "note": "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events."
         }
       },
       "contract": null

@@ -7,7 +7,10 @@ admin portals, customer portals, data-heavy applications, and workflow systems.
 It is not only a data-grid package and it is no longer architected as a
 React-only library.
 
-The first multi-framework beta focuses on all public non-grid components:
+The first multi-framework beta focuses on all public non-grid components. The
+canonical component-by-component boundary is
+[`../metadata/non-grid-beta-scope.json`](../metadata/non-grid-beta-scope.json),
+produced by BT-8001:
 
 - first-class React components;
 - first-class native HTML Custom Elements;

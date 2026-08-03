@@ -1,0 +1,3104 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "task": "BT-8001",
+    "sprint": "S8",
+    "qualityGate": "GBETA",
+    "documentation": "docs/quality/s8-non-grid-beta-scope-audit.md",
+    "generatedFrom": [
+      "docs/metadata/components.json",
+      "docs/metadata/packages.json",
+      "docs/metadata/gmf4-closure.json",
+      "packages/ui-elements/custom-elements.json"
+    ]
+  },
+  "program": {
+    "name": "VyrnForge non-grid multi-framework beta",
+    "task": {
+      "id": "BT-8001",
+      "title": "Audit non-grid beta component scope",
+      "status": "done"
+    },
+    "status": "scope-frozen",
+    "targetVersion": "0.2.0-beta.1",
+    "unlocks": ["BT-8002"],
+    "scopeOnly": true,
+    "releaseStatus": "not-release-ready"
+  },
+  "releaseGroup": {
+    "includedPackages": [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-elements"
+    ],
+    "excludedPackages": [
+      {
+        "name": "@vyrnforge/ui-data-grid",
+        "status": "react-alpha-deferred",
+        "reason": "Data-grid multi-framework rendering remains outside the non-grid beta critical path."
+      }
+    ],
+    "packageMetadataReleaseGroups": {
+      "nonGridBeta": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-elements"
+      ],
+      "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
+    },
+    "firstClassRenderers": {
+      "react": "@vyrnforge/ui-components",
+      "nativeHtml": "@vyrnforge/ui-elements"
+    },
+    "verifiedConsumers": {
+      "angular": "@vyrnforge/ui-elements",
+      "vue": "@vyrnforge/ui-elements"
+    },
+    "excludedPlatforms": [
+      "react-native",
+      "flutter",
+      "native-android",
+      "native-ios",
+      "desktop-native"
+    ]
+  },
+  "scopePolicy": {
+    "componentDefinition": "Every package-root public export classified in docs/metadata/components.json under @vyrnforge/ui-components.",
+    "inclusionRule": "Include every public non-grid React component/API that has current frameworkParity metadata for React and the native renderer.",
+    "maturityRule": "Scope inclusion does not promote component maturity. Canonical maturity remains owned by docs/metadata/components.json and its maturity evidence policy.",
+    "angularVueRule": "Angular and Vue are verified consumers of @vyrnforge/ui-elements; they are not separate component implementations or published renderer packages.",
+    "gridRule": "All @vyrnforge/ui-data-grid public exports remain on the independent React alpha track and are deferred from this beta release group."
+  },
+  "summary": {
+    "catalogEntries": 97,
+    "publicNonGridComponents": 67,
+    "includedComponents": 67,
+    "deferredNonGridComponents": 0,
+    "publicGridComponentsDeferred": 10,
+    "plannedNonPublicComponentsExcluded": 7,
+    "internalNonPublicComponentsExcluded": 1,
+    "nativeCustomElementTags": 58,
+    "categoryCounts": {
+      "composite": 8,
+      "data-display": 1,
+      "feedback": 9,
+      "form-control": 17,
+      "navigation": 5,
+      "overlay": 7,
+      "primitive": 20
+    },
+    "maturityCounts": {
+      "experimental": 67
+    },
+    "nativeStrategyCounts": {
+      "direct-element": 57,
+      "renderer-composition": 1,
+      "renderer-mapping": 8,
+      "renderer-service": 1
+    }
+  },
+  "components": [
+    {
+      "id": "alert",
+      "displayName": "Alert",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Alert",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-inline-message",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "alert",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for tiny metadata; use Badge or Caption."]
+    },
+    {
+      "id": "app-shell",
+      "displayName": "AppShell",
+      "package": "@vyrnforge/ui-components",
+      "category": "navigation",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "AppShell",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-app-shell",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/layout/app-shell"
+      },
+      "maturityEvidence": {
+        "key": "app-shell",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for small inline layouts or when an app-specific router shell already owns all regions."
+      ]
+    },
+    {
+      "id": "autocomplete",
+      "displayName": "Autocomplete",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Autocomplete",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-autocomplete",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/autocomplete"
+      },
+      "maturityEvidence": {
+        "key": "autocomplete",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values."
+      ]
+    },
+    {
+      "id": "badge",
+      "displayName": "Badge",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Badge",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-badge",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/feedback/badge"
+      },
+      "maturityEvidence": {
+        "key": "badge",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for long messages; use InlineMessage or Alert."
+      ]
+    },
+    {
+      "id": "breadcrumbs",
+      "displayName": "Breadcrumbs",
+      "package": "@vyrnforge/ui-components",
+      "category": "navigation",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Breadcrumbs",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-breadcrumbs",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "breadcrumbs",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for linear step progress or unrelated tabs."]
+    },
+    {
+      "id": "button",
+      "displayName": "Button",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Button",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/actions/button"
+      },
+      "maturityEvidence": {
+        "key": "button",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead."
+      ]
+    },
+    {
+      "id": "button-group",
+      "displayName": "ButtonGroup",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ButtonGroup",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-button-group",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/actions/button-group"
+      },
+      "maturityEvidence": {
+        "key": "button-group",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for unrelated actions."]
+    },
+    {
+      "id": "caption",
+      "displayName": "Caption",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Caption",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-caption",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "caption",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for required error text; use ValidationMessage or InlineMessage."
+      ]
+    },
+    {
+      "id": "card",
+      "displayName": "Card",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Card",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-card",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "card",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid nesting cards inside cards or using cards as page sections."
+      ]
+    },
+    {
+      "id": "checkbox",
+      "displayName": "Checkbox",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Checkbox",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-checkbox",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/checkbox"
+      },
+      "maturityEvidence": {
+        "key": "checkbox",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for mutually exclusive sets; use Radio when available."
+      ]
+    },
+    {
+      "id": "clear-button",
+      "displayName": "ClearButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ClearButton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-icon-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "clear-button",
+        "status": "pending"
+      },
+      "knownLimitations": ["requires-verification"]
+    },
+    {
+      "id": "close-button",
+      "displayName": "CloseButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "CloseButton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-icon-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "close-button",
+        "status": "pending"
+      },
+      "knownLimitations": ["requires-verification"]
+    },
+    {
+      "id": "code-text",
+      "displayName": "CodeText",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "CodeText",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-code-text",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "code-text",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for long code examples; use pre/code in docs."
+      ]
+    },
+    {
+      "id": "confirm-dialog",
+      "displayName": "ConfirmDialog",
+      "package": "@vyrnforge/ui-components",
+      "category": "overlay",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ConfirmDialog",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-confirm-dialog",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/overlays/confirm-dialog"
+      },
+      "maturityEvidence": {
+        "key": "confirm-dialog",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for routine low-risk actions."]
+    },
+    {
+      "id": "date-input",
+      "displayName": "DateInput",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "DateInput",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-date-input",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/date-input"
+      },
+      "maturityEvidence": {
+        "key": "date-input",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid when complex calendar range picking is required."
+      ]
+    },
+    {
+      "id": "datetime-input",
+      "displayName": "DateTimeInput",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "DateTimeInput",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-datetime-input",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/datetime-input"
+      },
+      "maturityEvidence": {
+        "key": "datetime-input",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for timezone-heavy scheduling workflows."]
+    },
+    {
+      "id": "dialog",
+      "displayName": "Dialog",
+      "package": "@vyrnforge/ui-components",
+      "category": "overlay",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Dialog",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-dialog",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/overlays/dialog"
+      },
+      "maturityEvidence": {
+        "key": "dialog",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for large workflows; use Drawer or a page."]
+    },
+    {
+      "id": "drawer",
+      "displayName": "Drawer",
+      "package": "@vyrnforge/ui-components",
+      "category": "overlay",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Drawer",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-drawer",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/overlays/drawer"
+      },
+      "maturityEvidence": {
+        "key": "drawer",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for tiny contextual actions; use Popover or Menu."
+      ]
+    },
+    {
+      "id": "dropdown",
+      "displayName": "Dropdown",
+      "package": "@vyrnforge/ui-components",
+      "category": "overlay",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Dropdown",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-composition",
+        "target": "vf-popover",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/overlays/dropdown"
+      },
+      "maturityEvidence": {
+        "key": "dropdown",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for native form select choices; use Select."]
+    },
+    {
+      "id": "empty-state",
+      "displayName": "EmptyState",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "EmptyState",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-empty-state",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "empty-state",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for loading or error states."]
+    },
+    {
+      "id": "error-state",
+      "displayName": "ErrorState",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ErrorState",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-error-state",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "error-state",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for inline validation; use ValidationMessage."
+      ]
+    },
+    {
+      "id": "field",
+      "displayName": "Field",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Field",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-field",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/field"
+      },
+      "maturityEvidence": {
+        "key": "field",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid duplicating label and validation layout manually."
+      ]
+    },
+    {
+      "id": "heading",
+      "displayName": "Heading",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Heading",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-heading",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "heading",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid using large display type inside compact panels."
+      ]
+    },
+    {
+      "id": "icon",
+      "displayName": "Icon",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Icon",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-icon",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "icon",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid adding external icon libraries by default."]
+    },
+    {
+      "id": "icon-button",
+      "displayName": "IconButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "IconButton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-icon-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/actions/icon-button"
+      },
+      "maturityEvidence": {
+        "key": "icon-button",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for destructive or primary business actions without visible text."
+      ]
+    },
+    {
+      "id": "inline",
+      "displayName": "Inline",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Inline",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-inline",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "inline",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for vertical layout; use Stack."]
+    },
+    {
+      "id": "inline-message",
+      "displayName": "InlineMessage",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "InlineMessage",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-inline-message",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "inline-message",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for page-level blocking errors; use ErrorState."
+      ]
+    },
+    {
+      "id": "label",
+      "displayName": "Label",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Label",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-label",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "label",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid as general body text."]
+    },
+    {
+      "id": "loading-state",
+      "displayName": "LoadingState",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "LoadingState",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-loading-state",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "loading-state",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for skeleton row placeholders; use Skeleton or grid skeleton rows."
+      ]
+    },
+    {
+      "id": "menu",
+      "displayName": "Menu",
+      "package": "@vyrnforge/ui-components",
+      "category": "overlay",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Menu",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-menu",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/overlays/menu"
+      },
+      "maturityEvidence": {
+        "key": "menu",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for navigation trees or complex forms."]
+    },
+    {
+      "id": "more-button",
+      "displayName": "MoreButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "MoreButton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-icon-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "more-button",
+        "status": "pending"
+      },
+      "knownLimitations": ["requires-verification"]
+    },
+    {
+      "id": "multi-select",
+      "displayName": "MultiSelect",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "MultiSelect",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-multi-select",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "multi-select",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for async, virtualized, creatable, or very large option sets."
+      ]
+    },
+    {
+      "id": "number-input",
+      "displayName": "NumberInput",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "NumberInput",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-number-input",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/number-input"
+      },
+      "maturityEvidence": {
+        "key": "number-input",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for formatted currency or masked values."]
+    },
+    {
+      "id": "page",
+      "displayName": "Page",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Page",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-page",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "page",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive."
+      ]
+    },
+    {
+      "id": "page-header",
+      "displayName": "PageHeader",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "PageHeader",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-page-header",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "page-header",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for small panel headings; use Panel or Section title props instead."
+      ]
+    },
+    {
+      "id": "page-toolbar",
+      "displayName": "PageToolbar",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "PageToolbar",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-page-toolbar",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "page-toolbar",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for primary page actions that belong in PageHeader actions."
+      ]
+    },
+    {
+      "id": "panel",
+      "displayName": "Panel",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Panel",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-panel",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "panel",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for tiny inline content."]
+    },
+    {
+      "id": "popover",
+      "displayName": "Popover",
+      "package": "@vyrnforge/ui-components",
+      "category": "overlay",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Popover",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-popover",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/overlays/popover"
+      },
+      "maturityEvidence": {
+        "key": "popover",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for complex forms; use Dialog or Drawer."]
+    },
+    {
+      "id": "radio",
+      "displayName": "Radio",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Radio",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-radio",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/radio"
+      },
+      "maturityEvidence": {
+        "key": "radio",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for binary settings; use Checkbox or Switch."]
+    },
+    {
+      "id": "radio-group",
+      "displayName": "RadioGroup",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "RadioGroup",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-radio-group",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/radio-group"
+      },
+      "maturityEvidence": {
+        "key": "radio-group",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for long option lists; use Select instead."]
+    },
+    {
+      "id": "rating",
+      "displayName": "Rating",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Rating",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-rating",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/rating"
+      },
+      "maturityEvidence": {
+        "key": "rating",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for continuous bounded ranges; use Slider."]
+    },
+    {
+      "id": "refresh-button",
+      "displayName": "RefreshButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "RefreshButton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-icon-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "refresh-button",
+        "status": "pending"
+      },
+      "knownLimitations": ["requires-verification"]
+    },
+    {
+      "id": "search-input",
+      "displayName": "SearchInput",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "SearchInput",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-search-input",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "search-input",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for general text entry."]
+    },
+    {
+      "id": "section",
+      "displayName": "Section",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Section",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-section",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "section",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid when a framed component is required; use Panel or Card."
+      ]
+    },
+    {
+      "id": "segmented-control",
+      "displayName": "SegmentedControl",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "SegmentedControl",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-segmented-control",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/actions/segmented-control"
+      },
+      "maturityEvidence": {
+        "key": "segmented-control",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for large option sets; use Select instead."]
+    },
+    {
+      "id": "select",
+      "displayName": "Select",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Select",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-select",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/select"
+      },
+      "maturityEvidence": {
+        "key": "select",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for multi-select until MultiSelect exists."]
+    },
+    {
+      "id": "side-nav",
+      "displayName": "SideNav",
+      "package": "@vyrnforge/ui-components",
+      "category": "navigation",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "SideNav",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-side-nav",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "side-nav",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for complex tree navigation or data-grid column menus."
+      ]
+    },
+    {
+      "id": "skeleton",
+      "displayName": "Skeleton",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Skeleton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-skeleton",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "skeleton",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid when a text loading label is clearer."]
+    },
+    {
+      "id": "slider",
+      "displayName": "Slider",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Slider",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-slider",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/slider"
+      },
+      "maturityEvidence": {
+        "key": "slider",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for formatted or direct numeric entry; use NumberInput."
+      ]
+    },
+    {
+      "id": "stack",
+      "displayName": "Stack",
+      "package": "@vyrnforge/ui-components",
+      "category": "composite",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Stack",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-stack",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "stack",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for horizontal layouts; use Inline."]
+    },
+    {
+      "id": "status-badge",
+      "displayName": "StatusBadge",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "StatusBadge",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-badge",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "status-badge",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid when the content is not a status."]
+    },
+    {
+      "id": "switch",
+      "displayName": "Switch",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Switch",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-switch",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/switch"
+      },
+      "maturityEvidence": {
+        "key": "switch",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for multi-step confirmation or non-immediate choices."
+      ]
+    },
+    {
+      "id": "tabs",
+      "displayName": "Tabs",
+      "package": "@vyrnforge/ui-components",
+      "category": "navigation",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Tabs",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-tabs",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/navigation/tabs"
+      },
+      "maturityEvidence": {
+        "key": "tabs",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for simple view modes; use SegmentedControl instead."
+      ]
+    },
+    {
+      "id": "text",
+      "displayName": "Text",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Text",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-text",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "text",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for headings; use Heading."]
+    },
+    {
+      "id": "text-input",
+      "displayName": "TextInput",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "TextInput",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-text-input",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/text-input"
+      },
+      "maturityEvidence": {
+        "key": "text-input",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for long multi-line input; use Textarea."]
+    },
+    {
+      "id": "textarea",
+      "displayName": "Textarea",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Textarea",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-textarea",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/textarea"
+      },
+      "maturityEvidence": {
+        "key": "textarea",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["Avoid for short single-line values."]
+    },
+    {
+      "id": "toast",
+      "displayName": "Toast",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Toast",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-toast",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/feedback/toast"
+      },
+      "maturityEvidence": {
+        "key": "toast",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history."
+      ]
+    },
+    {
+      "id": "toast-action",
+      "displayName": "ToastAction",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ToastAction",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-toast[action-label]",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "toast-action",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["requires-verification"]
+    },
+    {
+      "id": "toast-provider",
+      "displayName": "ToastProvider",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ToastProvider",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-mapping",
+        "target": "vf-toast-viewport",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "toast-provider",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["requires-verification"]
+    },
+    {
+      "id": "toggle-button",
+      "displayName": "ToggleButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ToggleButton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-toggle-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/actions/toggle-button"
+      },
+      "maturityEvidence": {
+        "key": "toggle-button",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for persistent settings; use Switch. Avoid navigation links."
+      ]
+    },
+    {
+      "id": "toggle-button-group",
+      "displayName": "ToggleButtonGroup",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ToggleButtonGroup",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-toggle-button-group",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/actions/toggle-button-group"
+      },
+      "maturityEvidence": {
+        "key": "toggle-button-group",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for long form choice labels or descriptions; use RadioGroup."
+      ]
+    },
+    {
+      "id": "toolbar-button",
+      "displayName": "ToolbarButton",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ToolbarButton",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-toolbar-button",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/actions/toolbar-button"
+      },
+      "maturityEvidence": {
+        "key": "toolbar-button",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for standalone page-level primary actions."]
+    },
+    {
+      "id": "tooltip",
+      "displayName": "Tooltip",
+      "package": "@vyrnforge/ui-components",
+      "category": "overlay",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Tooltip",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-tooltip",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/overlays/tooltip"
+      },
+      "maturityEvidence": {
+        "key": "tooltip",
+        "status": "pending"
+      },
+      "knownLimitations": ["Avoid for required instructions."]
+    },
+    {
+      "id": "top-nav",
+      "displayName": "TopNav",
+      "package": "@vyrnforge/ui-components",
+      "category": "navigation",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "TopNav",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-top-nav",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "top-nav",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid when the application needs a fully custom marketing or public-site header."
+      ]
+    },
+    {
+      "id": "transfer-list",
+      "displayName": "TransferList",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "TransferList",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-transfer-list",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/data-management/transfer-list"
+      },
+      "maturityEvidence": {
+        "key": "transfer-list",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for thousands of items, server pagination, complex IAM permission inheritance, hierarchical resources, approval/audit workflows, or data-grid use cases."
+      ]
+    },
+    {
+      "id": "use-toast",
+      "displayName": "useToast",
+      "package": "@vyrnforge/ui-components",
+      "category": "primitive",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "useToast",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "renderer-service",
+        "target": "VyrnForgeToastViewportElement service API",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "use-toast",
+        "status": "requires-verification"
+      },
+      "knownLimitations": ["requires-verification"]
+    },
+    {
+      "id": "validation-message",
+      "displayName": "ValidationMessage",
+      "package": "@vyrnforge/ui-components",
+      "category": "form-control",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "ValidationMessage",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-validation-message",
+        "status": "current",
+        "evidence": "docs/metadata/gmf3-closure.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/gmf4-closure.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "/components/forms/validation-message"
+      },
+      "maturityEvidence": {
+        "key": "validation-message",
+        "status": "requires-verification"
+      },
+      "knownLimitations": [
+        "Avoid for page-level blocking messages; use InlineMessage or ErrorState."
+      ]
+    }
+  ],
+  "exclusions": {
+    "publicGridComponents": [
+      {
+        "id": "data-grid-column-menu",
+        "displayName": "DataGridColumnMenu",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "data-grid-empty-state",
+        "displayName": "DataGridEmptyState",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "data-grid-error-state",
+        "displayName": "DataGridErrorState",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "data-grid-filter-bar",
+        "displayName": "DataGridFilterBar",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "data-grid-pagination",
+        "displayName": "DataGridPagination",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "data-grid-search",
+        "displayName": "DataGridSearch",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "data-grid-skeleton-rows",
+        "displayName": "DataGridSkeletonRows",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "data-grid-toolbar",
+        "displayName": "DataGridToolbar",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "universal-data-grid",
+        "displayName": "UniversalDataGrid",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "data-grid",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
+      {
+        "id": "use-data-grid-state",
+        "displayName": "useDataGridState",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      }
+    ],
+    "plannedNonPublicComponents": [
+      {
+        "id": "activity-log",
+        "displayName": "ActivityLog",
+        "package": "@vyrnforge/ui-components",
+        "category": "data-display",
+        "maturity": "planned",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
+      },
+      {
+        "id": "description-list",
+        "displayName": "DescriptionList",
+        "package": "@vyrnforge/ui-components",
+        "category": "data-display",
+        "maturity": "planned",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
+      },
+      {
+        "id": "key-value-list",
+        "displayName": "KeyValueList",
+        "package": "@vyrnforge/ui-components",
+        "category": "data-display",
+        "maturity": "planned",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
+      },
+      {
+        "id": "progress",
+        "displayName": "Progress",
+        "package": "@vyrnforge/ui-components",
+        "category": "feedback",
+        "maturity": "planned",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
+      },
+      {
+        "id": "property-table",
+        "displayName": "PropertyTable",
+        "package": "@vyrnforge/ui-components",
+        "category": "data-display",
+        "maturity": "planned",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
+      },
+      {
+        "id": "resource-list",
+        "displayName": "ResourceList",
+        "package": "@vyrnforge/ui-components",
+        "category": "data-display",
+        "maturity": "planned",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
+      },
+      {
+        "id": "timeline",
+        "displayName": "Timeline",
+        "package": "@vyrnforge/ui-components",
+        "category": "data-display",
+        "maturity": "planned",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
+      }
+    ],
+    "internalNonPublicComponents": [
+      {
+        "id": "toast-viewport",
+        "displayName": "ToastViewport",
+        "package": "@vyrnforge/ui-components",
+        "category": "internal",
+        "maturity": "internal",
+        "publicExport": false,
+        "decision": "excluded",
+        "reason": "Internal implementation surface and not part of the public beta contract."
+      }
+    ],
+    "platforms": [
+      {
+        "id": "react-native",
+        "decision": "excluded",
+        "reason": "Outside the first web multi-framework beta program."
+      },
+      {
+        "id": "flutter",
+        "decision": "excluded",
+        "reason": "Outside the first web multi-framework beta program."
+      },
+      {
+        "id": "native-android",
+        "decision": "excluded",
+        "reason": "Outside the first web multi-framework beta program."
+      },
+      {
+        "id": "native-ios",
+        "decision": "excluded",
+        "reason": "Outside the first web multi-framework beta program."
+      },
+      {
+        "id": "desktop-native",
+        "decision": "excluded",
+        "reason": "Outside the first web multi-framework beta program."
+      }
+    ]
+  },
+  "crossCuttingReleaseGaps": [
+    {
+      "area": "internationalization-and-rtl",
+      "status": "documentation-gap",
+      "releaseDisposition": "BT-8012",
+      "note": "The current component catalog has no canonical per-component internationalization or RTL evidence field. Beta documentation must state ownership and known limitations without inventing support claims."
+    },
+    {
+      "area": "responsive-and-reflow",
+      "status": "evidence-gap",
+      "releaseDisposition": "BT-8005,BT-8009,BT-8010",
+      "note": "The current scope is frozen, but final compatibility and application canaries must validate responsive and integration assumptions before publication."
+    },
+    {
+      "area": "maturity-promotion",
+      "status": "not-performed",
+      "releaseDisposition": "component-maturity-policy",
+      "note": "BT-8001 records scope only. No component is promoted to beta-stable by this audit."
+    }
+  ],
+  "downstreamReleaseTasks": [
+    "BT-8002",
+    "BT-8003",
+    "BT-8004",
+    "BT-8005",
+    "BT-8006",
+    "BT-8007",
+    "BT-8008",
+    "BT-8009",
+    "BT-8010",
+    "BT-8011",
+    "BT-8012",
+    "BT-8013",
+    "BT-8014"
+  ],
+  "scopeBlockers": [],
+  "acceptedLimitations": [
+    "React and native HTML are first-class renderers; Angular and Vue are verified consumers of the native renderer.",
+    "Angular Forms and Vue v-model bridges are reference adapters and are not separate published component libraries.",
+    "The React data grid remains explicitly deferred from the non-grid beta release group.",
+    "Non-web native platforms remain outside this beta support claim."
+  ]
+}

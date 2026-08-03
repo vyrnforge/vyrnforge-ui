@@ -4,7 +4,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 
 ## Release identity
 
-- [ ] Release scope is approved.
+- [ ] Release scope is approved. For the first non-grid beta, verify `docs/metadata/non-grid-beta-scope.json` with `npm run verify:beta-scope`.
 - [ ] Version is selected.
 - [ ] npm tag is selected: `alpha`, `beta`, candidate tag, or `latest` only for approved stable releases.
 - [ ] Package versions remain synchronized within the approved release group; the data-grid alpha is not promoted with the non-grid beta.

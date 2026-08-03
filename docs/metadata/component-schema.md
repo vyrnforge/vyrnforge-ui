@@ -75,7 +75,9 @@ declarations.
 
 Every public `@vyrnforge/ui-components` record must include `frameworkParity`.
 The record identifies the current React export, the shared behavior foundation,
-the planned native strategy or mapping, Angular/Vue consumer targets, and beta
-scope. This is catalog coverage, not a runtime support claim. Detailed
-properties, events, slots, methods, form behavior, and accessibility remain in
-`component-contracts.json` and expand family-by-family before GMF3.
+the current native strategy or mapping, GMF4-verified Angular/Vue consumer
+targets, and beta scope. Angular and Vue mappings must reference
+`docs/metadata/gmf4-closure.json`; they remain consumers of the shared native
+renderer rather than separate component implementations. Detailed properties,
+events, slots, methods, form behavior, and accessibility remain in
+`component-contracts.json`.

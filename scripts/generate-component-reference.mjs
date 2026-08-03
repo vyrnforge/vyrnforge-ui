@@ -44,7 +44,7 @@ function frameworkExamples(component) {
         ? 'schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import "@vyrnforge/ui-elements/register" from application bootstrap'
         : "",
       example: nativeTag ? `<${nativeTag}></${nativeTag}>` : "",
-      note: "Angular consumes the same Custom Element contract. The packed Angular consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration.",
+      note: "Angular consumes the same GMF4-verified Custom Element contract. Use property/event bindings; the optional vfFormControl adapter is reserved for Angular Forms integration.",
     },
     vue: {
       label: "Vue",
@@ -57,7 +57,7 @@ function frameworkExamples(component) {
         ? "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }"
         : "",
       example: nativeTag ? `<${nativeTag}></${nativeTag}>` : "",
-      note: "Vue consumes the same Custom Element contract. The packed Vue consumer is verified at framework level; this component status remains sourced from canonical component parity metadata until GMF4 closes. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events.",
+      note: "Vue consumes the same GMF4-verified Custom Element contract. Use .prop for object-valued properties; the optional reference wrapper maps modelValue to canonical value/checked events.",
     },
   };
 }
