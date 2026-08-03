@@ -27,7 +27,7 @@ component whose `frameworkParity.betaScope` is `included`. Angular and Vue
 examples consume the same `vf-*` element contract rather than creating
 framework-specific component definitions. Per-component framework status is
 read directly from `components.json`; the documentation generator does not
-promote `planned-gmf4` component parity merely because the framework-level
+invent component parity that differs from the GMF4-verified framework-level
 consumer fixture has passed.
 
 Detailed properties, attributes, events, slots, methods, accessibility, and

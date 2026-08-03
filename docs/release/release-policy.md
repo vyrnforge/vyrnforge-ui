@@ -6,12 +6,14 @@ The explicit prerelease dist-tag is authoritative during alpha. npm may retain a
 
 ## Multi-framework beta scope
 
-The first beta program applies to `ui-core`, planned `ui-behaviors`,
-`ui-components`, and planned `ui-elements`. The data-grid package remains an
+The first beta program applies to `ui-core`, `ui-behaviors`, `ui-components`,
+and `ui-elements`. BT-8001 freezes the component-level boundary in
+`docs/metadata/non-grid-beta-scope.json`. The data-grid package remains an
 independent React alpha and is not a beta blocker.
 
 React and native HTML are first-class beta targets. Angular and Vue are
-verified consumers and require GMF4 evidence before support is claimed.
+GMF4-verified consumers of the native renderer; they are not separate
+component implementations.
 Architecture examples alone are not release evidence.
 
 ## Maturity stages

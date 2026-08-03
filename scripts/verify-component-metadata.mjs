@@ -305,15 +305,19 @@ export function verifyComponentMetadata(
           component,
           "current native frameworkParity must reference native renderer evidence",
         );
-      if (
-        parity?.angular?.status !== "planned-gmf4" ||
-        parity?.vue?.status !== "planned-gmf4"
-      )
-        addFailure(
-          failures,
-          component,
-          "Angular and Vue mappings must remain planned until GMF4",
-        );
+      for (const framework of ["angular", "vue"]) {
+        const consumer = parity?.[framework];
+        if (
+          consumer?.status !== "verified-consumer" ||
+          consumer?.consumes !== "@vyrnforge/ui-elements" ||
+          consumer?.evidence !== "docs/metadata/gmf4-closure.json"
+        )
+          addFailure(
+            failures,
+            component,
+            `${framework} mapping must reference the GMF4-verified ui-elements consumer contract`,
+          );
+      }
     }
     if (component.maturity === "deprecated") {
       const deprecation = component.deprecation;

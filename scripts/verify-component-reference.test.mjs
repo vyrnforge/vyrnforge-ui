@@ -65,19 +65,16 @@ test("rejects a missing framework tab", () =>
       assert(failures.some((failure) => failure.includes("missing vue"))),
   ));
 
-test("rejects invented Angular or Vue parity promotion", () =>
+test("rejects a generated Angular status that differs from canonical parity", () =>
   fixture(
     (root) => {
       const file = path.join(root, "docs/generated/component-reference.json");
       const value = JSON.parse(readFileSync(file, "utf8"));
       const component = value.components.find(
-        (entry) => entry.frameworks?.angular?.status === "planned-gmf4",
+        (entry) => entry.frameworks?.angular?.status === "verified-consumer",
       );
-      assert(
-        component,
-        "fixture needs a component with planned-gmf4 Angular status",
-      );
-      component.frameworks.angular.status = "verified-consumer";
+      assert(component, "fixture needs a GMF4-verified Angular component");
+      component.frameworks.angular.status = "planned-gmf4";
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) =>
