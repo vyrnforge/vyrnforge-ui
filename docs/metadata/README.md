@@ -24,6 +24,7 @@ queryable repository facts and evidence records.
 | `gmf3-closure.json`                         | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims.            |
 | `gmf4-closure.json`                         | CF-7014 final Native HTML, React, Angular, and Vue compatibility gate, package-boundary decision, evidence, and S7 closure. |
 | `non-grid-beta-scope.json`                  | BT-8001 frozen 67-component non-grid beta scope, renderer mappings, maturity, exclusions, and downstream release gaps.      |
+| `release-groups.json`                       | BT-8002 canonical non-grid beta and independent data-grid alpha versions, package order, dist-tags, and dependency graph.   |
 | `component-contracts.json`                  | Canonical cross-framework events, slots, form association, and representative component contracts.                          |
 | `component-contract.schema.json`            | JSON Schema for the canonical multi-framework component contract catalog.                                                   |
 | `components.json`                           | Canonical normalized component and public-contract catalog, including maturity evidence.                                    |

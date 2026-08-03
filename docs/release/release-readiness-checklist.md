@@ -7,7 +7,8 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Release scope is approved. For the first non-grid beta, verify `docs/metadata/non-grid-beta-scope.json` with `npm run verify:beta-scope`.
 - [ ] Version is selected.
 - [ ] npm tag is selected: `alpha`, `beta`, candidate tag, or `latest` only for approved stable releases.
-- [ ] Package versions remain synchronized within the approved release group; the data-grid alpha is not promoted with the non-grid beta.
+- [ ] `npm run verify:release-groups` passes against `docs/metadata/release-groups.json`.
+- [ ] Package versions remain synchronized within the approved release group; `0.2.0-beta.1` excludes the independent `0.1.0-alpha.2` data-grid release.
 - [ ] VyrnForge Source License 1.0 metadata and package-local LICENSE files are verified.
 
 ## Mandatory blockers

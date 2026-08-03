@@ -80,8 +80,8 @@ maintainer may currently perform several roles.
 - Publication is manual through `release.yml`.
 - Publish mode requires the `npm-release` environment.
 - npm authorization is short-lived GitHub OIDC.
-- Package order is ui-core → ui-components → ui-data-grid.
-- The selected prerelease dist-tag must match the version channel.
+- The selected BT-8002 release group determines package order: non-grid beta publishes core → behaviors → components → elements; grid alpha publishes only ui-data-grid.
+- The selected prerelease dist-tag and exact version must match the release-group manifest.
 
 ### Repository release record
 
@@ -107,6 +107,7 @@ maintainer may currently perform several roles.
 
 ## Current operating model
 
-VyrnForge UI keeps coordinated package versions during alpha. CI testing is
-package-impact aware, but publication remains coordinated. Independent package
-versioning requires a separate approved release-governance change.
+VyrnForge UI uses two approved release groups. The four-package non-grid beta
+remains synchronized, while `ui-data-grid` has an independent alpha version.
+CI testing is package-impact aware, and publication requires an explicit group
+selection plus the exact version and dist-tag from the canonical manifest.

@@ -1,6 +1,6 @@
 import "./styles/index.css";
 
-export const vyrnForgeUiElementsVersion = "0.1.0-alpha.1";
+export const vyrnForgeUiElementsVersion = "0.2.0-beta.1";
 
 export type {
   VyrnForgeElementForTagName,

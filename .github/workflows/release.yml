@@ -3,8 +3,16 @@ name: Controlled npm Release
 on:
   workflow_dispatch:
     inputs:
+      release-group:
+        description: Canonical BT-8002 release group
+        required: true
+        default: non-grid-beta
+        type: choice
+        options:
+          - non-grid-beta
+          - data-grid-alpha
       version:
-        description: Coordinated prerelease version, for example 0.1.0-alpha.2
+        description: Exact prerelease version declared for the selected group
         required: true
         type: string
       mode:
@@ -16,13 +24,13 @@ on:
           - verify
           - publish
       dist-tag:
-        description: npm dist-tag for the coordinated prerelease
+        description: npm dist-tag declared for the selected release group
         required: true
-        default: alpha
+        default: beta
         type: choice
         options:
-          - alpha
           - beta
+          - alpha
           - next
 
 permissions:
@@ -41,6 +49,7 @@ jobs:
     permissions:
       contents: read
     env:
+      RELEASE_GROUP: ${{ inputs.release-group }}
       RELEASE_VERSION: ${{ inputs.version }}
       RELEASE_TAG: ${{ inputs.dist-tag }}
       RELEASE_MODE: ${{ inputs.mode }}
@@ -76,7 +85,7 @@ jobs:
         run: npm ci
 
       - name: Verify release candidate inputs and registry availability
-        run: node scripts/verify-release-candidate.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+        run: node scripts/verify-release-candidate.mjs --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
 
       - name: Install Chromium for browser validation
         run: npx playwright install --with-deps chromium
@@ -85,7 +94,7 @@ jobs:
         run: npm run quality
 
       - name: Require complete assistive-technology evidence for beta
-        if: inputs.dist-tag == 'beta'
+        if: inputs.release-group == 'non-grid-beta'
         run: npm run verify:assistive-technology:release
 
       - name: Verify clean generated-artifact state
@@ -97,21 +106,29 @@ jobs:
       - name: Write verification summary
         shell: bash
         run: |
+          if test "$RELEASE_GROUP" = "non-grid-beta"; then
+            packages="@vyrnforge/ui-core -> @vyrnforge/ui-behaviors -> @vyrnforge/ui-components -> @vyrnforge/ui-elements"
+            package_dirs="packages/ui-core/dist packages/ui-behaviors/dist packages/ui-components/dist packages/ui-elements/dist"
+          else
+            packages="@vyrnforge/ui-data-grid"
+            package_dirs="packages/ui-data-grid/dist"
+          fi
           {
             echo "## VyrnForge npm release verification"
             echo
+            echo "- Release group: \`$RELEASE_GROUP\`"
             echo "- Candidate version: \`$RELEASE_VERSION\`"
             echo "- Dist-tag: \`$RELEASE_TAG\`"
             echo "- Requested mode: \`$RELEASE_MODE\`"
             echo "- Commit: \`$GITHUB_SHA\`"
-            echo "- Packages: \`@vyrnforge/ui-core -> @vyrnforge/ui-components -> @vyrnforge/ui-data-grid\`"
-            echo "- Internal dependencies: exact \`$RELEASE_VERSION\`"
+            echo "- Packages: \`$packages\`"
+            echo "- Internal dependencies: exact versions from \`docs/metadata/release-groups.json\`"
             echo "- Validation: workflow contracts, metadata, formatting, typecheck, coverage, accessibility, regression fixtures, package payloads, consumer, docs, and playground passed"
             echo "- Registry: candidate versions are not yet published"
             echo "- Credentials: no token secret used; verification did not request OIDC or publish"
             echo
             echo "### Package dist sizes"
-            du -sh packages/ui-core/dist packages/ui-components/dist packages/ui-data-grid/dist
+            du -sh $package_dirs
           } >> "$GITHUB_STEP_SUMMARY"
 
   publish-packages:
@@ -126,6 +143,7 @@ jobs:
       contents: read
       id-token: write
     env:
+      RELEASE_GROUP: ${{ inputs.release-group }}
       RELEASE_VERSION: ${{ inputs.version }}
       RELEASE_TAG: ${{ inputs.dist-tag }}
       VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
@@ -161,13 +179,15 @@ jobs:
 
       - name: Verify release-critical package state
         run: |
-          node scripts/verify-release-candidate.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+          node scripts/verify-release-candidate.mjs --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
           npm run verify:packages
 
       - name: Publish ui-core through npm OIDC
+        if: inputs.release-group == 'non-grid-beta'
         run: npm publish ./packages/ui-core --access public --tag "$RELEASE_TAG"
 
       - name: Verify ui-core registry propagation
+        if: inputs.release-group == 'non-grid-beta'
         shell: bash
         run: |
           for attempt in {1..12}; do
@@ -179,52 +199,101 @@ jobs:
           echo "ui-core publication did not propagate"
           exit 1
 
-      - name: Publish ui-components through npm OIDC
-        run: npm publish ./packages/ui-components --access public --tag "$RELEASE_TAG"
+      - name: Publish ui-behaviors through npm OIDC
+        if: inputs.release-group == 'non-grid-beta'
+        run: npm publish ./packages/ui-behaviors --access public --tag "$RELEASE_TAG"
 
-      - name: Verify ui-components registry propagation
+      - name: Verify ui-behaviors registry propagation
+        if: inputs.release-group == 'non-grid-beta'
         shell: bash
         run: |
           for attempt in {1..12}; do
-            if test "$(npm view "@vyrnforge/ui-components@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
-              npm view "@vyrnforge/ui-components@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION ? 0 : 1); })'
+            if test "$(npm view "@vyrnforge/ui-behaviors@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
+              npm view "@vyrnforge/ui-behaviors@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION ? 0 : 1); })'
               exit 0
             fi
             sleep 5
           done
-          echo "ui-components publication did not propagate with the expected ui-core dependency"
+          echo "ui-behaviors publication did not propagate with the expected ui-core dependency"
           exit 1
 
-      - name: Publish ui-data-grid through npm OIDC
-        run: npm publish ./packages/ui-data-grid --access public --tag "$RELEASE_TAG"
+      - name: Publish ui-components through npm OIDC
+        if: inputs.release-group == 'non-grid-beta'
+        run: npm publish ./packages/ui-components --access public --tag "$RELEASE_TAG"
 
-      - name: Verify ui-data-grid registry propagation and selected dist-tag
+      - name: Verify ui-components registry propagation
+        if: inputs.release-group == 'non-grid-beta'
         shell: bash
         run: |
           for attempt in {1..12}; do
-            if test "$(npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
-              npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION && dependencies["@vyrnforge/ui-components"] === process.env.RELEASE_VERSION ? 0 : 1); })'
-              for package_name in @vyrnforge/ui-core @vyrnforge/ui-components @vyrnforge/ui-data-grid; do
+            if test "$(npm view "@vyrnforge/ui-components@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
+              npm view "@vyrnforge/ui-components@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION && dependencies["@vyrnforge/ui-behaviors"] === process.env.RELEASE_VERSION ? 0 : 1); })'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "ui-components publication did not propagate with the expected beta dependencies"
+          exit 1
+
+      - name: Publish ui-elements through npm OIDC
+        if: inputs.release-group == 'non-grid-beta'
+        run: npm publish ./packages/ui-elements --access public --tag "$RELEASE_TAG"
+
+      - name: Verify ui-elements registry propagation and beta dist-tag
+        if: inputs.release-group == 'non-grid-beta'
+        shell: bash
+        run: |
+          for attempt in {1..12}; do
+            if test "$(npm view "@vyrnforge/ui-elements@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
+              npm view "@vyrnforge/ui-elements@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION && dependencies["@vyrnforge/ui-behaviors"] === process.env.RELEASE_VERSION ? 0 : 1); })'
+              for package_name in @vyrnforge/ui-core @vyrnforge/ui-behaviors @vyrnforge/ui-components @vyrnforge/ui-elements; do
                 npm view "$package_name" dist-tags --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const tags = JSON.parse(input); process.exit(tags[process.env.RELEASE_TAG] === process.env.RELEASE_VERSION ? 0 : 1); })'
               done
               exit 0
             fi
             sleep 5
           done
-          echo "ui-data-grid publication did not propagate with the expected dependencies and dist-tag"
+          echo "non-grid beta publication did not propagate with expected dependencies and dist-tags"
+          exit 1
+
+      - name: Publish ui-data-grid through npm OIDC
+        if: inputs.release-group == 'data-grid-alpha'
+        run: npm publish ./packages/ui-data-grid --access public --tag "$RELEASE_TAG"
+
+      - name: Verify ui-data-grid registry propagation and alpha dist-tag
+        if: inputs.release-group == 'data-grid-alpha'
+        shell: bash
+        run: |
+          BETA_VERSION="$(node --input-type=module -e 'import { readReleaseGroups } from "./scripts/release-groups.mjs"; console.log(readReleaseGroups().groups["non-grid-beta"].version);')"
+          export BETA_VERSION
+          for attempt in {1..12}; do
+            if test "$(npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
+              npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.BETA_VERSION && dependencies["@vyrnforge/ui-components"] === process.env.BETA_VERSION ? 0 : 1); })'
+              npm view "@vyrnforge/ui-data-grid" dist-tags --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const tags = JSON.parse(input); process.exit(tags[process.env.RELEASE_TAG] === process.env.RELEASE_VERSION ? 0 : 1); })'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "ui-data-grid alpha publication did not propagate with expected beta dependencies and dist-tag"
           exit 1
 
       - name: Write publication summary
         shell: bash
         run: |
+          if test "$RELEASE_GROUP" = "non-grid-beta"; then
+            packages="ui-core, ui-behaviors, ui-components, ui-elements"
+          else
+            packages="ui-data-grid"
+          fi
           {
             echo "## VyrnForge npm publication"
             echo
+            echo "- Release group: \`$RELEASE_GROUP\`"
             echo "- Candidate version: \`$RELEASE_VERSION\`"
             echo "- Dist-tag: \`$RELEASE_TAG\`"
             echo "- Commit: \`$GITHUB_SHA\`"
-            echo "- Published in order: ui-core, ui-components, ui-data-grid"
-            echo "- Registry propagation and exact internal dependencies verified"
+            echo "- Published in order: $packages"
+            echo "- Registry propagation and exact manifest dependencies verified"
             echo "- Credentials: GitHub OIDC trusted publishing only; no token secret used"
             echo "- Provenance: generated automatically by npm trusted publishing"
           } >> "$GITHUB_STEP_SUMMARY"
@@ -238,6 +307,7 @@ jobs:
     permissions:
       contents: read
     env:
+      RELEASE_GROUP: ${{ inputs.release-group }}
       RELEASE_VERSION: ${{ inputs.version }}
       RELEASE_TAG: ${{ inputs.dist-tag }}
 
@@ -256,13 +326,14 @@ jobs:
         run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
 
       - name: Verify registry metadata and fresh consumer
-        run: node scripts/verify-registry-release.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+        run: node scripts/verify-registry-release.mjs --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
 
       - name: Write registry verification summary
         run: |
           {
             echo "## Registry and consumer verification"
             echo
+            echo "- Release group: \`$RELEASE_GROUP\`"
             echo "- Exact version: \`$RELEASE_VERSION\`"
             echo "- Authoritative prerelease tag: \`$RELEASE_TAG\`"
             echo "- Package metadata and exact dependency graph verified"
@@ -280,6 +351,7 @@ jobs:
     permissions:
       contents: write
     env:
+      RELEASE_GROUP: ${{ inputs.release-group }}
       RELEASE_VERSION: ${{ inputs.version }}
       RELEASE_TAG: ${{ inputs.dist-tag }}
       GH_TOKEN: ${{ github.token }}
@@ -310,7 +382,7 @@ jobs:
           fi
 
       - name: Generate release notes
-        run: node scripts/create-release-notes.mjs --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --commit "$GITHUB_SHA" --output release-notes.md
+        run: node scripts/create-release-notes.mjs --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --commit "$GITHUB_SHA" --output release-notes.md
 
       - name: Create annotated tag and GitHub prerelease
         shell: bash
@@ -318,11 +390,11 @@ jobs:
           TAG="v$RELEASE_VERSION"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$TAG" "$GITHUB_SHA" -m "VyrnForge UI $RELEASE_VERSION"
+          git tag -a "$TAG" "$GITHUB_SHA" -m "VyrnForge UI $RELEASE_GROUP $RELEASE_VERSION"
           git push origin "$TAG"
           if ! gh release create "$TAG" \
             --target "$GITHUB_SHA" \
-            --title "VyrnForge UI $RELEASE_VERSION" \
+            --title "VyrnForge UI $RELEASE_GROUP $RELEASE_VERSION" \
             --prerelease \
             --notes-file release-notes.md; then
             git push origin ":refs/tags/$TAG" || true
@@ -334,6 +406,7 @@ jobs:
           {
             echo "## GitHub release record"
             echo
+            echo "- Release group: \`$RELEASE_GROUP\`"
             echo "- Tag: \`v$RELEASE_VERSION\`"
             echo "- GitHub Release: created as prerelease"
             echo "- Permission separation: this job has repository write access and no npm OIDC permission"

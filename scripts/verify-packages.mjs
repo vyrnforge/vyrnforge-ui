@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getReleasePackageMap, readReleaseGroups } from "./release-groups.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const npmCliPath = process.env.npm_execpath;
@@ -122,9 +123,7 @@ const packageByName = new Map(
 );
 const rootPackageJson = readJson(path.join(root, "package.json"));
 const licenseValue = "SEE LICENSE IN LICENSE";
-const releaseVersion =
-  process.env.VYRNFORGE_RELEASE_VERSION ??
-  packageByName.get("@vyrnforge/ui-core").version;
+const releasePackageMap = getReleasePackageMap(readReleaseGroups({ root }));
 const rootLicensePath = path.join(root, "LICENSE");
 const rootLicenseText = readFileSync(rootLicensePath, "utf8");
 const conflictingSpdxLicenses = new Set([
@@ -156,15 +155,21 @@ assert(
 for (const packageInfo of packages) {
   const packageDir = path.join(root, packageInfo.dir);
   const packageJson = packageByName.get(packageInfo.name);
+  const expectedVersion = releasePackageMap.get(packageInfo.name)?.version;
   const packageLicensePath = path.join(packageDir, "LICENSE");
+
+  assert(
+    expectedVersion,
+    `${packageInfo.name}: missing from canonical release groups`,
+  );
 
   assert(
     packageJson.name === packageInfo.name,
     `${packageInfo.name}: package name mismatch`,
   );
   assert(
-    packageJson.version === releaseVersion,
-    `${packageInfo.name}: version must be ${releaseVersion}`,
+    packageJson.version === expectedVersion,
+    `${packageInfo.name}: version must be ${expectedVersion}`,
   );
   assert(
     !Object.hasOwn(packageJson, "private"),
@@ -395,8 +400,8 @@ for (const packageInfo of packages) {
   const files = packInfo.files.map((file) => file.path);
 
   assert(
-    packInfo.version === releaseVersion,
-    `${packageInfo.name}: packed manifest version must be ${releaseVersion}`,
+    packInfo.version === expectedVersion,
+    `${packageInfo.name}: packed manifest version must be ${expectedVersion}`,
   );
 
   for (const file of [
