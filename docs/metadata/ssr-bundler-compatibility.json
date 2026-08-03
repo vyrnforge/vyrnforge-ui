@@ -7,7 +7,7 @@
     "storyPoints": 5,
     "status": "evidence-complete",
     "gate": "GMF4",
-    "gateStatus": "in-progress",
+    "gateStatus": "passed",
     "predecessors": ["CF-7001", "CF-7002", "CF-7003", "CF-7005"]
   },
   "supportClaim": "ssr-bundler-verified",

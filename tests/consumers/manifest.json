@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "supportClaim": "partial-gmf4-runtime-evidence",
+  "supportClaim": "gmf4-runtime-evidence-complete",
   "runtimeBuildGate": "GMF4",
   "fixtures": [
     {

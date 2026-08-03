@@ -5,7 +5,7 @@
     "batch": "CF-7001-CF-7002-CF-7008",
     "status": "evidence-complete",
     "gate": "GMF4",
-    "gateStatus": "in-progress",
+    "gateStatus": "passed",
     "baseCommit": "f55828e9fe4fbb2e16b2d28bfc8d3f1732bdfa8a"
   },
   "tasks": [

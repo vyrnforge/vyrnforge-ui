@@ -5,7 +5,8 @@
     "sprint": "S7",
     "storyPoints": 8,
     "gate": "GMF4",
-    "status": "evidence-complete"
+    "status": "evidence-complete",
+    "gateStatus": "passed"
   },
   "supportClaim": "cross-framework-accessibility-verified",
   "predecessors": ["CF-7009"],

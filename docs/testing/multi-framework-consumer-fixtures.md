@@ -16,12 +16,17 @@ tests/consumers/vue/
 
 ## Current claim
 
-The original S4 fixtures recorded architecture only. CF-7001 and CF-7002 now
-upgrade native HTML and React to packed runtime evidence. CF-7003 upgrades
-Angular to `packed-angular-runtime-verified`. CF-7004 adds the
-`angular-forms-adapter-verified` reference integration. CF-7005 upgrades Vue to `packed-vue-runtime-verified` through clean packed
-installation, strict template typing, production Vite output, and Chromium
-evidence. Vue `v-model` translation remains CF-7006 work.
+Vue packed-consumer runtime evidence is recorded as `packed-vue-runtime-verified`.
+
+CF-7001 through CF-7014 complete the GMF4 evidence chain. Native HTML and
+React are first-class web renderers. Angular and Vue are verified packed
+consumers of the shared native renderer. Angular Forms and Vue `v-model`
+remain thin reference adapters rather than separate component libraries.
+
+The shared browser matrix, automated accessibility matrix, named Windows +
+Chrome + NVDA review, generated component contracts, SSR/bundler checks, and
+reviewed migration guidance are complete. The data grid remains explicitly
+outside the non-grid beta release group.
 
 `npm run verify:multi-framework` verifies fixture claims and structure.
 `npm run verify:consumer-foundations:runtime` performs clean tarball

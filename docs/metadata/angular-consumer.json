@@ -7,7 +7,7 @@
     "storyPoints": 8,
     "status": "evidence-complete",
     "gate": "GMF4",
-    "gateStatus": "in-progress",
+    "gateStatus": "passed",
     "baseCommit": "9edddc68e403da770c9c435a3a626bc3ea595052"
   },
   "framework": {
