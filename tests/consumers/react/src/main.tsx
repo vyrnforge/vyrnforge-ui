@@ -103,7 +103,7 @@ function App() {
   return (
     <main className="vf-consumer-react" data-react-consumer>
       <vf-inline-message title="React consumer ready" variant="success">
-        React 19 is consuming packed VyrnForge Custom Elements directly.
+        React is consuming packed VyrnForge Custom Elements directly.
       </vf-inline-message>
 
       <vf-button ref={actionRef} action="react-save" variant="primary">
