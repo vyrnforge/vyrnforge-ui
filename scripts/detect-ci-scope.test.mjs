@@ -132,9 +132,14 @@ test("playground-only changes build only the playground", () => {
 });
 
 test("consumer fixture changes run only the packed-consumer gate", () => {
-  const plan = planCiScope(["tests/package-consumer/src/main.tsx"]);
-  expectEnabled(plan, ["consumer"]);
-  expectDisabled(plan, ["quality", "packages", "docs", "playground", "full"]);
+  for (const file of [
+    "tests/package-consumer/src/main.tsx",
+    "tests/beta-package-consumer/src/main.tsx",
+  ]) {
+    const plan = planCiScope([file]);
+    expectEnabled(plan, ["consumer"]);
+    expectDisabled(plan, ["quality", "packages", "docs", "playground", "full"]);
+  }
 });
 
 test("multi-framework fixture changes run architecture, consumer, and docs checks", () => {
