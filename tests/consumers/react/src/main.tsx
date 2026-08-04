@@ -29,7 +29,7 @@ function App() {
         {
           id: "summary",
           label: "Summary",
-          content: "React 19 property assignment",
+          content: "React property assignment",
         },
         {
           id: "events",
@@ -64,6 +64,9 @@ function App() {
     if (!tabsElement || !ownerElement) {
       throw new Error("React did not attach the Custom Element refs.");
     }
+
+    // React 18 does not assign object-valued Custom Element properties from JSX.
+    tabsElement.items = tabs;
 
     const assignedItems = tabsElement.items;
     const itemsMatch =
@@ -107,11 +110,7 @@ function App() {
         Save from React
       </vf-button>
 
-      <vf-tabs
-        ref={tabsRef}
-        aria-label="React consumer sections"
-        items={tabs}
-      />
+      <vf-tabs ref={tabsRef} aria-label="React consumer sections" />
 
       <vf-text-input
         ref={ownerRef}
