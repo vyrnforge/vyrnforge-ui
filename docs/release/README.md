@@ -26,6 +26,7 @@ prerelease.
 | [beta-package-artifact-verification.md](beta-package-artifact-verification.md)               | BT-8003 tarball payload, public entry-point, offline-install, report, and cleanup verification.                   |
 | [beta-package-size-budgets.md](beta-package-size-budgets.md)                                 | BT-8004 package, JavaScript, declaration, and CSS growth budgets plus temporary waiver governance.                |
 | [security-workflow-hardening.md](security-workflow-hardening.md)                             | BT-8006 dependency, CodeQL, workflow-lint, permission, and protected-gate controls.                               |
+| [trusted-publishing-provenance.md](trusted-publishing-provenance.md)                         | BT-8007 OIDC publisher bindings, credential-free dry run, provenance verification, and external evidence.         |
 
 The executable BT-8005 environment matrix is documented in
 [`docs/testing/compatibility-release-matrix.md`](../testing/compatibility-release-matrix.md).

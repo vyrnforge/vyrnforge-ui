@@ -108,7 +108,9 @@ Before the first trusted publication, configure npm trusted publishers for each
 publishable package to trust this repository and the `release.yml` workflow.
 Keep the protected `npm-release` environment approval in place. Do not add npm
 tokens, `NODE_AUTH_TOKEN`, personal access tokens, or other long-lived registry
-credentials as a substitute for GitHub OIDC.
+credentials as a substitute for GitHub OIDC. The exact publisher fields,
+credential-free dry-run command, and external evidence requirements are defined
+in [trusted-publishing-provenance.md](trusted-publishing-provenance.md).
 
 ## Partial publication handling
 
