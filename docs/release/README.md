@@ -2,17 +2,16 @@
 
 This directory is the source of truth for VyrnForge UI release governance.
 
-VyrnForge UI is currently in an early alpha prerelease stage and is
-source-available under the VyrnForge Source License 1.0.
-`@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease,
-and `0.1.0-alpha.1` is the initial coordinated alpha published for all three
-packages. Future coordinated prereleases use the manually dispatched trusted
-publishing workflow, protected `npm-release` environment, registry verification,
-and automated Git tag plus GitHub prerelease record.
+VyrnForge UI maintains two explicit prerelease tracks. The synchronized
+`non-grid-beta` group contains `ui-core`, `ui-behaviors`, `ui-components`, and
+`ui-elements`; `ui-data-grid` remains independently versioned on the alpha
+track. Publication uses the manually dispatched trusted-publishing workflow,
+the protected `npm-release` environment, registry verification, and automated
+Git tag plus GitHub prerelease creation.
 
-The explicit prerelease dist-tag is authoritative. npm may retain a
-registry-managed `latest` tag, but it is not a stable-release signal during
-alpha.
+The selected release-group manifest and prerelease dist-tag are authoritative.
+An npm-managed `latest` tag is not a stability signal while packages remain in
+prerelease.
 
 | Document                                                                                     | Purpose                                                                                                           |
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -25,3 +24,8 @@ alpha.
 | [release-readiness-checklist.md](release-readiness-checklist.md)                             | Reusable release checklist for alpha, beta, and stable releases.                                                  |
 | [external-consumer-verification.md](external-consumer-verification.md)                       | Packed package consumer fixture and verification command.                                                         |
 | [beta-package-artifact-verification.md](beta-package-artifact-verification.md)               | BT-8003 tarball payload, public entry-point, offline-install, report, and cleanup verification.                   |
+| [beta-package-size-budgets.md](beta-package-size-budgets.md)                                 | BT-8004 package, JavaScript, declaration, and CSS growth budgets plus temporary waiver governance.                |
+| [security-workflow-hardening.md](security-workflow-hardening.md)                             | BT-8006 dependency, CodeQL, workflow-lint, permission, and protected-gate controls.                               |
+
+The executable BT-8005 environment matrix is documented in
+[`docs/testing/compatibility-release-matrix.md`](../testing/compatibility-release-matrix.md).

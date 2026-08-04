@@ -41,8 +41,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  compatibility-checks:
+    name: compatibility-checks
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/_compatibility.yml
+    permissions:
+      contents: read
+
+  security-checks:
+    name: security-checks
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      contents: read
+      pull-requests: read
+      security-events: write
+
   verify-release:
     name: verify-release
+    needs:
+      - compatibility-checks
+      - security-checks
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -92,6 +111,12 @@ jobs:
 
       - name: Run authoritative release validation
         run: npm run quality
+
+      - name: Verify beta artifacts and approved size budgets
+        if: inputs.release-group == 'non-grid-beta'
+        run: |
+          npm run verify:beta-package-artifacts
+          npm run verify:beta-package-size-budgets
 
       - name: Require complete assistive-technology evidence for beta
         if: inputs.release-group == 'non-grid-beta'

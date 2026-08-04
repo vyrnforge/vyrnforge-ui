@@ -20,8 +20,8 @@ not own product behavior, application state, public APIs, or styling contracts.
 - Use read-only permissions by default.
 - Use npm trusted publishing through GitHub OIDC only in the protected publish
   job.
-- Keep expensive cross-version checks in the nightly workflow instead of every
-  pull request.
+- Reuse the same compatibility and security contracts for pull requests, nightly
+  drift detection, and release preflight instead of maintaining separate gates.
 
 ## Workflow map
 
@@ -47,7 +47,7 @@ Repository development, pull-request CI, Pages, release verification, and nightl
 - npm `11.16.0`, pinned by the root `packageManager`;
 - TypeScript `7.0.2`, pinned exactly in the root and every workspace manifest.
 
-`scripts/verify-toolchain.mjs` prevents version drift across manifests, the lockfile, and workflows. Development-only workspaces require Node `>=24.18 <25` and npm `>=11.16 <12`; published packages require npm `>=11.16 <12` and declare Node `>=22.12 <25` as the intended consumer compatibility target. Complete Node 22 and Node 24 verification is deferred to VF-7001 and VF-7002.
+`scripts/verify-toolchain.mjs` prevents version drift across manifests, the lockfile, and workflows. Development-only workspaces require Node `>=24.18 <25` and npm `>=11.16 <12`; published packages require npm `>=11.16 <12` and declare Node `>=22.12 <25` as the intended consumer compatibility target. BT-8005 verifies the published-package Node 22.12 lower bound and the Node 24.18 repository baseline across native HTML, React, Angular, and Vue consumers.
 
 TypeScript 7 package builds separate runtime and declaration responsibilities. `tsup` emits ESM, CommonJS, and CSS with declaration bundling disabled. The native TypeScript CLI runs with each package's `tsconfig.build.json` to emit declaration-only output, and `scripts/prepare-package-declarations.mjs` removes CSS-only declaration imports and verifies that relative declaration references resolve before package verification. This avoids relying on declaration-bundling plugins built against the legacy TypeScript JavaScript compiler API.
 
@@ -57,11 +57,14 @@ The package graph is:
 
 ```text
 ui-core
-  └─ ui-components
-       └─ ui-data-grid
+  └─ ui-behaviors
+       ├─ ui-components
+       │    └─ ui-data-grid
+       └─ ui-elements
 ```
 
-`ui-data-grid` also depends directly on `ui-core`.
+`ui-components` and `ui-elements` also depend directly on `ui-core`.
+`ui-data-grid` depends directly on both `ui-core` and `ui-components`.
 
 The change planner uses the following impact rules:
 
@@ -134,10 +137,10 @@ The G1 quality checks aggregated by `ci-gate` are:
 - normalized component metadata and component-maturity verification; and
 - documentation and playground builds whenever the planner requires them.
 
-Cross-version Node/React compatibility matrices, dependency audit, npm publication,
-registry-consumer verification, Pages deployment, and release-record creation
-remain later compatibility or release checks. They are intentionally outside
-the pull-request `ci-gate`; the nightly and release workflows own them.
+The BT-8005 compatibility matrix and BT-8006 security workflow are mandatory
+inputs to `ci-gate`. They also run in nightly drift detection and before manual
+release verification. npm publication, registry-consumer verification, Pages
+deployment, and release-record creation remain outside pull-request CI.
 
 The orchestrator temporarily preserves these compatibility checks:
 
@@ -188,15 +191,36 @@ workflow.
 
 ### Package payloads
 
-Package verification remains coordinated because the three packages share one
-release version and exact internal dependencies during alpha. It verifies all
-publishable artifacts even when only one package changed.
+Package verification follows the canonical BT-8002 release groups. The four
+non-grid beta packages are built and packed together; `ui-data-grid` retains its
+independent alpha version. BT-8003 verifies every public entry point and clean
+offline tarball consumption. BT-8004 measures packed, unpacked, JavaScript,
+declaration, CSS, and file-count dimensions and fails growth beyond the
+approved budget unless a narrow, unexpired waiver exists.
 
 ### External consumer
 
 The external-consumer job always uses packed artifacts, never workspace links.
 It remains independent from the package job so a clean runner proves the public
 boundary.
+
+### Compatibility release matrix
+
+`.github/workflows/_compatibility.yml` executes the canonical BT-8005 matrix.
+Cases cover the supported Node 22.12 and Node 24.18 lines, React 18 and 19,
+Angular 21 and 22, Vue 3.4 and 3.5, and native HTML in Chromium, Firefox, and
+WebKit. Every case installs clean fixture dependencies, packs the VyrnForge
+packages, rejects workspace links, typechecks, production-builds, and runs the
+shared browser smoke scenarios. Each case uploads a machine-readable report.
+
+### Security validation
+
+`.github/workflows/_security.yml` owns pull-request dependency review, a
+high-severity audit of shipped dependencies, CodeQL analysis, verified
+`actionlint`, ShellCheck, immutable Action-pin enforcement, and security
+contract checks. Permissions are job-scoped: normal checks are read-only, and
+only CodeQL receives `security-events: write`. Mandatory failures cannot be
+converted to warnings or hidden with `continue-on-error`.
 
 ### Documentation
 
@@ -247,10 +271,12 @@ the deployment base paths, then deploys the assembled static artifact.
 
 ## Trusted release pipeline
 
-`release.yml` is manual and serialized. It has four responsibilities:
+`release.yml` is manual and serialized. The compatibility and security reusable
+workflows must succeed first. It then has four release responsibilities:
 
-1. **verify-release** — read-only candidate validation; no environment and no
-   OIDC.
+1. **verify-release** — read-only candidate validation, including BT-8003
+   package artifacts and BT-8004 budgets for the non-grid beta group; no
+   environment and no OIDC.
 2. **publish-packages** — protected `npm-release` environment; `contents: read`
    plus `id-token: write`; publishes ui-core, ui-components, and ui-data-grid in
    dependency order.
@@ -309,7 +335,8 @@ the hour. It validates:
 - package payloads;
 - packed external consumer;
 - docs and playground;
-- high-severity dependency audit;
+- the complete BT-8005 compatibility matrix;
+- BT-8006 dependency, CodeQL, actionlint, ShellCheck, and workflow validation;
 - one final `nightly-gate`.
 
 Nightly never publishes, deploys, creates tags, or writes repository contents.
@@ -323,6 +350,12 @@ npm run format
 npm run test:ci-scope
 npm run verify:workflows
 npm run verify:templates
+npm run test:beta-package-size-budgets
+npm run verify:beta-package-size-budgets
+npm run test:compatibility-release-matrix
+npm run verify:compatibility-release-matrix
+npm run test:security-workflow-hardening
+npm run verify:security-workflow-hardening
 npm run verify:ci
 npm run quality
 ```

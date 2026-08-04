@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "task": "BT-8004",
+    "documentation": "docs/release/beta-package-size-budgets.md",
+    "artifactContract": "docs/metadata/beta-package-artifacts.json"
+  },
+  "task": {
+    "id": "BT-8004",
+    "title": "Enforce package and CSS size budgets",
+    "status": "done",
+    "dependsOn": ["BT-8003"],
+    "unlocksAfterMerge": ["BT-8012"]
+  },
+  "releaseGroup": "non-grid-beta",
+  "baseline": {
+    "source": "VyrnForge CI run 30878924986 / beta-package-artifacts",
+    "headSha": "bf55580f4fcafc2cf286958490f6f4d51382b746",
+    "capturedAt": "2026-08-04T04:52:49.949Z",
+    "headroomPolicy": "Initial limits round measured BT-8003 artifacts upward with reviewable growth headroom."
+  },
+  "metrics": [
+    "packedBytes",
+    "unpackedBytes",
+    "fileCount",
+    "runtimeJavaScriptBytes",
+    "declarationBytes",
+    "cssBytes"
+  ],
+  "packages": [
+    {
+      "name": "@vyrnforge/ui-core",
+      "directory": "packages/ui-core",
+      "baseline": {
+        "packedBytes": 16811,
+        "unpackedBytes": 89244,
+        "fileCount": 12,
+        "runtimeJavaScriptBytes": 40247,
+        "declarationBytes": 10045,
+        "cssBytes": 25702
+      },
+      "budgets": {
+        "packedBytes": 22000,
+        "unpackedBytes": 116000,
+        "fileCount": 16,
+        "runtimeJavaScriptBytes": 52000,
+        "declarationBytes": 14000,
+        "cssBytes": 34000
+      }
+    },
+    {
+      "name": "@vyrnforge/ui-behaviors",
+      "directory": "packages/ui-behaviors",
+      "baseline": {
+        "packedBytes": 41425,
+        "unpackedBytes": 266244,
+        "fileCount": 24,
+        "runtimeJavaScriptBytes": 193501,
+        "declarationBytes": 58526,
+        "cssBytes": 0
+      },
+      "budgets": {
+        "packedBytes": 54000,
+        "unpackedBytes": 350000,
+        "fileCount": 30,
+        "runtimeJavaScriptBytes": 250000,
+        "declarationBytes": 78000,
+        "cssBytes": 0
+      }
+    },
+    {
+      "name": "@vyrnforge/ui-components",
+      "directory": "packages/ui-components",
+      "baseline": {
+        "packedBytes": 102798,
+        "unpackedBytes": 556885,
+        "fileCount": 217,
+        "runtimeJavaScriptBytes": 370025,
+        "declarationBytes": 82649,
+        "cssBytes": 80811
+      },
+      "budgets": {
+        "packedBytes": 135000,
+        "unpackedBytes": 730000,
+        "fileCount": 240,
+        "runtimeJavaScriptBytes": 480000,
+        "declarationBytes": 110000,
+        "cssBytes": 105000
+      }
+    },
+    {
+      "name": "@vyrnforge/ui-elements",
+      "directory": "packages/ui-elements",
+      "baseline": {
+        "packedBytes": 124813,
+        "unpackedBytes": 805463,
+        "fileCount": 31,
+        "runtimeJavaScriptBytes": 622191,
+        "declarationBytes": 62277,
+        "cssBytes": 84369
+      },
+      "budgets": {
+        "packedBytes": 165000,
+        "unpackedBytes": 1050000,
+        "fileCount": 40,
+        "runtimeJavaScriptBytes": 810000,
+        "declarationBytes": 84000,
+        "cssBytes": 110000
+      }
+    }
+  ],
+  "waivers": [],
+  "waiverPolicy": {
+    "requiredFields": [
+      "package",
+      "metric",
+      "maxValue",
+      "owner",
+      "reason",
+      "expiresOn"
+    ],
+    "maximumDurationDays": 30,
+    "expiredWaiversFail": true
+  },
+  "verification": {
+    "command": "npm run verify:beta-package-size-budgets",
+    "testCommand": "npm run test:beta-package-size-budgets",
+    "report": "test-results/beta-package-artifacts/size-report.json",
+    "ciWorkflow": ".github/workflows/_packages.yml"
+  },
+  "releaseReadiness": "not-ready"
+}
