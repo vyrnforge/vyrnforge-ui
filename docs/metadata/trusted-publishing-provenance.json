@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "task": "BT-8007",
+    "documentation": "docs/release/trusted-publishing-provenance.md"
+  },
+  "task": {
+    "id": "BT-8007",
+    "title": "Verify trusted publishing and provenance",
+    "status": "in-review",
+    "dependsOn": ["BT-8003", "BT-8006"],
+    "unlocksAfterMerge": ["BT-8008", "BT-8013"]
+  },
+  "repository": {
+    "owner": "vyrnforge",
+    "name": "vyrnforge-ui",
+    "public": true,
+    "url": "https://github.com/vyrnforge/vyrnforge-ui"
+  },
+  "workflow": {
+    "path": ".github/workflows/release.yml",
+    "filename": "release.yml",
+    "name": "Controlled npm Release",
+    "trigger": "workflow_dispatch",
+    "publishJob": "publish-packages",
+    "verifyJob": "verify-release",
+    "registryVerificationJob": "verify-registry-release",
+    "releaseRecordJob": "create-release-record",
+    "runner": "ubuntu-latest",
+    "environment": "npm-release",
+    "concurrencyGroup": "vyrnforge-npm-release",
+    "publishPermissions": {
+      "contents": "read",
+      "id-token": "write"
+    },
+    "verificationMustNotRequestOidc": true,
+    "releaseRecordMustNotRequestOidc": true
+  },
+  "npm": {
+    "registry": "https://registry.npmjs.org",
+    "publisher": {
+      "provider": "github-actions",
+      "organizationOrUser": "vyrnforge",
+      "repository": "vyrnforge-ui",
+      "workflowFilename": "release.yml",
+      "environment": "npm-release",
+      "allowedActions": ["npm publish"]
+    },
+    "automaticProvenance": {
+      "required": true,
+      "publishFlagForbidden": "--provenance",
+      "metadataPath": "dist.attestations.url",
+      "signatureCommand": "npm audit signatures"
+    },
+    "forbiddenCredentialMarkers": [
+      "NODE_AUTH_TOKEN",
+      "NPM_TOKEN",
+      "secrets.NPM_TOKEN",
+      "_authToken"
+    ]
+  },
+  "packages": [
+    {
+      "name": "@vyrnforge/ui-core",
+      "directory": "packages/ui-core",
+      "releaseGroup": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-behaviors",
+      "directory": "packages/ui-behaviors",
+      "releaseGroup": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-components",
+      "directory": "packages/ui-components",
+      "releaseGroup": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-elements",
+      "directory": "packages/ui-elements",
+      "releaseGroup": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-data-grid",
+      "directory": "packages/ui-data-grid",
+      "releaseGroup": "data-grid-alpha"
+    }
+  ],
+  "dryRun": {
+    "command": "npm run verify:trusted-publishing-dry-run -- --release-group <release-group> --version <version> --dist-tag <dist-tag>",
+    "reportDirectory": "test-results/trusted-publishing",
+    "requiresBuiltPackages": true,
+    "requiresCredentialFreeEnvironment": true
+  },
+  "externalEvidence": {
+    "status": "pending",
+    "evidenceDirectory": "docs/release/evidence/BT-8007",
+    "required": [
+      "npm trusted-publisher settings for every publishable package",
+      "npm publisher fields match repository, workflow filename, environment and allowed action",
+      "GitHub npm-release environment has required reviewers and prevents self-review",
+      "GitHub npm-release deployment branch policy permits only the approved release branch",
+      "no long-lived npm publish token is stored in repository or environment secrets",
+      "successful verify-mode workflow dry run with retained report"
+    ],
+    "evidenceIndex": "docs/release/evidence/BT-8007/evidence.json"
+  },
+  "verification": {
+    "contractCommand": "npm run verify:trusted-publishing-provenance",
+    "testCommand": "npm run test:trusted-publishing-provenance",
+    "dryRunTestCommand": "npm run test:trusted-publishing-dry-run"
+  },
+  "releaseReadiness": "not-ready"
+}

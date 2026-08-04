@@ -112,6 +112,20 @@ jobs:
       - name: Run authoritative release validation
         run: npm run quality
 
+      - name: Verify trusted-publishing and provenance contract
+        run: npm run verify:trusted-publishing-provenance
+
+      - name: Dry-run npm publication without registry credentials
+        run: npm run verify:trusted-publishing-dry-run -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+
+      - name: Upload trusted-publishing dry-run evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trusted-publishing-dry-run-${{ inputs.release-group }}
+          path: test-results/trusted-publishing
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Verify beta artifacts and approved size budgets
         if: inputs.release-group == 'non-grid-beta'
         run: |
@@ -151,6 +165,8 @@ jobs:
             echo "- Validation: workflow contracts, metadata, formatting, typecheck, coverage, accessibility, regression fixtures, package payloads, consumer, docs, and playground passed"
             echo "- Registry: candidate versions are not yet published"
             echo "- Credentials: no token secret used; verification did not request OIDC or publish"
+            echo "- Trusted publishing: credential-free npm publish dry run passed and evidence was retained"
+            echo "- Provenance: trusted-publisher contract and post-publish verification path passed"
             echo
             echo "### Package dist sizes"
             du -sh "${package_dirs[@]}"

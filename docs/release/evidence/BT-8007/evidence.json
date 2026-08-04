@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "task": "BT-8007",
+  "status": "pending",
+  "reviewer": null,
+  "reviewedAt": null,
+  "workflowRun": null,
+  "dryRunArtifact": null,
+  "packagePublisherSettings": [],
+  "environmentProtection": null,
+  "notes": "Populate only with redacted, reviewed references. Never store credentials, tokens, session data, or raw authentication responses."
+}
