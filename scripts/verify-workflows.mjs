@@ -392,7 +392,7 @@ assert(
 const rootPackage = JSON.parse(read("package.json"));
 assert(
   rootPackage.scripts["test:visual"] ===
-  "playwright test tests/browser/visual-regression.spec.ts --project=chromium",
+    "playwright test tests/browser/visual-regression.spec.ts --project=chromium",
   "package.json must expose the canonical visual-regression browser command",
 );
 for (const command of [
