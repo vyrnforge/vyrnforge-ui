@@ -52,7 +52,7 @@ jobs:
       - name: Install verified actionlint
         shell: bash
         run: |
-          archive="actionlint_${ACTIONLINT_VERSION}_linux_x86_64.tar.gz"
+          archive="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
           curl --fail --silent --show-error --location \
             --output "$archive" \
             "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/${archive}"
@@ -80,7 +80,6 @@ jobs:
     permissions:
       contents: read
       security-events: write
-      packages: read
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7

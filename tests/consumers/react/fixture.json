@@ -3,16 +3,16 @@
   "supportClaim": "packed-custom-elements-runtime-verified",
   "task": "CF-7002",
   "rendererPackages": ["@vyrnforge/ui-components", "@vyrnforge/ui-elements"],
-  "runtime": "react-19-custom-elements",
+  "runtime": "react-18-19-custom-elements",
   "commands": ["npm run typecheck", "npm run build", "npm run preview"],
   "requiredPatterns": [
     "react",
     "@vyrnforge/ui-elements/register",
     "@vyrnforge/ui-elements/styles/index.css",
-    "<vf-button",
-    "<vf-tabs",
-    "items={tabs}",
-    "useRef<ButtonElement>",
+    "\u003cvf-button",
+    "\u003cvf-tabs",
+    "tabsElement.items = tabs",
+    "useRef\u003cButtonElement\u003e",
     "addEventListener(\"vf-action\"",
     "data-consumer-ready"
   ]

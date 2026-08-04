@@ -361,6 +361,10 @@ for (const marker of [
     `_security.yml must include ${marker}`,
   );
 }
+assert(
+  !securityWorkflow.includes("packages: read"),
+  "_security.yml must not request packages permission beyond its reusable-workflow callers",
+);
 assertPinnedActionVersion(
   securityWorkflow,
   "_security.yml",
