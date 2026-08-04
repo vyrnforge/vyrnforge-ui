@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "task": "BT-8006",
+    "documentation": "docs/release/security-workflow-hardening.md"
+  },
+  "task": {
+    "id": "BT-8006",
+    "title": "Complete security and workflow hardening",
+    "status": "done",
+    "dependsOn": ["BT-8003"],
+    "unlocksAfterMerge": ["BT-8007", "BT-8008"]
+  },
+  "controls": {
+    "dependencyReview": {
+      "workflow": ".github/workflows/_security.yml",
+      "event": "pull_request",
+      "failOnSeverity": "high"
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "events": ["pull_request", "push", "workflow_dispatch", "schedule"]
+    },
+    "codeql": {
+      "language": "javascript-typescript",
+      "buildMode": "none",
+      "events": ["pull_request", "push", "workflow_dispatch", "schedule"]
+    },
+    "workflowLint": {
+      "actionlintVersion": "1.7.12",
+      "actionlintSha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+      "shellcheckRequired": true
+    },
+    "immutableActions": true,
+    "longLivedTokensForbidden": true,
+    "mandatoryAggregates": ["ci-gate", "nightly-gate", "verify-release"]
+  },
+  "protectedGate": {
+    "workflow": ".github/workflows/ci.yml",
+    "requiredCheck": "ci-gate",
+    "requiredJobs": [
+      "quality-checks",
+      "browser-checks",
+      "package-checks",
+      "consumer-checks",
+      "docs-checks",
+      "compatibility-checks",
+      "security-checks"
+    ],
+    "continueOnErrorForbidden": true,
+    "unexpectedSkipsFail": true
+  },
+  "releasePreflight": {
+    "workflow": ".github/workflows/release.yml",
+    "requiredJobs": [
+      "security-checks",
+      "compatibility-checks",
+      "verify-release"
+    ],
+    "betaArtifactVerificationRequired": true,
+    "betaSizeBudgetVerificationRequired": true
+  },
+  "verification": {
+    "command": "npm run verify:security-workflow-hardening",
+    "testCommand": "npm run test:security-workflow-hardening",
+    "workflow": ".github/workflows/_security.yml"
+  },
+  "releaseReadiness": "not-ready"
+}

@@ -166,6 +166,8 @@ for (const dependency of [
   "package-checks",
   "consumer-checks",
   "docs-checks",
+  "compatibility-checks",
+  "security-checks",
 ]) {
   assert(
     ciGateSection.includes(`- ${dependency}`),
@@ -182,6 +184,8 @@ for (const requiredToken of [
   "DOCS_REQUIRED",
   "PLAYGROUND_REQUIRED",
   "FIXTURES_REQUIRED",
+  "COMPATIBILITY_RESULT",
+  "SECURITY_RESULT",
   "failures.length > 0",
 ]) {
   assert(
@@ -210,6 +214,8 @@ for (const workflow of [
   "_packages.yml",
   "_consumer.yml",
   "_docs.yml",
+  "_compatibility.yml",
+  "_security.yml",
 ]) {
   const text = read(`.github/workflows/${workflow}`);
   assert(
@@ -314,6 +320,65 @@ assertPinnedActionVersion(
   "actions/upload-artifact",
   "v7.0.1",
 );
+
+const packagesWorkflow = read(".github/workflows/_packages.yml");
+for (const marker of [
+  "npm run verify:beta-package-artifacts",
+  "npm run verify:beta-package-size-budgets",
+  "size-report.json",
+]) {
+  assert(
+    packagesWorkflow.includes(marker),
+    `_packages.yml must include ${marker}`,
+  );
+}
+
+const compatibilityWorkflow = read(".github/workflows/_compatibility.yml");
+for (const marker of [
+  "docs/metadata/compatibility-release-matrix.json",
+  "compatibility-plan",
+  "fromJSON(needs.compatibility-plan.outputs.matrix)",
+  "fail-fast: false",
+  "verify:compatibility-release-case",
+  "playwright install --with-deps",
+]) {
+  assert(
+    compatibilityWorkflow.includes(marker),
+    `_compatibility.yml must include ${marker}`,
+  );
+}
+
+const securityWorkflow = read(".github/workflows/_security.yml");
+for (const marker of [
+  "npm audit --omit=dev --audit-level=high",
+  "actionlint -color",
+  "shellcheck --version",
+  "npm run verify:security-workflow-hardening",
+  "npm run verify:workflows",
+]) {
+  assert(
+    securityWorkflow.includes(marker),
+    `_security.yml must include ${marker}`,
+  );
+}
+assertPinnedActionVersion(
+  securityWorkflow,
+  "_security.yml",
+  "actions/dependency-review-action",
+  "v5.0.0",
+);
+assertPinnedActionVersion(
+  securityWorkflow,
+  "_security.yml",
+  "github/codeql-action/init",
+  "v4.36.0",
+);
+assertPinnedActionVersion(
+  securityWorkflow,
+  "_security.yml",
+  "github/codeql-action/analyze",
+  "v4.36.0",
+);
 assert(
   read(".github/workflows/_docs.yml").includes(
     "npm run verify:repository-inventory",
@@ -361,6 +426,8 @@ for (const workflow of [
   "_packages.yml",
   "_consumer.yml",
   "_docs.yml",
+  "_compatibility.yml",
+  "_security.yml",
 ]) {
   const text = read(`.github/workflows/${workflow}`);
   assert(
@@ -523,6 +590,16 @@ assert(
   release.includes("scripts/create-release-notes.mjs"),
   "release.yml must generate a release record from source",
 );
+for (const marker of [
+  "uses: ./.github/workflows/_compatibility.yml",
+  "uses: ./.github/workflows/_security.yml",
+  "- compatibility-checks",
+  "- security-checks",
+  "npm run verify:beta-package-artifacts",
+  "npm run verify:beta-package-size-budgets",
+]) {
+  assert(release.includes(marker), `release.yml must include ${marker}`);
+}
 assertNoLongLivedToken(release, "release.yml");
 
 const nightly = read(".github/workflows/nightly.yml");
@@ -542,6 +619,14 @@ assert(
 assert(
   nightly.includes("uses: ./.github/workflows/_browser.yml"),
   "nightly.yml must execute the Chromium browser contract suite",
+);
+assert(
+  nightly.includes("uses: ./.github/workflows/_compatibility.yml"),
+  "nightly.yml must execute the compatibility release matrix",
+);
+assert(
+  nightly.includes("uses: ./.github/workflows/_security.yml"),
+  "nightly.yml must execute security validation",
 );
 assert(
   nightly.includes("name: nightly-gate"),
@@ -567,19 +652,25 @@ for (const workflow of workflowFiles) {
 
   assertPinnedExternalActions(text, workflow);
 
-  assert(
-    !text.includes('node-version: "22"') && !text.includes('default: "22"'),
-    `${workflow} must not use the retired Node 22 development baseline`,
-  );
+  const isCompatibilityWorkflow = workflow === "_compatibility.yml";
+  if (!isCompatibilityWorkflow) {
+    assert(
+      !text.includes('node-version: "22"') && !text.includes('default: "22"'),
+      `${workflow} must not use Node 22 outside the compatibility matrix`,
+    );
+  }
 
   for (const match of text.matchAll(
     /node-version:[ \t]*["']?([^\s"']+)["']?/g,
   )) {
     const value = match[1];
     if (value.startsWith("${{")) continue;
+    const allowed = isCompatibilityWorkflow
+      ? ["22.12.0", "24.18.0"]
+      : ["24.18.0"];
     assert(
-      value === "24.18.0",
-      `${workflow}: explicit Node version must be 24.18.0, received ${value}`,
+      allowed.includes(value),
+      `${workflow}: explicit Node version must be ${allowed.join(" or ")}, received ${value}`,
     );
   }
 

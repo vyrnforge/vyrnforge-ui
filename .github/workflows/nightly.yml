@@ -63,30 +63,19 @@ jobs:
       build-docs: true
       build-playground: true
 
-  dependency-audit:
-    name: dependency-audit
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+  compatibility:
+    name: compatibility
+    uses: ./.github/workflows/_compatibility.yml
     permissions:
       contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-        with:
-          node-version: "24.18.0"
-          cache: npm
-
-      - name: Use repository package manager
-        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Audit high-severity dependency findings
-        run: npm audit --audit-level=high
+  security:
+    name: security
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      contents: read
+      pull-requests: read
+      security-events: write
 
   nightly-gate:
     name: nightly-gate
@@ -96,7 +85,8 @@ jobs:
       - packages
       - external-consumer
       - docs-and-playground
-      - dependency-audit
+      - compatibility
+      - security
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -106,7 +96,7 @@ jobs:
       - name: Aggregate nightly results
         env:
           RESULTS_JSON: >-
-            {"quality24":"${{ needs.quality-node-24.result }}","browser":"${{ needs.browser-chromium.result }}","packages":"${{ needs.packages.result }}","consumer":"${{ needs.external-consumer.result }}","docs":"${{ needs.docs-and-playground.result }}","audit":"${{ needs.dependency-audit.result }}"}
+            {"quality24":"${{ needs.quality-node-24.result }}","browser":"${{ needs.browser-chromium.result }}","packages":"${{ needs.packages.result }}","consumer":"${{ needs.external-consumer.result }}","docs":"${{ needs.docs-and-playground.result }}","compatibility":"${{ needs.compatibility.result }}","security":"${{ needs.security.result }}"}
         run: |
           node - <<'NODE'
           const results = JSON.parse(process.env.RESULTS_JSON);

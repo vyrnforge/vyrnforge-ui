@@ -144,6 +144,20 @@ jobs:
       build-docs: ${{ needs.plan.outputs.docs == 'true' }}
       build-playground: ${{ needs.plan.outputs.playground == 'true' }}
 
+  compatibility-checks:
+    name: compatibility-checks
+    uses: ./.github/workflows/_compatibility.yml
+    permissions:
+      contents: read
+
+  security-checks:
+    name: security-checks
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      contents: read
+      pull-requests: read
+      security-events: write
+
   # Compatibility checks preserve the existing branch-protection names while
   # the repository transitions to requiring only ci-gate.
   quality:
@@ -154,6 +168,8 @@ jobs:
       - browser-checks
       - package-checks
       - docs-checks
+      - compatibility-checks
+      - security-checks
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -167,6 +183,8 @@ jobs:
           BROWSER_RESULT: ${{ needs.browser-checks.result }}
           PACKAGE_RESULT: ${{ needs.package-checks.result }}
           DOCS_RESULT: ${{ needs.docs-checks.result }}
+          COMPATIBILITY_RESULT: ${{ needs.compatibility-checks.result }}
+          SECURITY_RESULT: ${{ needs.security-checks.result }}
         run: |
           node - <<'NODE'
           const results = {
@@ -174,7 +192,9 @@ jobs:
             quality: process.env.QUALITY_RESULT,
             browser: process.env.BROWSER_RESULT,
             packages: process.env.PACKAGE_RESULT,
-            docs: process.env.DOCS_RESULT
+            docs: process.env.DOCS_RESULT,
+            compatibility: process.env.COMPATIBILITY_RESULT,
+            security: process.env.SECURITY_RESULT
           };
           const failed = Object.entries(results).filter(([, result]) =>
             ["failure", "cancelled"].includes(result)
@@ -219,6 +239,8 @@ jobs:
       - package-checks
       - consumer-checks
       - docs-checks
+      - compatibility-checks
+      - security-checks
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -240,6 +262,8 @@ jobs:
           PLAYGROUND_REQUIRED: ${{ needs.plan.outputs.playground }}
           FIXTURES_REQUIRED: ${{ needs.plan.outputs.fixtures }}
           DOCS_RESULT: ${{ needs.docs-checks.result }}
+          COMPATIBILITY_RESULT: ${{ needs.compatibility-checks.result }}
+          SECURITY_RESULT: ${{ needs.security-checks.result }}
         run: |
           node - <<'NODE'
           const checks = {
@@ -265,6 +289,14 @@ jobs:
                 process.env.DOCS_REQUIRED === "true" ||
                 process.env.PLAYGROUND_REQUIRED === "true",
               result: process.env.DOCS_RESULT
+            },
+            compatibility: {
+              required: true,
+              result: process.env.COMPATIBILITY_RESULT
+            },
+            security: {
+              required: true,
+              result: process.env.SECURITY_RESULT
             }
           };
           const failures = Object.entries(checks).flatMap(([name, check]) => {

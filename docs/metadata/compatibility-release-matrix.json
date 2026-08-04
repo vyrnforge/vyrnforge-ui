@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "task": "BT-8005",
+    "documentation": "docs/testing/compatibility-release-matrix.md"
+  },
+  "task": {
+    "id": "BT-8005",
+    "title": "Run compatibility release matrix",
+    "status": "done",
+    "dependsOn": ["CF-7014", "BT-8003"],
+    "unlocksAfterMerge": ["BT-8009", "BT-8010"]
+  },
+  "releaseGroup": "non-grid-beta",
+  "supportPolicy": {
+    "node": ["22.12.0", "24.18.0"],
+    "react": ["18.3.1", "19.2.7"],
+    "angular": ["21.2.18", "22.0.8"],
+    "vue": ["3.4.38", "3.5.40"],
+    "nativeBrowsers": ["chromium", "firefox", "webkit"]
+  },
+  "cases": [
+    {
+      "id": "native-node22-chromium",
+      "fixture": "native-html",
+      "node": "22.12.0",
+      "browser": "chromium",
+      "overrides": {}
+    },
+    {
+      "id": "native-node24-chromium",
+      "fixture": "native-html",
+      "node": "24.18.0",
+      "browser": "chromium",
+      "overrides": {}
+    },
+    {
+      "id": "native-node24-firefox",
+      "fixture": "native-html",
+      "node": "24.18.0",
+      "browser": "firefox",
+      "overrides": {}
+    },
+    {
+      "id": "native-node24-webkit",
+      "fixture": "native-html",
+      "node": "24.18.0",
+      "browser": "webkit",
+      "overrides": {}
+    },
+    {
+      "id": "react18-node22-chromium",
+      "fixture": "react",
+      "node": "22.12.0",
+      "browser": "chromium",
+      "overrides": {
+        "dependencies": { "react": "18.3.1", "react-dom": "18.3.1" },
+        "devDependencies": {
+          "@types/react": "18.3.31",
+          "@types/react-dom": "18.3.7"
+        }
+      }
+    },
+    {
+      "id": "react19-node24-chromium",
+      "fixture": "react",
+      "node": "24.18.0",
+      "browser": "chromium",
+      "overrides": {}
+    },
+    {
+      "id": "angular21-node22-chromium",
+      "fixture": "angular",
+      "node": "22.12.0",
+      "browser": "chromium",
+      "overrides": {
+        "dependencies": {
+          "@angular/common": "21.2.18",
+          "@angular/compiler": "21.2.18",
+          "@angular/core": "21.2.18",
+          "@angular/forms": "21.2.18",
+          "@angular/platform-browser": "21.2.18"
+        },
+        "devDependencies": {
+          "@angular/build": "21.2.18",
+          "@angular/cli": "21.2.18",
+          "@angular/compiler-cli": "21.2.18",
+          "typescript": "5.9.3"
+        }
+      }
+    },
+    {
+      "id": "angular22-node24-chromium",
+      "fixture": "angular",
+      "node": "24.18.0",
+      "browser": "chromium",
+      "overrides": {}
+    },
+    {
+      "id": "vue34-node22-chromium",
+      "fixture": "vue",
+      "node": "22.12.0",
+      "browser": "chromium",
+      "overrides": { "dependencies": { "vue": "3.4.38" } }
+    },
+    {
+      "id": "vue35-node24-chromium",
+      "fixture": "vue",
+      "node": "24.18.0",
+      "browser": "chromium",
+      "overrides": {}
+    }
+  ],
+  "requiredChecks": [
+    "clean-install",
+    "package-tarballs",
+    "typecheck",
+    "production-build",
+    "browser-smoke"
+  ],
+  "verification": {
+    "contractCommand": "npm run verify:compatibility-release-matrix",
+    "testCommand": "npm run test:compatibility-release-matrix",
+    "caseCommand": "npm run verify:compatibility-release-case -- --case <case-id>",
+    "workflow": ".github/workflows/_compatibility.yml",
+    "reportDirectory": "test-results/compatibility-release-matrix"
+  },
+  "releaseReadiness": "not-ready"
+}

@@ -11,7 +11,7 @@ import {
 } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "@playwright/test";
+import { chromium, firefox, webkit } from "@playwright/test";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -1064,7 +1064,9 @@ async function verifyBrowserFixture(browser, fixture) {
       });
     }
     await context.close();
-    console.log(`RUNTIME ${fixture.id}: packed build and Chromium passed.`);
+    console.log(
+      `RUNTIME ${fixture.id}: packed build and browser smoke passed.`,
+    );
   } catch (error) {
     const diagnostics =
       browserDiagnostics.length > 0 ? `\n${browserDiagnostics.join("\n")}` : "";
@@ -1154,9 +1156,14 @@ try {
   }
 
   if (!buildOnly) {
-    const browser = await chromium.launch({
+    const browserName = process.env.VYRNFORGE_BROWSER ?? "chromium";
+    const browserType = { chromium, firefox, webkit }[browserName];
+    assert(browserType, `Unsupported browser ${browserName}`);
+    const browser = await browserType.launch({
       executablePath:
-        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
+        browserName === "chromium"
+          ? process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined
+          : undefined,
     });
     try {
       for (const fixture of fixtures) {
