@@ -361,6 +361,10 @@ for (const marker of [
     `_security.yml must include ${marker}`,
   );
 }
+assert(
+  !securityWorkflow.includes("packages: read"),
+  "_security.yml must not request packages permission beyond its reusable-workflow callers",
+);
 assertPinnedActionVersion(
   securityWorkflow,
   "_security.yml",
@@ -388,7 +392,7 @@ assert(
 const rootPackage = JSON.parse(read("package.json"));
 assert(
   rootPackage.scripts["test:visual"] ===
-    "playwright test tests/browser/visual-regression.spec.ts --project=chromium",
+  "playwright test tests/browser/visual-regression.spec.ts --project=chromium",
   "package.json must expose the canonical visual-regression browser command",
 );
 for (const command of [
