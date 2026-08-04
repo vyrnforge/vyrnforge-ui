@@ -61,8 +61,10 @@ function run(command, args, options = {}) {
     if (output?.trim()) record(output.trimEnd());
     return output;
   } catch (error) {
-    if (error.stdout?.toString().trim()) record(error.stdout.toString().trimEnd());
-    if (error.stderr?.toString().trim()) record(error.stderr.toString().trimEnd());
+    if (error.stdout?.toString().trim())
+      record(error.stdout.toString().trimEnd());
+    if (error.stderr?.toString().trim())
+      record(error.stderr.toString().trimEnd());
     throw error;
   }
 }
@@ -136,7 +138,9 @@ function buildAndPack(contract) {
 }
 
 function installConsumerDependencies() {
-  record("Installing third-party fixture dependencies before offline package installation.");
+  record(
+    "Installing third-party fixture dependencies before offline package installation.",
+  );
   runNpm(
     [
       "install",
@@ -173,11 +177,15 @@ function resolveEsmEntries(specifiers) {
     `const specifiers = ${JSON.stringify(specifiers)};\n` +
       "console.log(JSON.stringify(Object.fromEntries(specifiers.map((specifier) => [specifier, import.meta.resolve(specifier)]))));\n",
   );
-  return JSON.parse(run(process.execPath, [resolverPath], { cwd: consumerDirectory }));
+  return JSON.parse(
+    run(process.execPath, [resolverPath], { cwd: consumerDirectory }),
+  );
 }
 
 function verifyInstalledPackages(contract) {
-  const consumerRequire = createRequire(path.join(consumerDirectory, "package.json"));
+  const consumerRequire = createRequire(
+    path.join(consumerDirectory, "package.json"),
+  );
   const esmSpecifiers = contract.packages.flatMap((packageRecord) =>
     packageRecord.entryPoints
       .filter((entryPoint) => entryPoint.targets?.import)
@@ -193,7 +201,10 @@ function verifyInstalledPackages(contract) {
       ...packageRecord.name.split("/"),
     );
     const packageJson = readJson(path.join(packagePath, "package.json"));
-    assert(existsSync(packagePath), `${packageRecord.name}: package is not installed`);
+    assert(
+      existsSync(packagePath),
+      `${packageRecord.name}: package is not installed`,
+    );
     assert(
       !lstatSync(packagePath).isSymbolicLink(),
       `${packageRecord.name}: offline install must not produce a workspace symlink`,
@@ -249,7 +260,9 @@ function verifyInstalledPackages(contract) {
     packageReports.push({
       name: packageRecord.name,
       version: packageJson.version,
-      installedPath: path.relative(consumerDirectory, packagePath).replaceAll("\\", "/"),
+      installedPath: path
+        .relative(consumerDirectory, packagePath)
+        .replaceAll("\\", "/"),
       symlink: false,
       resolvedEntries,
     });

@@ -14,8 +14,7 @@ export const betaPackageContractPath =
 export const betaPackageDocumentationPath =
   "docs/release/beta-package-artifact-verification.md";
 export const betaPackageConsumerPath = "tests/beta-package-consumer";
-export const betaPackageReportDirectory =
-  "test-results/beta-package-artifacts";
+export const betaPackageReportDirectory = "test-results/beta-package-artifacts";
 
 const conditionOrder = ["types", "import", "require", "default"];
 const localDependencyPattern =
@@ -111,7 +110,10 @@ export function buildBetaPackageContract({ root = repositoryRoot } = {}) {
       root,
       path.join(releasePackage.directory, "package.json"),
     );
-    const entryPoints = collectExportEntries(packageJson.name, packageJson.exports);
+    const entryPoints = collectExportEntries(
+      packageJson.name,
+      packageJson.exports,
+    );
     const requiredPayload = [
       "LICENSE",
       "README.md",
@@ -172,7 +174,11 @@ export function buildBetaPackageContract({ root = repositoryRoot } = {}) {
       testCommand: "npm run test:beta-package-contract",
       consumerFixture: betaPackageConsumerPath,
       reportDirectory: betaPackageReportDirectory,
-      reportFiles: ["tarball-report.json", "consumer-report.json", "consumer.log"],
+      reportFiles: [
+        "tarball-report.json",
+        "consumer-report.json",
+        "consumer.log",
+      ],
       actualTarballsRequired: true,
       offlineVyrnForgeInstallRequired: true,
       workspaceLinksForbidden: true,
@@ -201,7 +207,9 @@ export function validatePackageManifest(packageRecord, packageJson) {
     failures.push(`${packageRecord.directory}: package name mismatch`);
   }
   if (packageJson.version !== packageRecord.version) {
-    failures.push(`${packageRecord.name}: version must be ${packageRecord.version}`);
+    failures.push(
+      `${packageRecord.name}: version must be ${packageRecord.version}`,
+    );
   }
   if (!packageJson.exports || !Object.keys(packageJson.exports).length) {
     failures.push(`${packageRecord.name}: exports map is required`);
@@ -218,7 +226,9 @@ export function validatePackageManifest(packageRecord, packageJson) {
         );
       }
       if (target.includes("/src/") || target.startsWith("./src")) {
-        failures.push(`${entryPoint.specifier}: export must not point to source`);
+        failures.push(
+          `${entryPoint.specifier}: export must not point to source`,
+        );
       }
     }
   }
@@ -254,12 +264,16 @@ export function validatePackedFiles(packageRecord, packedFiles) {
     "LICENSE",
     "README.md",
     "package.json",
-    ...(packageRecord.customElements ? [normalizeTarget(packageRecord.customElements)] : []),
+    ...(packageRecord.customElements
+      ? [normalizeTarget(packageRecord.customElements)]
+      : []),
   ]);
 
   for (const requiredFile of packageRecord.requiredPayload) {
     if (!files.includes(requiredFile)) {
-      failures.push(`${packageRecord.name}: tarball is missing ${requiredFile}`);
+      failures.push(
+        `${packageRecord.name}: tarball is missing ${requiredFile}`,
+      );
     }
   }
 
@@ -315,7 +329,9 @@ export function verifyBetaPackageContract({ root = repositoryRoot } = {}) {
 
   const documentationFile = path.join(root, betaPackageDocumentationPath);
   if (!existsSync(documentationFile)) {
-    failures.push(`BT-8003 documentation is missing: ${betaPackageDocumentationPath}`);
+    failures.push(
+      `BT-8003 documentation is missing: ${betaPackageDocumentationPath}`,
+    );
   } else {
     const documentation = readFileSync(documentationFile, "utf8");
     for (const packageRecord of actual.packages) {
@@ -346,9 +362,15 @@ export function verifyBetaPackageContract({ root = repositoryRoot } = {}) {
   const consumerTsconfigPath = `${betaPackageConsumerPath}/tsconfig.json`;
   const consumerTsconfig = readJson(root, consumerTsconfigPath);
   if (consumerTsconfig.compilerOptions?.paths) {
-    failures.push(`${consumerTsconfigPath}: TypeScript path aliases are forbidden`);
+    failures.push(
+      `${consumerTsconfigPath}: TypeScript path aliases are forbidden`,
+    );
   }
-  const consumerSourceDirectory = path.join(root, betaPackageConsumerPath, "src");
+  const consumerSourceDirectory = path.join(
+    root,
+    betaPackageConsumerPath,
+    "src",
+  );
   for (const sourceFile of readdirSync(consumerSourceDirectory, {
     recursive: true,
   })) {
@@ -364,7 +386,9 @@ export function verifyBetaPackageContract({ root = repositoryRoot } = {}) {
       /\.\.\/\.\.\/packages/iu.test(source) ||
       /@vyrnforge\/[^"']*\/src/iu.test(source)
     ) {
-      failures.push(`${relativePath}: consumer must use public package entry points`);
+      failures.push(
+        `${relativePath}: consumer must use public package entry points`,
+      );
     }
   }
 
