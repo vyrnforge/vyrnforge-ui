@@ -24,3 +24,4 @@ alpha.
 | [multi-framework-migration-and-limitations.md](multi-framework-migration-and-limitations.md) | React versus native-element selection, Angular/Vue integration, beta guarantees, exclusions, and migration paths. |
 | [release-readiness-checklist.md](release-readiness-checklist.md)                             | Reusable release checklist for alpha, beta, and stable releases.                                                  |
 | [external-consumer-verification.md](external-consumer-verification.md)                       | Packed package consumer fixture and verification command.                                                         |
+| [beta-package-artifact-verification.md](beta-package-artifact-verification.md)               | BT-8003 tarball payload, public entry-point, offline-install, report, and cleanup verification.                   |

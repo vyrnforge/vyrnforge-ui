@@ -186,7 +186,10 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (file.startsWith("tests/package-consumer/")) {
+    if (
+      file.startsWith("tests/package-consumer/") ||
+      file.startsWith("tests/beta-package-consumer/")
+    ) {
       scope.consumer = true;
       reasons.add("external consumer fixture");
       continue;
