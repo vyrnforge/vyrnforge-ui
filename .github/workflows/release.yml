@@ -133,10 +133,10 @@ jobs:
         run: |
           if test "$RELEASE_GROUP" = "non-grid-beta"; then
             packages="@vyrnforge/ui-core -> @vyrnforge/ui-behaviors -> @vyrnforge/ui-components -> @vyrnforge/ui-elements"
-            package_dirs="packages/ui-core/dist packages/ui-behaviors/dist packages/ui-components/dist packages/ui-elements/dist"
+            package_dirs=(packages/ui-core/dist packages/ui-behaviors/dist packages/ui-components/dist packages/ui-elements/dist)
           else
             packages="@vyrnforge/ui-data-grid"
-            package_dirs="packages/ui-data-grid/dist"
+            package_dirs=(packages/ui-data-grid/dist)
           fi
           {
             echo "## VyrnForge npm release verification"
@@ -153,7 +153,7 @@ jobs:
             echo "- Credentials: no token secret used; verification did not request OIDC or publish"
             echo
             echo "### Package dist sizes"
-            du -sh $package_dirs
+            du -sh "${package_dirs[@]}"
           } >> "$GITHUB_STEP_SUMMARY"
 
   publish-packages:
@@ -215,7 +215,7 @@ jobs:
         if: inputs.release-group == 'non-grid-beta'
         shell: bash
         run: |
-          for attempt in {1..12}; do
+          for _ in {1..12}; do
             if test "$(npm view "@vyrnforge/ui-core@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
               exit 0
             fi
@@ -232,7 +232,7 @@ jobs:
         if: inputs.release-group == 'non-grid-beta'
         shell: bash
         run: |
-          for attempt in {1..12}; do
+          for _ in {1..12}; do
             if test "$(npm view "@vyrnforge/ui-behaviors@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
               npm view "@vyrnforge/ui-behaviors@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION ? 0 : 1); })'
               exit 0
@@ -250,7 +250,7 @@ jobs:
         if: inputs.release-group == 'non-grid-beta'
         shell: bash
         run: |
-          for attempt in {1..12}; do
+          for _ in {1..12}; do
             if test "$(npm view "@vyrnforge/ui-components@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
               npm view "@vyrnforge/ui-components@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION && dependencies["@vyrnforge/ui-behaviors"] === process.env.RELEASE_VERSION ? 0 : 1); })'
               exit 0
@@ -268,7 +268,7 @@ jobs:
         if: inputs.release-group == 'non-grid-beta'
         shell: bash
         run: |
-          for attempt in {1..12}; do
+          for _ in {1..12}; do
             if test "$(npm view "@vyrnforge/ui-elements@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
               npm view "@vyrnforge/ui-elements@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.RELEASE_VERSION && dependencies["@vyrnforge/ui-behaviors"] === process.env.RELEASE_VERSION ? 0 : 1); })'
               for package_name in @vyrnforge/ui-core @vyrnforge/ui-behaviors @vyrnforge/ui-components @vyrnforge/ui-elements; do
@@ -291,7 +291,7 @@ jobs:
         run: |
           BETA_VERSION="$(node --input-type=module -e 'import { readReleaseGroups } from "./scripts/release-groups.mjs"; console.log(readReleaseGroups().groups["non-grid-beta"].version);')"
           export BETA_VERSION
-          for attempt in {1..12}; do
+          for _ in {1..12}; do
             if test "$(npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" version --registry=https://registry.npmjs.org 2>/dev/null || true)" = "$RELEASE_VERSION"; then
               npm view "@vyrnforge/ui-data-grid@$RELEASE_VERSION" dependencies --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const dependencies = JSON.parse(input); process.exit(dependencies["@vyrnforge/ui-core"] === process.env.BETA_VERSION && dependencies["@vyrnforge/ui-components"] === process.env.BETA_VERSION ? 0 : 1); })'
               npm view "@vyrnforge/ui-data-grid" dist-tags --json --registry=https://registry.npmjs.org | node -e 'let input=""; process.stdin.on("data", chunk => input += chunk).on("end", () => { const tags = JSON.parse(input); process.exit(tags[process.env.RELEASE_TAG] === process.env.RELEASE_VERSION ? 0 : 1); })'
