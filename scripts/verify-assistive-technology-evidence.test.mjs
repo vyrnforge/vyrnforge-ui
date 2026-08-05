@@ -238,3 +238,24 @@ test("result records must use a declared environment and canonical directory", (
     rmSync(root, { force: true, recursive: true });
   }
 });
+
+test("explicitly waived scenarios remain pending without blocking the selected release", () => {
+  assert.deepEqual(
+    verify(pendingEvidence(), {
+      requireComplete: true,
+      requiredScenarioIds: new Set(["AT-001"]),
+      waivedScenarioIds: new Set(["AT-001"]),
+    }),
+    [],
+  );
+});
+
+test("pending scenarios outside the selected release do not block it", () => {
+  assert.deepEqual(
+    verify(pendingEvidence(), {
+      requireComplete: true,
+      requiredScenarioIds: new Set(),
+    }),
+    [],
+  );
+});

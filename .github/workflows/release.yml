@@ -132,9 +132,9 @@ jobs:
           npm run verify:beta-package-artifacts
           npm run verify:beta-package-size-budgets
 
-      - name: Require complete assistive-technology evidence for beta
+      - name: Verify assistive-technology evidence or approved beta waiver
         if: inputs.release-group == 'non-grid-beta'
-        run: npm run verify:assistive-technology:release
+        run: npm run verify:assistive-technology:release -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --allow-waiver
 
       - name: Verify clean generated-artifact state
         shell: bash
@@ -163,6 +163,9 @@ jobs:
             echo "- Packages: \`$packages\`"
             echo "- Internal dependencies: exact versions from \`docs/metadata/release-groups.json\`"
             echo "- Validation: workflow contracts, metadata, formatting, typecheck, coverage, accessibility, regression fixtures, package payloads, consumer, docs, and playground passed"
+            if test "$RELEASE_GROUP" = "non-grid-beta"; then
+              echo "- Assistive technology: manual Windows/NVDA review is deferred under AT-WAIVER-001 and issue #86; no manual screen-reader pass is claimed; stable promotion remains blocked"
+            fi
             echo "- Registry: candidate versions are not yet published"
             echo "- Credentials: no token secret used; verification did not request OIDC or publish"
             echo "- Trusted publishing: credential-free npm publish dry run passed and evidence was retained"
