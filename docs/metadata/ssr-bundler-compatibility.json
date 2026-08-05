@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S7",
+    "task": "CF-7007",
+    "title": "Verify SSR and bundler compatibility",
+    "storyPoints": 5,
+    "status": "evidence-complete",
+    "gate": "GMF4",
+    "gateStatus": "passed",
+    "predecessors": ["CF-7001", "CF-7002", "CF-7003", "CF-7005"]
+  },
+  "supportClaim": "ssr-bundler-verified",
+  "packageImports": {
+    "esm": true,
+    "cjs": true,
+    "domGlobalsAbsent": [
+      "window",
+      "document",
+      "customElements",
+      "HTMLElement",
+      "ElementInternals"
+    ],
+    "registrationEntryServerSafe": true,
+    "reactStaticRender": true
+  },
+  "bundlerMatrix": [
+    {
+      "consumer": "native-html",
+      "tool": "Vite 8.1.5",
+      "packages": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-elements"
+      ]
+    },
+    {
+      "consumer": "react",
+      "tool": "Vite 8.1.5",
+      "packages": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-elements"
+      ]
+    },
+    {
+      "consumer": "angular",
+      "tool": "Angular CLI 22.0.8",
+      "packages": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-elements"
+      ]
+    },
+    {
+      "consumer": "vue",
+      "tool": "Vue 3.5.40 + Vite 8.1.5",
+      "packages": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-elements"
+      ]
+    }
+  ],
+  "requiredCommands": [
+    "npm run test:ssr-bundler",
+    "npm run verify:ssr-bundler",
+    "npm run verify:ssr-bundler:runtime",
+    "npm run quality"
+  ],
+  "pendingRuntimeEvidence": [],
+  "unresolvedBlockers": [],
+  "completedRuntimeEvidence": [
+    "clean packed production builds across native HTML, React, Angular, and Vue consumers",
+    "ESM package imports succeed with window, document, customElements, HTMLElement, and ElementInternals absent",
+    "CommonJS package imports succeed with DOM globals absent",
+    "@vyrnforge/ui-elements/register is server-safe before browser registration",
+    "React static server rendering succeeds through packed @vyrnforge/ui-components"
+  ]
+}

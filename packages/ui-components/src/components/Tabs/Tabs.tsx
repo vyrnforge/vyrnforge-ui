@@ -1,11 +1,7 @@
 import { useId, useMemo, useRef, type KeyboardEvent } from "react";
-import { useControllableState } from "../../hooks";
+import { useTabsBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import type { TabItem, TabsProps } from "./Tabs.types";
-
-function getFirstEnabled(items: TabItem[]) {
-  return items.find((item) => !item.disabled)?.id ?? "";
-}
 
 export function Tabs({
   children,
@@ -20,60 +16,53 @@ export function Tabs({
 }: TabsProps) {
   const baseId = useId();
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [selectedValue, setSelectedValue] = useControllableState({
+  const behaviorItems = useMemo(
+    () => items.map((item) => ({ id: item.id, disabled: item.disabled })),
+    [items],
+  );
+  const behavior = useTabsBehavior({
+    defaultValue,
+    items: behaviorItems,
+    onValueChange,
     value,
-    defaultValue: defaultValue ?? getFirstEnabled(items),
-    onChange: onValueChange
   });
-  const selectedItem = items.find((item) => item.id === selectedValue && !item.disabled);
-  const enabledIndexes = useMemo(
-    () =>
-      items
-        .map((item, index) => (item.disabled ? -1 : index))
-        .filter((index) => index >= 0),
-    [items]
+  const selectedItem = items.find(
+    (item) => item.id === behavior.selectedValue && !item.disabled,
   );
 
-  const moveFocus = (currentIndex: number, targetIndex: number) => {
-    const item = items[targetIndex];
-    if (!item || item.disabled) {
-      return;
-    }
-
+  const focusValue = (targetValue: string | null) => {
+    if (targetValue === null) return;
+    const targetIndex = items.findIndex((item) => item.id === targetValue);
     refs.current[targetIndex]?.focus();
-    setSelectedValue(item.id);
   };
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const currentPosition = enabledIndexes.indexOf(index);
-    if (currentPosition < 0) {
-      return;
-    }
+  const handleKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    item: TabItem,
+  ) => {
+    behavior.setFocusedValue(item.id);
 
     if (event.key === "ArrowRight") {
       event.preventDefault();
-      const nextPosition = (currentPosition + 1) % enabledIndexes.length;
-      moveFocus(index, enabledIndexes[nextPosition]);
+      focusValue(behavior.moveFocus("next"));
       return;
     }
 
     if (event.key === "ArrowLeft") {
       event.preventDefault();
-      const nextPosition =
-        (currentPosition - 1 + enabledIndexes.length) % enabledIndexes.length;
-      moveFocus(index, enabledIndexes[nextPosition]);
+      focusValue(behavior.moveFocus("previous"));
       return;
     }
 
     if (event.key === "Home") {
       event.preventDefault();
-      moveFocus(index, enabledIndexes[0]);
+      focusValue(behavior.moveFocus("first"));
       return;
     }
 
     if (event.key === "End") {
       event.preventDefault();
-      moveFocus(index, enabledIndexes[enabledIndexes.length - 1]);
+      focusValue(behavior.moveFocus("last"));
     }
   };
 
@@ -83,7 +72,7 @@ export function Tabs({
         "vf-tabs",
         `vf-tabs--${variant}`,
         `vf-tabs--${size}`,
-        className
+        className,
       )}
       {...props}
     >
@@ -99,17 +88,14 @@ export function Tabs({
               aria-selected={selected}
               className={joinClassNames(
                 "vf-tabs__tab",
-                selected && "vf-tabs__tab--selected"
+                selected && "vf-tabs__tab--selected",
               )}
               disabled={item.disabled}
               id={tabId}
               key={item.id}
-              onClick={() => {
-                if (!item.disabled) {
-                  setSelectedValue(item.id);
-                }
-              }}
-              onKeyDown={(event) => handleKeyDown(event, index)}
+              onClick={() => behavior.select(item.id)}
+              onFocus={() => behavior.setFocusedValue(item.id)}
+              onKeyDown={(event) => handleKeyDown(event, item)}
               ref={(node) => {
                 refs.current[index] = node;
               }}
@@ -118,7 +104,9 @@ export function Tabs({
               type="button"
             >
               <span className="vf-tabs__label">{item.label}</span>
-              {item.badge && <span className="vf-tabs__badge">{item.badge}</span>}
+              {item.badge && (
+                <span className="vf-tabs__badge">{item.badge}</span>
+              )}
             </button>
           );
         })}

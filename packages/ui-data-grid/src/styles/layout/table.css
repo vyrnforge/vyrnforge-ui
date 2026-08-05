@@ -10,7 +10,7 @@
   background: var(--udg-surface);
   box-shadow: var(--udg-shadow-sm);
 }
-.udg[data-variant=plain] .udg-table-wrap {
+.udg[data-variant="plain"] .udg-table-wrap {
   border-radius: var(--udg-radius-sm);
 }
 .udg-table {
@@ -46,13 +46,33 @@
 .udg-header-cell {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: var(--udg-layer-header);
   height: var(--udg-header-height);
-  border-bottom-color: var(--udg-border-strong);
-  background: var(--udg-header-bg);
+  border-bottom: 0;
+  background-color: var(--udg-header-bg);
+  background-image: linear-gradient(
+    var(--udg-border-strong),
+    var(--udg-border-strong)
+  );
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
   color: var(--udg-header-text);
   font-size: var(--udg-font-size-xs);
   font-weight: var(--udg-font-weight-semibold);
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.udg-table-wrap {
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scroll-padding-top: var(--udg-header-height);
+}
+
+.udg-table [role="gridcell"]:focus-visible {
+  position: relative;
+  z-index: var(--udg-layer-header-control);
+  outline: var(--vf-focus-width) solid var(--udg-focus-ring);
+  outline-offset: -2px;
 }

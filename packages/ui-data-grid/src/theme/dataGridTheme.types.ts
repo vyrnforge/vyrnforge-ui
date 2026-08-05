@@ -24,6 +24,7 @@ export type DataGridCssVar =
   | "--udg-shadow-md"
   | "--udg-bg"
   | "--udg-surface"
+  | "--udg-surface-raised"
   | "--udg-surface-subtle"
   | "--udg-surface-ra-sm"
   | "--udg-surface-muted"
@@ -37,6 +38,7 @@ export type DataGridCssVar =
   | "--udg-primary"
   | "--udg-primary-hover"
   | "--udg-primary-soft"
+  | "--udg-primary-text"
   | "--udg-danger"
   | "--udg-danger-soft"
   | "--udg-warning"
@@ -66,7 +68,13 @@ export type DataGridCssVar =
   | "--udg-row-selected-bg"
   | "--udg-row-border"
   | "--udg-skeleton-base"
-  | "--udg-skeleton-highlight";
+  | "--udg-skeleton-highlight"
+  | "--udg-layer-cell"
+  | "--udg-layer-frozen-cell"
+  | "--udg-layer-header"
+  | "--udg-layer-header-control"
+  | "--udg-layer-menu"
+  | "--udg-layer-menu-nested";
 
 export type DataGridThemeVars = Partial<Record<DataGridCssVar, string>>;
 

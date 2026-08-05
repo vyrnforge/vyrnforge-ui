@@ -4,7 +4,7 @@ const densities = ["compact", "standard", "comfortable"] as const;
 
 export function DensityPage() {
   return (
-    <div className="vf-playground-grid three">
+    <div className="vf-playground-grid vf-playground-grid--three">
       {densities.map((density) => (
         <section className="vf-playground-card" data-density={density} key={density}>
           <Heading size="sm">{density}</Heading>

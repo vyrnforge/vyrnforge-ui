@@ -16,8 +16,10 @@ examples/
 
 ```txt
 packages/ui-core/
+packages/ui-behaviors/   # MF-5001–MF-5014 current
 packages/ui-components/
-packages/ui-data-grid/
+packages/ui-elements/    # 58-tag GMF3 native renderer complete; S7 consumer verification next
+packages/ui-data-grid/   # independent React alpha
 ```
 
 ## Documentation
@@ -38,19 +40,22 @@ docs/react-docs/
 docs/ai/
 docs/templates/
 docs/prompts/
+tests/consumers/
 ```
 
 ## Where To Put Code
 
-| Work | Location |
-| --- | --- |
-| Shared tokens/themes | `packages/ui-core` |
-| Reusable component | `packages/ui-components/src/components/<Component>` |
-| Grid-specific behavior | `packages/ui-data-grid` |
-| Docs app example | `examples/basic-playground` or future docs app |
-| Architecture docs | `docs/architecture` |
-| Public API docs | `docs/api` |
-| Component docs | Component README plus docs app page |
+| Work                       | Location                                            |
+| -------------------------- | --------------------------------------------------- |
+| Shared tokens/themes       | `packages/ui-core`                                  |
+| Framework-neutral behavior | `packages/ui-behaviors`                             |
+| React component            | `packages/ui-components/src/components/<Component>` |
+| Native Custom Element      | `packages/ui-elements`                              |
+| Grid-specific behavior     | `packages/ui-data-grid` (deferred release track)    |
+| Docs app example           | `examples/basic-playground` or future docs app      |
+| Architecture docs          | `docs/architecture`                                 |
+| Public API docs            | `docs/api`                                          |
+| Component docs             | Component README plus docs app page                 |
 
 ## Before Creating New Docs
 

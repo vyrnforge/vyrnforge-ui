@@ -6,5 +6,5 @@ export default defineConfig({
   dts: false,
   sourcemap: false,
   clean: true,
-  external: ["react", "react-dom"]
+  external: ["@vyrnforge/ui-behaviors", "react", "react-dom"],
 });

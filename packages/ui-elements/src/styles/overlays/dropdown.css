@@ -1,0 +1,8 @@
+vf-popover .vf-dropdown {
+  display: grid;
+  gap: var(--vf-component-gap);
+  min-width: min(20rem, calc(100vw - var(--vf-space-6)));
+  padding: var(--vf-space-3);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-raised);
+}

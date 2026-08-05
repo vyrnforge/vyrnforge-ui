@@ -31,7 +31,7 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-`@vyrnforge/ui-components` consumes shared `--vf-*` variables from `@vyrnforge/ui-core`, so light, dark, enterprise, density, and scoped token overrides flow through the primitives.
+`@vyrnforge/ui-components` consumes canonical semantic `--vf-*` roles from `@vyrnforge/ui-core`, so light, dark, enterprise, density, motion, focus, status, and scoped token overrides flow consistently through the primitives. Historical broad aliases remain app compatibility inputs but are not used by package CSS.
 
 `@vyrnforge/ui-components` owns reusable UI primitives only. It does not own app business state, backend data, grid behavior, or a global store.
 
@@ -49,7 +49,7 @@ import "@vyrnforge/ui-components/styles/index.css";
 
 ## Maturity
 
-`docs/metadata/component-status.json` is the canonical maturity index. The
+`docs/metadata/components.json` is the canonical component metadata and maturity index. The
 action aliases `CloseButton`, `ClearButton`, `RefreshButton`, and `MoreButton`
 are stable convenience wrappers. `Toast`, `ToastProvider`, `ToastAction`, and
 `useToast` are experimental. `ToastProvider` owns its internal viewport; do
@@ -64,7 +64,7 @@ import {
   Card,
   Field,
   Stack,
-  TextInput
+  TextInput,
 } from "@vyrnforge/ui-components";
 
 export function Example() {
@@ -217,7 +217,7 @@ import {
   SearchInput,
   SideNav,
   Tabs,
-  TopNav
+  TopNav,
 } from "@vyrnforge/ui-components";
 
 <AppShell
@@ -227,14 +227,16 @@ import {
   sidebar={<SideNav activeId="orders" items={navItems} />}
   sidebarPosition="sticky"
 >
-  <Page toolbar={<PageToolbar left={<SearchInput aria-label="Search orders" />} />}>
+  <Page
+    toolbar={<PageToolbar left={<SearchInput aria-label="Search orders" />} />}
+  >
     <PageHeader
       breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
       title="Orders"
     />
     <Tabs defaultValue="open" items={tabs} />
   </Page>
-</AppShell>
+</AppShell>;
 ```
 
 `AppShell` layout modes:
@@ -341,3 +343,14 @@ Dialog and drawer:
 ## Dependency Policy
 
 This package is intentionally dependency-minimal. Do not add MUI, Radix, Headless UI, TanStack, Redux, Tailwind, styled-components, Emotion, icon libraries, CSS frameworks, or new runtime dependencies without review.
+
+## Shared behavior adoption
+
+Button, toggle controls, Checkbox, Switch, RadioGroup, Slider, Rating, and Tabs
+now consume framework-neutral decisions from `@vyrnforge/ui-behaviors`. The
+React package retains its existing public API and remains responsible for DOM
+rendering, native inputs, refs, focus execution, and React events.
+
+## React behavior adoption audit
+
+Every public component is classified in `docs/metadata/react-behavior-adoption.json`. Behavior-owning components consume `@vyrnforge/ui-behaviors` where applicable; native and presentation components retain renderer-owned responsibilities without duplicating portable controller state.

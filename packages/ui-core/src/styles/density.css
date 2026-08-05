@@ -1,22 +1,43 @@
-[data-density="compact"],
-.vf-density-compact {
-  --vf-control-height: 30px;
-  --vf-control-padding-x: 10px;
-  --vf-font-size-md: 13px;
-  --vf-row-height: 36px;
+:where([data-density="compact"], .vf-density-compact) {
+  --vf-control-height: var(--vf-control-height-sm);
+  --vf-control-padding-x: var(--vf-control-padding-x-sm);
+  --vf-control-padding-y: var(--vf-control-padding-y-sm);
+  --vf-icon-size: var(--vf-icon-size-sm);
+  --vf-row-height: var(--vf-row-height-sm);
+  --vf-component-gap: var(--vf-space-1);
+  --vf-type-body-font-size: var(--vf-font-size-sm);
 }
 
-[data-density="standard"],
-.vf-density-standard {
-  --vf-control-height: 36px;
-  --vf-control-padding-x: 12px;
-  --vf-row-height: 44px;
+/*
+ * Balanced and spacious are the canonical S3 names.
+ * Standard and comfortable remain supported compatibility aliases.
+ */
+:where(
+  [data-density="balanced"],
+  [data-density="standard"],
+  .vf-density-balanced,
+  .vf-density-standard
+) {
+  --vf-control-height: var(--vf-control-height-md);
+  --vf-control-padding-x: var(--vf-control-padding-x-md);
+  --vf-control-padding-y: var(--vf-control-padding-y-md);
+  --vf-icon-size: var(--vf-icon-size-md);
+  --vf-row-height: var(--vf-row-height-md);
+  --vf-component-gap: var(--vf-space-2);
+  --vf-type-body-font-size: var(--vf-font-size-md);
 }
 
-[data-density="comfortable"],
-.vf-density-comfortable {
-  --vf-control-height: 42px;
-  --vf-control-padding-x: 14px;
-  --vf-font-size-md: 15px;
-  --vf-row-height: 52px;
+:where(
+  [data-density="spacious"],
+  [data-density="comfortable"],
+  .vf-density-spacious,
+  .vf-density-comfortable
+) {
+  --vf-control-height: var(--vf-control-height-lg);
+  --vf-control-padding-x: var(--vf-control-padding-x-lg);
+  --vf-control-padding-y: var(--vf-control-padding-y-lg);
+  --vf-icon-size: var(--vf-icon-size-lg);
+  --vf-row-height: var(--vf-row-height-lg);
+  --vf-component-gap: var(--vf-space-3);
+  --vf-type-body-font-size: var(--vf-font-size-lg);
 }

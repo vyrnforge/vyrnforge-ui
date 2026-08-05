@@ -10,6 +10,38 @@
 }
 
 .vf-focus-ring:focus-visible {
-  outline: 2px solid var(--vf-focus-ring);
-  outline-offset: 2px;
+  outline: var(--vf-focus-width) solid var(--vf-focus-color);
+  outline-offset: var(--vf-focus-offset);
+  box-shadow: var(--vf-focus-shadow);
+}
+
+/*
+ * Reduced motion preserves state changes while removing non-essential travel
+ * and shortening visibility transitions to effectively immediate.
+ */
+:where([data-motion="reduced"], .vf-motion-reduced) {
+  --vf-motion-duration-instant: 0ms;
+  --vf-motion-duration-fast: 1ms;
+  --vf-motion-duration-standard: 1ms;
+  --vf-motion-duration-slow: 1ms;
+  --vf-motion-duration-deliberate: 1ms;
+  --vf-motion-easing-standard: linear;
+  --vf-motion-easing-enter: linear;
+  --vf-motion-easing-exit: linear;
+  --vf-motion-easing-emphasized: linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --vf-motion-duration-instant: 0ms;
+    --vf-motion-duration-fast: 1ms;
+    --vf-motion-duration-standard: 1ms;
+    --vf-motion-duration-slow: 1ms;
+    --vf-motion-duration-deliberate: 1ms;
+    --vf-motion-easing-standard: linear;
+    --vf-motion-easing-enter: linear;
+    --vf-motion-easing-exit: linear;
+    --vf-motion-easing-emphasized: linear;
+    scroll-behavior: auto;
+  }
 }

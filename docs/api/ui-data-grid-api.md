@@ -26,7 +26,7 @@ type Order = {
 
 const columns: DataGridColumnDef<Order>[] = [
   { id: "customer", header: "Customer", accessorKey: "customer" },
-  { id: "total", header: "Total", accessorKey: "total", dataType: "number" }
+  { id: "total", header: "Total", accessorKey: "total", dataType: "number" },
 ];
 
 export function OrdersGrid({ rows }: { rows: Order[] }) {
@@ -106,16 +106,13 @@ Use it when application code needs to coordinate the same complete
 fetching, permissions, and business workflows outside the grid package.
 
 ```tsx
-import {
-  UniversalDataGrid,
-  useDataGridState
-} from "@vyrnforge/ui-data-grid";
+import { UniversalDataGrid, useDataGridState } from "@vyrnforge/ui-data-grid";
 
 const [state, setState] = useDataGridState({
   defaultState: {
     density: "compact",
-    pagination: { pageIndex: 0, pageSize: 25 }
-  }
+    pagination: { pageIndex: 0, pageSize: 25 },
+  },
 });
 
 <UniversalDataGrid
@@ -174,6 +171,29 @@ Public helpers include:
 - `resetAllColumnSizes`
 
 Use these helpers when building controlled grid state or adapters.
+
+## Keyboard, Resize, Reorder, And Scrolling
+
+`UniversalDataGrid` uses an accessible composite-grid keyboard model for body
+cells:
+
+- one body cell is in the page Tab sequence;
+- Arrow keys move between rendered body cells without wrapping;
+- Home and End move to the first or last cell in the current row;
+- Control/Command + Home or End moves to the first or last rendered cell;
+- Space toggles selection when the focused row is selectable;
+- Enter activates the row through `onRowClick` and applies row-click selection
+  when enabled.
+
+Header controls remain separate Tab stops. Sort buttons use their native
+Enter/Space behavior. Column resize separators support pointer dragging, Left
+and Right Arrow adjustment, Shift-modified larger steps, and double-click reset.
+Column grips support native drag and drop plus Alt+Shift+Left/Right keyboard
+reordering. A polite live region announces keyboard resizing and reordering.
+
+The table header remains sticky inside the grid scroll container. When selection
+is enabled, the selection column is also sticky on the inline-start edge. Focused
+body cells scroll into the nearest visible horizontal and vertical position.
 
 ## Selection And Bulk Actions
 

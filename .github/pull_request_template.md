@@ -7,6 +7,7 @@ This is the compact fallback template. Prefer a focused template from
 .github/PULL_REQUEST_TEMPLATE when the change is clearly one of these:
 - component-or-package.md
 - docs-and-examples.md
+- change-manifest.md
 - ci-cd-infrastructure.md
 - release.md
 - repository-maintenance.md
@@ -22,7 +23,9 @@ Select every affected area.
 - [ ] Documentation or repository text
 - [ ] Playground or examples
 - [ ] `@vyrnforge/ui-core`
+- [ ] `@vyrnforge/ui-behaviors`
 - [ ] `@vyrnforge/ui-components`
+- [ ] `@vyrnforge/ui-elements`
 - [ ] `@vyrnforge/ui-data-grid`
 - [ ] Workspace, tooling, or repository maintenance
 - [ ] CI/CD, Pages, release automation, or governance

@@ -1,6 +1,6 @@
 # VyrnForge UI
 
-VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundation. It is built for reusable application surfaces such as administration portals, customer portals, IAM and access-management applications, workflow systems, reporting and analytics screens, and data-heavy enterprise applications.
+VyrnForge UI is a native-first, dependency-minimal enterprise UI foundation with a first-class React renderer and a native Custom Element foundation. It is built for reusable application surfaces such as administration portals, customer portals, IAM and access-management applications, workflow systems, reporting and analytics screens, and data-heavy enterprise applications.
 
 VyrnForge UI is not only a data-grid library. The data grid is one specialized package inside a broader UI foundation.
 
@@ -24,17 +24,35 @@ VyrnForge UI is currently in an early alpha prerelease stage.
 
 ## Packages
 
-| Package | Responsibility |
-| --- | --- |
-| `@vyrnforge/ui-core` | Design tokens, themes, density, CSS variables, utilities, and shared foundations. |
-| `@vyrnforge/ui-components` | Reusable React primitives and application components. |
-| `@vyrnforge/ui-data-grid` | Enterprise data-management grid functionality. |
+| Package                    | Responsibility                                                                                                              |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared foundations.            |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, action, toggle, choice, numeric, Tabs, subscriptions, and behavior events. |
+| `@vyrnforge/ui-components` | First-class React primitives and application components.                                                                    |
+| `@vyrnforge/ui-elements`   | Complete 58-tag browser-native Custom Element renderer with Light DOM, forms, typed events, and shared behaviors.           |
+| `@vyrnforge/ui-data-grid`  | Existing React enterprise data-management grid on a separate alpha track.                                                   |
 
 Intended dependency direction:
 
-- `@vyrnforge/ui-core` remains independent.
-- `@vyrnforge/ui-components` may depend on `@vyrnforge/ui-core`.
-- `@vyrnforge/ui-data-grid` may depend on `@vyrnforge/ui-core` and `@vyrnforge/ui-components`.
+- `@vyrnforge/ui-core` remains independent and framework-neutral.
+- `@vyrnforge/ui-behaviors` foundation may depend on `@vyrnforge/ui-core` only.
+- `@vyrnforge/ui-components` may depend on `ui-core` and `ui-behaviors`.
+- `@vyrnforge/ui-elements` foundation may depend on `ui-core` and `ui-behaviors` without a framework runtime.
+- `@vyrnforge/ui-data-grid` may depend on `ui-core` and `ui-components` and remains outside the non-grid beta group.
+
+## Multi-Framework Beta Direction
+
+The active release program prioritizes all public non-grid components:
+
+- React remains the reference renderer through `@vyrnforge/ui-components`.
+- Native HTML has a GMF3-complete renderer through `@vyrnforge/ui-elements`; CF-7001 verifies clean packed native HTML consumption and CF-7002 verifies direct React 19 Custom Element consumption.
+- Angular 22 is a packed, Chromium-verified consumer of the native element surface. CF-7004 adds a thin reactive/template-driven Angular Forms reference adapter. CF-7005 verifies an isolated Vue 3 packed consumer without adding framework dependencies to VyrnForge packages, including strict template typing, production Vite output, canonical interactions, and Chromium evidence. Vue `v-model` translation remains CF-7006 work.
+- Shared component state and behavior move into `@vyrnforge/ui-behaviors`; MF-5001–MF-5014 foundations and React migrations through Dialog, Drawer, Popover, Tooltip, ToastProvider, and ConfirmDialog are implemented.
+- The data grid remains usable as a React alpha and does not block the non-grid beta.
+
+Architecture fixtures do not claim framework support. Clean consumer builds,
+browser behavior, accessibility, typing, packaging, and documentation must pass
+GMF4 before a framework is marked beta-supported.
 
 ## Installation
 
@@ -54,6 +72,7 @@ When using all packages together, import package-level CSS in this order:
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
@@ -64,13 +83,14 @@ Shared VyrnForge UI styling uses `--vf-*` CSS variables and `vf-*` classes. Data
 
 ```tsx
 import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 
 import { Button, Card, Stack } from "@vyrnforge/ui-components";
 import {
   UniversalDataGrid,
-  type DataGridColumnDef
+  type DataGridColumnDef,
 } from "@vyrnforge/ui-data-grid";
 
 type AccessRequest = {
@@ -81,12 +101,12 @@ type AccessRequest = {
 
 const rows: AccessRequest[] = [
   { id: "REQ-1001", requester: "Workspace owner", status: "Pending" },
-  { id: "REQ-1002", requester: "Security reviewer", status: "Approved" }
+  { id: "REQ-1002", requester: "Security reviewer", status: "Approved" },
 ];
 
 const columns: DataGridColumnDef<AccessRequest>[] = [
   { id: "requester", header: "Requester", accessorKey: "requester" },
-  { id: "status", header: "Status", accessorKey: "status" }
+  { id: "status", header: "Status", accessorKey: "status" },
 ];
 
 export function AccessRequestsPanel() {
@@ -108,13 +128,14 @@ export function AccessRequestsPanel() {
 
 ## Repository Structure
 
-| Path | Purpose |
-| --- | --- |
-| `packages/` | Package workspaces for `ui-core`, `ui-components`, and `ui-data-grid`. |
-| `docs/` | Canonical markdown documentation and AI-readable metadata. |
-| `examples/basic-playground/` | Interactive playground source for component and grid examples. |
-| `apps/docs/` | React documentation viewer over the markdown docs. |
-| `.github/` | Repository automation and workflow configuration. |
+| Path                         | Purpose                                                                                          |
+| ---------------------------- | ------------------------------------------------------------------------------------------------ |
+| `packages/`                  | Current package workspaces plus the approved future `ui-behaviors` and `ui-elements` boundaries. |
+| `docs/`                      | Canonical markdown documentation and AI-readable metadata.                                       |
+| `examples/basic-playground/` | Interactive playground source for component and grid examples.                                   |
+| `apps/docs/`                 | React documentation viewer over the markdown docs.                                               |
+| `tests/consumers/`           | React, native HTML, Angular, and Vue integration-contract fixtures.                              |
+| `.github/`                   | Repository automation and workflow configuration.                                                |
 
 Package tests live beside package source where present.
 
@@ -124,7 +145,7 @@ Prerequisites:
 
 - Node.js `>=24.18 <25`; `.nvmrc` and `.node-version` pin Node `24.18.0`.
 - npm `>=11.16 <12`; `packageManager` pins npm `11.16.0`.
-- TypeScript is pinned to `7.0.2` across the workspace. Published package runtime compatibility remains `Node.js >=22.12 <25` because the generated browser-library output does not require Node 24.
+- TypeScript is pinned to `7.0.2` across the workspace. Published packages declare Node.js `>=22.12 <25` as their intended consumer compatibility target; complete Node 22 and Node 24 verification is deferred to VF-7001 and VF-7002.
 
 Install dependencies:
 
@@ -147,6 +168,7 @@ npm run typecheck
 npm run test
 npm run verify:consumer
 npm run verify:packages
+npm run verify:multi-framework
 npm run verify:toolchain
 ```
 
@@ -182,3 +204,7 @@ Production use, commercial use, redistribution, package republication, resale, s
 ## Ownership
 
 VyrnForge UI is maintained as part of the VyrnForge UI repository.
+
+## Current multi-framework stage
+
+S5 / GMF2 and S6 / GMF3 are complete. EL-6001 through EL-6018 provide a deterministic 58-tag native renderer plus documented mapping, composition, and service strategies for every public non-grid React record. S7 / GMF4 is active. CF-7001, CF-7002, and CF-7008 establish packed native HTML and React Custom Element consumers plus declaration and editor metadata. CF-7003 adds clean Angular 22 package, build, property/event, slot, native-form, and Chromium evidence. CF-7004 adds an opt-in standalone Angular Forms bridge for reactive and template-driven state, disabled/touched propagation, and native validity. CF-7005 adds a clean Vue 3 packed-consumer fixture and verifier with compiler custom-element recognition, property/event binding, named Light DOM composition, native form submission, and runtime-matrix coverage. Its clean install, strict template typecheck, production build, and Chromium matrix are verified. Vue `v-model` translation remains CF-7006 work.

@@ -1,0 +1,680 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "README.md",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "dist/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "VyrnForgeTextElement",
+          "description": "Text browser-native renderer. Body text primitive with size and tone options.",
+          "tagName": "vf-text",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeHeadingElement",
+          "description": "Heading browser-native renderer. Semantic heading primitive.",
+          "tagName": "vf-heading",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeCaptionElement",
+          "description": "Caption browser-native renderer. Small supporting text.",
+          "tagName": "vf-caption",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeLabelElement",
+          "description": "Label browser-native renderer. Form and metadata label primitive.",
+          "tagName": "vf-label",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeCodeTextElement",
+          "description": "CodeText browser-native renderer. Inline or block code-like text primitive.",
+          "tagName": "vf-code-text",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeIconElement",
+          "description": "Icon browser-native renderer. Small built-in symbol component used by VyrnForge controls.",
+          "tagName": "vf-icon",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeBadgeElement",
+          "description": "Badge browser-native renderer. Compact status or metadata label.",
+          "tagName": "vf-badge",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeCardElement",
+          "description": "Card browser-native renderer. Framed content container.",
+          "tagName": "vf-card",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgePanelElement",
+          "description": "Panel browser-native renderer. Section container with optional title, description, and actions.",
+          "tagName": "vf-panel",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeStackElement",
+          "description": "Stack browser-native renderer. Vertical layout primitive.",
+          "tagName": "vf-stack",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeInlineElement",
+          "description": "Inline browser-native renderer. Horizontal layout primitive.",
+          "tagName": "vf-inline",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgePageElement",
+          "description": "Page browser-native renderer. Page composition wrapper with optional title, description, status, actions, toolbar, density, and max-width.",
+          "tagName": "vf-page",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSectionElement",
+          "description": "Section browser-native renderer. Page section wrapper.",
+          "tagName": "vf-section",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeEmptyStateElement",
+          "description": "EmptyState browser-native renderer. Empty content placeholder.",
+          "tagName": "vf-empty-state",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeLoadingStateElement",
+          "description": "LoadingState browser-native renderer. Loading placeholder.",
+          "tagName": "vf-loading-state",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeErrorStateElement",
+          "description": "ErrorState browser-native renderer. Error placeholder or blocking error surface.",
+          "tagName": "vf-error-state",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeInlineMessageElement",
+          "description": "InlineMessage browser-native renderer. Inline contextual feedback message.",
+          "tagName": "vf-inline-message",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSkeletonElement",
+          "description": "Skeleton browser-native renderer. Skeleton placeholder block.",
+          "tagName": "vf-skeleton",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeButtonElement",
+          "description": "Button browser-native renderer. Text action control for primary, secondary, subtle, danger, and ghost actions.",
+          "tagName": "vf-button",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeIconButtonElement",
+          "description": "IconButton browser-native renderer. Compact icon-only action control.",
+          "tagName": "vf-icon-button",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeButtonGroupElement",
+          "description": "ButtonGroup browser-native renderer. Groups related buttons together.",
+          "tagName": "vf-button-group",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeToolbarButtonElement",
+          "description": "ToolbarButton browser-native renderer. Dense toolbar action that can show icon and label.",
+          "tagName": "vf-toolbar-button",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeTextInputElement",
+          "description": "TextInput browser-native renderer. Native text input with VyrnForge styling.",
+          "tagName": "vf-text-input",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeTextareaElement",
+          "description": "Textarea browser-native renderer. Native multi-line text control.",
+          "tagName": "vf-textarea",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSearchInputElement",
+          "description": "SearchInput browser-native renderer. Search-specific native input.",
+          "tagName": "vf-search-input",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeNumberInputElement",
+          "description": "NumberInput browser-native renderer. Native input type='number' control aligned with VyrnForge input styling, with integer and decimal typing modes.",
+          "tagName": "vf-number-input",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeDateInputElement",
+          "description": "DateInput browser-native renderer. Native input type='date' control aligned with VyrnForge input styling.",
+          "tagName": "vf-date-input",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeDateTimeInputElement",
+          "description": "DateTimeInput browser-native renderer. Native input type='datetime-local' control aligned with VyrnForge input styling.",
+          "tagName": "vf-datetime-input",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeCheckboxElement",
+          "description": "Checkbox browser-native renderer. Native checkbox control.",
+          "tagName": "vf-checkbox",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeRadioElement",
+          "description": "Radio browser-native renderer. Native radio input with optional label, description, invalid, disabled, controlled, and uncontrolled states.",
+          "tagName": "vf-radio",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeRadioGroupElement",
+          "description": "RadioGroup browser-native renderer. Fieldset-based radio group with label, description, error, orientation, disabled, required, controlled, and uncontrolled state.",
+          "tagName": "vf-radio-group",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSwitchElement",
+          "description": "Switch browser-native renderer. Native checkbox-backed switch for immediate on/off settings.",
+          "tagName": "vf-switch",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSelectElement",
+          "description": "Select browser-native renderer. Native select control with VyrnForge styling.",
+          "tagName": "vf-select",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSliderElement",
+          "description": "Slider browser-native renderer. Native bounded numeric range input with optional displayed value.",
+          "tagName": "vf-slider",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeRatingElement",
+          "description": "Rating browser-native renderer. Discrete whole-number rating control backed by native radio behavior when editable.",
+          "tagName": "vf-rating",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeToggleButtonElement",
+          "description": "ToggleButton browser-native renderer. Native pressable tool, formatting, or view action with controlled or uncontrolled pressed state.",
+          "tagName": "vf-toggle-button",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeToggleButtonGroupElement",
+          "description": "ToggleButtonGroup browser-native renderer. Joined native ToggleButton collection with single or multiple selection state.",
+          "tagName": "vf-toggle-button-group",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSegmentedControlElement",
+          "description": "SegmentedControl browser-native renderer. Small mutually exclusive mode selector.",
+          "tagName": "vf-segmented-control",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeFieldElement",
+          "description": "Field browser-native renderer. Form field wrapper for labels, descriptions, validation, and safe control relationships.",
+          "tagName": "vf-field",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeValidationMessageElement",
+          "description": "ValidationMessage browser-native renderer. Inline validation or supporting message with error, warning, success, and info tones.",
+          "tagName": "vf-validation-message",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeTabsElement",
+          "description": "Tabs browser-native renderer. Controlled or uncontrolled tab navigation with line, contained, and pills variants.",
+          "tagName": "vf-tabs",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeBreadcrumbsElement",
+          "description": "Breadcrumbs browser-native renderer. Hierarchical location trail with current page marking and optional link/button items.",
+          "tagName": "vf-breadcrumbs",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeSideNavElement",
+          "description": "SideNav browser-native renderer. Sidebar navigation for admin and customer portals with active, disabled, badge, icon, collapsed, header/footer slots, internal list scrolling, and one-level nested items.",
+          "tagName": "vf-side-nav",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeAutocompleteElement",
+          "description": "Autocomplete browser-native renderer. Searchable single-value combobox with serializable options and shared overlay behavior.",
+          "tagName": "vf-autocomplete",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeMultiSelectElement",
+          "description": "MultiSelect browser-native renderer. Simple multi-value selection control with chips, optional search, clear action, and native checkbox options.",
+          "tagName": "vf-multi-select",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeTransferListElement",
+          "description": "TransferList browser-native renderer. Dual-list assignment component for moving a moderate known collection between available and assigned states.",
+          "tagName": "vf-transfer-list",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeDialogElement",
+          "description": "Dialog browser-native renderer. Modal dialog surface.",
+          "tagName": "vf-dialog",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeDrawerElement",
+          "description": "Drawer browser-native renderer. Side panel overlay.",
+          "tagName": "vf-drawer",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgePopoverElement",
+          "description": "Popover browser-native renderer. Shared-foundation anchored floating content with portal rendering and optional modal behavior.",
+          "tagName": "vf-popover",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeMenuElement",
+          "description": "Menu browser-native renderer. Action menu.",
+          "tagName": "vf-menu",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeTooltipElement",
+          "description": "Tooltip browser-native renderer. Short contextual help.",
+          "tagName": "vf-tooltip",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeToastElement",
+          "description": "Toast browser-native renderer. Provider-owned transient feedback for successful operations, failures, warnings, and informational events.",
+          "tagName": "vf-toast",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeToastViewportElement",
+          "description": "VyrnForge vf-toast-viewport browser-native renderer.",
+          "tagName": "vf-toast-viewport",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeConfirmDialogElement",
+          "description": "ConfirmDialog browser-native renderer. Confirmation dialog for important actions.",
+          "tagName": "vf-confirm-dialog",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeAppShellElement",
+          "description": "AppShell browser-native renderer. Application shell layout with optional header, sidebar, footer, and explicit page/content/split scroll behavior.",
+          "tagName": "vf-app-shell",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgePageHeaderElement",
+          "description": "PageHeader browser-native renderer. Reusable page header with title, description, eyebrow, status, metadata, breadcrumbs, and actions.",
+          "tagName": "vf-page-header",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgePageToolbarElement",
+          "description": "PageToolbar browser-native renderer. Standard page-level toolbar for search, filters, refresh, export, view controls, and secondary actions.",
+          "tagName": "vf-page-toolbar",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
+          "name": "VyrnForgeTopNavElement",
+          "description": "TopNav browser-native renderer. Compact top navigation/header bar with brand, navigation, actions, and user area slots.",
+          "tagName": "vf-top-nav",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        }
+      ]
+    }
+  ],
+  "vyrnforge": {
+    "namespace": "vf-",
+    "registration": {
+      "explicitEntryPoint": "@vyrnforge/ui-elements/register",
+      "registerAll": "registerVyrnForgeElements",
+      "packageRootSideEffects": false
+    },
+    "domMode": "light-dom",
+    "registeredTagCount": 58,
+    "eventVocabulary": [
+      "vf-action",
+      "vf-checked-change",
+      "vf-dismiss",
+      "vf-invalid",
+      "vf-open-change",
+      "vf-pressed-change",
+      "vf-reset",
+      "vf-selection-change",
+      "vf-cancel",
+      "vf-confirm",
+      "vf-input-value-change",
+      "vf-toast-change",
+      "vf-value-change"
+    ],
+    "typeDeclarations": {
+      "tagNameMap": "VyrnForgeHTMLElementTagNameMap",
+      "globalDomMap": "HTMLElementTagNameMap",
+      "eventDetailMap": "VyrnForgeCanonicalEventDetailMap"
+    }
+  }
+}

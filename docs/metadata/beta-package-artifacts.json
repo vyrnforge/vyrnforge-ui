@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "task": "BT-8003",
+    "documentation": "docs/release/beta-package-artifact-verification.md",
+    "releaseGroups": "docs/metadata/release-groups.json"
+  },
+  "task": {
+    "id": "BT-8003",
+    "title": "Verify package exports and tarballs",
+    "status": "done",
+    "dependsOn": ["BT-8002", "CF-7008"],
+    "unlocksAfterMerge": ["BT-8004", "BT-8005", "BT-8006"]
+  },
+  "releaseGroup": {
+    "id": "non-grid-beta",
+    "channel": "beta",
+    "version": "0.2.0-beta.1",
+    "distTag": "beta",
+    "packageCount": 4,
+    "excludes": ["@vyrnforge/ui-data-grid"]
+  },
+  "packages": [
+    {
+      "name": "@vyrnforge/ui-core",
+      "directory": "packages/ui-core",
+      "version": "0.2.0-beta.1",
+      "files": ["dist", "README.md"],
+      "sideEffects": ["./dist/index.css"],
+      "main": "./dist/index.cjs",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "entryPoints": [
+        {
+          "exportKey": ".",
+          "specifier": "@vyrnforge/ui-core",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+          }
+        },
+        {
+          "exportKey": "./index.css",
+          "specifier": "@vyrnforge/ui-core/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./style.css",
+          "specifier": "@vyrnforge/ui-core/style.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./styles/index.css",
+          "specifier": "@vyrnforge/ui-core/styles/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        }
+      ],
+      "requiredPayload": [
+        "dist/index.cjs",
+        "dist/index.css",
+        "dist/index.d.ts",
+        "dist/index.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-behaviors",
+      "directory": "packages/ui-behaviors",
+      "version": "0.2.0-beta.1",
+      "files": ["dist", "README.md"],
+      "sideEffects": false,
+      "main": "./dist/index.cjs",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "entryPoints": [
+        {
+          "exportKey": ".",
+          "specifier": "@vyrnforge/ui-behaviors",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+          }
+        }
+      ],
+      "requiredPayload": [
+        "dist/index.cjs",
+        "dist/index.d.ts",
+        "dist/index.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-components",
+      "directory": "packages/ui-components",
+      "version": "0.2.0-beta.1",
+      "files": ["dist", "README.md"],
+      "sideEffects": ["./dist/index.css"],
+      "main": "./dist/index.cjs",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "entryPoints": [
+        {
+          "exportKey": ".",
+          "specifier": "@vyrnforge/ui-components",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+          }
+        },
+        {
+          "exportKey": "./index.css",
+          "specifier": "@vyrnforge/ui-components/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./style.css",
+          "specifier": "@vyrnforge/ui-components/style.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./styles/index.css",
+          "specifier": "@vyrnforge/ui-components/styles/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        }
+      ],
+      "requiredPayload": [
+        "dist/index.cjs",
+        "dist/index.css",
+        "dist/index.d.ts",
+        "dist/index.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-elements",
+      "directory": "packages/ui-elements",
+      "version": "0.2.0-beta.1",
+      "files": ["dist", "README.md", "custom-elements.json"],
+      "sideEffects": [
+        "./dist/index.css",
+        "./dist/register.js",
+        "./dist/register.cjs"
+      ],
+      "main": "./dist/index.cjs",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "customElements": "./custom-elements.json",
+      "entryPoints": [
+        {
+          "exportKey": ".",
+          "specifier": "@vyrnforge/ui-elements",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+          }
+        },
+        {
+          "exportKey": "./custom-elements.json",
+          "specifier": "@vyrnforge/ui-elements/custom-elements.json",
+          "kind": "json",
+          "target": "./custom-elements.json"
+        },
+        {
+          "exportKey": "./index.css",
+          "specifier": "@vyrnforge/ui-elements/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./register",
+          "specifier": "@vyrnforge/ui-elements/register",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/register.d.ts",
+            "import": "./dist/register.js",
+            "require": "./dist/register.cjs"
+          }
+        },
+        {
+          "exportKey": "./style.css",
+          "specifier": "@vyrnforge/ui-elements/style.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./styles/index.css",
+          "specifier": "@vyrnforge/ui-elements/styles/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        }
+      ],
+      "requiredPayload": [
+        "custom-elements.json",
+        "dist/index.cjs",
+        "dist/index.css",
+        "dist/index.d.ts",
+        "dist/index.js",
+        "dist/register.cjs",
+        "dist/register.d.ts",
+        "dist/register.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+      ]
+    }
+  ],
+  "verification": {
+    "command": "npm run verify:beta-package-artifacts",
+    "contractCommand": "npm run verify:beta-package-contract",
+    "testCommand": "npm run test:beta-package-contract",
+    "consumerFixture": "tests/beta-package-consumer",
+    "reportDirectory": "test-results/beta-package-artifacts",
+    "reportFiles": [
+      "tarball-report.json",
+      "consumer-report.json",
+      "consumer.log"
+    ],
+    "actualTarballsRequired": true,
+    "offlineVyrnForgeInstallRequired": true,
+    "workspaceLinksForbidden": true,
+    "allPublicEntryPointsRequired": true,
+    "typecheckRequired": true,
+    "productionBuildRequired": true,
+    "cleanupRequired": true
+  },
+  "releaseReadiness": "not-ready"
+}

@@ -1,20 +1,20 @@
 .vf-tooltip {
   width: fit-content;
 }
-
 .vf-tooltip__content {
   position: fixed;
   top: var(--vf-overlay-y, 0);
   left: var(--vf-overlay-x, 0);
-  z-index: var(--vf-z-tooltip);
+  z-index: var(--vf-layer-tooltip);
   max-width: 260px;
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-border-default);
   border-radius: var(--vf-radius-md);
   padding: var(--vf-space-2) var(--vf-space-3);
-  color: var(--vf-text);
-  background: var(--vf-surface-raised);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-overlay);
   box-shadow: var(--vf-shadow-sm);
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  font-family: var(--vf-type-caption-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
   pointer-events: none;
 }

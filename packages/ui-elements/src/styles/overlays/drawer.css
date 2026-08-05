@@ -1,0 +1,36 @@
+vf-drawer .vf-drawer__backdrop {
+  place-items: stretch end;
+  padding: 0;
+}
+vf-drawer .vf-drawer {
+  width: min(100vw, 420px);
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+}
+vf-drawer .vf-drawer--sm {
+  width: min(100vw, 340px);
+}
+vf-drawer .vf-drawer--md {
+  width: min(100vw, 420px);
+}
+vf-drawer .vf-drawer--lg {
+  width: min(100vw, 560px);
+}
+vf-drawer .vf-drawer--left {
+  justify-self: start;
+}
+vf-drawer .vf-drawer--right {
+  justify-self: end;
+}
+vf-drawer .vf-drawer--top,
+vf-drawer .vf-drawer--bottom {
+  width: 100vw;
+  height: min(70vh, 520px);
+}
+vf-drawer .vf-drawer--top {
+  align-self: start;
+}
+vf-drawer .vf-drawer--bottom {
+  align-self: end;
+}

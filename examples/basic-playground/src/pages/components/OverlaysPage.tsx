@@ -92,7 +92,7 @@ export function OverlaysPage() {
         </Inline>
       </Section>
 
-      <section className="vf-playground-grid two">
+      <section className="vf-playground-grid vf-playground-grid--two">
         <div className="vf-playground-card" data-theme="dark">
           <Heading size="sm">Dark theme overlays</Heading>
           <Inline>

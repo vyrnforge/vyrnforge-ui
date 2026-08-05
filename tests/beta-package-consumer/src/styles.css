@@ -1,0 +1,6 @@
+.vf-beta-consumer {
+  min-height: 100vh;
+  padding: var(--vf-space-6);
+  background: var(--vf-bg);
+  color: var(--vf-text);
+}

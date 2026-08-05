@@ -1,0 +1,96 @@
+name: Reusable security validation
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: dependency-review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: high
+
+  security-validation:
+    name: security-validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    env:
+      ACTIONLINT_VERSION: 1.7.12
+      ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit shipped dependency findings
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Install verified actionlint
+        shell: bash
+        run: |
+          archive="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          curl --fail --silent --show-error --location \
+            --output "$archive" \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/${archive}"
+          echo "${ACTIONLINT_SHA256}  ${archive}" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive" actionlint
+          sudo install -m 0755 actionlint /usr/local/bin/actionlint
+          actionlint -version
+
+      - name: Validate workflows and shell snippets
+        shell: bash
+        run: |
+          shellcheck --version
+          actionlint -color
+          find . -path ./.git -prune -o -type f -name '*.sh' -print0 | xargs -0 -r shellcheck
+
+      - name: Verify security and workflow contracts
+        run: |
+          npm run verify:security-workflow-hardening
+          npm run verify:workflows
+
+  codeql-analysis:
+    name: codeql-analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        with:
+          languages: javascript-typescript
+          build-mode: none
+
+      - name: Analyze JavaScript and TypeScript
+        uses: github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        with:
+          category: /language:javascript-typescript

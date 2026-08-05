@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "task": "CF-7009",
+    "sprint": "S7",
+    "storyPoints": 8,
+    "gate": "GMF4",
+    "status": "evidence-complete",
+    "gateStatus": "passed"
+  },
+  "supportClaim": "cross-framework-browser-matrix-verified",
+  "consumers": ["native-html", "react", "angular", "vue"],
+  "sharedScenarios": [
+    {
+      "id": "canonical-action-event",
+      "expectation": "vf-action dispatch reaches the consuming framework and updates observable state"
+    },
+    {
+      "id": "tabs-property-assignment",
+      "expectation": "the shared vf-tabs items property renders the Summary tab without object-to-attribute serialization"
+    },
+    {
+      "id": "text-input-value-property",
+      "expectation": "the shared vf-text-input value property reaches the native internal control"
+    }
+  ],
+  "runtime": {
+    "command": "npm run verify:cross-framework-matrix:runtime",
+    "report": "test-results/cross-framework-matrix/report.json",
+    "traces": "test-results/cross-framework-matrix/traces",
+    "ciWorkflow": ".github/workflows/_consumer.yml",
+    "artifactName": "cross-framework-browser-matrix"
+  },
+  "predecessors": ["CF-7004", "CF-7006", "CF-7007", "CF-7008"],
+  "evidence": [
+    "docs/testing/cross-framework-browser-matrix.md",
+    "scripts/verify-consumer-foundations-runtime.mjs",
+    "scripts/verify-cross-framework-browser-matrix.mjs",
+    "tests/consumers/manifest.json"
+  ],
+  "completedRuntimeEvidence": [
+    "one shared canonical-action-event scenario passed in Native HTML, React, Angular, and Vue",
+    "one shared vf-tabs items-property scenario passed in Native HTML, React, Angular, and Vue",
+    "one shared vf-text-input value-property scenario passed in Native HTML, React, Angular, and Vue",
+    "normalized matrix report generated under test-results/cross-framework-matrix/report.json",
+    "Playwright trace archives generated for all four consumers"
+  ],
+  "unresolvedBlockers": []
+}

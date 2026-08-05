@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S6",
+    "batch": "EL-6012-EL-6017",
+    "status": "implemented",
+    "gate": "GMF3",
+    "gateStatus": "passed"
+  },
+  "tasks": [
+    {
+      "id": "EL-6012",
+      "status": "done"
+    },
+    {
+      "id": "EL-6013",
+      "status": "done"
+    },
+    {
+      "id": "EL-6014",
+      "status": "done"
+    },
+    {
+      "id": "EL-6015",
+      "status": "done"
+    },
+    {
+      "id": "EL-6016",
+      "status": "done"
+    },
+    {
+      "id": "EL-6017",
+      "status": "done"
+    }
+  ],
+  "package": "@vyrnforge/ui-elements",
+  "registration": {
+    "previousCount": 40,
+    "addedCount": 14,
+    "totalCount": 54,
+    "addedTags": [
+      "vf-autocomplete",
+      "vf-multi-select",
+      "vf-transfer-list",
+      "vf-dialog",
+      "vf-drawer",
+      "vf-popover",
+      "vf-menu",
+      "vf-tooltip",
+      "vf-toast",
+      "vf-toast-viewport",
+      "vf-confirm-dialog",
+      "vf-app-shell",
+      "vf-page-header",
+      "vf-page-toolbar"
+    ]
+  },
+  "families": {
+    "collections": ["vf-autocomplete", "vf-multi-select", "vf-transfer-list"],
+    "modalOverlays": ["vf-dialog", "vf-drawer"],
+    "anchoredOverlays": ["vf-popover", "vf-menu", "vf-tooltip"],
+    "feedback": ["vf-toast", "vf-toast-viewport", "vf-confirm-dialog"],
+    "applicationComposition": [
+      "vf-app-shell",
+      "vf-page-header",
+      "vf-page-toolbar"
+    ]
+  },
+  "contracts": {
+    "dom": "light-dom",
+    "styleNamespace": "vf-",
+    "events": "typed bubbling composed vf-* CustomEvent contracts",
+    "forms": "ElementInternals-backed scalar and repeated-entry collection values",
+    "behaviorReuse": [
+      "createAutocompleteController",
+      "createMultiSelectController",
+      "createTransferListController",
+      "createDialogController",
+      "createDrawerController",
+      "createPopoverController",
+      "createNavigationController",
+      "createTooltipController",
+      "createToastController",
+      "createConfirmDialogController"
+    ],
+    "frameworkDependencies": []
+  },
+  "evidence": {
+    "browser": "tests/browser/native-advanced-elements.spec.ts",
+    "fixture": "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
+    "verifier": "scripts/verify-native-advanced-elements.mjs",
+    "verifierTests": "scripts/verify-native-advanced-elements.test.mjs",
+    "styles": "packages/ui-elements/src/styles/index.css"
+  },
+  "remainingGateWork": [],
+  "gmf3Closure": "docs/metadata/gmf3-closure.json"
+}

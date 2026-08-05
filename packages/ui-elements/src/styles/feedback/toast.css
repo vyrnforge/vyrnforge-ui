@@ -1,0 +1,154 @@
+vf-toast-viewport.vf-toast-viewport {
+  position: fixed;
+  z-index: var(--vf-layer-toast);
+  display: grid;
+  gap: var(--vf-component-gap);
+  width: min(420px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
+}
+
+vf-toast-viewport.vf-toast-viewport--top-start {
+  top: max(var(--vf-space-4), env(safe-area-inset-top));
+  left: max(var(--vf-space-4), env(safe-area-inset-left));
+}
+vf-toast-viewport.vf-toast-viewport--top-center {
+  top: max(var(--vf-space-4), env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+}
+vf-toast-viewport.vf-toast-viewport--top-end {
+  top: max(var(--vf-space-4), env(safe-area-inset-top));
+  right: max(var(--vf-space-4), env(safe-area-inset-right));
+}
+vf-toast-viewport.vf-toast-viewport--bottom-start {
+  bottom: max(var(--vf-space-4), env(safe-area-inset-bottom));
+  left: max(var(--vf-space-4), env(safe-area-inset-left));
+}
+vf-toast-viewport.vf-toast-viewport--bottom-center {
+  bottom: max(var(--vf-space-4), env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+}
+vf-toast-viewport.vf-toast-viewport--bottom-end {
+  right: max(var(--vf-space-4), env(safe-area-inset-right));
+  bottom: max(var(--vf-space-4), env(safe-area-inset-bottom));
+}
+
+vf-toast.vf-toast {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: flex-start;
+  gap: var(--vf-space-3);
+  min-width: 0;
+  border: 1px solid var(--vf-border-default);
+  border-radius: var(--vf-radius-lg);
+  padding: var(--vf-space-3);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-overlay);
+  box-shadow: var(--vf-shadow-md);
+  pointer-events: auto;
+}
+vf-toast .vf-toast__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  color: var(--vf-status-neutral-text);
+  background: var(--vf-status-neutral-background);
+}
+vf-toast .vf-toast__content {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+vf-toast .vf-toast__title {
+  color: var(--vf-text-primary);
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
+  letter-spacing: var(--vf-type-label-letter-spacing);
+  overflow-wrap: anywhere;
+}
+vf-toast .vf-toast__description {
+  color: var(--vf-text-secondary);
+  font-family: var(--vf-type-body-font-family);
+  font-size: var(--vf-type-body-font-size);
+  font-weight: var(--vf-type-body-font-weight);
+  line-height: var(--vf-type-body-line-height);
+  letter-spacing: var(--vf-type-body-letter-spacing);
+  overflow-wrap: anywhere;
+}
+vf-toast .vf-toast__action {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+vf-toast .vf-toast__dismiss {
+  margin-top: -4px;
+}
+vf-toast.vf-toast--info {
+  border-color: var(--vf-status-info-border);
+}
+vf-toast.vf-toast--info .vf-toast__icon {
+  color: var(--vf-status-info-text);
+  background: var(--vf-status-info-background);
+}
+vf-toast.vf-toast--success {
+  border-color: var(--vf-status-success-border);
+}
+vf-toast.vf-toast--success .vf-toast__icon {
+  color: var(--vf-status-success-text);
+  background: var(--vf-status-success-background);
+}
+vf-toast.vf-toast--warning {
+  border-color: var(--vf-status-warning-border);
+}
+vf-toast.vf-toast--warning .vf-toast__icon {
+  color: var(--vf-status-warning-text);
+  background: var(--vf-status-warning-background);
+}
+vf-toast.vf-toast--error {
+  border-color: var(--vf-status-error-border);
+}
+vf-toast.vf-toast--error .vf-toast__icon {
+  color: var(--vf-status-error-text);
+  background: var(--vf-status-error-background);
+}
+
+@media (max-width: 560px) {
+  vf-toast-viewport.vf-toast-viewport {
+    right: max(var(--vf-space-3), env(safe-area-inset-right));
+    left: max(var(--vf-space-3), env(safe-area-inset-left));
+    width: auto;
+    max-width: none;
+    transform: none;
+  }
+  vf-toast.vf-toast {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  vf-toast .vf-toast__action {
+    grid-column: 2 / -1;
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  vf-toast.vf-toast {
+    animation: vf-toast-enter var(--vf-motion-duration-standard)
+      var(--vf-motion-easing-enter);
+  }
+}
+@keyframes vf-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

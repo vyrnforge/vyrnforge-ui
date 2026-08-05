@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S7",
+    "task": "CF-7006",
+    "title": "Add Vue v-model integration adapter",
+    "storyPoints": 5,
+    "status": "evidence-complete",
+    "gate": "GMF4",
+    "gateStatus": "passed",
+    "predecessor": "CF-7005"
+  },
+  "adapter": {
+    "framework": "Vue",
+    "version": "3.5.40",
+    "supportClaim": "vue-model-adapter-verified",
+    "location": "tests/consumers/vue/src/adapters",
+    "renderer": "@vyrnforge/ui-elements",
+    "publishedPackage": null,
+    "duplicatesRendering": false,
+    "duplicatesValidation": false
+  },
+  "contracts": [
+    "modelValue",
+    "update:modelValue",
+    "vf-value-change",
+    "vf-checked-change",
+    "value",
+    "checked"
+  ],
+  "referenceAdapters": ["VyrnForgeTextInputModel", "VyrnForgeCheckboxModel"],
+  "ownership": {
+    "nativeElement": "rendering, accessibility, keyboard behavior, validation, form association, canonical events",
+    "vueAdapter": "modelValue/update:modelValue translation only"
+  },
+  "requiredCommands": [
+    "npm run test:vue-model-adapter",
+    "npm run verify:vue-model-adapter",
+    "npm run verify:vue-model-adapter:runtime",
+    "npm run quality"
+  ],
+  "pendingRuntimeEvidence": [],
+  "unresolvedBlockers": [],
+  "completedRuntimeEvidence": [
+    "parent modelValue propagates to native value",
+    "vf-value-change emits update:modelValue and updates the Vue parent model",
+    "parent modelValue propagates to native checked",
+    "vf-checked-change emits update:modelValue and updates the Vue parent model",
+    "clean packed Vue production build and Chromium interaction evidence"
+  ]
+}

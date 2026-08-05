@@ -1,6 +1,19 @@
-import { useState, type CSSProperties } from "react";
-import { useControllableState } from "../../hooks";
-import { DismissableLayer, FocusScope, Portal, useAnchoredPosition } from "../../internal/overlay";
+import {
+  cloneElement,
+  isValidElement,
+  useId,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type ReactElement,
+} from "react";
+import { usePopoverBehavior } from "../../internal/behaviors";
+import {
+  DismissableLayer,
+  FocusScope,
+  Portal,
+  useAnchoredPosition,
+} from "../../internal/overlay";
 import { joinClassNames } from "../../utils/classNames";
 import type { PopoverProps } from "./Popover.types";
 
@@ -20,14 +33,24 @@ export function Popover({
   placement = "bottom-start",
   portalContainer,
   style,
-  trigger
+  trigger,
+  triggerAriaHasPopup,
 }: PopoverProps) {
-  const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(null);
-  const [contentElement, setContentElement] = useState<HTMLDivElement | null>(null);
-  const [isOpen, setIsOpen] = useControllableState({
-    value: open,
-    defaultValue: defaultOpen,
-    onChange: onOpenChange
+  const triggerId = useId();
+  const contentId = useId();
+  const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(
+    null,
+  );
+  const [contentElement, setContentElement] = useState<HTMLDivElement | null>(
+    null,
+  );
+  const behavior = usePopoverBehavior({
+    contentId,
+    defaultOpen,
+    modal,
+    onOpenChange,
+    open,
+    triggerId,
   });
 
   const position = useAnchoredPosition({
@@ -35,41 +58,73 @@ export function Popover({
     floating: contentElement,
     matchAnchorWidth: matchTriggerWidth,
     offset,
-    placement
+    placement,
   });
+
+  const disclosureProps = {
+    "aria-controls": behavior.isOpen ? contentId : undefined,
+    "aria-expanded": behavior.isOpen,
+    "aria-haspopup": triggerAriaHasPopup ?? (modal ? "dialog" : undefined),
+  };
+  const renderedTrigger = isValidElement(trigger) ? (
+    cloneElement(
+      trigger as ReactElement<typeof disclosureProps>,
+      disclosureProps,
+    )
+  ) : (
+    <span
+      {...disclosureProps}
+      onKeyDown={(event: KeyboardEvent<HTMLSpanElement>) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          behavior.toggle("keyboard");
+        }
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      {trigger}
+    </span>
+  );
 
   return (
     <div
       className={joinClassNames(
         "vf-popover",
-        isOpen && "vf-popover--open",
-        className
+        behavior.isOpen && "vf-popover--open",
+        className,
       )}
       style={style}
     >
       <span
-        aria-expanded={isOpen}
-        aria-haspopup={modal ? "dialog" : undefined}
         className="vf-popover__trigger"
+        id={triggerId}
+        onClick={() => behavior.toggle("pointer")}
         ref={setTriggerElement}
-        onClick={() => setIsOpen(!isOpen)}
       >
-        {trigger}
+        {renderedTrigger}
       </span>
-      {isOpen && (
+      {behavior.isOpen && (
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[{ current: triggerElement }]}
-            className={joinClassNames("vf-popover__content", modal && "vf-popover__content--modal")}
+            className={joinClassNames(
+              "vf-popover__content",
+              modal && "vf-popover__content--modal",
+            )}
             dismissOnEscape={closeOnEscape}
-            dismissOnOutsidePointer={closeOnOutsidePointer ?? closeOnOutsideClick}
-            onDismiss={() => setIsOpen(false)}
+            dismissOnOutsidePointer={
+              closeOnOutsidePointer ?? closeOnOutsideClick
+            }
+            onDismiss={behavior.dismiss}
             onLayerChange={setContentElement}
-            style={{
-              "--vf-overlay-x": `${position.x}px`,
-              "--vf-overlay-y": `${position.y}px`,
-              visibility: position.ready ? undefined : "hidden"
-            } as CSSProperties}
+            style={
+              {
+                "--vf-overlay-x": `${position.x}px`,
+                "--vf-overlay-y": `${position.y}px`,
+                visibility: position.ready ? undefined : "hidden",
+              } as CSSProperties
+            }
           >
             <FocusScope
               autoFocus={modal}
@@ -77,7 +132,11 @@ export function Popover({
               restoreFocus
               trapped={modal}
             >
-              <div aria-modal={modal || undefined} role={modal ? "dialog" : undefined}>
+              <div
+                aria-modal={modal || undefined}
+                id={contentId}
+                role={modal ? "dialog" : undefined}
+              >
                 {children}
               </div>
             </FocusScope>

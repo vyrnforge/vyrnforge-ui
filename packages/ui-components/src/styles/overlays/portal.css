@@ -1,5 +1,5 @@
 .vf-dismissable-layer {
-  z-index: var(--vf-overlay-stack-index, var(--vf-z-popover));
+  z-index: var(--vf-overlay-stack-index, var(--vf-layer-popover));
 }
 
 .vf-focus-scope {

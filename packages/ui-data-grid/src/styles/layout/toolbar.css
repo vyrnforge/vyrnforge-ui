@@ -40,9 +40,10 @@
   background: var(--udg-control-bg);
   font: inherit;
   transition:
-    border-color 140ms ease,
-    box-shadow 140ms ease,
-    background-color 140ms ease;
+    border-color var(--vf-motion-duration-fast) var(--vf-motion-easing-standard),
+    box-shadow var(--vf-motion-duration-fast) var(--vf-motion-easing-standard),
+    background-color var(--vf-motion-duration-fast)
+      var(--vf-motion-easing-standard);
 }
 .udg-search-input {
   width: 100%;
@@ -87,8 +88,8 @@
 .udg-column-menu__more summary:focus-visible,
 .udg-column-menu-panel button:focus-visible,
 .udg-column-toggle input:focus-visible {
-  outline: 2px solid var(--udg-focus-ring);
-  outline-offset: 2px;
+  outline: var(--vf-focus-width) solid var(--udg-focus-ring);
+  outline-offset: var(--vf-focus-offset);
   border-color: var(--udg-control-focus-border);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--udg-focus-ring) 16%, transparent);
+  box-shadow: var(--vf-focus-shadow);
 }

@@ -23,7 +23,7 @@ export function DetailPage() {
         </div>
       </section>
 
-      <section className="vf-playground-grid two">
+      <section className="vf-playground-grid vf-playground-grid--two">
         <article className="vf-playground-card">
           <Heading size="sm">Metadata</Heading>
           <dl className="vf-playground-key-value-grid">

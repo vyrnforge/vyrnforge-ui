@@ -3,14 +3,15 @@
   width: var(--vf-skeleton-width, 100%);
   min-height: var(--vf-skeleton-height, 16px);
   border-radius: var(--vf-skeleton-radius, var(--vf-radius-md));
-  background:
-    linear-gradient(
-      90deg,
-      var(--vf-surface-subtle),
-      color-mix(in srgb, var(--vf-surface-subtle) 55%, var(--vf-border)),
-      var(--vf-surface-subtle));
+  background: linear-gradient(
+    90deg,
+    var(--vf-surface-muted),
+    color-mix(in srgb, var(--vf-surface-muted) 55%, var(--vf-border-default)),
+    var(--vf-surface-muted)
+  );
   background-size: 220% 100%;
-  animation: vf-skeleton 1.1s ease-in-out infinite;
+  animation: vf-skeleton var(--vf-motion-duration-deliberate)
+    var(--vf-motion-easing-standard) infinite alternate;
 }
 .vf-skeleton--static {
   animation: none;

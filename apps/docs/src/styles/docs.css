@@ -6,14 +6,24 @@ body {
   margin: 0;
   background: var(--vf-bg, #f8fafc);
   color: var(--vf-text, #0f172a);
-  font-family: var(--vf-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-family: var(
+    --vf-font-family,
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif
+  );
   line-height: 1.5;
 }
 
 .vf-docs-app {
   min-height: 100vh;
   background:
-    linear-gradient(180deg, var(--vf-surface-subtle, #f8fafc) 0%, var(--vf-bg, #ffffff) 360px),
+    linear-gradient(
+      180deg,
+      var(--vf-surface-subtle, #f8fafc) 0%,
+      var(--vf-bg, #ffffff) 360px
+    ),
     var(--vf-bg, #ffffff);
   color: var(--vf-text, #0f172a);
 }
@@ -472,17 +482,26 @@ body {
 
 .vf-docs-metadata-table--packages .vf-docs-metadata-table__head,
 .vf-docs-metadata-table--packages .vf-docs-metadata-table__row {
-  grid-template-columns: minmax(170px, 0.9fr) 90px minmax(190px, 1fr) minmax(260px, 1.4fr);
+  grid-template-columns: minmax(170px, 0.9fr) 90px minmax(190px, 1fr) minmax(
+      260px,
+      1.4fr
+    );
 }
 
 .vf-docs-metadata-table--imports .vf-docs-metadata-table__head,
 .vf-docs-metadata-table--imports .vf-docs-metadata-table__row {
-  grid-template-columns: minmax(160px, 0.8fr) minmax(220px, 1fr) minmax(260px, 1.2fr) minmax(240px, 1.2fr);
+  grid-template-columns: minmax(160px, 0.8fr) minmax(220px, 1fr) minmax(
+      260px,
+      1.2fr
+    ) minmax(240px, 1.2fr);
 }
 
 .vf-docs-metadata-table--rules .vf-docs-metadata-table__head,
 .vf-docs-metadata-table--rules .vf-docs-metadata-table__row {
-  grid-template-columns: minmax(180px, 0.7fr) minmax(300px, 1.3fr) minmax(260px, 1fr);
+  grid-template-columns: minmax(180px, 0.7fr) minmax(300px, 1.3fr) minmax(
+      260px,
+      1fr
+    );
 }
 
 .vf-docs-metadata-detail,
@@ -666,4 +685,63 @@ body {
   .vf-docs-page__intro {
     padding: 16px;
   }
+}
+
+.vf-docs-framework-tabs {
+  margin-top: 14px;
+}
+
+.vf-docs-framework-usage {
+  display: grid;
+  gap: 8px;
+}
+
+.vf-docs-framework-usage__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.vf-docs-reference-code {
+  overflow: auto;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--vf-border, #e2e8f0);
+  border-radius: var(--vf-radius-md, 6px);
+  background: var(--vf-surface-subtle, #f8fafc);
+  color: var(--vf-text-strong, #0f172a);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.vf-docs-contract-section {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--vf-border, #e2e8f0);
+}
+
+.vf-docs-contract-details {
+  display: grid;
+  gap: 6px;
+}
+
+.vf-docs-contract-field {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.35fr) minmax(0, 1fr);
+  gap: 10px;
+  font-size: 13px;
+}
+
+.vf-docs-contract-field strong {
+  color: var(--vf-text-strong, #0f172a);
+}
+
+.vf-docs-contract-field span {
+  min-width: 0;
+  color: var(--vf-text-muted, #64748b);
+  overflow-wrap: anywhere;
 }

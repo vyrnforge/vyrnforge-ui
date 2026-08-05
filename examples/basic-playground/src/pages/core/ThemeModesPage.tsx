@@ -4,7 +4,7 @@ const modes = ["light", "dark", "enterprise", "system"] as const;
 
 export function ThemeModesPage() {
   return (
-    <div className="vf-playground-grid two">
+    <div className="vf-playground-grid vf-playground-grid--two">
       {modes.map((mode) => (
         <section className="vf-playground-card vf-playground-theme-sample" data-theme={mode} key={mode}>
           <div className="vf-playground-card-heading">

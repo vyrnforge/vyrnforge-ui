@@ -1,3 +1,5 @@
+- Completed MF-5015 and MF-5016: audited every public React component, migrated IconButton action availability to the shared behavior resolver, added React adoption verification, and closed GMF2 with a canonical evidence gate.
+
 # Changelog
 
 Noteworthy public changes to VyrnForge UI will be documented here.
@@ -11,6 +13,30 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Added
 
+- Added EL-6001 and EL-6002 native registration, per-element registration factory, observed-attribute, property reflection, pre-definition upgrade, reconnect-safe lifecycle, and microtask update foundations.
+- Added EL-6003 and EL-6004 typed `vf-*` event dispatchers, canonical event detail contracts, ElementInternals form association, validity, disabled, reset, restoration, and real-form browser evidence.
+- MF-5005 through MF-5007 framework-neutral action, toggle, choice, numeric, and Tabs controllers.
+- React behavior adapters and parity tests for Button, ToggleButton, ToggleButtonGroup, SegmentedControl, Checkbox, Switch, RadioGroup, Slider, Rating, and Tabs.
+- MF-5008 through MF-5010 framework-neutral Autocomplete, MultiSelect, and Transfer List controllers with React parity adoption.
+- MF-5011 and MF-5012 framework-neutral Menu/SideNav navigation and overlay lifecycle, layer, and positioning foundations with React adapter adoption.
+- MF-5013 and MF-5014 component-specific Dialog, Drawer, Popover, Tooltip, Toast, and ConfirmDialog controllers with React parity adoption.
+
+### Added
+
+- Added MF-5001 through MF-5004 framework-neutral behavior foundations for
+  controllable state, deterministic collections and active-item navigation,
+  single/multiple/toggle/range selection, and canonical reasoned controller
+  events.
+
+- Added the accepted multi-framework web architecture for a first-class React
+  renderer, planned native Custom Elements, verified Angular/Vue consumption,
+  and framework-neutral behavior contracts.
+- Added machine-readable component contracts for canonical `vf-*` events,
+  semantic composition regions, form association, and representative action,
+  navigation, form-control, and overlay components.
+- Added React, native HTML, Angular, and Vue architecture fixtures plus
+  verification that prevents those fixtures from overstating runtime support.
+
 - Added dependency-aware CI planning, reusable quality/package/consumer/docs
   workflows, a stable `ci-gate`, a pinned Node 24 LTS nightly baseline, and a
   high-severity dependency audit.
@@ -21,6 +47,20 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   GitHub prerelease creation with separated permissions.
 
 ### Changed
+
+- Established the BT-8002 release manifest: `ui-core`, `ui-behaviors`,
+  `ui-components`, and `ui-elements` are synchronized at `0.2.0-beta.1`, while
+  `ui-data-grid` remains independently versioned at `0.1.0-alpha.2`.
+- Made release verification, trusted publication, registry checks, and release
+  notes require an explicit `non-grid-beta` or `data-grid-alpha` selection so
+  the grid cannot be promoted with the beta group.
+- Replaced the next grid-focused roadmap phase with the non-grid
+  multi-framework beta program. `@vyrnforge/ui-data-grid` remains an
+  independently versioned React alpha and does not block the beta release
+  group.
+- Established the `@vyrnforge/ui-behaviors` and `@vyrnforge/ui-elements`
+  package foundations while retaining `@vyrnforge/ui-components` as the public
+  React package through beta.
 
 - Split normal CI, GitHub Pages deployment, npm OIDC publication, registry
   verification, and GitHub release recording into explicit responsibilities.
@@ -33,11 +73,20 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   published packages' existing Node 22/24 consumer compatibility range.
 - Made the explicit prerelease dist-tag authoritative during alpha; npm's
   registry-managed `latest` tag is not treated as a stability signal.
+- Standardized canonical density names as `compact`, `balanced`, and
+  `spacious` while retaining `standard` and `comfortable` as compatibility
+  aliases for existing consumers.
 
 - Prepared `@vyrnforge/ui-core`, `@vyrnforge/ui-components`, and
   `@vyrnforge/ui-data-grid` as the synchronized `0.1.0-alpha.1` corrective
   prerelease. It corrects registry-facing package status text and aligns all
   three package versions.
+
+- Added UniversalDataGrid browser contracts for keyboard cell navigation,
+  pointer resize, drag reorder, sticky regions, and two-axis scrolling.
+- Added the S3 semantic token foundation for shared surfaces, text, borders,
+  interaction, status, density, typography, motion, and deterministic layers,
+  with typed exports and machine-verifiable metadata.
 
 ### Fixed
 
@@ -53,6 +102,13 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
   infrastructure, not an application API.
 
 ### Accessibility
+
+- Added a roving body-cell focus model with Arrow/Home/End navigation, keyboard
+  row activation and selection, semantic resize separators, keyboard column
+  reorder fallback, visible focused-cell styling, and polite interaction
+  announcements.
+- Kept the grid header and selection column visible during vertical and
+  horizontal scrolling.
 
 ### Security
 

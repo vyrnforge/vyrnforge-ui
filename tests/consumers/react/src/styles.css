@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  background: var(--vf-bg);
+  color: var(--vf-text);
+  font-family: var(--vf-font-family);
+}
+
+.vf-consumer-react {
+  display: grid;
+  gap: var(--vf-space-5);
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: var(--vf-space-6);
+}

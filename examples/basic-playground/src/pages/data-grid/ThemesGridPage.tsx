@@ -6,7 +6,7 @@ const themes = ["light", "dark", "enterprise", "system"] as const;
 
 export function ThemesGridPage() {
   return (
-    <div className="vf-playground-grid two">
+    <div className="vf-playground-grid vf-playground-grid--two">
       {themes.map((theme) => (
         <section className="vf-playground-card vf-playground-grid-theme-card" data-theme={theme} key={theme}>
           <h2>{theme}</h2>

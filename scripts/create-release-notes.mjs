@@ -1,50 +1,94 @@
 import { writeFileSync } from "node:fs";
+import {
+  getReleaseGroup,
+  getReleasePackageMap,
+  readReleaseGroups,
+} from "./release-groups.mjs";
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
   return index === -1 ? undefined : process.argv[index + 1];
 }
 
+const releaseGroupId = readArgument("--release-group");
 const version = readArgument("--version");
 const distTag = readArgument("--dist-tag");
 const commit = readArgument("--commit") ?? process.env.GITHUB_SHA ?? "unknown";
 const output = readArgument("--output");
 
-if (!version || !distTag || !output) {
-  throw new Error("usage: create-release-notes.mjs --version <version> --dist-tag <tag> --output <file>");
+if (!releaseGroupId || !version || !distTag || !output) {
+  throw new Error(
+    "usage: create-release-notes.mjs --release-group <group> --version <version> --dist-tag <tag> --output <file>",
+  );
 }
+
+const manifest = readReleaseGroups();
+const releaseGroup = getReleaseGroup(releaseGroupId, { manifest });
+const packageMap = getReleasePackageMap(manifest);
+if (version !== releaseGroup.version || distTag !== releaseGroup.distTag) {
+  throw new Error(
+    `${releaseGroupId} requires ${releaseGroup.version} with the ${releaseGroup.distTag} dist-tag`,
+  );
+}
+
+const packageLines = releaseGroup.packages
+  .map((packageInfo) => `- \`${packageInfo.name}@${version}\``)
+  .join("\n");
+const installPackages = releaseGroup.packages
+  .map((packageInfo) => `${packageInfo.name}@${distTag}`)
+  .join(" ");
+const cssImports = releaseGroup.packages
+  .filter((packageInfo) => packageInfo.hasCss)
+  .map((packageInfo) => `import "${packageInfo.name}/styles/index.css";`)
+  .join("\n");
+const packageOrder = releaseGroup.packages
+  .map((packageInfo) => packageInfo.name.replace("@vyrnforge/", ""))
+  .join(" → ");
+const externalDependencies = releaseGroup.packages.flatMap((packageInfo) =>
+  Object.entries(packageInfo.dependencies ?? {})
+    .filter(
+      ([dependencyName]) =>
+        !releaseGroup.packages.some(
+          (candidate) => candidate.name === dependencyName,
+        ),
+    )
+    .map(([dependencyName, dependencyVersion]) => {
+      const dependencyPackage = packageMap.get(dependencyName);
+      return `- \`${dependencyName}@${dependencyVersion}\` (${dependencyPackage?.releaseGroupId ?? "external"})`;
+    }),
+);
+const dependencySection = externalDependencies.length
+  ? `\n## Required VyrnForge dependencies\n\n${[...new Set(externalDependencies)].join("\n")}\n`
+  : "";
 
 const notes = `# VyrnForge UI ${version}
 
-VyrnForge UI ${version} is a coordinated **${distTag} prerelease** of the source-available VyrnForge UI packages. It is not a stable or production-readiness claim.
+VyrnForge UI ${version} is the **${releaseGroupId}** ${distTag} prerelease. It is not a stable or production-readiness claim.
 
 ## Packages
 
-- \`@vyrnforge/ui-core@${version}\`
-- \`@vyrnforge/ui-components@${version}\`
-- \`@vyrnforge/ui-data-grid@${version}\`
+${packageLines}
 
-All internal VyrnForge dependencies use the exact coordinated version.
-
+Packages in this release group use the versions declared in the canonical BT-8002 release manifest.
+${dependencySection}
 ## Installation
 
 \`\`\`bash
-npm install @vyrnforge/ui-core@${distTag} @vyrnforge/ui-components@${distTag} @vyrnforge/ui-data-grid@${distTag}
+npm install ${installPackages}
 \`\`\`
 
-Import package CSS in this order:
+Import package CSS in dependency order:
 
 \`\`\`ts
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
-import "@vyrnforge/ui-data-grid/styles/index.css";
+${cssImports}
 \`\`\`
 
 ## Release evidence
 
+- Release group: \`${releaseGroupId}\`
 - Source commit: \`${commit}\`
 - npm publication: GitHub OIDC trusted publishing
-- Package order: ui-core → ui-components → ui-data-grid
+- Package order: ${packageOrder}
 - Registry metadata and fresh external consumer build verified before this release record was created
 - npm registry signatures and provenance attestations verified with the npm CLI
 - npm provenance is generated automatically by trusted publishing

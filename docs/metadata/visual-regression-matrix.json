@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "task": "VF-3011",
+  "gate": "G3",
+  "status": "active",
+  "owner": "Quality Engineering",
+  "sourceOfTruth": "docs/metadata/visual-regression-matrix.json",
+  "browserContract": "tests/browser/visual-regression.spec.ts",
+  "runner": {
+    "project": "chromium",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "reducedMotion": "reduce",
+    "comparison": "computed-style-token-baseline",
+    "screenshotEvidence": "artifact-per-case",
+    "artifactDirectory": "test-results/visual-evidence"
+  },
+  "dimensions": {
+    "themes": ["light", "dark"],
+    "densities": ["compact", "standard", "comfortable"]
+  },
+  "suites": [
+    {
+      "id": "shared-components",
+      "title": "Shared component semantic roles",
+      "fixtureId": "visual-components",
+      "themes": ["light", "dark"],
+      "densities": ["compact", "standard", "comfortable"],
+      "tokenRootSelector": "[data-vf-fixture-region=\"fixture\"]",
+      "screenshotSelector": "[data-vf-fixture-region=\"content\"]",
+      "actions": [],
+      "targets": [
+        {
+          "id": "primary-button",
+          "selector": "[data-vf-visual-id=\"button-primary\"]",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--vf-interactive-primary"
+            },
+            {
+              "property": "color",
+              "token": "--vf-interactive-primary-text"
+            },
+            {
+              "property": "border-top-color",
+              "token": "--vf-interactive-primary"
+            },
+            {
+              "property": "min-height",
+              "token": "--vf-control-height"
+            },
+            {
+              "property": "border-top-left-radius",
+              "token": "--vf-radius-md"
+            }
+          ]
+        },
+        {
+          "id": "default-input",
+          "selector": "[data-vf-visual-id=\"input-default\"]",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--vf-control-background"
+            },
+            {
+              "property": "color",
+              "token": "--vf-text-primary"
+            },
+            {
+              "property": "border-top-color",
+              "token": "--vf-control-border"
+            },
+            {
+              "property": "min-height",
+              "token": "--vf-control-height"
+            }
+          ]
+        },
+        {
+          "id": "invalid-input",
+          "selector": "[data-vf-visual-id=\"input-invalid\"]",
+          "expectations": [
+            {
+              "property": "border-top-color",
+              "token": "--vf-status-error-indicator"
+            },
+            {
+              "property": "background-color",
+              "token": "--vf-control-background"
+            }
+          ]
+        },
+        {
+          "id": "success-badge",
+          "selector": "[data-vf-visual-id=\"badge-success\"]",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--vf-status-success-background"
+            },
+            {
+              "property": "color",
+              "token": "--vf-status-success-text"
+            },
+            {
+              "property": "border-top-color",
+              "token": "--vf-status-success-border"
+            }
+          ]
+        },
+        {
+          "id": "selected-toggle",
+          "selector": "[data-vf-visual-id=\"toggle-selected\"]",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--vf-interactive-selected-background"
+            },
+            {
+              "property": "color",
+              "token": "--vf-interactive-selected-text"
+            },
+            {
+              "property": "border-top-color",
+              "token": "--vf-interactive-selected-border"
+            },
+            {
+              "property": "min-height",
+              "token": "--vf-control-height"
+            }
+          ]
+        },
+        {
+          "id": "selected-tab",
+          "selector": "[data-vf-visual-id=\"tabs-contained\"] [aria-selected=\"true\"]",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--vf-surface-default"
+            },
+            {
+              "property": "color",
+              "token": "--vf-interactive-selected-text"
+            },
+            {
+              "property": "border-top-color",
+              "token": "--vf-interactive-selected-border"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-grid",
+      "title": "UniversalDataGrid semantic roles",
+      "fixtureId": "data-grid-selection",
+      "themes": ["light", "dark"],
+      "densities": ["compact", "standard", "comfortable"],
+      "tokenRootSelector": ".udg",
+      "screenshotSelector": "[data-vf-fixture-region=\"content\"]",
+      "actions": [],
+      "targets": [
+        {
+          "id": "grid-shell",
+          "selector": ".udg",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--udg-surface"
+            },
+            {
+              "property": "color",
+              "token": "--udg-text"
+            },
+            {
+              "property": "border-top-color",
+              "token": "--udg-border"
+            },
+            {
+              "property": "border-top-left-radius",
+              "token": "--udg-radius-md"
+            }
+          ]
+        },
+        {
+          "id": "grid-header",
+          "selector": ".udg-header-cell[data-udg-column-id=\"id\"]",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--udg-header-bg"
+            },
+            {
+              "property": "color",
+              "token": "--udg-header-text"
+            },
+            {
+              "property": "height",
+              "token": "--udg-header-height"
+            }
+          ]
+        },
+        {
+          "id": "selected-row",
+          "selector": "[data-udg-row-id=\"case-100\"]",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--udg-row-selected-bg"
+            },
+            {
+              "property": "height",
+              "token": "--udg-row-height"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dialog-overlay",
+      "title": "Dialog overlay semantic roles",
+      "fixtureId": "dialog-focus",
+      "themes": ["light", "dark"],
+      "densities": ["standard"],
+      "tokenRootSelector": ".vf-dialog",
+      "screenshotSelector": ".vf-dialog",
+      "actions": ["open-dialog"],
+      "targets": [
+        {
+          "id": "dialog-root",
+          "selector": ".vf-dialog",
+          "expectations": [
+            {
+              "property": "z-index",
+              "token": "--vf-layer-modal"
+            }
+          ]
+        },
+        {
+          "id": "dialog-scrim",
+          "selector": ".vf-dialog__overlay",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--vf-surface-scrim"
+            }
+          ]
+        },
+        {
+          "id": "dialog-panel",
+          "selector": ".vf-dialog__panel",
+          "expectations": [
+            {
+              "property": "background-color",
+              "token": "--vf-surface-overlay"
+            },
+            {
+              "property": "color",
+              "token": "--vf-text-primary"
+            },
+            {
+              "property": "border-top-color",
+              "token": "--vf-border-default"
+            },
+            {
+              "property": "border-top-left-radius",
+              "token": "--vf-radius-lg"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "expectedCaseCount": 14,
+  "evidence": {
+    "documentation": "docs/quality/s3-visual-regression.md",
+    "fixtureRegistry": "apps/regression-fixtures/src/fixtureRegistry.ts",
+    "workflow": ".github/workflows/_browser.yml"
+  }
+}

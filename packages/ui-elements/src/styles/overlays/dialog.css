@@ -1,0 +1,82 @@
+vf-dialog.vf-dialog-root,
+vf-drawer.vf-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--vf-layer-modal);
+  pointer-events: none;
+}
+vf-dialog.vf-dialog-root--open,
+vf-drawer.vf-drawer-root--open {
+  pointer-events: auto;
+}
+vf-dialog .vf-dialog__backdrop,
+vf-drawer .vf-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--vf-space-4);
+  background: var(--vf-surface-scrim);
+}
+vf-dialog .vf-dialog,
+vf-drawer .vf-drawer {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  width: min(100%, 560px);
+  max-height: calc(100vh - 32px);
+  border: 1px solid var(--vf-border-default);
+  border-radius: var(--vf-radius-lg);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-overlay);
+  box-shadow: var(--vf-shadow-md);
+}
+vf-dialog .vf-dialog--sm {
+  max-width: 400px;
+}
+vf-dialog .vf-dialog--md {
+  max-width: 560px;
+}
+vf-dialog .vf-dialog--lg {
+  max-width: 720px;
+}
+vf-dialog .vf-dialog--xl {
+  max-width: 920px;
+}
+vf-dialog .vf-dialog__header,
+vf-drawer .vf-drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--vf-space-4);
+  border-bottom: 1px solid var(--vf-divider);
+  padding: var(--vf-space-4);
+}
+vf-dialog .vf-dialog__title,
+vf-drawer .vf-drawer__title {
+  margin: 0;
+  font-family: var(--vf-type-section-title-font-family);
+  font-size: var(--vf-type-section-title-font-size);
+  font-weight: var(--vf-type-section-title-font-weight);
+  line-height: var(--vf-type-section-title-line-height);
+}
+vf-dialog .vf-dialog__description,
+vf-drawer .vf-drawer__description {
+  margin: 0;
+  padding: 0 var(--vf-space-4);
+  color: var(--vf-text-secondary);
+}
+vf-dialog .vf-dialog__body,
+vf-drawer .vf-drawer__body {
+  min-height: 0;
+  overflow: auto;
+  padding: var(--vf-space-4);
+}
+vf-dialog .vf-dialog__close,
+vf-drawer .vf-drawer__close {
+  flex: none;
+}
+
+vf-dialog > .vf-dialog__backdrop[hidden],
+vf-drawer > .vf-drawer__backdrop[hidden] {
+  display: none;
+}

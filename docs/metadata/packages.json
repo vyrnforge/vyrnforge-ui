@@ -4,13 +4,44 @@
   "packages": [
     {
       "name": "@vyrnforge/ui-core",
-      "purpose": "Shared VyrnForge design foundation for tokens, themes, density, utilities, and theme helpers.",
-      "owns": ["tokens", "themes", "density", "utility classes", "theme helper contracts"],
-      "doesNotOwn": ["React components", "data grid behavior", "app state", "backend fetching", "business workflows"],
+      "purpose": "Shared VyrnForge design foundation for semantic tokens, themes, density, typography, motion, layers, utilities, and theme helpers.",
+      "owns": [
+        "primitive tokens",
+        "semantic tokens",
+        "themes",
+        "density",
+        "typography roles",
+        "motion and reduced-motion contract",
+        "layering model",
+        "utility classes",
+        "theme helper contracts"
+      ],
+      "doesNotOwn": [
+        "React components",
+        "Custom Element renderers",
+        "component behavior controllers",
+        "data grid behavior",
+        "app state",
+        "backend fetching",
+        "business workflows"
+      ],
       "cssImport": "@vyrnforge/ui-core/styles/index.css",
       "apiDoc": "docs/api/ui-core-api.md",
       "dependsOn": [],
-      "mustNotDependOn": ["@vyrnforge/ui-components", "@vyrnforge/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "Vue",
+        "Angular",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
       "status": "current",
       "publicEntryPoints": [
         "@vyrnforge/ui-core",
@@ -18,17 +49,83 @@
         "@vyrnforge/ui-core/style.css",
         "@vyrnforge/ui-core/index.css"
       ],
-      "notes": "Lowest-level package. Keep dependency-free apart from build/dev tooling."
+      "notes": "Lowest-level dependency-free runtime package. Canonical semantic token metadata lives in docs/metadata/design-tokens.json.",
+      "releaseTrack": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-behaviors",
+      "purpose": "Framework-neutral state, collection, selection, action, toggle, choice, numeric, Tabs, subscription, and reasoned event contracts for public non-grid components.",
+      "owns": [
+        "controlled and uncontrolled state transitions",
+        "collection registration and ordering",
+        "selection models",
+        "action, toggle, choice, numeric, and Tabs decision models",
+        "keyboard decision models",
+        "validation state",
+        "canonical controller events"
+      ],
+      "doesNotOwn": [
+        "React rendering",
+        "Custom Element rendering",
+        "DOM focus execution",
+        "DOM positioning",
+        "application state",
+        "backend workflows"
+      ],
+      "cssImport": "not-applicable",
+      "apiDoc": "docs/api/ui-behaviors-api.md",
+      "dependsOn": ["@vyrnforge/ui-core"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "React DOM",
+        "Vue",
+        "Angular",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
+      "notes": "MF-5001 through MF-5010 are implemented. React adapters now cover action, toggle, native form, choice, numeric, Tabs, Autocomplete, MultiSelect, and Transfer List; remaining navigation and overlay migrations continue through S5."
     },
     {
       "name": "@vyrnforge/ui-components",
-      "purpose": "Reusable native-first React primitives and application components.",
-      "owns": ["actions", "typography", "forms", "data management", "feedback", "layout", "overlays", "shared vf-* classes"],
-      "doesNotOwn": ["data grid algorithms", "grid row models", "backend data", "global store", "tenant/auth/permissions"],
+      "purpose": "First-class React renderer for reusable VyrnForge primitives and application components.",
+      "owns": [
+        "actions",
+        "typography",
+        "forms",
+        "data management",
+        "feedback",
+        "layout",
+        "overlays",
+        "shared vf-* classes"
+      ],
+      "doesNotOwn": [
+        "data grid algorithms",
+        "grid row models",
+        "backend data",
+        "global store",
+        "tenant/auth/permissions"
+      ],
       "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",
-      "dependsOn": ["@vyrnforge/ui-core"],
-      "mustNotDependOn": ["@vyrnforge/ui-data-grid", "Redux", "TanStack", "MUI", "Radix", "Tailwind"],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-data-grid",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
       "status": "current",
       "publicEntryPoints": [
         "@vyrnforge/ui-components",
@@ -36,32 +133,105 @@
         "@vyrnforge/ui-components/style.css",
         "@vyrnforge/ui-components/index.css"
       ],
-      "notes": "Use for reusable UI outside specialized grid behavior."
+      "notes": "The ui-behaviors package foundation is current; React component adoption begins in S5. The public React package name remains stable through beta.",
+      "releaseTrack": "non-grid-beta"
+    },
+    {
+      "name": "@vyrnforge/ui-elements",
+      "purpose": "Browser-native Custom Element registration, lifecycle, property reflection, typed vf-* events, Light DOM CSS, form foundations, and non-grid renderers.",
+      "owns": [
+        "vf-* Custom Elements",
+        "property and attribute reflection",
+        "typed vf-* DOM events",
+        "Light DOM rendering",
+        "form-associated element integration",
+        "explicit registration entry points"
+      ],
+      "doesNotOwn": [
+        "React rendering",
+        "Angular component rendering",
+        "Vue component rendering",
+        "application state",
+        "backend workflows",
+        "data grid rendering"
+      ],
+      "cssImport": "@vyrnforge/ui-elements/styles/index.css",
+      "apiDoc": "docs/api/ui-elements-api.md",
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "React DOM",
+        "Vue",
+        "Angular",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "publicEntryPoints": [
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-elements/register",
+        "@vyrnforge/ui-elements/styles/index.css",
+        "@vyrnforge/ui-elements/style.css",
+        "@vyrnforge/ui-elements/index.css",
+        "@vyrnforge/ui-elements/custom-elements.json"
+      ],
+      "notes": "EL-6001 through EL-6018 are evidence-complete. CF-7001, CF-7002, and CF-7008 add clean packed native HTML and React 19 Custom Element consumers, typed DOM/event declarations, and the public Custom Elements Manifest. CF-7003 adds clean Angular 22 packed consumer evidence. CF-7004 adds an isolated Angular Forms reference adapter over the native value, checked, disabled, validity, and canonical event contracts without adding Angular to this package. CF-7005 verifies the clean Vue 3 packed consumer with compiler custom-element recognition, strict template typing, property/event binding, slots, native forms, production Vite output, and Chromium evidence. Vue v-model translation remains CF-7006 work."
     },
     {
       "name": "@vyrnforge/ui-data-grid",
       "purpose": "Specialized enterprise data-management grid and grid contracts.",
-      "owns": ["UniversalDataGrid", "grid-specific udg-* styles", "grid state contracts", "grid core helpers", "persistence/server/export adapters"],
-      "doesNotOwn": ["API calls", "export file generation by default", "report engine", "global store", "backend business workflows"],
+      "owns": [
+        "UniversalDataGrid",
+        "grid-specific udg-* styles",
+        "grid state contracts",
+        "grid core helpers",
+        "persistence/server/export adapters"
+      ],
+      "doesNotOwn": [
+        "API calls",
+        "export file generation by default",
+        "report engine",
+        "global store",
+        "backend business workflows"
+      ],
       "cssImport": "@vyrnforge/ui-data-grid/styles/index.css",
       "apiDoc": "docs/api/ui-data-grid-api.md",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
       "mustNotDependOn": ["Redux", "TanStack", "MUI", "Radix", "Tailwind"],
-      "status": "current",
+      "status": "react-alpha-deferred",
       "publicEntryPoints": [
         "@vyrnforge/ui-data-grid",
         "@vyrnforge/ui-data-grid/styles/index.css",
         "@vyrnforge/ui-data-grid/style.css",
         "@vyrnforge/ui-data-grid/index.css"
       ],
-      "notes": "Apps own rows, fetching, permissions, business actions, and file generation."
+      "notes": "Apps own rows, fetching, permissions, business actions, and file generation. Grid decomposition, scale work, and multi-framework rendering are deferred until after the non-grid beta.",
+      "releaseTrack": "independent-alpha"
     }
   ],
   "dependencyRules": [
     "ui-core depends on no VyrnForge package",
-    "ui-components may depend on ui-core",
+    "ui-behaviors may depend on ui-core only",
+    "ui-components may depend on ui-core and ui-behaviors",
+    "ui-elements may depend on ui-core and ui-behaviors",
     "ui-data-grid may depend on ui-core and ui-components",
-    "ui-core must never depend on ui-components or ui-data-grid",
-    "ui-components must never depend on ui-data-grid"
-  ]
+    "ui-core and ui-behaviors must not depend on React, Vue, Angular, or a DOM renderer",
+    "ui-components and ui-elements must not depend on ui-data-grid",
+    "ui-data-grid remains outside the non-grid beta release group"
+  ],
+  "releaseGroups": {
+    "nonGridBeta": [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-elements"
+    ],
+    "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
+  }
 }

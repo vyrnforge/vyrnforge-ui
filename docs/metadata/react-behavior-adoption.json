@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S5",
+    "task": "MF-5015",
+    "status": "evidence-complete",
+    "package": "@vyrnforge/ui-components",
+    "baseCommit": "c0125debb083181bdc340878e6cae3138ea49fb5"
+  },
+  "sourceOfTruth": {
+    "publicEntry": "packages/ui-components/src/index.ts",
+    "behaviorMetadata": "docs/metadata/behavior-foundations.json",
+    "parityDocuments": [
+      "docs/testing/behavior-react-parity.md",
+      "docs/testing/react-behavior-adoption-audit.md"
+    ]
+  },
+  "publicValueExports": [
+    "Button",
+    "ButtonGroup",
+    "Icon",
+    "ClearButton",
+    "CloseButton",
+    "IconButton",
+    "MoreButton",
+    "RefreshButton",
+    "ToolbarButton",
+    "ToggleButton",
+    "ToggleButtonGroup",
+    "SegmentedControl",
+    "Caption",
+    "CodeText",
+    "Heading",
+    "Label",
+    "Text",
+    "Badge",
+    "StatusBadge",
+    "Field",
+    "TextInput",
+    "SearchInput",
+    "Select",
+    "Checkbox",
+    "Radio",
+    "RadioGroup",
+    "Switch",
+    "NumberInput",
+    "DateInput",
+    "DateTimeInput",
+    "MultiSelect",
+    "Autocomplete",
+    "TransferList",
+    "Textarea",
+    "ValidationMessage",
+    "Rating",
+    "Slider",
+    "EmptyState",
+    "ErrorState",
+    "Alert",
+    "InlineMessage",
+    "Toast",
+    "ToastAction",
+    "ToastProvider",
+    "useToast",
+    "LoadingState",
+    "Skeleton",
+    "Card",
+    "Panel",
+    "Stack",
+    "Inline",
+    "Section",
+    "AppShell",
+    "Page",
+    "PageHeader",
+    "PageToolbar",
+    "SideNav",
+    "TopNav",
+    "Breadcrumbs",
+    "Tabs",
+    "Popover",
+    "Menu",
+    "Dropdown",
+    "Tooltip",
+    "Dialog",
+    "Drawer",
+    "ConfirmDialog"
+  ],
+  "nonComponentExports": [
+    {
+      "name": "useToast",
+      "kind": "hook"
+    }
+  ],
+  "classifications": [
+    {
+      "id": "shared-behavior-adapter",
+      "description": "React components that consume a shared ui-behaviors resolver or controller directly or through the internal React adapter layer.",
+      "components": [
+        "Button",
+        "IconButton",
+        "ToggleButton",
+        "ToggleButtonGroup",
+        "SegmentedControl",
+        "Checkbox",
+        "RadioGroup",
+        "Switch",
+        "Rating",
+        "Slider",
+        "Autocomplete",
+        "MultiSelect",
+        "TransferList",
+        "SideNav",
+        "Tabs",
+        "Popover",
+        "Menu",
+        "Tooltip",
+        "Dialog",
+        "Drawer",
+        "ConfirmDialog",
+        "ToastProvider"
+      ]
+    },
+    {
+      "id": "composed-behavior-adapter",
+      "description": "Public components whose behavior is inherited from another audited adapter rather than reimplemented.",
+      "components": [
+        "ClearButton",
+        "CloseButton",
+        "MoreButton",
+        "RefreshButton",
+        "Dropdown"
+      ]
+    },
+    {
+      "id": "native-semantic-adapter",
+      "description": "React wrappers that intentionally preserve native form or browser semantics; React owns DOM event translation and no portable state controller is required.",
+      "components": [
+        "TextInput",
+        "SearchInput",
+        "Select",
+        "Radio",
+        "NumberInput",
+        "DateInput",
+        "DateTimeInput",
+        "Textarea"
+      ]
+    },
+    {
+      "id": "presentation-or-composition",
+      "description": "Stateless visual, layout, semantic, or composition components that do not own reusable interaction state.",
+      "components": [
+        "ButtonGroup",
+        "Icon",
+        "ToolbarButton",
+        "Caption",
+        "CodeText",
+        "Heading",
+        "Label",
+        "Text",
+        "Badge",
+        "StatusBadge",
+        "Field",
+        "ValidationMessage",
+        "EmptyState",
+        "ErrorState",
+        "Alert",
+        "InlineMessage",
+        "Toast",
+        "ToastAction",
+        "LoadingState",
+        "Skeleton",
+        "Card",
+        "Panel",
+        "Stack",
+        "Inline",
+        "Section",
+        "AppShell",
+        "Page",
+        "PageHeader",
+        "PageToolbar",
+        "TopNav",
+        "Breadcrumbs"
+      ]
+    }
+  ],
+  "adoptionEvidence": [
+    {
+      "source": "packages/ui-components/src/components/Button/Button.tsx",
+      "markers": ["resolveActionState"]
+    },
+    {
+      "source": "packages/ui-components/src/components/IconButton/IconButton.tsx",
+      "markers": ["resolveActionState", "action.ariaBusy", "action.disabled"]
+    },
+    {
+      "source": "packages/ui-components/src/components/ToggleButton/ToggleButton.tsx",
+      "markers": ["useToggleBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/ToggleButtonGroup/ToggleButtonGroup.tsx",
+      "markers": ["useToggleGroupBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx",
+      "markers": ["useChoiceBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Checkbox/Checkbox.tsx",
+      "markers": ["resolveToggleInputState"]
+    },
+    {
+      "source": "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
+      "markers": ["useChoiceBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Switch/Switch.tsx",
+      "markers": ["resolveToggleInputState"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Rating/Rating.tsx",
+      "markers": ["useNumericBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Slider/Slider.tsx",
+      "markers": ["useNumericBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Autocomplete/useAutocomplete.ts",
+      "markers": ["createAutocompleteController"]
+    },
+    {
+      "source": "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
+      "markers": ["useMultiSelectBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/TransferList/useTransferList.ts",
+      "markers": ["createTransferListController"]
+    },
+    {
+      "source": "packages/ui-components/src/components/SideNav/SideNav.tsx",
+      "markers": ["useNavigationBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Tabs/Tabs.tsx",
+      "markers": ["useTabsBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Popover/Popover.tsx",
+      "markers": ["usePopoverBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Menu/Menu.tsx",
+      "markers": ["useNavigationBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Tooltip/Tooltip.tsx",
+      "markers": ["useTooltipBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Dialog/Dialog.tsx",
+      "markers": ["useDialogBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Drawer/Drawer.tsx",
+      "markers": ["useDrawerBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
+      "markers": ["useConfirmDialogBehavior"]
+    },
+    {
+      "source": "packages/ui-components/src/components/Toast/ToastProvider.tsx",
+      "markers": ["useToastBehavior"]
+    }
+  ],
+  "rendererOwnedResponsibilities": [
+    "DOM rendering and native element semantics",
+    "React refs and focus execution",
+    "portals and document listeners",
+    "browser event translation",
+    "timer execution for Tooltip and Toast",
+    "DOM measurement and anchored positioning adapters"
+  ],
+  "compatibilityInvariants": [
+    "public root exports unchanged",
+    "public React prop and callback shapes unchanged",
+    "documented vf-* CSS classes unchanged",
+    "controlled components continue to emit proposals",
+    "native form semantics remain browser-owned",
+    "React DOM and browser parity suites remain mandatory"
+  ],
+  "unresolvedBehaviorDuplication": [],
+  "requiredCommands": [
+    "npm run test:react-behavior-adoption",
+    "npm run verify:react-behavior-adoption",
+    "npm run test:coverage --workspace @vyrnforge/ui-components",
+    "npm run typecheck --workspace @vyrnforge/ui-components",
+    "npm run verify:consumer",
+    "npm run quality"
+  ]
+}

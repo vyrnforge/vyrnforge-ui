@@ -4,10 +4,10 @@
   justify-content: space-between;
   gap: var(--vf-space-3);
   min-width: 0;
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-border-default);
   border-radius: var(--vf-radius-lg);
   padding: var(--vf-space-3);
-  background: var(--vf-surface);
+  background: var(--vf-surface-default);
 }
 .vf-page-toolbar--compact {
   padding: var(--vf-space-2);
@@ -18,7 +18,7 @@
 .vf-page-toolbar--sticky {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--vf-layer-sticky);
 }
 .vf-page-toolbar__left,
 .vf-page-toolbar__right {

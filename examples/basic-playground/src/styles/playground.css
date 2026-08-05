@@ -146,11 +146,11 @@ select {
   min-width: 0;
 }
 
-.vf-playground-grid.two {
+.vf-playground-grid--two {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.vf-playground-grid.three {
+.vf-playground-grid--three {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
@@ -962,8 +962,8 @@ select {
   }
 
   .vf-playground-overview-hero,
-  .vf-playground-grid.two,
-  .vf-playground-grid.three,
+  .vf-playground-grid--two,
+  .vf-playground-grid--three,
   .vf-playground-token-grid,
   .vf-playground-demo-grid,
   .vf-playground-demo-page__reference,

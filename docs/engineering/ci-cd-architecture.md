@@ -10,8 +10,8 @@ not own product behavior, application state, public APIs, or styling contracts.
 ## Objectives
 
 - Keep one stable branch-protection gate: `ci-gate`.
-- Run the CI orchestrator for every pull request targeting `main` and every push
-  to `main`.
+- Run the CI orchestrator for every pull request targeting
+  `improvement/controlled-hardening` or `main`, and every push to `main`.
 - Select validation from the actual changed paths without workflow-level path
   filters.
 - Validate affected packages and their downstream dependents.
@@ -20,21 +20,21 @@ not own product behavior, application state, public APIs, or styling contracts.
 - Use read-only permissions by default.
 - Use npm trusted publishing through GitHub OIDC only in the protected publish
   job.
-- Keep expensive cross-version checks in the nightly workflow instead of every
-  pull request.
+- Reuse the same compatibility and security contracts for pull requests, nightly
+  drift detection, and release preflight instead of maintaining separate gates.
 
 ## Workflow map
 
-| Workflow | Trigger | Responsibility | Write capability |
-| --- | --- | --- | --- |
-| `.github/workflows/ci.yml` | Pull request, push to `main`, manual | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate` | None |
-| `.github/workflows/_quality.yml` | `workflow_call` | Metadata, lint, targeted/full typecheck, and targeted/full tests | None |
-| `.github/workflows/_packages.yml` | `workflow_call` | Clean package builds, package payload validation, declarations, CSS, LICENSE, and dry-run packs | None |
-| `.github/workflows/_consumer.yml` | `workflow_call` | Packed-artifact consumer installation and production build | None |
-| `.github/workflows/_docs.yml` | `workflow_call` | Documentation and playground builds | None |
-| `.github/workflows/pages.yml` | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only | Pages deployment only |
-| `.github/workflows/release.yml` | Manual | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release | Split by job |
-| `.github/workflows/nightly.yml` | Weekly schedule, manual | Full pinned Node 24 LTS validation and high-severity dependency audit | None |
+| Workflow                          | Trigger                                                 | Responsibility                                                                                         | Write capability      |
+| --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
+| `.github/workflows/ci.yml`        | Pull request, push to `main`, manual                    | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate` | None                  |
+| `.github/workflows/_quality.yml`  | `workflow_call`                                         | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification  | None                  |
+| `.github/workflows/_packages.yml` | `workflow_call`                                         | Clean package builds, package payload validation, declarations, CSS, LICENSE, and dry-run packs        | None                  |
+| `.github/workflows/_consumer.yml` | `workflow_call`                                         | Packed-artifact consumer installation and production build                                             | None                  |
+| `.github/workflows/_docs.yml`     | `workflow_call`                                         | Documentation and playground builds                                                                    | None                  |
+| `.github/workflows/pages.yml`     | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only                                                                     | Pages deployment only |
+| `.github/workflows/release.yml`   | Manual                                                  | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release        | Split by job          |
+| `.github/workflows/nightly.yml`   | Weekly schedule, manual                                 | Full pinned Node 24 LTS validation and high-severity dependency audit                                  | None                  |
 
 Reusable workflow files live directly in `.github/workflows/` because GitHub
 Actions does not support reusable workflow subdirectories.
@@ -47,7 +47,7 @@ Repository development, pull-request CI, Pages, release verification, and nightl
 - npm `11.16.0`, pinned by the root `packageManager`;
 - TypeScript `7.0.2`, pinned exactly in the root and every workspace manifest.
 
-`scripts/verify-toolchain.mjs` prevents version drift across manifests, the lockfile, and workflows. The published packages retain Node `>=22.12 <25` and npm `>=10 <12` consumer engine ranges because this repository-toolchain migration does not introduce a Node 24 runtime requirement into generated package output.
+`scripts/verify-toolchain.mjs` prevents version drift across manifests, the lockfile, and workflows. Development-only workspaces require Node `>=24.18 <25` and npm `>=11.16 <12`; published packages require npm `>=11.16 <12` and declare Node `>=22.12 <25` as the intended consumer compatibility target. BT-8005 verifies the published-package Node 22.12 lower bound and the Node 24.18 repository baseline across native HTML, React, Angular, and Vue consumers.
 
 TypeScript 7 package builds separate runtime and declaration responsibilities. `tsup` emits ESM, CommonJS, and CSS with declaration bundling disabled. The native TypeScript CLI runs with each package's `tsconfig.build.json` to emit declaration-only output, and `scripts/prepare-package-declarations.mjs` removes CSS-only declaration imports and verifies that relative declaration references resolve before package verification. This avoids relying on declaration-bundling plugins built against the legacy TypeScript JavaScript compiler API.
 
@@ -57,28 +57,31 @@ The package graph is:
 
 ```text
 ui-core
-  └─ ui-components
-       └─ ui-data-grid
+  └─ ui-behaviors
+       ├─ ui-components
+       │    └─ ui-data-grid
+       └─ ui-elements
 ```
 
-`ui-data-grid` also depends directly on `ui-core`.
+`ui-components` and `ui-elements` also depend directly on `ui-core`.
+`ui-data-grid` depends directly on both `ui-core` and `ui-components`.
 
 The change planner uses the following impact rules:
 
-| Changed area | Package quality | Package payloads | Consumer | Docs | Playground |
-| --- | --- | --- | --- | --- | --- |
-| `ui-core` runtime/public surface | core, components, data-grid | all | yes | yes | yes |
-| `ui-components` runtime/public surface | components, data-grid | all | yes | yes | yes |
-| `ui-data-grid` runtime/public surface | data-grid | all | yes | yes | yes |
-| Package test only | changed package | no | no | no | no |
-| Package README or package LICENSE | no | all coordinated payloads | yes | no | no |
-| Consumer fixture | no | included by consumer verifier | yes | no | no |
-| Metadata | metadata | no | no | yes | no |
-| Canonical docs | no | no | no | yes | no |
-| Docs app | no | no | no | yes | no |
-| Playground app | no | no | no | no | yes |
-| Root manifest, lockfile, shared build config, scripts, or workflows | full | all | yes | yes | yes |
-| Unknown path | safe full fallback | all | yes | yes | yes |
+Changes under `apps/regression-fixtures/**` are explicitly classified as fixture quality work. Changes under `tests/dom/**` run both shared component tests and regression fixtures. Package runtime changes also run fixtures because the fixture app validates public-package integration.
+
+| Changed area                           | Package quality             | Package payloads              | Consumer | Docs | Playground | Fixtures                         | Browser  |
+| -------------------------------------- | --------------------------- | ----------------------------- | -------- | ---- | ---------- | -------------------------------- | -------- |
+| `ui-core` runtime/public surface       | core, components, data-grid | all                           | yes      | yes  | yes        | yes                              | Chromium |
+| `ui-components` runtime/public surface | components, data-grid       | all                           | yes      | yes  | yes        | yes                              | Chromium |
+| `ui-data-grid` runtime/public surface  | data-grid                   | all                           | yes      | yes  | yes        | yes                              | Chromium |
+| Package test only                      | changed package             | no                            | no       | no   | no         | when shared DOM utilities change | no       |
+| Package README or package LICENSE      | no                          | all coordinated payloads      | yes      | no   | no         | no                               | no       |
+| Consumer fixture                       | no                          | included by consumer verifier | yes      | no   | no         | no                               | no       |
+| Regression fixture app                 | fixture quality             | no                            | no       | no   | no         | yes                              | Chromium |
+| Metadata                               | metadata                    | no                            | no       | yes  | no         | no                               | no       |
+| Docs                                   | no                          | no                            | no       | yes  | no         | no                               | no       |
+| Playground                             | no                          | no                            | no       | no   | yes        | no                               | no       |
 
 The planner is implemented by `scripts/detect-ci-scope.mjs`. Its machine outputs
 are:
@@ -92,6 +95,8 @@ are:
 - `consumer`
 - `docs`
 - `playground`
+- `fixtures`
+- `browser`
 - `full`
 - `docs_only`
 
@@ -115,6 +120,28 @@ The long-term required branch-protection check is:
 ci-gate
 ```
 
+`ci-gate` is the stable aggregate check. It directly evaluates the planner and
+each reusable validation result. A planned validation must succeed; a skipped
+validation is accepted only when the planner did not require it. Failed,
+cancelled, or unexpectedly skipped planned work fails `ci-gate`.
+
+The G1 quality checks aggregated by `ci-gate` are:
+
+- toolchain and workflow-contract verification;
+- package-boundary verification and package payload verification;
+- ESLint, formatting, and CSS lint;
+- TypeScript typechecking;
+- unit and DOM interaction tests, including automated axe accessibility tests;
+- Chromium browser contracts for affected runtime, fixture, and browser-test changes;
+- package coverage thresholds;
+- normalized component metadata and component-maturity verification; and
+- documentation and playground builds whenever the planner requires them.
+
+The BT-8005 compatibility matrix and BT-8006 security workflow are mandatory
+inputs to `ci-gate`. They also run in nightly drift detection and before manual
+release verification. npm publication, registry-consumer verification, Pages
+deployment, and release-record creation remain outside pull-request CI.
+
 The orchestrator temporarily preserves these compatibility checks:
 
 ```text
@@ -131,27 +158,69 @@ existing branch rule. After the new workflow has completed successfully on
 3. Remove the old `quality` and `external-consumer` requirements.
 4. Keep the compatibility jobs until a later infrastructure cleanup release.
 
+Repository administrators will later configure `ci-gate` as the single
+required repository-ruleset check after it has completed successfully on
+`main`. This workflow does not configure repository rulesets.
+
 ## Validation responsibilities
 
 ### Quality
 
-`scripts/run-scoped-quality.mjs` performs targeted package typecheck and tests
-when possible. It builds required package prerequisites once and suppresses
-repeated `pretypecheck` rebuilds.
+`scripts/run-scoped-quality.mjs` runs the mandatory repository checks and
+coverage suite, then performs targeted package typechecks when possible. It
+builds required package prerequisites once and suppresses repeated
+`pretypecheck` rebuilds.
 
-A full scope runs the authoritative root typecheck and test commands.
+A full scope runs the authoritative root typecheck command.
+
+### Browser contracts
+
+`.github/workflows/_browser.yml` owns the mandatory Chromium project. It installs
+Chromium and its system dependencies, starts the deterministic regression fixture
+application through Playwright `webServer`, runs `npm run test:browser`, and uploads
+HTML reports, traces, screenshots, and JSON results when the job fails.
+
+Browser work is independently planned through the `browser` scope. Runtime package
+changes, fixture changes, `tests/browser/**`, and `playwright.config.ts` require the
+browser job. Documentation-only work does not. `ci-gate` treats a required skipped
+browser job as a failure.
+
+The release verification workflow installs Chromium before running the authoritative
+`npm run quality` command. Nightly validation also runs the same reusable browser
+workflow.
 
 ### Package payloads
 
-Package verification remains coordinated because the three packages share one
-release version and exact internal dependencies during alpha. It verifies all
-publishable artifacts even when only one package changed.
+Package verification follows the canonical BT-8002 release groups. The four
+non-grid beta packages are built and packed together; `ui-data-grid` retains its
+independent alpha version. BT-8003 verifies every public entry point and clean
+offline tarball consumption. BT-8004 measures packed, unpacked, JavaScript,
+declaration, CSS, and file-count dimensions and fails growth beyond the
+approved budget unless a narrow, unexpired waiver exists.
 
 ### External consumer
 
 The external-consumer job always uses packed artifacts, never workspace links.
 It remains independent from the package job so a clean runner proves the public
 boundary.
+
+### Compatibility release matrix
+
+`.github/workflows/_compatibility.yml` executes the canonical BT-8005 matrix.
+Cases cover the supported Node 22.12 and Node 24.18 lines, React 18 and 19,
+Angular 21 and 22, Vue 3.4 and 3.5, and native HTML in Chromium, Firefox, and
+WebKit. Every case installs clean fixture dependencies, packs the VyrnForge
+packages, rejects workspace links, typechecks, production-builds, and runs the
+shared browser smoke scenarios. Each case uploads a machine-readable report.
+
+### Security validation
+
+`.github/workflows/_security.yml` owns pull-request dependency review, a
+high-severity audit of shipped dependencies, CodeQL analysis, verified
+`actionlint`, ShellCheck, immutable Action-pin enforcement, and security
+contract checks. Permissions are job-scoped: normal checks are read-only, and
+only CodeQL receives `security-events: write`. Mandatory failures cannot be
+converted to warnings or hidden with `continue-on-error`.
 
 ### Documentation
 
@@ -202,10 +271,12 @@ the deployment base paths, then deploys the assembled static artifact.
 
 ## Trusted release pipeline
 
-`release.yml` is manual and serialized. It has four responsibilities:
+`release.yml` is manual and serialized. The compatibility and security reusable
+workflows must succeed first. It then has four release responsibilities:
 
-1. **verify-release** — read-only candidate validation; no environment and no
-   OIDC.
+1. **verify-release** — read-only candidate validation, including BT-8003
+   package artifacts and BT-8004 budgets for the non-grid beta group; no
+   environment and no OIDC.
 2. **publish-packages** — protected `npm-release` environment; `contents: read`
    plus `id-token: write`; publishes ui-core, ui-components, and ui-data-grid in
    dependency order.
@@ -264,7 +335,8 @@ the hour. It validates:
 - package payloads;
 - packed external consumer;
 - docs and playground;
-- high-severity dependency audit;
+- the complete BT-8005 compatibility matrix;
+- BT-8006 dependency, CodeQL, actionlint, ShellCheck, and workflow validation;
 - one final `nightly-gate`.
 
 Nightly never publishes, deploys, creates tags, or writes repository contents.
@@ -273,12 +345,23 @@ Nightly never publishes, deploys, creates tags, or writes repository contents.
 
 ```bash
 npm run verify:toolchain
+npm run format:check
+npm run format
 npm run test:ci-scope
 npm run verify:workflows
 npm run verify:templates
+npm run test:beta-package-size-budgets
+npm run verify:beta-package-size-budgets
+npm run test:compatibility-release-matrix
+npm run verify:compatibility-release-matrix
+npm run test:security-workflow-hardening
+npm run verify:security-workflow-hardening
 npm run verify:ci
 npm run quality
 ```
+
+`npm run format:check` verifies supported repository files without changing
+them. `npm run format` applies the same formatter configuration.
 
 To inspect a full planner result locally:
 

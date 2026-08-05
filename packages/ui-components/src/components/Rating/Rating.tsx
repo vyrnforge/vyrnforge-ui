@@ -1,12 +1,8 @@
 import { useId } from "react";
-import { useControllableState } from "../../hooks";
+import { useNumericBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import { Icon } from "../Icon";
 import type { RatingProps } from "./Rating.types";
-
-function normalizeValue(value: number, max: number) {
-  return Math.max(0, Math.min(max, Math.round(value)));
-}
 
 export function Rating({
   allowClear = false,
@@ -23,15 +19,21 @@ export function Rating({
   readOnly = false,
   required = false,
   style,
-  value
+  value,
 }: RatingProps) {
   const generatedId = useId();
   const ratingMax = Math.max(1, Math.round(max));
-  const [currentValue, setCurrentValue] = useControllableState({
-    value: value === undefined ? undefined : normalizeValue(value, ratingMax),
-    defaultValue: normalizeValue(defaultValue, ratingMax),
-    onChange: onValueChange
+  const behavior = useNumericBehavior({
+    alignToStep: true,
+    defaultValue,
+    max: ratingMax,
+    min: 0,
+    onValueChange,
+    precision: 0,
+    step: 1,
+    value,
   });
+  const currentValue = Math.round(behavior.value);
   const ratingName = name ?? generatedId;
   const accessibleLabel = typeof label === "string" ? label : "Rating";
 
@@ -39,7 +41,11 @@ export function Rating({
     return (
       <div
         aria-label={`${accessibleLabel}: ${getLabelText(currentValue, ratingMax)}`}
-        className={joinClassNames("vf-rating", "vf-rating--read-only", className)}
+        className={joinClassNames(
+          "vf-rating",
+          "vf-rating--read-only",
+          className,
+        )}
         role="img"
         style={style}
       >
@@ -50,11 +56,16 @@ export function Rating({
             return (
               <span
                 aria-hidden="true"
-                className={joinClassNames("vf-rating__item", itemValue <= currentValue && "vf-rating__item--selected")}
+                className={joinClassNames(
+                  "vf-rating__item",
+                  itemValue <= currentValue && "vf-rating__item--selected",
+                )}
                 key={itemValue}
               >
                 <span className="vf-rating__icon">
-                  {itemValue <= currentValue ? icon ?? <Icon name="Star" /> : emptyIcon ?? <Icon name="Star" />}
+                  {itemValue <= currentValue
+                    ? (icon ?? <Icon name="Star" />)
+                    : (emptyIcon ?? <Icon name="Star" />)}
                 </span>
               </span>
             );
@@ -67,7 +78,11 @@ export function Rating({
   return (
     <fieldset
       aria-label={label ? undefined : accessibleLabel}
-      className={joinClassNames("vf-rating", disabled && "vf-rating--disabled", className)}
+      className={joinClassNames(
+        "vf-rating",
+        disabled && "vf-rating--disabled",
+        className,
+      )}
       disabled={disabled}
       style={style}
     >
@@ -80,7 +95,10 @@ export function Rating({
 
           return (
             <label
-              className={joinClassNames("vf-rating__item", itemValue <= currentValue && "vf-rating__item--selected")}
+              className={joinClassNames(
+                "vf-rating__item",
+                itemValue <= currentValue && "vf-rating__item--selected",
+              )}
               key={itemValue}
             >
               <input
@@ -88,11 +106,11 @@ export function Rating({
                 checked={selected}
                 className="vf-rating__input"
                 name={ratingName}
-                onChange={() => setCurrentValue(itemValue)}
+                onChange={() => behavior.setValue(itemValue, "pointer")}
                 onClick={(event) => {
                   if (selected && allowClear) {
                     event.preventDefault();
-                    setCurrentValue(0);
+                    behavior.setValue(0, "pointer");
                   }
                 }}
                 required={required && currentValue === 0 && itemValue === 1}
@@ -100,7 +118,9 @@ export function Rating({
                 value={itemValue}
               />
               <span aria-hidden="true" className="vf-rating__icon">
-                {itemValue <= currentValue ? icon ?? <Icon name="Star" /> : emptyIcon ?? <Icon name="Star" />}
+                {itemValue <= currentValue
+                  ? (icon ?? <Icon name="Star" />)
+                  : (emptyIcon ?? <Icon name="Star" />)}
               </span>
               <span className="vf-sr-only">{itemLabel}</span>
             </label>

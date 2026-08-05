@@ -41,13 +41,14 @@ import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 ```
 
-`@vyrnforge/ui-data-grid` remains backward compatible with `--udg-*` variables. It also maps many grid defaults to shared `--vf-*` variables when `@vyrnforge/ui-core` CSS is present, so app-level VyrnForge tokens can theme components and grid together.
+`@vyrnforge/ui-data-grid` remains backward compatible with `--udg-*` variables. Grid-facing roles now map to canonical semantic `--vf-*` roles from `@vyrnforge/ui-core`, so components and grid share one theme source. Light, dark, enterprise, and system grid themes inherit ui-core; only the documented grid high-contrast compatibility theme keeps explicit values.
 
 Override shared `--vf-*` tokens when components and grid should move together:
 
 ```css
 .my-app {
-  --vf-primary: #003b71;
+  --vf-interactive-primary: #003b71;
+  --vf-focus-color: #005ea8;
   --vf-radius-md: 10px;
 }
 ```
@@ -56,10 +57,16 @@ Override `--udg-*` tokens when only the grid should change:
 
 ```css
 .my-app .udg {
-  --udg-header-bg: #f8fafc;
+  --udg-header-bg: var(--vf-surface-muted);
   --udg-row-height: 42px;
 }
 ```
+
+Typed presets such as `dataGridLightTheme` are derived from ui-core theme
+presets. Custom shared themes can use
+`createDataGridThemeFromVyrnForgeTheme(name, themeVars)` when a concrete grid
+inline-variable object is required. Prefer scoped CSS semantic overrides for
+normal application theming.
 
 ## Theme System
 
@@ -83,12 +90,12 @@ Per-instance CSS variables can be passed with `themeVars`:
 ```tsx
 import {
   UniversalDataGrid,
-  createDataGridTheme
+  createDataGridTheme,
 } from "@vyrnforge/ui-data-grid";
 
 const customTheme = createDataGridTheme({
   "--udg-primary": "#003b71",
-  "--udg-radius-md": "10px"
+  "--udg-radius-md": "10px",
 });
 
 <UniversalDataGrid
@@ -166,7 +173,7 @@ Columns can be hidden by default and protected from hiding:
 ```tsx
 const columns = [
   { id: "name", header: "Name", accessorKey: "name", hideable: false },
-  { id: "email", header: "Email", accessorKey: "email", hidden: true }
+  { id: "email", header: "Email", accessorKey: "email", hidden: true },
 ];
 ```
 
@@ -186,7 +193,12 @@ Global search scans searchable columns across the current grid. Column filters a
 const columns = [
   { id: "name", header: "Name", accessorKey: "name", dataType: "string" },
   { id: "score", header: "Score", accessorKey: "score", dataType: "number" },
-  { id: "enabled", header: "Enabled", accessorKey: "enabled", dataType: "boolean" }
+  {
+    id: "enabled",
+    header: "Enabled",
+    accessorKey: "enabled",
+    dataType: "boolean",
+  },
 ];
 ```
 
@@ -210,15 +222,15 @@ const columns = [
     accessorKey: "name",
     width: 220,
     minWidth: 160,
-    maxWidth: 360
+    maxWidth: 360,
   },
   {
     id: "id",
     header: "ID",
     accessorKey: "id",
     width: 72,
-    resizable: false
-  }
+    resizable: false,
+  },
 ];
 ```
 
@@ -228,9 +240,9 @@ The current widths live in `DataGridState.columnSizing`:
 const [state, setState] = useState(
   createGridState({
     columnSizing: {
-      name: 260
-    }
-  })
+      name: 260,
+    },
+  }),
 );
 
 <UniversalDataGrid
@@ -243,6 +255,23 @@ const [state, setState] = useState(
 ```
 
 Users can drag the header edge resize handle, use keyboard arrow keys on a focused handle, or double click the handle to reset one column size. Persisted preferences include `columnSizing` by default.
+
+## Keyboard navigation and scrolling
+
+The rendered table uses an accessible grid interaction model. One body cell is
+in the Tab sequence; Arrow keys move between cells, Home and End move across the
+current row, and Control/Command + Home or End moves to the first or last
+rendered cell. Space toggles a selectable row and Enter activates the row.
+
+Headers, menus, drag grips, and resize separators remain independently
+keyboard-accessible. Resize separators accept Left/Right Arrow keys, Shift for a
+larger step, pointer dragging, and double-click reset. Header grips support
+Alt+Shift+Left/Right as the keyboard fallback for drag reorder. Changes are
+announced through a polite live region.
+
+The header stays sticky while the table scrolls. Selection cells stay pinned to
+the inline-start edge when selection is enabled, and keyboard navigation scrolls
+the focused cell into view on both axes.
 
 ## Row Selection
 
@@ -263,8 +292,8 @@ Row selection is opt-in and works in controlled or uncontrolled mode:
       id: "review",
       label: "Flag review",
       variant: "primary",
-      onClick: ({ selectedRowIds }) => console.log(selectedRowIds)
-    }
+      onClick: ({ selectedRowIds }) => console.log(selectedRowIds),
+    },
   ]}
 />
 ```
@@ -280,7 +309,7 @@ Grouping is opt-in with `enableGrouping`. It is client-side in this phase:
   tableId="users"
   columns={[
     { id: "name", header: "Name", accessorKey: "name" },
-    { id: "status", header: "Status", accessorKey: "status", groupable: true }
+    { id: "status", header: "Status", accessorKey: "status", groupable: true },
   ]}
   rows={rows}
   enableGrouping
@@ -314,11 +343,11 @@ Persistence is optional and stores preferences only, not row data:
 ```tsx
 import {
   UniversalDataGrid,
-  createLocalStorageGridPersistence
+  createLocalStorageGridPersistence,
 } from "@vyrnforge/ui-data-grid";
 
 const persistenceAdapter = createLocalStorageGridPersistence({
-  namespace: "my-app"
+  namespace: "my-app",
 });
 
 <UniversalDataGrid

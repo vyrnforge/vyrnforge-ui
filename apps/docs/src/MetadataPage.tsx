@@ -11,6 +11,7 @@ import {
   Text,
 } from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
+import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 
 type MetadataPageProps = {
   route: DocsRoute;
@@ -288,7 +289,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
 
   const categoryOptions = useMemo(() => uniqueValues(components, "category"), [components]);
   const packageOptions = useMemo(() => uniqueValues(components, "package"), [components]);
-  const statusOptions = useMemo(() => uniqueValues(components, "status"), [components]);
+  const statusOptions = useMemo(() => uniqueValues(components, "maturity"), [components]);
   const normalizedQuery = query.trim().toLowerCase();
 
   const filteredComponents = useMemo(
@@ -297,10 +298,10 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
         const matchesQuery =
           !normalizedQuery ||
           [
-            component.name,
+            component.displayName,
             component.package,
             component.category,
-            component.status,
+            component.maturity,
             component.purpose,
             component.aiUsageNotes
           ]
@@ -313,7 +314,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
           matchesQuery &&
           (packageFilter === "all" || toText(component.package) === packageFilter) &&
           (categoryFilter === "all" || toText(component.category) === categoryFilter) &&
-          (statusFilter === "all" || toText(component.status) === statusFilter)
+          (statusFilter === "all" || toText(component.maturity) === statusFilter)
         );
       }),
     [categoryFilter, components, normalizedQuery, packageFilter, statusFilter]
@@ -375,6 +376,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
           </div>
           {filteredComponents.map((component) => {
             const id = toText(component.id);
+            const maturity = getComponentMaturityPresentation(component);
 
             return (
               <button
@@ -384,11 +386,11 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
                 onClick={() => setSelectedId(id)}
                 type="button"
               >
-                <strong>{toText(component.name)}</strong>
+                <strong>{toText(component.displayName)}</strong>
                 <span>{toText(component.package)}</span>
                 <span>{toText(component.category)}</span>
-                <Badge tone="subtle" variant={statusVariant(toText(component.status))}>
-                  {toText(component.status)}
+                <Badge tone="subtle" variant={maturity.variant}>
+                  {maturity.label}
                 </Badge>
                 <span>{toText(component.purpose)}</span>
               </button>
@@ -410,24 +412,26 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
 }
 
 function ComponentDetail({ component }: { component: MetadataRecord }) {
+  const maturity = getComponentMaturityPresentation(component);
+
   return (
     <Card
       className="vf-docs-metadata-detail"
-      aria-label={`${toText(component.name)} details`}
+      aria-label={`${toText(component.displayName)} details`}
       padding="md"
       role="complementary"
     >
       <div className="vf-docs-metadata-detail__header">
         <div>
           <Heading level={3} size="md">
-            {toText(component.name)}
+            {toText(component.displayName)}
           </Heading>
           <Text tone="muted" size="sm">
             {toText(component.package)} / {toText(component.category)}
           </Text>
         </div>
-        <Badge tone="subtle" variant={statusVariant(toText(component.status))}>
-          {toText(component.status)}
+        <Badge tone="subtle" variant={maturity.variant}>
+          {maturity.label}
         </Badge>
       </div>
 

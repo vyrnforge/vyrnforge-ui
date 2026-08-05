@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "supportClaim": "gmf4-runtime-evidence-complete",
+  "runtimeBuildGate": "GMF4",
+  "fixtures": [
+    {
+      "id": "react",
+      "framework": "React",
+      "directory": "tests/consumers/react",
+      "contractFile": "fixture.json",
+      "exampleFiles": [
+        "example.tsx",
+        "src/main.tsx",
+        "src/vyrnforge-elements.d.ts",
+        "package.json"
+      ],
+      "supportClaim": "packed-custom-elements-runtime-verified"
+    },
+    {
+      "id": "native-html",
+      "framework": "Native HTML",
+      "directory": "tests/consumers/native-html",
+      "contractFile": "fixture.json",
+      "exampleFiles": [
+        "index.html",
+        "architecture-probe.ts",
+        "src/main.ts",
+        "package.json"
+      ],
+      "supportClaim": "packed-runtime-verified"
+    },
+    {
+      "id": "angular",
+      "framework": "Angular",
+      "directory": "tests/consumers/angular",
+      "contractFile": "fixture.json",
+      "exampleFiles": [
+        "package.json",
+        "angular.json",
+        "src/main.ts",
+        "src/app/app.component.ts",
+        "src/app/app.component.html",
+        "architecture-probe.ts",
+        "src/app/vyrnforge-form-control.directive.ts"
+      ],
+      "supportClaim": "packed-angular-runtime-verified",
+      "formsSupportClaim": "angular-forms-adapter-verified"
+    },
+    {
+      "id": "vue",
+      "framework": "Vue",
+      "directory": "tests/consumers/vue",
+      "contractFile": "fixture.json",
+      "exampleFiles": [
+        "package.json",
+        "index.html",
+        "tsconfig.json",
+        "vite.config.ts",
+        "architecture-probe.ts",
+        "src/main.ts",
+        "src/App.vue",
+        "src/styles.css",
+        "src/adapters/useVyrnForgeModel.ts",
+        "src/adapters/VyrnForgeTextInputModel.vue",
+        "src/adapters/VyrnForgeCheckboxModel.vue"
+      ],
+      "supportClaim": "packed-vue-runtime-verified",
+      "verificationStatus": "runtime-verified",
+      "modelSupportClaim": "vue-model-adapter-verified"
+    }
+  ],
+  "currentBatch": "CF-7010-CF-7013"
+}

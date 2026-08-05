@@ -1,0 +1,104 @@
+<main class="vf-consumer-angular" data-angular-consumer>
+  <vf-page-header
+    eyebrow="GMF4 consumer evidence"
+    title="Angular packed consumer"
+    description="Angular 22 consumes the native VyrnForge package directly."
+  >
+    <span slot="status" data-angular-slot="status">Angular 22</span>
+    <vf-button
+      id="angular-save"
+      slot="actions"
+      action="angular-save"
+      variant="primary"
+      (vf-action)="handleAction($event)"
+    >
+      Save from Angular
+    </vf-button>
+  </vf-page-header>
+
+  <vf-tabs
+    #tabsElement
+    aria-label="Angular consumer sections"
+    [items]="tabs"
+  ></vf-tabs>
+
+  <section class="vf-consumer-angular-section" aria-labelledby="reactive-title">
+    <h2 id="reactive-title">Reactive Forms adapter</h2>
+    <form
+      class="vf-consumer-angular-form"
+      [formGroup]="profileForm"
+      (submit)="$event.preventDefault()"
+    >
+      <vf-text-input
+        vfFormControl
+        formControlName="owner"
+        label="Reactive owner"
+        name="reactiveOwner"
+        required
+      ></vf-text-input>
+
+      <div class="vf-consumer-angular-actions">
+        <vf-button
+          id="disable-reactive-owner"
+          type="button"
+          action="disable-owner"
+          variant="secondary"
+          (vf-action)="disableOwner()"
+        >
+          Disable owner
+        </vf-button>
+        <vf-button
+          id="enable-reactive-owner"
+          type="button"
+          action="enable-owner"
+          variant="secondary"
+          (vf-action)="enableOwner()"
+        >
+          Enable owner
+        </vf-button>
+      </div>
+    </form>
+
+    <output data-reactive-value>{{ ownerControl.value }}</output>
+    <output data-reactive-state>
+      status={{ ownerControl.status }}; dirty={{ ownerControl.dirty }};
+      touched={{ ownerControl.touched }}; disabled={{ ownerControl.disabled }};
+      vyrnForgeError={{ ownerControl.hasError("vyrnForge") }}
+    </output>
+  </section>
+
+  <section class="vf-consumer-angular-section" aria-labelledby="template-title">
+    <h2 id="template-title">Template-driven Forms adapter</h2>
+    <form class="vf-consumer-angular-form">
+      <vf-checkbox
+        vfFormControl
+        name="notifications"
+        label="Receive notifications"
+        [(ngModel)]="notifications"
+      ></vf-checkbox>
+    </form>
+    <output data-template-value>{{ notifications }}</output>
+  </section>
+
+  <section class="vf-consumer-angular-section" aria-labelledby="native-title">
+    <h2 id="native-title">Native ElementInternals form</h2>
+    <form
+      id="angular-form"
+      class="vf-consumer-angular-form"
+      (submit)="handleSubmit($event)"
+    >
+      <vf-text-input
+        #ownerInput
+        label="Owner"
+        name="owner"
+        required
+        [value]="owner"
+      ></vf-text-input>
+      <vf-button type="submit" variant="secondary">
+        Submit Angular form
+      </vf-button>
+    </form>
+  </section>
+
+  <output aria-live="polite" data-consumer-status>{{ status }}</output>
+</main>

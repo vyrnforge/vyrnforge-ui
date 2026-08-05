@@ -21,7 +21,7 @@ export type ComponentDemoPageProps = {
   title: string;
   description: string;
   packageName: "@vyrnforge/ui-components" | "@vyrnforge/ui-data-grid";
-  status: "stable" | "experimental" | "planned";
+  status: "stable" | "beta-stable" | "alpha-stable" | "experimental" | "planned" | "deprecated";
   importCode: string;
   sections: ComponentPageSection[];
   useWhen?: string[];
@@ -31,7 +31,22 @@ export type ComponentDemoPageProps = {
   relatedComponents?: RelatedComponentLink[];
 };
 
-const statusVariant = { stable: "success", experimental: "info", planned: "neutral" } as const;
+const statusVariant = {
+  stable: "warning",
+  "beta-stable": "success",
+  "alpha-stable": "warning",
+  experimental: "info",
+  planned: "neutral",
+  deprecated: "danger"
+} as const;
+
+function statusLabel(status: ComponentDemoPageProps["status"]) {
+  if (status === "stable") {
+    return "Legacy stable — verification required";
+  }
+
+  return status;
+}
 
 function GuidanceList({ title, items }: { title: string; items?: string[] }) {
   if (!items || items.length === 0) {
@@ -75,7 +90,7 @@ export function ComponentDemoPage({
         <section className="vf-playground-section" id="overview">
           <PageHeader
             description={description}
-            status={<div className="vf-playground-demo-page__badges"><Badge tone="subtle">{packageName}</Badge><Badge variant={statusVariant[status]}>{status}</Badge></div>}
+            status={<div className="vf-playground-demo-page__badges"><Badge tone="subtle">{packageName}</Badge><Badge variant={statusVariant[status]}>{statusLabel(status)}</Badge></div>}
             title={title}
           />
         </section>

@@ -1,33 +1,38 @@
 import { forwardRef } from "react";
-import { useControllableState } from "../../hooks";
+import { useToggleBehavior } from "../../internal/behaviors";
 import { joinClassNames } from "../../utils/classNames";
 import { useToggleButtonGroupContext } from "../ToggleButtonGroup/ToggleButtonGroup.context";
 import type { ToggleButtonProps } from "./ToggleButton.types";
 
 export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
-  function ToggleButton({
-    children,
-    className,
-    defaultPressed = false,
-    disabled = false,
-    icon,
-    onClick,
-    onPressedChange,
-    pressed,
-    size,
-    type = "button",
-    value,
-    variant = "default",
-    ...props
-  }, ref) {
+  function ToggleButton(
+    {
+      children,
+      className,
+      defaultPressed = false,
+      disabled = false,
+      icon,
+      onClick,
+      onPressedChange,
+      pressed,
+      size,
+      type = "button",
+      value,
+      variant = "default",
+      ...props
+    },
+    ref,
+  ) {
     const group = useToggleButtonGroupContext();
-    const [uncontrolledPressed, setUncontrolledPressed] = useControllableState({
-      value: pressed,
-      defaultValue: defaultPressed,
-      onChange: onPressedChange
+    const toggleBehavior = useToggleBehavior({
+      defaultPressed,
+      onPressedChange,
+      pressed,
     });
     const grouped = Boolean(group && value !== undefined);
-    const isPressed = grouped ? group!.isPressed(value!) : uncontrolledPressed;
+    const isPressed = grouped
+      ? group!.isPressed(value!)
+      : toggleBehavior.pressed;
     const resolvedDisabled = disabled || Boolean(group?.disabled);
     const resolvedSize = size ?? group?.size ?? "md";
 
@@ -39,30 +44,34 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
           `vf-toggle-button--${resolvedSize}`,
           `vf-toggle-button--${variant}`,
           isPressed && "vf-toggle-button--pressed",
-          className
+          className,
         )}
         data-vf-toggle-button
         disabled={resolvedDisabled}
         onClick={(event) => {
           onClick?.(event);
-          if (event.defaultPrevented || resolvedDisabled) {
-            return;
-          }
+          if (event.defaultPrevented || resolvedDisabled) return;
 
           if (grouped) {
-            group!.toggle(value!);
+            group!.toggle(value!, "pointer");
             return;
           }
 
-          setUncontrolledPressed(!isPressed);
+          toggleBehavior.toggle("pointer");
         }}
         ref={ref}
         type={type}
         {...props}
       >
-        {icon && <span aria-hidden="true" className="vf-toggle-button__icon">{icon}</span>}
-        {children && <span className="vf-toggle-button__label">{children}</span>}
+        {icon && (
+          <span aria-hidden="true" className="vf-toggle-button__icon">
+            {icon}
+          </span>
+        )}
+        {children && (
+          <span className="vf-toggle-button__label">{children}</span>
+        )}
       </button>
     );
-  }
+  },
 );

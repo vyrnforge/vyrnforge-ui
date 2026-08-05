@@ -4,10 +4,11 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 
 ## Release identity
 
-- [ ] Release scope is approved.
+- [ ] Release scope is approved. For the first non-grid beta, verify `docs/metadata/non-grid-beta-scope.json` with `npm run verify:beta-scope`.
 - [ ] Version is selected.
 - [ ] npm tag is selected: `alpha`, `beta`, candidate tag, or `latest` only for approved stable releases.
-- [ ] Package versions remain synchronized unless an approved policy says otherwise.
+- [ ] `npm run verify:release-groups` passes against `docs/metadata/release-groups.json`.
+- [ ] Package versions remain synchronized within the approved release group; `0.2.0-beta.1` excludes the independent `0.1.0-alpha.2` data-grid release.
 - [ ] VyrnForge Source License 1.0 metadata and package-local LICENSE files are verified.
 
 ## Mandatory blockers
@@ -21,7 +22,9 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Package builds pass.
 - [ ] `npm run verify:packages` passes.
 - [ ] `npm run verify:consumer` passes.
+- [ ] `npm run verify:multi-framework` passes for a multi-framework release.
 - [ ] The stable `ci-gate` check passes. During migration, compatibility checks `quality` and `external-consumer` also pass.
+- [ ] For beta or stable promotion, `npm run verify:assistive-technology:release` passes.
 - [ ] Package manifests use `SEE LICENSE IN LICENSE`.
 - [ ] Package tarballs include LICENSE and no unrelated legal drafts or internal legal notes.
 - [ ] Type declaration output is present and reviewable.
@@ -40,6 +43,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 ## Recommended checks
 
 - [ ] External package-consumer fixture installs the package tarballs.
+- [ ] React, native HTML, Angular, and Vue consumer fixtures pass when required by GMF4.
 - [ ] Real application validation is complete.
 - [ ] Documentation build passes.
 - [ ] Playground build passes.

@@ -2,49 +2,41 @@
   position: relative;
   min-width: 0;
 }
-
 .vf-autocomplete__control {
   display: flex;
   align-items: center;
   min-width: 0;
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-control-border);
   border-radius: var(--vf-radius-md);
-  color: var(--vf-text);
-  background: var(--vf-surface);
-  transition:
-    border-color var(--vf-transition-fast),
-    box-shadow var(--vf-transition-fast),
-    background-color var(--vf-transition-fast);
+  color: var(--vf-text-primary);
+  background: var(--vf-control-background);
+  transition: var(--vf-motion-transition-color);
 }
-
 .vf-autocomplete__control:hover {
-  border-color: var(--vf-border-strong);
+  border-color: var(--vf-control-border-hover);
+  background: var(--vf-control-background-hover);
 }
-
 .vf-autocomplete__control:focus-within {
-  border-color: var(--vf-focus-ring);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vf-focus-ring) 22%, transparent);
+  border-color: var(--vf-focus-color);
+  box-shadow: var(--vf-focus-shadow);
 }
-
 .vf-autocomplete--invalid .vf-autocomplete__control {
-  border-color: var(--vf-danger);
+  border-color: var(--vf-status-error-indicator);
 }
-
 .vf-autocomplete--invalid .vf-autocomplete__control:focus-within {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vf-danger) 20%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--vf-status-error-indicator) 24%, transparent);
 }
-
 .vf-autocomplete__input.vf-input {
   min-width: 0;
   border: 0;
   border-radius: inherit;
+  background: transparent;
   box-shadow: none;
 }
-
 .vf-autocomplete__input.vf-input:focus-visible {
   outline: 0;
 }
-
 .vf-autocomplete__actions {
   display: inline-flex;
   flex: 0 0 auto;
@@ -52,63 +44,59 @@
   gap: 2px;
   padding-right: 3px;
 }
-
 .vf-autocomplete__clear.vf-icon-button,
 .vf-autocomplete__indicator.vf-icon-button {
-  width: 28px;
-  height: 28px;
-  color: var(--vf-text-muted);
+  width: var(--vf-control-height-sm);
+  height: var(--vf-control-height-sm);
+  color: var(--vf-text-secondary);
 }
-
 .vf-autocomplete__clear.vf-icon-button:hover:not(:disabled),
 .vf-autocomplete__indicator.vf-icon-button:hover:not(:disabled) {
-  color: var(--vf-text);
-  background: var(--vf-surface-subtle);
+  color: var(--vf-text-primary);
+  background: var(--vf-interactive-neutral-hover);
 }
-
 .vf-autocomplete__loading {
-  width: 14px;
-  height: 14px;
-  margin-inline: var(--vf-space-2);
-  border: 2px solid var(--vf-border-strong);
-  border-top-color: var(--vf-primary);
+  width: var(--vf-icon-size-sm);
+  height: var(--vf-icon-size-sm);
+  margin-inline: var(--vf-component-gap);
+  border: 2px solid var(--vf-border-emphasis);
+  border-top-color: var(--vf-interactive-primary);
   border-radius: 50%;
-  animation: vf-autocomplete-spin 800ms linear infinite;
+  animation: vf-autocomplete-spin var(--vf-motion-duration-deliberate) linear
+    infinite;
 }
-
-.vf-autocomplete--disabled .vf-autocomplete__control,
-.vf-autocomplete--read-only .vf-autocomplete__control {
-  background: var(--vf-surface-subtle);
-}
-
 .vf-autocomplete--disabled .vf-autocomplete__control {
+  border-color: var(--vf-control-disabled-border);
+  color: var(--vf-control-disabled-text);
+  background: var(--vf-control-disabled-background);
   cursor: not-allowed;
-  opacity: 0.62;
 }
-
+.vf-autocomplete--read-only .vf-autocomplete__control {
+  background: var(--vf-surface-muted);
+}
 .vf-autocomplete--read-only .vf-autocomplete__input {
   cursor: default;
 }
-
 .vf-autocomplete__layer {
   position: fixed;
   top: var(--vf-overlay-y, 0);
   left: var(--vf-overlay-x, 0);
-  width: var(--vf-overlay-anchor-width, min(360px, calc(100vw - (var(--vf-space-4) * 2))));
+  width: var(
+    --vf-overlay-anchor-width,
+    min(360px, calc(100vw - (var(--vf-space-4) * 2)))
+  );
   max-width: calc(100vw - (var(--vf-space-4) * 2));
 }
-
 .vf-autocomplete__listbox {
   max-height: min(320px, calc(100vh - (var(--vf-space-6) * 2)));
   overflow: auto;
-  border: 1px solid var(--vf-border);
+  border: 1px solid var(--vf-border-default);
   border-radius: var(--vf-radius-lg);
   padding: var(--vf-space-1);
-  color: var(--vf-text);
-  background: var(--vf-surface-raised);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-overlay);
   box-shadow: var(--vf-shadow-md);
 }
-
 .vf-autocomplete__option {
   display: flex;
   align-items: flex-start;
@@ -119,57 +107,47 @@
   border-radius: var(--vf-radius-md);
   padding: var(--vf-space-2) var(--vf-space-3);
   cursor: pointer;
+  transition: var(--vf-motion-transition-color);
 }
-
 .vf-autocomplete__option--active {
-  border-color: var(--vf-border-strong);
-  background: var(--vf-surface-subtle);
+  border-color: var(--vf-border-emphasis);
+  background: var(--vf-interactive-neutral-hover);
 }
-
 .vf-autocomplete__option--selected {
-  color: var(--vf-primary);
-  background: var(--vf-primary-soft);
+  color: var(--vf-interactive-selected-text);
+  background: var(--vf-interactive-selected-background);
 }
-
 .vf-autocomplete__option--active.vf-autocomplete__option--selected {
-  border-color: var(--vf-primary);
+  border-color: var(--vf-interactive-selected-border);
 }
-
 .vf-autocomplete__option--disabled {
+  color: var(--vf-text-disabled);
   cursor: not-allowed;
-  opacity: 0.58;
 }
-
 .vf-autocomplete__option-main {
   display: grid;
   gap: 2px;
   min-width: 0;
 }
-
 .vf-autocomplete__option-label {
-  color: var(--vf-text-strong);
-  font-weight: 680;
+  color: inherit;
+  font-family: var(--vf-type-label-font-family);
+  font-size: var(--vf-type-label-font-size);
+  font-weight: var(--vf-type-label-font-weight);
+  line-height: var(--vf-type-label-line-height);
 }
-
 .vf-autocomplete__option-description,
 .vf-autocomplete__status {
-  color: var(--vf-text-muted);
-  font-size: var(--vf-font-size-sm);
-  line-height: var(--vf-line-height-md);
+  color: var(--vf-text-secondary);
+  font-family: var(--vf-type-caption-font-family);
+  font-size: var(--vf-type-caption-font-size);
+  line-height: var(--vf-type-caption-line-height);
 }
-
 .vf-autocomplete__status {
   padding: var(--vf-space-3);
 }
-
 @keyframes vf-autocomplete-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .vf-autocomplete__loading {
-    animation: none;
   }
 }

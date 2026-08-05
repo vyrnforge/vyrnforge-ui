@@ -175,10 +175,10 @@ Legend:
 - Package: `@vyrnforge/ui-data-grid`
 - Component or feature: `DataGridSearch`, `DataGridFilterBar`, `DataGridSkeletonRows`, `DataGridEmptyState`, `DataGridErrorState`, `DataGridPagination`
 - Category: Metadata completeness
-- Evidence: `docs/metadata/component-status.json` lists these as stable and `packages/ui-data-grid/src/index.ts` exports them, but `docs/metadata/components.json` only directly catalogs `UniversalDataGrid`, `DataGridToolbar`, `DataGridColumnMenu`, and `DataGrid state/adapters`.
+- Historical evidence: the former compact status list named these stable and `packages/ui-data-grid/src/index.ts` exports them, while the earlier catalog omitted them. VF-1011 migrates the records into the canonical catalog.
 - User impact: The docs app and AI-readable metadata can under-report public grid components.
 - Recommended resolution: Add component metadata entries or explicitly classify these as internal implementation exports in the approved maturity update.
-- Affected files: `docs/metadata/components.json`, `docs/metadata/component-status.json`, `packages/ui-data-grid/src/index.ts`
+- Affected files: `docs/metadata/components.json`, `packages/ui-data-grid/src/index.ts`
 - Test requirement: Add metadata parity validation for root component exports.
 - Release disposition: Alpha backlog unless CI-007 decides the components are stable public API.
 
@@ -284,7 +284,7 @@ Legend:
 | Gap | Severity | Evidence | Recommendation |
 | --- | --- | --- | --- |
 | Public data-grid hooks missing current API classification | P1 | root exports exist, current docs/metadata omit them | Classify internal/experimental/stable before alpha. |
-| Metadata omits several public grid subcomponents | P2 | `component-status.json` has names missing from `components.json` | Add metadata entries or intentionally internalize. |
+| Metadata omits several public grid subcomponents | P2 | Historic compact metadata had names missing from the earlier catalog | VF-1011 migrated canonical entries. |
 | Component API docs have duplicate rows | P2 | repeated rows in `docs/api/ui-components-api.md` | Deduplicate. |
 | Browser-level focus/scroll/pointer evidence missing | P2 | tests are unit/SSR-style | Add manual checklist now; browser tests later. |
 | Planned items need stronger "not exported" separation | P2 | planned docs exist beside public metadata | Keep status visible and prevent import examples. |

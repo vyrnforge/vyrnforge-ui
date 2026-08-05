@@ -1,8 +1,9 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceOfTruth": "docs/api/import-and-setup.md",
   "recommendedOrder": [
     "@vyrnforge/ui-core/styles/index.css",
+    "@vyrnforge/ui-elements/styles/index.css",
     "@vyrnforge/ui-components/styles/index.css",
     "@vyrnforge/ui-data-grid/styles/index.css"
   ],
@@ -17,31 +18,72 @@
     {
       "package": "@vyrnforge/ui-core",
       "importPath": "@vyrnforge/ui-core/styles/index.css",
-      "requiredFor": ["shared --vf-* tokens", "theme presets", "density tokens", "utility classes"],
-      "mustComeBefore": ["@vyrnforge/ui-components/styles/index.css", "@vyrnforge/ui-data-grid/styles/index.css"],
-      "notes": "ui-core owns shared --vf-* design tokens, reset, density, utilities, and accessibility helpers."
+      "requiredFor": [
+        "shared --vf-* semantic tokens",
+        "theme presets",
+        "density contract",
+        "typography roles",
+        "motion and reduced-motion behavior",
+        "layering model",
+        "utility classes"
+      ],
+      "mustComeBefore": [
+        "@vyrnforge/ui-components/styles/index.css",
+        "@vyrnforge/ui-data-grid/styles/index.css"
+      ],
+      "notes": "ui-core owns shared --vf-* primitive and semantic tokens, reset, themes, density, typography, motion, layers, utilities, and accessibility helpers."
     },
     {
       "package": "@vyrnforge/ui-components",
       "importPath": "@vyrnforge/ui-components/styles/index.css",
-      "requiredFor": ["vf-* component classes", "shared component visual states"],
+      "requiredFor": [
+        "vf-* component classes",
+        "shared component visual states"
+      ],
       "mustComeBefore": ["@vyrnforge/ui-data-grid/styles/index.css"],
       "notes": "ui-components consumes --vf-* variables and owns vf-* component classes split by component family internally."
     },
     {
       "package": "@vyrnforge/ui-data-grid",
       "importPath": "@vyrnforge/ui-data-grid/styles/index.css",
-      "requiredFor": ["udg-* grid classes", "--udg-* grid variables", "grid layout and density"],
+      "requiredFor": [
+        "udg-* grid classes",
+        "--udg-* grid variables",
+        "grid layout and density"
+      ],
       "mustComeBefore": [],
       "notes": "ui-data-grid owns udg-* classes and --udg-* variables. The grid should work with fallback values but aligns best when ui-core is imported."
+    },
+    {
+      "package": "@vyrnforge/ui-elements",
+      "importPath": "@vyrnforge/ui-elements/styles/index.css",
+      "requiredFor": [
+        "native vf-* element foundation styling",
+        "shared ui-core token inheritance"
+      ],
+      "mustComeBefore": [],
+      "notes": "ui-elements uses Light DOM and imports the shared ui-core style foundation. Public component-specific styles are added during S6."
     }
   ],
   "rules": [
     "Import ui-core styles before ui-components styles.",
     "Import ui-components styles before ui-data-grid styles.",
     "Do not import internal package CSS module files directly.",
-    "Override --vf-* tokens for app-wide theme changes.",
-    "Override --udg-* variables for grid-specific changes.",
-    "Do not edit package CSS directly in consuming apps."
-  ]
+    "Override canonical --vf-* semantic roles for app-wide theme changes.",
+    "Use --udg-* only for genuinely grid-specific changes.",
+    "Do not edit package CSS directly in consuming apps.",
+    "React and native element renderers must consume the same canonical --vf-* semantic roles.",
+    "Light DOM is the default for ui-elements; Shadow DOM requires an approved component-level exception."
+  ],
+  "plannedNativeRendererOrder": [
+    "@vyrnforge/ui-core/styles/index.css",
+    "@vyrnforge/ui-elements/styles/index.css"
+  ],
+  "plannedNativeRendererStatus": "foundation implemented; public non-grid element renderers remain planned for S6",
+  "nativeElements": {
+    "entry": "@vyrnforge/ui-elements/styles/index.css",
+    "status": "current",
+    "tokenSource": "@vyrnforge/ui-core/styles/index.css",
+    "notes": "Portable Light DOM component classes reuse VyrnForge tokens and class contracts without importing @vyrnforge/ui-components at runtime."
+  }
 }

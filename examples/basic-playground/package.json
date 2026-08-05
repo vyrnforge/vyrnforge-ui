@@ -3,16 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24.18 <25",
+    "npm": ">=11.16 <12"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "lint": "eslint . --config ../../eslint.config.mjs",
+    "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "typecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-data-grid && tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vyrnforge/ui-components": "0.1.0-alpha.1",
-    "@vyrnforge/ui-core": "0.1.0-alpha.1",
-    "@vyrnforge/ui-data-grid": "0.1.0-alpha.1",
+    "@vyrnforge/ui-components": "0.2.0-beta.1",
+    "@vyrnforge/ui-core": "0.2.0-beta.1",
+    "@vyrnforge/ui-data-grid": "0.1.0-alpha.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-live": "^4.1.8"

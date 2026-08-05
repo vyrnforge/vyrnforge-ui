@@ -1,40 +1,109 @@
 # VyrnForge UI Quality Gates
 
-This document defines the minimum quality bar for shipped VyrnForge UI components. It applies to `@vyrnforge/ui-components` and `@vyrnforge/ui-data-grid`.
+This document defines the minimum evidence expected for VyrnForge UI component
+changes. The canonical maturity definitions and promotion requirements live in
+[`../governance/component-maturity-model.md`](../governance/component-maturity-model.md).
+Do not create a second maturity definition in this document.
 
 ## Severity
 
-| Severity | Definition |
-| --- | --- |
-| P0 | Crash, data loss, unusable keyboard behavior, focus trap failure, inaccessible primary interaction, or component cannot be used. |
-| P1 | Major API inconsistency, major layout or scroll defect, broken controlled state, incorrect form submission, or serious theme/responsive issue. |
-| P2 | Incomplete behavior, visual inconsistency, missing secondary accessibility behavior, or incomplete documentation. |
-| P3 | Polish, optional enhancement, or future optimization. |
+| Severity | Definition                                                                                                                                     |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| P0       | Crash, data loss, unusable keyboard behavior, focus-trap failure, inaccessible primary interaction, or component cannot be used.               |
+| P1       | Major API inconsistency, major layout or scroll defect, broken controlled state, incorrect form submission, or serious theme/responsive issue. |
+| P2       | Incomplete behavior, visual inconsistency, missing secondary accessibility behavior, or incomplete documentation.                              |
+| P3       | Polish, optional enhancement, or future optimization.                                                                                          |
 
-## Gates
+## Component quality gates
 
-| Gate | Stable requirement |
-| --- | --- |
-| API consistency | Props follow existing VyrnForge conventions: `value/defaultValue`, `checked/defaultChecked`, `open/defaultOpen`, `onValueChange`, `onCheckedChange`, `onOpenChange`, `disabled`, `readOnly`, `invalid`, `required`, `size`, `density`, `className`, and `style` where relevant. |
-| Behavior correctness | Controlled mode never mutates internal business state, uncontrolled defaults apply only initially, disabled/read-only blocks mutation, and callbacks receive predictable values. |
-| Accessibility | Primary interaction has labels, ARIA relationships, visible focus, keyboard operation, expected Escape behavior, and correct live-region/modal semantics. |
-| Visual quality | Light, dark, enterprise, compact, standard, and comfortable modes retain usable spacing, contrast, control heights, and focus visibility. |
-| Layout and scrolling | Components own predictable `min-width: 0`, `min-height: 0`, overflow, sticky offsets, and avoid clipped focus or double scrollbars. |
-| Theme and density support | Static visuals use `--vf-*` tokens in components and `--udg-*` in the grid. Density names are `compact`, `standard`, and `comfortable`. |
-| CSS ownership | `ui-core` owns tokens/utilities, `ui-components` owns reusable `vf-*` component styles, `ui-data-grid` owns `udg-*`, docs use `vf-docs-*`, and playground uses `vf-playground-*`. |
-| Documentation | Public components have API docs, metadata, playground examples, and AI usage notes when public enough for agents to consume. |
-| Testing | Stable components have meaningful tests for rendering contract, ARIA, state helpers, disabled/read-only behavior, or grid state behavior where practical. |
-| Production readiness | Stable components have no known P0/P1 issue and are represented accurately in metadata and playground badges. |
+| Gate                 | Requirement                                                                                                                                                                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| API consistency      | Props follow established VyrnForge conventions and controlled/uncontrolled behavior is explicit.                                                                                                                                                       |
+| Behavior correctness | Disabled/read-only states block mutation, callbacks are predictable, and business state is not silently owned by shared packages.                                                                                                                      |
+| Accessibility        | Labels, ARIA relationships, visible focus, keyboard operation, Escape behavior, and live-region/modal semantics are reviewed where applicable.                                                                                                         |
+| Visual quality       | Light, dark, enterprise, compact, standard, and comfortable modes retain usable spacing, contrast, control heights, and focus visibility.                                                                                                              |
+| Layout and scrolling | Components own predictable minimum sizes and overflow behavior and avoid clipped focus or duplicate scroll regions.                                                                                                                                    |
+| Theme and density    | Shared visuals use the canonical semantic roles in `docs/metadata/design-tokens.json`; grid-only internals use `--udg-*`.                                                                                                                              |
+| CSS ownership        | `ui-core` owns shared tokens/utilities, `ui-components` owns `vf-*`, `ui-data-grid` owns `udg-*`, docs own `vf-docs-*`, playground owns `vf-playground-*`, regression fixtures own `vf-fixture-*`, and external consumer fixtures use `vf-consumer-*`. |
+| CSS verification     | `npm run lint:css` rejects invalid CSS, duplicate declarations, invalid custom-property names, and CSS classes outside approved VyrnForge prefixes.                                                                                                    |
+| Documentation        | Public components have metadata, appropriate guidance, examples, and honest limitations.                                                                                                                                                               |
+| Testing              | Logic, DOM interaction, accessibility, browser, theme/density, compatibility, and consumer evidence are required according to category and maturity.                                                                                                   |
+| Production readiness | No unresolved P0/P1 defect and no maturity claim unsupported by the canonical evidence record.                                                                                                                                                         |
 
-## Status Rules
+## Maturity status source of truth
 
-Allowed statuses are:
+Allowed statuses are defined only in the canonical maturity model and metadata
+schema:
 
-| Status | Meaning |
-| --- | --- |
-| stable | Meets the stable quality gates and has no known P0/P1 issues. |
-| experimental | Public enough to test and document, but still has P2/P3 limitations or limited interaction coverage. |
-| planned | Not implemented or not exported. |
-| deprecated | Available only for migration away. |
+- `planned`
+- `experimental`
+- `alpha-stable`
+- `beta-stable`
+- `stable`
+- `deprecated`
+- `internal`
 
-New or recently expanded components should remain `experimental` until keyboard, accessibility, visual, docs, metadata, playground, and test coverage have been reviewed together.
+VF-2015 closed the temporary legacy-stable exception at Gate G2. The canonical
+metadata must keep `legacyUnverifiedEntries` empty. The 47 unsupported
+historical Stable claims are now explicitly Experimental with pending promotion
+evidence, while their public exports remain available. `npm run
+verify:maturity-closure` prevents those records from silently regaining an
+unsupported Stable label.
+
+## DOM interaction and accessibility test conventions
+
+Shared jsdom utilities live in `tests/dom`. Component and regression-fixture
+tests import `render`, `screen`, `createUser`, `getPortalRoot`, and
+`assertNoAccessibilityViolations` from that test-only location. Public package
+implementation must not expose these helpers.
+
+The shared setup automatically unmounts renders, removes the test portal root,
+restores mocks, clears timers, and returns to real timers after every test. A
+test using fake timers must enable and flush them locally.
+
+DOM interaction tests, automated axe scans, and Chromium contracts are
+implemented and mandatory where applicable. They provide repeatable structural,
+interaction, focus, pointer, and layout evidence, but they do not prove complete
+WCAG conformance. Manual assistive-technology execution remains pending and is
+tracked honestly by `docs/metadata/assistive-technology-reviews.json`.
+
+## Repository gate
+
+The authoritative local and release command is `npm run quality`. It includes:
+
+- workflow/toolchain, token, visual-regression, G3-closure, maturity-closure, and assistive-technology schema verifiers;
+- formatting, JavaScript/TypeScript lint, and CSS lint;
+- typecheck, package coverage thresholds, and Chromium browser contracts;
+- regression fixture test/build verification;
+- package and external-consumer verification;
+- docs and playground production builds.
+
+The GitHub `ci-gate` is the required aggregate check. Missing, cancelled,
+failed, or unexpectedly skipped mandatory work must fail the gate.
+
+## Semantic token gate
+
+S3 token changes must pass:
+
+```bash
+npm run test:design-tokens
+npm run verify:design-tokens
+```
+
+The contract verifier checks category completeness, typed exports, theme
+coverage, density aliases, compatibility bridges, reduced motion, and
+deterministic layers. Component and grid adoption is enforced by `npm run verify:token-adoption`.
+VF-3011 and VF-3012 add the final evidence and closure checks:
+
+```bash
+npm run test:visual-regression
+npm run verify:visual-regression
+npm run test:visual
+npm run test:g3-closure
+npm run verify:g3-closure
+```
+
+The computed-style matrix is blocking and cross-platform. PNG screenshots and
+JSON observations are uploaded from successful browser runs as review evidence.
+G3 is complete only after the aggregate GitHub `ci-gate` passes for the closure
+PR; the metadata record alone does not declare a CI result.

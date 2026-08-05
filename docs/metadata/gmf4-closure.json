@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "gate": "GMF4",
+  "status": "evidence-complete",
+  "program": "VyrnForge non-grid multi-framework beta",
+  "sprint": "S7",
+  "requiredCiGate": "ci-gate",
+  "closureTask": {
+    "id": "CF-7014",
+    "title": "Run final multi-framework compatibility gate",
+    "storyPoints": 5,
+    "status": "done"
+  },
+  "sprintCompletion": {
+    "plannedStoryPoints": 84,
+    "completedStoryPoints": 84,
+    "status": "complete",
+    "nextSprint": "S8",
+    "unlocks": ["BT-8001"]
+  },
+  "tasks": [
+    {
+      "id": "CF-7001",
+      "status": "done"
+    },
+    {
+      "id": "CF-7002",
+      "status": "done"
+    },
+    {
+      "id": "CF-7003",
+      "status": "done"
+    },
+    {
+      "id": "CF-7004",
+      "status": "done"
+    },
+    {
+      "id": "CF-7005",
+      "status": "done"
+    },
+    {
+      "id": "CF-7006",
+      "status": "done"
+    },
+    {
+      "id": "CF-7007",
+      "status": "done"
+    },
+    {
+      "id": "CF-7008",
+      "status": "done"
+    },
+    {
+      "id": "CF-7009",
+      "status": "done"
+    },
+    {
+      "id": "CF-7010",
+      "status": "done"
+    },
+    {
+      "id": "CF-7011",
+      "status": "done"
+    },
+    {
+      "id": "CF-7012",
+      "status": "done"
+    },
+    {
+      "id": "CF-7013",
+      "status": "done"
+    },
+    {
+      "id": "CF-7014",
+      "status": "done"
+    }
+  ],
+  "supportModel": {
+    "supportedConsumers": ["native-html", "react", "angular", "vue"],
+    "firstClassRenderers": {
+      "react": "@vyrnforge/ui-components",
+      "nativeHtml": "@vyrnforge/ui-elements"
+    },
+    "verifiedConsumers": {
+      "angular": "@vyrnforge/ui-elements",
+      "vue": "@vyrnforge/ui-elements"
+    },
+    "adapterPolicy": "Angular Forms and Vue v-model integrations remain thin consuming-application reference adapters over shared native contracts."
+  },
+  "compatibility": {
+    "packedConsumers": ["native-html", "react", "angular", "vue"],
+    "frameworkIntegrations": [
+      "Angular reactive and template-driven Forms adapter",
+      "Vue modelValue/update:modelValue reference adapter"
+    ],
+    "browserMatrix": "automated-passed",
+    "accessibilityMatrix": "automated-and-manual-passed",
+    "assistiveTechnology": "Windows + Chrome + NVDA reviewed",
+    "serverAndBundlers": "verified",
+    "generatedContracts": "verified",
+    "migrationAndLimitationsGuide": "reviewed"
+  },
+  "releaseGroup": {
+    "includedPackages": [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-elements"
+    ],
+    "deferredPackages": [
+      {
+        "name": "@vyrnforge/ui-data-grid",
+        "status": "react-alpha-deferred",
+        "reason": "Data-grid multi-framework rendering remains outside the non-grid beta critical path."
+      }
+    ],
+    "excludedPlatforms": [
+      "react-native",
+      "flutter",
+      "native-android",
+      "native-ios",
+      "desktop-native"
+    ]
+  },
+  "dependencyPolicy": {
+    "angularRuntimeDependencyInPublishedPackages": false,
+    "vueRuntimeDependencyInPublishedPackages": false,
+    "applicationStateManagerDependencyInPublishedPackages": false,
+    "frameworkNeutralFoundations": [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors"
+    ]
+  },
+  "evidence": [
+    "docs/metadata/multi-framework.json",
+    "docs/metadata/consumer-foundations.json",
+    "docs/metadata/angular-consumer.json",
+    "docs/metadata/angular-forms-adapter.json",
+    "docs/metadata/vue-consumer.json",
+    "docs/metadata/vue-model-adapter.json",
+    "docs/metadata/ssr-bundler-compatibility.json",
+    "docs/metadata/cross-framework-browser-matrix.json",
+    "docs/metadata/component-reference-program.json",
+    "docs/metadata/cross-framework-accessibility-review.json",
+    "docs/metadata/multi-framework-migration-guide.json",
+    "docs/testing/consumer-foundation-contracts.md",
+    "docs/testing/angular-consumer-contract.md",
+    "docs/testing/angular-forms-adapter-contract.md",
+    "docs/testing/vue-consumer-contract.md",
+    "docs/testing/vue-model-adapter-contract.md",
+    "docs/testing/ssr-bundler-compatibility.md",
+    "docs/testing/cross-framework-browser-matrix.md",
+    "docs/testing/generated-component-reference.md",
+    "docs/testing/cross-framework-accessibility-review.md",
+    "docs/release/multi-framework-migration-and-limitations.md",
+    "docs/quality/assistive-technology-results/cf-7010-cross-framework-nvda.json",
+    "docs/quality/documentation-reviews/cf-7013-multi-framework-migration-guide.json",
+    "tests/consumers/manifest.json",
+    ".github/workflows/_consumer.yml"
+  ],
+  "requiredCommands": [
+    "npm run test:gmf4-closure",
+    "npm run verify:gmf4-closure",
+    "npm run verify:ci",
+    "npm run verify:metadata",
+    "npm run verify:consumer-foundations:runtime",
+    "npm run verify:cross-framework-accessibility:runtime",
+    "npm run test:browser",
+    "npm run quality"
+  ],
+  "unresolvedBlockers": [],
+  "acceptedLimitations": [
+    "React and native HTML are first-class renderers; Angular and Vue are verified consumers of the native renderer.",
+    "Angular Forms and Vue v-model bridges are reference adapters and are not separate published component libraries.",
+    "The React data grid remains explicitly deferred from the non-grid beta release group.",
+    "Non-web native platforms remain outside this beta support claim."
+  ],
+  "nextGate": {
+    "sprint": "S8",
+    "firstTask": "BT-8001",
+    "purpose": "non-grid beta readiness"
+  }
+}

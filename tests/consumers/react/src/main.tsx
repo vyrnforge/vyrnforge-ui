@@ -1,0 +1,133 @@
+import { StrictMode, useEffect, useMemo, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
+
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
+import "@vyrnforge/ui-elements/register";
+
+import type {
+  VyrnForgeActionDetail,
+  VyrnForgeElementForTagName,
+  VyrnForgeTabItem,
+} from "@vyrnforge/ui-elements";
+
+type ButtonElement = VyrnForgeElementForTagName<"vf-button">;
+type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
+type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
+
+import "./styles.css";
+
+function App() {
+  const actionRef = useRef<ButtonElement>(null);
+  const tabsRef = useRef<TabsElement>(null);
+  const ownerRef = useRef<TextInputElement>(null);
+  const [status, setStatus] = useState("Waiting");
+
+  const tabs = useMemo(
+    () =>
+      [
+        {
+          id: "summary",
+          label: "Summary",
+          content: "React property assignment",
+        },
+        {
+          id: "events",
+          label: "Events",
+          content: "Typed DOM event listener",
+        },
+      ] satisfies readonly VyrnForgeTabItem[],
+    [],
+  );
+
+  useEffect(() => {
+    const action = actionRef.current;
+    if (!action) return;
+
+    const handleAction = (event: CustomEvent<VyrnForgeActionDetail>) => {
+      setStatus(
+        `Action: ${event.detail.action ?? "react-save"} (${event.detail.reason})`,
+      );
+      document
+        .querySelector("[data-react-consumer]")
+        ?.setAttribute("data-consumer-action", "received");
+    };
+
+    action.addEventListener("vf-action", handleAction);
+    return () => action.removeEventListener("vf-action", handleAction);
+  }, []);
+
+  useEffect(() => {
+    const tabsElement = tabsRef.current;
+    const ownerElement = ownerRef.current;
+
+    if (!tabsElement || !ownerElement) {
+      throw new Error("React did not attach the Custom Element refs.");
+    }
+
+    // React 18 does not assign object-valued Custom Element properties from JSX.
+    tabsElement.items = tabs;
+
+    const assignedItems = tabsElement.items;
+    const itemsMatch =
+      assignedItems.length === tabs.length &&
+      assignedItems.every((item, index) => {
+        const expected = tabs[index];
+        return (
+          expected !== undefined &&
+          item.id === expected.id &&
+          item.label === expected.label &&
+          item.content === expected.content
+        );
+      });
+
+    if (!itemsMatch) {
+      throw new Error("React did not assign the tabs items property.");
+    }
+
+    if (tabsElement.hasAttribute("items")) {
+      throw new Error(
+        "React serialized the tabs items property into an attribute.",
+      );
+    }
+
+    if (ownerElement.value !== "Operations") {
+      throw new Error("React did not assign the text input value property.");
+    }
+
+    document
+      .querySelector("[data-react-consumer]")
+      ?.setAttribute("data-consumer-ready", "true");
+  }, [tabs]);
+
+  return (
+    <main className="vf-consumer-react" data-react-consumer>
+      <vf-inline-message title="React consumer ready" variant="success">
+        React is consuming packed VyrnForge Custom Elements directly.
+      </vf-inline-message>
+
+      <vf-button ref={actionRef} action="react-save" variant="primary">
+        Save from React
+      </vf-button>
+
+      <vf-tabs ref={tabsRef} aria-label="React consumer sections" />
+
+      <vf-text-input
+        ref={ownerRef}
+        label="Owner"
+        name="owner"
+        value="Operations"
+      />
+
+      <output aria-live="polite" data-consumer-status>
+        {status}
+      </output>
+    </main>
+  );
+}
+
+createRoot(document.getElementById("root") as HTMLElement).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);

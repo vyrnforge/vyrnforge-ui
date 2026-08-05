@@ -1,5 +1,11 @@
 import { useId } from "react";
-import { DismissableLayer, FocusScope, Portal, useScrollLock } from "../../internal/overlay";
+import { useDrawerBehavior } from "../../internal/behaviors";
+import {
+  DismissableLayer,
+  FocusScope,
+  Portal,
+  useScrollLock,
+} from "../../internal/overlay";
 import { joinClassNames } from "../../utils/classNames";
 import { CloseButton } from "../IconButton";
 import type { DrawerProps } from "./Drawer.types";
@@ -20,15 +26,20 @@ export function Drawer({
   portalContainer,
   side = "right",
   size = "md",
-  title
+  title,
 }: DrawerProps) {
+  const contentId = useId();
   const titleId = useId();
   const descriptionId = useId();
-  useScrollLock(open && modal);
+  const behavior = useDrawerBehavior({
+    contentId,
+    modal,
+    onOpenChange,
+    open,
+  });
+  useScrollLock(behavior.isOpen && modal);
 
-  if (!open) {
-    return null;
-  }
+  if (!behavior.isOpen) return null;
 
   return (
     <Portal container={portalContainer}>
@@ -38,7 +49,7 @@ export function Drawer({
             className="vf-drawer__layer"
             dismissOnEscape={closeOnEscape}
             dismissOnOutsidePointer={closeOnOverlayClick}
-            onDismiss={() => onOpenChange(false)}
+            onDismiss={behavior.dismiss}
           >
             <FocusScope
               autoFocus={modal}
@@ -57,15 +68,20 @@ export function Drawer({
                   "vf-drawer__panel",
                   `vf-drawer__panel--${side}`,
                   `vf-drawer__panel--${size}`,
-                  className
+                  className,
                 )}
                 data-vf-focus-fallback
+                id={contentId}
                 role="dialog"
                 tabIndex={-1}
               >
                 <div className="vf-drawer__header">
                   <div className="vf-drawer__heading">
-                    {title && <h2 className="vf-drawer__title" id={titleId}>{title}</h2>}
+                    {title && (
+                      <h2 className="vf-drawer__title" id={titleId}>
+                        {title}
+                      </h2>
+                    )}
                     {description && (
                       <p className="vf-drawer__description" id={descriptionId}>
                         {description}
@@ -75,7 +91,7 @@ export function Drawer({
                   <CloseButton
                     aria-label="Close drawer"
                     className="vf-overlay-close"
-                    onClick={() => onOpenChange(false)}
+                    onClick={() => behavior.dismiss("close-button")}
                   />
                 </div>
                 {children && <div className="vf-drawer__body">{children}</div>}

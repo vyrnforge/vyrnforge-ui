@@ -1,46 +1,126 @@
 # VyrnForge UI Master Roadmap
 
-## Execution principle
+## Current direction
 
-VyrnForge should not become only a data-grid project. The roadmap balances:
+S0 through S3 established controlled change, quality evidence, interaction
+hardening, and semantic token consistency. The next release program prioritizes
+a multi-framework **non-grid beta** instead of further data-grid expansion.
 
-1. foundation stabilization
-2. complete enterprise app components
-3. data-management workflows
-4. accessibility and performance hardening
-5. release maturity
+The data-grid package remains available as a React alpha but does not block the
+beta release group.
+
+## Release groups
+
+### Non-grid beta
+
+```text
+@vyrnforge/ui-core
+@vyrnforge/ui-behaviors
+@vyrnforge/ui-components
+@vyrnforge/ui-elements
+```
+
+### Deferred independent alpha
+
+```text
+@vyrnforge/ui-data-grid
+```
 
 ## Sprint plan
 
-| Sprint | Name | Goal |
-| --- | --- | --- |
-| S0 | Baseline Freeze | Validate repo, package names, build, tests, docs. |
-| S1 | Public Docs + Token Reference | Create stable token/API/reference docs for humans and AI. |
-| S2 | App Shell + Navigation | AppShell, Page, PageHeader, SideNav, TopNav, Breadcrumbs, Tabs. |
-| S3 | Form Completion | Radio, Switch, NumberInput, DateInput, DateTimeInput, MultiSelect. |
-| S4 | Feedback System | Toast, ProgressBar, ProgressCircle, InlineMessage polish. |
-| S5 | Data Display Primitives | DescriptionList, KeyValueList, PropertyTable, ResourceList, Timeline, ActivityLog. |
-| S6 | Overlay Robustness | Portal, focus return, simple focus trap, viewport placement, QA checklist. |
-| S7 | Data Grid Server Mode | Server query mode, lazy placeholders, loading/fetching, totalRows. |
-| S8 | Export Request + Preview Shell | Export request scope/format/preview, no file generation by default. |
-| S9 | Saved Views | Save/rename/delete/default views with adapter contracts. |
-| S10 | Advanced Filter Drawer | AND/OR, ranges, multi-condition filters. |
-| S11 | Accessibility + QA Hardening | Keyboard/screen reader/contrast/reduced motion QA. |
-| S12 | Performance + Optional Virtualization | Profiling, memoization, optional row windowing. |
-| S13 | Release Hardening | Changelog, migration, npm pack test, API docs, CI. |
-| S14 | Advanced Patterns Later | Command palette, wizard, audit trail, diff viewer, impact preview. |
+| Sprint | Name                                      | Goal                                                                                                                      | Gate          |
+| ------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| S0     | Baseline and Change Control               | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed   |
+| S1     | Quality Foundation                        | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
+| S2     | Interaction and Accessibility Evidence    | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
+| S3     | Semantic Tokens and Component Consistency | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
+| S4     | Multi-Framework Architecture              | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 - passed |
+| S5     | Framework-Neutral Behaviors               | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 - passed |
+| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 - passed |
+| S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4          |
+| S8     | Non-Grid Beta Release                     | Harden packages, canary in applications, publish beta artifacts, and complete exit review.                                | GBETA         |
 
-## Near-term priority
+## S4 architecture tasks
 
-Do S1-S6 before deep grid-only work if the goal is to prove VyrnForge as a full UI foundation.
+- MF-4001: multi-framework web support ADR
+- MF-4002: package topology and dependency rules
+- MF-4003: canonical component-contract schema
+- MF-4004: canonical event vocabulary
+- MF-4005: composition and slot vocabulary
+- MF-4006: Light DOM and styling policy
+- MF-4007: form-associated element contract
+- MF-4008: React, native HTML, Angular, and Vue fixture foundation
 
-## Data-grid continuation
+- MF-4009: create the `@vyrnforge/ui-behaviors` package foundation
+- MF-4010: create the `@vyrnforge/ui-elements` package foundation
+- MF-4011: add complete framework-parity catalog metadata
+- MF-4012: complete GMF1 architecture gate evidence
 
-After S6, continue:
+S4 establishes real package foundations but does not port public components or create a framework support claim.
 
-1. server mode
-2. export request preview
-3. saved views
-4. advanced filters
-5. accessibility hardening
-6. performance/virtualization
+## S5 behavior tasks
+
+### Foundation batch — implemented
+
+- MF-5001: controllable state primitives
+- MF-5002: collection and active-item primitives
+- MF-5003: single, multiple, toggle, and range selection models
+- MF-5004: canonical controller event model
+
+The foundation batch is framework- and DOM-neutral. It does not migrate React
+components or complete GMF2.
+
+### Remaining GMF2 work
+
+- MF-5005: simple action and toggle behaviors — implemented
+- MF-5006: simple form-control behaviors — implemented
+- MF-5007: Tabs and composite navigation behavior — implemented
+- MF-5008: Autocomplete behavior — implemented
+- MF-5009: MultiSelect behavior — implemented
+- MF-5010: Transfer List behavior — implemented
+- MF-5011: Menu and SideNav navigation behavior — implemented
+- MF-5012: overlay lifecycle and DOM-adapter boundary — implemented
+- MF-5013: Dialog, Drawer, Popover, and Tooltip controllers — implemented
+- MF-5014: Toast and ConfirmDialog behavior — implemented
+- MF-5015: complete React behavior adoption and compatibility audit - implemented
+- MF-5016: shared behavior parity gate - implemented
+
+## S6 native element tasks
+
+### Foundation batch - implemented
+
+- EL-6001: native registration and lifecycle foundation
+- EL-6002: base element and property reflection
+
+The first S6 batch establishes deterministic registration, reusable
+per-element registration functions, observed-attribute declarations,
+pre-definition property upgrade, primitive reflection, and microtask-batched
+updates. It does not yet register public component tags.
+
+### GMF3 work - implemented
+
+- EL-6003: typed event dispatch utilities — implemented
+- EL-6004: form-associated element base — implemented
+- EL-6005 through EL-6017: public non-grid native component ports — implemented
+- EL-6018: native non-grid parity gate — implemented
+
+S6 closes with 58 registered native tags and current direct, mapping,
+composition, or service strategies for all 67 public non-grid React records.
+S7 / GMF4 is the active cross-framework consumer-verification phase.
+
+## Deferred data-grid track
+
+The previously planned grid decomposition and scale work moves to a separate
+post-beta track. Replanning begins only after GBETA unless a production defect
+requires a targeted fix.
+
+Deferred work includes:
+
+- internal grid-controller decomposition;
+- query and persistence refactoring;
+- column, selection, grouping, keyboard, and visual-region decomposition;
+- scale benchmarks and virtualization decisions;
+- framework-neutral grid core and additional renderers.
+
+Grid defects, security corrections, and compatibility maintenance remain
+allowed. Feature expansion is not on the non-grid beta critical path.

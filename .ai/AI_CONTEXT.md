@@ -12,35 +12,61 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 ## Packages
 
-| Package | Owns |
-| --- | --- |
-| `@vyrnforge/ui-core` | tokens, themes, density, utilities |
-| `@vyrnforge/ui-components` | reusable native React components |
-| `@vyrnforge/ui-data-grid` | UniversalDataGrid and grid-specific behavior |
+| Package                    | Owns                                                                                                                                       | Status                                                                                                                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `@vyrnforge/ui-core`       | tokens, themes, density, typography, motion, layers, utilities                                                                             | current; non-grid beta                                                                                                                                                                     |
+| `@vyrnforge/ui-behaviors`  | framework-neutral state, collections, selection, navigation, overlay, feedback, subscriptions, and events                                  | GMF2 complete; non-grid beta                                                                                                                                                               |
+| `@vyrnforge/ui-components` | first-class React renderer                                                                                                                 | current; non-grid beta                                                                                                                                                                     |
+| `@vyrnforge/ui-elements`   | native registration, lifecycle, observed attributes, property reflection, update scheduling, events, Light DOM, forms, and editor metadata | GMF3 passed; packed native HTML and React foundation complete; CF-7003 Angular consumer and CF-7004 Angular Forms reference adapter verified; CF-7005 Vue packed consumer runtime-verified |
+| `@vyrnforge/ui-data-grid`  | UniversalDataGrid and grid-specific behavior                                                                                               | React alpha; deferred                                                                                                                                                                      |
+
+React and native HTML are first-class beta targets. Angular has verified packed
+consumer evidence through CF-7003 and a thin Forms reference adapter through
+CF-7004. CF-7005 verifies the isolated Vue packed consumer through strict template typing,
+production Vite output, canonical interaction, and Chromium evidence. CF-7006
+verifies the thin Vue `v-model` reference adapter and CF-7007 verifies server-safe
+imports and the supported bundler matrix. CF-7009, CF-7011, and CF-7012
+complete the shared browser matrix and generated component reference. The
+current coherent GMF4 batch is CF-7010 + CF-7013: cross-framework
+Axe/keyboard/NVDA review plus the canonical migration and limitations guide.
+Mobile-native rendering is outside this program.
 
 ## Canonical Docs
 
-| Topic | Source |
-| --- | --- |
-| Project identity | `docs/governance/01-project-source-of-truth.md` |
-| Package boundaries | `docs/architecture/01-package-boundaries.md` |
-| State and Redux policy | `docs/architecture/02-state-and-adapter-ownership.md` |
-| Styling and themes | `docs/architecture/03-theming-and-styling.md` |
-| CSS architecture | `docs/architecture/06-css-architecture.md` |
-| Clean code boundaries | `docs/architecture/04-clean-code-boundaries.md` |
-| Roadmap | `docs/roadmap/00-master-roadmap.md` |
-| Component inventory | `docs/roadmap/01-component-inventory.md` |
-| Public API usage | `docs/api/README.md` |
-| Benchmarks | `docs/benchmark/` |
-| AI-readable metadata | `docs/metadata/` and `.ai/COMPONENT_MAP.json` |
-| CI/CD architecture | `docs/engineering/ci-cd-architecture.md` |
-| Release responsibilities | `docs/release/release-responsibility-matrix.md` |
+| Topic                              | Source                                                         |
+| ---------------------------------- | -------------------------------------------------------------- |
+| Project identity                   | `docs/governance/01-project-source-of-truth.md`                |
+| Package boundaries                 | `docs/architecture/01-package-boundaries.md`                   |
+| Multi-framework support            | `docs/architecture/adr-004-multi-framework-web-support.md`     |
+| Component contracts and events     | `docs/architecture/09-component-contracts-and-events.md`       |
+| Native elements and forms          | `docs/architecture/10-custom-elements-and-form-association.md` |
+| Consumer foundation evidence       | `docs/metadata/consumer-foundations.json`                      |
+| Angular consumer evidence          | `docs/metadata/angular-consumer.json`                          |
+| Angular Forms adapter evidence     | `docs/metadata/angular-forms-adapter.json`                     |
+| Vue consumer evidence              | `docs/metadata/vue-consumer.json`                              |
+| Cross-framework accessibility      | `docs/metadata/cross-framework-accessibility-review.json`      |
+| Multi-framework migration guide    | `docs/release/multi-framework-migration-and-limitations.md`    |
+| Cross-framework browser matrix     | `docs/metadata/cross-framework-browser-matrix.json`            |
+| Generated component reference      | `docs/generated/component-reference.json`                      |
+| Component reference program        | `docs/metadata/component-reference-program.json`               |
+| State and Redux policy             | `docs/architecture/02-state-and-adapter-ownership.md`          |
+| Styling and themes                 | `docs/architecture/03-theming-and-styling.md`                  |
+| CSS architecture                   | `docs/architecture/06-css-architecture.md`                     |
+| Clean code boundaries              | `docs/architecture/04-clean-code-boundaries.md`                |
+| Roadmap                            | `docs/roadmap/00-master-roadmap.md`                            |
+| Component inventory                | `docs/roadmap/01-component-inventory.md`                       |
+| Public API usage                   | `docs/api/README.md`                                           |
+| Benchmarks                         | `docs/benchmark/`                                              |
+| AI-readable metadata               | `docs/metadata/` and `.ai/COMPONENT_MAP.json`                  |
+| CI/CD architecture                 | `docs/engineering/ci-cd-architecture.md`                       |
+| Release responsibilities           | `docs/release/release-responsibility-matrix.md`                |
+| Controlled implementation workflow | `docs/governance/controlled-implementation-rules.md`           |
 
 ## Hard Rules
 
 - Do not add Redux/Zustand/TanStack state inside VyrnForge packages.
 - Do not add MUI, AntD, Tailwind, Radix, Headless UI, styled-components, Emotion, or icon libraries by default.
-- Keep native React + TypeScript + CSS.
+- Keep React as the reference renderer and use browser-native Custom Elements for native HTML.
 - Keep static visual styling in CSS, not TSX.
 - Use `--vf-*` tokens for shared design.
 - Use `--udg-*` variables only for grid-specific styling.
@@ -57,14 +83,20 @@ VyrnForge UI is source-available under the VyrnForge Source License 1.0, not ope
 
 Allowed:
 
+- `ui-behaviors -> ui-core`
 - `ui-components -> ui-core`
+- `ui-components -> ui-behaviors` during controlled S5 migrations
+- `ui-elements -> ui-core`
+- `ui-elements -> ui-behaviors`
 - `ui-data-grid -> ui-core`
 - `ui-data-grid -> ui-components`
 
 Forbidden:
 
-- `ui-core -> ui-components`
-- `ui-components -> ui-data-grid`
+- `ui-core -> any VyrnForge package`
+- `ui-behaviors -> renderer packages or framework runtimes`
+- `ui-components <-> ui-elements`
+- shared non-grid packages -> `ui-data-grid`
 
 ## Required Validation
 
@@ -79,3 +111,14 @@ For documentation-only changes, run the relevant docs build and
 `git diff --check`. CI/CD changes must preserve the stable `ci-gate`, read-only
 normal CI, and separate Pages, npm OIDC, registry-verification, and
 release-record responsibilities.
+
+## GMF4 compatibility closure
+
+- GMF4 is evidence-complete through CF-7014.
+- Native HTML and React are first-class web renderers.
+- Angular and Vue are verified consumers of `@vyrnforge/ui-elements`.
+- The non-grid beta release group is `ui-core`, `ui-behaviors`,
+  `ui-components`, and `ui-elements`.
+- `@vyrnforge/ui-data-grid` remains React alpha and is deferred.
+- S7 is complete at 84/84 story points; S8 begins with BT-8001.
+- Canonical closure evidence: `docs/metadata/gmf4-closure.json`.

@@ -4,7 +4,14 @@ import { CodeBlock } from "./CodeBlock";
 import { RelatedComponents } from "./RelatedComponents";
 import { UsageGuidance } from "./UsageGuidance";
 
-export type DemoStatus = "stable" | "experimental" | "candidate" | "planned";
+export type DemoStatus =
+  | "stable"
+  | "beta-stable"
+  | "alpha-stable"
+  | "experimental"
+  | "candidate"
+  | "planned"
+  | "deprecated";
 
 export type DemoPageProps = {
   title: string;
@@ -20,11 +27,22 @@ export type DemoPageProps = {
 };
 
 const statusVariant = {
-  stable: "success",
+  stable: "warning",
+  "beta-stable": "success",
+  "alpha-stable": "warning",
   experimental: "info",
   candidate: "warning",
-  planned: "neutral"
+  planned: "neutral",
+  deprecated: "danger"
 } as const;
+
+function statusLabel(status: DemoStatus) {
+  if (status === "stable") {
+    return "Legacy stable — verification required";
+  }
+
+  return status;
+}
 
 export function DemoPage({
   title,
@@ -45,7 +63,7 @@ export function DemoPage({
         status={
           <div className="vf-playground-demo-page__badges">
             <Badge tone="subtle">{packageName}</Badge>
-            <Badge variant={statusVariant[status]}>{status}</Badge>
+            <Badge variant={statusVariant[status]}>{statusLabel(status)}</Badge>
           </div>
         }
         title={title}

@@ -1,0 +1,86 @@
+:where([data-vf-element]) {
+  box-sizing: border-box;
+  color: var(--vf-text-primary, currentColor);
+  font-family: var(--vf-font-family, system-ui, sans-serif);
+}
+
+:where(
+  vf-text,
+  vf-heading,
+  vf-caption,
+  vf-label,
+  vf-code-text,
+  vf-badge,
+  vf-button,
+  vf-icon-button,
+  vf-toolbar-button,
+  vf-toggle-button,
+  vf-text-input,
+  vf-textarea,
+  vf-search-input,
+  vf-number-input,
+  vf-date-input,
+  vf-datetime-input,
+  vf-checkbox,
+  vf-radio,
+  vf-switch,
+  vf-select,
+  vf-slider,
+  vf-rating,
+  vf-validation-message
+) {
+  display: inline-block;
+}
+
+:where(
+  vf-card,
+  vf-panel,
+  vf-stack,
+  vf-inline,
+  vf-page,
+  vf-section,
+  vf-empty-state,
+  vf-loading-state,
+  vf-error-state,
+  vf-button-group,
+  vf-radio-group,
+  vf-toggle-button-group,
+  vf-segmented-control,
+  vf-field,
+  vf-tabs,
+  vf-breadcrumbs,
+  vf-side-nav
+) {
+  display: block;
+}
+
+:where(vf-button, vf-icon-button, vf-toolbar-button, vf-toggle-button)
+  > button {
+  font: inherit;
+}
+
+:where(
+    vf-text-input,
+    vf-search-input,
+    vf-number-input,
+    vf-date-input,
+    vf-datetime-input
+  )
+  > input,
+vf-textarea > textarea,
+vf-select > select {
+  width: 100%;
+}
+
+vf-field
+  > :where(
+    vf-text-input,
+    vf-textarea,
+    vf-search-input,
+    vf-number-input,
+    vf-date-input,
+    vf-datetime-input,
+    vf-select
+  ) {
+  width: 100%;
+}

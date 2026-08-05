@@ -7,7 +7,9 @@ Describe the component, token, utility, hook, package, or data-grid change and t
 Select every directly or transitively affected package.
 
 - [ ] `@vyrnforge/ui-core`
+- [ ] `@vyrnforge/ui-behaviors`
 - [ ] `@vyrnforge/ui-components`
+- [ ] `@vyrnforge/ui-elements`
 - [ ] `@vyrnforge/ui-data-grid`
 - [ ] Docs or playground examples
 - [ ] Packed external consumer

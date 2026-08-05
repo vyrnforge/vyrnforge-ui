@@ -1,0 +1,43 @@
+vf-popover.vf-popover-root,
+vf-tooltip.vf-tooltip-root,
+vf-menu.vf-menu-root {
+  position: relative;
+  display: inline-flex;
+}
+vf-popover .vf-popover__trigger,
+vf-tooltip .vf-tooltip__trigger,
+vf-menu .vf-menu__trigger {
+  display: inline-flex;
+}
+vf-popover .vf-popover {
+  position: absolute;
+  z-index: var(--vf-layer-popover);
+  top: calc(100% + var(--vf-popover-offset, 6px));
+  left: 0;
+  min-width: 220px;
+  max-width: min(420px, calc(100vw - (var(--vf-space-4) * 2)));
+  border: 1px solid var(--vf-border-default);
+  border-radius: var(--vf-radius-lg);
+  padding: var(--vf-space-3);
+  color: var(--vf-text-primary);
+  background: var(--vf-surface-overlay);
+  box-shadow: var(--vf-shadow-md);
+}
+vf-popover .vf-popover--top,
+vf-popover .vf-popover--top-start,
+vf-popover .vf-popover--top-end {
+  top: auto;
+  bottom: calc(100% + var(--vf-popover-offset, 6px));
+}
+vf-popover .vf-popover--align-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+vf-popover .vf-popover--align-end {
+  right: 0;
+  left: auto;
+}
+
+vf-popover .vf-popover[hidden] {
+  display: none;
+}

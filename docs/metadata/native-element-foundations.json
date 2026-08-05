@@ -1,0 +1,304 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "sprint": "S6",
+    "batch": "EL-6018",
+    "status": "evidence-complete",
+    "gate": "GMF3",
+    "gateStatus": "passed"
+  },
+  "tasks": [
+    {
+      "id": "EL-6001",
+      "status": "done"
+    },
+    {
+      "id": "EL-6002",
+      "status": "done"
+    },
+    {
+      "id": "EL-6003",
+      "status": "done"
+    },
+    {
+      "id": "EL-6004",
+      "status": "done"
+    },
+    {
+      "id": "EL-6005",
+      "status": "done"
+    },
+    {
+      "id": "EL-6006",
+      "status": "done"
+    },
+    {
+      "id": "EL-6007",
+      "status": "done"
+    },
+    {
+      "id": "EL-6008",
+      "status": "done"
+    },
+    {
+      "id": "EL-6009",
+      "status": "done"
+    },
+    {
+      "id": "EL-6010",
+      "status": "done"
+    },
+    {
+      "id": "EL-6011",
+      "status": "done"
+    },
+    {
+      "id": "EL-6012",
+      "status": "done"
+    },
+    {
+      "id": "EL-6013",
+      "status": "done"
+    },
+    {
+      "id": "EL-6014",
+      "status": "done"
+    },
+    {
+      "id": "EL-6015",
+      "status": "done"
+    },
+    {
+      "id": "EL-6016",
+      "status": "done"
+    },
+    {
+      "id": "EL-6017",
+      "status": "done"
+    },
+    {
+      "id": "EL-6018",
+      "status": "done"
+    }
+  ],
+  "registration": {
+    "registerAll": "registerVyrnForgeElements",
+    "registerDefinitions": "registerVyrnForgeElementDefinitions",
+    "registerOne": "registerVyrnForgeElement",
+    "registrationFactory": "createVyrnForgeElementRegistration",
+    "definitionCatalog": "vyrnForgeElementDefinitions",
+    "tagPrefix": "vf-",
+    "duplicatePolicy": "idempotent-no-op",
+    "importSideEffectEntryPoint": "@vyrnforge/ui-elements/register"
+  },
+  "baseElement": {
+    "class": "VyrnForgeElement",
+    "domMode": "light-dom",
+    "lifecycle": [
+      "connectedCallback",
+      "disconnectedCallback",
+      "attributeChangedCallback"
+    ],
+    "attributeTypes": ["boolean", "number", "string"],
+    "propertyFeatures": [
+      "pre-definition-upgrade",
+      "primitive-attribute-parsing",
+      "optional-property-reflection",
+      "property-only-object-values"
+    ],
+    "updateFeatures": [
+      "microtask-batching",
+      "changed-property-map",
+      "disconnect-deferral",
+      "updateComplete"
+    ]
+  },
+  "sourceFiles": [
+    "packages/ui-elements/src/base/VyrnForgeElement.ts",
+    "packages/ui-elements/src/base/VyrnForgeElement.test.ts",
+    "packages/ui-elements/src/base/VyrnForgeFormAssociatedElement.ts",
+    "packages/ui-elements/src/base/VyrnForgeFormAssociatedElement.test.ts",
+    "packages/ui-elements/src/events.ts",
+    "packages/ui-elements/src/events.test.ts",
+    "packages/ui-elements/src/registry.ts",
+    "packages/ui-elements/src/registry.test.ts",
+    "packages/ui-elements/src/register.ts",
+    "packages/ui-elements/src/index.ts",
+    "packages/ui-elements/src/components/dom.ts",
+    "packages/ui-elements/src/components/display.ts",
+    "packages/ui-elements/src/components/actions.ts",
+    "packages/ui-elements/src/components/inputs.ts",
+    "packages/ui-elements/src/components/selection.ts",
+    "packages/ui-elements/src/components/values.ts",
+    "packages/ui-elements/src/components/field.ts",
+    "packages/ui-elements/src/components/navigation.ts",
+    "packages/ui-elements/src/components/index.ts",
+    "apps/regression-fixtures/src/nativeFormFoundation.ts",
+    "apps/regression-fixtures/src/nativeCoreElements.tsx",
+    "tests/browser/native-form-foundation.spec.ts",
+    "tests/browser/native-core-elements.spec.ts",
+    "tests/consumers/native-html/architecture-probe.ts",
+    "tests/consumers/native-html/fixture.json",
+    "packages/ui-elements/src/components/parity.ts",
+    "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
+    "apps/regression-fixtures/src/nativeParityElements.tsx",
+    "tests/browser/native-advanced-elements.spec.ts",
+    "tests/browser/native-parity.spec.ts",
+    "packages/ui-elements/src/styles/actions/icon.css",
+    "packages/ui-elements/src/styles/feedback/alert.css",
+    "packages/ui-elements/src/styles/feedback/skeleton.css",
+    "packages/ui-elements/src/styles/navigation/top-nav.css",
+    "packages/ui-elements/src/styles/overlays/dropdown.css",
+    "docs/testing/gmf3-native-parity-gate.md",
+    "scripts/verify-gmf3-closure.mjs",
+    "scripts/verify-gmf3-closure.test.mjs"
+  ],
+  "documents": [
+    "packages/ui-elements/README.md",
+    "docs/api/ui-elements-api.md",
+    "docs/packages/ui-elements.md",
+    "docs/architecture/10-custom-elements-and-form-association.md",
+    "docs/testing/native-element-foundation-contracts.md",
+    "docs/testing/native-core-element-contracts.md",
+    "docs/testing/native-advanced-element-contracts.md",
+    "docs/testing/gmf3-native-parity-gate.md"
+  ],
+  "constraints": {
+    "frameworkDependencies": [],
+    "domRuntimeAtImport": false,
+    "shadowDomDefault": false,
+    "objectAttributeSerialization": false,
+    "formRuntimeAtImport": false
+  },
+  "remainingGmf3Tasks": [],
+  "events": {
+    "file": "packages/ui-elements/src/events.ts",
+    "namePattern": "vf-*",
+    "assertion": "assertVyrnForgeEventName",
+    "create": "createVyrnForgeEvent",
+    "dispatch": "dispatchVyrnForgeEvent",
+    "dispatcherFactory": "createVyrnForgeEventDispatcher",
+    "canonicalDispatcher": "vyrnForgeEventDispatcher",
+    "defaults": {
+      "bubbles": true,
+      "composed": true,
+      "cancelable": false
+    },
+    "canonicalNames": [
+      "vf-value-change",
+      "vf-open-change",
+      "vf-selection-change",
+      "vf-checked-change",
+      "vf-pressed-change",
+      "vf-action",
+      "vf-dismiss",
+      "vf-invalid",
+      "vf-reset"
+    ]
+  },
+  "formAssociation": {
+    "class": "VyrnForgeFormAssociatedElement",
+    "implementation": "ElementInternals",
+    "formAssociated": true,
+    "modes": ["value", "submitter"],
+    "properties": [
+      "name",
+      "disabled",
+      "required",
+      "form",
+      "labels",
+      "validity",
+      "validationMessage",
+      "willValidate"
+    ],
+    "methods": ["checkValidity", "reportValidity", "setCustomValidity"],
+    "callbacks": [
+      "formAssociatedCallback",
+      "formDisabledCallback",
+      "formResetCallback",
+      "formStateRestoreCallback"
+    ],
+    "features": [
+      "form-value-and-state-forwarding",
+      "effective-disabled-state",
+      "validity-forwarding",
+      "initial-state-reset",
+      "browser-state-restoration",
+      "canonical-invalid-event",
+      "canonical-reset-event",
+      "unsupported-browser-fallback"
+    ],
+    "browserEvidence": "tests/browser/native-form-foundation.spec.ts"
+  },
+  "nativeCoreElements": {
+    "metadata": "docs/metadata/native-core-elements.json",
+    "catalog": "vyrnForgeElementDefinitions",
+    "registrationCount": 40,
+    "groups": {
+      "display-layout": [
+        "vf-text",
+        "vf-heading",
+        "vf-caption",
+        "vf-label",
+        "vf-code-text",
+        "vf-badge",
+        "vf-card",
+        "vf-panel",
+        "vf-stack",
+        "vf-inline",
+        "vf-page",
+        "vf-section",
+        "vf-empty-state",
+        "vf-loading-state",
+        "vf-error-state"
+      ],
+      "actions": [
+        "vf-button",
+        "vf-icon-button",
+        "vf-button-group",
+        "vf-toolbar-button"
+      ],
+      "text-inputs": [
+        "vf-text-input",
+        "vf-textarea",
+        "vf-search-input",
+        "vf-number-input",
+        "vf-date-input",
+        "vf-datetime-input"
+      ],
+      "selection": [
+        "vf-checkbox",
+        "vf-radio",
+        "vf-radio-group",
+        "vf-switch",
+        "vf-select"
+      ],
+      "values": [
+        "vf-slider",
+        "vf-rating",
+        "vf-toggle-button",
+        "vf-toggle-button-group",
+        "vf-segmented-control"
+      ],
+      "field-validation": ["vf-field", "vf-validation-message"],
+      "navigation": ["vf-tabs", "vf-breadcrumbs", "vf-side-nav"]
+    },
+    "browserEvidence": "tests/browser/native-core-elements.spec.ts",
+    "fixture": "apps/regression-fixtures/src/nativeCoreElements.tsx",
+    "styleEntry": "@vyrnforge/ui-elements/styles/index.css",
+    "domMode": "light-dom"
+  },
+  "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
+  "nativeParityClosure": {
+    "metadata": "docs/metadata/gmf3-closure.json",
+    "registeredPublicTags": 58,
+    "browserEvidence": "tests/browser/native-parity.spec.ts",
+    "fixture": "apps/regression-fixtures/src/nativeParityElements.tsx",
+    "gateStatus": "passed",
+    "publicReactRecords": 67,
+    "directElements": 57,
+    "rendererMappings": 8,
+    "rendererCompositions": 1,
+    "rendererServices": 1
+  }
+}
