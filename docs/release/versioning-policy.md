@@ -14,15 +14,18 @@ and must select one of those release groups explicitly.
 
 ### `non-grid-beta`
 
+`0.2.0-beta.1` was used as a manual package-registration bootstrap release.
+The first controlled trusted-publishing candidate is `0.2.0-beta.2`.
+
 The first multi-framework non-grid beta is synchronized at
-`0.2.0-beta.1` with the `beta` dist-tag:
+`0.2.0-beta.2` with the `beta` dist-tag:
 
 1. `@vyrnforge/ui-core`
 2. `@vyrnforge/ui-behaviors`
 3. `@vyrnforge/ui-components`
 4. `@vyrnforge/ui-elements`
 
-All four packages publish together and use exact internal `0.2.0-beta.1`
+All four packages publish together and use exact internal `0.2.0-beta.2`
 dependencies. The synchronized version does not promote component maturity by
 itself; component maturity remains owned by the component metadata and evidence
 policy.
@@ -35,8 +38,8 @@ line. Its next source version is `0.1.0-alpha.2` with the `alpha` dist-tag.
 The grid package is not part of `non-grid-beta`. Its package dependencies point
 to the exact non-grid foundation versions it consumes:
 
-- `@vyrnforge/ui-core@0.2.0-beta.1`
-- `@vyrnforge/ui-components@0.2.0-beta.1`
+- `@vyrnforge/ui-core@0.2.0-beta.2`
+- `@vyrnforge/ui-components@0.2.0-beta.2`
 
 A grid-alpha publication is a separate release action and cannot change the
 `beta` dist-tag of any non-grid package.

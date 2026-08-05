@@ -11,7 +11,7 @@ const repositoryRoot = path.resolve(
 const expectedGroups = {
   "non-grid-beta": {
     channel: "beta",
-    version: "0.2.0-beta.1",
+    version: "0.2.0-beta.2",
     distTag: "beta",
     packages: [
       "@vyrnforge/ui-core",
@@ -276,7 +276,7 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
 
   const versioningPolicy = read(root, "docs/release/versioning-policy.md");
   for (const marker of [
-    "0.2.0-beta.1",
+    "0.2.0-beta.2",
     "0.1.0-alpha.2",
     "non-grid-beta",
     "data-grid-alpha",
@@ -301,6 +301,6 @@ export function assertReleaseGroups(options) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   assertReleaseGroups();
   console.log(
-    "BT-8002 passed: four packages are synchronized at 0.2.0-beta.1, ui-data-grid remains 0.1.0-alpha.2, and release tooling requires an explicit group.",
+    "BT-8002 passed: four packages are synchronized at 0.2.0-beta.2, ui-data-grid remains 0.1.0-alpha.2, and release tooling requires an explicit group.",
   );
 }

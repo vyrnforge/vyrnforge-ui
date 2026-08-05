@@ -284,9 +284,13 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     root,
     "packages/ui-components/package.json",
   );
+  const releaseGroups = readJson(root, "docs/metadata/release-groups.json");
+  const expectedBehaviorVersion =
+    releaseGroups?.groups?.["non-grid-beta"]?.version;
   if (
+    typeof expectedBehaviorVersion !== "string" ||
     componentPackage?.dependencies?.["@vyrnforge/ui-behaviors"] !==
-    "0.2.0-beta.1"
+      expectedBehaviorVersion
   ) {
     failures.push(
       "ui-components must declare the pinned ui-behaviors runtime dependency",

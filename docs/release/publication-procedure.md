@@ -12,8 +12,10 @@ Do not include real npm tokens in repository files, workflows, docs, or examples
 - `@vyrnforge/ui-core@0.1.0-alpha.0` is the historical first public prerelease.
 - `0.1.0-alpha.1` is the initial coordinated alpha, manually published for the
   original `ui-core`, `ui-components`, and `ui-data-grid` package set.
-- BT-8002 defines `non-grid-beta` at `0.2.0-beta.1` and `data-grid-alpha` at
-  `0.1.0-alpha.2` in `docs/metadata/release-groups.json`.
+- `0.2.0-beta.1` was manually published as a package-registration bootstrap
+  for the synchronized non-grid package set.
+- The next controlled trusted-publishing candidate is `non-grid-beta` at
+  `0.2.0-beta.2`; `data-grid-alpha` remains `0.1.0-alpha.2`.
 - Use the `beta` dist-tag only for `non-grid-beta` and the `alpha` dist-tag only
   for `data-grid-alpha`. Registry-managed `latest` is not a stable-release
   signal during prerelease.

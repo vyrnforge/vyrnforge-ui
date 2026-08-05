@@ -21,7 +21,7 @@
       "status": "done"
     },
     "status": "scope-frozen",
-    "targetVersion": "0.2.0-beta.1",
+    "targetVersion": "0.2.0-beta.2",
     "unlocks": ["BT-8002"],
     "scopeOnly": true,
     "releaseStatus": "not-release-ready"

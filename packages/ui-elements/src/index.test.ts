@@ -34,7 +34,7 @@ class ProbeElement extends VyrnForgeElement {
 
 describe("ui-elements foundation", () => {
   it("exposes the coordinated package version", () => {
-    expect(vyrnForgeUiElementsVersion).toBe("0.2.0-beta.1");
+    expect(vyrnForgeUiElementsVersion).toBe("0.2.0-beta.2");
   });
 
   it("registers tags idempotently", () => {
