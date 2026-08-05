@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+﻿import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -606,6 +606,35 @@ for (const marker of [
 }
 assertNoLongLivedToken(release, "release.yml");
 
+const releaseFinalizer = read(".github/workflows/finalize-release.yml");
+for (const marker of [
+  "workflow_dispatch:",
+  "source-commit:",
+  "name: verify-registry-release",
+  "scripts/verify-registry-release.mjs",
+  "name: create-release-record",
+  "scripts/create-release-notes.mjs",
+  'gh release create "$TAG"',
+]) {
+  assert(
+    releaseFinalizer.includes(marker),
+    `finalize-release.yml must include ${marker}`,
+  );
+}
+assert(
+  !/^\s*(push|pull_request|schedule):/m.test(releaseFinalizer),
+  "finalize-release.yml must only run through manual dispatch",
+);
+assert(
+  !releaseFinalizer.includes("npm publish"),
+  "finalize-release.yml must never republish npm packages",
+);
+assert(
+  !releaseFinalizer.includes("id-token: write"),
+  "finalize-release.yml must not request npm OIDC",
+);
+assertNoLongLivedToken(releaseFinalizer, "finalize-release.yml");
+assertPinnedExternalActions(releaseFinalizer, "finalize-release.yml");
 const nightly = read(".github/workflows/nightly.yml");
 assert(nightly.includes("schedule:"), "nightly.yml must define a schedule");
 assert(

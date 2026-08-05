@@ -1,0 +1,189 @@
+﻿name: Finalize npm Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-group:
+        description: Already-published release group
+        required: true
+        default: non-grid-beta
+        type: choice
+        options:
+          - non-grid-beta
+          - data-grid-alpha
+      version:
+        description: Exact version already published to npm
+        required: true
+        type: string
+      dist-tag:
+        description: Existing npm dist-tag
+        required: true
+        default: beta
+        type: choice
+        options:
+          - beta
+          - alpha
+      source-commit:
+        description: Commit used by the original npm publication run
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vyrnforge-npm-release-finalize
+  cancel-in-progress: false
+
+jobs:
+  verify-registry-release:
+    name: verify-registry-release
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    env:
+      RELEASE_GROUP: ${{ inputs.release-group }}
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_TAG: ${{ inputs.dist-tag }}
+      RELEASE_COMMIT: ${{ inputs.source-commit }}
+
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Confirm current main
+        shell: bash
+        run: |
+          git fetch origin main --depth=1
+          test "$GITHUB_SHA" = "$(git rev-parse origin/main)"
+
+      - name: Validate original publication commit
+        shell: bash
+        run: |
+          test "${#RELEASE_COMMIT}" -eq 40
+          git fetch origin main --tags --force
+          git cat-file -e "${RELEASE_COMMIT}^{commit}"
+          git merge-base --is-ancestor "$RELEASE_COMMIT" origin/main
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Use supported npm CLI
+        shell: bash
+        run: |
+          npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+          node -e 'const actual = require("child_process").execFileSync("npm", ["--version"], { encoding: "utf8" }).trim(); const expected = require("./package.json").packageManager.split("@").pop(); if (actual !== expected) process.exit(1)'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify published registry release
+        run: node scripts/verify-registry-release.mjs --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+
+      - name: Write verification summary
+        shell: bash
+        run: |
+          {
+            echo "## Published npm release verification"
+            echo
+            echo "- Release group: \`$RELEASE_GROUP\`"
+            echo "- Version: \`$RELEASE_VERSION\`"
+            echo "- Dist-tag: \`$RELEASE_TAG\`"
+            echo "- Publication commit: \`$RELEASE_COMMIT\`"
+            echo "- Registry signatures, provenance, package metadata, and fresh consumer verified"
+            echo "- No npm publication was performed by this workflow"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  create-release-record:
+    name: create-release-record
+    needs: verify-registry-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      RELEASE_GROUP: ${{ inputs.release-group }}
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_TAG: ${{ inputs.dist-tag }}
+      RELEASE_COMMIT: ${{ inputs.source-commit }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: Validate original publication commit
+        shell: bash
+        run: |
+          test "${#RELEASE_COMMIT}" -eq 40
+          git fetch origin main --tags --force
+          git cat-file -e "${RELEASE_COMMIT}^{commit}"
+          git merge-base --is-ancestor "$RELEASE_COMMIT" origin/main
+
+      - name: Confirm release record does not exist
+        shell: bash
+        run: |
+          TAG="v$RELEASE_VERSION"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Git tag already exists: $TAG"
+            exit 1
+          fi
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "GitHub Release already exists: $TAG"
+            exit 1
+          fi
+
+      - name: Generate release notes
+        run: node scripts/create-release-notes.mjs --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --commit "$RELEASE_COMMIT" --output release-notes.md
+
+      - name: Create tag and GitHub prerelease
+        shell: bash
+        run: |
+          TAG="v$RELEASE_VERSION"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag -a "$TAG" "$RELEASE_COMMIT" \
+            -m "VyrnForge UI $RELEASE_GROUP $RELEASE_VERSION"
+
+          git push origin "$TAG"
+
+          if ! gh release create "$TAG" \
+            --target "$RELEASE_COMMIT" \
+            --title "VyrnForge UI $RELEASE_GROUP $RELEASE_VERSION" \
+            --prerelease \
+            --notes-file release-notes.md; then
+            git push origin ":refs/tags/$TAG" || true
+            exit 1
+          fi
+
+      - name: Write release summary
+        shell: bash
+        run: |
+          {
+            echo "## GitHub release finalized"
+            echo
+            echo "- Tag: \`v$RELEASE_VERSION\`"
+            echo "- Publication commit: \`$RELEASE_COMMIT\`"
+            echo "- GitHub Release: created as prerelease"
+            echo "- npm was not republished"
+          } >> "$GITHUB_STEP_SUMMARY"
