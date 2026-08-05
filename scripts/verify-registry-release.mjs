@@ -122,7 +122,13 @@ const columns = [
   { id: "name", header: "Name", accessorKey: "name" },
 ];
 
-createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Registry consumer root element is missing.");
+}
+
+createRoot(rootElement).render(
   <UniversalDataGrid
     tableId="registry-grid"
     rows={rows}
@@ -149,11 +155,17 @@ const event = createBehaviorEvent(
   "programmatic",
 );
 
-createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Registry consumer root element is missing.");
+}
+
+createRoot(rootElement).render(
   <Card data-reason={event.reason}>
     <Stack gap="sm">
       <Button>Registry verification</Button>
-      <vf-button>Native verification</vf-button>
+      {React.createElement("vf-button", null, "Native verification")}
     </Stack>
   </Card>,
 );
