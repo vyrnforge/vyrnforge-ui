@@ -21,7 +21,7 @@ import {
 
 describe("ui-behaviors public surface", () => {
   it("exposes the coordinated package version", () => {
-    expect(vyrnForgeUiBehaviorsVersion).toBe("0.2.0-beta.1");
+    expect(vyrnForgeUiBehaviorsVersion).toBe("0.2.0-beta.2");
   });
 
   it("exports the behavior foundations through the package entry point", () => {

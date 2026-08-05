@@ -87,6 +87,8 @@ function excludedComponent(component, reason) {
 export function buildBetaScope({ root = repositoryRoot } = {}) {
   const catalog = readJson(root, "docs/metadata/components.json");
   const packages = readJson(root, "docs/metadata/packages.json");
+
+  const releaseGroups = readJson(root, "docs/metadata/release-groups.json");
   const gmf4 = readJson(root, "docs/metadata/gmf4-closure.json");
   const customElements = readJson(
     root,
@@ -153,7 +155,7 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
         status: "done",
       },
       status: "scope-frozen",
-      targetVersion: "0.2.0-beta.1",
+      targetVersion: releaseGroups.groups["non-grid-beta"].version,
       unlocks: ["BT-8002"],
       scopeOnly: true,
       releaseStatus: "not-release-ready",

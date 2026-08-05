@@ -16,8 +16,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vyrnforge/ui-components": "0.2.0-beta.1",
-    "@vyrnforge/ui-core": "0.2.0-beta.1",
+    "@vyrnforge/ui-components": "0.2.0-beta.2",
+    "@vyrnforge/ui-core": "0.2.0-beta.2",
     "@vyrnforge/ui-data-grid": "0.1.0-alpha.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

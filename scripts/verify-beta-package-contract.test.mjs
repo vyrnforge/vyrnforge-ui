@@ -61,7 +61,7 @@ test("rejects beta package version drift", () =>
   fixture(
     (root) => {
       mutateJson(root, "packages/ui-elements/package.json", (value) => {
-        value.version = "0.2.0-beta.2";
+        value.version = "0.2.0-beta.3";
       });
     },
     (failures) =>

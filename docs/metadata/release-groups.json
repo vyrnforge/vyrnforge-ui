@@ -14,7 +14,7 @@
   "groups": {
     "non-grid-beta": {
       "channel": "beta",
-      "version": "0.2.0-beta.1",
+      "version": "0.2.0-beta.2",
       "distTag": "beta",
       "synchronized": true,
       "publishTogether": true,
@@ -30,7 +30,7 @@
           "directory": "packages/ui-behaviors",
           "hasCss": false,
           "dependencies": {
-            "@vyrnforge/ui-core": "0.2.0-beta.1"
+            "@vyrnforge/ui-core": "0.2.0-beta.2"
           }
         },
         {
@@ -38,8 +38,8 @@
           "directory": "packages/ui-components",
           "hasCss": true,
           "dependencies": {
-            "@vyrnforge/ui-core": "0.2.0-beta.1",
-            "@vyrnforge/ui-behaviors": "0.2.0-beta.1"
+            "@vyrnforge/ui-core": "0.2.0-beta.2",
+            "@vyrnforge/ui-behaviors": "0.2.0-beta.2"
           }
         },
         {
@@ -47,8 +47,8 @@
           "directory": "packages/ui-elements",
           "hasCss": true,
           "dependencies": {
-            "@vyrnforge/ui-core": "0.2.0-beta.1",
-            "@vyrnforge/ui-behaviors": "0.2.0-beta.1"
+            "@vyrnforge/ui-core": "0.2.0-beta.2",
+            "@vyrnforge/ui-behaviors": "0.2.0-beta.2"
           }
         }
       ]
@@ -65,8 +65,8 @@
           "directory": "packages/ui-data-grid",
           "hasCss": true,
           "dependencies": {
-            "@vyrnforge/ui-core": "0.2.0-beta.1",
-            "@vyrnforge/ui-components": "0.2.0-beta.1"
+            "@vyrnforge/ui-core": "0.2.0-beta.2",
+            "@vyrnforge/ui-components": "0.2.0-beta.2"
           }
         }
       ]
