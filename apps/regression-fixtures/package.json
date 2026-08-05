@@ -13,7 +13,8 @@
     "lint": "eslint . --config ../../eslint.config.mjs",
     "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors && npm run build --workspace @vyrnforge/ui-components && npm run build --workspace @vyrnforge/ui-elements && npm run build --workspace @vyrnforge/ui-data-grid"
   },
   "dependencies": {
     "@vyrnforge/ui-components": "0.2.0-beta.2",
