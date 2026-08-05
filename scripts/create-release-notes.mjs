@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import {
   getReleaseGroup,
   getReleasePackageMap,
@@ -61,6 +61,22 @@ const dependencySection = externalDependencies.length
   ? `\n## Required VyrnForge dependencies\n\n${[...new Set(externalDependencies)].join("\n")}\n`
   : "";
 
+const waiverManifest = JSON.parse(
+  readFileSync(
+    "docs/metadata/assistive-technology-release-waivers.json",
+    "utf8",
+  ),
+);
+const activeWaiver = (waiverManifest.waivers ?? []).find(
+  (waiver) =>
+    waiver.status === "active" &&
+    waiver.releaseGroup === releaseGroupId &&
+    waiver.version === version,
+);
+const accessibilityExceptionSection = activeWaiver
+  ? `\n## Accessibility release exception\n\nManual Windows/NVDA review for ${activeWaiver.scenarioIds.join(", ")} is deferred under \`${activeWaiver.id}\`. No manual screen-reader pass or accessibility-complete status is claimed. The exception is tracked at ${activeWaiver.trackingIssue}, expires on \`${activeWaiver.expiresAt}\`, and blocks stable promotion.\n`
+  : "";
+
 const notes = `# VyrnForge UI ${version}
 
 VyrnForge UI ${version} is the **${releaseGroupId}** ${distTag} prerelease. It is not a stable or production-readiness claim.
@@ -82,7 +98,7 @@ Import package CSS in dependency order:
 \`\`\`ts
 ${cssImports}
 \`\`\`
-
+${accessibilityExceptionSection}
 ## Release evidence
 
 - Release group: \`${releaseGroupId}\`

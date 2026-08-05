@@ -51,9 +51,29 @@ export function verifyAssistiveTechnologyEvidence(
     fixtureInventory = new Map(),
     root = repositoryRoot,
     requireComplete = false,
+    requiredScenarioIds = null,
+    waivedScenarioIds = new Set(),
   } = {},
 ) {
   const failures = [];
+  const requiredScenarioIdSet =
+    requiredScenarioIds instanceof Set
+      ? requiredScenarioIds
+      : new Set((evidence?.scenarios ?? []).map((scenario) => scenario.id));
+  const waivedScenarioIdSet =
+    waivedScenarioIds instanceof Set
+      ? waivedScenarioIds
+      : new Set(waivedScenarioIds ?? []);
+  const strictScenarioIds = new Set(
+    [...requiredScenarioIdSet].filter(
+      (scenarioId) => !waivedScenarioIdSet.has(scenarioId),
+    ),
+  );
+  const strictEnvironmentIds = new Set(
+    (evidence?.scenarios ?? [])
+      .filter((scenario) => strictScenarioIds.has(scenario?.id))
+      .flatMap((scenario) => scenario.environmentIds ?? []),
+  );
 
   if (
     evidence?.schemaVersion !== 1 ||
@@ -145,7 +165,11 @@ export function verifyAssistiveTechnologyEvidence(
       );
     }
 
-    if (requireComplete && environment.status !== "complete") {
+    if (
+      requireComplete &&
+      strictEnvironmentIds.has(environmentId) &&
+      environment.status !== "complete"
+    ) {
       addFailure(
         failures,
         environmentId,
@@ -318,14 +342,18 @@ export function verifyAssistiveTechnologyEvidence(
       );
     }
 
-    if (requireComplete && scenario.status !== "complete") {
+    if (
+      requireComplete &&
+      strictScenarioIds.has(scope) &&
+      scenario.status !== "complete"
+    ) {
       addFailure(
         failures,
         scope,
         "release verification requires a complete scenario",
       );
     }
-    if (requireComplete) {
+    if (requireComplete && strictScenarioIds.has(scope)) {
       for (const result of scenario.results ?? []) {
         if (result?.outcome !== "passed") {
           addFailure(
@@ -344,28 +372,216 @@ export function verifyAssistiveTechnologyEvidence(
 export function verifyRepositoryAssistiveTechnologyEvidence({
   root = repositoryRoot,
   requireComplete = false,
+  releaseGroup,
+  version,
+  allowWaiver = false,
 } = {}) {
+  const failures = [];
   const componentCatalog = readJson(root, "docs/metadata/components.json");
-  return verifyAssistiveTechnologyEvidence(
-    readJson(root, "docs/metadata/assistive-technology-reviews.json"),
-    {
+  const evidence = readJson(
+    root,
+    "docs/metadata/assistive-technology-reviews.json",
+  );
+  const allScenarioIds = new Set(
+    evidence.scenarios.map((scenario) => scenario.id),
+  );
+  let requiredScenarioIds = allScenarioIds;
+  const waivedScenarioIds = new Set();
+
+  if ((releaseGroup && !version) || (!releaseGroup && version)) {
+    failures.push(
+      "release-group and version must be supplied together for assistive-technology release verification",
+    );
+  }
+
+  if (releaseGroup) {
+    if (
+      releaseGroup !== "non-grid-beta" &&
+      releaseGroup !== "data-grid-alpha"
+    ) {
+      failures.push(
+        `unsupported assistive-technology release group: ${releaseGroup}`,
+      );
+    } else {
+      const nonGridScope = readJson(
+        root,
+        "docs/metadata/non-grid-beta-scope.json",
+      );
+      const nonGridComponentIds = new Set(
+        nonGridScope.components.map((component) => component.id),
+      );
+
+      requiredScenarioIds = new Set(
+        evidence.scenarios
+          .filter((scenario) =>
+            releaseGroup === "non-grid-beta"
+              ? scenario.componentIds.every((componentId) =>
+                  nonGridComponentIds.has(componentId),
+                )
+              : scenario.componentIds.some(
+                  (componentId) => !nonGridComponentIds.has(componentId),
+                ),
+          )
+          .map((scenario) => scenario.id),
+      );
+    }
+  }
+
+  if (allowWaiver) {
+    if (!releaseGroup || !version) {
+      failures.push(
+        "an assistive-technology waiver requires release-group and version",
+      );
+    } else {
+      const waiverManifest = readJson(
+        root,
+        "docs/metadata/assistive-technology-release-waivers.json",
+      );
+
+      if (
+        waiverManifest.schemaVersion !== 1 ||
+        waiverManifest.sourceOfTruth?.canonical !== true
+      ) {
+        failures.push(
+          "assistive-technology waiver metadata must use canonical schema version 1",
+        );
+      }
+
+      const matches = (waiverManifest.waivers ?? []).filter(
+        (waiver) =>
+          waiver.status === "active" &&
+          waiver.releaseGroup === releaseGroup &&
+          waiver.version === version,
+      );
+
+      if (matches.length !== 1) {
+        failures.push(
+          `expected exactly one active assistive-technology waiver for ${releaseGroup}@${version}`,
+        );
+      } else {
+        const waiver = matches[0];
+        const expectedScenarioIds = [...requiredScenarioIds].sort();
+        const actualScenarioIds = [...(waiver.scenarioIds ?? [])].sort();
+        const expiration = Date.parse(`${waiver.expiresAt ?? ""}T23:59:59Z`);
+
+        if (!/^AT-WAIVER-\d{3}$/.test(waiver.id ?? "")) {
+          failures.push("assistive-technology waiver id is invalid");
+        }
+
+        if (
+          actualScenarioIds.length !== expectedScenarioIds.length ||
+          !expectedScenarioIds.every(
+            (scenarioId, index) => actualScenarioIds[index] === scenarioId,
+          )
+        ) {
+          failures.push(
+            "assistive-technology waiver scope must exactly match the selected release scenarios",
+          );
+        }
+
+        if (
+          typeof waiver.owner !== "string" ||
+          waiver.owner.trim().length === 0 ||
+          typeof waiver.reason !== "string" ||
+          waiver.reason.trim().length === 0
+        ) {
+          failures.push(
+            "assistive-technology waiver requires an owner and reason",
+          );
+        }
+
+        if (
+          !/^https:\/\/github\.com\/vyrnforge\/vyrnforge-ui\/issues\/\d+$/.test(
+            waiver.trackingIssue ?? "",
+          )
+        ) {
+          failures.push(
+            "assistive-technology waiver requires a VyrnForge tracking issue",
+          );
+        }
+
+        if (Number.isNaN(expiration) || expiration < Date.now()) {
+          failures.push(
+            "assistive-technology waiver is expired or has an invalid expiry date",
+          );
+        }
+
+        if (
+          waiver.blocksStablePromotion !== true ||
+          waiver.requiresReviewBeforeAccessibilityCompleteClaim !== true
+        ) {
+          failures.push(
+            "assistive-technology waiver must block stable promotion and accessibility-complete claims",
+          );
+        }
+
+        if (
+          !Array.isArray(waiver.knownCriticalAccessibilityFindings) ||
+          waiver.knownCriticalAccessibilityFindings.length !== 0
+        ) {
+          failures.push(
+            "assistive-technology waiver cannot cover known critical accessibility findings",
+          );
+        }
+
+        for (const scenarioId of waiver.scenarioIds ?? []) {
+          const scenario = evidence.scenarios.find(
+            (candidate) => candidate.id === scenarioId,
+          );
+
+          if (
+            scenario?.status !== "pending" ||
+            !Array.isArray(scenario.results) ||
+            scenario.results.length !== 0
+          ) {
+            failures.push(
+              `${scenarioId}: waived scenario must remain pending with no fabricated results`,
+            );
+          }
+        }
+
+        if (failures.length === 0) {
+          for (const scenarioId of waiver.scenarioIds) {
+            waivedScenarioIds.add(scenarioId);
+          }
+        }
+      }
+    }
+  }
+
+  failures.push(
+    ...verifyAssistiveTechnologyEvidence(evidence, {
       componentIds: new Set(
         componentCatalog.components.map((component) => component.id),
       ),
       fixtureInventory: readFixtureInventory(root),
       requireComplete,
+      requiredScenarioIds,
+      waivedScenarioIds,
       root,
-    },
+    }),
   );
+
+  return failures.sort();
 }
 
 if (
   process.argv[1] &&
   path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
+  const readArgument = (name) => {
+    const index = process.argv.indexOf(name);
+    return index === -1 ? undefined : process.argv[index + 1];
+  };
   const requireComplete = process.argv.includes("--require-complete");
+  const allowWaiver = process.argv.includes("--allow-waiver");
+  const releaseGroup = readArgument("--release-group");
+  const version = readArgument("--version");
   const failures = verifyRepositoryAssistiveTechnologyEvidence({
+    allowWaiver,
+    releaseGroup,
     requireComplete,
+    version,
   });
 
   if (failures.length > 0) {
@@ -374,9 +590,15 @@ if (
     );
   }
 
-  console.log(
-    requireComplete
-      ? "Assistive-technology release evidence is complete."
-      : "Assistive-technology evidence schema, fixtures, components, and pending-state honesty are consistent.",
-  );
+  if (requireComplete && allowWaiver) {
+    console.log(
+      `Assistive-technology release verification passed for ${releaseGroup}@${version} using a valid time-limited waiver. Manual screen-reader completion is not claimed.`,
+    );
+  } else {
+    console.log(
+      requireComplete
+        ? "Assistive-technology release evidence is complete."
+        : "Assistive-technology evidence schema, fixtures, components, and pending-state honesty are consistent.",
+    );
+  }
 }
