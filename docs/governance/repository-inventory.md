@@ -11,7 +11,7 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
-| Documentation | 126 active Markdown files; 23 archived Markdown files |
+| Documentation | 128 active Markdown files; 23 archived Markdown files |
 | Scripts | 131 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 11 workflow files, including 7 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
@@ -196,7 +196,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 126 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 128 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
@@ -288,7 +288,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Automated accessibility-test files | 4 |
 | Workflow files | 11 |
 | Reusable workflows | 7 |
-| Active Markdown documentation files | 126 |
+| Active Markdown documentation files | 128 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |
