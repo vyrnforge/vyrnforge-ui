@@ -2,9 +2,14 @@
 
 ## Current direction
 
-S0 through S3 established controlled change, quality evidence, interaction
-hardening, and semantic token consistency. The next release program prioritizes
-a multi-framework **non-grid beta** instead of further data-grid expansion.
+S0 through S7 established controlled change, quality evidence, interaction
+hardening, semantic token consistency, multi-framework architecture,
+framework-neutral behavior, native Custom Elements, and verified React, plain
+HTML, Angular, and Vue consumption.
+
+S7 is complete at 84/84 story points and GMF4 is evidence-complete. S8 is the
+active release program and prioritizes the coordinated multi-framework
+**non-grid beta**.
 
 The data-grid package remains available as a React alpha but does not block the
 beta release group.
@@ -34,11 +39,11 @@ beta release group.
 | S1     | Quality Foundation                        | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
 | S2     | Interaction and Accessibility Evidence    | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
 | S3     | Semantic Tokens and Component Consistency | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
-| S4     | Multi-Framework Architecture              | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 - passed |
-| S5     | Framework-Neutral Behaviors               | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 - passed |
-| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 - passed |
-| S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4          |
-| S8     | Non-Grid Beta Release                     | Harden packages, canary in applications, publish beta artifacts, and complete exit review.                                | GBETA         |
+| S4     | Multi-Framework Architecture              | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed |
+| S5     | Framework-Neutral Behaviors               | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed |
+| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed |
+| S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed |
+| S8     | Non-Grid Beta Release                     | Harden packages, canary in applications, publish beta artifacts, and complete exit review.                                | GBETA — active |
 
 ## S4 architecture tasks
 
@@ -106,7 +111,47 @@ updates. It does not yet register public component tags.
 
 S6 closes with 58 registered native tags and current direct, mapping,
 composition, or service strategies for all 67 public non-grid React records.
-S7 / GMF4 is the active cross-framework consumer-verification phase.
+
+## S7 cross-framework verification — complete
+
+- GMF4 is evidence-complete.
+- S7 finished at 84/84 story points.
+- React and native HTML are first-class renderers.
+- Angular and Vue packed consumers are verified against `@vyrnforge/ui-elements`.
+- Cross-framework browser, accessibility, SSR, bundler, generated-reference,
+  and migration-guide evidence is complete.
+
+## S8 non-grid beta release — active
+
+Completed:
+
+- BT-8001: freeze the non-grid beta scope.
+- BT-8002: set release groups and coordinated versions.
+- BT-8003: verify beta package artifacts.
+- BT-8004: enforce package and CSS size budgets.
+- BT-8005: verify the supported compatibility release matrix.
+- BT-8006: enforce security and workflow hardening.
+- BT-8007: verify trusted-publishing provenance and advance the coordinated
+  non-grid candidate to `0.2.0-beta.2`.
+- Deferred Windows/NVDA review completed; the temporary beta waiver was retired.
+- Fresh registry consumer fixture correction completed.
+
+Current release candidate:
+
+- Release group: `non-grid-beta`
+- Version: `0.2.0-beta.2`
+- Dist-tag: `beta`
+- Packages: `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`,
+  `@vyrnforge/ui-components`, and `@vyrnforge/ui-elements`
+
+Next action:
+
+- Dispatch the controlled npm release workflow from current `main` in `publish`
+  mode after reviewing the successful verification run and approving the
+  protected `npm-release` environment.
+- Verify registry propagation, exact internal dependency versions, beta
+  dist-tags, fresh consumer installation, signatures, and provenance before
+  creating the annotated tag and GitHub prerelease.
 
 ## Deferred data-grid track
 
