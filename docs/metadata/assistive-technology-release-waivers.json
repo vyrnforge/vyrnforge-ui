@@ -5,30 +5,5 @@
     "scope": "temporary assistive-technology release waivers",
     "documentation": "docs/release/assistive-technology-waivers.md"
   },
-  "waivers": [
-    {
-      "id": "AT-WAIVER-001",
-      "status": "active",
-      "releaseGroup": "non-grid-beta",
-      "version": "0.2.0-beta.2",
-      "scenarioIds": [
-        "AT-001",
-        "AT-002",
-        "AT-003",
-        "AT-004",
-        "AT-005",
-        "AT-006",
-        "AT-007",
-        "AT-008",
-        "AT-009"
-      ],
-      "owner": "draglide",
-      "reason": "Manual NVDA review is deferred until completion of the planned component implementation cycle. No manual screen-reader pass is claimed for this release.",
-      "trackingIssue": "https://github.com/vyrnforge/vyrnforge-ui/issues/86",
-      "expiresAt": "2026-10-31",
-      "blocksStablePromotion": true,
-      "requiresReviewBeforeAccessibilityCompleteClaim": true,
-      "knownCriticalAccessibilityFindings": []
-    }
-  ]
+  "waivers": []
 }
