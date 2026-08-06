@@ -14,38 +14,40 @@
   },
   "environments": {
     "windows-nvda-chrome": {
-      "status": "pending",
+      "status": "complete",
       "operatingSystem": {
-        "name": "Windows",
-        "version": "pending"
+        "name": "Windows 11",
+        "version": "25H2 (OS Build 26200.8875)"
       },
       "browser": {
         "name": "Chrome",
-        "version": "pending"
+        "version": "151.0.7922.83"
       },
       "assistiveTechnology": {
         "name": "NVDA",
-        "version": "pending"
+        "version": "2026.1.1"
       },
       "inputModes": ["keyboard", "screen-reader"],
-      "rationale": "Record exact versions, reviewer, and execution date when the manual session is performed."
+      "reviewer": "Adi",
+      "testedAt": "2026-08-05"
     },
     "windows-nvda-firefox": {
-      "status": "pending",
+      "status": "complete",
       "operatingSystem": {
-        "name": "Windows",
-        "version": "pending"
+        "name": "Windows 11",
+        "version": "25H2 (OS Build 26200.8875)"
       },
       "browser": {
         "name": "Firefox",
-        "version": "pending"
+        "version": "153.0.3"
       },
       "assistiveTechnology": {
         "name": "NVDA",
-        "version": "pending"
+        "version": "2026.1.1"
       },
       "inputModes": ["keyboard", "screen-reader"],
-      "rationale": "Record exact versions, reviewer, and execution date when the manual session is performed."
+      "reviewer": "Adi",
+      "testedAt": "2026-08-05"
     }
   },
   "scenarios": [
@@ -64,9 +66,25 @@
         "Invalid input and its error relationship are announced without relying on color."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-002",
@@ -79,9 +97,25 @@
         "Escape and explicit dismissal return focus to the opener."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-003",
@@ -94,9 +128,25 @@
         "Disabled, selected, and destructive item meaning is understandable."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-004",
@@ -109,9 +159,25 @@
         "Dismissal does not strand focus."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-005",
@@ -124,9 +190,25 @@
         "Clear and removal actions have meaningful accessible names."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-006",
@@ -139,9 +221,25 @@
         "Disabled items remain identifiable and protected from movement."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-007",
@@ -154,9 +252,25 @@
         "Clearing a rating produces an understandable state."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-008",
@@ -169,9 +283,25 @@
         "Pressed state changes are conveyed for controlled and uncontrolled toggles."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-009",
@@ -184,9 +314,25 @@
         "Dismiss controls are discoverable and pause behavior does not repeat announcements."
       ],
       "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
-      "status": "pending",
-      "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
-      "results": []
+      "status": "complete",
+      "results": [
+        {
+          "environmentId": "windows-nvda-chrome",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-chrome-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        },
+        {
+          "environmentId": "windows-nvda-firefox",
+          "outcome": "passed",
+          "reviewer": "Adi",
+          "testedAt": "2026-08-05",
+          "reference": "docs/quality/assistive-technology-results/2026-08-05-windows-nvda-firefox-adi.md",
+          "notes": "NVDA announced names, roles, states, validation, focus changes, selection changes, values, and live-region messages correctly. Keyboard and focus behavior matched the documented contracts. No defects observed."
+        }
+      ]
     },
     {
       "id": "AT-010",
