@@ -77,7 +77,7 @@ test("rejects a DOM-enabled ui-behaviors TypeScript configuration", () => {
   }
 });
 
-test("rejects missing quality integration", () => {
+test("rejects missing validation integration", () => {
   const root = createFixture();
   try {
     const file = path.join(root, "package.json");

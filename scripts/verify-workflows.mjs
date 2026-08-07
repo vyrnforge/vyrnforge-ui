@@ -239,22 +239,25 @@ for (const workflow of [
 }
 
 const scopedQuality = read("scripts/run-scoped-quality.mjs");
+assert(
+  !scopedQuality.includes('"verify:ci"'),
+  "scoped quality must not call the removed verify:ci aggregate",
+);
+assert(
+  !scopedQuality.includes('"quality"'),
+  "scoped quality must not call the removed quality aggregate",
+);
 for (const command of [
-  "verify:ci",
   "format:check",
   "lint",
   "lint:css",
+  "verify:package-boundaries",
+  "test:contracts",
   "verify:metadata",
-  "verify:design-tokens",
-  "verify:token-adoption",
-  "verify:visual-regression",
-  "verify:g3-closure",
-  "verify:component-maturity",
-  "verify:maturity-closure",
-  "verify:assistive-technology",
-  "verify:repository-inventory",
+  "verify:validation-model",
   "test:coverage",
-  "fixtures:verify",
+  "fixtures:test:prepared",
+  "fixtures:build:prepared",
   "typecheck",
 ]) {
   assert(
@@ -262,6 +265,10 @@ for (const command of [
     `scoped quality must run ${command}`,
   );
 }
+assert(
+  scopedQuality.includes("CI_SCOPE_METADATA"),
+  "scoped quality must run repository contracts only for metadata scope or full mode",
+);
 assert(
   !scopedQuality.includes("--if-present"),
   "scoped quality must not silently skip missing mandatory scripts",
@@ -395,32 +402,49 @@ assert(
     "playwright test tests/browser/visual-regression.spec.ts --project=chromium",
   "package.json must expose the canonical visual-regression browser command",
 );
+for (const command of ["check", "test", "build", "ci"]) {
+  assert(
+    typeof rootPackage.scripts[command] === "string",
+    `package.json must expose the public ${command} command`,
+  );
+}
+for (const deprecated of ["quality", "verify:ci"]) {
+  assert(
+    !(deprecated in rootPackage.scripts),
+    `package.json must remove the duplicated ${deprecated} aggregate`,
+  );
+}
 for (const command of [
-  "verify:ci",
-  "verify:metadata",
-  "verify:design-tokens",
-  "verify:token-adoption",
-  "verify:visual-regression",
-  "verify:g3-closure",
-  "verify:component-maturity",
-  "verify:maturity-closure",
-  "verify:assistive-technology",
   "format:check",
   "lint",
   "lint:css",
+  "verify:metadata",
+  "verify:package-boundaries",
+  "verify:workflows",
+  "verify:validation-model",
   "typecheck",
+]) {
+  assert(
+    rootPackage.scripts.check.includes(`npm run ${command}`),
+    `root check command must include ${command}`,
+  );
+}
+for (const command of [
+  "check",
+  "test:contracts",
   "test:coverage",
-  "verify:repository-inventory",
-  "fixtures:verify",
+  "build:packages",
+  "fixtures:test:prepared",
+  "fixtures:build:prepared",
   "test:browser",
   "verify:packages",
   "verify:consumer",
-  "build:docs",
-  "build:playground",
+  "verify:consumer-foundations:runtime",
+  "build:applications",
 ]) {
   assert(
-    rootPackage.scripts.quality.includes(`npm run ${command}`),
-    `root quality command must include ${command}`,
+    rootPackage.scripts.ci.includes(`npm run ${command}`),
+    `root ci command must include ${command}`,
   );
 }
 for (const workflow of [
