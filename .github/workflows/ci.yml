@@ -114,6 +114,7 @@ jobs:
       consumer: ${{ needs.plan.outputs.consumer == 'true' }}
       docs: ${{ needs.plan.outputs.docs == 'true' }}
       playground: ${{ needs.plan.outputs.playground == 'true' }}
+      pages-artifact: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
   security-checks:
     name: security-checks

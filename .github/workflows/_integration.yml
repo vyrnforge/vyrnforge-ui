@@ -27,6 +27,10 @@ on:
         required: false
         default: false
         type: boolean
+      pages-artifact:
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -44,6 +48,7 @@ jobs:
       RUN_CONSUMER: ${{ inputs.consumer }}
       RUN_DOCS: ${{ inputs.docs }}
       RUN_PLAYGROUND: ${{ inputs.playground }}
+      RUN_PAGES_ARTIFACT: ${{ inputs['pages-artifact'] }}
 
     steps:
       - name: Checkout
@@ -76,7 +81,7 @@ jobs:
           elif [[ "$RUN_CONSUMER" == "true" ]]; then
             # verify:packages owns the single complete package build.
             npm run verify:packages
-          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" ]]; then
+          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" || "$RUN_PAGES_ARTIFACT" == "true" ]]; then
             npm run build:packages
           elif [[ "$RUN_DOCS" == "true" ]]; then
             npm run build --workspace @vyrnforge/ui-core
@@ -111,12 +116,44 @@ jobs:
         run: npm run verify:repository-inventory
 
       - name: Build documentation application
-        if: inputs.docs
+        if: inputs.docs && !inputs['pages-artifact']
         run: npm run build --workspace @vyrnforge/ui-docs
 
       - name: Build playground
-        if: inputs.playground
+        if: inputs.playground && !inputs['pages-artifact']
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
+
+      - name: Build documentation application for Pages
+        if: inputs['pages-artifact']
+        run: npm run build --workspace @vyrnforge/ui-docs
+        env:
+          VITE_BASE_PATH: /vyrnforge-ui/
+
+      - name: Build playground for Pages
+        if: inputs['pages-artifact']
+        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
+        env:
+          VITE_BASE_PATH: /vyrnforge-ui/playground/
+
+      - name: Assemble Pages site once
+        if: inputs['pages-artifact']
+        shell: bash
+        run: |
+          rm -rf site
+          mkdir -p site/playground
+          cp -R apps/docs/dist/. site/
+          cp -R examples/basic-playground/dist/. site/playground/
+          touch site/.nojekyll
+
+      - name: Upload commit-bound Pages site
+        if: inputs['pages-artifact']
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pages-site-${{ github.sha }}
+          path: site/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Upload beta package artifact reports
         if: always() && inputs.packages

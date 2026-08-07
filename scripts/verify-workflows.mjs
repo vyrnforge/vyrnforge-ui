@@ -294,6 +294,12 @@ assert(
   "CI planner must classify browser contract tests explicitly",
 );
 const integrationWorkflow = read(".github/workflows/_integration.yml");
+assert(
+  ci.includes(
+    "pages-artifact: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}",
+  ),
+  "ci.yml must create the Pages site artifact only for a main push",
+);
 for (const marker of [
   "  integration:",
   "selected-integration",
@@ -309,6 +315,12 @@ for (const marker of [
   "npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
   "playwright-report/",
   "test-results/visual-evidence/",
+  "pages-artifact:",
+  "RUN_PAGES_ARTIFACT",
+  "VITE_BASE_PATH: /vyrnforge-ui/",
+  "Assemble Pages site once",
+  "pages-site-${{ github.sha }}",
+  "include-hidden-files: true",
 ]) {
   assert(
     integrationWorkflow.includes(marker),
@@ -443,8 +455,8 @@ for (const workflow of [
 
 const pages = read(".github/workflows/pages.yml");
 assert(
-  /permissions:\s*\n\s*contents: read/.test(pages),
-  "pages.yml global permissions must be read-only",
+  /permissions:\s*\n\s*actions: read\s*\n\s*contents: read/.test(pages),
+  "pages.yml must default to Actions and repository read access",
 );
 assert(
   pages.includes("workflow_run:"),
@@ -463,9 +475,44 @@ assert(
   "pages.yml must require successful CI",
 );
 assert(
-  pages.includes("git rev-parse origin/main"),
-  "pages.yml must reject stale main commits",
+  pages.includes("github.event.workflow_run.event == 'push'"),
+  "pages.yml must accept automatic deployment only from a push CI run",
 );
+assert(
+  pages.includes("ci-run-id:"),
+  "manual Pages deployment must require an existing CI run ID",
+);
+for (const marker of [
+  "name: prepare-pages",
+  'gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID"',
+  'gh api "repos/$GITHUB_REPOSITORY/commits/main"',
+  'test "$WORKFLOW_NAME" = "VyrnForge CI"',
+  'test "$RUN_EVENT" = "push"',
+  'test "$HEAD_BRANCH" = "main"',
+  'test "$CONCLUSION" = "success"',
+  'test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"',
+  'gh run download "${{ steps.candidate.outputs.run-id }}"',
+  '--name "pages-site-${{ steps.candidate.outputs.head-sha }}"',
+  "--dir site",
+  "test -f site/index.html",
+  "test -f site/playground/index.html",
+  "test -f site/.nojekyll",
+]) {
+  assert(pages.includes(marker), `pages.yml must include ${marker}`);
+}
+for (const forbidden of [
+  "actions/checkout@",
+  "actions/setup-node@",
+  "actions/download-artifact@",
+  "npm ci",
+  "npm run ",
+  "build:packages",
+]) {
+  assert(
+    !pages.includes(forbidden),
+    `pages.yml must deploy the verified CI artifact without ${forbidden}`,
+  );
+}
 assert(
   pages.includes("pages: write"),
   "pages.yml deploy job must have pages: write",
@@ -620,6 +667,10 @@ assert(
 assert(
   nightly.includes("uses: ./.github/workflows/_integration.yml"),
   "nightly.yml must execute full integration and build checks",
+);
+assert(
+  nightly.includes("pages-artifact: false"),
+  "nightly.yml must not create a deployable Pages artifact",
 );
 assert(
   nightly.includes("uses: ./.github/workflows/_compatibility.yml"),

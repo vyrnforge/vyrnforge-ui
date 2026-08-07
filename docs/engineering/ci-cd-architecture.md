@@ -10,36 +10,38 @@ not own product behavior, application state, public APIs, or styling contracts.
 ## Objectives
 
 - Keep one stable branch-protection gate: `ci-gate`.
-- Run the CI orchestrator for every pull request targeting
-  `improvement/controlled-hardening` or `main`, and every push to `main`.
+- Run the CI orchestrator for every pull request targeting `main` and every push
+  to `main`.
 - Select validation from the actual changed paths without workflow-level path
   filters.
 - Validate affected packages and their downstream dependents.
-- Keep normal CI, Pages deployment, npm publication, registry verification, and
-  GitHub release creation as separate responsibilities.
+- Keep CI validation and Pages artifact production separate from Pages
+  deployment, npm publication, registry verification, and GitHub release
+  creation.
 - Use read-only permissions by default.
 - Use npm trusted publishing through GitHub OIDC only in the protected publish
   job.
-- Reuse the same compatibility and security contracts for pull requests, nightly
-  drift detection, and release preflight instead of maintaining separate gates.
+- Select security checks from changed paths and reserve complete compatibility,
+  dependency, and CodeQL drift detection for nightly and release boundaries.
 
 ## Workflow map
 
-| Workflow                             | Trigger                                                 | Responsibility                                                                                                  | Write capability      |
-| ------------------------------------ | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `.github/workflows/ci.yml`           | Pull request, push to `main`, manual                    | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate`          | None                  |
-| `.github/workflows/_quality.yml`     | `workflow_call`                                         | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification           | None                  |
-| `.github/workflows/_integration.yml` | `workflow_call`                                         | Selected package, consumer, browser, documentation, and playground integration validation with prepared outputs | None                  |
-| `.github/workflows/pages.yml`        | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only                                                                              | Pages deployment only |
-| `.github/workflows/release.yml`      | Manual                                                  | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release                 | Split by job          |
-| `.github/workflows/nightly.yml`      | Weekly schedule, manual                                 | Full pinned Node 24 LTS validation and high-severity dependency audit                                           | None                  |
+| Workflow                             | Trigger                                                      | Responsibility                                                                                             | Write capability      |
+| ------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `.github/workflows/ci.yml`           | Pull request, push to `main`, manual                         | Plan scopes, invoke quality/integration/security, expose `ci-gate`, and upload the current-main Pages site | None                  |
+| `.github/workflows/_quality.yml`     | `workflow_call`                                              | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification      | None                  |
+| `.github/workflows/_integration.yml` | `workflow_call`                                              | Selected package, consumer, browser, docs, playground, and commit-bound Pages artifact production          | None                  |
+| `.github/workflows/pages.yml`        | Successful current-main CI push or manual existing CI run ID | Validate, download, package, and deploy the existing commit-bound Pages site                               | Pages deployment only |
+| `.github/workflows/release.yml`      | Manual                                                       | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release            | Split by job          |
+| `.github/workflows/nightly.yml`      | Weekly schedule, manual                                      | Full pinned Node 24 LTS validation and high-severity dependency audit                                      | None                  |
 
 Reusable workflow files live directly in `.github/workflows/` because GitHub
 Actions does not support reusable workflow subdirectories.
 
 ## Toolchain baseline
 
-Repository development, pull-request CI, Pages, release verification, and nightly validation use:
+Repository development, CI including Pages artifact production, release
+verification, and nightly validation use:
 
 - Node.js `24.18.0`, pinned by `.nvmrc` and `.node-version`;
 - npm `11.16.0`, pinned by the root `packageManager`;
@@ -85,9 +87,14 @@ The planner is implemented by `scripts/detect-ci-scope.mjs`. Its machine outputs
 are:
 
 - `quality`
+- `integration`
+- `security`
+- `historical_evidence`
 - `metadata`
 - `ui_core`
+- `ui_behaviors`
 - `ui_components`
+- `ui_elements`
 - `ui_data_grid`
 - `packages`
 - `consumer`
@@ -112,7 +119,7 @@ not accepted.
 
 ## Required status checks
 
-The long-term required branch-protection check is:
+The required branch-protection check is:
 
 ```text
 ci-gate
@@ -135,30 +142,13 @@ The G1 quality checks aggregated by `ci-gate` are:
 - normalized component metadata and component-maturity verification; and
 - documentation and playground builds whenever the planner requires them.
 
-The BT-8005 compatibility matrix and BT-8006 security workflow are mandatory
-inputs to `ci-gate`. They also run in nightly drift detection and before manual
-release verification. npm publication, registry-consumer verification, Pages
-deployment, and release-record creation remain outside pull-request CI.
+`ci-gate` evaluates the planner plus the selected quality, integration, and
+security responsibilities. Compatibility drift is owned by nightly and release
+preflight instead of every pull request. npm publication, registry verification,
+Pages deployment, and release-record creation remain outside pull-request CI.
 
-The orchestrator temporarily preserves these compatibility checks:
-
-```text
-quality
-external-consumer
-```
-
-This allows the workflow refactor to merge without immediately breaking the
-existing branch rule. After the new workflow has completed successfully on
-`main`:
-
-1. Add `ci-gate` as a required check.
-2. Confirm a test pull request is blocked while `ci-gate` is pending or failing.
-3. Remove the old `quality` and `external-consumer` requirements.
-4. Keep the compatibility jobs until a later infrastructure cleanup release.
-
-Repository administrators will later configure `ci-gate` as the single
-required repository-ruleset check after it has completed successfully on
-`main`. This workflow does not configure repository rulesets.
+Repository rulesets remain external configuration and must require the stable
+`ci-gate` check separately.
 
 ## Validation responsibilities
 
@@ -180,11 +170,11 @@ HTML reports, traces, screenshots, and JSON results when the job fails.
 
 Browser work is independently planned through the `browser` scope. Runtime package
 changes, fixture changes, `tests/browser/**`, and `playwright.config.ts` require the
-browser job. Documentation-only work does not. `ci-gate` treats a required skipped
-browser job as a failure.
+integration job's browser responsibility. Documentation-only work does not.
+`ci-gate` treats a required skipped integration job as a failure.
 
 The release verification workflow installs Chromium before running the authoritative
-`npm run quality` command. Nightly validation also runs the same reusable browser
+`npm run ci` command. Nightly validation also runs the same reusable integration
 workflow.
 
 ### Package payloads
@@ -198,9 +188,9 @@ approved budget unless a narrow, unexpired waiver exists.
 
 ### External consumer
 
-The external-consumer job always uses packed artifacts, never workspace links.
-It remains independent from the package job so a clean runner proves the public
-boundary.
+The integration owner verifies the external consumer from packed artifacts,
+never workspace links, while reusing package output prepared once in the same
+job.
 
 ### Compatibility release matrix
 
@@ -249,23 +239,27 @@ release and captures version, dist-tag, release stage, partial-publication
 state, provenance, consumer evidence, and expected final registry state.
 
 `npm run verify:templates` enforces these intake contracts and is included in
-`npm run verify:ci`. This prevents the repository templates from drifting back
-to duplicated command checklists or omitting required release evidence.
+`npm run check`. This prevents the repository templates from drifting back to
+duplicated command checklists or omitting required release evidence.
 
 ## Pages deployment
 
-`pages.yml` owns GitHub Pages only. The build job has `contents: read`; only the
-deploy job receives `pages: write` and `id-token: write`.
+The main-push `_integration.yml` job owns the deployable static-site build. It
+uses the deployment base paths, assembles docs and playground output once, and
+uploads `pages-site-<commit>` as a commit-bound CI artifact. Pull requests,
+manual CI runs, and nightly validation do not create that deployable artifact.
 
 Automatic deployment begins only after `VyrnForge CI` completes successfully on
-`main`. The workflow checks out that exact verified commit and rejects the run
-when it is no longer the current `origin/main`, preventing a slower stale CI run
-from overwriting a newer Pages deployment. Manual dispatch is still available,
-but the same current-main guard applies.
+`main`. `pages.yml` resolves the triggering run through the Actions API, requires
+a successful `push` run for `main`, compares its `head_sha` with the current
+`main` commit, and downloads only the matching named artifact. This prevents a
+slower stale CI run from overwriting a newer deployment.
 
-Pages no longer repeats the entire repository test suite. It verifies metadata,
-builds publishable packages, builds the docs application and playground with
-the deployment base paths, then deploys the assembled static artifact.
+Manual dispatch requires the ID of an existing successful current-main CI push
+run and follows the same validation path. The Pages workflow does not check out
+source, install dependencies, run repository validation, or rebuild the site.
+Its preparation job has only `actions: read` and `contents: read`; only the
+deployment job receives `pages: write` and `id-token: write`.
 
 ## Trusted release pipeline
 
@@ -342,6 +336,10 @@ Nightly never publishes, deploys, creates tags, or writes repository contents.
 ## Local commands
 
 ```bash
+npm run check
+npm run test
+npm run build
+npm run ci
 npm run verify:toolchain
 npm run format:check
 npm run format
@@ -354,8 +352,6 @@ npm run test:compatibility-release-matrix
 npm run verify:compatibility-release-matrix
 npm run test:security-workflow-hardening
 npm run verify:security-workflow-hardening
-npm run verify:ci
-npm run quality
 ```
 
 `npm run format:check` verifies supported repository files without changing
@@ -384,4 +380,4 @@ When changing CI/CD infrastructure:
 - do not add registry secrets;
 - do not combine Pages deployment with npm publishing;
 - do not combine npm OIDC and repository write permissions in one job;
-- run `npm run verify:ci` before the broader quality suite.
+- run focused workflow verification before the complete `npm run ci` validation.

@@ -232,12 +232,12 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | `.github/workflows/ci.yml` | Pull request/main CI planning and aggregate gate | Top-level workflow |
 | `.github/workflows/finalize-release.yml` | Requires verification | Top-level workflow |
 | `.github/workflows/nightly.yml` | Scheduled full validation and dependency audit | Top-level workflow |
-| `.github/workflows/pages.yml` | Verified-main documentation and playground deployment | Top-level workflow |
+| `.github/workflows/pages.yml` | Verified-main Pages artifact validation and deployment | Top-level workflow |
 | `.github/workflows/release.yml` | Manual release verification and protected npm publication | Top-level workflow |
 
 | Area | Inventory |
 | --- | --- |
-| CI aggregate gates | `ci.yml` exposes `quality`, `browser-checks`, `external-consumer`, and `ci-gate`; `nightly.yml` exposes `browser-chromium` and `nightly-gate`. |
+| CI aggregate gates | `ci.yml` exposes the stable `ci-gate` over selected quality, integration, and security responsibilities; `nightly.yml` exposes `nightly-gate`. |
 | Consumer fixtures | `tests/package-consumer/` is verified by `scripts/verify-consumer.mjs` using packed artifacts. |
 | Package verification | `scripts/verify-packages.mjs`, `scripts/prepare-package-declarations.mjs`, and package workflows validate build outputs, declarations, CSS, and LICENSE presence. |
 | Release governance | `docs/release/`, `scripts/verify-release-candidate.mjs`, `scripts/verify-registry-release.mjs`, and `scripts/create-release-notes.mjs`. |
@@ -249,7 +249,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Severity | Workstream | Observation | Evidence / next verification |
 | --- | --- | --- | --- |
 | High | Data Grid | `UniversalDataGrid.tsx` is a large responsibility concentration. | Measured at 1697 lines; review boundaries before future feature expansion. |
-| Medium | Accessibility | Automated Chromium contracts cover composite controls and data-grid interactions; the canonical manual assistive-technology matrix is pending named execution. | Retain browser-checks, run `npm run verify:assistive-technology`, and require the strict evidence gate before beta or stable promotion. |
+| Medium | Accessibility | Automated Chromium contracts cover composite controls and data-grid interactions; the canonical manual assistive-technology matrix is pending named execution. | Retain integration-owned browser contracts, run `npm run verify:assistive-technology`, and require the strict evidence gate before beta or stable promotion. |
 | Medium | Quality Engineering | Coverage remains uneven across packages despite an enforced baseline. | Use package coverage reports and raise thresholds only with measured evidence; browser behavior is tracked separately. |
 | Medium | Documentation | Component status has several structured and prose representations. | Keep metadata verification authoritative for structured parity and review routes/docs prose. |
 | Medium | Documentation | Known terminology and planned-surface presentation gaps remain. | See Q1-P2-004 and Q1-P2-006 in `docs/quality/q1-component-quality-audit.md`. |
