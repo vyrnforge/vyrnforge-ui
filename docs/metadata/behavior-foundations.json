@@ -332,7 +332,8 @@
     "npm run verify:react-behavior-adoption",
     "npm run test:gmf2-closure",
     "npm run verify:gmf2-closure",
-    "npm run quality"
+    "npm run check",
+    "npm run ci"
   ],
   "remainingGmf2Tasks": []
 }

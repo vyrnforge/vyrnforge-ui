@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 2,
+  "guidingRule": "Every validation concern has one owner and one normal path.",
+  "layers": {
+    "pull-request": {
+      "purpose": "Run only the affected checks required to merge safely.",
+      "entrypoint": "node scripts/run-scoped-quality.mjs"
+    },
+    "main": {
+      "purpose": "Run the complete current repository validation once after merge.",
+      "entrypoint": "npm run ci"
+    },
+    "nightly": {
+      "purpose": "Detect slow compatibility, browser, dependency, security, and size drift.",
+      "entrypoint": ".github/workflows/nightly.yml"
+    },
+    "release": {
+      "purpose": "Run release-specific checks against a successful current-main candidate.",
+      "entrypoint": ".github/workflows/release.yml"
+    }
+  },
+  "publicCommands": ["check", "test", "build", "ci"],
+  "internalCommandGroups": {
+    "activeContractTests": "npm run test:contracts",
+    "activeMetadata": "npm run verify:metadata",
+    "historicalEvidenceTests": "npm run test:historical-evidence",
+    "historicalEvidenceVerification": "npm run verify:historical-evidence"
+  },
+  "historicalEvidence": {
+    "normalValidation": false,
+    "scopeVariable": "CI_SCOPE_HISTORICAL_EVIDENCE",
+    "condition": "Run only when canonical completed-sprint evidence or its verifier changes.",
+    "examples": [
+      "docs/metadata/g3-closure.json",
+      "docs/metadata/gmf1-closure.json",
+      "docs/metadata/gmf2-closure.json",
+      "docs/metadata/gmf3-closure.json",
+      "docs/metadata/gmf4-closure.json"
+    ]
+  },
+  "checks": [
+    {
+      "id": "repository-formatting",
+      "owner": "pull-request",
+      "command": "npm run format:check",
+      "reusedBy": ["main"],
+      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+    },
+    {
+      "id": "repository-lint",
+      "owner": "pull-request",
+      "command": "npm run lint",
+      "reusedBy": ["main"],
+      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+    },
+    {
+      "id": "repository-css-lint",
+      "owner": "pull-request",
+      "command": "npm run lint:css",
+      "reusedBy": ["main"],
+      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+    },
+    {
+      "id": "affected-code-validation",
+      "owner": "pull-request",
+      "command": "node scripts/run-scoped-quality.mjs"
+    },
+    {
+      "id": "historical-evidence",
+      "owner": "pull-request",
+      "command": "CI_SCOPE_HISTORICAL_EVIDENCE=true node scripts/run-scoped-quality.mjs",
+      "condition": "Only when canonical completed-sprint evidence or its verifier changes."
+    },
+    {
+      "id": "affected-browser-contracts",
+      "owner": "pull-request",
+      "command": "npm run test:browser"
+    },
+    {
+      "id": "scoped-security",
+      "owner": "pull-request",
+      "command": ".github/workflows/_security.yml"
+    },
+    {
+      "id": "complete-repository-validation",
+      "owner": "main",
+      "command": "npm run ci"
+    },
+    {
+      "id": "packed-consumer-verification",
+      "owner": "main",
+      "command": "npm run verify:consumer"
+    },
+    {
+      "id": "complete-compatibility-matrix",
+      "owner": "nightly",
+      "command": ".github/workflows/_compatibility.yml"
+    },
+    {
+      "id": "dependency-audit-and-codeql",
+      "owner": "nightly",
+      "command": "nightly security drift mode"
+    },
+    {
+      "id": "release-candidate-inputs",
+      "owner": "release",
+      "command": "node scripts/verify-release-candidate.mjs"
+    },
+    {
+      "id": "release-package-budgets",
+      "owner": "release",
+      "command": "npm run verify:beta-package-size-budgets"
+    },
+    {
+      "id": "release-publication-dry-run",
+      "owner": "release",
+      "command": "npm run verify:trusted-publishing-dry-run"
+    },
+    {
+      "id": "release-registry-and-provenance",
+      "owner": "release",
+      "command": "npm run verify:registry-release"
+    }
+  ]
+}

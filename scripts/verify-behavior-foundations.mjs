@@ -452,10 +452,20 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   ) {
     failures.push("test:behavior-foundations script is missing or invalid");
   }
-  for (const aggregate of ["verify:metadata", "verify:ci"]) {
-    if (!scripts[aggregate]?.includes("behavior-foundations")) {
-      failures.push(`${aggregate} must include behavior-foundations`);
-    }
+  if (!scripts["verify:metadata"]?.includes("behavior-foundations")) {
+    failures.push("verify:metadata must include behavior-foundations");
+  }
+  if (!scripts["test:contracts"]?.includes("test:behavior-foundations")) {
+    failures.push("test:contracts must include test:behavior-foundations");
+  }
+  if (!scripts.check?.includes("verify:metadata")) {
+    failures.push("check must include verify:metadata");
+  }
+  if (
+    !scripts.ci?.includes("check") ||
+    !scripts.ci?.includes("test:contracts")
+  ) {
+    failures.push("ci must include check and test:contracts");
   }
 
   const requiredCommands = new Set(metadata.requiredCommands ?? []);
@@ -470,7 +480,8 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "npm run verify:react-behavior-adoption",
     "npm run test:gmf2-closure",
     "npm run verify:gmf2-closure",
-    "npm run quality",
+    "npm run check",
+    "npm run ci",
   ]) {
     if (!requiredCommands.has(command)) {
       failures.push(`behavior foundation metadata is missing ${command}`);
@@ -483,7 +494,6 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
 
   return [...new Set(failures)].sort();
 }
-
 export function assertBehaviorFoundations(options) {
   const failures = verifyBehaviorFoundations(options);
   if (failures.length > 0) {
@@ -499,6 +509,6 @@ if (
 ) {
   assertBehaviorFoundations();
   console.log(
-    "Behavior foundations passed: MF-5001 through MF-5016 contracts, React adoption, GMF2 closure metadata, docs, and quality integration are complete.",
+    "Behavior foundations passed: MF-5001 through MF-5016 contracts, React adoption, GMF2 closure metadata, docs, and validation integration are complete.",
   );
 }

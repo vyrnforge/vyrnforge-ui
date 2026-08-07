@@ -110,7 +110,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run authoritative release validation
-        run: npm run quality
+        run: npm run ci
 
       - name: Verify trusted-publishing and provenance contract
         run: npm run verify:trusted-publishing-provenance
