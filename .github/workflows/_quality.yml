@@ -40,6 +40,10 @@ on:
         required: false
         default: false
         type: boolean
+      historical-evidence:
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -60,6 +64,7 @@ jobs:
       CI_SCOPE_UI_ELEMENTS: ${{ inputs['ui-elements'] }}
       CI_SCOPE_UI_DATA_GRID: ${{ inputs['ui-data-grid'] }}
       CI_SCOPE_FIXTURES: ${{ inputs.fixtures }}
+      CI_SCOPE_HISTORICAL_EVIDENCE: ${{ inputs['historical-evidence'] }}
 
     steps:
       - name: Checkout

@@ -28,7 +28,7 @@
     "command": "npm run verify:cross-framework-matrix:runtime",
     "report": "test-results/cross-framework-matrix/report.json",
     "traces": "test-results/cross-framework-matrix/traces",
-    "ciWorkflow": ".github/workflows/_consumer.yml",
+    "ciWorkflow": ".github/workflows/_integration.yml",
     "artifactName": "cross-framework-browser-matrix"
   },
   "predecessors": ["CF-7004", "CF-7006", "CF-7007", "CF-7008"],

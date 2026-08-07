@@ -292,10 +292,10 @@ for (const component of catalog)
   if (component.maturity in totals) totals[component.maturity] += 1;
 
 const workflowPurposes = {
-  "_consumer.yml": "Reusable packed external-consumer verification",
-  "_docs.yml": "Reusable documentation and playground builds",
-  "_packages.yml": "Reusable package payload verification",
+  "_compatibility.yml": "Reusable release compatibility matrix",
+  "_integration.yml": "Reusable integration and build validation",
   "_quality.yml": "Reusable scoped quality validation",
+  "_security.yml": "Reusable security validation",
   "ci.yml": "Pull request/main CI planning and aggregate gate",
   "nightly.yml": "Scheduled full validation and dependency audit",
   "pages.yml": "Verified-main documentation and playground deployment",

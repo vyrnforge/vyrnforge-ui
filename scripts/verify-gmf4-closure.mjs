@@ -37,7 +37,7 @@ const requiredFiles = [
   "docs/quality/assistive-technology-results/cf-7010-cross-framework-nvda.json",
   "docs/quality/documentation-reviews/cf-7013-multi-framework-migration-guide.json",
   "tests/consumers/manifest.json",
-  ".github/workflows/_consumer.yml",
+  ".github/workflows/_integration.yml",
   "scripts/verify-gmf3-closure.mjs",
   "scripts/verify-multi-framework-architecture.mjs",
   "scripts/verify-package-boundaries.mjs",
@@ -257,11 +257,12 @@ export function verifyGmf4Closure({
   }
 
   for (const command of [
+    "npm run check",
+    "npm run test",
+    "npm run build",
+    "npm run ci",
     "npm run test:gmf4-closure",
     "npm run verify:gmf4-closure",
-    "npm run verify:ci",
-    "npm run verify:metadata",
-    "npm run quality",
   ]) {
     if (!(closure?.requiredCommands ?? []).includes(command)) {
       failures.push(`GMF4 closure is missing required command ${command}`);
@@ -320,24 +321,19 @@ export function verifyGmf4Closure({
     failures.push("root package scripts must expose GMF4 test and verifier");
   }
 
-  for (const [scriptName, requiredCommands] of Object.entries({
-    "verify:metadata": [
-      "npm run verify:vue-model-adapter",
-      "npm run verify:gmf4-closure",
-    ],
-    "verify:ci": [
-      "npm run test:vue-model-adapter",
-      "npm run verify:vue-model-adapter",
-      "npm run test:gmf4-closure",
-      "npm run verify:gmf4-closure",
-    ],
-    quality: ["npm run verify:gmf4-closure"],
-  })) {
-    const script = rootPackage?.scripts?.[scriptName] ?? "";
-    for (const command of requiredCommands) {
-      if (!script.includes(command)) {
-        failures.push(`${scriptName} must include ${command}`);
-      }
+  for (const scriptName of ["check", "test", "build", "ci"]) {
+    if (!rootPackage?.scripts?.[scriptName]) {
+      failures.push(
+        `root package scripts must expose canonical npm run ${scriptName}`,
+      );
+    }
+  }
+
+  for (const removedAlias of ["quality", "verify:ci"]) {
+    if (rootPackage?.scripts?.[removedAlias]) {
+      failures.push(
+        `root package scripts must not restore removed alias ${removedAlias}`,
+      );
     }
   }
 

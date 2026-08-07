@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quality-node-24:
-    name: quality-node-24
+  quality:
+    name: quality
     uses: ./.github/workflows/_quality.yml
     permissions:
       contents: read
@@ -22,6 +22,7 @@ jobs:
       node-version: "24.18.0"
       full: true
       metadata: true
+      historical-evidence: true
       ui-core: true
       ui-behaviors: true
       ui-components: true
@@ -29,39 +30,18 @@ jobs:
       ui-data-grid: true
       fixtures: true
 
-  browser-chromium:
-    name: browser-chromium
-    uses: ./.github/workflows/_browser.yml
+  integration:
+    name: integration
+    uses: ./.github/workflows/_integration.yml
     permissions:
       contents: read
     with:
       node-version: "24.18.0"
-
-  packages:
-    name: packages
-    uses: ./.github/workflows/_packages.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-
-  external-consumer:
-    name: external-consumer
-    uses: ./.github/workflows/_consumer.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-
-  docs-and-playground:
-    name: docs-and-playground
-    uses: ./.github/workflows/_docs.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-      build-docs: true
-      build-playground: true
+      browser: true
+      packages: true
+      consumer: true
+      docs: true
+      playground: true
 
   compatibility:
     name: compatibility
@@ -74,17 +54,16 @@ jobs:
     uses: ./.github/workflows/_security.yml
     permissions:
       contents: read
-      pull-requests: read
       security-events: write
+    with:
+      dependency-review: false
+      drift: true
 
   nightly-gate:
     name: nightly-gate
     needs:
-      - quality-node-24
-      - browser-chromium
-      - packages
-      - external-consumer
-      - docs-and-playground
+      - quality
+      - integration
       - compatibility
       - security
     if: always()
@@ -93,13 +72,23 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Aggregate nightly results
+      - name: Aggregate nightly responsibilities
         env:
           RESULTS_JSON: >-
-            {"quality24":"${{ needs.quality-node-24.result }}","browser":"${{ needs.browser-chromium.result }}","packages":"${{ needs.packages.result }}","consumer":"${{ needs.external-consumer.result }}","docs":"${{ needs.docs-and-playground.result }}","compatibility":"${{ needs.compatibility.result }}","security":"${{ needs.security.result }}"}
+            {"quality":"${{ needs.quality.result }}","integration":"${{ needs.integration.result }}","compatibility":"${{ needs.compatibility.result }}","security":"${{ needs.security.result }}"}
         run: |
           node - <<'NODE'
           const results = JSON.parse(process.env.RESULTS_JSON);
+          const failures = Object.entries(results).filter(
+            ([, result]) => result !== "success",
+          );
           console.log(results);
-          if (Object.values(results).some((result) => result !== "success")) process.exit(1);
+          if (failures.length) {
+            console.error(
+              `nightly-gate failed: ${failures
+                .map(([name, result]) => `${name}:${result}`)
+                .join("; ")}`,
+            );
+            process.exit(1);
+          }
           NODE

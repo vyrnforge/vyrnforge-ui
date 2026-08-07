@@ -2,6 +2,15 @@ name: Reusable security validation
 
 on:
   workflow_call:
+    inputs:
+      dependency-review:
+        required: false
+        default: true
+        type: boolean
+      drift:
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -9,7 +18,7 @@ permissions:
 jobs:
   dependency-review:
     name: dependency-review
-    if: github.event_name == 'pull_request'
+    if: inputs['dependency-review'] && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -32,7 +41,7 @@ jobs:
       ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -47,6 +56,7 @@ jobs:
         run: npm ci
 
       - name: Audit shipped dependency findings
+        if: inputs.drift
         run: npm audit --omit=dev --audit-level=high
 
       - name: Install verified actionlint
@@ -75,6 +85,7 @@ jobs:
 
   codeql-analysis:
     name: codeql-analysis
+    if: inputs.drift
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -82,7 +93,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0

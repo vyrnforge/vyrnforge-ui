@@ -56,7 +56,7 @@
     "scripts/verify-cross-framework-accessibility.mjs",
     "scripts/serve-cross-framework-accessibility-review.mjs",
     "scripts/verify-consumer-foundations-runtime.mjs",
-    ".github/workflows/_consumer.yml"
+    ".github/workflows/_integration.yml"
   ],
   "unresolvedBlockers": [],
   "completedEvidence": [

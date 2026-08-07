@@ -110,10 +110,14 @@ function runNpm(args, options = {}) {
   });
 }
 
-console.log("Building packages from clean generated output...");
-runNpm(["run", "build:packages"], {
-  stdio: "inherit",
-});
+if (process.env.VYRNFORGE_PACKAGES_PREPARED === "true") {
+  console.log("Using package output prepared by the owning integration job...");
+} else {
+  console.log("Building packages from clean generated output...");
+  runNpm(["run", "build:packages"], {
+    stdio: "inherit",
+  });
+}
 
 const packageByName = new Map(
   packages.map((packageInfo) => [

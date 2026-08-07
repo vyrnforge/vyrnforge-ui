@@ -1,0 +1,156 @@
+name: Reusable integration and build checks
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        default: "24.18.0"
+        type: string
+      browser:
+        required: false
+        default: false
+        type: boolean
+      packages:
+        required: false
+        default: false
+        type: boolean
+      consumer:
+        required: false
+        default: false
+        type: boolean
+      docs:
+        required: false
+        default: false
+        type: boolean
+      playground:
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    name: selected-integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    env:
+      RUN_BROWSER: ${{ inputs.browser }}
+      RUN_PACKAGES: ${{ inputs.packages }}
+      RUN_CONSUMER: ${{ inputs.consumer }}
+      RUN_DOCS: ${{ inputs.docs }}
+      RUN_PLAYGROUND: ${{ inputs.playground }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies once
+        run: npm ci
+
+      - name: Prepare selected package outputs once
+        shell: bash
+        run: |
+          if [[ "$RUN_PACKAGES" == "true" ]]; then
+            # The beta artifact verifier owns clean/build/pack for the four
+            # non-grid packages. Build the independently versioned grid once
+            # afterward so all package output is ready for downstream checks.
+            npm run verify:beta-package-artifacts
+            npm run build --workspace @vyrnforge/ui-data-grid
+            VYRNFORGE_PACKAGES_PREPARED=true npm run verify:packages
+            npm run verify:beta-package-size-budgets
+            test -f test-results/beta-package-artifacts/size-report.json
+          elif [[ "$RUN_CONSUMER" == "true" ]]; then
+            # verify:packages owns the single complete package build.
+            npm run verify:packages
+          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" ]]; then
+            npm run build:packages
+          elif [[ "$RUN_DOCS" == "true" ]]; then
+            npm run build --workspace @vyrnforge/ui-core
+            npm run build --workspace @vyrnforge/ui-behaviors
+            npm run build --workspace @vyrnforge/ui-components
+          fi
+
+      - name: Verify packed external consumer
+        if: inputs.consumer
+        env:
+          VYRNFORGE_PACKAGES_PREPARED: "true"
+        run: npm run verify:consumer
+
+      - name: Install Chromium once
+        if: inputs.browser || inputs.consumer
+        run: npx playwright install --with-deps chromium
+
+      - name: Run affected browser contracts
+        if: inputs.browser
+        env:
+          VYRNFORGE_PACKAGES_PREPARED: "true"
+        run: npm run test:browser
+
+      - name: Run cross-framework accessibility browser matrix
+        if: inputs.consumer
+        run: |
+          npm run verify:cross-framework-accessibility:runtime
+          test -f test-results/cross-framework-matrix/accessibility-report.json
+
+      - name: Verify generated repository inventory
+        if: inputs.docs
+        run: npm run verify:repository-inventory
+
+      - name: Build documentation application
+        if: inputs.docs
+        run: npm run build --workspace @vyrnforge/ui-docs
+
+      - name: Build playground
+        if: inputs.playground
+        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
+
+      - name: Upload beta package artifact reports
+        if: always() && inputs.packages
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: beta-package-artifacts
+          path: test-results/beta-package-artifacts/
+          if-no-files-found: error
+
+      - name: Upload visual regression evidence
+        if: success() && inputs.browser
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-regression-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/visual-evidence/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload browser failure artifacts
+        if: failure() && inputs.browser
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-browser-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            playwright-report/
+            test-results/browser/
+            test-results/browser-results.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload cross-framework browser matrix
+        if: always() && inputs.consumer
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cross-framework-browser-matrix
+          path: test-results/cross-framework-matrix/
+          if-no-files-found: error

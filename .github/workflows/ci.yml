@@ -6,7 +6,6 @@ on:
       - main
   pull_request:
     branches:
-      - improvement/controlled-hardening
       - main
   workflow_dispatch:
 
@@ -26,6 +25,9 @@ jobs:
       contents: read
     outputs:
       quality: ${{ steps.scope.outputs.quality }}
+      integration: ${{ steps.scope.outputs.integration }}
+      security: ${{ steps.scope.outputs.security }}
+      historical_evidence: ${{ steps.scope.outputs.historical_evidence }}
       metadata: ${{ steps.scope.outputs.metadata }}
       ui_core: ${{ steps.scope.outputs.ui_core }}
       ui_behaviors: ${{ steps.scope.outputs.ui_behaviors }}
@@ -62,8 +64,10 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
-            node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" || "$EVENT_NAME" == "push" ]]; then
+            node scripts/detect-ci-scope.mjs \
+              --full \
+              --github-output "$GITHUB_OUTPUT"
           else
             node scripts/detect-ci-scope.mjs \
               --base "$BASE_SHA" \
@@ -71,18 +75,11 @@ jobs:
               --github-output "$GITHUB_OUTPUT"
           fi
 
-      - name: Write CI plan summary
-        shell: bash
+      - name: Write readable CI plan
         env:
+          CI_SUMMARY_MODE: plan
           PLAN_JSON: ${{ steps.scope.outputs.plan_json }}
-        run: |
-          {
-            echo "## Dependency-aware CI plan"
-            echo
-            echo '```json'
-            echo "$PLAN_JSON"
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
+        run: node scripts/write-ci-summary.mjs
 
   quality-checks:
     name: quality-checks
@@ -95,6 +92,7 @@ jobs:
       node-version: "24.18.0"
       full: ${{ needs.plan.outputs.full == 'true' }}
       metadata: ${{ needs.plan.outputs.metadata == 'true' }}
+      historical-evidence: ${{ needs.plan.outputs.historical_evidence == 'true' }}
       ui-core: ${{ needs.plan.outputs.ui_core == 'true' }}
       ui-behaviors: ${{ needs.plan.outputs.ui_behaviors == 'true' }}
       ui-components: ${{ needs.plan.outputs.ui_components == 'true' }}
@@ -102,227 +100,62 @@ jobs:
       ui-data-grid: ${{ needs.plan.outputs.ui_data_grid == 'true' }}
       fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}
 
-  browser-checks:
-    name: browser-checks
+  integration-checks:
+    name: integration-checks
     needs: plan
-    if: needs.plan.outputs.browser == 'true'
-    uses: ./.github/workflows/_browser.yml
+    if: needs.plan.outputs.integration == 'true'
+    uses: ./.github/workflows/_integration.yml
     permissions:
       contents: read
     with:
       node-version: "24.18.0"
-
-  package-checks:
-    name: package-checks
-    needs: plan
-    if: needs.plan.outputs.packages == 'true'
-    uses: ./.github/workflows/_packages.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-
-  consumer-checks:
-    name: consumer-checks
-    needs: plan
-    if: needs.plan.outputs.consumer == 'true'
-    uses: ./.github/workflows/_consumer.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-
-  docs-checks:
-    name: docs-checks
-    needs: plan
-    if: needs.plan.outputs.docs == 'true' || needs.plan.outputs.playground == 'true'
-    uses: ./.github/workflows/_docs.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-      build-docs: ${{ needs.plan.outputs.docs == 'true' }}
-      build-playground: ${{ needs.plan.outputs.playground == 'true' }}
-
-  compatibility-checks:
-    name: compatibility-checks
-    uses: ./.github/workflows/_compatibility.yml
-    permissions:
-      contents: read
+      browser: ${{ needs.plan.outputs.browser == 'true' }}
+      packages: ${{ needs.plan.outputs.packages == 'true' }}
+      consumer: ${{ needs.plan.outputs.consumer == 'true' }}
+      docs: ${{ needs.plan.outputs.docs == 'true' }}
+      playground: ${{ needs.plan.outputs.playground == 'true' }}
 
   security-checks:
     name: security-checks
+    needs: plan
+    if: needs.plan.outputs.security == 'true'
     uses: ./.github/workflows/_security.yml
     permissions:
       contents: read
       pull-requests: read
       security-events: write
-
-  # Compatibility checks preserve the existing branch-protection names while
-  # the repository transitions to requiring only ci-gate.
-  quality:
-    name: quality
-    needs:
-      - plan
-      - quality-checks
-      - browser-checks
-      - package-checks
-      - docs-checks
-      - compatibility-checks
-      - security-checks
-    if: always()
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    steps:
-      - name: Aggregate quality-related results
-        env:
-          PLAN_RESULT: ${{ needs.plan.result }}
-          QUALITY_RESULT: ${{ needs.quality-checks.result }}
-          BROWSER_RESULT: ${{ needs.browser-checks.result }}
-          PACKAGE_RESULT: ${{ needs.package-checks.result }}
-          DOCS_RESULT: ${{ needs.docs-checks.result }}
-          COMPATIBILITY_RESULT: ${{ needs.compatibility-checks.result }}
-          SECURITY_RESULT: ${{ needs.security-checks.result }}
-        run: |
-          node - <<'NODE'
-          const results = {
-            plan: process.env.PLAN_RESULT,
-            quality: process.env.QUALITY_RESULT,
-            browser: process.env.BROWSER_RESULT,
-            packages: process.env.PACKAGE_RESULT,
-            docs: process.env.DOCS_RESULT,
-            compatibility: process.env.COMPATIBILITY_RESULT,
-            security: process.env.SECURITY_RESULT
-          };
-          const failed = Object.entries(results).filter(([, result]) =>
-            ["failure", "cancelled"].includes(result)
-          );
-          console.log(results);
-          if (failed.length) process.exit(1);
-          NODE
-
-  external-consumer:
-    name: external-consumer
-    needs:
-      - plan
-      - consumer-checks
-    if: always()
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    steps:
-      - name: Aggregate external-consumer result
-        env:
-          PLAN_RESULT: ${{ needs.plan.result }}
-          CONSUMER_RESULT: ${{ needs.consumer-checks.result }}
-        run: |
-          node - <<'NODE'
-          const results = {
-            plan: process.env.PLAN_RESULT,
-            consumer: process.env.CONSUMER_RESULT
-          };
-          console.log(results);
-          if (Object.values(results).some((result) => ["failure", "cancelled"].includes(result))) {
-            process.exit(1);
-          }
-          NODE
+    with:
+      dependency-review: true
+      drift: false
 
   ci-gate:
     name: ci-gate
     needs:
       - plan
       - quality-checks
-      - browser-checks
-      - package-checks
-      - consumer-checks
-      - docs-checks
-      - compatibility-checks
+      - integration-checks
       - security-checks
     if: always()
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     permissions:
       contents: read
     steps:
-      - name: Enforce the stable required gate
+      - name: Checkout gate reporter
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: Report selected, skipped, and failed responsibilities
         env:
+          CI_SUMMARY_MODE: gate
+          PLAN_JSON: ${{ needs.plan.outputs.plan_json }}
           PLAN_RESULT: ${{ needs.plan.result }}
-          QUALITY_REQUIRED: ${{ needs.plan.outputs.quality }}
           QUALITY_RESULT: ${{ needs.quality-checks.result }}
-          BROWSER_REQUIRED: ${{ needs.plan.outputs.browser }}
-          BROWSER_RESULT: ${{ needs.browser-checks.result }}
-          PACKAGES_REQUIRED: ${{ needs.plan.outputs.packages }}
-          PACKAGES_RESULT: ${{ needs.package-checks.result }}
-          CONSUMER_REQUIRED: ${{ needs.plan.outputs.consumer }}
-          CONSUMER_RESULT: ${{ needs.consumer-checks.result }}
-          DOCS_REQUIRED: ${{ needs.plan.outputs.docs }}
-          PLAYGROUND_REQUIRED: ${{ needs.plan.outputs.playground }}
-          FIXTURES_REQUIRED: ${{ needs.plan.outputs.fixtures }}
-          DOCS_RESULT: ${{ needs.docs-checks.result }}
-          COMPATIBILITY_RESULT: ${{ needs.compatibility-checks.result }}
+          INTEGRATION_RESULT: ${{ needs.integration-checks.result }}
           SECURITY_RESULT: ${{ needs.security-checks.result }}
-        run: |
-          node - <<'NODE'
-          const checks = {
-            plan: { required: true, result: process.env.PLAN_RESULT },
-            quality: {
-              required: process.env.QUALITY_REQUIRED === "true",
-              result: process.env.QUALITY_RESULT
-            },
-            browser: {
-              required: process.env.BROWSER_REQUIRED === "true",
-              result: process.env.BROWSER_RESULT
-            },
-            packages: {
-              required: process.env.PACKAGES_REQUIRED === "true",
-              result: process.env.PACKAGES_RESULT
-            },
-            consumer: {
-              required: process.env.CONSUMER_REQUIRED === "true",
-              result: process.env.CONSUMER_RESULT
-            },
-            documentation: {
-              required:
-                process.env.DOCS_REQUIRED === "true" ||
-                process.env.PLAYGROUND_REQUIRED === "true",
-              result: process.env.DOCS_RESULT
-            },
-            compatibility: {
-              required: true,
-              result: process.env.COMPATIBILITY_RESULT
-            },
-            security: {
-              required: true,
-              result: process.env.SECURITY_RESULT
-            }
-          };
-          const failures = Object.entries(checks).flatMap(([name, check]) => {
-            if (check.required && check.result !== "success") {
-              return `${name} was required but ${check.result}`;
-            }
-            if (!check.required && !["success", "skipped"].includes(check.result)) {
-              return `${name} was not required but ${check.result}`;
-            }
-            return [];
-          });
-
-          if (process.env.FIXTURES_REQUIRED === "true" && !checks.quality.required) {
-            failures.push("fixtures were required but the quality job was not planned");
-          }
-
-          console.log(
-            Object.fromEntries(
-              Object.entries(checks).map(([name, check]) => [
-                name,
-                `${check.required ? "required" : "not-required"}:${check.result}`
-              ])
-            )
-          );
-          if (failures.length > 0) {
-            console.error(`ci-gate failed: ${failures.join("; ")}`);
-            process.exit(1);
-          }
-          NODE
+        run: node scripts/write-ci-summary.mjs

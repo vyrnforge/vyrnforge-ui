@@ -304,7 +304,6 @@
     "scripts/verify-component-maturity.mjs": "fc32d55f775c4acafaf3ccf935d4c90bec8b863c16d3fc5b008c056211c2e2b1",
     "scripts/verify-component-maturity.test.mjs": "25d427ad2c09c3842d2596b30ee3bacb32c7abe4d8effd8ea46aa768363ede9a",
     "scripts/verify-component-metadata.test.mjs": "d117a280d152695e0734f8fcf2f6dd2631e0e308be0332126c42544c5ab0fdb3",
-    "scripts/verify-toolchain.mjs": "02193fed0d28e9164282309a5663d139ef40cac65f4db39f3274cfcbe5ce10b5",
     "SECURITY.md": "6bee3168383b6e8f5079f3cd4ecba7143f3b5f900f4d4b0ac119269304cb4cb3",
     "stylelint.config.mjs": "524166a7b28b76ac0b80c2833fd9803361dcd32127b94693b9aeaa8b6ed00cd2",
     "tests/dom/index.tsx": "014a3fadda2042f5753d7500690acdb9d02ae4b0e2dbec3acce58c55d4311e6f",

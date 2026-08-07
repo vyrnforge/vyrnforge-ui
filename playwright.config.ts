@@ -3,6 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 const fixturePort = 4173;
 const fixtureBaseUrl = `http://127.0.0.1:${fixturePort}`;
 const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
+const packagesPrepared = process.env.VYRNFORGE_PACKAGES_PREPARED === "true";
 
 export default defineConfig({
   testDir: "./tests/browser",
@@ -44,8 +45,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command:
-      "npm run build:packages && npm run dev --workspace @vyrnforge/ui-regression-fixtures -- --host 127.0.0.1 --port 4173 --strictPort",
+    command: packagesPrepared
+      ? "npm run dev --workspace @vyrnforge/ui-regression-fixtures -- --host 127.0.0.1 --port 4173 --strictPort"
+      : "npm run build:packages && npm run dev --workspace @vyrnforge/ui-regression-fixtures -- --host 127.0.0.1 --port 4173 --strictPort",
     url: fixtureBaseUrl,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

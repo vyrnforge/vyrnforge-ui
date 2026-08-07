@@ -157,17 +157,18 @@
     "docs/quality/assistive-technology-results/cf-7010-cross-framework-nvda.json",
     "docs/quality/documentation-reviews/cf-7013-multi-framework-migration-guide.json",
     "tests/consumers/manifest.json",
-    ".github/workflows/_consumer.yml"
+    ".github/workflows/_integration.yml"
   ],
   "requiredCommands": [
+    "npm run check",
+    "npm run test",
+    "npm run build",
+    "npm run ci",
     "npm run test:gmf4-closure",
     "npm run verify:gmf4-closure",
-    "npm run verify:ci",
-    "npm run verify:metadata",
     "npm run verify:consumer-foundations:runtime",
     "npm run verify:cross-framework-accessibility:runtime",
-    "npm run test:browser",
-    "npm run quality"
+    "npm run test:browser"
   ],
   "unresolvedBlockers": [],
   "acceptedLimitations": [
