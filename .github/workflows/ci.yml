@@ -123,6 +123,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
+      security-events: write
     with:
       dependency-review: true
       drift: false
