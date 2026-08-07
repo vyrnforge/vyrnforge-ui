@@ -42,6 +42,7 @@ jobs:
       consumer: true
       docs: true
       playground: true
+      pages-artifact: false
 
   compatibility:
     name: compatibility

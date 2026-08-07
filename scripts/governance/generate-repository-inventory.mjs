@@ -298,7 +298,7 @@ const workflowPurposes = {
   "_security.yml": "Reusable security validation",
   "ci.yml": "Pull request/main CI planning and aggregate gate",
   "nightly.yml": "Scheduled full validation and dependency audit",
-  "pages.yml": "Verified-main documentation and playground deployment",
+  "pages.yml": "Verified-main Pages artifact validation and deployment",
   "release.yml": "Manual release verification and protected npm publication",
 };
 
@@ -620,7 +620,7 @@ const outputLines = [
     [
       [
         "CI aggregate gates",
-        "`ci.yml` exposes `quality`, `browser-checks`, `external-consumer`, and `ci-gate`; `nightly.yml` exposes `browser-chromium` and `nightly-gate`.",
+        "`ci.yml` exposes the stable `ci-gate` over selected quality, integration, and security responsibilities; `nightly.yml` exposes `nightly-gate`.",
       ],
       [
         "Consumer fixtures",
@@ -660,7 +660,7 @@ const outputLines = [
         "Medium",
         "Accessibility",
         "Automated Chromium contracts cover composite controls and data-grid interactions; the canonical manual assistive-technology matrix is pending named execution.",
-        "Retain browser-checks, run `npm run verify:assistive-technology`, and require the strict evidence gate before beta or stable promotion.",
+        "Retain integration-owned browser contracts, run `npm run verify:assistive-technology`, and require the strict evidence gate before beta or stable promotion.",
       ],
       [
         "Medium",

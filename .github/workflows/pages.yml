@@ -8,8 +8,14 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      ci-run-id:
+        description: Successful current-main VyrnForge CI run ID to deploy
+        required: true
+        type: string
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
@@ -17,63 +23,86 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: build-pages
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+  prepare:
+    name: prepare-pages
+    if: >-
+      (github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push') ||
+      (github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 15
     permissions:
+      actions: read
       contents: read
 
     steps:
-      - name: Checkout verified main commit
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
-          fetch-depth: 0
-
-      - name: Reject stale or non-main deployment candidates
+      - name: Resolve successful current-main CI run
+        id: candidate
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          AUTOMATIC_RUN_ID: ${{ github.event.workflow_run.id }}
+          MANUAL_RUN_ID: ${{ inputs.ci-run-id }}
         run: |
-          git fetch origin main --depth=1
-          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+          set -euo pipefail
 
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-        with:
-          node-version-file: .nvmrc
-          cache: npm
+          if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+            RUN_ID="$AUTOMATIC_RUN_ID"
+          else
+            RUN_ID="$MANUAL_RUN_ID"
+          fi
 
-      - name: Use repository package manager
-        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+          if [[ ! "$RUN_ID" =~ ^[0-9]+$ ]]; then
+            echo "A numeric VyrnForge CI run ID is required."
+            exit 1
+          fi
 
-      - name: Install dependencies
-        run: npm ci
+          IFS=$'\t' read -r WORKFLOW_NAME RUN_EVENT HEAD_BRANCH CONCLUSION HEAD_SHA < <(
+            gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" \
+              --jq '[.name, .event, .head_branch, .conclusion, .head_sha] | @tsv'
+          )
+          CURRENT_MAIN_SHA="$(
+            gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha'
+          )"
 
-      - name: Verify public metadata
-        run: npm run verify:metadata
+          test "$WORKFLOW_NAME" = "VyrnForge CI"
+          test "$RUN_EVENT" = "push"
+          test "$HEAD_BRANCH" = "main"
+          test "$CONCLUSION" = "success"
+          test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"
 
-      - name: Build packages
-        run: npm run build:packages
+          echo "run-id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "head-sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
 
-      - name: Build docs
-        run: npm run build --workspace @vyrnforge/ui-docs
-        env:
-          VITE_BASE_PATH: /vyrnforge-ui/
+          {
+            echo "## GitHub Pages candidate"
+            echo
+            echo "- CI run: \`$RUN_ID\`"
+            echo "- Commit: \`$HEAD_SHA\`"
+            echo "- Source: successful VyrnForge CI push on current \`main\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Build playground
-        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
-        env:
-          VITE_BASE_PATH: /vyrnforge-ui/playground/
-
-      - name: Assemble Pages artifact
+      - name: Download commit-bound Pages site
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           rm -rf site
-          mkdir -p site/playground
-          cp -R apps/docs/dist/. site/
-          cp -R examples/basic-playground/dist/. site/playground/
-          touch site/.nojekyll
+          mkdir -p site
+          gh run download "${{ steps.candidate.outputs.run-id }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name "pages-site-${{ steps.candidate.outputs.head-sha }}" \
+            --dir site
+
+      - name: Verify downloaded Pages site
+        shell: bash
+        run: |
+          test -f site/index.html
+          test -f site/playground/index.html
+          test -f site/.nojekyll
 
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
@@ -89,7 +118,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: prepare
     permissions:
       pages: write
       id-token: write
