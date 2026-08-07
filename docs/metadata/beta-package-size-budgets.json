@@ -127,7 +127,7 @@
     "command": "npm run verify:beta-package-size-budgets",
     "testCommand": "npm run test:beta-package-size-budgets",
     "report": "test-results/beta-package-artifacts/size-report.json",
-    "ciWorkflow": ".github/workflows/_packages.yml"
+    "ciWorkflow": ".github/workflows/_integration.yml"
   },
   "releaseReadiness": "not-ready"
 }

@@ -45,7 +45,7 @@ export function loadVisualRegressionInputs(root = repositoryRoot) {
       root,
       "packages/ui-data-grid/src/styles/tokens/data-grid.tokens.css",
     ),
-    browserWorkflow: read(root, ".github/workflows/_browser.yml"),
+    browserWorkflow: read(root, ".github/workflows/_integration.yml"),
     packageJson: readJson(root, "package.json"),
   };
 }
@@ -226,7 +226,7 @@ export function verifyVisualRegressionContract({
     !browserWorkflow.includes("Upload visual regression evidence")
   ) {
     failures.push(
-      "_browser.yml must upload successful visual-regression evidence",
+      "_integration.yml must upload successful visual-regression evidence",
     );
   }
 

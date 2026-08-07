@@ -284,8 +284,12 @@ try {
   scanForbiddenImports();
   removeGeneratedConsumerOutput();
 
-  console.log("Building and verifying publishable packages...");
-  runNpm(["run", "verify:packages"], { stdio: "inherit" });
+  if (process.env.VYRNFORGE_PACKAGES_PREPARED === "true") {
+    console.log("Using packages prepared by the owning integration job...");
+  } else {
+    console.log("Building and verifying publishable packages...");
+    runNpm(["run", "verify:packages"], { stdio: "inherit" });
+  }
 
   console.log("Creating local package tarballs...");
   const tarballs = packPackages();

@@ -13,7 +13,7 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
 | Documentation | 129 active Markdown files; 23 archived Markdown files |
 | Scripts | 139 root npm scripts; repository automation under `scripts/` |
-| GitHub workflows | 12 workflow files, including 7 reusable workflows |
+| GitHub workflows | 9 workflow files, including 4 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
 ## B. Package Inventory
@@ -225,13 +225,10 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 
 | Workflow | Purpose | Classification |
 | --- | --- | --- |
-| `.github/workflows/_browser.yml` | Requires verification | Reusable workflow |
-| `.github/workflows/_compatibility.yml` | Requires verification | Reusable workflow |
-| `.github/workflows/_consumer.yml` | Reusable packed external-consumer verification | Reusable workflow |
-| `.github/workflows/_docs.yml` | Reusable documentation and playground builds | Reusable workflow |
-| `.github/workflows/_packages.yml` | Reusable package payload verification | Reusable workflow |
+| `.github/workflows/_compatibility.yml` | Reusable release compatibility matrix | Reusable workflow |
+| `.github/workflows/_integration.yml` | Reusable integration and build validation | Reusable workflow |
 | `.github/workflows/_quality.yml` | Reusable scoped quality validation | Reusable workflow |
-| `.github/workflows/_security.yml` | Requires verification | Reusable workflow |
+| `.github/workflows/_security.yml` | Reusable security validation | Reusable workflow |
 | `.github/workflows/ci.yml` | Pull request/main CI planning and aggregate gate | Top-level workflow |
 | `.github/workflows/finalize-release.yml` | Requires verification | Top-level workflow |
 | `.github/workflows/nightly.yml` | Scheduled full validation and dependency audit | Top-level workflow |
@@ -287,8 +284,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | DOM interaction test files | 8 |
 | Browser test files | 19 |
 | Automated accessibility-test files | 4 |
-| Workflow files | 12 |
-| Reusable workflows | 7 |
+| Workflow files | 9 |
+| Reusable workflows | 4 |
 | Active Markdown documentation files | 129 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |

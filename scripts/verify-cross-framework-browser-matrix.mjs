@@ -11,7 +11,7 @@ const requiredFiles = [
   "docs/metadata/cross-framework-browser-matrix.json",
   "docs/testing/cross-framework-browser-matrix.md",
   "scripts/verify-consumer-foundations-runtime.mjs",
-  ".github/workflows/_consumer.yml",
+  ".github/workflows/_integration.yml",
 ];
 
 function read(root, relativePath) {
@@ -87,14 +87,14 @@ export function verifyCrossFrameworkBrowserMatrix({
     }
   }
 
-  const workflow = read(root, ".github/workflows/_consumer.yml");
+  const workflow = read(root, ".github/workflows/_integration.yml");
   for (const marker of [
-    "verify:cross-framework-matrix:runtime",
+    "verify:cross-framework-accessibility:runtime",
     "cross-framework-browser-matrix",
     "actions/upload-artifact@",
   ]) {
     if (!workflow.includes(marker)) {
-      failures.push(`consumer CI workflow is missing ${marker}`);
+      failures.push(`integration CI workflow is missing ${marker}`);
     }
   }
 

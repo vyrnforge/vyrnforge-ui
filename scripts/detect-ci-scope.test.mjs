@@ -251,3 +251,38 @@ test("visual regression metadata runs browser, fixture, quality, and docs checks
     expectDisabled(plan, ["full", "docs_only"]);
   }
 });
+
+test("historical closure evidence uses its dedicated scope", () => {
+  for (const file of [
+    "docs/metadata/gmf4-closure.json",
+    "scripts/verify-gmf4-closure.mjs",
+  ]) {
+    const plan = planCiScope([file]);
+    expectEnabled(plan, [
+      "quality",
+      "metadata",
+      "docs",
+      "integration",
+      "historical_evidence",
+    ]);
+    expectDisabled(plan, ["packages", "consumer", "browser", "full"]);
+  }
+});
+
+test("normal package source changes do not execute historical evidence", () => {
+  const plan = planCiScope(["packages/ui-core/src/theme.ts"]);
+  assert.equal(plan.historical_evidence, false);
+  assert.equal(plan.integration, true);
+});
+
+test("dependency manifests select scoped security", () => {
+  const plan = planCiScope(["package-lock.json"]);
+  assert.equal(plan.security, true);
+  assert.equal(plan.full, true);
+});
+
+test("docs-only changes intentionally skip security", () => {
+  const plan = planCiScope(["docs/release/publication-procedure.md"]);
+  assert.equal(plan.security, false);
+  assert.equal(plan.integration, true);
+});

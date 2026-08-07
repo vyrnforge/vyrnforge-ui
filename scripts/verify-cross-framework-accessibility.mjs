@@ -130,7 +130,7 @@ export function verifyCrossFrameworkAccessibility({
     "packages/ui-elements/src/components/navigation.ts",
     "packages/ui-components/src/styles/feedback/alert.css",
     "packages/ui-elements/src/styles/feedback/alert.css",
-    ".github/workflows/_consumer.yml",
+    ".github/workflows/_integration.yml",
   ]) {
     if (!existsSync(path.join(root, file))) {
       failures.push(`required CF-7010 file is missing: ${file}`);
@@ -284,10 +284,10 @@ export function verifyCrossFrameworkAccessibility({
     }
   }
 
-  const workflow = read(root, ".github/workflows/_consumer.yml");
+  const workflow = read(root, ".github/workflows/_integration.yml");
   if (!workflow.includes("accessibility-report.json")) {
     failures.push(
-      "consumer CI workflow must verify the CF-7010 accessibility report",
+      "integration CI workflow must verify the CF-7010 accessibility report",
     );
   }
 

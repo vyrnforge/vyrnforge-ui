@@ -25,16 +25,14 @@ not own product behavior, application state, public APIs, or styling contracts.
 
 ## Workflow map
 
-| Workflow                          | Trigger                                                 | Responsibility                                                                                         | Write capability      |
-| --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
-| `.github/workflows/ci.yml`        | Pull request, push to `main`, manual                    | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate` | None                  |
-| `.github/workflows/_quality.yml`  | `workflow_call`                                         | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification  | None                  |
-| `.github/workflows/_packages.yml` | `workflow_call`                                         | Clean package builds, package payload validation, declarations, CSS, LICENSE, and dry-run packs        | None                  |
-| `.github/workflows/_consumer.yml` | `workflow_call`                                         | Packed-artifact consumer installation and production build                                             | None                  |
-| `.github/workflows/_docs.yml`     | `workflow_call`                                         | Documentation and playground builds                                                                    | None                  |
-| `.github/workflows/pages.yml`     | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only                                                                     | Pages deployment only |
-| `.github/workflows/release.yml`   | Manual                                                  | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release        | Split by job          |
-| `.github/workflows/nightly.yml`   | Weekly schedule, manual                                 | Full pinned Node 24 LTS validation and high-severity dependency audit                                  | None                  |
+| Workflow                             | Trigger                                                 | Responsibility                                                                                                  | Write capability      |
+| ------------------------------------ | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `.github/workflows/ci.yml`           | Pull request, push to `main`, manual                    | Plan affected scopes, invoke reusable validation, expose `quality`, `external-consumer`, and `ci-gate`          | None                  |
+| `.github/workflows/_quality.yml`     | `workflow_call`                                         | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification           | None                  |
+| `.github/workflows/_integration.yml` | `workflow_call`                                         | Selected package, consumer, browser, documentation, and playground integration validation with prepared outputs | None                  |
+| `.github/workflows/pages.yml`        | Successful `VyrnForge CI` run on current `main`, manual | Build and deploy GitHub Pages only                                                                              | Pages deployment only |
+| `.github/workflows/release.yml`      | Manual                                                  | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release                 | Split by job          |
+| `.github/workflows/nightly.yml`      | Weekly schedule, manual                                 | Full pinned Node 24 LTS validation and high-severity dependency audit                                           | None                  |
 
 Reusable workflow files live directly in `.github/workflows/` because GitHub
 Actions does not support reusable workflow subdirectories.
@@ -175,7 +173,7 @@ A full scope runs the authoritative root typecheck command.
 
 ### Browser contracts
 
-`.github/workflows/_browser.yml` owns the mandatory Chromium project. It installs
+`.github/workflows/_integration.yml` owns the mandatory Chromium project. It installs
 Chromium and its system dependencies, starts the deterministic regression fixture
 application through Playwright `webServer`, runs `npm run test:browser`, and uploads
 HTML reports, traces, screenshots, and JSON results when the job fails.

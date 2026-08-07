@@ -279,6 +279,6 @@
   "evidence": {
     "documentation": "docs/quality/s3-visual-regression.md",
     "fixtureRegistry": "apps/regression-fixtures/src/fixtureRegistry.ts",
-    "workflow": ".github/workflows/_browser.yml"
+    "workflow": ".github/workflows/_integration.yml"
   }
 }

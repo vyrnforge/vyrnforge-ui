@@ -84,19 +84,19 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
 
   const ci = read(root, ".github/workflows/ci.yml");
   const ciGate = ci.slice(ci.indexOf("  ci-gate:"));
-  for (const job of ["compatibility-checks", "security-checks"]) {
-    if (!ci.includes(`  ${job}:`)) {
-      failures.push(`ci.yml is missing mandatory ${job}`);
-    }
-    if (!ciGate.includes(`- ${job}`)) {
-      failures.push(`ci-gate must depend on ${job}`);
-    }
+  if (ci.includes("  compatibility-checks:")) {
+    failures.push("ci.yml must leave compatibility drift to nightly");
   }
-  for (const marker of [
-    "COMPATIBILITY_RESULT",
-    "SECURITY_RESULT",
-    "required: true",
-  ]) {
+  if (!ci.includes("  security-checks:")) {
+    failures.push("ci.yml is missing scoped security-checks");
+  }
+  if (!ci.includes("if: needs.plan.outputs.security == 'true'")) {
+    failures.push("security-checks must be selected by the CI planner");
+  }
+  if (!ciGate.includes("- security-checks")) {
+    failures.push("ci-gate must depend on security-checks");
+  }
+  for (const marker of ["SECURITY_RESULT", "scripts/write-ci-summary.mjs"]) {
     if (!ciGate.includes(marker)) {
       failures.push(`ci-gate must evaluate ${marker}`);
     }

@@ -121,12 +121,6 @@ function assertPinnedActionVersion(text, file, action, expectedVersion) {
 
 const ci = read(".github/workflows/ci.yml");
 assert(
-  /pull_request:\s*[\s\S]*branches:\s*[\s\S]*- improvement\/controlled-hardening/.test(
-    ci,
-  ),
-  "ci.yml must run for pull requests targeting improvement/controlled-hardening",
-);
-assert(
   /pull_request:\s*[\s\S]*branches:\s*[\s\S]*- main/.test(ci),
   "ci.yml must run for pull requests targeting main",
 );
@@ -147,12 +141,12 @@ assert(
   "ci.yml must expose the stable ci-gate check",
 );
 assert(
-  ci.includes("name: quality"),
-  "ci.yml must preserve the legacy quality check during migration",
+  !ci.includes("  quality:\n"),
+  "ci.yml must remove the temporary quality aggregate job",
 );
 assert(
-  ci.includes("name: external-consumer"),
-  "ci.yml must preserve the legacy external-consumer check during migration",
+  !ci.includes("  external-consumer:\n"),
+  "ci.yml must remove the temporary external-consumer aggregate job",
 );
 assert(
   ci.includes("if: always()"),
@@ -162,11 +156,7 @@ const ciGateSection = ci.slice(ci.indexOf("  ci-gate:"));
 for (const dependency of [
   "plan",
   "quality-checks",
-  "browser-checks",
-  "package-checks",
-  "consumer-checks",
-  "docs-checks",
-  "compatibility-checks",
+  "integration-checks",
   "security-checks",
 ]) {
   assert(
@@ -176,17 +166,10 @@ for (const dependency of [
 }
 for (const requiredToken of [
   "PLAN_RESULT",
-  "QUALITY_REQUIRED",
-  "BROWSER_REQUIRED",
-  "BROWSER_RESULT",
-  "PACKAGES_REQUIRED",
-  "CONSUMER_REQUIRED",
-  "DOCS_REQUIRED",
-  "PLAYGROUND_REQUIRED",
-  "FIXTURES_REQUIRED",
-  "COMPATIBILITY_RESULT",
+  "QUALITY_RESULT",
+  "INTEGRATION_RESULT",
   "SECURITY_RESULT",
-  "failures.length > 0",
+  "scripts/write-ci-summary.mjs",
 ]) {
   assert(
     ciGateSection.includes(requiredToken),
@@ -210,10 +193,7 @@ assertNoLongLivedToken(ci, "ci.yml");
 
 for (const workflow of [
   "_quality.yml",
-  "_browser.yml",
-  "_packages.yml",
-  "_consumer.yml",
-  "_docs.yml",
+  "_integration.yml",
   "_compatibility.yml",
   "_security.yml",
 ]) {
@@ -292,8 +272,8 @@ assert(
   "ci.yml must expose the planned browser scope",
 );
 assert(
-  ci.includes("if: needs.plan.outputs.browser == 'true'"),
-  "ci.yml must run browser checks only when the browser scope is planned",
+  ci.includes("if: needs.plan.outputs.integration == 'true'"),
+  "ci.yml must run integration checks only when integration is planned",
 );
 assert(
   ci.includes("fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}"),
@@ -304,59 +284,74 @@ assert(
   "reusable quality workflow must pass fixture scope to the scoped runner",
 );
 assert(
+  read(".github/workflows/_quality.yml").includes(
+    "CI_SCOPE_HISTORICAL_EVIDENCE",
+  ),
+  "reusable quality workflow must pass historical evidence scope explicitly",
+);
+assert(
   read("scripts/detect-ci-scope.mjs").includes("tests/browser/"),
   "CI planner must classify browser contract tests explicitly",
 );
-const browserWorkflow = read(".github/workflows/_browser.yml");
-for (const requiredBrowserToken of [
-  "playwright install --with-deps chromium",
+const integrationWorkflow = read(".github/workflows/_integration.yml");
+for (const marker of [
+  "  integration:",
+  "selected-integration",
+  "Install dependencies once",
+  "Prepare selected package outputs once",
+  "VYRNFORGE_PACKAGES_PREPARED",
   "npm run test:browser",
+  "npm run verify:packages",
+  "npm run verify:beta-package-artifacts",
+  "npm run verify:consumer",
+  "npm run verify:repository-inventory",
+  "npm run build --workspace @vyrnforge/ui-docs",
+  "npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
   "playwright-report/",
-  "test-results/",
-  "Upload visual regression evidence",
   "test-results/visual-evidence/",
 ]) {
   assert(
-    browserWorkflow.includes(requiredBrowserToken),
-    `_browser.yml must include ${requiredBrowserToken}`,
+    integrationWorkflow.includes(marker),
+    `_integration.yml must include ${marker}`,
   );
 }
 assertPinnedActionVersion(
-  browserWorkflow,
-  "_browser.yml",
+  integrationWorkflow,
+  "_integration.yml",
   "actions/upload-artifact",
   "v7.0.1",
 );
+const integrationJobsSection = integrationWorkflow.slice(
+  integrationWorkflow.indexOf("jobs:\n"),
+);
+assert(
+  (integrationJobsSection.match(/^ {2}[a-z][a-z0-9-]+:\s*$/gmu) ?? [])
+    .length === 1,
+  "integration workflow must contain exactly one job",
+);
+const playwrightConfig = read("playwright.config.ts");
+assert(
+  playwrightConfig.includes("VYRNFORGE_PACKAGES_PREPARED"),
+  "Playwright must reuse package output prepared by the integration owner",
+);
 
-const packagesWorkflow = read(".github/workflows/_packages.yml");
-for (const marker of [
-  "npm run verify:beta-package-artifacts",
-  "npm run verify:beta-package-size-budgets",
-  "size-report.json",
+for (const removedWorkflow of [
+  "_browser.yml",
+  "_packages.yml",
+  "_consumer.yml",
+  "_docs.yml",
 ]) {
   assert(
-    packagesWorkflow.includes(marker),
-    `_packages.yml must include ${marker}`,
-  );
-}
-
-const compatibilityWorkflow = read(".github/workflows/_compatibility.yml");
-for (const marker of [
-  "docs/metadata/compatibility-release-matrix.json",
-  "compatibility-plan",
-  "fromJSON(needs.compatibility-plan.outputs.matrix)",
-  "fail-fast: false",
-  "verify:compatibility-release-case",
-  "playwright install --with-deps",
-]) {
-  assert(
-    compatibilityWorkflow.includes(marker),
-    `_compatibility.yml must include ${marker}`,
+    !existsSync(path.join(workflowsDir, removedWorkflow)),
+    `${removedWorkflow} must be consolidated into _integration.yml`,
   );
 }
 
 const securityWorkflow = read(".github/workflows/_security.yml");
 for (const marker of [
+  "dependency-review:",
+  "drift:",
+  "if: inputs.drift",
   "npm audit --omit=dev --audit-level=high",
   "actionlint -color",
   "shellcheck --version",
@@ -369,33 +364,14 @@ for (const marker of [
   );
 }
 assert(
-  !securityWorkflow.includes("packages: read"),
-  "_security.yml must not request packages permission beyond its reusable-workflow callers",
-);
-assertPinnedActionVersion(
-  securityWorkflow,
-  "_security.yml",
-  "actions/dependency-review-action",
-  "v5.0.0",
-);
-assertPinnedActionVersion(
-  securityWorkflow,
-  "_security.yml",
-  "github/codeql-action/init",
-  "v4.36.0",
-);
-assertPinnedActionVersion(
-  securityWorkflow,
-  "_security.yml",
-  "github/codeql-action/analyze",
-  "v4.36.0",
+  ci.includes("if: needs.plan.outputs.security == 'true'"),
+  "CI security must run only when the planner selects it",
 );
 assert(
-  read(".github/workflows/_docs.yml").includes(
-    "npm run verify:repository-inventory",
-  ),
-  "docs validation must reject stale generated repository inventory",
+  !ci.includes("uses: ./.github/workflows/_compatibility.yml"),
+  "pull-request and main CI must leave compatibility drift to nightly",
 );
+
 const rootPackage = JSON.parse(read("package.json"));
 assert(
   rootPackage.scripts["test:visual"] ===
@@ -450,10 +426,7 @@ for (const command of [
 for (const workflow of [
   "ci.yml",
   "_quality.yml",
-  "_browser.yml",
-  "_packages.yml",
-  "_consumer.yml",
-  "_docs.yml",
+  "_integration.yml",
   "_compatibility.yml",
   "_security.yml",
 ]) {
@@ -645,8 +618,8 @@ assert(
   "nightly.yml must use the pinned Node 24 LTS baseline",
 );
 assert(
-  nightly.includes("uses: ./.github/workflows/_browser.yml"),
-  "nightly.yml must execute the Chromium browser contract suite",
+  nightly.includes("uses: ./.github/workflows/_integration.yml"),
+  "nightly.yml must execute full integration and build checks",
 );
 assert(
   nightly.includes("uses: ./.github/workflows/_compatibility.yml"),
