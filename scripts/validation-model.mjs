@@ -13,6 +13,7 @@ export const activeContractTests = [
   "test:security-workflow-hardening",
   "test:trusted-publishing-provenance",
   "test:trusted-publishing-dry-run",
+  "test:release-artifact",
   "test:multi-framework",
   "test:behavior-foundations",
   "test:component-maturity",

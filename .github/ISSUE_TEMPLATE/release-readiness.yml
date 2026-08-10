@@ -94,7 +94,7 @@ body:
     id: reproduction
     attributes:
       label: Reproduction or registry evidence
-      description: Provide verify-mode output, `npm view`, `npm pack --dry-run`, install, import, provenance, or consumer-app evidence with secrets removed.
+      description: Provide release-artifact verification output, `npm view`, exact-tarball dry-run, install, provenance, or consumer-app evidence with secrets removed.
     validations:
       required: true
 
@@ -147,4 +147,4 @@ body:
     id: validation
     attributes:
       label: Validation commands and checks already run
-      placeholder: "npm run verify:ci, npm run quality, verify-mode workflow, npm view, fresh consumer build"
+      placeholder: "ci-gate run, release-artifact verification, exact-tarball dry run, npm view, fresh registry consumer build"

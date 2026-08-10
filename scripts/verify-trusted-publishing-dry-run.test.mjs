@@ -8,12 +8,15 @@ import {
   readArgument,
 } from "./trusted-publishing-dry-run.mjs";
 
-test("builds a credential-free npm publish dry-run command", () => {
+test("builds a credential-free npm publish dry-run command for an exact tarball", () => {
   assert.deepEqual(
-    createPublishDryRunArgs({ directory: "packages/ui-core" }, "beta"),
+    createPublishDryRunArgs(
+      "/tmp/release-artifact/vyrnforge-ui-core-0.2.0-beta.2.tgz",
+      "beta",
+    ),
     [
       "publish",
-      "./packages/ui-core",
+      "/tmp/release-artifact/vyrnforge-ui-core-0.2.0-beta.2.tgz",
       "--dry-run",
       "--json",
       "--access",

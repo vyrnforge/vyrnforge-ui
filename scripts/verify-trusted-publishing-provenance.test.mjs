@@ -34,6 +34,22 @@ test("rejects long-lived npm credentials in the release workflow", () => {
   assert(failures.some((failure) => failure.includes("NODE_AUTH_TOKEN")));
 });
 
+test("rejects a release workflow that restores a verify/publish mode split", () => {
+  const workflowText = readFileSync(
+    new URL("../.github/workflows/release.yml", import.meta.url),
+    "utf8",
+  ).replace(
+    "      dist-tag:",
+    "      mode:\n        required: true\n        type: string\n      dist-tag:",
+  );
+  const failures = verifyTrustedPublishingProvenanceContract({ workflowText });
+  assert(
+    failures.some((failure) =>
+      failure.includes("single protected release path"),
+    ),
+  );
+});
+
 test("rejects a trusted publisher bound to the wrong workflow", () => {
   const contract = clone(readTrustedPublishingContract());
   contract.npm.publisher.workflowFilename = "publish.yml";
