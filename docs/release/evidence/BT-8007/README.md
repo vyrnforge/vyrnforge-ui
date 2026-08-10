@@ -8,7 +8,7 @@ Populate [`evidence.json`](evidence.json) and retain the referenced redacted cap
 
 - one redacted npm trusted-publisher settings capture per publishable package;
 - one redacted GitHub `npm-release` environment protection capture;
-- the successful verify-mode workflow run and dry-run artifact reference;
+- the successful single-path release workflow run and retained release-artifact dry-run reference;
 - reviewer, review date, and any approved exception.
 
 Repository-controlled validation alone is not sufficient to close BT-8007.

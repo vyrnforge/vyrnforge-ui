@@ -115,27 +115,69 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   }
 
   const release = read(root, ".github/workflows/release.yml");
-  const verifyReleaseSection = release.slice(
-    release.indexOf("  verify-release:"),
-    release.indexOf("  publish-packages:"),
-  );
-  for (const marker of [
-    "uses: ./.github/workflows/_compatibility.yml",
-    "uses: ./.github/workflows/_security.yml",
-    "needs:",
-    "- compatibility-checks",
-    "- security-checks",
-    "npm run verify:beta-package-artifacts",
-    "npm run verify:beta-package-size-budgets",
-  ]) {
-    if (!release.includes(marker)) {
-      failures.push(`release.yml is missing ${marker}`);
+  const verifyReleaseStart = release.indexOf("  verify-release:");
+  const publishPackagesStart = release.indexOf("  publish-packages:");
+
+  if (verifyReleaseStart < 0 || publishPackagesStart <= verifyReleaseStart) {
+    failures.push(
+      "release.yml is missing the canonical verify-release boundary",
+    );
+  } else {
+    const verifyReleaseSection = release.slice(
+      verifyReleaseStart,
+      publishPackagesStart,
+    );
+
+    for (const marker of [
+      "Resolve successful current-main CI run",
+      "actions/workflows/ci.yml/runs",
+      "gh api --paginate",
+      "npm run verify:release-artifact",
+      "npm run verify:beta-package-size-budgets",
+    ]) {
+      if (!verifyReleaseSection.includes(marker)) {
+        failures.push(
+          `release.yml verify-release is missing current-main release control: ${marker}`,
+        );
+      }
     }
   }
-  if (!verifyReleaseSection.includes("needs:")) {
-    failures.push("verify-release must depend on release security preflight");
+
+  for (const forbiddenMarker of [
+    "uses: ./.github/workflows/_compatibility.yml",
+    "uses: ./.github/workflows/_security.yml",
+    "  compatibility-checks:",
+    "  security-checks:",
+    "npm run verify:beta-package-artifacts",
+  ]) {
+    if (release.includes(forbiddenMarker)) {
+      failures.push(
+        `release.yml must not repeat successful main CI through ${forbiddenMarker}`,
+      );
+    }
   }
 
+  if (
+    JSON.stringify(manifest.controls?.mandatoryAggregates) !==
+    JSON.stringify(["ci-gate", "nightly-gate"])
+  ) {
+    failures.push(
+      "security contract mandatory aggregates must be ci-gate and nightly-gate",
+    );
+  }
+
+  if (
+    manifest.releasePreflight?.successfulCurrentMainCiRequired !== true ||
+    manifest.releasePreflight?.reusableSecurityWorkflowRepeated !== false ||
+    manifest.releasePreflight?.reusableCompatibilityWorkflowRepeated !==
+      false ||
+    manifest.releasePreflight?.releaseArtifactVerificationRequired !== true ||
+    manifest.releasePreflight?.betaSizeBudgetVerificationRequired !== true
+  ) {
+    failures.push(
+      "security contract release boundary must trust current-main CI and verify the retained release artifact",
+    );
+  }
   const documentation = read(root, securityDocumentationPath);
   for (const marker of [
     "BT-8006",

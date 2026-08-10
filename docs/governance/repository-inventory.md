@@ -12,8 +12,8 @@ VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundatio
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
 | Documentation | 129 active Markdown files; 23 archived Markdown files |
-| Scripts | 139 root npm scripts; repository automation under `scripts/` |
-| GitHub workflows | 9 workflow files, including 4 reusable workflows |
+| Scripts | 143 root npm scripts; repository automation under `scripts/` |
+| GitHub workflows | 8 workflow files, including 4 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
 ## B. Package Inventory
@@ -210,8 +210,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 110 |
-| Pure/unit | 83 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 111 |
+| Pure/unit | 84 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 8 detected test files with DOM interaction helpers. |
 | Browser | 19 detected browser-test files. |
@@ -230,10 +230,9 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | `.github/workflows/_quality.yml` | Reusable scoped quality validation | Reusable workflow |
 | `.github/workflows/_security.yml` | Reusable security validation | Reusable workflow |
 | `.github/workflows/ci.yml` | Pull request/main CI planning and aggregate gate | Top-level workflow |
-| `.github/workflows/finalize-release.yml` | Requires verification | Top-level workflow |
 | `.github/workflows/nightly.yml` | Scheduled full validation and dependency audit | Top-level workflow |
 | `.github/workflows/pages.yml` | Verified-main Pages artifact validation and deployment | Top-level workflow |
-| `.github/workflows/release.yml` | Manual release verification and protected npm publication | Top-level workflow |
+| `.github/workflows/release.yml` | Single-path immutable-artifact verification and protected npm publication | Top-level workflow |
 
 | Area | Inventory |
 | --- | --- |
@@ -253,7 +252,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Medium | Quality Engineering | Coverage remains uneven across packages despite an enforced baseline. | Use package coverage reports and raise thresholds only with measured evidence; browser behavior is tracked separately. |
 | Medium | Documentation | Component status has several structured and prose representations. | Keep metadata verification authoritative for structured parity and review routes/docs prose. |
 | Medium | Documentation | Known terminology and planned-surface presentation gaps remain. | See Q1-P2-004 and Q1-P2-006 in `docs/quality/q1-component-quality-audit.md`. |
-| Medium | Packaging & Release | Trusted publishing relies on external GitHub/npm configuration. | Verify `npm-release` protection and npm trusted-publisher bindings before publish mode. |
+| Medium | Packaging & Release | Trusted publishing relies on external GitHub/npm configuration. | Verify `npm-release` protection and npm trusted-publisher bindings before approving the protected publication job. |
 | Low | Performance | No measured large-row or rendering benchmark evidence was found. | Establish a performance baseline before feature growth or stable promotion. |
 | Low | Governance | Repository membership and approval rules are external to tracked source. | Confirm branch protection, code ownership, and release approvers in GitHub. |
 | Low | Design Tokens | Token ownership is documented, but visual-regression evidence is absent. | Use manual light/dark/enterprise/density review until visual testing exists. |
@@ -279,12 +278,12 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Publishable packages | 5 |
 | Package-root export names | 591 |
 | Public components inventoried | 75 |
-| Repository test files | 110 |
+| Repository test files | 111 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 8 |
 | Browser test files | 19 |
 | Automated accessibility-test files | 4 |
-| Workflow files | 9 |
+| Workflow files | 8 |
 | Reusable workflows | 4 |
 | Active Markdown documentation files | 129 |
 | Stable metadata entries | 0 |

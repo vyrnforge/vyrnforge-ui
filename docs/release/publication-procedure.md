@@ -28,7 +28,7 @@ Do not include real npm tokens in repository files, workflows, docs, or examples
 - No credentials, private URLs, internal documents, generated archives, logs, or environment files are included.
 - Changelog and release notes are prepared.
 - Migration notes are prepared for breaking changes.
-- `npm ci`, lint, typecheck, tests, package builds, package verification, docs build, and playground build pass.
+- A successful `VyrnForge CI` push run exists for the exact current-main release commit; release consumes that CI evidence rather than rerunning the general validation suite.
 - Package tarballs are reviewed before publication.
 - npm organization access and package visibility are confirmed.
 
@@ -66,31 +66,38 @@ stable.
 
 ## Controlled trusted publication
 
-1. Confirm release issue, checklist approval, and a clean checkout on current `main`.
-2. Manually dispatch `Controlled npm Release` with the canonical release group,
-   its exact version, matching prerelease dist-tag, and `verify` mode. Verify
-   mode never publishes and does not attach the `npm-release` environment or
-   request OIDC.
-3. Review the verification summary, registry availability checks, package
-   payloads, and external-consumer evidence.
-4. Manually dispatch the same candidate in `publish` mode only after approval.
-   The job requires the protected `npm-release` environment.
-5. npm trusted publishing uses GitHub Actions OIDC. No long-lived npm token is
-   stored in the repository, workflow, or GitHub Actions secrets.
-6. Packages publish in the dependency order declared by the selected release
-   group. `non-grid-beta` publishes core, behaviors, components, and elements;
-   `data-grid-alpha` publishes only the grid. The workflow verifies registry
-   propagation and exact manifest dependencies after each required step.
+1. Confirm release issue/checklist approval and dispatch
+   `Controlled npm Release` from current `main` with the canonical release
+   group, exact version, and matching prerelease dist-tag. There is no
+   verify/publish mode selector.
+2. The read-only verification job confirms that the dispatch commit is current
+   `main` and that a successful `VyrnForge CI` push run exists for that exact
+   commit. General CI is not rerun during release.
+3. The verification job builds the selected release dependency closure once,
+   creates the selected `.tgz` files once, records source commit, CI run ID,
+   npm integrity, shasum, SHA-256, sizes, files, package order, version, and
+   dist-tag in the release-artifact manifest, and verifies the exact tarballs.
+4. Review the verification summary and retained release artifact. The next job
+   waits for approval in the protected `npm-release` environment.
+5. The publishing job downloads and revalidates the exact retained artifact and
+   resolves current `main` after approval. If no package has been published
+   yet and the release commit is stale, publication stops.
+6. Packages publish in canonical dependency order from the retained tarballs.
+   If publication already started, a same-run retry may finish from the same
+   artifact even after `main` advances. An existing package is skipped only
+   when registry integrity, shasum, and dist-tag exactly match the retained
+   release; any mismatch fails.
 7. Trusted publishing generates provenance automatically; do not add
    `--provenance` manually.
-8. A read-only job installs the exact published versions from the public
-   registry, verifies metadata and internal dependencies, requires provenance
-   attestation metadata, cryptographically verifies npm registry signatures and
-   attestations with `npm audit signatures`, and runs the external consumer
-   typecheck and production build.
-9. Only after registry verification passes, a separate job with
-   `contents: write` creates the annotated `v<version>` tag and GitHub
-   prerelease. That job has no npm OIDC permission.
+8. A read-only job installs the published versions from the public registry,
+   verifies exact metadata and dependencies, requires provenance metadata,
+   runs `npm audit signatures`, and performs the fresh consumer typecheck and
+   production build.
+9. Only after registry verification passes, the repository-write job creates or
+   verifies the annotated `v<version>` tag and GitHub prerelease.
+10. There is no separate finalize or recovery workflow. Retry failed jobs in the
+    same release run. If the release cannot safely continue, use a new
+    corrective version rather than an alternate finalization path.
 
 ## Responsibility separation
 
@@ -121,7 +128,7 @@ If publication stops after some packages are published:
 - Do not overwrite or republish the same npm version.
 - Pause and document the partial state.
 - Verify which packages and tags reached the registry.
-- Prefer publishing the remaining approved packages when safe.
+- Retry the failed jobs in the same release run; remaining packages may publish only from the same retained, digest-verified artifact.
 - Use a corrective patch or prerelease if a package that reached the registry contains a release-blocking problem.
 - Deprecate a bad published version only when consumers need a clear warning not to use it.
 

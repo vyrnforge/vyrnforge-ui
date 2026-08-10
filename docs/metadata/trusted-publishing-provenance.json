@@ -31,11 +31,14 @@
     "environment": "npm-release",
     "concurrencyGroup": "vyrnforge-npm-release",
     "publishPermissions": {
+      "actions": "read",
       "contents": "read",
       "id-token": "write"
     },
     "verificationMustNotRequestOidc": true,
-    "releaseRecordMustNotRequestOidc": true
+    "releaseRecordMustNotRequestOidc": true,
+    "singleDispatch": true,
+    "releaseArtifact": "test-results/release-artifact/manifest.json"
   },
   "npm": {
     "registry": "https://registry.npmjs.org",
@@ -88,10 +91,11 @@
     }
   ],
   "dryRun": {
-    "command": "npm run verify:trusted-publishing-dry-run -- --release-group <release-group> --version <version> --dist-tag <dist-tag>",
-    "reportDirectory": "test-results/trusted-publishing",
-    "requiresBuiltPackages": true,
-    "requiresCredentialFreeEnvironment": true
+    "command": "npm run verify:trusted-publishing-dry-run -- --release-group <release-group> --version <version> --dist-tag <dist-tag> --artifact-dir test-results/release-artifact",
+    "reportDirectory": "test-results/release-artifact",
+    "requiresBuiltPackages": false,
+    "requiresCredentialFreeEnvironment": true,
+    "requiresVerifiedReleaseArtifact": true
   },
   "externalEvidence": {
     "status": "pending",
@@ -102,7 +106,7 @@
       "GitHub npm-release environment has required reviewers and prevents self-review",
       "GitHub npm-release deployment branch policy permits only the approved release branch",
       "no long-lived npm publish token is stored in repository or environment secrets",
-      "successful verify-mode workflow dry run with retained report"
+      "successful single-path release verification with retained exact-tarball dry-run evidence"
     ],
     "evidenceIndex": "docs/release/evidence/BT-8007/evidence.json"
   },

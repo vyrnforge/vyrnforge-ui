@@ -34,7 +34,7 @@
     },
     "immutableActions": true,
     "longLivedTokensForbidden": true,
-    "mandatoryAggregates": ["ci-gate", "nightly-gate", "verify-release"]
+    "mandatoryAggregates": ["ci-gate", "nightly-gate"]
   },
   "protectedGate": {
     "workflow": ".github/workflows/ci.yml",
@@ -45,7 +45,6 @@
       "package-checks",
       "consumer-checks",
       "docs-checks",
-      "compatibility-checks",
       "security-checks"
     ],
     "continueOnErrorForbidden": true,
@@ -53,13 +52,12 @@
   },
   "releasePreflight": {
     "workflow": ".github/workflows/release.yml",
-    "requiredJobs": [
-      "security-checks",
-      "compatibility-checks",
-      "verify-release"
-    ],
-    "betaArtifactVerificationRequired": true,
-    "betaSizeBudgetVerificationRequired": true
+    "requiredJobs": ["verify-release"],
+    "betaSizeBudgetVerificationRequired": true,
+    "successfulCurrentMainCiRequired": true,
+    "reusableSecurityWorkflowRepeated": false,
+    "reusableCompatibilityWorkflowRepeated": false,
+    "releaseArtifactVerificationRequired": true
   },
   "verification": {
     "command": "npm run verify:security-workflow-hardening",
