@@ -2,76 +2,52 @@
 
 ## Purpose
 
-`@vyrnforge/ui-components` is the first-class React renderer for reusable
-VyrnForge UI primitives and enterprise application components.
+`@vyrnforge/ui-components` is VyrnForge's first-class React renderer for
+reusable primitives and enterprise application components.
 
-The package name remains stable through the multi-framework beta. Do not rename
-it to `@vyrnforge/ui-react` during behavior extraction.
+It owns React props, callbacks, hooks, refs, JSX composition, renderer-specific
+DOM adapters, and React component styling. Portable behavior is delegated to
+`@vyrnforge/ui-behaviors` where it is shared with the native renderer.
 
-## Component groups
+## Install
 
-- actions: Button, IconButton, ToolbarButton, ButtonGroup, SegmentedControl;
-- typography: Text, Heading, Label, Caption, CodeText;
-- forms: Field, TextInput, SearchInput, Select, Autocomplete, Checkbox, Radio,
-  RadioGroup, Switch, NumberInput, DateInput, DateTimeInput, MultiSelect,
-  Textarea, ValidationMessage;
-- data management: TransferList;
-- feedback: Badge, Alert/InlineMessage, Toast, EmptyState, ErrorState,
-  LoadingState, Skeleton;
-- overlays: Popover, Menu, Dropdown, Tooltip, Dialog, Drawer, ConfirmDialog;
-- layout: Card, Panel, Stack, Inline, Section, AppShell, Page, PageHeader,
-  PageToolbar;
-- navigation: SideNav, TopNav, Breadcrumbs, Tabs.
-
-## Multi-framework role
-
-React remains the reference renderer. During S5, portable state transitions and
-controller rules move into `@vyrnforge/ui-behaviors` without changing
-the documented React public API.
-
-React owns:
-
-- React props and callbacks;
-- hooks and lifecycle integration;
-- refs, JSX, children, and render callbacks;
-- React-specific DOM adapters;
-- current component CSS and `vf-*` class structure.
-
-React must not become the implementation runtime for Angular, Vue, or native
-HTML consumers.
-
-## Dependencies
-
-Current:
-
-- `@vyrnforge/ui-core`
-- React and React DOM as peer dependencies
-
-Planned after S5:
-
-- `@vyrnforge/ui-behaviors`
-
-Forbidden:
-
-- `@vyrnforge/ui-elements`
-- `@vyrnforge/ui-data-grid`
-- required Redux, TanStack, MUI, Radix, Tailwind, or other large UI runtimes
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta
+```
 
 ## Import
 
 ```tsx
 import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
+
+import { Button } from "@vyrnforge/ui-components";
 ```
 
-## Release direction
+## Dependencies
 
-All public non-grid React components are in the coordinated beta scope. Their
-promotion requires React parity after behavior extraction and the normal
-component maturity evidence.
+The package may depend on:
 
-See:
+- `@vyrnforge/ui-core`;
+- `@vyrnforge/ui-behaviors`;
+- React and React DOM as peer dependencies.
 
-- `../architecture/adr-004-multi-framework-web-support.md`
-- `../architecture/09-component-contracts-and-events.md`
-- `../metadata/multi-framework.json`
+It must not depend on `@vyrnforge/ui-elements`,
+`@vyrnforge/ui-data-grid`, an application store, or a large third-party UI
+runtime.
+
+React is a first-class renderer, not the implementation runtime for native
+HTML, Angular, or Vue consumers.
+
+## Public surface
+
+Use [ui-components API](../api/ui-components-api.md) and the
+[generated component reference](../generated/component-reference.json) for the
+current public component surface. Component maturity and known limitations are
+canonical in [`../metadata/components.json`](../metadata/components.json);
+do not duplicate that catalog here.
+
+## Release channel
+
+`@vyrnforge/ui-components` is part of the synchronized non-grid `beta` release
+group.

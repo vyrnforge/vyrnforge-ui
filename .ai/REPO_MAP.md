@@ -2,63 +2,68 @@
 
 ## Root
 
-```txt
+```text
 package.json
 README.md
 AGENTS.md
 .ai/
 docs/
 packages/
+apps/
 examples/
+tests/
+scripts/
 ```
 
 ## Packages
 
-```txt
-packages/ui-core/
-packages/ui-behaviors/   # MF-5001–MF-5014 current
-packages/ui-components/
-packages/ui-elements/    # 58-tag GMF3 native renderer complete; S7 consumer verification next
-packages/ui-data-grid/   # independent React alpha
+```text
+packages/ui-core/        # framework-neutral design foundation
+packages/ui-behaviors/   # framework-neutral controllers and behavior
+packages/ui-components/  # first-class React renderer
+packages/ui-elements/    # first-class native Custom Element renderer
+packages/ui-data-grid/   # independent React alpha data grid
 ```
 
 ## Documentation
 
-Use `docs/README.md` as the canonical documentation entrypoint.
+Use `docs/README.md` as the canonical reader-oriented entrypoint.
 
-```txt
-docs/README.md
-docs/governance/
-docs/architecture/
-docs/roadmap/
-docs/api/
-docs/benchmark/
-docs/metadata/
-docs/archive/
-docs/packages/
-docs/react-docs/
-docs/ai/
-docs/templates/
-docs/prompts/
-tests/consumers/
+```text
+docs/api/           # public usage and API contracts
+docs/architecture/  # package, state, styling, renderer, accessibility contracts
+docs/governance/    # ownership, source-of-truth, metadata, repository governance
+docs/release/       # release policy and publication
+docs/roadmap/       # current planning
+docs/quality/       # current limitations plus quality/evidence material
+docs/testing/       # browser and consumer contracts/evidence
+docs/metadata/      # structured catalogs and verification state
+docs/generated/     # generated references
+docs/archive/       # historical/replaced guidance
 ```
 
-## Where To Put Code
+## Where code belongs
 
-| Work                       | Location                                            |
-| -------------------------- | --------------------------------------------------- |
-| Shared tokens/themes       | `packages/ui-core`                                  |
-| Framework-neutral behavior | `packages/ui-behaviors`                             |
-| React component            | `packages/ui-components/src/components/<Component>` |
-| Native Custom Element      | `packages/ui-elements`                              |
-| Grid-specific behavior     | `packages/ui-data-grid` (deferred release track)    |
-| Docs app example           | `examples/basic-playground` or future docs app      |
-| Architecture docs          | `docs/architecture`                                 |
-| Public API docs            | `docs/api`                                          |
-| Component docs             | Component README plus docs app page                 |
+| Work                       | Location                    |
+| -------------------------- | --------------------------- |
+| Shared tokens/themes       | `packages/ui-core`          |
+| Framework-neutral behavior | `packages/ui-behaviors`     |
+| React components           | `packages/ui-components`    |
+| Native Custom Elements     | `packages/ui-elements`      |
+| Grid-specific behavior     | `packages/ui-data-grid`     |
+| Human docs application     | `apps/docs`                 |
+| Interactive examples       | `examples/basic-playground` |
+| Consumer fixtures          | `tests/consumers`           |
+| Browser verification       | `tests/browser`             |
+| Repository automation      | `scripts`                   |
+| Architecture docs          | `docs/architecture`         |
+| Public API docs            | `docs/api`                  |
 
-## Before Creating New Docs
+## Before creating docs
 
-Read `docs/README.md` and `docs/governance/00-documentation-governance.md`.
+Read `docs/README.md` and
+`docs/governance/00-documentation-governance.md`.
 
-Update canonical docs instead of creating duplicates. Archive outdated docs under `docs/archive/<yyyy-mm-topic>/`.
+Update canonical docs instead of creating duplicates. Component status belongs
+in `docs/metadata/components.json`; generated references derive from canonical
+metadata.

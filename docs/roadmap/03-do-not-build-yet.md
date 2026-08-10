@@ -1,25 +1,26 @@
 # Do Not Build Yet
 
-These items are intentionally deferred from the non-grid multi-framework beta.
+These items remain intentionally outside the current VyrnForge roadmap unless a
+new approved requirement or measured need changes the priority.
 
-| Avoid                                                        | Reason                                                                                                           |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| Data-grid decomposition and performance expansion            | The grid remains a usable React alpha but must not delay the broader component beta.                             |
-| Multi-framework data-grid renderers                          | Extract non-grid architecture and prove the renderer model first.                                                |
-| Independent Angular component implementation                 | Angular consumes native elements; only thin integration adapters are allowed where needed.                       |
-| Independent Vue component implementation                     | Vue consumes native elements; only thin `v-model` or typing adapters are allowed where needed.                   |
-| Renaming `@vyrnforge/ui-components` to `@vyrnforge/ui-react` | Creates migration churn without improving the architecture boundary.                                             |
-| Universal Shadow DOM                                         | Conflicts with enterprise theming, overrides, overlays, and existing CSS contracts; exceptions require approval. |
-| Large Web Component runtime                                  | Violates the native-first, dependency-minimal direction unless proven necessary.                                 |
-| React Native, Flutter, Android, or iOS renderer              | The current program is multi-framework web support, not cross-platform native rendering.                         |
-| Charting package                                             | Not core to current VyrnForge positioning. Integrate external chart packages later.                              |
-| Spreadsheet clone or BI pivot engine                         | Pulls the grid toward Excel/BI scope too early.                                                                  |
-| Required Redux adapter                                       | Controlled props and framework-neutral controllers remain store-agnostic.                                        |
-| Required Tailwind, MUI, Radix, or TanStack dependency        | Violates the approved dependency policy.                                                                         |
-| Full XLSX/PDF generator inside grid                          | Apps or future dedicated packages own file generation.                                                           |
+| Avoid                                                             | Reason                                                                                                                    |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Broad data-grid decomposition without a dedicated plan            | The grid is a separate React alpha workstream and should not redefine the shared UI foundation.                           |
+| Multi-framework data-grid renderers                               | Non-grid renderer support does not imply grid parity; additional grid renderers need their own architecture and evidence. |
+| Independent Angular component implementation                      | Angular consumes the native renderer; thin integration adapters are preferred.                                            |
+| Independent Vue component implementation                          | Vue consumes the native renderer; thin model/typing adapters are preferred.                                               |
+| Renaming `@vyrnforge/ui-components` to `@vyrnforge/ui-react`      | Creates migration churn without improving package ownership.                                                              |
+| Universal Shadow DOM                                              | Conflicts with current enterprise styling and interoperability defaults; exceptions require explicit approval.            |
+| Large required Web Component runtime                              | Conflicts with the native-first, dependency-minimal architecture unless clearly justified.                                |
+| React Native, Flutter, Android, or iOS renderer                   | Mobile-native rendering is outside the current web support model.                                                         |
+| Built-in charting platform                                        | Not part of the current UI foundation scope.                                                                              |
+| Spreadsheet clone or BI pivot engine                              | Pulls the grid into a different product category.                                                                         |
+| Required Redux/Zustand/NgRx/Pinia integration                     | VyrnForge remains application-store agnostic.                                                                             |
+| Required Tailwind, MUI, Radix, TanStack, or similar UI dependency | Conflicts with dependency-minimal portability.                                                                            |
+| Full XLSX/PDF generation inside the grid                          | File generation remains an application or dedicated-package concern.                                                      |
 
 ## Rule
 
-Build only when the need appears across multiple real products or the capability
-is foundational for the approved beta critical path. Architecture fixtures do
-not justify a support claim; support requires versioned consumer evidence.
+Build new reusable surface area only when it solves a repeated product need,
+fits existing package boundaries, and cannot be satisfied by extending current
+VyrnForge foundations.

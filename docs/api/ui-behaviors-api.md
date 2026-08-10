@@ -240,6 +240,9 @@ loading and disabled action eligibility, cancel proposals, confirm events, and
 user-dismissal blocking while loading. The React adapter keeps rendering and
 button event translation.
 
-## GMF2 closure
+## Related sources
 
-MF-5001 through MF-5016 are complete. React adoption is audited in `docs/metadata/react-behavior-adoption.json`, and the shared behavior parity gate is recorded in `docs/metadata/gmf2-closure.json`.
+Behavior ownership and renderer boundaries are canonical in
+`docs/architecture/02-state-and-adapter-ownership.md`. Historical behavior
+closure evidence remains available under `docs/metadata/` and does not define
+the current public API.

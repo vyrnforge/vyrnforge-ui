@@ -1,112 +1,35 @@
 # Component Inventory
 
-## Maturity levels
+VyrnForge does not maintain a second hand-written component/status table in the
+roadmap.
 
-| Level | Meaning |
-| --- | --- |
-| Candidate | Potential future component. |
-| Planned | Approved direction, not implemented. |
-| Experimental | Implemented but API may change. |
-| Stable | Production-usable API. |
-| Deprecated | Replaced by another pattern. |
+## Canonical catalog
 
-## Foundation
+The canonical structured component catalog is:
 
-| Component | Package | Status |
-| --- | --- | --- |
-| Theme tokens | `ui-core` | Stable/Current |
-| Density tokens | `ui-core` | Stable/Current |
-| Utility classes | `ui-core` | Stable/Current |
+[`../metadata/components.json`](../metadata/components.json)
 
-## Actions
+It owns component identity, package ownership, public-export status, maturity,
+routes, evidence, framework-parity metadata, and per-component known
+limitations.
 
-| Component | Package | Status |
-| --- | --- | --- |
-| Button | `ui-components` | Current |
-| IconButton | `ui-components` | Current |
-| ToolbarButton | `ui-components` | Current |
-| ButtonGroup | `ui-components` | Current/Experimental |
-| SegmentedControl | `ui-components` | Current |
-| ToggleButton | `ui-components` | Experimental |
-| ToggleButtonGroup | `ui-components` | Experimental |
+## Generated views
 
-## Typography
+Use generated views when a human- or tool-friendly projection is needed:
 
-| Component | Package | Status |
-| --- | --- | --- |
-| Text | `ui-components` | Current |
-| Heading | `ui-components` | Current |
-| Label | `ui-components` | Current |
-| Caption | `ui-components` | Current |
-| CodeText | `ui-components` | Current/Planned |
+- [`../generated/component-reference.json`](../generated/component-reference.json)
+  for generated framework/component reference data;
+- [`../governance/repository-inventory.md`](../governance/repository-inventory.md)
+  for the generated repository/component evidence inventory.
 
-## Forms
+Those views must derive from canonical metadata rather than introduce another
+manually maintained status list.
 
-| Component | Package | Status |
-| --- | --- | --- |
-| Field | `ui-components` | Current |
-| TextInput | `ui-components` | Current |
-| SearchInput | `ui-components` | Current |
-| Select | `ui-components` | Current |
-| Checkbox | `ui-components` | Current |
-| Textarea | `ui-components` | Current |
-| Radio | `ui-components` | Experimental |
-| RadioGroup | `ui-components` | Experimental |
-| Switch | `ui-components` | Experimental |
-| NumberInput | `ui-components` | Experimental |
-| DateInput | `ui-components` | Experimental |
-| DateTimeInput | `ui-components` | Experimental |
-| MultiSelect | `ui-components` | Experimental |
-| ValidationMessage | `ui-components` | Experimental |
-| Rating | `ui-components` | Experimental |
-| Slider | `ui-components` | Experimental |
-| Combobox | `ui-components` | Later |
-| Autocomplete | `ui-components` | Experimental (single-select) |
-| TransferList | `ui-components` | Experimental |
+## Planning rule
 
-## Overlays
+Roadmap work may reference component IDs from the canonical catalog, but changes
+to component availability or maturity must update `components.json` and its
+required evidence first.
 
-| Component | Package | Status |
-| --- | --- | --- |
-| Popover | `ui-components` | Current |
-| Menu | `ui-components` | Current |
-| Dropdown | `ui-components` | Current |
-| Tooltip | `ui-components` | Current |
-| Dialog | `ui-components` | Current |
-| Drawer | `ui-components` | Current |
-| ConfirmDialog | `ui-components` | Current |
-| CommandPalette | `ui-components` or future package | Later |
-
-## Navigation
-
-| Component | Package | Status |
-| --- | --- | --- |
-| Tabs | `ui-components` | Experimental |
-| Breadcrumbs | `ui-components` | Experimental |
-| SideNav | `ui-components` | Experimental |
-| TopNav | `ui-components` | Experimental |
-| AppShell | `ui-components` | Experimental |
-| Page | `ui-components` | Experimental |
-| PageHeader | `ui-components` | Experimental |
-| PageToolbar | `ui-components` | Experimental |
-
-## Data display
-
-| Component | Package | Status |
-| --- | --- | --- |
-| DescriptionList | `ui-components` | Planned |
-| KeyValueList | `ui-components` | Planned |
-| PropertyTable | `ui-components` | Planned |
-| ResourceList | `ui-components` | Planned |
-| CompactList | `ui-components` | Planned |
-| Timeline | `ui-components` | Planned |
-| ActivityLog | `ui-components` | Planned |
-
-## Data management
-
-| Component | Package | Status |
-| --- | --- | --- |
-| UniversalDataGrid | `ui-data-grid` | Current |
-| AdvancedFilterDrawer | `ui-data-grid` or `ui-components` | Planned |
-| SavedViewSelector | `ui-data-grid` or `ui-components` | Planned |
-| ExportPreviewPanel | future package or `ui-data-grid` shell | Planned |
+Potential future components remain `planned` in canonical metadata until an
+approved implementation makes them public.

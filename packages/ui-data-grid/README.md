@@ -8,10 +8,14 @@ This package exposes generic contracts, pure core helpers, controlled/uncontroll
 
 ## Package Status
 
-VyrnForge UI is currently in an early alpha prerelease stage. For registry
-installations, use the explicit `alpha` dist-tag while the public APIs,
-accessibility behavior, and package boundaries continue to be evaluated. This
-package is not yet intended for production use.
+VyrnForge UI is prerelease software. `@vyrnforge/ui-data-grid` remains on the
+independent `data-grid-alpha` release track. Use the explicit `alpha` dist-tag
+for the grid and the compatible `beta` channel for its shared VyrnForge
+foundations.
+
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
+```
 
 VyrnForge UI is source-available under the VyrnForge Source License 1.0. Source inspection, local evaluation, and temporary non-production prototypes are permitted. Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license.
 

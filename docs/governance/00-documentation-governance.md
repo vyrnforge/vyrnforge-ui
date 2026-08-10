@@ -2,105 +2,71 @@
 
 ## Purpose
 
-This document prevents VyrnForge UI documentation from becoming duplicated, conflicting, or multi-directional.
+VyrnForge documentation should have one current source of truth per topic.
+Reader-facing entrypoints link to canonical documents rather than repeating
+their full content.
 
-VyrnForge UI has multiple concerns:
+## Canonical ownership
 
-- native-first UI foundation
-- component library
-- design-system tokens
-- specialized data grid
-- playground / React docs app
-- AI-friendly documentation
+| Topic                                                      | Canonical source                                      |
+| ---------------------------------------------------------- | ----------------------------------------------------- |
+| Documentation entrypoint                                   | `docs/README.md`                                      |
+| Project identity                                           | `docs/governance/01-project-source-of-truth.md`       |
+| Package boundaries                                         | `docs/architecture/01-package-boundaries.md`          |
+| State ownership                                            | `docs/architecture/02-state-and-adapter-ownership.md` |
+| Theming and styling                                        | `docs/architecture/03-theming-and-styling.md`         |
+| Current roadmap                                            | `docs/roadmap/00-master-roadmap.md`                   |
+| Component catalog, maturity, and per-component limitations | `docs/metadata/components.json`                       |
+| Generated component/framework reference                    | `docs/generated/component-reference.json`             |
+| CI/CD architecture                                         | `docs/engineering/ci-cd-architecture.md`              |
+| Release procedure                                          | `docs/release/publication-procedure.md`               |
+| AI context                                                 | `.ai/AI_CONTEXT.md`                                   |
 
-Without governance, every sprint can create another version of the same idea. This document defines how documentation should be owned.
+Generated inventories and references may summarize canonical metadata, but they
+must not become competing manually maintained catalogs.
 
 ## Core rules
 
-### 1. One source of truth per topic
+### One source of truth per topic
 
-Do not create duplicate documents for the same decision.
+Before creating a document, identify whether an existing canonical source
+already owns the subject. Update that source and link to it instead of creating
+another version.
 
-| Topic | Canonical document |
-| --- | --- |
-| Project identity | `docs/governance/01-project-source-of-truth.md` |
-| Package boundaries | `docs/architecture/01-package-boundaries.md` |
-| State ownership | `docs/architecture/02-state-and-adapter-ownership.md` |
-| Theming/styling | `docs/architecture/03-theming-and-styling.md` |
-| Roadmap | `docs/roadmap/00-master-roadmap.md` |
-| Component inventory | `docs/roadmap/01-component-inventory.md` |
-| React docs app | `docs/react-docs/00-react-docs-app-spec.md` |
-| AI context | `.ai/AI_CONTEXT.md` |
+### Current guidance before history
 
-### 2. Archive instead of deleting
+Normal usage, architecture, package, and release docs describe current behavior.
+Completed sprint narratives, gate-closure reports, old audits, and
+release-specific evidence belong under clearly marked historical/evidence
+areas.
 
-When a document becomes outdated:
+Historical evidence never overrides current guidance.
 
-1. Move it to `docs/archive/<yyyy-mm-topic>/`.
-2. Add a note at the top saying why it was archived.
-3. Link the replacement document.
+### Archive replaced guidance
 
-### 3. Stable documents should have owners
+When a document is replaced rather than updated, move it under
+`docs/archive/<yyyy-mm-topic>/`, add an archive note, and link the replacement.
 
-Every stable document should include:
+### Keep generated catalogs generated
 
-- status
-- owner role
-- last reviewed date
-- replacement/related docs
+Component lists and framework-reference views must derive from canonical
+metadata. Do not hand-maintain the same component/status table in the README,
+roadmap, package docs, API index, and metadata.
 
-### 4. Docs should serve humans and AI
+### Human and machine-readable sources must agree
 
-Each major document should include:
+Markdown owns human-readable decisions. Structured metadata supports
+verification, generated docs, and AI lookup and must stay aligned with those
+decisions.
 
-- clear title
-- purpose
-- scope
-- non-goals
-- decisions
-- examples
-- AI usage notes when applicable
+## Important document lifecycle
 
-### 5. No hidden architectural decisions
+Stable or canonical documents should state their purpose, scope, non-goals where
+needed, and related sources. See [Document Lifecycle](02-document-lifecycle.md)
+for archive and replacement rules.
 
-If a decision affects package boundaries, state ownership, dependencies, theming, or public API, it belongs in docs.
+## Verification
 
-## Document status values
-
-| Status | Meaning |
-| --- | --- |
-| Draft | Not final; may change soon. |
-| Proposed | Awaiting review/confirmation. |
-| Stable | Approved baseline. |
-| Deprecated | Still available but should not guide new work. |
-| Archived | Historical only. |
-
-## Required header for important docs
-
-```md
----
-title: <Document title>
-status: Stable
-owner: VyrnForge UI maintainers
-last_reviewed: YYYY-MM-DD
-canonical: true
----
-```
-
-## When creating a new doc
-
-Before creating a new doc, answer:
-
-1. Does an existing doc already own this topic?
-2. Is this a new topic or an update to an existing topic?
-3. Is the doc for humans, AI, or both?
-4. Should it be a stable doc, ADR, sprint doc, or template?
-5. What old docs become outdated after this change?
-
-## What should not happen
-
-- Multiple roadmap files with different priorities.
-- Multiple package architecture files with different package boundaries.
-- Multiple Redux/state policy files with different guidance.
-- Component docs that contradict package README.
-- AI prompts that ignore the current architecture docs.
+`npm run verify:documentation-current` checks primary guidance for stale release
+channels, hardcoded prerelease versions, obsolete project-state language, and
+reader-entrypoint structure.

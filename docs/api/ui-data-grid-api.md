@@ -98,7 +98,7 @@ The app remains the source of truth when controlled props are used.
 ## Experimental State Hook
 
 `useDataGridState` is the one supported public grid hook. It is
-**experimental** during pre-alpha: its package-root import, options, and
+**experimental** on the independent alpha prerelease track: its package-root import, options, and
 returned tuple are documented, but the API may change before a stable release.
 
 Use it when application code needs to coordinate the same complete

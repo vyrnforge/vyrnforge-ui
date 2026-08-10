@@ -4,9 +4,9 @@ This document is the canonical human-readable contract for MF-4006 and MF-4007.
 
 ## Native element direction
 
-`@vyrnforge/ui-elements` will use browser-native Custom Elements and remain
-runtime dependency-minimal. A large component runtime is not approved by this
-architecture batch.
+`@vyrnforge/ui-elements` uses browser-native Custom Elements and remains runtime
+dependency-minimal. A large component runtime is not approved by the VyrnForge
+architecture.
 
 Registration must be explicit:
 
@@ -187,5 +187,5 @@ submission. CF-7004 proves an opt-in standalone ControlValueAccessor/Validator
 directive that maps Angular Forms to the existing native value, checked,
 disabled, validity, and canonical event contracts. CF-7005 supplies the Vue 3
 packed-consumer fixture and runtime verifier over the same native contracts.
-The clean build and Chromium evidence are complete; Vue `v-model` translation
-remains CF-7006 work.
+The clean build, Chromium evidence, and thin Vue `v-model` reference adapter are
+complete.

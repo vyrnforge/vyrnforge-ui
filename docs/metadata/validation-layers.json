@@ -61,6 +61,13 @@
       "reuseReason": "The post-merge trust boundary validates the exact merged tree."
     },
     {
+      "id": "documentation-current",
+      "owner": "pull-request",
+      "command": "npm run verify:documentation-current",
+      "reusedBy": ["main"],
+      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+    },
+    {
       "id": "affected-code-validation",
       "owner": "pull-request",
       "command": "node scripts/run-scoped-quality.mjs"

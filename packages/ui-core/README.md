@@ -8,14 +8,21 @@ components, data-grid behavior, application state, adapters, or a global store.
 
 ## Package status
 
-VyrnForge UI is in early alpha. Install through the explicit `alpha` dist-tag
-while contracts continue to be evaluated. This package is not yet intended for
-production use.
+VyrnForge UI is prerelease software. `@vyrnforge/ui-core` is part of the
+configured `non-grid-beta` release group. Use the explicit `beta` dist-tag for
+prerelease registry installations; stable-release and component-maturity
+decisions remain separate.
 
 VyrnForge UI is source-available under the VyrnForge Source License 1.0.
 Production, commercial, redistribution, republication, resale, sublicensing,
 white-labeling, and competing-library use require separate written permission
 or a commercial license.
+
+## Install
+
+```bash
+npm install @vyrnforge/ui-core@beta
+```
 
 ## Import
 
@@ -42,7 +49,7 @@ Public package entry points use built `dist` output. They do not expose internal
 
 ## Semantic token contract
 
-The S3 contract contains nine categories:
+The semantic token contract contains nine categories:
 
 - surfaces
 - text

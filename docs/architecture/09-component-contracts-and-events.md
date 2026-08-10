@@ -1,7 +1,7 @@
 # Multi-Framework Component Contracts And Events
 
-This document is the canonical human-readable contract for MF-4003, MF-4004,
-and MF-4005. The machine-readable source is
+This document is the canonical human-readable cross-framework component
+contract. The machine-readable source is
 `docs/metadata/component-contracts.json`.
 
 ## Contract layers
@@ -135,9 +135,10 @@ Equivalent behavior does not require identical DOM trees.
 
 ## Current catalog and representative records
 
-S4 records framework-parity metadata for every public React non-grid component and keeps Button, Tabs, Autocomplete, and Dialog as detailed representative contracts.
-They prove the schema across action, navigation, form-control, and overlay
-families. They do not claim that the native elements are implemented.
+The canonical component catalog and renderer status live in
+`docs/metadata/components.json`. Detailed representative cross-framework
+contracts remain in `docs/metadata/component-contracts.json`, and the generated
+consumer-facing projection lives in `docs/generated/component-reference.json`.
 
-MF-4011 expands the schema across the complete component catalog. S5 and S6
-supply behavior and renderer evidence before any beta maturity promotion.
+React and native HTML are the first-class renderers. Angular and Vue consume the
+native renderer through the verified mappings recorded in canonical metadata.
