@@ -266,14 +266,13 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
     "non-grid-beta",
     "data-grid-alpha",
     '--release-group "$RELEASE_GROUP"',
-    "if: inputs.release-group == 'non-grid-beta'",
-    "if: inputs.release-group == 'data-grid-alpha'",
   ]) {
     if (!releaseWorkflow.includes(marker)) {
-      failures.push(`release workflow is missing group guard: ${marker}`);
+      failures.push(
+        `release workflow is missing release-group contract marker: ${marker}`,
+      );
     }
   }
-
   const versioningPolicy = read(root, "docs/release/versioning-policy.md");
   for (const marker of [
     "0.2.0-beta.2",

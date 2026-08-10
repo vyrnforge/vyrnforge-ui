@@ -15,15 +15,15 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 
 - [ ] Repository checkout is clean.
 - [ ] No credentials, private URLs, customer data, internal documents, logs, archives, `.env` files, or unintended generated output are included.
-- [ ] `npm ci` passes.
-- [ ] Lint passes when available.
-- [ ] Typecheck passes.
-- [ ] Tests pass.
-- [ ] Package builds pass.
-- [ ] `npm run verify:packages` passes.
-- [ ] `npm run verify:consumer` passes.
+- [ ] A successful `VyrnForge CI` push run exists for the exact current-main release commit.
+- [ ] The successful current-main CI run includes the repository quality gate for the release commit.
+- [ ] Release verification resolves and records that exact successful CI run.
+- [ ] The release-artifact manifest records the exact source commit, CI run ID, package order, version, and dist-tag.
+- [ ] The selected release dependency closure is built once in `verify-release`.
+- [ ] Exact release `.tgz` files pass release-artifact digest, payload, and consumer verification.
+- [ ] Credential-free `npm publish --dry-run` runs against those exact retained `.tgz` files.
 - [ ] `npm run verify:multi-framework` passes for a multi-framework release.
-- [ ] The stable `ci-gate` check passes. During migration, compatibility checks `quality` and `external-consumer` also pass.
+- [ ] The stable `ci-gate` result for the release commit is successful.
 - [ ] For beta or stable promotion, `npm run verify:assistive-technology:release` passes.
 - [ ] Package manifests use `SEE LICENSE IN LICENSE`.
 - [ ] Package tarballs include LICENSE and no unrelated legal drafts or internal legal notes.
@@ -35,8 +35,8 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] SECURITY.md reporting route is accurate.
 - [ ] npm organization access and package visibility are confirmed.
 - [ ] The controlled release workflow is manually dispatched from current `main`.
-- [ ] Verify mode summary is reviewed before publish mode is approved.
-- [ ] The protected `npm-release` environment is approved for publish mode.
+- [ ] The single release verification summary and immutable artifact are reviewed before `npm-release` approval.
+- [ ] The protected `npm-release` environment is approved for the publishing job.
 - [ ] npm trusted publishers are configured for each publishable package; no long-lived npm token is stored.
 - [ ] Rollback or corrective-release plan is documented.
 

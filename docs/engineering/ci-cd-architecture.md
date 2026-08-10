@@ -21,19 +21,20 @@ not own product behavior, application state, public APIs, or styling contracts.
 - Use read-only permissions by default.
 - Use npm trusted publishing through GitHub OIDC only in the protected publish
   job.
-- Select security checks from changed paths and reserve complete compatibility,
-  dependency, and CodeQL drift detection for nightly and release boundaries.
+- Select security checks from changed paths, reserve complete compatibility,
+  dependency, and CodeQL drift detection for nightly validation, and require
+  release to consume successful current-main CI evidence rather than rerun it.
 
 ## Workflow map
 
-| Workflow                             | Trigger                                                      | Responsibility                                                                                             | Write capability      |
-| ------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `.github/workflows/ci.yml`           | Pull request, push to `main`, manual                         | Plan scopes, invoke quality/integration/security, expose `ci-gate`, and upload the current-main Pages site | None                  |
-| `.github/workflows/_quality.yml`     | `workflow_call`                                              | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification      | None                  |
-| `.github/workflows/_integration.yml` | `workflow_call`                                              | Selected package, consumer, browser, docs, playground, and commit-bound Pages artifact production          | None                  |
-| `.github/workflows/pages.yml`        | Successful current-main CI push or manual existing CI run ID | Validate, download, package, and deploy the existing commit-bound Pages site                               | Pages deployment only |
-| `.github/workflows/release.yml`      | Manual                                                       | Verify candidate, publish through OIDC, verify registry consumer, create tag and GitHub Release            | Split by job          |
-| `.github/workflows/nightly.yml`      | Weekly schedule, manual                                      | Full pinned Node 24 LTS validation and high-severity dependency audit                                      | None                  |
+| Workflow                             | Trigger                                                      | Responsibility                                                                                                      | Write capability      |
+| ------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `.github/workflows/ci.yml`           | Pull request, push to `main`, manual                         | Plan scopes, invoke quality/integration/security, expose `ci-gate`, and upload the current-main Pages site          | None                  |
+| `.github/workflows/_quality.yml`     | `workflow_call`                                              | Metadata, lint, coverage, targeted/full typecheck, accessibility, and regression-fixture verification               | None                  |
+| `.github/workflows/_integration.yml` | `workflow_call`                                              | Selected package, consumer, browser, docs, playground, and commit-bound Pages artifact production                   | None                  |
+| `.github/workflows/pages.yml`        | Successful current-main CI push or manual existing CI run ID | Validate, download, package, and deploy the existing commit-bound Pages site                                        | Pages deployment only |
+| `.github/workflows/release.yml`      | Manual                                                       | Resolve current-main CI, prepare/verify immutable tarballs, publish exact artifact, verify registry, create release | Split by job          |
+| `.github/workflows/nightly.yml`      | Weekly schedule, manual                                      | Full pinned Node 24 LTS validation and high-severity dependency audit                                               | None                  |
 
 Reusable workflow files live directly in `.github/workflows/` because GitHub
 Actions does not support reusable workflow subdirectories.
@@ -143,8 +144,8 @@ The G1 quality checks aggregated by `ci-gate` are:
 - documentation and playground builds whenever the planner requires them.
 
 `ci-gate` evaluates the planner plus the selected quality, integration, and
-security responsibilities. Compatibility drift is owned by nightly and release
-preflight instead of every pull request. npm publication, registry verification,
+security responsibilities. Compatibility drift is owned by nightly validation. Release consumes the
+successful current-main CI result instead of rerunning compatibility. npm publication, registry verification,
 Pages deployment, and release-record creation remain outside pull-request CI.
 
 Repository rulesets remain external configuration and must require the stable
@@ -263,26 +264,41 @@ deployment job receives `pages: write` and `id-token: write`.
 
 ## Trusted release pipeline
 
-`release.yml` is manual and serialized. The compatibility and security reusable
-workflows must succeed first. It then has four release responsibilities:
+`release.yml` is the only normal release entry point and is manual and
+serialized. A dispatch is valid only from current `main` and only when a
+successful `VyrnForge CI` push run exists for that exact commit. Release does
+not rerun the general CI, browser, compatibility, documentation, or broad
+security suites.
 
-1. **verify-release** — read-only candidate validation, including BT-8003
-   package artifacts and BT-8004 budgets for the non-grid beta group; no
-   environment and no OIDC.
-2. **publish-packages** — protected `npm-release` environment; `contents: read`
-   plus `id-token: write`; publishes ui-core, ui-components, and ui-data-grid in
-   dependency order.
-3. **verify-registry-release** — read-only fresh installation from the public
-   registry, exact metadata/dependency verification, npm registry-signature and
-   provenance-attestation verification, typecheck, and production build.
-4. **create-release-record** — `contents: write` only; creates the annotated Git
-   tag and GitHub prerelease after registry verification.
+The workflow has four ordered responsibilities:
 
-The npm publishing job cannot write repository contents. The release-record job
-cannot request npm OIDC. This separation limits the impact of each permission.
+1. **verify-release** - read-only verification resolves successful current-main
+   CI, builds the selected dependency closure once, creates the selected
+   package `.tgz` files once, binds them to source/CI/digest metadata, verifies
+   their payload and consumer behavior, and uploads one immutable release
+   artifact.
+2. **publish-packages** - the protected `npm-release` job downloads and
+   revalidates that artifact, resolves current `main` after approval, and
+   publishes only the retained `.tgz` files through OIDC. It never rebuilds or
+   repacks packages.
+3. **verify-registry-release** - read-only public-registry verification checks
+   exact metadata/dependencies, signatures, provenance attestations, and a
+   fresh consumer typecheck/build.
+4. **create-release-record** - `contents: write` only; creates or verifies the
+   annotated tag and GitHub prerelease after registry verification.
 
-No workflow stores `NPM_TOKEN`, `NODE_AUTH_TOKEN`, or another long-lived
-publishing credential.
+There is no finalize/recovery workflow and no verify/publish mode split. If
+`main` advances before any package is published, publication refuses to start
+from the stale commit. If exact publication already started, a failed
+`publish-packages` job may be retried in the same workflow run: already
+published packages are accepted only when registry integrity and shasum match
+the retained tarballs, and remaining packages use those same retained bytes.
+Any mismatch fails hard.
+
+The npm publishing job cannot write repository contents and does not expose the
+repository `GITHUB_TOKEN` to the npm process. The release-record job cannot
+request npm OIDC. No workflow stores `NPM_TOKEN`, `NODE_AUTH_TOKEN`, or
+another long-lived publishing credential.
 
 ### Prerelease dist-tags
 

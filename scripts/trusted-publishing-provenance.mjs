@@ -250,12 +250,15 @@ export function verifyTrustedPublishingProvenanceContract({
 
   addFailure(
     failures,
-    publishSection.includes("if: inputs.mode == 'publish'") &&
+    !normalizedWorkflowText.includes("inputs.mode") &&
+      !normalizedWorkflowText.includes("RELEASE_MODE") &&
+      !/^\s+mode:/m.test(normalizedWorkflowText) &&
       publishSection.includes("runs-on: ubuntu-latest") &&
       publishSection.includes("environment:\n      name: npm-release") &&
+      publishSection.includes("actions: read") &&
       publishSection.includes("contents: read") &&
       publishSection.includes("id-token: write"),
-    "publish-packages must use the protected npm-release environment and job-scoped OIDC",
+    "publish-packages must be the single protected release path with job-scoped OIDC",
   );
   addFailure(
     failures,
@@ -279,11 +282,19 @@ export function verifyTrustedPublishingProvenanceContract({
   addFailure(
     failures,
     verifySection.includes("npm run verify:trusted-publishing-provenance") &&
+      verifySection.includes("npm run prepare:release-artifact") &&
+      verifySection.includes("npm run verify:release-artifact") &&
       verifySection.includes("npm run verify:trusted-publishing-dry-run") &&
-      verifySection.includes(
-        "trusted-publishing-dry-run-${{ inputs.release-group }}",
+      verifySection.includes("test-results/release-artifact") &&
+      !verifySection.includes("npm run ci") &&
+      !verifySection.includes("playwright install") &&
+      !normalizedWorkflowText.includes(
+        "uses: ./.github/workflows/_compatibility.yml",
+      ) &&
+      !normalizedWorkflowText.includes(
+        "uses: ./.github/workflows/_security.yml",
       ),
-    "verify-release must retain the BT-8007 contract, dry run and evidence artifact",
+    "verify-release must trust successful main CI and verify the exact retained release artifact",
   );
 
   const forbiddenMarkers = contract.npm?.forbiddenCredentialMarkers ?? [];
@@ -364,14 +375,21 @@ export function verifyTrustedPublishingProvenanceContract({
         packageJson.repository?.directory === expected.directory,
       `${expected.name} must remain a public package linked to the exact repository directory`,
     );
-    addFailure(
-      failures,
-      publishSection.includes(
-        `npm publish ./${expected.directory} --access public --tag "$RELEASE_TAG"`,
-      ),
-      `${expected.name} is missing its canonical OIDC publish command`,
-    );
   }
+
+  addFailure(
+    failures,
+    publishSection.includes("node scripts/publish-release-artifact.mjs") &&
+      publishSection.includes("node scripts/verify-release-artifact.mjs") &&
+      publishSection.includes("gh run download") &&
+      publishSection.includes("Resolve current main publication boundary") &&
+      publishSection.includes("--current-main") &&
+      !/^ {6}GH_TOKEN:/m.test(publishSection) &&
+      !publishSection.includes("npm ci") &&
+      !publishSection.includes("npm pack") &&
+      !publishSection.includes("npm publish ./packages/"),
+    "publish-packages must download, verify, and publish only the retained release tarballs",
+  );
 
   addFailure(
     failures,

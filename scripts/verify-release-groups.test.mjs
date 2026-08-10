@@ -100,20 +100,20 @@ test("rejects a stale workspace consumer dependency", () =>
       ),
   ));
 
-test("rejects release tooling without an explicit grid guard", () =>
+test("rejects release tooling that does not forward the selected release group", () =>
   fixture(
     (root) => {
       const workflowPath = path.join(root, ".github/workflows/release.yml");
       const workflow = readFileSync(workflowPath, "utf8").replaceAll(
-        "if: inputs.release-group == 'data-grid-alpha'",
-        "if: always()",
+        '--release-group "$RELEASE_GROUP"',
+        '--release-group "non-grid-beta"',
       );
       writeFileSync(workflowPath, workflow);
     },
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("inputs.release-group == 'data-grid-alpha'"),
+          failure.includes('--release-group "$RELEASE_GROUP"'),
         ),
       ),
   ));

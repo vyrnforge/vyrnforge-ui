@@ -299,7 +299,8 @@ const workflowPurposes = {
   "ci.yml": "Pull request/main CI planning and aggregate gate",
   "nightly.yml": "Scheduled full validation and dependency audit",
   "pages.yml": "Verified-main Pages artifact validation and deployment",
-  "release.yml": "Manual release verification and protected npm publication",
+  "release.yml":
+    "Single-path immutable-artifact verification and protected npm publication",
 };
 
 const outputLines = [
@@ -684,7 +685,7 @@ const outputLines = [
         "Medium",
         "Packaging & Release",
         "Trusted publishing relies on external GitHub/npm configuration.",
-        "Verify `npm-release` protection and npm trusted-publisher bindings before publish mode.",
+        "Verify `npm-release` protection and npm trusted-publisher bindings before approving the protected publication job.",
       ],
       [
         "Low",

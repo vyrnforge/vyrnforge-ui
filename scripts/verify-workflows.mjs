@@ -548,33 +548,47 @@ for (const releaseGroup of ["non-grid-beta", "data-grid-alpha"]) {
     `release.yml must expose the ${releaseGroup} release group`,
   );
 }
+for (const argument of [
+  '--release-group "$RELEASE_GROUP"',
+  '--version "$RELEASE_VERSION"',
+  '--dist-tag "$RELEASE_TAG"',
+]) {
+  assert(
+    release.includes(argument),
+    `release.yml must pass ${argument} to release tooling`,
+  );
+}
 assert(
-  release.includes('--release-group "$RELEASE_GROUP"'),
-  "release.yml must pass the selected release group to release tooling",
+  !release.includes("inputs.mode") &&
+    !release.includes("RELEASE_MODE") &&
+    !/^\s+mode:/m.test(release),
+  "release.yml must expose one release action rather than verify/publish modes",
 );
 assert(
   !/^\s*(push|pull_request|schedule):/m.test(release),
   "release.yml must not publish from automatic triggers",
 );
-assert(
-  release.includes("name: verify-release"),
-  "release.yml must separate candidate verification",
-);
-assert(
-  release.includes("name: publish-packages"),
-  "release.yml must separate npm publication",
-);
-assert(
-  release.includes("name: verify-registry-release"),
-  "release.yml must verify registry artifacts after publication",
-);
-assert(
-  release.includes("name: create-release-record"),
-  "release.yml must separate GitHub release recording",
-);
-assert(
-  release.includes("environment:\n      name: npm-release"),
-  "release publish job must use npm-release environment",
+for (const removedWorkflow of [
+  "finalize-release.yml",
+  "release-recovery.yml",
+]) {
+  assert(
+    !existsSync(path.join(workflowsDir, removedWorkflow)),
+    `${removedWorkflow} must not provide an alternate release path`,
+  );
+}
+for (const jobName of [
+  "name: verify-release",
+  "name: publish-packages",
+  "name: verify-registry-release",
+  "name: create-release-record",
+]) {
+  assert(release.includes(jobName), `release.yml must include ${jobName}`);
+}
+
+const verifyReleaseSection = release.slice(
+  release.indexOf("  verify-release:"),
+  release.indexOf("  publish-packages:"),
 );
 const publishSection = release.slice(
   release.indexOf("  publish-packages:"),
@@ -583,39 +597,77 @@ const publishSection = release.slice(
 const releaseRecordSection = release.slice(
   release.indexOf("  create-release-record:"),
 );
-assert(
-  publishSection.includes("id-token: write"),
-  "release publish job must request OIDC",
-);
-assert(
-  !publishSection.includes("contents: write"),
-  "release publish job must not write repository contents",
-);
-assert(
-  releaseRecordSection.includes("contents: write"),
-  "release record job must receive repository write permission",
-);
-assert(
-  !releaseRecordSection.includes("id-token: write"),
-  "release record job must not request npm OIDC",
-);
-assert(
-  release.includes("scripts/verify-registry-release.mjs"),
-  "release.yml must run fresh registry-consumer verification",
-);
-for (const packageName of ["ui-behaviors", "ui-elements"]) {
+
+for (const marker of [
+  "Resolve successful current-main CI run",
+  "actions/workflows/ci.yml/runs",
+  "gh api --paginate",
+  "npm run prepare:release-artifact",
+  "npm run verify:release-artifact",
+  "npm run verify:trusted-publishing-dry-run",
+  "npm run verify:beta-package-size-budgets",
+  "npm run verify:assistive-technology:release",
+  "Upload immutable release artifact",
+]) {
   assert(
-    publishSection.includes(`Publish ${packageName} through npm OIDC`),
-    `non-grid beta publication must include ${packageName}`,
+    verifyReleaseSection.includes(marker),
+    `verify-release must include ${marker}`,
+  );
+}
+for (const forbidden of [
+  "npm run ci",
+  "playwright install",
+  "uses: ./.github/workflows/_compatibility.yml",
+  "uses: ./.github/workflows/_security.yml",
+]) {
+  assert(
+    !release.includes(forbidden),
+    `release.yml must not repeat main CI through ${forbidden}`,
   );
 }
 assert(
-  publishSection.includes("if: inputs.release-group == 'non-grid-beta'"),
-  "beta package publication must be guarded by the non-grid release group",
+  /permissions:\s*\n\s*actions: read\s*\n\s*contents: read/.test(
+    verifyReleaseSection,
+  ),
+  "verify-release must read current-main CI without write permissions",
 );
 assert(
-  publishSection.includes("if: inputs.release-group == 'data-grid-alpha'"),
-  "ui-data-grid publication must be guarded by the independent alpha group",
+  publishSection.includes("environment:\n      name: npm-release") &&
+    publishSection.includes("actions: read") &&
+    publishSection.includes("contents: read") &&
+    publishSection.includes("id-token: write"),
+  "publish-packages must use npm-release with artifact read access and npm OIDC",
+);
+assert(
+  !/^ {6}GH_TOKEN:/m.test(publishSection),
+  "publish-packages must not expose GITHUB_TOKEN to npm publish at job scope",
+);
+for (const marker of [
+  "gh run download",
+  "node scripts/verify-release-artifact.mjs",
+  "Resolve current main publication boundary",
+  '--current-main "${{ steps.publication-main.outputs.sha }}"',
+  "node scripts/publish-release-artifact.mjs",
+]) {
+  assert(
+    publishSection.includes(marker),
+    `publish-packages must include ${marker}`,
+  );
+}
+for (const forbidden of [
+  "npm ci",
+  "npm run build",
+  "npm pack",
+  "npm publish ./packages/",
+]) {
+  assert(
+    !publishSection.includes(forbidden),
+    `publish-packages must not recreate release bytes with ${forbidden}`,
+  );
+}
+assert(
+  release.includes("scripts/verify-registry-release.mjs"),
+  "release.yml must run fresh registry-consumer verification",
 );
 const registryVerifier = read("scripts/verify-registry-release.mjs");
 assert(
@@ -627,27 +679,24 @@ assert(
   "registry release verification must cryptographically verify registry signatures and attestations",
 );
 assert(
-  release.includes("playwright install --with-deps chromium"),
-  "release verification must install Chromium before the authoritative quality command",
-);
-assert(
-  release.includes("npm run verify:assistive-technology:release"),
-  "beta release verification must require complete manual assistive-technology evidence",
-);
-assert(
   release.includes("scripts/create-release-notes.mjs"),
   "release.yml must generate a release record from source",
 );
-for (const marker of [
-  "uses: ./.github/workflows/_compatibility.yml",
-  "uses: ./.github/workflows/_security.yml",
-  "- compatibility-checks",
-  "- security-checks",
-  "npm run verify:beta-package-artifacts",
-  "npm run verify:beta-package-size-budgets",
-]) {
-  assert(release.includes(marker), `release.yml must include ${marker}`);
-}
+assert(
+  releaseRecordSection.includes("contents: write") &&
+    !releaseRecordSection.includes("id-token: write"),
+  "release record job must have repository write permission without npm OIDC",
+);
+assert(
+  releaseRecordSection.includes(
+    'test "$(git rev-parse "$TAG^{commit}")" = "$GITHUB_SHA"',
+  ) && releaseRecordSection.includes('gh release edit "$TAG"'),
+  "release record retries must accept only the same source tag and remain idempotent",
+);
+assert(
+  !publishSection.includes("--provenance"),
+  "trusted publishing must use automatic provenance without --provenance",
+);
 assertNoLongLivedToken(release, "release.yml");
 
 const nightly = read(".github/workflows/nightly.yml");

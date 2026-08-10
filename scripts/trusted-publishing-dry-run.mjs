@@ -1,25 +1,22 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import path from "node:path";
 
 import {
-  getReleaseGroup,
-  readReleaseGroups,
-  repositoryRoot,
-} from "./release-groups.mjs";
+  readReleaseArtifactManifest,
+  releaseArtifactDirectory,
+  resolveReleaseSelection,
+  validateReleaseArtifactManifest,
+  verifyReleaseArtifactFiles,
+} from "./release-artifact.mjs";
+import { repositoryRoot } from "./release-groups.mjs";
 
-export const trustedPublishingReportDirectory =
-  "test-results/trusted-publishing";
 export const forbiddenPublishCredentialNames = [
   "NODE_AUTH_TOKEN",
   "NPM_TOKEN",
   "NPM_CONFIG__AUTH",
   "NPM_CONFIG__AUTHTOKEN",
 ];
-
-function assert(condition, message) {
-  if (!condition) throw new Error(message);
-}
 
 export function readArgument(args, name) {
   const index = args.indexOf(name);
@@ -41,10 +38,10 @@ export function createCredentialFreeEnvironment(environment) {
   return next;
 }
 
-export function createPublishDryRunArgs(packageInfo, distTag) {
+export function createPublishDryRunArgs(tarballPath, distTag) {
   return [
     "publish",
-    `./${packageInfo.directory}`,
+    tarballPath,
     "--dry-run",
     "--json",
     "--access",
@@ -70,51 +67,47 @@ export function runTrustedPublishingDryRun({
   releaseGroupId,
   version,
   distTag,
+  artifactDir = releaseArtifactDirectory,
   environment = process.env,
   root = repositoryRoot,
 } = {}) {
   const configuredCredentials = findConfiguredPublishCredentials(environment);
-  assert(
-    configuredCredentials.length === 0,
-    `trusted-publishing dry run requires credential-free environment; found ${configuredCredentials.join(", ")}`,
-  );
+  if (configuredCredentials.length) {
+    throw new Error(
+      `trusted-publishing dry run requires credential-free environment; found ${configuredCredentials.join(", ")}`,
+    );
+  }
 
-  const manifest = readReleaseGroups({ root });
-  const releaseGroup = getReleaseGroup(releaseGroupId, { root, manifest });
-  assert(
-    version === releaseGroup.version,
-    `${releaseGroupId} version mismatch`,
-  );
-  assert(
-    distTag === releaseGroup.distTag,
-    `${releaseGroupId} dist-tag mismatch`,
-  );
+  resolveReleaseSelection({ releaseGroupId, version, distTag, root });
+  const artifactManifest = readReleaseArtifactManifest({ artifactDir, root });
+  const failures = [
+    ...validateReleaseArtifactManifest({
+      artifactManifest,
+      releaseGroupId,
+      version,
+      distTag,
+      root,
+    }),
+    ...verifyReleaseArtifactFiles({ artifactManifest, artifactDir, root }),
+  ];
+  if (failures.length) {
+    throw new Error(
+      `trusted-publishing dry run rejected the artifact:\n- ${failures.join("\n- ")}`,
+    );
+  }
 
   const childEnvironment = createCredentialFreeEnvironment(environment);
-  const startedAt = new Date().toISOString();
   const packages = [];
+  const startedAt = new Date().toISOString();
 
-  for (const packageInfo of releaseGroup.packages) {
-    const packageJson = JSON.parse(
-      readFileSync(
-        path.join(root, packageInfo.directory, "package.json"),
-        "utf8",
-      ),
+  for (const packageInfo of artifactManifest.packages) {
+    const tarballPath = path.resolve(
+      root,
+      artifactDir,
+      "tarballs",
+      packageInfo.filename,
     );
-    assert(
-      packageJson.name === packageInfo.name,
-      `${packageInfo.directory} package name mismatch`,
-    );
-    assert(
-      packageJson.version === releaseGroup.version,
-      `${packageInfo.name} version mismatch`,
-    );
-    assert(
-      packageJson.publishConfig?.access === "public",
-      `${packageInfo.name} publishConfig.access must be public`,
-    );
-
-    const args = createPublishDryRunArgs(packageInfo, distTag);
+    const args = createPublishDryRunArgs(tarballPath, distTag);
     const output = runNpm(args, {
       cwd: root,
       encoding: "utf8",
@@ -123,29 +116,35 @@ export function runTrustedPublishingDryRun({
     });
     packages.push({
       name: packageInfo.name,
-      directory: packageInfo.directory,
-      version: packageJson.version,
-      command: `npm ${args.join(" ")}`,
+      version: packageInfo.version,
+      filename: packageInfo.filename,
+      sha256: packageInfo.sha256,
+      command: `npm publish ${packageInfo.filename} --dry-run --json --access public --tag ${distTag}`,
       status: "passed",
       output,
     });
   }
 
   const report = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     task: "BT-8007",
     releaseGroup: releaseGroupId,
     version,
     distTag,
+    sourceCommit: artifactManifest.sourceCommit,
+    ciRunId: artifactManifest.ciRunId,
     credentialFree: true,
     provenanceRequested: false,
+    exactTarballs: true,
     startedAt,
     completedAt: new Date().toISOString(),
     packages,
   };
-  const reportDirectory = path.join(root, trustedPublishingReportDirectory);
-  mkdirSync(reportDirectory, { recursive: true });
-  const reportPath = path.join(reportDirectory, `${releaseGroupId}.json`);
+  const reportPath = path.resolve(
+    root,
+    artifactDir,
+    "trusted-publishing-dry-run.json",
+  );
   writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
   return { report, reportPath };
 }

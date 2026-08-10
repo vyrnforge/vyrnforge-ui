@@ -12,7 +12,7 @@ The controlled release workflow must keep publication isolated in the
 
 - GitHub-hosted `ubuntu-latest` runner;
 - protected `npm-release` environment;
-- `contents: read` and `id-token: write` only;
+- `actions: read`, `contents: read`, and `id-token: write` only;
 - no npm token, `NODE_AUTH_TOKEN`, `_authToken`, or equivalent long-lived
   publishing credential;
 - exact release-group package order;
@@ -21,7 +21,7 @@ The controlled release workflow must keep publication isolated in the
 - read-only registry verification of attestation metadata and
   `npm audit signatures` before a release record is created.
 
-Candidate verification and release-record creation must not receive npm OIDC.
+Candidate verification and release-record creation must not receive npm OIDC. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run.
 The release-record job may receive `contents: write` only after the registry
 verification job passes.
 
@@ -67,22 +67,24 @@ for trusted publication.
 
 ## Credential-free dry run
 
-After release validation has built the selected packages, run:
+After `verify-release` has created and digest-bound the immutable release
+artifact, it runs:
 
 ```bash
 npm run verify:trusted-publishing-dry-run -- \
   --release-group non-grid-beta \
-  --version 0.2.0-beta.1 \
-  --dist-tag beta
+  --version 0.2.0-beta.2 \
+  --dist-tag beta \
+  --artifact-dir test-results/release-artifact
 ```
 
-The script removes publishing-token variables from the child process, executes
-`npm publish --dry-run --json` for each package in canonical dependency order,
-and writes a retained report under
-`test-results/trusted-publishing/`. A dry run proves the package command and
-payload preparation path without requesting OIDC or changing the registry. It
-does not prove npm-side trusted-publisher configuration; that remains external
-evidence.
+The script removes publishing-token variables from the child process and runs
+`npm publish --dry-run --json` against each exact retained `.tgz` in canonical
+dependency order. The report is retained inside the release artifact. The dry
+run therefore proves the publication command against the same bytes that the
+protected job may publish, without requesting OIDC or changing the registry.
+It does not prove npm-side trusted-publisher configuration; that remains
+external evidence.
 
 ## Closure evidence
 
@@ -93,6 +95,6 @@ following evidence is recorded under `docs/release/evidence/BT-8007`:
 2. exact repository, workflow filename, environment, and allowed-action fields;
 3. protected `npm-release` environment reviewer and branch policy;
 4. confirmation that no long-lived npm publish token is stored;
-5. a successful verify-mode workflow dry-run artifact.
+5. a successful single-path release verification with retained exact-tarball dry-run evidence.
 
 Do not mark BT-8007 complete from repository checks alone.
