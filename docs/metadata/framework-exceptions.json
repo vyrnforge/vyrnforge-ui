@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "handwritten framework integration and dedicated renderer exceptions",
+    "documentation": "docs/architecture/adr-008-framework-exception-policy.md"
+  },
+  "defaultPolicy": "generated-or-generic",
+  "states": ["proposed", "active", "retiring", "closed"],
+  "exceptionClasses": [
+    "ssr-hydration",
+    "performance",
+    "accessibility-focus-form",
+    "composition",
+    "imperative-ref",
+    "compiler-type-system",
+    "migration-compatibility"
+  ],
+  "requiredFields": [
+    "id",
+    "framework",
+    "scope",
+    "exceptionClass",
+    "reason",
+    "owner",
+    "sourcePaths",
+    "evidence",
+    "exitCriteria",
+    "state",
+    "reviewMilestone"
+  ],
+  "exceptions": []
+}
