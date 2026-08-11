@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "S11-S15 measurable gate requirements and evidence categories",
+    "documentation": "docs/quality/multi-framework-program-gates.md"
+  },
+  "evidenceCategories": [
+    "contracts",
+    "generation",
+    "types-api",
+    "package-artifact",
+    "packed-consumer",
+    "browser-behavior",
+    "accessibility",
+    "ssr-hydration-bundler",
+    "performance",
+    "release-trust",
+    "documentation-migration",
+    "exceptions-rollback"
+  ],
+  "gates": [
+    {
+      "id": "G11",
+      "sprint": "S11",
+      "name": "Multi-Framework Generation Ready",
+      "requiredCategories": ["contracts", "generation", "types-api", "package-artifact", "packed-consumer", "browser-behavior", "accessibility", "exceptions-rollback"],
+      "status": "not-started",
+      "evidence": [],
+      "approvedExceptions": []
+    },
+    {
+      "id": "G12",
+      "sprint": "S12",
+      "name": "Angular First-Class Ready",
+      "requiredCategories": ["contracts", "generation", "types-api", "package-artifact", "packed-consumer", "browser-behavior", "accessibility", "ssr-hydration-bundler", "release-trust", "documentation-migration", "exceptions-rollback"],
+      "status": "not-started",
+      "evidence": [],
+      "approvedExceptions": []
+    },
+    {
+      "id": "G13",
+      "sprint": "S13",
+      "name": "Vue First-Class Ready",
+      "requiredCategories": ["contracts", "generation", "types-api", "package-artifact", "packed-consumer", "browser-behavior", "accessibility", "ssr-hydration-bundler", "release-trust", "documentation-migration", "exceptions-rollback"],
+      "status": "not-started",
+      "evidence": [],
+      "approvedExceptions": []
+    },
+    {
+      "id": "G14",
+      "sprint": "S14",
+      "name": "React Convergence Ready",
+      "requiredCategories": ["contracts", "generation", "types-api", "package-artifact", "packed-consumer", "browser-behavior", "accessibility", "ssr-hydration-bundler", "performance", "documentation-migration", "exceptions-rollback"],
+      "status": "not-started",
+      "evidence": [],
+      "approvedExceptions": []
+    },
+    {
+      "id": "G15",
+      "sprint": "S15",
+      "name": "Multi-Framework Distribution Release-Ready",
+      "requiredCategories": ["types-api", "package-artifact", "packed-consumer", "browser-behavior", "accessibility", "ssr-hydration-bundler", "performance", "release-trust", "documentation-migration", "exceptions-rollback"],
+      "status": "not-started",
+      "evidence": [],
+      "approvedExceptions": []
+    }
+  ],
+  "closureRule": "A gate may pass only when every required evidence category has repository-verifiable evidence or an approved exception reference; prose-only claims are insufficient."
+}
