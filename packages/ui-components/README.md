@@ -4,13 +4,13 @@ Native-first VyrnForge UI component primitives built with React, TypeScript, and
 
 ## Install
 
-VyrnForge UI is currently in an early alpha prerelease stage. For registry
-installations, use the explicit `alpha` dist-tag while the public APIs,
-accessibility behavior, and package boundaries continue to be evaluated. This
-package is not yet intended for production use. The install shape is:
+VyrnForge UI is prerelease software. `@vyrnforge/ui-components` is part of the
+configured `non-grid-beta` release group. Use the explicit `beta` dist-tag for
+prerelease registry installations; component maturity remains tracked
+separately.
 
 ```bash
-npm install @vyrnforge/ui-core @vyrnforge/ui-components
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta
 ```
 
 Public package entry points use the package root and CSS subpath exports:

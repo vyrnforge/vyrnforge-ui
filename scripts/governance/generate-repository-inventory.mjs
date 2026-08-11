@@ -215,8 +215,16 @@ const components = records
     return [...names]
       .sort((a, b) => a.localeCompare(b))
       .map((name) => {
+        const componentMetadata = catalogByKey.get(
+          `${record.manifest.name}:${name}`,
+        );
         const source = sourceFor(name, record.directory, files);
-        const documentation = docsFor(name, record.directory, docs);
+        const canonicalDocumentation = componentMetadata?.docsPath;
+        const documentation =
+          typeof canonicalDocumentation === "string" &&
+          existsSync(path.join(root, canonicalDocumentation))
+            ? canonicalDocumentation
+            : docsFor(name, record.directory, docs);
         const playground = routeFor(name, routes);
         const [testFiles, testTypes] = testFor(name, packageTests);
         const gaps =
@@ -243,8 +251,7 @@ const components = records
           playground,
           testFiles,
           testTypes,
-          catalogByKey.get(`${record.manifest.name}:${name}`)?.maturity ??
-            "Requires verification",
+          componentMetadata?.maturity ?? "Requires verification",
           gaps,
           owners[record.manifest.name],
         ];
@@ -310,7 +317,7 @@ const outputLines = [
   "",
   "## A. Repository Overview",
   "",
-  "VyrnForge UI is a native-first, dependency-minimal enterprise React UI foundation. It includes shared token foundations, reusable React components, specialized data-grid behavior, a documentation application, and a component playground.",
+  "VyrnForge UI is a native-first, dependency-minimal enterprise multi-framework UI foundation. It includes shared design tokens, framework-neutral behavior, first-class React and native Custom Element renderers, a specialized React data grid, a documentation application, and a component playground.",
   "",
   table(
     ["Area", "Measured inventory"],

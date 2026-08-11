@@ -2,63 +2,62 @@
 
 ## Purpose
 
-VyrnForge metadata files make package, component, styling, state, and AI guidance machine-readable for the docs app and Codex agents.
+VyrnForge metadata makes package, component, styling, state, release, and
+verification information machine-readable for repository tooling, generated
+documentation, and AI agents.
 
-Markdown docs remain the source of truth for project direction. Metadata files are structured indexes and must not introduce competing roadmap or architecture decisions.
+Markdown remains the source of truth for human-readable architecture and
+project decisions. `docs/metadata/components.json` is the canonical structured
+component catalog for public status, maturity, ownership, exports, routes,
+evidence, and per-component limitations.
 
-## Metadata Files
+## Primary metadata
 
-| File                                     | Update when                                                                                                                                                            |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `docs/metadata/packages.json`            | Package ownership, dependencies, CSS imports, or public entry points change.                                                                                           |
-| `docs/metadata/multi-framework.json`     | Framework support levels, renderer status, release groups, package topology, or fixture policy changes.                                                                |
-| `docs/metadata/component-contracts.json` | Canonical properties/events/slots/form association or representative cross-framework contracts change.                                                                 |
-| `docs/metadata/components.json`          | A component/contract is added, renamed, deprecated, removed, materially changes usage guidance, or changes maturity, ownership, routes, exports, or maturity evidence. |
-| `docs/metadata/css-imports.json`         | CSS import paths, import order, class prefixes, or token ownership changes.                                                                                            |
-| `docs/metadata/design-tokens.json`       | Semantic token categories, theme roles, density aliases, motion rules, layering, compatibility bridges, or token ownership changes.                                    |
-| `docs/metadata/state-contracts.json`     | State ownership, Redux policy, persistence, server query, or export request contracts change.                                                                          |
-| `docs/metadata/ai-usage-rules.json`      | Agent rules, dependency constraints, or recommended usage patterns change.                                                                                             |
-| `.ai/COMPONENT_MAP.json`                 | Component/package quick lookup changes; keep it compact and aligned to `docs/metadata/components.json`.                                                                |
+| File                                     | Update when                                                                                                                     |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/metadata/packages.json`            | Package ownership, dependencies, CSS imports, or public entrypoints change.                                                     |
+| `docs/metadata/components.json`          | A component is added, renamed, deprecated, removed, changes public status/maturity, or materially changes its catalog metadata. |
+| `docs/metadata/multi-framework.json`     | Framework support, renderer status, release topology, or fixture policy changes.                                                |
+| `docs/metadata/component-contracts.json` | Canonical properties, events, composition regions, methods, or form association change.                                         |
+| `docs/metadata/css-imports.json`         | CSS entrypoints, import order, prefixes, or token ownership change.                                                             |
+| `docs/metadata/design-tokens.json`       | Semantic tokens, theme roles, density, motion, layering, or compatibility bridges change.                                       |
+| `docs/metadata/state-contracts.json`     | State ownership, store policy, persistence, server-query, or export-request contracts change.                                   |
+| `docs/metadata/release-groups.json`      | Release-group membership, versions, dist-tags, or exact internal dependency alignment change.                                   |
+| `docs/metadata/validation-layers.json`   | Validation ownership, public commands, or repository validation layers change.                                                  |
+| `docs/metadata/ai-usage-rules.json`      | Agent dependency constraints or usage rules change.                                                                             |
+
+`.ai/COMPONENT_MAP.json` is a compact lookup and must stay aligned with
+`docs/metadata/components.json`.
 
 ## Rules
 
-- Keep JSON stable, explicit, and easy to diff.
-- Do not generate new roadmap direction inside metadata.
-- Do not list planned components as available imports.
-- Mark unavailable future components as `planned`.
-- Mark unstable public components as `experimental`.
-- Keep internal APIs as `internal` records in the canonical component catalog;
-  they must not be package-root exports.
-- Keep `.ai/COMPONENT_MAP.json` compact; put full details in `docs/metadata/components.json`.
-- If metadata conflicts with markdown docs, update markdown first, then metadata.
+- Keep metadata explicit, stable, and easy to diff.
+- Do not generate roadmap or architecture decisions inside metadata.
+- Do not list unavailable planned components as available imports.
+- Keep public maturity and limitations in the canonical component catalog
+  instead of duplicating them across roadmap and package docs.
+- Generated component/API views must derive from canonical metadata.
+- If metadata conflicts with human-readable architecture, update the canonical
+  Markdown decision first and then align metadata.
 
-## Review Checklist
+## Review checklist
 
 Before merging metadata changes:
 
-1. Confirm `docs/README.md` links the metadata area.
-2. Confirm each JSON file parses.
-3. Confirm canonical component maturity and public-export status match package exports and roadmap docs.
-4. Confirm CSS import order still matches package docs.
-5. Confirm the semantic-token catalog matches `@vyrnforge/ui-core`, including theme, density, motion, compatibility, and layer contracts.
-6. Confirm state rules still match `docs/architecture/02-state-and-adapter-ownership.md`.
+1. Confirm `docs/README.md` still points to the correct canonical area.
+2. Confirm JSON parses and generated references remain reproducible.
+3. Confirm package exports and component catalog records agree.
+4. Confirm CSS import order agrees with package manifests and API docs.
+5. Confirm state rules agree with
+   `docs/architecture/02-state-and-adapter-ownership.md`.
+6. Confirm framework support agrees with current verified consumer evidence.
 7. Confirm AI rules do not permit forbidden dependencies.
-8. Confirm the docs app still builds.
-9. Run `npm run verify:design-tokens` and `npm run test:design-tokens` when the token contract or metadata changes.
-10. Run `npm run verify:component-metadata` and `npm run verify:component-maturity` when component metadata or evidence changes.
+8. Build the documentation application when documentation/metadata consumption
+   changes.
+9. Run the repository's targeted metadata verifiers for the area changed.
 
-## AI Notes
+## AI usage
 
-AI agents should read metadata only as an index. For decisions, read the canonical markdown docs linked from `docs/README.md`.
-
-## Multi-framework metadata
-
-Changes to renderer scope, planned packages, canonical events, slots, form
-association, or consumer fixtures require:
-
-```bash
-npm run test:multi-framework
-npm run verify:multi-framework
-```
-
-Do not mark a framework supported in metadata before GMF4 evidence exists.
+AI agents use metadata for structured lookup and current status. Architecture
+and usage decisions still come from the canonical Markdown documents linked
+from `docs/README.md`.

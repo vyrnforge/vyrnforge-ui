@@ -1,92 +1,68 @@
-# `@vyrnforge/ui-elements` - Native Renderer GMF3 Complete
+# `@vyrnforge/ui-elements`
 
 ## Purpose
 
-`@vyrnforge/ui-elements` is VyrnForge's browser-native renderer for public
-non-grid components and plain HTML consumers. It adapts shared tokens and
-framework-neutral behavior contracts to standards-based Custom Elements.
+`@vyrnforge/ui-elements` is VyrnForge's first-class browser-native Custom
+Element renderer for the public non-grid foundation.
 
-## Implemented through EL-6018
+It provides explicit registration, Light DOM rendering, typed canonical
+`vf-*` events, form-associated element foundations, package-owned styles, and
+editor metadata without a React, Angular, or Vue runtime dependency.
 
-EL-6001 through EL-6018 provide:
+## Install
 
-- deterministic, explicit registration for 58 lowercase `vf-*` tags;
-- Light DOM lifecycle, property reflection, typed events, and update scheduling;
-- `ElementInternals`-backed form submission, reset, disabled, and validity
-  behavior;
-- display, action, form, value, navigation, collection, overlay, feedback, and
-  enterprise composition elements;
-- four GMF3 completion tags: `vf-icon`, `vf-inline-message`, `vf-skeleton`, and
-  `vf-top-nav`;
-- documented renderer mappings for `Alert`, `Dropdown`, `ToastAction`,
-  `ToastProvider`, and `useToast`.
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta
+```
 
-Adapters use VyrnForge tokens and CSS custom properties, canonical typed events,
-shared behavior controllers, and native browser semantics. They introduce no
-React, Angular, Vue, application-state, or third-party component-library
-dependency.
+## Register
 
-## Registration
-
-Package-root import is side-effect free. Consumers choose explicit registration:
+The package root is side-effect free:
 
 ```ts
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
+
 import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 
 registerVyrnForgeElements();
 ```
 
+Applications may instead opt into explicit side-effect registration:
+
 ```ts
 import "@vyrnforge/ui-elements/register";
 ```
 
-`vyrnForgeElementDefinitions` is the canonical 58-tag catalog and
-`vyrnForgeElementRegistrations` exposes reusable per-tag registration
-functions.
+Registration is deterministic and idempotent.
 
-## Styles
+## Renderer contract
 
-Consumers load core tokens before native renderer styles:
+The native renderer:
 
-```ts
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-elements/styles/index.css";
+- uses Light DOM by default;
+- consumes shared `--vf-*` tokens;
+- keeps arrays and objects as DOM properties;
+- uses canonical typed `vf-*` events;
+- participates in native forms through the documented form-association contract;
+- keeps package-root imports safe when browser globals are unavailable.
+
+Angular and Vue are verified consumers of this same native renderer. Framework
+forms/model adapters are thin integration layers and do not duplicate rendering
+or accessibility behavior.
+
+## Public surface
+
+Use [ui-elements API](../api/ui-elements-api.md) and the
+[generated component reference](../generated/component-reference.json).
+
+Editor tooling can consume:
+
+```text
+@vyrnforge/ui-elements/custom-elements.json
 ```
 
-Native advanced selectors are scoped to Custom Element hosts so the native and
-React renderers can coexist in one document without class-name leakage.
+## Release channel
 
-## Renderer mappings
-
-| React API       | Native contract                                                                 |
-| --------------- | ------------------------------------------------------------------------------- |
-| `Alert`         | `vf-inline-message`                                                             |
-| `Dropdown`      | `vf-popover` with `vf-dropdown` content                                         |
-| `ToastAction`   | `vf-toast[action-label]`                                                        |
-| `ToastProvider` | `vf-toast-viewport`                                                             |
-| `useToast`      | `VyrnForgeToastViewportElement.add`, `updateToast`, `dismiss`, and `dismissAll` |
-
-## Evidence
-
-- `docs/metadata/gmf3-closure.json`
-- `docs/testing/gmf3-native-parity-gate.md`
-- `docs/metadata/native-element-foundations.json`
-- `docs/metadata/native-core-elements.json`
-- `docs/metadata/native-advanced-elements.json`
-- `tests/browser/native-parity.spec.ts`
-- `scripts/verify-gmf3-closure.mjs`
-- `docs/metadata/angular-consumer.json`
-- `tests/consumers/angular/fixture.json`
-- `scripts/verify-angular-consumer.mjs`
-
-GMF3 is complete. CF-7001 and CF-7002 provide clean packed-package runtime
-verification for native HTML and React 19 Custom Element consumers. CF-7008
-adds the typed 58-tag DOM map, canonical event listener declarations, and the
-public Custom Elements Manifest. CF-7003 verifies a clean Angular 22 packed
-consumer with property/event binding, named Light DOM composition, native form
-submission, and Chromium evidence. CF-7005 adds the isolated Vue 3 fixture and
-verifier for compiler recognition, property/event binding, slots, native forms,
-and the runtime matrix. Clean build and Chromium evidence are complete; Vue
-`v-model` translation remains CF-7006 work.
-
-Editor metadata is exported from `@vyrnforge/ui-elements/custom-elements.json`.
+`@vyrnforge/ui-elements` is part of the synchronized non-grid `beta` release
+group.

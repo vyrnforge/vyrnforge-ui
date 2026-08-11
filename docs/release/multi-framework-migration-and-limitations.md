@@ -1,44 +1,47 @@
 # Multi-Framework Migration and Limitations Guide
 
-CF-7013 explains how to choose and adopt VyrnForge across React, Native HTML,
-Angular, and Vue during the multi-framework beta. Canonical component status and
-detailed contracts remain in `docs/metadata/components.json`,
-`docs/metadata/component-contracts.json`, and the generated component reference.
+This guide explains how to choose and integrate VyrnForge across React, native
+HTML, Angular, and Vue.
+
+Canonical component status lives in `docs/metadata/components.json`; generated
+framework/component usage lives in `docs/generated/component-reference.json`.
 
 ## Choose React components or native elements
 
-Use `@vyrnforge/ui-components` in a React application when a first-class React
-component already exists. It provides the React-oriented API, composition model,
-and TypeScript experience while preserving shared VyrnForge tokens, behavior,
-and accessibility contracts.
+Use `@vyrnforge/ui-components` in React applications when a first-class React
+component exists.
 
-Use `@vyrnforge/ui-elements` when the host is Native HTML, Angular, Vue, another
-web framework, or a React interoperability boundary that specifically needs
-Custom Elements. Native elements are not a second design system: they adapt the
-same shared foundations and use canonical `vf-*` DOM events.
+Use `@vyrnforge/ui-elements` for native HTML, Angular, Vue, other web frameworks,
+or an interoperability boundary that specifically needs Custom Elements.
 
-Do not wrap every element by default. Add a thin consumer-local adapter only
-when a framework convention cannot be represented directly, such as Angular
-Forms or Vue `v-model` translation.
+The two renderers share VyrnForge tokens, behavior contracts, accessibility
+expectations, and component semantics. They are not separate design systems.
 
-## React migration
+Do not wrap every native element by default. Keep framework-local adapters only
+where they add real framework integration value.
 
-Prefer the first-class React package:
+## React
 
-```tsx
-import { Button, TextInput } from "@vyrnforge/ui-components";
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta
 ```
 
-A React application may consume `@vyrnforge/ui-elements` directly for an
-interop boundary. In that case, register the elements once, use DOM properties
-for object-valued data, and listen for canonical CustomEvents. Do not create a
-parallel React wrapper library unless a verified reusable gap exists.
+```tsx
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-components/styles/index.css";
 
-## Native HTML migration
+import { Button } from "@vyrnforge/ui-components";
+```
 
-Register the element catalog once and import package-owned CSS in order:
+React applications may also consume native elements at explicit interop
+boundaries, but should not create a parallel wrapper library without a verified
+reusable need.
+
+## Native HTML
+
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta
+```
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
@@ -46,103 +49,75 @@ import "@vyrnforge/ui-elements/styles/index.css";
 import "@vyrnforge/ui-elements/register";
 ```
 
-```html
-<vf-button action="save">Save</vf-button>
-<vf-text-input name="owner" value="Operations"></vf-text-input>
-```
+Assign arrays and objects as DOM properties and listen for canonical `vf-*`
+`CustomEvent` values.
 
-Assign arrays and objects as DOM properties rather than serializing them into
-attributes. Handle `vf-*` events as native `CustomEvent` instances. Form-
-associated elements participate through `ElementInternals` where the canonical
-component contract declares form association.
+## Angular
 
-## Angular integration
+Angular consumes the native element package.
 
-Angular consumes the same Custom Elements package. Register the elements from
-application bootstrap and allow Custom Elements in the consuming component or
-application schema:
+Configure Custom Element recognition, use property bindings for complex values,
+and bind canonical DOM events directly. Use the thin Angular Forms reference
+pattern only when Angular form-state translation is needed.
 
-```ts
-schemas: [CUSTOM_ELEMENTS_SCHEMA];
-```
+The adapter does not create a separate VyrnForge Angular component library and
+does not make NgRx or another application store a package requirement.
 
-Use Angular property bindings for complex values and template event bindings
-for canonical events. Do not rename shared events to Angular-only APIs.
+## Vue
 
-The CF-7004 `vfFormControl` implementation is a thin consumer-local reference
-adapter for reactive and template-driven Forms. It is not a published Angular
-component library, and VyrnForge does not require NgRx or another application
-state-management solution.
+Vue consumes the native element package.
 
-## Vue integration
+Configure the Vue compiler to recognize the `vf-*` namespace, use DOM property
+binding for complex values, and listen for canonical events. Use the thin
+`v-model` reference adapter only when model translation improves application
+ergonomics.
 
-Configure Vue/Vite to recognize the `vf-*` namespace as Custom Elements:
+The adapter does not create a separate VyrnForge Vue component library.
 
-```ts
-compilerOptions: {
-  isCustomElement: (tag) => tag.startsWith("vf-"),
-}
-```
+## Current guarantees
 
-Use `.prop` when Vue must assign an object or array as a DOM property. Listen for
-canonical element events without inventing Vue-specific event contracts.
+The non-grid beta model verifies:
 
-CF-7006 supplies a thin consumer-local reference adapter for translating
-`modelValue` to the canonical value or checked property/event pair. It does not
-create a published Vue component package and should be copied or extended only
-for controls that need `v-model` ergonomics.
+- shared design tokens and package-owned CSS;
+- framework-neutral behavior contracts;
+- React and native HTML renderer integration;
+- Angular and Vue consumption of native elements;
+- canonical properties/events and composition;
+- representative framework forms/model translation;
+- packed-package installation and production builds;
+- server-safe package imports and supported bundler output;
+- browser and accessibility behavior covered by the repository's current
+  evidence model.
 
-## Beta guarantees
+Component maturity is still evaluated per component. A beta package channel does
+not make every public component stable.
 
-The beta program verifies a consistent design-token system, package-owned CSS,
-framework-neutral behavior contracts, canonical element properties/events,
-keyboard behavior, accessibility expectations, packed-package installation,
-production builds, server-safe imports, and representative browser behavior.
+## Current limitations
 
-React and Native HTML are first-class beta targets. Angular and Vue have packed
-consumer, browser, and adapter evidence, but per-component support status remains
-canonical in `components.json` until the GMF4 compatibility gate closes. A
-framework-level fixture pass is not permission to promote every component
-record automatically.
+- The data grid remains React-only on its independent alpha track.
+- No published Angular or Vue component library is provided.
+- Framework form/model adapters are reference integrations, not arbitrary
+  business-form abstractions.
+- Mobile-native renderers are outside the current web support model.
+- Server-safe import does not mean browser-only Custom Element internals are
+  server-rendered.
+- Framework-specific styling forks are unsupported; use shared VyrnForge tokens
+  and package CSS.
+- VyrnForge packages do not require an application state manager.
 
-## Current exclusions and limitations
+## Migrating one-off wrappers
 
-- VyrnForge does not provide a mobile-native renderer.
-- The server contract guarantees safe imports and supported bundler output; it does not claim server rendering of browser-only Custom Element internals.
-- Angular and Vue use the shared Custom Elements package. No published Angular or Vue component package is guaranteed in this beta.
-- Consumer-local Forms and `v-model` adapters cover verified representative value categories, not arbitrary business-specific controls.
-- Framework-specific styling forks are unsupported. Use VyrnForge tokens and package CSS.
-- VyrnForge packages do not require Redux, Zustand, Pinia, NgRx, or another application store.
+1. Identify whether the wrapper only registers an element, forwards properties,
+   or renames canonical events.
+2. Remove wrappers that add no framework value.
+3. Keep thin adapters only for a real framework convention.
+4. Keep business validation, data fetching, state ownership, and workflow
+   decisions in the consuming application.
+5. Compare behavior against the generated component reference and current
+   consumer/browser evidence.
+6. Preserve an incremental rollback path.
 
-## Data-grid scope
+## Upgrade path
 
-`@vyrnforge/ui-data-grid` remains on its independent React alpha track. The GMF4
-non-grid compatibility claim does not promise Angular, Vue, or Native HTML data-
-grid renderers. Applications may keep grid usage in a React surface or defer a
-cross-framework grid migration. Do not infer grid parity from non-grid Custom
-Element evidence.
-
-## Migrating existing one-off wrappers
-
-1. Identify whether the wrapper only registers a VyrnForge element, forwards properties, or renames canonical events.
-2. Remove wrappers that add no framework value and consume the shared element directly.
-3. Keep thin adapters only for a verified framework convention such as Angular Forms or Vue `v-model`.
-4. Move business validation, data fetching, state ownership, and workflow decisions back to the consuming application.
-5. Compare behavior against the generated component reference and the packed cross-framework browser matrix.
-6. Preserve an incremental rollback path; do not migrate every application surface in one release solely to standardize syntax.
-
-## Versioning and upgrade path
-
-During `0.x`, pin exact VyrnForge versions, review `CHANGELOG.md`, and follow
-`MIGRATION.md` plus the deprecation and migration policy before upgrading.
-Public API changes should include a compatibility path, but prerelease minor
-versions may still contain breaking changes.
-
-## Source-of-truth links
-
-- `docs/generated/component-reference.json` — generated framework usage and available contract fields.
-- `docs/metadata/cross-framework-browser-matrix.json` — CF-7009 browser evidence.
-- `docs/metadata/cross-framework-accessibility-review.json` — CF-7010 accessibility evidence state.
-- `docs/architecture/adr-004-multi-framework-web-support.md` — approved architecture.
-- `docs/release/deprecation-and-migration-policy.md` — compatibility and removal rules.
-- `docs/metadata/multi-framework.json` — current framework support and release topology.
+During `0.x`, use explicit prerelease channels, review the changelog and
+migration guidance, and follow the deprecation policy before upgrading.

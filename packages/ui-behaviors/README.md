@@ -1,19 +1,18 @@
-# `@vyrnforge/ui-behaviors`
+# @vyrnforge/ui-behaviors
 
-Framework-neutral behavior primitives for VyrnForge UI.
+Framework-neutral controller and behavior primitives for VyrnForge UI.
 
-The package owns portable state transitions and interaction decisions. It does
-not render, read or write the DOM, manage application business state, or depend
-on React, Angular, Vue, or another renderer.
+The package owns portable state transitions and interaction decisions used by
+renderers. It does not render UI, execute DOM operations, manage application
+business state, or require React, Angular, Vue, or an application store.
 
-## Current S5 foundations
+## Install
 
-- controllable state for controlled and uncontrolled renderer adapters;
-- collection registration, deterministic ordering, active-item navigation, and
-  disabled-item skipping;
-- single and multiple selection with select, deselect, toggle, range, replace,
-  clear, and controlled synchronization operations;
-- immutable reasoned behavior events and framework-neutral event channels.
+```bash
+npm install @vyrnforge/ui-behaviors@beta
+```
+
+## Use
 
 ```ts
 import {
@@ -21,99 +20,19 @@ import {
   createControllableState,
   createSelectionController,
 } from "@vyrnforge/ui-behaviors";
-
-const openState = createControllableState({
-  defaultValue: false,
-  onChange(event) {
-    console.log(event.detail.value, event.reason);
-  },
-});
-
-const options = createCollectionController({
-  initialItems: [
-    { key: "draft", data: { label: "Draft" } },
-    { key: "disabled", data: { label: "Disabled" }, disabled: true },
-    { key: "approved", data: { label: "Approved" } },
-  ],
-});
-
-options.moveActive("next");
-
-const selection = createSelectionController({
-  defaultSelectedKeys: ["draft"],
-  orderedKeys: () => options.getSnapshot().items.map((item) => item.key),
-});
-
-selection.selectRange("approved");
 ```
 
-## Controlled-state rule
+The public surface includes shared controller families for state, collections,
+selection, navigation, overlays, form-related behavior, feedback, and reasoned
+events.
 
-A controller is controlled when the `value` or `selectedKeys` property exists
-in its options, including when the value is explicitly `undefined`.
+`@vyrnforge/ui-behaviors` may depend on `@vyrnforge/ui-core` only and owns no
+CSS.
 
-A controlled change method emits a proposal but does not replace the current
-snapshot. The renderer or consuming application commits the external value
-through `syncValue()` or `syncSelectedKeys()`.
+Canonical documentation:
 
-## Boundary
+- `docs/packages/ui-behaviors.md`
+- `docs/api/ui-behaviors-api.md`
+- `docs/architecture/02-state-and-adapter-ownership.md`
 
-The package may depend on `@vyrnforge/ui-core` only. Source code must not import
-or reference React, React DOM, Vue, Angular, `HTMLElement`, `ElementInternals`,
-`CustomEvent`, `document`, `window`, or `customElements`.
-
-The package intentionally owns no CSS and performs no DOM work.
-
-## First React adapter batch
-
-MF-5005 through MF-5012 add framework-neutral behavior for action state,
-boolean toggles, toggle groups, single-choice controls, numeric controls, Tabs,
-Autocomplete, MultiSelect, and Transfer List. `@vyrnforge/ui-components`
-consumes these contracts while keeping DOM focus, native form elements, refs,
-portals, and React event translation in the renderer package.
-
-## Composite selection adapters
-
-MF-5008 through MF-5010 add portable controllers for Autocomplete,
-MultiSelect, and Transfer List. The controllers own filtering, selection,
-active-item intent, open/query state, and ordered transfer decisions. React
-continues to own portals, DOM focus, native form nodes, refs, and event
-translation.
-
-## Navigation and overlay foundations
-
-MF-5011 and MF-5012 add:
-
-- `createNavigationController()` for Menu and SideNav roving active intent,
-  disabled-item skipping, Home/End movement, selection events, and dismissal
-  reasons;
-- `createOverlayLifecycleController()` for controlled or uncontrolled open
-  transitions with explicit trigger and dismissal reasons;
-- `createOverlayLayerRegistry()` and `resolveOverlayPosition()` for portable
-  layer ordering and pure anchored-position decisions;
-- focus, layer, and positioning adapter contracts that keep DOM execution in
-  renderer packages.
-
-The React adapters retain refs, `focus()`, portals, focus trapping, document
-listeners, scroll locking, DOM measurement, and CSS application.
-
-## Component overlay and feedback controllers
-
-MF-5013 and MF-5014 add:
-
-- `createDialogController()`, `createDrawerController()`,
-  `createPopoverController()`, and `createTooltipController()` for portable
-  open state, modal/disabled configuration, explicit dismissal reasons, and
-  trigger/content relationships;
-- `createToastController()` for deterministic queue state, visible-window
-  selection, explicit duration, pause/resume state, action events, and
-  dismissal reasons;
-- `createConfirmDialogController()` for controlled confirmation state,
-  loading/disabled action rules, and explicit cancel/confirm events.
-
-React remains responsible for timers, portals, focus execution, DOM
-measurement, native events, and rendering ReactNode payloads.
-
-## GMF2 closure
-
-MF-5001 through MF-5016 are complete. React adoption is audited in `docs/metadata/react-behavior-adoption.json`, and the shared behavior parity gate is recorded in `docs/metadata/gmf2-closure.json`.
+The package is part of the synchronized non-grid `beta` release group.

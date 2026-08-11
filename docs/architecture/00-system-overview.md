@@ -1,92 +1,85 @@
 # VyrnForge UI System Overview
 
-VyrnForge UI is a native-first, dependency-minimal enterprise UI foundation.
-The first multi-framework beta targets reusable **non-grid** components for
-React and native HTML, with Angular and Vue verified as consumers of the native
-Custom Element surface.
+VyrnForge UI is a native-first, dependency-minimal enterprise UI foundation
+with shared framework-neutral foundations, first-class React and native HTML
+renderers, and a specialized React data grid.
 
 ## Package architecture
 
 ```text
                          @vyrnforge/ui-core
-       tokens · themes · density · typography · motion · layers · utilities
+       tokens Â· themes Â· density Â· typography Â· motion Â· layers Â· utilities
                                   |
                          @vyrnforge/ui-behaviors
-       framework-neutral controllers · collections · selection · validation
+       framework-neutral controllers Â· collections Â· selection Â· events
                                   |
               +-------------------+-------------------+
               |                                       |
  @vyrnforge/ui-components                    @vyrnforge/ui-elements
- React renderer and adapters                 native Custom Elements
+ first-class React renderer                  native Custom Elements
               |                                       |
               +----------- consuming applications ----+
-                          React · HTML · Angular · Vue
+                          React Â· HTML Â· Angular Â· Vue
 
 Separate release track:
-@vyrnforge/ui-data-grid — existing React alpha data-grid package
+@vyrnforge/ui-data-grid â€” specialized React data grid
 ```
 
-`ui-behaviors` and `ui-elements` are implemented package foundations approved by
-GMF1. Their runtime work begins after this architecture sprint.
+`ui-components` and `ui-elements` also depend directly on `ui-core`.
+`ui-data-grid` depends on `ui-core` and `ui-components`.
 
-## Support levels
+## Support model
 
-| Surface       | Support direction                                                    | Beta role                    |
-| ------------- | -------------------------------------------------------------------- | ---------------------------- |
-| React         | First-class renderer through `@vyrnforge/ui-components`              | Included                     |
-| Native HTML   | First-class Custom Element renderer through `@vyrnforge/ui-elements` | Included                     |
-| Angular       | Verified consumer of `@vyrnforge/ui-elements`                        | Included after GMF4 evidence |
-| Vue           | Verified consumer of `@vyrnforge/ui-elements`                        | Included after GMF4 evidence |
-| Data grid     | Existing React alpha package                                         | Excluded from non-grid beta  |
-| Mobile-native | Separate future program                                              | Excluded                     |
+| Surface       | Role                                                                  | Release scope             |
+| ------------- | --------------------------------------------------------------------- | ------------------------- |
+| React         | First-class renderer through `@vyrnforge/ui-components`.              | Non-grid beta             |
+| Native HTML   | First-class Custom Element renderer through `@vyrnforge/ui-elements`. | Non-grid beta             |
+| Angular       | Verified consumer of `@vyrnforge/ui-elements`.                        | Non-grid beta integration |
+| Vue           | Verified consumer of `@vyrnforge/ui-elements`.                        | Non-grid beta integration |
+| Data grid     | Specialized React package.                                            | Independent alpha         |
+| Mobile-native | Separate future program.                                              | Excluded                  |
 
 ## Core principles
 
 - One semantic token and CSS-variable foundation.
-- One framework-neutral behavior contract where behavior can be shared.
-- Thin renderer adapters rather than duplicated state and accessibility logic.
-- React remains the reference renderer and keeps its existing package name.
-- Browser-native Custom Elements provide the plain HTML integration surface.
-- Light DOM is the default for enterprise customization and interoperability.
-- Angular and Vue wrappers are optional and integration-focused, not duplicate
-  component implementations.
-- Data-grid work does not block the non-grid beta release.
+- One framework-neutral behavior contract where behavior is shared.
+- Thin renderer and framework adapters.
+- Light DOM by default for native elements.
+- Store-agnostic public packages.
+- Application business state, backend requests, authorization, and workflows
+  remain outside VyrnForge.
+- Data-grid specialization must not redefine the entire library.
 
 ## State and rendering separation
 
-The framework-neutral layer owns decisions and transitions. Renderers own
-framework lifecycle and output. DOM adapters own focus, event listening,
-positioning, observers, and browser execution.
+Shared controllers own portable decisions and transitions. DOM adapters own
+browser execution. Renderers own framework lifecycle and output.
 
 ```text
 shared controller
   state transitions
-  selection and collection rules
+  collection and selection rules
   keyboard decisions
   validation state
-  canonical event reasons
+  reasoned events
 
 DOM adapter
   focus execution
-  event translation
+  browser events
   positioning and observers
   ARIA relationship application
 
 renderer
   React JSX or Custom Element Light DOM
   framework lifecycle
-  templates, children, or slots
+  children, templates, or slots
 ```
-
-No VyrnForge package owns application authentication, authorization, backend
-requests, tenant state, business workflows, or global application storage.
 
 ## Canonical sources
 
-- Multi-framework decision: `architecture/adr-004-multi-framework-web-support.md`
-- Package boundaries: `architecture/01-package-boundaries.md`
-- Component contracts: `architecture/09-component-contracts-and-events.md`
-- Native element and form strategy:
-  `architecture/10-custom-elements-and-form-association.md`
-- Machine-readable support model: `metadata/multi-framework.json`
-- Machine-readable component contracts: `metadata/component-contracts.json`
+- [Package Boundaries](01-package-boundaries.md)
+- [State and Adapter Ownership](02-state-and-adapter-ownership.md)
+- [Component Contracts and Events](09-component-contracts-and-events.md)
+- [Custom Elements and Form Association](10-custom-elements-and-form-association.md)
+- [`../metadata/multi-framework.json`](../metadata/multi-framework.json)
+- [`../metadata/component-contracts.json`](../metadata/component-contracts.json)

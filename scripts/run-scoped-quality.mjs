@@ -35,6 +35,7 @@ for (const command of [
   "format:check",
   "lint",
   "lint:css",
+  "verify:documentation-current",
   "verify:package-boundaries",
 ]) {
   runNpm(["run", command]);

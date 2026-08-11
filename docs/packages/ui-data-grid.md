@@ -2,39 +2,21 @@
 
 ## Purpose
 
-`@vyrnforge/ui-data-grid` provides `UniversalDataGrid`, a specialized React
-enterprise data-management grid.
+`@vyrnforge/ui-data-grid` provides `UniversalDataGrid` and the specialized
+React data-management contracts around it.
 
-It is one package inside VyrnForge UI, not the entire library.
+The package owns grid rendering, grid-specific `udg-*` styling, search/filter/
+sort/pagination/grouping behavior, selection, column management, grid state,
+persistence contracts, server-query contracts, and export-request contracts.
 
-## Current scope
+Applications continue to own backend rows, fetching, authorization, mutations,
+business workflows, and generated report files.
 
-The package owns:
+## Install
 
-- React grid rendering;
-- grid-specific `udg-*` styles;
-- search, filter, sort, pagination, grouping, and selection behavior;
-- column visibility, order, and sizing;
-- grid state contracts;
-- persistence, server, and export adapters.
-
-Applications still own backend rows, fetching, authorization, mutations,
-business actions, and report-file generation.
-
-## Multi-framework roadmap status
-
-The data grid remains an independently versioned **React alpha** package. It is
-excluded from the non-grid beta release group.
-
-Deferred until after GBETA:
-
-- large internal decomposition;
-- performance and scale expansion;
-- framework-neutral grid-core extraction;
-- native, Angular, or Vue grid renderers.
-
-Targeted defect, security, accessibility, and compatibility fixes remain
-allowed. Grid feature expansion must not delay the non-grid beta.
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
+```
 
 ## Import
 
@@ -42,10 +24,20 @@ allowed. Grid feature expansion must not delay the non-grid beta.
 import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
+
+import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
 
-## Release direction
+## Release and framework scope
 
-`@vyrnforge/ui-data-grid` stays on its own alpha prerelease line while
-`ui-core`, `ui-behaviors`, `ui-components`, and `ui-elements` move toward the
-coordinated non-grid beta.
+The grid remains an independently versioned React `alpha` package. It is not
+part of the synchronized non-grid beta release group.
+
+Native HTML, Angular, and Vue grid renderers are not part of the current support
+claim. Broader grid decomposition, scale work, and additional renderers remain
+a separate future workstream unless reprioritized.
+
+## Public surface
+
+Use [ui-data-grid API](../api/ui-data-grid-api.md) for the current public grid
+contracts. Shared non-grid component maturity does not imply grid maturity.

@@ -1,7 +1,7 @@
 # `@vyrnforge/ui-elements` API
 
-EL-6001 through EL-6018 establish the complete GMF3 browser-native renderer for
-the VyrnForge non-grid beta scope.
+`@vyrnforge/ui-elements` provides the complete browser-native renderer for the
+VyrnForge non-grid beta scope.
 
 ## Foundation exports
 
@@ -109,7 +109,7 @@ Styles consume shared VyrnForge tokens. Native selectors are scoped to their
 Custom Element hosts so `@vyrnforge/ui-elements` and
 `@vyrnforge/ui-components` can coexist in a mixed renderer fixture.
 
-Canonical GMF3 evidence is `docs/metadata/gmf3-closure.json`.
+Canonical native-renderer closure evidence is `docs/metadata/gmf3-closure.json`.
 
 ## Consumer declarations and editor metadata
 
