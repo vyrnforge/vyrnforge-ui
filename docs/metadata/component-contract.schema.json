@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://vyrnforge.dev/schemas/component-contracts.schema.json",
-  "title": "VyrnForge Multi-Framework Component Contracts",
+  "title": "VyrnForge Canonical Multi-Framework Component Contracts",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,177 +13,348 @@
     "componentContracts"
   ],
   "properties": {
-    "$schema": {
-      "type": "string"
-    },
-    "schemaVersion": {
-      "const": 1
-    },
-    "sourceOfTruth": {
-      "type": "object",
-      "required": ["canonical", "scope", "documentation"],
-      "properties": {
-        "canonical": {
-          "const": true
-        },
-        "scope": {
-          "type": "string",
-          "minLength": 1
-        },
-        "documentation": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "additionalProperties": false
-    },
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 2 },
+    "sourceOfTruth": { "$ref": "#/$defs/sourceOfTruth" },
     "eventVocabulary": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/event"
-      }
+      "items": { "$ref": "#/$defs/eventVocabularyEntry" }
     },
     "slotVocabulary": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/slot"
-      }
+      "items": { "$ref": "#/$defs/slotVocabularyEntry" }
     },
-    "formAssociation": {
-      "$ref": "#/$defs/formAssociation"
-    },
+    "formAssociation": { "$ref": "#/$defs/formAssociationFoundation" },
     "componentContracts": {
       "type": "array",
-      "minItems": 4,
-      "items": {
-        "$ref": "#/$defs/component"
-      }
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/component" }
     },
-    "catalogCoverage": {
-      "type": "object"
-    }
+    "catalogCoverage": { "type": "object" }
   },
   "$defs": {
-    "stringArray": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
-      "uniqueItems": true
-    },
-    "event": {
+    "sourceOfTruth": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name",
-        "purpose",
-        "bubbles",
-        "composed",
-        "cancelable",
-        "detailFields"
-      ],
+      "required": ["canonical", "scope", "documentation"],
       "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        "canonical": { "const": true },
+        "scope": { "type": "string", "minLength": 1 },
+        "documentation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-zA-Z_$][a-zA-Z0-9_$]*$"
+    },
+    "kebabIdentifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "canonicalEventName": {
+      "type": "string",
+      "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "valueType": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "bigint",
+            "array",
+            "object",
+            "record",
+            "function",
+            "element",
+            "unknown"
+          ]
         },
-        "purpose": {
-          "type": "string",
-          "minLength": 1
+        "typeName": { "type": "string", "minLength": 1 },
+        "itemType": { "type": "string", "minLength": 1 },
+        "nullable": { "type": "boolean" }
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "required"],
+      "properties": {
+        "name": { "$ref": "#/$defs/identifier" },
+        "type": { "$ref": "#/$defs/valueType" },
+        "required": { "type": "boolean" },
+        "description": { "type": "string" }
+      }
+    },
+    "property": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "required", "mutable", "default"],
+      "properties": {
+        "name": { "$ref": "#/$defs/identifier" },
+        "type": { "$ref": "#/$defs/valueType" },
+        "required": { "type": "boolean" },
+        "mutable": { "type": "boolean" },
+        "default": {},
+        "description": { "type": "string" },
+        "controlled": { "type": "boolean" },
+        "uncontrolledDefaultProperty": { "$ref": "#/$defs/identifier" },
+        "readOnly": { "type": "boolean" }
+      }
+    },
+    "attribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "property", "valueKind", "reflection", "removal"],
+      "properties": {
+        "name": { "$ref": "#/$defs/kebabIdentifier" },
+        "property": { "$ref": "#/$defs/identifier" },
+        "valueKind": { "enum": ["string", "number", "boolean", "enum"] },
+        "reflection": { "enum": ["none", "property-to-attribute", "two-way"] },
+        "removal": { "enum": ["restore-default", "set-false", "set-null"] }
+      }
+    },
+    "eventDetailField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "required"],
+      "properties": {
+        "name": { "$ref": "#/$defs/identifier" },
+        "type": { "$ref": "#/$defs/valueType" },
+        "required": { "type": "boolean" }
+      }
+    },
+    "eventVocabularyEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "purpose", "bubbles", "composed", "cancelable", "detail"],
+      "properties": {
+        "name": { "$ref": "#/$defs/canonicalEventName" },
+        "purpose": { "type": "string", "minLength": 1 },
+        "bubbles": { "type": "boolean" },
+        "composed": { "type": "boolean" },
+        "cancelable": { "type": "boolean" },
+        "detail": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/eventDetailField" }
         },
-        "bubbles": {
-          "const": true
-        },
-        "composed": {
-          "const": true
-        },
-        "cancelable": {
-          "type": "boolean"
-        },
-        "detailFields": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "reasonVocabulary": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "componentEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "source"],
+      "properties": {
+        "name": { "$ref": "#/$defs/canonicalEventName" },
+        "source": { "enum": ["controller", "canonical-element", "form", "user-action"] },
+        "description": { "type": "string" }
+      }
+    },
+    "slotVocabularyEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "purpose"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 }
       }
     },
     "slot": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "purpose"],
+      "required": ["name", "required", "multiple", "content"],
       "properties": {
-        "name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "purpose": {
-          "type": "string",
-          "minLength": 1
-        }
+        "name": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "multiple": { "type": "boolean" },
+        "content": { "enum": ["text", "element", "component", "template", "any"] },
+        "description": { "type": "string" }
       }
     },
-    "renderer": {
+    "method": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["package", "status"],
+      "required": ["name", "parameters", "returns", "async"],
       "properties": {
-        "package": {
-          "type": "string",
-          "pattern": "^@vyrnforge/"
+        "name": { "$ref": "#/$defs/identifier" },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/parameter" }
         },
-        "export": {
-          "type": "string",
-          "minLength": 1
-        },
-        "tag": {
-          "type": "string",
-          "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$"
-        },
-        "status": {
-          "enum": ["current", "foundation-current", "planned"]
-        }
+        "returns": { "$ref": "#/$defs/valueType" },
+        "async": { "type": "boolean" },
+        "description": { "type": "string" }
       }
     },
-    "formAssociation": {
+    "formAssociationFoundation": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "modes",
-        "requiredProperties",
-        "valueModeProperties",
-        "requiredMethods",
-        "requiredCallbacks",
-        "implementation",
-        "fallbackPolicy"
-      ],
+      "required": ["modes", "requiredProperties", "valueModeProperties", "requiredMethods", "requiredCallbacks", "implementation", "fallbackPolicy"],
       "properties": {
         "modes": {
           "type": "array",
-          "items": {
-            "enum": ["none", "value", "submitter"]
-          },
+          "items": { "enum": ["none", "value", "submitter"] },
           "uniqueItems": true
         },
-        "requiredProperties": {
-          "$ref": "#/$defs/stringArray"
+        "requiredProperties": { "$ref": "#/$defs/stringArray" },
+        "valueModeProperties": { "$ref": "#/$defs/stringArray" },
+        "requiredMethods": { "$ref": "#/$defs/stringArray" },
+        "requiredCallbacks": { "$ref": "#/$defs/stringArray" },
+        "implementation": { "const": "ElementInternals" },
+        "fallbackPolicy": { "type": "string", "minLength": 1 }
+      }
+    },
+    "formContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["association", "disabledProperty", "validity", "reset"],
+      "properties": {
+        "association": { "enum": ["none", "value", "submitter"] },
+        "nameProperty": { "$ref": "#/$defs/identifier" },
+        "valueProperty": { "$ref": "#/$defs/identifier" },
+        "disabledProperty": { "$ref": "#/$defs/identifier" },
+        "requiredProperty": { "$ref": "#/$defs/identifier" },
+        "validity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["supported", "methods"],
+          "properties": {
+            "supported": { "type": "boolean" },
+            "methods": { "$ref": "#/$defs/stringArray" },
+            "invalidEvent": { "$ref": "#/$defs/canonicalEventName" }
+          }
         },
-        "valueModeProperties": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "requiredMethods": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "requiredCallbacks": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "implementation": {
-          "const": "ElementInternals"
-        },
-        "fallbackPolicy": {
-          "type": "string",
-          "minLength": 1
+        "reset": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["supported"],
+          "properties": {
+            "supported": { "type": "boolean" },
+            "event": { "$ref": "#/$defs/canonicalEventName" },
+            "restores": { "$ref": "#/$defs/stringArray" }
+          }
         }
+      }
+    },
+    "modelContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "controlled", "stateProperty", "changeEvent"],
+      "properties": {
+        "kind": { "enum": ["none", "value", "checked", "selection", "open", "pressed", "custom"] },
+        "controlled": { "type": "boolean" },
+        "stateProperty": { "type": ["string", "null"] },
+        "defaultProperty": { "type": ["string", "null"] },
+        "changeEvent": { "type": ["string", "null"] },
+        "disabledProperty": { "type": ["string", "null"] },
+        "touchedSemantics": { "enum": ["none", "blur", "interaction", "framework-owned"] }
+      }
+    },
+    "refContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exposure", "methods"],
+      "properties": {
+        "exposure": { "enum": ["none", "element", "facade-handle"] },
+        "methods": { "$ref": "#/$defs/stringArray" },
+        "elementType": { "type": "string", "minLength": 1 }
+      }
+    },
+    "propertyMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical", "public", "binding"],
+      "properties": {
+        "canonical": { "$ref": "#/$defs/identifier" },
+        "public": { "type": "string", "minLength": 1 },
+        "binding": { "enum": ["property", "attribute", "prop", "input", "model", "readonly"] }
+      }
+    },
+    "eventMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical", "public", "mode"],
+      "properties": {
+        "canonical": { "$ref": "#/$defs/canonicalEventName" },
+        "public": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["dom-event", "callback", "output", "emit", "model-update"] },
+        "detail": { "enum": ["event", "detail", "value", "mapped"] }
+      }
+    },
+    "slotMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical", "public", "mode"],
+      "properties": {
+        "canonical": { "type": "string", "minLength": 1 },
+        "public": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["slot", "children", "prop", "content-projection", "template"] }
+      }
+    },
+    "frameworkMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package", "status", "properties", "events", "slots", "model", "ref"],
+      "properties": {
+        "package": { "type": "string", "pattern": "^@vyrnforge/" },
+        "status": { "enum": ["current", "target", "migration", "exception"] },
+        "export": { "type": "string", "minLength": 1 },
+        "tag": { "type": "string", "pattern": "^vf-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "properties": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/propertyMapping" }
+        },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/eventMapping" }
+        },
+        "slots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slotMapping" }
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["none", "controlled", "two-way", "forms", "v-model", "native-form"] },
+            "property": { "type": ["string", "null"] },
+            "event": { "type": ["string", "null"] }
+          }
+        },
+        "ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["none", "element", "forwarded-ref", "view-child", "template-ref", "facade-handle"] },
+            "type": { "type": "string" }
+          }
+        },
+        "setup": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "frameworkMappings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["native", "react", "angular", "vue"],
+      "properties": {
+        "native": { "$ref": "#/$defs/frameworkMapping" },
+        "react": { "$ref": "#/$defs/frameworkMapping" },
+        "angular": { "$ref": "#/$defs/frameworkMapping" },
+        "vue": { "$ref": "#/$defs/frameworkMapping" }
       }
     },
     "component": {
@@ -192,55 +363,46 @@
       "required": [
         "id",
         "category",
-        "react",
-        "native",
         "properties",
         "attributes",
         "events",
         "slots",
         "methods",
-        "formAssociation",
-        "accessibility"
+        "form",
+        "model",
+        "ref",
+        "accessibility",
+        "frameworkMappings"
       ],
       "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-        },
-        "category": {
-          "type": "string",
-          "minLength": 1
-        },
-        "react": {
-          "$ref": "#/$defs/renderer"
-        },
-        "native": {
-          "$ref": "#/$defs/renderer"
-        },
+        "id": { "$ref": "#/$defs/kebabIdentifier" },
+        "category": { "type": "string", "minLength": 1 },
         "properties": {
-          "$ref": "#/$defs/stringArray"
+          "type": "array",
+          "items": { "$ref": "#/$defs/property" }
         },
         "attributes": {
-          "$ref": "#/$defs/stringArray"
+          "type": "array",
+          "items": { "$ref": "#/$defs/attribute" }
         },
         "events": {
-          "$ref": "#/$defs/stringArray"
+          "type": "array",
+          "items": { "$ref": "#/$defs/componentEvent" }
         },
         "slots": {
-          "$ref": "#/$defs/stringArray"
+          "type": "array",
+          "items": { "$ref": "#/$defs/slot" }
         },
         "methods": {
-          "$ref": "#/$defs/stringArray"
+          "type": "array",
+          "items": { "$ref": "#/$defs/method" }
         },
-        "formAssociation": {
-          "enum": ["none", "value", "submitter"]
-        },
-        "accessibility": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "representative": {
-          "type": "boolean"
-        }
+        "form": { "$ref": "#/$defs/formContract" },
+        "model": { "$ref": "#/$defs/modelContract" },
+        "ref": { "$ref": "#/$defs/refContract" },
+        "accessibility": { "$ref": "#/$defs/stringArray" },
+        "frameworkMappings": { "$ref": "#/$defs/frameworkMappings" },
+        "representative": { "type": "boolean" }
       }
     }
   }
