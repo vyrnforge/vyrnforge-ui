@@ -11,8 +11,22 @@ delivery, release, documentation, and contribution paths now use the simplified
 repository model while preserving the established package architecture and trust
 boundaries.
 
+The next approved program is **VyrnForge Multi-Framework Distribution
+Architecture**. Its product support model treats React, native HTML, Angular,
+and Vue as equally first-class supported web surfaces. Support status is a
+consumer guarantee; it does not require four independent implementations or the
+same renderer strategy for every framework. The implementation model, package
+strategy, generation rules, and migration path are S10 architecture decisions.
+
+The program continues to share tokens, contracts, behaviors, styling,
+accessibility expectations, and component semantics across supported surfaces.
+Framework-specific implementation should be generated or generic wherever
+practical, with handwritten framework-specific code reserved for concrete
+technical exceptions.
+
 The data-grid package remains a specialized React alpha on an independent
-release track.
+release track. Multi-framework data-grid work is outside the S10-S15 program
+unless separately reprioritized.
 
 ## Release groups
 
@@ -35,20 +49,31 @@ The canonical exact versions, dist-tags, package membership, and internal
 dependency alignment live in
 [`../metadata/release-groups.json`](../metadata/release-groups.json).
 
+Current package names and release-group membership describe the implemented
+state. Public package topology for the new first-class framework surfaces is not
+predetermined and must not be inferred from this roadmap before the S10 package
+strategy decision is complete.
+
 ## Sprint plan
 
-| Sprint | Name                                      | Goal                                                                                                                      | Gate / state  |
-| ------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| S0     | Baseline and Change Control               | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed   |
-| S1     | Quality Foundation                        | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
-| S2     | Interaction and Accessibility Evidence    | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
-| S3     | Semantic Tokens and Component Consistency | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
-| S4     | Multi-Framework Architecture              | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed |
-| S5     | Framework-Neutral Behaviors               | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed |
-| S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed |
-| S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed |
-| S8     | Non-Grid Beta Release                     | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete      |
-| S9     | Repository and Delivery Simplification    | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete      |
+| Sprint | Name                                           | Goal                                                                                                                      | Gate / state  |
+| ------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| S0     | Baseline and Change Control                    | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed   |
+| S1     | Quality Foundation                             | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
+| S2     | Interaction and Accessibility Evidence         | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
+| S3     | Semantic Tokens and Component Consistency      | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
+| S4     | Multi-Framework Architecture                   | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed |
+| S5     | Framework-Neutral Behaviors                    | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed |
+| S6     | Native Custom Elements                         | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed |
+| S7     | Cross-Framework Verification and Docs          | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed |
+| S8     | Non-Grid Beta Release                          | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete      |
+| S9     | Repository and Delivery Simplification         | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete      |
+| S10    | Canonical Component & Distribution Architecture | Establish the target architecture, complete canonical contract model, package strategy, and migration rules.              | G10 — active  |
+| S11    | Framework Generation Foundation                | Prove deterministic generation and shared vertical slices across all four supported surfaces.                             | G11 — planned |
+| S12    | First-Class Angular Distribution               | Deliver low-friction Angular distribution with generated integration and framework-native forms/DX.                       | G12 — planned |
+| S13    | First-Class Vue Distribution                   | Deliver low-friction Vue distribution with generated integration and framework-native model/slot/ref DX.                  | G13 — planned |
+| S14    | React Canonical-Renderer Convergence           | Converge eligible React components toward the canonical implementation while preserving public ergonomics and parity.     | G14 — planned |
+| S15    | Multi-Framework Packaging & Release            | Make packaging, release verification, documentation, and four-surface distribution metadata-driven and release-ready.     | G15 — planned |
 
 ## S4 architecture tasks
 
@@ -138,6 +163,19 @@ S9 is complete. Normal contributors use one setup and validation path, CI
 derives technical scope from changed paths, and specialist intake remains only
 where infrastructure or release operations require additional evidence.
 
+## S10-S15 multi-framework distribution program
+
+S10-S15 changes the target distribution architecture without pretending that
+all target surfaces already exist in the current implementation. The approved
+support target is four first-class web surfaces: React, native HTML, Angular,
+and Vue. The exact public package names and canonical implementation mechanics
+remain unresolved until their S10 architecture decisions close.
+
+Execution is dependency-driven rather than a fully sequential sprint queue.
+MFD-1001 establishes this support model. MFD-1002 and MFD-1003 are the first
+parallel architecture tasks after it; no framework package implementation begins
+before the required architecture and generation gates.
+
 ## Deferred data-grid track
 
 The previously planned broad grid decomposition and multi-framework renderer
@@ -154,14 +192,18 @@ Deferred work includes:
 - framework-neutral grid core and additional renderers.
 
 Grid defects, security corrections, accessibility fixes, and compatibility
-maintenance remain allowed. Feature expansion is not part of the S9 critical
-path.
+maintenance remain allowed. Feature expansion is not part of the S10-S15
+multi-framework distribution critical path.
 
 ## Planning rules
 
+- The approved S10-S15 execution workbook is the current program execution plan;
+  repository planning docs should reflect it without pre-deciding open S10
+  architecture choices.
 - Accepted architecture overrides historical sprint notes.
 - Current package manifests and release metadata override stale planning
-  examples.
+  examples about the implemented state, but they do not override an explicitly
+  approved future target architecture.
 - `docs/metadata/components.json` owns structured component status and maturity.
 - Historical task identifiers remain here and in evidence because this roadmap
   is the planning/history source; normal usage guidance should not require them.
