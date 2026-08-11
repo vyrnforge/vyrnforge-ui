@@ -1,52 +1,27 @@
 ## Summary
 
-Describe the focused change, the problem it solves, and why it belongs in VyrnForge UI or its repository infrastructure.
-
-<!--
-This is the compact fallback template. Prefer a focused template from
-.github/PULL_REQUEST_TEMPLATE when the change is clearly one of these:
-- component-or-package.md
-- docs-and-examples.md
-- change-manifest.md
-- ci-cd-infrastructure.md
-- release.md
-- repository-maintenance.md
-
-The selected template helps reviewers; scripts/detect-ci-scope.mjs remains
-authoritative for checks executed by CI.
--->
-
-## Scope
-
-Select every affected area.
-
-- [ ] Documentation or repository text
-- [ ] Playground or examples
-- [ ] `@vyrnforge/ui-core`
-- [ ] `@vyrnforge/ui-behaviors`
-- [ ] `@vyrnforge/ui-components`
-- [ ] `@vyrnforge/ui-elements`
-- [ ] `@vyrnforge/ui-data-grid`
-- [ ] Workspace, tooling, or repository maintenance
-- [ ] CI/CD, Pages, release automation, or governance
-- [ ] Coordinated package release
+What changed, why is it needed, and why does it belong in VyrnForge?
 
 ## Impact
 
-**Public API or CSS contract:** None / additive / breaking / not applicable
+**Public API, behavior, or CSS:** None / describe
 
-**Release or deployment:** None / Pages / npm / Git tag and GitHub Release / not applicable
+**Documentation or metadata:** None / describe
 
-**Permissions, secrets, OIDC, or branch protection:** None / describe below
+**Breaking or migration impact:** None / describe
 
 ## Validation
 
-- [ ] Relevant targeted checks passed.
-- [ ] The generated CI plan matches the intended scope and `ci-gate` should represent the merge decision.
-- [ ] `npm run verify:ci` passed when workflow, planner, release, or repository-template files changed.
-- [ ] `npm run quality` passed once when full validation is required.
-- [ ] No credentials, `.env` files, `node_modules`, logs, archives, build output, or generated package artifacts were committed.
+- [ ] `npm run check`
+- [ ] `npm test`
+- [ ] `npm run build`
+- [ ] Tests, docs, metadata, or screenshots were updated where relevant.
+
+<!--
+CI determines required technical scope from the changed paths through
+scripts/detect-ci-scope.mjs. Do not duplicate the package/job matrix here.
+-->
 
 ## Notes
 
-List limitations, follow-up work, intentionally deferred checks, or required post-merge actions.
+List known limitations, screenshots, follow-up work, or reviewer context.

@@ -6,10 +6,10 @@ S0 through S8 established the repository foundations, quality model,
 multi-framework non-grid architecture, native renderer, cross-framework
 verification, and prerelease release groups.
 
-S9 is the active repository-and-delivery simplification program. It does not
-change the established package architecture. Its goal is to make validation,
-delivery, release, documentation, and contribution paths easier to understand
-and operate without weakening the existing trust boundaries.
+S9 completed the repository-and-delivery simplification program. Validation,
+delivery, release, documentation, and contribution paths now use the simplified
+repository model while preserving the established package architecture and trust
+boundaries.
 
 The data-grid package remains a specialized React alpha on an independent
 release track.
@@ -48,7 +48,7 @@ dependency alignment live in
 | S6     | Native Custom Elements                    | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed |
 | S7     | Cross-Framework Verification and Docs     | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed |
 | S8     | Non-Grid Beta Release                     | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete      |
-| S9     | Repository and Delivery Simplification    | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Active        |
+| S9     | Repository and Delivery Simplification    | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete      |
 
 ## S4 architecture tasks
 
@@ -124,18 +124,19 @@ retained in
 
 ## S9 repository and delivery simplification
 
-| Task    | Goal                                                                         | Status  |
-| ------- | ---------------------------------------------------------------------------- | ------- |
-| RS-9001 | Simplify validation ownership.                                               | Done    |
-| RS-9002 | Simplify the root command graph.                                             | Done    |
-| RS-9003 | Simplify CI orchestration and the merge gate.                                | Done    |
-| RS-9004 | Build Pages once in CI and deploy the verified artifact.                     | Done    |
-| RS-9005 | Simplify prerelease publication into one controlled progression.             | Done    |
-| RS-9006 | Restructure documentation around reader intent and current sources of truth. | Active  |
-| RS-9007 | Simplify contributor-facing setup, validation, and pull-request guidance.    | Planned |
+| Task    | Goal                                                                         | Status |
+| ------- | ---------------------------------------------------------------------------- | ------ |
+| RS-9001 | Simplify validation ownership.                                               | Done   |
+| RS-9002 | Simplify the root command graph.                                             | Done   |
+| RS-9003 | Simplify CI orchestration and the merge gate.                                | Done   |
+| RS-9004 | Build Pages once in CI and deploy the verified artifact.                     | Done   |
+| RS-9005 | Simplify prerelease publication into one controlled progression.             | Done   |
+| RS-9006 | Restructure documentation around reader intent and current sources of truth. | Done   |
+| RS-9007 | Simplify contributor-facing setup, validation, and pull-request guidance.    | Done   |
 
-RS-9007 closes S9 after current documentation and contributor guidance use the
-same simplified repository model.
+S9 is complete. Normal contributors use one setup and validation path, CI
+derives technical scope from changed paths, and specialist intake remains only
+where infrastructure or release operations require additional evidence.
 
 ## Deferred data-grid track
 

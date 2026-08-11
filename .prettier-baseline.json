@@ -3,7 +3,6 @@
   "policy": "Legacy entries are accepted only while their exact file hash remains unchanged. New or modified files must satisfy Prettier.",
   "entries": {
     ".github/dependabot.yml": "48efa67bddee12a58b11c300fa182ab2ae2076dff350e41fdcf6246876a6b74a",
-    ".github/PULL_REQUEST_TEMPLATE/change-manifest.md": "f25c7bc40827cadf2920f0c7f13e28497acc5d2a7c96757a8586a8cfaf1859c0",
     "apps/docs/src/App.tsx": "1acfe286fac613e69df7b6a9b906ce2c2ac351d4230c638853047bf56b6e3176",
     "apps/docs/src/componentMaturityPresentation.ts": "3474a608f1dd8a280510aa188d0239eebca530b0c6db44fac2f5e3a2543a26ee",
     "apps/docs/src/deploymentLinks.ts": "55e1ebb33c223f2dbbf458fc77b6c9aeded0f08451dd136591a56e7a60a71863",
@@ -14,7 +13,6 @@
     "apps/docs/src/MetadataPage.tsx": "dc35c513796a8eca74028dd1fea5899c0e8b9d9a1c2b41886ef3f51e155831bb",
     "apps/docs/src/styles/docs.css": "5af02f24c388973540769d720200c629ac65c33a8447e1d26f2ddef41cb6b674",
     "apps/docs/vite.config.ts": "5239eb0dc3e922c5e88f003ce86c1bd2347917bc42eb8c4bbb97beb1e0b1a15c",
-    "CONTRIBUTING.md": "8143e690e41602e00020a7f1fed0a331729e83b9a8838fb2cf57859c725db143",
     "docs/ai/00-ai-documentation-strategy.md": "e78a8c71a441b6f1d94cb56ec6361567e8d41b6cbc47ac0631da4f6d221d418f",
     "docs/api/css-class-reference.md": "b29547a9d12acabfc169c93ab5804825c841d33686fef0b36d7b6938c5bb290d",
     "docs/architecture/07-overlay-and-focus.md": "9baabc0513f6b052457f7cfead8ddd5e851ae354a1f11a2439da4bfaebe6b4d1",
@@ -47,7 +45,6 @@
     "docs/components/forms/autocomplete.md": "659448c532613760cb75bd54f3a8e2793bb9fc47fc4432ddeae3c29dc8d8131f",
     "docs/governance/02-document-lifecycle.md": "9b8b0add66c6529f140fc92e89cc03aafa44e0a8bb2b93c9c6a319fcdfeeb13d",
     "docs/governance/03-naming-and-terminology.md": "dc40b11e1f4b351070b81f987847f793427af08997c0f1cc8a521d704a99e59c",
-    "docs/governance/change-manifest-and-dependency-policy.md": "b7e4a24a1ac503d966439ba38a13f19bff3f9e5114cf2a6f577d14b9186a8737",
     "docs/governance/component-maturity-model.md": "9f8f80972469f5f64fb5bafc4cb1ab3ca6d379ffd10459d0406098fa97a9eafa",
     "docs/governance/controlled-implementation-rules.md": "301b8030bfdefeb387a4cdcde8f0509c37fbb4e6ec478ef3e07ab56879ef6ace",
     "docs/governance/ownership-and-review-model.md": "1b9af289cf2c466135c5fa0ad2711ad90dd281e2ecc99c0c71d0883d34224f55",

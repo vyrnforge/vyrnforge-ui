@@ -220,28 +220,36 @@ packages.
 
 ## Pull-request and issue intake contracts
 
-The repository provides a compact automatic pull-request fallback plus focused
-templates for component/package changes, documentation/examples, CI/CD
-infrastructure, coordinated releases, and repository maintenance. Multiple
-package-specific forms are avoided because a single upstream change may affect
-several packages; the component/package template records all direct and
-transitive package impact in one review.
+The normal contributor path is intentionally small:
 
-Focused templates are stored under `.github/PULL_REQUEST_TEMPLATE/` and are
-selected through GitHub's `template` query parameter. Template selection and
-author checkboxes provide review evidence only. The generated planner output
-remains authoritative and CI verifies the repository-template contracts.
+```text
+clone -> npm ci -> npm run check -> npm test -> npm run build -> pull request
+```
 
-Repository infrastructure has a dedicated issue form for CI orchestration,
-planner behavior, package/consumer verification, Pages, trusted publishing,
-registry proof, release records, nightly validation, and branch protection. The
-release-readiness form is reserved for a specific candidate or published
-release and captures version, dist-tag, release stage, partial-publication
-state, provenance, consumer evidence, and expected final registry state.
+The automatic `.github/pull_request_template.md` is the default for ordinary
+code, documentation, test, and maintenance changes. It asks for the change,
+impact, validation, and reviewer context; it does not ask authors to predict
+package jobs or reproduce CI workflow topology.
 
-`npm run verify:templates` enforces these intake contracts and is included in
-`npm run check`. This prevents the repository templates from drifting back to
-duplicated command checklists or omitting required release evidence.
+`scripts/detect-ci-scope.mjs` remains authoritative for technical CI scope. The
+planner derives package, consumer, docs, playground, fixture, browser, security,
+and full-validation responsibilities from the changed paths. Pull-request
+checkboxes are not a second scope engine.
+
+Only two specialist pull-request templates remain:
+
+- `ci-cd-infrastructure.md` for workflow, Pages, permissions, branch-protection,
+  environment, and repository-automation changes;
+- `release.md` for an actual prerelease publication candidate.
+
+The issue forms remain responsibility-specific because they collect information
+needed before implementation: product defects, reusable feature proposals,
+accessibility concerns, CI/repository infrastructure, and release-readiness
+problems.
+
+`npm run verify:templates` enforces the contributor-intake contract and reports
+`npm run verify:templates` as the reproduction command when it fails. Its
+contract tests run with the active repository contract suite.
 
 ## Pages deployment
 
