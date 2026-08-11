@@ -1,144 +1,232 @@
-# Multi-Framework Component Contracts And Events
+# Canonical Multi-Framework Component Contracts
 
-This document is the canonical human-readable cross-framework component
-contract. The machine-readable source is
-`docs/metadata/component-contracts.json`.
+This document is the canonical human-readable contract model for non-grid web
+components. The machine-readable source is
+`docs/metadata/component-contracts.json`, validated by
+`docs/metadata/component-contract.schema.json`.
 
-## Contract layers
+MFD-1005 expands the contract from representative string lists into structured
+metadata that can drive framework generation without reading React, Angular, or
+Vue implementation source.
 
-Every public non-grid component is described independently from its renderer:
+## Contract ownership
+
+The canonical contract describes VyrnForge semantics independently from any one
+framework syntax:
 
 ```text
-component contract
-  properties and attributes
-  events
+canonical component contract
+  typed properties and defaults
+  declarative attributes and reflection
+  canonical events and typed detail
   semantic composition regions
-  public methods
+  public imperative methods
+  browser form semantics
+  value/model state semantics
+  ref/element exposure
   accessibility obligations
-  form-association mode
+  per-framework facade mappings
         |
-        +-- React renderer
-        +-- native Custom Element renderer
-        +-- Angular consumer mapping
-        +-- Vue consumer mapping
+        +-- native HTML
+        +-- React facade
+        +-- Angular facade
+        +-- Vue facade
 ```
 
-The shared contract must not contain React nodes, Vue slots, Angular templates,
-framework event objects, dependency-injection objects, or DOM element
-instances.
+Shared metadata must not contain application business logic, framework runtime
+objects, private controller instances, backend concerns, or application state.
+Framework mappings describe public translation rules, not separate component
+implementations.
 
-## Properties and attributes
+## Properties
 
-Properties are the complete typed runtime surface. Attributes are the
-serializable declarative subset.
+Every property is a structured record containing at least:
 
-Rules:
+- canonical camel-cased name;
+- value kind and optional public type name;
+- required/optional status;
+- mutability;
+- canonical default;
+- optional controlled/uncontrolled semantics;
+- optional read-only status and description.
 
-1. Primitive string, number, and Boolean values should reflect when reflection
-   is unambiguous and useful.
-2. Objects, arrays, callbacks, and templates are properties only.
-3. Dash-cased attributes map to camel-cased properties.
-4. Attribute removal restores the documented default; it must not stringify
-   `undefined` or `null`.
-5. Properties assigned before connection or upgrade must be preserved.
-6. Controlled and uncontrolled behavior is defined by the shared controller,
-   not independently by each renderer.
+Objects, arrays, callbacks, templates, and element references remain properties
+rather than serialized attributes. Defaults are contract data so generators do
+not infer them from framework source.
 
-## Canonical DOM events
+## Attributes
 
-Native elements emit `CustomEvent` values using the `vf-*` namespace. Public
-component events bubble and cross composition boundaries unless a contract
-explicitly documents otherwise.
+Attributes are the serializable declarative subset of properties. Every
+attribute record states:
 
-Canonical event names are:
+- dash-cased public name;
+- canonical property target;
+- primitive/enum value kind;
+- reflection direction;
+- removal behavior.
 
-| Event                 | Purpose                                        |
-| --------------------- | ---------------------------------------------- |
-| `vf-value-change`     | Value transition.                              |
-| `vf-open-change`      | Open/closed transition.                        |
-| `vf-selection-change` | Single or multiple selection transition.       |
-| `vf-checked-change`   | Checked or mixed-state transition.             |
-| `vf-pressed-change`   | Pressed/selected tool transition.              |
-| `vf-action`           | Primary action invocation.                     |
-| `vf-dismiss`          | Dismissal request with a reason.               |
-| `vf-invalid`          | Invalid form state.                            |
-| `vf-reset`            | Reset to the initial form or controller state. |
+Attribute removal semantics are explicit: restore the canonical default, set a
+Boolean false, or set a nullable value to null. Generators must not stringify
+`undefined` or `null` accidentally.
 
-Event payloads include domain values and a stable reason. They must not expose
-React synthetic events, Vue component instances, Angular event emitters, or
-private controller objects.
+## Canonical events
 
-Renderer mapping is idiomatic rather than textually identical:
+Native elements emit `CustomEvent` values in the `vf-*` namespace. Event
+vocabulary entries define:
 
-| Canonical DOM event   | React               | Vue                                      | Angular                                |
-| --------------------- | ------------------- | ---------------------------------------- | -------------------------------------- |
-| `vf-value-change`     | `onValueChange`     | `update:modelValue` or explicit listener | `valueChange` or DOM event binding     |
-| `vf-open-change`      | `onOpenChange`      | `update:open` or explicit listener       | `openChange` or DOM event binding      |
-| `vf-selection-change` | `onSelectionChange` | explicit listener                        | `selectionChange` or DOM event binding |
+- canonical name and purpose;
+- bubbling, composition, and cancellation behavior;
+- typed detail fields and requiredness;
+- optional stable reason vocabulary.
 
-React public callbacks remain stable while internals migrate to shared
-controllers. Native DOM events are not forced into React's existing prop names.
+A component references canonical events with a source classification such as
+controller transition, canonical-element behavior, form integration, or direct
+user action.
 
-## Composition vocabulary
+Framework mappings then define the public translation explicitly. For example,
+`vf-value-change` can map to a React callback, Angular output, Vue
+`update:modelValue`, or remain a DOM event for native HTML without changing the
+canonical event meaning.
 
-Frameworks compose content differently. VyrnForge therefore standardizes
-semantic regions, not framework syntax.
+## Composition and slots
 
-Canonical regions include:
+VyrnForge standardizes semantic composition regions rather than framework
+syntax. The shared vocabulary includes regions such as `default`, `label`,
+`description`, `prefix`, `suffix`, `trigger`, `content`, `header`, `footer`,
+`actions`, `item`, `empty`, and `loading`.
 
-```text
-default
-label
-description
-prefix
-suffix
-trigger
-content
-header
-footer
-actions
-item
-empty
-loading
-```
+Each component slot record states whether the region is required, whether it can
+accept multiple nodes, and its content class. Framework mappings then select an
+idiomatic mechanism:
 
-React may implement a region with children or a render callback. Vue may use a
-slot, Angular may use content projection or a template, and a Custom Element
-may use a named slot. The meaning and accessibility relationship remain the
-same.
+- native named/default slots;
+- React children or explicit render/content props;
+- Angular content projection or templates;
+- Vue slots.
 
-Do not create framework-only region names when a canonical region already
-expresses the intent.
+This makes composition deterministic without requiring identical DOM trees.
 
 ## Methods
 
-Public methods are reserved for imperative behavior that cannot be represented
-reliably through properties and events, such as `focus`, `show`, `close`,
-`checkValidity`, and `reportValidity`.
+Public methods are structured with parameters, return type, async status, and an
+optional description. They are reserved for imperative behavior that cannot be
+represented reliably through properties and events, such as `focus`, `show`,
+`close`, `checkValidity`, and `reportValidity`.
 
-Methods must be renderer-safe, documented, and typed. Do not expose internal
-controller mutation methods.
+Internal controller mutation methods are never public contract methods.
+
+## Form semantics
+
+The root form-association foundation continues to define the browser contract
+for `none`, `value`, and `submitter` modes and the ElementInternals lifecycle.
+
+Each component additionally records its own form mapping:
+
+- association mode;
+- name/value/disabled/required properties where applicable;
+- validity support, methods, and invalid event;
+- reset support, reset event, and restored state.
+
+MFD-1006 builds the detailed cross-framework forms/model contract on top of this
+representation. MFD-1005 only ensures the schema can express the required data
+without framework-source inference.
+
+## Value and model semantics
+
+Every component has an explicit model record, even when the kind is `none`.
+Supported model classes include value, checked, selection, open, pressed, and
+custom state.
+
+The model record identifies:
+
+- controlled-state behavior;
+- canonical state property;
+- optional uncontrolled/default property;
+- canonical change event;
+- disabled-state property when applicable;
+- touched semantics.
+
+This is the shared input for later React controlled API, Angular Forms, and Vue
+`v-model` mappings rather than three independently maintained interpretations.
+
+## Ref and imperative exposure
+
+Every component declares whether consumers receive no imperative surface, the
+canonical element, or a facade handle. It also declares the method set and
+optional canonical element type.
+
+Framework mappings select the idiomatic exposure mechanism, such as a forwarded
+React ref, Angular view-child reference, Vue template ref/exposed handle, or the
+native element itself.
+
+## Framework mappings
+
+Every canonical component contract contains explicit mappings for all four
+supported web surfaces:
+
+- `native`;
+- `react`;
+- `angular`;
+- `vue`.
+
+A framework mapping records:
+
+- public package and implementation status (`current`, `target`, `migration`, or
+  explicit `exception`);
+- public export or native tag;
+- property/input/prop/model translations;
+- event callback/output/emit/model-update translations;
+- slot/children/template/content-projection translations;
+- value/model integration mode;
+- ref exposure mode;
+- optional setup requirements.
+
+The mapping describes facade behavior. It must not become a place to embed
+component-specific renderer code.
 
 ## Accessibility obligations
 
-The contract records semantic outcomes rather than implementation details. A
-renderer must provide equivalent:
+Accessibility remains an outcome contract. Each component records semantic and
+interaction obligations such as native semantics, accessible names,
+relationships, keyboard navigation, focus containment/restoration, disabled and
+invalid state, and live-region behavior where applicable.
 
-- roles and native semantics;
-- accessible names and descriptions;
-- keyboard transitions;
-- focus order, containment, and restoration;
-- disabled and invalid states;
-- live-region behavior where required.
+Framework generation may change syntax but may not weaken those obligations.
 
-Equivalent behavior does not require identical DOM trees.
+## Source-reading rule
 
-## Current catalog and representative records
+Once a component is contract-complete, a framework generator should be able to
+determine its public facade shape from canonical metadata and generator rules.
+It must not inspect React/Angular/Vue component implementation source to discover
+missing props, events, slot names, form behavior, or ref semantics.
 
-The canonical component catalog and renderer status live in
-`docs/metadata/components.json`. Detailed representative cross-framework
-contracts remain in `docs/metadata/component-contracts.json`, and the generated
-consumer-facing projection lives in `docs/generated/component-reference.json`.
+During S10, MFD-1010 inventories the full supported non-grid catalog and marks
+each component `contract-complete`, `needs-data`, or `exception-required`.
+Unknown fields must be surfaced explicitly rather than guessed from source.
 
-React and native HTML are the first-class renderers. Angular and Vue consume the
-native renderer through the verified mappings recorded in canonical metadata.
+## Current representative records
+
+Schema v2 is populated first for representative action, navigation, form, and
+overlay components:
+
+- Button;
+- Tabs;
+- Autocomplete;
+- Dialog.
+
+These records prove that the schema can represent properties, attributes,
+events, composition, methods, forms, model state, refs, accessibility, and all
+four framework mappings in one canonical structure. Full catalog population is
+MFD-1010 after MFD-1006 through MFD-1008 define the detailed semantic mapping
+rules.
+
+## Compatibility and migration
+
+The schema describes both implemented and target states. Native mappings are
+currently implemented; React mappings may be marked as migration while S14
+converges them; Angular and Vue mappings may be target-state until their
+first-class packages are implemented.
+
+Metadata status must never be used to claim a target package is already shipped.
+Current package manifests and release metadata remain authoritative for the
+implemented distribution state.
