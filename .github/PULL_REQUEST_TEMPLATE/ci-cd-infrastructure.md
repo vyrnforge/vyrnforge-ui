@@ -1,48 +1,36 @@
 ## Summary
 
-Describe the CI/CD, workflow, release-engineering, Pages, branch-protection, or repository-automation change and the operational risk it addresses.
+Describe the CI/CD, Pages, permissions, branch-protection, or repository
+automation change and the operational problem it solves.
 
-## Infrastructure scope
+## Operational impact
 
-- [ ] CI planner or `ci-gate`
-- [ ] Reusable quality/package/consumer/docs workflow
-- [ ] GitHub Pages build or deployment
-- [ ] npm trusted publishing or OIDC
-- [ ] Registry, signature, or provenance verification
-- [ ] Git tag or GitHub Release recording
-- [ ] Nightly validation
-- [ ] Repository templates, governance, or branch protection
-- [ ] Verification/release scripts
+**Trigger or planner behavior:** None / describe
 
-## Responsibility and permission impact
+**Permissions, secrets, or OIDC:** None / describe
 
-**Trigger change:** None / pull request / push / dispatch / schedule / workflow completion
+**Environment or approval flow:** None / `npm-release` / `github-pages` / describe
 
-**Permissions changed:** None / `contents: read` / `contents: write` / `id-token: write` / Pages permissions / describe below
+**Required `ci-gate` or branch-protection behavior:** None / describe
 
-**Environment or approval changed:** None / `npm-release` / `github-pages` / describe below
+## Safety
 
-**Required-check or branch-protection change:** None / describe migration below
-
-## Infrastructure review
-
-- [ ] `scripts/detect-ci-scope.mjs` rules and tests were updated when path categories changed.
-- [ ] CI remains always-running with a stable `ci-gate`; required checks do not rely on workflow-level path filters.
-- [ ] Global permissions remain read-only and every elevated permission is job-scoped.
-- [ ] Pull-request CI cannot publish packages, deploy Pages, create tags, or create GitHub Releases.
-- [ ] Pages deployment, npm OIDC publication, registry verification, and release recording remain separate responsibilities.
-- [ ] No long-lived npm token, personal access token, or equivalent publishing secret was introduced.
-- [ ] Failure, cancellation, intentional skip, concurrency, and retry behavior were considered.
-- [ ] Source-of-truth architecture and responsibility documentation was updated without duplicating workflow YAML.
+- [ ] Normal pull-request CI remains read-only.
+- [ ] Any elevated permission, including `id-token: write` or repository write access, remains job-scoped to the operation that requires it.
+- [ ] Pages deployment, npm publication, registry verification, and repository
+      writes remain isolated to the jobs that own those responsibilities.
+- [ ] No long-lived npm token, personal access token, or equivalent publishing
+      credential was introduced.
+- [ ] Failure, retry, concurrency, and rollback behavior were considered.
 
 ## Validation
 
-- [ ] Planner fixtures or tests cover new routing behavior.
-- [ ] Workflow and repository-template contracts passed.
-- [ ] `npm run verify:ci` passed.
-- [ ] `npm run quality` passed once before merge when full validation is required.
-- [ ] No package version, public API, CSS ownership, npm publication, dist-tag, Git tag, or GitHub Release changed.
+- [ ] `npm run check`
+- [ ] `npm test`
+- [ ] `npm run build`
+- [ ] Planner/workflow/template tests were updated where behavior changed.
 
-## Rollout and rollback
+## Rollout
 
-Describe branch-protection migration, environment configuration, staged rollout, rollback steps, and post-merge verification.
+Describe any repository setting, environment, branch-protection, or post-merge
+step that cannot be represented in source control.

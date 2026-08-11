@@ -1,51 +1,37 @@
 ## Summary
 
-Describe the coordinated VyrnForge release, the included user-visible changes, and why this version is ready.
+Describe the prerelease candidate and the user-visible changes it contains.
 
-## Release identity
+## Candidate
 
 **Release group:** `non-grid-beta` / `data-grid-alpha`
 
 **Version:**
 
-**npm dist-tag:** `alpha` / `beta` / `next` / `latest`
+**npm dist-tag:** `beta` / `alpha`
 
 **Release commit:**
 
-**Included packages:**
+## Release evidence
 
-- [ ] `@vyrnforge/ui-core`
-- [ ] `@vyrnforge/ui-behaviors`
-- [ ] `@vyrnforge/ui-components`
-- [ ] `@vyrnforge/ui-elements`
-- [ ] `@vyrnforge/ui-data-grid`
-
-## Candidate integrity
-
-- [ ] `npm run verify:release-groups` passes for the selected canonical group.
-- [ ] Package manifests and internal dependencies use the exact versions declared by the release-group manifest.
-- [ ] The version does not already exist for any package on npm.
-- [ ] Changelog, release notes, migration notes, package READMEs, metadata, and examples match the candidate.
-- [ ] Package payloads contain expected runtime files, declarations, CSS entries, LICENSE, and README.
-- [ ] Fresh packed-consumer installation, typecheck, and production build passed.
-
-## Trusted publishing and release record
-
-- [ ] Release verification completed before requesting publication approval.
-- [ ] npm publication uses the protected `npm-release` environment and job-scoped OIDC.
-- [ ] No `NPM_TOKEN`, `NODE_AUTH_TOKEN`, personal access token, or long-lived publishing credential is used.
-- [ ] Publication order matches the selected group: `ui-core` → `ui-behaviors` → `ui-components` → `ui-elements`, or `ui-data-grid` only.
-- [ ] Registry propagation and exact dependency metadata are verified after each publication.
-- [ ] Registry signatures/provenance and a fresh registry consumer are verified before creating the release record.
-- [ ] The Git tag and GitHub Release are created only after successful registry verification.
+- [ ] Current `main` CI succeeded for the exact release commit.
+- [ ] The release workflow verified the selected release group and retained
+      immutable package tarballs.
+- [ ] Publication uses the protected `npm-release` environment and job-scoped
+      OIDC.
+- [ ] Registry metadata, exact dependencies, signatures/provenance, and a fresh
+      registry consumer are verified before the release record is created.
+- [ ] Git tag and GitHub Release creation occur only after registry
+      verification.
 
 ## Validation
 
-- [ ] `npm run quality` passed for the final candidate.
-- [ ] Release workflow verify mode passed for this exact version and dist-tag.
-- [ ] No uncommitted or generated release artifact is present.
-- [ ] Rollback or partial-publication handling is documented.
+- [ ] `npm run check`
+- [ ] `npm test`
+- [ ] `npm run build`
+- [ ] Release-specific verification passed for this exact candidate.
 
-## Approval and evidence
+## Outcome and notes
 
-Link the release workflow run, approval record, npm packages, provenance evidence, consumer result, Git tag, GitHub Release, and any remaining limitations.
+Link the release workflow/evidence and record any partial-publication state,
+known limitation, or required follow-up.

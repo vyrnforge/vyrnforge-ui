@@ -24,6 +24,7 @@ export const activeContractTests = [
   "test:component-reference",
   "test:maturity-closure",
   "test:assistive-technology",
+  "test:templates",
   "test:documentation-current",
   "test:validation-model",
 ];

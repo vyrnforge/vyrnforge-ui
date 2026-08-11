@@ -12,7 +12,7 @@ VyrnForge UI is a native-first, dependency-minimal enterprise multi-framework UI
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
 | Documentation | 129 active Markdown files; 23 archived Markdown files |
-| Scripts | 145 root npm scripts; repository automation under `scripts/` |
+| Scripts | 146 root npm scripts; repository automation under `scripts/` |
 | GitHub workflows | 8 workflow files, including 4 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
@@ -210,8 +210,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 112 |
-| Pure/unit | 85 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 113 |
+| Pure/unit | 86 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 8 detected test files with DOM interaction helpers. |
 | Browser | 19 detected browser-test files. |
@@ -278,7 +278,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Publishable packages | 5 |
 | Package-root export names | 591 |
 | Public components inventoried | 75 |
-| Repository test files | 112 |
+| Repository test files | 113 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 8 |
 | Browser test files | 19 |
