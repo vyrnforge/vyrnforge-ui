@@ -10,6 +10,7 @@ import {
   sha1File,
   sha256File,
   sha512IntegrityFile,
+  validatePackedPayload,
   validateReleaseArtifactManifest,
 } from "./release-artifact.mjs";
 
@@ -100,6 +101,26 @@ test("release artifact manifest rejects reordered packages", () => {
   assert(
     failures.includes(
       "release artifact package order does not match the release group",
+    ),
+  );
+});
+
+test("packed payload verification follows package CSS policy", () => {
+  const packageInfo = {
+    name: "@vyrnforge/example",
+    policies: { hasCss: true },
+  };
+  const packageJson = {
+    exports: { ".": { types: "./dist/index.d.ts", import: "./dist/index.js" } },
+    types: "./dist/index.d.ts",
+  };
+  const failures = validatePackedPayload(packageInfo, packageJson, [
+    "dist/index.d.ts",
+    "dist/index.js",
+  ]);
+  assert(
+    failures.includes(
+      "@vyrnforge/example: CSS payload is required by release metadata",
     ),
   );
 });

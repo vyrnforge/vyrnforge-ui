@@ -165,7 +165,7 @@ function validatePackageManifest(packageInfo, packageJson) {
   return failures;
 }
 
-function validatePackedPayload(packageInfo, packageJson, files) {
+export function validatePackedPayload(packageInfo, packageJson, files) {
   const failures = [];
   const exportTargets = collectStringTargets(packageJson.exports ?? {});
   const requiredFiles = [
@@ -184,6 +184,15 @@ function validatePackedPayload(packageInfo, packageJson, files) {
   const allowedRootFiles = new Set(
     uniqueRequiredFiles.filter((file) => !file.startsWith("dist/")),
   );
+  const declarationFiles = files.filter((file) => file.endsWith(".d.ts"));
+  const cssFiles = files.filter((file) => file.endsWith(".css"));
+
+  if (packageJson.types && declarationFiles.length === 0) {
+    failures.push(`${packageInfo.name}: declarations are required by package metadata`);
+  }
+  if (packageInfo.policies?.hasCss === true && cssFiles.length === 0) {
+    failures.push(`${packageInfo.name}: CSS payload is required by release metadata`);
+  }
 
   for (const requiredFile of uniqueRequiredFiles) {
     if (!files.includes(requiredFile)) {
