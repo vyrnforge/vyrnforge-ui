@@ -3,10 +3,38 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  getTrustedPublishingPackages,
   readTrustedPublishingContract,
   verifyTrustedPublishingExternalEvidence,
   verifyTrustedPublishingProvenanceContract,
 } from "./trusted-publishing-provenance.mjs";
+
+test("trusted publishing package coverage derives from release metadata", () => {
+  const packages = getTrustedPublishingPackages({
+    schemaVersion: 2,
+    releaseLines: {
+      "framework-beta": {
+        packages: [
+          { name: "@vyrnforge/ui-angular", directory: "packages/ui-angular" },
+          { name: "@vyrnforge/ui-vue", directory: "packages/ui-vue" },
+        ],
+      },
+    },
+  });
+
+  assert.deepEqual(packages, [
+    {
+      name: "@vyrnforge/ui-angular",
+      directory: "packages/ui-angular",
+      releaseGroup: "framework-beta",
+    },
+    {
+      name: "@vyrnforge/ui-vue",
+      directory: "packages/ui-vue",
+      releaseGroup: "framework-beta",
+    },
+  ]);
+});
 
 function clone(value) {
   return structuredClone(value);

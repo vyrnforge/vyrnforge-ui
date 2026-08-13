@@ -2,7 +2,10 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { readReleaseGroups } from "./release-groups.mjs";
+import {
+  getReleaseLineEntries,
+  readReleaseGroups,
+} from "./release-groups.mjs";
 
 export const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -134,6 +137,17 @@ export function verifyTrustedPublishingExternalEvidence({
 
 export function readTrustedPublishingContract({ root = repositoryRoot } = {}) {
   return readJson(root, trustedPublishingContractPath);
+}
+
+export function getTrustedPublishingPackages(releaseGroups) {
+  return getReleaseLineEntries(releaseGroups).flatMap(
+    ([releaseGroup, value]) =>
+      (value.packages ?? []).map((packageInfo) => ({
+        name: packageInfo.name,
+        directory: packageInfo.directory,
+        releaseGroup,
+      })),
+  );
 }
 
 export function verifyTrustedPublishingProvenanceContract({
@@ -340,14 +354,7 @@ export function verifyTrustedPublishingProvenanceContract({
     "registry verifier must require provenance metadata and npm audit signatures",
   );
 
-  const expectedPackages = Object.entries(releaseGroups.groups ?? {}).flatMap(
-    ([releaseGroup, value]) =>
-      (value.packages ?? []).map((packageInfo) => ({
-        name: packageInfo.name,
-        directory: packageInfo.directory,
-        releaseGroup,
-      })),
-  );
+  const expectedPackages = getTrustedPublishingPackages(releaseGroups);
   addFailure(
     failures,
     Array.isArray(contract.packages) &&
@@ -401,7 +408,11 @@ export function verifyTrustedPublishingProvenanceContract({
   );
   const evidence = readJson(root, contract.externalEvidence.evidenceIndex);
   failures.push(
-    ...verifyTrustedPublishingExternalEvidence({ root, contract, evidence }),
+    ...verifyTrustedPublishingExternalEvidence({
+      root,
+      contract: { ...contract, packages: expectedPackages },
+      evidence,
+    }),
   );
 
   return failures.sort();
