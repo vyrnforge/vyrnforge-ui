@@ -605,7 +605,7 @@ for (const marker of [
   "npm run prepare:release-artifact",
   "npm run verify:release-artifact",
   "npm run verify:trusted-publishing-dry-run",
-  "npm run verify:beta-package-size-budgets",
+  "npm run verify:release-size-budgets",
   "npm run verify:assistive-technology:release",
   "Upload immutable release artifact",
 ]) {
