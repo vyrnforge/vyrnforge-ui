@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,8 +12,43 @@ export const releaseGroupsSchemaPath =
   "docs/metadata/release-groups.schema.json";
 export const releaseGroupsSchemaVersion = 2;
 
+function createLegacyReleaseGroupsView(manifest) {
+  return Object.fromEntries(
+    Object.entries(manifest.releaseLines ?? {}).map(
+      ([releaseGroupId, releaseGroup]) => [
+        releaseGroupId,
+        {
+          ...releaseGroup,
+          synchronized: releaseGroup.versioning?.mode === "synchronized",
+          publishTogether: releaseGroup.publication?.publishTogether === true,
+          packages: (releaseGroup.packages ?? []).map((packageInfo) => ({
+            ...packageInfo,
+            hasCss: packageInfo.policies?.hasCss ?? false,
+          })),
+        },
+      ],
+    ),
+  );
+}
+
 export function readReleaseGroups({ root = repositoryRoot } = {}) {
-  return JSON.parse(readFileSync(path.join(root, releaseGroupsPath), "utf8"));
+  const manifest = JSON.parse(
+    readFileSync(path.join(root, releaseGroupsPath), "utf8"),
+  );
+
+  if (
+    manifest.schemaVersion === releaseGroupsSchemaVersion &&
+    !Object.hasOwn(manifest, "groups")
+  ) {
+    Object.defineProperty(manifest, "groups", {
+      configurable: false,
+      enumerable: false,
+      value: createLegacyReleaseGroupsView(manifest),
+      writable: false,
+    });
+  }
+
+  return manifest;
 }
 
 export function getReleaseLineEntries(manifest) {
@@ -72,6 +107,56 @@ export function getReleasePackageMap(manifest) {
 
 export function getReleasePackageNames(releaseGroup) {
   return (releaseGroup.packages ?? []).map((packageInfo) => packageInfo.name);
+}
+
+function workspacePatterns(rootPackage) {
+  if (Array.isArray(rootPackage.workspaces)) return rootPackage.workspaces;
+  return rootPackage.workspaces?.packages ?? [];
+}
+
+function expandSingleLevelWorkspacePattern(root, pattern) {
+  const normalized = pattern.replaceAll("\\", "/");
+  if (!normalized.endsWith("/*")) {
+    throw new Error(
+      `unsupported workspace pattern for release discovery: ${pattern}`,
+    );
+  }
+  const parentRelative = normalized.slice(0, -2);
+  const parent = path.join(root, parentRelative);
+  if (!existsSync(parent)) return [];
+
+  return readdirSync(parent, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => path.posix.join(parentRelative, entry.name));
+}
+
+export function discoverPublishableWorkspaces({ root = repositoryRoot } = {}) {
+  const rootPackage = JSON.parse(
+    readFileSync(path.join(root, "package.json"), "utf8"),
+  );
+  const discovered = [];
+
+  for (const pattern of workspacePatterns(rootPackage)) {
+    for (const directory of expandSingleLevelWorkspacePattern(root, pattern)) {
+      const packageJsonPath = path.join(root, directory, "package.json");
+      if (!existsSync(packageJsonPath)) continue;
+      const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+      if (packageJson.private === true) continue;
+      if (
+        typeof packageJson.name !== "string" ||
+        !packageJson.name.startsWith("@vyrnforge/")
+      ) {
+        continue;
+      }
+      discovered.push({
+        name: packageJson.name,
+        directory,
+        version: packageJson.version,
+      });
+    }
+  }
+
+  return discovered.sort((left, right) => left.name.localeCompare(right.name));
 }
 
 function isRecord(value) {

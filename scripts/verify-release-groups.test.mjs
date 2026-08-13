@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   cpSync,
+  mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -175,4 +176,50 @@ test("rejects release tooling that drops release-group selection", () =>
           failure.includes('--release-group "$RELEASE_GROUP"'),
         ),
       ),
+  ));
+
+test("rejects a newly added publishable workspace until metadata classifies it", () =>
+  fixture(
+    (root) => {
+      const workspace = path.join(root, "packages", "future-framework");
+      mkdirSync(workspace, { recursive: true });
+      writeFileSync(
+        path.join(workspace, "package.json"),
+        `${JSON.stringify(
+          {
+            name: "@vyrnforge/ui-future-framework",
+            version: "0.1.0-alpha.1",
+          },
+          null,
+          2,
+        )}\n`,
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("publishable workspace is not classified"),
+        ),
+      ),
+  ));
+
+test("ignores private workspaces during publishable-package discovery", () =>
+  fixture(
+    (root) => {
+      const workspace = path.join(root, "packages", "private-helper");
+      mkdirSync(workspace, { recursive: true });
+      writeFileSync(
+        path.join(workspace, "package.json"),
+        `${JSON.stringify(
+          {
+            name: "@vyrnforge/private-helper",
+            version: "0.0.0",
+            private: true,
+          },
+          null,
+          2,
+        )}\n`,
+      );
+    },
+    (failures) => assert.deepEqual(failures, []),
   ));

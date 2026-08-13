@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  discoverPublishableWorkspaces,
   getReleaseLineEntries,
   getReleasePackageMap,
   readReleaseGroups,
@@ -57,6 +58,37 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
   if (failures.length > 0) return [...new Set(failures)].sort();
 
   const packageMap = getReleasePackageMap(manifest);
+  let discoveredPublishable = [];
+  try {
+    discoveredPublishable = discoverPublishableWorkspaces({ root });
+  } catch (error) {
+    failures.push(`publishable workspace discovery failed: ${error.message}`);
+  }
+
+  const discoveredByName = new Map(
+    discoveredPublishable.map((packageInfo) => [packageInfo.name, packageInfo]),
+  );
+  for (const packageInfo of discoveredPublishable) {
+    const classified = packageMap.get(packageInfo.name);
+    if (!classified) {
+      failures.push(
+        `${packageInfo.name}: publishable workspace is not classified in release metadata`,
+      );
+      continue;
+    }
+    if (classified.directory !== packageInfo.directory) {
+      failures.push(
+        `${packageInfo.name}: release metadata directory must be ${packageInfo.directory}`,
+      );
+    }
+  }
+  for (const packageInfo of packageMap.values()) {
+    if (!discoveredByName.has(packageInfo.name)) {
+      failures.push(
+        `${packageInfo.name}: release metadata classifies a workspace that is not publishable`,
+      );
+    }
+  }
 
   for (const [releaseLineId, releaseLine] of getReleaseLineEntries(manifest)) {
     for (const packageInfo of releaseLine.packages) {
