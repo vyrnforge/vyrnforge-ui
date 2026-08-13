@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -64,15 +65,10 @@ function frameworkExamples(component) {
 
 export function buildComponentReference({ root = repositoryRoot } = {}) {
   const catalog = readJson(root, "docs/metadata/components.json");
-  const contracts = readJson(root, "docs/metadata/component-contracts.json");
+  const contracts = loadCanonicalComponentContracts({ root });
   const manifest = readJson(root, "packages/ui-elements/custom-elements.json");
 
-  const contractById = new Map(
-    (contracts.componentContracts ?? []).map((contract) => [
-      contract.id,
-      contract,
-    ]),
-  );
+  const contractById = contracts.componentById;
   const nativeByTag = new Map(
     (manifest.modules ?? [])
       .flatMap((module) => module.declarations ?? [])
