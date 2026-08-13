@@ -218,6 +218,18 @@ export function validateReleaseGroupsV2(manifest) {
     ) {
       failures.push(`${releaseLineId}: tagIdentity policy is incomplete`);
     }
+    for (const field of ["tagTemplate", "releaseNameTemplate"]) {
+      const template = releaseLine.tagIdentity?.[field];
+      if (
+        typeof template !== "string" ||
+        !template.includes("{releaseLineId}") ||
+        !template.includes("{version}")
+      ) {
+        failures.push(
+          `${releaseLineId}: tagIdentity.${field} must include {releaseLineId} and {version}`,
+        );
+      }
+    }
     if (!Array.isArray(releaseLine.releaseDependencies)) {
       failures.push(`${releaseLineId}: releaseDependencies must be an array`);
     }
@@ -414,6 +426,8 @@ export function migrateReleaseGroupsV1(
       tagIdentity: {
         scope: "release-line",
         legacyPolicy: policy.legacyPolicy ?? "preserve-only",
+        tagTemplate: policy.tagTemplate,
+        releaseNameTemplate: policy.releaseNameTemplate,
       },
       validation: {
         artifacts: true,

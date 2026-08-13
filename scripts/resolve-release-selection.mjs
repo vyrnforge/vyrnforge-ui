@@ -13,6 +13,15 @@ function readArgument(name) {
   return index === -1 ? undefined : process.argv[index + 1];
 }
 
+function renderIdentity(template, { releaseGroupId, version }) {
+  if (typeof template !== "string") {
+    throw new Error("release tag identity template is missing");
+  }
+  return template
+    .replaceAll("{releaseLineId}", releaseGroupId)
+    .replaceAll("{version}", version);
+}
+
 export function resolveReleaseSelection(
   releaseGroupId,
   { root = repositoryRoot, manifest = readReleaseGroups({ root }) } = {},
@@ -52,6 +61,17 @@ export function resolveReleaseSelection(
     channel: releaseGroup.channel,
     version: releaseGroup.version,
     distTag: releaseGroup.distTag,
+    gitTag: renderIdentity(releaseGroup.tagIdentity.tagTemplate, {
+      releaseGroupId,
+      version: releaseGroup.version,
+    }),
+    releaseName: renderIdentity(
+      releaseGroup.tagIdentity.releaseNameTemplate,
+      {
+        releaseGroupId,
+        version: releaseGroup.version,
+      },
+    ),
     packages: selectedPackages,
     dependencyClosure: [...dependencyClosure].filter(
       (packageName) => !selectedSet.has(packageName),
@@ -79,12 +99,16 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   writeGithubFile(readArgument("--github-output"), {
     version: resolved.version,
     "dist-tag": resolved.distTag,
+    "git-tag": resolved.gitTag,
+    "release-name": resolved.releaseName,
     "packages-json": JSON.stringify(resolved.packages),
     "dependency-closure-json": JSON.stringify(resolved.dependencyClosure),
   });
   writeGithubFile(readArgument("--github-env"), {
     RELEASE_VERSION: resolved.version,
     RELEASE_TAG: resolved.distTag,
+    RELEASE_GIT_TAG: resolved.gitTag,
+    RELEASE_NAME: resolved.releaseName,
     VYRNFORGE_RELEASE_VERSION: resolved.version,
   });
   console.log(JSON.stringify(resolved, null, 2));

@@ -17,7 +17,12 @@ const manifest = {
       distTag: "beta",
       versioning: { mode: "synchronized" },
       publication: { publishable: true, publishTogether: true },
-      tagIdentity: { scope: "release-line", legacyPolicy: "preserve-only" },
+      tagIdentity: {
+        scope: "release-line",
+        legacyPolicy: "preserve-only",
+        tagTemplate: "{releaseLineId}/v{version}",
+        releaseNameTemplate: "{releaseLineId} v{version}",
+      },
       validation: {
         artifacts: true,
         provenance: true,
@@ -51,7 +56,12 @@ const manifest = {
       distTag: "alpha",
       versioning: { mode: "independent" },
       publication: { publishable: true, publishTogether: false },
-      tagIdentity: { scope: "release-line", legacyPolicy: "preserve-only" },
+      tagIdentity: {
+        scope: "release-line",
+        legacyPolicy: "preserve-only",
+        tagTemplate: "{releaseLineId}/v{version}",
+        releaseNameTemplate: "{releaseLineId} v{version}",
+      },
       validation: {
         artifacts: true,
         provenance: true,
@@ -95,4 +105,20 @@ test("rejects an unknown release group", () => {
     () => resolveReleaseSelection("missing", { manifest }),
     /unknown release group/,
   );
+});
+
+test("release-line identity prevents same-version tag collisions", () => {
+  const sameVersionManifest = structuredClone(manifest);
+  sameVersionManifest.releaseLines.extension.version =
+    sameVersionManifest.releaseLines.foundation.version;
+  const foundation = resolveReleaseSelection("foundation", {
+    manifest: sameVersionManifest,
+  });
+  const extension = resolveReleaseSelection("extension", {
+    manifest: sameVersionManifest,
+  });
+  assert.notEqual(foundation.gitTag, extension.gitTag);
+  assert.notEqual(foundation.releaseName, extension.releaseName);
+  assert.equal(foundation.gitTag, "foundation/v1.0.0-beta.1");
+  assert.equal(extension.gitTag, "extension/v1.0.0-beta.1");
 });

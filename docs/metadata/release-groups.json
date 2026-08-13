@@ -21,7 +21,9 @@
       },
       "tagIdentity": {
         "scope": "release-line",
-        "legacyPolicy": "preserve-only"
+        "legacyPolicy": "preserve-only",
+        "tagTemplate": "{releaseLineId}/v{version}",
+        "releaseNameTemplate": "{releaseLineId} v{version}"
       },
       "validation": {
         "artifacts": true,
@@ -107,7 +109,9 @@
       },
       "tagIdentity": {
         "scope": "release-line",
-        "legacyPolicy": "preserve-only"
+        "legacyPolicy": "preserve-only",
+        "tagTemplate": "{releaseLineId}/v{version}",
+        "releaseNameTemplate": "{releaseLineId} v{version}"
       },
       "validation": {
         "artifacts": true,

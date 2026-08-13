@@ -64,8 +64,16 @@ const legacyManifest = {
 function migrate() {
   return migrateReleaseGroupsV1(legacyManifest, {
     releaseLinePolicies: {
-      foundation: { intent: "foundation prerelease" },
-      extension: { intent: "extension prerelease" },
+      foundation: {
+        intent: "foundation prerelease",
+        tagTemplate: "{releaseLineId}/v{version}",
+        releaseNameTemplate: "{releaseLineId} v{version}",
+      },
+      extension: {
+        intent: "extension prerelease",
+        tagTemplate: "{releaseLineId}/v{version}",
+        releaseNameTemplate: "{releaseLineId} v{version}",
+      },
     },
     classifyPackage(packageInfo) {
       return {

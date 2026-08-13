@@ -68,7 +68,7 @@
         "tagIdentity": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["scope", "legacyPolicy"],
+          "required": ["scope", "legacyPolicy", "tagTemplate", "releaseNameTemplate"],
           "properties": {
             "scope": { "const": "release-line" },
             "legacyPolicy": { "enum": ["preserve-only", "none"] },

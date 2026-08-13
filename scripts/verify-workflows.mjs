@@ -694,6 +694,12 @@ assert(
   "release record retries must accept only the same source tag and remain idempotent",
 );
 assert(
+  releaseRecordSection.includes('TAG="$RELEASE_GIT_TAG"') &&
+    releaseRecordSection.includes('TITLE="$RELEASE_NAME"') &&
+    !releaseRecordSection.includes('TAG="v$RELEASE_VERSION"'),
+  "release record identity must derive from collision-safe release-line metadata",
+);
+assert(
   !publishSection.includes("--provenance"),
   "trusted publishing must use automatic provenance without --provenance",
 );
