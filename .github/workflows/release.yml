@@ -4,26 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       release-group:
-        description: Canonical BT-8002 release group
+        description: Canonical release line id from docs/metadata/release-groups.json
         required: true
         default: non-grid-beta
-        type: choice
-        options:
-          - non-grid-beta
-          - data-grid-alpha
-      version:
-        description: Exact prerelease version declared for the selected group
-        required: true
         type: string
-      dist-tag:
-        description: npm dist-tag declared for the selected release group
-        required: true
-        default: beta
-        type: choice
-        options:
-          - beta
-          - alpha
-          - next
 
 permissions:
   actions: read
@@ -45,11 +29,10 @@ jobs:
     outputs:
       artifact-name: ${{ steps.artifact-name.outputs.name }}
       ci-run-id: ${{ steps.candidate.outputs.ci-run-id }}
+      release-version: ${{ steps.release-inputs.outputs.version }}
+      dist-tag: ${{ steps.release-inputs.outputs.dist-tag }}
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
-      VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
 
     steps:
       - name: Checkout selected commit
@@ -90,6 +73,14 @@ jobs:
           node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org
           package-manager-cache: false
+
+      - name: Resolve canonical release inputs
+        id: release-inputs
+        run: >-
+          node scripts/resolve-release-selection.mjs
+          --release-group "$RELEASE_GROUP"
+          --github-output "$GITHUB_OUTPUT"
+          --github-env "$GITHUB_ENV"
 
       - name: Use supported npm CLI
         shell: bash
@@ -195,9 +186,9 @@ jobs:
       id-token: write
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
-      VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
+      RELEASE_TAG: ${{ needs.verify-release.outputs.dist-tag }}
+      VYRNFORGE_RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
 
     steps:
       - name: Checkout release tooling from the selected commit
@@ -280,15 +271,15 @@ jobs:
 
   verify-registry-release:
     name: verify-registry-release
-    needs: publish-packages
+    needs: [publish-packages, verify-release]
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
       contents: read
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
+      RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
+      RELEASE_TAG: ${{ needs.verify-release.outputs.dist-tag }}
 
     steps:
       - name: Checkout published commit
@@ -322,15 +313,15 @@ jobs:
 
   create-release-record:
     name: create-release-record
-    needs: verify-registry-release
+    needs: [verify-registry-release, verify-release]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
+      RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
+      RELEASE_TAG: ${{ needs.verify-release.outputs.dist-tag }}
       GH_TOKEN: ${{ github.token }}
 
     steps:

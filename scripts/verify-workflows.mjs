@@ -540,14 +540,14 @@ assert(
 );
 assert(
   release.includes("release-group:"),
-  "release.yml must require an explicit BT-8002 release group",
+  "release.yml must require an explicit canonical release group",
 );
-for (const releaseGroup of ["non-grid-beta", "data-grid-alpha"]) {
-  assert(
-    release.includes(releaseGroup),
-    `release.yml must expose the ${releaseGroup} release group`,
-  );
-}
+assert(
+  release.includes("scripts/resolve-release-selection.mjs") &&
+    !release.includes("${{ inputs.version }}") &&
+    !release.includes("${{ inputs.dist-tag }}"),
+  "release.yml must derive version and dist-tag from canonical release metadata",
+);
 for (const argument of [
   '--release-group "$RELEASE_GROUP"',
   '--version "$RELEASE_VERSION"',
