@@ -13,6 +13,37 @@ import {
   validateReleaseArtifactManifest,
 } from "./release-artifact.mjs";
 
+test("release build order is metadata-driven and de-duplicates shared dependencies", () => {
+  const packageMap = new Map([
+    ["@vyrnforge/foundation", { name: "@vyrnforge/foundation", dependencies: {} }],
+    [
+      "@vyrnforge/framework-a",
+      {
+        name: "@vyrnforge/framework-a",
+        dependencies: { "@vyrnforge/foundation": "1.0.0" },
+      },
+    ],
+    [
+      "@vyrnforge/framework-b",
+      {
+        name: "@vyrnforge/framework-b",
+        dependencies: { "@vyrnforge/foundation": "1.0.0" },
+      },
+    ],
+  ]);
+  const releaseGroup = {
+    packages: [
+      packageMap.get("@vyrnforge/framework-a"),
+      packageMap.get("@vyrnforge/framework-b"),
+    ],
+  };
+
+  assert.deepEqual(
+    getReleaseBuildOrder({ releaseGroup, packageMap }).map(({ name }) => name),
+    ["@vyrnforge/foundation", "@vyrnforge/framework-a", "@vyrnforge/framework-b"],
+  );
+});
+
 test("data-grid release build order contains its VyrnForge dependency closure once", () => {
   const { releaseGroup, packageMap } = resolveReleaseSelection({
     releaseGroupId: "data-grid-alpha",

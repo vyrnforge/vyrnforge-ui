@@ -11,7 +11,7 @@ import {
 
 export const releaseArtifactDirectory = "test-results/release-artifact";
 export const releaseArtifactManifestName = "manifest.json";
-export const releaseArtifactSchemaVersion = 1;
+export const releaseArtifactSchemaVersion = 2;
 
 const localDependencyPattern =
   /^(?:workspace:|file:|link:|\.{1,2}(?:[\\/]|$)|[A-Za-z]:[\\/]|\/)/u;
@@ -222,13 +222,21 @@ export function validateReleaseArtifactManifest({
   root = repositoryRoot,
 } = {}) {
   const failures = [];
-  const { releaseGroup } = resolveReleaseSelection({
+  const { releaseGroup, packageMap } = resolveReleaseSelection({
     releaseGroupId,
     version,
     distTag,
     root,
   });
   const expectedNames = releaseGroup.packages.map(({ name }) => name);
+  const expectedBuildClosure = getReleaseBuildOrder({
+    releaseGroup,
+    packageMap,
+  }).map(({ name }) => name);
+
+  if (!exactOrder(artifactManifest?.buildClosure ?? [], expectedBuildClosure)) {
+    failures.push("release artifact build closure does not match release metadata");
+  }
 
   if (artifactManifest?.schemaVersion !== releaseArtifactSchemaVersion) {
     failures.push("release artifact schemaVersion mismatch");
