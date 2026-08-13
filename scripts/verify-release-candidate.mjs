@@ -12,7 +12,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const npmCliPath = process.env.npm_execpath;
 const localDependencySpecPattern =
   /^(?:workspace:|file:|link:|\.{1,2}(?:[\\/]|$)|[A-Za-z]:[\\/]|\/)/;
-const allowedDistTags = new Set(["alpha", "beta", "next"]);
 
 function assert(condition, message) {
   if (!condition) {
@@ -71,7 +70,6 @@ const distTag = readArgument("--dist-tag");
 assert(releaseGroupId, "missing required --release-group");
 assert(version, "missing required --version");
 assert(distTag, "missing required --dist-tag");
-assert(allowedDistTags.has(distTag), `unsupported dist-tag: ${distTag}`);
 
 const manifest = readReleaseGroups({ root });
 const releaseGroup = getReleaseGroup(releaseGroupId, { root, manifest });

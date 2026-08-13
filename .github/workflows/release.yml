@@ -4,26 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       release-group:
-        description: Canonical BT-8002 release group
+        description: Canonical release line id from docs/metadata/release-groups.json
         required: true
         default: non-grid-beta
-        type: choice
-        options:
-          - non-grid-beta
-          - data-grid-alpha
-      version:
-        description: Exact prerelease version declared for the selected group
-        required: true
         type: string
-      dist-tag:
-        description: npm dist-tag declared for the selected release group
-        required: true
-        default: beta
-        type: choice
-        options:
-          - beta
-          - alpha
-          - next
 
 permissions:
   actions: read
@@ -45,11 +29,12 @@ jobs:
     outputs:
       artifact-name: ${{ steps.artifact-name.outputs.name }}
       ci-run-id: ${{ steps.candidate.outputs.ci-run-id }}
+      release-version: ${{ steps.release-inputs.outputs.version }}
+      dist-tag: ${{ steps.release-inputs.outputs.dist-tag }}
+      git-tag: ${{ steps.release-inputs.outputs.git-tag }}
+      release-name: ${{ steps.release-inputs.outputs.release-name }}
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
-      VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
 
     steps:
       - name: Checkout selected commit
@@ -90,6 +75,14 @@ jobs:
           node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org
           package-manager-cache: false
+
+      - name: Resolve canonical release inputs
+        id: release-inputs
+        run: >-
+          node scripts/resolve-release-selection.mjs
+          --release-group "$RELEASE_GROUP"
+          --github-output "$GITHUB_OUTPUT"
+          --github-env "$GITHUB_ENV"
 
       - name: Use supported npm CLI
         shell: bash
@@ -195,9 +188,9 @@ jobs:
       id-token: write
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
-      VYRNFORGE_RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
+      RELEASE_TAG: ${{ needs.verify-release.outputs.dist-tag }}
+      VYRNFORGE_RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
 
     steps:
       - name: Checkout release tooling from the selected commit
@@ -280,15 +273,15 @@ jobs:
 
   verify-registry-release:
     name: verify-registry-release
-    needs: publish-packages
+    needs: [publish-packages, verify-release]
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
       contents: read
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
+      RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
+      RELEASE_TAG: ${{ needs.verify-release.outputs.dist-tag }}
 
     steps:
       - name: Checkout published commit
@@ -322,15 +315,17 @@ jobs:
 
   create-release-record:
     name: create-release-record
-    needs: verify-registry-release
+    needs: [verify-registry-release, verify-release]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     env:
       RELEASE_GROUP: ${{ inputs.release-group }}
-      RELEASE_VERSION: ${{ inputs.version }}
-      RELEASE_TAG: ${{ inputs.dist-tag }}
+      RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
+      RELEASE_TAG: ${{ needs.verify-release.outputs.dist-tag }}
+      RELEASE_GIT_TAG: ${{ needs.verify-release.outputs.git-tag }}
+      RELEASE_NAME: ${{ needs.verify-release.outputs.release-name }}
       GH_TOKEN: ${{ github.token }}
 
     steps:
@@ -352,8 +347,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          TAG="v$RELEASE_VERSION"
-          TITLE="VyrnForge UI $RELEASE_GROUP $RELEASE_VERSION"
+          TAG="$RELEASE_GIT_TAG"
+          TITLE="$RELEASE_NAME"
 
           git fetch origin --tags --force
           if git rev-parse "$TAG^{commit}" >/dev/null 2>&1; then
@@ -361,7 +356,7 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git tag -a "$TAG" "$GITHUB_SHA" -m "VyrnForge UI $RELEASE_GROUP $RELEASE_VERSION"
+            git tag -a "$TAG" "$GITHUB_SHA" -m "$RELEASE_NAME"
             git push origin "$TAG"
           fi
 
@@ -384,7 +379,7 @@ jobs:
             echo "## GitHub release record"
             echo
             echo "- Release group: \`$RELEASE_GROUP\`"
-            echo "- Tag: \`v$RELEASE_VERSION\`"
+            echo "- Tag: \`$RELEASE_GIT_TAG\`"
             echo "- GitHub Release: present as prerelease"
             echo "- Retry rule: an existing tag is accepted only when it resolves to this workflow commit"
             echo "- Permission separation: repository write access only; no npm OIDC permission"

@@ -2,6 +2,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { getReleaseGroup, readReleaseGroups } from "./release-groups.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -88,7 +90,11 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
   const catalog = readJson(root, "docs/metadata/components.json");
   const packages = readJson(root, "docs/metadata/packages.json");
 
-  const releaseGroups = readJson(root, "docs/metadata/release-groups.json");
+  const releaseGroups = readReleaseGroups({ root });
+  const betaReleaseGroup = getReleaseGroup("non-grid-beta", {
+    root,
+    manifest: releaseGroups,
+  });
   const gmf4 = readJson(root, "docs/metadata/gmf4-closure.json");
   const customElements = readJson(
     root,
@@ -155,7 +161,7 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
         status: "done",
       },
       status: "scope-frozen",
-      targetVersion: releaseGroups.groups["non-grid-beta"].version,
+      targetVersion: betaReleaseGroup.version,
       unlocks: ["BT-8002"],
       scopeOnly: true,
       releaseStatus: "not-release-ready",

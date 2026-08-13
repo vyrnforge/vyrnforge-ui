@@ -344,6 +344,10 @@ function verifyComponentContracts(failures, contracts) {
     );
   }
 
+  if (contracts.schemaVersion !== 2) {
+    addFailure(failures, "component contracts must use schema version 2");
+  }
+
   const eventNames = new Set();
   for (const event of contracts.eventVocabulary ?? []) {
     if (!/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(event.name ?? "")) {
@@ -363,14 +367,14 @@ function verifyComponentContracts(failures, contracts) {
         `${event.name} must bubble and cross composition boundaries`,
       );
     }
-    if (!Array.isArray(event.detailFields) || event.detailFields.length === 0) {
-      addFailure(failures, `${event.name} must define detailFields`);
+    if (!Array.isArray(event.detail)) {
+      addFailure(failures, `${event.name} must define detail`);
     }
   }
-  if (!sameMembers(eventNames, expectedEvents)) {
+  if ([...expectedEvents].some((eventName) => !eventNames.has(eventName))) {
     addFailure(
       failures,
-      "canonical event vocabulary is incomplete or contains extras",
+      "canonical event vocabulary is missing required baseline events",
     );
   }
 
@@ -381,10 +385,10 @@ function verifyComponentContracts(failures, contracts) {
     }
     slotNames.add(slot.name);
   }
-  if (!sameMembers(slotNames, expectedSlots)) {
+  if ([...expectedSlots].some((slotName) => !slotNames.has(slotName))) {
     addFailure(
       failures,
-      "canonical slot vocabulary is incomplete or contains extras",
+      "canonical slot vocabulary is missing required baseline slots",
     );
   }
 
@@ -415,43 +419,57 @@ function verifyComponentContracts(failures, contracts) {
       );
     }
     if (contract.representative === true) representativeIds.add(contract.id);
-    if (!contract.react?.package || contract.react.status !== "current") {
+    const mappings = contract.frameworkMappings ?? {};
+
+    const react = mappings.react;
+    if (
+      react?.package !== "@vyrnforge/ui-components" ||
+      !["current", "migration"].includes(react?.status) ||
+      typeof react?.export !== "string" ||
+      react.export.length === 0
+    ) {
       addFailure(
         failures,
-        `${contract.id} must record the current React renderer`,
+        `${contract.id} has an invalid React framework mapping`,
       );
     }
+
+    const native = mappings.native;
     if (
-      contract.native?.package !== "@vyrnforge/ui-elements" ||
-      contract.native.status !== "current" ||
-      contract.native.evidence !== "docs/metadata/gmf3-closure.json" ||
-      !/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(contract.native.tag ?? "")
+      native?.package !== "@vyrnforge/ui-elements" ||
+      native?.status !== "current" ||
+      !/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(native?.tag ?? "")
     ) {
       addFailure(
         failures,
         `${contract.id} has an invalid current native renderer`,
       );
     }
-    for (const eventName of contract.events ?? []) {
+
+    for (const event of contract.events ?? []) {
+      const eventName = event?.name;
       if (!eventNames.has(eventName)) {
         addFailure(
           failures,
-          `${contract.id} references unknown event ${eventName}`,
+          `${contract.id} references unknown event ${String(eventName)}`,
         );
       }
     }
-    for (const slotName of contract.slots ?? []) {
+
+    for (const slot of contract.slots ?? []) {
+      const slotName = slot?.name;
       if (!slotNames.has(slotName)) {
         addFailure(
           failures,
-          `${contract.id} references unknown slot ${slotName}`,
+          `${contract.id} references unknown slot ${String(slotName)}`,
         );
       }
     }
-    if (!(formAssociation.modes ?? []).includes(contract.formAssociation)) {
+
+    if (!(formAssociation.modes ?? []).includes(contract.form?.association)) {
       addFailure(
         failures,
-        `${contract.id} has invalid form association ${String(contract.formAssociation)}`,
+        `${contract.id} has invalid form association ${String(contract.form?.association)}`,
       );
     }
   }
@@ -573,10 +591,14 @@ export function verifyMultiFrameworkArchitecture({
   const publicNonGrid = (componentCatalog.components ?? []).filter(
     (component) =>
       component.package === "@vyrnforge/ui-components" &&
-      component.publicExport === true,
+      component.publicExport === true &&
+      component.frameworkParity?.betaScope === "included" &&
+      component.category !== "data-grid" &&
+      component.category !== "grid-feature",
   );
+
   if (
-    contracts.catalogCoverage?.publicNonGridComponents !== publicNonGrid.length
+    contracts.catalogCoverage?.scopedComponentCount !== publicNonGrid.length
   ) {
     addFailure(failures, "component-contract catalog coverage count is stale");
   }

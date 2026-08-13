@@ -1,57 +1,21 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getReleasePackageMap, readReleaseGroups } from "./release-groups.mjs";
+import {
+  discoverPublishableWorkspaces,
+  getReleaseLineEntries,
+  getReleasePackageMap,
+  readReleaseGroups,
+  releaseGroupsPath,
+  releaseGroupsSchemaPath,
+  releaseGroupsSchemaVersion,
+  validateReleaseGroupsV2,
+} from "./release-groups.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-
-const expectedGroups = {
-  "non-grid-beta": {
-    channel: "beta",
-    version: "0.2.0-beta.2",
-    distTag: "beta",
-    packages: [
-      "@vyrnforge/ui-core",
-      "@vyrnforge/ui-behaviors",
-      "@vyrnforge/ui-components",
-      "@vyrnforge/ui-elements",
-    ],
-  },
-  "data-grid-alpha": {
-    channel: "alpha",
-    version: "0.1.0-alpha.2",
-    distTag: "alpha",
-    packages: ["@vyrnforge/ui-data-grid"],
-  },
-};
-
-const workspaceConsumers = [
-  "apps/docs/package.json",
-  "apps/regression-fixtures/package.json",
-  "examples/basic-playground/package.json",
-];
-
-const versionExports = new Map([
-  [
-    "@vyrnforge/ui-core",
-    ["packages/ui-core/src/index.ts", "vyrnForgeUiCoreVersion"],
-  ],
-  [
-    "@vyrnforge/ui-behaviors",
-    ["packages/ui-behaviors/src/index.ts", "vyrnForgeUiBehaviorsVersion"],
-  ],
-  [
-    "@vyrnforge/ui-components",
-    ["packages/ui-components/src/index.ts", "vyrnForgeUiComponentsVersion"],
-  ],
-  [
-    "@vyrnforge/ui-elements",
-    ["packages/ui-elements/src/index.ts", "vyrnForgeUiElementsVersion"],
-  ],
-]);
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -61,231 +25,208 @@ function readJson(root, relativePath) {
   return JSON.parse(read(root, relativePath));
 }
 
-function packageNames(releaseGroup) {
-  return (releaseGroup.packages ?? []).map((packageInfo) => packageInfo.name);
-}
-
-function sameMembers(actual, expected) {
-  const actualSorted = [...actual].sort();
-  const expectedSorted = [...expected].sort();
-  return (
-    actualSorted.length === expectedSorted.length &&
-    actualSorted.every((value, index) => value === expectedSorted[index])
-  );
-}
-
 export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
   const failures = [];
-  const manifestPath = "docs/metadata/release-groups.json";
-  if (!existsSync(path.join(root, manifestPath))) {
-    return [`BT-8002 evidence is missing: ${manifestPath}`];
+
+  if (!existsSync(path.join(root, releaseGroupsPath))) {
+    return [`release-group manifest is missing: ${releaseGroupsPath}`];
+  }
+  if (!existsSync(path.join(root, releaseGroupsSchemaPath))) {
+    return [`release-group schema is missing: ${releaseGroupsSchemaPath}`];
   }
 
-  const manifest = readReleaseGroups({ root });
-  if (manifest.task?.id !== "BT-8002" || manifest.task?.status !== "done") {
-    failures.push("release group manifest must record BT-8002 as done");
+  let manifest;
+  let schema;
+  try {
+    manifest = readReleaseGroups({ root });
+  } catch (error) {
+    return [`release-group manifest is invalid JSON: ${error.message}`];
   }
-  if (!manifest.task?.unlocks?.includes("BT-8003")) {
-    failures.push("BT-8002 must unlock BT-8003");
-  }
-
-  for (const [releaseGroupId, expected] of Object.entries(expectedGroups)) {
-    const actual = manifest.groups?.[releaseGroupId];
-    if (!actual) {
-      failures.push(`release group is missing: ${releaseGroupId}`);
-      continue;
-    }
-    if (actual.channel !== expected.channel) {
-      failures.push(`${releaseGroupId}: channel must be ${expected.channel}`);
-    }
-    if (actual.version !== expected.version) {
-      failures.push(`${releaseGroupId}: version must be ${expected.version}`);
-    }
-    if (actual.distTag !== expected.distTag) {
-      failures.push(`${releaseGroupId}: distTag must be ${expected.distTag}`);
-    }
-    if (!sameMembers(packageNames(actual), expected.packages)) {
-      failures.push(`${releaseGroupId}: package membership is invalid`);
-    }
+  try {
+    schema = readJson(root, releaseGroupsSchemaPath);
+  } catch (error) {
+    return [`release-group schema is invalid JSON: ${error.message}`];
   }
 
-  const betaPackages = packageNames(manifest.groups?.["non-grid-beta"] ?? {});
-  if (betaPackages.includes("@vyrnforge/ui-data-grid")) {
-    failures.push("non-grid beta must not include ui-data-grid");
-  }
-  if (
-    manifest.groups?.["data-grid-alpha"]?.version ===
-    manifest.groups?.["non-grid-beta"]?.version
-  ) {
-    failures.push("data-grid alpha must keep an independent version");
-  }
-
-  const releasePackageEntries = Object.values(manifest.groups ?? {}).flatMap(
-    (releaseGroup) => releaseGroup.packages ?? [],
-  );
-  const packageMap = getReleasePackageMap(manifest);
-  if (releasePackageEntries.length !== 5 || packageMap.size !== 5) {
+  if (schema.properties?.schemaVersion?.const !== releaseGroupsSchemaVersion) {
     failures.push(
-      "release groups must classify all five publishable packages once",
+      `release-group schema must describe schemaVersion ${releaseGroupsSchemaVersion}`,
     );
   }
-  if (
-    manifest.rules?.nonGridBetaPackageCount !== 4 ||
-    manifest.rules?.dataGridAlphaPackageCount !== 1 ||
-    manifest.rules?.exactInternalVersions !== true ||
-    manifest.rules?.dataGridExcludedFromNonGridBeta !== true ||
-    manifest.rules?.releaseWorkflowRequiresGroupSelection !== true
-  ) {
-    failures.push("release group enforcement rules are incomplete");
+
+  failures.push(...validateReleaseGroupsV2(manifest));
+  if (failures.length > 0) return [...new Set(failures)].sort();
+
+  const packageMap = getReleasePackageMap(manifest);
+  let discoveredPublishable = [];
+  try {
+    discoveredPublishable = discoverPublishableWorkspaces({ root });
+  } catch (error) {
+    failures.push(`publishable workspace discovery failed: ${error.message}`);
   }
 
-  for (const [packageName, packageInfo] of packageMap) {
-    const packageJsonPath = path.join(packageInfo.directory, "package.json");
-    const packageJson = readJson(root, packageJsonPath);
-    if (packageJson.name !== packageName) {
-      failures.push(`${packageJsonPath}: package name mismatch`);
-    }
-    if (packageJson.version !== packageInfo.version) {
+  const discoveredByName = new Map(
+    discoveredPublishable.map((packageInfo) => [packageInfo.name, packageInfo]),
+  );
+  for (const packageInfo of discoveredPublishable) {
+    const classified = packageMap.get(packageInfo.name);
+    if (!classified) {
       failures.push(
-        `${packageName}: package version must be ${packageInfo.version}`,
+        `${packageInfo.name}: publishable workspace is not classified in release metadata`,
+      );
+      continue;
+    }
+    if (classified.directory !== packageInfo.directory) {
+      failures.push(
+        `${packageInfo.name}: release metadata directory must be ${packageInfo.directory}`,
       );
     }
+  }
+  for (const packageInfo of packageMap.values()) {
+    if (!discoveredByName.has(packageInfo.name)) {
+      failures.push(
+        `${packageInfo.name}: release metadata classifies a workspace that is not publishable`,
+      );
+    }
+  }
 
-    for (const [dependencyName, dependencyVersion] of Object.entries(
-      packageInfo.dependencies ?? {},
-    )) {
-      if (packageJson.dependencies?.[dependencyName] !== dependencyVersion) {
+  for (const [releaseLineId, releaseLine] of getReleaseLineEntries(manifest)) {
+    for (const packageInfo of releaseLine.packages) {
+      const packageJsonPath = path.join(packageInfo.directory, "package.json");
+      if (!existsSync(path.join(root, packageJsonPath))) {
+        failures.push(`${packageInfo.name}: missing ${packageJsonPath}`);
+        continue;
+      }
+
+      const packageJson = readJson(root, packageJsonPath);
+      if (packageJson.name !== packageInfo.name) {
+        failures.push(`${packageJsonPath}: package name mismatch`);
+      }
+      if (packageJson.private === true) {
+        failures.push(`${packageInfo.name}: release package must be publishable`);
+      }
+      if (packageJson.version !== releaseLine.version) {
         failures.push(
-          `${packageName}: ${dependencyName} must use exact ${dependencyVersion}`,
+          `${packageInfo.name}: package version must be ${releaseLine.version}`,
         );
       }
-    }
 
-    for (const [dependencyName, dependencyVersion] of Object.entries(
-      packageJson.dependencies ?? {},
-    )) {
-      if (!dependencyName.startsWith("@vyrnforge/")) continue;
-      const targetPackage = packageMap.get(dependencyName);
-      if (!targetPackage) {
+      for (const [dependencyName, dependencyVersion] of Object.entries(
+        packageInfo.dependencies ?? {},
+      )) {
+        if (packageJson.dependencies?.[dependencyName] !== dependencyVersion) {
+          failures.push(
+            `${packageInfo.name}: metadata dependency ${dependencyName} must match package.json ${dependencyVersion}`,
+          );
+        }
+
+        const targetPackage = packageMap.get(dependencyName);
+        if (!targetPackage) {
+          failures.push(
+            `${packageInfo.name}: unknown VyrnForge dependency ${dependencyName}`,
+          );
+          continue;
+        }
+        if (dependencyVersion !== targetPackage.version) {
+          failures.push(
+            `${packageInfo.name}: ${dependencyName} must match ${targetPackage.version}`,
+          );
+        }
+      }
+
+      for (const [dependencyName, dependencyVersion] of Object.entries(
+        packageJson.dependencies ?? {},
+      )) {
+        if (!dependencyName.startsWith("@vyrnforge/")) continue;
+        const targetPackage = packageMap.get(dependencyName);
+        if (!targetPackage) {
+          failures.push(
+            `${packageInfo.name}: package.json references unclassified ${dependencyName}`,
+          );
+          continue;
+        }
+        if (packageInfo.dependencies?.[dependencyName] !== dependencyVersion) {
+          failures.push(
+            `${packageInfo.name}: ${dependencyName} must be declared in release metadata`,
+          );
+        }
+        if (dependencyVersion !== targetPackage.version) {
+          failures.push(
+            `${packageInfo.name}: ${dependencyName} must use exact ${targetPackage.version}`,
+          );
+        }
+      }
+
+      const versionExport = packageInfo.policies?.versionExport;
+      if (versionExport) {
+        if (!existsSync(path.join(root, versionExport.path))) {
+          failures.push(
+            `${packageInfo.name}: version export source is missing: ${versionExport.path}`,
+          );
+        } else {
+          const source = read(root, versionExport.path);
+          if (
+            !source.includes(
+              `${versionExport.symbol} = "${releaseLine.version}"`,
+            )
+          ) {
+            failures.push(
+              `${packageInfo.name}: ${versionExport.symbol} must be ${releaseLine.version}`,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  const packageLockPath = "package-lock.json";
+  if (!existsSync(path.join(root, packageLockPath))) {
+    failures.push(`${packageLockPath} is missing`);
+  } else {
+    const packageLock = readJson(root, packageLockPath);
+    for (const packageInfo of packageMap.values()) {
+      const lockedPackage = packageLock.packages?.[packageInfo.directory];
+      if (!lockedPackage) {
         failures.push(
-          `${packageName}: unknown VyrnForge dependency ${dependencyName}`,
+          `package-lock.json: missing workspace ${packageInfo.directory}`,
         );
         continue;
       }
-      if (dependencyVersion !== targetPackage.version) {
+      if (lockedPackage.version !== packageInfo.version) {
         failures.push(
-          `${packageName}: ${dependencyName} must match ${targetPackage.version}`,
+          `package-lock.json: ${packageInfo.directory} must be ${packageInfo.version}`,
         );
       }
-    }
-
-    const versionExport = versionExports.get(packageName);
-    if (versionExport) {
-      const [sourcePath, exportName] = versionExport;
-      const source = read(root, sourcePath);
-      if (!source.includes(`${exportName} = "${packageInfo.version}"`)) {
-        failures.push(
-          `${packageName}: public version export must be ${packageInfo.version}`,
-        );
+      for (const [dependencyName, dependencyVersion] of Object.entries(
+        packageInfo.dependencies ?? {},
+      )) {
+        if (lockedPackage.dependencies?.[dependencyName] !== dependencyVersion) {
+          failures.push(
+            `package-lock.json: ${packageInfo.name} ${dependencyName} must be ${dependencyVersion}`,
+          );
+        }
       }
     }
   }
 
-  const packageLock = readJson(root, "package-lock.json");
-  for (const packageInfo of packageMap.values()) {
-    const lockedPackage = packageLock.packages?.[packageInfo.directory];
-    if (lockedPackage?.version !== packageInfo.version) {
-      failures.push(
-        `package-lock.json: ${packageInfo.directory} must be ${packageInfo.version}`,
-      );
-    }
-    for (const [dependencyName, dependencyVersion] of Object.entries(
-      packageInfo.dependencies ?? {},
-    )) {
-      if (lockedPackage?.dependencies?.[dependencyName] !== dependencyVersion) {
+  const releaseWorkflowPath = ".github/workflows/release.yml";
+  if (!existsSync(path.join(root, releaseWorkflowPath))) {
+    failures.push(`${releaseWorkflowPath} is missing`);
+  } else {
+    const releaseWorkflow = read(root, releaseWorkflowPath);
+    for (const marker of [
+      "release-group:",
+      '--release-group "$RELEASE_GROUP"',
+    ]) {
+      if (!releaseWorkflow.includes(marker)) {
         failures.push(
-          `package-lock.json: ${packageInfo.name} ${dependencyName} must be ${dependencyVersion}`,
+          `release workflow is missing release-group contract marker: ${marker}`,
         );
       }
     }
   }
 
-  for (const relativePath of workspaceConsumers) {
-    const packageJson = readJson(root, relativePath);
-    const lockEntryPath = relativePath.replace(/\/package\.json$/u, "");
-    const lockEntry = packageLock.packages?.[lockEntryPath];
-    for (const [dependencyName, dependencyVersion] of Object.entries(
-      packageJson.dependencies ?? {},
-    )) {
-      if (!dependencyName.startsWith("@vyrnforge/")) continue;
-      const targetPackage = packageMap.get(dependencyName);
-      if (targetPackage && dependencyVersion !== targetPackage.version) {
-        failures.push(
-          `${relativePath}: ${dependencyName} must be ${targetPackage.version}`,
-        );
-      }
-      if (
-        targetPackage &&
-        lockEntry?.dependencies?.[dependencyName] !== targetPackage.version
-      ) {
-        failures.push(
-          `package-lock.json: ${lockEntryPath} ${dependencyName} must be ${targetPackage.version}`,
-        );
-      }
-    }
-  }
-
-  const packagesMetadata = readJson(root, "docs/metadata/packages.json");
-  if (
-    !sameMembers(
-      packagesMetadata.releaseGroups?.nonGridBeta ?? [],
-      expectedGroups["non-grid-beta"].packages,
-    )
-  ) {
-    failures.push("packages.json nonGridBeta release group is invalid");
-  }
-  if (
-    !sameMembers(
-      packagesMetadata.releaseGroups?.dataGridAlpha ?? [],
-      expectedGroups["data-grid-alpha"].packages,
-    )
-  ) {
-    failures.push("packages.json dataGridAlpha release group is invalid");
-  }
-
-  const betaScope = readJson(root, "docs/metadata/non-grid-beta-scope.json");
-  if (
-    betaScope.program?.targetVersion !== expectedGroups["non-grid-beta"].version
-  ) {
-    failures.push("BT-8001 targetVersion must match the beta release group");
-  }
-
-  const releaseWorkflow = read(root, ".github/workflows/release.yml");
-  for (const marker of [
-    "release-group:",
-    "non-grid-beta",
-    "data-grid-alpha",
-    '--release-group "$RELEASE_GROUP"',
-  ]) {
-    if (!releaseWorkflow.includes(marker)) {
-      failures.push(
-        `release workflow is missing release-group contract marker: ${marker}`,
-      );
-    }
-  }
-  const versioningPolicy = read(root, "docs/release/versioning-policy.md");
-  for (const marker of [
-    "0.2.0-beta.2",
-    "0.1.0-alpha.2",
-    "non-grid-beta",
-    "data-grid-alpha",
-  ]) {
-    if (!versioningPolicy.includes(marker)) {
-      failures.push(`versioning policy is missing marker: ${marker}`);
-    }
-  }
-
-  return failures.sort();
+  return [...new Set(failures)].sort();
 }
 
 export function assertReleaseGroups(options) {
@@ -300,6 +241,6 @@ export function assertReleaseGroups(options) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   assertReleaseGroups();
   console.log(
-    "BT-8002 passed: four packages are synchronized at 0.2.0-beta.2, ui-data-grid remains 0.1.0-alpha.2, and release tooling requires an explicit group.",
+    "Release group verification passed: schema, metadata, package manifests, dependency declarations, lockfile, and workflow selection are consistent.",
   );
 }

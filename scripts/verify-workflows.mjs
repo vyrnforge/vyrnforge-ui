@@ -540,14 +540,14 @@ assert(
 );
 assert(
   release.includes("release-group:"),
-  "release.yml must require an explicit BT-8002 release group",
+  "release.yml must require an explicit canonical release group",
 );
-for (const releaseGroup of ["non-grid-beta", "data-grid-alpha"]) {
-  assert(
-    release.includes(releaseGroup),
-    `release.yml must expose the ${releaseGroup} release group`,
-  );
-}
+assert(
+  release.includes("scripts/resolve-release-selection.mjs") &&
+    !release.includes("${{ inputs.version }}") &&
+    !release.includes("${{ inputs.dist-tag }}"),
+  "release.yml must derive version and dist-tag from canonical release metadata",
+);
 for (const argument of [
   '--release-group "$RELEASE_GROUP"',
   '--version "$RELEASE_VERSION"',
@@ -692,6 +692,12 @@ assert(
     'test "$(git rev-parse "$TAG^{commit}")" = "$GITHUB_SHA"',
   ) && releaseRecordSection.includes('gh release edit "$TAG"'),
   "release record retries must accept only the same source tag and remain idempotent",
+);
+assert(
+  releaseRecordSection.includes('TAG="$RELEASE_GIT_TAG"') &&
+    releaseRecordSection.includes('TITLE="$RELEASE_NAME"') &&
+    !releaseRecordSection.includes('TAG="v$RELEASE_VERSION"'),
+  "release record identity must derive from collision-safe release-line metadata",
 );
 assert(
   !publishSection.includes("--provenance"),

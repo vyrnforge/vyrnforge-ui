@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vyrnforge.dev/schemas/release-groups.schema.json",
+  "title": "VyrnForge Release Groups",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceOfTruth", "releaseLines"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 2 },
+    "sourceOfTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical", "scope", "documentation"],
+      "properties": {
+        "canonical": { "const": true },
+        "scope": { "const": "release-groups" },
+        "documentation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "releaseLines": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-z0-9]+(?:-[a-z0-9]+)*$": { "$ref": "#/$defs/releaseLine" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "releaseLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intent",
+        "channel",
+        "version",
+        "distTag",
+        "versioning",
+        "publication",
+        "tagIdentity",
+        "validation",
+        "releaseDependencies",
+        "packages"
+      ],
+      "properties": {
+        "intent": { "type": "string", "minLength": 1 },
+        "channel": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "distTag": { "type": "string", "minLength": 1 },
+        "versioning": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["synchronized", "independent"] }
+          }
+        },
+        "publication": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["publishable", "publishTogether"],
+          "properties": {
+            "publishable": { "type": "boolean" },
+            "publishTogether": { "type": "boolean" }
+          }
+        },
+        "tagIdentity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope", "legacyPolicy", "tagTemplate", "releaseNameTemplate"],
+          "properties": {
+            "scope": { "const": "release-line" },
+            "legacyPolicy": { "enum": ["preserve-only", "none"] },
+            "tagTemplate": { "type": "string", "minLength": 1 },
+            "releaseNameTemplate": { "type": "string", "minLength": 1 }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["artifacts", "provenance", "registry", "consumer"],
+          "properties": {
+            "artifacts": { "type": "boolean" },
+            "provenance": { "type": "boolean" },
+            "registry": { "type": "boolean" },
+            "consumer": { "type": "boolean" }
+          }
+        },
+        "releaseDependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["releaseLine", "policy"],
+            "properties": {
+              "releaseLine": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "policy": { "const": "exact" }
+            }
+          }
+        },
+        "packages": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/package" }
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "directory", "role", "dependencies", "policies"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^@vyrnforge/" },
+        "directory": { "type": "string", "pattern": "^packages/" },
+        "role": { "type": "string", "minLength": 1 },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "policies": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["hasCss"],
+          "properties": {
+            "hasCss": { "type": "boolean" },
+            "versionExport": {
+              "anyOf": [
+                { "type": "null" },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path", "symbol"],
+                  "properties": {
+                    "path": { "type": "string", "minLength": 1 },
+                    "symbol": { "type": "string", "minLength": 1 }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
