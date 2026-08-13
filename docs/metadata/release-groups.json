@@ -43,6 +43,14 @@
             "versionExport": {
               "path": "packages/ui-core/src/index.ts",
               "symbol": "vyrnForgeUiCoreVersion"
+            },
+            "sizeBudget": {
+              "packedBytes": 22000,
+              "unpackedBytes": 116000,
+              "fileCount": 16,
+              "runtimeJavaScriptBytes": 52000,
+              "declarationBytes": 14000,
+              "cssBytes": 34000
             }
           }
         },
@@ -58,6 +66,14 @@
             "versionExport": {
               "path": "packages/ui-behaviors/src/index.ts",
               "symbol": "vyrnForgeUiBehaviorsVersion"
+            },
+            "sizeBudget": {
+              "packedBytes": 54000,
+              "unpackedBytes": 350000,
+              "fileCount": 30,
+              "runtimeJavaScriptBytes": 250000,
+              "declarationBytes": 78000,
+              "cssBytes": 0
             }
           }
         },
@@ -74,6 +90,14 @@
             "versionExport": {
               "path": "packages/ui-components/src/index.ts",
               "symbol": "vyrnForgeUiComponentsVersion"
+            },
+            "sizeBudget": {
+              "packedBytes": 135000,
+              "unpackedBytes": 730000,
+              "fileCount": 240,
+              "runtimeJavaScriptBytes": 480000,
+              "declarationBytes": 110000,
+              "cssBytes": 105000
             }
           }
         },
@@ -90,6 +114,14 @@
             "versionExport": {
               "path": "packages/ui-elements/src/index.ts",
               "symbol": "vyrnForgeUiElementsVersion"
+            },
+            "sizeBudget": {
+              "packedBytes": 165000,
+              "unpackedBytes": 1050000,
+              "fileCount": 40,
+              "runtimeJavaScriptBytes": 810000,
+              "declarationBytes": 84000,
+              "cssBytes": 110000
             }
           }
         }
