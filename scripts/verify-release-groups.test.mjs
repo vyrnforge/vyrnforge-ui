@@ -19,9 +19,7 @@ const repositoryRoot = path.resolve(
 
 const fixtureEntries = [
   ".github",
-  "apps",
   "docs",
-  "examples",
   "packages",
   "scripts",
   "package-lock.json",
@@ -50,63 +48,124 @@ function mutateJson(root, relativePath, update) {
   writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-test("accepts the BT-8002 release groups", () =>
+test("accepts the generalized release metadata", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
 
-test("rejects promoting ui-data-grid with the non-grid beta", () =>
+test("rejects malformed schema metadata", () =>
   fixture(
-    (root) => {
+    (root) =>
       mutateJson(root, "docs/metadata/release-groups.json", (value) => {
-        value.groups["non-grid-beta"].packages.push(
-          value.groups["data-grid-alpha"].packages[0],
+        value.schemaVersion = 99;
+      }),
+    (failures) =>
+      assert(
+        failures.some((failure) => failure.includes("schemaVersion must be 2")),
+      ),
+  ));
+
+test("rejects duplicate package classification", () =>
+  fixture(
+    (root) =>
+      mutateJson(root, "docs/metadata/release-groups.json", (value) => {
+        const [firstLine, secondLine] = Object.values(value.releaseLines);
+        secondLine.packages.push(firstLine.packages[0]);
+      }),
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("classified more than once"),
+        ),
+      ),
+  ));
+
+test("rejects package ordering errors", () =>
+  fixture(
+    (root) =>
+      mutateJson(root, "docs/metadata/release-groups.json", (value) => {
+        const releaseLine = Object.values(value.releaseLines).find(
+          (candidate) => candidate.packages.length > 1,
         );
-      });
-    },
+        releaseLine.packages.reverse();
+      }),
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("must not include ui-data-grid"),
+          failure.includes("must appear earlier in release order"),
         ),
       ),
   ));
 
-test("rejects beta package version drift", () =>
+test("rejects invalid release dependency references", () =>
+  fixture(
+    (root) =>
+      mutateJson(root, "docs/metadata/release-groups.json", (value) => {
+        const releaseLine = Object.values(value.releaseLines).find(
+          (candidate) => candidate.releaseDependencies.length > 0,
+        );
+        releaseLine.releaseDependencies[0].releaseLine = "missing-line";
+      }),
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("unknown release dependency"),
+        ),
+      ),
+  ));
+
+test("rejects package version drift", () =>
   fixture(
     (root) => {
-      mutateJson(root, "packages/ui-elements/package.json", (value) => {
-        value.version = "0.2.0-beta.3";
+      const manifest = JSON.parse(
+        readFileSync(
+          path.join(root, "docs/metadata/release-groups.json"),
+          "utf8",
+        ),
+      );
+      const packageInfo = Object.values(manifest.releaseLines)[0].packages[0];
+      mutateJson(root, path.join(packageInfo.directory, "package.json"), (value) => {
+        value.version = "9.9.9-alpha.1";
       });
     },
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("package version must be 0.2.0-beta.2"),
+          failure.includes("package version must be"),
         ),
       ),
   ));
 
-test("rejects a stale workspace consumer dependency", () =>
+test("rejects inconsistent dependency declarations", () =>
   fixture(
-    (root) => {
-      mutateJson(root, "apps/docs/package.json", (value) => {
-        value.dependencies["@vyrnforge/ui-core"] = "0.1.0-alpha.1";
-      });
-    },
+    (root) =>
+      mutateJson(root, "docs/metadata/release-groups.json", (value) => {
+        const releaseLine = Object.values(value.releaseLines).find(
+          (candidate) =>
+            candidate.packages.some(
+              (packageInfo) =>
+                Object.keys(packageInfo.dependencies ?? {}).length > 0,
+            ),
+        );
+        const packageInfo = releaseLine.packages.find(
+          (candidate) => Object.keys(candidate.dependencies ?? {}).length > 0,
+        );
+        const dependencyName = Object.keys(packageInfo.dependencies)[0];
+        packageInfo.dependencies[dependencyName] = "0.0.0-invalid";
+      }),
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("apps/docs/package.json: @vyrnforge/ui-core"),
+          failure.includes("metadata dependency"),
         ),
       ),
   ));
 
-test("rejects release tooling that does not forward the selected release group", () =>
+test("rejects release tooling that drops release-group selection", () =>
   fixture(
     (root) => {
       const workflowPath = path.join(root, ".github/workflows/release.yml");
       const workflow = readFileSync(workflowPath, "utf8").replaceAll(
         '--release-group "$RELEASE_GROUP"',
-        '--release-group "non-grid-beta"',
+        '--release-group "hard-coded"',
       );
       writeFileSync(workflowPath, workflow);
     },
