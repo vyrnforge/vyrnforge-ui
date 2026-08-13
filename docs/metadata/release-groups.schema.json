@@ -140,6 +140,19 @@
                   }
                 }
               ]
+            },
+            "sizeBudget": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["packedBytes", "unpackedBytes", "fileCount", "runtimeJavaScriptBytes", "declarationBytes", "cssBytes"],
+              "properties": {
+                "packedBytes": { "type": "integer", "minimum": 0 },
+                "unpackedBytes": { "type": "integer", "minimum": 0 },
+                "fileCount": { "type": "integer", "minimum": 0 },
+                "runtimeJavaScriptBytes": { "type": "integer", "minimum": 0 },
+                "declarationBytes": { "type": "integer", "minimum": 0 },
+                "cssBytes": { "type": "integer", "minimum": 0 }
+              }
             }
           }
         }

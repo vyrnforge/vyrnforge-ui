@@ -53,7 +53,7 @@
   "releasePreflight": {
     "workflow": ".github/workflows/release.yml",
     "requiredJobs": ["verify-release"],
-    "betaSizeBudgetVerificationRequired": true,
+    "releaseLineSizeBudgetVerificationRequired": true,
     "successfulCurrentMainCiRequired": true,
     "reusableSecurityWorkflowRepeated": false,
     "reusableCompatibilityWorkflowRepeated": false,
