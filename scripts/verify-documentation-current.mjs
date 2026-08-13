@@ -2,6 +2,11 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  getReleaseLineEntries,
+  readReleaseGroups,
+} from "./release-groups.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -124,7 +129,7 @@ function read(root, relativePath) {
 
 function buildPackageChannelMap(releaseGroups) {
   const channels = new Map();
-  for (const releaseGroup of Object.values(releaseGroups.groups ?? {})) {
+  for (const [, releaseGroup] of getReleaseLineEntries(releaseGroups)) {
     for (const packageInfo of releaseGroup.packages ?? []) {
       channels.set(packageInfo.name, releaseGroup.distTag);
     }
@@ -245,9 +250,7 @@ function verifyPrimaryStructure({ root, failures }) {
 
 function verifyVersionPolicy({ root, releaseGroups, failures }) {
   const policy = read(root, "docs/release/versioning-policy.md");
-  for (const [releaseGroupId, releaseGroup] of Object.entries(
-    releaseGroups.groups ?? {},
-  )) {
+  for (const [releaseGroupId, releaseGroup] of getReleaseLineEntries(releaseGroups)) {
     if (!policy.includes(releaseGroupId)) {
       failures.push(
         `docs/release/versioning-policy.md: missing release group id ${releaseGroupId}`,
@@ -294,9 +297,7 @@ function verifyRoadmapContracts({ root, failures }) {
 
 export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   const failures = [];
-  const releaseGroups = JSON.parse(
-    read(root, "docs/metadata/release-groups.json"),
-  );
+  const releaseGroups = readReleaseGroups({ root });
   const channels = buildPackageChannelMap(releaseGroups);
 
   for (const relativePath of documentationCurrentPaths) {

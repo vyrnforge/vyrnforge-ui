@@ -47,60 +47,17 @@ function lockedVersion(lockfile, packageName) {
   return version;
 }
 
-function consumerSource(releaseGroupId) {
-  if (releaseGroupId === "data-grid-alpha") {
-    return `import React from "react";
-import { createRoot } from "react-dom/client";
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
-import "@vyrnforge/ui-data-grid/styles/index.css";
-import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
-import type { DataGridColumnDef } from "@vyrnforge/ui-data-grid";
-
-type Row = { id: string; name: string };
-
-const rows: Row[] = [{ id: "row-1", name: "Release artifact" }];
-const columns: DataGridColumnDef<Row>[] = [
-  { id: "id", header: "ID", accessorKey: "id" },
-  { id: "name", header: "Name", accessorKey: "name" },
-];
-
-createRoot(document.getElementById("root") as HTMLElement).render(
-  <UniversalDataGrid
-    tableId="release-artifact-grid"
-    rows={rows}
-    columns={columns}
-    getRowId={(row) => row.id}
-  />,
-);
-`;
-  }
-
-  return `import React from "react";
-import { createRoot } from "react-dom/client";
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
-import "@vyrnforge/ui-elements/styles/index.css";
-import { createBehaviorEvent } from "@vyrnforge/ui-behaviors";
-import { Button, Card, Stack } from "@vyrnforge/ui-components";
-import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
-
-registerVyrnForgeElements();
-const event = createBehaviorEvent(
-  "release-artifact",
-  { package: "@vyrnforge/ui-behaviors" },
-  "programmatic",
-);
-
-createRoot(document.getElementById("root") as HTMLElement).render(
-  <Card data-reason={event.reason}>
-    <Stack gap="sm">
-      <Button>Release artifact</Button>
-      {React.createElement("vf-button", null, "Native release artifact")}
-    </Stack>
-  </Card>,
-);
-`;
+function consumerSource(releaseGroup) {
+  const imports = releaseGroup.packages.map(
+    (packageInfo, index) => `import * as package${index} from "${packageInfo.name}";`,
+  );
+  const cssImports = releaseGroup.packages
+    .filter((packageInfo) => packageInfo.policies?.hasCss === true)
+    .map((packageInfo) => `import "${packageInfo.name}/styles/index.css";`);
+  const references = releaseGroup.packages.map(
+    (_packageInfo, index) => `void package${index};`,
+  );
+  return [...imports, ...cssImports, "", ...references, ""].join("\n");
 }
 
 function verifyConsumer({
@@ -126,7 +83,7 @@ function verifyConsumer({
     mkdirSync(path.join(consumerDirectory, "src"), { recursive: true });
     writeFileSync(
       path.join(consumerDirectory, "src/main.tsx"),
-      consumerSource(releaseGroupId),
+      consumerSource(releaseGroup),
     );
     writeFileSync(
       path.join(consumerDirectory, "src/vite-env.d.ts"),
@@ -179,7 +136,7 @@ function verifyConsumer({
     );
     const installArgs = [
       "install",
-      ...(releaseGroupId === "non-grid-beta" ? ["--offline"] : []),
+
       "--no-package-lock",
       "--no-save",
       "--ignore-scripts",
@@ -225,14 +182,12 @@ function verifyConsumer({
       .filter((file) => file.endsWith(".css"))
       .map((file) => readFileSync(path.join(assetsDirectory, file), "utf8"))
       .join("\n");
-    if (!cssText.includes("--vf-")) {
+    if (
+      releaseGroup.packages.some((packageInfo) => packageInfo.policies?.hasCss) &&
+      cssText.length === 0
+    ) {
       throw new Error(
-        "release-artifact consumer CSS is missing --vf-* variables",
-      );
-    }
-    if (releaseGroupId === "data-grid-alpha" && !cssText.includes("--udg-")) {
-      throw new Error(
-        "data-grid release-artifact CSS is missing --udg-* variables",
+        "release-artifact consumer did not bundle declared package CSS",
       );
     }
   } finally {

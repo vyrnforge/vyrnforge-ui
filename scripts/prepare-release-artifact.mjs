@@ -56,7 +56,8 @@ rmSync(artifactRoot, { recursive: true, force: true });
 mkdirSync(tarballDirectory, { recursive: true });
 
 runNpm(["run", "clean:packages"], { stdio: "inherit" });
-for (const packageInfo of getReleaseBuildOrder({ releaseGroup, packageMap })) {
+const buildOrder = getReleaseBuildOrder({ releaseGroup, packageMap });
+for (const packageInfo of buildOrder) {
   runNpm(
     ["run", "build", "--ignore-scripts", "--workspace", packageInfo.name],
     {
@@ -104,6 +105,7 @@ const artifactManifest = {
   sourceCommit,
   ciRunId: String(ciRunId),
   createdAt: new Date().toISOString(),
+  buildClosure: buildOrder.map(({ name }) => name),
   packages: packageArtifacts,
 };
 writeFileSync(

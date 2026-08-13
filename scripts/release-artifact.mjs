@@ -11,7 +11,7 @@ import {
 
 export const releaseArtifactDirectory = "test-results/release-artifact";
 export const releaseArtifactManifestName = "manifest.json";
-export const releaseArtifactSchemaVersion = 1;
+export const releaseArtifactSchemaVersion = 2;
 
 const localDependencyPattern =
   /^(?:workspace:|file:|link:|\.{1,2}(?:[\\/]|$)|[A-Za-z]:[\\/]|\/)/u;
@@ -165,7 +165,7 @@ function validatePackageManifest(packageInfo, packageJson) {
   return failures;
 }
 
-function validatePackedPayload(packageInfo, packageJson, files) {
+export function validatePackedPayload(packageInfo, packageJson, files) {
   const failures = [];
   const exportTargets = collectStringTargets(packageJson.exports ?? {});
   const requiredFiles = [
@@ -184,6 +184,15 @@ function validatePackedPayload(packageInfo, packageJson, files) {
   const allowedRootFiles = new Set(
     uniqueRequiredFiles.filter((file) => !file.startsWith("dist/")),
   );
+  const declarationFiles = files.filter((file) => file.endsWith(".d.ts"));
+  const cssFiles = files.filter((file) => file.endsWith(".css"));
+
+  if (packageJson.types && declarationFiles.length === 0) {
+    failures.push(`${packageInfo.name}: declarations are required by package metadata`);
+  }
+  if (packageInfo.policies?.hasCss === true && cssFiles.length === 0) {
+    failures.push(`${packageInfo.name}: CSS payload is required by release metadata`);
+  }
 
   for (const requiredFile of uniqueRequiredFiles) {
     if (!files.includes(requiredFile)) {
@@ -222,13 +231,21 @@ export function validateReleaseArtifactManifest({
   root = repositoryRoot,
 } = {}) {
   const failures = [];
-  const { releaseGroup } = resolveReleaseSelection({
+  const { releaseGroup, packageMap } = resolveReleaseSelection({
     releaseGroupId,
     version,
     distTag,
     root,
   });
   const expectedNames = releaseGroup.packages.map(({ name }) => name);
+  const expectedBuildClosure = getReleaseBuildOrder({
+    releaseGroup,
+    packageMap,
+  }).map(({ name }) => name);
+
+  if (!exactOrder(artifactManifest?.buildClosure ?? [], expectedBuildClosure)) {
+    failures.push("release artifact build closure does not match release metadata");
+  }
 
   if (artifactManifest?.schemaVersion !== releaseArtifactSchemaVersion) {
     failures.push("release artifact schemaVersion mismatch");
