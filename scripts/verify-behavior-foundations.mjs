@@ -1,6 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  getReleaseGroup,
+  readReleaseGroups,
+} from "./release-groups.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -284,13 +288,18 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     root,
     "packages/ui-components/package.json",
   );
-  const releaseGroups = readJson(root, "docs/metadata/release-groups.json");
-  const expectedBehaviorVersion =
-    releaseGroups?.groups?.["non-grid-beta"]?.version;
+
+  const releaseGroups = readReleaseGroups({ root });
+  const nonGridBeta = getReleaseGroup("non-grid-beta", {
+    root,
+    manifest: releaseGroups,
+  });
+  const expectedBehaviorVersion = nonGridBeta.version;
+
   if (
     typeof expectedBehaviorVersion !== "string" ||
     componentPackage?.dependencies?.["@vyrnforge/ui-behaviors"] !==
-      expectedBehaviorVersion
+    expectedBehaviorVersion
   ) {
     failures.push(
       "ui-components must declare the pinned ui-behaviors runtime dependency",
