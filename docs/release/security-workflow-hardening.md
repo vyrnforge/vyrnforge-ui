@@ -37,8 +37,8 @@ exists for that exact commit. It does not call the reusable compatibility or
 security workflows again.
 
 Release-specific verification then validates the immutable retained release
-artifact and, for the non-grid beta group, enforces the approved BT-8004 size
-budgets before publication can begin.
+artifact and enforces release-line size budgets declared in canonical release
+metadata before publication can begin.
 
 ## Permission boundaries
 

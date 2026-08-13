@@ -133,7 +133,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
       "actions/workflows/ci.yml/runs",
       "gh api --paginate",
       "npm run verify:release-artifact",
-      "npm run verify:beta-package-size-budgets",
+      "npm run verify:release-size-budgets",
     ]) {
       if (!verifyReleaseSection.includes(marker)) {
         failures.push(
@@ -172,7 +172,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     manifest.releasePreflight?.reusableCompatibilityWorkflowRepeated !==
       false ||
     manifest.releasePreflight?.releaseArtifactVerificationRequired !== true ||
-    manifest.releasePreflight?.betaSizeBudgetVerificationRequired !== true
+    manifest.releasePreflight?.releaseLineSizeBudgetVerificationRequired !== true
   ) {
     failures.push(
       "security contract release boundary must trust current-main CI and verify the retained release artifact",

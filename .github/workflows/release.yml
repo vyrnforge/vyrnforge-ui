@@ -127,12 +127,11 @@ jobs:
           --dist-tag "$RELEASE_TAG"
           --artifact-dir test-results/release-artifact
 
-      - name: Verify approved beta size budgets against the release build
-        if: inputs.release-group == 'non-grid-beta'
-        run: |
-          npm run verify:beta-package-size-budgets
-          cp test-results/beta-package-artifacts/size-report.json \
-            test-results/release-artifact/beta-size-report.json
+      - name: Verify release-line size budgets
+        run: >-
+          npm run verify:release-size-budgets --
+          --release-group "$RELEASE_GROUP"
+          --artifact-dir test-results/release-artifact
 
       - name: Verify assistive-technology evidence or approved beta waiver
         if: inputs.release-group == 'non-grid-beta'
