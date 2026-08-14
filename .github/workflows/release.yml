@@ -274,7 +274,7 @@ jobs:
     name: verify-registry-release
     needs: [publish-packages, verify-release]
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     permissions:
       contents: read
     env:
@@ -296,9 +296,18 @@ jobs:
       - name: Use repository package manager
         run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
 
-      - name: Verify registry metadata and fresh consumer
-        run: node scripts/verify-registry-release.mjs --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG"
+      - name: Install registry verification dependencies
+        run: npm ci
 
+      - name: Install Chromium for four-surface smoke
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify registry metadata and four external consumers
+        run: >-
+          node scripts/verify-registry-release.mjs
+          --release-group "$RELEASE_GROUP"
+          --version "$RELEASE_VERSION"
+          --dist-tag "$RELEASE_TAG"
       - name: Write registry verification summary
         run: |
           {
@@ -309,7 +318,7 @@ jobs:
             echo "- Authoritative prerelease tag: \`$RELEASE_TAG\`"
             echo "- Package metadata and exact dependency graph verified"
             echo "- npm registry signatures and provenance attestations verified"
-            echo "- Fresh registry consumer typecheck and production build passed"
+            echo "- Native, React, Angular, and Vue registry consumer typecheck, production build, and smoke runtime passed"
           } >> "$GITHUB_STEP_SUMMARY"
 
   create-release-record:
