@@ -36,6 +36,8 @@ const version = readArgument(process.argv, "--version");
 const distTag = readArgument(process.argv, "--dist-tag");
 const sourceCommit = readArgument(process.argv, "--source-commit");
 const ciRunId = readArgument(process.argv, "--ci-run-id");
+const artifactDir =
+  readArgument(process.argv, "--artifact-dir") ?? releaseArtifactDirectory;
 
 if (!/^[0-9a-f]{40}$/u.test(sourceCommit ?? "")) {
   throw new Error("missing or invalid --source-commit");
@@ -49,7 +51,7 @@ const { releaseGroup, packageMap } = resolveReleaseSelection({
   version,
   distTag,
 });
-const artifactRoot = path.join(repositoryRoot, releaseArtifactDirectory);
+const artifactRoot = path.join(repositoryRoot, artifactDir);
 const tarballDirectory = path.join(artifactRoot, "tarballs");
 
 rmSync(artifactRoot, { recursive: true, force: true });
@@ -150,5 +152,5 @@ if (releaseGroupId === "non-grid-beta") {
 }
 
 console.log(
-  `Prepared ${packageArtifacts.length} immutable release tarballs in ${releaseArtifactDirectory}.`,
+  `Prepared ${packageArtifacts.length} immutable release tarballs in ${artifactDir}.`,
 );
