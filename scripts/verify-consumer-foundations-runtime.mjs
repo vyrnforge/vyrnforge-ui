@@ -12,6 +12,11 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium, firefox, webkit } from "@playwright/test";
+import {
+  getReleaseGroup,
+  getReleasePackageMap,
+  readReleaseGroups,
+} from "./release-groups.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -95,6 +100,42 @@ const buildOnly = process.argv.includes("--build-only");
 function readCliValue(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? (process.argv[index + 1] ?? null) : null;
+}
+
+const packageSource = readCliValue("--package-source") ?? "packed";
+const registryReleaseGroupId = readCliValue("--release-group");
+const registryVersion = readCliValue("--version");
+const registryDistTag = readCliValue("--dist-tag");
+const registryMode = packageSource === "registry";
+
+assert(
+  packageSource === "packed" || packageSource === "registry",
+  `Unsupported consumer package source ${packageSource}`,
+);
+
+let registryReleaseGroup = null;
+let registryPackageMap = null;
+
+if (registryMode) {
+  assert(registryReleaseGroupId, "registry package source requires --release-group");
+  assert(registryVersion, "registry package source requires --version");
+  assert(registryDistTag, "registry package source requires --dist-tag");
+
+  const manifest = readReleaseGroups({ root: repositoryRoot });
+  registryReleaseGroup = getReleaseGroup(registryReleaseGroupId, {
+    root: repositoryRoot,
+    manifest,
+  });
+  registryPackageMap = getReleasePackageMap(manifest);
+
+  assert(
+    registryVersion === registryReleaseGroup.version,
+    `${registryReleaseGroupId} registry version mismatch`,
+  );
+  assert(
+    registryDistTag === registryReleaseGroup.distTag,
+    `${registryReleaseGroupId} registry dist-tag mismatch`,
+  );
 }
 
 const matrixReportArgument = readCliValue("--matrix-report");
@@ -256,6 +297,50 @@ function verifyInstalledPackages(fixtureDirectory, tarballs) {
       );
     }
   }
+}
+
+function registryDependencyClosure(releaseGroup, packageMap) {
+  const packages = new Map();
+
+  const visit = (packageName) => {
+    if (packages.has(packageName)) return;
+
+    const packageInfo = packageMap.get(packageName);
+    assert(packageInfo, `release metadata is missing ${packageName}`);
+    packages.set(packageName, packageInfo);
+
+    for (const dependencyName of Object.keys(packageInfo.dependencies ?? {})) {
+      if (packageMap.has(dependencyName)) visit(dependencyName);
+    }
+  };
+
+  for (const packageInfo of releaseGroup.packages) {
+    visit(packageInfo.name);
+  }
+
+  return packages;
+}
+
+function selectFixtureRegistryPackages(fixture) {
+  const closure = registryDependencyClosure(
+    registryReleaseGroup,
+    registryPackageMap,
+  );
+
+  return fixture.packageNames.map((packageName) => {
+    const packageInfo = closure.get(packageName);
+
+    assert(
+      packageInfo,
+      `${fixture.id}: ${packageName} is not available in the selected registry release closure`,
+    );
+
+    return {
+      ...packageInfo,
+      customElements: packageName === "@vyrnforge/ui-elements",
+      spec: `${packageName}@${packageInfo.version}`,
+    };
+  });
 }
 
 function selectFixtureTarballs(fixture, tarballs) {
@@ -1103,24 +1188,32 @@ async function verifyBrowserFixture(browser, fixture) {
 try {
   removeAllGeneratedOutput();
 
-  console.log("Building the framework-neutral packages...");
-  runNpm(["run", "build", "--workspace", "@vyrnforge/ui-core"], {
-    stdio: "inherit",
-  });
-  runNpm(["run", "build", "--workspace", "@vyrnforge/ui-behaviors"], {
-    stdio: "inherit",
-  });
-  runNpm(["run", "build", "--workspace", "@vyrnforge/ui-components"], {
-    stdio: "inherit",
-  });
-  runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {
-    stdio: "inherit",
-  });
+  let tarballs = [];
 
-  console.log(
-    "Packing ui-core, ui-behaviors, ui-components, and ui-elements...",
-  );
-  const tarballs = packPackages();
+  if (!registryMode) {
+    console.log("Building the framework-neutral packages...");
+    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-core"], {
+      stdio: "inherit",
+    });
+    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-behaviors"], {
+      stdio: "inherit",
+    });
+    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-components"], {
+      stdio: "inherit",
+    });
+    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {
+      stdio: "inherit",
+    });
+
+    console.log(
+      "Packing ui-core, ui-behaviors, ui-components, and ui-elements...",
+    );
+    tarballs = packPackages();
+  } else {
+    console.log(
+      `Using exact registry packages for ${registryReleaseGroupId} ${registryVersion}.`,
+    );
+  }
 
   for (const fixture of fixtures) {
     const fixtureDirectory = path.join(repositoryRoot, fixture.directory);
@@ -1129,20 +1222,43 @@ try {
       cwd: fixtureDirectory,
       stdio: "inherit",
     });
-    const fixtureTarballs = selectFixtureTarballs(fixture, tarballs);
-    runNpm(
-      [
-        "install",
-        "--no-package-lock",
-        "--no-save",
-        ...fixtureTarballs.map((tarball) => tarball.tarballPath),
-      ],
-      {
-        cwd: fixtureDirectory,
-        stdio: "inherit",
-      },
-    );
-    verifyInstalledPackages(fixtureDirectory, fixtureTarballs);
+    if (registryMode) {
+      const registryPackages = selectFixtureRegistryPackages(fixture);
+
+      runNpm(
+        [
+          "install",
+          "--no-package-lock",
+          "--no-save",
+          "--ignore-scripts",
+          "--registry=https://registry.npmjs.org",
+          ...registryPackages.map(({ spec }) => spec),
+        ],
+        {
+          cwd: fixtureDirectory,
+          stdio: "inherit",
+        },
+      );
+
+      verifyInstalledPackages(fixtureDirectory, registryPackages);
+    } else {
+      const fixtureTarballs = selectFixtureTarballs(fixture, tarballs);
+
+      runNpm(
+        [
+          "install",
+          "--no-package-lock",
+          "--no-save",
+          ...fixtureTarballs.map((tarball) => tarball.tarballPath),
+        ],
+        {
+          cwd: fixtureDirectory,
+          stdio: "inherit",
+        },
+      );
+
+      verifyInstalledPackages(fixtureDirectory, fixtureTarballs);
+    }
     verifyServerSafeImports(fixtureDirectory, fixture);
     runNpm(["run", "typecheck"], {
       cwd: fixtureDirectory,

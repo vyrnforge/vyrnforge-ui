@@ -616,7 +616,6 @@ for (const marker of [
 }
 for (const forbidden of [
   "npm run ci",
-  "playwright install",
   "uses: ./.github/workflows/_compatibility.yml",
   "uses: ./.github/workflows/_security.yml",
 ]) {
@@ -625,6 +624,13 @@ for (const forbidden of [
     `release.yml must not repeat main CI through ${forbidden}`,
   );
 }
+
+assert(
+  !verifyReleaseSection.includes("playwright install") &&
+    !publishSection.includes("playwright install") &&
+    !releaseRecordSection.includes("playwright install"),
+  "only post-publish registry verification may install Playwright browsers",
+);
 assert(
   /permissions:\s*\n\s*actions: read\s*\n\s*contents: read/.test(
     verifyReleaseSection,
@@ -678,6 +684,39 @@ assert(
   registryVerifier.includes('["audit", "signatures"'),
   "registry release verification must cryptographically verify registry signatures and attestations",
 );
+for (const marker of [
+  "verify:consumer-foundations:runtime",
+  '"--package-source"',
+  '"registry"',
+  '"--release-group"',
+  '"--version"',
+  '"--dist-tag"',
+]) {
+  assert(
+    registryVerifier.includes(marker),
+    `registry release verification must use the canonical four-surface consumer runner through ${marker}`,
+  );
+}
+
+const registryReleaseSection = release.slice(
+  release.indexOf("  verify-registry-release:"),
+  release.indexOf("  create-release-record:"),
+);
+
+for (const marker of [
+  "Install registry verification dependencies",
+  "npm ci",
+  "Install Chromium for four-surface smoke",
+  "npx playwright install --with-deps chromium",
+  "node scripts/verify-registry-release.mjs",
+  "Native, React, Angular, and Vue",
+]) {
+  assert(
+    registryReleaseSection.includes(marker),
+    `verify-registry-release must include ${marker}`,
+  );
+}
+
 assert(
   release.includes("scripts/create-release-notes.mjs"),
   "release.yml must generate a release record from source",

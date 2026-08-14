@@ -344,3 +344,45 @@ try {
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }
+
+const fourSurfaceRequiredPackages = [
+  "@vyrnforge/ui-core",
+  "@vyrnforge/ui-behaviors",
+  "@vyrnforge/ui-components",
+  "@vyrnforge/ui-elements",
+];
+
+const registryClosureNames = new Set(
+  closurePackages.map((packageInfo) => packageInfo.name),
+);
+
+if (
+  fourSurfaceRequiredPackages.every((packageName) =>
+    registryClosureNames.has(packageName),
+  )
+) {
+  console.log(
+    `Running four-surface registry consumer verification for ${releaseGroupId} ${version}...`,
+  );
+
+  runNpm(
+    [
+      "run",
+      "verify:consumer-foundations:runtime",
+      "--",
+      "--package-source",
+      "registry",
+      "--release-group",
+      releaseGroupId,
+      "--version",
+      version,
+      "--dist-tag",
+      distTag,
+    ],
+    { stdio: "inherit" },
+  );
+
+  console.log(
+    `Four-surface registry consumer verification passed: ${releaseGroupId} ${version}`,
+  );
+}
