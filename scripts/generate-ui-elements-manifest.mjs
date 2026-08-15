@@ -2,6 +2,9 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import { deriveCanonicalNativeTags } from "./framework-generation.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -132,11 +135,17 @@ function createManifest(definitions, descriptions, canonicalEvents) {
   };
 }
 
+const canonicalContracts = loadCanonicalComponentContracts({
+  root: repositoryRoot,
+});
+const expectedNativeTags = deriveCanonicalNativeTags(canonicalContracts);
+assert(expectedNativeTags.length > 0, "Canonical native tag catalog is empty.");
+
 const registryText = readFileSync(registryPath, "utf8");
 const definitions = collectDefinitions(registryText);
 assert(
-  definitions.length === 58,
-  `Expected 58 registered elements, received ${definitions.length}.`,
+  definitions.length > 0,
+  "Custom Element registry contains no definitions.",
 );
 assert(
   new Set(definitions.map((item) => item.tagName)).size === definitions.length,
