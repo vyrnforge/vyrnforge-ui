@@ -5,19 +5,102 @@
     "generator": "scripts/generate-framework-api-reference.mjs",
     "command": "npm run generate:framework-api-reference",
     "sources": [
-      "docs/metadata/component-contracts.json"
+      "docs/metadata/component-contracts.json",
+      "docs/metadata/framework-exceptions.json"
     ],
     "tasks": [
       "MFD-1102",
+      "MFD-1103",
       "MFD-1104",
       "MFD-1105",
       "MFD-1106",
       "MFD-1107",
       "MFD-1108",
+      "MFD-1109",
       "MFD-1110"
     ]
   },
   "sourceSchemaVersion": 2,
+  "exceptionPolicy": {
+    "defaultPolicy": "generated-or-generic",
+    "records": [
+      {
+        "id": "MFD-EX-NATIVE-TOAST-VIEWPORT",
+        "framework": "native",
+        "scope": "toast-viewport",
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-elements/src/components/feedback.ts"
+        ],
+        "reviewMilestone": "S14 framework convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-ACTION-ALIASES",
+        "framework": "react",
+        "scope": [
+          "clear-button",
+          "close-button",
+          "more-button",
+          "refresh-button"
+        ],
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/IconButton/ActionButtons.tsx"
+        ],
+        "reviewMilestone": "S14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-STATUS-BADGE",
+        "framework": "react",
+        "scope": "status-badge",
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Badge/Badge.types.ts",
+          "packages/ui-components/src/components/Badge/StatusBadge.tsx"
+        ],
+        "reviewMilestone": "S14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-TOAST-ACTION",
+        "framework": "react",
+        "scope": "toast-action",
+        "exceptionClass": "composition",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Toast/Toast.types.ts",
+          "packages/ui-components/src/components/Toast/ToastAction.tsx"
+        ],
+        "reviewMilestone": "S14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-TOAST-PROVIDER",
+        "framework": "react",
+        "scope": "toast-provider",
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Toast/ToastProvider.tsx",
+          "packages/ui-components/src/components/Toast/useToast.ts"
+        ],
+        "reviewMilestone": "S14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-USE-TOAST",
+        "framework": "react",
+        "scope": "use-toast",
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Toast/Toast.types.ts",
+          "packages/ui-components/src/components/Toast/useToast.ts"
+        ],
+        "reviewMilestone": "S14 React convergence"
+      }
+    ]
+  },
   "surfaces": {
     "native": {
       "package": "@vyrnforge/ui-elements",

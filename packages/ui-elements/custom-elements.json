@@ -658,19 +658,30 @@
     "registeredTagCount": 58,
     "eventVocabulary": [
       "vf-action",
+      "vf-cancel",
       "vf-checked-change",
+      "vf-confirm",
       "vf-dismiss",
+      "vf-input-value-change",
       "vf-invalid",
       "vf-open-change",
       "vf-pressed-change",
       "vf-reset",
       "vf-selection-change",
-      "vf-cancel",
-      "vf-confirm",
-      "vf-input-value-change",
       "vf-toast-change",
       "vf-value-change"
     ],
+    "nativeGeneration": {
+      "sources": {
+        "contracts": "docs/metadata/component-contracts.json",
+        "registrationEvidence": "packages/ui-elements/src/registry.ts",
+        "exceptions": "docs/metadata/framework-exceptions.json",
+        "descriptions": "docs/metadata/components.json"
+      },
+      "canonicalTagCount": 57,
+      "canonicalMappedRegistrationCount": 57,
+      "exceptionBackedRegistrationCount": 1
+    },
     "typeDeclarations": {
       "tagNameMap": "VyrnForgeHTMLElementTagNameMap",
       "globalDomMap": "HTMLElementTagNameMap",

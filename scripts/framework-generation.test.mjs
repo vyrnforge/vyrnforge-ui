@@ -6,11 +6,23 @@ import { fileURLToPath } from "node:url";
 
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
 import {
+  createFrameworkExceptionReference,
+  createFrameworkOverrideHooks,
+  loadFrameworkExceptions,
+} from "./framework-exceptions.mjs";
+import {
   FRAMEWORK_SURFACES,
   createFrameworkApiReference,
   createFrameworkGenerationModel,
   deriveCanonicalNativeTags,
 } from "./framework-generation.mjs";
+import { buildNativeElementArtifacts } from "./generate-ui-elements-manifest.mjs";
+import {
+  NativeElementGenerationError,
+  createNativeElementGenerationModel,
+  loadNativeRegistrationEvidence,
+  parseNativeRegistrationEvidence,
+} from "./native-element-generation.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -124,7 +136,10 @@ test("native manifest generation no longer encodes a fixed element count", () =>
 });
 
 test("framework API reference records generated ownership and all four surfaces", () => {
-  const reference = createFrameworkApiReference(loadContracts());
+  const exceptions = loadFrameworkExceptions({ root: repositoryRoot });
+  const reference = createFrameworkApiReference(loadContracts(), {
+    exceptionPolicy: createFrameworkExceptionReference(exceptions),
+  });
   assert.equal(reference.generated.editable, false);
   assert.equal(
     reference.generated.generator,
@@ -133,4 +148,143 @@ test("framework API reference records generated ownership and all four surfaces"
   assert.deepEqual(Object.keys(reference.surfaces), [...FRAMEWORK_SURFACES]);
   assert.equal(reference.surfaces.angular.package, "@vyrnforge/ui-angular");
   assert.equal(reference.surfaces.vue.package, "@vyrnforge/ui-vue");
+  assert(
+    reference.generated.sources.includes(
+      "docs/metadata/framework-exceptions.json",
+    ),
+  );
+  assert.equal(reference.exceptionPolicy.defaultPolicy, "generated-or-generic");
+  assert(reference.exceptionPolicy.records.length > 0);
+});
+
+test("framework exceptions gate narrow handwritten override hooks", () => {
+  const registry = loadFrameworkExceptions({ root: repositoryRoot });
+  const nativeException = registry.byId.get("MFD-EX-NATIVE-TOAST-VIEWPORT");
+  assert(nativeException);
+  assert.equal(nativeException.framework, "native");
+  assert.equal(nativeException.scope, "toast-viewport");
+  assert.equal(nativeException.state, "active");
+
+  const hooks = createFrameworkOverrideHooks({
+    registry,
+    overrides: {
+      "MFD-EX-NATIVE-TOAST-VIEWPORT": (context) => ({
+        ...context,
+        handledBy: "declared-exception",
+      }),
+    },
+  });
+  assert.equal(hooks.has("MFD-EX-NATIVE-TOAST-VIEWPORT"), true);
+  assert.deepEqual(
+    hooks.apply("MFD-EX-NATIVE-TOAST-VIEWPORT", {
+      framework: "native",
+      scope: "toast-viewport",
+      tagName: "vf-toast-viewport",
+    }),
+    {
+      framework: "native",
+      scope: "toast-viewport",
+      tagName: "vf-toast-viewport",
+      handledBy: "declared-exception",
+    },
+  );
+  assert.throws(
+    () =>
+      createFrameworkOverrideHooks({
+        registry,
+        overrides: { "MFD-EX-UNDECLARED": () => null },
+      }),
+    /has no declared exception/u,
+  );
+  assert.throws(
+    () =>
+      hooks.apply("MFD-EX-NATIVE-TOAST-VIEWPORT", {
+        framework: "react",
+        scope: "toast-viewport",
+      }),
+    /cannot run for framework/u,
+  );
+});
+
+test("native generation reconciles canonical contracts with AST registration evidence", () => {
+  const contracts = loadContracts();
+  const exceptions = loadFrameworkExceptions({ root: repositoryRoot });
+  const registrations = loadNativeRegistrationEvidence({
+    root: repositoryRoot,
+  });
+  const model = createNativeElementGenerationModel({
+    contracts,
+    exceptions,
+    registrations,
+  });
+
+  assert.equal(model.summary.registrationCount, registrations.length);
+  assert.equal(
+    model.summary.canonicalTagCount,
+    deriveCanonicalNativeTags(contracts).length,
+  );
+  assert(model.summary.exceptionBackedRegistrationCount > 0);
+  const toastViewport = model.entries.find(
+    (entry) => entry.tagName === "vf-toast-viewport",
+  );
+  assert(toastViewport);
+  assert.deepEqual(toastViewport.canonicalComponentIds, []);
+  assert(toastViewport.exceptionIds.includes("MFD-EX-NATIVE-TOAST-VIEWPORT"));
+
+  const evidenceSource = readFileSync(
+    path.join(repositoryRoot, "scripts/native-element-generation.mjs"),
+    "utf8",
+  );
+  const generatorSource = readFileSync(
+    path.join(repositoryRoot, "scripts/generate-ui-elements-manifest.mjs"),
+    "utf8",
+  );
+  assert.match(evidenceSource, /@babel\/eslint-parser/u);
+  assert.match(evidenceSource, /babelParser\.parseForESLint/u);
+  assert.match(
+    evidenceSource,
+    /findDefinitionCatalog\(program, catalogName\)/u,
+  );
+  assert.doesNotMatch(generatorSource, /collectDefinitions/u);
+  assert.doesNotMatch(generatorSource, /matchAll/u);
+});
+
+test("native manifest and DOM declarations share one reconciled generation model", () => {
+  const contracts = loadContracts();
+  const artifacts = buildNativeElementArtifacts({ root: repositoryRoot });
+  const manifestDeclarations = artifacts.manifest.modules[0].declarations;
+
+  assert.equal(manifestDeclarations.length, artifacts.model.entries.length);
+  assert.deepEqual(
+    artifacts.manifest.vyrnforge.eventVocabulary,
+    contracts.events.map((event) => event.name),
+  );
+  for (const entry of artifacts.model.entries) {
+    assert(
+      artifacts.declarations.includes(
+        `"${entry.tagName}": VyrnForgeElementInstance<"${entry.className}">;`,
+      ),
+    );
+  }
+  assert.deepEqual(artifacts.manifest.vyrnforge.nativeGeneration.sources, {
+    contracts: "docs/metadata/component-contracts.json",
+    registrationEvidence: "packages/ui-elements/src/registry.ts",
+    exceptions: "docs/metadata/framework-exceptions.json",
+    descriptions: "docs/metadata/components.json",
+  });
+});
+
+test("native registration AST evidence rejects duplicate tags deterministically", () => {
+  const fixture = `
+    export const vyrnForgeElementDefinitions = Object.freeze([
+      Object.freeze({ tagName: "vf-sample", constructor: SampleElement }),
+      Object.freeze({ tagName: "vf-sample", constructor: OtherElement }),
+    ]);
+  `;
+  assert.throws(
+    () => parseNativeRegistrationEvidence(fixture),
+    (error) =>
+      error instanceof NativeElementGenerationError &&
+      error.message.includes("duplicate tags"),
+  );
 });

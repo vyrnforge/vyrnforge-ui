@@ -7,11 +7,13 @@ export const FRAMEWORK_SURFACES = Object.freeze([
 
 export const FRAMEWORK_GENERATION_TASKS = Object.freeze([
   "MFD-1102",
+  "MFD-1103",
   "MFD-1104",
   "MFD-1105",
   "MFD-1106",
   "MFD-1107",
   "MFD-1108",
+  "MFD-1109",
   "MFD-1110",
 ]);
 
@@ -466,18 +468,24 @@ export function createFrameworkGenerationModel(contracts) {
   };
 }
 
-export function createFrameworkApiReference(contracts) {
+export function createFrameworkApiReference(
+  contracts,
+  { exceptionPolicy = null } = {},
+) {
   const model = createFrameworkGenerationModel(contracts);
+  const sources = ["docs/metadata/component-contracts.json"];
+  if (exceptionPolicy) sources.push("docs/metadata/framework-exceptions.json");
   return {
     schemaVersion: 1,
     generated: {
       editable: false,
       generator: "scripts/generate-framework-api-reference.mjs",
       command: "npm run generate:framework-api-reference",
-      sources: ["docs/metadata/component-contracts.json"],
+      sources,
       tasks: [...FRAMEWORK_GENERATION_TASKS],
     },
     sourceSchemaVersion: model.sourceSchemaVersion,
+    ...(exceptionPolicy ? { exceptionPolicy } : {}),
     surfaces: model.surfaces,
   };
 }

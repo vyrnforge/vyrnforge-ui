@@ -3,6 +3,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import {
+  createFrameworkExceptionReference,
+  loadFrameworkExceptions,
+} from "./framework-exceptions.mjs";
 import { createFrameworkApiReference } from "./framework-generation.mjs";
 
 const repositoryRoot = path.resolve(
@@ -15,7 +19,10 @@ export const FRAMEWORK_API_REFERENCE_PATH =
 
 export function buildFrameworkApiReference({ root = repositoryRoot } = {}) {
   const contracts = loadCanonicalComponentContracts({ root });
-  return createFrameworkApiReference(contracts);
+  const exceptions = loadFrameworkExceptions({ root });
+  return createFrameworkApiReference(contracts, {
+    exceptionPolicy: createFrameworkExceptionReference(exceptions),
+  });
 }
 
 export function serializeFrameworkApiReference(reference) {
@@ -28,6 +35,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const reference = buildFrameworkApiReference();
   writeFileSync(outputPath, serializeFrameworkApiReference(reference), "utf8");
   console.log(
-    `Generated ${FRAMEWORK_API_REFERENCE_PATH} for ${reference.surfaces.native.summary.componentCount} canonical components.`,
+    `Generated ${FRAMEWORK_API_REFERENCE_PATH} for ${reference.surfaces.native.summary.componentCount} canonical components with ${reference.exceptionPolicy.records.length} framework exceptions.`,
   );
 }
