@@ -15,6 +15,8 @@ type ButtonElement = VyrnForgeElementForTagName<"vf-button">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
+import { GeneratedButton } from "./generated/Button.generated";
+
 import "./styles.css";
 
 function App() {
@@ -106,9 +108,21 @@ function App() {
         React is consuming packed VyrnForge Custom Elements directly.
       </vf-inline-message>
 
-      <vf-button ref={actionRef} action="react-save" variant="primary">
+      <GeneratedButton
+        ref={actionRef}
+        action="react-save"
+        variant="primary"
+        onClick={(detail) => {
+          if (detail.action !== "react-save") {
+            throw new Error("Generated React Button action mapping is invalid.");
+          }
+          document
+            .querySelector("[data-react-consumer]")
+            ?.setAttribute("data-generated-button-action", "received");
+        }}
+      >
         Save from React
-      </vf-button>
+      </GeneratedButton>
 
       <vf-tabs ref={tabsRef} aria-label="React consumer sections" />
 

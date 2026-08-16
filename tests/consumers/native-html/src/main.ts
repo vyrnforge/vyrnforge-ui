@@ -5,6 +5,8 @@ import type {
   VyrnForgeTabItem,
 } from "@vyrnforge/ui-elements";
 
+import { bindGeneratedVfButton } from "./generated/vf-button.generated";
+
 import "./styles.css";
 
 const root = document.querySelector<HTMLElement>("[data-consumer-root]");
@@ -33,6 +35,17 @@ tabs.items = [
     content: "Canonical events and property assignment",
   },
 ] satisfies readonly VyrnForgeTabItem[];
+
+bindGeneratedVfButton(save, {
+  action: "save",
+  variant: "primary",
+  onAction: (detail) => {
+    if (detail.action !== "save") {
+      throw new Error("Generated Native Button action mapping is invalid.");
+    }
+    root.dataset.generatedButtonAction = "received";
+  },
+});
 
 save.addEventListener("vf-action", (event) => {
   const detail: VyrnForgeActionDetail = event.detail;

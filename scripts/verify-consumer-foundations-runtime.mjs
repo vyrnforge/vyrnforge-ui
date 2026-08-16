@@ -117,7 +117,10 @@ let registryReleaseGroup = null;
 let registryPackageMap = null;
 
 if (registryMode) {
-  assert(registryReleaseGroupId, "registry package source requires --release-group");
+  assert(
+    registryReleaseGroupId,
+    "registry package source requires --release-group",
+  );
   assert(registryVersion, "registry package source requires --version");
   assert(registryDistTag, "registry package source requires --dist-tag");
 
@@ -524,21 +527,25 @@ async function waitForSharedMatrixStatus(page, expectedText) {
 const matrixSelectors = Object.freeze({
   "native-html": {
     action: "#native-save > button[data-vf-action-control]",
+    generatedButton: '#native-save[data-vf-generated-button="native"]',
     input: 'vf-text-input[name="owner"] input',
     actionText: "Action: save",
   },
   react: {
     action: "vf-button > button[data-vf-action-control]",
+    generatedButton: 'vf-button[data-vf-generated-button="react"]',
     input: "vf-text-input input",
     actionText: "react-save",
   },
   angular: {
     action: "#angular-save > button[data-vf-action-control]",
+    generatedButton: '#angular-save[data-vf-generated-button="angular"]',
     input: 'vf-text-input[name="owner"] input',
     actionText: "angular-save",
   },
   vue: {
     action: "#vue-save > button[data-vf-action-control]",
+    generatedButton: '#vue-save[data-vf-generated-button="vue"]',
     input: 'vf-text-input[name="ownerPreview"] input',
     actionText: "vue-save",
   },
@@ -550,11 +557,31 @@ async function verifySharedMatrixScenario(page, fixture) {
 
   await page.waitForSelector('[data-consumer-ready="true"]');
 
+  const generatedButton = page.locator(selectors.generatedButton);
+  await generatedButton.waitFor({ state: "visible" });
+  assert(
+    (await generatedButton.evaluate((element) => element.tagName)) ===
+      "VF-BUTTON",
+    `${fixture.id}: generated Button facade did not retain the canonical vf-button renderer`,
+  );
+  assert(
+    ((await generatedButton.textContent()) ?? "").trim().length > 0,
+    `${fixture.id}: generated Button default child/slot content is missing`,
+  );
+
   const actionControl = page.locator(selectors.action);
   await actionControl.waitFor({ state: "visible" });
   await actionControl.click();
   await page.waitForSelector('[data-consumer-action="received"]');
+  await page.waitForSelector('[data-generated-button-action="received"]');
   await waitForSharedMatrixStatus(page, selectors.actionText);
+
+  const actionClassName = await actionControl.getAttribute("class");
+  assert(
+    actionClassName?.split(/\s+/u).includes("vf-button") === true &&
+      actionClassName.split(/\s+/u).includes("vf-button--primary") === true,
+    `${fixture.id}: generated Button did not preserve canonical primary styling`,
+  );
 
   const statusText =
     (await page.locator("[data-consumer-status]").textContent()) ?? "";
@@ -578,6 +605,8 @@ async function verifySharedMatrixScenario(page, fixture) {
     consumer: fixture.id,
     scenarios: Object.freeze({
       "canonical-action-event": true,
+      "generated-button-facade": true,
+      "generated-button-styling": true,
       "tabs-property-assignment": true,
       "text-input-value-property": true,
     }),
@@ -1293,6 +1322,8 @@ try {
   if (matrixMode) {
     const expectedScenarioIds = [
       "canonical-action-event",
+      "generated-button-facade",
+      "generated-button-styling",
       "tabs-property-assignment",
       "text-input-value-property",
     ];

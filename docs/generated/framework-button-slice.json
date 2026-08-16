@@ -1,0 +1,927 @@
+{
+  "schemaVersion": 1,
+  "generated": {
+    "editable": false,
+    "generator": "scripts/generate-framework-button-slice.mjs",
+    "command": "npm run generate:framework-button-slice",
+    "sources": [
+      "docs/metadata/component-contracts.json"
+    ],
+    "sourceRecords": [
+      "component:button"
+    ],
+    "task": "MFD-1112"
+  },
+  "component": "button",
+  "canonicalRenderer": "@vyrnforge/ui-elements",
+  "artifacts": {
+    "native": "tests/consumers/native-html/src/generated/vf-button.generated.ts",
+    "react": "tests/consumers/react/src/generated/Button.generated.tsx",
+    "angular": "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
+    "vue": "tests/consumers/vue/src/generated/VfButton.generated.ts"
+  },
+  "surfaces": {
+    "native": {
+      "package": "@vyrnforge/ui-elements",
+      "status": "current",
+      "export": null,
+      "tag": "vf-button",
+      "properties": [
+        {
+          "canonical": "variant",
+          "public": "variant",
+          "binding": "property",
+          "type": "ButtonVariant",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonVariant"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "primary"
+        },
+        {
+          "canonical": "disabled",
+          "public": "disabled",
+          "binding": "property",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "loading",
+          "public": "loading",
+          "binding": "property",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "size",
+          "public": "size",
+          "binding": "property",
+          "type": "ButtonSize",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonSize"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "md"
+        },
+        {
+          "canonical": "fullWidth",
+          "public": "fullWidth",
+          "binding": "property",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "type",
+          "public": "type",
+          "binding": "property",
+          "type": "ButtonType",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonType"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "button"
+        },
+        {
+          "canonical": "name",
+          "public": "name",
+          "binding": "property",
+          "type": "string",
+          "typeContract": {
+            "kind": "string",
+            "nullable": true
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": null
+        },
+        {
+          "canonical": "value",
+          "public": "value",
+          "binding": "property",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        },
+        {
+          "canonical": "action",
+          "public": "action",
+          "binding": "property",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        }
+      ],
+      "events": [
+        {
+          "canonical": "vf-action",
+          "public": "vf-action",
+          "mode": "dom-event",
+          "detail": "event",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true,
+          "detailFields": [
+            {
+              "name": "action",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "value",
+              "type": "unknown",
+              "required": false
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "canonical": "default",
+          "public": "default",
+          "mode": "slot",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "prefix",
+          "public": "prefix",
+          "mode": "slot",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "suffix",
+          "public": "suffix",
+          "mode": "slot",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        },
+        {
+          "name": "click",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        }
+      ],
+      "accessibility": [
+        "native button semantics",
+        "disabled/loading state",
+        "accessible name"
+      ],
+      "adapter": {
+        "kind": "canonical-native",
+        "canonicalRenderer": "@vyrnforge/ui-elements"
+      }
+    },
+    "react": {
+      "package": "@vyrnforge/ui-components",
+      "status": "migration",
+      "export": "Button",
+      "tag": null,
+      "properties": [
+        {
+          "canonical": "variant",
+          "public": "variant",
+          "binding": "prop",
+          "type": "ButtonVariant",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonVariant"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "primary"
+        },
+        {
+          "canonical": "disabled",
+          "public": "disabled",
+          "binding": "prop",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "loading",
+          "public": "loading",
+          "binding": "prop",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "size",
+          "public": "size",
+          "binding": "prop",
+          "type": "ButtonSize",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonSize"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "md"
+        },
+        {
+          "canonical": "fullWidth",
+          "public": "fullWidth",
+          "binding": "prop",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "type",
+          "public": "type",
+          "binding": "prop",
+          "type": "ButtonType",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonType"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "button"
+        },
+        {
+          "canonical": "name",
+          "public": "name",
+          "binding": "prop",
+          "type": "string",
+          "typeContract": {
+            "kind": "string",
+            "nullable": true
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": null
+        },
+        {
+          "canonical": "value",
+          "public": "value",
+          "binding": "prop",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        },
+        {
+          "canonical": "action",
+          "public": "action",
+          "binding": "prop",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        }
+      ],
+      "events": [
+        {
+          "canonical": "vf-action",
+          "public": "onClick",
+          "mode": "callback",
+          "detail": "detail",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true,
+          "detailFields": [
+            {
+              "name": "action",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "value",
+              "type": "unknown",
+              "required": false
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "canonical": "default",
+          "public": "children",
+          "mode": "children",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "prefix",
+          "public": "prefix",
+          "mode": "prop",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "suffix",
+          "public": "suffix",
+          "mode": "prop",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        },
+        {
+          "name": "click",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        }
+      ],
+      "accessibility": [
+        "native button semantics",
+        "disabled/loading state",
+        "accessible name"
+      ],
+      "adapter": {
+        "kind": "react-facade",
+        "canonicalRenderer": "@vyrnforge/ui-elements",
+        "model": {
+          "enabled": false,
+          "mode": "none",
+          "canonicalKind": "none",
+          "canonicalProperty": null,
+          "canonicalDefaultProperty": null,
+          "canonicalChangeEvent": null,
+          "publicProperty": null,
+          "publicEvent": null
+        },
+        "refMode": "forwarded-ref"
+      }
+    },
+    "angular": {
+      "package": "@vyrnforge/ui-angular",
+      "status": "target",
+      "export": "VfButton",
+      "tag": null,
+      "properties": [
+        {
+          "canonical": "variant",
+          "public": "variant",
+          "binding": "input",
+          "type": "ButtonVariant",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonVariant"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "primary"
+        },
+        {
+          "canonical": "disabled",
+          "public": "disabled",
+          "binding": "input",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "loading",
+          "public": "loading",
+          "binding": "input",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "size",
+          "public": "size",
+          "binding": "input",
+          "type": "ButtonSize",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonSize"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "md"
+        },
+        {
+          "canonical": "fullWidth",
+          "public": "fullWidth",
+          "binding": "input",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "type",
+          "public": "type",
+          "binding": "input",
+          "type": "ButtonType",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonType"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "button"
+        },
+        {
+          "canonical": "name",
+          "public": "name",
+          "binding": "input",
+          "type": "string",
+          "typeContract": {
+            "kind": "string",
+            "nullable": true
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": null
+        },
+        {
+          "canonical": "value",
+          "public": "value",
+          "binding": "input",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        },
+        {
+          "canonical": "action",
+          "public": "action",
+          "binding": "input",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        }
+      ],
+      "events": [
+        {
+          "canonical": "vf-action",
+          "public": "action",
+          "mode": "output",
+          "detail": "detail",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true,
+          "detailFields": [
+            {
+              "name": "action",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "value",
+              "type": "unknown",
+              "required": false
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "canonical": "default",
+          "public": "default",
+          "mode": "content-projection",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "prefix",
+          "public": "prefix",
+          "mode": "content-projection",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "suffix",
+          "public": "suffix",
+          "mode": "content-projection",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        },
+        {
+          "name": "click",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        }
+      ],
+      "accessibility": [
+        "native button semantics",
+        "disabled/loading state",
+        "accessible name"
+      ],
+      "adapter": {
+        "kind": "angular-facade",
+        "canonicalRenderer": "@vyrnforge/ui-elements",
+        "selector": "vf-button",
+        "forms": {
+          "enabled": false,
+          "mode": "none"
+        },
+        "refMode": "view-child"
+      }
+    },
+    "vue": {
+      "package": "@vyrnforge/ui-vue",
+      "status": "target",
+      "export": "VfButton",
+      "tag": null,
+      "properties": [
+        {
+          "canonical": "variant",
+          "public": "variant",
+          "binding": "prop",
+          "type": "ButtonVariant",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonVariant"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "primary"
+        },
+        {
+          "canonical": "disabled",
+          "public": "disabled",
+          "binding": "prop",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "loading",
+          "public": "loading",
+          "binding": "prop",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "size",
+          "public": "size",
+          "binding": "prop",
+          "type": "ButtonSize",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonSize"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "md"
+        },
+        {
+          "canonical": "fullWidth",
+          "public": "fullWidth",
+          "binding": "prop",
+          "type": "boolean",
+          "typeContract": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": false
+        },
+        {
+          "canonical": "type",
+          "public": "type",
+          "binding": "prop",
+          "type": "ButtonType",
+          "typeContract": {
+            "kind": "string",
+            "typeName": "ButtonType"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": "button"
+        },
+        {
+          "canonical": "name",
+          "public": "name",
+          "binding": "prop",
+          "type": "string",
+          "typeContract": {
+            "kind": "string",
+            "nullable": true
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": null
+        },
+        {
+          "canonical": "value",
+          "public": "value",
+          "binding": "prop",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        },
+        {
+          "canonical": "action",
+          "public": "action",
+          "binding": "prop",
+          "type": "string",
+          "typeContract": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "readOnly": false,
+          "controlled": false,
+          "default": ""
+        }
+      ],
+      "events": [
+        {
+          "canonical": "vf-action",
+          "public": "action",
+          "mode": "emit",
+          "detail": "detail",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true,
+          "detailFields": [
+            {
+              "name": "action",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "value",
+              "type": "unknown",
+              "required": false
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "canonical": "default",
+          "public": "default",
+          "mode": "slot",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "prefix",
+          "public": "prefix",
+          "mode": "slot",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        },
+        {
+          "canonical": "suffix",
+          "public": "suffix",
+          "mode": "slot",
+          "required": false,
+          "multiple": true,
+          "content": "any"
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        },
+        {
+          "name": "click",
+          "async": false,
+          "parameters": [],
+          "returns": "void"
+        }
+      ],
+      "accessibility": [
+        "native button semantics",
+        "disabled/loading state",
+        "accessible name"
+      ],
+      "adapter": {
+        "kind": "vue-facade",
+        "canonicalRenderer": "@vyrnforge/ui-elements",
+        "vModel": {
+          "enabled": false,
+          "mode": "none"
+        },
+        "refMode": "template-ref"
+      }
+    }
+  }
+}

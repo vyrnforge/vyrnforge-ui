@@ -649,6 +649,17 @@
   ],
   "vyrnforge": {
     "namespace": "vf-",
+    "generated": {
+      "editable": false,
+      "generator": "scripts/generate-ui-elements-manifest.mjs",
+      "command": "npm run generate:custom-elements",
+      "sources": [
+        "docs/metadata/component-contracts.json",
+        "packages/ui-elements/src/registry.ts",
+        "docs/metadata/framework-exceptions.json",
+        "docs/metadata/components.json"
+      ]
+    },
     "registration": {
       "explicitEntryPoint": "@vyrnforge/ui-elements/register",
       "registerAll": "registerVyrnForgeElements",

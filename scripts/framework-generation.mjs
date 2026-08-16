@@ -15,6 +15,8 @@ export const FRAMEWORK_GENERATION_TASKS = Object.freeze([
   "MFD-1108",
   "MFD-1109",
   "MFD-1110",
+  "MFD-1111",
+  "MFD-1112",
 ]);
 
 export class FrameworkGenerationError extends Error {
@@ -376,6 +378,7 @@ export function deriveCanonicalNativeTags(contracts) {
     }
     tags.add(tag);
   }
+
   return [...tags].sort(compareText);
 }
 
