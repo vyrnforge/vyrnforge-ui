@@ -179,7 +179,9 @@ function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
       .map((file) => readFileSync(path.join(assetsDirectory, file), "utf8"))
       .join("\n");
     if (
-      releaseGroup.packages.some((packageInfo) => packageInfo.policies?.hasCss) &&
+      releaseGroup.packages.some(
+        (packageInfo) => packageInfo.policies?.hasCss,
+      ) &&
       cssText.length === 0
     ) {
       throw new Error(
