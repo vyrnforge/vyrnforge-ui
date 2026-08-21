@@ -418,7 +418,8 @@ export const docsRoutes: DocsRoute[] = [
     id: "ui-behaviors",
     title: "ui-behaviors",
     group: "Packages",
-    description: "Framework-neutral controllers and reusable interaction behavior.",
+    description:
+      "Framework-neutral controllers and reusable interaction behavior.",
     sourcePath: "docs/packages/ui-behaviors.md",
     aiPurpose: "Use this before changing portable component behavior.",
     tags: ["package", "ui-behaviors"],
