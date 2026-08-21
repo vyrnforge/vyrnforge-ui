@@ -1,0 +1,81 @@
+name: S11 consumer verifier repair
+
+on:
+  push:
+    branches:
+      - s11-framework-generation-foundation
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s11-framework-generation-foundation
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Align consumer verifier with canonical event ownership
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          verifier = Path('scripts/verify-consumer-foundations.mjs')
+          text = verifier.read_text()
+          text = text.replace(
+              'import { currentConsumerBatch } from "./consumer-batch-progression.mjs";\n',
+              'import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";\nimport { currentConsumerBatch } from "./consumer-batch-progression.mjs";\n',
+          )
+          text = text.replace(
+              'function collectRegistryDefinitions(text) {\n',
+              'function sameStringSet(left, right) {\n  return (\n    JSON.stringify([...left].sort()) === JSON.stringify([...right].sort())\n  );\n}\n\nfunction collectRegistryDefinitions(text) {\n',
+          )
+          old = '''  const canonicalEventNames = collectCanonicalEventNames(eventsText);\n  if (canonicalEventNames.length === 0) {\n    addFailure(failures, "canonical event detail map is missing or empty");\n  } else if (\n    JSON.stringify(manifest.vyrnforge?.eventVocabulary ?? []) !==\n    JSON.stringify(canonicalEventNames)\n  ) {\n    addFailure(\n      failures,\n      "custom-elements.json event vocabulary must match the canonical event detail map",\n    );\n  }\n'''
+          new = '''  const contracts = loadCanonicalComponentContracts({ root });\n  const canonicalContractEventNames = contracts.events.map((event) => event.name);\n  const typedEventNames = collectCanonicalEventNames(eventsText);\n  if (typedEventNames.length === 0) {\n    addFailure(failures, "canonical event detail map is missing or empty");\n  } else if (!sameStringSet(typedEventNames, canonicalContractEventNames)) {\n    addFailure(\n      failures,\n      "canonical event detail map must cover canonical contract event vocabulary",\n    );\n  }\n  if (\n    JSON.stringify(manifest.vyrnforge?.eventVocabulary ?? []) !==\n    JSON.stringify(canonicalContractEventNames)\n  ) {\n    addFailure(\n      failures,\n      "custom-elements.json event vocabulary must match canonical component contracts",\n    );\n  }\n'''
+          if old not in text:
+              raise SystemExit('expected consumer verifier event block was not found')
+          verifier.write_text(text.replace(old, new))
+
+          test_file = Path('scripts/verify-consumer-foundations.test.mjs')
+          test_text = test_file.read_text().replace(
+              'event vocabulary must match the canonical event detail map',
+              'event vocabulary must match canonical component contracts',
+          )
+          insertion = '''\n\ntest("rejects typed event maps that diverge from canonical contracts", () => {\n  withRepositoryFixture(\n    (root) => {\n      const eventsPath = path.join(root, "packages/ui-elements/src/events.ts");\n      const eventsText = readFileSync(eventsPath, "utf8");\n      writeFileSync(\n        eventsPath,\n        eventsText.replace(\n          '  readonly "vf-confirm": VyrnForgeConfirmDetail;\\n',\n          "",\n        ),\n      );\n    },\n    (root) => {\n      assert(\n        verifyConsumerFoundations({ root }).some((failure) =>\n          failure.includes(\n            "canonical event detail map must cover canonical contract event vocabulary",\n          ),\n        ),\n      );\n    },\n  );\n});\n'''
+          marker = '\n\ntest("rejects a React dependency in the native package", () => {'
+          if marker not in test_text:
+              raise SystemExit('expected consumer verifier test marker was not found')
+          test_file.write_text(test_text.replace(marker, insertion + marker))
+          PY
+          npx prettier --write \
+            scripts/verify-consumer-foundations.mjs \
+            scripts/verify-consumer-foundations.test.mjs
+
+      - name: Validate focused consumer contract
+        run: node --test scripts/verify-consumer-foundations.test.mjs
+
+      - name: Commit verifier repair
+        run: |
+          rm .github/workflows/_s11-consumer-verifier-repair.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            scripts/verify-consumer-foundations.mjs \
+            scripts/verify-consumer-foundations.test.mjs \
+            .github/workflows/_s11-consumer-verifier-repair.yml
+          git commit -m "fix: align consumer event verification with canonical contracts"
+          git push origin HEAD:s11-framework-generation-foundation
