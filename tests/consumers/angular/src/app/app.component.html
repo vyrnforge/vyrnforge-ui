@@ -37,7 +37,7 @@
         formControlName="owner"
         label="Reactive owner"
         name="reactiveOwner"
-        required
+        [required]="true"
         (valueChange)="handleGeneratedTextInputValue($event)"
       ></vf-text-input>
 
