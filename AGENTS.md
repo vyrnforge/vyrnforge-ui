@@ -6,11 +6,11 @@ VyrnForge UI is a native-first, dependency-minimal enterprise UI foundation.
 
 Packages:
 
-- `@vyrnforge/ui-core` â€” framework-neutral design foundation;
-- `@vyrnforge/ui-behaviors` â€” framework-neutral controllers and behavior;
-- `@vyrnforge/ui-components` â€” first-class React renderer;
-- `@vyrnforge/ui-elements` â€” first-class native HTML Custom Element renderer;
-- `@vyrnforge/ui-data-grid` â€” specialized React data grid on an independent
+- `@vyrnforge/ui-core` — framework-neutral design foundation;
+- `@vyrnforge/ui-behaviors` — framework-neutral controllers and behavior;
+- `@vyrnforge/ui-components` — first-class React renderer;
+- `@vyrnforge/ui-elements` — first-class native HTML Custom Element renderer;
+- `@vyrnforge/ui-data-grid` — specialized React data grid on an independent
   alpha track.
 
 Do not treat this repository as only a data-grid project.
@@ -79,6 +79,10 @@ verified consumers of `@vyrnforge/ui-elements` through thin framework
 integrations. Do not create independent Angular/Vue component libraries or
 resume broad multi-framework grid work without an approved requirement.
 
+Accepted target architecture may describe future first-class framework packages.
+Keep future target state distinct from what current package manifests and release
+metadata actually implement.
+
 ## Validation
 
 Use targeted checks while implementing. The normal root command surface is:
@@ -99,10 +103,17 @@ permission boundaries.
 
 When public behavior changes, update the canonical API/package docs and
 structured metadata that own that behavior. Do not hand-maintain duplicate
-component lists.
+component lists, route inventories, or machine-readable copies of information
+already owned elsewhere.
 
-If documentation is replaced, archive it under
-`docs/archive/<yyyy-mm-topic>/` with a replacement note.
+Follow `docs/governance/02-document-lifecycle.md` when replacing documentation.
+Archive material only when it retains audit, migration, regression, or
+architectural value. Delete obsolete one-time prompts, task instructions,
+reproducible copies, and duplicate guidance when they have no continuing value.
+
+Before deleting or moving a document, check repository references and
+`apps/docs/src/docsRegistry.ts` so the documentation build is not left with a
+stale import.
 
 ## Licensing
 

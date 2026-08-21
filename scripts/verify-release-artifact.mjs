@@ -49,7 +49,8 @@ function lockedVersion(lockfile, packageName) {
 
 function consumerSource(releaseGroup) {
   const imports = releaseGroup.packages.map(
-    (packageInfo, index) => `import * as package${index} from "${packageInfo.name}";`,
+    (packageInfo, index) =>
+      `import * as package${index} from "${packageInfo.name}";`,
   );
   const cssImports = releaseGroup.packages
     .filter((packageInfo) => packageInfo.policies?.hasCss === true)
@@ -60,12 +61,7 @@ function consumerSource(releaseGroup) {
   return [...imports, ...cssImports, "", ...references, ""].join("\n");
 }
 
-function verifyConsumer({
-  releaseGroupId,
-  artifactManifest,
-  artifactDir,
-  releaseGroup,
-}) {
+function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
   const lockfile = JSON.parse(
     readFileSync(path.join(repositoryRoot, "package-lock.json"), "utf8"),
   );
@@ -183,7 +179,9 @@ function verifyConsumer({
       .map((file) => readFileSync(path.join(assetsDirectory, file), "utf8"))
       .join("\n");
     if (
-      releaseGroup.packages.some((packageInfo) => packageInfo.policies?.hasCss) &&
+      releaseGroup.packages.some(
+        (packageInfo) => packageInfo.policies?.hasCss,
+      ) &&
       cssText.length === 0
     ) {
       throw new Error(
@@ -230,7 +228,6 @@ if (failures.length) {
 
 if (!skipConsumer) {
   verifyConsumer({
-    releaseGroupId,
     artifactManifest,
     artifactDir,
     releaseGroup,

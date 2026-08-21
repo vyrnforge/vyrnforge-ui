@@ -6,11 +6,15 @@ VyrnForge documentation should have one current source of truth per topic.
 Reader-facing entrypoints link to canonical documents rather than repeating
 their full content.
 
+The documentation system itself is described in
+[Documentation System](../engineering/documentation-system.md).
+
 ## Canonical ownership
 
 | Topic                                                      | Canonical source                                      |
 | ---------------------------------------------------------- | ----------------------------------------------------- |
 | Documentation entrypoint                                   | `docs/README.md`                                      |
+| Documentation organization and docs-app ownership          | `docs/engineering/documentation-system.md`            |
 | Project identity                                           | `docs/governance/01-project-source-of-truth.md`       |
 | Package boundaries                                         | `docs/architecture/01-package-boundaries.md`          |
 | State ownership                                            | `docs/architecture/02-state-and-adapter-ownership.md` |
@@ -37,15 +41,22 @@ another version.
 
 Normal usage, architecture, package, and release docs describe current behavior.
 Completed sprint narratives, gate-closure reports, old audits, and
-release-specific evidence belong under clearly marked historical/evidence
-areas.
+release-specific evidence belong under clearly marked historical/evidence areas
+only when they retain audit, migration, regression, or architectural value.
 
 Historical evidence never overrides current guidance.
 
-### Archive replaced guidance
+### Retain history intentionally
 
-When a document is replaced rather than updated, move it under
-`docs/archive/<yyyy-mm-topic>/`, add an archive note, and link the replacement.
+Git history is the fallback history for ordinary documentation changes. Do not
+archive every replaced file by default.
+
+Archive replaced guidance when the old material has continuing value for audit
+evidence, migrations, regressions, or architectural context. Delete obsolete
+one-time prompts, task instructions, reproducible copies, and duplicate guidance
+when they have no continuing value.
+
+See [Document Lifecycle](02-document-lifecycle.md) for the retention rules.
 
 ### Keep generated catalogs generated
 
@@ -53,20 +64,33 @@ Component lists and framework-reference views must derive from canonical
 metadata. Do not hand-maintain the same component/status table in the README,
 roadmap, package docs, API index, and metadata.
 
+### Keep executable inventories executable
+
+When code already owns a current inventory or mapping, documentation should
+explain the durable contract and link to the implementation rather than copy the
+inventory into Markdown. For example, documentation routes and source mappings
+are owned by `apps/docs/src/docsRegistry.ts`.
+
 ### Human and machine-readable sources must agree
 
 Markdown owns human-readable decisions. Structured metadata supports
 verification, generated docs, and AI lookup and must stay aligned with those
 decisions.
 
+Agent-facing files should remain concise pointers and implementation guardrails;
+they should not become a second architecture manual.
+
 ## Important document lifecycle
 
 Stable or canonical documents should state their purpose, scope, non-goals where
 needed, and related sources. See [Document Lifecycle](02-document-lifecycle.md)
-for archive and replacement rules.
+for retention, archive, replacement, and deletion rules.
 
 ## Verification
 
 `npm run verify:documentation-current` checks primary guidance for stale release
 channels, hardcoded prerelease versions, obsolete project-state language, and
 reader-entrypoint structure.
+
+Documentation application changes should also preserve a successful docs build
+because `apps/docs` imports repository documentation directly.

@@ -90,7 +90,7 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
     }
   }
 
-  for (const [releaseLineId, releaseLine] of getReleaseLineEntries(manifest)) {
+  for (const [, releaseLine] of getReleaseLineEntries(manifest)) {
     for (const packageInfo of releaseLine.packages) {
       const packageJsonPath = path.join(packageInfo.directory, "package.json");
       if (!existsSync(path.join(root, packageJsonPath))) {
@@ -103,7 +103,9 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
         failures.push(`${packageJsonPath}: package name mismatch`);
       }
       if (packageJson.private === true) {
-        failures.push(`${packageInfo.name}: release package must be publishable`);
+        failures.push(
+          `${packageInfo.name}: release package must be publishable`,
+        );
       }
       if (packageJson.version !== releaseLine.version) {
         failures.push(
@@ -200,7 +202,9 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
       for (const [dependencyName, dependencyVersion] of Object.entries(
         packageInfo.dependencies ?? {},
       )) {
-        if (lockedPackage.dependencies?.[dependencyName] !== dependencyVersion) {
+        if (
+          lockedPackage.dependencies?.[dependencyName] !== dependencyVersion
+        ) {
           failures.push(
             `package-lock.json: ${packageInfo.name} ${dependencyName} must be ${dependencyVersion}`,
           );
