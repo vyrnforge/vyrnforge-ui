@@ -2,14 +2,14 @@
 
 ## Lifecycle states
 
-| State | Use when | Action |
-| --- | --- | --- |
-| Draft | New idea or incomplete plan | Keep close to the active proposal or work item; do not present it as canonical. |
-| Proposed | Needs review but has clear structure | Link from current planning only when it is actively being considered. |
-| Stable | Accepted as current direction | Link from the appropriate canonical index or owner. |
-| Deprecated | Still needed during a migration or compatibility period | Mark the replacement and expected removal conditions. |
-| Archived | Historical material with continuing evidence or context value | Move under `docs/archive/` and clearly mark the replacement. |
-| Deleted | Obsolete material with no continuing repository value | Remove it; Git history remains the recovery path. |
+| State      | Use when                                                      | Action                                                                          |
+| ---------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Draft      | New idea or incomplete plan                                   | Keep close to the active proposal or work item; do not present it as canonical. |
+| Proposed   | Needs review but has clear structure                          | Link from current planning only when it is actively being considered.           |
+| Stable     | Accepted as current direction                                 | Link from the appropriate canonical index or owner.                             |
+| Deprecated | Still needed during a migration or compatibility period       | Mark the replacement and expected removal conditions.                           |
+| Archived   | Historical material with continuing evidence or context value | Move under `docs/archive/` and clearly mark the replacement.                    |
+| Deleted    | Obsolete material with no continuing repository value         | Remove it; Git history remains the recovery path.                               |
 
 ## Retention decision
 
