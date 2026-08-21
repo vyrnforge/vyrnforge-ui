@@ -107,6 +107,24 @@ if (newOrChanged.length > 0 || stale.length > 0) {
   if (newOrChanged.length > 0) {
     console.error("New or changed files do not satisfy Prettier:");
     for (const file of newOrChanged) console.error(`  - ${file}`);
+
+    if (process.env.CI) {
+      const diagnostic = spawnSync(
+        process.execPath,
+        [prettierCli, "--write", ...newOrChanged, "--color=false"],
+        {
+          cwd: root,
+          encoding: "utf8",
+        },
+      );
+      if (diagnostic.status === 0) {
+        for (const file of newOrChanged) {
+          console.error(`--- PRETTIER OUTPUT: ${file} ---`);
+          console.error(readFileSync(path.join(root, file), "utf8"));
+          console.error(`--- END PRETTIER OUTPUT: ${file} ---`);
+        }
+      }
+    }
   }
   if (stale.length > 0) {
     console.error("Formatting baseline contains stale entries:");
