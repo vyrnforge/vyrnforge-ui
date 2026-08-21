@@ -3,6 +3,7 @@ import path from "node:path";
 
 export const activeContractTests = [
   "test:canonical-contracts",
+  "test:framework-generation",
   "test:ci-scope",
   "test:package-boundaries",
   "test:component-metadata",
@@ -30,6 +31,7 @@ export const activeContractTests = [
   "test:templates",
   "test:documentation-current",
   "test:validation-model",
+  "test:generated-framework-artifacts",
 ];
 
 export const historicalEvidenceTests = [
