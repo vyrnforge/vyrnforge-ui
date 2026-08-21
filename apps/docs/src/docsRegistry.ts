@@ -1,6 +1,7 @@
 import docsIndex from "../../../docs/README.md?raw";
 import sourceOfTruth from "../../../docs/governance/01-project-source-of-truth.md?raw";
 import aiUsageGuide from "../../../.ai/DOC_USAGE_GUIDE.md?raw";
+import documentationSystem from "../../../docs/engineering/documentation-system.md?raw";
 import systemOverview from "../../../docs/architecture/00-system-overview.md?raw";
 import packageBoundaries from "../../../docs/architecture/01-package-boundaries.md?raw";
 import stateAndAdapters from "../../../docs/architecture/02-state-and-adapter-ownership.md?raw";
@@ -39,11 +40,6 @@ import apiUiDataGrid from "../../../docs/api/ui-data-grid-api.md?raw";
 import apiCssTokens from "../../../docs/api/css-token-reference.md?raw";
 import apiCssClasses from "../../../docs/api/css-class-reference.md?raw";
 import apiPublicVsInternal from "../../../docs/api/public-vs-internal-api.md?raw";
-import docsAppSpec from "../../../docs/react-docs/00-react-docs-app-spec.md?raw";
-import routeMap from "../../../docs/react-docs/01-route-map.md?raw";
-import exampleStandards from "../../../docs/react-docs/02-example-standards.md?raw";
-import aiReadableDocs from "../../../docs/react-docs/03-ai-readable-docs.md?raw";
-import aiDocumentationStrategy from "../../../docs/ai/00-ai-documentation-strategy.md?raw";
 import aiContext from "../../../.ai/AI_CONTEXT.md?raw";
 import agents from "../../../AGENTS.md?raw";
 import repoMap from "../../../.ai/REPO_MAP.md?raw";
@@ -117,6 +113,19 @@ export const docsRoutes: DocsRoute[] = [
     aiPurpose: "Use this before changing documentation.",
     tags: ["ai", "docs"],
     content: aiUsageGuide,
+  },
+  {
+    id: "documentation-system",
+    title: "Documentation System",
+    group: "Start Here",
+    description:
+      "Canonical documentation ownership, lifecycle, docs application, and AI source-of-truth rules.",
+    sourcePath: "docs/engineering/documentation-system.md",
+    aiPurpose:
+      "Use this before adding, moving, consolidating, or deleting documentation.",
+    tags: ["canonical", "documentation", "governance"],
+    canonical: true,
+    content: documentationSystem,
   },
   {
     id: "system-overview",
@@ -409,11 +418,10 @@ export const docsRoutes: DocsRoute[] = [
     id: "ui-behaviors",
     title: "ui-behaviors",
     group: "Packages",
-    description: "Planned framework-neutral controller and state boundary.",
+    description: "Framework-neutral controllers and reusable interaction behavior.",
     sourcePath: "docs/packages/ui-behaviors.md",
-    aiPurpose:
-      "Use this before extracting portable component behavior from React.",
-    tags: ["package", "ui-behaviors", "planned"],
+    aiPurpose: "Use this before changing portable component behavior.",
+    tags: ["package", "ui-behaviors"],
     canonical: true,
     content: uiBehaviorsDoc,
   },
@@ -432,11 +440,11 @@ export const docsRoutes: DocsRoute[] = [
     id: "ui-elements",
     title: "ui-elements",
     group: "Packages",
-    description: "Planned native Custom Element renderer boundary.",
+    description: "Native Custom Element renderer and form/event integration.",
     sourcePath: "docs/packages/ui-elements.md",
     aiPurpose:
-      "Use this before implementing native elements or framework consumer adapters.",
-    tags: ["package", "ui-elements", "custom-elements", "planned"],
+      "Use this before changing native elements or verified framework consumer integrations.",
+    tags: ["package", "ui-elements", "custom-elements"],
     canonical: true,
     content: uiElementsDoc,
   },
@@ -703,56 +711,6 @@ export const docsRoutes: DocsRoute[] = [
     content: metadataAiUsageRules,
   },
   {
-    id: "docs-app-spec",
-    title: "Docs App Spec",
-    group: "React Docs",
-    description: "Specification for the human-facing docs app.",
-    sourcePath: "docs/react-docs/00-react-docs-app-spec.md",
-    aiPurpose: "Use this before changing the docs app.",
-    tags: ["react-docs"],
-    content: docsAppSpec,
-  },
-  {
-    id: "route-map",
-    title: "Route Map",
-    group: "React Docs",
-    description: "Required route structure.",
-    sourcePath: "docs/react-docs/01-route-map.md",
-    aiPurpose: "Use this to align docs navigation.",
-    tags: ["react-docs", "routes"],
-    content: routeMap,
-  },
-  {
-    id: "example-standards",
-    title: "Example Standards",
-    group: "React Docs",
-    description: "Rules for examples, snippets, and use-case pages.",
-    sourcePath: "docs/react-docs/02-example-standards.md",
-    aiPurpose: "Use this before adding docs examples.",
-    tags: ["react-docs", "examples"],
-    content: exampleStandards,
-  },
-  {
-    id: "ai-readable-docs",
-    title: "AI-Readable Docs",
-    group: "React Docs",
-    description: "How docs expose machine-readable context.",
-    sourcePath: "docs/react-docs/03-ai-readable-docs.md",
-    aiPurpose: "Use this before adding AI-facing docs metadata.",
-    tags: ["react-docs", "ai"],
-    content: aiReadableDocs,
-  },
-  {
-    id: "ai-documentation-strategy",
-    title: "AI Documentation Strategy",
-    group: "AI",
-    description: "Strategy for AI-readable VyrnForge UI docs.",
-    sourcePath: "docs/ai/00-ai-documentation-strategy.md",
-    aiPurpose: "Use this to keep AI docs useful and non-duplicative.",
-    tags: ["ai", "docs"],
-    content: aiDocumentationStrategy,
-  },
-  {
     id: "agent-rules",
     title: "Agent Rules",
     group: "AI",
@@ -789,10 +747,10 @@ export const docsRoutes: DocsRoute[] = [
     id: "component-map",
     title: "Component Map",
     group: "AI",
-    description: "Machine-readable component map.",
+    description: "AI navigation map to canonical repository metadata.",
     sourcePath: ".ai/COMPONENT_MAP.json",
-    aiPurpose: "Use this as structured component metadata.",
-    tags: ["ai", "json", "components"],
+    aiPurpose: "Use this to locate canonical package and component metadata.",
+    tags: ["ai", "json", "navigation"],
     kind: "json",
     content: componentMapJson,
   },
@@ -831,7 +789,6 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["packages", "reference"],
     kind: "package-reference",
   },
-
   {
     id: "gmf4-compatibility-gate",
     title: "GMF4 Compatibility Gate",
@@ -864,12 +821,13 @@ export const docsRoutes: DocsRoute[] = [
 export const docsGroups = [
   "Start Here",
   "Architecture",
+  "Testing",
+  "Quality",
   "Roadmap",
   "Release",
   "Packages",
   "API Reference",
   "Metadata",
-  "React Docs",
   "AI",
 ];
 
