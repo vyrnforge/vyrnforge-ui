@@ -1,0 +1,62 @@
+name: S11 finalize merge-ref validation
+
+on:
+  push:
+    branches:
+      - s11-framework-generation-foundation
+    paths:
+      - .github/workflows/_s11-finalize-merge-validation.yml
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout PR merge tree
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: refs/pull/127/merge
+          fetch-depth: 0
+
+      - name: Generate inventory for final merge tree
+        shell: bash
+        run: |
+          rm -f .github/workflows/_s11-finalize-merge-validation.yml
+          npm ci
+          npm run inventory:repository
+          npm run verify:repository-inventory
+          cp docs/governance/repository-inventory.md "$RUNNER_TEMP/repository-inventory.md"
+
+      - name: Commit final inventory and remove one-shot workflow
+        shell: bash
+        run: |
+          git fetch origin s11-framework-generation-foundation
+          git checkout -B s11-framework-generation-foundation origin/s11-framework-generation-foundation
+          cp "$RUNNER_TEMP/repository-inventory.md" docs/governance/repository-inventory.md
+          rm -f .github/workflows/_s11-finalize-merge-validation.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- docs/governance/repository-inventory.md .github/workflows/_s11-finalize-merge-validation.yml
+          if git diff --cached --quiet; then
+            echo "No final inventory change required."
+          else
+            git commit -m "docs: align S11 inventory with PR merge tree"
+            git push origin HEAD:s11-framework-generation-foundation
+          fi
+
+      - name: Dispatch full VyrnForge CI on final head
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/vyrnforge/vyrnforge-ui/actions/workflows/ci.yml/dispatches \
+            --data '{"ref":"s11-framework-generation-foundation"}'
