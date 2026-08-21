@@ -90,7 +90,7 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
     }
   }
 
-  for (const [releaseLineId, releaseLine] of getReleaseLineEntries(manifest)) {
+  for (const [, releaseLine] of getReleaseLineEntries(manifest)) {
     for (const packageInfo of releaseLine.packages) {
       const packageJsonPath = path.join(packageInfo.directory, "package.json");
       if (!existsSync(path.join(root, packageJsonPath))) {
