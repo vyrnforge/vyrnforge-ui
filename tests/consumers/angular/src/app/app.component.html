@@ -32,11 +32,13 @@
       (submit)="$event.preventDefault()"
     >
       <vf-text-input
+        vfGeneratedTextInput
         vfFormControl
         formControlName="owner"
         label="Reactive owner"
         name="reactiveOwner"
         required
+        (valueChange)="handleGeneratedTextInputValue($event)"
       ></vf-text-input>
 
       <div class="vf-consumer-angular-actions">
