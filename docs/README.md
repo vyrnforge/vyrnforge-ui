@@ -102,19 +102,21 @@ historical sprint or gate identifiers.
 
 ## Historical evidence
 
-Historical and evidence-heavy material remains available for audits,
-regressions, release review, and architectural context, but it does not override
-current canonical guidance.
+Historical and evidence-heavy material that meets the document-retention policy
+remains available for audits, regressions, release review, and architectural
+context, but it does not override current canonical guidance.
 
 | Area                                   | Purpose                                                                                              |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [archive/](archive/)                   | Replaced planning and documentation preserved for historical context.                                |
 | [quality/](quality/)                   | Quality audits, closure records, visual evidence, accessibility evidence, and stabilization reports. |
 | [testing/](testing/)                   | Detailed compatibility, browser, consumer, and framework verification contracts.                     |
 | [metadata/](metadata/)                 | Structured contracts, generated evidence state, release groups, and closure records.                 |
 | [release/evidence/](release/evidence/) | Release-specific evidence retained by policy.                                                        |
 
-Archived documents never override active documentation.
+Retained historical evidence never overrides active documentation. Obsolete
+material with no continuing repository value is removed according to
+[Document Lifecycle](governance/02-document-lifecycle.md); Git history remains
+the recovery path.
 
 AI and automation context lives in [AGENTS.md](../AGENTS.md) and the
 [.ai/](../.ai/) directory. Those files point back to the same canonical
