@@ -2,6 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 export const activeContractTests = [
+  "test:canonical-contracts",
   "test:ci-scope",
   "test:package-boundaries",
   "test:component-metadata",
@@ -9,11 +10,13 @@ export const activeContractTests = [
   "test:release-groups",
   "test:beta-package-contract",
   "test:beta-package-size-budgets",
+  "test:release-size-budgets",
   "test:compatibility-release-matrix",
   "test:security-workflow-hardening",
   "test:trusted-publishing-provenance",
   "test:trusted-publishing-dry-run",
   "test:release-artifact",
+  "test:release-dry-run",
   "test:multi-framework",
   "test:behavior-foundations",
   "test:component-maturity",
