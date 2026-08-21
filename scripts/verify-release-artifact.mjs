@@ -49,7 +49,8 @@ function lockedVersion(lockfile, packageName) {
 
 function consumerSource(releaseGroup) {
   const imports = releaseGroup.packages.map(
-    (packageInfo, index) => `import * as package${index} from "${packageInfo.name}";`,
+    (packageInfo, index) =>
+      `import * as package${index} from "${packageInfo.name}";`,
   );
   const cssImports = releaseGroup.packages
     .filter((packageInfo) => packageInfo.policies?.hasCss === true)
@@ -178,8 +179,9 @@ function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
       .map((file) => readFileSync(path.join(assetsDirectory, file), "utf8"))
       .join("\n");
     if (
-      releaseGroup.packages.some((packageInfo) => packageInfo.policies?.hasCss) &&
-      cssText.length === 0
+      releaseGroup.packages.some(
+        (packageInfo) => packageInfo.policies?.hasCss,
+      ) && cssText.length === 0
     ) {
       throw new Error(
         "release-artifact consumer did not bundle declared package CSS",
