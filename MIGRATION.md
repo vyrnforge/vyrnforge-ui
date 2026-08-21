@@ -1,57 +1,31 @@
 # Migration Guide
 
-## 0.x Versions
+VyrnForge is still in the `0.x` release line. Until `1.0.0`, breaking changes may occur in minor releases while public contracts are finalized.
 
-The `0.x` API is unstable while VyrnForge UI and the Universal Data Grid contract are being shaped.
+Consumers should pin exact versions during beta adoption and review the changelog and release notes before upgrading.
 
-Breaking changes may happen in minor releases before `1.0.0`, including changes to:
+## Canonical migration guidance
 
-- public TypeScript types
-- component props
-- state shape
-- core helper signatures
-- CSS class names and variables
-
-Consumers should pin exact versions during `0.x` adoption and review the changelog before upgrading.
-
-## Multi-Framework Beta Migration
-
-The canonical React, Native HTML, Angular, and Vue migration and limitations guide is:
+For React, Native HTML, Angular, and Vue migration guidance, supported integration boundaries, and current limitations, use:
 
 ```text
 docs/release/multi-framework-migration-and-limitations.md
 ```
 
-Use it to choose React components versus native elements, apply the verified Angular Forms and Vue `v-model` adapter boundaries, and understand the current SSR, mobile-native, and data-grid exclusions.
+For deprecation timelines, compatibility expectations, and public API removal policy, use:
 
-## Native-First Direction
-
-This package is intentionally native-first and lightweight. It does not depend on MUI, TanStack Table, TanStack Virtual, Redux, RTK Query, or other runtime frameworks.
-
-Future migrations should preserve this direction unless a heavier dependency has a clear, documented justification.
-
-## Early Namespace Alignment
-
-Early local scaffolding used the placeholder package name `@your-org/ui-data-grid`.
-
-The current package name uses the legacy `@vyrnforge/*` npm scope. This scope is intentionally unchanged until BR-006:
-
-```txt
-@vyrnforge/ui-data-grid
+```text
+docs/release/deprecation-and-migration-policy.md
 ```
 
-Update imports and CSS imports accordingly:
+For package versions and prerelease compatibility rules, use:
 
-Before:
-
-```tsx
-import { UniversalDataGrid } from "@your-org/ui-data-grid";
-import "@your-org/ui-data-grid/style.css";
+```text
+docs/release/versioning-policy.md
 ```
 
-After:
+## Architecture constraints
 
-```tsx
-import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
-import "@vyrnforge/ui-data-grid/style.css";
-```
+Migrations must preserve VyrnForge's shared design system and framework-independent foundations. React and native HTML are first-class web targets; Angular and Vue consume the verified Custom Element foundation unless a future accepted architecture decision introduces a first-class framework package.
+
+VyrnForge remains dependency-minimal and store-agnostic. Do not introduce application state-management or heavyweight UI-framework dependencies into shared packages as part of a migration.
