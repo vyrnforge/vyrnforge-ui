@@ -67,6 +67,19 @@ function buildEntries(files) {
   return Object.fromEntries(files.map((file) => [file, hashFile(file)]));
 }
 
+function printFormattedFile(relativePath) {
+  const result = spawnSync(process.execPath, [prettierCli, relativePath], {
+    cwd: root,
+    encoding: "utf8",
+  });
+
+  if (result.status === 0) {
+    console.error(`--- Prettier output: ${relativePath} ---`);
+    console.error(result.stdout.trimEnd());
+    console.error(`--- End Prettier output: ${relativePath} ---`);
+  }
+}
+
 const unformattedFiles = listUnformattedFiles();
 
 if (writeBaseline) {
@@ -106,7 +119,10 @@ const stale = Object.keys(baseline.entries)
 if (newOrChanged.length > 0 || stale.length > 0) {
   if (newOrChanged.length > 0) {
     console.error("New or changed files do not satisfy Prettier:");
-    for (const file of newOrChanged) console.error(`  - ${file}`);
+    for (const file of newOrChanged) {
+      console.error(`  - ${file}`);
+      printFormattedFile(file);
+    }
   }
   if (stale.length > 0) {
     console.error("Formatting baseline contains stale entries:");
