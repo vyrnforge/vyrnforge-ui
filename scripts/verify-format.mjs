@@ -48,7 +48,9 @@ function listUnformattedFiles() {
     },
   );
 
-  if (result.error) throw result.error;
+  if (result.error) {
+    throw result.error;
+  }
   if (![0, 1].includes(result.status ?? -1)) {
     process.stderr.write(result.stderr ?? "");
     fail(`Prettier exited unexpectedly with status ${result.status}.`);
@@ -75,32 +77,22 @@ if (writeBaseline) {
     entries: buildEntries(unformattedFiles),
   };
   writeFileSync(baselinePath, `${JSON.stringify(baseline, null, 2)}\n`, "utf8");
-  console.log(`Wrote formatting baseline for ${unformattedFiles.length} legacy files.`);
+  console.log(
+    `Wrote formatting baseline for ${unformattedFiles.length} legacy files.`,
+  );
   process.exit(0);
 }
 
 if (!existsSync(baselinePath)) {
-  fail("Formatting baseline is missing. Run npm run format:baseline after reviewing legacy debt.");
+  fail(
+    "Formatting baseline is missing. Run npm run format:baseline after reviewing legacy debt.",
+  );
 }
 
 const baseline = JSON.parse(readFileSync(baselinePath, "utf8"));
 if (baseline.schemaVersion !== 1 || typeof baseline.entries !== "object") {
   fail("Formatting baseline has an unsupported schema.");
 }
-
-const retired = new Set([
-  "scripts/verify-release-artifact.mjs",
-  "scripts/verify-release-groups.mjs",
-]);
-const correctedBaseline = {
-  ...baseline,
-  entries: Object.fromEntries(
-    Object.entries(baseline.entries).filter(([file]) => !retired.has(file)),
-  ),
-};
-console.error(
-  `CORRECTED_BASELINE_BASE64=${Buffer.from(`${JSON.stringify(correctedBaseline, null, 2)}\n`, "utf8").toString("base64")}`,
-);
 
 const currentEntries = buildEntries(unformattedFiles);
 const newOrChanged = unformattedFiles.filter(
@@ -120,7 +112,9 @@ if (newOrChanged.length > 0 || stale.length > 0) {
     console.error("Formatting baseline contains stale entries:");
     for (const file of stale) console.error(`  - ${file}`);
   }
-  fail("Run npm run format on changed files, then regenerate the baseline only after review.");
+  fail(
+    "Run npm run format on changed files, then regenerate the baseline only after review.",
+  );
 }
 
 console.log(

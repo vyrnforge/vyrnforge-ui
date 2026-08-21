@@ -78,7 +78,10 @@ const applications = [
 ];
 const activeDocs = walk(
   "docs",
-  (file) => file.endsWith(".md") && !file.includes("/archive/"),
+  (file) =>
+    file.endsWith(".md") &&
+    !file.includes("/archive/") &&
+    !file.includes("/generated/"),
 );
 const archivedDocs = walk("docs/archive", (file) => file.endsWith(".md"));
 const workflows = walk(

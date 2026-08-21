@@ -316,8 +316,6 @@
     "scripts/verify-component-metadata.test.mjs": "d117a280d152695e0734f8fcf2f6dd2631e0e308be0332126c42544c5ab0fdb3",
     "scripts/verify-consumer-foundations-runtime.mjs": "38e78bd1009c7727aa8d4eb18d43a5c7422d1dd54751096d38c02f83521c98ec",
     "scripts/verify-documentation-current.mjs": "62f3ef8d05093d7512bbe72e44b043e1d484bc24bdf075cfc2503637dbbcb0e3",
-    "scripts/verify-release-artifact.mjs": "f3df5950873687bef941add72cb721c27ba0b68f4e14e861e261ae39e44fb332",
-    "scripts/verify-release-groups.mjs": "6aa584dca3bc0b77e47666855c0c0c8b19ace957f374f1265f1df2c8c378a578",
     "scripts/verify-release-groups.test.mjs": "ffd4f7b4419ac599852752b6321615bf6a4b8fa6e9b340479164dda745036fe5",
     "scripts/verify-release-size-budgets.mjs": "fdd975ed2b5aaf846018cf4dbeef6ac431550d04e3d25a3bf402a1180e875d86",
     "SECURITY.md": "6bee3168383b6e8f5079f3cd4ecba7143f3b5f900f4d4b0ac119269304cb4cb3",

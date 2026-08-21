@@ -28,9 +28,6 @@ try {
   const generated = normalize(readFileSync(generatedPath, "utf8"));
 
   if (committed !== generated) {
-    console.error(
-      `GENERATED_INVENTORY_BASE64=${Buffer.from(generated, "utf8").toString("base64")}`,
-    );
     throw new Error(
       "Repository inventory is stale. Run `npm run inventory:repository` and commit the generated documentation.",
     );
