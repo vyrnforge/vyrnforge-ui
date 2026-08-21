@@ -96,7 +96,9 @@ function App() {
     }
 
     if (ownerElement.value !== owner) {
-      throw new Error("React did not assign the generated text input value property.");
+      throw new Error(
+        "React did not assign the generated text input value property.",
+      );
     }
 
     document
@@ -116,7 +118,9 @@ function App() {
         variant="primary"
         onClick={(detail) => {
           if (detail.action !== "react-save") {
-            throw new Error("Generated React Button action mapping is invalid.");
+            throw new Error(
+              "Generated React Button action mapping is invalid.",
+            );
           }
           document
             .querySelector("[data-react-consumer]")

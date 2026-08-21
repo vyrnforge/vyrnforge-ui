@@ -1,9 +1,4 @@
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -24,7 +19,9 @@ function normalizeLineEndings(value) {
   return value.replace(/\r\n?/g, "\n");
 }
 
-export function buildFrameworkTextInputSliceArtifacts({ root = repositoryRoot } = {}) {
+export function buildFrameworkTextInputSliceArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const contracts = loadCanonicalComponentContracts({ root });
   const generationModel = createFrameworkGenerationModel(contracts);
   const model = createFrameworkTextInputSliceModel(generationModel);
@@ -34,7 +31,9 @@ export function buildFrameworkTextInputSliceArtifacts({ root = repositoryRoot } 
   };
 }
 
-export function writeFrameworkTextInputSliceArtifacts({ root = repositoryRoot } = {}) {
+export function writeFrameworkTextInputSliceArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const result = buildFrameworkTextInputSliceArtifacts({ root });
   for (const artifact of result.artifacts) {
     const outputPath = path.join(root, artifact.path);
@@ -44,7 +43,9 @@ export function writeFrameworkTextInputSliceArtifacts({ root = repositoryRoot } 
   return result;
 }
 
-export function verifyFrameworkTextInputSliceArtifacts({ root = repositoryRoot } = {}) {
+export function verifyFrameworkTextInputSliceArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const result = buildFrameworkTextInputSliceArtifacts({ root });
   const failures = [];
   for (const artifact of result.artifacts) {

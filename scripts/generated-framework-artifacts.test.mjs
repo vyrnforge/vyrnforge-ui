@@ -13,8 +13,14 @@ import {
 
 test("generated framework text comparison is deterministic across line endings", () => {
   assert.equal(generatedTextIsCurrent("alpha\nbeta\n", "alpha\nbeta\n"), true);
-  assert.equal(generatedTextIsCurrent("alpha\r\nbeta\r\n", "alpha\nbeta\n"), true);
-  assert.equal(generatedTextIsCurrent("alpha\nbeta\n", "alpha\ngamma\n"), false);
+  assert.equal(
+    generatedTextIsCurrent("alpha\r\nbeta\r\n", "alpha\nbeta\n"),
+    true,
+  );
+  assert.equal(
+    generatedTextIsCurrent("alpha\nbeta\n", "alpha\ngamma\n"),
+    false,
+  );
 });
 
 test("stale generated artifacts identify their canonical source records", () => {
@@ -76,6 +82,9 @@ test("generated framework artifact registry covers every S11 owned output", () =
     ].sort(),
   );
   for (const artifact of artifacts) {
-    assert(artifact.sourceRecords.length > 0, `${artifact.path}: missing source records`);
+    assert(
+      artifact.sourceRecords.length > 0,
+      `${artifact.path}: missing source records`,
+    );
   }
 });

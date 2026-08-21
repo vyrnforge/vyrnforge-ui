@@ -18,10 +18,9 @@ const save =
   );
 const tabs =
   document.querySelector<VyrnForgeElementForTagName<"vf-tabs">>("#native-tabs");
-const owner =
-  document.querySelector<VyrnForgeElementForTagName<"vf-text-input">>(
-    'vf-text-input[name="owner"]',
-  );
+const owner = document.querySelector<
+  VyrnForgeElementForTagName<"vf-text-input">
+>('vf-text-input[name="owner"]');
 const form = document.querySelector<HTMLFormElement>("#native-form");
 
 if (!root || !status || !save || !tabs || !owner || !form) {

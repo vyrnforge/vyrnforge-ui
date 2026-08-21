@@ -35,12 +35,18 @@ function runNpm(args) {
 }
 
 function readJson(filePath) {
-  assert(existsSync(filePath), `Button runtime evidence is missing ${filePath}`);
+  assert(
+    existsSync(filePath),
+    `Button runtime evidence is missing ${filePath}`,
+  );
   return JSON.parse(readFileSync(filePath, "utf8"));
 }
 
 function verifyMatrix(report) {
-  assert(report.status === "passed", "Button cross-framework matrix did not pass");
+  assert(
+    report.status === "passed",
+    "Button cross-framework matrix did not pass",
+  );
   assert(
     Array.isArray(report.consumers) && report.consumers.length === 4,
     "Button cross-framework matrix must record all four consumers",

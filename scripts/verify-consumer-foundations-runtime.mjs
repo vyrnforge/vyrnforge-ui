@@ -864,11 +864,9 @@ async function verifyBrowserFixture(browser, fixture) {
         "React did not assign the vf-tabs items property",
       );
       assert(
-        (
-          await page
-            .locator('vf-text-input[name="owner"] input')
-            .inputValue()
-        ) === "Operations",
+        (await page
+          .locator('vf-text-input[name="owner"] input')
+          .inputValue()) === "Operations",
         "React did not assign the vf-text-input value property",
       );
     } else if (fixture.id === "angular") {

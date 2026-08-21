@@ -1,9 +1,11 @@
 export const FRAMEWORK_TEXT_INPUT_COMPONENT_ID = "text-input";
 
 export const FRAMEWORK_TEXT_INPUT_ARTIFACT_PATHS = Object.freeze({
-  native: "tests/consumers/native-html/src/generated/vf-text-input.generated.ts",
+  native:
+    "tests/consumers/native-html/src/generated/vf-text-input.generated.ts",
   react: "tests/consumers/react/src/generated/TextInput.generated.tsx",
-  angular: "tests/consumers/angular/src/app/generated/vf-text-input.generated.ts",
+  angular:
+    "tests/consumers/angular/src/app/generated/vf-text-input.generated.ts",
   vue: "tests/consumers/vue/src/generated/VfTextInput.generated.ts",
 });
 
@@ -60,7 +62,10 @@ function assertRecord(record, framework) {
     `${framework}: TextInput must keep ${CANONICAL_RENDERER} as canonical renderer`,
   );
   if (framework === "native") {
-    assert(record.tag === "vf-text-input", "native: TextInput must target vf-text-input");
+    assert(
+      record.tag === "vf-text-input",
+      "native: TextInput must target vf-text-input",
+    );
   }
   for (const property of REQUIRED_PROPERTIES) {
     assert(

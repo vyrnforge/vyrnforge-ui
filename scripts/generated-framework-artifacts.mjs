@@ -1,9 +1,4 @@
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -65,7 +60,9 @@ function registerSliceArtifacts(artifacts, generator, command) {
   );
 }
 
-export function buildGeneratedFrameworkArtifacts({ root = repositoryRoot } = {}) {
+export function buildGeneratedFrameworkArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const native = buildNativeElementArtifacts({ root });
   const apiReference = buildFrameworkApiReference({ root });
   const button = buildFrameworkButtonSliceArtifacts({ root });
@@ -137,7 +134,9 @@ export function findStaleGeneratedFrameworkArtifacts(
   return failures.sort();
 }
 
-export function writeGeneratedFrameworkArtifacts({ root = repositoryRoot } = {}) {
+export function writeGeneratedFrameworkArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const artifacts = buildGeneratedFrameworkArtifacts({ root });
   for (const artifact of artifacts) {
     const outputPath = path.join(root, artifact.path);
@@ -147,7 +146,9 @@ export function writeGeneratedFrameworkArtifacts({ root = repositoryRoot } = {})
   return artifacts;
 }
 
-export function verifyGeneratedFrameworkArtifacts({ root = repositoryRoot } = {}) {
+export function verifyGeneratedFrameworkArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const artifacts = buildGeneratedFrameworkArtifacts({ root });
   const failures = findStaleGeneratedFrameworkArtifacts(artifacts, { root });
   if (failures.length > 0) throw new GeneratedFrameworkArtifactsError(failures);
