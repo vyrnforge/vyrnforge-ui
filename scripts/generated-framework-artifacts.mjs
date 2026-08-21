@@ -7,9 +7,8 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-  buildFrameworkButtonSliceArtifacts,
-} from "./generate-framework-button-slice.mjs";
+import { buildFrameworkButtonSliceArtifacts } from "./generate-framework-button-slice.mjs";
+import { buildFrameworkTextInputSliceArtifacts } from "./generate-framework-text-input-slice.mjs";
 import {
   FRAMEWORK_API_REFERENCE_PATH,
   buildFrameworkApiReference,
@@ -54,10 +53,23 @@ function freezeArtifact(record) {
   });
 }
 
+function registerSliceArtifacts(artifacts, generator, command) {
+  return artifacts.map((artifact) =>
+    freezeArtifact({
+      path: artifact.path,
+      generator,
+      command,
+      sourceRecords: artifact.sourceRecords,
+      content: artifact.content,
+    }),
+  );
+}
+
 export function buildGeneratedFrameworkArtifacts({ root = repositoryRoot } = {}) {
   const native = buildNativeElementArtifacts({ root });
   const apiReference = buildFrameworkApiReference({ root });
   const button = buildFrameworkButtonSliceArtifacts({ root });
+  const textInput = buildFrameworkTextInputSliceArtifacts({ root });
 
   return Object.freeze([
     freezeArtifact({
@@ -89,14 +101,15 @@ export function buildGeneratedFrameworkArtifacts({ root = repositoryRoot } = {})
       sourceRecords: ["component:*", "framework-exception:*"],
       content: serializeFrameworkApiReference(apiReference),
     }),
-    ...button.artifacts.map((artifact) =>
-      freezeArtifact({
-        path: artifact.path,
-        generator: "scripts/generate-framework-button-slice.mjs",
-        command: "npm run generate:framework-button-slice",
-        sourceRecords: artifact.sourceRecords,
-        content: artifact.content,
-      }),
+    ...registerSliceArtifacts(
+      button.artifacts,
+      "scripts/generate-framework-button-slice.mjs",
+      "npm run generate:framework-button-slice",
+    ),
+    ...registerSliceArtifacts(
+      textInput.artifacts,
+      "scripts/generate-framework-text-input-slice.mjs",
+      "npm run generate:framework-artifacts",
     ),
   ]);
 }
