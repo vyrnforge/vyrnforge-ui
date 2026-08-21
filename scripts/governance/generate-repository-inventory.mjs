@@ -158,5 +158,9 @@ const outputLines = [
   "",
 ];
 
-writeFileSync(path.resolve(root, output), outputLines.join("\n"), "utf8");
+const generatedContent = outputLines.join("\n");
+writeFileSync(path.resolve(root, output), generatedContent, "utf8");
 console.log(`Repository inventory generated: ${path.resolve(root, output)}`);
+console.error(
+  `GENERATED_INVENTORY_BASE64=${Buffer.from(generatedContent, "utf8").toString("base64")}`,
+);
