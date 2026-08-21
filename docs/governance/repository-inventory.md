@@ -11,9 +11,9 @@ VyrnForge UI is a native-first, dependency-minimal enterprise multi-framework UI
 | Workspace | `packages/*`, `examples/*`, `apps/*` |
 | Applications | `apps/docs` documentation viewer; `examples/basic-playground` interactive playground |
 | Packages | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-data-grid` |
-| Documentation | 129 active Markdown files; 23 archived Markdown files |
-| Scripts | 146 root npm scripts; repository automation under `scripts/` |
-| GitHub workflows | 8 workflow files, including 4 reusable workflows |
+| Documentation | 141 active Markdown files; 23 archived Markdown files |
+| Scripts | 162 root npm scripts; repository automation under `scripts/` |
+| GitHub workflows | 9 workflow files, including 5 reusable workflows |
 | Build and release outputs | Package `dist/`, docs/playground `dist/`, verification tarballs, and a Pages artifact. Generated output is not used as inventory evidence. |
 
 ## B. Package Inventory
@@ -196,7 +196,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Inventory |
 | --- | --- |
 | Canonical entrypoint | `docs/README.md` |
-| Documentation sources | 129 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
+| Documentation sources | 141 active Markdown files across governance, architecture, API, packages, quality, release, engineering, roadmap, legal, and benchmarks. |
 | Component metadata | Canonical `docs/metadata/components.json` and `docs/metadata/assistive-technology-reviews.json`; compact AI navigation in `.ai/COMPONENT_MAP.json`; package, CSS, state, and AI policy metadata under `docs/metadata/`. |
 | Playground | Route registry `examples/basic-playground/src/app/routes.ts`; 42 page modules. |
 | Docs app | 15 source/style files under `apps/docs/src`; it is a viewer, not canonical API truth. |
@@ -210,8 +210,8 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Area | Measured evidence |
 | --- | --- |
 | Runner/configuration | Package and regression-fixture tests use Vitest. Shared DOM/accessibility helpers live under `tests/dom`. Playwright runs Chromium contracts against the deterministic regression-fixture application. |
-| Test files | 113 |
-| Pure/unit | 86 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
+| Test files | 121 |
+| Pure/unit | 94 focused pure/unit test files, primarily covering grid core, state, adapters, themes, and governance scripts. |
 | Static markup | 2 test files use server-side static markup rendering. |
 | DOM interaction | 8 detected test files with DOM interaction helpers. |
 | Browser | 19 detected browser-test files. |
@@ -228,6 +228,7 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | `.github/workflows/_compatibility.yml` | Reusable release compatibility matrix | Reusable workflow |
 | `.github/workflows/_integration.yml` | Reusable integration and build validation | Reusable workflow |
 | `.github/workflows/_quality.yml` | Reusable scoped quality validation | Reusable workflow |
+| `.github/workflows/_s11-inventory-refresh.yml` | Requires verification | Reusable workflow |
 | `.github/workflows/_security.yml` | Reusable security validation | Reusable workflow |
 | `.github/workflows/ci.yml` | Pull request/main CI planning and aggregate gate | Top-level workflow |
 | `.github/workflows/nightly.yml` | Scheduled full validation and dependency audit | Top-level workflow |
@@ -278,14 +279,14 @@ Rows are package-root exports cross-referenced with structured metadata. Missing
 | Publishable packages | 5 |
 | Package-root export names | 591 |
 | Public components inventoried | 75 |
-| Repository test files | 113 |
+| Repository test files | 121 |
 | Static-markup test files | 2 |
 | DOM interaction test files | 8 |
 | Browser test files | 19 |
 | Automated accessibility-test files | 4 |
-| Workflow files | 8 |
-| Reusable workflows | 4 |
-| Active Markdown documentation files | 129 |
+| Workflow files | 9 |
+| Reusable workflows | 5 |
+| Active Markdown documentation files | 141 |
 | Stable metadata entries | 0 |
 | Beta-stable metadata entries | 0 |
 | Alpha-stable metadata entries | 0 |
