@@ -18,6 +18,7 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 import { VfButton } from "./generated/vf-button.generated";
+import { VfTextInput } from "./generated/vf-text-input.generated";
 import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
 
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
@@ -30,6 +31,7 @@ type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
     FormsModule,
     ReactiveFormsModule,
     VfButton,
+    VfTextInput,
     VyrnForgeFormControlDirective,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -120,6 +122,12 @@ export class AppComponent implements AfterViewInit {
     document
       .querySelector("[data-angular-consumer]")
       ?.setAttribute("data-generated-button-action", "received");
+  }
+
+  handleGeneratedTextInputValue(value: string): void {
+    document
+      .querySelector("[data-angular-consumer]")
+      ?.setAttribute("data-generated-text-input-value", value);
   }
 
   disableOwner(): void {
