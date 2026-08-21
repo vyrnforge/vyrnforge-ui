@@ -3,7 +3,7 @@ import { nextTick, onMounted, ref } from "vue";
 
 import VyrnForgeCheckboxModel from "./adapters/VyrnForgeCheckboxModel.vue";
 import VfButton from "./generated/VfButton.generated";
-import VfTextInput from "./generated/VfTextInput.generated";
+import GeneratedVfTextInput from "./generated/VfTextInput.generated";
 import type {
   VyrnForgeActionDetail,
   VyrnForgeElementForTagName,
@@ -148,7 +148,7 @@ onMounted(async () => {
     <section class="vf-consumer-vue-section" aria-labelledby="model-title">
       <h2 id="model-title">Generated Vue v-model facade</h2>
       <label for="vue-model-owner">Model owner</label>
-      <VfTextInput
+      <GeneratedVfTextInput
         id="vue-model-owner"
         v-model="modelOwner"
         name="modelOwner"
