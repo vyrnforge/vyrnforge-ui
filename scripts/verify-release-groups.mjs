@@ -166,9 +166,7 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
         } else {
           const source = read(root, versionExport.path);
           if (
-            !source.includes(
-              `${versionExport.symbol} = "${releaseLine.version}"`,
-            )
+            !source.includes(`${versionExport.symbol} = "${releaseLine.version}"`)
           ) {
             failures.push(
               `${packageInfo.name}: ${versionExport.symbol} must be ${releaseLine.version}`,
