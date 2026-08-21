@@ -97,11 +97,17 @@ const outputLines = [
     ["Area", "Current inventory"],
     [
       ["Workspace globs", codeList(rootPackage.workspaces ?? [])],
-      ["Packages", codeList(packageRecords.map(({ manifest }) => manifest.name))],
+      [
+        "Packages",
+        codeList(packageRecords.map(({ manifest }) => manifest.name)),
+      ],
       ["Applications and examples", codeList(applications)],
       ["Active Markdown docs", String(activeDocs.length)],
       ["Archived Markdown docs", String(archivedDocs.length)],
-      ["Root npm scripts", String(Object.keys(rootPackage.scripts ?? {}).length)],
+      [
+        "Root npm scripts",
+        String(Object.keys(rootPackage.scripts ?? {}).length),
+      ],
       ["GitHub workflow files", String(workflows.length)],
     ],
   ),
