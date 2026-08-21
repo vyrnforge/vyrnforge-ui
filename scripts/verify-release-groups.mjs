@@ -200,7 +200,9 @@ export function verifyReleaseGroups({ root = repositoryRoot } = {}) {
       for (const [dependencyName, dependencyVersion] of Object.entries(
         packageInfo.dependencies ?? {},
       )) {
-        if (lockedPackage.dependencies?.[dependencyName] !== dependencyVersion) {
+        if (
+          lockedPackage.dependencies?.[dependencyName] !== dependencyVersion
+        ) {
           failures.push(
             `package-lock.json: ${packageInfo.name} ${dependencyName} must be ${dependencyVersion}`,
           );
