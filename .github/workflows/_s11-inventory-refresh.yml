@@ -1,0 +1,46 @@
+name: S11 repository inventory refresh
+
+on:
+  push:
+    branches:
+      - s11-framework-generation-foundation
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s11-framework-generation-foundation
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Refresh generated repository inventory
+        run: |
+          npm run inventory:repository
+          npm run verify:repository-inventory
+
+      - name: Commit refreshed inventory
+        run: |
+          rm .github/workflows/_s11-inventory-refresh.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/governance/repository-inventory.md \
+            .github/workflows/_s11-inventory-refresh.yml
+          git commit -m "docs: refresh S11 repository inventory"
+          git push origin HEAD:s11-framework-generation-foundation
