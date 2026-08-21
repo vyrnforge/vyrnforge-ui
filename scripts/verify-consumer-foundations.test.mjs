@@ -111,6 +111,7 @@ test("rejects stale Custom Elements event vocabulary", () => {
   );
 });
 
+// Canonical contracts own event-vocabulary ordering; the typed event map must preserve set parity.
 test("rejects typed event maps that diverge from canonical contracts", () => {
   withRepositoryFixture(
     (root) => {
