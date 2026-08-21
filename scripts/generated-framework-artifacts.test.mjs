@@ -55,10 +55,9 @@ test("stale generated artifacts identify their canonical source records", () => 
   }
 });
 
-
-test("generated framework artifact registry covers every S11-4 owned output", () => {
+test("generated framework artifact registry covers every S11 owned output", () => {
   const artifacts = buildGeneratedFrameworkArtifacts();
-  assert.equal(artifacts.length, 8);
+  assert.equal(artifacts.length, 12);
   assert.deepEqual(
     artifacts.map((artifact) => artifact.path).sort(),
     [
@@ -67,9 +66,13 @@ test("generated framework artifact registry covers every S11-4 owned output", ()
       "packages/ui-elements/custom-elements.json",
       "packages/ui-elements/src/custom-elements.ts",
       "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
+      "tests/consumers/angular/src/app/generated/vf-text-input.generated.ts",
       "tests/consumers/native-html/src/generated/vf-button.generated.ts",
+      "tests/consumers/native-html/src/generated/vf-text-input.generated.ts",
       "tests/consumers/react/src/generated/Button.generated.tsx",
+      "tests/consumers/react/src/generated/TextInput.generated.tsx",
       "tests/consumers/vue/src/generated/VfButton.generated.ts",
+      "tests/consumers/vue/src/generated/VfTextInput.generated.ts",
     ].sort(),
   );
   for (const artifact of artifacts) {
