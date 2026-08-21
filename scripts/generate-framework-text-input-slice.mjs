@@ -62,7 +62,7 @@ export function verifyFrameworkTextInputSliceArtifacts({ root = repositoryRoot }
   }
   if (failures.length > 0) {
     throw new Error(
-      `TextInput framework slice is stale; run npm run generate:framework-text-input-slice.\n${failures
+      `TextInput framework slice is stale; run npm run generate:framework-artifacts.\n${failures
         .map((failure) => `- ${failure}`)
         .join("\n")}`,
     );
