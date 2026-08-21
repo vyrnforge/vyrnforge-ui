@@ -1,0 +1,67 @@
+name: S11 formatting repair
+
+on:
+  push:
+    branches:
+      - s11-framework-generation-foundation
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s11-framework-generation-foundation
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format CI-reported files
+        run: |
+          npx prettier --write \
+            scripts/framework-text-input-generation.mjs \
+            scripts/generate-framework-button-slice.mjs \
+            scripts/generate-framework-text-input-slice.mjs \
+            scripts/generated-framework-artifacts.mjs \
+            scripts/generated-framework-artifacts.test.mjs \
+            scripts/verify-consumer-foundations-runtime.mjs \
+            scripts/verify-framework-button-slice-runtime.mjs \
+            tests/consumers/native-html/src/main.ts \
+            tests/consumers/react/src/main.tsx
+          node scripts/verify-format.mjs --write-baseline
+
+      - name: Commit reviewed formatting repair
+        run: |
+          rm .github/workflows/_s11-format-repair.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            .prettier-baseline.json \
+            scripts/framework-text-input-generation.mjs \
+            scripts/generate-framework-button-slice.mjs \
+            scripts/generate-framework-text-input-slice.mjs \
+            scripts/generated-framework-artifacts.mjs \
+            scripts/generated-framework-artifacts.test.mjs \
+            scripts/verify-consumer-foundations-runtime.mjs \
+            scripts/verify-framework-button-slice-runtime.mjs \
+            tests/consumers/native-html/src/main.ts \
+            tests/consumers/react/src/main.tsx \
+            .github/workflows/_s11-format-repair.yml
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "chore: format S11 generation changes"
+          git push origin HEAD:s11-framework-generation-foundation
