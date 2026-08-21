@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
 import { currentConsumerBatch } from "./consumer-batch-progression.mjs";
 
 const repositoryRoot = path.resolve(
@@ -87,6 +88,10 @@ function collectCanonicalEventNames(text) {
         (match) => match[1],
       )
     : [];
+}
+
+function sameStringSet(left, right) {
+  return JSON.stringify([...left].sort()) === JSON.stringify([...right].sort());
 }
 
 function collectRegistryDefinitions(text) {
@@ -209,16 +214,26 @@ function verifyPackageContract(root, failures, closure) {
     addFailure(failures, "custom-elements.json must record 58 tags");
   }
 
-  const canonicalEventNames = collectCanonicalEventNames(eventsText);
-  if (canonicalEventNames.length === 0) {
+  const contracts = loadCanonicalComponentContracts({ root });
+  const canonicalContractEventNames = contracts.events.map(
+    (event) => event.name,
+  );
+  const typedEventNames = collectCanonicalEventNames(eventsText);
+  if (typedEventNames.length === 0) {
     addFailure(failures, "canonical event detail map is missing or empty");
-  } else if (
+  } else if (!sameStringSet(typedEventNames, canonicalContractEventNames)) {
+    addFailure(
+      failures,
+      "canonical event detail map must cover canonical contract event vocabulary",
+    );
+  }
+  if (
     JSON.stringify(manifest.vyrnforge?.eventVocabulary ?? []) !==
-    JSON.stringify(canonicalEventNames)
+    JSON.stringify(canonicalContractEventNames)
   ) {
     addFailure(
       failures,
-      "custom-elements.json event vocabulary must match the canonical event detail map",
+      "custom-elements.json event vocabulary must match canonical component contracts",
     );
   }
   if (
