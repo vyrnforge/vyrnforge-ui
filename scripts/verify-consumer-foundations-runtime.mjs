@@ -534,7 +534,7 @@ const matrixSelectors = Object.freeze({
   react: {
     action: "vf-button > button[data-vf-action-control]",
     generatedButton: 'vf-button[data-vf-generated-button="react"]',
-    input: "vf-text-input input",
+    input: 'vf-text-input[name="owner"] input',
     actionText: "react-save",
   },
   angular: {
@@ -864,8 +864,11 @@ async function verifyBrowserFixture(browser, fixture) {
         "React did not assign the vf-tabs items property",
       );
       assert(
-        (await page.locator("vf-text-input input").inputValue()) ===
-          "Operations",
+        (
+          await page
+            .locator('vf-text-input[name="owner"] input')
+            .inputValue()
+        ) === "Operations",
         "React did not assign the vf-text-input value property",
       );
     } else if (fixture.id === "angular") {
