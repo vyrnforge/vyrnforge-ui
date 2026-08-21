@@ -60,12 +60,7 @@ function consumerSource(releaseGroup) {
   return [...imports, ...cssImports, "", ...references, ""].join("\n");
 }
 
-function verifyConsumer({
-  releaseGroupId,
-  artifactManifest,
-  artifactDir,
-  releaseGroup,
-}) {
+function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
   const lockfile = JSON.parse(
     readFileSync(path.join(repositoryRoot, "package-lock.json"), "utf8"),
   );
@@ -230,7 +225,6 @@ if (failures.length) {
 
 if (!skipConsumer) {
   verifyConsumer({
-    releaseGroupId,
     artifactManifest,
     artifactDir,
     releaseGroup,
