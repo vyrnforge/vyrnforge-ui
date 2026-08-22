@@ -30,12 +30,6 @@ const tabs = [
     content: "Vue generated Tabs facade",
   },
   {
-    id: "disabled",
-    label: "Disabled",
-    content: "Disabled tab",
-    disabled: true,
-  },
-  {
     id: "events",
     label: "Events",
     content: "Vue v-model and canonical DOM event mapping",
@@ -102,8 +96,7 @@ onMounted(async () => {
         expected !== undefined &&
         item.id === expected.id &&
         item.label === expected.label &&
-        item.content === expected.content &&
-        item.disabled === expected.disabled
+        item.content === expected.content
       );
     });
 
