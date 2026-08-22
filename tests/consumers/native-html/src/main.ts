@@ -35,12 +35,6 @@ const tabItems = [
     content: "Packed native HTML consumer",
   },
   {
-    id: "disabled",
-    label: "Disabled",
-    content: "Disabled tab",
-    disabled: true,
-  },
-  {
     id: "activity",
     label: "Activity",
     content: "Canonical events and generated facade mapping",
