@@ -106,10 +106,9 @@ export function createFrameworkTabsSliceModel(generationModel) {
     "react: Tabs controlled value mapping is incomplete",
   );
   assert(
-    surfaces.angular.adapter.model?.enabled === true &&
-      surfaces.angular.adapter.model.canonicalProperty === "value" &&
-      surfaces.angular.adapter.model.publicProperty === "value" &&
-      surfaces.angular.adapter.model.publicEvent === "valueChange",
+    surfaces.angular.model?.mode === "two-way" &&
+      surfaces.angular.model.property === "value" &&
+      surfaces.angular.model.event === "valueChange",
     "angular: Tabs two-way value mapping is incomplete",
   );
   assert(
