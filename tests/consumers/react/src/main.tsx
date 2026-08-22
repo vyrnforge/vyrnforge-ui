@@ -85,13 +85,19 @@ function App() {
       });
 
     if (!itemsMatch) {
-      throw new Error("Generated React Tabs did not assign the items property.");
+      throw new Error(
+        "Generated React Tabs did not assign the items property.",
+      );
     }
     if (tabsElement.hasAttribute("items")) {
-      throw new Error("Generated React Tabs serialized items into an attribute.");
+      throw new Error(
+        "Generated React Tabs serialized items into an attribute.",
+      );
     }
     if (tabsElement.value !== selectedTab) {
-      throw new Error("Generated React Tabs did not preserve controlled value.");
+      throw new Error(
+        "Generated React Tabs did not preserve controlled value.",
+      );
     }
     if (ownerElement.value !== owner) {
       throw new Error(

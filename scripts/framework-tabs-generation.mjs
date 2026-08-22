@@ -191,6 +191,7 @@ export type GeneratedTabsRef = VyrnForgeElementForTagName<"vf-tabs">;
 
 export interface GeneratedTabsProps {
   id?: string;
+  "aria-label"?: string;
   value?: string;
   defaultValue?: string;
   activationMode?: GeneratedTabsRef["activationMode"];
@@ -207,6 +208,7 @@ export const GeneratedTabs = forwardRef<GeneratedTabsRef, GeneratedTabsProps>(
   function GeneratedTabs(
     {
       id,
+      "aria-label": ariaLabel,
       value,
       defaultValue,
       activationMode,
@@ -271,7 +273,12 @@ export const GeneratedTabs = forwardRef<GeneratedTabsRef, GeneratedTabsProps>(
     }, [onValueChange]);
 
     return (
-      <vf-tabs ref={elementRef} id={id} data-vf-generated-tabs="react">
+      <vf-tabs
+        ref={elementRef}
+        id={id}
+        aria-label={ariaLabel}
+        data-vf-generated-tabs="react"
+      >
         {children}
       </vf-tabs>
     );

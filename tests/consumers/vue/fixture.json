@@ -11,7 +11,7 @@
     "@vyrnforge/ui-elements/styles/index.css",
     "<vf-button",
     "@vf-action",
-    ":items.prop",
+    "<GeneratedVfTabs",
     "slot=\"status\"",
     "@vf-value-change",
     "new FormData",

@@ -93,13 +93,19 @@ export class AppComponent implements AfterViewInit {
         });
 
       if (!itemsMatch) {
-        throw new Error("Generated Angular Tabs did not assign the items property.");
+        throw new Error(
+          "Generated Angular Tabs did not assign the items property.",
+        );
       }
       if (tabsElement.hasAttribute("items")) {
-        throw new Error("Generated Angular Tabs serialized the items property.");
+        throw new Error(
+          "Generated Angular Tabs serialized the items property.",
+        );
       }
       if (tabsElement.value !== this.selectedTab) {
-        throw new Error("Generated Angular Tabs did not preserve two-way value.");
+        throw new Error(
+          "Generated Angular Tabs did not preserve two-way value.",
+        );
       }
       if (ownerElement.value !== this.owner) {
         throw new Error("Angular did not assign the input value property.");
