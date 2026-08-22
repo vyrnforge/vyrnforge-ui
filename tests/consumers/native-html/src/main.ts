@@ -6,6 +6,7 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 import { bindGeneratedVfButton } from "./generated/vf-button.generated";
+import { bindGeneratedVfTabs } from "./generated/vf-tabs.generated";
 import { bindGeneratedVfTextInput } from "./generated/vf-text-input.generated";
 
 import "./styles.css";
@@ -27,7 +28,7 @@ if (!root || !status || !save || !tabs || !owner || !form) {
   throw new Error("Native HTML consumer fixture markup is incomplete.");
 }
 
-tabs.items = [
+const tabItems = [
   {
     id: "summary",
     label: "Summary",
@@ -36,9 +37,18 @@ tabs.items = [
   {
     id: "activity",
     label: "Activity",
-    content: "Canonical events and property assignment",
+    content: "Canonical events and generated facade mapping",
   },
 ] satisfies readonly VyrnForgeTabItem[];
+
+bindGeneratedVfTabs(tabs, {
+  items: tabItems,
+  value: "summary",
+  activationMode: "automatic",
+  onValueChange: (value) => {
+    root.dataset.generatedTabsValue = value;
+  },
+});
 
 bindGeneratedVfButton(save, {
   action: "save",
