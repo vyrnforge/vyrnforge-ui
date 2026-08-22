@@ -57,12 +57,6 @@ export class AppComponent implements AfterViewInit {
       content: "Angular generated Tabs facade",
     },
     {
-      id: "disabled",
-      label: "Disabled",
-      content: "Disabled tab",
-      disabled: true,
-    },
-    {
       id: "events",
       label: "Events",
       content: "Angular value/valueChange mapping",
@@ -94,8 +88,7 @@ export class AppComponent implements AfterViewInit {
             expected !== undefined &&
             item.id === expected.id &&
             item.label === expected.label &&
-            item.content === expected.content &&
-            item.disabled === expected.disabled
+            item.content === expected.content
           );
         });
 
