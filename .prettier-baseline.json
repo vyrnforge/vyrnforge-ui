@@ -43,7 +43,6 @@
     "docs/roadmap/00-master-roadmap.md": "58a0321e936d39bf5463350437178373f98c2915dac1f1ce5eefb4ba736bb4e5",
     "docs/templates/component-doc-template.md": "98c22569dfa94e6f7be3b6c8c551dc1d19e3cd16978fef2933a6e04a3bd63ada",
     "docs/templates/package-readme-template.md": "b9d0f9c54b958a19cbcc46c0d6b79152e8b6fbb52fe80dbab25f406211ae402f",
-    "docs/templates/sprint-doc-template.md": "912b7dc5e6a394365d0a791c1b6a13e54154d89075587648c8b22acd71892419",
     "examples/basic-playground/README.md": "a8ba11c59ba622c1980125892777c7f4bc86d82ccee84b22747f311d8e59f28b",
     "examples/basic-playground/src/app/App.tsx": "44818775db91b2141303ffb60dd7f32f40d638f6c041f53e6759f9ee185e7192",
     "examples/basic-playground/src/app/deploymentLinks.ts": "f692c1aac98af9d748d74f122a470f7bbe52f1876d1c1bd4de747e195378c5ac",
