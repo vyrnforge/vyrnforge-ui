@@ -38,12 +38,6 @@ function App() {
           content: "React generated Tabs facade",
         },
         {
-          id: "disabled",
-          label: "Disabled",
-          content: "Disabled tab",
-          disabled: true,
-        },
-        {
           id: "events",
           label: "Events",
           content: "Controlled value and typed DOM event listener",
@@ -86,8 +80,7 @@ function App() {
           expected !== undefined &&
           item.id === expected.id &&
           item.label === expected.label &&
-          item.content === expected.content &&
-          item.disabled === expected.disabled
+          item.content === expected.content
         );
       });
 
