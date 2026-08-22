@@ -30,6 +30,21 @@ jobs:
         run: |
           npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
           npm ci
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("scripts/framework-tabs-generation.mjs")
+          text = path.read_text()
+          old = '''    surfaces.angular.adapter.model?.enabled === true &&
+              surfaces.angular.adapter.model.canonicalProperty === "value" &&
+              surfaces.angular.adapter.model.publicProperty === "value" &&
+              surfaces.angular.adapter.model.publicEvent === "valueChange",'''
+          new = '''    surfaces.angular.model?.mode === "two-way" &&
+              surfaces.angular.model.property === "value" &&
+              surfaces.angular.model.event === "valueChange",'''
+          if old not in text:
+              raise SystemExit("expected Angular Tabs assertion not found")
+          path.write_text(text.replace(old, new))
+          PY
           npx prettier --write scripts/framework-tabs-generation.mjs scripts/generate-framework-tabs-slice.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs
           rm -f .github/workflows/_mfd1114-generate-tabs.yml
           npm run generate:framework-artifacts
