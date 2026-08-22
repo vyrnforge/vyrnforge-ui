@@ -72,7 +72,10 @@ function handleDialogOpenChange(open: boolean): void {
 }
 
 function handleDialogDismiss(detail: GeneratedDialogDismissDetail): void {
-  consumerRoot.value?.setAttribute("data-generated-dialog-dismiss", detail.reason);
+  consumerRoot.value?.setAttribute(
+    "data-generated-dialog-dismiss",
+    detail.reason,
+  );
 }
 
 function applyProgrammaticModel(): void {

@@ -14,7 +14,7 @@ const fixtures = Object.freeze([
     id: "native-html",
     directory: "tests/consumers/native-html",
     port: 4181,
-    opener: '#native-dialog [data-dialog-trigger]',
+    opener: "#native-dialog [data-dialog-trigger]",
     dialog: '#native-dialog[data-vf-generated-dialog="native"]',
     root: "[data-consumer-root]",
   }),
@@ -30,7 +30,8 @@ const fixtures = Object.freeze([
     id: "angular",
     directory: "tests/consumers/angular",
     port: 4183,
-    opener: 'vf-dialog[data-vf-generated-dialog="angular"] [data-dialog-trigger]',
+    opener:
+      'vf-dialog[data-vf-generated-dialog="angular"] [data-dialog-trigger]',
     dialog: 'vf-dialog[data-vf-generated-dialog="angular"]',
     root: "[data-angular-consumer]",
   }),
@@ -218,8 +219,9 @@ async function verifyDialogFixture(browser, fixture) {
     );
 
     assert(
-      (await page.locator(fixture.root).getAttribute("data-generated-dialog-open")) ===
-        "false",
+      (await page
+        .locator(fixture.root)
+        .getAttribute("data-generated-dialog-open")) === "false",
       `${fixture.id}: framework open-state mapping did not observe Escape dismissal`,
     );
     assert(
