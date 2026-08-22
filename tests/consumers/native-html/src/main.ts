@@ -18,9 +18,6 @@ const save =
   document.querySelector<VyrnForgeElementForTagName<"vf-button">>(
     "#native-save",
   );
-const dialogOpen = document.querySelector<
-  VyrnForgeElementForTagName<"vf-button">
->("#native-dialog-open");
 const dialog =
   document.querySelector<VyrnForgeElementForTagName<"vf-dialog">>(
     "#native-dialog",
@@ -32,16 +29,7 @@ const owner = document.querySelector<
 >('vf-text-input[name="owner"]');
 const form = document.querySelector<HTMLFormElement>("#native-form");
 
-if (
-  !root ||
-  !status ||
-  !save ||
-  !dialogOpen ||
-  !dialog ||
-  !tabs ||
-  !owner ||
-  !form
-) {
+if (!root || !status || !save || !dialog || !tabs || !owner || !form) {
   throw new Error("Native HTML consumer fixture markup is incomplete.");
 }
 
@@ -94,10 +82,9 @@ bindGeneratedVfDialog(dialog, {
   onOpenChange: (open) => {
     root.dataset.generatedDialogOpen = String(open);
   },
-});
-
-dialogOpen.addEventListener("vf-action", () => {
-  dialog.show();
+  onDismiss: (detail) => {
+    root.dataset.generatedDialogDismiss = detail.reason;
+  },
 });
 
 save.addEventListener("vf-action", (event) => {
