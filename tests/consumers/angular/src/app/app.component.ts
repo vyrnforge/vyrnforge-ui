@@ -18,7 +18,10 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 import { VfButton } from "./generated/vf-button.generated";
-import { VfDialog } from "./generated/vf-dialog.generated";
+import {
+  VfDialog,
+  type GeneratedDialogDismissDetail,
+} from "./generated/vf-dialog.generated";
 import { VfTabs } from "./generated/vf-tabs.generated";
 import { VfTextInput } from "./generated/vf-text-input.generated";
 import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
@@ -160,15 +163,17 @@ export class AppComponent implements AfterViewInit {
       ?.setAttribute("data-generated-text-input-value", value);
   }
 
-  openDialog(): void {
-    this.dialogOpen = true;
-  }
-
   handleDialogOpenChange(open: boolean): void {
     this.dialogOpen = open;
     document
       .querySelector("[data-angular-consumer]")
       ?.setAttribute("data-generated-dialog-open", String(open));
+  }
+
+  handleDialogDismiss(detail: GeneratedDialogDismissDetail): void {
+    document
+      .querySelector("[data-angular-consumer]")
+      ?.setAttribute("data-generated-dialog-dismiss", detail.reason);
   }
 
   disableOwner(): void {
