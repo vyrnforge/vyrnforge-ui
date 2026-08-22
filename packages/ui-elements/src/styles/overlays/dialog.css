@@ -1,11 +1,15 @@
-vf-dialog.vf-dialog-root,
+vf-dialog.vf-dialog-root {
+  position: relative;
+}
+vf-dialog .vf-dialog__trigger {
+  display: contents;
+}
 vf-drawer.vf-drawer-root {
   position: fixed;
   inset: 0;
   z-index: var(--vf-layer-modal);
   pointer-events: none;
 }
-vf-dialog.vf-dialog-root--open,
 vf-drawer.vf-drawer-root--open {
   pointer-events: auto;
 }
@@ -13,6 +17,7 @@ vf-dialog .vf-dialog__backdrop,
 vf-drawer .vf-drawer__backdrop {
   position: fixed;
   inset: 0;
+  z-index: var(--vf-layer-modal);
   display: grid;
   place-items: center;
   padding: var(--vf-space-4);
@@ -70,6 +75,14 @@ vf-drawer .vf-drawer__body {
   min-height: 0;
   overflow: auto;
   padding: var(--vf-space-4);
+}
+vf-dialog .vf-dialog__actions,
+vf-dialog .vf-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--vf-space-2);
+  padding: var(--vf-space-3) var(--vf-space-4);
+  border-top: 1px solid var(--vf-divider);
 }
 vf-dialog .vf-dialog__close,
 vf-drawer .vf-drawer__close {
