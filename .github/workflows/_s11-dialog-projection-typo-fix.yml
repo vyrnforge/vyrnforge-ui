@@ -1,0 +1,26 @@
+name: S11 Dialog Projection Typo Fix
+
+on:
+  push:
+    branches:
+      - s11-dialog-generation-slice
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s11-dialog-generation-slice
+          fetch-depth: 0
+      - run: sed -i 's/querySelelector/querySelector/g; s/:cope >/:scope >/g' packages/ui-elements/src/components/overlays.ts
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add packages/ui-elements/src/components/overlays.ts
+          git commit -m "fix: correct Dialog late projection selector"
+          git push origin HEAD:s11-dialog-generation-slice
