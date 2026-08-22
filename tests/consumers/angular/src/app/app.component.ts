@@ -18,6 +18,7 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 import { VfButton } from "./generated/vf-button.generated";
+import { VfTabs } from "./generated/vf-tabs.generated";
 import { VfTextInput } from "./generated/vf-text-input.generated";
 import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
 
@@ -31,6 +32,7 @@ type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
     FormsModule,
     ReactiveFormsModule,
     VfButton,
+    VfTabs,
     VfTextInput,
     VyrnForgeFormControlDirective,
   ],
@@ -52,15 +54,16 @@ export class AppComponent implements AfterViewInit {
     {
       id: "summary",
       label: "Summary",
-      content: "Angular 22 property binding",
+      content: "Angular generated Tabs property binding",
     },
     {
       id: "events",
       label: "Events",
-      content: "Angular template event binding",
+      content: "Angular generated valueChange output",
     },
   ] satisfies readonly VyrnForgeTabItem[];
 
+  selectedTab = "summary";
   notifications = true;
   status = "Waiting";
 
@@ -90,10 +93,13 @@ export class AppComponent implements AfterViewInit {
         });
 
       if (!itemsMatch) {
-        throw new Error("Angular did not assign the tabs items property.");
+        throw new Error("Generated Angular Tabs did not assign the items property.");
       }
       if (tabsElement.hasAttribute("items")) {
-        throw new Error("Angular serialized the tabs items property.");
+        throw new Error("Generated Angular Tabs serialized the items property.");
+      }
+      if (tabsElement.value !== this.selectedTab) {
+        throw new Error("Generated Angular Tabs did not preserve two-way value.");
       }
       if (ownerElement.value !== this.owner) {
         throw new Error("Angular did not assign the input value property.");
@@ -122,6 +128,13 @@ export class AppComponent implements AfterViewInit {
     document
       .querySelector("[data-angular-consumer]")
       ?.setAttribute("data-generated-button-action", "received");
+  }
+
+  handleGeneratedTabsValue(value: string): void {
+    this.selectedTab = value;
+    document
+      .querySelector("[data-angular-consumer]")
+      ?.setAttribute("data-generated-tabs-value", value);
   }
 
   handleGeneratedTextInputValue(value: string): void {
