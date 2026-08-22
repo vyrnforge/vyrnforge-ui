@@ -3,7 +3,9 @@ import { nextTick, onMounted, ref } from "vue";
 
 import VyrnForgeCheckboxModel from "./adapters/VyrnForgeCheckboxModel.vue";
 import VfButton from "./generated/VfButton.generated";
-import VfDialog from "./generated/VfDialog.generated";
+import VfDialog, {
+  type GeneratedDialogDismissDetail,
+} from "./generated/VfDialog.generated";
 import GeneratedVfTabs from "./generated/VfTabs.generated";
 import GeneratedVfTextInput from "./generated/VfTextInput.generated";
 import type {
@@ -67,6 +69,10 @@ function handleOwnerValueChange(event: Event): void {
 
 function handleDialogOpenChange(open: boolean): void {
   consumerRoot.value?.setAttribute("data-generated-dialog-open", String(open));
+}
+
+function handleDialogDismiss(detail: GeneratedDialogDismissDetail): void {
+  consumerRoot.value?.setAttribute("data-generated-dialog-dismiss", detail.reason);
 }
 
 function applyProgrammaticModel(): void {
@@ -215,19 +221,16 @@ onMounted(async () => {
       </form>
     </section>
 
-    <vf-button
-      id="vue-dialog-open"
-      action="open-dialog"
-      @vf-action="dialogOpen = true"
-    >
-      Open Vue dialog
-    </vf-button>
     <VfDialog
       v-model:open="dialogOpen"
       title="Vue generated dialog"
       description="Generated Vue Dialog focus lifecycle evidence"
       @update:open="handleDialogOpenChange"
+      @dismiss="handleDialogDismiss"
     >
+      <template #trigger>
+        <button type="button" data-dialog-trigger>Open Vue dialog</button>
+      </template>
       <template #content>
         <div>
           <button type="button" data-dialog-first>First dialog action</button>
