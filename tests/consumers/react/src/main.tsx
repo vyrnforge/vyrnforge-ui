@@ -173,20 +173,16 @@ function App() {
         }}
       />
 
-      <span data-react-dialog-opener>
-        <GeneratedButton
-          action="open-dialog"
-          onClick={() => setDialogOpen(true)}
-        >
-          Open React dialog
-        </GeneratedButton>
-      </span>
-
       <GeneratedDialog
         ref={dialogRef}
         open={dialogOpen}
         title="React generated dialog"
         description="Generated React Dialog focus lifecycle evidence"
+        trigger={
+          <button type="button" data-dialog-trigger>
+            Open React dialog
+          </button>
+        }
         content={
           <div>
             <button type="button" data-dialog-first>
@@ -202,6 +198,11 @@ function App() {
           document
             .querySelector("[data-react-consumer]")
             ?.setAttribute("data-generated-dialog-open", String(open));
+        }}
+        onDismiss={(detail) => {
+          document
+            .querySelector("[data-react-consumer]")
+            ?.setAttribute("data-generated-dialog-dismiss", detail.reason);
         }}
       />
 
