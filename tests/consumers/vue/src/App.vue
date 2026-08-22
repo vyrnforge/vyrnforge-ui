@@ -3,6 +3,7 @@ import { nextTick, onMounted, ref } from "vue";
 
 import VyrnForgeCheckboxModel from "./adapters/VyrnForgeCheckboxModel.vue";
 import VfButton from "./generated/VfButton.generated";
+import GeneratedVfTabs from "./generated/VfTabs.generated";
 import GeneratedVfTextInput from "./generated/VfTextInput.generated";
 import type {
   VyrnForgeActionDetail,
@@ -15,9 +16,9 @@ type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
 const consumerRoot = ref<HTMLElement | null>(null);
-const tabsElement = ref<TabsElement | null>(null);
 const ownerElement = ref<TextInputElement | null>(null);
 const owner = ref("Operations");
+const selectedTab = ref("summary");
 const status = ref("Waiting");
 const modelOwner = ref("Model Operations");
 const modelNotifications = ref(true);
@@ -26,12 +27,12 @@ const tabs = [
   {
     id: "summary",
     label: "Summary",
-    content: "Vue 3 property binding",
+    content: "Vue generated Tabs property binding",
   },
   {
     id: "events",
     label: "Events",
-    content: "Canonical DOM event binding",
+    content: "Generated Vue v-model value update",
   },
 ] satisfies readonly VyrnForgeTabItem[];
 
@@ -46,6 +47,12 @@ function handleGeneratedButtonAction(detail: VyrnForgeActionDetail): void {
     throw new Error("Generated Vue Button action mapping is invalid.");
   }
   consumerRoot.value?.setAttribute("data-generated-button-action", "received");
+}
+
+function handleGeneratedTabsValue(event: Event): void {
+  const detail = (event as CustomEvent<VyrnForgeValueChangeDetail<string>>)
+    .detail;
+  consumerRoot.value?.setAttribute("data-generated-tabs-value", detail.value);
 }
 
 function handleOwnerValueChange(event: Event): void {
@@ -72,10 +79,12 @@ function handleSubmit(event: Event): void {
 onMounted(async () => {
   await nextTick();
 
-  const tabsNode = tabsElement.value;
+  const tabsNode = consumerRoot.value?.querySelector<TabsElement>(
+    '[data-vf-generated-tabs="vue"]',
+  );
   const ownerNode = ownerElement.value;
   if (!tabsNode || !ownerNode) {
-    throw new Error("Vue did not attach the Custom Element template refs.");
+    throw new Error("Vue did not attach the generated Custom Element refs.");
   }
 
   const assignedItems = tabsNode.items;
@@ -92,10 +101,13 @@ onMounted(async () => {
     });
 
   if (!itemsMatch) {
-    throw new Error("Vue did not assign the tabs items property.");
+    throw new Error("Generated Vue Tabs did not assign the items property.");
   }
   if (tabsNode.hasAttribute("items")) {
-    throw new Error("Vue serialized the tabs items property.");
+    throw new Error("Generated Vue Tabs serialized the items property.");
+  }
+  if (tabsNode.value !== selectedTab.value) {
+    throw new Error("Generated Vue Tabs did not preserve v-model value.");
   }
   if (ownerNode.value !== owner.value) {
     throw new Error("Vue did not assign the text-input value property.");
@@ -126,11 +138,13 @@ onMounted(async () => {
       </VfButton>
     </vf-page-header>
 
-    <vf-tabs
-      ref="tabsElement"
+    <GeneratedVfTabs
+      v-model="selectedTab"
       aria-label="Vue consumer sections"
-      :items.prop="tabs"
-    ></vf-tabs>
+      :items="tabs"
+      activation-mode="automatic"
+      @vf-value-change="handleGeneratedTabsValue"
+    />
 
     <section class="vf-consumer-vue-section" aria-labelledby="value-title">
       <h2 id="value-title">Canonical value event</h2>
