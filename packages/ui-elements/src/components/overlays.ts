@@ -71,6 +71,7 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
   #body: HTMLDivElement | null = null;
   #surface: HTMLDivElement | null = null;
   #trigger: HTMLElement | null = null;
+  #childObserver: MutationObserver | null = null;
   #previousFocus: HTMLElement | null = null;
 
   get closeOnEscape(): boolean {
@@ -148,16 +149,21 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
 
   protected override connected(): void {
     this.ensureScaffold();
+    this.#childObserver = new MutationObserver(() => this.requestUpdate());
+    this.#childObserver.observe(this, { childList: true });
     this.addEventListener("keydown", this.handleKeyDown);
   }
 
   protected override disconnected(): void {
+    this.#childObserver?.disconnect();
+    this.#childObserver = null;
     this.removeEventListener("keydown", this.handleKeyDown);
   }
 
   protected override update(): void {
     const scaffold = this.ensureScaffold();
     if (!scaffold) return;
+    this.reconcileExternalNodes(scaffold);
     this.#controller.setDisabled(this.disabled);
     this.#controller.setModal(this.modal);
     this.#controller.syncOpen(this.open);
@@ -216,6 +222,66 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
   private get overlayConfig(): OverlayElementConfig {
     return (this.constructor as typeof VyrnForgeModalOverlayElement)
       .overlayConfig;
+  }
+
+  private reconcileExternalNodes(scaffold: {
+    backdrop: HTMLDivElement;
+    body: HTMLDivElement;
+    description: HTMLParagraphElement;
+    surface: HTMLDivElement;
+    title: HTMLHeadingElement;
+  }): void {
+    const externalNodes = [...this.childNodes].filter(
+      (node) =>
+        !(
+          node instanceof Element &&
+          node.hasAttribute("data-vf-overlay-internal")
+        ),
+    );
+    if (externalNodes.length === 0) return;
+
+    const triggerContainer = this.querySelelector<HTMLElement>(
+      `:cope > .${this.overlayConfig.baseClass}__trigger`,
+    );
+    const header = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__header`,
+    );
+    const actions = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__actions`,
+    );
+    const footer = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__footer`,
+    );
+    const close = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__close`,
+    );
+
+    for (const node of externalNodes) {
+      const slot = node instanceof Element ? node.getAttribute("slot") : null;
+      if (node instanceof Element) node.removeAttribute("slot");
+
+      if (
+        slot === "trigger" &&
+        node instanceof HTMLElement &&
+        triggerContainer
+      ) {
+        this.#trigger?.removeEventListener("click", this.handleTriggerClick);
+        this.#trigger = node;
+        this.#trigger.addEventListener("click", this.handleTriggerClick);
+        triggerContainer.replaceChildren(node);
+      } else if (slot === "header" && header) {
+        if (close) header.insertBefore(node, close);
+        else header.append(node);
+      } else if (slot === "actions" && actions) {
+        actions.hidden = false;
+        actions.append(node);
+      } else if (slot === "footer" && footer) {
+        footer.hidden = false;
+        footer.append(node);
+      } else {
+        scaffold.body.append(node);
+      }
+    }
   }
 
   private ensureScaffold(): {
