@@ -189,9 +189,13 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
       scaffold.surface.setAttribute("aria-describedby", this.#descriptionId);
     else scaffold.surface.removeAttribute("aria-describedby");
     scaffold.backdrop.setAttribute("aria-hidden", String(!this.open));
-    this.#trigger?.setAttribute("aria-controls", this.#contentId);
-    this.#trigger?.setAttribute("aria-expanded", String(this.open));
-    this.#trigger?.setAttribute("aria-haspopup", "dialog");
+    const triggerControl = this.resolveTriggerControl();
+    this.#trigger?.removeAttribute("aria-controls");
+    this.#trigger?.removeAttribute("aria-expanded");
+    this.#trigger?.removeAttribute("aria-haspopup");
+    triggerControl?.setAttribute("aria-controls", this.#contentId);
+    triggerControl?.setAttribute("aria-expanded", String(this.open));
+    triggerControl?.setAttribute("aria-haspopup", "dialog");
     this.setAttribute("data-vf-element", "");
 
     if (this.open && !this.#previousFocus) {
@@ -364,6 +368,21 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
       'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
     );
     (focusable ?? this.#surface)?.focus();
+  }
+
+  private resolveTriggerControl(): HTMLElement | null {
+    const trigger = this.#trigger;
+    if (!trigger) return null;
+    if (
+      trigger.matches(
+        'button, a[href], input:not([type="hidden"]), select, textarea, [role="button"]',
+      )
+    ) {
+      return trigger;
+    }
+    return trigger.querySelector<HTMLElement>(
+      'button, a[href], input:not([type="hidden"]), select, textarea, [role="button"]',
+    );
   }
 
   private readonly handleTriggerClick = () => {
