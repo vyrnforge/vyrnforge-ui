@@ -1,0 +1,48 @@
+name: Temporary S11 Tabs Formatter
+
+on:
+  push:
+    branches:
+      - s11-tabs-generation-slice
+
+permissions:
+  contents: write
+
+jobs:
+  format-tabs:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s11-tabs-generation-slice
+
+      - name: Install repository dependencies
+        run: npm ci
+
+      - name: Format Tabs files exactly
+        run: >-
+          npx prettier --write
+          scripts/framework-tabs-generation.mjs
+          tests/consumers/angular/src/app/app.component.ts
+          tests/consumers/react/src/main.tsx
+
+      - name: Commit formatted files
+        shell: bash
+        run: |
+          if git diff --quiet -- \
+            scripts/framework-tabs-generation.mjs \
+            tests/consumers/angular/src/app/app.component.ts \
+            tests/consumers/react/src/main.tsx; then
+            echo "Files already match Prettier."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            scripts/framework-tabs-generation.mjs \
+            tests/consumers/angular/src/app/app.component.ts \
+            tests/consumers/react/src/main.tsx
+          git commit -m "style: format Tabs slice"
+          git push origin HEAD:s11-tabs-generation-slice
