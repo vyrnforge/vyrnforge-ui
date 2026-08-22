@@ -140,7 +140,7 @@ onMounted(async () => {
 
     <GeneratedVfTabs
       v-model="activeTab"
-      aria-label="Vue consumer sections"
+      ariaLabel="Vue consumer sections"
       activation-mode="automatic"
       :items="tabs"
       @vf-value-change="handleGeneratedTabsValue"
