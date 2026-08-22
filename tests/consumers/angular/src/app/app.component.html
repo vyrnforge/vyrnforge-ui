@@ -20,8 +20,12 @@
 
   <vf-tabs
     #tabsElement
+    vfGeneratedTabs
     aria-label="Angular consumer sections"
     [items]="tabs"
+    [value]="selectedTab"
+    activationMode="automatic"
+    (valueChange)="handleGeneratedTabsValue($event)"
   ></vf-tabs>
 
   <section class="vf-consumer-angular-section" aria-labelledby="reactive-title">
