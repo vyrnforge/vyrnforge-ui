@@ -9,10 +9,11 @@
     "react",
     "@vyrnforge/ui-elements/register",
     "@vyrnforge/ui-elements/styles/index.css",
-    "\u003cvf-button",
-    "\u003cvf-tabs",
-    "tabsElement.items = tabs",
-    "useRef\u003cButtonElement\u003e",
+    "<vf-button",
+    "GeneratedTabs",
+    "items={tabs}",
+    "onValueChange",
+    "useRef<ButtonElement>",
     "addEventListener(\"vf-action\"",
     "data-consumer-ready"
   ]
