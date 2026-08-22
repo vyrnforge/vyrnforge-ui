@@ -16,6 +16,7 @@ type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
 import { GeneratedButton } from "./generated/Button.generated";
+import { GeneratedTabs } from "./generated/Tabs.generated";
 import { GeneratedTextInput } from "./generated/TextInput.generated";
 
 import "./styles.css";
@@ -24,6 +25,7 @@ function App() {
   const actionRef = useRef<ButtonElement>(null);
   const tabsRef = useRef<TabsElement>(null);
   const ownerRef = useRef<TextInputElement>(null);
+  const [activeTab, setActiveTab] = useState("summary");
   const [owner, setOwner] = useState("Operations");
   const [status, setStatus] = useState("Waiting");
 
@@ -33,12 +35,18 @@ function App() {
         {
           id: "summary",
           label: "Summary",
-          content: "React property assignment",
+          content: "React generated Tabs facade",
+        },
+        {
+          id: "disabled",
+          label: "Disabled",
+          content: "Disabled tab",
+          disabled: true,
         },
         {
           id: "events",
           label: "Events",
-          content: "Typed DOM event listener",
+          content: "Controlled value and typed DOM event listener",
         },
       ] satisfies readonly VyrnForgeTabItem[],
     [],
@@ -69,9 +77,6 @@ function App() {
       throw new Error("React did not attach the Custom Element refs.");
     }
 
-    // React 18 does not assign object-valued Custom Element properties from JSX.
-    tabsElement.items = tabs;
-
     const assignedItems = tabsElement.items;
     const itemsMatch =
       assignedItems.length === tabs.length &&
@@ -81,18 +86,23 @@ function App() {
           expected !== undefined &&
           item.id === expected.id &&
           item.label === expected.label &&
-          item.content === expected.content
+          item.content === expected.content &&
+          item.disabled === expected.disabled
         );
       });
 
     if (!itemsMatch) {
-      throw new Error("React did not assign the tabs items property.");
+      throw new Error("Generated React Tabs did not assign the items property.");
     }
 
     if (tabsElement.hasAttribute("items")) {
       throw new Error(
-        "React serialized the tabs items property into an attribute.",
+        "Generated React Tabs serialized the items property into an attribute.",
       );
+    }
+
+    if (tabsElement.value !== activeTab) {
+      throw new Error("Generated React Tabs did not retain controlled value.");
     }
 
     if (ownerElement.value !== owner) {
@@ -104,7 +114,7 @@ function App() {
     document
       .querySelector("[data-react-consumer]")
       ?.setAttribute("data-consumer-ready", "true");
-  }, [owner, tabs]);
+  }, [activeTab, owner, tabs]);
 
   return (
     <main className="vf-consumer-react" data-react-consumer>
@@ -130,7 +140,19 @@ function App() {
         Save from React
       </GeneratedButton>
 
-      <vf-tabs ref={tabsRef} aria-label="React consumer sections" />
+      <GeneratedTabs
+        ref={tabsRef}
+        ariaLabel="React consumer sections"
+        items={tabs}
+        value={activeTab}
+        activationMode="automatic"
+        onValueChange={(value) => {
+          setActiveTab(value);
+          document
+            .querySelector("[data-react-consumer]")
+            ?.setAttribute("data-generated-tabs-value", value);
+        }}
+      />
 
       <GeneratedTextInput
         ref={ownerRef}
