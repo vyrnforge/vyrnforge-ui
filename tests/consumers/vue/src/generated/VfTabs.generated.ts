@@ -49,11 +49,15 @@ export const VfTabs = defineComponent({
   setup(props, { attrs, emit, expose }) {
     const elementRef = ref<VfTabsElement | null>(null);
     let defaultApplied = false;
+    let appliedItems: readonly VyrnForgeTabItem[] | undefined;
 
     watchEffect(() => {
       const element = elementRef.value;
       if (!element) return;
-      element.items = props.items;
+      if (appliedItems !== props.items) {
+        element.items = props.items;
+        appliedItems = props.items;
+      }
       if (props.modelValue !== undefined) {
         if (element.value !== props.modelValue) element.value = props.modelValue;
       } else if (!defaultApplied && props.defaultValue !== undefined) {
