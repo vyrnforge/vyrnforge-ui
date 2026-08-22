@@ -1,145 +1,31 @@
 {
   "project": "VyrnForge UI",
-  "schemaVersion": 3,
+  "schemaVersion": 4,
+  "purpose": "AI navigation only. Canonical repository metadata owns package, component, framework, release, and evidence status.",
   "sourceOfTruth": {
     "docsIndex": "docs/README.md",
+    "documentationSystem": "docs/engineering/documentation-system.md",
     "componentMetadata": "docs/metadata/components.json",
     "packageMetadata": "docs/metadata/packages.json",
+    "componentContracts": "docs/metadata/component-contracts.json",
+    "designTokens": "docs/metadata/design-tokens.json",
     "cssImports": "docs/metadata/css-imports.json",
     "stateContracts": "docs/metadata/state-contracts.json",
-    "aiUsageRules": "docs/metadata/ai-usage-rules.json",
     "multiFramework": "docs/metadata/multi-framework.json",
-    "componentContracts": "docs/metadata/component-contracts.json",
-    "gmf1Closure": "docs/metadata/gmf1-closure.json",
-    "gmf3Closure": "docs/metadata/gmf3-closure.json",
-    "crossFrameworkAccessibility": "docs/metadata/cross-framework-accessibility-review.json",
-    "multiFrameworkMigrationGuide": "docs/metadata/multi-framework-migration-guide.json"
+    "aiUsageRules": "docs/metadata/ai-usage-rules.json"
   },
-  "packages": {
-    "@vyrnforge/ui-core": {
-      "status": "current",
-      "releaseTrack": "non-grid-beta",
-      "owns": [
-        "tokens",
-        "themes",
-        "density",
-        "typography",
-        "motion",
-        "layers",
-        "utilities"
-      ],
-      "css": ["@vyrnforge/ui-core/styles/index.css"]
-    },
-    "@vyrnforge/ui-behaviors": {
-      "status": "current-foundation",
-      "releaseTrack": "non-grid-beta",
-      "owns": [
-        "framework-neutral controllers",
-        "collections",
-        "selection",
-        "validation",
-        "behavior events",
-        "navigation intent",
-        "overlay lifecycle and positioning"
-      ],
-      "css": []
-    },
-    "@vyrnforge/ui-components": {
-      "status": "current",
-      "renderer": "react",
-      "releaseTrack": "non-grid-beta",
-      "owns": [
-        "actions",
-        "typography",
-        "forms",
-        "feedback",
-        "layout",
-        "overlays",
-        "navigation",
-        "data management"
-      ],
-      "css": [
-        "@vyrnforge/ui-core/styles/index.css",
-        "@vyrnforge/ui-components/styles/index.css"
-      ]
-    },
-    "@vyrnforge/ui-elements": {
-      "status": "current-gmf4-consumer-foundation",
-      "renderer": "custom-elements",
-      "releaseTrack": "non-grid-beta",
-      "owns": [
-        "native elements",
-        "property reflection",
-        "vf-* DOM events",
-        "form association",
-        "registration",
-        "Custom Elements Manifest"
-      ],
-      "css": [
-        "@vyrnforge/ui-core/styles/index.css",
-        "@vyrnforge/ui-elements/styles/index.css"
-      ],
-      "registeredPublicTags": 58,
-      "currentBatch": "CF-7010-CF-7013",
-      "gateStatus": "gmf4-accessibility-and-migration-review",
-      "publicMetadata": "@vyrnforge/ui-elements/custom-elements.json",
-      "consumerEvidence": [
-        "native-html",
-        "react-custom-elements",
-        "angular",
-        "vue"
-      ]
-    },
-    "@vyrnforge/ui-data-grid": {
-      "status": "react-alpha-deferred",
-      "renderer": "react",
-      "releaseTrack": "independent-alpha",
-      "owns": [
-        "UniversalDataGrid",
-        "grid behavior",
-        "grid state",
-        "grid adapters",
-        "grid-specific styles"
-      ],
-      "css": [
-        "@vyrnforge/ui-core/styles/index.css",
-        "@vyrnforge/ui-components/styles/index.css",
-        "@vyrnforge/ui-data-grid/styles/index.css"
-      ]
-    }
+  "packageDocs": {
+    "@vyrnforge/ui-core": "docs/packages/ui-core.md",
+    "@vyrnforge/ui-behaviors": "docs/packages/ui-behaviors.md",
+    "@vyrnforge/ui-components": "docs/packages/ui-components.md",
+    "@vyrnforge/ui-elements": "docs/packages/ui-elements.md",
+    "@vyrnforge/ui-data-grid": "docs/packages/ui-data-grid.md"
   },
-  "rules": {
-    "state": "store-agnostic controlled/uncontrolled; no Redux dependency",
-    "styling": "CSS variables and package CSS; no static visual inline styles",
-    "dependencies": "native-first, dependency-minimal",
-    "componentMetadata": "Read docs/metadata/components.json for component maturity, ownership, export status, routes, evidence, accessibility guidance, and limitations.",
-    "multiFramework": "React and native HTML are first-class beta targets; Angular and Vue require verified consumer evidence; data grid is deferred."
-  },
-  "componentUsageNotes": {
-    "AppShell": {
-      "layoutProps": [
-        "scrollMode",
-        "headerPosition",
-        "sidebarPosition",
-        "headerHeight",
-        "sidebarWidth",
-        "collapsedSidebarWidth",
-        "minHeight",
-        "fullHeight"
-      ],
-      "rule": "Do not fix persistent navigation with one-off app CSS when AppShell props can express the layout."
-    },
-    "Field": {
-      "relationshipRule": "Use Field's render-function child when it should supply native control relationships. For a static child, pair Field htmlFor with the child control id."
-    },
-    "SelectionControls": {
-      "rule": "Use Switch for persistent settings, ToggleButton for active tools or views, ToggleButtonGroup for related compact tools, SegmentedControl for small stable exclusive options, RadioGroup for spacious form choices, and Checkbox for independent Boolean values."
-    },
-    "Toast": {
-      "rule": "Use ToastProvider and useToast for transient operation feedback; queue, duration, pause/resume, action, and dismissal state come from ui-behaviors."
-    },
-    "Overlays": {
-      "rule": "Popover, Tooltip, Dialog, Drawer, and ConfirmDialog consume shared ui-behaviors controllers while React retains portals, focus, refs, timers, and DOM event translation."
-    }
-  }
+  "agentEntrypoints": [
+    "AGENTS.md",
+    ".ai/AI_CONTEXT.md",
+    ".ai/CODING_RULES.md",
+    ".ai/DOC_USAGE_GUIDE.md",
+    ".ai/REPO_MAP.md"
+  ]
 }
