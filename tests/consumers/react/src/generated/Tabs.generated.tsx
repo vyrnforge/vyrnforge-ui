@@ -47,6 +47,9 @@ export const GeneratedTabs = forwardRef<GeneratedTabsRef, GeneratedTabsProps>(
   ) {
     const elementRef = useRef<GeneratedTabsRef>(null);
     const defaultAppliedRef = useRef(false);
+    const appliedItemsRef = useRef<readonly VyrnForgeTabItem[] | undefined>(
+      undefined,
+    );
 
     useImperativeHandle(
       forwardedRef,
@@ -57,9 +60,12 @@ export const GeneratedTabs = forwardRef<GeneratedTabsRef, GeneratedTabsProps>(
     useLayoutEffect(() => {
       const element = elementRef.current;
       if (!element) return;
-      element.items = items;
+      if (appliedItemsRef.current !== items) {
+        element.items = items;
+        appliedItemsRef.current = items;
+      }
       if (value !== undefined) {
-        element.value = value;
+        if (element.value !== value) element.value = value;
       } else if (!defaultAppliedRef.current && defaultValue !== undefined) {
         element.value = defaultValue;
         defaultAppliedRef.current = true;
