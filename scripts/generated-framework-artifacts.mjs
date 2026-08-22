@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { buildFrameworkButtonSliceArtifacts } from "./generate-framework-button-slice.mjs";
+import { buildFrameworkDialogSliceArtifacts } from "./generate-framework-dialog-slice.mjs";
 import { buildFrameworkTabsSliceArtifacts } from "./generate-framework-tabs-slice.mjs";
 import { buildFrameworkTextInputSliceArtifacts } from "./generate-framework-text-input-slice.mjs";
 import {
@@ -69,6 +70,7 @@ export function buildGeneratedFrameworkArtifacts({
   const button = buildFrameworkButtonSliceArtifacts({ root });
   const textInput = buildFrameworkTextInputSliceArtifacts({ root });
   const tabs = buildFrameworkTabsSliceArtifacts({ root });
+  const dialog = buildFrameworkDialogSliceArtifacts({ root });
 
   return Object.freeze([
     freezeArtifact({
@@ -113,6 +115,11 @@ export function buildGeneratedFrameworkArtifacts({
     ...registerSliceArtifacts(
       tabs.artifacts,
       "scripts/generate-framework-tabs-slice.mjs",
+      "npm run generate:framework-artifacts",
+    ),
+    ...registerSliceArtifacts(
+      dialog.artifacts,
+      "scripts/generate-framework-dialog-slice.mjs",
       "npm run generate:framework-artifacts",
     ),
   ]);
