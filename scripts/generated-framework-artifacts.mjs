@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { buildFrameworkButtonSliceArtifacts } from "./generate-framework-button-slice.mjs";
+import { buildFrameworkTabsSliceArtifacts } from "./generate-framework-tabs-slice.mjs";
 import { buildFrameworkTextInputSliceArtifacts } from "./generate-framework-text-input-slice.mjs";
 import {
   FRAMEWORK_API_REFERENCE_PATH,
@@ -67,6 +68,7 @@ export function buildGeneratedFrameworkArtifacts({
   const apiReference = buildFrameworkApiReference({ root });
   const button = buildFrameworkButtonSliceArtifacts({ root });
   const textInput = buildFrameworkTextInputSliceArtifacts({ root });
+  const tabs = buildFrameworkTabsSliceArtifacts({ root });
 
   return Object.freeze([
     freezeArtifact({
@@ -106,6 +108,11 @@ export function buildGeneratedFrameworkArtifacts({
     ...registerSliceArtifacts(
       textInput.artifacts,
       "scripts/generate-framework-text-input-slice.mjs",
+      "npm run generate:framework-artifacts",
+    ),
+    ...registerSliceArtifacts(
+      tabs.artifacts,
+      "scripts/generate-framework-tabs-slice.mjs",
       "npm run generate:framework-artifacts",
     ),
   ]);
