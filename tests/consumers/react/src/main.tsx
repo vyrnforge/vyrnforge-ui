@@ -173,13 +173,11 @@ function App() {
         }}
       />
 
-      <GeneratedButton
-        id="react-dialog-open"
-        action="open-dialog"
-        onClick={() => setDialogOpen(true)}
-      >
-        Open React dialog
-      </GeneratedButton>
+      <span data-react-dialog-opener>
+        <GeneratedButton action="open-dialog" onClick={() => setDialogOpen(true)}>
+          Open React dialog
+        </GeneratedButton>
+      </span>
 
       <GeneratedDialog
         ref={dialogRef}
