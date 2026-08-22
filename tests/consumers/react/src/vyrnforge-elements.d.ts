@@ -5,6 +5,7 @@ import type {
 import type { DetailedHTMLProps, HTMLAttributes } from "react";
 
 type ButtonElement = VyrnForgeElementForTagName<"vf-button">;
+type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type InlineMessageElement = VyrnForgeElementForTagName<"vf-inline-message">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
@@ -24,6 +25,12 @@ declare module "react" {
         type?: "button" | "reset" | "submit";
         value?: string;
         variant?: ButtonElement["variant"];
+      };
+      "vf-dialog": ElementProps<DialogElement> & {
+        description?: string;
+        disabled?: boolean;
+        open?: boolean;
+        title?: string;
       };
       "vf-inline-message": ElementProps<InlineMessageElement> & {
         title?: string;

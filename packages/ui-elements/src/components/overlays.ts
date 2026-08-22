@@ -70,6 +70,8 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
   #backdrop: HTMLDivElement | null = null;
   #body: HTMLDivElement | null = null;
   #surface: HTMLDivElement | null = null;
+  #trigger: HTMLElement | null = null;
+  #childObserver: MutationObserver | null = null;
   #previousFocus: HTMLElement | null = null;
 
   get closeOnEscape(): boolean {
@@ -147,16 +149,21 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
 
   protected override connected(): void {
     this.ensureScaffold();
+    this.#childObserver = new MutationObserver(() => this.requestUpdate());
+    this.#childObserver.observe(this, { childList: true });
     this.addEventListener("keydown", this.handleKeyDown);
   }
 
   protected override disconnected(): void {
+    this.#childObserver?.disconnect();
+    this.#childObserver = null;
     this.removeEventListener("keydown", this.handleKeyDown);
   }
 
   protected override update(): void {
     const scaffold = this.ensureScaffold();
     if (!scaffold) return;
+    this.reconcileExternalNodes(scaffold);
     this.#controller.setDisabled(this.disabled);
     this.#controller.setModal(this.modal);
     this.#controller.syncOpen(this.open);
@@ -187,6 +194,14 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
     if (this.description)
       scaffold.surface.setAttribute("aria-describedby", this.#descriptionId);
     else scaffold.surface.removeAttribute("aria-describedby");
+    scaffold.backdrop.setAttribute("aria-hidden", String(!this.open));
+    const triggerControl = this.resolveTriggerControl();
+    this.#trigger?.removeAttribute("aria-controls");
+    this.#trigger?.removeAttribute("aria-expanded");
+    this.#trigger?.removeAttribute("aria-haspopup");
+    triggerControl?.setAttribute("aria-controls", this.#contentId);
+    triggerControl?.setAttribute("aria-expanded", String(this.open));
+    triggerControl?.setAttribute("aria-haspopup", "dialog");
     this.setAttribute("data-vf-element", "");
 
     if (this.open && !this.#previousFocus) {
@@ -207,6 +222,66 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
   private get overlayConfig(): OverlayElementConfig {
     return (this.constructor as typeof VyrnForgeModalOverlayElement)
       .overlayConfig;
+  }
+
+  private reconcileExternalNodes(scaffold: {
+    backdrop: HTMLDivElement;
+    body: HTMLDivElement;
+    description: HTMLParagraphElement;
+    surface: HTMLDivElement;
+    title: HTMLHeadingElement;
+  }): void {
+    const externalNodes = [...this.childNodes].filter(
+      (node) =>
+        !(
+          node instanceof Element &&
+          node.hasAttribute("data-vf-overlay-internal")
+        ),
+    );
+    if (externalNodes.length === 0) return;
+
+    const triggerContainer = this.querySelector<HTMLElement>(
+      `:scope > .${this.overlayConfig.baseClass}__trigger`,
+    );
+    const header = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__header`,
+    );
+    const actions = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__actions`,
+    );
+    const footer = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__footer`,
+    );
+    const close = scaffold.surface.querySelector<HTMLElement>(
+      `.${this.overlayConfig.baseClass}__close`,
+    );
+
+    for (const node of externalNodes) {
+      const slot = node instanceof Element ? node.getAttribute("slot") : null;
+      if (node instanceof Element) node.removeAttribute("slot");
+
+      if (
+        slot === "trigger" &&
+        node instanceof HTMLElement &&
+        triggerContainer
+      ) {
+        this.#trigger?.removeEventListener("click", this.handleTriggerClick);
+        this.#trigger = node;
+        this.#trigger.addEventListener("click", this.handleTriggerClick);
+        triggerContainer.replaceChildren(node);
+      } else if (slot === "header" && header) {
+        if (close) header.insertBefore(node, close);
+        else header.append(node);
+      } else if (slot === "actions" && actions) {
+        actions.hidden = false;
+        actions.append(node);
+      } else if (slot === "footer" && footer) {
+        footer.hidden = false;
+        footer.append(node);
+      } else {
+        scaffold.body.append(node);
+      }
+    }
   }
 
   private ensureScaffold(): {
@@ -246,6 +321,35 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
           node.hasAttribute("data-vf-overlay-internal")
         ),
     );
+    const trigger = externalNodes.find(
+      (node): node is HTMLElement =>
+        node instanceof HTMLElement && node.getAttribute("slot") === "trigger",
+    );
+    const headerNodes: Node[] = [];
+    const contentNodes: Node[] = [];
+    const actionNodes: Node[] = [];
+    const footerNodes: Node[] = [];
+    for (const node of externalNodes) {
+      if (node === trigger) continue;
+      const slot =
+        node instanceof Element ? node.getAttribute("slot") : undefined;
+      if (slot === "header") headerNodes.push(node);
+      else if (slot === "actions") actionNodes.push(node);
+      else if (slot === "footer") footerNodes.push(node);
+      else contentNodes.push(node);
+    }
+    const clearSlot = (node: Node) => {
+      if (node instanceof Element) node.removeAttribute("slot");
+      return node;
+    };
+    const triggerContainer = document.createElement("span");
+    triggerContainer.className = `${this.overlayConfig.baseClass}__trigger`;
+    triggerContainer.dataset.vfOverlayInternal = "";
+    if (trigger) {
+      trigger.removeAttribute("slot");
+      trigger.addEventListener("click", this.handleTriggerClick);
+      triggerContainer.append(trigger);
+    }
     const backdrop = document.createElement("div");
     backdrop.className = `${this.overlayConfig.baseClass}__backdrop`;
     backdrop.dataset.vfOverlayInternal = "";
@@ -264,7 +368,9 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
     close.setAttribute("aria-label", "Close");
     close.textContent = "×";
     close.addEventListener("click", () => this.close("close-button"));
-    header.append(title, close);
+    header.append(title);
+    for (const node of headerNodes) header.append(clearSlot(node));
+    header.append(close);
     const description = document.createElement("p");
     description.id = this.#descriptionId;
     description.className = `${this.overlayConfig.baseClass}__description`;
@@ -272,18 +378,44 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
     const body = document.createElement("div");
     body.className = `${this.overlayConfig.baseClass}__body`;
     body.dataset.vfOverlayBody = "";
-    for (const node of externalNodes) body.append(node);
-    surface.append(header, description, body);
+    for (const node of contentNodes) body.append(clearSlot(node));
+    const actions = document.createElement("div");
+    actions.className = `${this.overlayConfig.baseClass}__actions`;
+    actions.dataset.vfOverlayInternal = "";
+    for (const node of actionNodes) actions.append(clearSlot(node));
+    actions.hidden = actionNodes.length === 0;
+    const footer = document.createElement("footer");
+    footer.className = `${this.overlayConfig.baseClass}__footer`;
+    footer.dataset.vfOverlayInternal = "";
+    for (const node of footerNodes) footer.append(clearSlot(node));
+    footer.hidden = footerNodes.length === 0;
+    surface.append(header, description, body, actions, footer);
     backdrop.append(surface);
-    this.replaceChildren(backdrop);
+    this.replaceChildren(triggerContainer, backdrop);
     this.#backdrop = backdrop;
     this.#surface = surface;
     this.#body = body;
+    this.#trigger = trigger ?? null;
     return { backdrop, body, description, surface, title };
   }
 
   private requestOpen(nextOpen: boolean, reason: string): void {
     const previousOpen = this.open;
+    if (
+      !nextOpen &&
+      previousOpen &&
+      reason !== "programmatic" &&
+      !this.dispatchTypedEvent(
+        "vf-dismiss",
+        {
+          id: this.id || undefined,
+          reason: reason as OverlayDismissReason,
+        },
+        { cancelable: true },
+      )
+    ) {
+      return;
+    }
     const changed = nextOpen
       ? this.#controller.setOpen(true, reason as "programmatic")
       : this.#controller.dismiss(reason as OverlayDismissReason);
@@ -303,6 +435,25 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
     );
     (focusable ?? this.#surface)?.focus();
   }
+
+  private resolveTriggerControl(): HTMLElement | null {
+    const trigger = this.#trigger;
+    if (!trigger) return null;
+    if (
+      trigger.matches(
+        'button, a[href], input:not([type="hidden"]), select, textarea, [role="button"]',
+      )
+    ) {
+      return trigger;
+    }
+    return trigger.querySelector<HTMLElement>(
+      'button, a[href], input:not([type="hidden"]), select, textarea, [role="button"]',
+    );
+  }
+
+  private readonly handleTriggerClick = () => {
+    if (!this.disabled) this.show();
+  };
 
   private readonly handleBackdropPointer = (event: PointerEvent) => {
     if (event.target !== this.#backdrop || !this.closeOnOutsidePointer) return;

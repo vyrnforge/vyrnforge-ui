@@ -3,6 +3,9 @@ import { nextTick, onMounted, ref } from "vue";
 
 import VyrnForgeCheckboxModel from "./adapters/VyrnForgeCheckboxModel.vue";
 import VfButton from "./generated/VfButton.generated";
+import VfDialog, {
+  type GeneratedDialogDismissDetail,
+} from "./generated/VfDialog.generated";
 import GeneratedVfTabs from "./generated/VfTabs.generated";
 import GeneratedVfTextInput from "./generated/VfTextInput.generated";
 import type {
@@ -12,12 +15,14 @@ import type {
   VyrnForgeValueChangeDetail,
 } from "@vyrnforge/ui-elements";
 
+type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
 const consumerRoot = ref<HTMLElement | null>(null);
 const ownerElement = ref<TextInputElement | null>(null);
 const activeTab = ref("summary");
+const dialogOpen = ref(false);
 const owner = ref("Operations");
 const status = ref("Waiting");
 const modelOwner = ref("Model Operations");
@@ -62,6 +67,17 @@ function handleOwnerValueChange(event: Event): void {
   consumerRoot.value?.setAttribute("data-consumer-value", "received");
 }
 
+function handleDialogOpenChange(open: boolean): void {
+  consumerRoot.value?.setAttribute("data-generated-dialog-open", String(open));
+}
+
+function handleDialogDismiss(detail: GeneratedDialogDismissDetail): void {
+  consumerRoot.value?.setAttribute(
+    "data-generated-dialog-dismiss",
+    detail.reason,
+  );
+}
+
 function applyProgrammaticModel(): void {
   modelOwner.value = "Programmatic Vue";
   modelNotifications.value = true;
@@ -82,8 +98,11 @@ onMounted(async () => {
   const tabsNode = document.querySelector<TabsElement>(
     'vf-tabs[data-vf-generated-tabs="vue"]',
   );
+  const dialogNode = document.querySelector<DialogElement>(
+    'vf-dialog[data-vf-generated-dialog="vue"]',
+  );
   const ownerNode = ownerElement.value;
-  if (!tabsNode || !ownerNode) {
+  if (!tabsNode || !dialogNode || !ownerNode) {
     throw new Error("Vue did not attach the Custom Element refs.");
   }
 
@@ -111,6 +130,9 @@ onMounted(async () => {
   }
   if (ownerNode.value !== owner.value) {
     throw new Error("Vue did not assign the text-input value property.");
+  }
+  if (dialogNode.open !== dialogOpen.value) {
+    throw new Error("Generated Vue Dialog did not retain v-model:open state.");
   }
 
   consumerRoot.value?.setAttribute("data-consumer-property", "verified");
@@ -201,6 +223,24 @@ onMounted(async () => {
         <vf-button type="submit" variant="default"> Submit Vue form </vf-button>
       </form>
     </section>
+
+    <VfDialog
+      v-model:open="dialogOpen"
+      title="Vue generated dialog"
+      description="Generated Vue Dialog focus lifecycle evidence"
+      @update:open="handleDialogOpenChange"
+      @dismiss="handleDialogDismiss"
+    >
+      <template #trigger>
+        <button type="button" data-dialog-trigger>Open Vue dialog</button>
+      </template>
+      <template #content>
+        <div>
+          <button type="button" data-dialog-first>First dialog action</button>
+          <button type="button" data-dialog-last>Last dialog action</button>
+        </div>
+      </template>
+    </VfDialog>
 
     <output aria-live="polite" data-consumer-status>{{ status }}</output>
   </main>

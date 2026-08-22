@@ -108,5 +108,23 @@
     </form>
   </section>
 
+  <vf-dialog
+    #dialogElement
+    vfGeneratedDialog
+    [open]="dialogOpen"
+    title="Angular generated dialog"
+    description="Generated Angular Dialog focus lifecycle evidence"
+    (openChange)="handleDialogOpenChange($event)"
+    (dismiss)="handleDialogDismiss($event)"
+  >
+    <button slot="trigger" type="button" data-dialog-trigger>
+      Open Angular dialog
+    </button>
+    <div slot="content">
+      <button type="button" data-dialog-first>First dialog action</button>
+      <button type="button" data-dialog-last>Last dialog action</button>
+    </div>
+  </vf-dialog>
+
   <output aria-live="polite" data-consumer-status>{{ status }}</output>
 </main>

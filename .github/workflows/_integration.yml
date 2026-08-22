@@ -108,7 +108,8 @@ jobs:
       - name: Run cross-framework accessibility browser matrix
         if: inputs.consumer
         run: |
-          npm run verify:cross-framework-accessibility:runtime
+          npm run verify:cross-framework-accessibility:runtime -- --preserve-built-fixtures
+          node scripts/verify-framework-dialog-runtime.mjs
           test -f test-results/cross-framework-matrix/accessibility-report.json
 
       - name: Verify generated repository inventory
