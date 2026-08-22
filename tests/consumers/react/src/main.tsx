@@ -171,13 +171,13 @@ function App() {
         }}
       />
 
-      <vf-button
+      <GeneratedButton
         id="react-dialog-open"
         action="open-dialog"
-        onVfAction={() => setDialogOpen(true)}
+        onClick={() => setDialogOpen(true)}
       >
         Open React dialog
-      </vf-button>
+      </GeneratedButton>
 
       <GeneratedDialog
         ref={dialogRef}
