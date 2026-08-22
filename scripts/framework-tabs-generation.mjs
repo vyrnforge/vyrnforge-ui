@@ -3,7 +3,8 @@ export const FRAMEWORK_TABS_COMPONENT_ID = "tabs";
 export const FRAMEWORK_TABS_ARTIFACT_PATHS = Object.freeze({
   native: "tests/consumers/native-html/src/generated/vf-tabs.generated.ts",
   react: "tests/consumers/react/src/generated/Tabs.generated.tsx",
-  angular: "tests/consumers/angular/src/app/generated/vf-tabs.generated.ts",
+  angular:
+    "tests/consumers/angular/src/app/generated/vf-tabs.generated.ts",
   vue: "tests/consumers/vue/src/generated/VfTabs.generated.ts",
 });
 
@@ -70,7 +71,11 @@ function assertRecord(record, framework) {
     findEvent(record, "vf-value-change"),
     `${framework}: Tabs requires vf-value-change mapping`,
   );
-  for (const requirement of ["tablist semantics", "roving focus", "aria-controls"]) {
+  for (const requirement of [
+    "tablist semantics",
+    "roving focus",
+    "aria-controls",
+  ]) {
     assert(
       record.accessibility.includes(requirement),
       `${framework}: Tabs must retain ${requirement}`,
