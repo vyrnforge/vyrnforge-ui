@@ -117,7 +117,9 @@ export class AppComponent implements AfterViewInit {
         throw new Error("Angular did not assign the input value property.");
       }
       if (dialogElement.open !== this.dialogOpen) {
-        throw new Error("Generated Angular Dialog did not retain bound open state.");
+        throw new Error(
+          "Generated Angular Dialog did not retain bound open state.",
+        );
       }
 
       const root = document.querySelector<HTMLElement>(

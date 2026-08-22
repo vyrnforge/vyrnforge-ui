@@ -112,7 +112,9 @@ function App() {
     }
 
     if (dialogElement.open !== dialogOpen) {
-      throw new Error("Generated React Dialog did not retain controlled open state.");
+      throw new Error(
+        "Generated React Dialog did not retain controlled open state.",
+      );
     }
 
     document
