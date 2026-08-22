@@ -63,7 +63,7 @@ test("stale generated artifacts identify their canonical source records", () => 
 
 test("generated framework artifact registry covers every S11 owned output", () => {
   const artifacts = buildGeneratedFrameworkArtifacts();
-  assert.equal(artifacts.length, 16);
+  assert.equal(artifacts.length, 20);
   assert.deepEqual(
     artifacts.map((artifact) => artifact.path).sort(),
     [
@@ -72,15 +72,19 @@ test("generated framework artifact registry covers every S11 owned output", () =
       "packages/ui-elements/custom-elements.json",
       "packages/ui-elements/src/custom-elements.ts",
       "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
+      "tests/consumers/angular/src/app/generated/vf-dialog.generated.ts",
       "tests/consumers/angular/src/app/generated/vf-tabs.generated.ts",
       "tests/consumers/angular/src/app/generated/vf-text-input.generated.ts",
       "tests/consumers/native-html/src/generated/vf-button.generated.ts",
+      "tests/consumers/native-html/src/generated/vf-dialog.generated.ts",
       "tests/consumers/native-html/src/generated/vf-tabs.generated.ts",
       "tests/consumers/native-html/src/generated/vf-text-input.generated.ts",
       "tests/consumers/react/src/generated/Button.generated.tsx",
+      "tests/consumers/react/src/generated/Dialog.generated.tsx",
       "tests/consumers/react/src/generated/Tabs.generated.tsx",
       "tests/consumers/react/src/generated/TextInput.generated.tsx",
       "tests/consumers/vue/src/generated/VfButton.generated.ts",
+      "tests/consumers/vue/src/generated/VfDialog.generated.ts",
       "tests/consumers/vue/src/generated/VfTabs.generated.ts",
       "tests/consumers/vue/src/generated/VfTextInput.generated.ts",
     ].sort(),
