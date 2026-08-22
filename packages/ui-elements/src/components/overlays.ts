@@ -240,8 +240,8 @@ abstract class VyrnForgeModalOverlayElement extends VyrnForgeDomElement {
     );
     if (externalNodes.length === 0) return;
 
-    const triggerContainer = this.querySelelector<HTMLElement>(
-      `:cope > .${this.overlayConfig.baseClass}__trigger`,
+    const triggerContainer = this.querySelector<HTMLElement>(
+      `:scope > .${this.overlayConfig.baseClass}__trigger`,
     );
     const header = scaffold.surface.querySelector<HTMLElement>(
       `.${this.overlayConfig.baseClass}__header`,
