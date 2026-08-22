@@ -15,12 +15,16 @@ type ButtonElement = VyrnForgeElementForTagName<"vf-button">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
+import { GeneratedButton } from "./generated/Button.generated";
+import { GeneratedTextInput } from "./generated/TextInput.generated";
+
 import "./styles.css";
 
 function App() {
   const actionRef = useRef<ButtonElement>(null);
   const tabsRef = useRef<TabsElement>(null);
   const ownerRef = useRef<TextInputElement>(null);
+  const [owner, setOwner] = useState("Operations");
   const [status, setStatus] = useState("Waiting");
 
   const tabs = useMemo(
@@ -91,14 +95,16 @@ function App() {
       );
     }
 
-    if (ownerElement.value !== "Operations") {
-      throw new Error("React did not assign the text input value property.");
+    if (ownerElement.value !== owner) {
+      throw new Error(
+        "React did not assign the generated text input value property.",
+      );
     }
 
     document
       .querySelector("[data-react-consumer]")
       ?.setAttribute("data-consumer-ready", "true");
-  }, [tabs]);
+  }, [owner, tabs]);
 
   return (
     <main className="vf-consumer-react" data-react-consumer>
@@ -106,17 +112,37 @@ function App() {
         React is consuming packed VyrnForge Custom Elements directly.
       </vf-inline-message>
 
-      <vf-button ref={actionRef} action="react-save" variant="primary">
+      <GeneratedButton
+        ref={actionRef}
+        action="react-save"
+        variant="primary"
+        onClick={(detail) => {
+          if (detail.action !== "react-save") {
+            throw new Error(
+              "Generated React Button action mapping is invalid.",
+            );
+          }
+          document
+            .querySelector("[data-react-consumer]")
+            ?.setAttribute("data-generated-button-action", "received");
+        }}
+      >
         Save from React
-      </vf-button>
+      </GeneratedButton>
 
       <vf-tabs ref={tabsRef} aria-label="React consumer sections" />
 
-      <vf-text-input
+      <GeneratedTextInput
         ref={ownerRef}
         label="Owner"
         name="owner"
-        value="Operations"
+        value={owner}
+        onValueChange={(value) => {
+          setOwner(value);
+          document
+            .querySelector("[data-react-consumer]")
+            ?.setAttribute("data-generated-text-input-value", value);
+        }}
       />
 
       <output aria-live="polite" data-consumer-status>

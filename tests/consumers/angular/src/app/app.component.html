@@ -7,10 +7,12 @@
     <span slot="status" data-angular-slot="status">Angular 22</span>
     <vf-button
       id="angular-save"
+      vfGeneratedButton
       slot="actions"
       action="angular-save"
       variant="primary"
       (vf-action)="handleAction($event)"
+      (action)="handleGeneratedButtonAction($event)"
     >
       Save from Angular
     </vf-button>
@@ -30,11 +32,13 @@
       (submit)="$event.preventDefault()"
     >
       <vf-text-input
+        vfGeneratedTextInput
         vfFormControl
         formControlName="owner"
         label="Reactive owner"
         name="reactiveOwner"
-        required
+        [required]="true"
+        (valueChange)="handleGeneratedTextInputValue($event)"
       ></vf-text-input>
 
       <div class="vf-consumer-angular-actions">

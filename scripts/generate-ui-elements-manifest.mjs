@@ -2,27 +2,21 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import { loadFrameworkExceptions } from "./framework-exceptions.mjs";
+import {
+  createNativeElementGenerationModel,
+  loadNativeRegistrationEvidence,
+} from "./native-element-generation.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
 const checkOnly = process.argv.includes("--check");
-const registryPath = path.join(
-  repositoryRoot,
-  "packages/ui-elements/src/registry.ts",
-);
-const componentMetadataPath = path.join(
-  repositoryRoot,
-  "docs/metadata/components.json",
-);
-const eventsPath = path.join(
-  repositoryRoot,
-  "packages/ui-elements/src/events.ts",
-);
-const outputPath = path.join(
-  repositoryRoot,
-  "packages/ui-elements/custom-elements.json",
-);
+const componentMetadataPath = "docs/metadata/components.json";
+const manifestOutputPath = "packages/ui-elements/custom-elements.json";
+const declarationOutputPath = "packages/ui-elements/src/custom-elements.ts";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -32,30 +26,8 @@ function readJson(file) {
   return JSON.parse(readFileSync(file, "utf8"));
 }
 
-function collectDefinitions(registryText) {
-  const definitions = [];
-  const pattern = /tagName:\s*"([^"]+)"\s*,\s*constructor:\s*([A-Za-z0-9_]+)/gs;
-
-  for (const match of registryText.matchAll(pattern)) {
-    definitions.push({ tagName: match[1], className: match[2] });
-  }
-
-  return definitions;
-}
-
 function normalizeLineEndings(value) {
   return value.replace(/\r\n?/g, "\n");
-}
-
-function collectCanonicalEvents(eventsText) {
-  const detailMap = eventsText.match(
-    /export interface VyrnForgeCanonicalEventDetailMap\s*\{([\s\S]*?)\n\}/,
-  );
-  assert(detailMap, "VyrnForgeCanonicalEventDetailMap is missing.");
-
-  return [...detailMap[1].matchAll(/readonly\s+"([^"]+)"\s*:/g)].map(
-    (match) => match[1],
-  );
 }
 
 function componentDescriptions(metadata) {
@@ -90,7 +62,11 @@ function componentDescriptions(metadata) {
   return descriptions;
 }
 
-function createManifest(definitions, descriptions, canonicalEvents) {
+export function createCustomElementsManifest(
+  model,
+  descriptions,
+  canonicalEvents,
+) {
   return {
     schemaVersion: "1.0.0",
     readme: "README.md",
@@ -98,7 +74,7 @@ function createManifest(definitions, descriptions, canonicalEvents) {
       {
         kind: "javascript-module",
         path: "dist/index.js",
-        declarations: definitions.map(({ tagName, className }) => ({
+        declarations: model.entries.map(({ tagName, className }) => ({
           kind: "class",
           name: className,
           description:
@@ -115,14 +91,36 @@ function createManifest(definitions, descriptions, canonicalEvents) {
     ],
     vyrnforge: {
       namespace: "vf-",
+      generated: {
+        editable: false,
+        generator: "scripts/generate-ui-elements-manifest.mjs",
+        command: "npm run generate:custom-elements",
+        sources: [
+          "docs/metadata/component-contracts.json",
+          "packages/ui-elements/src/registry.ts",
+          "docs/metadata/framework-exceptions.json",
+          "docs/metadata/components.json",
+        ],
+      },
       registration: {
         explicitEntryPoint: "@vyrnforge/ui-elements/register",
         registerAll: "registerVyrnForgeElements",
         packageRootSideEffects: false,
       },
       domMode: "light-dom",
-      registeredTagCount: definitions.length,
+      registeredTagCount: model.summary.registrationCount,
       eventVocabulary: canonicalEvents,
+      nativeGeneration: {
+        sources: {
+          ...model.sources,
+          descriptions: "docs/metadata/components.json",
+        },
+        canonicalTagCount: model.summary.canonicalTagCount,
+        canonicalMappedRegistrationCount:
+          model.summary.canonicalMappedRegistrationCount,
+        exceptionBackedRegistrationCount:
+          model.summary.exceptionBackedRegistrationCount,
+      },
       typeDeclarations: {
         tagNameMap: "VyrnForgeHTMLElementTagNameMap",
         globalDomMap: "HTMLElementTagNameMap",
@@ -132,56 +130,126 @@ function createManifest(definitions, descriptions, canonicalEvents) {
   };
 }
 
-const registryText = readFileSync(registryPath, "utf8");
-const definitions = collectDefinitions(registryText);
-assert(
-  definitions.length === 58,
-  `Expected 58 registered elements, received ${definitions.length}.`,
-);
-assert(
-  new Set(definitions.map((item) => item.tagName)).size === definitions.length,
-  "Custom Element registry contains duplicate tags.",
-);
-assert(
-  new Set(definitions.map((item) => item.className)).size ===
-    definitions.length,
-  "Custom Element registry contains duplicate constructor exports.",
-);
+export function serializeCustomElementsManifest(manifest) {
+  return `${JSON.stringify(manifest, null, 2)}\n`;
+}
 
-const eventsText = readFileSync(eventsPath, "utf8");
-const canonicalEvents = collectCanonicalEvents(eventsText);
-assert(canonicalEvents.length > 0, "Canonical event map is empty.");
-assert(
-  new Set(canonicalEvents).size === canonicalEvents.length,
-  "Canonical event map contains duplicate names.",
-);
-for (const eventName of canonicalEvents) {
+export function serializeNativeTypeDeclarations(model) {
+  const entries = model.entries
+    .map(
+      ({ tagName, className }) =>
+        `  "${tagName}": VyrnForgeElementInstance<"${className}">;`,
+    )
+    .join("\n");
+
+  return `/**
+ * @generated by scripts/generate-ui-elements-manifest.mjs
+ * DO NOT EDIT. Regenerate with: npm run generate:custom-elements
+ */
+type VyrnForgeComponentConstructors = typeof import("./components");
+
+type VyrnForgeElementInstance<
+  TName extends keyof VyrnForgeComponentConstructors,
+> = VyrnForgeComponentConstructors[TName] extends abstract new (
+  ...args: never[]
+) => infer TElement
+  ? TElement
+  : never;
+
+/**
+ * Public Custom Element tag-to-instance map for typed DOM consumers.
+ *
+ * Importing \`@vyrnforge/ui-elements\` installs this declaration only;
+ * registration remains explicit through \`registerVyrnForgeElements\` or
+ * \`@vyrnforge/ui-elements/register\`.
+ */
+export interface VyrnForgeHTMLElementTagNameMap {
+${entries}
+}
+
+export type VyrnForgePublicElementTagName =
+  keyof VyrnForgeHTMLElementTagNameMap;
+
+export type VyrnForgeElementForTagName<
+  TTagName extends VyrnForgePublicElementTagName,
+> = VyrnForgeHTMLElementTagNameMap[TTagName];
+
+declare global {
+  interface HTMLElementTagNameMap extends VyrnForgeHTMLElementTagNameMap {}
+}
+`;
+}
+
+export function buildNativeElementArtifacts({ root = repositoryRoot } = {}) {
+  const contracts = loadCanonicalComponentContracts({ root });
+  const exceptions = loadFrameworkExceptions({ root });
+  const registrations = loadNativeRegistrationEvidence({ root });
+  const model = createNativeElementGenerationModel({
+    contracts,
+    exceptions,
+    registrations,
+  });
+  const descriptions = componentDescriptions(
+    readJson(path.join(root, componentMetadataPath)),
+  );
+  const canonicalEvents = contracts.events.map((event) => event.name);
+  assert(canonicalEvents.length > 0, "Canonical event vocabulary is empty.");
+
+  return {
+    model,
+    manifest: createCustomElementsManifest(
+      model,
+      descriptions,
+      canonicalEvents,
+    ),
+    declarations: serializeNativeTypeDeclarations(model),
+  };
+}
+
+function assertCurrent(filePath, expected, label) {
+  assert(existsSync(filePath), `${label} is missing.`);
   assert(
-    /^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(eventName),
-    `Invalid canonical event name: ${eventName}.`,
+    normalizeLineEndings(readFileSync(filePath, "utf8")) === expected,
+    `${label} is stale; run npm run generate:custom-elements.`,
   );
 }
 
-const metadata = readJson(componentMetadataPath);
-const manifest = createManifest(
-  definitions,
-  componentDescriptions(metadata),
-  canonicalEvents,
-);
-const serialized = `${JSON.stringify(manifest, null, 2)}\n`;
+export function writeNativeElementArtifacts({ root = repositoryRoot } = {}) {
+  const artifacts = buildNativeElementArtifacts({ root });
+  writeFileSync(
+    path.join(root, manifestOutputPath),
+    serializeCustomElementsManifest(artifacts.manifest),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, declarationOutputPath),
+    artifacts.declarations,
+    "utf8",
+  );
+  return artifacts;
+}
 
-if (checkOnly) {
-  assert(existsSync(outputPath), "custom-elements.json is missing.");
-  assert(
-    normalizeLineEndings(readFileSync(outputPath, "utf8")) === serialized,
-    "custom-elements.json is stale; run npm run generate:custom-elements.",
+export function verifyNativeElementArtifacts({ root = repositoryRoot } = {}) {
+  const artifacts = buildNativeElementArtifacts({ root });
+  assertCurrent(
+    path.join(root, manifestOutputPath),
+    serializeCustomElementsManifest(artifacts.manifest),
+    "custom-elements.json",
   );
-  console.log(
-    `Custom Elements metadata is current for ${definitions.length} vf-* tags.`,
+  assertCurrent(
+    path.join(root, declarationOutputPath),
+    artifacts.declarations,
+    "custom-elements.ts",
   );
-} else {
-  writeFileSync(outputPath, serialized);
+  return artifacts;
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const artifacts = checkOnly
+    ? verifyNativeElementArtifacts()
+    : writeNativeElementArtifacts();
+  const verb = checkOnly ? "current" : "generated";
   console.log(
-    `Generated Custom Elements metadata for ${definitions.length} vf-* tags.`,
+    `Custom Elements metadata and declarations are ${verb} for ${artifacts.model.summary.registrationCount} vf-* tags (${artifacts.model.summary.exceptionBackedRegistrationCount} exception-backed).`,
   );
 }

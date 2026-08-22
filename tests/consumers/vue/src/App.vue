@@ -2,7 +2,8 @@
 import { nextTick, onMounted, ref } from "vue";
 
 import VyrnForgeCheckboxModel from "./adapters/VyrnForgeCheckboxModel.vue";
-import VyrnForgeTextInputModel from "./adapters/VyrnForgeTextInputModel.vue";
+import VfButton from "./generated/VfButton.generated";
+import GeneratedVfTextInput from "./generated/VfTextInput.generated";
 import type {
   VyrnForgeActionDetail,
   VyrnForgeElementForTagName,
@@ -38,6 +39,13 @@ function handleAction(event: Event): void {
   const detail = (event as CustomEvent<VyrnForgeActionDetail>).detail;
   status.value = `Action: ${detail.action ?? "vue-save"} (${detail.reason})`;
   consumerRoot.value?.setAttribute("data-consumer-action", "received");
+}
+
+function handleGeneratedButtonAction(detail: VyrnForgeActionDetail): void {
+  if (detail.action !== "vue-save") {
+    throw new Error("Generated Vue Button action mapping is invalid.");
+  }
+  consumerRoot.value?.setAttribute("data-generated-button-action", "received");
 }
 
 function handleOwnerValueChange(event: Event): void {
@@ -106,15 +114,16 @@ onMounted(async () => {
       description="Vue 3 consumes the native VyrnForge package directly."
     >
       <span slot="status" data-vue-slot="status">Vue 3.5</span>
-      <vf-button
+      <VfButton
         id="vue-save"
         slot="actions"
         action="vue-save"
         variant="primary"
         @vf-action="handleAction"
+        @action="handleGeneratedButtonAction"
       >
         Save from Vue
-      </vf-button>
+      </VfButton>
     </vf-page-header>
 
     <vf-tabs
@@ -137,12 +146,13 @@ onMounted(async () => {
     </section>
 
     <section class="vf-consumer-vue-section" aria-labelledby="model-title">
-      <h2 id="model-title">Vue v-model adapter</h2>
+      <h2 id="model-title">Generated Vue v-model facade</h2>
       <label for="vue-model-owner">Model owner</label>
-      <VyrnForgeTextInputModel
+      <GeneratedVfTextInput
         id="vue-model-owner"
         v-model="modelOwner"
         name="modelOwner"
+        label="Model owner"
       />
       <output data-vue-model-value>{{ modelOwner }}</output>
 

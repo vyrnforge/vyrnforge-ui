@@ -103,7 +103,33 @@ test("rejects stale Custom Elements event vocabulary", () => {
       assert(
         verifyConsumerFoundations({ root }).some((failure) =>
           failure.includes(
-            "event vocabulary must match the canonical event detail map",
+            "event vocabulary must match canonical component contracts",
+          ),
+        ),
+      );
+    },
+  );
+});
+
+// Canonical contracts own event-vocabulary ordering; the typed event map must preserve set parity.
+test("rejects typed event maps that diverge from canonical contracts", () => {
+  withRepositoryFixture(
+    (root) => {
+      const eventsPath = path.join(root, "packages/ui-elements/src/events.ts");
+      const eventsText = readFileSync(eventsPath, "utf8");
+      writeFileSync(
+        eventsPath,
+        eventsText.replace(
+          '  readonly "vf-confirm": VyrnForgeConfirmDetail;\n',
+          "",
+        ),
+      );
+    },
+    (root) => {
+      assert(
+        verifyConsumerFoundations({ root }).some((failure) =>
+          failure.includes(
+            "canonical event detail map must cover canonical contract event vocabulary",
           ),
         ),
       );

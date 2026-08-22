@@ -649,6 +649,17 @@
   ],
   "vyrnforge": {
     "namespace": "vf-",
+    "generated": {
+      "editable": false,
+      "generator": "scripts/generate-ui-elements-manifest.mjs",
+      "command": "npm run generate:custom-elements",
+      "sources": [
+        "docs/metadata/component-contracts.json",
+        "packages/ui-elements/src/registry.ts",
+        "docs/metadata/framework-exceptions.json",
+        "docs/metadata/components.json"
+      ]
+    },
     "registration": {
       "explicitEntryPoint": "@vyrnforge/ui-elements/register",
       "registerAll": "registerVyrnForgeElements",
@@ -658,19 +669,30 @@
     "registeredTagCount": 58,
     "eventVocabulary": [
       "vf-action",
+      "vf-cancel",
       "vf-checked-change",
+      "vf-confirm",
       "vf-dismiss",
+      "vf-input-value-change",
       "vf-invalid",
       "vf-open-change",
       "vf-pressed-change",
       "vf-reset",
       "vf-selection-change",
-      "vf-cancel",
-      "vf-confirm",
-      "vf-input-value-change",
       "vf-toast-change",
       "vf-value-change"
     ],
+    "nativeGeneration": {
+      "sources": {
+        "contracts": "docs/metadata/component-contracts.json",
+        "registrationEvidence": "packages/ui-elements/src/registry.ts",
+        "exceptions": "docs/metadata/framework-exceptions.json",
+        "descriptions": "docs/metadata/components.json"
+      },
+      "canonicalTagCount": 57,
+      "canonicalMappedRegistrationCount": 57,
+      "exceptionBackedRegistrationCount": 1
+    },
     "typeDeclarations": {
       "tagNameMap": "VyrnForgeHTMLElementTagNameMap",
       "globalDomMap": "HTMLElementTagNameMap",

@@ -17,6 +17,8 @@ import type {
   VyrnForgeTabItem,
 } from "@vyrnforge/ui-elements";
 
+import { VfButton } from "./generated/vf-button.generated";
+import { VfTextInput } from "./generated/vf-text-input.generated";
 import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
 
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
@@ -25,7 +27,13 @@ type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, VyrnForgeFormControlDirective],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    VfButton,
+    VfTextInput,
+    VyrnForgeFormControlDirective,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: "./app.component.html",
 })
@@ -105,6 +113,21 @@ export class AppComponent implements AfterViewInit {
     document
       .querySelector("[data-angular-consumer]")
       ?.setAttribute("data-consumer-action", "received");
+  }
+
+  handleGeneratedButtonAction(detail: VyrnForgeActionDetail): void {
+    if (detail.action !== "angular-save") {
+      throw new Error("Generated Angular Button action mapping is invalid.");
+    }
+    document
+      .querySelector("[data-angular-consumer]")
+      ?.setAttribute("data-generated-button-action", "received");
+  }
+
+  handleGeneratedTextInputValue(value: string): void {
+    document
+      .querySelector("[data-angular-consumer]")
+      ?.setAttribute("data-generated-text-input-value", value);
   }
 
   disableOwner(): void {
