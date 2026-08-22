@@ -85,7 +85,9 @@ function App() {
       });
 
     if (!itemsMatch) {
-      throw new Error("Generated React Tabs did not assign the items property.");
+      throw new Error(
+        "Generated React Tabs did not assign the items property.",
+      );
     }
 
     if (tabsElement.hasAttribute("items")) {
@@ -95,7 +97,9 @@ function App() {
     }
 
     if (tabsElement.value !== activeTab) {
-      throw new Error("Generated React Tabs did not retain controlled value.");
+      throw new Error(
+        "Generated React Tabs did not retain controlled value.",
+      );
     }
 
     if (ownerElement.value !== owner) {
