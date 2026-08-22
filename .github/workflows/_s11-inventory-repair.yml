@@ -1,0 +1,44 @@
+name: S11 inventory repair
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.event.pull_request.head.ref == 's11-framework-generation-foundation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout S11 head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: s11-framework-generation-foundation
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Refresh repository inventory
+        shell: bash
+        run: |
+          npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+          npm ci
+          npm run inventory:repository
+          npm run verify:repository-inventory
+
+      - name: Commit repair and remove helper
+        shell: bash
+        run: |
+          rm -f .github/workflows/_s11-inventory-repair.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- docs/governance/repository-inventory.md .github/workflows/_s11-inventory-repair.yml
+          git commit -m "docs: refresh repository inventory after S11 reconciliation"
+          git push origin HEAD:s11-framework-generation-foundation
