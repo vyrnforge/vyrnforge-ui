@@ -1,0 +1,58 @@
+name: S11 Dialog Format
+
+on:
+  push:
+    branches:
+      - s11-dialog-generation-slice
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s11-dialog-generation-slice
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format Dialog slice
+        run: >-
+          npx prettier --write
+          tests/consumers/angular/src/app/app.component.html
+          tests/consumers/angular/src/app/app.component.ts
+          tests/consumers/native-html/index.html
+          tests/consumers/native-html/src/main.ts
+          tests/consumers/react/src/main.tsx
+          tests/consumers/vue/src/App.vue
+
+      - name: Commit formatting
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/consumers/angular/src/app/app.component.html \
+            tests/consumers/angular/src/app/app.component.ts \
+            tests/consumers/native-html/index.html \
+            tests/consumers/native-html/src/main.ts \
+            tests/consumers/react/src/main.tsx \
+            tests/consumers/vue/src/App.vue
+          git commit -m "style: format Dialog consumer fixtures"
+          git push origin HEAD:s11-dialog-generation-slice
