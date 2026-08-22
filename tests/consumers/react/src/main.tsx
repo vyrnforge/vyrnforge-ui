@@ -12,10 +12,12 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 type ButtonElement = VyrnForgeElementForTagName<"vf-button">;
+type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
 import { GeneratedButton } from "./generated/Button.generated";
+import { GeneratedDialog } from "./generated/Dialog.generated";
 import { GeneratedTabs } from "./generated/Tabs.generated";
 import { GeneratedTextInput } from "./generated/TextInput.generated";
 
@@ -23,9 +25,11 @@ import "./styles.css";
 
 function App() {
   const actionRef = useRef<ButtonElement>(null);
+  const dialogRef = useRef<DialogElement>(null);
   const tabsRef = useRef<TabsElement>(null);
   const ownerRef = useRef<TextInputElement>(null);
   const [activeTab, setActiveTab] = useState("summary");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [owner, setOwner] = useState("Operations");
   const [status, setStatus] = useState("Waiting");
 
@@ -66,8 +70,9 @@ function App() {
   useEffect(() => {
     const tabsElement = tabsRef.current;
     const ownerElement = ownerRef.current;
+    const dialogElement = dialogRef.current;
 
-    if (!tabsElement || !ownerElement) {
+    if (!tabsElement || !ownerElement || !dialogElement) {
       throw new Error("React did not attach the Custom Element refs.");
     }
 
@@ -106,10 +111,14 @@ function App() {
       );
     }
 
+    if (dialogElement.open !== dialogOpen) {
+      throw new Error("Generated React Dialog did not retain controlled open state.");
+    }
+
     document
       .querySelector("[data-react-consumer]")
       ?.setAttribute("data-consumer-ready", "true");
-  }, [activeTab, owner, tabs]);
+  }, [activeTab, dialogOpen, owner, tabs]);
 
   return (
     <main className="vf-consumer-react" data-react-consumer>
@@ -159,6 +168,37 @@ function App() {
           document
             .querySelector("[data-react-consumer]")
             ?.setAttribute("data-generated-text-input-value", value);
+        }}
+      />
+
+      <vf-button
+        id="react-dialog-open"
+        action="open-dialog"
+        onVfAction={() => setDialogOpen(true)}
+      >
+        Open React dialog
+      </vf-button>
+
+      <GeneratedDialog
+        ref={dialogRef}
+        open={dialogOpen}
+        title="React generated dialog"
+        description="Generated React Dialog focus lifecycle evidence"
+        content={
+          <div>
+            <button type="button" data-dialog-first>
+              First dialog action
+            </button>
+            <button type="button" data-dialog-last>
+              Last dialog action
+            </button>
+          </div>
+        }
+        onOpenChange={(open) => {
+          setDialogOpen(open);
+          document
+            .querySelector("[data-react-consumer]")
+            ?.setAttribute("data-generated-dialog-open", String(open));
         }}
       />
 
