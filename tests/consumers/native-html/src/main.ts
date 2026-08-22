@@ -6,6 +6,7 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 import { bindGeneratedVfButton } from "./generated/vf-button.generated";
+import { bindGeneratedVfDialog } from "./generated/vf-dialog.generated";
 import { bindGeneratedVfTabs } from "./generated/vf-tabs.generated";
 import { bindGeneratedVfTextInput } from "./generated/vf-text-input.generated";
 
@@ -17,6 +18,14 @@ const save =
   document.querySelector<VyrnForgeElementForTagName<"vf-button">>(
     "#native-save",
   );
+const dialogOpen =
+  document.querySelector<VyrnForgeElementForTagName<"vf-button">>(
+    "#native-dialog-open",
+  );
+const dialog =
+  document.querySelector<VyrnForgeElementForTagName<"vf-dialog">>(
+    "#native-dialog",
+  );
 const tabs =
   document.querySelector<VyrnForgeElementForTagName<"vf-tabs">>("#native-tabs");
 const owner = document.querySelector<
@@ -24,7 +33,7 @@ const owner = document.querySelector<
 >('vf-text-input[name="owner"]');
 const form = document.querySelector<HTMLFormElement>("#native-form");
 
-if (!root || !status || !save || !tabs || !owner || !form) {
+if (!root || !status || !save || !dialogOpen || !dialog || !tabs || !owner || !form) {
   throw new Error("Native HTML consumer fixture markup is incomplete.");
 }
 
@@ -69,6 +78,18 @@ bindGeneratedVfTextInput(owner, {
   onValueChange: (value) => {
     root.dataset.generatedTextInputValue = value;
   },
+});
+
+bindGeneratedVfDialog(dialog, {
+  title: "Native generated dialog",
+  description: "Generated Native Dialog focus lifecycle evidence",
+  onOpenChange: (open) => {
+    root.dataset.generatedDialogOpen = String(open);
+  },
+});
+
+dialogOpen.addEventListener("vf-action", () => {
+  dialog.show();
 });
 
 save.addEventListener("vf-action", (event) => {
