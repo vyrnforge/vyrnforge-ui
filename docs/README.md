@@ -94,7 +94,6 @@ public API contracts.
 | Current gaps                                 | [Gap Analysis](roadmap/02-gap-analysis.md)                         |
 | Explicitly deferred work                     | [Do Not Build Yet](roadmap/03-do-not-build-yet.md)                 |
 | Component lifecycle and promotion            | [Component Maturity Model](governance/component-maturity-model.md) |
-| Comparative research                         | [UI Library Landscape](benchmark/00-ui-library-landscape.md)       |
 
 Current planning may use active task identifiers where they are useful for
 execution. Normal usage guidance should not require readers to understand
