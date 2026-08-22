@@ -19,14 +19,21 @@ function normalizeLineEndings(value) {
   return value.replace(/\r\n?/g, "\n");
 }
 
-export function buildFrameworkTabsSliceArtifacts({ root = repositoryRoot } = {}) {
+export function buildFrameworkTabsSliceArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const contracts = loadCanonicalComponentContracts({ root });
   const generationModel = createFrameworkGenerationModel(contracts);
   const model = createFrameworkTabsSliceModel(generationModel);
-  return { model, artifacts: buildFrameworkTabsArtifacts(model) };
+  return {
+    model,
+    artifacts: buildFrameworkTabsArtifacts(model),
+  };
 }
 
-export function writeFrameworkTabsSliceArtifacts({ root = repositoryRoot } = {}) {
+export function writeFrameworkTabsSliceArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const result = buildFrameworkTabsSliceArtifacts({ root });
   for (const artifact of result.artifacts) {
     const outputPath = path.join(root, artifact.path);
@@ -36,7 +43,9 @@ export function writeFrameworkTabsSliceArtifacts({ root = repositoryRoot } = {})
   return result;
 }
 
-export function verifyFrameworkTabsSliceArtifacts({ root = repositoryRoot } = {}) {
+export function verifyFrameworkTabsSliceArtifacts({
+  root = repositoryRoot,
+} = {}) {
   const result = buildFrameworkTabsSliceArtifacts({ root });
   const failures = [];
   for (const artifact of result.artifacts) {
