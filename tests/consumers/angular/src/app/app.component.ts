@@ -18,10 +18,12 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 import { VfButton } from "./generated/vf-button.generated";
+import { VfDialog } from "./generated/vf-dialog.generated";
 import { VfTabs } from "./generated/vf-tabs.generated";
 import { VfTextInput } from "./generated/vf-text-input.generated";
 import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
 
+type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
@@ -32,6 +34,7 @@ type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
     FormsModule,
     ReactiveFormsModule,
     VfButton,
+    VfDialog,
     VfTabs,
     VfTextInput,
     VyrnForgeFormControlDirective,
@@ -45,6 +48,9 @@ export class AppComponent implements AfterViewInit {
 
   @ViewChild("ownerInput", { read: ElementRef })
   private ownerInputRef?: ElementRef<TextInputElement>;
+
+  @ViewChild("dialogElement", { read: ElementRef })
+  private dialogRef?: ElementRef<DialogElement>;
 
   readonly owner = "Operations";
   readonly profileForm = new FormGroup({
@@ -64,6 +70,7 @@ export class AppComponent implements AfterViewInit {
   ] satisfies readonly VyrnForgeTabItem[];
 
   activeTab = "summary";
+  dialogOpen = false;
   notifications = true;
   status = "Waiting";
 
@@ -75,7 +82,8 @@ export class AppComponent implements AfterViewInit {
     queueMicrotask(() => {
       const tabsElement = this.tabsRef?.nativeElement;
       const ownerElement = this.ownerInputRef?.nativeElement;
-      if (!tabsElement || !ownerElement) {
+      const dialogElement = this.dialogRef?.nativeElement;
+      if (!tabsElement || !ownerElement || !dialogElement) {
         throw new Error("Angular did not attach the Custom Element refs.");
       }
 
@@ -107,6 +115,9 @@ export class AppComponent implements AfterViewInit {
       }
       if (ownerElement.value !== this.owner) {
         throw new Error("Angular did not assign the input value property.");
+      }
+      if (dialogElement.open !== this.dialogOpen) {
+        throw new Error("Generated Angular Dialog did not retain bound open state.");
       }
 
       const root = document.querySelector<HTMLElement>(
@@ -145,6 +156,17 @@ export class AppComponent implements AfterViewInit {
     document
       .querySelector("[data-angular-consumer]")
       ?.setAttribute("data-generated-text-input-value", value);
+  }
+
+  openDialog(): void {
+    this.dialogOpen = true;
+  }
+
+  handleDialogOpenChange(open: boolean): void {
+    this.dialogOpen = open;
+    document
+      .querySelector("[data-angular-consumer]")
+      ?.setAttribute("data-generated-dialog-open", String(open));
   }
 
   disableOwner(): void {
