@@ -22,7 +22,7 @@ const fixtures = Object.freeze([
     directory: "tests/consumers/react",
     port: 4182,
     opener:
-      '[data-react-dialog-opener] vf-button > button[data-vf-action-control]',
+      "[data-react-dialog-opener] vf-button > button[data-vf-action-control]",
     dialog: 'vf-dialog[data-vf-generated-dialog="react"]',
   }),
   Object.freeze({
@@ -169,14 +169,11 @@ async function verifyDialogFixture(browser, fixture) {
       (selector) => document.querySelector(selector)?.open === true,
       fixture.dialog,
     );
-    await page.waitForFunction(
-      (selector) => {
-        const dialogElement = document.querySelector(selector);
-        const active = document.activeElement;
-        return Boolean(dialogElement && active && dialogElement.contains(active));
-      },
-      fixture.dialog,
-    );
+    await page.waitForFunction((selector) => {
+      const dialogElement = document.querySelector(selector);
+      const active = document.activeElement;
+      return Boolean(dialogElement && active && dialogElement.contains(active));
+    }, fixture.dialog);
 
     const firstFocusedTag = await page.evaluate(
       () => document.activeElement?.tagName ?? null,
@@ -217,8 +214,9 @@ async function verifyDialogFixture(browser, fixture) {
     );
 
     assert(
-      (await opener.evaluate((element) => document.activeElement === element)) ===
-        true,
+      (await opener.evaluate(
+        (element) => document.activeElement === element,
+      )) === true,
       `${fixture.id}: Dialog did not restore focus to its opener`,
     );
     assert(
