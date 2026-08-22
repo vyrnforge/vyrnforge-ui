@@ -31,14 +31,14 @@
         <vf-button type="submit" variant="default">Submit owner</vf-button>
       </form>
 
-      <vf-button id="native-dialog-open" action="open-dialog">
-        Open Native dialog
-      </vf-button>
       <vf-dialog
         id="native-dialog"
         title="Native generated dialog"
         description="Generated Native Dialog focus lifecycle evidence"
       >
+        <button slot="trigger" type="button" data-dialog-trigger>
+          Open Native dialog
+        </button>
         <div slot="content">
           <button type="button" data-dialog-first>First dialog action</button>
           <button type="button" data-dialog-last>Last dialog action</button>
