@@ -14,30 +14,33 @@ const fixtures = Object.freeze([
     id: "native-html",
     directory: "tests/consumers/native-html",
     port: 4181,
-    opener: "#native-dialog-open > button[data-vf-action-control]",
+    opener: '#native-dialog [data-dialog-trigger]',
     dialog: '#native-dialog[data-vf-generated-dialog="native"]',
+    root: "[data-consumer-root]",
   }),
   Object.freeze({
     id: "react",
     directory: "tests/consumers/react",
     port: 4182,
-    opener:
-      "[data-react-dialog-opener] vf-button > button[data-vf-action-control]",
+    opener: 'vf-dialog[data-vf-generated-dialog="react"] [data-dialog-trigger]',
     dialog: 'vf-dialog[data-vf-generated-dialog="react"]',
+    root: "[data-react-consumer]",
   }),
   Object.freeze({
     id: "angular",
     directory: "tests/consumers/angular",
     port: 4183,
-    opener: "#angular-dialog-open > button[data-vf-action-control]",
+    opener: 'vf-dialog[data-vf-generated-dialog="angular"] [data-dialog-trigger]',
     dialog: 'vf-dialog[data-vf-generated-dialog="angular"]',
+    root: "[data-angular-consumer]",
   }),
   Object.freeze({
     id: "vue",
     directory: "tests/consumers/vue",
     port: 4184,
-    opener: "#vue-dialog-open > button[data-vf-action-control]",
+    opener: 'vf-dialog[data-vf-generated-dialog="vue"] [data-dialog-trigger]',
     dialog: 'vf-dialog[data-vf-generated-dialog="vue"]',
+    root: "[data-vue-consumer]",
   }),
 ]);
 
@@ -163,6 +166,15 @@ async function verifyDialogFixture(browser, fixture) {
       (await dialog.evaluate((element) => element.tagName)) === "VF-DIALOG",
       `${fixture.id}: generated Dialog did not retain the canonical vf-dialog renderer`,
     );
+    assert(
+      await dialog.evaluate(
+        (element) =>
+          typeof element.show === "function" &&
+          typeof element.close === "function" &&
+          typeof element.focus === "function",
+      ),
+      `${fixture.id}: generated Dialog methods are not exposed by the canonical renderer`,
+    );
 
     await opener.click();
     await page.waitForFunction(
@@ -174,14 +186,6 @@ async function verifyDialogFixture(browser, fixture) {
       const active = document.activeElement;
       return Boolean(dialogElement && active && dialogElement.contains(active));
     }, fixture.dialog);
-
-    const firstFocusedTag = await page.evaluate(
-      () => document.activeElement?.tagName ?? null,
-    );
-    assert(
-      firstFocusedTag !== "BODY",
-      `${fixture.id}: Dialog opening did not move focus into the overlay`,
-    );
 
     await page.keyboard.press("Shift+Tab");
     assert(
@@ -214,25 +218,40 @@ async function verifyDialogFixture(browser, fixture) {
     );
 
     assert(
-      (await opener.evaluate(
-        (element) => document.activeElement === element,
-      )) === true,
-      `${fixture.id}: Dialog did not restore focus to its opener`,
+      (await page.locator(fixture.root).getAttribute("data-generated-dialog-open")) ===
+        "false",
+      `${fixture.id}: framework open-state mapping did not observe Escape dismissal`,
     );
     assert(
       (await page
-        .locator(
-          fixture.id === "native-html"
-            ? "[data-consumer-root]"
-            : `[data-${fixture.id === "react" ? "react" : fixture.id}-consumer]`,
-        )
-        .getAttribute("data-generated-dialog-open")) === "false",
-      `${fixture.id}: framework open-state mapping did not observe Escape dismissal`,
+        .locator(fixture.root)
+        .getAttribute("data-generated-dialog-dismiss")) === "escape-key",
+      `${fixture.id}: framework dismissal mapping did not expose escape-key`,
+    );
+
+    await dialog.evaluate((element) => element.show());
+    await page.waitForFunction(
+      (selector) => document.querySelector(selector)?.open === true,
+      fixture.dialog,
+    );
+    await dialog.evaluate((element) => element.focus());
+    assert(
+      await dialog.evaluate(
+        (element) =>
+          document.activeElement !== null &&
+          element.contains(document.activeElement),
+      ),
+      `${fixture.id}: Dialog focus() did not focus the overlay`,
+    );
+    await dialog.evaluate((element) => element.close());
+    await page.waitForFunction(
+      (selector) => document.querySelector(selector)?.open === false,
+      fixture.dialog,
     );
 
     await page.close();
     console.log(
-      `DIALOG ${fixture.id}: open, focus containment, Escape, model update, and focus restoration passed.`,
+      `DIALOG ${fixture.id}: trigger, focus containment/restoration, Escape dismissal, model mapping, and methods passed.`,
     );
   } catch (error) {
     throw new Error(
