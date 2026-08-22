@@ -25,15 +25,17 @@ jobs:
           node-version: 24.18.0
           cache: npm
 
-      - name: Repair React accessibility passthrough and validate consumers
+      - name: Finalize generated Tabs consumers
         shell: bash
         run: |
           npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
           npm ci
           python - <<'PY'
           from pathlib import Path
-          path = Path("scripts/framework-tabs-generation.mjs")
-          text = path.read_text()
+          import json
+
+          generator = Path("scripts/framework-tabs-generation.mjs")
+          text = generator.read_text()
           replacements = [
               (
                   'export interface GeneratedTabsProps {\n  id?: string;\n',
@@ -52,22 +54,42 @@ jobs:
               if old not in text:
                   raise SystemExit(f"expected React Tabs source fragment not found: {old!r}")
               text = text.replace(old, new, 1)
-          path.write_text(text)
+          generator.write_text(text)
+
+          fixture_updates = {
+              Path("tests/consumers/react/fixture.json"): {
+                  "<vf-tabs": "GeneratedTabs",
+                  "tabsElement.items = tabs": "data-generated-tabs-value",
+              },
+              Path("tests/consumers/vue/fixture.json"): {
+                  ":items.prop": "<GeneratedVfTabs",
+              },
+          }
+          for fixture_path, updates in fixture_updates.items():
+              data = json.loads(fixture_path.read_text())
+              patterns = data["requiredPatterns"]
+              for old, new in updates.items():
+                  if old not in patterns:
+                      raise SystemExit(f"{fixture_path}: required pattern {old!r} not found")
+                  patterns[patterns.index(old)] = new
+              fixture_path.write_text(json.dumps(data, indent=2) + "\n")
           PY
           npx prettier --write \
             scripts/framework-tabs-generation.mjs \
             tests/consumers/native-html/src/main.ts \
             tests/consumers/react/src/main.tsx \
+            tests/consumers/react/fixture.json \
             tests/consumers/angular/src/app/app.component.ts \
             tests/consumers/angular/src/app/app.component.html \
-            tests/consumers/vue/src/App.vue
+            tests/consumers/vue/src/App.vue \
+            tests/consumers/vue/fixture.json
           rm -f .github/workflows/_mfd1114-tabs-consumer-repair.yml
           npm run generate:framework-artifacts
           npm run inventory:repository
           npm run verify:generated-framework-artifacts
           npm run verify:consumer-foundations
 
-      - name: Commit repaired Tabs consumers
+      - name: Commit finalized Tabs consumers
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
@@ -76,9 +98,11 @@ jobs:
             scripts/framework-tabs-generation.mjs \
             tests/consumers/native-html/src/main.ts \
             tests/consumers/react/src/main.tsx \
+            tests/consumers/react/fixture.json \
             tests/consumers/angular/src/app/app.component.ts \
             tests/consumers/angular/src/app/app.component.html \
             tests/consumers/vue/src/App.vue \
+            tests/consumers/vue/fixture.json \
             tests/consumers/native-html/src/generated/vf-tabs.generated.ts \
             tests/consumers/react/src/generated/Tabs.generated.tsx \
             tests/consumers/angular/src/app/generated/vf-tabs.generated.ts \
