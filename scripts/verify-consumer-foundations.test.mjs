@@ -147,7 +147,9 @@ test("rejects regressed packed consumer claims", () => {
     (root) => {
       assert(
         verifyConsumerFoundations({ root }).some((failure) =>
-          failure.includes("vue manifest support claim is not a current verified claim"),
+          failure.includes(
+            "vue manifest support claim is not a current verified claim",
+          ),
         ),
       );
     },
