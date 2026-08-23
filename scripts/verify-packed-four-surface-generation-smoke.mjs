@@ -4,7 +4,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const npmCliPath = process.env.npm_execpath;
 const evidenceDirectory = path.join(
   root,
   "test-results/packed-four-surface-smoke",
