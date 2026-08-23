@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "sprint": "S14",
+    "id": "MFD-1409",
+    "title": "Migrate simple actions and typography batch",
+    "status": "parity-blocked"
+  },
+  "batch": {
+    "id": "react-batch-1",
+    "target": "simple actions and typography",
+    "rollback": "Retain current React implementations until canonical-backed facades pass every ADR-009 batch gate."
+  },
+  "evidence": [
+    {
+      "component": "Button",
+      "currentImplementation": "packages/ui-components/src/components/Button/Button.tsx",
+      "publicTypes": "packages/ui-components/src/components/Button/Button.types.ts",
+      "blockerClass": "imperative/ref-compatibility",
+      "finding": "The public component forwards HTMLButtonElement and inherits ButtonHTMLAttributes<HTMLButtonElement>. A vf-button Custom Element is not an HTMLButtonElement, so substituting it behind the same public type would make the ref and native-element contract unsound.",
+      "requiredResolution": "Preserve a genuinely compatible ref/native surface or record a narrow ADR-008 migration compatibility exception with evidence and exit criteria. Do not use a type cast as parity evidence."
+    },
+    {
+      "component": "Text",
+      "currentImplementation": "packages/ui-components/src/components/Typography/Text.tsx",
+      "blockerClass": "framework-composition-compatibility",
+      "finding": "The public React component supports an arbitrary polymorphic `as` ElementType and forwards the corresponding DOM props. Replacing that behavior with one fixed Custom Element requires an explicit compatibility mapping rather than silently changing rendered semantic element ownership.",
+      "requiredResolution": "Prove a canonical-backed polymorphic mapping or retain a narrow React integration path until the public semantic contract can be preserved."
+    }
+  ],
+  "rules": [
+    "Do not mark MFD-1409 migrated while a public native ref/type contract is only preserved through an unsound cast.",
+    "Do not remove legacy React source in the initial cutover step.",
+    "Resolve blockers through shared facade capability or explicit ADR-008 evidence, not component-specific hidden forks."
+  ]
+}
