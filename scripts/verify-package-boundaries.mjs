@@ -36,6 +36,7 @@ const packageDefinitions = [
     allowedDependencies: new Set([
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
     ]),
     forbiddenFrameworkSpecifiers: [],
   },
