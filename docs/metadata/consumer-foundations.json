@@ -1,36 +1,5 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S7",
-    "batch": "CF-7001-CF-7002-CF-7008",
-    "status": "evidence-complete",
-    "gate": "GMF4",
-    "gateStatus": "passed",
-    "baseCommit": "f55828e9fe4fbb2e16b2d28bfc8d3f1732bdfa8a"
-  },
-  "tasks": [
-    {
-      "id": "CF-7001",
-      "status": "done",
-      "title": "Verify plain HTML consumer",
-      "storyPoints": 3,
-      "evidence": "tests/consumers/native-html"
-    },
-    {
-      "id": "CF-7002",
-      "status": "done",
-      "title": "Verify React consumption of ui-elements",
-      "storyPoints": 3,
-      "evidence": "tests/consumers/react"
-    },
-    {
-      "id": "CF-7008",
-      "status": "done",
-      "title": "Verify declarations and Custom Element metadata",
-      "storyPoints": 5,
-      "evidence": "packages/ui-elements/custom-elements.json"
-    }
-  ],
   "packageContract": {
     "package": "@vyrnforge/ui-elements",
     "packedPackages": [
@@ -47,7 +16,6 @@
   "consumerFixtures": [
     {
       "id": "native-html",
-      "task": "CF-7001",
       "supportClaim": "packed-runtime-verified",
       "frameworkRuntime": "none",
       "directory": "tests/consumers/native-html",
@@ -63,7 +31,6 @@
     },
     {
       "id": "react",
-      "task": "CF-7002",
       "supportClaim": "packed-custom-elements-runtime-verified",
       "frameworkRuntime": "React 19",
       "directory": "tests/consumers/react",
@@ -76,10 +43,40 @@
         "typed refs and application-owned JSX declarations",
         "explicit native registration"
       ]
+    },
+    {
+      "id": "angular",
+      "supportClaim": "packed-angular-runtime-verified",
+      "formsSupportClaim": "angular-forms-adapter-verified",
+      "frameworkRuntime": "Angular 22.0.8",
+      "directory": "tests/consumers/angular",
+      "evidence": [
+        "clean tarball installation",
+        "strict Angular application build",
+        "Custom Element property and event bindings",
+        "native form participation",
+        "Angular Forms reference adapter",
+        "Chromium runtime verification"
+      ]
+    },
+    {
+      "id": "vue",
+      "supportClaim": "packed-vue-runtime-verified",
+      "modelSupportClaim": "vue-model-adapter-verified",
+      "frameworkRuntime": "Vue 3.5.40",
+      "directory": "tests/consumers/vue",
+      "evidence": [
+        "clean tarball installation",
+        "strict vue-tsc template and script type checking",
+        "Vite production build",
+        "Custom Element property and event bindings",
+        "native form participation",
+        "consumer-local v-model reference adapter",
+        "Chromium runtime verification"
+      ]
     }
   ],
   "declarationContract": {
-    "task": "CF-7008",
     "globalTagMap": {
       "export": "VyrnForgeHTMLElementTagNameMap",
       "global": "HTMLElementTagNameMap",
@@ -100,57 +97,26 @@
       "generator": "scripts/generate-ui-elements-manifest.mjs"
     }
   },
-  "requiredCommands": [
-    "npm run test:consumer-foundations",
-    "npm run verify:consumer-foundations",
-    "npm run verify:consumer-foundations:runtime",
-    "npm run test:angular-consumer",
-    "npm run verify:angular-consumer",
-    "npm run test:vue-consumer",
-    "npm run verify:vue-consumer",
-    "npm run verify:packages",
-    "npm run quality"
-  ],
   "evidence": [
     "tests/consumers/manifest.json",
     "tests/consumers/native-html/fixture.json",
     "tests/consumers/react/fixture.json",
+    "tests/consumers/angular/fixture.json",
+    "tests/consumers/vue/fixture.json",
+    "docs/metadata/angular-consumer.json",
+    "docs/metadata/angular-forms-adapter.json",
+    "docs/metadata/vue-consumer.json",
+    "docs/metadata/vue-model-adapter.json",
     "packages/ui-elements/src/custom-elements.ts",
     "packages/ui-elements/custom-elements.json",
     "scripts/generate-ui-elements-manifest.mjs",
     "scripts/verify-consumer-foundations.mjs",
     "scripts/verify-consumer-foundations-runtime.mjs",
     "docs/testing/consumer-foundation-contracts.md",
-    "tests/consumers/vue/fixture.json",
-    "docs/metadata/vue-consumer.json",
-    "docs/testing/vue-consumer-contract.md"
+    "docs/testing/angular-consumer-contract.md",
+    "docs/testing/angular-forms-adapter-contract.md",
+    "docs/testing/vue-consumer-contract.md",
+    "docs/testing/vue-model-adapter-contract.md"
   ],
-  "unresolvedBlockers": [],
-  "deferred": [
-    "Vue v-model adapter verification",
-    "cross-framework SSR and bundler verification",
-    "cross-framework browser and accessibility matrices",
-    "GMF4 closure and compatibility matrix sign-off",
-    "data-grid multi-framework work remains outside the non-grid beta critical path"
-  ],
-  "followOnEvidence": [
-    {
-      "task": "CF-7003",
-      "status": "done",
-      "evidence": "docs/metadata/angular-consumer.json",
-      "claim": "packed-angular-runtime-verified"
-    },
-    {
-      "task": "CF-7004",
-      "status": "done",
-      "evidence": "docs/metadata/angular-forms-adapter.json",
-      "claim": "angular-forms-adapter-verified"
-    },
-    {
-      "task": "CF-7005",
-      "status": "done",
-      "evidence": "docs/metadata/vue-consumer.json",
-      "claim": "packed-vue-runtime-verified"
-    }
-  ]
+  "unresolvedBlockers": []
 }
