@@ -208,6 +208,6 @@ framework facade/renderer
 - [ADR-010: AI Consumption Contract](adr-010-ai-consumption-contract.md)
 - [ADR-011: Optional Advanced Module Architecture](adr-011-optional-advanced-module-architecture.md)
 - [ADR-012: Framework Extensibility Contract](adr-012-framework-extensibility-contract.md)
-- [ADR-013: Reusable Pattern and Template Contract](adr-013-reusable-pattern-template-contract.md)
+- [ADR-013: Reusable Pattern and Template Contract](adr-013-pattern-template-contract.md)
 - [`../metadata/multi-framework.json`](../metadata/multi-framework.json)
 - [`../metadata/component-contracts.json`](../metadata/component-contracts.json)
