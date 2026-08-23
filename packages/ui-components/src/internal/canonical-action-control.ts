@@ -20,7 +20,9 @@ export function useCanonicalActionControlClassName(
     if (tokens.length === 0) return;
 
     const applyExternalClasses = () => {
-      const missing = tokens.filter((token) => !control.classList.contains(token));
+      const missing = tokens.filter(
+        (token) => !control.classList.contains(token),
+      );
       if (missing.length > 0) control.classList.add(...missing);
     };
 
