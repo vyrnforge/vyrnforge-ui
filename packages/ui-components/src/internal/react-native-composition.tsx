@@ -22,7 +22,11 @@ export function mapNamedContentToCanonicalSlots(
       ];
     }
 
-    return [<span slot={slot}>{content}</span>];
+    return [
+      <span key={slot} slot={slot}>
+        {content}
+      </span>,
+    ];
   });
 }
 
