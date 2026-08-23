@@ -19,7 +19,6 @@ export const activeContractTests = [
   "test:release-artifact",
   "test:release-dry-run",
   "test:multi-framework",
-  "test:behavior-foundations",
   "test:component-maturity",
   "test:design-tokens",
   "test:token-adoption",
@@ -61,7 +60,6 @@ export const activeMetadataVerifiers = [
   "verify:security-workflow-hardening",
   "verify:trusted-publishing-provenance",
   "verify:multi-framework",
-  "verify:behavior-foundations",
   "verify:consumer-foundations",
   "verify:component-reference",
 ];
@@ -120,7 +118,7 @@ export function findCommandCycles(graph) {
 
     active.add(name);
     stack.push(name);
-    for (const dependency of graph[name] ?? []) visit(dependency);
+    for (const dependency of graph[name] ?? []) visit(dependency, nextTrail);
     stack.pop();
     active.delete(name);
     visited.add(name);
