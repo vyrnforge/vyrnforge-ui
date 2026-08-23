@@ -13,7 +13,6 @@ import multiFrameworkDecision from "../../../docs/architecture/adr-004-multi-fra
 import componentContracts from "../../../docs/architecture/09-component-contracts-and-events.md?raw";
 import customElementsAndForms from "../../../docs/architecture/10-custom-elements-and-form-association.md?raw";
 import multiFrameworkFixtures from "../../../docs/testing/multi-framework-consumer-fixtures.md?raw";
-import gmf4CompatibilityGate from "../../../docs/testing/gmf4-cross-framework-compatibility-gate.md?raw";
 import semanticTokenAudit from "../../../docs/quality/s3-semantic-token-audit.md?raw";
 import multiFrameworkArchitectureEvidence from "../../../docs/quality/s4-multi-framework-architecture.md?raw";
 import masterRoadmap from "../../../docs/roadmap/00-master-roadmap.md?raw";
@@ -49,7 +48,6 @@ import metadataPackages from "../../../docs/metadata/packages.json?raw";
 import metadataComponents from "../../../docs/metadata/components.json?raw";
 import metadataDesignTokens from "../../../docs/metadata/design-tokens.json?raw";
 import metadataMultiFramework from "../../../docs/metadata/multi-framework.json?raw";
-import metadataGmf4Closure from "../../../docs/metadata/gmf4-closure.json?raw";
 import metadataComponentContracts from "../../../docs/metadata/component-contracts.json?raw";
 import metadataComponentContractSchema from "../../../docs/metadata/component-contract.schema.json?raw";
 import metadataCrossFrameworkBrowserMatrix from "../../../docs/metadata/cross-framework-browser-matrix.json?raw";
@@ -789,33 +787,6 @@ export const docsRoutes: DocsRoute[] = [
       "Use this as a navigable summary. Architecture docs remain source of truth.",
     tags: ["packages", "reference"],
     kind: "package-reference",
-  },
-  {
-    id: "gmf4-compatibility-gate",
-    title: "GMF4 Compatibility Gate",
-    group: "Testing",
-    description:
-      "CF-7014 final Native HTML, React, Angular, and Vue compatibility closure.",
-    sourcePath: "docs/testing/gmf4-cross-framework-compatibility-gate.md",
-    aiPurpose:
-      "Use this to review the final GMF4 support claim, evidence, blockers, and deferred data-grid scope.",
-    tags: ["testing", "multi-framework", "gmf4", "closure"],
-    canonical: true,
-    content: gmf4CompatibilityGate,
-  },
-  {
-    id: "metadata-gmf4-closure",
-    title: "GMF4 Closure Metadata",
-    group: "Metadata",
-    description:
-      "Machine-readable CF-7001 through CF-7014 compatibility closure.",
-    sourcePath: "docs/metadata/gmf4-closure.json",
-    aiPurpose:
-      "Use this for the canonical GMF4 task, evidence, package, blocker, and handoff record.",
-    tags: ["metadata", "gmf4", "closure"],
-    canonical: true,
-    kind: "metadata",
-    content: metadataGmf4Closure,
   },
 ];
 
