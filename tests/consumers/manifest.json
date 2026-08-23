@@ -1,7 +1,5 @@
 {
   "schemaVersion": 1,
-  "supportClaim": "gmf4-runtime-evidence-complete",
-  "runtimeBuildGate": "GMF4",
   "fixtures": [
     {
       "id": "react",
@@ -68,6 +66,5 @@
       "verificationStatus": "runtime-verified",
       "modelSupportClaim": "vue-model-adapter-verified"
     }
-  ],
-  "currentBatch": "CF-7010-CF-7013"
+  ]
 }
