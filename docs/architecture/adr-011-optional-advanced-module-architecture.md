@@ -65,14 +65,14 @@ It should not own the consuming application's business/runtime engine.
 
 Examples:
 
-| VyrnForge UI scope | External/application responsibility |
-| --- | --- |
+| VyrnForge UI scope                                                                        | External/application responsibility                              |
+| ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | chart rendering, axes, legends, selection, tooltips, accessible visualization interaction | BI calculation engine, business metrics pipeline, data warehouse |
-| workflow/diagram editing surface, nodes, ports, selection, keyboard interaction | workflow execution engine, orchestration runtime |
-| tree/tree-grid navigation, expansion, selection, editing UI | application data service and business hierarchy rules |
-| complex form composition and validation presentation | business workflow and domain validation policy |
-| spatial/3D controls, panels, interaction affordances | full game/scene/rendering engine unless separately justified |
-| data-grid interaction and presentation | backend query service, authorization, application persistence |
+| workflow/diagram editing surface, nodes, ports, selection, keyboard interaction           | workflow execution engine, orchestration runtime                 |
+| tree/tree-grid navigation, expansion, selection, editing UI                               | application data service and business hierarchy rules            |
+| complex form composition and validation presentation                                      | business workflow and domain validation policy                   |
+| spatial/3D controls, panels, interaction affordances                                      | full game/scene/rendering engine unless separately justified     |
+| data-grid interaction and presentation                                                    | backend query service, authorization, application persistence    |
 
 Integration with external runtimes should happen through controlled adapters, data interfaces, events, methods, or extension points.
 

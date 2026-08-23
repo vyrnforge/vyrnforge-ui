@@ -63,14 +63,14 @@ A pattern should be preferred when the primary value is the coordinated composit
 
 Examples:
 
-| Need | Preferred ownership |
-| --- | --- |
-| Toggle state and keyboard semantics | Component/behavior contract |
-| Dialog focus trap and close reasons | Component/behavior contract |
-| Settings page with navigation, sections, fields, actions | Pattern |
-| Filter bar coordinated with a result area | Pattern |
-| Business-specific customer onboarding sequence | Application, possibly using a generic step-form pattern |
-| Domain-specific approval workflow rules | Application/runtime |
+| Need                                                     | Preferred ownership                                     |
+| -------------------------------------------------------- | ------------------------------------------------------- |
+| Toggle state and keyboard semantics                      | Component/behavior contract                             |
+| Dialog focus trap and close reasons                      | Component/behavior contract                             |
+| Settings page with navigation, sections, fields, actions | Pattern                                                 |
+| Filter bar coordinated with a result area                | Pattern                                                 |
+| Business-specific customer onboarding sequence           | Application, possibly using a generic step-form pattern |
+| Domain-specific approval workflow rules                  | Application/runtime                                     |
 
 Patterns must not hide missing reusable component behavior. If several patterns duplicate the same interaction controller or semantic API, that is evidence to extract or extend a component/behavior instead.
 
