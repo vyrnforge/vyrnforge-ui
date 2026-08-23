@@ -216,7 +216,6 @@ test("missing diff uses safe full validation", () => {
 
 test("regression fixture changes run fixture quality without full fallback", () => {
   const plan = planCiScope(["apps/regression-fixtures/src/FixtureApp.tsx"]);
-
   assert.equal(plan.quality, true);
   assert.equal(plan.fixtures, true);
   assert.equal(plan.browser, true);
@@ -225,7 +224,6 @@ test("regression fixture changes run fixture quality without full fallback", () 
 
 test("shared DOM test utility changes run components and fixtures", () => {
   const plan = planCiScope(["tests/dom/index.tsx"]);
-
   assert.equal(plan.quality, true);
   assert.equal(plan.fixtures, true);
   assert.equal(plan.ui_components, true);
@@ -242,14 +240,9 @@ test("browser contract changes run browser and quality checks", () => {
 });
 
 test("visual regression metadata runs browser, fixture, quality, and docs checks", () => {
-  for (const file of [
-    "docs/metadata/visual-regression-matrix.json",
-    "docs/metadata/g3-closure.json",
-  ]) {
-    const plan = planCiScope([file]);
-    expectEnabled(plan, ["quality", "metadata", "docs", "fixtures", "browser"]);
-    expectDisabled(plan, ["full", "docs_only"]);
-  }
+  const plan = planCiScope(["docs/metadata/visual-regression-matrix.json"]);
+  expectEnabled(plan, ["quality", "metadata", "docs", "fixtures", "browser"]);
+  expectDisabled(plan, ["full", "docs_only", "historical_evidence"]);
 });
 
 test("historical closure evidence uses its dedicated scope", () => {
