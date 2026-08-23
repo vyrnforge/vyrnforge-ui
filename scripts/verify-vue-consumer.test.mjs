@@ -40,7 +40,7 @@ function mutateJson(root, relativePath, mutator) {
   writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-test("accepts the CF-7005 Vue consumer implementation", () => {
+test("accepts the verified Vue consumer implementation", () => {
   withRepositoryFixture(null, (failures) => {
     assert.deepEqual(failures, []);
   });
