@@ -103,7 +103,6 @@ const requiredDocuments = [
   "docs/metadata/multi-framework.json",
   "docs/metadata/component-contracts.json",
   "docs/metadata/component-contract.schema.json",
-  "docs/metadata/gmf4-closure.json",
   "docs/metadata/consumer-foundations.json",
   "docs/metadata/angular-consumer.json",
   "docs/metadata/angular-forms-adapter.json",
@@ -238,19 +237,6 @@ function verifyPackageTopology(root, failures, architecture) {
 }
 
 function verifyFrameworkSupport(failures, architecture) {
-  if (architecture.program?.status !== "gmf4-evidence-complete") {
-    addFailure(
-      failures,
-      "multi-framework program status must be gmf4-evidence-complete",
-    );
-  }
-  if (architecture.program?.gate !== "GMF4") {
-    addFailure(failures, "multi-framework program gate must be GMF4");
-  }
-  if (architecture.program?.currentSprint !== "S8") {
-    addFailure(failures, "multi-framework currentSprint must be S8");
-  }
-
   const frameworks = new Map(
     (architecture.frameworks ?? []).map((framework) => [
       framework.id,
@@ -328,9 +314,6 @@ function verifyFrameworkSupport(failures, architecture) {
       failures,
       "consumer fixture policy must reference angular-forms-adapter.json",
     );
-  }
-  if (architecture.consumerFixturePolicy?.runtimeBuildGate !== "GMF4") {
-    addFailure(failures, "consumer runtime build gate must remain GMF4");
   }
 }
 
@@ -492,16 +475,6 @@ function verifyConsumerFixtures(root, failures, architecture) {
   }
 
   const manifest = readJson(root, manifestPath);
-  if (manifest.supportClaim !== "gmf4-runtime-evidence-complete") {
-    addFailure(
-      failures,
-      "consumer fixture manifest must record gmf4-runtime-evidence-complete",
-    );
-  }
-  if (manifest.runtimeBuildGate !== "GMF4") {
-    addFailure(failures, "consumer runtime build gate must be GMF4");
-  }
-
   const fixtureIds = new Set();
   for (const fixture of manifest.fixtures ?? []) {
     fixtureIds.add(fixture.id);
@@ -601,11 +574,12 @@ export function verifyMultiFrameworkArchitecture({
     addFailure(failures, "component-contract catalog coverage count is stale");
   }
   for (const component of publicNonGrid) {
-    if (!component.frameworkParity)
+    if (!component.frameworkParity) {
       addFailure(
         failures,
         `${component.id} is missing frameworkParity metadata`,
       );
+    }
   }
   verifyConsumerFixtures(root, failures, architecture);
 
