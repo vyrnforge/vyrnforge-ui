@@ -242,29 +242,22 @@ test("browser contract changes run browser and quality checks", () => {
 test("visual regression metadata runs browser, fixture, quality, and docs checks", () => {
   const plan = planCiScope(["docs/metadata/visual-regression-matrix.json"]);
   expectEnabled(plan, ["quality", "metadata", "docs", "fixtures", "browser"]);
-  expectDisabled(plan, ["full", "docs_only", "historical_evidence"]);
+  expectDisabled(plan, ["full", "docs_only"]);
 });
 
-test("historical closure evidence uses its dedicated scope", () => {
+test("framework evidence metadata uses normal metadata quality coverage", () => {
   for (const file of [
-    "docs/metadata/gmf4-closure.json",
-    "scripts/verify-gmf4-closure.mjs",
+    "docs/metadata/angular-forms-adapter.json",
+    "docs/metadata/vue-consumer.json",
   ]) {
     const plan = planCiScope([file]);
-    expectEnabled(plan, [
-      "quality",
-      "metadata",
-      "docs",
-      "integration",
-      "historical_evidence",
-    ]);
+    expectEnabled(plan, ["quality", "metadata", "docs", "integration"]);
     expectDisabled(plan, ["packages", "consumer", "browser", "full"]);
   }
 });
 
-test("normal package source changes do not execute historical evidence", () => {
+test("normal package source changes use standard integration coverage", () => {
   const plan = planCiScope(["packages/ui-core/src/theme.ts"]);
-  assert.equal(plan.historical_evidence, false);
   assert.equal(plan.integration, true);
 });
 
