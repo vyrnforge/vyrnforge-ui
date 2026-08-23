@@ -93,6 +93,7 @@ public API contracts.
 | Component catalog pointer and planning rules | [Component Inventory](roadmap/01-component-inventory.md)           |
 | Current gaps                                 | [Gap Analysis](roadmap/02-gap-analysis.md)                         |
 | Explicitly deferred work                     | [Do Not Build Yet](roadmap/03-do-not-build-yet.md)                 |
+| Proposed vision, mission, and scope alignment | [Vision, Mission & Scope Alignment Review](roadmap/04-vision-mission-scope-alignment-review.md) |
 | Component lifecycle and promotion            | [Component Maturity Model](governance/component-maturity-model.md) |
 
 Current planning may use active task identifiers where they are useful for
