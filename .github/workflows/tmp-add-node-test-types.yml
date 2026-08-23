@@ -1,0 +1,44 @@
+name: Temporary Node test type repair
+
+on:
+  push:
+    branches:
+      - chore/repair-react-formatting-regression
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chore/repair-react-formatting-regression
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+      - name: Add Node types as ui-components dev dependency
+        run: npm install --save-dev --workspace @vyrnforge/ui-components @types/node@latest
+      - name: Enable Node types for package tests
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const path = 'packages/ui-components/tsconfig.json';
+          const config = JSON.parse(fs.readFileSync(path, 'utf8'));
+          config.compilerOptions.types = [...new Set([...(config.compilerOptions.types || []), 'node'])];
+          fs.writeFileSync(path, `${JSON.stringify(config, null, 2)}\n`);
+          NODE
+          npx prettier --write packages/ui-components/package.json packages/ui-components/tsconfig.json package-lock.json
+      - name: Remove temporary workflow and commit repair
+        run: |
+          rm .github/workflows/tmp-add-node-test-types.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "fix: type Node-based React compatibility tests"
+          git push origin HEAD:chore/repair-react-formatting-regression
