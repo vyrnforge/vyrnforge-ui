@@ -53,10 +53,16 @@ function verifyMetadata(root, failures) {
     addFailure(failures, "Angular Forms adapter status must be verified");
   }
   if (adapter.framework !== "Angular" || adapter.version !== angularVersion) {
-    addFailure(failures, `Angular Forms adapter version must be ${angularVersion}`);
+    addFailure(
+      failures,
+      `Angular Forms adapter version must be ${angularVersion}`,
+    );
   }
   if (adapter.supportClaim !== expectedSupportClaim) {
-    addFailure(failures, `Angular Forms support claim must be ${expectedSupportClaim}`);
+    addFailure(
+      failures,
+      `Angular Forms support claim must be ${expectedSupportClaim}`,
+    );
   }
   if (adapter.directive !== "VyrnForgeFormControlDirective") {
     addFailure(failures, "Angular Forms directive identity is invalid");
@@ -74,13 +80,19 @@ function verifyMetadata(root, failures) {
     );
   }
   if (adapter.location !== "tests/consumers/angular") {
-    addFailure(failures, "Angular Forms adapter must remain in the isolated reference fixture");
+    addFailure(
+      failures,
+      "Angular Forms adapter must remain in the isolated reference fixture",
+    );
   }
   if (adapter.duplicatesRendering !== false) {
     addFailure(failures, "Angular Forms adapter must not duplicate rendering");
   }
   if (adapter.duplicatesValidation !== false) {
-    addFailure(failures, "Angular Forms adapter must delegate validation to native elements");
+    addFailure(
+      failures,
+      "Angular Forms adapter must delegate validation to native elements",
+    );
   }
 
   const actualTags = new Set(adapter.supportedTags ?? []);
@@ -160,7 +172,10 @@ function verifyDirective(root, failures) {
     "host: {",
   ]) {
     if (directive.includes(forbidden)) {
-      addFailure(failures, `Angular Forms directive must not contain ${forbidden}`);
+      addFailure(
+        failures,
+        `Angular Forms directive must not contain ${forbidden}`,
+      );
     }
   }
 }
@@ -171,7 +186,10 @@ function verifyFixture(root, failures) {
     addFailure(failures, `@angular/forms must be pinned to ${angularVersion}`);
   }
 
-  const component = read(root, "tests/consumers/angular/src/app/app.component.ts");
+  const component = read(
+    root,
+    "tests/consumers/angular/src/app/app.component.ts",
+  );
   for (const marker of [
     "FormsModule",
     "ReactiveFormsModule",
@@ -185,7 +203,10 @@ function verifyFixture(root, failures) {
       addFailure(failures, `Angular Forms component is missing ${marker}`);
     }
   }
-  const template = read(root, "tests/consumers/angular/src/app/app.component.html");
+  const template = read(
+    root,
+    "tests/consumers/angular/src/app/app.component.html",
+  );
   for (const marker of [
     "vfFormControl",
     'formControlName="owner"',
@@ -203,24 +224,38 @@ function verifyFixture(root, failures) {
 
   const fixture = readJson(root, "tests/consumers/angular/fixture.json");
   if (fixture.formsSupportClaim !== expectedSupportClaim) {
-    addFailure(failures, `Angular fixture forms support claim must be ${expectedSupportClaim}`);
+    addFailure(
+      failures,
+      `Angular fixture forms support claim must be ${expectedSupportClaim}`,
+    );
   }
   const manifest = readJson(root, "tests/consumers/manifest.json");
-  const angularFixture = (manifest.fixtures ?? []).find((entry) => entry.id === "angular");
+  const angularFixture = (manifest.fixtures ?? []).find(
+    (entry) => entry.id === "angular",
+  );
   if (angularFixture?.formsSupportClaim !== expectedSupportClaim) {
-    addFailure(failures, `consumer manifest Angular forms claim must be ${expectedSupportClaim}`);
+    addFailure(
+      failures,
+      `consumer manifest Angular forms claim must be ${expectedSupportClaim}`,
+    );
   }
   if (
     !(angularFixture?.exampleFiles ?? []).includes(
       "src/app/vyrnforge-form-control.directive.ts",
     )
   ) {
-    addFailure(failures, "consumer manifest must index the Angular Forms directive");
+    addFailure(
+      failures,
+      "consumer manifest must index the Angular Forms directive",
+    );
   }
 }
 
 function verifyRuntimeEvidence(root, failures) {
-  const runtime = read(root, "scripts/verify-consumer-foundations-runtime.mjs");
+  const runtime = read(
+    root,
+    "scripts/verify-consumer-foundations-runtime.mjs",
+  );
   for (const marker of [
     'vf-text-input[name="reactiveOwner"]',
     "data-reactive-value",
@@ -267,7 +302,10 @@ function verifyPackageBoundary(root, failures) {
       "@vyrnforge/ui-elements",
     ].every((packageName) => nonGridBeta.includes(packageName))
   ) {
-    addFailure(failures, "Angular Forms adapter must not change the approved four-package beta release group");
+    addFailure(
+      failures,
+      "Angular Forms adapter must not change the approved four-package beta release group",
+    );
   }
 }
 
