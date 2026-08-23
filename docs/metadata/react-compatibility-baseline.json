@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "sprint": "S14",
+    "id": "MFD-1401",
+    "title": "Capture React public API and behavior baseline",
+    "status": "captured",
+    "baseCommit": "674ee012f204a10f42ed608c6d650e385053aed3"
+  },
+  "package": {
+    "name": "@vyrnforge/ui-components",
+    "version": "0.2.0-beta.2",
+    "manifest": "packages/ui-components/package.json",
+    "publicEntry": "packages/ui-components/src/index.ts",
+    "cssEntrypoints": [
+      "./style.css",
+      "./index.css",
+      "./styles/index.css"
+    ],
+    "peerDependencies": {
+      "react": ">=18 <20",
+      "react-dom": ">=18 <20"
+    }
+  },
+  "testedReactVersions": ["18.3.1", "19.2.7"],
+  "fingerprints": [
+    {
+      "path": "packages/ui-components/package.json",
+      "kind": "blob",
+      "sha1": "b86a89927e66b9d82933e98c009233883803b606",
+      "covers": ["package exports", "CSS entrypoints", "React peer support"]
+    },
+    {
+      "path": "packages/ui-components/src/index.ts",
+      "kind": "blob",
+      "sha1": "9b24696736a323e290e21beb766587839f4fb20e",
+      "covers": ["public value exports", "public type exports"]
+    },
+    {
+      "path": "packages/ui-components/src/components",
+      "kind": "tree",
+      "sha1": "28995913fdf2c51bae3014e08f5b05d02c406d51",
+      "covers": [
+        "component props and types",
+        "callbacks",
+        "refs and imperative behavior",
+        "runtime behavior",
+        "component parity tests"
+      ]
+    },
+    {
+      "path": "packages/ui-components/src/styles",
+      "kind": "tree",
+      "sha1": "88c772ee240b05535b98aade2b7501f3e85c330f",
+      "covers": ["React renderer CSS implementation"]
+    },
+    {
+      "path": "docs/api/ui-components-api.md",
+      "kind": "blob",
+      "sha1": "09510da23a9559834e8ccaaba63a7280df2a6cbc",
+      "covers": ["documented React public API and usage contracts"]
+    },
+    {
+      "path": "docs/packages/ui-components.md",
+      "kind": "blob",
+      "sha1": "665d895f70a4358a28d31aaac7c21e5d6197d8b5",
+      "covers": ["React package ownership and public consumption contract"]
+    },
+    {
+      "path": "docs/metadata/react-behavior-adoption.json",
+      "kind": "blob",
+      "sha1": "9e50d32d04295b0e2d6d2bd2f63561757c2be898",
+      "covers": ["behavior ownership", "public value export audit", "compatibility invariants"]
+    },
+    {
+      "path": "docs/metadata/compatibility-release-matrix.json",
+      "kind": "blob",
+      "sha1": "6e77698d9d3889898c755de9e04bccd97d0188f9",
+      "covers": ["tested React versions", "packed consumer compatibility cases"]
+    }
+  ],
+  "runtimeEvidence": [
+    "packages/ui-components/src/components/__tests__/accessibility.test.tsx",
+    "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
+    "packages/ui-components/src/components/__tests__/dom-interactions.test.tsx",
+    "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
+    "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+  ],
+  "compatibilityInvariants": [
+    "public root exports unchanged",
+    "public React prop and callback shapes unchanged",
+    "documented vf-* CSS classes unchanged",
+    "controlled components continue to emit proposals",
+    "native form semantics remain browser-owned",
+    "React DOM and browser parity suites remain mandatory"
+  ],
+  "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
+}
