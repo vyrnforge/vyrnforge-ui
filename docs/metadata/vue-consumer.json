@@ -1,15 +1,6 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S7",
-    "task": "CF-7005",
-    "title": "Verify Vue consumer",
-    "storyPoints": 8,
-    "status": "evidence-complete",
-    "gate": "GMF4",
-    "gateStatus": "passed",
-    "baseCommit": "59201986b6b3d6255901ff1942cb3e347e6f30cc"
-  },
+  "status": "verified",
   "framework": {
     "name": "Vue",
     "version": "3.5.40",
@@ -50,25 +41,13 @@
     "runtime verifier integration for the Vue fixture"
   ],
   "pendingRuntimeEvidence": [],
-  "requiredCommands": [
-    "npm run test:vue-consumer",
-    "npm run verify:vue-consumer",
-    "npm run verify:vue-consumer:runtime",
-    "npm run quality"
-  ],
   "modelAdapterDecision": {
-    "task": "CF-7006",
     "status": "verified",
     "reason": "Vue v-model expects modelValue and update:modelValue, while native VyrnForge controls expose value or checked properties plus canonical vf-value-change or vf-checked-change DOM events.",
     "boundary": "A thin Vue-only directive, composable, or wrapper may translate the protocol but must not duplicate rendering, validation, selection, or form-association logic.",
     "publishedPackage": null,
     "evidence": "docs/metadata/vue-model-adapter.json"
   },
-  "deferred": [
-    "shared cross-framework browser and accessibility matrix",
-    "GMF4 closure",
-    "data-grid multi-framework work"
-  ],
   "unresolvedBlockers": [],
   "sources": [
     "https://www.npmjs.com/package/vue",
@@ -81,5 +60,9 @@
     "strict vue-tsc template and script type checking",
     "Vite production application build",
     "Chromium property, event, slot, and native-form interaction evidence"
+  ],
+  "deferred": [
+    "official first-class Vue package cutover",
+    "data-grid multi-framework work"
   ]
 }
