@@ -5,25 +5,6 @@
     "scope": "multi-framework web support, package topology, renderer status, and consumer-fixture policy",
     "documentation": "docs/architecture/adr-004-multi-framework-web-support.md"
   },
-  "program": {
-    "name": "VyrnForge non-grid multi-framework beta",
-    "gate": "GMF4",
-    "status": "gmf4-evidence-complete",
-    "firstClassRenderers": ["react", "native-html"],
-    "verifiedConsumers": ["angular", "vue"],
-    "excludedPlatforms": [
-      "react-native",
-      "flutter",
-      "native-android",
-      "native-ios",
-      "desktop-native"
-    ],
-    "deferredPackages": ["@vyrnforge/ui-data-grid"],
-    "currentSprint": "S8",
-    "runtimeVerificationCandidates": [],
-    "gateStatus": "passed",
-    "closureMetadata": "docs/metadata/gmf4-closure.json"
-  },
   "packages": [
     {
       "name": "@vyrnforge/ui-core",
@@ -65,8 +46,7 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "react",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
-      "notes": "The ui-behaviors dependency is architectural and becomes active during S5. The existing React public package name remains stable through beta."
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"]
     },
     {
       "name": "@vyrnforge/ui-elements",
@@ -91,7 +71,7 @@
       "betaIncluded": false,
       "runtime": "react",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
-      "notes": "Grid implementation, decomposition, performance work, and multi-framework rendering are outside the non-grid beta critical path."
+      "notes": "Grid implementation, decomposition, performance work, and multi-framework rendering remain outside the non-grid beta critical path."
     }
   ],
   "frameworks": [
@@ -100,8 +80,7 @@
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-components",
       "fixture": "tests/consumers/react",
-      "betaClaim": "custom-elements-consumer-verified",
-      "consumerFoundation": "CF-7002"
+      "betaClaim": "custom-elements-consumer-verified"
     },
     {
       "id": "native-html",
@@ -109,8 +88,7 @@
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/native-html",
       "betaClaim": "packed-consumer-verified",
-      "rendererFoundation": "native-parity-current",
-      "consumerFoundation": "CF-7001"
+      "rendererFoundation": "native-parity-current"
     },
     {
       "id": "angular",
@@ -118,9 +96,7 @@
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/angular",
       "betaClaim": "packed-consumer-verified",
-      "consumerFoundation": "CF-7003",
-      "formsIntegration": "angular-forms-adapter-verified",
-      "formsAdapter": "CF-7004"
+      "formsIntegration": "angular-forms-adapter-verified"
     },
     {
       "id": "vue",
@@ -128,7 +104,7 @@
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/vue",
       "betaClaim": "packed-consumer-verified",
-      "consumerFoundation": "CF-7005"
+      "modelIntegration": "vue-model-adapter-verified"
     }
   ],
   "styling": {
@@ -142,38 +118,17 @@
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
     "currentClaim": "native-html-react-angular-vue-consumer-foundation-complete",
-    "runtimeBuildGate": "GMF4",
-    "rule": "CF-7001 and CF-7002 prove clean packed native HTML and React 19 Custom Element consumption. CF-7003 proves Angular 22 packed consumption. CF-7004 proves a thin Angular Forms bridge without changing the renderer or package topology. CF-7005 proves the Vue 3 packed consumer with strict vue-tsc, production Vite output, canonical property/event/slot/native-form behavior, and Chromium evidence.",
+    "rule": "Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through public package outputs. Framework-specific adapters remain thin translation layers over shared native contracts.",
     "evidence": "docs/metadata/consumer-foundations.json",
     "angularEvidence": "docs/metadata/angular-consumer.json",
     "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json",
-    "vueEvidence": "docs/metadata/vue-consumer.json"
+    "vueEvidence": "docs/metadata/vue-consumer.json",
+    "vueModelEvidence": "docs/metadata/vue-model-adapter.json"
   },
   "behaviorFoundation": {
     "package": "@vyrnforge/ui-behaviors",
     "status": "complete",
-    "tasks": [
-      "MF-5001",
-      "MF-5002",
-      "MF-5003",
-      "MF-5004",
-      "MF-5005",
-      "MF-5006",
-      "MF-5007",
-      "MF-5008",
-      "MF-5009",
-      "MF-5010",
-      "MF-5011",
-      "MF-5012",
-      "MF-5013",
-      "MF-5014",
-      "MF-5015",
-      "MF-5016"
-    ],
-    "metadata": "docs/metadata/behavior-foundations.json",
-    "gate": "GMF2",
-    "gateStatus": "passed",
-    "currentBatch": "MF-5015-MF-5016"
+    "metadata": "docs/metadata/behavior-foundations.json"
   },
   "nativeElementFoundation": {
     "package": "@vyrnforge/ui-elements",
@@ -184,122 +139,55 @@
     "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
     "foundationStage": "native-parity-current"
   },
-  "consumerFoundation": {
-    "status": "complete",
-    "batch": "CF-7001-CF-7002-CF-7008",
-    "tasks": [
-      {
-        "id": "CF-7001",
-        "status": "done"
-      },
-      {
-        "id": "CF-7002",
-        "status": "done"
-      },
-      {
-        "id": "CF-7008",
-        "status": "done"
-      }
-    ],
-    "metadata": "docs/metadata/consumer-foundations.json",
-    "runtimeFixtures": ["native-html", "react"],
-    "declarationContract": {
-      "tagNameMap": "VyrnForgeHTMLElementTagNameMap",
-      "typedEvents": "VyrnForgeElementEventListener",
-      "customElementsManifest": "@vyrnforge/ui-elements/custom-elements.json"
-    },
-    "gate": "GMF4",
-    "gateStatus": "passed"
-  },
   "angularConsumer": {
     "status": "complete",
-    "task": "CF-7003",
-    "storyPoints": 8,
     "frameworkVersion": "22.0.8",
     "metadata": "docs/metadata/angular-consumer.json",
     "runtimeFixture": "tests/consumers/angular",
-    "supportClaim": "packed-angular-runtime-verified",
-    "gate": "GMF4",
-    "gateStatus": "passed"
+    "supportClaim": "packed-angular-runtime-verified"
   },
   "angularFormsAdapter": {
     "status": "complete",
-    "task": "CF-7004",
-    "storyPoints": 5,
     "frameworkVersion": "22.0.8",
     "metadata": "docs/metadata/angular-forms-adapter.json",
     "runtimeFixture": "tests/consumers/angular",
     "supportClaim": "angular-forms-adapter-verified",
-    "publishedPackage": null,
-    "gate": "GMF4",
-    "gateStatus": "passed"
+    "publishedPackage": null
   },
   "vueConsumer": {
     "status": "complete",
-    "task": "CF-7005",
-    "storyPoints": 8,
     "frameworkVersion": "3.5.40",
     "metadata": "docs/metadata/vue-consumer.json",
     "runtimeFixture": "tests/consumers/vue",
-    "supportClaim": "packed-vue-runtime-verified",
-    "gate": "GMF4",
-    "gateStatus": "passed"
-  },
-  "ssrBundlerCompatibility": {
-    "status": "complete",
-    "task": "CF-7007",
-    "storyPoints": 5,
-    "metadata": "docs/metadata/ssr-bundler-compatibility.json",
-    "supportClaim": "ssr-bundler-verified",
-    "gate": "GMF4",
-    "gateStatus": "passed"
+    "supportClaim": "packed-vue-runtime-verified"
   },
   "vueModelAdapter": {
     "status": "complete",
-    "task": "CF-7006",
-    "storyPoints": 5,
     "metadata": "docs/metadata/vue-model-adapter.json",
     "supportClaim": "vue-model-adapter-verified",
-    "publishedPackage": null,
-    "gate": "GMF4",
-    "gateStatus": "passed"
+    "publishedPackage": null
+  },
+  "ssrBundlerCompatibility": {
+    "status": "complete",
+    "metadata": "docs/metadata/ssr-bundler-compatibility.json",
+    "supportClaim": "ssr-bundler-verified"
   },
   "crossFrameworkMatrix": {
     "status": "complete",
-    "task": "CF-7009",
     "metadata": "docs/metadata/cross-framework-browser-matrix.json",
-    "gate": "GMF4",
-    "gateStatus": "passed"
+    "supportClaim": "cross-framework-browser-matrix-verified"
   },
   "componentReference": {
     "status": "complete",
-    "tasks": ["CF-7011", "CF-7012"],
-    "metadata": "docs/metadata/component-reference-program.json",
-    "gate": "GMF4",
-    "gateStatus": "passed"
+    "metadata": "docs/metadata/component-reference-program.json"
   },
   "accessibilityReview": {
     "status": "complete",
-    "task": "CF-7010",
     "metadata": "docs/metadata/cross-framework-accessibility-review.json",
-    "gate": "GMF4",
-    "gateStatus": "passed"
+    "supportClaim": "cross-framework-accessibility-verified"
   },
   "migrationGuide": {
     "status": "complete",
-    "task": "CF-7013",
-    "metadata": "docs/metadata/multi-framework-migration-guide.json",
-    "gate": "GMF4",
-    "gateStatus": "passed"
-  },
-  "gmf4Closure": {
-    "status": "complete",
-    "task": "CF-7014",
-    "storyPoints": 5,
-    "metadata": "docs/metadata/gmf4-closure.json",
-    "gate": "GMF4",
-    "gateStatus": "passed",
-    "nextSprint": "S8",
-    "nextTask": "BT-8001"
+    "metadata": "docs/metadata/multi-framework-migration-guide.json"
   }
 }
