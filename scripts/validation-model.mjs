@@ -118,7 +118,7 @@ export function findCommandCycles(graph) {
 
     active.add(name);
     stack.push(name);
-    for (const dependency of graph[name] ?? []) visit(dependency, nextTrail);
+    for (const dependency of graph[name] ?? []) visit(dependency);
     stack.pop();
     active.delete(name);
     visited.add(name);
