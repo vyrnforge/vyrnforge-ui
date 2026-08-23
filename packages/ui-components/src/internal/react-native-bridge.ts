@@ -1,6 +1,6 @@
 import {
   type ForwardedRef,
-  type MutableRefObject,
+  type RefObject,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -79,7 +79,7 @@ export function useCanonicalElementBridge<TElement extends HTMLElement>(
     properties = {},
     events = {},
   }: CanonicalElementBridgeOptions,
-): MutableRefObject<TElement | null> {
+): RefObject<TElement | null> {
   const elementRef = useRef<TElement>(null);
 
   useImperativeHandle(
