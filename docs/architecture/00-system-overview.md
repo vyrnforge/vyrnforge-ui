@@ -66,14 +66,14 @@ coverage, and provenance according to ADR-012.
 
 ## Current support model
 
-| Surface       | Current role                                                           | Current release scope     | Approved target                    |
-| ------------- | ---------------------------------------------------------------------- | ------------------------- | ---------------------------------- |
-| React         | First-class package through `@vyrnforge/ui-components`.                | Non-grid beta             | First-class canonical-backed facade |
-| Native HTML   | First-class package through `@vyrnforge/ui-elements`.                  | Non-grid beta             | First-class canonical native surface |
-| Angular       | Verified consumer of `@vyrnforge/ui-elements`.                         | Integration evidence      | Official first-class facade package |
-| Vue           | Verified consumer of `@vyrnforge/ui-elements`.                         | Integration evidence      | Official first-class facade package |
-| Data grid     | Specialized React package.                                             | Independent alpha         | Optional advanced capability        |
-| Mobile-native | Not part of the current web framework program.                         | Excluded                  | Separate future product decision     |
+| Surface       | Current role                                            | Current release scope | Approved target                      |
+| ------------- | ------------------------------------------------------- | --------------------- | ------------------------------------ |
+| React         | First-class package through `@vyrnforge/ui-components`. | Non-grid beta         | First-class canonical-backed facade  |
+| Native HTML   | First-class package through `@vyrnforge/ui-elements`.   | Non-grid beta         | First-class canonical native surface |
+| Angular       | Verified consumer of `@vyrnforge/ui-elements`.          | Integration evidence  | Official first-class facade package  |
+| Vue           | Verified consumer of `@vyrnforge/ui-elements`.          | Integration evidence  | Official first-class facade package  |
+| Data grid     | Specialized React package.                              | Independent alpha     | Optional advanced capability         |
+| Mobile-native | Not part of the current web framework program.          | Excluded              | Separate future product decision     |
 
 Do not use the approved target column as evidence that an unshipped package is
 already available. Current support claims must follow package/release metadata

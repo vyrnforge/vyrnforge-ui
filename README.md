@@ -44,9 +44,9 @@ release-group versions and dependency rules.
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations. |
 | `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.     |
-| `@vyrnforge/ui-components` | Current first-class React package over shared VyrnForge foundations.                                                      |
+| `@vyrnforge/ui-components` | Current first-class React package over shared VyrnForge foundations.                                                     |
 | `@vyrnforge/ui-elements`   | Current first-class browser-native Custom Elements package over shared VyrnForge foundations.                            |
-| `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                     |
+| `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                    |
 
 The approved first-class web target is Native HTML, React, Angular, and Vue.
 Supported framework surfaces share canonical component, behavior,

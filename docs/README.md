@@ -35,26 +35,26 @@ Package-specific guidance:
 Start with [CONTRIBUTING.md](../CONTRIBUTING.md), then use the canonical
 documents for the part of the foundation you are changing.
 
-| Topic                              | Canonical documentation                                                                         |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Project identity                   | [Project Source of Truth](governance/01-project-source-of-truth.md)                             |
-| System architecture                | [System Overview](architecture/00-system-overview.md)                                           |
-| Package ownership and dependencies | [Package Boundaries](architecture/01-package-boundaries.md)                                     |
-| State and adapters                 | [State and Adapter Ownership](architecture/02-state-and-adapter-ownership.md)                   |
-| Styling                            | [Theming and Styling](architecture/03-theming-and-styling.md)                                   |
-| Implementation boundaries          | [Clean Code Boundaries](architecture/04-clean-code-boundaries.md)                               |
-| Accessibility                      | [Accessibility Standards](architecture/05-accessibility-standards.md)                           |
-| CSS ownership                      | [CSS Architecture](architecture/06-css-architecture.md)                                         |
-| Overlay and focus                  | [Overlay and Focus](architecture/07-overlay-and-focus.md)                                       |
-| Semantic tokens                    | [Semantic Token Contract](architecture/08-semantic-token-contract.md)                           |
-| Component contracts and events     | [Component Contracts and Events](architecture/09-component-contracts-and-events.md)             |
-| Custom Elements and forms          | [Custom Elements and Form Association](architecture/10-custom-elements-and-form-association.md) |
-| AI consumption architecture        | [ADR-010: AI Consumption Contract](architecture/adr-010-ai-consumption-contract.md)              |
+| Topic                              | Canonical documentation                                                                                         |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Project identity                   | [Project Source of Truth](governance/01-project-source-of-truth.md)                                             |
+| System architecture                | [System Overview](architecture/00-system-overview.md)                                                           |
+| Package ownership and dependencies | [Package Boundaries](architecture/01-package-boundaries.md)                                                     |
+| State and adapters                 | [State and Adapter Ownership](architecture/02-state-and-adapter-ownership.md)                                   |
+| Styling                            | [Theming and Styling](architecture/03-theming-and-styling.md)                                                   |
+| Implementation boundaries          | [Clean Code Boundaries](architecture/04-clean-code-boundaries.md)                                               |
+| Accessibility                      | [Accessibility Standards](architecture/05-accessibility-standards.md)                                           |
+| CSS ownership                      | [CSS Architecture](architecture/06-css-architecture.md)                                                         |
+| Overlay and focus                  | [Overlay and Focus](architecture/07-overlay-and-focus.md)                                                       |
+| Semantic tokens                    | [Semantic Token Contract](architecture/08-semantic-token-contract.md)                                           |
+| Component contracts and events     | [Component Contracts and Events](architecture/09-component-contracts-and-events.md)                             |
+| Custom Elements and forms          | [Custom Elements and Form Association](architecture/10-custom-elements-and-form-association.md)                 |
+| AI consumption architecture        | [ADR-010: AI Consumption Contract](architecture/adr-010-ai-consumption-contract.md)                             |
 | Optional advanced modules          | [ADR-011: Optional Advanced Module Architecture](architecture/adr-011-optional-advanced-module-architecture.md) |
-| Framework extensibility            | [ADR-012: Framework Extensibility Contract](architecture/adr-012-framework-extensibility-contract.md) |
-| Reusable patterns and templates    | [ADR-013: Reusable Pattern and Template Contract](architecture/adr-013-pattern-template-contract.md) |
-| Browser testing                    | [Browser Testing](testing/browser-testing.md)                                                   |
-| Cross-framework consumer fixtures  | [Consumer Fixture Strategy](testing/multi-framework-consumer-fixtures.md)                       |
+| Framework extensibility            | [ADR-012: Framework Extensibility Contract](architecture/adr-012-framework-extensibility-contract.md)           |
+| Reusable patterns and templates    | [ADR-013: Reusable Pattern and Template Contract](architecture/adr-013-pattern-template-contract.md)            |
+| Browser testing                    | [Browser Testing](testing/browser-testing.md)                                                                   |
+| Cross-framework consumer fixtures  | [Consumer Fixture Strategy](testing/multi-framework-consumer-fixtures.md)                                       |
 
 The canonical component catalog and maturity records live in
 [`metadata/components.json`](metadata/components.json). Generated views must
@@ -91,14 +91,14 @@ Planning documents describe current direction and intentional future work. They
 do not override accepted architecture, current package manifests, or canonical
 public API contracts.
 
-| Topic                                        | Canonical documentation                                            |
-| -------------------------------------------- | ------------------------------------------------------------------ |
-| Current roadmap                              | [Master Roadmap](roadmap/00-master-roadmap.md)                     |
-| Component catalog pointer and planning rules | [Component Inventory](roadmap/01-component-inventory.md)           |
-| Current gaps                                 | [Gap Analysis](roadmap/02-gap-analysis.md)                         |
-| Explicitly deferred work                     | [Do Not Build Yet](roadmap/03-do-not-build-yet.md)                 |
+| Topic                                         | Canonical documentation                                                                         |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Current roadmap                               | [Master Roadmap](roadmap/00-master-roadmap.md)                                                  |
+| Component catalog pointer and planning rules  | [Component Inventory](roadmap/01-component-inventory.md)                                        |
+| Current gaps                                  | [Gap Analysis](roadmap/02-gap-analysis.md)                                                      |
+| Explicitly deferred work                      | [Do Not Build Yet](roadmap/03-do-not-build-yet.md)                                              |
 | Proposed vision, mission, and scope alignment | [Vision, Mission & Scope Alignment Review](roadmap/04-vision-mission-scope-alignment-review.md) |
-| Component lifecycle and promotion            | [Component Maturity Model](governance/component-maturity-model.md) |
+| Component lifecycle and promotion             | [Component Maturity Model](governance/component-maturity-model.md)                              |
 
 Current planning may use active task identifiers where they are useful for
 execution. Normal usage guidance should not require readers to understand
