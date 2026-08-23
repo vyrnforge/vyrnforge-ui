@@ -82,7 +82,8 @@ function gitTreeHash(absolutePath: string): string {
         };
       }
 
-      const mode = (lstatSync(entryPath).mode & 0o111) === 0 ? "100644" : "100755";
+      const mode =
+        (lstatSync(entryPath).mode & 0o111) === 0 ? "100644" : "100755";
       return {
         mode,
         name: entry.name,
