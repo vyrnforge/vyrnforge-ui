@@ -52,6 +52,7 @@ documents for the part of the foundation you are changing.
 | AI consumption architecture        | [ADR-010: AI Consumption Contract](architecture/adr-010-ai-consumption-contract.md)              |
 | Optional advanced modules          | [ADR-011: Optional Advanced Module Architecture](architecture/adr-011-optional-advanced-module-architecture.md) |
 | Framework extensibility            | [ADR-012: Framework Extensibility Contract](architecture/adr-012-framework-extensibility-contract.md) |
+| Reusable patterns and templates    | [ADR-013: Reusable Pattern and Template Contract](architecture/adr-013-pattern-template-contract.md) |
 | Browser testing                    | [Browser Testing](testing/browser-testing.md)                                                   |
 | Cross-framework consumer fixtures  | [Consumer Fixture Strategy](testing/multi-framework-consumer-fixtures.md)                       |
 
