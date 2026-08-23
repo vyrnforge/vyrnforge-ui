@@ -1,0 +1,46 @@
+name: Temporary React formatting repair
+
+on:
+  push:
+    branches:
+      - chore/repair-react-formatting-regression
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chore/repair-react-formatting-regression
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Format files introduced by S14 React work
+        run: >-
+          npx prettier --write
+          docs/metadata/react-compatibility-baseline.json
+          docs/metadata/react-migration-matrix.json
+          packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts
+          packages/ui-components/src/__tests__/react-migration-matrix.test.ts
+          packages/ui-components/src/__tests__/react-native-api-mapping.test.ts
+          packages/ui-components/src/__tests__/react-native-bridge.test.tsx
+          packages/ui-components/src/internal/react-native-api-mapping.ts
+          packages/ui-components/src/internal/react-native-bridge.ts
+          packages/ui-components/src/internal/react-native-composition.tsx
+      - name: Remove temporary workflow and commit repair
+        run: |
+          rm .github/workflows/tmp-repair-react-formatting.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "style: repair S14 React formatting regression"
+          git push origin HEAD:chore/repair-react-formatting-regression
