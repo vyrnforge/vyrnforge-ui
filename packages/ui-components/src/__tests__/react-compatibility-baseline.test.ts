@@ -106,7 +106,9 @@ function gitTreeHash(absolutePath: string): string {
 
 function fingerprint(relativePath: string, kind: "blob" | "tree"): string {
   const absolutePath = path.join(repositoryRoot, relativePath);
-  return kind === "tree" ? gitTreeHash(absolutePath) : gitBlobHash(absolutePath);
+  return kind === "tree"
+    ? gitTreeHash(absolutePath)
+    : gitBlobHash(absolutePath);
 }
 
 describe("MFD-1401 React compatibility baseline", () => {

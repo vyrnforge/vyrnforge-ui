@@ -73,10 +73,7 @@ describe("MFD-1403 React canonical element bridge", () => {
 
     const Fixture = forwardRef<BridgeTestElement>(function Fixture(_, ref) {
       const properties = useMemo(() => ({ value: "controlled" }), []);
-      const events = useMemo(
-        () => ({ "vf-change": onChange }),
-        [],
-      );
+      const events = useMemo(() => ({ "vf-change": onChange }), []);
       const elementRef = useCanonicalElementBridge(ref, {
         tagName,
         properties,
