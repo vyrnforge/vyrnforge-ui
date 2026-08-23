@@ -6,7 +6,6 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const taskIds = Array.from({ length: 18 }, (_, index) => `EL-${6001 + index}`);
 const requiredFiles = [
   "packages/ui-elements/src/base/VyrnForgeElement.ts",
   "packages/ui-elements/src/base/VyrnForgeElement.test.ts",
@@ -30,10 +29,8 @@ const requiredFiles = [
   "tests/browser/native-parity.spec.ts",
   "docs/metadata/native-core-elements.json",
   "docs/metadata/native-advanced-elements.json",
-  "docs/metadata/gmf3-closure.json",
   "docs/testing/native-core-element-contracts.md",
   "docs/testing/native-advanced-element-contracts.md",
-  "docs/testing/gmf3-native-parity-gate.md",
   "tests/consumers/native-html/architecture-probe.ts",
   "tests/consumers/native-html/fixture.json",
   "packages/ui-elements/README.md",
@@ -86,34 +83,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   if (metadata.schemaVersion !== 1) {
     failures.push("native element foundation schemaVersion must be 1");
   }
-  if (metadata.program?.sprint !== "S6") {
-    failures.push("native element foundation sprint must be S6");
-  }
-  if (metadata.program?.batch !== "EL-6018") {
-    failures.push("native element foundation batch must be EL-6018");
-  }
-  if (metadata.program?.status !== "evidence-complete") {
-    failures.push("native element foundation status must be evidence-complete");
-  }
-  if (
-    metadata.program?.gate !== "GMF3" ||
-    metadata.program?.gateStatus !== "passed"
-  ) {
-    failures.push("native element foundation GMF3 gate must be passed");
-  }
-
-  const tasks = new Map(
-    (metadata.tasks ?? []).map((task) => [task.id, task.status]),
-  );
-  for (const taskId of taskIds) {
-    if (tasks.get(taskId) !== "done") {
-      failures.push(`${taskId} must be done`);
-    }
-  }
-  if (tasks.size !== taskIds.length) {
-    failures.push(
-      "native element foundation task inventory must contain exactly EL-6001 through EL-6018",
-    );
+  if (metadata.sourceOfTruth?.canonical !== true) {
+    failures.push("native element foundation metadata must be canonical");
   }
 
   const registration = metadata.registration ?? {};
@@ -299,6 +270,54 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     failures.push("native registry must contain 58 unique public tags");
   }
 
+  const componentMetadata = readJson(root, "docs/metadata/components.json");
+  const publicComponents = (componentMetadata?.components ?? []).filter(
+    (component) =>
+      component.package === "@vyrnforge/ui-components" &&
+      component.publicExport === true,
+  );
+  const strategyCounts = new Map();
+  for (const component of publicComponents) {
+    const native = component.frameworkParity?.native;
+    if (native?.status !== "current") {
+      failures.push(`${component.id} native parity status must be current`);
+      continue;
+    }
+    if (native.evidence !== "docs/metadata/native-element-foundations.json") {
+      failures.push(
+        `${component.id} must reference current native foundation evidence`,
+      );
+    }
+    strategyCounts.set(
+      native.strategy,
+      (strategyCounts.get(native.strategy) ?? 0) + 1,
+    );
+  }
+  for (const [strategy, expectedCount] of [
+    ["direct-element", 57],
+    ["renderer-mapping", 8],
+    ["renderer-composition", 1],
+    ["renderer-service", 1],
+  ]) {
+    if (strategyCounts.get(strategy) !== expectedCount) {
+      failures.push(
+        `native renderer strategy ${strategy} must contain ${expectedCount} records`,
+      );
+    }
+  }
+
+  requireIncludes(
+    failures,
+    read(root, "packages/ui-elements/src/components/parity.ts"),
+    "packages/ui-elements/src/components/parity.ts",
+    [
+      "VyrnForgeIconElement",
+      "VyrnForgeInlineMessageElement",
+      "VyrnForgeSkeletonElement",
+      "VyrnForgeTopNavElement",
+    ],
+  );
+
   requireIncludes(
     failures,
     read(root, "packages/ui-elements/src/index.ts"),
@@ -386,42 +405,37 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   requireIncludes(failures, packageRoot, "package.json", [
     "test:native-element-foundations",
     "verify:native-element-foundations",
-    "test:gmf3-closure",
-    "verify:gmf3-closure",
   ]);
 
   const multiFramework = readJson(root, "docs/metadata/multi-framework.json");
-  const currentSprint = multiFramework?.program?.currentSprint;
-  const currentSprintNumber = /^S\d+$/.test(currentSprint ?? "")
-    ? Number(currentSprint.slice(1))
-    : Number.NaN;
-  if (!Number.isInteger(currentSprintNumber) || currentSprintNumber < 7) {
-    failures.push("multi-framework currentSprint must not regress before S7");
-  }
-  const foundation = multiFramework?.nativeElementFoundation ?? {};
+  const multiFrameworkFoundation =
+    multiFramework?.nativeElementFoundation ?? {};
   if (
-    foundation.currentBatch !== "EL-6018" ||
-    foundation.status !== "complete" ||
-    foundation.gateStatus !== "passed" ||
-    foundation.registeredPublicTags !== 58
+    multiFrameworkFoundation.status !== "complete" ||
+    multiFrameworkFoundation.metadata !==
+      "docs/metadata/native-element-foundations.json" ||
+    multiFrameworkFoundation.registeredPublicTags !== 58 ||
+    multiFrameworkFoundation.foundationStage !== "native-parity-current"
   ) {
     failures.push(
-      "multi-framework nativeElementFoundation must record complete EL-6018 GMF3 evidence",
+      "multi-framework nativeElementFoundation must record current native parity evidence",
     );
   }
 
-  if ((metadata.remainingGmf3Tasks ?? []).length !== 0) {
-    failures.push("remainingGmf3Tasks must be empty");
-  }
+  const nativeParity = metadata.nativeParity ?? {};
   if (
-    metadata.nativeParityClosure?.metadata !==
-      "docs/metadata/gmf3-closure.json" ||
-    metadata.nativeParityClosure?.registeredPublicTags !== 58 ||
-    metadata.nativeParityClosure?.gateStatus !== "passed"
+    nativeParity.registeredPublicTags !== 58 ||
+    nativeParity.browserEvidence !== "tests/browser/native-parity.spec.ts" ||
+    nativeParity.fixture !==
+      "apps/regression-fixtures/src/nativeParityElements.tsx" ||
+    nativeParity.publicReactRecords !== publicComponents.length ||
+    nativeParity.directElements !== strategyCounts.get("direct-element") ||
+    nativeParity.rendererMappings !== strategyCounts.get("renderer-mapping") ||
+    nativeParity.rendererCompositions !==
+      strategyCounts.get("renderer-composition") ||
+    nativeParity.rendererServices !== strategyCounts.get("renderer-service")
   ) {
-    failures.push(
-      "nativeParityClosure metadata must record passed GMF3 evidence",
-    );
+    failures.push("nativeParity metadata must match current renderer evidence");
   }
 
   return [...new Set(failures)].sort();

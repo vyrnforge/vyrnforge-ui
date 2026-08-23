@@ -38,7 +38,7 @@ const requiredFiles = [
   "docs/quality/documentation-reviews/cf-7013-multi-framework-migration-guide.json",
   "tests/consumers/manifest.json",
   ".github/workflows/_integration.yml",
-  "scripts/verify-gmf3-closure.mjs",
+  "scripts/verify-native-element-foundations.mjs",
   "scripts/verify-multi-framework-architecture.mjs",
   "scripts/verify-package-boundaries.mjs",
   "scripts/verify-consumer-foundations.mjs",
@@ -58,7 +58,7 @@ const requiredFiles = [
   "packages/ui-data-grid/package.json",
 ];
 const dependencyVerifierScripts = [
-  "scripts/verify-gmf3-closure.mjs",
+  "scripts/verify-native-element-foundations.mjs",
   "scripts/verify-multi-framework-architecture.mjs",
   "scripts/verify-package-boundaries.mjs",
   "scripts/verify-consumer-foundations.mjs",

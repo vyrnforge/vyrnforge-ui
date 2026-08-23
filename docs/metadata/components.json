@@ -1027,7 +1027,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1094,7 +1094,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-icon-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1159,7 +1159,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-toolbar-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1224,7 +1224,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-button-group",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1289,7 +1289,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-segmented-control",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1362,7 +1362,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-toggle-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1438,7 +1438,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-toggle-button-group",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1503,7 +1503,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-icon",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1568,7 +1568,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-text",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1635,7 +1635,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-heading",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1700,7 +1700,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-label",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1767,7 +1767,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-caption",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1834,7 +1834,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-code-text",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1906,7 +1906,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-field",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -1973,7 +1973,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-validation-message",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2038,7 +2038,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-text-input",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2103,7 +2103,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-search-input",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2168,7 +2168,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-select",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2235,7 +2235,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-checkbox",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2300,7 +2300,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-textarea",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2367,7 +2367,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-badge",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2432,7 +2432,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-badge",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2499,7 +2499,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-inline-message",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2564,7 +2564,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-inline-message",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2629,7 +2629,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-empty-state",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2696,7 +2696,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-error-state",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2763,7 +2763,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-loading-state",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2828,7 +2828,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-skeleton",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2895,7 +2895,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-card",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -2960,7 +2960,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-panel",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3025,7 +3025,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-stack",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3090,7 +3090,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-inline",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3157,7 +3157,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-section",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3222,7 +3222,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-popover",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3287,7 +3287,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-menu",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3352,7 +3352,7 @@
           "status": "current",
           "strategy": "renderer-composition",
           "target": "vf-popover",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3417,7 +3417,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-tooltip",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3482,7 +3482,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-dialog",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3549,7 +3549,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-drawer",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3614,7 +3614,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-confirm-dialog",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3927,7 +3927,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-app-shell",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -3994,7 +3994,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-page",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4061,7 +4061,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-page-header",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4128,7 +4128,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-page-toolbar",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4195,7 +4195,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-side-nav",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4262,7 +4262,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-top-nav",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4327,7 +4327,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-breadcrumbs",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4394,7 +4394,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-tabs",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4461,7 +4461,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-radio",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4526,7 +4526,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-radio-group",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4593,7 +4593,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-switch",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4658,7 +4658,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-number-input",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4725,7 +4725,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-date-input",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4790,7 +4790,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-datetime-input",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4855,7 +4855,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-rating",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4922,7 +4922,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-slider",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -4990,7 +4990,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-multi-select",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5070,7 +5070,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-autocomplete",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5150,7 +5150,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-transfer-list",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5230,7 +5230,7 @@
           "status": "current",
           "strategy": "direct-element",
           "target": "vf-toast",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5645,7 +5645,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-icon-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5710,7 +5710,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-icon-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5775,7 +5775,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-icon-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5840,7 +5840,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-icon-button",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5905,7 +5905,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-toast[action-label]",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -5970,7 +5970,7 @@
           "status": "current",
           "strategy": "renderer-mapping",
           "target": "vf-toast-viewport",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",
@@ -6035,7 +6035,7 @@
           "status": "current",
           "strategy": "renderer-service",
           "target": "VyrnForgeToastViewportElement service API",
-          "evidence": "docs/metadata/gmf3-closure.json"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "verified-consumer",

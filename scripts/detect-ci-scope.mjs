@@ -44,7 +44,6 @@ const fullValidationFiles = new Set([
 ]);
 
 const historicalEvidenceFiles = new Set([
-  "docs/metadata/gmf3-closure.json",
   "docs/metadata/gmf4-closure.json",
   "docs/metadata/native-element-foundations.json",
   "docs/metadata/native-core-elements.json",

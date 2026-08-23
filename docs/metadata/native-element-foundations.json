@@ -1,86 +1,5 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S6",
-    "batch": "EL-6018",
-    "status": "evidence-complete",
-    "gate": "GMF3",
-    "gateStatus": "passed"
-  },
-  "tasks": [
-    {
-      "id": "EL-6001",
-      "status": "done"
-    },
-    {
-      "id": "EL-6002",
-      "status": "done"
-    },
-    {
-      "id": "EL-6003",
-      "status": "done"
-    },
-    {
-      "id": "EL-6004",
-      "status": "done"
-    },
-    {
-      "id": "EL-6005",
-      "status": "done"
-    },
-    {
-      "id": "EL-6006",
-      "status": "done"
-    },
-    {
-      "id": "EL-6007",
-      "status": "done"
-    },
-    {
-      "id": "EL-6008",
-      "status": "done"
-    },
-    {
-      "id": "EL-6009",
-      "status": "done"
-    },
-    {
-      "id": "EL-6010",
-      "status": "done"
-    },
-    {
-      "id": "EL-6011",
-      "status": "done"
-    },
-    {
-      "id": "EL-6012",
-      "status": "done"
-    },
-    {
-      "id": "EL-6013",
-      "status": "done"
-    },
-    {
-      "id": "EL-6014",
-      "status": "done"
-    },
-    {
-      "id": "EL-6015",
-      "status": "done"
-    },
-    {
-      "id": "EL-6016",
-      "status": "done"
-    },
-    {
-      "id": "EL-6017",
-      "status": "done"
-    },
-    {
-      "id": "EL-6018",
-      "status": "done"
-    }
-  ],
   "registration": {
     "registerAll": "registerVyrnForgeElements",
     "registerDefinitions": "registerVyrnForgeElementDefinitions",
@@ -148,10 +67,7 @@
     "packages/ui-elements/src/styles/feedback/alert.css",
     "packages/ui-elements/src/styles/feedback/skeleton.css",
     "packages/ui-elements/src/styles/navigation/top-nav.css",
-    "packages/ui-elements/src/styles/overlays/dropdown.css",
-    "docs/testing/gmf3-native-parity-gate.md",
-    "scripts/verify-gmf3-closure.mjs",
-    "scripts/verify-gmf3-closure.test.mjs"
+    "packages/ui-elements/src/styles/overlays/dropdown.css"
   ],
   "documents": [
     "packages/ui-elements/README.md",
@@ -160,8 +76,7 @@
     "docs/architecture/10-custom-elements-and-form-association.md",
     "docs/testing/native-element-foundation-contracts.md",
     "docs/testing/native-core-element-contracts.md",
-    "docs/testing/native-advanced-element-contracts.md",
-    "docs/testing/gmf3-native-parity-gate.md"
+    "docs/testing/native-advanced-element-contracts.md"
   ],
   "constraints": {
     "frameworkDependencies": [],
@@ -170,7 +85,6 @@
     "objectAttributeSerialization": false,
     "formRuntimeAtImport": false
   },
-  "remainingGmf3Tasks": [],
   "events": {
     "file": "packages/ui-elements/src/events.ts",
     "namePattern": "vf-*",
@@ -289,12 +203,15 @@
     "domMode": "light-dom"
   },
   "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
-  "nativeParityClosure": {
-    "metadata": "docs/metadata/gmf3-closure.json",
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "native Custom Element registration, base-element behavior, events, form association, renderer parity, and browser evidence",
+    "documentation": "docs/architecture/10-custom-elements-and-form-association.md"
+  },
+  "nativeParity": {
     "registeredPublicTags": 58,
     "browserEvidence": "tests/browser/native-parity.spec.ts",
     "fixture": "apps/regression-fixtures/src/nativeParityElements.tsx",
-    "gateStatus": "passed",
     "publicReactRecords": 67,
     "directElements": 57,
     "rendererMappings": 8,
