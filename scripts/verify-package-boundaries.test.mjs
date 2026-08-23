@@ -61,6 +61,16 @@ test("rejects invalid package manifest dependencies", () => {
   );
 });
 
+test("rejects application state managers in published package boundaries", () => {
+  const failures = verifyFixture("invalid");
+
+  assert(
+    failures.includes(
+      "packages/ui-components/package.json: @vyrnforge/ui-components must not depend on application state manager zustand in dependencies",
+    ),
+  );
+});
+
 test("reserves framework-neutral boundaries for core, behaviors, and elements", () => {
   const failures = verifyFixture("invalid");
 
