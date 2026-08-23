@@ -50,12 +50,14 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       [ariaLabel, disabled, loading, size, type, value, variant],
     );
 
-    const elementRef =
-      useCanonicalElementBridge<CanonicalIconButtonElement>(null, {
+    const elementRef = useCanonicalElementBridge<CanonicalIconButtonElement>(
+      null,
+      {
         tagName: "vf-icon-button",
         register: registerCanonicalIconButton,
         properties: canonicalProperties,
-      });
+      },
+    );
 
     useCanonicalActionControlClassName(controlRef, className);
 
