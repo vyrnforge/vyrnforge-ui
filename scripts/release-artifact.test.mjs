@@ -56,6 +56,7 @@ test("data-grid release build order contains its VyrnForge dependency closure on
     [
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
       "@vyrnforge/ui-components",
       "@vyrnforge/ui-data-grid",
     ],
