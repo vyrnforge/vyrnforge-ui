@@ -78,6 +78,30 @@
           }
         },
         {
+          "name": "@vyrnforge/ui-elements",
+          "directory": "packages/ui-elements",
+          "role": "native-html-renderer",
+          "dependencies": {
+            "@vyrnforge/ui-core": "0.2.0-beta.2",
+            "@vyrnforge/ui-behaviors": "0.2.0-beta.2"
+          },
+          "policies": {
+            "hasCss": true,
+            "versionExport": {
+              "path": "packages/ui-elements/src/index.ts",
+              "symbol": "vyrnForgeUiElementsVersion"
+            },
+            "sizeBudget": {
+              "packedBytes": 165000,
+              "unpackedBytes": 1050000,
+              "fileCount": 40,
+              "runtimeJavaScriptBytes": 810000,
+              "declarationBytes": 84000,
+              "cssBytes": 110000
+            }
+          }
+        },
+        {
           "name": "@vyrnforge/ui-components",
           "directory": "packages/ui-components",
           "role": "react-renderer",
@@ -99,30 +123,6 @@
               "runtimeJavaScriptBytes": 480000,
               "declarationBytes": 110000,
               "cssBytes": 105000
-            }
-          }
-        },
-        {
-          "name": "@vyrnforge/ui-elements",
-          "directory": "packages/ui-elements",
-          "role": "native-html-renderer",
-          "dependencies": {
-            "@vyrnforge/ui-core": "0.2.0-beta.2",
-            "@vyrnforge/ui-behaviors": "0.2.0-beta.2"
-          },
-          "policies": {
-            "hasCss": true,
-            "versionExport": {
-              "path": "packages/ui-elements/src/index.ts",
-              "symbol": "vyrnForgeUiElementsVersion"
-            },
-            "sizeBudget": {
-              "packedBytes": 165000,
-              "unpackedBytes": 1050000,
-              "fileCount": 40,
-              "runtimeJavaScriptBytes": 810000,
-              "declarationBytes": 84000,
-              "cssBytes": 110000
             }
           }
         }
