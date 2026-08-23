@@ -130,12 +130,14 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
     if (component.vue?.status !== "verified-consumer") {
       failures.push(`${component.id}: Vue must be a verified consumer`);
     }
+    const frameworkEvidence = {
+      angular: "docs/metadata/angular-consumer.json",
+      vue: "docs/metadata/vue-consumer.json",
+    };
     for (const framework of ["angular", "vue"]) {
-      if (
-        component[framework]?.evidence !== "docs/metadata/gmf4-closure.json"
-      ) {
+      if (component[framework]?.evidence !== frameworkEvidence[framework]) {
         failures.push(
-          `${component.id}: ${framework} must reference GMF4 closure evidence`,
+          `${component.id}: ${framework} must reference current consumer evidence`,
         );
       }
     }

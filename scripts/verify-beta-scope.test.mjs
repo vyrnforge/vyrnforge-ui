@@ -56,8 +56,9 @@ test("rejects a stale component scope manifest", () =>
 test("rejects adding ui-data-grid to the beta release group", () =>
   fixture(
     (root) => {
-      mutateJson(root, "docs/metadata/gmf4-closure.json", (value) => {
-        value.releaseGroup.includedPackages.push("@vyrnforge/ui-data-grid");
+      mutateJson(root, "docs/metadata/release-groups.json", (value) => {
+        const beta = value.releaseLines["non-grid-beta"];
+        beta.packages.push(value.releaseLines["data-grid-alpha"].packages[0]);
       });
       mutateJson(root, "docs/metadata/non-grid-beta-scope.json", (value) => {
         value.releaseGroup.includedPackages.push("@vyrnforge/ui-data-grid");
