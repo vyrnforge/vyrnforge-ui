@@ -102,55 +102,6 @@
       ]
     },
     {
-      "name": "@vyrnforge/ui-components",
-      "directory": "packages/ui-components",
-      "version": "0.2.0-beta.2",
-      "files": ["dist", "README.md"],
-      "sideEffects": ["./dist/index.css"],
-      "main": "./dist/index.cjs",
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts",
-      "entryPoints": [
-        {
-          "exportKey": ".",
-          "specifier": "@vyrnforge/ui-components",
-          "kind": "conditional",
-          "targets": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.js",
-            "require": "./dist/index.cjs"
-          }
-        },
-        {
-          "exportKey": "./index.css",
-          "specifier": "@vyrnforge/ui-components/index.css",
-          "kind": "css",
-          "target": "./dist/index.css"
-        },
-        {
-          "exportKey": "./style.css",
-          "specifier": "@vyrnforge/ui-components/style.css",
-          "kind": "css",
-          "target": "./dist/index.css"
-        },
-        {
-          "exportKey": "./styles/index.css",
-          "specifier": "@vyrnforge/ui-components/styles/index.css",
-          "kind": "css",
-          "target": "./dist/index.css"
-        }
-      ],
-      "requiredPayload": [
-        "dist/index.cjs",
-        "dist/index.css",
-        "dist/index.d.ts",
-        "dist/index.js",
-        "LICENSE",
-        "package.json",
-        "README.md"
-      ]
-    },
-    {
       "name": "@vyrnforge/ui-elements",
       "directory": "packages/ui-elements",
       "version": "0.2.0-beta.2",
@@ -219,6 +170,55 @@
         "dist/register.cjs",
         "dist/register.d.ts",
         "dist/register.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-components",
+      "directory": "packages/ui-components",
+      "version": "0.2.0-beta.2",
+      "files": ["dist", "README.md"],
+      "sideEffects": ["./dist/index.css"],
+      "main": "./dist/index.cjs",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "entryPoints": [
+        {
+          "exportKey": ".",
+          "specifier": "@vyrnforge/ui-components",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+          }
+        },
+        {
+          "exportKey": "./index.css",
+          "specifier": "@vyrnforge/ui-components/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./style.css",
+          "specifier": "@vyrnforge/ui-components/style.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        },
+        {
+          "exportKey": "./styles/index.css",
+          "specifier": "@vyrnforge/ui-components/styles/index.css",
+          "kind": "css",
+          "target": "./dist/index.css"
+        }
+      ],
+      "requiredPayload": [
+        "dist/index.cjs",
+        "dist/index.css",
+        "dist/index.d.ts",
+        "dist/index.js",
         "LICENSE",
         "package.json",
         "README.md"
