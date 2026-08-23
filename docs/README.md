@@ -49,6 +49,8 @@ documents for the part of the foundation you are changing.
 | Semantic tokens                    | [Semantic Token Contract](architecture/08-semantic-token-contract.md)                           |
 | Component contracts and events     | [Component Contracts and Events](architecture/09-component-contracts-and-events.md)             |
 | Custom Elements and forms          | [Custom Elements and Form Association](architecture/10-custom-elements-and-form-association.md) |
+| AI consumption architecture        | [ADR-010: AI Consumption Contract](architecture/adr-010-ai-consumption-contract.md)              |
+| Optional advanced modules          | [ADR-011: Optional Advanced Module Architecture](architecture/adr-011-optional-advanced-module-architecture.md) |
 | Browser testing                    | [Browser Testing](testing/browser-testing.md)                                                   |
 | Cross-framework consumer fixtures  | [Consumer Fixture Strategy](testing/multi-framework-consumer-fixtures.md)                       |
 
