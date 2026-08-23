@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "sprint": "S14",
+    "id": "MFD-1408",
+    "title": "Verify SSR and hydration behavior",
+    "status": "contract-implemented"
+  },
+  "package": "@vyrnforge/ui-components",
+  "bridge": "packages/ui-components/src/internal/react-native-bridge.ts",
+  "invariants": [
+    "Importing the React package or bridge does not require window, document, HTMLElement, or customElements at module evaluation time.",
+    "Custom-element registration runs only from client lifecycle effects and is idempotent when the tag is already registered.",
+    "Server rendering does not execute registration, property assignment, or canonical event subscription side effects.",
+    "Hydration preserves server markup and applies canonical properties/events after the element ref is attached.",
+    "Registration helpers tolerate environments without a CustomElementRegistry and do not duplicate definitions."
+  ],
+  "validation": [
+    "packages/ui-components/src/__tests__/react-ssr-hydration.test.tsx",
+    "packages/ui-components/src/__tests__/react-native-bridge.test.tsx",
+    "docs/metadata/compatibility-release-matrix.json"
+  ]
+}
