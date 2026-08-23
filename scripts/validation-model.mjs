@@ -33,22 +33,6 @@ export const activeContractTests = [
   "test:generated-framework-artifacts",
 ];
 
-export const historicalEvidenceTests = [
-  "test:react-behavior-adoption",
-  "test:native-element-foundations",
-  "test:native-core-elements",
-  "test:native-advanced-elements",
-  "test:angular-consumer",
-  "test:angular-forms-adapter",
-  "test:vue-consumer",
-  "test:vue-model-adapter",
-  "test:ssr-bundler",
-  "test:cross-framework-matrix",
-  "test:cross-framework-accessibility",
-  "test:multi-framework-migration-guide",
-  "test:gmf4-closure",
-];
-
 export const activeMetadataVerifiers = [
   "verify:component-metadata",
   "verify:beta-scope",
@@ -61,22 +45,6 @@ export const activeMetadataVerifiers = [
   "verify:multi-framework",
   "verify:consumer-foundations",
   "verify:component-reference",
-];
-
-export const historicalEvidenceVerifiers = [
-  "verify:react-behavior-adoption",
-  "verify:native-element-foundations",
-  "verify:native-core-elements",
-  "verify:native-advanced-elements",
-  "verify:angular-consumer",
-  "verify:angular-forms-adapter",
-  "verify:vue-consumer",
-  "verify:vue-model-adapter",
-  "verify:ssr-bundler",
-  "verify:cross-framework-matrix",
-  "verify:cross-framework-accessibility",
-  "verify:multi-framework-migration-guide",
-  "verify:gmf4-closure",
 ];
 
 export function extractRootScriptDependencies(command) {
@@ -202,15 +170,6 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
     JSON.stringify(metadata.publicCommands) === JSON.stringify(publicCommands),
     "validation metadata must expose only check, test, build, and ci",
   );
-  assert(
-    metadata.historicalEvidence?.normalValidation === false,
-    "historical evidence must be excluded from normal validation",
-  );
-  assert(
-    metadata.historicalEvidence?.scopeVariable ===
-      "CI_SCOPE_HISTORICAL_EVIDENCE",
-    "historical evidence must use its dedicated scope variable",
-  );
 
   const layerNames = Object.keys(metadata.layers ?? {});
   assert(
@@ -239,15 +198,6 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
   }
 
   assert(
-    scopedRunner.includes("CI_SCOPE_HISTORICAL_EVIDENCE"),
-    "scoped runner must expose the historical-evidence scope",
-  );
-  assert(
-    scopedRunner.includes('"test:historical-evidence"') &&
-      scopedRunner.includes('"verify:historical-evidence"'),
-    "scoped runner must execute both historical evidence groups when selected",
-  );
-  assert(
     !scopedRunner.includes('"verify:ci"'),
     "scoped runner must not invoke verify:ci",
   );
@@ -263,42 +213,9 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
     "test:contracts must contain the exact active contract test group",
   );
   assert(
-    exactDependencies(
-      graph,
-      "test:historical-evidence",
-      historicalEvidenceTests,
-    ),
-    "test:historical-evidence must contain the exact historical test group",
-  );
-  assert(
     exactDependencies(graph, "verify:metadata", activeMetadataVerifiers),
     "verify:metadata must contain the exact active metadata group",
   );
-  assert(
-    exactDependencies(
-      graph,
-      "verify:historical-evidence",
-      historicalEvidenceVerifiers,
-    ),
-    "verify:historical-evidence must contain the exact historical verifier group",
-  );
-
-  const historicalNames = new Set([
-    "test:historical-evidence",
-    "verify:historical-evidence",
-    ...historicalEvidenceTests,
-    ...historicalEvidenceVerifiers,
-  ]);
-  for (const entrypoint of ["check", "ci"]) {
-    const reached = expandCommandExecutions(graph, entrypoint).map(
-      (execution) => execution.name,
-    );
-    const leaked = reached.filter((name) => historicalNames.has(name));
-    assert(
-      leaked.length === 0,
-      `${entrypoint} must not reach historical evidence: ${leaked.join(", ")}`,
-    );
-  }
 
   const cycles = findCommandCycles(graph);
   assert(
@@ -317,23 +234,14 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
     generatedFrom: "package.json and docs/metadata/validation-layers.json",
     publicCommands,
     graph: Object.fromEntries(
-      [
-        ...publicCommands,
-        "test:contracts",
-        "verify:metadata",
-        "test:historical-evidence",
-        "verify:historical-evidence",
-      ].map((name) => [name, graph[name] ?? []]),
+      [...publicCommands, "test:contracts", "verify:metadata"].map((name) => [
+        name,
+        graph[name] ?? [],
+      ]),
     ),
     activeContracts: {
       tests: activeContractTests,
       verifiers: activeMetadataVerifiers,
-    },
-    historicalEvidence: {
-      tests: historicalEvidenceTests,
-      verifiers: historicalEvidenceVerifiers,
-      normalValidation: false,
-      scopeVariable: "CI_SCOPE_HISTORICAL_EVIDENCE",
     },
     ciExecutions,
     cycles,
