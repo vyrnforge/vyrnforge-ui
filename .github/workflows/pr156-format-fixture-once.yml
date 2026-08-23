@@ -1,0 +1,56 @@
+name: PR156 format fixture once
+
+on:
+  push:
+    branches:
+      - chore/repo-wide-legacy-cleanup
+    paths:
+      - .github/workflows/pr156-format-fixture-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: chore/repo-wide-legacy-cleanup
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restore invalid state-manager fixture
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const path = 'scripts/fixtures/package-boundaries/invalid/packages/ui-components/package.json';
+          const value = JSON.parse(readFileSync(path, 'utf8'));
+          value.dependencies ??= {};
+          value.dependencies.zustand = '5.0.0';
+          writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
+          NODE
+
+      - name: Format with repository Prettier
+        run: npx prettier --write scripts/fixtures/package-boundaries/invalid/packages/ui-components/package.json
+
+      - name: Remove helper and commit
+        run: |
+          rm .github/workflows/pr156-format-fixture-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/fixtures/package-boundaries/invalid/packages/ui-components/package.json .github/workflows/pr156-format-fixture-once.yml
+          git commit -m "fix: restore formatted application-state boundary fixture"
+          git push origin HEAD:chore/repo-wide-legacy-cleanup
