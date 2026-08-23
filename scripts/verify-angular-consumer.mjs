@@ -2,8 +2,6 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { isConsumerBatchAtLeast } from "./consumer-batch-progression.mjs";
-
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -47,26 +45,6 @@ function addFailure(failures, message) {
 
 function verifyMetadata(root, failures) {
   const metadata = readJson(root, "docs/metadata/angular-consumer.json");
-  const program = metadata.program ?? {};
-  if (program.sprint !== "S7") {
-    addFailure(failures, "Angular consumer sprint must be S7");
-  }
-  if (program.task !== "CF-7003") {
-    addFailure(failures, "Angular consumer task must be CF-7003");
-  }
-  if (program.storyPoints !== 8) {
-    addFailure(failures, "CF-7003 story points must be 8");
-  }
-  if (program.status !== "evidence-complete") {
-    addFailure(failures, "CF-7003 status must be evidence-complete");
-  }
-  if (program.gate !== "GMF4" || program.gateStatus !== "passed") {
-    addFailure(failures, "CF-7003 must record passed GMF4");
-  }
-  if (program.baseCommit !== "9edddc68e403da770c9c435a3a626bc3ea595052") {
-    addFailure(failures, "CF-7003 base commit is invalid");
-  }
-
   const framework = metadata.framework ?? {};
   if (framework.name !== "Angular" || framework.version !== angularVersion) {
     addFailure(failures, `Angular framework version must be ${angularVersion}`);
@@ -106,7 +84,7 @@ function verifyMetadata(root, failures) {
     addFailure(failures, "Angular fixture preview port must be 4183");
   }
   if ((metadata.unresolvedBlockers ?? []).length !== 0) {
-    addFailure(failures, "CF-7003 unresolved blockers must be empty");
+    addFailure(failures, "Angular unresolved blockers must be empty");
   }
 }
 
@@ -122,9 +100,6 @@ function verifyFixture(root, failures) {
   );
   const manifest = readJson(root, "tests/consumers/manifest.json");
 
-  if (fixture.task !== "CF-7003") {
-    addFailure(failures, "Angular fixture task must be CF-7003");
-  }
   if (fixture.supportClaim !== expectedFixtureClaim) {
     addFailure(
       failures,
@@ -158,9 +133,6 @@ function verifyFixture(root, failures) {
         addFailure(failures, `Angular manifest example is missing ${file}`);
       }
     }
-  }
-  if (!isConsumerBatchAtLeast(manifest.currentBatch, "CF-7005")) {
-    addFailure(failures, "consumer manifest currentBatch is invalid");
   }
 
   const expectedAngularPackages = [
@@ -359,9 +331,6 @@ function verifyArchitecture(root, failures) {
     if (angular.betaClaim !== expectedBetaClaim) {
       addFailure(failures, `Angular beta claim must be ${expectedBetaClaim}`);
     }
-    if (angular.consumerFoundation !== "CF-7003") {
-      addFailure(failures, "Angular consumer foundation must be CF-7003");
-    }
   }
 
   const policy = architecture.consumerFixturePolicy ?? {};
@@ -378,8 +347,6 @@ function verifyArchitecture(root, failures) {
   const angularConsumer = architecture.angularConsumer ?? {};
   if (
     angularConsumer.status !== "complete" ||
-    angularConsumer.task !== "CF-7003" ||
-    angularConsumer.storyPoints !== 8 ||
     angularConsumer.supportClaim !== expectedFixtureClaim
   ) {
     addFailure(
@@ -484,7 +451,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exitCode = 1;
   } else {
     console.log(
-      "Angular consumer passed: CF-7003 provides clean Angular 22 packed-package, property/event, slot, native-form, build, and Chromium evidence.",
+      "Angular consumer passed: Angular 22 clean-consumer packed-package, property/event, slot, native-form, build, and Chromium evidence is aligned.",
     );
   }
 }
