@@ -30,10 +30,7 @@ function createFixture() {
       recursive: true,
     });
   }
-  cpSync(
-    path.join(repositoryRoot, "package.json"),
-    path.join(root, "package.json"),
-  );
+  cpSync(path.join(repositoryRoot, "package.json"), path.join(root, "package.json"));
   return root;
 }
 
@@ -41,17 +38,17 @@ test("repository behavior foundations are internally complete", () => {
   assert.deepEqual(verifyBehaviorFoundations(), []);
 });
 
-test("rejects an incomplete task record", () => {
+test("rejects a stale or invalid current behavior contract", () => {
   const root = createFixture();
   try {
     const file = path.join(root, "docs/metadata/behavior-foundations.json");
     const value = JSON.parse(readFileSync(file, "utf8"));
-    value.tasks.find((task) => task.id === "MF-5006").status = "pending";
+    value.contracts.tabs.factory = "legacyTabsController";
     writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 
     assert(
       verifyBehaviorFoundations({ root }).some((failure) =>
-        failure.includes("MF-5006 must be done"),
+        failure.includes("tabs factory must be createTabsController"),
       ),
     );
   } finally {
@@ -102,11 +99,7 @@ test("rejects missing React behavior dependency", () => {
     const file = path.join(root, "packages/ui-components/package.json");
     const value = JSON.parse(readFileSync(file, "utf8"));
     delete value.dependencies["@vyrnforge/ui-behaviors"];
-    writeFileSync(
-      file,
-      `${JSON.stringify(value, null, 2)}
-`,
-    );
+    writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 
     assert(
       verifyBehaviorFoundations({ root }).some((failure) =>
