@@ -5,16 +5,34 @@ and per-component limitations belong in `docs/metadata/components.json`.
 
 ## Current gaps
 
-| Gap                       | Why it matters                                                                                                                               | Current direction                                                               |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Repository understanding  | Current behavior should be discoverable without reconstructing historical sprint/gate work.                                                  | Complete the active documentation and contributor simplification work.          |
-| Stable maturity promotion | Prerelease package channels do not make every component stable.                                                                              | Promote components only through the canonical maturity/evidence model.          |
-| Real application feedback | Enterprise application adoption can expose integration, accessibility, performance, and internationalization needs not visible in fixtures.  | Add work from observed product evidence rather than speculative expansion.      |
-| Data-grid evolution       | The React grid is independently versioned and broader decomposition/multi-framework rendering remains separate from the non-grid foundation. | Replan the grid as its own workstream when demand and measurements justify it.  |
-| Mobile-native rendering   | The current architecture is multi-framework web, not mobile-native.                                                                          | Keep mobile-native work outside the current roadmap unless explicitly approved. |
+| Gap | Why it matters | Current direction |
+| --- | --- | --- |
+| General-purpose positioning | Canonical implementation foundations are broader than the older enterprise-only product wording. | Align README, architecture summaries, roadmap language, and public onboarding with the canonical general-purpose / enterprise-depth positioning. |
+| Stable maturity promotion | Prerelease package channels do not make every component stable or first-class production-ready. | Promote components and packages only through the canonical maturity, compatibility, accessibility, performance, and evidence model. |
+| First-class Angular distribution | Angular is an approved first-class surface but the official package and complete framework-native integration are not yet shipped. | Complete the active S12/G12 distribution work without moving shared design/behavior ownership into Angular-specific code. |
+| First-class Vue distribution | Vue is an approved first-class surface but the official package and complete framework-native integration are not yet shipped. | Complete the active S13/G13 distribution work with generated/typed framework integration and evidence. |
+| React canonical convergence | Shared canonical integration exists, but public React compatibility and framework-specific constraints must remain protected during migration. | Complete S14 using parity evidence and narrow ADR-008 exceptions rather than forcing unsafe convergence. |
+| AI consumption architecture | Component metadata already contains useful AI guidance, but AI is not yet supported by a formal compact consumer contract and token-efficiency model. | Define machine-readable AI consumption rules and generate bounded context from canonical contracts rather than maintaining duplicate AI documentation. |
+| Optional advanced-module architecture | The data grid demonstrates package separation, but there is no generalized architecture for future heavyweight UI modules. | Define dependency, release, size, styling, generation, external-engine, and framework-integration rules before adding multiple advanced modules. |
+| Hierarchical data/navigation | Existing menus and side navigation intentionally do not replace complex tree navigation or tree-grid interaction. | Plan reusable tree collection, expanded-state, selection, keyboard, accessibility, lazy-data, and virtualization contracts before implementing TreeView/TreeGrid surfaces. |
+| Visualization/charting | Visualization UI is valid long-term VyrnForge scope, but there is no approved chart architecture or optional distribution model. | Keep implementation deferred while defining the UI-vs-BI boundary, rendering/dependency strategy, accessibility, theming, and framework contract. |
+| Complex form composition | Individual form controls and model semantics are strong; higher-level form layout, reusable form patterns, and optional schema-driven UI remain incomplete. | Extend shared form foundations and patterns without owning product-specific validation, persistence, or workflow execution. |
+| Reusable templates/patterns | Component slots and composition semantics exist, but repeated application compositions are not yet represented as canonical machine-readable patterns. | Define reusable pattern/template metadata that can drive framework examples, documentation, and AI guidance without duplicating component truth. |
+| Data-grid evolution | The React grid is independently versioned and broader decomposition/multi-framework rendering remains separate from the current non-grid distribution program. | Replan grid evolution as an optional advanced-module workstream when demand, architecture, and measurements justify it. |
+| Spatial/3D UI boundary | Spatial/3D controls are valid future UI exploration but VyrnForge must not become a rendering/game engine. | Define capability, accessibility, dependency, engine-adapter, SSR, input, and fallback boundaries before implementation. |
+| Future framework extensibility | Current contracts target four approved surfaces, while the long-term architecture should be capable of adding another justified framework. | Keep framework concepts contract-driven and avoid hard-coding four-framework assumptions where a generic capability model is practical. |
+| Real application feedback | General-purpose and enterprise application adoption can expose integration, accessibility, visual, performance, internationalization, and DX needs not visible in fixtures. | Add or reprioritize work from observed product evidence rather than speculative component expansion. |
+| Tracker/source synchronization | Program trackers can lag merged repository implementation and produce misleading progress/gate reporting. | Reconcile active tracker status from merged GitHub evidence before using percentages or gate labels as authoritative execution state. |
+| Mobile-native rendering | The current architecture is a web UI system, not a React Native/Flutter/Android/iOS renderer. | Keep mobile-native work outside the current roadmap unless a separate product program is explicitly approved. |
 
 ## Planning rule
 
 Do not carry old gap lists forward after the underlying capability exists.
 Create or reprioritize work from current component metadata, defects,
-measurements, real application needs, and approved architecture decisions.
+measurements, real application needs, approved architecture decisions, and the
+canonical product vision.
+
+Do not inject speculative advanced-module implementation into the S10-S15
+critical path. Finish the current multi-framework distribution program while
+making the long-term architecture explicit enough that later programs extend one
+VyrnForge system rather than creating isolated products.
