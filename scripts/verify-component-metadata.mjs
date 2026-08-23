@@ -290,14 +290,14 @@ export function verifyComponentMetadata(
         addFailure(
           failures,
           component,
-          "frameworkParity must reference current or planned S6 native rendering",
+          "frameworkParity must reference current native rendering",
         );
       if (
         parity?.native?.status === "current" &&
         ![
           "docs/metadata/native-core-elements.json",
           "docs/metadata/native-advanced-elements.json",
-          "docs/metadata/gmf3-closure.json",
+          "docs/metadata/native-element-foundations.json",
         ].includes(parity.native.evidence)
       )
         addFailure(

@@ -298,7 +298,7 @@ function verifyFixture(root, failures) {
     }
   }
   for (const marker of [
-    ':items.prop="tabs"',
+    ':items="tabs"',
     ':value.prop="owner"',
     '@vf-action="handleAction"',
     '@vf-value-change="handleOwnerValueChange"',

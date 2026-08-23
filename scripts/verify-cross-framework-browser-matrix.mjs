@@ -11,6 +11,7 @@ const requiredFiles = [
   "docs/metadata/cross-framework-browser-matrix.json",
   "docs/testing/cross-framework-browser-matrix.md",
   "scripts/verify-consumer-foundations-runtime.mjs",
+  "scripts/verify-packed-four-surface-generation-smoke.mjs",
   ".github/workflows/_integration.yml",
 ];
 
@@ -87,9 +88,24 @@ export function verifyCrossFrameworkBrowserMatrix({
     }
   }
 
+  const smoke = read(
+    root,
+    "scripts/verify-packed-four-surface-generation-smoke.mjs",
+  );
+  for (const marker of [
+    "scripts/verify-consumer-foundations-runtime.mjs",
+    "--accessibility-report",
+    "test-results/cross-framework-matrix/accessibility-report.json",
+  ]) {
+    if (!smoke.includes(marker)) {
+      failures.push(`packed four-surface smoke is missing ${marker}`);
+    }
+  }
+
   const workflow = read(root, ".github/workflows/_integration.yml");
   for (const marker of [
-    "verify:cross-framework-accessibility:runtime",
+    "verify-packed-four-surface-generation-smoke.mjs",
+    "test-results/cross-framework-matrix/accessibility-report.json",
     "cross-framework-browser-matrix",
     "actions/upload-artifact@",
   ]) {

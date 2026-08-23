@@ -43,7 +43,7 @@ test("repository native element foundations are internally complete", () => {
   assert.deepEqual(verifyNativeElementFoundations(), []);
 });
 
-test("rejects an incomplete EL-6004 task", () => {
+test("rejects non-canonical native foundation metadata", () => {
   const root = createFixture();
   try {
     const file = path.join(
@@ -51,12 +51,14 @@ test("rejects an incomplete EL-6004 task", () => {
       "docs/metadata/native-element-foundations.json",
     );
     const value = JSON.parse(readFileSync(file, "utf8"));
-    value.tasks.find((task) => task.id === "EL-6004").status = "planned";
+    value.sourceOfTruth.canonical = false;
     writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 
     assert(
       verifyNativeElementFoundations({ root }).some((failure) =>
-        failure.includes("EL-6004 must be done"),
+        failure.includes(
+          "native element foundation metadata must be canonical",
+        ),
       ),
     );
   } finally {
@@ -145,36 +147,25 @@ test("rejects missing real-form browser evidence", () => {
   }
 });
 
-test("accepts later sprints without weakening the S7 minimum", () => {
-  const laterRoot = createFixture();
+test("rejects native parity metadata that diverges from current renderer evidence", () => {
+  const root = createFixture();
   try {
-    const file = path.join(laterRoot, "docs/metadata/multi-framework.json");
+    const file = path.join(
+      root,
+      "docs/metadata/native-element-foundations.json",
+    );
     const value = JSON.parse(readFileSync(file, "utf8"));
-    value.program.currentSprint = "S9";
+    value.nativeParity.registeredPublicTags = 57;
     writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 
     assert(
-      !verifyNativeElementFoundations({ root: laterRoot }).some((failure) =>
-        failure.includes("currentSprint"),
+      verifyNativeElementFoundations({ root }).some((failure) =>
+        failure.includes(
+          "nativeParity metadata must match current renderer evidence",
+        ),
       ),
     );
   } finally {
-    rmSync(laterRoot, { recursive: true, force: true });
-  }
-
-  const regressedRoot = createFixture();
-  try {
-    const file = path.join(regressedRoot, "docs/metadata/multi-framework.json");
-    const value = JSON.parse(readFileSync(file, "utf8"));
-    value.program.currentSprint = "S6";
-    writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
-
-    assert(
-      verifyNativeElementFoundations({ root: regressedRoot }).some((failure) =>
-        failure.includes("currentSprint must not regress before S7"),
-      ),
-    );
-  } finally {
-    rmSync(regressedRoot, { recursive: true, force: true });
+    rmSync(root, { recursive: true, force: true });
   }
 });

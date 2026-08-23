@@ -41,7 +41,7 @@ function createFixture() {
     "docs/metadata/multi-framework.json",
     ...closure.evidence,
     ...[
-      "scripts/verify-gmf3-closure.mjs",
+      "scripts/verify-native-element-foundations.mjs",
       "scripts/verify-multi-framework-architecture.mjs",
       "scripts/verify-package-boundaries.mjs",
       "scripts/verify-consumer-foundations.mjs",
@@ -165,17 +165,17 @@ test("rejects unresolved GMF4 blockers", () => {
   }
 });
 
-test("historical verifiers accept the completed GMF4 transition", () => {
+test("current verifiers accept the completed GMF4 transition", () => {
   const consumerSource = readFileSync(
     path.join(repositoryRoot, "scripts/verify-consumer-foundations.mjs"),
     "utf8",
   );
-  const gmf3Source = readFileSync(
-    path.join(repositoryRoot, "scripts/verify-gmf3-closure.mjs"),
-    "utf8",
-  );
   const nativeFoundationSource = readFileSync(
     path.join(repositoryRoot, "scripts/verify-native-element-foundations.mjs"),
+    "utf8",
+  );
+  const gmf4Source = readFileSync(
+    path.join(repositoryRoot, "scripts/verify-gmf4-closure.mjs"),
     "utf8",
   );
   const fixtureDocs = readFileSync(
@@ -192,12 +192,15 @@ test("historical verifiers accept the completed GMF4 transition", () => {
       "consumer manifest and multi-framework program completion state must agree",
     ),
   );
-  assert(gmf3Source.includes("currentSprintNumber < 7"));
+  assert(nativeFoundationSource.includes("native-parity-current"));
   assert(
     nativeFoundationSource.includes(
-      "multi-framework currentSprint must not regress before S7",
+      "native element foundation metadata must be canonical",
     ),
   );
-  assert(!gmf3Source.includes("multi-framework currentSprint must be S7"));
+  assert(
+    gmf4Source.includes('"scripts/verify-native-element-foundations.mjs"'),
+  );
+  assert(!gmf4Source.includes('"scripts/verify-gmf3-closure.mjs"'));
   assert(fixtureDocs.includes("packed-vue-runtime-verified"));
 });

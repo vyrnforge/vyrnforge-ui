@@ -82,7 +82,7 @@
         "form-associated element integration",
         "explicit registration entry points"
       ],
-      "foundationStage": "gmf3-parity-complete"
+      "foundationStage": "native-parity-current"
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -109,7 +109,7 @@
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/native-html",
       "betaClaim": "packed-consumer-verified",
-      "rendererFoundation": "gmf3-parity-complete",
+      "rendererFoundation": "native-parity-current",
       "consumerFoundation": "CF-7001"
     },
     {
@@ -178,35 +178,11 @@
   "nativeElementFoundation": {
     "package": "@vyrnforge/ui-elements",
     "status": "complete",
-    "tasks": [
-      "EL-6001",
-      "EL-6002",
-      "EL-6003",
-      "EL-6004",
-      "EL-6005",
-      "EL-6006",
-      "EL-6007",
-      "EL-6008",
-      "EL-6009",
-      "EL-6010",
-      "EL-6011",
-      "EL-6012",
-      "EL-6013",
-      "EL-6014",
-      "EL-6015",
-      "EL-6016",
-      "EL-6017",
-      "EL-6018"
-    ],
     "metadata": "docs/metadata/native-element-foundations.json",
-    "gate": "GMF3",
-    "gateStatus": "passed",
-    "currentBatch": "EL-6018",
     "nativeCoreMetadata": "docs/metadata/native-core-elements.json",
     "registeredPublicTags": 58,
     "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
-    "foundationStage": "gmf3-parity-complete",
-    "closureMetadata": "docs/metadata/gmf3-closure.json"
+    "foundationStage": "native-parity-current"
   },
   "consumerFoundation": {
     "status": "complete",

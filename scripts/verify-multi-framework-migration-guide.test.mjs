@@ -45,13 +45,19 @@ test("rejects removal of the data-grid limitation", () =>
       writeFileSync(
         file,
         readFileSync(file, "utf8").replace(
-          "## Data-grid scope",
-          "## Deferred module",
+          "data grid remains React-only on its independent alpha track",
+          "data grid follows the shared non-grid release track",
         ),
       );
     },
     (failures) =>
-      assert(failures.some((failure) => failure.includes("Data-grid scope"))),
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "data grid remains React-only on its independent alpha track",
+          ),
+        ),
+      ),
   ));
 
 test("evidence-complete requires named review evidence", () =>

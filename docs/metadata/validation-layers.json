@@ -30,10 +30,7 @@
     "normalValidation": false,
     "scopeVariable": "CI_SCOPE_HISTORICAL_EVIDENCE",
     "condition": "Run only when remaining canonical completed-sprint evidence or its verifier changes.",
-    "examples": [
-      "docs/metadata/gmf3-closure.json",
-      "docs/metadata/gmf4-closure.json"
-    ]
+    "examples": ["docs/metadata/gmf4-closure.json"]
   },
   "checks": [
     {
