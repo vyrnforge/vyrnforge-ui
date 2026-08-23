@@ -18,42 +18,44 @@ const requiredFiles = [
   "tests/consumers/manifest.json",
   "scripts/verify-consumer-foundations-runtime.mjs",
 ];
-function read(root, rel) {
-  return readFileSync(path.join(root, rel), "utf8");
+function read(root, relativePath) {
+  return readFileSync(path.join(root, relativePath), "utf8");
 }
-function json(root, rel) {
-  return JSON.parse(read(root, rel));
+function readJson(root, relativePath) {
+  return JSON.parse(read(root, relativePath));
 }
-function fail(list, msg) {
-  list.push(msg);
+function fail(failures, message) {
+  failures.push(message);
 }
 
 export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
   const failures = [];
-  for (const file of requiredFiles)
-    if (!existsSync(path.join(root, file)))
-      fail(failures, `required CF-7006 file is missing: ${file}`);
-  if (failures.length) return failures.sort();
+  for (const file of requiredFiles) {
+    if (!existsSync(path.join(root, file))) {
+      fail(failures, `required Vue model adapter file is missing: ${file}`);
+    }
+  }
+  if (failures.length > 0) return failures.sort();
 
-  const metadata = json(root, "docs/metadata/vue-model-adapter.json");
-  if (metadata.program?.task !== "CF-7006" || metadata.program?.sprint !== "S7")
-    fail(failures, "Vue model adapter program must be S7 / CF-7006");
-  if (metadata.program?.storyPoints !== 5)
-    fail(failures, "CF-7006 story points must be 5");
-  if (metadata.program?.status !== "evidence-complete")
-    fail(failures, "CF-7006 status must be evidence-complete");
-  if (metadata.adapter?.supportClaim !== expectedClaim)
+  const metadata = readJson(root, "docs/metadata/vue-model-adapter.json");
+  if (metadata.status !== "verified") {
+    fail(failures, "Vue model adapter status must be verified");
+  }
+  if (metadata.adapter?.supportClaim !== expectedClaim) {
     fail(failures, `Vue model adapter support claim must be ${expectedClaim}`);
-  if (metadata.adapter?.publishedPackage !== null)
-    fail(failures, "CF-7006 must not publish a Vue adapter package");
+  }
+  if (metadata.adapter?.publishedPackage !== null) {
+    fail(failures, "Vue model adapter must not publish a framework package");
+  }
   if (
     metadata.adapter?.duplicatesRendering !== false ||
     metadata.adapter?.duplicatesValidation !== false
-  )
+  ) {
     fail(
       failures,
       "Vue model adapter must delegate rendering and validation to native elements",
     );
+  }
   for (const contract of [
     "modelValue",
     "update:modelValue",
@@ -61,9 +63,11 @@ export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
     "vf-checked-change",
     "value",
     "checked",
-  ])
-    if (!(metadata.contracts ?? []).includes(contract))
+  ]) {
+    if (!(metadata.contracts ?? []).includes(contract)) {
       fail(failures, `Vue model adapter metadata is missing ${contract}`);
+    }
+  }
 
   const composable = read(
     root,
@@ -75,9 +79,12 @@ export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
     "removeEventListener",
     "options.write",
     "options.emit",
-  ])
-    if (!composable.includes(marker))
+  ]) {
+    if (!composable.includes(marker)) {
       fail(failures, `Vue model composable is missing ${marker}`);
+    }
+  }
+
   const text = read(
     root,
     "tests/consumers/vue/src/adapters/VyrnForgeTextInputModel.vue",
@@ -88,9 +95,12 @@ export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
     "vf-value-change",
     "target.value",
     "<vf-text-input",
-  ])
-    if (!text.includes(marker))
+  ]) {
+    if (!text.includes(marker)) {
       fail(failures, `Vue text model adapter is missing ${marker}`);
+    }
+  }
+
   const checkbox = read(
     root,
     "tests/consumers/vue/src/adapters/VyrnForgeCheckboxModel.vue",
@@ -101,18 +111,23 @@ export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
     "vf-checked-change",
     "target.checked",
     "<vf-checkbox",
-  ])
-    if (!checkbox.includes(marker))
+  ]) {
+    if (!checkbox.includes(marker)) {
       fail(failures, `Vue checkbox model adapter is missing ${marker}`);
-  for (const source of [composable, text, checkbox])
+    }
+  }
+  for (const source of [composable, text, checkbox]) {
     for (const forbidden of [
       "innerHTML",
       "attachShadow",
       "@vyrnforge/ui-components",
       "@vyrnforge/ui-data-grid",
-    ])
-      if (source.includes(forbidden))
+    ]) {
+      if (source.includes(forbidden)) {
         fail(failures, `Vue model adapter must not contain ${forbidden}`);
+      }
+    }
+  }
 
   const app = read(root, "tests/consumers/vue/src/App.vue");
   for (const marker of [
@@ -121,38 +136,52 @@ export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
     "data-vue-model-value",
     "data-vue-model-checked",
     'id="vue-model-programmatic"',
-  ])
-    if (!app.includes(marker))
-      fail(failures, `Vue application is missing CF-7006 marker ${marker}`);
-  const fixture = json(root, "tests/consumers/vue/fixture.json");
-  if (fixture.modelAdapterDecision !== "cf-7006-adapter-verified")
-    fail(failures, "Vue fixture must record the CF-7006 verified adapter");
-  if (fixture.modelAdapter?.supportClaim !== expectedClaim)
+  ]) {
+    if (!app.includes(marker)) {
+      fail(failures, `Vue application is missing model adapter marker ${marker}`);
+    }
+  }
+
+  const fixture = readJson(root, "tests/consumers/vue/fixture.json");
+  if (fixture.modelAdapterDecision !== "reference-adapter-verified") {
+    fail(failures, "Vue fixture must record the verified reference adapter");
+  }
+  if (fixture.modelAdapter?.supportClaim !== expectedClaim) {
     fail(failures, "Vue fixture model adapter support claim is invalid");
-  const manifest = json(root, "tests/consumers/manifest.json");
+  }
+
+  const manifest = readJson(root, "tests/consumers/manifest.json");
   const vue = (manifest.fixtures ?? []).find((item) => item.id === "vue");
-  if (vue?.modelSupportClaim !== expectedClaim)
+  if (vue?.modelSupportClaim !== expectedClaim) {
     fail(failures, "consumer manifest Vue model support claim is invalid");
-  for (const file of vue?.exampleFiles ?? [])
-    if (!existsSync(path.join(root, "tests/consumers/vue", file)))
+  }
+  for (const file of vue?.exampleFiles ?? []) {
+    if (!existsSync(path.join(root, "tests/consumers/vue", file))) {
       fail(failures, `Vue manifest example is missing ${file}`);
+    }
+  }
+
   const runtime = read(root, "scripts/verify-consumer-foundations-runtime.mjs");
   for (const marker of [
     "data-vue-model-value",
     "data-vue-model-checked",
     "vue-model-programmatic",
     "Programmatic Vue",
-  ])
-    if (!runtime.includes(marker))
-      fail(failures, `CF-7006 runtime evidence is missing ${marker}`);
+  ]) {
+    if (!runtime.includes(marker)) {
+      fail(failures, `Vue model adapter runtime evidence is missing ${marker}`);
+    }
+  }
   return failures.sort();
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const failures = verifyVueModelAdapter();
-  if (failures.length) {
+  if (failures.length > 0) {
     console.error("Vue model adapter verification failed:");
     for (const failure of failures) console.error(`- ${failure}`);
     process.exitCode = 1;
-  } else console.log("Vue model adapter static verification passed.");
+  } else {
+    console.log("Vue model adapter verification passed.");
+  }
 }
