@@ -44,9 +44,7 @@ export function mapReactPropsToCanonical<TProps extends object>(
     if (typeof callback !== "function") continue;
 
     events[event.canonicalEvent] = (detail, customEvent) => {
-      const mappedDetail = event.mapDetail
-        ? event.mapDetail(detail)
-        : detail;
+      const mappedDetail = event.mapDetail ? event.mapDetail(detail) : detail;
       (callback as (value: unknown, event?: CustomEvent) => void)(
         mappedDetail,
         customEvent,

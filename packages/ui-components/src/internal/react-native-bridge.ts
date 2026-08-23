@@ -82,11 +82,7 @@ export function useCanonicalElementBridge<TElement extends HTMLElement>(
 ): RefObject<TElement | null> {
   const elementRef = useRef<TElement>(null);
 
-  useImperativeHandle(
-    forwardedRef,
-    () => elementRef.current as TElement,
-    [],
-  );
+  useImperativeHandle(forwardedRef, () => elementRef.current as TElement, []);
 
   useEffect(() => {
     ensureCanonicalElementRegistered(tagName, register);

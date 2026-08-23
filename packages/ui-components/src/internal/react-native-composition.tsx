@@ -11,7 +11,8 @@ export function mapNamedContentToCanonicalSlots(
   namedContent: CanonicalNamedContent,
 ): ReactNode[] {
   return Object.entries(namedContent).flatMap(([slot, content]) => {
-    if (content === null || content === undefined || content === false) return [];
+    if (content === null || content === undefined || content === false)
+      return [];
 
     if (isValidElement(content)) {
       return [
@@ -21,7 +22,11 @@ export function mapNamedContentToCanonicalSlots(
       ];
     }
 
-    return [<span slot={slot}>{content}</span>];
+    return [
+      <span key={slot} slot={slot}>
+        {content}
+      </span>,
+    ];
   });
 }
 

@@ -18,7 +18,11 @@ type MigrationMatrix = {
   schemaVersion: number;
   task: { sprint: string; id: string; status: string };
   strategies: Array<{ id: string; reason: string; exports: string[] }>;
-  nonComponentExports: Array<{ name: string; strategy: string; reason: string }>;
+  nonComponentExports: Array<{
+    name: string;
+    strategy: string;
+    reason: string;
+  }>;
   dedicatedRendererExceptions: string[];
 };
 
@@ -42,7 +46,9 @@ describe("MFD-1402 React migration matrix", () => {
     const expectedComponents = adoption.publicValueExports
       .filter((name) => !nonComponents.has(name))
       .sort();
-    const classified = matrix.strategies.flatMap((strategy) => strategy.exports);
+    const classified = matrix.strategies.flatMap(
+      (strategy) => strategy.exports,
+    );
 
     expect(new Set(classified).size).toBe(classified.length);
     expect([...classified].sort()).toEqual(expectedComponents);

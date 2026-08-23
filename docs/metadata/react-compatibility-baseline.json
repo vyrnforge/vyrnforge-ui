@@ -12,11 +12,7 @@
     "version": "0.2.0-beta.2",
     "manifest": "packages/ui-components/package.json",
     "publicEntry": "packages/ui-components/src/index.ts",
-    "cssEntrypoints": [
-      "./style.css",
-      "./index.css",
-      "./styles/index.css"
-    ],
+    "cssEntrypoints": ["./style.css", "./index.css", "./styles/index.css"],
     "peerDependencies": {
       "react": ">=18 <20",
       "react-dom": ">=18 <20"
@@ -70,7 +66,11 @@
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
       "sha1": "9e50d32d04295b0e2d6d2bd2f63561757c2be898",
-      "covers": ["behavior ownership", "public value export audit", "compatibility invariants"]
+      "covers": [
+        "behavior ownership",
+        "public value export audit",
+        "compatibility invariants"
+      ]
     },
     {
       "path": "docs/metadata/compatibility-release-matrix.json",

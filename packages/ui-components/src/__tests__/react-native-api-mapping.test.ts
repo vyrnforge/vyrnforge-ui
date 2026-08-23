@@ -7,7 +7,11 @@ describe("MFD-1404 React API mapping", () => {
       { disabled: undefined, size: "lg", onValueChange: undefined },
       {
         properties: [
-          { reactProp: "disabled", canonicalProperty: "disabled", defaultValue: false },
+          {
+            reactProp: "disabled",
+            canonicalProperty: "disabled",
+            defaultValue: false,
+          },
           { reactProp: "size", canonicalProperty: "size", defaultValue: "md" },
         ],
       },

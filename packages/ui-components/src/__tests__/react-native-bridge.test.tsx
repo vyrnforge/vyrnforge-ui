@@ -14,7 +14,7 @@ class BridgeTestElement extends HTMLElement {
 
 function defineBridgeTestElement(tagName: string): void {
   if (!customElements.get(tagName)) {
-    customElements.define(tagName, BridgeTestElement);
+    customElements.define(tagName, class extends BridgeTestElement {});
   }
 }
 
@@ -73,10 +73,7 @@ describe("MFD-1403 React canonical element bridge", () => {
 
     const Fixture = forwardRef<BridgeTestElement>(function Fixture(_, ref) {
       const properties = useMemo(() => ({ value: "controlled" }), []);
-      const events = useMemo(
-        () => ({ "vf-change": onChange }),
-        [],
-      );
+      const events = useMemo(() => ({ "vf-change": onChange }), []);
       const elementRef = useCanonicalElementBridge(ref, {
         tagName,
         properties,
