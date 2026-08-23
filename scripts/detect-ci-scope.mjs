@@ -9,7 +9,6 @@ export const scopeKeys = [
   "quality",
   "integration",
   "security",
-  "historical_evidence",
   "metadata",
   "ui_core",
   "ui_behaviors",
@@ -42,26 +41,6 @@ const fullValidationFiles = new Set([
   "package-lock.json",
   "tsconfig.base.json",
 ]);
-
-const historicalEvidenceFiles = new Set([
-  "docs/metadata/gmf4-closure.json",
-  "docs/metadata/native-element-foundations.json",
-  "docs/metadata/native-core-elements.json",
-  "docs/metadata/native-advanced-elements.json",
-  "docs/metadata/angular-consumer.json",
-  "docs/metadata/angular-forms-adapter.json",
-  "docs/metadata/vue-consumer.json",
-  "docs/metadata/vue-model-adapter.json",
-]);
-
-function isHistoricalEvidencePath(file) {
-  return (
-    historicalEvidenceFiles.has(file) ||
-    /^scripts\/(?:verify|test)-(?:gmf[34]|native-|angular-|vue-|ssr-|cross-framework-|multi-framework-migration)/u.test(
-      file,
-    )
-  );
-}
 
 function createScope() {
   return Object.fromEntries(scopeKeys.map((key) => [key, false]));
@@ -127,7 +106,6 @@ function markFull(scope) {
     }
   }
   scope.docs_only = false;
-  scope.historical_evidence = false;
 }
 
 function classifyPackageFile(file, scope, reasons) {
@@ -189,15 +167,6 @@ export function planCiScope(files, { forceFull = false } = {}) {
   }
 
   for (const file of changedFiles) {
-    if (isHistoricalEvidencePath(file)) {
-      scope.quality = true;
-      scope.metadata = true;
-      scope.docs = true;
-      scope.historical_evidence = true;
-      reasons.add(`completed historical evidence: ${file}`);
-      continue;
-    }
-
     if (
       fullValidationFiles.has(file) ||
       file.startsWith(".github/workflows/") ||
