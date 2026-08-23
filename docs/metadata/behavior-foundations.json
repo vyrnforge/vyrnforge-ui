@@ -1,95 +1,8 @@
 {
-  "schemaVersion": 1,
-  "program": {
-    "sprint": "S5",
-    "batch": "MF-5001-MF-5016",
-    "status": "complete",
-    "gate": "GMF2",
-    "gateStatus": "passed",
-    "package": "@vyrnforge/ui-behaviors"
-  },
-  "tasks": [
-    {
-      "id": "MF-5001",
-      "name": "Controllable state primitives",
-      "status": "done"
-    },
-    {
-      "id": "MF-5002",
-      "name": "Collection and active-item primitives",
-      "status": "done"
-    },
-    {
-      "id": "MF-5003",
-      "name": "Selection models",
-      "status": "done"
-    },
-    {
-      "id": "MF-5004",
-      "name": "Canonical controller event model",
-      "status": "done"
-    },
-    {
-      "id": "MF-5005",
-      "name": "Simple action and toggle behaviors",
-      "status": "done"
-    },
-    {
-      "id": "MF-5006",
-      "name": "Simple form-control behaviors",
-      "status": "done"
-    },
-    {
-      "id": "MF-5007",
-      "name": "Tabs and composite navigation behavior",
-      "status": "done"
-    },
-    {
-      "id": "MF-5008",
-      "name": "Autocomplete behavior",
-      "status": "done"
-    },
-    {
-      "id": "MF-5009",
-      "name": "MultiSelect behavior",
-      "status": "done"
-    },
-    {
-      "id": "MF-5010",
-      "name": "Transfer List behavior",
-      "status": "done"
-    },
-    {
-      "id": "MF-5011",
-      "name": "Menu and SideNav navigation behavior",
-      "status": "done"
-    },
-    {
-      "id": "MF-5012",
-      "name": "Overlay lifecycle and DOM-adapter boundary",
-      "status": "done"
-    },
-    {
-      "id": "MF-5013",
-      "name": "Dialog, Drawer, Popover, and Tooltip controllers",
-      "status": "done"
-    },
-    {
-      "id": "MF-5014",
-      "name": "Toast and ConfirmDialog behavior",
-      "status": "done"
-    },
-    {
-      "id": "MF-5015",
-      "name": "React behavior adoption and compatibility audit",
-      "status": "done"
-    },
-    {
-      "id": "MF-5016",
-      "name": "Shared-behavior parity gate",
-      "status": "done"
-    }
-  ],
+  "schemaVersion": 2,
+  "package": "@vyrnforge/ui-behaviors",
+  "status": "current",
+  "scope": "framework-neutral reusable behavior contracts and React adapter adoption",
   "contracts": {
     "controllableState": {
       "factory": "createControllableState",
@@ -113,14 +26,7 @@
     "selection": {
       "factory": "createSelectionController",
       "modes": ["single", "multiple"],
-      "operations": [
-        "select",
-        "deselect",
-        "toggle",
-        "range",
-        "replace",
-        "clear"
-      ],
+      "operations": ["select", "deselect", "toggle", "range", "replace", "clear"],
       "rules": [
         "unique-keys",
         "disabled-keys-rejected",
@@ -151,18 +57,8 @@
       ]
     },
     "actionToggle": {
-      "factories": [
-        "resolveActionState",
-        "createToggleController",
-        "createToggleGroupController"
-      ],
-      "reactAdapters": [
-        "Button",
-        "IconButton",
-        "ToggleButton",
-        "ToggleButtonGroup",
-        "SegmentedControl"
-      ],
+      "factories": ["resolveActionState", "createToggleController", "createToggleGroupController"],
+      "reactAdapters": ["Button", "IconButton", "ToggleButton", "ToggleButtonGroup", "SegmentedControl"],
       "rules": [
         "loading-disables-action",
         "controlled-toggle-proposals",
@@ -257,11 +153,7 @@
       "layerRegistryFactory": "createOverlayLayerRegistry",
       "positionResolver": "resolveOverlayPosition",
       "reactAdapters": ["Popover", "Dialog", "Drawer"],
-      "adapterContracts": [
-        "OverlayFocusAdapter",
-        "OverlayLayerRegistry",
-        "OverlayPositionAdapter"
-      ],
+      "adapterContracts": ["OverlayFocusAdapter", "OverlayLayerRegistry", "OverlayPositionAdapter"],
       "rules": [
         "controlled-open-proposals",
         "explicit-dismissal-reasons",
@@ -321,6 +213,12 @@
     ],
     "ownsCss": false
   },
+  "evidence": {
+    "reactAdoption": "docs/metadata/react-behavior-adoption.json",
+    "behaviorContracts": "docs/testing/behavior-foundation-contracts.md",
+    "reactParity": "docs/testing/behavior-react-parity.md",
+    "reactAdoptionAudit": "docs/testing/react-behavior-adoption-audit.md"
+  },
   "requiredCommands": [
     "npm run test:behavior-foundations",
     "npm run verify:behavior-foundations",
@@ -330,10 +228,7 @@
     "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run test:react-behavior-adoption",
     "npm run verify:react-behavior-adoption",
-    "npm run test:gmf2-closure",
-    "npm run verify:gmf2-closure",
     "npm run check",
     "npm run ci"
-  ],
-  "remainingGmf2Tasks": []
+  ]
 }
