@@ -39,11 +39,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const endSlot = rightSlot ?? trailingIcon;
     const ariaLabel = props["aria-label"];
 
-    useImperativeHandle(
-      ref,
-      () => controlRef.current as HTMLButtonElement,
-      [],
-    );
+    useImperativeHandle(ref, () => controlRef.current as HTMLButtonElement, []);
 
     const canonicalProperties = useMemo(
       () => ({
