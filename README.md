@@ -1,18 +1,29 @@
 # VyrnForge UI
 
-VyrnForge UI is a native-first, dependency-minimal enterprise UI foundation for
-administration portals, customer portals, IAM and access-management systems,
-internal tools, workflow applications, reporting screens, dashboards, and
-data-heavy enterprise applications.
+VyrnForge UI is a native-owned, dependency-minimal, general-purpose UI system
+with enterprise-grade depth. It provides one contract-driven design, behavior,
+and accessibility foundation across supported web frameworks while keeping
+framework runtimes, application state, and business logic outside the shared
+core.
 
-It provides shared design foundations, framework-neutral behavior, reusable
-React components, browser-native Custom Elements, and a specialized React data
-grid. The data grid is one package in the wider VyrnForge foundation, not the
-definition of the library.
+The long-term product direction spans lightweight primitives, application
+components, reusable patterns, and optional advanced UI capabilities. Capability
+breadth does not mean every consumer must install heavyweight modules or
+framework integrations they do not use.
+
+## Current implementation
+
+VyrnForge UI is prerelease software. The current repository ships shared design
+and behavior foundations, first-class React and native HTML packages, and a
+specialized React data grid. Angular and Vue are approved first-class target
+surfaces and currently remain verified consumers of the native Custom Element
+foundation while their official facade packages are completed through S12 and
+S13.
+
+The data grid is one optional specialized capability in the wider VyrnForge UI
+system, not the definition of the library.
 
 ## Maturity and release channels
-
-VyrnForge UI is prerelease software.
 
 | Track           | Packages                                                                                              | npm tag |
 | --------------- | ----------------------------------------------------------------------------------------------------- | ------- |
@@ -33,24 +44,43 @@ release-group versions and dependency rules.
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations. |
 | `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.     |
-| `@vyrnforge/ui-components` | First-class React primitives and enterprise application components.                                                      |
-| `@vyrnforge/ui-elements`   | First-class browser-native Custom Elements over the shared VyrnForge foundations.                                        |
-| `@vyrnforge/ui-data-grid`  | Specialized React enterprise data-management grid on an independent alpha track.                                         |
+| `@vyrnforge/ui-components` | Current first-class React package over shared VyrnForge foundations.                                                      |
+| `@vyrnforge/ui-elements`   | Current first-class browser-native Custom Elements package over shared VyrnForge foundations.                            |
+| `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                     |
 
-React and native HTML are first-class web renderers. Angular and Vue are
-verified consumers of the native Custom Element renderer through thin
-framework-integration patterns rather than separate VyrnForge component
-libraries.
+The approved first-class web target is Native HTML, React, Angular, and Vue.
+Supported framework surfaces share canonical component, behavior,
+accessibility, styling, and terminology contracts while remaining idiomatic to
+each framework. Future framework support must follow the framework admission
+and evidence model rather than creating an independent VyrnForge component
+library.
+
+## Product principles
+
+- Native-owned means VyrnForge owns its UI implementation rather than wrapping
+  another large UI library; it does not mean Native HTML is the only first-class
+  surface.
+- Shared contracts, metadata, tokens, behaviors, accessibility semantics, and
+  generation stay framework-neutral where practical.
+- Framework packages are adapters/facades over shared VyrnForge foundations,
+  with narrow evidence-backed exceptions when required.
+- Optional advanced capabilities must not make unrelated consumers pay their
+  dependency, runtime, CSS, or bundle cost.
+- Application state management, authentication, backend services, business
+  workflow execution, and other application/runtime semantics remain outside
+  VyrnForge.
+- Public metadata and contracts should serve both human developers and AI
+  systems without creating parallel sources of truth.
 
 ## Installation
 
-React:
+Current React package:
 
 ```bash
 npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta
 ```
 
-Native HTML Custom Elements:
+Current Native HTML Custom Elements package:
 
 ```bash
 npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta
@@ -62,14 +92,16 @@ Framework-neutral behavior APIs:
 npm install @vyrnforge/ui-core@beta @vyrnforge/ui-behaviors@beta
 ```
 
-React data grid:
+Current React data grid:
 
 ```bash
 npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
 ```
 
-See [Import and Setup](docs/api/import-and-setup.md) for registration, CSS
-imports, Angular/Vue integration, and package-specific guidance.
+Angular and Vue currently use the verified native integration path documented in
+[Import and Setup](docs/api/import-and-setup.md). Their approved official
+first-class package paths become the normal installation path only after the
+corresponding framework release gates pass.
 
 ## Minimal usage
 
@@ -124,6 +156,8 @@ automation, but they are not the normal contributor entrypoints.
 ## Documentation
 
 Use [docs/README.md](docs/README.md) as the canonical documentation entrypoint.
+The authoritative product identity and scope live in
+[Project Source of Truth](docs/governance/01-project-source-of-truth.md).
 
 - [Use VyrnForge](docs/README.md#use-vyrnforge)
 - [Build VyrnForge](docs/README.md#build-vyrnforge)
