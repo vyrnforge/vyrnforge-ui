@@ -10,8 +10,7 @@ import { joinClassNames } from "../../utils/classNames";
 import { Tooltip } from "../Tooltip";
 import type { IconButtonProps } from "./IconButton.types";
 
-type CanonicalIconButtonElement =
-  VyrnForgeElementForTagName<"vf-icon-button">;
+type CanonicalIconButtonElement = VyrnForgeElementForTagName<"vf-icon-button">;
 
 const registerCanonicalIconButton =
   vyrnForgeElementRegistrations["vf-icon-button"];
@@ -36,11 +35,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     const action = resolveActionState({ disabled, loading });
     const ariaLabel = props["aria-label"];
 
-    useImperativeHandle(
-      ref,
-      () => controlRef.current as HTMLButtonElement,
-      [],
-    );
+    useImperativeHandle(ref, () => controlRef.current as HTMLButtonElement, []);
 
     const canonicalProperties = useMemo(
       () => ({
