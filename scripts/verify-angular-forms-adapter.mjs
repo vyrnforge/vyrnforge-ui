@@ -68,7 +68,10 @@ function verifyMetadata(root, failures) {
     addFailure(failures, "Angular Forms directive identity is invalid");
   }
   if (adapter.selectorAttribute !== "vfFormControl") {
-    addFailure(failures, "Angular Forms selector attribute must be vfFormControl");
+    addFailure(
+      failures,
+      "Angular Forms selector attribute must be vfFormControl",
+    );
   }
   if (adapter.renderer !== "@vyrnforge/ui-elements") {
     addFailure(failures, "Angular Forms adapter must target ui-elements");
@@ -252,10 +255,7 @@ function verifyFixture(root, failures) {
 }
 
 function verifyRuntimeEvidence(root, failures) {
-  const runtime = read(
-    root,
-    "scripts/verify-consumer-foundations-runtime.mjs",
-  );
+  const runtime = read(root, "scripts/verify-consumer-foundations-runtime.mjs");
   for (const marker of [
     'vf-text-input[name="reactiveOwner"]',
     "data-reactive-value",
@@ -268,7 +268,10 @@ function verifyRuntimeEvidence(root, failures) {
     "Angular ngModel did not receive vf-checked-change",
   ]) {
     if (!runtime.includes(marker)) {
-      addFailure(failures, `Angular Forms runtime evidence is missing ${marker}`);
+      addFailure(
+        failures,
+        `Angular Forms runtime evidence is missing ${marker}`,
+      );
     }
   }
 }
@@ -313,7 +316,10 @@ export function verifyAngularFormsAdapter(root = repositoryRoot) {
   const failures = [];
   for (const relativePath of requiredFiles) {
     if (!existsSync(path.join(root, relativePath))) {
-      addFailure(failures, `missing required Angular Forms file ${relativePath}`);
+      addFailure(
+        failures,
+        `missing required Angular Forms file ${relativePath}`,
+      );
     }
   }
   if (failures.length > 0) return failures;

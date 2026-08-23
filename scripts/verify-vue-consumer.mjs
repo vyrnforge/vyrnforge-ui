@@ -374,7 +374,10 @@ function verifyRepositoryIntegration(root, failures) {
     architecture.consumerFixturePolicy?.vueEvidence !==
     "docs/metadata/vue-consumer.json"
   ) {
-    addFailure(failures, "multi-framework metadata must reference Vue evidence");
+    addFailure(
+      failures,
+      "multi-framework metadata must reference Vue evidence",
+    );
   }
   const foundationFixture = (consumerFoundations.consumerFixtures ?? []).find(
     (entry) => entry.id === "vue",

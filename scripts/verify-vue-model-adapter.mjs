@@ -42,10 +42,7 @@ export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
     fail(failures, "Vue model adapter status must be verified");
   }
   if (metadata.adapter?.supportClaim !== expectedClaim) {
-    fail(
-      failures,
-      `Vue model adapter support claim must be ${expectedClaim}`,
-    );
+    fail(failures, `Vue model adapter support claim must be ${expectedClaim}`);
   }
   if (metadata.adapter?.publishedPackage !== null) {
     fail(failures, "Vue model adapter must not publish a framework package");
@@ -167,10 +164,7 @@ export function verifyVueModelAdapter({ root = repositoryRoot } = {}) {
     }
   }
 
-  const runtime = read(
-    root,
-    "scripts/verify-consumer-foundations-runtime.mjs",
-  );
+  const runtime = read(root, "scripts/verify-consumer-foundations-runtime.mjs");
   for (const marker of [
     "data-vue-model-value",
     "data-vue-model-checked",
