@@ -66,7 +66,7 @@ test("rejects application state managers in published package boundaries", () =>
 
   assert(
     failures.includes(
-      "packages/ui-components/package.json: @vyrnforge/ui-components must not depend on application state manager zustand in dependencies",
+      "packages/ui-components/src/state-manager-leak.ts: @vyrnforge/ui-components must not import application state manager zustand",
     ),
   );
 });
