@@ -269,7 +269,6 @@
     "scripts/governance/verify-repository-inventory.mjs": "2b84c4884aabf9eae310720a94fac5d043ca30eb3306ea6fcdfcbd6149b7cdd9",
     "scripts/prepare-package-declarations.mjs": "b62626cfd444f8c545e88fb0820023b7c3d5d93667845fd000fcb3636188d183",
     "scripts/release-artifact.mjs": "1ed18633deabf2846d5c78d1760eaff1884ea19e17430ec56a92b7fdafc56b34",
-    "scripts/release-artifact.test.mjs": "44d301c711abc7a59e8ad1cf20eaaca9fed7babfc80e0773d8300841a27d4e53",
     "scripts/release-groups.mjs": "a31f87de36aa82c5a42dcb742596f62f2cf6e422e749968e7e0e38440cf6295f",
     "scripts/release-notes.test.mjs": "e11862b4267cf1ede8dc91491fd7dab2543df4fc274d802add1b5cfa9c6f5427",
     "scripts/release-size-budgets.mjs": "ad6739a4fa19cc7c83dd885210de83d2a3fa2e8b42c960adbcac6231ded75e64",

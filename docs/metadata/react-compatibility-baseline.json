@@ -23,8 +23,13 @@
     {
       "path": "packages/ui-components/package.json",
       "kind": "blob",
-      "sha1": "b86a89927e66b9d82933e98c009233883803b606",
-      "covers": ["package exports", "CSS entrypoints", "React peer support"]
+      "sha1": "9164ec370fe4de812162f6a06fdc03fa2a03903d",
+      "covers": [
+        "package exports",
+        "CSS entrypoints",
+        "React peer support",
+        "canonical facade dependencies"
+      ]
     },
     {
       "path": "packages/ui-components/src/index.ts",
@@ -35,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "28995913fdf2c51bae3014e08f5b05d02c406d51",
+      "sha1": "7b587b3f1f0acc6b4e32f40fa6a094f31be8438c",
       "covers": [
         "component props and types",
         "callbacks",
@@ -84,7 +89,8 @@
     "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
     "packages/ui-components/src/components/__tests__/dom-interactions.test.tsx",
     "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
-    "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    "packages/ui-components/src/components/__tests__/primitives.test.tsx",
+    "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx"
   ],
   "compatibilityInvariants": [
     "public root exports unchanged",
@@ -93,6 +99,13 @@
     "controlled components continue to emit proposals",
     "native form semantics remain browser-owned",
     "React DOM and browser parity suites remain mandatory"
+  ],
+  "recaptures": [
+    {
+      "task": "MFD-1409",
+      "reason": "Button and IconButton moved to canonical Light-DOM action facades while preserving the documented React API, native HTMLButtonElement refs, native event surface, SSR output, CSS hooks, and accessibility behavior.",
+      "evidence": "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx"
+    }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
 }

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 2,
+  "task": {
+    "sprint": "S14",
+    "id": "MFD-1409",
+    "title": "Migrate simple actions and typography batch",
+    "status": "implementing"
+  },
+  "batch": {
+    "id": "react-batch-1",
+    "target": "simple actions and typography",
+    "rollback": "Retain the prior React source history and keep each cutover independently revertible until G14 stabilization."
+  },
+  "resolutions": [
+    {
+      "componentFamily": "actions",
+      "strategy": "canonical-light-dom-control",
+      "finding": "Canonical action elements already adopt an existing Light-DOM native button marked with data-vf-action-control. React can therefore preserve a genuine HTMLButtonElement ref and native button attributes while canonical VyrnForge owns action state, accessibility synchronization, and vf-action behavior.",
+      "sharedPrerequisite": "Canonical action elements must preserve an explicit external native-control class so framework facades do not reimplement class merging."
+    },
+    {
+      "componentFamily": "typography",
+      "strategy": "temporary-migration-exception",
+      "finding": "The React typography API deliberately owns semantic native tags (p/span/div, h1-h6, label, small/code). The current canonical vf-* display elements render as fixed Custom Elements and do not provide a semantic-native adoption contract.",
+      "requiredResolution": "Keep only the semantic renderer narrow and explicit until the canonical display foundation supports semantic native-element adoption without changing public React DOM semantics. Styling/token contracts remain shared."
+    }
+  ],
+  "rules": [
+    "Do not preserve HTMLButtonElement compatibility through a Custom Element type cast.",
+    "Do not change documented React semantic tags merely to claim convergence.",
+    "Prefer a shared canonical capability over framework-specific DOM mutation.",
+    "Legacy implementation removal remains a later MFD-1416 concern after stabilization."
+  ]
+}

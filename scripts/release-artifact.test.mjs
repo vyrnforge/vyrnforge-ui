@@ -16,7 +16,10 @@ import {
 
 test("release build order is metadata-driven and de-duplicates shared dependencies", () => {
   const packageMap = new Map([
-    ["@vyrnforge/foundation", { name: "@vyrnforge/foundation", dependencies: {} }],
+    [
+      "@vyrnforge/foundation",
+      { name: "@vyrnforge/foundation", dependencies: {} },
+    ],
     [
       "@vyrnforge/framework-a",
       {
@@ -41,7 +44,11 @@ test("release build order is metadata-driven and de-duplicates shared dependenci
 
   assert.deepEqual(
     getReleaseBuildOrder({ releaseGroup, packageMap }).map(({ name }) => name),
-    ["@vyrnforge/foundation", "@vyrnforge/framework-a", "@vyrnforge/framework-b"],
+    [
+      "@vyrnforge/foundation",
+      "@vyrnforge/framework-a",
+      "@vyrnforge/framework-b",
+    ],
   );
 });
 
@@ -56,6 +63,7 @@ test("data-grid release build order contains its VyrnForge dependency closure on
     [
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
       "@vyrnforge/ui-components",
       "@vyrnforge/ui-data-grid",
     ],
