@@ -1,169 +1,98 @@
 # VyrnForge UI Metadata
 
-These files are structured indexes for the docs app, contributors, and AI
-agents. Markdown remains the human-readable policy source; metadata provides
-queryable repository facts and evidence records.
+These files are structured indexes for the docs app, contributors, automation,
+and AI agents. Human-readable policy remains in the canonical architecture,
+governance, testing, release, and quality documents. Metadata provides
+queryable repository facts and current evidence records.
 
-## Files
+## Core metadata
 
-| File                                        | Purpose                                                                                                                     |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `packages.json`                             | Package ownership, dependencies, CSS imports, and public entry points.                                                      |
-| `multi-framework.json`                      | Canonical renderer support levels, beta release groups, planned packages, and consumer fixture policy.                      |
-| `native-element-foundations.json`           | EL-6001 through EL-6018 foundation, 58-tag native catalog, form/event evidence, and passed GMF3 closure state.              |
-| `consumer-foundations.json`                 | CF-7001, CF-7002, and CF-7008 packed native HTML/React consumers plus declarations and Custom Elements Manifest evidence.   |
-| `angular-consumer.json`                     | CF-7003 Angular 22 packed consumer, property/event, slot, form, build, and Chromium evidence.                               |
-| `angular-forms-adapter.json`                | CF-7004 Angular Forms reference adapter, supported value categories, ownership boundary, and runtime evidence.              |
-| `vue-consumer.json`                         | CF-7005 Vue 3 fixture, compiler/property/event/slot/form contract, verifier, and completed runtime evidence.                |
-| `cross-framework-accessibility-review.json` | CF-7010 Axe, keyboard, and named NVDA cross-framework review state.                                                         |
-| `multi-framework-migration-guide.json`      | CF-7013 canonical migration/limitations guide and review evidence status.                                                   |
-| `cross-framework-browser-matrix.json`       | CF-7009 shared packed browser matrix, normalized report, trace artifact, and support-claim status.                          |
-| `component-reference-program.json`          | CF-7011/CF-7012 generated framework-tab and component-contract reference verification status.                               |
-| `native-core-elements.json`                 | EL-6005 through EL-6011 canonical 40-tag core renderer wave and browser evidence.                                           |
-| `native-advanced-elements.json`             | EL-6012 through EL-6017 canonical 14-tag advanced renderer wave and browser evidence.                                       |
-| `gmf3-closure.json`                         | EL-6018 native non-grid parity decision, 58-tag catalog, mapping strategies, evidence, and deferred GMF4 claims.            |
-| `gmf4-closure.json`                         | CF-7014 final Native HTML, React, Angular, and Vue compatibility gate, package-boundary decision, evidence, and S7 closure. |
-| `non-grid-beta-scope.json`                  | BT-8001 frozen 67-component non-grid beta scope, renderer mappings, maturity, exclusions, and downstream release gaps.      |
-| `release-groups.json`                       | BT-8002 canonical non-grid beta and independent data-grid alpha versions, package order, dist-tags, and dependency graph.   |
-| `component-contracts.json`                  | Canonical cross-framework events, slots, form association, and representative component contracts.                          |
-| `component-contract.schema.json`            | JSON Schema for the canonical multi-framework component contract catalog.                                                   |
-| `components.json`                           | Canonical normalized component and public-contract catalog, including maturity evidence.                                    |
-| `component-schema.md`                       | Field definitions and contributor workflow for canonical component metadata.                                                |
-| `assistive-technology-reviews.json`         | Canonical manual screen-reader environment, scenario, and result status.                                                    |
-| `design-tokens.json`                        | Canonical semantic token categories, themes, densities, motion, layers, and compatibility bridges.                          |
-| `visual-regression-matrix.json`             | Canonical VF-3011 browser visual-evidence suites, dimensions, selectors, and token assertions.                              |
-| `g3-closure.json`                           | Machine-readable VF-3012 G3 task, evidence, check, blocker, and closure record.                                             |
-| `css-imports.json`                          | Required CSS import order and styling ownership.                                                                            |
-| `state-contracts.json`                      | State ownership levels and adapter policies.                                                                                |
-| `ai-usage-rules.json`                       | AI-specific usage rules and constraints.                                                                                    |
+- `packages.json` owns package relationships, public entry points, and release
+  group membership.
+- `multi-framework.json` owns current package topology, framework support,
+  styling policy, and the four-surface consumer-fixture policy.
+- `component-contracts.json` and `component-contract.schema.json` own shared
+  renderer-neutral component, event, slot, and form contracts.
+- `components.json` owns the normalized component catalog, public-contract
+  inventory, maturity, and evidence.
+- `design-tokens.json` owns shared semantic tokens, themes, densities, motion,
+  layers, and compatibility bridges.
+- `framework-exceptions.json` records explicit framework-specific exceptions to
+  shared contracts and generation.
+- `state-contracts.json` owns shared state and adapter boundaries.
+- `css-imports.json` owns CSS import order and styling ownership.
 
-## Multi-framework architecture metadata
+## Consumer and framework evidence
 
-`multi-framework.json` records the approved React/native-first web strategy,
-planned package topology, Angular/Vue verification status, Light DOM policy,
-and deferred data-grid release track. `component-contracts.json` owns the
-canonical `vf-*` event vocabulary, semantic slot regions, form-association
-contract, and representative renderer-neutral component records.
+- `consumer-foundations.json` indexes current packed Native HTML, React,
+  Angular, and Vue fixtures together with Custom Element declarations and
+  canonical events.
+- `angular-consumer.json` records Angular packed-consumer, property, event,
+  slot, form, build, and Chromium evidence.
+- `angular-forms-adapter.json` records the Angular Forms reference-adapter
+  contract and runtime evidence.
+- `vue-consumer.json` records Vue compiler, typing, property, event, slot, form,
+  build, and Chromium evidence.
+- `vue-model-adapter.json` records the thin Vue `v-model` reference-adapter
+  contract and runtime evidence.
+- `ssr-bundler-compatibility.json` records server-safe import and packed bundler
+  compatibility evidence.
+- `cross-framework-browser-matrix.json` records shared packed browser scenarios,
+  reports, and trace evidence.
+- `cross-framework-accessibility-review.json` records automated and manual
+  cross-framework accessibility evidence.
+- `multi-framework-migration-guide.json` records migration and limitations guide
+  verification evidence.
+- `multi-framework-program-gates.json` defines forward-looking G11-G15 evidence
+  categories for first-class multi-framework distribution.
 
-GMF3 marks the native renderer evidence complete. React and native HTML have
-packed runtime evidence, CF-7003 adds Angular 22 packed runtime evidence, and
-CF-7004 adds Angular reactive/template-driven Forms adapter evidence without a
-new published package. CF-7005 verifies the Vue 3 packed consumer and CF-7006 verifies the thin
-`v-model` reference adapter. CF-7007 verifies SSR/bundler compatibility.
-CF-7009 adds the shared cross-framework packed browser matrix. CF-7010 adds
-the Axe, keyboard, and named NVDA review contract, while CF-7013 publishes
-the framework migration and limitations guide. GMF4 is evidence-complete through CF-7014. BT-8001 then freezes the 67-component non-grid beta scope, records explicit exclusions, aligns Angular/Vue component parity with the completed GMF4 consumer claim, and unlocks BT-8002.
+## Native, quality, and release evidence
+
+Native renderer evidence lives in `native-element-foundations.json`,
+`native-core-elements.json`, and `native-advanced-elements.json`. Release and
+scope contracts live in `non-grid-beta-scope.json`, `release-groups.json`,
+`release-groups.schema.json`, `beta-package-artifacts.json`,
+`beta-package-size-budgets.json`, and `compatibility-release-matrix.json`.
+
+Accessibility, visual, security, provenance, validation, and AI policy evidence
+lives in `assistive-technology-reviews.json`,
+`assistive-technology-release-waivers.json`, `visual-regression-matrix.json`,
+`security-workflow-hardening.json`, `trusted-publishing-provenance.json`,
+`validation-layers.json`, and `ai-usage-rules.json`.
+
+## Multi-framework architecture
+
+`multi-framework.json` describes the current reusable architecture rather than a
+completed sprint ledger. Native HTML / Custom Elements, React, Angular, and Vue
+consumer evidence is indexed through `consumer-foundations.json` and
+`tests/consumers/manifest.json`. Framework-specific Forms and model adapters
+remain thin translation layers over shared VyrnForge rendering, accessibility,
+validation, event, and form-association contracts.
+
+Forward-looking multi-framework release gates are defined separately in
+`multi-framework-program-gates.json` and
+`docs/quality/multi-framework-program-gates.md`.
 
 ```bash
 npm run test:multi-framework
 npm run verify:multi-framework
-npm run test:beta-scope
-npm run verify:beta-scope
+npm run test:consumer-foundations
+npm run verify:consumer-foundations
 ```
 
-The human-readable sources are:
+The primary human-readable sources are:
 
-- `docs/architecture/adr-004-multi-framework-web-support.md`;
-- `docs/architecture/09-component-contracts-and-events.md`;
-- `docs/architecture/10-custom-elements-and-form-association.md`;
-- `docs/testing/multi-framework-consumer-fixtures.md`.
+- `docs/architecture/adr-004-multi-framework-web-support.md`
+- `docs/architecture/09-component-contracts-and-events.md`
+- `docs/architecture/10-custom-elements-and-form-association.md`
+- `docs/testing/multi-framework-consumer-fixtures.md`
 
-## Component metadata maintenance
+## Maintenance
 
-`components.json` is the only structured owner of component maturity, package
-ownership, documentation and playground routes, public-export status, and
-component evidence. It supports `planned`, `experimental`, `alpha-stable`,
-`beta-stable`, `stable`, `deprecated`, and `internal`.
-
-VF-2015 closed the temporary legacy-stable exception. The transition policy's
-`legacyUnverifiedEntries` list must remain empty. Its `closedEntries` audit list
-records the 47 unsupported historical Stable claims that were honestly
-reclassified as Experimental without changing their public exports. Future
-promotion requires the complete evidence defined by the canonical maturity
-model.
-
-Run these commands after component metadata changes:
-
-```bash
-npm run verify:component-metadata
-npm run verify:component-maturity
-npm run verify:maturity-closure
-```
-
-## Manual assistive-technology evidence
-
-`assistive-technology-reviews.json` records required environments, deterministic
-fixture scenarios, manual contracts, execution status, and immutable result
-references. Pending records are allowed during current alpha development but
-do not represent a manual pass. Beta or stable promotion requires the strict
-gate and passing results for every declared scenario and environment.
-
-```bash
-npm run verify:assistive-technology
-npm run verify:assistive-technology:release
-```
+Update the canonical owner first, then regenerate or edit dependent metadata and
+run its verifier. Do not add sprint story points, completed task ledgers, or
+one-time closure state to current capability metadata unless an active quality
+contract explicitly requires it.
 
 Canonical maintenance rules live in
-`docs/governance/04-metadata-maintenance.md`; accessibility execution rules live
-in `docs/architecture/05-accessibility-standards.md`.
-
-## Design token metadata
-
-`design-tokens.json` is the structured S3 contract for shared semantic roles.
-It is aligned with `packages/ui-core/src/theme/tokenContract.ts` and the
-`ui-core` CSS foundation.
-
-```bash
-npm run test:design-tokens
-npm run verify:design-tokens
-```
-
-The verifier rejects missing categories, duplicate names, incomplete theme
-presets, broken compatibility bridges, missing density aliases, invalid layer
-order, and incomplete reduced-motion behavior.
-
-## Visual regression and G3 closure metadata
-
-`visual-regression-matrix.json` owns the deterministic VF-3011 case matrix. It
-combines a blocking computed-style-to-token comparison with successful-run PNG
-and observation artifacts. `g3-closure.json` records the complete VF-3001
-through VF-3012 evidence chain without treating a local metadata edit as a
-substitute for the required GitHub `ci-gate`.
-
-```bash
-npm run test:visual-regression
-npm run verify:visual-regression
-npm run test:visual
-npm run test:g3-closure
-npm run verify:g3-closure
-```
-
-Maintenance guidance lives in `docs/quality/s3-visual-regression.md`; the final
-evidence decision is documented in `docs/quality/s3-g3-closure.md`.
-
-| `react-behavior-adoption.json` | MF-5015 classification of every public React component and compatibility evidence. |
-| `gmf2-closure.json` | MF-5016 shared behavior parity gate evidence and unresolved-blocker record. |
-
-## Native element foundation metadata
-
-`native-element-foundations.json` records the completed S6 task inventory,
-registration and base-element contracts, executable evidence, the 58-tag
-catalog, and the passed GMF3 closure reference.
-
-```bash
-npm run test:native-element-foundations
-npm run verify:native-element-foundations
-npm run test:gmf3-closure
-npm run verify:gmf3-closure
-```
-
-## GMF4 compatibility closure
-
-`gmf4-closure.json` records the completed CF-7001 through CF-7014 evidence
-chain, four verified packed web consumers, package-boundary decision, explicit
-data-grid deferral, empty blocker inventory, and S8 handoff.
-
-```bash
-npm run test:gmf4-closure
-npm run verify:gmf4-closure
-```
+`docs/governance/04-metadata-maintenance.md`.

@@ -22,15 +22,7 @@
   "publicCommands": ["check", "test", "build", "ci"],
   "internalCommandGroups": {
     "activeContractTests": "npm run test:contracts",
-    "activeMetadata": "npm run verify:metadata",
-    "historicalEvidenceTests": "npm run test:historical-evidence",
-    "historicalEvidenceVerification": "npm run verify:historical-evidence"
-  },
-  "historicalEvidence": {
-    "normalValidation": false,
-    "scopeVariable": "CI_SCOPE_HISTORICAL_EVIDENCE",
-    "condition": "Run only when remaining canonical completed-sprint evidence or its verifier changes.",
-    "examples": ["docs/metadata/gmf4-closure.json"]
+    "activeMetadata": "npm run verify:metadata"
   },
   "checks": [
     {
@@ -65,12 +57,6 @@
       "id": "affected-code-validation",
       "owner": "pull-request",
       "command": "node scripts/run-scoped-quality.mjs"
-    },
-    {
-      "id": "historical-evidence",
-      "owner": "pull-request",
-      "command": "CI_SCOPE_HISTORICAL_EVIDENCE=true node scripts/run-scoped-quality.mjs",
-      "condition": "Only when remaining canonical completed-sprint evidence or its verifier changes."
     },
     {
       "id": "affected-browser-contracts",

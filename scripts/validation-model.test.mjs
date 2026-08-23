@@ -40,25 +40,21 @@ test("detects duplicate execution reached through different branches", () => {
   assert.equal(duplicates[0].name, "shared");
 });
 
-test("normal validation can exclude a conditional historical group", () => {
+test("entrypoint expansion excludes unrelated command groups", () => {
   const graph = buildCommandGraph({
     ci: "npm run check && npm run test:contracts",
     check: "npm run verify:metadata",
     "test:contracts": "npm run test:current",
     "verify:metadata": "npm run verify:current",
-    "test:historical-evidence": "npm run test:gmf4-closure",
-    "verify:historical-evidence": "npm run verify:gmf4-closure",
+    "test:optional": "node optional.test.mjs",
+    "verify:optional": "node optional.mjs",
     "test:current": "node current.test.mjs",
     "verify:current": "node current.mjs",
-    "test:gmf4-closure": "node gmf4.test.mjs",
-    "verify:gmf4-closure": "node gmf4.mjs",
   });
 
   const reached = expandCommandExecutions(graph, "ci").map(
     (execution) => execution.name,
   );
-  assert.equal(reached.includes("test:historical-evidence"), false);
-  assert.equal(reached.includes("verify:historical-evidence"), false);
-  assert.equal(reached.includes("test:gmf4-closure"), false);
-  assert.equal(reached.includes("verify:gmf4-closure"), false);
+  assert.equal(reached.includes("test:optional"), false);
+  assert.equal(reached.includes("verify:optional"), false);
 });

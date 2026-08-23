@@ -1,15 +1,6 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S7",
-    "task": "CF-7006",
-    "title": "Add Vue v-model integration adapter",
-    "storyPoints": 5,
-    "status": "evidence-complete",
-    "gate": "GMF4",
-    "gateStatus": "passed",
-    "predecessor": "CF-7005"
-  },
+  "status": "verified",
   "adapter": {
     "framework": "Vue",
     "version": "3.5.40",
@@ -33,12 +24,6 @@
     "nativeElement": "rendering, accessibility, keyboard behavior, validation, form association, canonical events",
     "vueAdapter": "modelValue/update:modelValue translation only"
   },
-  "requiredCommands": [
-    "npm run test:vue-model-adapter",
-    "npm run verify:vue-model-adapter",
-    "npm run verify:vue-model-adapter:runtime",
-    "npm run quality"
-  ],
   "pendingRuntimeEvidence": [],
   "unresolvedBlockers": [],
   "completedRuntimeEvidence": [

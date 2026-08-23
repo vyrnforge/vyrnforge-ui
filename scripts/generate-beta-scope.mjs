@@ -38,7 +38,7 @@ function betaComponent(component) {
     maturity: component.maturity,
     decision: "included",
     decisionRationale:
-      "Public non-grid React export with a current native-renderer mapping and GMF4-verified Angular/Vue consumption.",
+      "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
     react: {
       package: component.frameworkParity.react.package,
       export: component.frameworkParity.react.export,
@@ -95,7 +95,11 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
     root,
     manifest: releaseGroups,
   });
-  const gmf4 = readJson(root, "docs/metadata/gmf4-closure.json");
+  const architecture = readJson(root, "docs/metadata/multi-framework.json");
+  const dataGridReleaseGroup = getReleaseGroup("data-grid-alpha", {
+    root,
+    manifest: releaseGroups,
+  });
   const customElements = readJson(
     root,
     "packages/ui-elements/custom-elements.json",
@@ -149,7 +153,8 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
       generatedFrom: [
         "docs/metadata/components.json",
         "docs/metadata/packages.json",
-        "docs/metadata/gmf4-closure.json",
+        "docs/metadata/multi-framework.json",
+        "docs/metadata/release-groups.json",
         "packages/ui-elements/custom-elements.json",
       ],
     },
@@ -167,12 +172,37 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
       releaseStatus: "not-release-ready",
     },
     releaseGroup: {
-      includedPackages: gmf4.releaseGroup.includedPackages,
-      excludedPackages: gmf4.releaseGroup.deferredPackages,
+      includedPackages: betaReleaseGroup.packages.map((entry) => entry.name),
+      excludedPackages: dataGridReleaseGroup.packages.map((entry) => ({
+        name: entry.name,
+        status:
+          architecture.packages.find(
+            (candidate) => candidate.name === entry.name,
+          )?.status ?? "deferred",
+        reason:
+          "Data-grid multi-framework rendering remains outside the non-grid beta critical path.",
+      })),
       packageMetadataReleaseGroups: packages.releaseGroups,
-      firstClassRenderers: gmf4.supportModel.firstClassRenderers,
-      verifiedConsumers: gmf4.supportModel.verifiedConsumers,
-      excludedPlatforms: gmf4.releaseGroup.excludedPlatforms,
+      firstClassRenderers: Object.fromEntries(
+        architecture.frameworks
+          .filter((framework) => framework.supportLevel === "first-class")
+          .map((framework) => [
+            framework.id === "native-html" ? "nativeHtml" : framework.id,
+            framework.renderer,
+          ]),
+      ),
+      verifiedConsumers: Object.fromEntries(
+        architecture.frameworks
+          .filter((framework) => framework.supportLevel === "verified-consumer")
+          .map((framework) => [framework.id, framework.renderer]),
+      ),
+      excludedPlatforms: [
+        "react-native",
+        "flutter",
+        "native-android",
+        "native-ios",
+        "desktop-native",
+      ],
     },
     scopePolicy: {
       componentDefinition:
@@ -222,7 +252,13 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
           "Internal implementation surface and not part of the public beta contract.",
         ),
       ),
-      platforms: gmf4.releaseGroup.excludedPlatforms.map((platform) => ({
+      platforms: [
+        "react-native",
+        "flutter",
+        "native-android",
+        "native-ios",
+        "desktop-native",
+      ].map((platform) => ({
         id: platform,
         decision: "excluded",
         reason: "Outside the first web multi-framework beta program.",
@@ -264,7 +300,12 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
       "BT-8014",
     ],
     scopeBlockers: [],
-    acceptedLimitations: gmf4.acceptedLimitations,
+    acceptedLimitations: [
+      "React and native HTML are first-class renderers; Angular and Vue are verified consumers of the native renderer.",
+      "Angular Forms and Vue v-model bridges are reference adapters and are not separate published component libraries.",
+      "The React data grid remains explicitly deferred from the non-grid beta release group.",
+      "Non-web native platforms remain outside this beta support claim.",
+    ],
   };
 }
 

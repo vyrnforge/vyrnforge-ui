@@ -10,39 +10,48 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+
 import { verifyVueModelAdapter } from "./verify-vue-model-adapter.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
+
 function fixture(mutator, callback) {
   const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-vue-model-"));
   try {
-    for (const entry of ["docs", "scripts", "tests"])
+    for (const entry of ["docs", "scripts", "tests"]) {
       cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
         recursive: true,
       });
+    }
     mutator?.(root);
     callback(verifyVueModelAdapter({ root }));
   } finally {
     rmSync(root, { force: true, recursive: true });
   }
 }
-test("accepts the CF-7006 verified adapter", () =>
+
+test("accepts the verified Vue model adapter", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
+
 test("rejects a published Vue adapter package", () =>
   fixture(
     (root) => {
       const file = path.join(root, "docs/metadata/vue-model-adapter.json");
       const value = JSON.parse(readFileSync(file, "utf8"));
       value.adapter.publishedPackage = "@vyrnforge/ui-vue";
-      writeFileSync(file, JSON.stringify(value, null, 2) + "\n");
+      writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) =>
       assert(
-        failures.includes("CF-7006 must not publish a Vue adapter package"),
+        failures.includes(
+          "Vue model adapter must not publish a framework package",
+        ),
       ),
   ));
+
 test("rejects missing checked-event translation", () =>
   fixture(
     (root) => {
@@ -58,6 +67,7 @@ test("rejects missing checked-event translation", () =>
     (failures) =>
       assert(failures.some((failure) => failure.includes("vf-checked-change"))),
   ));
+
 test("rejects missing listener cleanup", () =>
   fixture(
     (root) => {

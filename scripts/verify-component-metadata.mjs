@@ -305,17 +305,21 @@ export function verifyComponentMetadata(
           component,
           "current native frameworkParity must reference native renderer evidence",
         );
+      const consumerEvidence = {
+        angular: "docs/metadata/angular-consumer.json",
+        vue: "docs/metadata/vue-consumer.json",
+      };
       for (const framework of ["angular", "vue"]) {
         const consumer = parity?.[framework];
         if (
           consumer?.status !== "verified-consumer" ||
           consumer?.consumes !== "@vyrnforge/ui-elements" ||
-          consumer?.evidence !== "docs/metadata/gmf4-closure.json"
+          consumer?.evidence !== consumerEvidence[framework]
         )
           addFailure(
             failures,
             component,
-            `${framework} mapping must reference the GMF4-verified ui-elements consumer contract`,
+            `${framework} mapping must reference the current ui-elements consumer contract`,
           );
       }
     }

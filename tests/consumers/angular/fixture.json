@@ -1,6 +1,5 @@
 {
   "id": "angular",
-  "task": "CF-7003",
   "supportClaim": "packed-angular-runtime-verified",
   "frameworkRuntime": "Angular 22.0.8",
   "rendererPackages": ["@vyrnforge/ui-elements"],
@@ -32,6 +31,5 @@
     "disabled and touched propagation through ControlValueAccessor",
     "native validity mapped through Angular Validator"
   ],
-  "formsAdapterTask": "CF-7004",
   "formsSupportClaim": "angular-forms-adapter-verified"
 }

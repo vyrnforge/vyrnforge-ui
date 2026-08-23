@@ -23,7 +23,6 @@ function runNpm(args) {
 
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
-const historicalEvidence = readBoolean("CI_SCOPE_HISTORICAL_EVIDENCE");
 const core = full || readBoolean("CI_SCOPE_UI_CORE");
 const behaviors = full || readBoolean("CI_SCOPE_UI_BEHAVIORS");
 const components = full || readBoolean("CI_SCOPE_UI_COMPONENTS");
@@ -58,11 +57,6 @@ if (metadata) {
   ]) {
     runNpm(["run", command]);
   }
-}
-
-if (historicalEvidence) {
-  runNpm(["run", "test:historical-evidence"]);
-  runNpm(["run", "verify:historical-evidence"]);
 }
 
 const selected = [

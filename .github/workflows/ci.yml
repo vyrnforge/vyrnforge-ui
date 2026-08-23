@@ -27,7 +27,6 @@ jobs:
       quality: ${{ steps.scope.outputs.quality }}
       integration: ${{ steps.scope.outputs.integration }}
       security: ${{ steps.scope.outputs.security }}
-      historical_evidence: ${{ steps.scope.outputs.historical_evidence }}
       metadata: ${{ steps.scope.outputs.metadata }}
       ui_core: ${{ steps.scope.outputs.ui_core }}
       ui_behaviors: ${{ steps.scope.outputs.ui_behaviors }}
@@ -92,7 +91,6 @@ jobs:
       node-version: "24.18.0"
       full: ${{ needs.plan.outputs.full == 'true' }}
       metadata: ${{ needs.plan.outputs.metadata == 'true' }}
-      historical-evidence: ${{ needs.plan.outputs.historical_evidence == 'true' }}
       ui-core: ${{ needs.plan.outputs.ui_core == 'true' }}
       ui-behaviors: ${{ needs.plan.outputs.ui_behaviors == 'true' }}
       ui-components: ${{ needs.plan.outputs.ui_components == 'true' }}

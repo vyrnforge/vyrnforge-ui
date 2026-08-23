@@ -22,7 +22,6 @@ jobs:
       node-version: "24.18.0"
       full: true
       metadata: true
-      historical-evidence: true
       ui-core: true
       ui-behaviors: true
       ui-components: true

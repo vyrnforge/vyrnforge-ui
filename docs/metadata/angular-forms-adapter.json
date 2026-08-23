@@ -1,15 +1,6 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S7",
-    "task": "CF-7004",
-    "title": "Add Angular forms integration adapter",
-    "storyPoints": 5,
-    "status": "evidence-complete",
-    "gate": "GMF4",
-    "gateStatus": "passed",
-    "baseCommit": "1eadbb59a7cf3b63d9797a65bbb0d979cb0f0205"
-  },
+  "status": "verified",
   "adapter": {
     "framework": "Angular",
     "version": "22.0.8",
@@ -77,21 +68,7 @@
     "no Angular dependency in VyrnForge packages",
     "approved four-package non-grid beta release group remains unchanged"
   ],
-  "requiredCommands": [
-    "npm run test:angular-forms-adapter",
-    "npm run verify:angular-forms-adapter",
-    "npm run verify:angular-consumer:runtime",
-    "npm run quality"
-  ],
   "unresolvedBlockers": [],
-  "deferred": [
-    "Vue v-model adapter implementation",
-    "Vue v-model adapter decision",
-    "cross-framework browser and accessibility matrix",
-    "GMF4 closure",
-    "published framework integration package topology",
-    "data-grid multi-framework work"
-  ],
   "sources": [
     "https://angular.dev/api/forms/ControlValueAccessor",
     "https://angular.dev/api/forms/NG_VALUE_ACCESSOR",
