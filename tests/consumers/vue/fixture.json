@@ -1,6 +1,5 @@
 {
   "id": "vue",
-  "task": "CF-7005",
   "supportClaim": "packed-vue-runtime-verified",
   "frameworkRuntime": "Vue 3.5.40",
   "rendererPackages": ["@vyrnforge/ui-elements"],
@@ -23,7 +22,7 @@
     "update:modelValue",
     "vf-checked-change"
   ],
-  "modelAdapterDecision": "cf-7006-adapter-verified",
+  "modelAdapterDecision": "reference-adapter-verified",
   "verificationStatus": "runtime-verified",
   "requiredEvidence": [
     "clean tarball installation",
@@ -49,12 +48,11 @@
     "ElementInternals form submission",
     "Chromium runtime verification",
     "shared token CSS without data-grid tokens",
-    "CF-7006 packed Vue v-model string synchronization",
-    "CF-7006 packed Vue v-model boolean synchronization",
-    "CF-7006 programmatic parent-to-native model synchronization"
+    "packed Vue v-model string synchronization",
+    "packed Vue v-model boolean synchronization",
+    "programmatic parent-to-native model synchronization"
   ],
   "modelAdapter": {
-    "task": "CF-7006",
     "supportClaim": "vue-model-adapter-verified",
     "location": "src/adapters",
     "publishedPackage": null,
