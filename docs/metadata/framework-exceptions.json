@@ -125,6 +125,29 @@
       "reviewMilestone": "S14 React convergence"
     },
     {
+      "id": "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
+      "framework": "react",
+      "scope": ["text", "heading", "label", "caption", "code-text"],
+      "exceptionClass": "migration-compatibility",
+      "reason": "The documented React typography API renders consumer-selected semantic native elements (including p/span/div, h1-h6, label, small, and code) and accepts their native attribute contracts. The current canonical vf-* display elements are fixed Custom Element hosts and do not yet expose a semantic native-element adoption contract that can preserve those DOM semantics.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Typography/Text.tsx",
+        "packages/ui-components/src/components/Typography/Heading.tsx",
+        "packages/ui-components/src/components/Typography/Label.tsx",
+        "packages/ui-components/src/components/Typography/Caption.tsx",
+        "packages/ui-components/src/components/Typography/CodeText.tsx",
+        "packages/ui-components/src/components/Typography/Typography.types.ts"
+      ],
+      "evidence": [
+        "MFD-1401 captures the existing React typography public API and DOM behavior as compatibility baseline.",
+        "MFD-1409 repository inspection confirms the React renderer selects actual semantic native tags while packages/ui-elements/src/components/display.ts exposes fixed vf-* Custom Element hosts."
+      ],
+      "exitCriteria": "Add a framework-neutral canonical display capability that can adopt or otherwise preserve the documented semantic native element and attribute contract without changing React DOM semantics, then migrate these renderers through the normal S14 parity gates.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
       "id": "MFD-EX-NATIVE-TOAST-VIEWPORT",
       "framework": "native",
       "scope": "toast-viewport",
