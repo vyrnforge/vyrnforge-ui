@@ -2,19 +2,19 @@
   "schemaVersion": 1,
   "rules": [
     {
-      "id": "prefer-VyrnForge-components",
-      "rule": "Prefer @vyrnforge/ui-components before creating raw custom controls.",
-      "reason": "Keeps UI consistent and accessible."
+      "id": "prefer-vyrnforge-surface",
+      "rule": "Prefer the official VyrnForge component or framework surface for the selected consumer framework before creating a one-off custom control.",
+      "reason": "Keeps UI semantics, accessibility, styling, and behavior aligned across supported surfaces."
     },
     {
       "id": "use-grid-for-data-management",
-      "rule": "Use @vyrnforge/ui-data-grid only for data-management tables.",
-      "reason": "UniversalDataGrid is specialized grid behavior, not a generic layout component."
+      "rule": "Use @vyrnforge/ui-data-grid only for data-management tables where its current React-only support and alpha maturity are appropriate.",
+      "reason": "UniversalDataGrid is a specialized advanced capability, not a generic layout component or a claim of current multi-framework grid parity."
     },
     {
       "id": "do-not-use-grid-as-layout",
       "rule": "Do not use DataGrid as generic layout.",
-      "reason": "Use layout primitives such as Card, Panel, Stack, Inline, and Section."
+      "reason": "Use VyrnForge layout primitives and composition patterns instead."
     },
     {
       "id": "button-for-primary-actions",
@@ -23,72 +23,86 @@
     },
     {
       "id": "icon-controls",
-      "rule": "Use IconButton or ToolbarButton for repeated utility actions.",
-      "reason": "They provide consistent compact action styling."
+      "rule": "Use IconButton or ToolbarButton for repeated utility actions when those components are available on the selected surface.",
+      "reason": "They provide consistent compact action semantics and styling."
     },
     {
       "id": "icon-accessibility",
-      "rule": "Every icon-only button needs an aria-label.",
-      "reason": "Screen reader users need a text name for the control."
+      "rule": "Every icon-only button needs an accessible name such as aria-label when the surrounding semantics do not already provide one.",
+      "reason": "Assistive-technology users need a text name for the control."
     },
     {
       "id": "css-variables",
-      "rule": "Use CSS variables for styling customization.",
-      "reason": "VyrnForge theming is token-driven and scoped."
+      "rule": "Use VyrnForge CSS custom properties and semantic tokens for styling customization.",
+      "reason": "VyrnForge theming is token-driven and portable across supported surfaces."
     },
     {
       "id": "no-forbidden-deps",
-      "rule": "Do not add MUI, Tailwind, Radix, TanStack, Redux, styled-components, Emotion, icon libraries, or CSS frameworks unless explicitly approved.",
-      "reason": "VyrnForge is native-first and dependency-minimal."
+      "rule": "Do not add MUI, Tailwind, Radix, TanStack, Redux, Zustand, styled-components, Emotion, large icon libraries, or similar frameworks unless explicitly approved.",
+      "reason": "VyrnForge is native-owned, dependency-minimal, and application-store agnostic."
     },
     {
       "id": "app-fetching",
-      "rule": "Keep app data fetching outside VyrnForge packages.",
-      "reason": "Apps own backend rows, auth, permissions, retries, and cache."
+      "rule": "Keep application data fetching, caching, authentication, authorization, routing, and business workflow execution outside VyrnForge packages.",
+      "reason": "VyrnForge owns reusable UI semantics; consuming applications own business/runtime semantics."
     },
     {
       "id": "check-status",
-      "rule": "Check component status before using planned components.",
-      "reason": "Planned components may not exist in package exports yet."
+      "rule": "Check current component, package, framework, and maturity status before using or recommending a planned or target capability.",
+      "reason": "Canonical metadata may describe both current implementation and accepted target state."
     },
     {
       "id": "check-public-api-docs",
-      "rule": "Before using a VyrnForge component or contract, check docs/api and docs/metadata.",
-      "reason": "API docs define public usage while metadata provides structured lookup."
+      "rule": "Before using a VyrnForge component or contract, check the canonical API and metadata sources relevant to the selected framework and task.",
+      "reason": "Public API and canonical metadata define usage; generated or AI-facing views must not invent missing semantics."
     },
     {
       "id": "avoid-internal-api",
-      "rule": "Do not use undocumented internal APIs unless explicitly asked.",
-      "reason": "Only documented exports, props, tokens, and adapter contracts are stable public API."
+      "rule": "Do not use undocumented internal APIs or deep package imports unless explicitly asked and the architecture permits it.",
+      "reason": "Only documented public entrypoints, props, tokens, events, methods, and adapter contracts are supported consumer API."
     },
     {
       "id": "multi-framework-contracts",
-      "rule": "Use the canonical component event, slot, form, and renderer contracts before adding framework-specific APIs.",
-      "reason": "Shared contracts prevent React, native HTML, Angular, and Vue behavior from drifting."
+      "rule": "Use the canonical component property, event, composition, form, model, ref, accessibility, and framework mappings before adding framework-specific APIs.",
+      "reason": "Shared contracts prevent supported framework surfaces from drifting into separate component libraries."
     },
     {
       "id": "framework-support-claims",
-      "rule": "Do not describe Angular, Vue, or native elements as beta-supported until GMF4 evidence passes.",
-      "reason": "Architecture fixtures document the intended integration but are not runtime support evidence."
+      "rule": "Distinguish verified consumer evidence, current shipped packages, accepted target packages, migration state, and explicit exceptions when describing framework support.",
+      "reason": "Framework support claims must follow current package/release metadata and accepted architecture rather than stale planning assumptions."
     },
     {
-      "id": "defer-grid-roadmap",
-      "rule": "Do not resume data-grid feature expansion unless it is explicitly reprioritized.",
-      "reason": "The active critical path is the non-grid multi-framework beta."
+      "id": "advanced-module-boundary",
+      "rule": "Treat advanced capabilities such as grids, trees, visualization, complex editors, and spatial UI as optional modules unless an approved architecture says otherwise; do not pull their weight or engines into the common foundation.",
+      "reason": "Capability depth should not make unrelated VyrnForge consumers pay unnecessary dependency, bundle, CSS, or runtime cost."
+    },
+    {
+      "id": "defer-unprioritized-advanced-work",
+      "rule": "Do not start deferred advanced capability implementation merely because it is valid long-term VyrnForge scope; follow the active roadmap and approved architecture work.",
+      "reason": "The S10-S15 multi-framework distribution program remains the current critical path until its gates close."
     },
     {
       "id": "follow-boundaries",
-      "rule": "Follow the approved multi-framework package boundaries.",
-      "reason": "ui-core is lowest-level; ui-behaviors is framework-neutral; ui-components and ui-elements are independent renderers; shared packages must not depend on ui-data-grid."
+      "rule": "Follow current canonical package boundaries and require a dedicated architecture decision before adding new advanced-module or framework dependency edges.",
+      "reason": "Shared foundations must remain dependency-minimal and must not acquire reverse dependencies on renderers or optional advanced modules."
+    },
+    {
+      "id": "bounded-ai-context",
+      "rule": "Prefer task- and framework-scoped AI context derived from canonical metadata instead of loading or copying the entire VyrnForge documentation set.",
+      "reason": "ADR-010 requires bounded, deterministic AI context with no parallel source of product semantics."
     }
   ],
   "lookupOrder": [
+    "docs/governance/01-project-source-of-truth.md",
     "docs/README.md",
     "docs/api/README.md",
     "docs/metadata/components.json",
     "docs/metadata/packages.json",
+    "docs/metadata/release-groups.json",
     "docs/metadata/multi-framework.json",
     "docs/metadata/component-contracts.json",
+    "docs/architecture/adr-010-ai-consumption-contract.md",
+    "docs/architecture/adr-011-optional-advanced-module-architecture.md",
     ".ai/AI_CONTEXT.md"
   ]
 }
