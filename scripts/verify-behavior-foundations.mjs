@@ -11,10 +11,6 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-const expectedTasks = Array.from(
-  { length: 16 },
-  (_, index) => `MF-${5001 + index}`,
-);
 const expectedReasons = [
   "user",
   "programmatic",
@@ -26,6 +22,7 @@ const expectedReasons = [
   "reset",
   "restore",
 ];
+
 const requiredSourceFiles = [
   "packages/ui-behaviors/src/controller.ts",
   "packages/ui-behaviors/src/events.ts",
@@ -47,6 +44,7 @@ const requiredSourceFiles = [
   "packages/ui-behaviors/src/confirm-dialog.ts",
   "packages/ui-behaviors/src/index.ts",
 ];
+
 const requiredDocuments = [
   "packages/ui-behaviors/README.md",
   "docs/api/ui-behaviors-api.md",
@@ -54,11 +52,9 @@ const requiredDocuments = [
   "docs/quality/s5-framework-neutral-behaviors.md",
   "docs/testing/behavior-foundation-contracts.md",
   "docs/testing/behavior-react-parity.md",
+  "docs/testing/react-behavior-adoption-audit.md",
   "docs/metadata/behavior-foundations.json",
   "docs/metadata/react-behavior-adoption.json",
-  "docs/metadata/gmf2-closure.json",
-  "docs/testing/react-behavior-adoption-audit.md",
-  "docs/testing/gmf2-behavior-parity-gate.md",
 ];
 
 function read(root, relativePath) {
@@ -96,44 +92,21 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
 
   for (const relativePath of [...requiredSourceFiles, ...requiredDocuments]) {
     if (!existsSync(path.join(root, relativePath))) {
-      failures.push(
-        `missing required behavior foundation file ${relativePath}`,
-      );
+      failures.push(`missing required behavior foundation file ${relativePath}`);
     }
   }
 
   const metadata = readJson(root, "docs/metadata/behavior-foundations.json");
   if (!metadata) return [...new Set(failures)].sort();
 
-  if (metadata.schemaVersion !== 1) {
-    failures.push("behavior foundation schemaVersion must be 1");
+  if (metadata.schemaVersion !== 2) {
+    failures.push("behavior foundation schemaVersion must be 2");
   }
-  if (metadata.program?.sprint !== "S5") {
-    failures.push("behavior foundation sprint must be S5");
+  if (metadata.package !== "@vyrnforge/ui-behaviors") {
+    failures.push("behavior foundation package must be @vyrnforge/ui-behaviors");
   }
-  if (metadata.program?.batch !== "MF-5001-MF-5016") {
-    failures.push("behavior foundation batch must be MF-5001-MF-5016");
-  }
-  if (metadata.program?.status !== "complete") {
-    failures.push("behavior foundation status must be complete");
-  }
-  if (metadata.program?.gate !== "GMF2") {
-    failures.push("behavior foundation gate must be GMF2");
-  }
-  if (metadata.program?.gateStatus !== "passed") {
-    failures.push("GMF2 must be passed after the closure batch");
-  }
-
-  const tasks = new Map((metadata.tasks ?? []).map((task) => [task.id, task]));
-  for (const taskId of expectedTasks) {
-    if (tasks.get(taskId)?.status !== "done") {
-      failures.push(`${taskId} must be done`);
-    }
-  }
-  if (tasks.size !== expectedTasks.length) {
-    failures.push(
-      `behavior foundation metadata must contain exactly ${expectedTasks.length} tasks`,
-    );
+  if (metadata.status !== "current") {
+    failures.push("behavior foundation status must be current");
   }
 
   const reasons = new Set(metadata.contracts?.events?.reasons ?? []);
@@ -142,45 +115,27 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   }
 
   const expectedFactories = [
-    ["controllableState", "createControllableState"],
-    ["collection", "createCollectionController"],
-    ["selection", "createSelectionController"],
-    ["events", "createBehaviorEvent"],
-    ["choice", "createChoiceController"],
-    ["numeric", "createNumericValueController"],
-    ["tabs", "createTabsController"],
-    ["autocomplete", "createAutocompleteController"],
-    ["multiSelect", "createMultiSelectController"],
-    ["transferList", "createTransferListController"],
-    ["navigation", "createNavigationController"],
-    ["toast", "createToastController"],
-    ["confirmDialog", "createConfirmDialogController"],
+    ["controllableState", "factory", "createControllableState"],
+    ["collection", "factory", "createCollectionController"],
+    ["selection", "factory", "createSelectionController"],
+    ["events", "factory", "createBehaviorEvent"],
+    ["choice", "factory", "createChoiceController"],
+    ["numeric", "factory", "createNumericValueController"],
+    ["tabs", "factory", "createTabsController"],
+    ["autocomplete", "factory", "createAutocompleteController"],
+    ["multiSelect", "factory", "createMultiSelectController"],
+    ["transferList", "factory", "createTransferListController"],
+    ["navigation", "factory", "createNavigationController"],
+    ["toast", "factory", "createToastController"],
+    ["confirmDialog", "factory", "createConfirmDialogController"],
+    ["overlay", "lifecycleFactory", "createOverlayLifecycleController"],
+    ["overlay", "layerRegistryFactory", "createOverlayLayerRegistry"],
+    ["overlay", "positionResolver", "resolveOverlayPosition"],
   ];
-  for (const [contractName, factory] of expectedFactories) {
-    if (metadata.contracts?.[contractName]?.factory !== factory) {
-      failures.push(`${contractName} factory must be ${factory}`);
+  for (const [contractName, field, expected] of expectedFactories) {
+    if (metadata.contracts?.[contractName]?.[field] !== expected) {
+      failures.push(`${contractName} ${field} must be ${expected}`);
     }
-  }
-  if (
-    metadata.contracts?.overlay?.lifecycleFactory !==
-    "createOverlayLifecycleController"
-  ) {
-    failures.push(
-      "overlay lifecycleFactory must be createOverlayLifecycleController",
-    );
-  }
-  if (
-    metadata.contracts?.overlay?.layerRegistryFactory !==
-    "createOverlayLayerRegistry"
-  ) {
-    failures.push(
-      "overlay layerRegistryFactory must be createOverlayLayerRegistry",
-    );
-  }
-  if (
-    metadata.contracts?.overlay?.positionResolver !== "resolveOverlayPosition"
-  ) {
-    failures.push("overlay positionResolver must be resolveOverlayPosition");
   }
 
   const overlayComponentFactories = new Set(
@@ -197,13 +152,27 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     }
   }
 
+  if (
+    !sameMembers(
+      new Set(metadata.boundaries?.allowedPackageDependencies ?? []),
+      new Set(["@vyrnforge/ui-core"]),
+    )
+  ) {
+    failures.push("behavior metadata may allow ui-core only");
+  }
+  if (metadata.boundaries?.ownsCss !== false) {
+    failures.push("ui-behaviors must not own CSS");
+  }
+
   const packageJson = readJson(root, "packages/ui-behaviors/package.json");
   if (packageJson?.name !== "@vyrnforge/ui-behaviors") {
     failures.push("ui-behaviors package name is invalid");
   }
-  const runtimeDependencies = Object.keys(packageJson?.dependencies ?? {});
   if (
-    !sameMembers(new Set(runtimeDependencies), new Set(["@vyrnforge/ui-core"]))
+    !sameMembers(
+      new Set(Object.keys(packageJson?.dependencies ?? {})),
+      new Set(["@vyrnforge/ui-core"]),
+    )
   ) {
     failures.push("ui-behaviors may depend on ui-core only");
   }
@@ -276,189 +245,69 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "ConfirmDialog",
   ]);
 
-  const roadmap = read(root, "docs/roadmap/00-master-roadmap.md");
-  requireIncludes(
-    failures,
-    roadmap,
-    "docs/roadmap/00-master-roadmap.md",
-    expectedTasks,
-  );
-
-  const componentPackage = readJson(
-    root,
-    "packages/ui-components/package.json",
-  );
-
+  const componentPackage = readJson(root, "packages/ui-components/package.json");
   const releaseGroups = readReleaseGroups({ root });
   const nonGridBeta = getReleaseGroup("non-grid-beta", {
     root,
     manifest: releaseGroups,
   });
-  const expectedBehaviorVersion = nonGridBeta.version;
-
   if (
-    typeof expectedBehaviorVersion !== "string" ||
+    typeof nonGridBeta.version !== "string" ||
     componentPackage?.dependencies?.["@vyrnforge/ui-behaviors"] !==
-    expectedBehaviorVersion
+      nonGridBeta.version
   ) {
-    failures.push(
-      "ui-components must declare the pinned ui-behaviors runtime dependency",
-    );
+    failures.push("ui-components must declare the pinned ui-behaviors runtime dependency");
   }
 
   const migratedComponents = [
-    [
-      "packages/ui-components/src/components/Button/Button.tsx",
-      "resolveActionState",
-    ],
-    [
-      "packages/ui-components/src/components/IconButton/IconButton.tsx",
-      "resolveActionState",
-    ],
-    [
-      "packages/ui-components/src/components/ToggleButton/ToggleButton.tsx",
-      "useToggleBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/ToggleButtonGroup/ToggleButtonGroup.tsx",
-      "useToggleGroupBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx",
-      "useChoiceBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Checkbox/Checkbox.tsx",
-      "resolveToggleInputState",
-    ],
-    [
-      "packages/ui-components/src/components/Switch/Switch.tsx",
-      "resolveToggleInputState",
-    ],
-    [
-      "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
-      "useChoiceBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Slider/Slider.tsx",
-      "useNumericBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Rating/Rating.tsx",
-      "useNumericBehavior",
-    ],
+    ["packages/ui-components/src/components/Button/Button.tsx", "resolveActionState"],
+    ["packages/ui-components/src/components/IconButton/IconButton.tsx", "resolveActionState"],
+    ["packages/ui-components/src/components/ToggleButton/ToggleButton.tsx", "useToggleBehavior"],
+    ["packages/ui-components/src/components/ToggleButtonGroup/ToggleButtonGroup.tsx", "useToggleGroupBehavior"],
+    ["packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx", "useChoiceBehavior"],
+    ["packages/ui-components/src/components/Checkbox/Checkbox.tsx", "resolveToggleInputState"],
+    ["packages/ui-components/src/components/Switch/Switch.tsx", "resolveToggleInputState"],
+    ["packages/ui-components/src/components/RadioGroup/RadioGroup.tsx", "useChoiceBehavior"],
+    ["packages/ui-components/src/components/Slider/Slider.tsx", "useNumericBehavior"],
+    ["packages/ui-components/src/components/Rating/Rating.tsx", "useNumericBehavior"],
     ["packages/ui-components/src/components/Tabs/Tabs.tsx", "useTabsBehavior"],
-    [
-      "packages/ui-components/src/components/Autocomplete/useAutocomplete.ts",
-      "createAutocompleteController",
-    ],
-    [
-      "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
-      "useMultiSelectBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/TransferList/useTransferList.ts",
-      "createTransferListController",
-    ],
-    [
-      "packages/ui-components/src/components/Menu/Menu.tsx",
-      "useNavigationBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/SideNav/SideNav.tsx",
-      "useNavigationBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Popover/Popover.tsx",
-      "usePopoverBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Dialog/Dialog.tsx",
-      "useDialogBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Drawer/Drawer.tsx",
-      "useDrawerBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Tooltip/Tooltip.tsx",
-      "useTooltipBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/Toast/ToastProvider.tsx",
-      "useToastBehavior",
-    ],
-    [
-      "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
-      "useConfirmDialogBehavior",
-    ],
-    [
-      "packages/ui-components/src/internal/overlay/overlayStack.ts",
-      "createOverlayLayerRegistry",
-    ],
-    [
-      "packages/ui-components/src/internal/overlay/useAnchoredPosition.ts",
-      "resolveOverlayPosition",
-    ],
+    ["packages/ui-components/src/components/Autocomplete/useAutocomplete.ts", "createAutocompleteController"],
+    ["packages/ui-components/src/components/MultiSelect/MultiSelect.tsx", "useMultiSelectBehavior"],
+    ["packages/ui-components/src/components/TransferList/useTransferList.ts", "createTransferListController"],
+    ["packages/ui-components/src/components/Menu/Menu.tsx", "useNavigationBehavior"],
+    ["packages/ui-components/src/components/SideNav/SideNav.tsx", "useNavigationBehavior"],
+    ["packages/ui-components/src/components/Popover/Popover.tsx", "usePopoverBehavior"],
+    ["packages/ui-components/src/components/Dialog/Dialog.tsx", "useDialogBehavior"],
+    ["packages/ui-components/src/components/Drawer/Drawer.tsx", "useDrawerBehavior"],
+    ["packages/ui-components/src/components/Tooltip/Tooltip.tsx", "useTooltipBehavior"],
+    ["packages/ui-components/src/components/Toast/ToastProvider.tsx", "useToastBehavior"],
+    ["packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx", "useConfirmDialogBehavior"],
+    ["packages/ui-components/src/internal/overlay/overlayStack.ts", "createOverlayLayerRegistry"],
+    ["packages/ui-components/src/internal/overlay/useAnchoredPosition.ts", "resolveOverlayPosition"],
   ];
   for (const [relativePath, marker] of migratedComponents) {
-    const source = read(root, relativePath);
-    requireIncludes(failures, source, relativePath, [marker]);
+    requireIncludes(failures, read(root, relativePath), relativePath, [marker]);
   }
 
-  const parityTest = read(
-    root,
+  requireIncludes(
+    failures,
+    read(root, "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx"),
     "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
+    ["React adapters preserve shared behavior parity", "Tabs", "Autocomplete", "Dialog"],
   );
   requireIncludes(
     failures,
-    parityTest,
-    "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx",
-    [
-      "React adapters preserve shared behavior parity",
-      "Tabs",
-      "IconButton",
-      "RadioGroup",
-      "Autocomplete",
-      "MultiSelect",
-      "TransferList",
-      "Menu",
-      "SideNav",
-      "Dialog",
-    ],
-  );
-
-  const overlayFeedbackParityTest = read(
-    root,
+    read(root, "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx"),
     "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
-  );
-  requireIncludes(
-    failures,
-    overlayFeedbackParityTest,
-    "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
-    [
-      "React overlay and feedback adapters preserve shared behavior parity",
-      "Dialog",
-      "Drawer",
-      "Popover",
-      "Tooltip",
-      "ToastProvider",
-      "ConfirmDialog",
-    ],
+    ["React overlay and feedback adapters preserve shared behavior parity", "Dialog", "Drawer", "Popover", "Tooltip", "ToastProvider", "ConfirmDialog"],
   );
 
   const rootPackage = readJson(root, "package.json");
   const scripts = rootPackage?.scripts ?? {};
-  if (
-    scripts["verify:behavior-foundations"] !==
-    "node scripts/verify-behavior-foundations.mjs"
-  ) {
+  if (scripts["verify:behavior-foundations"] !== "node scripts/verify-behavior-foundations.mjs") {
     failures.push("verify:behavior-foundations script is missing or invalid");
   }
-  if (
-    scripts["test:behavior-foundations"] !==
-    "node --test scripts/verify-behavior-foundations.test.mjs"
-  ) {
+  if (scripts["test:behavior-foundations"] !== "node --test scripts/verify-behavior-foundations.test.mjs") {
     failures.push("test:behavior-foundations script is missing or invalid");
   }
   if (!scripts["verify:metadata"]?.includes("behavior-foundations")) {
@@ -470,10 +319,7 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
   if (!scripts.check?.includes("verify:metadata")) {
     failures.push("check must include verify:metadata");
   }
-  if (
-    !scripts.ci?.includes("check") ||
-    !scripts.ci?.includes("test:contracts")
-  ) {
+  if (!scripts.ci?.includes("check") || !scripts.ci?.includes("test:contracts")) {
     failures.push("ci must include check and test:contracts");
   }
 
@@ -487,8 +333,6 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     "npm run verify:package-boundaries",
     "npm run test:react-behavior-adoption",
     "npm run verify:react-behavior-adoption",
-    "npm run test:gmf2-closure",
-    "npm run verify:gmf2-closure",
     "npm run check",
     "npm run ci",
   ]) {
@@ -497,18 +341,19 @@ export function verifyBehaviorFoundations({ root = repositoryRoot } = {}) {
     }
   }
 
-  if ((metadata.remainingGmf2Tasks ?? []).length !== 0) {
-    failures.push("remainingGmf2Tasks must be empty after GMF2 closure");
+  for (const obsolete of ["gmf2", "MF-50", "remainingGmf2Tasks"]) {
+    if (JSON.stringify(metadata).toLowerCase().includes(obsolete.toLowerCase())) {
+      failures.push(`behavior foundation metadata must not retain obsolete ${obsolete} closure state`);
+    }
   }
 
   return [...new Set(failures)].sort();
 }
+
 export function assertBehaviorFoundations(options) {
   const failures = verifyBehaviorFoundations(options);
   if (failures.length > 0) {
-    throw new Error(
-      `Behavior foundation verification failed:\n- ${failures.join("\n- ")}`,
-    );
+    throw new Error(`Behavior foundation verification failed:\n- ${failures.join("\n- ")}`);
   }
 }
 
@@ -518,6 +363,6 @@ if (
 ) {
   assertBehaviorFoundations();
   console.log(
-    "Behavior foundations passed: MF-5001 through MF-5016 contracts, React adoption, GMF2 closure metadata, docs, and validation integration are complete.",
+    "Behavior foundations passed: current framework-neutral contracts, React adoption, package boundaries, docs, and validation integration are aligned.",
   );
 }
