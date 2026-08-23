@@ -44,8 +44,6 @@ const fullValidationFiles = new Set([
 ]);
 
 const historicalEvidenceFiles = new Set([
-  "docs/metadata/gmf1-closure.json",
-  "docs/metadata/gmf2-closure.json",
   "docs/metadata/gmf3-closure.json",
   "docs/metadata/gmf4-closure.json",
   "docs/metadata/native-element-foundations.json",
@@ -60,7 +58,7 @@ const historicalEvidenceFiles = new Set([
 function isHistoricalEvidencePath(file) {
   return (
     historicalEvidenceFiles.has(file) ||
-    /^scripts\/(?:verify|test)-(?:g3|gmf[1-4]|native-|angular-|vue-|ssr-|cross-framework-|multi-framework-migration)/u.test(
+    /^scripts\/(?:verify|test)-(?:gmf[3-4]|native-|angular-|vue-|ssr-|cross-framework-|multi-framework-migration)/u.test(
       file,
     )
   );
@@ -125,9 +123,7 @@ function markPackagePayload(scope) {
 
 function markFull(scope) {
   for (const key of scopeKeys) {
-    if (key !== "docs_only") {
-      scope[key] = true;
-    }
+    if (key !== "docs_only") scope[key] = true;
   }
   scope.docs_only = false;
   scope.historical_evidence = false;
@@ -138,9 +134,7 @@ function classifyPackageFile(file, scope, reasons) {
     /^packages\/(ui-core|ui-behaviors|ui-components|ui-elements|ui-data-grid)\/(.+)$/.exec(
       file,
     );
-  if (!match) {
-    return false;
-  }
+  if (!match) return false;
 
   const [, packageName, packagePath] = match;
 
@@ -212,9 +206,7 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (classifyPackageFile(file, scope, reasons)) {
-      continue;
-    }
+    if (classifyPackageFile(file, scope, reasons)) continue;
 
     if (file === "LICENSE") {
       markPackagePayload(scope);
@@ -275,19 +267,13 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (
-      file === "docs/metadata/visual-regression-matrix.json" ||
-      file === "docs/metadata/g3-closure.json"
-    ) {
+    if (file === "docs/metadata/visual-regression-matrix.json") {
       scope.quality = true;
       scope.metadata = true;
       scope.docs = true;
       scope.fixtures = true;
       scope.browser = true;
-      if (file === "docs/metadata/g3-closure.json") {
-        scope.historical_evidence = true;
-      }
-      reasons.add("visual regression or G3 closure metadata");
+      reasons.add("visual regression metadata");
       continue;
     }
 
@@ -322,7 +308,6 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    // An unknown file may affect tooling or build behavior. Prefer a safe full run.
     markFull(scope);
     reasons.add(`unclassified path uses safe full validation: ${file}`);
   }
@@ -356,13 +341,9 @@ function isZeroSha(value) {
 }
 
 function readChangedFiles({ base, head, filesFrom }) {
-  if (filesFrom) {
-    return readFileSync(filesFrom, "utf8").split(/\r?\n/);
-  }
+  if (filesFrom) return readFileSync(filesFrom, "utf8").split(/\r?\n/);
 
-  if (isZeroSha(base) || !head) {
-    return [];
-  }
+  if (isZeroSha(base) || !head) return [];
 
   try {
     return execFileSync(
@@ -401,16 +382,13 @@ if (isMainModule()) {
   const base = readArgument("--base") ?? process.env.CI_BASE_SHA;
   const head = readArgument("--head") ?? process.env.CI_HEAD_SHA;
   const filesFrom = readArgument("--files-from");
-  const githubOutput =
-    readArgument("--github-output") ?? process.env.GITHUB_OUTPUT;
+  const githubOutput = readArgument("--github-output") ?? process.env.GITHUB_OUTPUT;
   const files = readChangedFiles({ base, head, filesFrom });
   const plan = planCiScope(files, {
     forceFull: forceFull || isZeroSha(base) || !head,
   });
 
-  if (githubOutput) {
-    writeGitHubOutput(githubOutput, plan);
-  }
+  if (githubOutput) writeGitHubOutput(githubOutput, plan);
 
   process.stdout.write(`${JSON.stringify(plan, null, 2)}\n`);
 }
