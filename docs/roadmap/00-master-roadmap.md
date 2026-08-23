@@ -61,24 +61,24 @@ them current.
 
 ## Sprint plan
 
-| Sprint | Name                                           | Goal                                                                                                                      | Gate / state  |
-| ------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| S0     | Baseline and Change Control                    | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed   |
-| S1     | Quality Foundation                             | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
-| S2     | Interaction and Accessibility Evidence         | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
-| S3     | Semantic Tokens and Component Consistency      | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
-| S4     | Multi-Framework Architecture                   | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed |
-| S5     | Framework-Neutral Behaviors                    | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed |
-| S6     | Native Custom Elements                         | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed |
-| S7     | Cross-Framework Verification and Docs          | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed |
-| S8     | Non-Grid Beta Release                          | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete      |
-| S9     | Repository and Delivery Simplification         | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete      |
+| Sprint | Name                                            | Goal                                                                                                                      | Gate / state                |
+| ------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| S0     | Baseline and Change Control                     | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed                 |
+| S1     | Quality Foundation                              | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed                 |
+| S2     | Interaction and Accessibility Evidence          | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed                 |
+| S3     | Semantic Tokens and Component Consistency       | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed                 |
+| S4     | Multi-Framework Architecture                    | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed               |
+| S5     | Framework-Neutral Behaviors                     | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed               |
+| S6     | Native Custom Elements                          | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed               |
+| S7     | Cross-Framework Verification and Docs           | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed               |
+| S8     | Non-Grid Beta Release                           | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete                    |
+| S9     | Repository and Delivery Simplification          | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete                    |
 | S10    | Canonical Component & Distribution Architecture | Establish the target architecture, complete canonical contract model, package strategy, and migration rules.              | See active program evidence |
-| S11    | Framework Generation Foundation                | Prove deterministic generation and shared vertical slices across all four supported surfaces.                             | See active program evidence |
-| S12    | First-Class Angular Distribution               | Deliver low-friction Angular distribution with generated integration and framework-native forms/DX.                       | G12 program track |
-| S13    | First-Class Vue Distribution                   | Deliver low-friction Vue distribution with generated integration and framework-native model/slot/ref DX.                  | G13 program track |
-| S14    | React Canonical-Renderer Convergence           | Converge eligible React components toward the canonical implementation while preserving public ergonomics and parity.     | G14 program track |
-| S15    | Multi-Framework Packaging & Release            | Make packaging, release verification, documentation, and four-surface distribution metadata-driven and release-ready.     | G15 program track |
+| S11    | Framework Generation Foundation                 | Prove deterministic generation and shared vertical slices across all four supported surfaces.                             | See active program evidence |
+| S12    | First-Class Angular Distribution                | Deliver low-friction Angular distribution with generated integration and framework-native forms/DX.                       | G12 program track           |
+| S13    | First-Class Vue Distribution                    | Deliver low-friction Vue distribution with generated integration and framework-native model/slot/ref DX.                  | G13 program track           |
+| S14    | React Canonical-Renderer Convergence            | Converge eligible React components toward the canonical implementation while preserving public ergonomics and parity.     | G14 program track           |
+| S15    | Multi-Framework Packaging & Release             | Make packaging, release verification, documentation, and four-surface distribution metadata-driven and release-ready.     | G15 program track           |
 
 The execution workbook and merged repository evidence own live task/gate status.
 This roadmap intentionally avoids duplicating fast-changing percentages and task
