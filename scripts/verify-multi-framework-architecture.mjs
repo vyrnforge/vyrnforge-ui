@@ -103,7 +103,6 @@ const requiredDocuments = [
   "docs/metadata/multi-framework.json",
   "docs/metadata/component-contracts.json",
   "docs/metadata/component-contract.schema.json",
-  "docs/metadata/gmf1-closure.json",
   "docs/metadata/gmf3-closure.json",
   "docs/metadata/gmf4-closure.json",
   "docs/metadata/consumer-foundations.json",

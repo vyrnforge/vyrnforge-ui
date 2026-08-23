@@ -19,7 +19,6 @@ export const activeContractTests = [
   "test:release-artifact",
   "test:release-dry-run",
   "test:multi-framework",
-  "test:behavior-foundations",
   "test:component-maturity",
   "test:design-tokens",
   "test:token-adoption",
@@ -35,10 +34,7 @@ export const activeContractTests = [
 ];
 
 export const historicalEvidenceTests = [
-  "test:g3-closure",
-  "test:gmf1-closure",
   "test:react-behavior-adoption",
-  "test:gmf2-closure",
   "test:native-element-foundations",
   "test:native-core-elements",
   "test:native-advanced-elements",
@@ -64,16 +60,12 @@ export const activeMetadataVerifiers = [
   "verify:security-workflow-hardening",
   "verify:trusted-publishing-provenance",
   "verify:multi-framework",
-  "verify:behavior-foundations",
   "verify:consumer-foundations",
   "verify:component-reference",
 ];
 
 export const historicalEvidenceVerifiers = [
-  "verify:g3-closure",
-  "verify:gmf1-closure",
   "verify:react-behavior-adoption",
-  "verify:gmf2-closure",
   "verify:native-element-foundations",
   "verify:native-core-elements",
   "verify:native-advanced-elements",

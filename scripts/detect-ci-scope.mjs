@@ -44,8 +44,6 @@ const fullValidationFiles = new Set([
 ]);
 
 const historicalEvidenceFiles = new Set([
-  "docs/metadata/gmf1-closure.json",
-  "docs/metadata/gmf2-closure.json",
   "docs/metadata/gmf3-closure.json",
   "docs/metadata/gmf4-closure.json",
   "docs/metadata/native-element-foundations.json",
@@ -60,7 +58,7 @@ const historicalEvidenceFiles = new Set([
 function isHistoricalEvidencePath(file) {
   return (
     historicalEvidenceFiles.has(file) ||
-    /^scripts\/(?:verify|test)-(?:g3|gmf[1-4]|native-|angular-|vue-|ssr-|cross-framework-|multi-framework-migration)/u.test(
+    /^scripts\/(?:verify|test)-(?:gmf[34]|native-|angular-|vue-|ssr-|cross-framework-|multi-framework-migration)/u.test(
       file,
     )
   );
@@ -275,19 +273,13 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (
-      file === "docs/metadata/visual-regression-matrix.json" ||
-      file === "docs/metadata/g3-closure.json"
-    ) {
+    if (file === "docs/metadata/visual-regression-matrix.json") {
       scope.quality = true;
       scope.metadata = true;
       scope.docs = true;
       scope.fixtures = true;
       scope.browser = true;
-      if (file === "docs/metadata/g3-closure.json") {
-        scope.historical_evidence = true;
-      }
-      reasons.add("visual regression or G3 closure metadata");
+      reasons.add("visual regression metadata");
       continue;
     }
 
