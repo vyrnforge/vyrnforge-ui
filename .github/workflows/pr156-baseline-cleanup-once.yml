@@ -1,0 +1,40 @@
+name: PR156 baseline cleanup once
+
+on:
+  push:
+    branches:
+      - chore/repo-wide-legacy-cleanup
+    paths:
+      - .github/workflows/pr156-baseline-cleanup-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: chore/repo-wide-legacy-cleanup
+          fetch-depth: 0
+
+      - name: Remove stale baseline entry and helper
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync, rmSync } from 'node:fs';
+          const path = '.prettier-baseline.json';
+          const baseline = JSON.parse(readFileSync(path, 'utf8'));
+          delete baseline.entries['scripts/fixtures/package-boundaries/invalid/packages/ui-components/package.json'];
+          writeFileSync(path, `${JSON.stringify(baseline, null, 2)}\n`);
+          rmSync('.github/workflows/pr156-baseline-cleanup-once.yml');
+          NODE
+
+      - name: Commit cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .prettier-baseline.json .github/workflows/pr156-baseline-cleanup-once.yml
+          git commit -m "chore: remove stale package fixture formatting baseline"
+          git push origin HEAD:chore/repo-wide-legacy-cleanup
