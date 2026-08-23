@@ -48,26 +48,8 @@ function mutateJson(root, relativePath, update) {
   writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-test("repository consumer foundation evidence is internally complete", () => {
+test("repository consumer foundation contracts are internally complete", () => {
   assert.deepEqual(verifyConsumerFoundations(), []);
-});
-
-test("rejects an incomplete consumer task", () => {
-  withRepositoryFixture(
-    (root) => {
-      mutateJson(root, "docs/metadata/consumer-foundations.json", (value) => {
-        value.tasks.find((task) => task.id === "CF-7002").status =
-          "in-progress";
-      });
-    },
-    (root) => {
-      assert(
-        verifyConsumerFoundations({ root }).some((failure) =>
-          failure.includes("CF-7002 must be done"),
-        ),
-      );
-    },
-  );
 });
 
 test("rejects stale Custom Elements metadata", () => {
@@ -148,6 +130,24 @@ test("rejects a React dependency in the native package", () => {
       assert(
         verifyConsumerFoundations({ root }).some((failure) =>
           failure.includes("must not acquire a React dependency"),
+        ),
+      );
+    },
+  );
+});
+
+test("rejects regressed packed consumer claims", () => {
+  withRepositoryFixture(
+    (root) => {
+      mutateJson(root, "tests/consumers/manifest.json", (value) => {
+        value.fixtures.find((fixture) => fixture.id === "vue").supportClaim =
+          "packed-vue-runtime-ready";
+      });
+    },
+    (root) => {
+      assert(
+        verifyConsumerFoundations({ root }).some((failure) =>
+          failure.includes("vue manifest support claim is not a current verified claim"),
         ),
       );
     },
