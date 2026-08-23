@@ -60,6 +60,7 @@ jobs:
       CI_SCOPE_UI_ELEMENTS: ${{ inputs['ui-elements'] }}
       CI_SCOPE_UI_DATA_GRID: ${{ inputs['ui-data-grid'] }}
       CI_SCOPE_FIXTURES: ${{ inputs.fixtures }}
+      CI_SCOPE_HISTORICAL_EVIDENCE: false
 
     steps:
       - name: Checkout
