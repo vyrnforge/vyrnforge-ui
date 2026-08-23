@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "sprint": "S14",
+    "id": "MFD-1402",
+    "title": "Classify catalog migration strategy",
+    "status": "classified",
+    "dependsOn": ["MFD-1401", "MFD-1009"]
+  },
+  "package": "@vyrnforge/ui-components",
+  "sourceOfTruth": {
+    "publicExports": "docs/metadata/react-behavior-adoption.json",
+    "canonicalCatalog": "docs/metadata/components.json",
+    "exceptionRegistry": "docs/metadata/framework-exceptions.json",
+    "strategy": "docs/architecture/adr-009-react-canonical-convergence.md"
+  },
+  "strategies": [
+    {
+      "id": "generated-facade",
+      "reason": "The public component has a canonical non-grid browser implementation and should converge to a generated or generic React facade while preserving the captured React API.",
+      "exports": [
+        "Button", "ButtonGroup", "Icon", "ClearButton", "CloseButton", "IconButton", "MoreButton", "RefreshButton", "ToolbarButton", "ToggleButton", "ToggleButtonGroup", "SegmentedControl",
+        "Caption", "CodeText", "Heading", "Label", "Text", "Badge", "StatusBadge", "Field", "TextInput", "SearchInput", "Select", "Checkbox", "Radio", "RadioGroup", "Switch", "NumberInput", "DateInput", "DateTimeInput", "MultiSelect", "Autocomplete", "TransferList", "Textarea", "ValidationMessage", "Rating", "Slider", "EmptyState", "ErrorState", "Alert", "InlineMessage", "Toast", "ToastAction", "LoadingState", "Skeleton", "Card", "Panel", "Stack", "Inline", "Section", "AppShell", "Page", "PageHeader", "PageToolbar", "SideNav", "TopNav", "Breadcrumbs", "Tabs", "Popover", "Menu", "Dropdown", "Tooltip", "Dialog", "Drawer", "ConfirmDialog"
+      ]
+    },
+    {
+      "id": "temporary-legacy",
+      "reason": "React provider ownership is framework-specific integration rather than canonical DOM rendering. Retain it until MFD-1415 determines whether a narrow integration adapter or an ADR-008 exception is required; historical existence alone is not sufficient for a permanent dedicated renderer.",
+      "exports": ["ToastProvider"]
+    }
+  ],
+  "nonComponentExports": [
+    {
+      "name": "useToast",
+      "strategy": "react-integration-api",
+      "reason": "This is a React hook rather than a component renderer. Its compatibility remains part of the public baseline and ToastProvider migration work."
+    }
+  ],
+  "dedicatedRendererExceptions": [],
+  "rules": [
+    "Every public React component value export is classified exactly once.",
+    "Generated facade is the default target; temporary legacy status is not a permanent exception.",
+    "Dedicated-renderer status requires an active or retiring ADR-008 framework exception record.",
+    "Migration batches remain reversible and must preserve the MFD-1401 compatibility baseline unless a separate public migration is approved."
+  ]
+}
