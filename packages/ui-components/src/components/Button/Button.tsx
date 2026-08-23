@@ -1,7 +1,7 @@
 import { resolveActionState } from "@vyrnforge/ui-behaviors";
 import {
-  registerVyrnForgeElement,
   type VyrnForgeElementForTagName,
+  vyrnForgeElementRegistrations,
 } from "@vyrnforge/ui-elements";
 import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { useCanonicalActionControlClassName } from "../../internal/canonical-action-control";
@@ -11,9 +11,7 @@ import type { ButtonProps } from "./Button.types";
 
 type CanonicalButtonElement = VyrnForgeElementForTagName<"vf-button">;
 
-const registerCanonicalButton = () => {
-  registerVyrnForgeElement("vf-button");
-};
+const registerCanonicalButton = vyrnForgeElementRegistrations["vf-button"];
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
