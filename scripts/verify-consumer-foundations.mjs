@@ -4,48 +4,24 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
-import { currentConsumerBatch } from "./consumer-batch-progression.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
 
-const expectedTasks = new Map([
-  ["CF-7001", 3],
-  ["CF-7002", 3],
-  ["CF-7008", 5],
-]);
-
 const allowedFixtureClaims = new Map([
   ["native-html", new Set(["packed-runtime-verified"])],
   ["react", new Set(["packed-custom-elements-runtime-verified"])],
-  [
-    "angular",
-    new Set(["architecture-fixture-only", "packed-angular-runtime-verified"]),
-  ],
-  [
-    "vue",
-    new Set([
-      "architecture-fixture-only",
-      "packed-vue-runtime-ready",
-      "packed-vue-runtime-verified",
-    ]),
-  ],
+  ["angular", new Set(["packed-angular-runtime-verified"])],
+  ["vue", new Set(["packed-vue-runtime-verified"])],
 ]);
 
 const allowedBetaClaims = new Map([
   ["native-html", new Set(["packed-consumer-verified"])],
   ["react", new Set(["custom-elements-consumer-verified"])],
-  ["angular", new Set(["planned", "packed-consumer-verified"])],
-  [
-    "vue",
-    new Set([
-      "planned",
-      "runtime-verification-pending",
-      "packed-consumer-verified",
-    ]),
-  ],
+  ["angular", new Set(["packed-consumer-verified"])],
+  ["vue", new Set(["packed-consumer-verified"])],
 ]);
 
 const requiredDocuments = [
@@ -102,52 +78,7 @@ function collectRegistryDefinitions(text) {
   ].map((match) => ({ tagName: match[1], className: match[2] }));
 }
 
-function verifyTasks(root, failures, closure) {
-  if (closure.program?.sprint !== "S7") {
-    addFailure(failures, "consumer foundation sprint must be S7");
-  }
-  if (closure.program?.batch !== "CF-7001-CF-7002-CF-7008") {
-    addFailure(failures, "consumer foundation batch is invalid");
-  }
-  if (closure.program?.status !== "evidence-complete") {
-    addFailure(
-      failures,
-      "consumer foundation status must be evidence-complete",
-    );
-  }
-  if (closure.program?.gate !== "GMF4") {
-    addFailure(failures, "consumer foundation gate must be GMF4");
-  }
-  if (closure.program?.gateStatus !== "passed") {
-    addFailure(failures, "GMF4 must be passed");
-  }
-
-  const tasks = new Map((closure.tasks ?? []).map((task) => [task.id, task]));
-  for (const [taskId, storyPoints] of expectedTasks) {
-    const task = tasks.get(taskId);
-    if (!task) {
-      addFailure(failures, `consumer foundation is missing ${taskId}`);
-      continue;
-    }
-    if (task.status !== "done") {
-      addFailure(failures, `${taskId} must be done`);
-    }
-    if (task.storyPoints !== storyPoints) {
-      addFailure(failures, `${taskId} story points must be ${storyPoints}`);
-    }
-    if (!task.evidence || !existsSync(path.join(root, task.evidence))) {
-      addFailure(failures, `${taskId} evidence is missing`);
-    }
-  }
-  if (tasks.size !== expectedTasks.size) {
-    addFailure(
-      failures,
-      `consumer foundation must contain exactly ${expectedTasks.size} tasks`,
-    );
-  }
-}
-
-function verifyPackageContract(root, failures, closure) {
+function verifyPackageContract(root, failures, metadata) {
   const packageJson = readJson(root, "packages/ui-elements/package.json");
   const rootPackageJson = readJson(root, "package.json");
   const registryText = read(root, "packages/ui-elements/src/registry.ts");
@@ -296,37 +227,17 @@ function verifyPackageContract(root, failures, closure) {
   }
 
   if (
-    closure.declarationContract?.globalTagMap?.registeredTags !== 58 ||
-    closure.declarationContract?.customElementsManifest?.registeredTags !== 58
+    metadata.declarationContract?.globalTagMap?.registeredTags !== 58 ||
+    metadata.declarationContract?.customElementsManifest?.registeredTags !== 58
   ) {
     addFailure(failures, "consumer foundation declaration counts must be 58");
   }
 }
 
-function verifyFixtures(root, failures, closure, architecture) {
+function verifyFixtures(root, failures, metadata, architecture) {
   const manifest = readJson(root, "tests/consumers/manifest.json");
-  const completedGmf4 =
-    architecture.program?.status === "gmf4-evidence-complete" &&
-    architecture.program?.gateStatus === "passed";
-  const expectedManifestSupportClaim = completedGmf4
-    ? "gmf4-runtime-evidence-complete"
-    : "partial-gmf4-runtime-evidence";
-
-  if (manifest.supportClaim !== expectedManifestSupportClaim) {
-    addFailure(
-      failures,
-      `consumer manifest must record ${expectedManifestSupportClaim}`,
-    );
-  }
-  if (manifest.currentBatch !== currentConsumerBatch) {
-    addFailure(
-      failures,
-      `consumer manifest currentBatch must be ${currentConsumerBatch}`,
-    );
-  }
-
-  const closureFixtures = new Map(
-    (closure.consumerFixtures ?? []).map((fixture) => [fixture.id, fixture]),
+  const metadataFixtures = new Map(
+    (metadata.consumerFixtures ?? []).map((fixture) => [fixture.id, fixture]),
   );
 
   for (const fixture of manifest.fixtures ?? []) {
@@ -334,7 +245,7 @@ function verifyFixtures(root, failures, closure, architecture) {
     if (!allowedClaims?.has(fixture.supportClaim)) {
       addFailure(
         failures,
-        `${fixture.id} manifest support claim is not an allowed progression`,
+        `${fixture.id} manifest support claim is not a current verified claim`,
       );
     }
 
@@ -352,7 +263,7 @@ function verifyFixtures(root, failures, closure, architecture) {
     if (!allowedClaims?.has(contract.supportClaim)) {
       addFailure(
         failures,
-        `${fixture.id} fixture support claim is not an allowed progression`,
+        `${fixture.id} fixture support claim is not a current verified claim`,
       );
     }
 
@@ -380,7 +291,7 @@ function verifyFixtures(root, failures, closure, architecture) {
     }
 
     if (fixture.id === "native-html" || fixture.id === "react") {
-      if (!closureFixtures.has(fixture.id)) {
+      if (!metadataFixtures.has(fixture.id)) {
         addFailure(
           failures,
           `consumer foundation metadata is missing ${fixture.id}`,
@@ -414,32 +325,9 @@ function verifyFixtures(root, failures, closure, architecture) {
     if (!allowedClaims.has(frameworks.get(frameworkId)?.betaClaim)) {
       addFailure(
         failures,
-        `${frameworkId} beta claim is not an allowed progression`,
+        `${frameworkId} beta claim is not a current verified claim`,
       );
     }
-  }
-
-  const allowedProgramStatuses = new Set([
-    "consumer-foundation-complete",
-    "gmf4-evidence-complete",
-  ]);
-  if (!allowedProgramStatuses.has(architecture.program?.status)) {
-    addFailure(
-      failures,
-      "multi-framework program must record consumer-foundation-complete or gmf4-evidence-complete",
-    );
-  }
-  if (
-    (manifest.supportClaim === "gmf4-runtime-evidence-complete") !==
-    completedGmf4
-  ) {
-    addFailure(
-      failures,
-      "consumer manifest and multi-framework program completion state must agree",
-    );
-  }
-  if (architecture.program?.gate !== "GMF4") {
-    addFailure(failures, "multi-framework program gate must be GMF4");
   }
   if (
     architecture.consumerFixturePolicy?.evidence !==
@@ -464,35 +352,25 @@ export function verifyConsumerFoundations({ root = repositoryRoot } = {}) {
     }
   }
 
-  let closure;
+  let metadata;
   let architecture;
   try {
-    closure = readJson(root, "docs/metadata/consumer-foundations.json");
+    metadata = readJson(root, "docs/metadata/consumer-foundations.json");
     architecture = readJson(root, "docs/metadata/multi-framework.json");
   } catch (error) {
     return [`consumer foundation metadata is invalid: ${error.message}`];
   }
 
-  verifyTasks(root, failures, closure);
-  verifyPackageContract(root, failures, closure);
-  verifyFixtures(root, failures, closure, architecture);
+  verifyPackageContract(root, failures, metadata);
+  verifyFixtures(root, failures, metadata, architecture);
 
-  for (const evidence of closure.evidence ?? []) {
+  for (const evidence of metadata.evidence ?? []) {
     if (!existsSync(path.join(root, evidence))) {
       addFailure(
         failures,
         `consumer foundation evidence is missing ${evidence}`,
       );
     }
-  }
-  if (
-    !Array.isArray(closure.unresolvedBlockers) ||
-    closure.unresolvedBlockers.length !== 0
-  ) {
-    addFailure(
-      failures,
-      "consumer foundation unresolvedBlockers must be empty",
-    );
   }
 
   if (root === repositoryRoot) {
@@ -534,6 +412,6 @@ if (
 ) {
   assertConsumerFoundations();
   console.log(
-    "Consumer foundations passed: CF-7001, CF-7002, and CF-7008 provide packed native HTML and React Custom Element consumers plus the 58-tag declaration and metadata contract.",
+    "Consumer foundations passed: packed web consumers, Custom Element declarations, canonical events, and generated metadata are aligned.",
   );
 }
