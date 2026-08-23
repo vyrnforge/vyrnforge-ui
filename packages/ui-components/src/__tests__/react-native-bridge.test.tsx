@@ -14,7 +14,7 @@ class BridgeTestElement extends HTMLElement {
 
 function defineBridgeTestElement(tagName: string): void {
   if (!customElements.get(tagName)) {
-    customElements.define(tagName, BridgeTestElement);
+    customElements.define(tagName, class extends BridgeTestElement {});
   }
 }
 
