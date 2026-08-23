@@ -1,4 +1,4 @@
-name: MFD-1409 lockfile regeneration
+name: MFD-1409 lockfile repair
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  regenerate-lockfile:
+  repair-lockfile:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -19,25 +19,31 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: mfd-1409-react-actions-typography-batch-v2
+          fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-        with:
-          node-version-file: .nvmrc
-          package-manager-cache: false
-
-      - name: Use repository package manager
-        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
-
-      - name: Regenerate workspace lockfile
-        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-
-      - name: Commit generated lockfile
+      - name: Restore pre-regeneration lockfile and add only the required edge
         shell: bash
         run: |
-          git diff --exit-code -- package-lock.json && exit 0
+          git show 05354831acc3baec41b035e9304cccf23e44cdd3:package-lock.json > package-lock.json
+          node <<'NODE'
+          const fs = require("node:fs");
+          const path = "package-lock.json";
+          let text = fs.readFileSync(path, "utf8");
+          const needle = '        "@vyrnforge/ui-behaviors": "0.2.0-beta.2",\n        "@vyrnforge/ui-core": "0.2.0-beta.2"\n      },\n      "devDependencies": {\n        "@testing-library/jest-dom": "^6.9.1"';
+          const replacement = '        "@vyrnforge/ui-behaviors": "0.2.0-beta.2",\n        "@vyrnforge/ui-core": "0.2.0-beta.2",\n        "@vyrnforge/ui-elements": "0.2.0-beta.2"\n      },\n      "devDependencies": {\n        "@testing-library/jest-dom": "^6.9.1"';
+          if (!text.includes(needle)) {
+            throw new Error("ui-components workspace dependency block not found");
+          }
+          text = text.replace(needle, replacement);
+          fs.writeFileSync(path, text);
+          NODE
+
+      - name: Commit surgical lockfile repair and remove helper workflow
+        shell: bash
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/mfd-1409-lockfile-fix.yml
           git add package-lock.json
-          git commit -m "chore: sync workspace lockfile for MFD-1409"
+          git commit -m "chore: repair MFD-1409 workspace lockfile"
           git push origin HEAD:mfd-1409-react-actions-typography-batch-v2
