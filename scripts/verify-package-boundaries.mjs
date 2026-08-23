@@ -280,7 +280,12 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
           );
           continue;
         }
-        if (matchesPackageSpecifier(specifier, forbiddenApplicationStateSpecifiers)) {
+        if (
+          matchesPackageSpecifier(
+            specifier,
+            forbiddenApplicationStateSpecifiers,
+          )
+        ) {
           failures.push(
             `${sourceFilePath}: ${packageDefinition.name} must not import application state manager ${specifier}`,
           );
