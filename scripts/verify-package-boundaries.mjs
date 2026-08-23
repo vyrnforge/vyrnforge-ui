@@ -64,6 +64,13 @@ for (const packageDefinition of packageDefinitions) {
   packageDefinition.forbiddenDomIdentifiers ??= [];
 }
 
+const forbiddenApplicationStateSpecifiers = [
+  "pinia",
+  "@ngrx/store",
+  "@reduxjs/toolkit",
+  "redux",
+  "zustand",
+];
 const sourceExtensions = new Set([
   ".ts",
   ".tsx",
@@ -169,7 +176,7 @@ function isRelativeSpecifier(specifier) {
   );
 }
 
-function matchesForbiddenFrameworkSpecifier(specifier, forbiddenSpecifiers) {
+function matchesPackageSpecifier(specifier, forbiddenSpecifiers) {
   return forbiddenSpecifiers.some((forbiddenSpecifier) =>
     forbiddenSpecifier.endsWith("/")
       ? specifier.startsWith(forbiddenSpecifier)
@@ -223,13 +230,23 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
           );
         }
         if (
-          matchesForbiddenFrameworkSpecifier(
+          matchesPackageSpecifier(
             dependencyName,
             packageDefinition.forbiddenFrameworkSpecifiers,
           )
         ) {
           failures.push(
             `${relativePath(root, packageJsonPath)}: ${packageDefinition.name} must remain framework-neutral and must not declare ${dependencyName} in ${dependencyGroup}`,
+          );
+        }
+        if (
+          matchesPackageSpecifier(
+            dependencyName,
+            forbiddenApplicationStateSpecifiers,
+          )
+        ) {
+          failures.push(
+            `${relativePath(root, packageJsonPath)}: ${packageDefinition.name} must not depend on application state manager ${dependencyName} in ${dependencyGroup}`,
           );
         }
       }
@@ -253,13 +270,19 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
         path.extname(sourceFile),
       )) {
         if (
-          matchesForbiddenFrameworkSpecifier(
+          matchesPackageSpecifier(
             specifier,
             packageDefinition.forbiddenFrameworkSpecifiers,
           )
         ) {
           failures.push(
             `${sourceFilePath}: ${packageDefinition.name} must remain framework-neutral and must not import ${specifier}`,
+          );
+          continue;
+        }
+        if (matchesPackageSpecifier(specifier, forbiddenApplicationStateSpecifiers)) {
+          failures.push(
+            `${sourceFilePath}: ${packageDefinition.name} must not import application state manager ${specifier}`,
           );
           continue;
         }
