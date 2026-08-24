@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "use-toast",
+  "name": "useToast",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "guidance": {
+    "useWhen": null,
+    "avoidWhen": null,
+    "aiUsageNotes": null,
+    "relatedComponents": []
+  },
+  "accessibility": [],
+  "knownLimitations": [],
+  "styling": {
+    "classes": [],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements"
+    }
+  },
+  "contract": null,
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": null,
+    "customElementsManifest": null
+  }
+}

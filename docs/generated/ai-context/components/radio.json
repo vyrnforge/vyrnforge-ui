@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "id": "radio",
+  "name": "Radio",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native radio input with optional label, description, invalid, disabled, controlled, and uncontrolled states.",
+  "guidance": {
+    "useWhen": "Use for single-choice options, usually inside RadioGroup.",
+    "avoidWhen": "Avoid for binary settings; use Checkbox or Switch.",
+    "aiUsageNotes": "Use native Radio for simple choices and keep app state controlled when needed.",
+    "relatedComponents": [
+      "RadioGroup",
+      "Checkbox",
+      "SegmentedControl"
+    ]
+  },
+  "accessibility": [
+    "Provide label or aria-label; group related radios with RadioGroup where practical.",
+    "native radio semantics",
+    "accessible label",
+    "checked/disabled/required states",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for binary settings; use Checkbox or Switch."
+  ],
+  "styling": {
+    "classes": [
+      "vf-radio",
+      "vf-radio-field"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Radio } from '@vyrnforge/ui-components';",
+      "example": "<Radio name='cycle' value='monthly' label='Monthly' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-radio></vf-radio>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-radio></vf-radio>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-radio></vf-radio>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "checked",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultChecked",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "InputSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": "on"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-checked-change"
+      },
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native radio semantics",
+      "accessible label",
+      "checked/disabled/required states",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

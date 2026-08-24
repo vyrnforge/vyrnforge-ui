@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "stack",
+  "name": "Stack",
+  "package": "@vyrnforge/ui-components",
+  "category": "composite",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Vertical layout primitive.",
+  "guidance": {
+    "useWhen": "Use for consistent vertical spacing.",
+    "avoidWhen": "Avoid for horizontal layouts; use Inline.",
+    "aiUsageNotes": "Prefer Stack over ad hoc margin chains.",
+    "relatedComponents": [
+      "Inline"
+    ]
+  },
+  "accessibility": [
+    "Stack does not add semantics by itself.",
+    "layout-only semantics; child accessibility remains intact"
+  ],
+  "knownLimitations": [
+    "Avoid for horizontal layouts; use Inline."
+  ],
+  "styling": {
+    "classes": [
+      "vf-stack"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Stack } from '@vyrnforge/ui-components';",
+      "example": "<Stack gap='md'>...</Stack>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-stack></vf-stack>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-stack></vf-stack>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-stack></vf-stack>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "align",
+        "type": "LayoutAlign",
+        "required": false,
+        "default": "stretch"
+      },
+      {
+        "name": "gap",
+        "type": "LayoutGap",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "justify",
+        "type": "LayoutJustify",
+        "required": false,
+        "default": "start"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "layout-only semantics; child accessibility remains intact"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

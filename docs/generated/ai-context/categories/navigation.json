@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "category": "navigation",
+  "components": [
+    {
+      "id": "app-shell",
+      "name": "AppShell",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Application shell layout with optional header, sidebar, footer, and explicit page/content/split scroll behavior.",
+      "context": "ai-context/components/app-shell.json"
+    },
+    {
+      "id": "breadcrumbs",
+      "name": "Breadcrumbs",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Hierarchical location trail with current page marking and optional link/button items.",
+      "context": "ai-context/components/breadcrumbs.json"
+    },
+    {
+      "id": "side-nav",
+      "name": "SideNav",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Sidebar navigation for admin and customer portals with active, disabled, badge, icon, collapsed, header/footer slots, internal list scrolling, and one-level nested items.",
+      "context": "ai-context/components/side-nav.json"
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Controlled or uncontrolled tab navigation with line, contained, and pills variants.",
+      "context": "ai-context/components/tabs.json"
+    },
+    {
+      "id": "top-nav",
+      "name": "TopNav",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Compact top navigation/header bar with brand, navigation, actions, and user area slots.",
+      "context": "ai-context/components/top-nav.json"
+    }
+  ]
+}

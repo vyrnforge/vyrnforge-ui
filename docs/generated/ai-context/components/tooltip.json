@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "tooltip",
+  "name": "Tooltip",
+  "package": "@vyrnforge/ui-components",
+  "category": "overlay",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Short contextual help.",
+  "guidance": {
+    "useWhen": "Use to clarify compact controls.",
+    "avoidWhen": "Avoid for required instructions.",
+    "aiUsageNotes": "Use tooltip as supporting help only.",
+    "relatedComponents": [
+      "IconButton",
+      "ToolbarButton"
+    ]
+  },
+  "accessibility": [
+    "Tooltip opens from hover/focus and is not a substitute for an accessible name. Content must not be interactive.",
+    "tooltip role",
+    "trigger aria-describedby",
+    "focus and hover activation"
+  ],
+  "knownLimitations": [
+    "Avoid for required instructions."
+  ],
+  "styling": {
+    "classes": [
+      "vf-tooltip"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Tooltip } from '@vyrnforge/ui-components';",
+      "example": "<Tooltip content='Refresh'><Button>Refresh</Button></Tooltip>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-tooltip></vf-tooltip>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-tooltip></vf-tooltip>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-tooltip></vf-tooltip>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "content",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "delayMs",
+        "type": "number",
+        "required": false,
+        "default": 300
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "required": false,
+        "default": 6
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "placement",
+        "type": "TooltipPlacement",
+        "required": false,
+        "default": "top"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-open-change"
+      }
+    ],
+    "slots": [
+      "trigger"
+    ],
+    "methods": [],
+    "accessibility": [
+      "tooltip role",
+      "trigger aria-describedby",
+      "focus and hover activation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

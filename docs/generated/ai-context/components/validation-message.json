@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "validation-message",
+  "name": "ValidationMessage",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Inline validation or supporting message with error, warning, success, and info tones.",
+  "guidance": {
+    "useWhen": "Use with aria-describedby or near fields for validation and form feedback.",
+    "avoidWhen": "Avoid for page-level blocking messages; use InlineMessage or ErrorState.",
+    "aiUsageNotes": "Use Field error for standard field errors; use ValidationMessage for custom form compositions.",
+    "relatedComponents": [
+      "Field",
+      "InlineMessage"
+    ]
+  },
+  "accessibility": [
+    "Error tone uses alert semantics and can be referenced by aria-describedby.",
+    "alert role for errors",
+    "status role for non-error messages"
+  ],
+  "knownLimitations": [
+    "Avoid for page-level blocking messages; use InlineMessage or ErrorState."
+  ],
+  "styling": {
+    "classes": [
+      "vf-validation-message"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ValidationMessage } from '@vyrnforge/ui-components';",
+      "example": "<ValidationMessage tone='error' id='email-error'>Email is required</ValidationMessage>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-validation-message></vf-validation-message>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-validation-message></vf-validation-message>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-validation-message></vf-validation-message>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "tone",
+        "type": "ValidationTone",
+        "required": false,
+        "default": "error"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "alert role for errors",
+      "status role for non-error messages"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

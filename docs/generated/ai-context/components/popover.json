@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "popover",
+  "name": "Popover",
+  "package": "@vyrnforge/ui-components",
+  "category": "overlay",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Shared-foundation anchored floating content with portal rendering and optional modal behavior.",
+  "guidance": {
+    "useWhen": "Use for contextual controls or short information.",
+    "avoidWhen": "Avoid for complex forms; use Dialog or Drawer.",
+    "aiUsageNotes": "Keep popover content compact. Use modal only when a focus boundary is intentionally required.",
+    "relatedComponents": [
+      "Menu",
+      "Tooltip",
+      "Dialog"
+    ]
+  },
+  "accessibility": [
+    "Non-modal by default; Escape/outside dismissal is topmost-safe and focus restores to the trigger on close.",
+    "trigger aria-expanded/aria-haspopup",
+    "dialog content semantics",
+    "Escape/outside-pointer dismissal"
+  ],
+  "knownLimitations": [
+    "Avoid for complex forms; use Dialog or Drawer."
+  ],
+  "styling": {
+    "classes": [
+      "vf-popover"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Popover } from '@vyrnforge/ui-components';",
+      "example": "<Popover trigger={<Button>Open</Button>}>Content</Popover>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-popover></vf-popover>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-popover></vf-popover>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-popover></vf-popover>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "align",
+        "type": "PopoverAlign",
+        "required": false,
+        "default": "start"
+      },
+      {
+        "name": "closeOnEscape",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "closeOnOutsidePointer",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "matchTriggerWidth",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "modal",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "required": false,
+        "default": 6
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "placement",
+        "type": "OverlayPlacement",
+        "required": false,
+        "default": "bottom-start"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-open-change"
+      }
+    ],
+    "slots": [
+      "trigger",
+      "default"
+    ],
+    "methods": [
+      "show",
+      "close",
+      "toggle"
+    ],
+    "accessibility": [
+      "trigger aria-expanded/aria-haspopup",
+      "dialog content semantics",
+      "Escape/outside-pointer dismissal"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

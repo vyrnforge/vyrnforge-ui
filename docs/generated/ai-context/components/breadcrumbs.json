@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "breadcrumbs",
+  "name": "Breadcrumbs",
+  "package": "@vyrnforge/ui-components",
+  "category": "navigation",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Hierarchical location trail with current page marking and optional link/button items.",
+  "guidance": {
+    "useWhen": "Use in nested admin or customer portal pages to show location.",
+    "avoidWhen": "Avoid for linear step progress or unrelated tabs.",
+    "aiUsageNotes": "Keep routing in the app; pass href/onClick through items.",
+    "relatedComponents": [
+      "PageHeader"
+    ]
+  },
+  "accessibility": [
+    "Breadcrumb nav should use aria-label.",
+    "navigation landmark",
+    "ordered breadcrumb list",
+    "aria-current on current page"
+  ],
+  "knownLimitations": [
+    "Avoid for linear step progress or unrelated tabs."
+  ],
+  "styling": {
+    "classes": [
+      "vf-breadcrumbs"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Breadcrumbs } from '@vyrnforge/ui-components';",
+      "example": "<Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Orders', current: true }]} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-breadcrumbs></vf-breadcrumbs>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-breadcrumbs></vf-breadcrumbs>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-breadcrumbs></vf-breadcrumbs>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "items",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "Breadcrumb"
+      },
+      {
+        "name": "separator",
+        "type": "string",
+        "required": false,
+        "default": "/"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-action"
+      }
+    ],
+    "slots": [],
+    "methods": [],
+    "accessibility": [
+      "navigation landmark",
+      "ordered breadcrumb list",
+      "aria-current on current page"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "text",
+  "name": "Text",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Body text primitive with size and tone options.",
+  "guidance": {
+    "useWhen": "Use for paragraphs and supporting copy.",
+    "avoidWhen": "Avoid for headings; use Heading.",
+    "aiUsageNotes": "Prefer Text over ad hoc paragraph classes.",
+    "relatedComponents": [
+      "Heading",
+      "Caption",
+      "Label"
+    ]
+  },
+  "accessibility": [
+    "Choose semantic element through the as prop when needed.",
+    "text content remains semantic"
+  ],
+  "knownLimitations": [
+    "Avoid for headings; use Heading."
+  ],
+  "styling": {
+    "classes": [
+      "vf-text"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Text } from '@vyrnforge/ui-components';",
+      "example": "<Text tone='muted'>Updated just now</Text>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-text></vf-text>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-text></vf-text>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-text></vf-text>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "size",
+        "type": "DisplaySize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "tone",
+        "type": "TextTone",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "text content remains semantic"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

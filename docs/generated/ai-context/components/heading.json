@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "heading",
+  "name": "Heading",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Semantic heading primitive.",
+  "guidance": {
+    "useWhen": "Use for section and page headings.",
+    "avoidWhen": "Avoid using large display type inside compact panels.",
+    "aiUsageNotes": "Match heading size to container density.",
+    "relatedComponents": [
+      "Text",
+      "Caption"
+    ]
+  },
+  "accessibility": [
+    "Keep heading levels logical.",
+    "heading role",
+    "aria-level tracks level"
+  ],
+  "knownLimitations": [
+    "Avoid using large display type inside compact panels."
+  ],
+  "styling": {
+    "classes": [
+      "vf-heading"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Heading } from '@vyrnforge/ui-components';",
+      "example": "<Heading level={2}>Settings</Heading>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-heading></vf-heading>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-heading></vf-heading>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-heading></vf-heading>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "level",
+        "type": "number",
+        "required": false,
+        "default": 2
+      },
+      {
+        "name": "size",
+        "type": "DisplaySize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "tone",
+        "type": "TextTone",
+        "required": false,
+        "default": "strong"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "heading role",
+      "aria-level tracks level"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

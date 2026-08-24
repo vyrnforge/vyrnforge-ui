@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "empty-state",
+  "name": "EmptyState",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Empty content placeholder.",
+  "guidance": {
+    "useWhen": "Use when a list, grid, or panel has no records.",
+    "avoidWhen": "Avoid for loading or error states.",
+    "aiUsageNotes": "Use for empty content, not as decoration.",
+    "relatedComponents": [
+      "LoadingState",
+      "ErrorState"
+    ]
+  },
+  "accessibility": [
+    "Message should explain what happened and possible next action.",
+    "status role"
+  ],
+  "knownLimitations": [
+    "Avoid for loading or error states."
+  ],
+  "styling": {
+    "classes": [
+      "vf-empty-state"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { EmptyState } from '@vyrnforge/ui-components';",
+      "example": "<EmptyState title='No results' description='Try another search.' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-empty-state></vf-empty-state>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-empty-state></vf-empty-state>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-empty-state></vf-empty-state>"
+    }
+  },
+  "contract": {
+    "properties": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "status role"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

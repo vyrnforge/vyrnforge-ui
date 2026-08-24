@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "label",
+  "name": "Label",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Form and metadata label primitive.",
+  "guidance": {
+    "useWhen": "Use to label controls or dense metadata.",
+    "avoidWhen": "Avoid as general body text.",
+    "aiUsageNotes": "Prefer Field for full form field composition.",
+    "relatedComponents": [
+      "Field",
+      "TextInput"
+    ]
+  },
+  "accessibility": [
+    "Connect labels to controls using htmlFor.",
+    "click-to-focus label proxy",
+    "visible label text"
+  ],
+  "knownLimitations": [
+    "Avoid as general body text."
+  ],
+  "styling": {
+    "classes": [
+      "vf-label"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Label } from '@vyrnforge/ui-components';",
+      "example": "<Label htmlFor='email'>Email</Label>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-label></vf-label>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-label></vf-label>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-label></vf-label>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "for",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "size",
+        "type": "DisplaySize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "tone",
+        "type": "TextTone",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "click-to-focus label proxy",
+      "visible label text"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

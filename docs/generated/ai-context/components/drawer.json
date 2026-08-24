@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "id": "drawer",
+  "name": "Drawer",
+  "package": "@vyrnforge/ui-components",
+  "category": "overlay",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Side panel overlay.",
+  "guidance": {
+    "useWhen": "Use for secondary workflows, filters, or detail panels.",
+    "avoidWhen": "Avoid for tiny contextual actions; use Popover or Menu.",
+    "aiUsageNotes": "Use Drawer for larger secondary surfaces. Use non-modal mode only for an intentional advanced composition.",
+    "relatedComponents": [
+      "Dialog",
+      "Popover"
+    ]
+  },
+  "accessibility": [
+    "Modal by default with Dialog-equivalent focus and scroll behavior; its body scrolls independently from header/footer.",
+    "dialog semantics",
+    "accessible title/description",
+    "focus containment",
+    "focus restoration",
+    "side placement does not change semantics"
+  ],
+  "knownLimitations": [
+    "Avoid for tiny contextual actions; use Popover or Menu."
+  ],
+  "styling": {
+    "classes": [
+      "vf-drawer"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Drawer } from '@vyrnforge/ui-components';",
+      "example": "<Drawer open={open} onOpenChange={setOpen} title='Filters'>Content</Drawer>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-drawer></vf-drawer>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-drawer></vf-drawer>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-drawer></vf-drawer>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "modal",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "closeOnEscape",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "closeOnOutsidePointer",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "DialogSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "side",
+        "type": "DrawerSide",
+        "required": false,
+        "default": "right"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-open-change"
+      },
+      {
+        "name": "vf-dismiss"
+      }
+    ],
+    "slots": [
+      "trigger",
+      "header",
+      "content",
+      "actions",
+      "footer"
+    ],
+    "methods": [
+      "show",
+      "close",
+      "focus"
+    ],
+    "accessibility": [
+      "dialog semantics",
+      "accessible title/description",
+      "focus containment",
+      "focus restoration",
+      "side placement does not change semantics"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

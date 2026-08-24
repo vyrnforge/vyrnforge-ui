@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "card",
+  "name": "Card",
+  "package": "@vyrnforge/ui-components",
+  "category": "composite",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Framed content container.",
+  "guidance": {
+    "useWhen": "Use for individual repeated items or genuinely framed tools.",
+    "avoidWhen": "Avoid nesting cards inside cards or using cards as page sections.",
+    "aiUsageNotes": "Do not turn whole pages into stacks of decorative cards.",
+    "relatedComponents": [
+      "Panel",
+      "Section"
+    ]
+  },
+  "accessibility": [
+    "Use semantic children inside Card.",
+    "grouping container without implicit interactive semantics"
+  ],
+  "knownLimitations": [
+    "Avoid nesting cards inside cards or using cards as page sections."
+  ],
+  "styling": {
+    "classes": [
+      "vf-card"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Card } from '@vyrnforge/ui-components';",
+      "example": "<Card padding='md'>Content</Card>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-card></vf-card>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-card></vf-card>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-card></vf-card>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "padding",
+        "type": "SpacingToken",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "variant",
+        "type": "CardVariant",
+        "required": false,
+        "default": "bordered"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "grouping container without implicit interactive semantics"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

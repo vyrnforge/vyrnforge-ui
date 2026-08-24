@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "id": "select",
+  "name": "Select",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native select control with VyrnForge styling.",
+  "guidance": {
+    "useWhen": "Use for small to medium option lists.",
+    "avoidWhen": "Avoid for multi-select until MultiSelect exists.",
+    "aiUsageNotes": "Use native select before inventing custom dropdowns.",
+    "relatedComponents": [
+      "Field",
+      "SegmentedControl"
+    ]
+  },
+  "accessibility": [
+    "Provide label and meaningful option text.",
+    "native select semantics",
+    "accessible options",
+    "disabled/required/invalid states",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for multi-select until MultiSelect exists."
+  ],
+  "styling": {
+    "classes": [
+      "vf-select"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Select } from '@vyrnforge/ui-components';",
+      "example": "<Select value={value} onChange={(event) => setValue(event.currentTarget.value)} options={options} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-select></vf-select>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-select></vf-select>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-select></vf-select>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "options",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "size",
+        "type": "InputSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native select semantics",
+      "accessible options",
+      "disabled/required/invalid states",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

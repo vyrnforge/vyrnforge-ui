@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "id": "date-input",
+  "name": "DateInput",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native input type='date' control aligned with VyrnForge input styling.",
+  "guidance": {
+    "useWhen": "Use for simple date values where the browser native picker is acceptable.",
+    "avoidWhen": "Avoid when complex calendar range picking is required.",
+    "aiUsageNotes": "Do not add a date picker or date library for basic date input.",
+    "relatedComponents": [
+      "TextInput",
+      "Field"
+    ]
+  },
+  "accessibility": [
+    "Date formats need clear guidance.",
+    "native text-control semantics",
+    "accessible label",
+    "disabled/required/invalid states",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid when complex calendar range picking is required."
+  ],
+  "styling": {
+    "classes": [
+      "vf-date-input",
+      "vf-input"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { DateInput } from '@vyrnforge/ui-components';",
+      "example": "<DateInput defaultValue='2026-07-10' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-date-input></vf-date-input>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-date-input></vf-date-input>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-date-input></vf-date-input>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "autocomplete",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "InputSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "select",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native text-control semantics",
+      "accessible label",
+      "disabled/required/invalid states",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

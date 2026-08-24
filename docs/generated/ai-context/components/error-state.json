@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "error-state",
+  "name": "ErrorState",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Error placeholder or blocking error surface.",
+  "guidance": {
+    "useWhen": "Use when content failed to load or a section cannot render.",
+    "avoidWhen": "Avoid for inline validation; use ValidationMessage.",
+    "aiUsageNotes": "Use for failed content areas.",
+    "relatedComponents": [
+      "EmptyState",
+      "Alert"
+    ]
+  },
+  "accessibility": [
+    "Error states should be understandable without color.",
+    "alert role for error state"
+  ],
+  "knownLimitations": [
+    "Avoid for inline validation; use ValidationMessage."
+  ],
+  "styling": {
+    "classes": [
+      "vf-error-state"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ErrorState } from '@vyrnforge/ui-components';",
+      "example": "<ErrorState title='Could not load data' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-error-state></vf-error-state>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-error-state></vf-error-state>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-error-state></vf-error-state>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "tone",
+        "type": "TextTone",
+        "required": false,
+        "default": "danger"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "alert role for error state"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

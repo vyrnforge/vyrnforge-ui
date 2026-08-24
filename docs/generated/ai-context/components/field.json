@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "id": "field",
+  "name": "Field",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Form field wrapper for labels, descriptions, validation, and safe control relationships.",
+  "guidance": {
+    "useWhen": "Use around form controls that need label/help/error text.",
+    "avoidWhen": "Avoid duplicating label and validation layout manually.",
+    "aiUsageNotes": "Prefer Field for standard form composition. Do not expect Field to clone or mutate arbitrary child controls.",
+    "relatedComponents": [
+      "TextInput",
+      "Select",
+      "Checkbox",
+      "ValidationMessage"
+    ]
+  },
+  "accessibility": [
+    "Use Field's render function to receive a stable control id, aria-describedby, invalid, required, and disabled props. Static children remain compatible through htmlFor plus a matching control id.",
+    "label-to-control association",
+    "aria-required propagation",
+    "aria-invalid propagation",
+    "description/message aria-describedby wiring"
+  ],
+  "knownLimitations": [
+    "Avoid duplicating label and validation layout manually."
+  ],
+  "styling": {
+    "classes": [
+      "vf-field"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Field, TextInput } from '@vyrnforge/ui-components';",
+      "example": "<Field id='email' label='Email'>{(controlProps) => <TextInput {...controlProps} />}</Field>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-field></vf-field>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-field></vf-field>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-field></vf-field>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "message",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "orientation",
+        "type": "Orientation",
+        "required": false,
+        "default": "vertical"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "success",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "warning",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "label-to-control association",
+      "aria-required propagation",
+      "aria-invalid propagation",
+      "description/message aria-describedby wiring"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

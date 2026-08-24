@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "assignment-patterns",
+  "displayName": "Assignments",
+  "category": "data-management",
+  "purpose": "Bounded dual-list assignment workflow for moving known options between available and assigned collections.",
+  "useWhen": "Use for moderate known collections where users need to review both available and assigned items while making changes.",
+  "avoidWhen": "Avoid for very large, remote, or hierarchical collections that need a different collection/search architecture.",
+  "components": [
+    "badge",
+    "button",
+    "stack",
+    "transfer-list",
+    "validation-message"
+  ],
+  "playgroundRoute": "/assignment-patterns",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "assignment",
+    "transfer list",
+    "dual list",
+    "permissions",
+    "memberships"
+  ],
+  "componentContexts": [
+    "ai-context/components/badge.json",
+    "ai-context/components/button.json",
+    "ai-context/components/stack.json",
+    "ai-context/components/transfer-list.json",
+    "ai-context/components/validation-message.json"
+  ]
+}

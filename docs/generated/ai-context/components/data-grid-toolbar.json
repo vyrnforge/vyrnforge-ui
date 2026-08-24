@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "data-grid-toolbar",
+  "name": "DataGridToolbar",
+  "package": "@vyrnforge/ui-data-grid",
+  "category": "grid-feature",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Grid-specific toolbar surface.",
+  "guidance": {
+    "useWhen": "Use inside grid workflows when exposed by the grid package.",
+    "avoidWhen": "Avoid for generic page toolbars; use ui-components primitives.",
+    "aiUsageNotes": "Keep grid-specific controls in ui-data-grid.",
+    "relatedComponents": [
+      "UniversalDataGrid",
+      "ToolbarButton"
+    ]
+  },
+  "accessibility": [
+    "Toolbar actions must be labelled."
+  ],
+  "knownLimitations": [
+    "Avoid for generic page toolbars; use ui-components primitives."
+  ],
+  "styling": {
+    "classes": [
+      "udg-toolbar"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "react-alpha-deferred",
+      "package": "@vyrnforge/ui-data-grid",
+      "setup": "import { DataGridToolbar } from '@vyrnforge/ui-data-grid';",
+      "example": "<DataGridToolbar>...</DataGridToolbar>"
+    },
+    "native-html": {
+      "status": "not-supported",
+      "package": null
+    },
+    "angular": {
+      "status": "not-supported",
+      "package": null
+    },
+    "vue": {
+      "status": "not-supported",
+      "package": null
+    }
+  },
+  "contract": null,
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": null,
+    "customElementsManifest": null
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "radio-group",
+  "name": "RadioGroup",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Fieldset-based radio group with label, description, error, orientation, disabled, required, controlled, and uncontrolled state.",
+  "guidance": {
+    "useWhen": "Use for mutually exclusive choice sets in forms and settings.",
+    "avoidWhen": "Avoid for long option lists; use Select instead.",
+    "aiUsageNotes": "Prefer RadioGroup over hand-built radio collections.",
+    "relatedComponents": [
+      "Radio",
+      "Field",
+      "ValidationMessage"
+    ]
+  },
+  "accessibility": [
+    "Uses fieldset/legend and native radio keyboard behavior.",
+    "radiogroup semantics",
+    "arrow-key navigation",
+    "roving focus",
+    "accessible group label"
+  ],
+  "knownLimitations": [
+    "Avoid for long option lists; use Select instead."
+  ],
+  "styling": {
+    "classes": [
+      "vf-radio-group"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { RadioGroup } from '@vyrnforge/ui-components';",
+      "example": "<RadioGroup label='Cycle' value={cycle} onValueChange={setCycle} options={options} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-radio-group></vf-radio-group>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-radio-group></vf-radio-group>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-radio-group></vf-radio-group>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "orientation",
+        "type": "Orientation",
+        "required": false,
+        "default": "vertical"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "radiogroup semantics",
+      "arrow-key navigation",
+      "roving focus",
+      "accessible group label"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

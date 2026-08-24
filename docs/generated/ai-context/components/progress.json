@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "progress",
+  "name": "Progress",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "planned",
+  "availability": "planned",
+  "purpose": "Progress indicator.",
+  "guidance": {
+    "useWhen": "Use later for determinate or indeterminate progress.",
+    "avoidWhen": "Do not import until implemented.",
+    "aiUsageNotes": "Use LoadingState until Progress exists.",
+    "relatedComponents": [
+      "LoadingState",
+      "Skeleton"
+    ]
+  },
+  "accessibility": [
+    "Progress needs accessible value text where determinate."
+  ],
+  "knownLimitations": [
+    "Do not import until implemented."
+  ],
+  "styling": {
+    "classes": [],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "not-supported",
+      "package": "@vyrnforge/ui-components"
+    },
+    "native-html": {
+      "status": "not-supported",
+      "package": null
+    },
+    "angular": {
+      "status": "not-supported",
+      "package": null
+    },
+    "vue": {
+      "status": "not-supported",
+      "package": null
+    }
+  },
+  "contract": null,
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": null,
+    "customElementsManifest": null
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "id": "autocomplete",
+  "name": "Autocomplete",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Searchable single-value combobox with serializable options and shared overlay behavior.",
+  "guidance": {
+    "useWhen": "Use for larger known option sets where typing part of a label reduces selection effort.",
+    "avoidWhen": "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values.",
+    "aiUsageNotes": "Use only for one known selected value. Apps own async fetching, debounce, cancellation, caching, and errors. Reuse built-in filtering or filterOptions; do not add multiple selection, free-solo, grouping, virtualization, or another overlay engine.",
+    "relatedComponents": [
+      "Select",
+      "TextInput",
+      "SearchInput",
+      "MultiSelect",
+      "Popover"
+    ]
+  },
+  "accessibility": [
+    "Uses combobox/listbox/option roles, aria-activedescendant navigation, disabled-option skipping, topmost Escape/outside dismissal, and hidden form value support through name.",
+    "combobox semantics",
+    "listbox ownership",
+    "active descendant",
+    "keyboard option navigation",
+    "accessible validation"
+  ],
+  "knownLimitations": [
+    "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values."
+  ],
+  "styling": {
+    "classes": [
+      "vf-autocomplete",
+      "vf-autocomplete__control",
+      "vf-autocomplete__input",
+      "vf-autocomplete__listbox",
+      "vf-autocomplete__option"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Autocomplete } from '@vyrnforge/ui-components';",
+      "example": "<Autocomplete options={[{ value: 'admin', label: 'Administrator' }]} placeholder='Select a role' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-autocomplete></vf-autocomplete>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-autocomplete></vf-autocomplete>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-autocomplete></vf-autocomplete>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "autoHighlight",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "inputValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "noOptionsText",
+        "type": "string",
+        "required": false,
+        "default": "No options found"
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "openOnFocus",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "options",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-input-value-change"
+      },
+      {
+        "name": "vf-open-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [
+      "label",
+      "description",
+      "prefix",
+      "suffix",
+      "empty",
+      "loading",
+      "item"
+    ],
+    "methods": [
+      "focus",
+      "clear",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "combobox semantics",
+      "listbox ownership",
+      "active descendant",
+      "keyboard option navigation",
+      "accessible validation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

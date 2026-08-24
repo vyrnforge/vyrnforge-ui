@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "dropdown",
+  "name": "Dropdown",
+  "package": "@vyrnforge/ui-components",
+  "category": "overlay",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Generic Popover composition for trigger-controlled floating content.",
+  "guidance": {
+    "useWhen": "Use for compact option/action surfaces.",
+    "avoidWhen": "Avoid for native form select choices; use Select.",
+    "aiUsageNotes": "Use Dropdown for generic composed content. Use Menu for actions and Select for form value selection.",
+    "relatedComponents": [
+      "Menu",
+      "Popover"
+    ]
+  },
+  "accessibility": [
+    "Trigger should expose expanded state.",
+    "trigger expanded state",
+    "popover-backed content semantics",
+    "Escape dismissal"
+  ],
+  "knownLimitations": [
+    "Avoid for native form select choices; use Select."
+  ],
+  "styling": {
+    "classes": [
+      "vf-dropdown"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Dropdown } from '@vyrnforge/ui-components';",
+      "example": "<Dropdown trigger={<Button>Open</Button>}>Content</Dropdown>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-popover></vf-popover>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-popover></vf-popover>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-popover></vf-popover>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "placement",
+        "type": "OverlayPlacement",
+        "required": false,
+        "default": "bottom-start"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-open-change"
+      }
+    ],
+    "slots": [
+      "trigger",
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "trigger expanded state",
+      "popover-backed content semantics",
+      "Escape dismissal"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

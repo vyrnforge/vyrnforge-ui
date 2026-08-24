@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "id": "text-input",
+  "name": "TextInput",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native text input with VyrnForge styling.",
+  "guidance": {
+    "useWhen": "Use for short text values.",
+    "avoidWhen": "Avoid for long multi-line input; use Textarea.",
+    "aiUsageNotes": "Keep validation in Field/ValidationMessage.",
+    "relatedComponents": [
+      "Field",
+      "SearchInput",
+      "Textarea"
+    ]
+  },
+  "accessibility": [
+    "Provide an associated label.",
+    "native text-control semantics",
+    "accessible label",
+    "disabled/required/invalid states",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for long multi-line input; use Textarea."
+  ],
+  "styling": {
+    "classes": [
+      "vf-input"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { TextInput } from '@vyrnforge/ui-components';",
+      "example": "<TextInput id='name' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-text-input></vf-text-input>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-text-input></vf-text-input>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-text-input></vf-text-input>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "autocomplete",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "InputSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "select",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native text-control semantics",
+      "accessible label",
+      "disabled/required/invalid states",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "id": "app-shell",
+  "name": "AppShell",
+  "package": "@vyrnforge/ui-components",
+  "category": "navigation",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Application shell layout with optional header, sidebar, footer, and explicit page/content/split scroll behavior.",
+  "guidance": {
+    "useWhen": "Use for admin portals, customer portals, and enterprise apps that need a consistent shell without routing assumptions.",
+    "avoidWhen": "Avoid for small inline layouts or when an app-specific router shell already owns all regions.",
+    "aiUsageNotes": "Use scrollMode='page' for simple pages, 'content' for admin/docs apps with persistent navigation, and 'split' for independently scrollable nav/content. Do not add router integration, global state, or one-off app CSS for persistent navigation when AppShell props can express it.",
+    "relatedComponents": [
+      "Page",
+      "SideNav",
+      "TopNav"
+    ]
+  },
+  "accessibility": [
+    "Pass meaningful header/sidebar content and avoid duplicate main landmarks inside shell content unless Page owns the main region.",
+    "header/main/aside/footer landmark structure",
+    "layout does not replace child navigation labels"
+  ],
+  "knownLimitations": [
+    "Avoid for small inline layouts or when an app-specific router shell already owns all regions."
+  ],
+  "styling": {
+    "classes": [
+      "vf-app-shell",
+      "vf-app-shell--scroll-page",
+      "vf-app-shell--scroll-content",
+      "vf-app-shell--scroll-split",
+      "vf-app-shell--header-static",
+      "vf-app-shell--header-sticky",
+      "vf-app-shell--header-fixed",
+      "vf-app-shell--sidebar-static",
+      "vf-app-shell--sidebar-sticky",
+      "vf-app-shell--sidebar-fixed",
+      "vf-app-shell__sidebar-scroll"
+    ],
+    "variables": [
+      "--vf-app-shell-header-height",
+      "--vf-app-shell-sidebar-width",
+      "--vf-app-shell-sidebar-collapsed-width",
+      "--vf-app-shell-min-height"
+    ]
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { AppShell } from '@vyrnforge/ui-components';",
+      "example": "<AppShell scrollMode='content' headerPosition='sticky' sidebarPosition='sticky' header={<TopNav />} sidebar={<SideNav items={items} />}>Content</AppShell>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-app-shell></vf-app-shell>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-app-shell></vf-app-shell>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-app-shell></vf-app-shell>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "collapsedSidebarWidth",
+        "type": "string",
+        "required": false,
+        "default": "64px"
+      },
+      {
+        "name": "fullHeight",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "headerHeight",
+        "type": "string",
+        "required": false,
+        "default": "64px"
+      },
+      {
+        "name": "headerPosition",
+        "type": "AppShellHeaderPosition",
+        "required": false,
+        "default": "sticky"
+      },
+      {
+        "name": "minHeight",
+        "type": "string",
+        "required": false,
+        "default": "100dvh"
+      },
+      {
+        "name": "scrollMode",
+        "type": "AppShellScrollMode",
+        "required": false,
+        "default": "content"
+      },
+      {
+        "name": "sidebarCollapsed",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "sidebarPosition",
+        "type": "AppShellSidebarPosition",
+        "required": false,
+        "default": "sticky"
+      },
+      {
+        "name": "sidebarWidth",
+        "type": "string",
+        "required": false,
+        "default": "280px"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "header",
+      "sidebar",
+      "default",
+      "footer"
+    ],
+    "methods": [],
+    "accessibility": [
+      "header/main/aside/footer landmark structure",
+      "layout does not replace child navigation labels"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

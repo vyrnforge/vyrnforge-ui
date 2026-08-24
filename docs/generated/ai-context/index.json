@@ -1,0 +1,776 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Minimal bootstrap index for task-scoped VyrnForge consumption.",
+  "protocol": {
+    "namedComponent": "If the component is already known, read only its ai-context/components/<id>.json slice.",
+    "taskOrPattern": "For a workflow or page task, inspect the pattern list first, then read the selected pattern slice and only the component slices it references.",
+    "discovery": "When the component is unknown, read the smallest matching category slice before opening component slices.",
+    "escalation": "Read architecture or policy Markdown only when the task changes architecture, package boundaries, support claims, release policy, or another cross-cutting contract."
+  },
+  "packages": [
+    {
+      "name": "@vyrnforge/ui-core",
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "runtime": "framework-neutral"
+    },
+    {
+      "name": "@vyrnforge/ui-behaviors",
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "runtime": "framework-neutral"
+    },
+    {
+      "name": "@vyrnforge/ui-components",
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "runtime": "react"
+    },
+    {
+      "name": "@vyrnforge/ui-elements",
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "runtime": "custom-elements"
+    },
+    {
+      "name": "@vyrnforge/ui-data-grid",
+      "status": "react-alpha-deferred",
+      "releaseTrack": "independent-alpha",
+      "runtime": "react"
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "react",
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-components"
+    },
+    {
+      "id": "native-html",
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-elements"
+    },
+    {
+      "id": "angular",
+      "supportLevel": "verified-consumer",
+      "renderer": "@vyrnforge/ui-elements"
+    },
+    {
+      "id": "vue",
+      "supportLevel": "verified-consumer",
+      "renderer": "@vyrnforge/ui-elements"
+    }
+  ],
+  "categories": [
+    {
+      "id": "composite",
+      "context": "ai-context/categories/composite.json"
+    },
+    {
+      "id": "data-display",
+      "context": "ai-context/categories/data-display.json"
+    },
+    {
+      "id": "data-grid",
+      "context": "ai-context/categories/data-grid.json"
+    },
+    {
+      "id": "feedback",
+      "context": "ai-context/categories/feedback.json"
+    },
+    {
+      "id": "form-control",
+      "context": "ai-context/categories/form-control.json"
+    },
+    {
+      "id": "grid-feature",
+      "context": "ai-context/categories/grid-feature.json"
+    },
+    {
+      "id": "navigation",
+      "context": "ai-context/categories/navigation.json"
+    },
+    {
+      "id": "overlay",
+      "context": "ai-context/categories/overlay.json"
+    },
+    {
+      "id": "primitive",
+      "context": "ai-context/categories/primitive.json"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "resource-list",
+      "name": "Resource List",
+      "category": "data-management",
+      "context": "ai-context/patterns/resource-list.json"
+    },
+    {
+      "id": "detail",
+      "name": "Detail Page",
+      "category": "application-layout",
+      "context": "ai-context/patterns/detail.json"
+    },
+    {
+      "id": "settings",
+      "name": "Settings",
+      "category": "forms",
+      "context": "ai-context/patterns/settings.json"
+    },
+    {
+      "id": "form",
+      "name": "Form",
+      "category": "forms",
+      "context": "ai-context/patterns/form.json"
+    },
+    {
+      "id": "filter-form",
+      "name": "Filter Form",
+      "category": "data-management",
+      "context": "ai-context/patterns/filter-form.json"
+    },
+    {
+      "id": "assignment-patterns",
+      "name": "Assignments",
+      "category": "data-management",
+      "context": "ai-context/patterns/assignment-patterns.json"
+    },
+    {
+      "id": "empty-error-loading",
+      "name": "Empty, Error, and Loading",
+      "category": "feedback",
+      "context": "ai-context/patterns/empty-error-loading.json"
+    },
+    {
+      "id": "admin-shell",
+      "name": "Admin Shell",
+      "category": "application-layout",
+      "context": "ai-context/patterns/admin-shell.json"
+    },
+    {
+      "id": "customer-portal-shell",
+      "name": "Customer Portal",
+      "category": "application-layout",
+      "context": "ai-context/patterns/customer-portal-shell.json"
+    }
+  ],
+  "components": [
+    {
+      "id": "card",
+      "name": "Card",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/card.json"
+    },
+    {
+      "id": "inline",
+      "name": "Inline",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/inline.json"
+    },
+    {
+      "id": "page",
+      "name": "Page",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/page.json"
+    },
+    {
+      "id": "page-header",
+      "name": "PageHeader",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/page-header.json"
+    },
+    {
+      "id": "page-toolbar",
+      "name": "PageToolbar",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/page-toolbar.json"
+    },
+    {
+      "id": "panel",
+      "name": "Panel",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/panel.json"
+    },
+    {
+      "id": "section",
+      "name": "Section",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/section.json"
+    },
+    {
+      "id": "stack",
+      "name": "Stack",
+      "category": "composite",
+      "availability": "available",
+      "context": "ai-context/components/stack.json"
+    },
+    {
+      "id": "activity-log",
+      "name": "ActivityLog",
+      "category": "data-display",
+      "availability": "planned",
+      "context": "ai-context/components/activity-log.json"
+    },
+    {
+      "id": "description-list",
+      "name": "DescriptionList",
+      "category": "data-display",
+      "availability": "planned",
+      "context": "ai-context/components/description-list.json"
+    },
+    {
+      "id": "key-value-list",
+      "name": "KeyValueList",
+      "category": "data-display",
+      "availability": "planned",
+      "context": "ai-context/components/key-value-list.json"
+    },
+    {
+      "id": "property-table",
+      "name": "PropertyTable",
+      "category": "data-display",
+      "availability": "planned",
+      "context": "ai-context/components/property-table.json"
+    },
+    {
+      "id": "resource-list",
+      "name": "ResourceList",
+      "category": "data-display",
+      "availability": "planned",
+      "context": "ai-context/components/resource-list.json"
+    },
+    {
+      "id": "timeline",
+      "name": "Timeline",
+      "category": "data-display",
+      "availability": "planned",
+      "context": "ai-context/components/timeline.json"
+    },
+    {
+      "id": "transfer-list",
+      "name": "TransferList",
+      "category": "data-display",
+      "availability": "available",
+      "context": "ai-context/components/transfer-list.json"
+    },
+    {
+      "id": "universal-data-grid",
+      "name": "UniversalDataGrid",
+      "category": "data-grid",
+      "availability": "available",
+      "context": "ai-context/components/universal-data-grid.json"
+    },
+    {
+      "id": "alert",
+      "name": "Alert",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/alert.json"
+    },
+    {
+      "id": "badge",
+      "name": "Badge",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/badge.json"
+    },
+    {
+      "id": "empty-state",
+      "name": "EmptyState",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/empty-state.json"
+    },
+    {
+      "id": "error-state",
+      "name": "ErrorState",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/error-state.json"
+    },
+    {
+      "id": "inline-message",
+      "name": "InlineMessage",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/inline-message.json"
+    },
+    {
+      "id": "loading-state",
+      "name": "LoadingState",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/loading-state.json"
+    },
+    {
+      "id": "progress",
+      "name": "Progress",
+      "category": "feedback",
+      "availability": "planned",
+      "context": "ai-context/components/progress.json"
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/skeleton.json"
+    },
+    {
+      "id": "status-badge",
+      "name": "StatusBadge",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/status-badge.json"
+    },
+    {
+      "id": "toast",
+      "name": "Toast",
+      "category": "feedback",
+      "availability": "available",
+      "context": "ai-context/components/toast.json"
+    },
+    {
+      "id": "autocomplete",
+      "name": "Autocomplete",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/autocomplete.json"
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/checkbox.json"
+    },
+    {
+      "id": "date-input",
+      "name": "DateInput",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/date-input.json"
+    },
+    {
+      "id": "datetime-input",
+      "name": "DateTimeInput",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/datetime-input.json"
+    },
+    {
+      "id": "field",
+      "name": "Field",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/field.json"
+    },
+    {
+      "id": "multi-select",
+      "name": "MultiSelect",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/multi-select.json"
+    },
+    {
+      "id": "number-input",
+      "name": "NumberInput",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/number-input.json"
+    },
+    {
+      "id": "radio",
+      "name": "Radio",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/radio.json"
+    },
+    {
+      "id": "radio-group",
+      "name": "RadioGroup",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/radio-group.json"
+    },
+    {
+      "id": "rating",
+      "name": "Rating",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/rating.json"
+    },
+    {
+      "id": "search-input",
+      "name": "SearchInput",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/search-input.json"
+    },
+    {
+      "id": "select",
+      "name": "Select",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/select.json"
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/slider.json"
+    },
+    {
+      "id": "switch",
+      "name": "Switch",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/switch.json"
+    },
+    {
+      "id": "textarea",
+      "name": "Textarea",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/textarea.json"
+    },
+    {
+      "id": "text-input",
+      "name": "TextInput",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/text-input.json"
+    },
+    {
+      "id": "validation-message",
+      "name": "ValidationMessage",
+      "category": "form-control",
+      "availability": "available",
+      "context": "ai-context/components/validation-message.json"
+    },
+    {
+      "id": "advanced-filter-drawer",
+      "name": "AdvancedFilterDrawer",
+      "category": "grid-feature",
+      "availability": "planned",
+      "context": "ai-context/components/advanced-filter-drawer.json"
+    },
+    {
+      "id": "data-grid-bulk-action-bar",
+      "name": "DataGridBulkActionBar",
+      "category": "grid-feature",
+      "availability": "planned",
+      "context": "ai-context/components/data-grid-bulk-action-bar.json"
+    },
+    {
+      "id": "data-grid-column-menu",
+      "name": "DataGridColumnMenu",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-column-menu.json"
+    },
+    {
+      "id": "data-grid-empty-state",
+      "name": "DataGridEmptyState",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-empty-state.json"
+    },
+    {
+      "id": "data-grid-error-state",
+      "name": "DataGridErrorState",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-error-state.json"
+    },
+    {
+      "id": "data-grid-filter-bar",
+      "name": "DataGridFilterBar",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-filter-bar.json"
+    },
+    {
+      "id": "data-grid-pagination",
+      "name": "DataGridPagination",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-pagination.json"
+    },
+    {
+      "id": "data-grid-search",
+      "name": "DataGridSearch",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-search.json"
+    },
+    {
+      "id": "data-grid-skeleton-rows",
+      "name": "DataGridSkeletonRows",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-skeleton-rows.json"
+    },
+    {
+      "id": "data-grid-toolbar",
+      "name": "DataGridToolbar",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/data-grid-toolbar.json"
+    },
+    {
+      "id": "export-preview-panel",
+      "name": "ExportPreviewPanel",
+      "category": "grid-feature",
+      "availability": "planned",
+      "context": "ai-context/components/export-preview-panel.json"
+    },
+    {
+      "id": "saved-view-selector",
+      "name": "SavedViewSelector",
+      "category": "grid-feature",
+      "availability": "planned",
+      "context": "ai-context/components/saved-view-selector.json"
+    },
+    {
+      "id": "use-data-grid-state",
+      "name": "useDataGridState",
+      "category": "grid-feature",
+      "availability": "available",
+      "context": "ai-context/components/use-data-grid-state.json"
+    },
+    {
+      "id": "app-shell",
+      "name": "AppShell",
+      "category": "navigation",
+      "availability": "available",
+      "context": "ai-context/components/app-shell.json"
+    },
+    {
+      "id": "breadcrumbs",
+      "name": "Breadcrumbs",
+      "category": "navigation",
+      "availability": "available",
+      "context": "ai-context/components/breadcrumbs.json"
+    },
+    {
+      "id": "side-nav",
+      "name": "SideNav",
+      "category": "navigation",
+      "availability": "available",
+      "context": "ai-context/components/side-nav.json"
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs",
+      "category": "navigation",
+      "availability": "available",
+      "context": "ai-context/components/tabs.json"
+    },
+    {
+      "id": "top-nav",
+      "name": "TopNav",
+      "category": "navigation",
+      "availability": "available",
+      "context": "ai-context/components/top-nav.json"
+    },
+    {
+      "id": "confirm-dialog",
+      "name": "ConfirmDialog",
+      "category": "overlay",
+      "availability": "available",
+      "context": "ai-context/components/confirm-dialog.json"
+    },
+    {
+      "id": "dialog",
+      "name": "Dialog",
+      "category": "overlay",
+      "availability": "available",
+      "context": "ai-context/components/dialog.json"
+    },
+    {
+      "id": "drawer",
+      "name": "Drawer",
+      "category": "overlay",
+      "availability": "available",
+      "context": "ai-context/components/drawer.json"
+    },
+    {
+      "id": "dropdown",
+      "name": "Dropdown",
+      "category": "overlay",
+      "availability": "available",
+      "context": "ai-context/components/dropdown.json"
+    },
+    {
+      "id": "menu",
+      "name": "Menu",
+      "category": "overlay",
+      "availability": "available",
+      "context": "ai-context/components/menu.json"
+    },
+    {
+      "id": "popover",
+      "name": "Popover",
+      "category": "overlay",
+      "availability": "available",
+      "context": "ai-context/components/popover.json"
+    },
+    {
+      "id": "tooltip",
+      "name": "Tooltip",
+      "category": "overlay",
+      "availability": "available",
+      "context": "ai-context/components/tooltip.json"
+    },
+    {
+      "id": "button",
+      "name": "Button",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/button.json"
+    },
+    {
+      "id": "button-group",
+      "name": "ButtonGroup",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/button-group.json"
+    },
+    {
+      "id": "caption",
+      "name": "Caption",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/caption.json"
+    },
+    {
+      "id": "clear-button",
+      "name": "ClearButton",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/clear-button.json"
+    },
+    {
+      "id": "close-button",
+      "name": "CloseButton",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/close-button.json"
+    },
+    {
+      "id": "code-text",
+      "name": "CodeText",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/code-text.json"
+    },
+    {
+      "id": "heading",
+      "name": "Heading",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/heading.json"
+    },
+    {
+      "id": "icon",
+      "name": "Icon",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/icon.json"
+    },
+    {
+      "id": "icon-button",
+      "name": "IconButton",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/icon-button.json"
+    },
+    {
+      "id": "label",
+      "name": "Label",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/label.json"
+    },
+    {
+      "id": "more-button",
+      "name": "MoreButton",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/more-button.json"
+    },
+    {
+      "id": "refresh-button",
+      "name": "RefreshButton",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/refresh-button.json"
+    },
+    {
+      "id": "segmented-control",
+      "name": "SegmentedControl",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/segmented-control.json"
+    },
+    {
+      "id": "text",
+      "name": "Text",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/text.json"
+    },
+    {
+      "id": "toast-action",
+      "name": "ToastAction",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/toast-action.json"
+    },
+    {
+      "id": "toast-provider",
+      "name": "ToastProvider",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/toast-provider.json"
+    },
+    {
+      "id": "toggle-button",
+      "name": "ToggleButton",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/toggle-button.json"
+    },
+    {
+      "id": "toggle-button-group",
+      "name": "ToggleButtonGroup",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/toggle-button-group.json"
+    },
+    {
+      "id": "toolbar-button",
+      "name": "ToolbarButton",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/toolbar-button.json"
+    },
+    {
+      "id": "use-toast",
+      "name": "useToast",
+      "category": "primitive",
+      "availability": "available",
+      "context": "ai-context/components/use-toast.json"
+    }
+  ]
+}

@@ -74,7 +74,9 @@
       ],
       "cssImport": "not-applicable",
       "apiDoc": "docs/api/ui-behaviors-api.md",
-      "dependsOn": ["@vyrnforge/ui-core"],
+      "dependsOn": [
+        "@vyrnforge/ui-core"
+      ],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
@@ -91,8 +93,10 @@
       ],
       "status": "current",
       "releaseTrack": "non-grid-beta",
-      "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
-      "notes": "MF-5001 through MF-5010 are implemented. React adapters now cover action, toggle, native form, choice, numeric, Tabs, Autocomplete, MultiSelect, and Transfer List; remaining navigation and overlay migrations continue through S5."
+      "publicEntryPoints": [
+        "@vyrnforge/ui-behaviors"
+      ],
+      "notes": "Framework-neutral behavior foundations are current and remain renderer-independent."
     },
     {
       "name": "@vyrnforge/ui-components",
@@ -116,7 +120,10 @@
       ],
       "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors"
+      ],
       "mustNotDependOn": [
         "@vyrnforge/ui-elements",
         "@vyrnforge/ui-data-grid",
@@ -133,7 +140,7 @@
         "@vyrnforge/ui-components/style.css",
         "@vyrnforge/ui-components/index.css"
       ],
-      "notes": "The ui-behaviors package foundation is current; React component adoption begins in S5. The public React package name remains stable through beta.",
+      "notes": "First-class React renderer over shared VyrnForge foundations. The public package name remains stable through the current beta track.",
       "releaseTrack": "non-grid-beta"
     },
     {
@@ -157,7 +164,10 @@
       ],
       "cssImport": "@vyrnforge/ui-elements/styles/index.css",
       "apiDoc": "docs/api/ui-elements-api.md",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors"
+      ],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-data-grid",
@@ -181,7 +191,7 @@
         "@vyrnforge/ui-elements/index.css",
         "@vyrnforge/ui-elements/custom-elements.json"
       ],
-      "notes": "EL-6001 through EL-6018 are evidence-complete. CF-7001, CF-7002, and CF-7008 add clean packed native HTML and React 19 Custom Element consumers, typed DOM/event declarations, and the public Custom Elements Manifest. CF-7003 adds clean Angular 22 packed consumer evidence. CF-7004 adds an isolated Angular Forms reference adapter over the native value, checked, disabled, validity, and canonical event contracts without adding Angular to this package. CF-7005 verifies the clean Vue 3 packed consumer with compiler custom-element recognition, strict template typing, property/event binding, slots, native forms, production Vite output, and Chromium evidence. Vue v-model translation remains CF-7006 work."
+      "notes": "First-class Native HTML / Custom Elements renderer. Clean packed React, Native HTML, Angular, and Vue consumers verify the shared element contract; Angular and Vue first-class package work remains governed by forward-looking distribution gates."
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -202,8 +212,17 @@
       ],
       "cssImport": "@vyrnforge/ui-data-grid/styles/index.css",
       "apiDoc": "docs/api/ui-data-grid-api.md",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
-      "mustNotDependOn": ["Redux", "TanStack", "MUI", "Radix", "Tailwind"],
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-components"
+      ],
+      "mustNotDependOn": [
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
       "status": "react-alpha-deferred",
       "publicEntryPoints": [
         "@vyrnforge/ui-data-grid",
@@ -232,6 +251,8 @@
       "@vyrnforge/ui-components",
       "@vyrnforge/ui-elements"
     ],
-    "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
+    "dataGridAlpha": [
+      "@vyrnforge/ui-data-grid"
+    ]
   }
 }

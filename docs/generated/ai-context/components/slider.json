@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "id": "slider",
+  "name": "Slider",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native bounded numeric range input with optional displayed value.",
+  "guidance": {
+    "useWhen": "Use for a bounded numeric setting where range interaction is useful.",
+    "avoidWhen": "Avoid for formatted or direct numeric entry; use NumberInput.",
+    "aiUsageNotes": "Do not add dual-thumb ranges, tooltip positioning, or custom drag mathematics.",
+    "relatedComponents": [
+      "NumberInput",
+      "Rating"
+    ]
+  },
+  "accessibility": [
+    "Uses native input type='range'; provide Field label or ariaLabel.",
+    "native range semantics",
+    "accessible label",
+    "keyboard adjustment",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for formatted or direct numeric entry; use NumberInput."
+  ],
+  "styling": {
+    "classes": [
+      "vf-slider",
+      "vf-slider__control",
+      "vf-slider__value"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Slider } from '@vyrnforge/ui-components';",
+      "example": "<Slider ariaLabel='Approval threshold' defaultValue={65} showValue />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-slider></vf-slider>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-slider></vf-slider>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-slider></vf-slider>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": 100
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "required": false,
+        "default": 0
+      },
+      {
+        "name": "showValue",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "default": 1
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "required": false,
+        "default": 0
+      },
+      {
+        "name": "defaultValue",
+        "type": "number",
+        "required": false,
+        "default": 0
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native range semantics",
+      "accessible label",
+      "keyboard adjustment",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

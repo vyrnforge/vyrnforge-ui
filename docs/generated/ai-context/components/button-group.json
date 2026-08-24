@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "button-group",
+  "name": "ButtonGroup",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Groups related buttons together.",
+  "guidance": {
+    "useWhen": "Use for adjacent related actions or attached toolbar controls.",
+    "avoidWhen": "Avoid for unrelated actions.",
+    "aiUsageNotes": "Use only when grouping clarifies action relationship.",
+    "relatedComponents": [
+      "Button",
+      "ToolbarButton",
+      "SegmentedControl"
+    ]
+  },
+  "accessibility": [
+    "Keep grouped controls individually labelled.",
+    "group role",
+    "aria-orientation"
+  ],
+  "knownLimitations": [
+    "Avoid for unrelated actions."
+  ],
+  "styling": {
+    "classes": [
+      "vf-button-group"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ButtonGroup, Button } from '@vyrnforge/ui-components';",
+      "example": "<ButtonGroup><Button>One</Button><Button>Two</Button></ButtonGroup>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-button-group></vf-button-group>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-button-group></vf-button-group>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-button-group></vf-button-group>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "attached",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "orientation",
+        "type": "Orientation",
+        "required": false,
+        "default": "horizontal"
+      },
+      {
+        "name": "size",
+        "type": "ButtonGroupSize",
+        "required": false,
+        "default": "md"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "group role",
+      "aria-orientation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

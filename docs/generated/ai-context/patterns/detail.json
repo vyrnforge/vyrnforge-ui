@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "detail",
+  "displayName": "Detail Page",
+  "category": "application-layout",
+  "purpose": "Detail surface with identity, status, metadata, related information, and contextual actions.",
+  "useWhen": "Use for a route focused on one resource or entity with several readable sections and actions.",
+  "avoidWhen": "Avoid forcing a detail page into a dense table or a modal when the workflow needs durable navigation and deep linking.",
+  "components": [
+    "badge",
+    "button",
+    "more-button"
+  ],
+  "playgroundRoute": "/detail",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "detail page",
+    "entity details",
+    "resource page",
+    "metadata",
+    "actions"
+  ],
+  "componentContexts": [
+    "ai-context/components/badge.json",
+    "ai-context/components/button.json",
+    "ai-context/components/more-button.json"
+  ]
+}

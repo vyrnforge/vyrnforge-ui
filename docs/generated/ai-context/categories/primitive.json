@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "category": "primitive",
+  "components": [
+    {
+      "id": "button",
+      "name": "Button",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Text action control for primary, secondary, subtle, danger, and ghost actions.",
+      "context": "ai-context/components/button.json"
+    },
+    {
+      "id": "button-group",
+      "name": "ButtonGroup",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Groups related buttons together.",
+      "context": "ai-context/components/button-group.json"
+    },
+    {
+      "id": "caption",
+      "name": "Caption",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Small supporting text.",
+      "context": "ai-context/components/caption.json"
+    },
+    {
+      "id": "clear-button",
+      "name": "ClearButton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/clear-button.json"
+    },
+    {
+      "id": "close-button",
+      "name": "CloseButton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/close-button.json"
+    },
+    {
+      "id": "code-text",
+      "name": "CodeText",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Inline or block code-like text primitive.",
+      "context": "ai-context/components/code-text.json"
+    },
+    {
+      "id": "heading",
+      "name": "Heading",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Semantic heading primitive.",
+      "context": "ai-context/components/heading.json"
+    },
+    {
+      "id": "icon",
+      "name": "Icon",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Small built-in symbol component used by VyrnForge controls.",
+      "context": "ai-context/components/icon.json"
+    },
+    {
+      "id": "icon-button",
+      "name": "IconButton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Compact icon-only action control.",
+      "context": "ai-context/components/icon-button.json"
+    },
+    {
+      "id": "label",
+      "name": "Label",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Form and metadata label primitive.",
+      "context": "ai-context/components/label.json"
+    },
+    {
+      "id": "more-button",
+      "name": "MoreButton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/more-button.json"
+    },
+    {
+      "id": "refresh-button",
+      "name": "RefreshButton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/refresh-button.json"
+    },
+    {
+      "id": "segmented-control",
+      "name": "SegmentedControl",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Small mutually exclusive mode selector.",
+      "context": "ai-context/components/segmented-control.json"
+    },
+    {
+      "id": "text",
+      "name": "Text",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Body text primitive with size and tone options.",
+      "context": "ai-context/components/text.json"
+    },
+    {
+      "id": "toast-action",
+      "name": "ToastAction",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/toast-action.json"
+    },
+    {
+      "id": "toast-provider",
+      "name": "ToastProvider",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/toast-provider.json"
+    },
+    {
+      "id": "toggle-button",
+      "name": "ToggleButton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native pressable tool, formatting, or view action with controlled or uncontrolled pressed state.",
+      "context": "ai-context/components/toggle-button.json"
+    },
+    {
+      "id": "toggle-button-group",
+      "name": "ToggleButtonGroup",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Joined native ToggleButton collection with single or multiple selection state.",
+      "context": "ai-context/components/toggle-button-group.json"
+    },
+    {
+      "id": "toolbar-button",
+      "name": "ToolbarButton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Dense toolbar action that can show icon and label.",
+      "context": "ai-context/components/toolbar-button.json"
+    },
+    {
+      "id": "use-toast",
+      "name": "useToast",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/use-toast.json"
+    }
+  ]
+}

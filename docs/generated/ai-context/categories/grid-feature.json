@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "category": "grid-feature",
+  "components": [
+    {
+      "id": "advanced-filter-drawer",
+      "name": "AdvancedFilterDrawer",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Advanced multi-condition grid filtering surface.",
+      "context": "ai-context/components/advanced-filter-drawer.json"
+    },
+    {
+      "id": "data-grid-bulk-action-bar",
+      "name": "DataGridBulkActionBar",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Dedicated public bulk-action bar component.",
+      "context": "ai-context/components/data-grid-bulk-action-bar.json"
+    },
+    {
+      "id": "data-grid-column-menu",
+      "name": "DataGridColumnMenu",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Column visibility, density, order, and reset menu.",
+      "context": "ai-context/components/data-grid-column-menu.json"
+    },
+    {
+      "id": "data-grid-empty-state",
+      "name": "DataGridEmptyState",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/data-grid-empty-state.json"
+    },
+    {
+      "id": "data-grid-error-state",
+      "name": "DataGridErrorState",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/data-grid-error-state.json"
+    },
+    {
+      "id": "data-grid-filter-bar",
+      "name": "DataGridFilterBar",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/data-grid-filter-bar.json"
+    },
+    {
+      "id": "data-grid-pagination",
+      "name": "DataGridPagination",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/data-grid-pagination.json"
+    },
+    {
+      "id": "data-grid-search",
+      "name": "DataGridSearch",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/data-grid-search.json"
+    },
+    {
+      "id": "data-grid-skeleton-rows",
+      "name": "DataGridSkeletonRows",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "context": "ai-context/components/data-grid-skeleton-rows.json"
+    },
+    {
+      "id": "data-grid-toolbar",
+      "name": "DataGridToolbar",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Grid-specific toolbar surface.",
+      "context": "ai-context/components/data-grid-toolbar.json"
+    },
+    {
+      "id": "export-preview-panel",
+      "name": "ExportPreviewPanel",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Export request preview and confirmation shell.",
+      "context": "ai-context/components/export-preview-panel.json"
+    },
+    {
+      "id": "saved-view-selector",
+      "name": "SavedViewSelector",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Saved grid view selector and manager entry point.",
+      "context": "ai-context/components/saved-view-selector.json"
+    },
+    {
+      "id": "use-data-grid-state",
+      "name": "useDataGridState",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Controlled or uncontrolled coordinator for complete DataGridState outside UniversalDataGrid.",
+      "context": "ai-context/components/use-data-grid-state.json"
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "confirm-dialog",
+  "name": "ConfirmDialog",
+  "package": "@vyrnforge/ui-components",
+  "category": "overlay",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Confirmation dialog for important actions.",
+  "guidance": {
+    "useWhen": "Use before destructive or high-impact actions.",
+    "avoidWhen": "Avoid for routine low-risk actions.",
+    "aiUsageNotes": "Use for destructive confirmation flows; it must not create separate portal or focus logic.",
+    "relatedComponents": [
+      "Dialog",
+      "Button"
+    ]
+  },
+  "accessibility": [
+    "Composes Dialog, including modal focus containment and restoration. Confirm and cancel actions must be clear.",
+    "dialog semantics through canonical dialog",
+    "confirm/cancel controls remain keyboard accessible",
+    "loading state prevents accidental dismissal"
+  ],
+  "knownLimitations": [
+    "Avoid for routine low-risk actions."
+  ],
+  "styling": {
+    "classes": [
+      "vf-confirm-dialog"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ConfirmDialog } from '@vyrnforge/ui-components';",
+      "example": "<ConfirmDialog open={open} onOpenChange={setOpen} title='Delete item?' onConfirm={onConfirm} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-confirm-dialog></vf-confirm-dialog>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-confirm-dialog></vf-confirm-dialog>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-confirm-dialog></vf-confirm-dialog>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "cancelLabel",
+        "type": "string",
+        "required": false,
+        "default": "Cancel"
+      },
+      {
+        "name": "confirmLabel",
+        "type": "string",
+        "required": false,
+        "default": "Confirm"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "variant",
+        "type": "ConfirmDialogVariant",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-cancel"
+      },
+      {
+        "name": "vf-confirm"
+      },
+      {
+        "name": "vf-open-change"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "cancel",
+      "confirm"
+    ],
+    "accessibility": [
+      "dialog semantics through canonical dialog",
+      "confirm/cancel controls remain keyboard accessible",
+      "loading state prevents accidental dismissal"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

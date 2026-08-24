@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "id": "icon-button",
+  "name": "IconButton",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Compact icon-only action control.",
+  "guidance": {
+    "useWhen": "Use for repeated utility actions like refresh, close, clear, and more.",
+    "avoidWhen": "Avoid for destructive or primary business actions without visible text.",
+    "aiUsageNotes": "Do not create unlabeled icon-only controls.",
+    "relatedComponents": [
+      "Icon",
+      "ToolbarButton",
+      "Button"
+    ]
+  },
+  "accessibility": [
+    "Every icon-only button must have an aria-label.",
+    "native button semantics",
+    "icon-only control requires accessible name"
+  ],
+  "knownLimitations": [
+    "Avoid for destructive or primary business actions without visible text."
+  ],
+  "styling": {
+    "classes": [
+      "vf-icon-button"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { IconButton, Icon } from '@vyrnforge/ui-components';",
+      "example": "<IconButton aria-label='Refresh'><Icon name='Refresh' /></IconButton>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-icon-button></vf-icon-button>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-icon-button></vf-icon-button>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-icon-button></vf-icon-button>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "action",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "ButtonSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "variant",
+        "type": "ButtonVariant",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-action"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "methods": [
+      "focus"
+    ],
+    "accessibility": [
+      "native button semantics",
+      "icon-only control requires accessible name"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

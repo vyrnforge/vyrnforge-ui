@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "category": "feedback",
+  "components": [
+    {
+      "id": "alert",
+      "name": "Alert",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Alert-style feedback surface.",
+      "context": "ai-context/components/alert.json"
+    },
+    {
+      "id": "badge",
+      "name": "Badge",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Compact status or metadata label.",
+      "context": "ai-context/components/badge.json"
+    },
+    {
+      "id": "empty-state",
+      "name": "EmptyState",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Empty content placeholder.",
+      "context": "ai-context/components/empty-state.json"
+    },
+    {
+      "id": "error-state",
+      "name": "ErrorState",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Error placeholder or blocking error surface.",
+      "context": "ai-context/components/error-state.json"
+    },
+    {
+      "id": "inline-message",
+      "name": "InlineMessage",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Inline contextual feedback message.",
+      "context": "ai-context/components/inline-message.json"
+    },
+    {
+      "id": "loading-state",
+      "name": "LoadingState",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Loading placeholder.",
+      "context": "ai-context/components/loading-state.json"
+    },
+    {
+      "id": "progress",
+      "name": "Progress",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Progress indicator.",
+      "context": "ai-context/components/progress.json"
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Skeleton placeholder block.",
+      "context": "ai-context/components/skeleton.json"
+    },
+    {
+      "id": "status-badge",
+      "name": "StatusBadge",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Status-oriented badge with status mapping.",
+      "context": "ai-context/components/status-badge.json"
+    },
+    {
+      "id": "toast",
+      "name": "Toast",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Provider-owned transient feedback for successful operations, failures, warnings, and informational events.",
+      "context": "ai-context/components/toast.json"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "id": "side-nav",
+  "name": "SideNav",
+  "package": "@vyrnforge/ui-components",
+  "category": "navigation",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Sidebar navigation for admin and customer portals with active, disabled, badge, icon, collapsed, header/footer slots, internal list scrolling, and one-level nested items.",
+  "guidance": {
+    "useWhen": "Use for app-level sidebar navigation without coupling to a router.",
+    "avoidWhen": "Avoid for complex tree navigation or data-grid column menus.",
+    "aiUsageNotes": "Keep route state in the app and pass activeId/onSelect; do not add router dependencies. Use inside AppShell for persistent sidebars; SideNav keeps header/footer visible while the item list scrolls inside vf-side-nav__scroll.",
+    "relatedComponents": [
+      "AppShell",
+      "TopNav"
+    ]
+  },
+  "accessibility": [
+    "Navigation should use nav landmark and current-page state.",
+    "navigation landmark",
+    "roving focus",
+    "arrow/Home/End navigation",
+    "aria-current state"
+  ],
+  "knownLimitations": [
+    "Avoid for complex tree navigation or data-grid column menus."
+  ],
+  "styling": {
+    "classes": [
+      "vf-side-nav",
+      "vf-side-nav__scroll",
+      "vf-side-nav__item"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { SideNav } from '@vyrnforge/ui-components';",
+      "example": "<SideNav activeId='orders' items={[{ id: 'orders', label: 'Orders' }]} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-side-nav></vf-side-nav>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-side-nav></vf-side-nav>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-side-nav></vf-side-nav>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "activeId",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultActiveId",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "collapsed",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "items",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "Primary navigation"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      }
+    ],
+    "slots": [],
+    "methods": [],
+    "accessibility": [
+      "navigation landmark",
+      "roving focus",
+      "arrow/Home/End navigation",
+      "aria-current state"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "top-nav",
+  "name": "TopNav",
+  "package": "@vyrnforge/ui-components",
+  "category": "navigation",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Compact top navigation/header bar with brand, navigation, actions, and user area slots.",
+  "guidance": {
+    "useWhen": "Use as the header region for enterprise app shells.",
+    "avoidWhen": "Avoid when the application needs a fully custom marketing or public-site header.",
+    "aiUsageNotes": "TopNav does not own auth or user state; pass user UI through userArea.",
+    "relatedComponents": [
+      "AppShell",
+      "SideNav"
+    ]
+  },
+  "accessibility": [
+    "Navigation items need clear labels.",
+    "banner landmark",
+    "navigation content remains semantic"
+  ],
+  "knownLimitations": [
+    "Avoid when the application needs a fully custom marketing or public-site header."
+  ],
+  "styling": {
+    "classes": [
+      "vf-top-nav"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { TopNav } from '@vyrnforge/ui-components';",
+      "example": "<TopNav brand='Admin Portal' actions={<Button>Invite</Button>} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-top-nav></vf-top-nav>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-top-nav></vf-top-nav>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-top-nav></vf-top-nav>"
+    }
+  },
+  "contract": {
+    "properties": [],
+    "events": [],
+    "slots": [
+      "brand",
+      "navigation",
+      "actions",
+      "user"
+    ],
+    "methods": [],
+    "accessibility": [
+      "banner landmark",
+      "navigation content remains semantic"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "inline",
+  "name": "Inline",
+  "package": "@vyrnforge/ui-components",
+  "category": "composite",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Horizontal layout primitive.",
+  "guidance": {
+    "useWhen": "Use for compact rows of controls or metadata.",
+    "avoidWhen": "Avoid for vertical layout; use Stack.",
+    "aiUsageNotes": "Use for control rows and action clusters.",
+    "relatedComponents": [
+      "Stack"
+    ]
+  },
+  "accessibility": [
+    "Inline does not add semantics by itself.",
+    "layout-only semantics; child accessibility remains intact"
+  ],
+  "knownLimitations": [
+    "Avoid for vertical layout; use Stack."
+  ],
+  "styling": {
+    "classes": [
+      "vf-inline"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Inline } from '@vyrnforge/ui-components';",
+      "example": "<Inline gap='sm'>...</Inline>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-inline></vf-inline>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-inline></vf-inline>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-inline></vf-inline>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "align",
+        "type": "LayoutAlign",
+        "required": false,
+        "default": "center"
+      },
+      {
+        "name": "gap",
+        "type": "LayoutGap",
+        "required": false,
+        "default": "sm"
+      },
+      {
+        "name": "justify",
+        "type": "LayoutJustify",
+        "required": false,
+        "default": "start"
+      },
+      {
+        "name": "wrap",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "layout-only semantics; child accessibility remains intact"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

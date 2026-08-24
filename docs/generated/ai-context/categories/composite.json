@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "category": "composite",
+  "components": [
+    {
+      "id": "card",
+      "name": "Card",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Framed content container.",
+      "context": "ai-context/components/card.json"
+    },
+    {
+      "id": "inline",
+      "name": "Inline",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Horizontal layout primitive.",
+      "context": "ai-context/components/inline.json"
+    },
+    {
+      "id": "page",
+      "name": "Page",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Page composition wrapper with optional title, description, status, actions, toolbar, density, and max-width.",
+      "context": "ai-context/components/page.json"
+    },
+    {
+      "id": "page-header",
+      "name": "PageHeader",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Reusable page header with title, description, eyebrow, status, metadata, breadcrumbs, and actions.",
+      "context": "ai-context/components/page-header.json"
+    },
+    {
+      "id": "page-toolbar",
+      "name": "PageToolbar",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Standard page-level toolbar for search, filters, refresh, export, view controls, and secondary actions.",
+      "context": "ai-context/components/page-toolbar.json"
+    },
+    {
+      "id": "panel",
+      "name": "Panel",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Section container with optional title, description, and actions.",
+      "context": "ai-context/components/panel.json"
+    },
+    {
+      "id": "section",
+      "name": "Section",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Page section wrapper.",
+      "context": "ai-context/components/section.json"
+    },
+    {
+      "id": "stack",
+      "name": "Stack",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Vertical layout primitive.",
+      "context": "ai-context/components/stack.json"
+    }
+  ]
+}

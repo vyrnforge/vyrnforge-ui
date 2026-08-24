@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "id": "segmented-control",
+  "name": "SegmentedControl",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Small mutually exclusive mode selector.",
+  "guidance": {
+    "useWhen": "Use for density, theme preview, or view mode selection.",
+    "avoidWhen": "Avoid for large option sets; use Select instead.",
+    "aiUsageNotes": "Use for compact mode choices, not multi-select.",
+    "relatedComponents": [
+      "ButtonGroup",
+      "Select"
+    ]
+  },
+  "accessibility": [
+    "Provide an accessible label.",
+    "radiogroup semantics",
+    "radio item state",
+    "keyboard reachable buttons"
+  ],
+  "knownLimitations": [
+    "Avoid for large option sets; use Select instead."
+  ],
+  "styling": {
+    "classes": [
+      "vf-segmented-control"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { SegmentedControl } from '@vyrnforge/ui-components';",
+      "example": "<SegmentedControl aria-label='Density' value={density} onChange={setDensity} options={options} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-segmented-control></vf-segmented-control>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-segmented-control></vf-segmented-control>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-segmented-control></vf-segmented-control>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "Options"
+      },
+      {
+        "name": "options",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "size",
+        "type": "SegmentedSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      }
+    ],
+    "slots": [],
+    "methods": [],
+    "accessibility": [
+      "radiogroup semantics",
+      "radio item state",
+      "keyboard reachable buttons"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

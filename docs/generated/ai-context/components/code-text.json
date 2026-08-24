@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "id": "code-text",
+  "name": "CodeText",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Inline or block code-like text primitive.",
+  "guidance": {
+    "useWhen": "Use for tokens, paths, commands, and code identifiers.",
+    "avoidWhen": "Avoid for long code examples; use pre/code in docs.",
+    "aiUsageNotes": "Use for literal identifiers in UI copy.",
+    "relatedComponents": [
+      "Text"
+    ]
+  },
+  "accessibility": [
+    "Keep code labels readable and copyable when important.",
+    "code text remains readable by assistive technology"
+  ],
+  "knownLimitations": [
+    "Avoid for long code examples; use pre/code in docs."
+  ],
+  "styling": {
+    "classes": [
+      "vf-code-text"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { CodeText } from '@vyrnforge/ui-components';",
+      "example": "<CodeText>--vf-primary</CodeText>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-code-text></vf-code-text>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-code-text></vf-code-text>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-code-text></vf-code-text>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "tone",
+        "type": "TextTone",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "code text remains readable by assistive technology"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "alert",
+  "name": "Alert",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Alert-style feedback surface.",
+  "guidance": {
+    "useWhen": "Use for important messages that need stronger visual weight.",
+    "avoidWhen": "Avoid for tiny metadata; use Badge or Caption.",
+    "aiUsageNotes": "Use sparingly for important feedback.",
+    "relatedComponents": [
+      "InlineMessage",
+      "ErrorState"
+    ]
+  },
+  "accessibility": [
+    "Use appropriate role for urgent messages.",
+    "status or alert role follows severity"
+  ],
+  "knownLimitations": [
+    "Avoid for tiny metadata; use Badge or Caption."
+  ],
+  "styling": {
+    "classes": [
+      "vf-inline-message",
+      "vf-alert"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Alert } from '@vyrnforge/ui-components';",
+      "example": "<Alert variant='warning'>Check required fields.</Alert>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-inline-message></vf-inline-message>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-inline-message></vf-inline-message>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-inline-message></vf-inline-message>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "variant",
+        "type": "InlineMessageVariant",
+        "required": false,
+        "default": "info"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "status or alert role follows severity"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "id": "tabs",
+  "name": "Tabs",
+  "package": "@vyrnforge/ui-components",
+  "category": "navigation",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Controlled or uncontrolled tab navigation with line, contained, and pills variants.",
+  "guidance": {
+    "useWhen": "Use for dense workflow sections with related tab panels.",
+    "avoidWhen": "Avoid for simple view modes; use SegmentedControl instead.",
+    "aiUsageNotes": "Use controlled value/onValueChange when tab state belongs to the app.",
+    "relatedComponents": [
+      "SegmentedControl"
+    ]
+  },
+  "accessibility": [
+    "Tabs need keyboard and aria-selected behavior.",
+    "tablist semantics",
+    "roving focus",
+    "aria-controls",
+    "aria-selected",
+    "manual/automatic activation"
+  ],
+  "knownLimitations": [
+    "Avoid for simple view modes; use SegmentedControl instead."
+  ],
+  "styling": {
+    "classes": [
+      "vf-tabs",
+      "vf-tabs__tab",
+      "vf-tabs__panel"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Tabs } from '@vyrnforge/ui-components';",
+      "example": "<Tabs defaultValue='summary' items={[{ id: 'summary', label: 'Summary', content: 'Summary' }]} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-tabs></vf-tabs>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-tabs></vf-tabs>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-tabs></vf-tabs>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "activationMode",
+        "type": "TabsActivationMode",
+        "required": false,
+        "default": "automatic"
+      },
+      {
+        "name": "items",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "orientation",
+        "type": "TabsOrientation",
+        "required": false,
+        "default": "horizontal"
+      },
+      {
+        "name": "disabledValues",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "size",
+        "type": "TabsSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "variant",
+        "type": "TabsVariant",
+        "required": false,
+        "default": "line"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "tablist semantics",
+      "roving focus",
+      "aria-controls",
+      "aria-selected",
+      "manual/automatic activation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -4,6 +4,7 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -18,14 +19,10 @@ const repositoryRoot = path.resolve(
 );
 
 function fixture(mutator, callback) {
-  const root = mkdtempSync(
-    path.join(tmpdir(), "vyrnforge-component-reference-"),
-  );
+  const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-consumer-knowledge-"));
   try {
-    for (const entry of ["apps", "docs", "packages", "scripts"]) {
-      cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
-        recursive: true,
-      });
+    for (const entry of ["apps", "docs", "examples", "packages", "scripts"]) {
+      cpSync(path.join(repositoryRoot, entry), path.join(root, entry), { recursive: true });
     }
     mutator?.(root);
     callback(verifyComponentReference({ root }));
@@ -34,53 +31,45 @@ function fixture(mutator, callback) {
   }
 }
 
-test("accepts the generated CF-7011/CF-7012 reference", () =>
+test("accepts the generated consumer knowledge and task-scoped AI context", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
 
-test("rejects a stale generated reference", () =>
+test("rejects stale generated consumer knowledge", () =>
   fixture(
     (root) => {
-      const file = path.join(root, "docs/generated/component-reference.json");
+      const file = path.join(root, "docs/generated/consumer-knowledge.json");
       const value = JSON.parse(readFileSync(file, "utf8"));
       value.components.pop();
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("generated component reference is stale"),
-        ),
-      ),
+    (failures) => assert(failures.some((failure) => failure.includes("consumer knowledge is stale"))),
   ));
 
-test("rejects a missing framework tab", () =>
+test("rejects a missing component context slice", () =>
+  fixture(
+    (root) => unlinkSync(path.join(root, "docs/generated/ai-context/components/button.json")),
+    (failures) => assert(failures.some((failure) => failure.includes("button AI component context is missing"))),
+  ));
+
+test("rejects generated Angular status drift", () =>
   fixture(
     (root) => {
       const file = path.join(root, "docs/generated/component-reference.json");
       const value = JSON.parse(readFileSync(file, "utf8"));
-      delete value.components[0].frameworks.vue;
+      const component = value.components.find((entry) => entry.frameworks?.angular?.status === "verified-consumer");
+      assert(component, "fixture needs a verified Angular consumer component");
+      component.frameworks.angular.status = "first-class";
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
-    (failures) =>
-      assert(failures.some((failure) => failure.includes("missing vue"))),
+    (failures) => assert(failures.some((failure) => failure.includes("component reference is stale"))),
   ));
 
-test("rejects a generated Angular status that differs from canonical parity", () =>
+test("rejects hand-written playground maturity status", () =>
   fixture(
     (root) => {
-      const file = path.join(root, "docs/generated/component-reference.json");
-      const value = JSON.parse(readFileSync(file, "utf8"));
-      const component = value.components.find(
-        (entry) => entry.frameworks?.angular?.status === "verified-consumer",
-      );
-      assert(component, "fixture needs a GMF4-verified Angular component");
-      component.frameworks.angular.status = "planned-gmf4";
-      writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
+      const file = path.join(root, "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx");
+      const content = readFileSync(file, "utf8");
+      writeFileSync(file, content.replace("title=\"Button\"", "status=\"stable\" title=\"Button\""));
     },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("Angular status must remain sourced"),
-        ),
-      ),
+    (failures) => assert(failures.some((failure) => failure.includes("hand-written status prop"))),
   ));

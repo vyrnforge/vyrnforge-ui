@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "loading-state",
+  "name": "LoadingState",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Loading placeholder.",
+  "guidance": {
+    "useWhen": "Use while content is being fetched or prepared.",
+    "avoidWhen": "Avoid for skeleton row placeholders; use Skeleton or grid skeleton rows.",
+    "aiUsageNotes": "Use label text for loading context.",
+    "relatedComponents": [
+      "Skeleton",
+      "DataGridSkeletonRows"
+    ]
+  },
+  "accessibility": [
+    "Use aria-busy where relevant.",
+    "status role"
+  ],
+  "knownLimitations": [
+    "Avoid for skeleton row placeholders; use Skeleton or grid skeleton rows."
+  ],
+  "styling": {
+    "classes": [
+      "vf-loading-state"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { LoadingState } from '@vyrnforge/ui-components';",
+      "example": "<LoadingState label='Loading users' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-loading-state></vf-loading-state>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-loading-state></vf-loading-state>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-loading-state></vf-loading-state>"
+    }
+  },
+  "contract": {
+    "properties": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "status role"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

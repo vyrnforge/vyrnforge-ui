@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "skeleton",
+  "name": "Skeleton",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Skeleton placeholder block.",
+  "guidance": {
+    "useWhen": "Use for placeholder UI while content loads.",
+    "avoidWhen": "Avoid when a text loading label is clearer.",
+    "aiUsageNotes": "Use sparingly for structure placeholders.",
+    "relatedComponents": [
+      "LoadingState"
+    ]
+  },
+  "accessibility": [
+    "Respect reduced motion.",
+    "decorative skeleton is aria-hidden"
+  ],
+  "knownLimitations": [
+    "Avoid when a text loading label is clearer."
+  ],
+  "styling": {
+    "classes": [
+      "vf-skeleton"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Skeleton } from '@vyrnforge/ui-components';",
+      "example": "<Skeleton width='100%' height={24} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-skeleton></vf-skeleton>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-skeleton></vf-skeleton>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-skeleton></vf-skeleton>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "animated",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "height",
+        "type": "string",
+        "required": false,
+        "default": "16px"
+      },
+      {
+        "name": "radius",
+        "type": "string",
+        "required": false,
+        "default": "var(--vf-radius-md)"
+      },
+      {
+        "name": "width",
+        "type": "string",
+        "required": false,
+        "default": "100%"
+      }
+    ],
+    "events": [],
+    "slots": [],
+    "methods": [],
+    "accessibility": [
+      "decorative skeleton is aria-hidden"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}
