@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "id": "dialog",
+  "name": "Dialog",
+  "package": "@vyrnforge/ui-components",
+  "category": "overlay",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Modal dialog surface.",
+  "guidance": {
+    "useWhen": "Use for focused decisions, confirmations, and short forms.",
+    "avoidWhen": "Avoid for large workflows; use Drawer or a page.",
+    "aiUsageNotes": "Use title and description for context. Use initialFocusRef for deliberate first focus.",
+    "relatedComponents": [
+      "ConfirmDialog",
+      "Drawer"
+    ]
+  },
+  "accessibility": [
+    "Portal modal with title/description relationships, topmost Escape/outside dismissal, trapped focus, restoration, and scroll locking.",
+    "dialog semantics",
+    "accessible title/description",
+    "focus containment",
+    "focus restoration",
+    "Escape dismissal"
+  ],
+  "knownLimitations": [
+    "Avoid for large workflows; use Drawer or a page."
+  ],
+  "styling": {
+    "classes": [
+      "vf-dialog"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Dialog } from '@vyrnforge/ui-components';",
+      "example": "<Dialog open={open} onOpenChange={setOpen} title='Edit'>Content</Dialog>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-dialog></vf-dialog>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-dialog></vf-dialog>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-dialog></vf-dialog>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "modal",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "closeOnEscape",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "closeOnOutsidePointer",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "DialogSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-open-change"
+      },
+      {
+        "name": "vf-dismiss"
+      }
+    ],
+    "slots": [
+      "trigger",
+      "header",
+      "content",
+      "actions",
+      "footer"
+    ],
+    "methods": [
+      "show",
+      "close",
+      "focus"
+    ],
+    "accessibility": [
+      "dialog semantics",
+      "accessible title/description",
+      "focus containment",
+      "focus restoration",
+      "Escape dismissal"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

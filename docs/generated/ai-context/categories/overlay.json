@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "category": "overlay",
+  "components": [
+    {
+      "id": "confirm-dialog",
+      "name": "ConfirmDialog",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Confirmation dialog for important actions.",
+      "context": "ai-context/components/confirm-dialog.json"
+    },
+    {
+      "id": "dialog",
+      "name": "Dialog",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Modal dialog surface.",
+      "context": "ai-context/components/dialog.json"
+    },
+    {
+      "id": "drawer",
+      "name": "Drawer",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Side panel overlay.",
+      "context": "ai-context/components/drawer.json"
+    },
+    {
+      "id": "dropdown",
+      "name": "Dropdown",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Generic Popover composition for trigger-controlled floating content.",
+      "context": "ai-context/components/dropdown.json"
+    },
+    {
+      "id": "menu",
+      "name": "Menu",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Action menu.",
+      "context": "ai-context/components/menu.json"
+    },
+    {
+      "id": "popover",
+      "name": "Popover",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Shared-foundation anchored floating content with portal rendering and optional modal behavior.",
+      "context": "ai-context/components/popover.json"
+    },
+    {
+      "id": "tooltip",
+      "name": "Tooltip",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Short contextual help.",
+      "context": "ai-context/components/tooltip.json"
+    }
+  ]
+}

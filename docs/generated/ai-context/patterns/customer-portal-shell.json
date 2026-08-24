@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "customer-portal-shell",
+  "displayName": "Customer Portal",
+  "category": "application-layout",
+  "purpose": "Customer-facing portal composition with predictable navigation, breadcrumbs, page identity, and related content tabs.",
+  "useWhen": "Use as a composition reference for account, customer, partner, and self-service portal experiences.",
+  "avoidWhen": "Keep authentication, account state, routing, permissions, and backend workflows in the consuming application.",
+  "components": [
+    "app-shell",
+    "badge",
+    "breadcrumbs",
+    "button",
+    "page-header",
+    "panel",
+    "side-nav",
+    "tabs",
+    "top-nav"
+  ],
+  "playgroundRoute": "/customer-portal-shell",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "customer portal",
+    "account portal",
+    "self service",
+    "breadcrumbs",
+    "tabs",
+    "sidebar"
+  ],
+  "componentContexts": [
+    "ai-context/components/app-shell.json",
+    "ai-context/components/badge.json",
+    "ai-context/components/breadcrumbs.json",
+    "ai-context/components/button.json",
+    "ai-context/components/page-header.json",
+    "ai-context/components/panel.json",
+    "ai-context/components/side-nav.json",
+    "ai-context/components/tabs.json",
+    "ai-context/components/top-nav.json"
+  ]
+}

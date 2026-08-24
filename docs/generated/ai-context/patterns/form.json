@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "form",
+  "displayName": "Form",
+  "category": "forms",
+  "purpose": "General application form composition with labelled fields, varied input types, validation, submission feedback, and application-owned state.",
+  "useWhen": "Use when a workflow collects several related values and needs clear validation and submission actions.",
+  "avoidWhen": "Avoid putting business validation, persistence, authorization, or backend workflow execution inside VyrnForge components.",
+  "components": [
+    "autocomplete",
+    "button",
+    "checkbox",
+    "date-input",
+    "date-time-input",
+    "field",
+    "inline-message",
+    "multi-select",
+    "number-input",
+    "radio-group",
+    "select",
+    "text-input",
+    "toast-provider",
+    "use-toast",
+    "validation-message"
+  ],
+  "playgroundRoute": "/form",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "form",
+    "data entry",
+    "validation",
+    "submit",
+    "request form"
+  ],
+  "componentContexts": [
+    "ai-context/components/autocomplete.json",
+    "ai-context/components/button.json",
+    "ai-context/components/checkbox.json",
+    "ai-context/components/date-input.json",
+    "ai-context/components/date-time-input.json",
+    "ai-context/components/field.json",
+    "ai-context/components/inline-message.json",
+    "ai-context/components/multi-select.json",
+    "ai-context/components/number-input.json",
+    "ai-context/components/radio-group.json",
+    "ai-context/components/select.json",
+    "ai-context/components/text-input.json",
+    "ai-context/components/toast-provider.json",
+    "ai-context/components/use-toast.json",
+    "ai-context/components/validation-message.json"
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "id": "transfer-list",
+  "name": "TransferList",
+  "package": "@vyrnforge/ui-components",
+  "category": "data-display",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Dual-list assignment component for moving a moderate known collection between available and assigned states.",
+  "guidance": {
+    "useWhen": "Use for bounded known collections where users need to see available and assigned items simultaneously and move items reversibly.",
+    "avoidWhen": "Avoid for thousands of items, server pagination, complex IAM permission inheritance, hierarchical resources, approval/audit workflows, or data-grid use cases.",
+    "aiUsageNotes": "Use only for bounded local assignment. Apps own backend fetching, server search, pagination, approvals, and persistence. Do not use as a UniversalDataGrid replacement, IAM permission catalog, tree transfer, drag-and-drop transfer, or virtualized selector.",
+    "relatedComponents": [
+      "Checkbox",
+      "MultiSelect",
+      "Autocomplete",
+      "Select",
+      "UniversalDataGrid"
+    ]
+  },
+  "accessibility": [
+    "Uses labelled groups, native checkboxes, and native buttons. Option descriptions are associated with checkboxes. It intentionally avoids incorrect listbox semantics for checkbox-based multi-selection.",
+    "labeled source and target groups",
+    "keyboard-accessible move actions",
+    "selection state",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for thousands of items, server pagination, complex IAM permission inheritance, hierarchical resources, approval/audit workflows, or data-grid use cases."
+  ],
+  "styling": {
+    "classes": [
+      "vf-transfer-list",
+      "vf-transfer-list__panel",
+      "vf-transfer-list__options",
+      "vf-transfer-list__option",
+      "vf-transfer-list__actions"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { TransferList } from '@vyrnforge/ui-components';",
+      "example": "<TransferList options={[{ value: 'iam', label: 'Identity and Access Management' }]} defaultValue={['iam']} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-transfer-list></vf-transfer-list>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-transfer-list></vf-transfer-list>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-transfer-list></vf-transfer-list>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "clearSelectionAfterMove",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "moveAll",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "options",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "searchable",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "sourceTitle",
+        "type": "string",
+        "required": false,
+        "default": "Available"
+      },
+      {
+        "name": "targetTitle",
+        "type": "string",
+        "required": false,
+        "default": "Assigned"
+      },
+      {
+        "name": "value",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "defaultValue",
+        "type": "array",
+        "required": false,
+        "default": []
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-selection-change"
+      },
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "labeled source and target groups",
+      "keyboard-accessible move actions",
+      "selection state",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

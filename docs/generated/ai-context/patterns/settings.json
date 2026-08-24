@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "settings",
+  "displayName": "Settings",
+  "category": "forms",
+  "purpose": "Sectioned settings workflow using labelled controls, validation, immediate settings, and explicit save feedback.",
+  "useWhen": "Use for durable application or account configuration where related settings need clear labels, descriptions, validation, and save behavior.",
+  "avoidWhen": "Avoid mixing settings with unrelated transactional workflows; keep application persistence and authorization outside VyrnForge.",
+  "components": [
+    "autocomplete",
+    "button",
+    "field",
+    "radio-group",
+    "select",
+    "switch",
+    "text-input",
+    "toast-provider",
+    "use-toast",
+    "validation-message"
+  ],
+  "playgroundRoute": "/settings",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "settings",
+    "preferences",
+    "configuration",
+    "account settings",
+    "workspace settings"
+  ],
+  "componentContexts": [
+    "ai-context/components/autocomplete.json",
+    "ai-context/components/button.json",
+    "ai-context/components/field.json",
+    "ai-context/components/radio-group.json",
+    "ai-context/components/select.json",
+    "ai-context/components/switch.json",
+    "ai-context/components/text-input.json",
+    "ai-context/components/toast-provider.json",
+    "ai-context/components/use-toast.json",
+    "ai-context/components/validation-message.json"
+  ]
+}

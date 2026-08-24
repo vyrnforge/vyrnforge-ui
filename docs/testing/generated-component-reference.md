@@ -1,41 +1,51 @@
-# Generated Multi-Framework Component Reference
+# Consumer Knowledge Generation
 
-CF-7011 and CF-7012 share one generated documentation pipeline.
+VyrnForge generates human reference data and compact AI retrieval context from
+the same canonical metadata. The generated layer is a projection, not a second
+source of truth.
 
-`docs/metadata/components.json` remains the canonical component inventory and
-framework-parity source. `docs/metadata/component-contracts.json` remains the
-canonical detailed framework-neutral contract catalog, and
-`packages/ui-elements/custom-elements.json` remains the published Custom
-Elements declaration manifest.
+Canonical inputs are:
 
-The generated artifact is:
+- `docs/metadata/components.json` for component identity, package, maturity,
+  purpose, usage guidance, styling hooks, and framework parity;
+- `docs/metadata/component-contracts.json` for renderer-neutral properties,
+  events, slots, methods, accessibility, and form contracts;
+- `docs/metadata/patterns.json` for reusable application composition patterns;
+- `docs/metadata/packages.json` and `docs/metadata/multi-framework.json` for
+  package and framework support;
+- `packages/ui-elements/custom-elements.json` for published Custom Element
+  declarations.
+
+The generator emits:
 
 ```text
+docs/generated/consumer-knowledge.json
 docs/generated/component-reference.json
+docs/generated/ai-context/index.json
+docs/generated/ai-context/categories/*.json
+docs/generated/ai-context/components/*.json
+docs/generated/ai-context/patterns/*.json
 ```
+
+`consumer-knowledge.json` is the shared application projection used by the docs
+reference viewer and playground. The `ai-context` tree is deliberately split so
+an AI agent can read a small index, one task/category record, and only the
+component slices required for the current request. The docs production build
+publishes the same generated consumer knowledge and `ai-context` tree as static
+assets so external tools can retrieve machine-readable context without scraping
+rendered documentation.
+
+Angular and Vue status remains sourced from canonical framework-parity metadata.
+Current verified Custom Element consumption must not be presented as a shipped
+first-class framework package before the corresponding distribution gate passes.
+Missing contracts and unverified usage text are omitted rather than guessed.
 
 Run:
 
 ```bash
-npm run generate:component-reference
-npm run verify:component-reference
-npm run test:component-reference
+npm run generate:consumer-knowledge
+npm run verify:consumer-knowledge
+npm run test:consumer-knowledge
+npm run query:ai-context -- --component button --framework react
+npm run query:ai-context -- --pattern settings
 ```
-
-The generator emits React, Native HTML, Angular, and Vue usage tabs for every
-component whose `frameworkParity.betaScope` is `included`. Angular and Vue
-examples consume the same `vf-*` element contract rather than creating
-framework-specific component definitions. Per-component framework status is
-read directly from `components.json`; the documentation generator does not
-invent component parity that differs from the GMF4-verified framework-level
-consumer fixture has passed.
-
-Detailed properties, attributes, events, slots, methods, accessibility, and
-form-association fields are emitted only for entries already present in the
-canonical component-contract catalog. Missing contracts are not guessed or
-duplicated.
-
-The React docs application reads only the generated artifact for its component
-reference viewer. This keeps framework examples and detailed contract tables
-derived from canonical metadata instead of maintaining another hand-written
-contract source.

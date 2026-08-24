@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "page-toolbar",
+  "name": "PageToolbar",
+  "package": "@vyrnforge/ui-components",
+  "category": "composite",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Standard page-level toolbar for search, filters, refresh, export, view controls, and secondary actions.",
+  "guidance": {
+    "useWhen": "Use below a page header for dense enterprise page controls.",
+    "avoidWhen": "Avoid for primary page actions that belong in PageHeader actions.",
+    "aiUsageNotes": "Use PageToolbar for page controls; do not add grid-specific toolbar behavior here.",
+    "relatedComponents": [
+      "Page",
+      "ToolbarButton",
+      "SearchInput"
+    ]
+  },
+  "accessibility": [
+    "Toolbar controls must keep accessible names and visible labels where practical.",
+    "toolbar role",
+    "accessible toolbar label"
+  ],
+  "knownLimitations": [
+    "Avoid for primary page actions that belong in PageHeader actions."
+  ],
+  "styling": {
+    "classes": [
+      "vf-page-toolbar"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { PageToolbar } from '@vyrnforge/ui-components';",
+      "example": "<PageToolbar left={<SearchInput aria-label='Search' />} right={<ToolbarButton label='Refresh' />} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-page-toolbar></vf-page-toolbar>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-page-toolbar></vf-page-toolbar>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-page-toolbar></vf-page-toolbar>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "density",
+        "type": "Density",
+        "required": false,
+        "default": "standard"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "Page controls"
+      },
+      {
+        "name": "sticky",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default",
+      "right"
+    ],
+    "methods": [],
+    "accessibility": [
+      "toolbar role",
+      "accessible toolbar label"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

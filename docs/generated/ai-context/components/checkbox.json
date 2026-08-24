@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "id": "checkbox",
+  "name": "Checkbox",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native checkbox control.",
+  "guidance": {
+    "useWhen": "Use for independent binary choices.",
+    "avoidWhen": "Avoid for mutually exclusive sets; use Radio when available.",
+    "aiUsageNotes": "Use for true/false preferences and row selection.",
+    "relatedComponents": [
+      "Field",
+      "UniversalDataGrid"
+    ]
+  },
+  "accessibility": [
+    "Ensure label text describes the checked state.",
+    "native checkbox semantics",
+    "accessible label",
+    "checked/disabled/required states",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for mutually exclusive sets; use Radio when available."
+  ],
+  "styling": {
+    "classes": [
+      "vf-checkbox"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Checkbox } from '@vyrnforge/ui-components';",
+      "example": "<Checkbox checked={enabled} onChange={(event) => setEnabled(event.currentTarget.checked)} label='Enabled' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-checkbox></vf-checkbox>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-checkbox></vf-checkbox>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-checkbox></vf-checkbox>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "checked",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultChecked",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "indeterminate",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "InputSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": "on"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-checked-change"
+      },
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native checkbox semantics",
+      "accessible label",
+      "checked/disabled/required states",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,3 +1,4 @@
+import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
 import type { ComponentType } from "react";
 import { OverviewPage } from "../pages/overview/OverviewPage";
 import { ThemeTokensPage } from "../pages/core/ThemeTokensPage";
@@ -36,7 +37,7 @@ import {
   SliderPage,
   ToggleButtonGroupPage,
   ToggleButtonPage,
-} from "../pages/reference/S3B1ComponentPages";
+} from "../pages/reference/ControlComponentPages";
 import {
   ConfirmDialogPage,
   DialogPage,
@@ -76,9 +77,9 @@ export type PlaygroundRoute = {
     | "Overview"
     | "Foundations"
     | "Components"
-    | "Data Grid"
     | "Patterns"
-    | "Quality";
+    | "Advanced Modules"
+    | "Internal";
   subgroup?:
     | "Actions"
     | "Forms"
@@ -88,10 +89,22 @@ export type PlaygroundRoute = {
     | "Navigation"
     | "Overlays";
   gallery?: boolean;
+  visibility?: "public" | "internal";
   path?: string;
   packageName?: "@vyrnforge/ui-components" | "@vyrnforge/ui-data-grid";
   Component: ComponentType;
 };
+
+const consumerKnowledge = JSON.parse(consumerKnowledgeRaw) as {
+  patterns: Array<{ id: string; purpose: string }>;
+};
+
+function patternDescription(id: string, fallback: string) {
+  return (
+    consumerKnowledge.patterns.find((pattern) => pattern.id === id)?.purpose ??
+    fallback
+  );
+}
 
 export const routes: PlaygroundRoute[] = [
   {
@@ -108,7 +121,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Theme Tokens",
     title: "Theme Tokens",
     description:
-      "Shared dv tokens for color, surfaces, typography, spacing, and status.",
+      "Shared vf tokens for color, surfaces, typography, spacing, and status.",
     group: "Foundations",
     Component: ThemeTokensPage,
   },
@@ -133,7 +146,7 @@ export const routes: PlaygroundRoute[] = [
     label: "CSS Overrides",
     title: "CSS Overrides",
     description:
-      "Global dv overrides, local scopes, and grid-only udg overrides.",
+      "Global vf overrides, local scopes, and grid-only udg overrides.",
     group: "Foundations",
     Component: CssOverridePage,
   },
@@ -552,7 +565,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Basic Grid",
     title: "Basic Grid",
     description: "Rows, columns, search, sort, and pagination.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     gallery: true,
     path: "/data-grid/basic",
     packageName: "@vyrnforge/ui-data-grid",
@@ -563,7 +576,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Columns",
     title: "Column Management",
     description: "Visibility, order, density, and reset behavior.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: ColumnsPage,
   },
   {
@@ -572,7 +585,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Filtering",
     description:
       "Search and filter state examples without adding new grid features.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: FilteringPage,
   },
   {
@@ -580,7 +593,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Selection",
     title: "Selection",
     description: "Selectable rows, disabled rows, and bulk actions.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: SelectionPage,
   },
   {
@@ -588,7 +601,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Grouping",
     title: "Grouping",
     description: "Client-side grouping examples.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: GroupingPage,
   },
   {
@@ -596,7 +609,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Resizing",
     title: "Column Resizing",
     description: "Resizable columns, long text, and horizontal overflow.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: ResizingPage,
   },
   {
@@ -604,7 +617,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Grid Themes",
     title: "Grid Themes",
     description: "Light, dark, enterprise, and shared token alignment.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: ThemesGridPage,
   },
   {
@@ -613,7 +626,7 @@ export const routes: PlaygroundRoute[] = [
     title: "Grid States",
     description:
       "Empty, error, and loading states rendered through the grid package.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: GridStatesPage,
   },
   {
@@ -621,14 +634,17 @@ export const routes: PlaygroundRoute[] = [
     label: "Stress Grid",
     title: "Stress Grid",
     description: "Many rows and columns without introducing virtualization.",
-    group: "Data Grid",
+    group: "Advanced Modules",
     Component: StressGridPage,
   },
   {
     id: "resource-list",
     label: "Resource List",
     title: "Resource List",
-    description: "Compact enterprise lists with metadata, actions, and badges.",
+    description: patternDescription(
+      "resource-list",
+      "Compact resource lists with metadata and actions.",
+    ),
     group: "Patterns",
     Component: ResourceListPage,
   },
@@ -636,7 +652,7 @@ export const routes: PlaygroundRoute[] = [
     id: "detail",
     label: "Detail Page",
     title: "Detail Page",
-    description: "Header, metadata, status, key-value sections, and actions.",
+    description: patternDescription("detail", "Entity detail composition."),
     group: "Patterns",
     Component: DetailPage,
   },
@@ -644,7 +660,10 @@ export const routes: PlaygroundRoute[] = [
     id: "settings",
     label: "Settings",
     title: "Settings",
-    description: "Sectioned settings with checkboxes and explanatory text.",
+    description: patternDescription(
+      "settings",
+      "Sectioned settings composition.",
+    ),
     group: "Patterns",
     Component: SettingsPage,
   },
@@ -652,8 +671,10 @@ export const routes: PlaygroundRoute[] = [
     id: "form",
     label: "Form",
     title: "Form",
-    description:
-      "Fields, validation, disabled controls, and submission actions.",
+    description: patternDescription(
+      "form",
+      "General application form composition.",
+    ),
     group: "Patterns",
     Component: FormPage,
   },
@@ -661,7 +682,10 @@ export const routes: PlaygroundRoute[] = [
     id: "filter-form",
     label: "Filter Form",
     title: "Filter Form",
-    description: "Search, select, native date range, and filter actions.",
+    description: patternDescription(
+      "filter-form",
+      "Operational filter composition.",
+    ),
     group: "Patterns",
     Component: FilterFormPage,
   },
@@ -669,7 +693,10 @@ export const routes: PlaygroundRoute[] = [
     id: "assignment-patterns",
     label: "Assignments",
     title: "Assignment Patterns",
-    description: "Bounded dual-list assignment flows with TransferList.",
+    description: patternDescription(
+      "assignment-patterns",
+      "Bounded assignment flows.",
+    ),
     group: "Patterns",
     Component: AssignmentPatternsPage,
   },
@@ -678,15 +705,19 @@ export const routes: PlaygroundRoute[] = [
     label: "Overlay Stress Test",
     title: "Overlay Stress Test",
     description:
-      "Nested portal, focus, dismissal, scroll, and z-index exercise.",
-    group: "Patterns",
+      "Nested portal, focus, dismissal, scroll, and z-index engineering exercise.",
+    group: "Internal",
+    visibility: "internal",
     Component: OverlayStressPage,
   },
   {
     id: "empty-error-loading",
     label: "Empty/Error/Loading",
     title: "Empty, Error, and Loading",
-    description: "Full-page feedback states for enterprise workflows.",
+    description: patternDescription(
+      "empty-error-loading",
+      "Route-level feedback states.",
+    ),
     group: "Patterns",
     Component: EmptyErrorLoadingPage,
   },
@@ -694,8 +725,10 @@ export const routes: PlaygroundRoute[] = [
     id: "admin-shell",
     label: "Admin Shell",
     title: "Admin Shell",
-    description:
-      "A complete admin app frame using AppShell, TopNav, SideNav, PageHeader, and PageToolbar.",
+    description: patternDescription(
+      "admin-shell",
+      "Admin workspace composition.",
+    ),
     group: "Patterns",
     Component: AdminShellPage,
   },
@@ -703,8 +736,10 @@ export const routes: PlaygroundRoute[] = [
     id: "customer-portal-shell",
     label: "Customer Portal",
     title: "Customer Portal Shell",
-    description:
-      "A customer-facing portal frame with enterprise theme, breadcrumbs, and tabs.",
+    description: patternDescription(
+      "customer-portal-shell",
+      "Customer portal composition.",
+    ),
     group: "Patterns",
     Component: CustomerPortalShellPage,
   },
@@ -714,7 +749,8 @@ export const routes: PlaygroundRoute[] = [
     title: "Quality / Component Matrix",
     description:
       "Controlled review surface for component states, themes, densities, overlays, layouts, and grid behavior.",
-    group: "Quality",
+    group: "Internal",
+    visibility: "internal",
     Component: ComponentMatrixPage,
   },
 ];
@@ -723,7 +759,7 @@ export const routeGroups = [
   "Overview",
   "Foundations",
   "Components",
-  "Data Grid",
   "Patterns",
-  "Quality",
+  "Advanced Modules",
+  "Internal",
 ] as const;

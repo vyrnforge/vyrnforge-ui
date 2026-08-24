@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "data-grid-bulk-action-bar",
+  "name": "DataGridBulkActionBar",
+  "package": "@vyrnforge/ui-data-grid",
+  "category": "grid-feature",
+  "maturity": "planned",
+  "availability": "planned",
+  "purpose": "Dedicated public bulk-action bar component.",
+  "guidance": {
+    "useWhen": "Use later if exported publicly.",
+    "avoidWhen": "Do not import today; bulk actions are configured through UniversalDataGrid props.",
+    "aiUsageNotes": "Do not invent a public DataGridBulkActionBar import until it exists.",
+    "relatedComponents": [
+      "UniversalDataGrid"
+    ]
+  },
+  "accessibility": [
+    "Bulk actions should describe selected row scope."
+  ],
+  "knownLimitations": [
+    "Do not import today; bulk actions are configured through UniversalDataGrid props."
+  ],
+  "styling": {
+    "classes": [
+      "udg-bulk-actions"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "not-supported",
+      "package": "@vyrnforge/ui-data-grid"
+    },
+    "native-html": {
+      "status": "not-supported",
+      "package": null
+    },
+    "angular": {
+      "status": "not-supported",
+      "package": null
+    },
+    "vue": {
+      "status": "not-supported",
+      "package": null
+    }
+  },
+  "contract": null,
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": null,
+    "customElementsManifest": null
+  }
+}

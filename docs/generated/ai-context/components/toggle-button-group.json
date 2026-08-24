@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "id": "toggle-button-group",
+  "name": "ToggleButtonGroup",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Joined native ToggleButton collection with single or multiple selection state.",
+  "guidance": {
+    "useWhen": "Use for compact related tool or view choices.",
+    "avoidWhen": "Avoid for long form choice labels or descriptions; use RadioGroup.",
+    "aiUsageNotes": "Use type='single' for exclusive tools and type='multiple' for independent active tools.",
+    "relatedComponents": [
+      "ToggleButton",
+      "SegmentedControl",
+      "RadioGroup",
+      "ButtonGroup"
+    ]
+  },
+  "accessibility": [
+    "Use ToggleButton children with unique values. The group does not clone arbitrary children and supports arrow-key focus movement.",
+    "group role",
+    "aria-orientation",
+    "child pressed states"
+  ],
+  "knownLimitations": [
+    "Avoid for long form choice labels or descriptions; use RadioGroup."
+  ],
+  "styling": {
+    "classes": [
+      "vf-toggle-button-group",
+      "vf-toggle-button-group--single",
+      "vf-toggle-button-group--multiple"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ToggleButton, ToggleButtonGroup } from '@vyrnforge/ui-components';",
+      "example": "<ToggleButtonGroup defaultValue='table'><ToggleButton value='table'>Table</ToggleButton></ToggleButtonGroup>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-toggle-button-group></vf-toggle-button-group>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-toggle-button-group></vf-toggle-button-group>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-toggle-button-group></vf-toggle-button-group>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "orientation",
+        "type": "Orientation",
+        "required": false,
+        "default": "horizontal"
+      },
+      {
+        "name": "type",
+        "type": "ToggleGroupType",
+        "required": false,
+        "default": "single"
+      },
+      {
+        "name": "value",
+        "type": "ToggleGroupValue",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "ToggleGroupValue",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "group role",
+      "aria-orientation",
+      "child pressed states"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

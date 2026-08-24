@@ -9,7 +9,7 @@ import {
   SideNav,
   Tabs,
   Text,
-  TopNav
+  TopNav,
 } from "@vyrnforge/ui-components";
 
 export function CustomerPortalShellPage() {
@@ -27,11 +27,15 @@ export function CustomerPortalShellPage() {
           <TopNav
             brand={
               <span className="vf-playground-top-brand">
-                <span className="vf-playground-brand__mark">D</span>
+                <span className="vf-playground-brand__mark">V</span>
                 Customer Portal
               </span>
             }
-            actions={<Button size="sm" variant="subtle">Contact support</Button>}
+            actions={
+              <Button size="sm" variant="subtle">
+                Contact support
+              </Button>
+            }
             userArea={<Badge variant="success">Acme Co.</Badge>}
           />
         }
@@ -43,9 +47,22 @@ export function CustomerPortalShellPage() {
             activeId="subscriptions"
             items={[
               { id: "home", label: "Home", icon: <Icon name="Eye" /> },
-              { id: "subscriptions", label: "Subscriptions", icon: <Icon name="Columns" /> },
-              { id: "billing", label: "Billing", icon: <Icon name="Download" /> },
-              { id: "support", label: "Support", icon: <Icon name="Info" />, badge: "New" }
+              {
+                id: "subscriptions",
+                label: "Subscriptions",
+                icon: <Icon name="Columns" />,
+              },
+              {
+                id: "billing",
+                label: "Billing",
+                icon: <Icon name="Download" />,
+              },
+              {
+                id: "support",
+                label: "Support",
+                icon: <Icon name="Info" />,
+                badge: "New",
+              },
             ]}
           />
         }
@@ -58,7 +75,11 @@ export function CustomerPortalShellPage() {
               <Breadcrumbs
                 items={[
                   { id: "portal", label: "Portal", href: "#" },
-                  { id: "subscriptions", label: "Subscriptions", current: true }
+                  {
+                    id: "subscriptions",
+                    label: "Subscriptions",
+                    current: true,
+                  },
                 ]}
               />
             }
@@ -75,20 +96,32 @@ export function CustomerPortalShellPage() {
                 id: "overview",
                 label: "Overview",
                 content: (
-                  <Panel title="Usage" description="Current subscription usage.">
-                    <Text>72% of included monthly events used. Renewal is scheduled for August.</Text>
+                  <Panel
+                    title="Usage"
+                    description="Current subscription usage."
+                  >
+                    <Text>
+                      72% of included monthly events used. Renewal is scheduled
+                      for August.
+                    </Text>
                   </Panel>
-                )
+                ),
               },
               {
                 id: "billing",
                 label: "Billing",
                 content: (
-                  <Panel title="Billing contact" description="Customer-owned account data.">
-                    <Text>finance@acme.example receives invoices and renewal notices.</Text>
+                  <Panel
+                    title="Billing contact"
+                    description="Customer-owned account data."
+                  >
+                    <Text>
+                      finance@acme.example receives invoices and renewal
+                      notices.
+                    </Text>
                   </Panel>
-                )
-              }
+                ),
+              },
             ]}
           />
         </div>

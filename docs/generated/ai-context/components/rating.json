@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "rating",
+  "name": "Rating",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Discrete whole-number rating control backed by native radio behavior when editable.",
+  "guidance": {
+    "useWhen": "Use for small qualitative scores such as quality, satisfaction, or review ratings.",
+    "avoidWhen": "Avoid for continuous bounded ranges; use Slider.",
+    "aiUsageNotes": "Keep Rating whole-number only. Do not add half-star precision or an icon library.",
+    "relatedComponents": [
+      "RadioGroup",
+      "Slider"
+    ]
+  },
+  "accessibility": [
+    "Editable ratings use labelled native radio inputs. Read-only ratings are exposed as non-editable text equivalents.",
+    "radiogroup semantics",
+    "radio item labeling",
+    "keyboard adjustment",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for continuous bounded ranges; use Slider."
+  ],
+  "styling": {
+    "classes": [
+      "vf-rating",
+      "vf-rating__item",
+      "vf-rating__icon"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Rating } from '@vyrnforge/ui-components';",
+      "example": "<Rating label='Quality score' defaultValue={4} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-rating></vf-rating>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-rating></vf-rating>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-rating></vf-rating>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "allowClear",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "Rating"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": 5
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "required": false,
+        "default": 0
+      },
+      {
+        "name": "defaultValue",
+        "type": "number",
+        "required": false,
+        "default": 0
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "radiogroup semantics",
+      "radio item labeling",
+      "keyboard adjustment",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "badge",
+  "name": "Badge",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Compact status or metadata label.",
+  "guidance": {
+    "useWhen": "Use for short neutral, info, success, warning, or danger labels.",
+    "avoidWhen": "Avoid for long messages; use InlineMessage or Alert.",
+    "aiUsageNotes": "Keep badge text short.",
+    "relatedComponents": [
+      "StatusBadge",
+      "InlineMessage"
+    ]
+  },
+  "accessibility": [
+    "Do not rely on color alone for meaning.",
+    "text remains available to assistive technology"
+  ],
+  "knownLimitations": [
+    "Avoid for long messages; use InlineMessage or Alert."
+  ],
+  "styling": {
+    "classes": [
+      "vf-badge"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Badge } from '@vyrnforge/ui-components';",
+      "example": "<Badge variant='success'>Active</Badge>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-badge></vf-badge>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-badge></vf-badge>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-badge></vf-badge>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "size",
+        "type": "BadgeSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "tone",
+        "type": "BadgeTone",
+        "required": false,
+        "default": "subtle"
+      },
+      {
+        "name": "variant",
+        "type": "BadgeVariant",
+        "required": false,
+        "default": "neutral"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "text remains available to assistive technology"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

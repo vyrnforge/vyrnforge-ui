@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "page-header",
+  "name": "PageHeader",
+  "package": "@vyrnforge/ui-components",
+  "category": "composite",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Reusable page header with title, description, eyebrow, status, metadata, breadcrumbs, and actions.",
+  "guidance": {
+    "useWhen": "Use for route/page headers or major workflow headers.",
+    "avoidWhen": "Avoid for small panel headings; use Panel or Section title props instead.",
+    "aiUsageNotes": "Use PageHeader for route-level headers and keep action labels explicit.",
+    "relatedComponents": [
+      "Page",
+      "Breadcrumbs",
+      "Button",
+      "ToolbarButton"
+    ]
+  },
+  "accessibility": [
+    "Title renders as an h1; preserve heading order in surrounding pages.",
+    "semantic page heading",
+    "supplemental regions preserve child semantics"
+  ],
+  "knownLimitations": [
+    "Avoid for small panel headings; use Panel or Section title props instead."
+  ],
+  "styling": {
+    "classes": [
+      "vf-page-header"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { PageHeader } from '@vyrnforge/ui-components';",
+      "example": "<PageHeader title='Orders' actions={<Button>Create</Button>} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-page-header></vf-page-header>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-page-header></vf-page-header>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-page-header></vf-page-header>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "eyebrow",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [],
+    "slots": [
+      "breadcrumbs",
+      "status",
+      "metadata",
+      "actions"
+    ],
+    "methods": [],
+    "accessibility": [
+      "semantic page heading",
+      "supplemental regions preserve child semantics"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

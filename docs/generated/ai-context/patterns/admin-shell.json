@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "admin-shell",
+  "displayName": "Admin Shell",
+  "category": "application-layout",
+  "purpose": "Dense administration workspace with persistent top navigation, side navigation, page identity, toolbar actions, and work panels.",
+  "useWhen": "Use as a composition reference for internal operations, administration, IAM, and other dense workspace applications.",
+  "avoidWhen": "Avoid copying application routing, authorization, or business state into the library; the shell only defines reusable UI composition.",
+  "components": [
+    "app-shell",
+    "badge",
+    "button",
+    "page-header",
+    "page-toolbar",
+    "panel",
+    "search-input",
+    "side-nav",
+    "toolbar-button",
+    "top-nav"
+  ],
+  "playgroundRoute": "/admin-shell",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "admin",
+    "admin shell",
+    "operations console",
+    "workspace",
+    "sidebar",
+    "top navigation"
+  ],
+  "componentContexts": [
+    "ai-context/components/app-shell.json",
+    "ai-context/components/badge.json",
+    "ai-context/components/button.json",
+    "ai-context/components/page-header.json",
+    "ai-context/components/page-toolbar.json",
+    "ai-context/components/panel.json",
+    "ai-context/components/search-input.json",
+    "ai-context/components/side-nav.json",
+    "ai-context/components/toolbar-button.json",
+    "ai-context/components/top-nav.json"
+  ]
+}

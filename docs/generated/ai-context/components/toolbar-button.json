@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "toolbar-button",
+  "name": "ToolbarButton",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Dense toolbar action that can show icon and label.",
+  "guidance": {
+    "useWhen": "Use inside repeated toolbars or compact command rows.",
+    "avoidWhen": "Avoid for standalone page-level primary actions.",
+    "aiUsageNotes": "Prefer ToolbarButton for dense repeated utility commands.",
+    "relatedComponents": [
+      "Button",
+      "IconButton",
+      "ButtonGroup"
+    ]
+  },
+  "accessibility": [
+    "Keep label meaningful even when visual space is compact.",
+    "native button semantics",
+    "aria-pressed for active tool state",
+    "accessible name"
+  ],
+  "knownLimitations": [
+    "Avoid for standalone page-level primary actions."
+  ],
+  "styling": {
+    "classes": [
+      "vf-toolbar-button"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ToolbarButton, Icon } from '@vyrnforge/ui-components';",
+      "example": "<ToolbarButton icon={<Icon name='Filter' />} label='Filters' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-toolbar-button></vf-toolbar-button>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-toolbar-button></vf-toolbar-button>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-toolbar-button></vf-toolbar-button>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "action",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "active",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "pressed",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultPressed",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "ButtonSize",
+        "required": false,
+        "default": "sm"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "variant",
+        "type": "ButtonVariant",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-pressed-change"
+      },
+      {
+        "name": "vf-action"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "methods": [
+      "focus"
+    ],
+    "accessibility": [
+      "native button semantics",
+      "aria-pressed for active tool state",
+      "accessible name"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

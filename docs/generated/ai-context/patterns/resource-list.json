@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "resource-list",
+  "displayName": "Resource List",
+  "category": "data-management",
+  "purpose": "Compact application list for resources, metadata, status, and row-level actions without introducing grid semantics.",
+  "useWhen": "Use for moderate resource collections where each item needs a readable identity, metadata, status, and a few actions.",
+  "avoidWhen": "Use UniversalDataGrid when columnar comparison, sorting, filtering, resizing, grouping, or grid state is the primary interaction model.",
+  "components": [
+    "badge",
+    "button",
+    "more-button",
+    "toast-provider",
+    "use-toast"
+  ],
+  "playgroundRoute": "/resource-list",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "resource list",
+    "records",
+    "assets",
+    "row actions",
+    "status list"
+  ],
+  "componentContexts": [
+    "ai-context/components/badge.json",
+    "ai-context/components/button.json",
+    "ai-context/components/more-button.json",
+    "ai-context/components/toast-provider.json",
+    "ai-context/components/use-toast.json"
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "category": "form-control",
+  "components": [
+    {
+      "id": "autocomplete",
+      "name": "Autocomplete",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Searchable single-value combobox with serializable options and shared overlay behavior.",
+      "context": "ai-context/components/autocomplete.json"
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native checkbox control.",
+      "context": "ai-context/components/checkbox.json"
+    },
+    {
+      "id": "date-input",
+      "name": "DateInput",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native input type='date' control aligned with VyrnForge input styling.",
+      "context": "ai-context/components/date-input.json"
+    },
+    {
+      "id": "datetime-input",
+      "name": "DateTimeInput",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native input type='datetime-local' control aligned with VyrnForge input styling.",
+      "context": "ai-context/components/datetime-input.json"
+    },
+    {
+      "id": "field",
+      "name": "Field",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Form field wrapper for labels, descriptions, validation, and safe control relationships.",
+      "context": "ai-context/components/field.json"
+    },
+    {
+      "id": "multi-select",
+      "name": "MultiSelect",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Simple multi-value selection control with chips, optional search, clear action, and native checkbox options.",
+      "context": "ai-context/components/multi-select.json"
+    },
+    {
+      "id": "number-input",
+      "name": "NumberInput",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native input type='number' control aligned with VyrnForge input styling, with integer and decimal typing modes.",
+      "context": "ai-context/components/number-input.json"
+    },
+    {
+      "id": "radio",
+      "name": "Radio",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native radio input with optional label, description, invalid, disabled, controlled, and uncontrolled states.",
+      "context": "ai-context/components/radio.json"
+    },
+    {
+      "id": "radio-group",
+      "name": "RadioGroup",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Fieldset-based radio group with label, description, error, orientation, disabled, required, controlled, and uncontrolled state.",
+      "context": "ai-context/components/radio-group.json"
+    },
+    {
+      "id": "rating",
+      "name": "Rating",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Discrete whole-number rating control backed by native radio behavior when editable.",
+      "context": "ai-context/components/rating.json"
+    },
+    {
+      "id": "search-input",
+      "name": "SearchInput",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Search-specific native input.",
+      "context": "ai-context/components/search-input.json"
+    },
+    {
+      "id": "select",
+      "name": "Select",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native select control with VyrnForge styling.",
+      "context": "ai-context/components/select.json"
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native bounded numeric range input with optional displayed value.",
+      "context": "ai-context/components/slider.json"
+    },
+    {
+      "id": "switch",
+      "name": "Switch",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native checkbox-backed switch for immediate on/off settings.",
+      "context": "ai-context/components/switch.json"
+    },
+    {
+      "id": "textarea",
+      "name": "Textarea",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native multi-line text control.",
+      "context": "ai-context/components/textarea.json"
+    },
+    {
+      "id": "text-input",
+      "name": "TextInput",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Native text input with VyrnForge styling.",
+      "context": "ai-context/components/text-input.json"
+    },
+    {
+      "id": "validation-message",
+      "name": "ValidationMessage",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Inline validation or supporting message with error, warning, success, and info tones.",
+      "context": "ai-context/components/validation-message.json"
+    }
+  ]
+}

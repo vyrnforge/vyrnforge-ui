@@ -1,31 +1,49 @@
+import { Panel } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
-import { DemoBlock } from "../../components/DemoBlock";
-import { DemoPage } from "../../components/DemoPage";
-import { DemoSection } from "../../components/DemoSection";
+import { ComponentDemoPage } from "../../components/ComponentDemoPage";
 import { users } from "../../data/users";
 import { persistenceAdapter, userColumns } from "./gridShared";
 
+const importCode =
+  'import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";';
+
 export function BasicGridPage() {
   return (
-    <DemoPage
-      accessibility="Give the grid a meaningful surrounding heading and test keyboard access for sorting, column actions, and pagination."
-      avoid="Avoid passing application fetching, mutations, or a global store into the grid package."
+    <ComponentDemoPage
+      accessibility={[
+        "Give the grid a meaningful surrounding heading and test keyboard access for sorting, column actions, and pagination.",
+      ]}
+      avoidWhen={[
+        "Application fetching, mutations, and global state should remain outside the grid package.",
+      ]}
       description="A specialized data-management grid with local search, sorting, pagination, and persisted view preferences."
-      importSnippet={'import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";'}
+      importCode={importCode}
       packageName="@vyrnforge/ui-data-grid"
-      relatedComponents={["PageToolbar", "SearchInput", "DataGrid state contracts"]}
-      status="stable"
-      title="Basic data grid"
-      usage="Use UniversalDataGrid for structured, column-based data management. Keep row data and business workflows in the application."
-    >
-      <DemoSection description="Search, sorting, pagination, density, and column controls use the current data-grid package." title="Live preview">
-        <DemoBlock
-          defaultCodeVisible
-          code={'<UniversalDataGrid\n  tableId="users"\n  columns={userColumns}\n  rows={users}\n  getRowId={(row) => row.id}\n  persistState\n  persistenceAdapter={persistenceAdapter}\n  variant="card"\n/>'}
-          preview={<UniversalDataGrid tableId="vf-playground-basic-users" rows={users} columns={userColumns} getRowId={(row) => row.id} persistenceAdapter={persistenceAdapter} persistState variant="card" />}
-          title="Users"
-        />
-      </DemoSection>
-    </DemoPage>
+      relatedComponents={[]}
+      sections={[
+        {
+          id: "basic-usage",
+          label: "Basic usage",
+          title: "Basic usage",
+          children: (
+            <Panel title="Users">
+              <UniversalDataGrid
+                tableId="vf-playground-basic-users"
+                rows={users}
+                columns={userColumns}
+                getRowId={(row) => row.id}
+                persistenceAdapter={persistenceAdapter}
+                persistState
+                variant="card"
+              />
+            </Panel>
+          ),
+        },
+      ]}
+      title="UniversalDataGrid"
+      useWhen={[
+        "Use UniversalDataGrid for structured, column-based data management while the application owns row data and business workflows.",
+      ]}
+    />
   );
 }

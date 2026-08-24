@@ -15,6 +15,8 @@ queryable repository facts and current evidence records.
   renderer-neutral component, event, slot, and form contracts.
 - `components.json` owns the normalized component catalog, public-contract
   inventory, maturity, and evidence.
+- `patterns.json` owns reusable application composition patterns and task-routing
+  hints shared by the playground and generated AI context.
 - `design-tokens.json` owns shared semantic tokens, themes, densities, motion,
   layers, and compatibility bridges.
 - `framework-exceptions.json` records explicit framework-specific exceptions to

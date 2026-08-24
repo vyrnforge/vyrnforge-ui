@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "id": "switch",
+  "name": "Switch",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native checkbox-backed switch for immediate on/off settings.",
+  "guidance": {
+    "useWhen": "Use for settings that take effect as enabled/disabled toggles.",
+    "avoidWhen": "Avoid for multi-step confirmation or non-immediate choices.",
+    "aiUsageNotes": "Use Switch for settings; use Checkbox for acknowledgements and forms requiring checkbox semantics.",
+    "relatedComponents": [
+      "Checkbox"
+    ]
+  },
+  "accessibility": [
+    "Uses role='switch' and aria-checked for controlled checked state.",
+    "native switch semantics",
+    "accessible label",
+    "checked/disabled/required states",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for multi-step confirmation or non-immediate choices."
+  ],
+  "styling": {
+    "classes": [
+      "vf-switch"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Switch } from '@vyrnforge/ui-components';",
+      "example": "<Switch checked={enabled} onCheckedChange={setEnabled} label='Enabled' />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-switch></vf-switch>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-switch></vf-switch>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-switch></vf-switch>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "checked",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultChecked",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "InputSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": "on"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-checked-change"
+      },
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native switch semantics",
+      "accessible label",
+      "checked/disabled/required states",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

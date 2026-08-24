@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "clear-button",
+  "name": "ClearButton",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "guidance": {
+    "useWhen": null,
+    "avoidWhen": null,
+    "aiUsageNotes": null,
+    "relatedComponents": []
+  },
+  "accessibility": [],
+  "knownLimitations": [],
+  "styling": {
+    "classes": [],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-icon-button></vf-icon-button>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-icon-button></vf-icon-button>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-icon-button></vf-icon-button>"
+    }
+  },
+  "contract": null,
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": null,
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

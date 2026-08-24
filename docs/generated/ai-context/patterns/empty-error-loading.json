@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "empty-error-loading",
+  "displayName": "Empty, Error, and Loading",
+  "category": "feedback",
+  "purpose": "Route-level feedback composition for empty, failed, and loading application states.",
+  "useWhen": "Use to make page and workflow state explicit while the consuming application owns loading and retry state.",
+  "avoidWhen": "Use smaller inline feedback when the entire route or primary task is not affected.",
+  "components": [
+    "button",
+    "empty-state",
+    "error-state",
+    "loading-state",
+    "skeleton"
+  ],
+  "playgroundRoute": "/empty-error-loading",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "empty state",
+    "error state",
+    "loading state",
+    "skeleton",
+    "retry"
+  ],
+  "componentContexts": [
+    "ai-context/components/button.json",
+    "ai-context/components/empty-state.json",
+    "ai-context/components/error-state.json",
+    "ai-context/components/loading-state.json",
+    "ai-context/components/skeleton.json"
+  ]
+}

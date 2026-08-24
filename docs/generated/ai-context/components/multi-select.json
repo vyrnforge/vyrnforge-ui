@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "id": "multi-select",
+  "name": "MultiSelect",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Simple multi-value selection control with chips, optional search, clear action, and native checkbox options.",
+  "guidance": {
+    "useWhen": "Use for small multi-value option sets in forms and settings.",
+    "avoidWhen": "Avoid for async, virtualized, creatable, or very large option sets.",
+    "aiUsageNotes": "Keep S3 MultiSelect simple; do not add async loading, creatable options, or virtualization.",
+    "relatedComponents": [
+      "Select",
+      "Checkbox"
+    ]
+  },
+  "accessibility": [
+    "Multi-select needs clear keyboard and announcement behavior.",
+    "listbox semantics",
+    "multi-selection state",
+    "keyboard-accessible trigger",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for async, virtualized, creatable, or very large option sets."
+  ],
+  "styling": {
+    "classes": [
+      "vf-multi-select"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { MultiSelect } from '@vyrnforge/ui-components';",
+      "example": "<MultiSelect value={roles} onValueChange={setRoles} options={options} searchable />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-multi-select></vf-multi-select>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-multi-select></vf-multi-select>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-multi-select></vf-multi-select>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "options",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "Select options"
+      },
+      {
+        "name": "searchable",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "value",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "defaultValue",
+        "type": "array",
+        "required": false,
+        "default": []
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "clear",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "listbox semantics",
+      "multi-selection state",
+      "keyboard-accessible trigger",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

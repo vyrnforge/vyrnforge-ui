@@ -1,56 +1,47 @@
 {
-  "schemaVersion": 1,
-  "program": {
-    "sprint": "S7",
-    "gate": "GMF4",
-    "status": "evidence-complete",
-    "tasks": [
-      {
-        "id": "CF-7011",
-        "title": "Add framework tabs to component documentation",
-        "status": "done"
-      },
-      {
-        "id": "CF-7012",
-        "title": "Generate component contract reference",
-        "status": "done"
-      }
-    ],
-    "gateStatus": "passed"
-  },
-  "supportClaim": "multi-framework-component-reference-verified",
+  "schemaVersion": 2,
+  "status": "current",
+  "purpose": "Generate one consumer-knowledge model for human reference surfaces and task-scoped AI context retrieval without duplicating canonical component, contract, pattern, package, or framework truth.",
   "sourceOfTruth": [
     "docs/metadata/components.json",
     "docs/metadata/component-contracts.json",
+    "docs/metadata/patterns.json",
+    "docs/metadata/packages.json",
+    "docs/metadata/multi-framework.json",
     "packages/ui-elements/custom-elements.json"
   ],
-  "generatedArtifact": "docs/generated/component-reference.json",
-  "frameworkTabs": ["react", "native-html", "angular", "vue"],
+  "generatedArtifacts": {
+    "consumerKnowledge": "docs/generated/consumer-knowledge.json",
+    "componentReference": "docs/generated/component-reference.json",
+    "aiIndex": "docs/generated/ai-context/index.json",
+    "aiCategories": "docs/generated/ai-context/categories/*.json",
+    "aiComponents": "docs/generated/ai-context/components/*.json",
+    "aiPatterns": "docs/generated/ai-context/patterns/*.json"
+  },
+  "frameworkSurfaces": ["react", "native-html", "angular", "vue"],
   "policy": {
-    "preserveCanonicalParityStatuses": true,
+    "canonicalMetadataWins": true,
     "inventMissingContracts": false,
-    "frameworkSpecificRenderingDuplicated": false
+    "inventFrameworkSupport": false,
+    "generatedAiContextIsTaskScoped": true,
+    "playgroundStatusIsGenerated": true,
+    "humanExamplesMayRemainHandAuthoredWhenVerifiedAgainstPublicApis": true
   },
   "requiredCommands": [
-    "npm run generate:component-reference",
-    "npm run test:component-reference",
-    "npm run verify:component-reference",
+    "npm run generate:consumer-knowledge",
+    "npm run verify:consumer-knowledge",
+    "npm run test:consumer-knowledge",
     "npm run build:docs",
-    "npm run quality"
+    "npm run build:playground"
   ],
   "evidence": [
     "docs/testing/generated-component-reference.md",
-    "docs/generated/component-reference.json",
+    "docs/generated/consumer-knowledge.json",
+    "docs/generated/ai-context/index.json",
+    "apps/docs/src/AiContextIndexPage.tsx",
     "apps/docs/src/ComponentReferencePage.tsx",
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
     "scripts/generate-component-reference.mjs",
     "scripts/verify-component-reference.mjs"
-  ],
-  "completedEvidence": [
-    "generated component reference covers the canonical beta-scope inventory",
-    "React, Native HTML, Angular, and Vue usage tabs are present without duplicating component implementations",
-    "per-component Angular and Vue parity statuses remain sourced from canonical components.json metadata",
-    "detailed contract fields are emitted only from the canonical component-contract catalog",
-    "documentation application production build passed"
-  ],
-  "unresolvedBlockers": []
+  ]
 }

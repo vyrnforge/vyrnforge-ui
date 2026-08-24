@@ -50,33 +50,37 @@ import {
   Tooltip,
   TopNav,
   TransferList,
-  useToast
+  useToast,
 } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 
 const roleOptions = [
   { value: "admin", label: "Administrator" },
   { value: "operator", label: "Operator" },
-  { value: "viewer", label: "Viewer", disabled: true }
+  { value: "viewer", label: "Viewer", disabled: true },
 ];
 
 const transferOptions = [
   { value: "iam", label: "Identity", description: "Access requests." },
-  { value: "analytics", label: "Analytics", description: "Operational insight." },
+  {
+    value: "analytics",
+    label: "Analytics",
+    description: "Operational insight.",
+  },
   { value: "api-gateway", label: "API Gateway", disabled: true },
-  { value: "reports", label: "Reports" }
+  { value: "reports", label: "Reports" },
 ];
 
 const gridRows = [
   { id: "ord-1", customer: "Mira Sutanto", status: "Ready", total: 4820 },
   { id: "ord-2", customer: "Daniel Prasetyo", status: "Pending", total: 2100 },
-  { id: "ord-3", customer: "Sofia Hartono", status: "Blocked", total: 920 }
+  { id: "ord-3", customer: "Sofia Hartono", status: "Blocked", total: 920 },
 ];
 
 function MatrixSection({
   children,
   description,
-  title
+  title,
 }: {
   children: ReactNode;
   description: string;
@@ -99,7 +103,7 @@ function MatrixToastDemo() {
         onClick={() =>
           toast.success({
             title: "Saved",
-            description: "The quality matrix action completed."
+            description: "The quality matrix action completed.",
           })
         }
         variant="primary"
@@ -109,9 +113,11 @@ function MatrixToastDemo() {
       <Button
         onClick={() =>
           toast.error({
-            action: <ToastAction altText="Retry quality check">Retry</ToastAction>,
+            action: (
+              <ToastAction altText="Retry quality check">Retry</ToastAction>
+            ),
             title: "Export failed",
-            description: "The retry action stays keyboard accessible."
+            description: "The retry action stays keyboard accessible.",
           })
         }
         variant="danger"
@@ -138,11 +144,12 @@ export function ComponentMatrixPage() {
             <div>
               <h2>Component Quality Matrix</h2>
               <p className="vf-playground-note">
-                Review representative component states against theme, density, focus, disabled,
-                read-only, invalid, loading, long-label, and narrow-width cases.
+                Review representative component states against theme, density,
+                focus, disabled, read-only, invalid, loading, long-label, and
+                narrow-width cases.
               </p>
             </div>
-            <Badge variant="info">Q1</Badge>
+            <Badge variant="info">internal QA</Badge>
           </div>
           <div className="vf-playground-quality-controls">
             <SegmentedControl
@@ -151,7 +158,7 @@ export function ComponentMatrixPage() {
               options={[
                 { label: "Light", value: "light" },
                 { label: "Dark", value: "dark" },
-                { label: "Enterprise", value: "enterprise" }
+                { label: "Enterprise", value: "enterprise" },
               ]}
               value={theme}
             />
@@ -161,7 +168,7 @@ export function ComponentMatrixPage() {
               options={[
                 { label: "Compact", value: "compact" },
                 { label: "Standard", value: "standard" },
-                { label: "Comfortable", value: "comfortable" }
+                { label: "Comfortable", value: "comfortable" },
               ]}
               value={density}
             />
@@ -174,7 +181,11 @@ export function ComponentMatrixPage() {
         </Panel>
 
         <div
-          className={narrow ? "vf-playground-quality-frame vf-playground-quality-frame--narrow" : "vf-playground-quality-frame"}
+          className={
+            narrow
+              ? "vf-playground-quality-frame vf-playground-quality-frame--narrow"
+              : "vf-playground-quality-frame"
+          }
           data-density={density}
           data-theme={theme}
         >
@@ -186,19 +197,35 @@ export function ComponentMatrixPage() {
               <Inline gap="sm" wrap>
                 <Button variant="primary">Save changes</Button>
                 <Button variant="subtle">Cancel</Button>
-                <Button loading variant="primary">Saving</Button>
+                <Button loading variant="primary">
+                  Saving
+                </Button>
                 <Button disabled>Disabled</Button>
-                <Button fullWidth variant="danger">Full-width destructive action with a long label</Button>
+                <Button fullWidth variant="danger">
+                  Full-width destructive action with a long label
+                </Button>
               </Inline>
               <Inline gap="sm" wrap>
                 <IconButton aria-label="Refresh" tooltip="Refresh">
                   <Icon name="Refresh" />
                 </IconButton>
-                <IconButton aria-label="Delete record" tooltip="Delete record" variant="danger">
+                <IconButton
+                  aria-label="Delete record"
+                  tooltip="Delete record"
+                  variant="danger"
+                >
                   <Icon name="Delete" />
                 </IconButton>
-                <ToolbarButton active icon={<Icon name="Filter" />} label="Filters" />
-                <ToolbarButton disabled icon={<Icon name="Settings" />} label="Policy locked" />
+                <ToolbarButton
+                  active
+                  icon={<Icon name="Filter" />}
+                  label="Filters"
+                />
+                <ToolbarButton
+                  disabled
+                  icon={<Icon name="Settings" />}
+                  label="Policy locked"
+                />
               </Inline>
               <ButtonGroup attached>
                 <Button>Day</Button>
@@ -208,7 +235,11 @@ export function ComponentMatrixPage() {
               <Inline gap="sm" wrap>
                 <ToggleButton defaultPressed>Pin toolbar</ToggleButton>
                 <ToggleButton disabled>Disabled tool</ToggleButton>
-                <ToggleButtonGroup ariaLabel="Formatting" defaultValue={["bold"]} type="multiple">
+                <ToggleButtonGroup
+                  ariaLabel="Formatting"
+                  defaultValue={["bold"]}
+                  type="multiple"
+                >
                   <ToggleButton value="bold">Bold</ToggleButton>
                   <ToggleButton value="italic">Italic</ToggleButton>
                   <ToggleButton value="underline">Underline</ToggleButton>
@@ -222,34 +253,78 @@ export function ComponentMatrixPage() {
             title="Form Controls"
           >
             <div className="vf-playground-quality-grid">
-              <Field id="quality-name" label="Workspace name" description="A normal labelled text field." required>
-                {(controlProps) => <SearchInput {...controlProps} defaultValue="Operations" />}
+              <Field
+                id="quality-name"
+                label="Workspace name"
+                description="A normal labelled text field."
+                required
+              >
+                {(controlProps) => (
+                  <SearchInput {...controlProps} defaultValue="Operations" />
+                )}
               </Field>
-              <Field id="quality-description" label="Long description" warning="Review before publishing.">
-                {(controlProps) => <Textarea {...controlProps} defaultValue="This request has a deliberately longer value to inspect height, wrapping, and focus outline behavior." rows={4} />}
+              <Field
+                id="quality-description"
+                label="Long description"
+                warning="Review before publishing."
+              >
+                {(controlProps) => (
+                  <Textarea
+                    {...controlProps}
+                    defaultValue="This request has a deliberately longer value to inspect height, wrapping, and focus outline behavior."
+                    rows={4}
+                  />
+                )}
               </Field>
-              <Field id="quality-role" label="Role" error="Choose an available role.">
-                {(controlProps) => <Select {...controlProps} invalid options={roleOptions} />}
+              <Field
+                id="quality-role"
+                label="Role"
+                error="Choose an available role."
+              >
+                {(controlProps) => (
+                  <Select {...controlProps} invalid options={roleOptions} />
+                )}
               </Field>
               <Field id="quality-limit" label="Approval limit">
-                {(controlProps) => <NumberInput {...controlProps} defaultValue={12.5} mode="decimal" step={0.01} />}
+                {(controlProps) => (
+                  <NumberInput
+                    {...controlProps}
+                    defaultValue={12.5}
+                    mode="decimal"
+                    step={0.01}
+                  />
+                )}
               </Field>
               <DateInput aria-label="Start date" defaultValue="2026-07-16" />
-              <DateTimeInput aria-label="Review time" defaultValue="2026-07-16T09:30" />
-              <Checkbox defaultChecked label="I agree to the workspace access policy with a long label that wraps." />
-              <Switch label="Require audit notes" defaultChecked description="Immediate setting." />
+              <DateTimeInput
+                aria-label="Review time"
+                defaultValue="2026-07-16T09:30"
+              />
+              <Checkbox
+                defaultChecked
+                label="I agree to the workspace access policy with a long label that wraps."
+              />
+              <Switch
+                label="Require audit notes"
+                defaultChecked
+                description="Immediate setting."
+              />
               <RadioGroup
                 label="Review cadence"
                 defaultValue="weekly"
                 options={[
                   { label: "Daily", value: "daily" },
                   { label: "Weekly", value: "weekly" },
-                  { label: "Annual", value: "annual", disabled: true }
+                  { label: "Annual", value: "annual", disabled: true },
                 ]}
               />
               <Stack gap="sm">
                 <Rating label="Quality score" defaultValue={4} />
-                <Slider ariaLabel="Approval threshold" defaultValue={65} showValue />
+                <Slider
+                  ariaLabel="Approval threshold"
+                  defaultValue={65}
+                  showValue
+                />
               </Stack>
             </div>
           </MatrixSection>
@@ -282,14 +357,22 @@ export function ComponentMatrixPage() {
               <Inline gap="sm" wrap>
                 <Badge variant="success">Ready</Badge>
                 <Badge variant="warning">Pending review</Badge>
-                <Badge tone="solid" variant="danger">Blocked</Badge>
+                <Badge tone="solid" variant="danger">
+                  Blocked
+                </Badge>
               </Inline>
               <Alert title="Policy warning" variant="warning">
                 This persistent message should remain readable in every theme.
               </Alert>
               <div className="vf-playground-quality-grid">
-                <EmptyState action={<Button>Create record</Button>} title="No records" />
-                <ErrorState retryAction={<Button>Retry</Button>} title="Could not load records" />
+                <EmptyState
+                  action={<Button>Create record</Button>}
+                  title="No records"
+                />
+                <ErrorState
+                  retryAction={<Button>Retry</Button>}
+                  title="Could not load records"
+                />
                 <LoadingState label="Loading records" />
                 <Stack gap="sm">
                   <Skeleton />
@@ -314,15 +397,27 @@ export function ComponentMatrixPage() {
                 items={[
                   { id: "home", href: "#overview", label: "Home" },
                   { id: "settings", href: "#settings", label: "Settings" },
-                  { id: "quality", current: true, label: "Component Quality Matrix" }
+                  {
+                    id: "quality",
+                    current: true,
+                    label: "Component Quality Matrix",
+                  },
                 ]}
               />
               <Tabs
                 defaultValue="overview"
                 items={[
-                  { id: "overview", label: "Overview", content: <Text>Overview panel.</Text> },
-                  { id: "details", label: "Details", content: <Text>Details panel.</Text> },
-                  { id: "disabled", disabled: true, label: "Disabled" }
+                  {
+                    id: "overview",
+                    label: "Overview",
+                    content: <Text>Overview panel.</Text>,
+                  },
+                  {
+                    id: "details",
+                    label: "Details",
+                    content: <Text>Details panel.</Text>,
+                  },
+                  { id: "disabled", disabled: true, label: "Disabled" },
                 ]}
               />
               <div className="vf-playground-nav-demo-frame">
@@ -330,8 +425,11 @@ export function ComponentMatrixPage() {
                   activeId="orders"
                   items={[
                     { id: "overview", label: "Overview" },
-                    { id: "orders", label: "Orders with a deliberately long navigation label" },
-                    { id: "settings", label: "Settings" }
+                    {
+                      id: "orders",
+                      label: "Orders with a deliberately long navigation label",
+                    },
+                    { id: "settings", label: "Settings" },
                   ]}
                 />
               </div>
@@ -340,7 +438,15 @@ export function ComponentMatrixPage() {
                 header={<TopNav brand="Shell" />}
                 minHeight={320}
                 scrollMode="content"
-                sidebar={<SideNav activeId="orders" items={[{ id: "overview", label: "Overview" }, { id: "orders", label: "Orders" }]} />}
+                sidebar={
+                  <SideNav
+                    activeId="orders"
+                    items={[
+                      { id: "overview", label: "Overview" },
+                      { id: "orders", label: "Orders" },
+                    ]}
+                  />
+                }
                 sidebarWidth={180}
               >
                 <Page>
@@ -350,12 +456,21 @@ export function ComponentMatrixPage() {
                     title="Route title"
                   />
                   <PageToolbar>
-                    <ToolbarButton icon={<Icon name="Search" />} label="Search" />
-                    <ToolbarButton active icon={<Icon name="Filter" />} label="Filters" />
+                    <ToolbarButton
+                      icon={<Icon name="Search" />}
+                      label="Search"
+                    />
+                    <ToolbarButton
+                      active
+                      icon={<Icon name="Filter" />}
+                      label="Filters"
+                    />
                   </PageToolbar>
                   <Section title="Section">
                     <Card>
-                      <Text tone="muted">Constrained shell content surface.</Text>
+                      <Text tone="muted">
+                        Constrained shell content surface.
+                      </Text>
                     </Card>
                   </Section>
                 </Page>
@@ -378,7 +493,7 @@ export function ComponentMatrixPage() {
                 items={[
                   { id: "edit", label: "Edit" },
                   { id: "archive", label: "Archive", disabled: true },
-                  { id: "delete", label: "Delete", danger: true }
+                  { id: "delete", label: "Delete", danger: true },
                 ]}
                 trigger={<Button>Open menu</Button>}
               />
@@ -389,7 +504,9 @@ export function ComponentMatrixPage() {
               </Tooltip>
               <Button onClick={() => setDialogOpen(true)}>Open dialog</Button>
               <Button onClick={() => setDrawerOpen(true)}>Open drawer</Button>
-              <Button variant="danger" onClick={() => setConfirmOpen(true)}>Confirm delete</Button>
+              <Button variant="danger" onClick={() => setConfirmOpen(true)}>
+                Confirm delete
+              </Button>
             </Inline>
             <Dialog
               description="Focus should remain inside while open and return to the trigger after close."
@@ -398,8 +515,12 @@ export function ComponentMatrixPage() {
               title="Quality dialog"
             >
               <Stack gap="md">
-                <Text>Dialog body with enough structure to test tab order.</Text>
-                <Button onClick={() => setDialogOpen(false)}>Close from body</Button>
+                <Text>
+                  Dialog body with enough structure to test tab order.
+                </Text>
+                <Button onClick={() => setDialogOpen(false)}>
+                  Close from body
+                </Button>
               </Stack>
             </Dialog>
             <Drawer
@@ -430,9 +551,25 @@ export function ComponentMatrixPage() {
           >
             <UniversalDataGrid
               columns={[
-                { id: "customer", accessorKey: "customer", header: "Customer", searchable: true, sortable: true },
-                { id: "status", accessorKey: "status", header: "Status", sortable: true },
-                { id: "total", accessorKey: "total", header: "Total", sortable: true }
+                {
+                  id: "customer",
+                  accessorKey: "customer",
+                  header: "Customer",
+                  searchable: true,
+                  sortable: true,
+                },
+                {
+                  id: "status",
+                  accessorKey: "status",
+                  header: "Status",
+                  sortable: true,
+                },
+                {
+                  id: "total",
+                  accessorKey: "total",
+                  header: "Total",
+                  sortable: true,
+                },
               ]}
               getRowId={(row) => row.id}
               rows={gridRows}

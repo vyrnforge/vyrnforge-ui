@@ -1,25 +1,47 @@
 import { ComponentDemoPage } from "../../components/ComponentDemoPage";
 import { createLiveScope, LiveExample } from "../../components/live";
 
-const scope = createLiveScope("Button", "ConfirmDialog", "Dialog", "Drawer", "Icon", "IconButton", "Menu", "Popover", "Stack", "Text", "Tooltip");
+const scope = createLiveScope(
+  "Button",
+  "ConfirmDialog",
+  "Dialog",
+  "Drawer",
+  "Icon",
+  "IconButton",
+  "Menu",
+  "Popover",
+  "Stack",
+  "Text",
+  "Tooltip",
+);
 
 export function OverlayStressPage() {
-  return <ComponentDemoPage
-    accessibility={["Use this page with a keyboard to verify Escape affects only the topmost layer and modal Tab focus remains contained.", "The live example intentionally combines overlays; each remains responsible for its own labels and commands."]}
-    description="A composed overlay exercise for portal, stack ordering, focus, scrolling, and sticky AppShell regression checks."
-    importCode={'import { ConfirmDialog, Dialog, Drawer, Menu, Popover, Tooltip } from "@vyrnforge/ui-components";'}
-    packageName="@vyrnforge/ui-components"
-    props={[]}
-    relatedComponents={[]}
-    sections={[{
-      id: "overlay-composition",
-      label: "Overlay composition",
-      title: "Overlay composition",
-      children: <LiveExample
-        description="Open the dialog, then its nested popover and confirmation. Close each layer with Escape. The drawer includes a keyboard-ready menu and a tooltip on its close action."
-        id="overlay-stress"
-        imports={'import { Button, ConfirmDialog, Dialog, Drawer, Icon, IconButton, Menu, Popover, Stack, Text, Tooltip } from "@vyrnforge/ui-components";'}
-        initialCode={`function Example() {
+  return (
+    <ComponentDemoPage
+      accessibility={[
+        "Use this page with a keyboard to verify Escape affects only the topmost layer and modal Tab focus remains contained.",
+        "The live example intentionally combines overlays; each remains responsible for its own labels and commands.",
+      ]}
+      description="A composed overlay exercise for portal, stack ordering, focus, scrolling, and sticky AppShell regression checks."
+      importCode={
+        'import { ConfirmDialog, Dialog, Drawer, Menu, Popover, Tooltip } from "@vyrnforge/ui-components";'
+      }
+      packageName="@vyrnforge/ui-components"
+      props={[]}
+      relatedComponents={[]}
+      sections={[
+        {
+          id: "overlay-composition",
+          label: "Overlay composition",
+          title: "Overlay composition",
+          children: (
+            <LiveExample
+              description="Open the dialog, then its nested popover and confirmation. Close each layer with Escape. The drawer includes a keyboard-ready menu and a tooltip on its close action."
+              id="overlay-stress"
+              imports={
+                'import { Button, ConfirmDialog, Dialog, Drawer, Icon, IconButton, Menu, Popover, Stack, Text, Tooltip } from "@vyrnforge/ui-components";'
+              }
+              initialCode={`function Example() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = React.useState(false);
@@ -46,12 +68,16 @@ export function OverlayStressPage() {
 }
 
 render(<Example />);`}
-        scope={scope}
-        title="Nested overlay stress test"
-      />
-    }]}
-    status="experimental"
-    title="Overlay Stress Test"
-    useWhen={["Checking nested overlay behavior while evolving shared focus and portal internals."]}
-  />;
+              scope={scope}
+              title="Nested overlay stress test"
+            />
+          ),
+        },
+      ]}
+      title="Overlay Stress Test"
+      useWhen={[
+        "Checking nested overlay behavior while evolving shared focus and portal internals.",
+      ]}
+    />
+  );
 }

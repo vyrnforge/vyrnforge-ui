@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "button",
+  "name": "Button",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Text action control for primary, secondary, subtle, danger, and ghost actions.",
+  "guidance": {
+    "useWhen": "Use for primary business actions such as Save, Submit, Create, or Cancel.",
+    "avoidWhen": "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead.",
+    "aiUsageNotes": "Use visible text for important actions.",
+    "relatedComponents": [
+      "IconButton",
+      "ToolbarButton",
+      "ButtonGroup"
+    ]
+  },
+  "accessibility": [
+    "Button renders a native button and supports disabled/loading states.",
+    "native button semantics",
+    "disabled/loading state",
+    "accessible name"
+  ],
+  "knownLimitations": [
+    "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead."
+  ],
+  "styling": {
+    "classes": [
+      "vf-button"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Button } from '@vyrnforge/ui-components';",
+      "example": "<Button variant='primary'>Save</Button>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-button></vf-button>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-button></vf-button>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-button></vf-button>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "variant",
+        "type": "ButtonVariant",
+        "required": false,
+        "default": "primary"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "ButtonSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "type",
+        "type": "ButtonType",
+        "required": false,
+        "default": "button"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": null
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "action",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-action"
+      }
+    ],
+    "slots": [
+      "default",
+      "prefix",
+      "suffix"
+    ],
+    "methods": [
+      "focus",
+      "click"
+    ],
+    "accessibility": [
+      "native button semantics",
+      "disabled/loading state",
+      "accessible name"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

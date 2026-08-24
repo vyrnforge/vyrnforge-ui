@@ -1,6 +1,7 @@
 import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
+import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { MarkdownView } from "./MarkdownView";
 import { MetadataPage } from "./MetadataPage";
@@ -34,13 +35,19 @@ export function DocsPage({ route }: DocsPageProps) {
           title={route.title}
         />
         {route.aiPurpose && (
-          <InlineMessage className="vf-docs-ai-purpose" title="AI purpose" variant="info">
+          <InlineMessage
+            className="vf-docs-ai-purpose"
+            title="AI purpose"
+            variant="info"
+          >
             {route.aiPurpose}
           </InlineMessage>
         )}
       </div>
 
-      {route.kind === "component-reference" ? (
+      {route.kind === "ai-context-index" ? (
+        <AiContextIndexPage />
+      ) : route.kind === "component-reference" ? (
         <ComponentReferencePage />
       ) : route.kind === "package-reference" ? (
         <PackageReferencePage />

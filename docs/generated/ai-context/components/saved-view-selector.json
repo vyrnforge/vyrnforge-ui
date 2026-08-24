@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "saved-view-selector",
+  "name": "SavedViewSelector",
+  "package": "@vyrnforge/ui-data-grid",
+  "category": "grid-feature",
+  "maturity": "planned",
+  "availability": "planned",
+  "purpose": "Saved grid view selector and manager entry point.",
+  "guidance": {
+    "useWhen": "Use later for user preference presets.",
+    "avoidWhen": "Do not import until implemented.",
+    "aiUsageNotes": "Do not build saved views before adapter contracts are stable.",
+    "relatedComponents": [
+      "UniversalDataGrid"
+    ]
+  },
+  "accessibility": [
+    "Saved view actions need clear names and confirmation for delete."
+  ],
+  "knownLimitations": [
+    "Do not import until implemented."
+  ],
+  "styling": {
+    "classes": [],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "not-supported",
+      "package": "@vyrnforge/ui-data-grid"
+    },
+    "native-html": {
+      "status": "not-supported",
+      "package": null
+    },
+    "angular": {
+      "status": "not-supported",
+      "package": null
+    },
+    "vue": {
+      "status": "not-supported",
+      "package": null
+    }
+  },
+  "contract": null,
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": null,
+    "customElementsManifest": null
+  }
+}

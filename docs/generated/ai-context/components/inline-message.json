@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "inline-message",
+  "name": "InlineMessage",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Inline contextual feedback message.",
+  "guidance": {
+    "useWhen": "Use near forms or content sections for local info/warning/error/success messages.",
+    "avoidWhen": "Avoid for page-level blocking errors; use ErrorState.",
+    "aiUsageNotes": "Use InlineMessage for local feedback.",
+    "relatedComponents": [
+      "Alert",
+      "ValidationMessage"
+    ]
+  },
+  "accessibility": [
+    "Danger validation messages should be announced where needed.",
+    "status or alert role follows severity"
+  ],
+  "knownLimitations": [
+    "Avoid for page-level blocking errors; use ErrorState."
+  ],
+  "styling": {
+    "classes": [
+      "vf-inline-message"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { InlineMessage } from '@vyrnforge/ui-components';",
+      "example": "<InlineMessage variant='info'>Changes are saved locally.</InlineMessage>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-inline-message></vf-inline-message>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-inline-message></vf-inline-message>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-inline-message></vf-inline-message>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "variant",
+        "type": "InlineMessageVariant",
+        "required": false,
+        "default": "info"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "status or alert role follows severity"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

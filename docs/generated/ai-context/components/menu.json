@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "id": "menu",
+  "name": "Menu",
+  "package": "@vyrnforge/ui-components",
+  "category": "overlay",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Action menu.",
+  "guidance": {
+    "useWhen": "Use for compact action lists.",
+    "avoidWhen": "Avoid for navigation trees or complex forms.",
+    "aiUsageNotes": "Use for actions, not form values. Do not hide destructive actions behind unclear labels.",
+    "relatedComponents": [
+      "Dropdown",
+      "Popover"
+    ]
+  },
+  "accessibility": [
+    "Uses menu roles and ArrowUp/ArrowDown, Home, End, Enter, Space, and Escape navigation while skipping disabled items.",
+    "menu/menuitem semantics",
+    "roving focus",
+    "arrow/Home/End navigation",
+    "Escape returns focus to trigger"
+  ],
+  "knownLimitations": [
+    "Avoid for navigation trees or complex forms."
+  ],
+  "styling": {
+    "classes": [
+      "vf-menu"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Menu } from '@vyrnforge/ui-components';",
+      "example": "<Menu trigger={<Button>Actions</Button>} items={items} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-menu></vf-menu>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-menu></vf-menu>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-menu></vf-menu>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "items",
+        "type": "array",
+        "required": false,
+        "default": []
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "placement",
+        "type": "OverlayPlacement",
+        "required": false,
+        "default": "bottom-start"
+      },
+      {
+        "name": "size",
+        "type": "MenuSize",
+        "required": false,
+        "default": "md"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-action"
+      },
+      {
+        "name": "vf-open-change"
+      }
+    ],
+    "slots": [
+      "trigger"
+    ],
+    "methods": [],
+    "accessibility": [
+      "menu/menuitem semantics",
+      "roving focus",
+      "arrow/Home/End navigation",
+      "Escape returns focus to trigger"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

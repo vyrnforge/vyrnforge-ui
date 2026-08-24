@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "category": "data-grid",
+  "components": [
+    {
+      "id": "universal-data-grid",
+      "name": "UniversalDataGrid",
+      "package": "@vyrnforge/ui-data-grid",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Specialized enterprise data-management grid.",
+      "context": "ai-context/components/universal-data-grid.json"
+    }
+  ]
+}

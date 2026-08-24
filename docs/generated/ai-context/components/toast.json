@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "id": "toast",
+  "name": "Toast",
+  "package": "@vyrnforge/ui-components",
+  "category": "feedback",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Provider-owned transient feedback for successful operations, failures, warnings, and informational events.",
+  "guidance": {
+    "useWhen": "Use for brief operation feedback such as saved changes, copy completion, export lifecycle updates, and background operation completion.",
+    "avoidWhen": "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history.",
+    "aiUsageNotes": "Wrap app areas in ToastProvider before calling useToast. Use toast/update/dismiss for transient feedback only. Do not use Toast as field validation, persistent contextual feedback, destructive confirmation, or notification history.",
+    "relatedComponents": [
+      "InlineMessage",
+      "Alert",
+      "ValidationMessage",
+      "Dialog",
+      "ConfirmDialog",
+      "Badge"
+    ]
+  },
+  "accessibility": [
+    "ToastProvider renders a Portal viewport. Neutral, info, and success toasts use polite status announcements; warning and error use alert semantics. Focus does not move automatically.",
+    "status/alert live-region semantics by tone",
+    "dismiss action has accessible name"
+  ],
+  "knownLimitations": [
+    "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history."
+  ],
+  "styling": {
+    "classes": [
+      "vf-toast",
+      "vf-toast__content",
+      "vf-toast__action",
+      "vf-toast__dismiss",
+      "vf-toast-viewport"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ToastProvider, ToastAction, useToast } from '@vyrnforge/ui-components';",
+      "example": "const toast = useToast(); toast.success({ title: 'Saved', description: 'Changes were saved.' });"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-toast></vf-toast>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-toast></vf-toast>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-toast></vf-toast>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "actionLabel",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "dismissible",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "toastId",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "tone",
+        "type": "ToastTone",
+        "required": false,
+        "default": "neutral"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-action"
+      },
+      {
+        "name": "vf-dismiss"
+      }
+    ],
+    "slots": [],
+    "methods": [],
+    "accessibility": [
+      "status/alert live-region semantics by tone",
+      "dismiss action has accessible name"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

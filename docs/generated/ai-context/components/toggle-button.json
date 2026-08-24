@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "toggle-button",
+  "name": "ToggleButton",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native pressable tool, formatting, or view action with controlled or uncontrolled pressed state.",
+  "guidance": {
+    "useWhen": "Use for an active tool, formatting option, or current-surface view action.",
+    "avoidWhen": "Avoid for persistent settings; use Switch. Avoid navigation links.",
+    "aiUsageNotes": "Do not substitute ToggleButton for a persistent Switch setting or navigation link.",
+    "relatedComponents": [
+      "Switch",
+      "Button",
+      "IconButton",
+      "SegmentedControl",
+      "ToggleButtonGroup"
+    ]
+  },
+  "accessibility": [
+    "Renders a native button with aria-pressed. Icon-only usage requires aria-label.",
+    "native button semantics",
+    "aria-pressed state",
+    "accessible name"
+  ],
+  "knownLimitations": [
+    "Avoid for persistent settings; use Switch. Avoid navigation links."
+  ],
+  "styling": {
+    "classes": [
+      "vf-toggle-button",
+      "vf-toggle-button--pressed"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ToggleButton } from '@vyrnforge/ui-components';",
+      "example": "<ToggleButton defaultPressed>Pin column</ToggleButton>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-toggle-button></vf-toggle-button>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-toggle-button></vf-toggle-button>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-toggle-button></vf-toggle-button>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "action",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "pressed",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "defaultPressed",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "ButtonSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "variant",
+        "type": "ButtonVariant",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-pressed-change"
+      },
+      {
+        "name": "vf-action"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "methods": [
+      "focus"
+    ],
+    "accessibility": [
+      "native button semantics",
+      "aria-pressed state",
+      "accessible name"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

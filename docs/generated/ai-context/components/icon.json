@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "icon",
+  "name": "Icon",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Small built-in symbol component used by VyrnForge controls.",
+  "guidance": {
+    "useWhen": "Use supported icon names with VyrnForge buttons and toolbar controls.",
+    "avoidWhen": "Avoid adding external icon libraries by default.",
+    "aiUsageNotes": "Do not introduce an icon dependency for one-off symbols.",
+    "relatedComponents": [
+      "IconButton",
+      "ToolbarButton"
+    ]
+  },
+  "accessibility": [
+    "Use decorative icons unless the icon itself carries meaning.",
+    "decorative icons aria-hidden",
+    "meaningful icons expose img role and accessible label"
+  ],
+  "knownLimitations": [
+    "Avoid adding external icon libraries by default."
+  ],
+  "styling": {
+    "classes": [
+      "vf-icon"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Icon } from '@vyrnforge/ui-components';",
+      "example": "<Icon name='Search' decorative />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-icon></vf-icon>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-icon></vf-icon>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-icon></vf-icon>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "decorative",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "name",
+        "type": "IconName",
+        "required": false,
+        "default": "Info"
+      },
+      {
+        "name": "size",
+        "type": "IconSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "events": [],
+    "slots": [],
+    "methods": [],
+    "accessibility": [
+      "decorative icons aria-hidden",
+      "meaningful icons expose img role and accessible label"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

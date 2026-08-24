@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "panel",
+  "name": "Panel",
+  "package": "@vyrnforge/ui-components",
+  "category": "composite",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Section container with optional title, description, and actions.",
+  "guidance": {
+    "useWhen": "Use for titled settings or content panels.",
+    "avoidWhen": "Avoid for tiny inline content.",
+    "aiUsageNotes": "Use Panel for titled content regions.",
+    "relatedComponents": [
+      "Card",
+      "Section"
+    ]
+  },
+  "accessibility": [
+    "Panel title should describe the section.",
+    "region semantics"
+  ],
+  "knownLimitations": [
+    "Avoid for tiny inline content."
+  ],
+  "styling": {
+    "classes": [
+      "vf-panel"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Panel } from '@vyrnforge/ui-components';",
+      "example": "<Panel title='Settings'>Content</Panel>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-panel></vf-panel>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-panel></vf-panel>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-panel></vf-panel>"
+    }
+  },
+  "contract": {
+    "properties": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "region semantics"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

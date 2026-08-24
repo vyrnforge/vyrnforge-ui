@@ -1,5 +1,11 @@
 import type { ReactNode } from "react";
-import { AppShell, Badge, Heading, Text, TopNav } from "@vyrnforge/ui-components";
+import {
+  AppShell,
+  Badge,
+  Heading,
+  Text,
+  TopNav,
+} from "@vyrnforge/ui-components";
 import type { DocsRoute } from "./docsRegistry";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
@@ -14,7 +20,7 @@ type DocsShellProps = {
 export function DocsShell({
   activeRoute,
   headerAction,
-  onRouteChange
+  onRouteChange,
 }: DocsShellProps) {
   return (
     <AppShell
@@ -26,11 +32,11 @@ export function DocsShell({
             <div>
               <div className="vf-docs-header__eyebrow">VyrnForge UI Docs</div>
               <Heading level={1} size="lg" className="vf-docs-header__title">
-                Source-of-truth documentation and AI reference
+                AI context and source-of-truth reference
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Markdown files remain canonical. This app is a readable navigation
-                and reference layer.
+                Inspect canonical documentation and generated task-scoped
+                context. AI tools should consume the generated JSON directly.
               </Text>
             </div>
           }
@@ -53,10 +59,7 @@ export function DocsShell({
       headerPosition="sticky"
       scrollMode="content"
       sidebar={
-        <DocsNav
-          activeRouteId={activeRoute.id}
-          onRouteChange={onRouteChange}
-        />
+        <DocsNav activeRouteId={activeRoute.id} onRouteChange={onRouteChange} />
       }
       sidebarPosition="sticky"
       sidebarWidth={260}

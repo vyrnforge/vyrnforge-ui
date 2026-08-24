@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "id": "number-input",
+  "name": "NumberInput",
+  "package": "@vyrnforge/ui-components",
+  "category": "form-control",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Native input type='number' control aligned with VyrnForge input styling, with integer and decimal typing modes.",
+  "guidance": {
+    "useWhen": "Use for numeric settings, quantities, limits, and scores.",
+    "avoidWhen": "Avoid for formatted currency or masked values.",
+    "aiUsageNotes": "Use mode='integer' for whole numbers and mode='decimal' with step for decimal values; do not build custom spinner UI.",
+    "relatedComponents": [
+      "TextInput",
+      "Field"
+    ]
+  },
+  "accessibility": [
+    "Numeric constraints need clear labels and validation.",
+    "native number-input semantics",
+    "accessible label",
+    "numeric validity",
+    "ElementInternals form participation"
+  ],
+  "knownLimitations": [
+    "Avoid for formatted currency or masked values."
+  ],
+  "styling": {
+    "classes": [
+      "vf-number-input",
+      "vf-input"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { NumberInput } from '@vyrnforge/ui-components';",
+      "example": "<NumberInput mode='integer' min={0} max={100} defaultValue={50} />"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-number-input></vf-number-input>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-number-input></vf-number-input>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-number-input></vf-number-input>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "autocomplete",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": null
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "required": false,
+        "default": null
+      },
+      {
+        "name": "mode",
+        "type": "NumericInputMode",
+        "required": false,
+        "default": "decimal"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "size",
+        "type": "InputSize",
+        "required": false,
+        "default": "md"
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "default": null
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "default": ""
+      },
+      {
+        "name": "valueAsNumber",
+        "type": "number",
+        "required": false,
+        "default": null
+      }
+    ],
+    "events": [
+      {
+        "name": "vf-value-change"
+      },
+      {
+        "name": "vf-invalid"
+      },
+      {
+        "name": "vf-reset"
+      }
+    ],
+    "slots": [],
+    "methods": [
+      "focus",
+      "select",
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
+    "accessibility": [
+      "native number-input semantics",
+      "accessible label",
+      "numeric validity",
+      "ElementInternals form participation"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

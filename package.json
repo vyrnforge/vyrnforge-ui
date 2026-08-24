@@ -155,7 +155,11 @@
     "test:generated-framework-artifacts": "node --test scripts/generated-framework-artifacts.test.mjs",
     "verify:framework-button-slice:runtime": "node scripts/verify-framework-button-slice-runtime.mjs",
     "verify:framework-api-reference": "node scripts/generate-framework-api-reference.mjs --check",
-    "verify:custom-elements": "node scripts/generate-ui-elements-manifest.mjs --check"
+    "verify:custom-elements": "node scripts/generate-ui-elements-manifest.mjs --check",
+    "generate:consumer-knowledge": "node scripts/generate-component-reference.mjs",
+    "verify:consumer-knowledge": "node scripts/verify-component-reference.mjs",
+    "test:consumer-knowledge": "node --test scripts/verify-component-reference.test.mjs",
+    "query:ai-context": "node scripts/query-ai-context.mjs"
   },
   "packageManager": "npm@11.16.0",
   "engines": {

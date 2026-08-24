@@ -7,7 +7,7 @@ import {
   type TabItem,
 } from "@vyrnforge/ui-components";
 
-import componentReferenceRaw from "../../../docs/generated/component-reference.json?raw";
+import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 
 type FrameworkUsage = {
@@ -48,11 +48,11 @@ type ComponentReferenceItem = {
   contract: ContractDetail | null;
 };
 
-type ComponentReference = {
+type ConsumerKnowledge = {
   components: ComponentReferenceItem[];
 };
 
-const reference = JSON.parse(componentReferenceRaw) as ComponentReference;
+const reference = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
 
 const frameworkOrder = [
   { id: "react", label: "React" },
@@ -194,6 +194,10 @@ export function ComponentReferencePage() {
                     </div>
 
                     <Text>{component.purpose}</Text>
+                    <Text size="sm" tone="muted">
+                      AI context slice:{" "}
+                      <code>{`ai-context/components/${component.id}.json`}</code>
+                    </Text>
 
                     <Tabs
                       aria-label={`${component.displayName} framework usage`}

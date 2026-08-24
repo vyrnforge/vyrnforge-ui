@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "filter-form",
+  "displayName": "Filter Form",
+  "category": "data-management",
+  "purpose": "Compact filter composition for operational lists and reports using search, choice, and date controls.",
+  "useWhen": "Use when a list or report needs several explicit filters that remain application-owned and easy to reset.",
+  "avoidWhen": "Avoid coupling filter controls to fetching or global state inside VyrnForge; adapters and application code own those effects.",
+  "components": [
+    "autocomplete",
+    "button",
+    "date-input",
+    "field",
+    "search-input",
+    "select",
+    "stack",
+    "inline"
+  ],
+  "playgroundRoute": "/filter-form",
+  "exampleFramework": "react",
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "filters",
+    "search form",
+    "report filters",
+    "list filters",
+    "date filter"
+  ],
+  "componentContexts": [
+    "ai-context/components/autocomplete.json",
+    "ai-context/components/button.json",
+    "ai-context/components/date-input.json",
+    "ai-context/components/field.json",
+    "ai-context/components/search-input.json",
+    "ai-context/components/select.json",
+    "ai-context/components/stack.json",
+    "ai-context/components/inline.json"
+  ]
+}

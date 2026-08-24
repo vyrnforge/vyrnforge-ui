@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "data-grid-filter-bar",
+  "name": "DataGridFilterBar",
+  "package": "@vyrnforge/ui-data-grid",
+  "category": "grid-feature",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "guidance": {
+    "useWhen": null,
+    "avoidWhen": null,
+    "aiUsageNotes": null,
+    "relatedComponents": []
+  },
+  "accessibility": [],
+  "knownLimitations": [],
+  "styling": {
+    "classes": [],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "react-alpha-deferred",
+      "package": "@vyrnforge/ui-data-grid"
+    },
+    "native-html": {
+      "status": "not-supported",
+      "package": null
+    },
+    "angular": {
+      "status": "not-supported",
+      "package": null
+    },
+    "vue": {
+      "status": "not-supported",
+      "package": null
+    }
+  },
+  "contract": null,
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": null,
+    "customElementsManifest": null
+  }
+}

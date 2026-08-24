@@ -15,6 +15,7 @@ import customElementsAndForms from "../../../docs/architecture/10-custom-element
 import multiFrameworkFixtures from "../../../docs/testing/multi-framework-consumer-fixtures.md?raw";
 import visualRegression from "../../../docs/testing/visual-regression.md?raw";
 import qualityGates from "../../../docs/quality/00-quality-gates.md?raw";
+import multiFrameworkProgramGates from "../../../docs/quality/multi-framework-program-gates.md?raw";
 import knownLimitations from "../../../docs/quality/03-known-limitations.md?raw";
 import multiFrameworkArchitectureEvidence from "../../../docs/quality/s4-multi-framework-architecture.md?raw";
 import masterRoadmap from "../../../docs/roadmap/00-master-roadmap.md?raw";
@@ -66,7 +67,8 @@ export type DocsRouteKind =
   | "json"
   | "metadata"
   | "component-reference"
-  | "package-reference";
+  | "package-reference"
+  | "ai-context-index";
 
 export type DocsRoute = {
   id: string;
@@ -82,6 +84,18 @@ export type DocsRoute = {
 };
 
 export const docsRoutes: DocsRoute[] = [
+  {
+    id: "ai-consumer-context",
+    title: "AI Consumer Context",
+    group: "Start Here",
+    description:
+      "Inspect the minimal generated retrieval index used by AI consumers.",
+    sourcePath: "docs/generated/ai-context/index.json",
+    aiPurpose:
+      "Start here for task-scoped consumer context instead of loading the full documentation corpus.",
+    tags: ["ai", "generated", "consumer-context"],
+    kind: "ai-context-index",
+  },
   {
     id: "overview",
     title: "Overview",
@@ -280,6 +294,19 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["canonical", "quality", "testing", "ci"],
     canonical: true,
     content: qualityGates,
+  },
+  {
+    id: "multi-framework-program-gates",
+    title: "Multi-Framework Program Gates",
+    group: "Quality",
+    description:
+      "Active G11-G15 evidence requirements for first-class multi-framework distribution.",
+    sourcePath: "docs/quality/multi-framework-program-gates.md",
+    aiPurpose:
+      "Use this before claiming Angular, Vue, React convergence, or distribution gates complete.",
+    tags: ["canonical", "quality", "multi-framework", "gates"],
+    canonical: true,
+    content: multiFrameworkProgramGates,
   },
   {
     id: "known-limitations",
@@ -776,7 +803,7 @@ export const docsRoutes: DocsRoute[] = [
   },
   {
     id: "ai-context",
-    title: "AI Context",
+    title: "AI Bootstrap",
     group: "AI",
     description: "Primary AI context file.",
     sourcePath: ".ai/AI_CONTEXT.md",

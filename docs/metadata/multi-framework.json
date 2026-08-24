@@ -178,8 +178,9 @@
     "supportClaim": "cross-framework-browser-matrix-verified"
   },
   "componentReference": {
-    "status": "complete",
-    "metadata": "docs/metadata/component-reference-program.json"
+    "status": "current",
+    "metadata": "docs/metadata/component-reference-program.json",
+    "generated": "docs/generated/component-reference.json"
   },
   "accessibilityReview": {
     "status": "complete",
@@ -189,5 +190,11 @@
   "migrationGuide": {
     "status": "complete",
     "metadata": "docs/metadata/multi-framework-migration-guide.json"
+  },
+  "consumerKnowledge": {
+    "status": "current",
+    "metadata": "docs/metadata/component-reference-program.json",
+    "generated": "docs/generated/consumer-knowledge.json",
+    "aiContextIndex": "docs/generated/ai-context/index.json"
   }
 }

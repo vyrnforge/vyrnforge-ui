@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "category": "data-display",
+  "components": [
+    {
+      "id": "activity-log",
+      "name": "ActivityLog",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Operational activity feed.",
+      "context": "ai-context/components/activity-log.json"
+    },
+    {
+      "id": "description-list",
+      "name": "DescriptionList",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Read-only term/value data display.",
+      "context": "ai-context/components/description-list.json"
+    },
+    {
+      "id": "key-value-list",
+      "name": "KeyValueList",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Compact key/value metadata list.",
+      "context": "ai-context/components/key-value-list.json"
+    },
+    {
+      "id": "property-table",
+      "name": "PropertyTable",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Structured read-only property table.",
+      "context": "ai-context/components/property-table.json"
+    },
+    {
+      "id": "resource-list",
+      "name": "ResourceList",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "List of resource summary items.",
+      "context": "ai-context/components/resource-list.json"
+    },
+    {
+      "id": "timeline",
+      "name": "Timeline",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "planned",
+      "availability": "planned",
+      "purpose": "Chronological event display.",
+      "context": "ai-context/components/timeline.json"
+    },
+    {
+      "id": "transfer-list",
+      "name": "TransferList",
+      "package": "@vyrnforge/ui-components",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Dual-list assignment component for moving a moderate known collection between available and assigned states.",
+      "context": "ai-context/components/transfer-list.json"
+    }
+  ]
+}

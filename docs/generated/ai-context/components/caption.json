@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "caption",
+  "name": "Caption",
+  "package": "@vyrnforge/ui-components",
+  "category": "primitive",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Small supporting text.",
+  "guidance": {
+    "useWhen": "Use for hints, metadata, and timestamps.",
+    "avoidWhen": "Avoid for required error text; use ValidationMessage or InlineMessage.",
+    "aiUsageNotes": "Use muted tone for secondary details.",
+    "relatedComponents": [
+      "Text",
+      "ValidationMessage"
+    ]
+  },
+  "accessibility": [
+    "Do not make critical instructions too small to read.",
+    "text content remains semantic"
+  ],
+  "knownLimitations": [
+    "Avoid for required error text; use ValidationMessage or InlineMessage."
+  ],
+  "styling": {
+    "classes": [
+      "vf-caption"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Caption } from '@vyrnforge/ui-components';",
+      "example": "<Caption>Optional</Caption>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-caption></vf-caption>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-caption></vf-caption>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-caption></vf-caption>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "tone",
+        "type": "TextTone",
+        "required": false,
+        "default": "muted"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "text content remains semantic"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}

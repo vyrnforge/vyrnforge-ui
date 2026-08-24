@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "page",
+  "name": "Page",
+  "package": "@vyrnforge/ui-components",
+  "category": "composite",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Page composition wrapper with optional title, description, status, actions, toolbar, density, and max-width.",
+  "guidance": {
+    "useWhen": "Use for top-level app pages that need consistent header, toolbar, and content spacing.",
+    "avoidWhen": "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive.",
+    "aiUsageNotes": "Use Page for route-level composition, not repeated item cards.",
+    "relatedComponents": [
+      "PageHeader",
+      "PageToolbar",
+      "Section"
+    ]
+  },
+  "accessibility": [
+    "Page renders a main landmark; avoid nesting it inside another main landmark.",
+    "main landmark semantics"
+  ],
+  "knownLimitations": [
+    "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive."
+  ],
+  "styling": {
+    "classes": [
+      "vf-page"
+    ],
+    "variables": []
+  },
+  "frameworks": {
+    "react": {
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Page } from '@vyrnforge/ui-components';",
+      "example": "<Page title='Orders' toolbar={<PageToolbar />}>Content</Page>"
+    },
+    "native-html": {
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-page></vf-page>"
+    },
+    "angular": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "example": "<vf-page></vf-page>"
+    },
+    "vue": {
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
+      "example": "<vf-page></vf-page>"
+    }
+  },
+  "contract": {
+    "properties": [
+      {
+        "name": "density",
+        "type": "Density",
+        "required": false,
+        "default": "standard"
+      },
+      {
+        "name": "maxWidth",
+        "type": "PageMaxWidth",
+        "required": false,
+        "default": "lg"
+      }
+    ],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "main landmark semantics"
+    ],
+    "formAssociation": "none"
+  },
+  "source": {
+    "componentMetadata": "docs/metadata/components.json",
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
+  }
+}
