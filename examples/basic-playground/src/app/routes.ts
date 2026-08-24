@@ -100,7 +100,10 @@ const consumerKnowledge = JSON.parse(consumerKnowledgeRaw) as {
 };
 
 function patternDescription(id: string, fallback: string) {
-  return consumerKnowledge.patterns.find((pattern) => pattern.id === id)?.purpose ?? fallback;
+  return (
+    consumerKnowledge.patterns.find((pattern) => pattern.id === id)?.purpose ??
+    fallback
+  );
 }
 
 export const routes: PlaygroundRoute[] = [
@@ -638,7 +641,10 @@ export const routes: PlaygroundRoute[] = [
     id: "resource-list",
     label: "Resource List",
     title: "Resource List",
-    description: patternDescription("resource-list", "Compact resource lists with metadata and actions."),
+    description: patternDescription(
+      "resource-list",
+      "Compact resource lists with metadata and actions.",
+    ),
     group: "Patterns",
     Component: ResourceListPage,
   },
@@ -654,7 +660,10 @@ export const routes: PlaygroundRoute[] = [
     id: "settings",
     label: "Settings",
     title: "Settings",
-    description: patternDescription("settings", "Sectioned settings composition."),
+    description: patternDescription(
+      "settings",
+      "Sectioned settings composition.",
+    ),
     group: "Patterns",
     Component: SettingsPage,
   },
@@ -662,8 +671,10 @@ export const routes: PlaygroundRoute[] = [
     id: "form",
     label: "Form",
     title: "Form",
-    description:
-      patternDescription("form", "General application form composition."),
+    description: patternDescription(
+      "form",
+      "General application form composition.",
+    ),
     group: "Patterns",
     Component: FormPage,
   },
@@ -671,7 +682,10 @@ export const routes: PlaygroundRoute[] = [
     id: "filter-form",
     label: "Filter Form",
     title: "Filter Form",
-    description: patternDescription("filter-form", "Operational filter composition."),
+    description: patternDescription(
+      "filter-form",
+      "Operational filter composition.",
+    ),
     group: "Patterns",
     Component: FilterFormPage,
   },
@@ -679,7 +693,10 @@ export const routes: PlaygroundRoute[] = [
     id: "assignment-patterns",
     label: "Assignments",
     title: "Assignment Patterns",
-    description: patternDescription("assignment-patterns", "Bounded assignment flows."),
+    description: patternDescription(
+      "assignment-patterns",
+      "Bounded assignment flows.",
+    ),
     group: "Patterns",
     Component: AssignmentPatternsPage,
   },
@@ -697,7 +714,10 @@ export const routes: PlaygroundRoute[] = [
     id: "empty-error-loading",
     label: "Empty/Error/Loading",
     title: "Empty, Error, and Loading",
-    description: patternDescription("empty-error-loading", "Route-level feedback states."),
+    description: patternDescription(
+      "empty-error-loading",
+      "Route-level feedback states.",
+    ),
     group: "Patterns",
     Component: EmptyErrorLoadingPage,
   },
@@ -705,7 +725,10 @@ export const routes: PlaygroundRoute[] = [
     id: "admin-shell",
     label: "Admin Shell",
     title: "Admin Shell",
-    description: patternDescription("admin-shell", "Admin workspace composition."),
+    description: patternDescription(
+      "admin-shell",
+      "Admin workspace composition.",
+    ),
     group: "Patterns",
     Component: AdminShellPage,
   },
@@ -713,7 +736,10 @@ export const routes: PlaygroundRoute[] = [
     id: "customer-portal-shell",
     label: "Customer Portal",
     title: "Customer Portal Shell",
-    description: patternDescription("customer-portal-shell", "Customer portal composition."),
+    description: patternDescription(
+      "customer-portal-shell",
+      "Customer portal composition.",
+    ),
     group: "Patterns",
     Component: CustomerPortalShellPage,
   },

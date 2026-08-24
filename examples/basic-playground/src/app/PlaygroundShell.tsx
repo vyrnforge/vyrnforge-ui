@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
-import { AppShell, Badge, Page, SegmentedControl, Select, TopNav } from "@vyrnforge/ui-components";
+import {
+  AppShell,
+  Badge,
+  Page,
+  SegmentedControl,
+  Select,
+  TopNav,
+} from "@vyrnforge/ui-components";
 import type { PlaygroundRoute } from "./routes";
 import { playgroundLinks } from "./deploymentLinks";
 import { PlaygroundNav } from "./PlaygroundNav";
@@ -25,7 +32,7 @@ export function PlaygroundShell({
   onDensityChange,
   onRouteChange,
   onThemeChange,
-  routes
+  routes,
 }: PlaygroundShellProps) {
   return (
     <AppShell
@@ -41,10 +48,16 @@ export function PlaygroundShell({
           actions={
             <div className="vf-playground-top-controls">
               <div className="vf-playground-top-links">
-                <a className="vf-playground-top-link" href={playgroundLinks.docs}>
+                <a
+                  className="vf-playground-top-link"
+                  href={playgroundLinks.docs}
+                >
                   Docs
                 </a>
-                <a className="vf-playground-top-link" href={playgroundLinks.repository}>
+                <a
+                  className="vf-playground-top-link"
+                  href={playgroundLinks.repository}
+                >
                   GitHub
                 </a>
               </div>
@@ -55,7 +68,7 @@ export function PlaygroundShell({
                   { label: "Light", value: "light" },
                   { label: "Dark", value: "dark" },
                   { label: "Enterprise", value: "enterprise" },
-                  { label: "System", value: "system" }
+                  { label: "System", value: "system" },
                 ]}
                 size="sm"
                 value={theme}
@@ -66,7 +79,7 @@ export function PlaygroundShell({
                 options={[
                   { label: "Compact", value: "compact" },
                   { label: "Standard", value: "standard" },
-                  { label: "Comfortable", value: "comfortable" }
+                  { label: "Comfortable", value: "comfortable" },
                 ]}
                 size="sm"
                 value={density}

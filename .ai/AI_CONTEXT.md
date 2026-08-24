@@ -35,13 +35,13 @@ The deployed docs application exposes the same generated tree under
 
 ## Current package model
 
-| Package | Role | Track |
-| --- | --- | --- |
-| `@vyrnforge/ui-core` | framework-neutral design tokens, themes, density, utilities | non-grid beta |
-| `@vyrnforge/ui-behaviors` | framework-neutral controllers and interaction contracts | non-grid beta |
-| `@vyrnforge/ui-components` | first-class React renderer | non-grid beta |
-| `@vyrnforge/ui-elements` | first-class Native HTML / Custom Elements renderer | non-grid beta |
-| `@vyrnforge/ui-data-grid` | specialized React data grid | independent alpha |
+| Package                    | Role                                                        | Track             |
+| -------------------------- | ----------------------------------------------------------- | ----------------- |
+| `@vyrnforge/ui-core`       | framework-neutral design tokens, themes, density, utilities | non-grid beta     |
+| `@vyrnforge/ui-behaviors`  | framework-neutral controllers and interaction contracts     | non-grid beta     |
+| `@vyrnforge/ui-components` | first-class React renderer                                  | non-grid beta     |
+| `@vyrnforge/ui-elements`   | first-class Native HTML / Custom Elements renderer          | non-grid beta     |
+| `@vyrnforge/ui-data-grid`  | specialized React data grid                                 | independent alpha |
 
 React and Native HTML are current first-class renderer/package surfaces. Angular
 and Vue are approved first-class targets and currently verified consumers of the

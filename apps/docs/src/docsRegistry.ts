@@ -88,9 +88,11 @@ export const docsRoutes: DocsRoute[] = [
     id: "ai-consumer-context",
     title: "AI Consumer Context",
     group: "Start Here",
-    description: "Inspect the minimal generated retrieval index used by AI consumers.",
+    description:
+      "Inspect the minimal generated retrieval index used by AI consumers.",
     sourcePath: "docs/generated/ai-context/index.json",
-    aiPurpose: "Start here for task-scoped consumer context instead of loading the full documentation corpus.",
+    aiPurpose:
+      "Start here for task-scoped consumer context instead of loading the full documentation corpus.",
     tags: ["ai", "generated", "consumer-context"],
     kind: "ai-context-index",
   },
@@ -297,9 +299,11 @@ export const docsRoutes: DocsRoute[] = [
     id: "multi-framework-program-gates",
     title: "Multi-Framework Program Gates",
     group: "Quality",
-    description: "Active G11-G15 evidence requirements for first-class multi-framework distribution.",
+    description:
+      "Active G11-G15 evidence requirements for first-class multi-framework distribution.",
     sourcePath: "docs/quality/multi-framework-program-gates.md",
-    aiPurpose: "Use this before claiming Angular, Vue, React convergence, or distribution gates complete.",
+    aiPurpose:
+      "Use this before claiming Angular, Vue, React convergence, or distribution gates complete.",
     tags: ["canonical", "quality", "multi-framework", "gates"],
     canonical: true,
     content: multiFrameworkProgramGates,

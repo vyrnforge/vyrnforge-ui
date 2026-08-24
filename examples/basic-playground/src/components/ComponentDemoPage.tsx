@@ -6,7 +6,7 @@ import {
   Panel,
   Tabs,
   Text,
-  type TabItem
+  type TabItem,
 } from "@vyrnforge/ui-components";
 import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
 import { CodeBlock } from "./CodeBlock";
@@ -51,7 +51,10 @@ type CanonicalComponentKnowledge = {
   };
   accessibilityNotes: string | null;
   knownLimitations: string[];
-  frameworks: Record<"react" | "native-html" | "angular" | "vue", FrameworkUsage>;
+  frameworks: Record<
+    "react" | "native-html" | "angular" | "vue",
+    FrameworkUsage
+  >;
   contract: { accessibility?: string[] } | null;
 };
 
@@ -79,7 +82,7 @@ const frameworkOrder = [
   { id: "react", label: "React" },
   { id: "native-html", label: "Native HTML" },
   { id: "angular", label: "Angular" },
-  { id: "vue", label: "Vue" }
+  { id: "vue", label: "Vue" },
 ] as const;
 
 const maturityVariant = {
@@ -88,7 +91,7 @@ const maturityVariant = {
   "alpha-stable": "warning",
   "beta-stable": "success",
   stable: "success",
-  deprecated: "danger"
+  deprecated: "danger",
 } as const;
 
 function normalizeName(value: string) {
@@ -98,7 +101,7 @@ function normalizeName(value: string) {
 function getCanonicalKnowledge(title: string) {
   const normalized = normalizeName(title);
   return canonicalKnowledge.find(
-    (component) => normalizeName(component.displayName) === normalized
+    (component) => normalizeName(component.displayName) === normalized,
   );
 }
 
@@ -107,7 +110,11 @@ function GuidanceList({ title, items }: { title: string; items?: string[] }) {
   return (
     <div className="vf-playground-guidance-list">
       <h3>{title}</h3>
-      <ul>{items.map((item) => <li key={item}>{item}</li>)}</ul>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -121,7 +128,9 @@ function FrameworkUsagePanel({ usage }: { usage: FrameworkUsage }) {
       </div>
       {usage.setup && <CodeBlock code={usage.setup} />}
       {usage.example && <CodeBlock code={usage.example} />}
-      <Text size="sm" tone="muted">{usage.note}</Text>
+      <Text size="sm" tone="muted">
+        {usage.note}
+      </Text>
     </div>
   );
 }
@@ -130,7 +139,7 @@ function frameworkTabs(component: CanonicalComponentKnowledge): TabItem[] {
   return frameworkOrder.map(({ id, label }) => ({
     id,
     label,
-    content: <FrameworkUsagePanel usage={component.frameworks[id]} />
+    content: <FrameworkUsagePanel usage={component.frameworks[id]} />,
   }));
 }
 
@@ -144,15 +153,19 @@ export function ComponentDemoPage({
   avoidWhen,
   accessibility,
   props,
-  relatedComponents
+  relatedComponents,
 }: ComponentDemoPageProps) {
   const canonical = getCanonicalKnowledge(title);
-  const canonicalUseWhen = canonical?.guidance.useWhen ? [canonical.guidance.useWhen] : useWhen;
-  const canonicalAvoidWhen = canonical?.guidance.avoidWhen ? [canonical.guidance.avoidWhen] : avoidWhen;
+  const canonicalUseWhen = canonical?.guidance.useWhen
+    ? [canonical.guidance.useWhen]
+    : useWhen;
+  const canonicalAvoidWhen = canonical?.guidance.avoidWhen
+    ? [canonical.guidance.avoidWhen]
+    : avoidWhen;
   const canonicalAccessibility = canonical
     ? [
         ...(canonical.accessibilityNotes ? [canonical.accessibilityNotes] : []),
-        ...(canonical.contract?.accessibility ?? [])
+        ...(canonical.contract?.accessibility ?? []),
       ]
     : accessibility;
   const outlineItems: PageOutlineItem[] = [
@@ -160,13 +173,20 @@ export function ComponentDemoPage({
     { id: "import", label: "Import" },
     ...(canonical ? [{ id: "framework-usage", label: "Framework usage" }] : []),
     ...sections.map(({ id, label }) => ({ id, label })),
-    ...(canonicalUseWhen?.length || canonicalAvoidWhen?.length ? [{ id: "usage-guidance", label: "Usage guidance" }] : []),
+    ...(canonicalUseWhen?.length || canonicalAvoidWhen?.length
+      ? [{ id: "usage-guidance", label: "Usage guidance" }]
+      : []),
     ...(props?.length ? [{ id: "api-reference", label: "API reference" }] : []),
-    ...(canonicalAccessibility?.length ? [{ id: "accessibility", label: "Accessibility" }] : []),
-    ...(relatedComponents?.length ? [{ id: "related-components", label: "Related components" }] : [])
+    ...(canonicalAccessibility?.length
+      ? [{ id: "accessibility", label: "Accessibility" }]
+      : []),
+    ...(relatedComponents?.length
+      ? [{ id: "related-components", label: "Related components" }]
+      : []),
   ];
   const resolvedPackage = canonical?.package ?? packageName;
-  const maturity = canonical?.maturity as keyof typeof maturityVariant | undefined;
+  const maturity = canonical?.maturity as
+    keyof typeof maturityVariant | undefined;
 
   return (
     <div className="vf-playground-reference-layout">
@@ -176,22 +196,35 @@ export function ComponentDemoPage({
             description={canonical?.purpose || description}
             status={
               <div className="vf-playground-demo-page__badges">
-                {resolvedPackage && <Badge tone="subtle">{resolvedPackage}</Badge>}
-                {canonical && <Badge variant="success" tone="subtle">{canonical.availability}</Badge>}
-                {maturity && <Badge variant={maturityVariant[maturity] ?? "neutral"}>{maturity}</Badge>}
+                {resolvedPackage && (
+                  <Badge tone="subtle">{resolvedPackage}</Badge>
+                )}
+                {canonical && (
+                  <Badge variant="success" tone="subtle">
+                    {canonical.availability}
+                  </Badge>
+                )}
+                {maturity && (
+                  <Badge variant={maturityVariant[maturity] ?? "neutral"}>
+                    {maturity}
+                  </Badge>
+                )}
               </div>
             }
             title={title}
           />
         </section>
         <section className="vf-playground-section" id="import">
-          <Panel title="Import"><CodeBlock code={importCode} /></Panel>
+          <Panel title="Import">
+            <CodeBlock code={importCode} />
+          </Panel>
         </section>
         {canonical && (
           <section className="vf-playground-section" id="framework-usage">
             <Panel title="Framework usage">
               <Text tone="muted">
-                Current support and setup are generated from canonical VyrnForge framework metadata.
+                Current support and setup are generated from canonical VyrnForge
+                framework metadata.
               </Text>
               <Tabs
                 aria-label={`${title} framework usage`}
@@ -203,8 +236,14 @@ export function ComponentDemoPage({
           </section>
         )}
         {sections.map((section) => (
-          <section className="vf-playground-section" id={section.id} key={section.id}>
-            {section.title && <h2 className="vf-playground-section__title">{section.title}</h2>}
+          <section
+            className="vf-playground-section"
+            id={section.id}
+            key={section.id}
+          >
+            {section.title && (
+              <h2 className="vf-playground-section__title">{section.title}</h2>
+            )}
             {section.children}
           </section>
         ))}
@@ -218,19 +257,33 @@ export function ComponentDemoPage({
         )}
         {props && props.length > 0 && (
           <section className="vf-playground-section" id="api-reference">
-            <Panel title="API reference"><PropsTable rows={props} /></Panel>
+            <Panel title="API reference">
+              <PropsTable rows={props} />
+            </Panel>
           </section>
         )}
         {canonicalAccessibility && canonicalAccessibility.length > 0 && (
           <section className="vf-playground-section" id="accessibility">
-            <Panel title="Accessibility"><GuidanceList items={canonicalAccessibility} title="Considerations" /></Panel>
+            <Panel title="Accessibility">
+              <GuidanceList
+                items={canonicalAccessibility}
+                title="Considerations"
+              />
+            </Panel>
           </section>
         )}
         {relatedComponents && relatedComponents.length > 0 && (
           <section className="vf-playground-section" id="related-components">
             <Panel title="Related components">
               <ul className="vf-playground-related-links">
-                {relatedComponents.map((component) => <li key={component.id}><a href={`#${component.id}`}><CodeText>{component.name}</CodeText><Text tone="muted">{component.description}</Text></a></li>)}
+                {relatedComponents.map((component) => (
+                  <li key={component.id}>
+                    <a href={`#${component.id}`}>
+                      <CodeText>{component.name}</CodeText>
+                      <Text tone="muted">{component.description}</Text>
+                    </a>
+                  </li>
+                ))}
               </ul>
             </Panel>
           </section>

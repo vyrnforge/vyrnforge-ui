@@ -32,7 +32,9 @@ function cleanText(value) {
 
 function cleanList(value) {
   if (Array.isArray(value)) {
-    return value.filter((entry) => cleanText(entry)).map((entry) => entry.trim());
+    return value
+      .filter((entry) => cleanText(entry))
+      .map((entry) => entry.trim());
   }
   const cleaned = cleanText(value);
   return cleaned ? [cleaned] : [];
@@ -68,13 +70,15 @@ function frameworkExamples(component, context) {
   const parity = component.frameworkParity ?? {};
   const nativeTarget = cleanText(parity.native?.target);
   const nativeTag = nativeTarget?.startsWith("vf-") ? nativeTarget : null;
-  const packageMeta = context.multiFrameworkPackageByName.get(component.package);
+  const packageMeta = context.multiFrameworkPackageByName.get(
+    component.package,
+  );
   const packageRuntime = packageMeta?.runtime ?? null;
   const packageStatus = packageMeta?.status ?? null;
   const reactStatus =
     parity.react?.status ??
     (component.publicExport && packageRuntime === "react"
-      ? packageStatus ?? "current"
+      ? (packageStatus ?? "current")
       : "not-supported");
   const nativeStatus = parity.native?.status ?? "not-supported";
   const angularStatus = parity.angular?.status ?? "not-supported";
@@ -86,7 +90,8 @@ function frameworkExamples(component, context) {
     react: {
       label: "React",
       status: reactStatus,
-      package: parity.react?.package ??
+      package:
+        parity.react?.package ??
         (packageRuntime === "react" ? component.package : null),
       setup: reactStatus === "not-supported" ? "" : reactSetup,
       example: reactStatus === "not-supported" ? "" : reactExample,
@@ -103,7 +108,9 @@ function frameworkExamples(component, context) {
     angular: {
       label: "Angular",
       status: angularStatus,
-      package: parity.angular?.consumes ?? (nativeTag ? "@vyrnforge/ui-elements" : null),
+      package:
+        parity.angular?.consumes ??
+        (nativeTag ? "@vyrnforge/ui-elements" : null),
       setup: nativeTag
         ? 'schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import "@vyrnforge/ui-elements/register" from application bootstrap'
         : "",
@@ -113,7 +120,8 @@ function frameworkExamples(component, context) {
     vue: {
       label: "Vue",
       status: vueStatus,
-      package: parity.vue?.consumes ?? (nativeTag ? "@vyrnforge/ui-elements" : null),
+      package:
+        parity.vue?.consumes ?? (nativeTag ? "@vyrnforge/ui-elements" : null),
       setup: nativeTag
         ? "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }"
         : "",
@@ -159,7 +167,9 @@ function loadContext(root) {
 function componentRecord(component, context) {
   const nativeTarget = cleanText(component.frameworkParity?.native?.target);
   const nativeTag = nativeTarget?.startsWith("vf-") ? nativeTarget : null;
-  const nativeDeclaration = nativeTag ? context.nativeByTag.get(nativeTag) : null;
+  const nativeDeclaration = nativeTag
+    ? context.nativeByTag.get(nativeTag)
+    : null;
   const contract = context.contracts.componentById.get(component.id) ?? null;
   return {
     id: component.id,
@@ -189,7 +199,9 @@ function componentRecord(component, context) {
     playgroundPath: cleanText(component.playgroundPath),
     source: {
       componentMetadata: "docs/metadata/components.json",
-      contractMetadata: contract ? "docs/metadata/component-contracts.json" : null,
+      contractMetadata: contract
+        ? "docs/metadata/component-contracts.json"
+        : null,
       customElementsManifest: nativeDeclaration
         ? "packages/ui-elements/custom-elements.json"
         : null,
@@ -231,7 +243,9 @@ export function buildConsumerKnowledge({ root = repositoryRoot } = {}) {
         : left.category.localeCompare(right.category),
     );
   const packages = (context.packageCatalog.packages ?? []).map((entry) => {
-    const frameworkPackage = context.multiFrameworkPackageByName.get(entry.name);
+    const frameworkPackage = context.multiFrameworkPackageByName.get(
+      entry.name,
+    );
     return {
       name: entry.name,
       purpose: entry.purpose,
@@ -246,7 +260,9 @@ export function buildConsumerKnowledge({ root = repositoryRoot } = {}) {
     supportLevel: entry.supportLevel,
     renderer: entry.renderer,
   }));
-  const patterns = (context.patterns.patterns ?? []).map((pattern) => ({ ...pattern }));
+  const patterns = (context.patterns.patterns ?? []).map((pattern) => ({
+    ...pattern,
+  }));
 
   return {
     schemaVersion: 1,
@@ -280,7 +296,9 @@ export function buildComponentReference({ root = repositoryRoot } = {}) {
       )
       .map((component) => component.id),
   );
-  const components = knowledge.components.filter((component) => includedIds.has(component.id));
+  const components = knowledge.components.filter((component) =>
+    includedIds.has(component.id),
+  );
   return {
     schemaVersion: 2,
     generatedFrom: knowledge.generatedFrom,
@@ -341,7 +359,10 @@ function componentContextSlice(component) {
     knownLimitations: component.knownLimitations,
     styling: component.styling,
     frameworks: Object.fromEntries(
-      Object.entries(component.frameworks).map(([id, usage]) => [id, compactFramework(usage)]),
+      Object.entries(component.frameworks).map(([id, usage]) => [
+        id,
+        compactFramework(usage),
+      ]),
     ),
     contract: compactContract(component.contract),
     source: component.source,
@@ -351,7 +372,10 @@ function componentContextSlice(component) {
 export function buildAiContextArtifacts({ root = repositoryRoot } = {}) {
   const knowledge = buildConsumerKnowledge({ root });
   const components = Object.fromEntries(
-    knowledge.components.map((component) => [component.id, componentContextSlice(component)]),
+    knowledge.components.map((component) => [
+      component.id,
+      componentContextSlice(component),
+    ]),
   );
   const categoryMap = new Map();
   for (const component of knowledge.components) {
@@ -402,12 +426,14 @@ export function buildAiContextArtifacts({ root = repositoryRoot } = {}) {
       escalation:
         "Read architecture or policy Markdown only when the task changes architecture, package boundaries, support claims, release policy, or another cross-cutting contract.",
     },
-    packages: knowledge.packages.map(({ name, status, releaseTrack, runtime }) => ({
-      name,
-      status,
-      releaseTrack,
-      runtime,
-    })),
+    packages: knowledge.packages.map(
+      ({ name, status, releaseTrack, runtime }) => ({
+        name,
+        status,
+        releaseTrack,
+        runtime,
+      }),
+    ),
     frameworks: knowledge.frameworks,
     categories: Object.keys(categories)
       .sort()
@@ -448,7 +474,11 @@ export function writeConsumerKnowledge({ root = repositoryRoot } = {}) {
   writeJson(root, "docs/generated/component-reference.json", reference);
   writeJson(root, "docs/generated/ai-context/index.json", ai.index);
   for (const [category, value] of Object.entries(ai.categories)) {
-    writeJson(root, `docs/generated/ai-context/categories/${category}.json`, value);
+    writeJson(
+      root,
+      `docs/generated/ai-context/categories/${category}.json`,
+      value,
+    );
   }
   for (const [id, value] of Object.entries(ai.components)) {
     writeJson(root, `docs/generated/ai-context/components/${id}.json`, value);

@@ -1,8 +1,4 @@
-import {
-  existsSync,
-  readFileSync,
-  readdirSync,
-} from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -66,16 +62,36 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     "docs/metadata/multi-framework.json",
   ]) {
     if (!(program.sourceOfTruth ?? []).includes(requiredSource)) {
-      failures.push(`consumer knowledge metadata is missing source ${requiredSource}`);
+      failures.push(
+        `consumer knowledge metadata is missing source ${requiredSource}`,
+      );
     }
   }
 
   const expectedKnowledge = buildConsumerKnowledge({ root });
   const expectedReference = buildComponentReference({ root });
   const expectedAi = buildAiContextArtifacts({ root });
-  compareJson(root, knowledgePath, expectedKnowledge, failures, "consumer knowledge");
-  compareJson(root, generatedPath, expectedReference, failures, "component reference");
-  compareJson(root, `${aiRoot}/index.json`, expectedAi.index, failures, "AI context index");
+  compareJson(
+    root,
+    knowledgePath,
+    expectedKnowledge,
+    failures,
+    "consumer knowledge",
+  );
+  compareJson(
+    root,
+    generatedPath,
+    expectedReference,
+    failures,
+    "component reference",
+  );
+  compareJson(
+    root,
+    `${aiRoot}/index.json`,
+    expectedAi.index,
+    failures,
+    "AI context index",
+  );
   for (const [category, value] of Object.entries(expectedAi.categories)) {
     compareJson(
       root,
@@ -106,11 +122,19 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
 
   const expectedAiFiles = new Set([
     `${aiRoot}/index.json`,
-    ...Object.keys(expectedAi.categories).map((id) => `${aiRoot}/categories/${id}.json`),
-    ...Object.keys(expectedAi.components).map((id) => `${aiRoot}/components/${id}.json`),
-    ...Object.keys(expectedAi.patterns).map((id) => `${aiRoot}/patterns/${id}.json`),
+    ...Object.keys(expectedAi.categories).map(
+      (id) => `${aiRoot}/categories/${id}.json`,
+    ),
+    ...Object.keys(expectedAi.components).map(
+      (id) => `${aiRoot}/components/${id}.json`,
+    ),
+    ...Object.keys(expectedAi.patterns).map(
+      (id) => `${aiRoot}/patterns/${id}.json`,
+    ),
   ]);
-  for (const file of filesRecursively(root, aiRoot).filter((entry) => entry.endsWith(".json"))) {
+  for (const file of filesRecursively(root, aiRoot).filter((entry) =>
+    entry.endsWith(".json"),
+  )) {
     if (!expectedAiFiles.has(file)) {
       failures.push(`unexpected stale AI context artifact: ${file}`);
     }
@@ -124,27 +148,36 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
       component.maturity !== "internal",
   );
   if (expectedReference.scope?.componentCount !== included.length) {
-    failures.push("component reference must cover every public beta-scope component");
+    failures.push(
+      "component reference must cover every public beta-scope component",
+    );
   }
   const frameworkIds = ["react", "native-html", "angular", "vue"];
   for (const component of expectedReference.components ?? []) {
     const source = included.find((entry) => entry.id === component.id);
     for (const frameworkId of frameworkIds) {
       if (!component.frameworks?.[frameworkId]) {
-        failures.push(`${component.id}: generated framework usage is missing ${frameworkId}`);
+        failures.push(
+          `${component.id}: generated framework usage is missing ${frameworkId}`,
+        );
       }
     }
     if (
       source?.frameworkParity?.angular?.status &&
-      component.frameworks.angular.status !== source.frameworkParity.angular.status
+      component.frameworks.angular.status !==
+        source.frameworkParity.angular.status
     ) {
-      failures.push(`${component.id}: Angular status must remain sourced from canonical component parity metadata`);
+      failures.push(
+        `${component.id}: Angular status must remain sourced from canonical component parity metadata`,
+      );
     }
     if (
       source?.frameworkParity?.vue?.status &&
       component.frameworks.vue.status !== source.frameworkParity.vue.status
     ) {
-      failures.push(`${component.id}: Vue status must remain sourced from canonical component parity metadata`);
+      failures.push(
+        `${component.id}: Vue status must remain sourced from canonical component parity metadata`,
+      );
     }
   }
 
@@ -157,19 +190,42 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     'label: "Vue"',
     "AI context slice",
   ]) {
-    if (!docsPage.includes(marker)) failures.push(`consumer knowledge viewer is missing ${marker}`);
+    if (!docsPage.includes(marker))
+      failures.push(`consumer knowledge viewer is missing ${marker}`);
   }
   const aiPage = read(root, "apps/docs/src/AiContextIndexPage.tsx");
-  for (const marker of ["ai-context/index.json", "Task-scoped retrieval", "components"]) {
-    if (!aiPage.includes(marker)) failures.push(`AI context index viewer is missing ${marker}`);
+  for (const marker of [
+    "ai-context/index.json",
+    "Task-scoped retrieval",
+    "components",
+  ]) {
+    if (!aiPage.includes(marker))
+      failures.push(`AI context index viewer is missing ${marker}`);
   }
-  const playgroundPage = read(root, "examples/basic-playground/src/components/ComponentDemoPage.tsx");
-  for (const marker of ["consumer-knowledge.json", "framework-usage", "canonicalKnowledge"]) {
-    if (!playgroundPage.includes(marker)) failures.push(`playground component reference is missing ${marker}`);
+  const playgroundPage = read(
+    root,
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+  );
+  for (const marker of [
+    "consumer-knowledge.json",
+    "framework-usage",
+    "canonicalKnowledge",
+  ]) {
+    if (!playgroundPage.includes(marker))
+      failures.push(`playground component reference is missing ${marker}`);
   }
-  for (const file of filesRecursively(root, "examples/basic-playground/src/pages/reference").filter((entry) => entry.endsWith(".tsx"))) {
-    if (/\bstatus="(?:stable|beta-stable|alpha-stable|experimental|planned|deprecated)"/.test(read(root, file))) {
-      failures.push(`${file}: component maturity must come from generated consumer knowledge, not a hand-written status prop`);
+  for (const file of filesRecursively(
+    root,
+    "examples/basic-playground/src/pages/reference",
+  ).filter((entry) => entry.endsWith(".tsx"))) {
+    if (
+      /\bstatus="(?:stable|beta-stable|alpha-stable|experimental|planned|deprecated)"/.test(
+        read(root, file),
+      )
+    ) {
+      failures.push(
+        `${file}: component maturity must come from generated consumer knowledge, not a hand-written status prop`,
+      );
     }
   }
   const routes = read(root, "examples/basic-playground/src/app/routes.ts");
@@ -179,7 +235,8 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     'group: "Advanced Modules"',
     "consumer-knowledge.json",
   ]) {
-    if (!routes.includes(marker)) failures.push(`playground routes are missing ${marker}`);
+    if (!routes.includes(marker))
+      failures.push(`playground routes are missing ${marker}`);
   }
   const rolloutResidueFiles = [
     "docs/metadata/component-reference-program.json",
@@ -190,7 +247,9 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   const rolloutPattern = /GMF4|CF-7011|CF-7012|npm run quality/;
   for (const file of rolloutResidueFiles) {
     if (rolloutPattern.test(read(root, file))) {
-      failures.push(`${file}: retired rollout/task language remains in the current consumer knowledge pipeline`);
+      failures.push(
+        `${file}: retired rollout/task language remains in the current consumer knowledge pipeline`,
+      );
     }
   }
   return failures.sort();

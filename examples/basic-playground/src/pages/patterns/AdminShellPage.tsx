@@ -10,7 +10,7 @@ import {
   SideNav,
   Text,
   ToolbarButton,
-  TopNav
+  TopNav,
 } from "@vyrnforge/ui-components";
 
 export function AdminShellPage() {
@@ -35,7 +35,10 @@ export function AdminShellPage() {
             actions={
               <>
                 <ToolbarButton icon={<Icon name="Refresh" />} label="Sync" />
-                <ToolbarButton icon={<Icon name="Settings" />} label="Settings" />
+                <ToolbarButton
+                  icon={<Icon name="Settings" />}
+                  label="Settings"
+                />
               </>
             }
             userArea={<Badge tone="subtle">Admin</Badge>}
@@ -48,10 +51,23 @@ export function AdminShellPage() {
           <SideNav
             activeId="tickets"
             items={[
-              { id: "dashboard", label: "Dashboard", icon: <Icon name="Eye" /> },
-              { id: "tickets", label: "Tickets", icon: <Icon name="Warning" />, badge: "12" },
+              {
+                id: "dashboard",
+                label: "Dashboard",
+                icon: <Icon name="Eye" />,
+              },
+              {
+                id: "tickets",
+                label: "Tickets",
+                icon: <Icon name="Warning" />,
+                badge: "12",
+              },
               { id: "assets", label: "Assets", icon: <Icon name="Columns" /> },
-              { id: "settings", label: "Settings", icon: <Icon name="Settings" /> }
+              {
+                id: "settings",
+                label: "Settings",
+                icon: <Icon name="Settings" />,
+              },
             ]}
           />
         }
@@ -67,20 +83,36 @@ export function AdminShellPage() {
           />
           <PageToolbar
             sticky
-            left={<SearchInput aria-label="Search tickets" placeholder="Search tickets" />}
+            left={
+              <SearchInput
+                aria-label="Search tickets"
+                placeholder="Search tickets"
+              />
+            }
             right={
               <>
-                <ToolbarButton active icon={<Icon name="Filter" />} label="Priority" />
+                <ToolbarButton
+                  active
+                  icon={<Icon name="Filter" />}
+                  label="Priority"
+                />
                 <ToolbarButton icon={<Icon name="Download" />} label="Export" />
               </>
             }
           />
           <div className="vf-playground-grid vf-playground-grid--two">
             <Panel title="Queue health" description="Live operational summary.">
-              <Text>4 critical tickets, 8 standard tickets, 2 pending review.</Text>
+              <Text>
+                4 critical tickets, 8 standard tickets, 2 pending review.
+              </Text>
             </Panel>
-            <Panel title="Owner coverage" description="Current response ownership.">
-              <Text>Platform, Security, and Customer Success are actively assigned.</Text>
+            <Panel
+              title="Owner coverage"
+              description="Current response ownership."
+            >
+              <Text>
+                Platform, Security, and Customer Success are actively assigned.
+              </Text>
             </Panel>
           </div>
         </div>

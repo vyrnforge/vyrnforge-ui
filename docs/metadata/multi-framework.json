@@ -29,9 +29,7 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "framework-neutral",
-      "dependsOn": [
-        "@vyrnforge/ui-core"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core"],
       "owns": [
         "controlled and uncontrolled state transitions",
         "collection models",
@@ -48,10 +46,7 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "react",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-behaviors"
-      ]
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"]
     },
     {
       "name": "@vyrnforge/ui-elements",
@@ -59,10 +54,7 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "custom-elements",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-behaviors"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "owns": [
         "native Custom Element renderers",
         "property and attribute reflection",
@@ -78,10 +70,7 @@
       "status": "react-alpha-deferred",
       "betaIncluded": false,
       "runtime": "react",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-components"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
       "notes": "Grid implementation, decomposition, performance work, and multi-framework rendering remain outside the non-grid beta critical path."
     }
   ],

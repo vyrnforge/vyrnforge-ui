@@ -25,7 +25,9 @@ const search = value("--search");
 const framework = value("--framework");
 
 if (componentId) {
-  const component = read(`docs/generated/ai-context/components/${componentId}.json`);
+  const component = read(
+    `docs/generated/ai-context/components/${componentId}.json`,
+  );
   if (framework) {
     component.frameworks = component.frameworks?.[framework]
       ? { [framework]: component.frameworks[framework] }
@@ -41,10 +43,14 @@ if (componentId) {
   const needle = search.toLowerCase();
   output({
     components: index.components.filter((entry) =>
-      `${entry.id} ${entry.name} ${entry.category}`.toLowerCase().includes(needle),
+      `${entry.id} ${entry.name} ${entry.category}`
+        .toLowerCase()
+        .includes(needle),
     ),
     patterns: index.patterns.filter((entry) =>
-      `${entry.id} ${entry.name} ${entry.category}`.toLowerCase().includes(needle),
+      `${entry.id} ${entry.name} ${entry.category}`
+        .toLowerCase()
+        .includes(needle),
     ),
   });
 } else {

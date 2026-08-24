@@ -74,9 +74,7 @@
       ],
       "cssImport": "not-applicable",
       "apiDoc": "docs/api/ui-behaviors-api.md",
-      "dependsOn": [
-        "@vyrnforge/ui-core"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
@@ -93,9 +91,7 @@
       ],
       "status": "current",
       "releaseTrack": "non-grid-beta",
-      "publicEntryPoints": [
-        "@vyrnforge/ui-behaviors"
-      ],
+      "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
       "notes": "Framework-neutral behavior foundations are current and remain renderer-independent."
     },
     {
@@ -120,10 +116,7 @@
       ],
       "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-behaviors"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "mustNotDependOn": [
         "@vyrnforge/ui-elements",
         "@vyrnforge/ui-data-grid",
@@ -164,10 +157,7 @@
       ],
       "cssImport": "@vyrnforge/ui-elements/styles/index.css",
       "apiDoc": "docs/api/ui-elements-api.md",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-behaviors"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-data-grid",
@@ -212,17 +202,8 @@
       ],
       "cssImport": "@vyrnforge/ui-data-grid/styles/index.css",
       "apiDoc": "docs/api/ui-data-grid-api.md",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-components"
-      ],
-      "mustNotDependOn": [
-        "Redux",
-        "TanStack",
-        "MUI",
-        "Radix",
-        "Tailwind"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
+      "mustNotDependOn": ["Redux", "TanStack", "MUI", "Radix", "Tailwind"],
       "status": "react-alpha-deferred",
       "publicEntryPoints": [
         "@vyrnforge/ui-data-grid",
@@ -251,8 +232,6 @@
       "@vyrnforge/ui-components",
       "@vyrnforge/ui-elements"
     ],
-    "dataGridAlpha": [
-      "@vyrnforge/ui-data-grid"
-    ]
+    "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
   }
 }

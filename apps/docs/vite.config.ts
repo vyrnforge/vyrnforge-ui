@@ -25,16 +25,18 @@ function publishConsumerContext(): Plugin {
       }
       cpSync(
         path.join(repositoryRoot, "docs/generated/consumer-knowledge.json"),
-        path.join(dist, "consumer-knowledge.json")
+        path.join(dist, "consumer-knowledge.json"),
       );
-    }
+    },
   };
 }
 
 export default defineConfig(({ mode }) => ({
-  base: process.env.VITE_BASE_PATH ?? (mode === "production" ? "/vyrnforge-ui/" : "/"),
+  base:
+    process.env.VITE_BASE_PATH ??
+    (mode === "production" ? "/vyrnforge-ui/" : "/"),
   plugins: [react(), publishConsumerContext()],
   server: {
-    port: 5174
-  }
+    port: 5174,
+  },
 }));

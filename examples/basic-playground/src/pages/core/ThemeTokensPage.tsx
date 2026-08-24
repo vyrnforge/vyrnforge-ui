@@ -12,7 +12,7 @@ const tokens = [
   ["Warning", "--vf-warning", "var(--vf-warning)"],
   ["Success", "--vf-success", "var(--vf-success)"],
   ["Info", "--vf-info", "var(--vf-info)"],
-  ["Focus", "--vf-focus-ring", "var(--vf-focus-ring)"]
+  ["Focus", "--vf-focus-ring", "var(--vf-focus-ring)"],
 ];
 
 const scaleTokens = [
@@ -23,7 +23,7 @@ const scaleTokens = [
   ["Row height", "--vf-row-height"],
   ["Space 2", "--vf-space-2"],
   ["Space 3", "--vf-space-3"],
-  ["Space 4", "--vf-space-4"]
+  ["Space 4", "--vf-space-4"],
 ];
 
 export function ThemeTokensPage() {
@@ -32,13 +32,18 @@ export function ThemeTokensPage() {
       <div className="vf-playground-section-heading">
         <div>
           <Heading size="md">Shared vf token contract</Heading>
-          <Text tone="muted">Components and grid examples inherit these values from ui-core.</Text>
+          <Text tone="muted">
+            Components and grid examples inherit these values from ui-core.
+          </Text>
         </div>
       </div>
       <div className="vf-playground-token-grid">
         {tokens.map(([label, name, value]) => (
           <div className="vf-playground-token-card" key={name}>
-            <span className="vf-playground-token-swatch" style={{ background: value }} />
+            <span
+              className="vf-playground-token-swatch"
+              style={{ background: value }}
+            />
             <strong>{label}</strong>
             <code>{name}</code>
           </div>
@@ -49,7 +54,12 @@ export function ThemeTokensPage() {
           <div className="vf-playground-scale-row" key={name}>
             <strong>{label}</strong>
             <code>{name}</code>
-            <span style={{ width: `var(${name}, 24px)`, borderRadius: name.includes("radius") ? `var(${name}, 8px)` : 4 }} />
+            <span
+              style={{
+                width: `var(${name}, 24px)`,
+                borderRadius: name.includes("radius") ? `var(${name}, 8px)` : 4,
+              }}
+            />
           </div>
         ))}
       </div>

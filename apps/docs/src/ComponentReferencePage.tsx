@@ -194,7 +194,10 @@ export function ComponentReferencePage() {
                     </div>
 
                     <Text>{component.purpose}</Text>
-                    <Text size="sm" tone="muted">AI context slice: <code>{`ai-context/components/${component.id}.json`}</code></Text>
+                    <Text size="sm" tone="muted">
+                      AI context slice:{" "}
+                      <code>{`ai-context/components/${component.id}.json`}</code>
+                    </Text>
 
                     <Tabs
                       aria-label={`${component.displayName} framework usage`}

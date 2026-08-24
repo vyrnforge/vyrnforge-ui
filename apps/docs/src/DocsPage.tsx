@@ -35,7 +35,11 @@ export function DocsPage({ route }: DocsPageProps) {
           title={route.title}
         />
         {route.aiPurpose && (
-          <InlineMessage className="vf-docs-ai-purpose" title="AI purpose" variant="info">
+          <InlineMessage
+            className="vf-docs-ai-purpose"
+            title="AI purpose"
+            variant="info"
+          >
             {route.aiPurpose}
           </InlineMessage>
         )}

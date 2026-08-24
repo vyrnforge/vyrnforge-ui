@@ -13,11 +13,23 @@
       "purpose": "Compact application list for resources, metadata, status, and row-level actions without introducing grid semantics.",
       "useWhen": "Use for moderate resource collections where each item needs a readable identity, metadata, status, and a few actions.",
       "avoidWhen": "Use UniversalDataGrid when columnar comparison, sorting, filtering, resizing, grouping, or grid state is the primary interaction model.",
-      "components": ["badge", "button", "more-button", "toast-provider", "use-toast"],
+      "components": [
+        "badge",
+        "button",
+        "more-button",
+        "toast-provider",
+        "use-toast"
+      ],
       "playgroundRoute": "/resource-list",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["resource list", "records", "assets", "row actions", "status list"]
+      "aiKeywords": [
+        "resource list",
+        "records",
+        "assets",
+        "row actions",
+        "status list"
+      ]
     },
     {
       "id": "detail",
@@ -30,7 +42,13 @@
       "playgroundRoute": "/detail",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["detail page", "entity details", "resource page", "metadata", "actions"]
+      "aiKeywords": [
+        "detail page",
+        "entity details",
+        "resource page",
+        "metadata",
+        "actions"
+      ]
     },
     {
       "id": "settings",
@@ -39,11 +57,28 @@
       "purpose": "Sectioned settings workflow using labelled controls, validation, immediate settings, and explicit save feedback.",
       "useWhen": "Use for durable application or account configuration where related settings need clear labels, descriptions, validation, and save behavior.",
       "avoidWhen": "Avoid mixing settings with unrelated transactional workflows; keep application persistence and authorization outside VyrnForge.",
-      "components": ["autocomplete", "button", "field", "radio-group", "select", "switch", "text-input", "toast-provider", "use-toast", "validation-message"],
+      "components": [
+        "autocomplete",
+        "button",
+        "field",
+        "radio-group",
+        "select",
+        "switch",
+        "text-input",
+        "toast-provider",
+        "use-toast",
+        "validation-message"
+      ],
       "playgroundRoute": "/settings",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["settings", "preferences", "configuration", "account settings", "workspace settings"]
+      "aiKeywords": [
+        "settings",
+        "preferences",
+        "configuration",
+        "account settings",
+        "workspace settings"
+      ]
     },
     {
       "id": "form",
@@ -52,11 +87,33 @@
       "purpose": "General application form composition with labelled fields, varied input types, validation, submission feedback, and application-owned state.",
       "useWhen": "Use when a workflow collects several related values and needs clear validation and submission actions.",
       "avoidWhen": "Avoid putting business validation, persistence, authorization, or backend workflow execution inside VyrnForge components.",
-      "components": ["autocomplete", "button", "checkbox", "date-input", "date-time-input", "field", "inline-message", "multi-select", "number-input", "radio-group", "select", "text-input", "toast-provider", "use-toast", "validation-message"],
+      "components": [
+        "autocomplete",
+        "button",
+        "checkbox",
+        "date-input",
+        "date-time-input",
+        "field",
+        "inline-message",
+        "multi-select",
+        "number-input",
+        "radio-group",
+        "select",
+        "text-input",
+        "toast-provider",
+        "use-toast",
+        "validation-message"
+      ],
       "playgroundRoute": "/form",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["form", "data entry", "validation", "submit", "request form"]
+      "aiKeywords": [
+        "form",
+        "data entry",
+        "validation",
+        "submit",
+        "request form"
+      ]
     },
     {
       "id": "filter-form",
@@ -65,11 +122,26 @@
       "purpose": "Compact filter composition for operational lists and reports using search, choice, and date controls.",
       "useWhen": "Use when a list or report needs several explicit filters that remain application-owned and easy to reset.",
       "avoidWhen": "Avoid coupling filter controls to fetching or global state inside VyrnForge; adapters and application code own those effects.",
-      "components": ["autocomplete", "button", "date-input", "field", "search-input", "select", "stack", "inline"],
+      "components": [
+        "autocomplete",
+        "button",
+        "date-input",
+        "field",
+        "search-input",
+        "select",
+        "stack",
+        "inline"
+      ],
       "playgroundRoute": "/filter-form",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["filters", "search form", "report filters", "list filters", "date filter"]
+      "aiKeywords": [
+        "filters",
+        "search form",
+        "report filters",
+        "list filters",
+        "date filter"
+      ]
     },
     {
       "id": "assignment-patterns",
@@ -78,11 +150,23 @@
       "purpose": "Bounded dual-list assignment workflow for moving known options between available and assigned collections.",
       "useWhen": "Use for moderate known collections where users need to review both available and assigned items while making changes.",
       "avoidWhen": "Avoid for very large, remote, or hierarchical collections that need a different collection/search architecture.",
-      "components": ["badge", "button", "stack", "transfer-list", "validation-message"],
+      "components": [
+        "badge",
+        "button",
+        "stack",
+        "transfer-list",
+        "validation-message"
+      ],
       "playgroundRoute": "/assignment-patterns",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["assignment", "transfer list", "dual list", "permissions", "memberships"]
+      "aiKeywords": [
+        "assignment",
+        "transfer list",
+        "dual list",
+        "permissions",
+        "memberships"
+      ]
     },
     {
       "id": "empty-error-loading",
@@ -91,11 +175,23 @@
       "purpose": "Route-level feedback composition for empty, failed, and loading application states.",
       "useWhen": "Use to make page and workflow state explicit while the consuming application owns loading and retry state.",
       "avoidWhen": "Use smaller inline feedback when the entire route or primary task is not affected.",
-      "components": ["button", "empty-state", "error-state", "loading-state", "skeleton"],
+      "components": [
+        "button",
+        "empty-state",
+        "error-state",
+        "loading-state",
+        "skeleton"
+      ],
       "playgroundRoute": "/empty-error-loading",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["empty state", "error state", "loading state", "skeleton", "retry"]
+      "aiKeywords": [
+        "empty state",
+        "error state",
+        "loading state",
+        "skeleton",
+        "retry"
+      ]
     },
     {
       "id": "admin-shell",
@@ -104,11 +200,29 @@
       "purpose": "Dense administration workspace with persistent top navigation, side navigation, page identity, toolbar actions, and work panels.",
       "useWhen": "Use as a composition reference for internal operations, administration, IAM, and other dense workspace applications.",
       "avoidWhen": "Avoid copying application routing, authorization, or business state into the library; the shell only defines reusable UI composition.",
-      "components": ["app-shell", "badge", "button", "page-header", "page-toolbar", "panel", "search-input", "side-nav", "toolbar-button", "top-nav"],
+      "components": [
+        "app-shell",
+        "badge",
+        "button",
+        "page-header",
+        "page-toolbar",
+        "panel",
+        "search-input",
+        "side-nav",
+        "toolbar-button",
+        "top-nav"
+      ],
       "playgroundRoute": "/admin-shell",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["admin", "admin shell", "operations console", "workspace", "sidebar", "top navigation"]
+      "aiKeywords": [
+        "admin",
+        "admin shell",
+        "operations console",
+        "workspace",
+        "sidebar",
+        "top navigation"
+      ]
     },
     {
       "id": "customer-portal-shell",
@@ -117,11 +231,28 @@
       "purpose": "Customer-facing portal composition with predictable navigation, breadcrumbs, page identity, and related content tabs.",
       "useWhen": "Use as a composition reference for account, customer, partner, and self-service portal experiences.",
       "avoidWhen": "Keep authentication, account state, routing, permissions, and backend workflows in the consuming application.",
-      "components": ["app-shell", "badge", "breadcrumbs", "button", "page-header", "panel", "side-nav", "tabs", "top-nav"],
+      "components": [
+        "app-shell",
+        "badge",
+        "breadcrumbs",
+        "button",
+        "page-header",
+        "panel",
+        "side-nav",
+        "tabs",
+        "top-nav"
+      ],
       "playgroundRoute": "/customer-portal-shell",
       "exampleFramework": "react",
       "frameworkNeutral": true,
-      "aiKeywords": ["customer portal", "account portal", "self service", "breadcrumbs", "tabs", "sidebar"]
+      "aiKeywords": [
+        "customer portal",
+        "account portal",
+        "self service",
+        "breadcrumbs",
+        "tabs",
+        "sidebar"
+      ]
     }
   ]
 }
