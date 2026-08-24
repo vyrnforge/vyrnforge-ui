@@ -16,7 +16,8 @@ export function PlaygroundNav({
     id: route.id,
     label: route.label,
     active: route.id === activeRouteId,
-    badge: route.group === "Data Grid" ? "Grid" : undefined,
+    badge:
+      route.packageName === "@vyrnforge/ui-data-grid" ? "Alpha" : undefined,
     onSelect: () => onRouteChange(route.id),
   });
 
