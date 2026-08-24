@@ -247,7 +247,7 @@ export const docsRoutes: DocsRoute[] = [
     title: "Multi-Framework Consumer Fixtures",
     group: "Testing",
     description:
-      "React, native HTML, Angular, and Vue fixture ownership and GMF4 evidence rules.",
+      "React, native HTML, Angular, and Vue fixture ownership and current support evidence.",
     sourcePath: "docs/testing/multi-framework-consumer-fixtures.md",
     aiPurpose:
       "Use this before changing consumer fixtures or making framework support claims.",
@@ -268,14 +268,14 @@ export const docsRoutes: DocsRoute[] = [
   },
   {
     id: "s4-multi-framework-architecture",
-    title: "S4 Multi-Framework Architecture Evidence",
+    title: "Multi-Framework Architecture Evidence",
     group: "Quality",
     description:
-      "MF-4001 through MF-4008 evidence and the explicit GMF1 support-claim boundary.",
+      "Current shared architecture, renderer boundaries, and framework-support evidence.",
     sourcePath: "docs/quality/s4-multi-framework-architecture.md",
     aiPurpose:
-      "Use this to review what S4 proves and what remains deferred to later gates.",
-    tags: ["quality", "multi-framework", "s4", "evidence"],
+      "Use this to review current multi-framework architecture evidence and support boundaries.",
+    tags: ["quality", "multi-framework", "evidence"],
     content: multiFrameworkArchitectureEvidence,
   },
   {

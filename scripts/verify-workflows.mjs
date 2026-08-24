@@ -284,12 +284,6 @@ assert(
   "reusable quality workflow must pass fixture scope to the scoped runner",
 );
 assert(
-  read(".github/workflows/_quality.yml").includes(
-    "CI_SCOPE_HISTORICAL_EVIDENCE",
-  ),
-  "reusable quality workflow must pass historical evidence scope explicitly",
-);
-assert(
   read("scripts/detect-ci-scope.mjs").includes("tests/browser/"),
   "CI planner must classify browser contract tests explicitly",
 );
