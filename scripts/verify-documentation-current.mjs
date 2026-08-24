@@ -2,10 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-  getReleaseLineEntries,
-  readReleaseGroups,
-} from "./release-groups.mjs";
+import { getReleaseLineEntries, readReleaseGroups } from "./release-groups.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -32,6 +29,7 @@ export const documentationCurrentPaths = [
   "docs/architecture/00-system-overview.md",
   "docs/architecture/01-package-boundaries.md",
   "docs/architecture/02-state-and-adapter-ownership.md",
+  "docs/architecture/08-semantic-token-contract.md",
   "docs/architecture/adr-004-multi-framework-web-support.md",
   "docs/architecture/09-component-contracts-and-events.md",
   "docs/architecture/10-custom-elements-and-form-association.md",
@@ -39,7 +37,10 @@ export const documentationCurrentPaths = [
   "docs/roadmap/01-component-inventory.md",
   "docs/roadmap/02-gap-analysis.md",
   "docs/roadmap/03-do-not-build-yet.md",
+  "docs/quality/00-quality-gates.md",
   "docs/quality/03-known-limitations.md",
+  "docs/testing/browser-testing.md",
+  "docs/testing/visual-regression.md",
   "docs/release/README.md",
   "docs/release/versioning-policy.md",
   "docs/release/multi-framework-migration-and-limitations.md",
@@ -85,8 +86,12 @@ export const documentationTaskFreePaths = [
   "docs/architecture/00-system-overview.md",
   "docs/architecture/01-package-boundaries.md",
   "docs/architecture/02-state-and-adapter-ownership.md",
+  "docs/architecture/08-semantic-token-contract.md",
   "docs/architecture/09-component-contracts-and-events.md",
+  "docs/quality/00-quality-gates.md",
   "docs/quality/03-known-limitations.md",
+  "docs/testing/browser-testing.md",
+  "docs/testing/visual-regression.md",
   "docs/release/README.md",
   "docs/release/multi-framework-migration-and-limitations.md",
   "packages/ui-core/README.md",
@@ -250,7 +255,9 @@ function verifyPrimaryStructure({ root, failures }) {
 
 function verifyVersionPolicy({ root, releaseGroups, failures }) {
   const policy = read(root, "docs/release/versioning-policy.md");
-  for (const [releaseGroupId, releaseGroup] of getReleaseLineEntries(releaseGroups)) {
+  for (const [releaseGroupId, releaseGroup] of getReleaseLineEntries(
+    releaseGroups,
+  )) {
     if (!policy.includes(releaseGroupId)) {
       failures.push(
         `docs/release/versioning-policy.md: missing release group id ${releaseGroupId}`,

@@ -1,19 +1,17 @@
 # Semantic Token Contract
 
-This document is the human-readable contract for S3 tasks VF-3001 through
-VF-3008. The machine-readable source is
-`docs/metadata/design-tokens.json`; the typed package export is
-`packages/ui-core/src/theme/tokenContract.ts`.
+The machine-readable source of truth is
+`docs/metadata/design-tokens.json`; typed token and theme exports are owned by
+`@vyrnforge/ui-core`.
 
 ## Purpose
 
 Shared visual decisions belong to `@vyrnforge/ui-core` when they describe a
-role that can be reused across components, the data grid, documentation, or
-consuming applications. Components should not invent local values for shared
-surface, text, interaction, status, density, typography, motion, or layering
-roles.
+role reusable across components, the data grid, documentation, or consuming
+applications. Components should not invent local values for shared surface,
+text, interaction, status, density, typography, motion, or layering roles.
 
-The contract remains native-first, CSS-variable-based, dependency-minimal, and
+The contract is native-first, CSS-variable-based, dependency-minimal, and
 store-agnostic.
 
 ## Ownership decision
@@ -47,16 +45,14 @@ See `../api/css-token-reference.md` for the complete token list.
 
 ## Compatibility bridge
 
-The historical tokens such as `--vf-bg`, `--vf-surface`, `--vf-text`,
-`--vf-primary`, and status aliases remain compatibility sources during the S3
-migration. Canonical roles read from them, so existing app overrides continue
-to influence new semantic tokens.
+Compatibility variables such as `--vf-bg`, `--vf-surface`, `--vf-text`,
+`--vf-primary`, and status aliases remain supported bridges where declared by
+the canonical contract. New component work must use canonical role names.
 
-New component work must use the canonical role names. VF-3009 and VF-3010
-completed package adoption: shared components now consume semantic roles and
-the data grid maps its package-owned roles to the shared contract. Compatibility
-sources are not removed in S3 because consuming applications may still override
-them.
+Shared components consume semantic roles directly. The data grid keeps
+package-owned `--udg-*` roles for grid-specific semantics and geometry, with
+defaults mapped to the shared contract. Compatibility aliases must not become a
+second source of theme values.
 
 ## Themes
 
@@ -69,8 +65,7 @@ Light, dark, enterprise, and system themes expose the same semantic roles.
   operating system requests dark color scheme.
 
 Theme presets exported from TypeScript contain every theme-scoped semantic
-token. This prevents JavaScript theme application from providing a partial
-contract.
+token so JavaScript theme application cannot provide a partial contract.
 
 ## Density
 
@@ -80,36 +75,28 @@ Canonical density names are:
 - `balanced`
 - `spacious`
 
-`standard` remains an alias of `balanced`; `comfortable` remains an alias of
-`spacious`. Components and grid CSS accept both canonical and compatibility
-names. Public TypeScript grid density values remain unchanged during alpha to
-avoid an unrelated API migration in VF-3010.
+`standard` remains a compatibility alias of `balanced`; `comfortable`
+remains a compatibility alias of `spacious`. Components and grid CSS accept
+supported canonical and compatibility names according to their public contracts.
 
-The active density contract controls:
-
-- control height and padding
-- icon size
-- row height
-- component gap
-- body type size
-
-`--vf-hit-target-min` is the minimum pointer target policy token. Components
-must still consider context, adjacent target spacing, and accessibility.
+The active density contract controls control height and padding, icon size, row
+height, component gap, and body type size. `--vf-hit-target-min` is the shared
+minimum pointer-target policy token; components must still account for context,
+adjacent target spacing, and accessibility.
 
 ## Typography
 
 Named roles replace ad hoc combinations of font size, weight, line height, and
-letter spacing. Shared utility classes are available as `vf-type-*`, but
-package components may also consume the role variables directly.
-
-Numeric presentation uses tabular numerals through `.vf-type-numeric`.
+letter spacing. Shared utility classes are available as `vf-type-*`, while
+package components may consume role variables directly. Numeric presentation
+uses tabular numerals through `.vf-type-numeric`.
 
 ## Motion
 
 No essential state change may depend on animation. Automatic
 `prefers-reduced-motion: reduce` and explicit `data-motion="reduced"` /
-`.vf-motion-reduced` modes shorten non-essential durations to `1ms` and use
-linear easing while preserving state visibility.
+`.vf-motion-reduced` modes shorten non-essential durations and use linear
+easing while preserving state visibility.
 
 ## Layers
 
@@ -128,62 +115,47 @@ Layer values are unique and strictly increasing:
 | Toast    |    90 |
 | Debug    |  9999 |
 
-Historical `--vf-z-*` variables alias these canonical levels. Dynamic overlay
-stack offsets remain component-owned and must be added to the appropriate
-semantic base layer.
+Compatibility z-index variables alias canonical levels. Dynamic overlay stack
+offsets remain component-owned and must be added to the appropriate semantic
+base layer.
+
+## Package adoption boundary
+
+- `@vyrnforge/ui-components` consumes canonical `--vf-*` roles for shared
+  surfaces, text, borders, interaction, status, controls, typography, motion,
+  focus, and layers.
+- Component-local custom properties are limited to private geometry or dynamic
+  state such as slider progress and measured overlay coordinates.
+- `@vyrnforge/ui-data-grid` retains `--udg-*` only as grid-facing role and
+  geometry contracts; their defaults map to canonical `--vf-*` roles.
+- Light, dark, enterprise, and system grid themes inherit ui-core. Explicit
+  package-specific themes remain narrow documented exceptions when the shared
+  foundation does not yet own an equivalent contract.
+- Typed data-grid presets derive from exported ui-core theme objects rather than
+  duplicating theme color literals.
+
+The historical `--udg-surface-ra-sm` spelling remains a compatibility alias
+of `--udg-surface-raised`. New code must use the correctly named role.
 
 ## Verification
 
 ```bash
 npm run test:design-tokens
 npm run verify:design-tokens
-npm run test:browser -- tests/browser/semantic-tokens.spec.ts
-npm run verify:visual-regression
-npm run test:visual
-npm run verify:g3-closure
-```
-
-The verifier rejects missing categories, duplicate token names, incomplete
-theme presets, broken compatibility bridges, missing density aliases, invalid
-layer order, and missing reduced-motion fallbacks.
-
-## Package adoption status
-
-VF-3009 and VF-3010 enforce the following boundary:
-
-- `@vyrnforge/ui-components` consumes canonical `--vf-*` semantic roles for
-  shared surfaces, text, borders, interaction, status, controls, typography,
-  motion, focus, and layers.
-- Component-local custom properties are limited to private geometry or dynamic
-  state, such as slider progress and measured overlay coordinates.
-- `@vyrnforge/ui-data-grid` retains `--udg-*` only as grid-facing role and
-  geometry contracts. Their defaults map to canonical `--vf-*` roles.
-- Light, dark, enterprise, and system grid themes inherit ui-core. The explicit
-  grid high-contrast theme remains a documented exception until ui-core owns a
-  shared high-contrast preset.
-- Typed data-grid presets derive from the exported ui-core theme objects rather
-  than duplicating color literals.
-
-The historical `--udg-surface-ra-sm` spelling remains as a compatibility alias
-of `--udg-surface-raised`. New code must use the correctly named role.
-
-## Adoption verification
-
-```bash
 npm run test:token-adoption
 npm run verify:token-adoption
+npm run test:browser -- tests/browser/semantic-tokens.spec.ts
+npm run test:visual-regression
+npm run verify:visual-regression
+npm run test:visual
 ```
 
-The verifier rejects legacy shared token references in package CSS, hard-coded
-component colors, duplicated grid theme maps, literal motion timings, missing
-grid-to-core mappings, and typed grid presets that duplicate theme colors.
+The verifiers reject missing categories, duplicate token names, incomplete theme
+presets, broken compatibility bridges, invalid density aliases, invalid layer
+order, missing reduced-motion fallbacks, hard-coded shared component colors,
+duplicated grid theme maps, literal motion timings, and invalid grid-to-core
+mappings.
 
-## VF-3011 and VF-3012 closure
-
-The semantic contract is now backed by the canonical visual matrix,
-fourteen Chromium cases, per-case PNG/JSON evidence, and the machine-readable
-G3 closure record. See `../quality/s3-visual-regression.md`,
-`../quality/s3-g3-closure.md`, and `../metadata/g3-closure.json`.
-
-The metadata state is `evidence-complete`; the authoritative merge decision
-remains the final pull-request `ci-gate`.
+Visual evidence is governed by
+[Visual Regression Testing](../testing/visual-regression.md) and the canonical
+`docs/metadata/visual-regression-matrix.json`.

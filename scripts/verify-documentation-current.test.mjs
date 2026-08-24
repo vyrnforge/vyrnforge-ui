@@ -193,3 +193,21 @@ test("rejects removal of behavior-history markers required by repository evidenc
         ),
       ),
   ));
+
+test("rejects removed aggregate commands in quality guidance", () =>
+  fixture(
+    (root) => {
+      const relativePath = "docs/quality/00-quality-gates.md";
+      write(
+        root,
+        relativePath,
+        `${read(root, relativePath)}\nLegacy instruction: npm run quality\n`,
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("removed public command: npm run quality"),
+        ),
+      ),
+  ));

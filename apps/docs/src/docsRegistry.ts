@@ -13,7 +13,9 @@ import multiFrameworkDecision from "../../../docs/architecture/adr-004-multi-fra
 import componentContracts from "../../../docs/architecture/09-component-contracts-and-events.md?raw";
 import customElementsAndForms from "../../../docs/architecture/10-custom-elements-and-form-association.md?raw";
 import multiFrameworkFixtures from "../../../docs/testing/multi-framework-consumer-fixtures.md?raw";
-import semanticTokenAudit from "../../../docs/quality/s3-semantic-token-audit.md?raw";
+import visualRegression from "../../../docs/testing/visual-regression.md?raw";
+import qualityGates from "../../../docs/quality/00-quality-gates.md?raw";
+import knownLimitations from "../../../docs/quality/03-known-limitations.md?raw";
 import multiFrameworkArchitectureEvidence from "../../../docs/quality/s4-multi-framework-architecture.md?raw";
 import masterRoadmap from "../../../docs/roadmap/00-master-roadmap.md?raw";
 import componentInventory from "../../../docs/roadmap/01-component-inventory.md?raw";
@@ -255,16 +257,42 @@ export const docsRoutes: DocsRoute[] = [
     content: multiFrameworkFixtures,
   },
   {
-    id: "s3-semantic-token-audit",
-    title: "S3 Semantic Token Audit",
+    id: "visual-regression",
+    title: "Visual Regression Testing",
+    group: "Testing",
+    description:
+      "Deterministic computed-style baselines, screenshot evidence, and visual matrix maintenance.",
+    sourcePath: "docs/testing/visual-regression.md",
+    aiPurpose:
+      "Use this before changing the visual regression matrix, fixtures, or evidence policy.",
+    tags: ["testing", "visual", "tokens", "evidence"],
+    content: visualRegression,
+  },
+  {
+    id: "quality-gates",
+    title: "Quality Gates",
     group: "Quality",
     description:
-      "VF-3001 inventory of shared token gaps, hard-coded decisions, and deferred migration debt.",
-    sourcePath: "docs/quality/s3-semantic-token-audit.md",
+      "Current component, repository, accessibility, token, and merge-quality requirements.",
+    sourcePath: "docs/quality/00-quality-gates.md",
     aiPurpose:
-      "Use this to distinguish completed token foundation work from VF-3009 and VF-3010 migration debt.",
-    tags: ["quality", "tokens", "audit", "s3"],
-    content: semanticTokenAudit,
+      "Use this to determine the current blocking quality expectations for repository changes.",
+    tags: ["canonical", "quality", "testing", "ci"],
+    canonical: true,
+    content: qualityGates,
+  },
+  {
+    id: "known-limitations",
+    title: "Known Limitations",
+    group: "Quality",
+    description:
+      "Current release-level framework, browser, server, and application-ownership limitations.",
+    sourcePath: "docs/quality/03-known-limitations.md",
+    aiPurpose:
+      "Use this before making support claims that may exceed current package or framework boundaries.",
+    tags: ["canonical", "quality", "limitations"],
+    canonical: true,
+    content: knownLimitations,
   },
   {
     id: "s4-multi-framework-architecture",
@@ -382,11 +410,11 @@ export const docsRoutes: DocsRoute[] = [
     title: "Multi-Framework Migration and Limitations",
     group: "Release",
     description:
-      "CF-7013 guidance for choosing React components or native elements, integrating Angular and Vue, and understanding beta exclusions.",
+      "Guidance for choosing React components or native elements, integrating Angular and Vue, and understanding current framework and release limitations.",
     sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
     aiPurpose:
       "Use this before migrating an application to VyrnForge across React, Native HTML, Angular, or Vue.",
-    tags: ["release", "migration", "multi-framework", "gmf4"],
+    tags: ["release", "migration", "multi-framework"],
     canonical: true,
     content: multiFrameworkMigrationGuide,
   },
@@ -489,11 +517,11 @@ export const docsRoutes: DocsRoute[] = [
     title: "Metadata / Cross-Framework Browser Matrix",
     group: "Metadata",
     description:
-      "CF-7009 packed Native HTML, React, Angular, and Vue shared browser scenarios and runtime evidence.",
+      "Packed Native HTML, React, Angular, and Vue shared browser scenarios and runtime evidence.",
     sourcePath: "docs/metadata/cross-framework-browser-matrix.json",
     aiPurpose:
       "Use this for the current shared browser matrix scenarios, report path, and trace evidence status.",
-    tags: ["metadata", "multi-framework", "browser", "gmf4", "json"],
+    tags: ["metadata", "multi-framework", "browser", "json"],
     kind: "metadata",
     content: metadataCrossFrameworkBrowserMatrix,
   },
@@ -502,11 +530,11 @@ export const docsRoutes: DocsRoute[] = [
     title: "Metadata / Cross-Framework Accessibility",
     group: "Metadata",
     description:
-      "CF-7010 Axe, keyboard, and manual Windows + Chrome + NVDA evidence state across four packed consumers.",
+      "Automated accessibility, keyboard, and manual assistive-technology evidence across packed framework consumers.",
     sourcePath: "docs/metadata/cross-framework-accessibility-review.json",
     aiPurpose:
       "Use this to determine whether cross-framework accessibility automation and named NVDA evidence are complete.",
-    tags: ["metadata", "accessibility", "multi-framework", "gmf4", "json"],
+    tags: ["metadata", "accessibility", "multi-framework", "json"],
     kind: "metadata",
     content: metadataCrossFrameworkAccessibility,
   },
@@ -515,11 +543,11 @@ export const docsRoutes: DocsRoute[] = [
     title: "Metadata / Multi-Framework Migration Guide",
     group: "Metadata",
     description:
-      "CF-7013 migration and limitations guide review status and required coverage.",
+      "Migration and limitations guide review status and required coverage.",
     sourcePath: "docs/metadata/multi-framework-migration-guide.json",
     aiPurpose:
       "Use this to verify the canonical multi-framework migration guide and its review evidence.",
-    tags: ["metadata", "migration", "multi-framework", "gmf4", "json"],
+    tags: ["metadata", "migration", "multi-framework", "json"],
     kind: "metadata",
     content: metadataMultiFrameworkMigrationGuide,
   },
@@ -528,18 +556,11 @@ export const docsRoutes: DocsRoute[] = [
     title: "Metadata / Component Reference Program",
     group: "Metadata",
     description:
-      "CF-7011/CF-7012 generated framework usage tabs and component-contract reference status.",
+      "Generated framework usage tabs and component-contract reference status.",
     sourcePath: "docs/metadata/component-reference-program.json",
     aiPurpose:
       "Use this to determine the verification state and source-of-truth policy for generated multi-framework component documentation.",
-    tags: [
-      "metadata",
-      "components",
-      "reference",
-      "multi-framework",
-      "gmf4",
-      "json",
-    ],
+    tags: ["metadata", "components", "reference", "multi-framework", "json"],
     kind: "metadata",
     content: metadataComponentReferenceProgram,
   },
