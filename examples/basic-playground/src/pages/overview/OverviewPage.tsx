@@ -12,6 +12,10 @@ const featuredPatterns = knowledge.patterns.filter((pattern) =>
   ["settings", "form", "resource-list", "detail", "admin-shell", "customer-portal-shell"].includes(pattern.id)
 );
 
+function navigate(path: string) {
+  window.location.hash = path;
+}
+
 export function OverviewPage() {
   return (
     <Stack gap="lg">
@@ -23,8 +27,8 @@ export function OverviewPage() {
             Explore reusable components, application patterns, shared foundations, and optional advanced modules. Examples use public VyrnForge APIs and keep business state in the consuming application.
           </Text>
           <Inline gap="sm" wrap>
-            <Button as="a" href="#/settings" variant="primary">Explore a settings workflow</Button>
-            <Button as="a" href="#/components/actions/button" variant="subtle">Browse components</Button>
+            <Button onClick={() => navigate("/settings")} variant="primary">Explore a settings workflow</Button>
+            <Button onClick={() => navigate("/components/actions/button")} variant="subtle">Browse components</Button>
           </Inline>
         </Stack>
       </section>
