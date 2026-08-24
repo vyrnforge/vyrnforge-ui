@@ -1,0 +1,34 @@
+name: Temporary consumer knowledge convergence
+
+on:
+  push:
+    branches:
+      - feat/consumer-knowledge-playground
+
+permissions:
+  contents: write
+
+jobs:
+  converge:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/consumer-knowledge-playground
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply convergence
+        run: |
+          python scripts/tmp_converge_consumer_knowledge.py
+          node scripts/generate-component-reference.mjs
+          rm scripts/tmp_converge_consumer_knowledge.py
+          rm .github/workflows/tmp-converge-consumer-knowledge.yml
+      - name: Commit generated convergence
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m "feat: converge consumer knowledge surfaces"
+          git push origin HEAD:feat/consumer-knowledge-playground
