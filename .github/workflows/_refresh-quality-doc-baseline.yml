@@ -1,0 +1,52 @@
+name: Refresh quality docs formatting baseline
+
+on:
+  push:
+    branches:
+      - chore/retire-stale-quality-docs
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format temporary workflow
+        run: npx prettier --write .github/workflows/_refresh-quality-doc-baseline.yml
+
+      - name: Refresh reviewed formatting baseline
+        run: npm run format:baseline
+
+      - name: Verify formatting
+        run: npm run format:check
+
+      - name: Verify documentation currency
+        run: npm run test:documentation-current && npm run verify:documentation-current
+
+      - name: Remove one-shot workflow
+        run: rm .github/workflows/_refresh-quality-doc-baseline.yml
+
+      - name: Commit baseline refresh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: refresh formatting baseline"
+          git push origin HEAD:chore/retire-stale-quality-docs
