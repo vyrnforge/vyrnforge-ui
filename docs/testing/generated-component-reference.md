@@ -30,7 +30,10 @@ docs/generated/ai-context/patterns/*.json
 `consumer-knowledge.json` is the shared application projection used by the docs
 reference viewer and playground. The `ai-context` tree is deliberately split so
 an AI agent can read a small index, one task/category record, and only the
-component slices required for the current request.
+component slices required for the current request. The docs production build
+publishes the same generated consumer knowledge and `ai-context` tree as static
+assets so external tools can retrieve machine-readable context without scraping
+rendered documentation.
 
 Angular and Vue status remains sourced from canonical framework-parity metadata.
 Current verified Custom Element consumption must not be presented as a shipped
