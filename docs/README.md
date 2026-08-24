@@ -54,6 +54,7 @@ documents for the part of the foundation you are changing.
 | Framework extensibility            | [ADR-012: Framework Extensibility Contract](architecture/adr-012-framework-extensibility-contract.md)           |
 | Reusable patterns and templates    | [ADR-013: Reusable Pattern and Template Contract](architecture/adr-013-pattern-template-contract.md)            |
 | Browser testing                    | [Browser Testing](testing/browser-testing.md)                                                                   |
+| Visual regression                  | [Visual Regression Testing](testing/visual-regression.md)                                                       |
 | Cross-framework consumer fixtures  | [Consumer Fixture Strategy](testing/multi-framework-consumer-fixtures.md)                                       |
 
 The canonical component catalog and maturity records live in
@@ -74,6 +75,7 @@ and metadata.
 | Metadata maintenance                            | [Metadata Maintenance](governance/04-metadata-maintenance.md)             |
 | Ownership and review                            | [Ownership and Review Model](governance/ownership-and-review-model.md)    |
 | Repository hygiene                              | [Repository Hygiene](governance/repository-hygiene.md)                    |
+| Quality gates                                   | [Quality Gates](quality/00-quality-gates.md)                              |
 | Generated repository inventory                  | [Repository Inventory](governance/repository-inventory.md)                |
 | CI, merge gates, Pages, and workflow boundaries | [CI/CD Architecture](engineering/ci-cd-architecture.md)                   |
 | Release process                                 | [Release Documentation](release/README.md)                                |
@@ -110,12 +112,12 @@ Historical and evidence-heavy material that meets the document-retention policy
 remains available for audits, regressions, release review, and architectural
 context, but it does not override current canonical guidance.
 
-| Area                                   | Purpose                                                                                              |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [quality/](quality/)                   | Quality audits, closure records, visual evidence, accessibility evidence, and stabilization reports. |
-| [testing/](testing/)                   | Detailed compatibility, browser, consumer, and framework verification contracts.                     |
-| [metadata/](metadata/)                 | Structured contracts, generated evidence state, release groups, and closure records.                 |
-| [release/evidence/](release/evidence/) | Release-specific evidence retained by policy.                                                        |
+| Area                                   | Purpose                                                                                                                |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| [quality/](quality/)                   | Current quality gates, limitations, architecture evidence, accessibility evidence, and retained stabilization records. |
+| [testing/](testing/)                   | Detailed browser, visual, compatibility, consumer, and framework verification contracts.                               |
+| [metadata/](metadata/)                 | Structured contracts, generated evidence state, release groups, and closure records.                                   |
+| [release/evidence/](release/evidence/) | Release-specific evidence retained by policy.                                                                          |
 
 Retained historical evidence never overrides active documentation. Obsolete
 material with no continuing repository value is removed according to

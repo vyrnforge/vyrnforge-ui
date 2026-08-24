@@ -1,7 +1,5 @@
 {
   "schemaVersion": 1,
-  "task": "VF-3011",
-  "gate": "G3",
   "status": "active",
   "owner": "Quality Engineering",
   "sourceOfTruth": "docs/metadata/visual-regression-matrix.json",
@@ -277,7 +275,7 @@
   ],
   "expectedCaseCount": 14,
   "evidence": {
-    "documentation": "docs/quality/s3-visual-regression.md",
+    "documentation": "docs/testing/visual-regression.md",
     "fixtureRegistry": "apps/regression-fixtures/src/fixtureRegistry.ts",
     "workflow": ".github/workflows/_integration.yml"
   }

@@ -1,109 +1,94 @@
 # VyrnForge UI Quality Gates
 
 This document defines the minimum evidence expected for VyrnForge UI component
-changes. The canonical maturity definitions and promotion requirements live in
+and package changes. Canonical maturity definitions and promotion requirements
+live in
 [`../governance/component-maturity-model.md`](../governance/component-maturity-model.md).
-Do not create a second maturity definition in this document.
+Do not create a second maturity definition here.
 
 ## Severity
 
-| Severity | Definition                                                                                                                                     |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| P0       | Crash, data loss, unusable keyboard behavior, focus-trap failure, inaccessible primary interaction, or component cannot be used.               |
-| P1       | Major API inconsistency, major layout or scroll defect, broken controlled state, incorrect form submission, or serious theme/responsive issue. |
-| P2       | Incomplete behavior, visual inconsistency, missing secondary accessibility behavior, or incomplete documentation.                              |
-| P3       | Polish, optional enhancement, or future optimization.                                                                                          |
+| Severity | Definition                                                                                                                                       |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| P0       | Crash, data loss, unusable keyboard behavior, focus-trap failure, inaccessible primary interaction, or a component cannot be used.               |
+| P1       | Major API inconsistency, major layout or scroll defect, broken controlled state, incorrect form submission, or serious theme/responsive failure. |
+| P2       | Incomplete behavior, visual inconsistency, missing secondary accessibility behavior, or incomplete documentation.                                |
+| P3       | Polish, optional enhancement, or future optimization.                                                                                            |
 
 ## Component quality gates
 
 | Gate                 | Requirement                                                                                                                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| API consistency      | Props follow established VyrnForge conventions and controlled/uncontrolled behavior is explicit.                                                                                                                                                       |
-| Behavior correctness | Disabled/read-only states block mutation, callbacks are predictable, and business state is not silently owned by shared packages.                                                                                                                      |
-| Accessibility        | Labels, ARIA relationships, visible focus, keyboard operation, Escape behavior, and live-region/modal semantics are reviewed where applicable.                                                                                                         |
-| Visual quality       | Light, dark, enterprise, compact, standard, and comfortable modes retain usable spacing, contrast, control heights, and focus visibility.                                                                                                              |
+| API consistency      | Public APIs follow established VyrnForge conventions and controlled/uncontrolled behavior is explicit.                                                                                                                                                 |
+| Behavior correctness | Disabled and read-only states block mutation as documented, callbacks are predictable, and shared packages do not silently own application business state.                                                                                             |
+| Accessibility        | Labels, ARIA relationships, visible focus, keyboard operation, Escape behavior, and live-region or modal semantics are reviewed where applicable.                                                                                                      |
+| Visual quality       | Supported themes and densities retain usable spacing, contrast, control geometry, and focus visibility.                                                                                                                                                |
 | Layout and scrolling | Components own predictable minimum sizes and overflow behavior and avoid clipped focus or duplicate scroll regions.                                                                                                                                    |
 | Theme and density    | Shared visuals use the canonical semantic roles in `docs/metadata/design-tokens.json`; grid-only internals use `--udg-*`.                                                                                                                              |
 | CSS ownership        | `ui-core` owns shared tokens/utilities, `ui-components` owns `vf-*`, `ui-data-grid` owns `udg-*`, docs own `vf-docs-*`, playground owns `vf-playground-*`, regression fixtures own `vf-fixture-*`, and external consumer fixtures use `vf-consumer-*`. |
-| CSS verification     | `npm run lint:css` rejects invalid CSS, duplicate declarations, invalid custom-property names, and CSS classes outside approved VyrnForge prefixes.                                                                                                    |
-| Documentation        | Public components have metadata, appropriate guidance, examples, and honest limitations.                                                                                                                                                               |
+| CSS verification     | `npm run lint:css` rejects invalid CSS, duplicate declarations, invalid custom-property names, and classes outside approved VyrnForge prefixes.                                                                                                        |
+| Documentation        | Public surfaces have canonical metadata, appropriate guidance, examples where useful, and honest limitations.                                                                                                                                          |
 | Testing              | Logic, DOM interaction, accessibility, browser, theme/density, compatibility, and consumer evidence are required according to category and maturity.                                                                                                   |
 | Production readiness | No unresolved P0/P1 defect and no maturity claim unsupported by the canonical evidence record.                                                                                                                                                         |
 
-## Maturity status source of truth
+## Maturity source of truth
 
-Allowed statuses are defined only in the canonical maturity model and metadata
-schema:
+Allowed statuses and promotion requirements are owned by the component maturity
+model and canonical component metadata. Current maturity verification includes:
 
-- `planned`
-- `experimental`
-- `alpha-stable`
-- `beta-stable`
-- `stable`
-- `deprecated`
-- `internal`
+```bash
+npm run verify:component-maturity
+npm run verify:maturity-closure
+```
 
-VF-2015 closed the temporary legacy-stable exception at Gate G2. The canonical
-metadata must keep `legacyUnverifiedEntries` empty. The 47 unsupported
-historical Stable claims are now explicitly Experimental with pending promotion
-evidence, while their public exports remain available. `npm run
-verify:maturity-closure` prevents those records from silently regaining an
-unsupported Stable label.
+These checks prevent unsupported maturity claims from silently reappearing in
+current metadata.
 
-## DOM interaction and accessibility test conventions
+## DOM interaction and accessibility
 
 Shared jsdom utilities live in `tests/dom`. Component and regression-fixture
-tests import `render`, `screen`, `createUser`, `getPortalRoot`, and
-`assertNoAccessibilityViolations` from that test-only location. Public package
-implementation must not expose these helpers.
+tests import test-only helpers from that location; public package implementation
+must not expose them.
 
-The shared setup automatically unmounts renders, removes the test portal root,
-restores mocks, clears timers, and returns to real timers after every test. A
-test using fake timers must enable and flush them locally.
+DOM interaction tests, automated axe scans, and Chromium contracts are mandatory
+where applicable. They provide repeatable structural, interaction, focus,
+pointer, and layout evidence, but they do not prove complete WCAG conformance.
+Manual assistive-technology execution is tracked by
+`docs/metadata/assistive-technology-reviews.json`.
 
-DOM interaction tests, automated axe scans, and Chromium contracts are
-implemented and mandatory where applicable. They provide repeatable structural,
-interaction, focus, pointer, and layout evidence, but they do not prove complete
-WCAG conformance. Manual assistive-technology execution remains pending and is
-tracked honestly by `docs/metadata/assistive-technology-reviews.json`.
+## Repository validation
 
-## Repository gate
+Use the repository's current aggregate commands rather than reconstructing an
+older sprint-specific gate:
 
-The authoritative local and release command is `npm run quality`. It includes:
+```bash
+npm run check
+npm run ci
+```
 
-- workflow/toolchain, token, visual-regression, G3-closure, maturity-closure, and assistive-technology schema verifiers;
-- formatting, JavaScript/TypeScript lint, and CSS lint;
-- typecheck, package coverage thresholds, and Chromium browser contracts;
-- regression fixture test/build verification;
-- package and external-consumer verification;
-- docs and playground production builds.
+`npm run check` covers formatting, linting, static contracts, metadata,
+package boundaries, documentation currency, type checking, and other blocking
+repository verifiers. `npm run ci` adds the broader contract, coverage,
+package, fixture, browser, packed-consumer, and application-build evidence used
+by continuous integration.
 
-The GitHub `ci-gate` is the required aggregate check. Missing, cancelled,
-failed, or unexpectedly skipped mandatory work must fail the gate.
+The GitHub `ci-gate` is the required aggregate merge check. Missing,
+cancelled, failed, or unexpectedly skipped mandatory work must fail the gate.
 
-## Semantic token gate
+## Semantic token and visual evidence
 
-S3 token changes must pass:
+Token-contract changes use the canonical token and adoption checks:
 
 ```bash
 npm run test:design-tokens
 npm run verify:design-tokens
-```
-
-The contract verifier checks category completeness, typed exports, theme
-coverage, density aliases, compatibility bridges, reduced motion, and
-deterministic layers. Component and grid adoption is enforced by `npm run verify:token-adoption`.
-VF-3011 and VF-3012 add the final evidence and closure checks:
-
-```bash
+npm run test:token-adoption
+npm run verify:token-adoption
 npm run test:visual-regression
 npm run verify:visual-regression
 npm run test:visual
-npm run test:g3-closure
-npm run verify:g3-closure
 ```
 
-The computed-style matrix is blocking and cross-platform. PNG screenshots and
-JSON observations are uploaded from successful browser runs as review evidence.
-G3 is complete only after the aggregate GitHub `ci-gate` passes for the closure
-PR; the metadata record alone does not declare a CI result.
+The visual matrix combines deterministic computed-style expectations with PNG
+review evidence. Its durable testing contract is documented in
+[Visual Regression Testing](../testing/visual-regression.md).

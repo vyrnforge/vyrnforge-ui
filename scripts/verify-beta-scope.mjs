@@ -9,7 +9,6 @@ const repositoryRoot = path.resolve(
 );
 
 const scopePath = "docs/metadata/non-grid-beta-scope.json";
-const reportPath = "docs/quality/s8-non-grid-beta-scope-audit.md";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -28,12 +27,10 @@ function nativeTagFromTarget(target) {
 export function verifyBetaScope({ root = repositoryRoot } = {}) {
   const failures = [];
 
-  for (const relativePath of [scopePath, reportPath]) {
-    if (!existsSync(path.join(root, relativePath))) {
-      failures.push(`BT-8001 evidence is missing: ${relativePath}`);
-    }
+  if (!existsSync(path.join(root, scopePath))) {
+    failures.push(`beta scope metadata is missing: ${scopePath}`);
+    return failures;
   }
-  if (failures.length > 0) return failures.sort();
 
   const expected = buildBetaScope({ root });
   const actual = readJson(root, scopePath);
@@ -173,21 +170,6 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
     failures.push("BT-8001 scopeBlockers must be empty before scope freeze");
   }
 
-  const report = read(root, reportPath);
-  for (const marker of [
-    "# S8 Non-Grid Beta Scope Audit",
-    "67 public non-grid components",
-    "58 native Custom Element tags",
-    "No component maturity is promoted",
-    "BT-8002",
-    "Internationalization and RTL",
-    "Responsive and reflow",
-  ]) {
-    if (!report.includes(marker)) {
-      failures.push(`BT-8001 audit report is missing marker: ${marker}`);
-    }
-  }
-
   return failures.sort();
 }
 
@@ -203,6 +185,6 @@ export function assertBetaScope(options) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   assertBetaScope();
   console.log(
-    "BT-8001 passed: the 67-component non-grid beta scope is frozen, explicit exclusions are recorded, and BT-8002 is unlocked.",
+    "Non-grid beta scope metadata is current, internally consistent, and keeps the data grid on its independent release track.",
   );
 }
