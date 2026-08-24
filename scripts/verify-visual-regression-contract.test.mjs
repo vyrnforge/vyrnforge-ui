@@ -12,7 +12,7 @@ function clone(value) {
 
 const validInputs = loadVisualRegressionInputs();
 
-test("accepts the committed VF-3011 visual regression contract", () => {
+test("accepts the committed visual regression contract", () => {
   assert.deepEqual(verifyVisualRegressionContract(validInputs), []);
 });
 
