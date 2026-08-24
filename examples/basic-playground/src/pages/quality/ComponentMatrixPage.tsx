@@ -142,7 +142,7 @@ export function ComponentMatrixPage() {
                 read-only, invalid, loading, long-label, and narrow-width cases.
               </p>
             </div>
-            <Badge variant="info">Q1</Badge>
+            <Badge variant="info">internal QA</Badge>
           </div>
           <div className="vf-playground-quality-controls">
             <SegmentedControl

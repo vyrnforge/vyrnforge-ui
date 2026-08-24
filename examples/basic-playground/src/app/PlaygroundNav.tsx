@@ -21,7 +21,9 @@ export function PlaygroundNav({
   });
 
   const items: SideNavItem[] = routeGroups.flatMap<SideNavItem>((group): SideNavItem[] => {
-    const groupRoutes = routes.filter((route) => route.group === group);
+    const groupRoutes = routes.filter(
+      (route) => route.group === group && route.visibility !== "internal"
+    );
 
     if (group === "Components") {
       const subgroups = ["Actions", "Forms", "Data Management", "Feedback", "Layout", "Navigation", "Overlays"] as const;

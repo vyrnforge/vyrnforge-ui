@@ -60,7 +60,6 @@ export function FieldReferencePage() {
   </Field>
 </Stack>`, scope, 'import { Field, Stack, TextInput } from "@vyrnforge/ui-components";') }
     ]}
-    status="experimental"
     title="Field"
     useWhen={["Building standard create, edit, settings, and configuration fields.", "A control needs clear associated help or validation."]}
   />;
@@ -72,7 +71,7 @@ export function ValidationMessagePage() {
   <ValidationMessage tone="warning">Review before publishing.</ValidationMessage>
   <ValidationMessage tone="success">Changes are ready to save.</ValidationMessage>
   <ValidationMessage tone="info">This setting applies to new requests.</ValidationMessage>
-</Inline>`, scope, 'import { Inline, ValidationMessage } from "@vyrnforge/ui-components";') }]} status="experimental" title="ValidationMessage" useWhen={["Explaining an individual validation state.", "Providing compact field-adjacent guidance."]} />;
+</Inline>`, scope, 'import { Inline, ValidationMessage } from "@vyrnforge/ui-components";') }]} title="ValidationMessage" useWhen={["Explaining an individual validation state.", "Providing compact field-adjacent guidance."]} />;
 }
 
 export function RadioPage() {
@@ -80,7 +79,7 @@ export function RadioPage() {
   return <ComponentDemoPage accessibility={["Give an individual radio a visible label or aria-label.", "Group mutually exclusive options with RadioGroup."]} avoidWhen={["A binary setting; use Checkbox or Switch.", "A grouped choice; use RadioGroup."]} description="A native radio input for simple, explicitly named single-choice options." importCode={'import { Radio } from "@vyrnforge/ui-components";'} packageName="@vyrnforge/ui-components" props={[{ name: "checked | defaultChecked", type: "boolean", description: "Controlled or initial selected state." }, { name: "name", type: "string", description: "Native radio group name." }, { name: "label", type: "ReactNode", description: "Visible option label." }, { name: "description", type: "ReactNode", description: "Optional supporting text." }]} relatedComponents={[]} sections={[{ id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live("radio-basic-live", "Standalone option", '<Radio defaultChecked label="Monthly billing" name="billing" value="monthly" />', scope, 'import { Radio } from "@vyrnforge/ui-components";') }, { id: "states", label: "States", title: "States", children: live("radio-states-live", "Disabled and invalid", `<Stack gap="sm">
   <Radio label="Disabled option" disabled name="availability" value="disabled" />
   <Radio label="Required selection" invalid required name="availability" value="required" />
-</Stack>`, scope, 'import { Radio, Stack } from "@vyrnforge/ui-components";') }]} status="experimental" title="Radio" useWhen={["Composing a small native choice set manually.", "A RadioGroup is not needed because the surrounding fieldset is already present."]} />;
+</Stack>`, scope, 'import { Radio, Stack } from "@vyrnforge/ui-components";') }]} title="Radio" useWhen={["Composing a small native choice set manually.", "A RadioGroup is not needed because the surrounding fieldset is already present."]} />;
 }
 
 export function RadioGroupPage() {
@@ -88,7 +87,7 @@ export function RadioGroupPage() {
   return <ComponentDemoPage accessibility={["RadioGroup uses a fieldset and legend for its choice set.", "Native arrow-key behavior remains available within the group."]} avoidWhen={["A long option list; use Select.", "Independent multiple selections; use Checkbox."]} description="A fieldset-based native radio group with controlled or uncontrolled value support." importCode={'import { RadioGroup } from "@vyrnforge/ui-components";'} packageName="@vyrnforge/ui-components" props={[{ name: "options", type: "RadioGroupOption[]", required: true, description: "Value, label, description, and disabled state." }, { name: "value | defaultValue", type: "string", description: "Controlled or initial selection." }, { name: "onValueChange", type: "(value: string) => void", description: "Selection callback." }, { name: "orientation", type: '"vertical" | "horizontal"', defaultValue: '"vertical"', description: "Option layout." }]} relatedComponents={[]} sections={[{ id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live("radio-group-basic-live", "Delivery choice", '<RadioGroup label="Delivery method" defaultValue="standard" name="delivery" options={[{ label: "Standard", value: "standard" }, { label: "Express", value: "express" }]} />', scope, 'import { RadioGroup } from "@vyrnforge/ui-components";') }, { id: "validation", label: "Validation", title: "Validation", children: live("radio-group-validation-live", "Required horizontal selection", `<Stack gap="md">
   <RadioGroup label="Review cycle" orientation="horizontal" required options={[{ label: "Monthly", value: "monthly" }, { label: "Quarterly", value: "quarterly" }, { label: "Annual", value: "annual", disabled: true }]} />
   <RadioGroup label="Escalation" error="Choose an escalation level." options={[{ label: "Standard", value: "standard" }, { label: "High", value: "high" }]} />
-</Stack>`, scope, 'import { RadioGroup, Stack } from "@vyrnforge/ui-components";') }]} status="experimental" title="RadioGroup" useWhen={["One option must be selected from a small named set.", "The form needs a visible group label and validation text."]} />;
+</Stack>`, scope, 'import { RadioGroup, Stack } from "@vyrnforge/ui-components";') }]} title="RadioGroup" useWhen={["One option must be selected from a small named set.", "The form needs a visible group label and validation text."]} />;
 }
 
 export function SwitchPage() {
@@ -98,7 +97,7 @@ export function SwitchPage() {
   return <Stack gap="sm"><Switch checked={enabled} label="Require audit notes" onCheckedChange={setEnabled} /><Switch disabled label="Managed by organization policy" /><Switch invalid label="Review this setting" /></Stack>;
 }
 
-render(<Example />);`, scope, 'import { Stack, Switch } from "@vyrnforge/ui-components";') }]} status="experimental" title="Switch" useWhen={["Changing an immediate, independent setting.", "The setting is understandable in both on and off states."]} />;
+render(<Example />);`, scope, 'import { Stack, Switch } from "@vyrnforge/ui-components";') }]} title="Switch" useWhen={["Changing an immediate, independent setting.", "The setting is understandable in both on and off states."]} />;
 }
 
 function nativeInputPage(
@@ -111,7 +110,7 @@ function nativeInputPage(
 ) {
   const scope = createLiveScope("Field", "NumberInput", "Stack", "DateInput", "DateTimeInput");
   const imports = `import { ${component}, Field, Stack } from "@vyrnforge/ui-components";`;
-  return <ComponentDemoPage accessibility={["Provide a visible Field label or aria-label.", "Native constraints such as required, min, max, and readOnly stay available."]} avoidWhen={["The value needs custom formatting or masking."]} description={description} importCode={imports} packageName="@vyrnforge/ui-components" props={props} relatedComponents={[]} sections={[{ id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live(`${component.toLowerCase()}-basic-live`, "Native input", basicCode, scope, imports) }, { id: "states", label: "States", title: "States", children: live(`${component.toLowerCase()}-states-live`, "Required, invalid, and unavailable", stateCode, scope, imports) }]} status="experimental" title={title} useWhen={["A standard native input covers the workflow.", "The application benefits from browser-native editing and validation behavior."]} />;
+  return <ComponentDemoPage accessibility={["Provide a visible Field label or aria-label.", "Native constraints such as required, min, max, and readOnly stay available."]} avoidWhen={["The value needs custom formatting or masking."]} description={description} importCode={imports} packageName="@vyrnforge/ui-components" props={props} relatedComponents={[]} sections={[{ id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live(`${component.toLowerCase()}-basic-live`, "Native input", basicCode, scope, imports) }, { id: "states", label: "States", title: "States", children: live(`${component.toLowerCase()}-states-live`, "Required, invalid, and unavailable", stateCode, scope, imports) }]} title={title} useWhen={["A standard native input covers the workflow.", "The application benefits from browser-native editing and validation behavior."]} />;
 }
 
 export function NumberInputPage() {
@@ -152,7 +151,7 @@ export function TextInputReferencePage() {
   <TextInput aria-label="Invalid workspace name" invalid defaultValue="Op" />
   <TextInput aria-label="Read only workspace name" readOnly defaultValue="Operations" />
   <TextInput aria-label="Disabled workspace name" disabled defaultValue="Managed by policy" />
-</Stack>`, scope, 'import { Stack, TextInput } from "@vyrnforge/ui-components";') }]} status="experimental" title="TextInput" useWhen={["Capturing a short text value.", "The application needs native onChange behavior."]} />;
+</Stack>`, scope, 'import { Stack, TextInput } from "@vyrnforge/ui-components";') }]} title="TextInput" useWhen={["Capturing a short text value.", "The application needs native onChange behavior."]} />;
 }
 
 export function TextareaPage() {
@@ -162,7 +161,7 @@ export function TextareaPage() {
 </Field>`, scope, 'import { Field, Textarea } from "@vyrnforge/ui-components";') }, { id: "states", label: "States", title: "States", children: live("textarea-states-live", "Required and unavailable", `<Stack gap="sm">
   <Textarea aria-label="Required justification" invalid required placeholder="Add a business reason" rows={3} />
   <Textarea aria-label="Read only note" readOnly defaultValue="Recorded by policy." rows={3} />
-</Stack>`, scope, 'import { Stack, Textarea } from "@vyrnforge/ui-components";') }]} status="experimental" title="Textarea" useWhen={["Capturing longer explanations, notes, or justifications."]} />;
+</Stack>`, scope, 'import { Stack, Textarea } from "@vyrnforge/ui-components";') }]} title="Textarea" useWhen={["Capturing longer explanations, notes, or justifications."]} />;
 }
 
 export function SelectReferencePage() {
@@ -173,7 +172,7 @@ export function SelectReferencePage() {
   <Select aria-label="Plan" invalid required options={[{ label: "Choose a plan", value: "" }]} />
   <Select aria-label="Plan options" options={[{ label: "Starter", value: "starter" }, { label: "Enterprise", value: "enterprise", disabled: true }]} />
   <Select aria-label="Disabled region" disabled options={[{ label: "APAC", value: "apac" }]} />
-</Stack>`, scope, 'import { Select, Stack } from "@vyrnforge/ui-components";') }]} status="experimental" title="Select" useWhen={["Choosing one option from a short stable list."]} />;
+</Stack>`, scope, 'import { Select, Stack } from "@vyrnforge/ui-components";') }]} title="Select" useWhen={["Choosing one option from a short stable list."]} />;
 }
 
 export function CheckboxReferencePage() {
@@ -182,5 +181,5 @@ export function CheckboxReferencePage() {
   <Checkbox invalid label="I acknowledge the data policy" required />
   <Checkbox disabled label="Managed by organization policy" />
   <Field label="Optional acknowledgement" orientation="horizontal"><Checkbox aria-label="Optional acknowledgement" /></Field>
-</Stack>`, scope, 'import { Checkbox, Field, Stack } from "@vyrnforge/ui-components";') }]} status="experimental" title="Checkbox" useWhen={["Acknowledging a statement.", "Selecting several independent options."]} />;
+</Stack>`, scope, 'import { Checkbox, Field, Stack } from "@vyrnforge/ui-components";') }]} title="Checkbox" useWhen={["Acknowledging a statement.", "Selecting several independent options."]} />;
 }

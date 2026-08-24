@@ -26,11 +26,10 @@ export function DocsShell({
             <div>
               <div className="vf-docs-header__eyebrow">VyrnForge UI Docs</div>
               <Heading level={1} size="lg" className="vf-docs-header__title">
-                Source-of-truth documentation and AI reference
+                AI context and source-of-truth reference
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Markdown files remain canonical. This app is a readable navigation
-                and reference layer.
+                Inspect canonical documentation and generated task-scoped context. AI tools should consume the generated JSON directly.
               </Text>
             </div>
           }

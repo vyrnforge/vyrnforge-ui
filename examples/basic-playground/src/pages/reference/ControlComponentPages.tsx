@@ -37,7 +37,6 @@ render(<Example />);`, scope, 'import { Rating } from "@vyrnforge/ui-components"
   <Rating allowClear label="Clearable rating" defaultValue={3} />
 </Stack>`, scope, 'import { Rating, Stack } from "@vyrnforge/ui-components";') }
     ]}
-    status="experimental"
     title="Rating"
     useWhen={["Capturing a small discrete score such as quality, satisfaction, or review rating.", "Each rating value has a clear shared meaning."]}
   />;
@@ -69,7 +68,6 @@ render(<Example />);`, scope, 'import { Slider } from "@vyrnforge/ui-components"
   </Field>
 </Stack>`, scope, 'import { Field, Slider, Stack } from "@vyrnforge/ui-components";') }
     ]}
-    status="experimental"
     title="Slider"
     useWhen={["Selecting a bounded numeric setting with a useful visible range.", "Keyboard and pointer range interaction fit the workflow."]}
   />;
@@ -100,7 +98,6 @@ render(<Example />);`, scope, 'import { ToggleButton } from "@vyrnforge/ui-compo
   <ToggleButton defaultPressed icon={<Icon name="Eye" />}>Compact view</ToggleButton>
 </Inline>`, scope, 'import { Icon, Inline, ToggleButton } from "@vyrnforge/ui-components";') }
     ]}
-    status="experimental"
     title="ToggleButton"
     useWhen={["Activating a temporary tool, formatting command, or view option.", "The pressed state is meaningful and visible in the current surface."]}
   />;
@@ -136,7 +133,6 @@ render(<Example />);`, scope, 'import { ToggleButton, ToggleButtonGroup } from "
 
 <ToggleButtonGroup ariaLabel="Grid tools" disabled><ToggleButton value="columns" icon={<Icon name="Columns" />}>Columns</ToggleButton><ToggleButton value="filters" icon={<Icon name="Filter" />}>Filters</ToggleButton></ToggleButtonGroup>`, scope, 'import { Icon, ToggleButton, ToggleButtonGroup } from "@vyrnforge/ui-components";') }
     ]}
-    status="experimental"
     title="ToggleButtonGroup"
     useWhen={["Grouping related tools or view modes in a dense work surface.", "Exclusive or multi-select pressed state belongs to a compact group."]}
   />;

@@ -8,7 +8,7 @@ export function CssOverridePage() {
     <div className="vf-playground-page-stack">
       <section className="vf-playground-panel vf-playground-custom-vf-theme">
         <div className="vf-playground-card-heading">
-          <Heading size="md">Global dv override</Heading>
+          <Heading size="md">Global vf override</Heading>
           <Badge variant="info">components + grid</Badge>
         </div>
         <Text tone="muted">The scoped container changes shared tokens used by primitives and grid fallbacks.</Text>
@@ -31,7 +31,7 @@ export function CssOverridePage() {
           <Heading size="md">Grid-only udg override</Heading>
           <Badge variant="neutral">grid only</Badge>
         </div>
-        <Text tone="muted">The same component buttons stay unchanged while udg variables tune only the grid.</Text>
+        <Text tone="muted">The same component buttons stay unchanged while grid-specific udg variables tune only the grid.</Text>
         <div className="vf-playground-inline-actions">
           <Button variant="primary">Shared button</Button>
           <Button variant="subtle">Shared secondary</Button>

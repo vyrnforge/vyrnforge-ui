@@ -27,7 +27,7 @@ export function CustomerPortalShellPage() {
           <TopNav
             brand={
               <span className="vf-playground-top-brand">
-                <span className="vf-playground-brand__mark">D</span>
+                <span className="vf-playground-brand__mark">V</span>
                 Customer Portal
               </span>
             }

@@ -31,7 +31,7 @@ export function ThemeTokensPage() {
     <section className="vf-playground-panel">
       <div className="vf-playground-section-heading">
         <div>
-          <Heading size="md">Shared dv token contract</Heading>
+          <Heading size="md">Shared vf token contract</Heading>
           <Text tone="muted">Components and grid examples inherit these values from ui-core.</Text>
         </div>
       </div>

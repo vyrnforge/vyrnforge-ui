@@ -53,7 +53,6 @@ export function ButtonPage() {
   <Button fullWidth variant="primary">Publish changes</Button>
 </Stack>`, scope, 'import { Button, Icon, Inline, Stack } from "@vyrnforge/ui-components";') }
     ]}
-    status="stable"
     title="Button"
     useWhen={["Triggering a visible business action.", "Submitting or cancelling a form.", "Executing a clearly labelled operation."]}
   />;
@@ -82,7 +81,6 @@ export function IconButtonPage() {
   <ToolbarButton icon={<Icon name="Refresh" />} label="Refresh" />
 </Inline>`, scope, 'import { Icon, IconButton, Inline, ToolbarButton } from "@vyrnforge/ui-components";') }
     ]}
-    status="stable"
     title="IconButton"
     useWhen={["Repeating a familiar utility action in a compact area.", "A nearby toolbar gives clear context for the icon."]}
   />;
@@ -110,7 +108,6 @@ export function ButtonGroupPage() {
   <Button disabled>Archive</Button>
 </ButtonGroup>`, scope, 'import { Button, ButtonGroup } from "@vyrnforge/ui-components";') }
     ]}
-    status="experimental"
     title="ButtonGroup"
     useWhen={["Actions are adjacent and clearly related.", "A compact action cluster benefits from shared framing."]}
   />;
@@ -134,7 +131,6 @@ export function ToolbarButtonPage() {
   <ToolbarButton aria-label="More actions" icon={<Icon name="MoreHorizontal" />} tooltip="More actions" />
 </Inline>`, scope, 'import { Icon, Inline, ToolbarButton } from "@vyrnforge/ui-components";') }
     ]}
-    status="stable"
     title="ToolbarButton"
     useWhen={["A repeated command belongs in a dense toolbar.", "A short visible label improves scanability."]}
   />;
@@ -147,7 +143,7 @@ export function SegmentedControlPage() {
   return <SegmentedControl aria-label="View mode" value={value} onChange={setValue} options={[{ label: "Table", value: "table", icon: <Icon name="Columns" /> }, { label: "List", value: "list", icon: <Icon name="DragHandle" /> }]} />;
 }
 
-render(<Example />);`, scope, 'import { Icon, SegmentedControl } from "@vyrnforge/ui-components";') }]} status="stable" title="SegmentedControl" useWhen={["Selecting one mode from a small set.", "The choice changes the current surface in place."]} />;
+render(<Example />);`, scope, 'import { Icon, SegmentedControl } from "@vyrnforge/ui-components";') }]} title="SegmentedControl" useWhen={["Selecting one mode from a small set.", "The choice changes the current surface in place."]} />;
 }
 
 export function TextInputPage() {
@@ -155,7 +151,7 @@ export function TextInputPage() {
   return <ComponentDemoPage accessibility={["Provide a visible Field label or aria-label.", "Pair invalid state with clear validation text."]} avoidWhen={["The value is a search query; use SearchInput.", "The value spans multiple lines; use Textarea."]} description="A native text input with VyrnForge sizing and validation styling." importCode={'import { Field, TextInput } from "@vyrnforge/ui-components";'} packageName="@vyrnforge/ui-components" props={[{ name: "invalid", type: "boolean", defaultValue: "false", description: "Invalid visual state." }, { name: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Input size." }, { name: "value", type: "string", description: "Controlled native value." }, { name: "defaultValue", type: "string", description: "Initial uncontrolled value." }]} relatedComponents={[]} sections={[{ id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live("text-input-basic-live", "Workspace name", '<Field htmlFor="workspace-name" label="Workspace name"><TextInput id="workspace-name" defaultValue="Operations" /></Field>', scope, 'import { Field, TextInput } from "@vyrnforge/ui-components";') }, { id: "states", label: "States", title: "States", children: live("text-input-states-live", "Invalid and disabled", `<Stack gap="sm">
   <TextInput aria-label="Invalid workspace name" invalid defaultValue="Short" />
   <TextInput aria-label="Disabled workspace name" disabled defaultValue="Managed by policy" />
-</Stack>`, scope, 'import { Stack, TextInput } from "@vyrnforge/ui-components";') }]} status="experimental" title="TextInput" useWhen={["Capturing a short text value.", "The application needs native onChange behavior."]} />;
+</Stack>`, scope, 'import { Stack, TextInput } from "@vyrnforge/ui-components";') }]} title="TextInput" useWhen={["Capturing a short text value.", "The application needs native onChange behavior."]} />;
 }
 
 export function SelectPage() {
@@ -163,7 +159,7 @@ export function SelectPage() {
   return <ComponentDemoPage accessibility={["Associate the select with a visible label or aria-label.", "Keep option labels concise."]} avoidWhen={["The option list is large or asynchronous.", "The user chooses multiple values; use MultiSelect."]} description="A native select with shared VyrnForge styling for compact option sets." importCode={'import { Select } from "@vyrnforge/ui-components";'} packageName="@vyrnforge/ui-components" props={[{ name: "options", type: "SelectOption[]", description: "Option labels, values, and disabled state." }, { name: "invalid", type: "boolean", defaultValue: "false", description: "Invalid visual state." }, { name: "value", type: "string", description: "Controlled selected value." }]} relatedComponents={[]} sections={[{ id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live("select-basic-live", "Region selection", '<Select aria-label="Region" defaultValue="apac" options={[{ label: "APAC", value: "apac" }, { label: "EMEA", value: "emea" }, { label: "AMER", value: "amer" }]} />', scope, 'import { Select } from "@vyrnforge/ui-components";') }, { id: "states", label: "States", title: "States", children: live("select-states-live", "Invalid and unavailable options", `<Stack gap="sm">
   <Select aria-label="Plan" invalid options={[{ label: "Choose a plan", value: "" }]} />
   <Select aria-label="Plan options" options={[{ label: "Starter", value: "starter" }, { label: "Enterprise", value: "enterprise", disabled: true }]} />
-</Stack>`, scope, 'import { Select, Stack } from "@vyrnforge/ui-components";') }]} status="experimental" title="Select" useWhen={["Choosing one option from a short stable list.", "Native select behavior fits the workflow."]} />;
+</Stack>`, scope, 'import { Select, Stack } from "@vyrnforge/ui-components";') }]} title="Select" useWhen={["Choosing one option from a short stable list.", "Native select behavior fits the workflow."]} />;
 }
 
 export function CheckboxPage() {
@@ -173,7 +169,7 @@ export function CheckboxPage() {
   return <Stack gap="sm"><Checkbox checked={enabled} label="Enable provisioning" onChange={(event) => setEnabled(event.currentTarget.checked)} /><Checkbox disabled label="Managed by organization policy" /><Checkbox invalid label="Review the required acknowledgement" /></Stack>;
 }
 
-render(<Example />);`, scope, 'import { Checkbox, Stack } from "@vyrnforge/ui-components";') }]} status="experimental" title="Checkbox" useWhen={["Acknowledging a statement.", "Selecting several independent options."]} />;
+render(<Example />);`, scope, 'import { Checkbox, Stack } from "@vyrnforge/ui-components";') }]} title="Checkbox" useWhen={["Acknowledging a statement.", "Selecting several independent options."]} />;
 }
 
 export function BadgePage() {
@@ -183,14 +179,14 @@ export function BadgePage() {
   <Badge variant="success">Success</Badge>
   <Badge variant="warning">Pending</Badge>
   <Badge tone="solid" variant="danger">Blocked</Badge>
-</Inline>`, scope, 'import { Badge, Inline } from "@vyrnforge/ui-components";') }]} status="stable" title="Badge" useWhen={["Showing short, scannable status or metadata.", "Adding secondary context beside a name or heading."]} />;
+</Inline>`, scope, 'import { Badge, Inline } from "@vyrnforge/ui-components";') }]} title="Badge" useWhen={["Showing short, scannable status or metadata.", "Adding secondary context beside a name or heading."]} />;
 }
 
 export function AppShellPage() {
   const scope = createLiveScope("AppShell", "Panel", "SideNav", "Text", "TopNav");
   return <ComponentDemoPage accessibility={["Provide meaningful header and sidebar content.", "Use only one route-level main landmark."]} avoidWhen={["A small embedded layout does not need persistent navigation.", "A Panel is sufficient for a framed task surface."]} description="An application-level layout with explicit scroll ownership and persistent regions." importCode={'import { AppShell, SideNav, TopNav } from "@vyrnforge/ui-components";'} packageName="@vyrnforge/ui-components" props={[{ name: "scrollMode", type: '"page" | "content" | "split"', defaultValue: '"page"', description: "Shell scrolling strategy." }, { name: "headerPosition", type: '"static" | "sticky" | "fixed"', defaultValue: '"static"', description: "Header position." }, { name: "sidebarPosition", type: '"static" | "sticky" | "fixed"', defaultValue: '"static"', description: "Sidebar position." }, { name: "sidebarWidth", type: "number | string", defaultValue: "280", description: "Expanded sidebar width." }]} relatedComponents={[]} sections={[{ id: "basic-usage", label: "Basic usage", title: "Basic usage", children: live("app-shell-basic-live", "Persistent application layout", `<AppShell fullHeight={false} minHeight={320} header={<TopNav brand="Operations" />} headerPosition="sticky" sidebar={<SideNav activeId="orders" items={[{ id: "overview", label: "Overview" }, { id: "orders", label: "Orders" }]} />} sidebarPosition="sticky" sidebarWidth={180} scrollMode="content">
   <Panel title="Route content"><Text tone="muted">The header and sidebar remain visible while this content area scrolls.</Text></Panel>
-</AppShell>`, scope, 'import { AppShell, Panel, SideNav, Text, TopNav } from "@vyrnforge/ui-components";') }]} status="experimental" title="AppShell" useWhen={["Building an admin portal or workspace with persistent navigation.", "The app needs predictable content scrolling."]} />;
+</AppShell>`, scope, 'import { AppShell, Panel, SideNav, Text, TopNav } from "@vyrnforge/ui-components";') }]} title="AppShell" useWhen={["Building an admin portal or workspace with persistent navigation.", "The app needs predictable content scrolling."]} />;
 }
 
 export function TabsPage() {
@@ -200,7 +196,7 @@ export function TabsPage() {
   return <Tabs value={value} onValueChange={setValue} items={[{ id: "activity", label: "Activity", content: <Text>Recent activity.</Text> }, { id: "details", label: "Details", content: <Text>Workspace details.</Text> }]} />;
 }
 
-render(<Example />);`, scope, 'import { Tabs, Text } from "@vyrnforge/ui-components";') }, { id: "variants", label: "Variants", title: "Variants", children: live("tabs-variants-live", "Pills variant", '<Tabs defaultValue="summary" size="sm" variant="pills" items={[{ id: "summary", label: "Summary", content: <Text>Summary content.</Text> }, { id: "history", label: "History", content: <Text>History content.</Text> }]} />', scope, 'import { Tabs, Text } from "@vyrnforge/ui-components";') }]} status="experimental" title="Tabs" useWhen={["Switching related content panels on one route.", "The panel set is limited and labels are short."]} />;
+render(<Example />);`, scope, 'import { Tabs, Text } from "@vyrnforge/ui-components";') }, { id: "variants", label: "Variants", title: "Variants", children: live("tabs-variants-live", "Pills variant", '<Tabs defaultValue="summary" size="sm" variant="pills" items={[{ id: "summary", label: "Summary", content: <Text>Summary content.</Text> }, { id: "history", label: "History", content: <Text>History content.</Text> }]} />', scope, 'import { Tabs, Text } from "@vyrnforge/ui-components";') }]} title="Tabs" useWhen={["Switching related content panels on one route.", "The panel set is limited and labels are short."]} />;
 }
 
 export function BasicGridReferencePage() {
@@ -217,5 +213,5 @@ export function BasicGridReferencePage() {
   ]}
   getRowId={(row) => row.id}
   variant="card"
-/>`, scope, 'import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";', "Edit the columns or rows to see the grid update without changing application state.") }]} status="stable" title="UniversalDataGrid" useWhen={["Managing structured records with columns, search, sorting, and grid controls.", "The application owns data and connects server or persistence adapters at its boundary."]} />;
+/>`, scope, 'import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";', "Edit the columns or rows to see the grid update without changing application state.") }]} title="UniversalDataGrid" useWhen={["Managing structured records with columns, search, sorting, and grid controls.", "The application owns data and connects server or persistence adapters at its boundary."]} />;
 }

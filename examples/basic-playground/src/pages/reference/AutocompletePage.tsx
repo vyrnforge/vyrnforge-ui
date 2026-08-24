@@ -110,7 +110,6 @@ render(<Example />);`, basicScope, 'import { Autocomplete } from "@vyrnforge/ui-
   {(controlProps) => <Autocomplete {...controlProps} name="owner" options={${roleOptions}} placeholder="Select an owner" />}
 </Field>`, stateScope, 'import { Autocomplete, Field } from "@vyrnforge/ui-components";') }
     ]}
-    status="experimental"
     title="Autocomplete"
     useWhen={[
       "A larger known option set is easier to choose by typing part of the label.",

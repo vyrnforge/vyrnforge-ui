@@ -316,7 +316,6 @@ render(
 );`)
         }
       ]}
-      status="experimental"
       title="Toast"
       useWhen={[
         "A short operation completes or fails and the user should be briefly informed.",

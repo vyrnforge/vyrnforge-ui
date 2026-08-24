@@ -34,7 +34,7 @@ export function PlaygroundShell({
         <TopNav
           brand={
             <div className="vf-playground-top-brand">
-              <span className="vf-playground-brand__mark">D</span>
+              <span className="vf-playground-brand__mark">V</span>
               <span>VyrnForge UI Playground</span>
             </div>
           }
@@ -73,7 +73,7 @@ export function PlaygroundShell({
               />
             </div>
           }
-          userArea={<Badge tone="subtle">native-first</Badge>}
+          userArea={<Badge tone="subtle">developer playground</Badge>}
         />
       }
       data-density={density}
@@ -91,7 +91,7 @@ export function PlaygroundShell({
       sidebarWidth={300}
     >
       <Page
-        actions={<Badge variant="success">usage lab</Badge>}
+        actions={<Badge variant="success">explore & build</Badge>}
         description={activeRoute.gallery ? undefined : activeRoute.description}
         eyebrow={activeRoute.group}
         maxWidth="xl"

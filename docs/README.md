@@ -127,3 +127,7 @@ the recovery path.
 AI and automation context lives in [AGENTS.md](../AGENTS.md) and the
 [.ai/](../.ai/) directory. Those files point back to the same canonical
 documentation rather than defining a separate architecture.
+
+## AI consumer context
+
+AI consumers should begin with [`generated/ai-context/index.json`](generated/ai-context/index.json) and retrieve the smallest relevant pattern, category, or component slice. The generated files derive from canonical metadata and are also published by the docs application; they are not a second source of truth.

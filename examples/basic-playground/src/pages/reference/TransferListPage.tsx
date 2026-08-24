@@ -254,7 +254,6 @@ render(<Example />);`, richScope, 'import { Stack, Text, TransferList } from "@v
 </div>`, baseScope, 'import { TransferList } from "@vyrnforge/ui-components";', "The component stacks panels when its viewport is narrow, and each panel keeps its own scroll container.")
         }
       ]}
-      status="experimental"
       title="Transfer List"
       useWhen={[
         "Users choose a subset from a bounded known collection.",
