@@ -1,0 +1,77 @@
+name: Temporary targeted consumer validation
+
+on:
+  push:
+    branches:
+      - feat/consumer-knowledge-playground
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/consumer-knowledge-playground
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - run: npm ci
+      - name: Format only changed consumer surfaces
+        run: |
+          npx prettier --write \
+            .ai/AI_CONTEXT.md \
+            apps/docs/src/AiContextIndexPage.tsx \
+            apps/docs/src/ComponentReferencePage.tsx \
+            apps/docs/src/DocsPage.tsx \
+            apps/docs/src/DocsShell.tsx \
+            apps/docs/src/docsRegistry.ts \
+            apps/docs/vite.config.ts \
+            docs/README.md \
+            docs/metadata/README.md \
+            docs/metadata/component-reference-program.json \
+            docs/metadata/multi-framework.json \
+            docs/metadata/packages.json \
+            docs/metadata/patterns.json \
+            docs/testing/generated-component-reference.md \
+            examples/basic-playground/README.md \
+            examples/basic-playground/src/app/PlaygroundNav.tsx \
+            examples/basic-playground/src/app/PlaygroundShell.tsx \
+            examples/basic-playground/src/app/routes.ts \
+            examples/basic-playground/src/components/ComponentDemoPage.tsx \
+            examples/basic-playground/src/pages/core/CssOverridePage.tsx \
+            examples/basic-playground/src/pages/core/ThemeTokensPage.tsx \
+            examples/basic-playground/src/pages/overview/OverviewPage.tsx \
+            examples/basic-playground/src/pages/patterns/AdminShellPage.tsx \
+            examples/basic-playground/src/pages/patterns/CustomerPortalShellPage.tsx \
+            examples/basic-playground/src/pages/quality/ComponentMatrixPage.tsx \
+            'examples/basic-playground/src/pages/reference/*.tsx' \
+            package.json \
+            scripts/generate-component-reference.mjs \
+            scripts/query-ai-context.mjs \
+            scripts/verify-component-reference.mjs \
+            scripts/verify-component-reference.test.mjs \
+            docs/generated/component-reference.json \
+            docs/generated/consumer-knowledge.json \
+            'docs/generated/ai-context/**/*.json'
+          npm run inventory:repository
+          rm .github/workflows/tmp-targeted-consumer-validation.yml
+      - name: Commit targeted formatting
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: format consumer surfaces"
+          git push origin HEAD:feat/consumer-knowledge-playground
+      - name: Validate focused consumer surfaces
+        run: |
+          npm run verify:consumer-knowledge
+          npm run test:consumer-knowledge
+          npm run typecheck --workspace @vyrnforge/ui-docs
+          npm run typecheck --workspace @vyrnforge/ui-data-grid-basic-playground
+          npm run build:docs
+          npm run build:playground
