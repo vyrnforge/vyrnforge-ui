@@ -1,0 +1,70 @@
+name: Retire stale quality docs
+
+on:
+  push:
+    branches:
+      - chore/retire-stale-quality-docs
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply cleanup
+        run: node scripts/retire-stale-quality-docs.mjs
+
+      - name: Format changed sources
+        run: >-
+          npx prettier --write
+          apps/docs/src/docsRegistry.ts
+          docs/README.md
+          docs/architecture/08-semantic-token-contract.md
+          docs/quality/00-quality-gates.md
+          docs/testing/browser-testing.md
+          docs/testing/visual-regression.md
+          scripts/verify-documentation-current.mjs
+          scripts/verify-documentation-current.test.mjs
+
+      - name: Regenerate inventory
+        run: npm run inventory:repository
+
+      - name: Verify documentation currency
+        run: npm run test:documentation-current && npm run verify:documentation-current
+
+      - name: Verify repository inventory
+        run: npm run verify:repository-inventory
+
+      - name: Build docs
+        run: npm run build:docs
+
+      - name: Remove one-shot helper
+        run: rm scripts/retire-stale-quality-docs.mjs .github/workflows/_retire-stale-quality-docs.yml
+
+      - name: Commit cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No cleanup changes to commit."
+            exit 1
+          fi
+          git commit -m "chore: retire stale quality documentation"
+          git push origin HEAD:chore/retire-stale-quality-docs
