@@ -74,11 +74,16 @@ export function verifyVisualRegressionContract({
   if (matrix.schemaVersion !== 1) {
     failures.push("visual regression matrix schemaVersion must be 1");
   }
-  if (matrix.task !== "VF-3011" || matrix.gate !== "G3") {
-    failures.push("visual regression matrix must belong to VF-3011 and G3");
-  }
   if (matrix.status !== "active") {
     failures.push("visual regression matrix status must be active");
+  }
+  if (
+    matrix.sourceOfTruth !== "docs/metadata/visual-regression-matrix.json" ||
+    matrix.browserContract !== "tests/browser/visual-regression.spec.ts"
+  ) {
+    failures.push(
+      "visual regression matrix must identify its canonical metadata and browser contract",
+    );
   }
   if (
     matrix.runner?.comparison !== "computed-style-token-baseline" ||
