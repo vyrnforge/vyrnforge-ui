@@ -1,7 +1,7 @@
 # Multi-Framework Consumer Fixture Strategy
 
-This document defines the MF-4008 fixture foundation and the evidence that
-becomes mandatory at GMF4.
+This document defines the current clean-consumer fixture strategy used to verify
+VyrnForge framework support from packed package artifacts.
 
 ## Fixture locations
 
@@ -14,53 +14,53 @@ tests/consumers/vue/
 
 `tests/consumers/manifest.json` is the fixture registry.
 
-## Current claim
+## Current support evidence
 
-Vue packed-consumer runtime evidence is recorded as `packed-vue-runtime-verified`.
+React and native HTML are first-class renderer surfaces. Angular and Vue are
+verified consumers of the shared native renderer while their dedicated
+first-class package cutovers remain governed by G12 and G13 respectively.
+Angular Forms and Vue `v-model` integration remain thin adapters over shared
+VyrnForge behavior and native-element contracts rather than independent
+component implementations.
 
-CF-7001 through CF-7014 complete the GMF4 evidence chain. Native HTML and
-React are first-class web renderers. Angular and Vue are verified packed
-consumers of the shared native renderer. Angular Forms and Vue `v-model`
-remain thin reference adapters rather than separate component libraries.
-
-The shared browser matrix, automated accessibility matrix, named Windows +
-Chrome + NVDA review, generated component contracts, SSR/bundler checks, and
-reviewed migration guidance are complete. The data grid remains explicitly
+Current evidence includes clean packed installation, strict type checking,
+production builds, Chromium interaction, canonical property/event/slot
+behavior, native form participation, framework adapters, SSR/bundler checks,
+cross-framework browser coverage, automated accessibility coverage, reviewed
+assistive-technology evidence, and migration guidance. The data grid remains
 outside the non-grid beta release group.
 
-`npm run verify:multi-framework` verifies fixture claims and structure.
+`npm run verify:multi-framework` verifies framework topology and fixture claims.
 `npm run verify:consumer-foundations:runtime` performs clean tarball
 installation, type checking, production builds, and Chromium evidence for the
 native HTML, React, Angular, and Vue fixtures. See
-`docs/testing/consumer-foundation-contracts.md` and
-`docs/testing/angular-consumer-contract.md` and
+`docs/testing/consumer-foundation-contracts.md`,
+`docs/testing/angular-consumer-contract.md`, and
 `docs/testing/vue-consumer-contract.md`.
 
-## Required final evidence
+## Required consumer evidence
 
-Each supported consumer must eventually run from a clean dependency graph and
-prove:
+Each supported consumer must prove:
 
-1. package installation;
+1. package installation from packed or published artifacts;
 2. production build;
 3. type checking;
 4. package import without premature DOM access;
 5. property and attribute handling;
 6. canonical events;
-7. slots/composition;
+7. slots and composition;
 8. themes and density;
 9. form participation where applicable;
 10. browser keyboard, focus, and accessibility scenarios.
 
 ## React fixture
 
-The React fixture covers both:
+The React fixture covers both the first-class React package and explicit native
+element registration. The React package remains the recommended React path.
 
 ```tsx
 import { Button } from "@vyrnforge/ui-components";
 ```
-
-and native element use after explicit registration:
 
 ```tsx
 import "@vyrnforge/ui-elements/register";
@@ -68,37 +68,33 @@ import "@vyrnforge/ui-elements/register";
 <vf-button variant="primary">Save</vf-button>;
 ```
 
-The first path remains the recommended React beta path.
-
 ## Native HTML fixture
 
-The no-framework fixture must run with only browser APIs and VyrnForge package
-artifacts. It is the primary proof that the native renderer does not carry a
-hidden React, Vue, or Angular runtime.
+The no-framework fixture runs with browser APIs and VyrnForge package artifacts.
+It proves that the native renderer does not carry a hidden React, Vue, or Angular
+runtime dependency.
 
 ## Angular fixture
 
-CF-7003 verifies the Angular 22 fixture from clean packed dependencies with
-Custom Element schema configuration, property and DOM-event binding, named
-Light DOM composition, native form submission, production build, and Chromium
-evidence. CF-7004 adds a thin opt-in Forms directive for reactive and
-template-driven value, touched, disabled, and validation integration without
-duplicating the native renderer.
+The Angular fixture verifies clean packed dependencies, Custom Element schema
+configuration, property and DOM-event binding, named Light DOM composition,
+native form submission, production build, Chromium behavior, and the thin Forms
+adapter for reactive and template-driven integration.
 
 ## Vue fixture
 
-CF-7005 supplies the Vue 3 fixture and runtime verifier for clean packed
-dependencies, `vf-*` compiler recognition, forced DOM property binding,
-canonical DOM events, named Light DOM composition, native form submission,
-production Vite output, and Chromium interaction. That evidence is complete.
-CF-7006 owns the thin `v-model` translation adapter.
+The Vue fixture verifies clean packed dependencies, `vf-*` compiler
+recognition, DOM property binding, canonical DOM events, named Light DOM
+composition, native form submission, production Vite output, Chromium
+interaction, and the thin `v-model` adapter.
 
 ## CI ownership
 
 Changes under `tests/consumers/` require consumer and metadata verification.
-Runtime fixture jobs may be split by framework later, but the stable `ci-gate`
-must aggregate every required result.
+The stable `ci-gate` aggregates every required result selected by the CI
+planner.
 
-No framework may be marked supported because an example compiles locally. The
-support claim comes only from the versioned compatibility matrix and GMF4
+No framework support claim comes from an example compiling locally. Current
+support levels are defined by versioned repository metadata and must be backed by
+the corresponding clean-consumer, package, browser, accessibility, and release
 evidence.
