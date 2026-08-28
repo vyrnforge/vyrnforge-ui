@@ -45,14 +45,12 @@ function requireOrder(content, relativePath, markers, failures) {
   for (const marker of markers) {
     const index = content.indexOf(marker);
     if (index < 0) {
-      failures.push(
-        `${relativePath}: normal contribution path is missing ${marker}`,
-      );
+      failures.push(`${relativePath}: contribution path is missing ${marker}`);
       continue;
     }
     if (index <= previous) {
       failures.push(
-        `${relativePath}: normal contribution path must keep ${markers.join(" -> ")} in order`,
+        `${relativePath}: contribution path must keep ${markers.join(" -> ")} in order`,
       );
       return;
     }
@@ -97,16 +95,21 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     contributing,
     "CONTRIBUTING.md",
     [
-      "## Normal contribution path",
+      "## Trunk-based contribution path",
+      "`main` is the only long-lived development branch.",
+      "docs/governance/05-trunk-delivery.md",
       "npm ci",
       "npm run check",
       "npm test",
       "npm run build",
-      "Then open a pull request against `main`.",
+      "Open the pull request against `main` unless it is an explicitly documented",
       "scripts/detect-ci-scope.mjs",
+      "actual workspace dependency graph",
+      "Pushes to\n`main` are always fully validated",
       "The default pull-request template is the normal path.",
       "ci-cd-infrastructure.md",
       "release.md",
+      "A new publishable workspace must be introduced together with repository",
       "SECURITY.md",
     ],
     failures,
@@ -120,7 +123,7 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
       "npm run check",
       "npm test",
       "npm run build",
-      "Then open a pull request against `main`.",
+      "Open the pull request against `main` unless it is an explicitly documented",
     ],
     failures,
   );
@@ -137,13 +140,18 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     normalTemplate,
     [
       "## Summary",
+      "## Branch / dependency",
       "## Impact",
       "## Validation",
       "## Notes",
+      "**Playground or executable example:**",
+      "**Package/release lifecycle:**",
       "`npm run check`",
       "`npm test`",
       "`npm run build`",
+      "New or changed publishable workspaces have an explicit release lifecycle classification.",
       "scripts/detect-ci-scope.mjs",
+      "docs/governance/05-trunk-delivery.md",
     ],
     failures,
   );
@@ -260,7 +268,7 @@ if (
     process.exitCode = 1;
   } else {
     console.log(
-      "Repository contribution contracts passed: one normal PR path, planner-owned CI scope, and specialist infrastructure/release intake.",
+      "Repository contribution contracts passed: trunk-based intake, planner-owned CI scope, and specialist infrastructure/release paths.",
     );
   }
 }
