@@ -13,3 +13,6 @@ export type { VfTabsElement } from "./generated/vf-tabs.generated.js";
 
 export { VfTextInput } from "./generated/vf-text-input.generated.js";
 export type { VfTextInputElement } from "./generated/vf-text-input.generated.js";
+
+export { provideVyrnForge } from "./setup.js";
+export type { VyrnForgeAngularOptions } from "./setup.js";
