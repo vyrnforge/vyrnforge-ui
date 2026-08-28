@@ -26,22 +26,13 @@ jobs:
           let registry = readFileSync(registryFile, "utf8");
           const importAnchor = 'import { buildVueCatalogArtifact } from "./vue-catalog-generation.mjs";\n';
           if (!registry.includes(importAnchor)) throw new Error("Vue catalog import anchor missing");
-          registry = registry.replace(
-            importAnchor,
-            `${importAnchor}import { buildVueTypedCatalogArtifact } from "./vue-type-generation.mjs";\n`,
-          );
+          registry = registry.replace(importAnchor, `${importAnchor}import { buildVueTypedCatalogArtifact } from "./vue-type-generation.mjs";\n`);
           const buildAnchor = "  const vueCatalog = buildVueCatalogArtifact({ root });\n";
           if (!registry.includes(buildAnchor)) throw new Error("Vue catalog build anchor missing");
-          registry = registry.replace(
-            buildAnchor,
-            `${buildAnchor}  const vueTypes = buildVueTypedCatalogArtifact({ root });\n`,
-          );
+          registry = registry.replace(buildAnchor, `${buildAnchor}  const vueTypes = buildVueTypedCatalogArtifact({ root });\n`);
           const artifactAnchor = `    freezeArtifact({\n      path: vueCatalog.path,\n      generator: "scripts/vue-catalog-generation.mjs",\n      command: "npm run generate:framework-artifacts",\n      sourceRecords: vueCatalog.sourceRecords,\n      content: vueCatalog.content,\n    }),\n`;
           if (!registry.includes(artifactAnchor)) throw new Error("Vue catalog artifact anchor missing");
-          registry = registry.replace(
-            artifactAnchor,
-            `${artifactAnchor}    freezeArtifact({\n      path: vueTypes.path,\n      generator: "scripts/vue-type-generation.mjs",\n      command: "npm run generate:framework-artifacts",\n      sourceRecords: vueTypes.sourceRecords,\n      content: vueTypes.content,\n    }),\n`,
-          );
+          registry = registry.replace(artifactAnchor, `${artifactAnchor}    freezeArtifact({\n      path: vueTypes.path,\n      generator: "scripts/vue-type-generation.mjs",\n      command: "npm run generate:framework-artifacts",\n      sourceRecords: vueTypes.sourceRecords,\n      content: vueTypes.content,\n    }),\n`);
           writeFileSync(registryFile, registry, "utf8");
 
           const testFile = "scripts/generated-framework-artifacts.test.mjs";
@@ -98,19 +89,40 @@ jobs:
             <VfDialog><template #not-a-slot>Invalid</template></VfDialog>
           </template>
           VUE
-      - name: Install Vue type checker
-        run: npm install --save-dev vue-tsc --workspace @vyrnforge/ui-vue
-      - name: Wire Vue typecheck
+      - name: Install Vue type-check tooling
+        run: npm install --save-dev vue-tsc @typescript/typescript6 --workspace @vyrnforge/ui-vue
+      - name: Add TS7-compatible Vue type verifier
         run: |
+          cat > scripts/verify-vue-type-surface.mjs <<'NODE'
+          import { createRequire } from "node:module";
+          import path from "node:path";
+          import { fileURLToPath } from "node:url";
+          import { run } from "vue-tsc";
+
+          const require = createRequire(import.meta.url);
+          const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+          const typescript6Entry = require.resolve("@typescript/typescript6");
+          const tscPath = path.join(path.dirname(typescript6Entry), "tsc.js");
+
+          process.chdir(repositoryRoot);
+          process.argv = [
+            process.execPath,
+            "vue-tsc",
+            "-p",
+            "packages/ui-vue/tsconfig.json",
+            "--noEmit",
+          ];
+          run(tscPath);
+          NODE
           node --input-type=module <<'NODE'
           import { readFileSync, writeFileSync } from "node:fs";
           const file = "packages/ui-vue/package.json";
           const pkg = JSON.parse(readFileSync(file, "utf8"));
-          pkg.scripts.typecheck = "vue-tsc -p tsconfig.json --noEmit";
+          pkg.scripts.typecheck = "node ../../scripts/verify-vue-type-surface.mjs";
           writeFileSync(file, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
           NODE
       - run: npm run generate:framework-artifacts
-      - run: npx prettier scripts/vue-type-generation.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs packages/ui-vue/src/index.ts packages/ui-vue/src/type-surface.consumer.vue packages/ui-vue/package.json package-lock.json --write
+      - run: npx prettier scripts/vue-type-generation.mjs scripts/verify-vue-type-surface.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs packages/ui-vue/src/index.ts packages/ui-vue/src/type-surface.consumer.vue packages/ui-vue/package.json package-lock.json --write
       - run: npm run typecheck --workspace @vyrnforge/ui-vue
       - run: npm run test:generated-framework-artifacts
       - name: Commit clean task tree
