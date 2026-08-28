@@ -45,7 +45,7 @@ function mutate(root, relativePath, transform) {
   writeFileSync(file, content, "utf8");
 }
 
-test("accepts the simplified contributor intake contracts", () => {
+test("accepts the trunk-based contributor intake contracts", () => {
   assert.deepEqual(verifyRepositoryTemplates(), []);
 });
 
@@ -65,6 +65,22 @@ test("rejects repository setup that drops npm ci", () => {
   }
 });
 
+test("rejects contributor guidance that drops the trunk contract", () => {
+  const root = createFixture();
+  try {
+    mutate(root, "CONTRIBUTING.md", (content) =>
+      content.replace("## Trunk-based contribution path", "## Contribution path"),
+    );
+    assert(
+      verifyRepositoryTemplates({ root }).some((failure) =>
+        failure.includes("## Trunk-based contribution path"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("rejects removed aggregate commands in normal PR guidance", () => {
   const root = createFixture();
   try {
@@ -75,6 +91,25 @@ test("rejects removed aggregate commands in normal PR guidance", () => {
     assert(
       failures.some((failure) =>
         failure.includes("removed command npm run quality"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects a PR template that drops publishable-workspace lifecycle impact", () => {
+  const root = createFixture();
+  try {
+    mutate(root, ".github/pull_request_template.md", (content) =>
+      content.replace(
+        "New or changed publishable workspaces have an explicit release lifecycle classification.",
+        "Package lifecycle reviewed.",
+      ),
+    );
+    assert(
+      verifyRepositoryTemplates({ root }).some((failure) =>
+        failure.includes("explicit release lifecycle classification"),
       ),
     );
   } finally {
