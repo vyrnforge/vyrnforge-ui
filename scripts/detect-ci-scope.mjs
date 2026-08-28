@@ -1,10 +1,5 @@
 import { execFileSync } from "node:child_process";
-import {
-  appendFileSync,
-  existsSync,
-  readFileSync,
-  readdirSync,
-} from "node:fs";
+import { appendFileSync, existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -52,7 +47,11 @@ function discoverPackages() {
 
   for (const directory of readdirSync(packagesRoot, { withFileTypes: true })) {
     if (!directory.isDirectory()) continue;
-    const manifestPath = path.join(packagesRoot, directory.name, "package.json");
+    const manifestPath = path.join(
+      packagesRoot,
+      directory.name,
+      "package.json",
+    );
     if (!existsSync(manifestPath)) continue;
 
     const manifest = readJson(manifestPath);
