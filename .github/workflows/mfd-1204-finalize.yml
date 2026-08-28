@@ -26,22 +26,211 @@ jobs:
         run: npm install --global npm@11.16.0
       - name: Install dependencies
         run: npm ci
-      - name: Finalize canonical event field mapping
+      - name: Finalize canonical Angular adaptation rules
         run: |
           python3 <<'PY'
           from pathlib import Path
+
           path = Path('scripts/angular-catalog-generation.mjs')
           text = path.read_text()
-          old = 'function mappedEventField(record, event) {\n  if (event.detail === "value") return "value";\n  if (event.detail !== "mapped") return null;\n\n  const modelProperty = record.model?.property;\n  if (\n    modelProperty &&\n    event.detailFields.some((field) => field.name === modelProperty)\n  ) {\n    return modelProperty;\n  }\n  if (event.detailFields.length === 1) return event.detailFields[0].name;\n  return null;\n}'
-          new = 'function mappedEventField(record, event) {\n  const hasField = (name) =>\n    Boolean(name) && event.detailFields.some((field) => field.name === name);\n  const publicChangeField = event.public.endsWith("Change")\n    ? `${event.public.slice(0, -"Change".length)}`\n    : null;\n\n  if (event.detail === "value") {\n    if (hasField(publicChangeField)) return publicChangeField;\n    if (hasField("value")) return "value";\n    const modelProperty = record.model?.property;\n    if (hasField(modelProperty)) return modelProperty;\n    return null;\n  }\n  if (event.detail !== "mapped") return null;\n\n  const modelProperty = record.model?.property;\n  if (hasField(modelProperty)) return modelProperty;\n  if (hasField(publicChangeField)) return publicChangeField;\n  if (event.detailFields.length === 1) return event.detailFields[0].name;\n  return null;\n}'
-          if old not in text:
-              raise SystemExit('mappedEventField patch target not found')
-          text = text.replace(old, new)
-          old_validation = '      if (event.detail === "mapped") {\n        assert(\n          mappedEventField(record, event),\n          `${record.id}: mapped output ${event.public} needs a deterministic canonical field or specialization`,\n        );\n      }\n      if (event.detail === "value") {\n        assert(\n          event.detailFields.some((field) => field.name === "value"),\n          `${record.id}: value output ${event.public} is missing canonical detail.value`,\n        );\n      }'
-          new_validation = '      if (event.detail === "mapped" || event.detail === "value") {\n        assert(\n          mappedEventField(record, event),\n          `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,\n        );\n      }'
-          if old_validation not in text:
-              raise SystemExit('event validation patch target not found')
-          text = text.replace(old_validation, new_validation)
+
+          def replace_once(old, new, label):
+              global text
+              if old not in text:
+                  raise SystemExit(f'{label} patch target not found')
+              text = text.replace(old, new, 1)
+
+          replace_once(
+          '''function mappedEventField(record, event) {
+            if (event.detail === "value") return "value";
+            if (event.detail !== "mapped") return null;
+
+            const modelProperty = record.model?.property;
+            if (
+              modelProperty &&
+              event.detailFields.some((field) => field.name === modelProperty)
+            ) {
+              return modelProperty;
+            }
+            if (event.detailFields.length === 1) return event.detailFields[0].name;
+            return null;
+          }''',
+          '''function mappedEventField(record, event) {
+            const hasField = (name) =>
+              Boolean(name) && event.detailFields.some((field) => field.name === name);
+            const publicChangeField = event.public.endsWith("Change")
+              ? event.public.slice(0, -"Change".length)
+              : null;
+
+            if (event.detail === "value") {
+              if (hasField(publicChangeField)) return publicChangeField;
+              if (hasField("value")) return "value";
+              const modelProperty = record.model?.property;
+              if (hasField(modelProperty)) return modelProperty;
+              return null;
+            }
+            if (event.detail !== "mapped") return null;
+
+            const modelProperty = record.model?.property;
+            if (hasField(modelProperty)) return modelProperty;
+            if (hasField(publicChangeField)) return publicChangeField;
+            if (event.detailFields.length === 1) return event.detailFields[0].name;
+            return null;
+          }''',
+          'event field mapping')
+
+          replace_once(
+          '''      if (event.detail === "mapped") {
+                assert(
+                  mappedEventField(record, event),
+                  `${record.id}: mapped output ${event.public} needs a deterministic canonical field or specialization`,
+                );
+              }
+              if (event.detail === "value") {
+                assert(
+                  event.detailFields.some((field) => field.name === "value"),
+                  `${record.id}: value output ${event.public} is missing canonical detail.value`,
+                );
+              }''',
+          '''      if (event.detail === "mapped" || event.detail === "value") {
+                assert(
+                  mappedEventField(record, event),
+                  `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,
+                );
+              }''',
+          'event validation')
+
+          replace_once(
+          'function normalizeGeneratedComponent(record, nativeRecord) {',
+          'function normalizeGeneratedComponent(record, nativeRecord, canonicalRecord) {',
+          'canonical record signature')
+
+          replace_once(
+          '''  const outputAliases = new Set(record.events.map((event) => event.public));
+            const properties = record.properties.filter(
+              (property) => property.readOnly !== true && property.binding !== "readonly",
+            );
+            const directiveProperties = properties.filter(
+              (property) => !outputAliases.has(property.public),
+            );
+            const hostBoundProperties = properties.filter((property) =>
+              outputAliases.has(property.public),
+            );''',
+          '''  const outputAliases = new Set(record.events.map((event) => event.public));
+            const canonicalDefaultProperty = canonicalRecord?.model?.defaultProperty ?? null;
+            const canonicalStateProperty = canonicalRecord?.model?.stateProperty ?? null;
+            const properties = record.properties
+              .filter(
+                (property) =>
+                  property.readOnly !== true && property.binding !== "readonly",
+              )
+              .map((property) => {
+                const defaultInitializer =
+                  canonicalDefaultProperty !== null &&
+                  property.canonical === canonicalDefaultProperty;
+                if (defaultInitializer) {
+                  assert(
+                    canonicalStateProperty,
+                    `${record.id}: default input ${property.public} requires a canonical state property`,
+                  );
+                }
+                return Object.freeze({
+                  ...property,
+                  runtimeCanonical: defaultInitializer
+                    ? canonicalStateProperty
+                    : property.canonical,
+                  defaultInitializer,
+                });
+              });
+            const directiveProperties = properties.filter(
+              (property) => !outputAliases.has(property.public),
+            );
+            const hostBoundProperties = properties.filter((property) =>
+              outputAliases.has(property.public),
+            );
+            assert(
+              hostBoundProperties.every((property) => !property.defaultInitializer),
+              `${record.id}: default initializer cannot collide with an output alias`,
+            );''',
+          'default initializer model')
+
+          replace_once(
+          'export function createAngularCatalogModel(generationModel, exceptionRegistry) {',
+          'export function createAngularCatalogModel(\n  generationModel,\n  exceptionRegistry,\n  canonicalById,\n) {',
+          'catalog model signature')
+
+          replace_once(
+          '''    const angularRecord = angularById.get(nativeRecord.id);
+              assert(angularRecord, `${nativeRecord.id}: missing Angular generation record`);
+              const exception = findActiveAngularException(exceptionRegistry, nativeRecord.id);''',
+          '''    const angularRecord = angularById.get(nativeRecord.id);
+              assert(angularRecord, `${nativeRecord.id}: missing Angular generation record`);
+              const canonicalRecord = canonicalById.get(nativeRecord.id);
+              assert(canonicalRecord, `${nativeRecord.id}: missing canonical component record`);
+              const exception = findActiveAngularException(exceptionRegistry, nativeRecord.id);''',
+          'canonical lookup')
+
+          replace_once(
+          '    components.push(normalizeGeneratedComponent(angularRecord, nativeRecord));',
+          '''    components.push(
+                normalizeGeneratedComponent(angularRecord, nativeRecord, canonicalRecord),
+              );''',
+          'normalize call')
+
+          replace_once(
+          '''function inputSource(component, property) {
+            const member = identifier(`${property.public}Input`);
+            return `  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element[\"${property.canonical}\"] | undefined) {\n    if (value !== undefined) {\n      this.element.nativeElement[\"${property.canonical}\"] = value;\n    }\n  }`;
+          }''',
+          '''function inputSource(component, property) {
+            const member = identifier(`${property.public}Input`);
+            const runtimeCanonical = property.runtimeCanonical;
+            if (property.defaultInitializer) {
+              const guard = identifier(`${property.public}Applied`);
+              return `  private ${guard} = false;\n\n  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element[\"${runtimeCanonical}\"] | undefined) {\n    if (!this.${guard} && value !== undefined) {\n      this.element.nativeElement[\"${runtimeCanonical}\"] = value;\n      this.${guard} = true;\n    }\n  }`;
+            }
+            return `  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element[\"${runtimeCanonical}\"] | undefined) {\n    if (value !== undefined) {\n      this.element.nativeElement[\"${runtimeCanonical}\"] = value;\n    }\n  }`;
+          }''',
+          'input runtime target')
+
+          replace_once(
+          '''function slotSource(component) {
+            const values = component.slots.map((slot) => `"${slot.public}"`).join(", ");
+            return `export const ${component.exportName}SlotNames = Object.freeze([${values}] as const);\nexport type ${component.exportName}SlotName = (typeof ${component.exportName}SlotNames)[number];\n\nexport function compose${component.exportName}Slot(\n  element: HTMLElement,\n  slot: ${component.exportName}SlotName,\n): HTMLElement {\n  if (slot === "default") element.removeAttribute("slot");\n  else element.setAttribute("slot", slot);\n  return element;\n}`;
+          }''',
+          '''function slotSource(component) {
+            const values = component.slots.map((slot) => `"${slot.public}"`).join(", ");
+            const hasDefault = component.slots.some((slot) => slot.public === "default");
+            const assignment = hasDefault
+              ? '  if (slot === "default") element.removeAttribute("slot");\\n  else element.setAttribute("slot", slot);'
+              : '  element.setAttribute("slot", slot);';
+            return `export const ${component.exportName}SlotNames = Object.freeze([${values}] as const);\nexport type ${component.exportName}SlotName = (typeof ${component.exportName}SlotNames)[number];\n\nexport function compose${component.exportName}Slot(\n  element: HTMLElement,\n  slot: ${component.exportName}SlotName,\n): HTMLElement {\n${assignment}\n  return element;\n}`;
+          }''',
+          'slot composition')
+
+          replace_once(
+          '        `  ${JSON.stringify(property.public)}?: ${component.exportName}Element[\\"${property.canonical}\\"];`,',
+          '        `  ${JSON.stringify(property.public)}?: ${component.exportName}Element[\\"${property.runtimeCanonical}\\"];`,',
+          'typed input contract')
+
+          replace_once(
+          '''  const contracts = loadCanonicalComponentContracts({ root });
+            const generationModel = createFrameworkGenerationModel(contracts);
+            const exceptionRegistry = loadFrameworkExceptions({ root });
+            const model = createAngularCatalogModel(generationModel, exceptionRegistry);''',
+          '''  const contracts = loadCanonicalComponentContracts({ root });
+            const generationModel = createFrameworkGenerationModel(contracts);
+            const exceptionRegistry = loadFrameworkExceptions({ root });
+            const canonicalById = new Map(
+              contracts.components.map((component) => [component.id, component]),
+            );
+            const model = createAngularCatalogModel(
+              generationModel,
+              exceptionRegistry,
+              canonicalById,
+            );''',
+          'artifact canonical index')
+
           path.write_text(text)
           PY
       - name: Format authored sources
