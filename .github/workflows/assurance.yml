@@ -1,0 +1,81 @@
+name: VyrnForge Weekly Assurance
+
+on:
+  schedule:
+    - cron: "17 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vyrnforge-weekly-assurance
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: full-quality
+    uses: ./.github/workflows/_quality.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "24.18.0"
+      full: true
+      metadata: true
+      fixtures: true
+
+  integration:
+    name: full-integration
+    uses: ./.github/workflows/_integration.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "24.18.0"
+      browser: true
+      packages: true
+      consumer: true
+      docs: true
+      playground: true
+      pages-artifact: false
+
+  compatibility:
+    name: ecosystem-compatibility
+    uses: ./.github/workflows/_compatibility.yml
+    permissions:
+      contents: read
+
+  security:
+    name: security-drift
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      contents: read
+      security-events: write
+    with:
+      dependency-review: false
+      drift: true
+
+  assurance-gate:
+    name: assurance-gate
+    needs: [quality, integration, compatibility, security]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Aggregate scheduled assurance responsibilities
+        env:
+          RESULTS_JSON: >-
+            {"quality":"${{ needs.quality.result }}","integration":"${{ needs.integration.result }}","compatibility":"${{ needs.compatibility.result }}","security":"${{ needs.security.result }}"}
+        run: |
+          node - <<'NODE'
+          const results = JSON.parse(process.env.RESULTS_JSON);
+          const failures = Object.entries(results).filter(([, result]) => result !== "success");
+          console.log(results);
+          if (failures.length) {
+            console.error(
+              `assurance-gate failed: ${failures.map(([name, result]) => `${name}:${result}`).join("; ")}`,
+            );
+            process.exit(1);
+          }
+          NODE
