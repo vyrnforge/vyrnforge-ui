@@ -1,0 +1,126 @@
+name: MFD-1204 finalize Angular catalog
+
+on:
+  push:
+    branches:
+      - mfd-1204-angular-full-catalog-bindings
+    paths:
+      - .github/workflows/mfd-1204-finalize.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: mfd-1204-angular-full-catalog-bindings
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Finalize catalog wiring
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import json
+
+          generator = Path('scripts/angular-catalog-generation.mjs')
+          text = generator.read_text()
+          old = '''function eventOutputType(event) {
+            if (event.detail === "event") return "Event";
+            const detailType = `VyrnForgeCanonicalEventDetailMap[\\"${event.canonical}\\"]`;
+            if (event.detail === "detail") return detailType;
+            const field = event.detail === "value" ? "value" : null;
+            return field ? `${detailType}[\\"${field}\\"]` : detailType;
+          }'''
+          new = '''function eventOutputType(component, event) {
+            if (event.detail === "event") return "Event";
+            const detailType = `VyrnForgeCanonicalEventDetailMap[\\"${event.canonical}\\"]`;
+            if (event.detail === "detail") return detailType;
+            const field = mappedEventField(component, event);
+            assert(
+              field,
+              `${component.id}: ${event.public} has no deterministic mapped detail field`,
+            );
+            return `${detailType}[\\"${field}\\"]`;
+          }'''
+          if old not in text:
+              raise SystemExit('eventOutputType patch target not found')
+          text = text.replace(old, new)
+          text = text.replace('new EventEmitter<${eventOutputType(event)}>()', 'new EventEmitter<${eventOutputType(component, event)}>()')
+          generator.write_text(text)
+
+          index = Path('packages/ui-angular/src/index.ts')
+          text = index.read_text()
+          marker = 'export * from "./generated/catalog.generated.js";\n'
+          if marker not in text:
+              text += '\n' + marker
+          index.write_text(text)
+
+          pkg_path = Path('packages/ui-angular/package.json')
+          pkg = json.loads(pkg_path.read_text())
+          verifier = 'node ../../scripts/verify-angular-catalog-coverage.mjs'
+          if verifier not in pkg['scripts']['test']:
+              pkg['scripts']['test'] += ' && ' + verifier
+          pkg_path.write_text(json.dumps(pkg, indent=2) + '\n')
+
+          test_path = Path('packages/ui-angular/src/index.test.ts')
+          text = test_path.read_text()
+          if 'CatalogExport' not in text:
+              text = text.replace(
+                  'type SetupExport = Assert<HasExport<"provideVyrnForge">>;\n',
+                  'type SetupExport = Assert<HasExport<"provideVyrnForge">>;\ntype CatalogExport = Assert<HasExport<"vyrnForgeAngularCatalog">>;\ntype DirectivesExport = Assert<HasExport<"vyrnForgeAngularGeneratedDirectives">>;\n',
+              )
+              text = text.replace(
+                  '  SetupExport,\n] = [true, true, true, true, true];',
+                  '  SetupExport,\n  CatalogExport,\n  DirectivesExport,\n] = [true, true, true, true, true, true, true];',
+              )
+              text = text.replace(
+                  'expect(publicSurfaceIsTyped).toEqual([true, true, true, true, true]);',
+                  'expect(publicSurfaceIsTyped).toEqual([\n      true,\n      true,\n      true,\n      true,\n      true,\n      true,\n      true,\n    ]);',
+              )
+          test_path.write_text(text)
+
+          readme = Path('packages/ui-angular/README.md')
+          text = readme.read_text()
+          text = text.replace(
+              '## Current surface\n\n- `VfButton`\n- `VfTextInput`\n- `VfTabs`\n- `VfDialog`\n\nThe package is intentionally private while the Angular distribution lane is being completed. One-step application setup, full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.',
+              '## Current surface\n\nThe package exposes the full supported 59-contract non-grid Angular facade catalog. Every supported contract is generated from canonical VyrnForge metadata or must be backed by an active framework-exception record. `VfButton`, `VfTextInput`, `VfTabs`, and `VfDialog` retain their specialized generated bindings while participating in the same catalog/coverage contract.\n\nGenerated directives provide canonical selectors, typed inputs/outputs, typed native-element references and method proxies, plus slot composition metadata/helpers. The package remains private while Forms promotion, SSR/hydration validation, and publication/release verification continue through later S12 tasks.',
+          )
+          readme.write_text(text)
+
+          registry_test = Path('scripts/generated-framework-artifacts.test.mjs')
+          text = registry_test.read_text()
+          text = text.replace('assert.equal(artifacts.length, 20);', 'assert.equal(artifacts.length, 25);')
+          anchor = '      "packages/ui-elements/src/custom-elements.ts",\n'
+          additions = '''      "packages/ui-angular/src/generated/catalog.generated.ts",\n      "packages/ui-angular/src/generated/vf-button.generated.ts",\n      "packages/ui-angular/src/generated/vf-dialog.generated.ts",\n      "packages/ui-angular/src/generated/vf-tabs.generated.ts",\n      "packages/ui-angular/src/generated/vf-text-input.generated.ts",\n'''
+          if 'packages/ui-angular/src/generated/catalog.generated.ts' not in text:
+              text = text.replace(anchor, anchor + additions)
+          text = text.replace('generated framework artifact registry covers every S11 owned output', 'generated framework artifact registry covers every owned output')
+          registry_test.write_text(text)
+          PY
+      - name: Format authored sources
+        run: npx prettier --write scripts/angular-catalog-generation.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs scripts/verify-angular-catalog-coverage.mjs packages/ui-angular/src/index.ts packages/ui-angular/src/index.test.ts packages/ui-angular/package.json packages/ui-angular/README.md
+      - name: Generate framework artifacts
+        run: npm run generate:framework-artifacts
+      - name: Verify Angular catalog
+        run: |
+          node scripts/verify-angular-catalog-coverage.mjs
+          npm run verify:generated-framework-artifacts
+          npm run typecheck --workspace @vyrnforge/ui-angular
+      - name: Commit finalized task
+        run: |
+          git rm .github/workflows/mfd-1204-finalize.yml
+          git config user.name "vyrnforge-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add scripts/angular-catalog-generation.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs scripts/verify-angular-catalog-coverage.mjs packages/ui-angular
+          git commit -m "feat(angular): generate full non-grid catalog (MFD-1204)"
+          git push origin HEAD:mfd-1204-angular-full-catalog-bindings
