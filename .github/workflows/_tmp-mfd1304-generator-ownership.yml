@@ -1,0 +1,58 @@
+name: Temporary MFD-1304 generator ownership
+
+on:
+  push:
+    branches:
+      - tmp/MFD-1304-generator-ownership
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - run: npm ci
+      - name: Move Vue generator ownership to public package
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from "node:fs";
+
+          const replacements = new Map([
+            ["scripts/framework-button-generation.mjs", ["tests/consumers/vue/src/generated/VfButton.generated.ts", "packages/ui-vue/src/generated/VfButton.generated.ts"]],
+            ["scripts/framework-dialog-generation.mjs", ["tests/consumers/vue/src/generated/VfDialog.generated.ts", "packages/ui-vue/src/generated/VfDialog.generated.ts"]],
+            ["scripts/framework-tabs-generation.mjs", ["tests/consumers/vue/src/generated/VfTabs.generated.ts", "packages/ui-vue/src/generated/VfTabs.generated.ts"]],
+            ["scripts/framework-text-input-generation.mjs", ["tests/consumers/vue/src/generated/VfTextInput.generated.ts", "packages/ui-vue/src/generated/VfTextInput.generated.ts"]],
+          ]);
+          for (const [file, [from, to]] of replacements) {
+            const source = readFileSync(file, "utf8");
+            if (!source.includes(from)) throw new Error(`${file}: expected old Vue artifact path`);
+            writeFileSync(file, source.replaceAll(from, to), "utf8");
+          }
+
+          const testFile = "scripts/generated-framework-artifacts.test.mjs";
+          let testSource = readFileSync(testFile, "utf8");
+          testSource = testSource.replace('test("generated framework artifact registry covers every S11 owned output"', 'test("generated framework artifact registry covers every owned output"');
+          testSource = testSource.replace("assert.equal(artifacts.length, 20);", "assert.equal(artifacts.length, 21);");
+          for (const [, [from, to]] of replacements) testSource = testSource.replaceAll(from, to);
+          const anchor = '      "packages/ui-elements/src/custom-elements.ts",\n';
+          if (!testSource.includes(anchor)) throw new Error("artifact test insertion anchor missing");
+          testSource = testSource.replace(anchor, `${anchor}      "packages/ui-vue/src/generated/catalog.generated.ts",\n`);
+          writeFileSync(testFile, testSource, "utf8");
+          NODE
+      - run: npm run generate:framework-artifacts
+      - run: npx prettier scripts/framework-button-generation.mjs scripts/framework-dialog-generation.mjs scripts/framework-tabs-generation.mjs scripts/framework-text-input-generation.mjs scripts/generated-framework-artifacts.test.mjs --write
+      - name: Commit clean task tree
+        run: |
+          rm .github/workflows/_tmp-mfd1304-generator-ownership.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "fix(vue): own generated catalog artifacts"
+          git push
