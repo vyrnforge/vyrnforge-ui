@@ -41,6 +41,7 @@ jobs:
           new_validation = '      if (event.detail === "mapped" || event.detail === "value") {\n        assert(\n          mappedEventField(record, event),\n          `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,\n        );\n      }'
           if old_validation not in text:
               raise SystemExit('event validation patch target not found')
+          text = text.replace(old_validation, new_validation)
           path.write_text(text)
           PY
       - name: Format authored sources
