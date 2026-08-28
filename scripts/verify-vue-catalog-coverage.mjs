@@ -23,9 +23,7 @@ const indexSource = readFileSync(
   path.join(root, "packages/ui-vue/src/index.ts"),
   "utf8",
 );
-if (
-  !indexSource.includes('export * from "./generated/catalog.generated";')
-) {
+if (!indexSource.includes("export * from \"./generated/catalog.generated\";")) {
   throw new Error("Vue public entrypoint does not export the generated catalog");
 }
 const pluginSource = readFileSync(
