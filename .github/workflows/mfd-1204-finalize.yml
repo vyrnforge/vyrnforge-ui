@@ -30,6 +30,7 @@ jobs:
         run: |
           python3 <<'PY'
           from pathlib import Path
+          import re
 
           path = Path('scripts/angular-catalog-generation.mjs')
           text = path.read_text()
@@ -79,26 +80,23 @@ jobs:
           }''',
           'event field mapping')
 
-          replace_once(
-          '''      if (event.detail === "mapped") {
-                assert(
-                  mappedEventField(record, event),
-                  `${record.id}: mapped output ${event.public} needs a deterministic canonical field or specialization`,
-                );
-              }
-              if (event.detail === "value") {
-                assert(
-                  event.detailFields.some((field) => field.name === "value"),
-                  `${record.id}: value output ${event.public} is missing canonical detail.value`,
-                );
-              }''',
-          '''      if (event.detail === "mapped" || event.detail === "value") {
+          event_validation_pattern = re.compile(
+              r'''      if \(event\.detail === "mapped"\) \{.*?      \}\n      if \(event\.detail === "value"\) \{.*?      \}''',
+              re.S,
+          )
+          event_validation_replacement = '''      if (event.detail === "mapped" || event.detail === "value") {
                 assert(
                   mappedEventField(record, event),
                   `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,
                 );
-              }''',
-          'event validation')
+              }'''
+          text, count = event_validation_pattern.subn(
+              event_validation_replacement,
+              text,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit('event validation structural patch target not found')
 
           replace_once(
           'function normalizeGeneratedComponent(record, nativeRecord) {',
