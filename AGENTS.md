@@ -18,6 +18,7 @@ Current packages:
 - `@vyrnforge/ui-behaviors` — framework-neutral controllers and behavior;
 - `@vyrnforge/ui-components` — first-class React package;
 - `@vyrnforge/ui-elements` — first-class native HTML Custom Element package;
+- `@vyrnforge/ui-vue` — first-class Vue package;
 - `@vyrnforge/ui-data-grid` — specialized React data grid on an independent
   alpha track.
 
@@ -29,15 +30,77 @@ enterprise-only component catalog.
 1. `.ai/AI_CONTEXT.md`
 2. `docs/README.md`
 3. `docs/governance/01-project-source-of-truth.md` for product identity/scope
-4. the relevant package doc under `docs/packages/`
-5. the relevant API doc under `docs/api/`
-6. relevant canonical metadata under `docs/metadata/`
-7. relevant architecture docs under `docs/architecture/`
-8. the active roadmap/tracker when planning work
+4. `docs/governance/05-trunk-delivery.md` for branch, lane, CI, and promotion policy
+5. the relevant package doc under `docs/packages/`
+6. the relevant API doc under `docs/api/`
+7. relevant canonical metadata under `docs/metadata/`
+8. relevant architecture docs under `docs/architecture/`
+9. the active roadmap/tracker when planning work
 
 `docs/README.md` is the single documentation entrypoint. Do not create competing
 sources of truth for project identity, package boundaries, state policy,
 styling, roadmap, release, component status, framework support, or AI guidance.
+
+## Agent branch and delivery contract
+
+Autonomous agents must follow the repository integration-lane model. Branch
+selection is part of task correctness, not optional repository housekeeping.
+
+Before editing files, determine the owning persistent lane from the requested
+work and current repository architecture:
+
+- `integration/foundation` — `ui-core`, `ui-behaviors`, tokens, shared contracts,
+  schemas, metadata, generators, and framework-independent utilities;
+- `integration/native` — `ui-elements`, Custom Elements, DOM/native-surface work;
+- `integration/react` — React facade/package work;
+- `integration/angular` — Angular facade/package work;
+- `integration/vue` — Vue facade/package work;
+- `integration/data-grid` — data-grid and optional data-management modules;
+- `integration/docs` — documentation application, guides, examples/playground,
+  and reader-facing documentation infrastructure;
+- `integration/platform` — CI/CD, release tooling, repository automation,
+  developer tooling, and cross-repository infrastructure.
+
+For normal implementation work:
+
+1. start the short-lived task branch from the owning `integration/<lane>`;
+2. open the task PR back to that same owning lane;
+3. require the selected CI responsibilities and final `ci-gate` to pass before
+   treating the task PR as complete;
+4. promote completed lane work to `main` only through an
+   `integration/<lane>` -> `main` promotion PR;
+5. require full repository validation and a green `ci-gate` before merging a
+   promotion PR;
+6. after shared changes land on `main`, synchronize affected lanes from `main`
+   before building dependent work on them.
+
+Do not create a normal task branch from `main`, do not open a normal task PR
+straight to `main`, and do not directly advance a persistent integration-lane
+ref to bypass its task-PR flow. Direct-to-`main` work is reserved for an
+explicit emergency hotfix and still requires the full gate.
+
+Persistent lanes are peers. Do not create permanent branch dependency chains
+between foundation, native, React, Angular, Vue, data-grid, docs, or platform.
+When a capability is shared, implement it in the correct shared lane, promote it
+to `main`, synchronize the consuming lanes, then adapt each framework
+independently. Use a temporary stacked task branch only for a real unmerged
+technical/tracker prerequisite and record that dependency explicitly.
+
+If a requested change spans multiple ownership lanes, do not hide that coupling
+inside one framework branch. Put framework-independent work in its owning shared
+lane and separate independent lane work when practical. Follow actual tracker and
+technical dependencies rather than serializing framework lanes by convention.
+
+Before opening or merging any PR, verify the actual head branch, base branch,
+diff, tracker dependency, and required evidence. When the user asks for an
+end-to-end change, do not stop after merging a task PR into an integration lane
+if the requested outcome also requires a lane-to-`main` promotion; continue
+through the promotion gate when its real dependencies are satisfied.
+
+GitHub settings should protect `main` and every persistent `integration/*` lane.
+Repository-side agent behavior must follow this contract even when a host-level
+protection setting is temporarily missing. Never use a missing protection rule
+as permission to bypass the documented lane flow.
 
 ## Reuse rule
 
