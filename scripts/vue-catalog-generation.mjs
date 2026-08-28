@@ -63,13 +63,13 @@ export function createVueCatalogModel(generationModel) {
     `expected 59 supported non-grid contracts, received ${components.length}`,
   );
   assert(
+    new Set(components.map((entry) => entry.id)).size === components.length,
+    "duplicate canonical component ids",
+  );
+  assert(
     new Set(components.map((entry) => entry.exportName)).size ===
       components.length,
     "duplicate Vue exports",
-  );
-  assert(
-    new Set(components.map((entry) => entry.tag)).size === components.length,
-    "duplicate canonical tags",
   );
   return Object.freeze(components);
 }
@@ -111,7 +111,7 @@ function renderSlots(slots: Slots): unknown[] {
 
 function createVyrnForgeVueFacade(
   name: string,
-  tag: VyrnForgePublicElementTagName | "vf-alert",
+  tag: VyrnForgePublicElementTagName,
 ): Component {
   return defineComponent({
     name,
