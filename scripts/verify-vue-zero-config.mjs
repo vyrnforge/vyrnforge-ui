@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -25,7 +31,9 @@ function buildRequiredPackages() {
 }
 
 function verifyCleanViteBuild() {
-  const tempRoot = mkdtempSync(path.join(repositoryRoot, ".tmp-vue-zero-config-"));
+  const tempRoot = mkdtempSync(
+    path.join(repositoryRoot, ".tmp-vue-zero-config-"),
+  );
   const srcDir = path.join(tempRoot, "src");
   mkdirSync(srcDir);
 
@@ -49,7 +57,14 @@ function verifyCleanViteBuild() {
 
     execFileSync(
       npm,
-      ["exec", "--", "vite", "build", "--config", path.join(tempRoot, "vite.config.ts")],
+      [
+        "exec",
+        "--",
+        "vite",
+        "build",
+        "--config",
+        path.join(tempRoot, "vite.config.ts"),
+      ],
       {
         cwd: tempRoot,
         env: {
