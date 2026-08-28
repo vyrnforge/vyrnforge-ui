@@ -5,14 +5,22 @@ weekly assurance, documentation deployment, and package release orchestration.
 
 ## Lifecycle workflows
 
-VyrnForge intentionally exposes only four GitHub Actions workflows:
+VyrnForge intentionally exposes only four GitHub Actions workflows.
 
-| Workflow | Trigger | Responsibility | Write capability |
-| --- | --- | --- | --- |
-| `.github/workflows/ci.yml` | PRs to `main` or `integration/**`, push to `main`, manual | Change-impact planning, scoped/full validation, exact-main delivery artifact, stable `ci-gate` | None |
-| `.github/workflows/assurance.yml` | Weekly schedule, manual | Full quality/integration, compatibility matrix, dependency audit, workflow lint, ShellCheck, CodeQL, `assurance-gate` | CodeQL security events only |
-| `.github/workflows/deploy-pages.yml` | Successful current-main CI push or manual existing CI run ID | Validate and deploy the existing commit-bound Pages artifact | Pages deployment only |
-| `.github/workflows/release.yml` | Manual from current `main` | Verify immutable release artifact, publish exact tarballs, verify registry, create release record | Split by protected job |
+- `.github/workflows/ci.yml` runs for pull requests to `main` or
+  `integration/**`, pushes to `main`, and manual validation. It owns change
+  planning, scoped or full validation, the exact-main delivery artifact, and
+  the stable `ci-gate`. It has no write capability.
+- `.github/workflows/assurance.yml` runs weekly or manually. It owns full
+  quality and integration validation, the compatibility matrix, dependency
+  audit, workflow lint, ShellCheck, CodeQL, and `assurance-gate`. Only its
+  CodeQL job can write security events.
+- `.github/workflows/deploy-pages.yml` consumes a successful current-main CI
+  artifact and deploys it. Only its deployment job receives Pages write and
+  OIDC permissions.
+- `.github/workflows/release.yml` is manual from current `main`. It verifies an
+  immutable release artifact, publishes exact tarballs, verifies the registry,
+  and creates the release record through narrowly scoped job permissions.
 
 Internal validation responsibilities are jobs inside `ci.yml` and
 `assurance.yml`; they are not separate reusable workflow files. This keeps the
@@ -20,15 +28,15 @@ GitHub Actions workflow inventory aligned with real lifecycle entrypoints.
 
 ## CI boundaries
 
-`ci.yml` always runs for PRs targeting `main` or a persistent integration lane.
-It does not use workflow-level path filters. `scripts/detect-ci-scope.mjs`
-selects quality, integration, browser, package, consumer, docs, playground,
-fixture, and security work from the actual change.
+`ci.yml` always runs for pull requests targeting `main` or a persistent
+integration lane. It does not use workflow-level path filters.
+`scripts/detect-ci-scope.mjs` selects quality, integration, browser, package,
+consumer, docs, playground, fixture, and security work from the actual change.
 
 - Task PR -> `integration/<lane>`: affected-scope validation once.
-- Integration-lane merge/synchronization: no push-triggered CI duplication.
+- Integration-lane merge or synchronization: no push-triggered CI duplication.
 - Promotion or emergency hotfix PR -> `main`: full repository validation once.
-- Push to `main`: exact-main delivery scope only; quality and security are not
+- Push to `main`: exact-main delivery scope only. Quality and security are not
   rerun after the already-passed promotion gate.
 
 The stable branch-protection check is `ci-gate`. It evaluates planner output and
@@ -42,7 +50,7 @@ failure fails the gate.
 
 The `quality-checks` job runs `scripts/run-scoped-quality.mjs`. It owns format,
 lint, CSS lint, repository contracts, coverage, fixture validation, and
-affected/full typechecking according to planner output.
+affected or full typechecking according to planner output.
 
 ### Integration and delivery
 
@@ -58,9 +66,9 @@ deployable Pages artifact.
 
 ### Security
 
-PR security work is planner-selected inside `ci.yml`: high-severity dependency
-review, verified actionlint, ShellCheck, workflow contracts, and security
-hardening verification.
+PR security work is planner-selected inside `ci.yml`: high-severity
+`dependency-review`, verified actionlint, ShellCheck, workflow contracts, and
+security hardening verification.
 
 Deep security drift is owned by `assurance.yml`: shipped-dependency audit,
 actionlint, ShellCheck, CodeQL, and the complete compatibility matrix.
@@ -69,14 +77,15 @@ actionlint, ShellCheck, CodeQL, and the complete compatibility matrix.
 
 `assurance.yml` runs Monday at 02:17 UTC and can also be dispatched manually.
 It executes full Node 24.18 repository quality and integration validation, the
-canonical Node/framework/browser compatibility matrix, dependency/security
-drift checks, and CodeQL. `assurance-gate` aggregates those responsibilities.
-It never publishes packages, deploys Pages, creates tags, or requests npm OIDC.
+canonical Node, framework, and browser compatibility matrix,
+dependency/security drift checks, and CodeQL. `assurance-gate` aggregates those
+responsibilities. It never publishes packages, deploys Pages, creates tags, or
+requests npm OIDC.
 
 ## Pages deployment
 
 `deploy-pages.yml` is intentionally separate from normal CI to preserve least
-privilege. Its preparation job has only Actions/repository read access. It
+privilege. Its preparation job has only Actions and repository read access. It
 accepts only a successful `VyrnForge CI` push run for current `main`, verifies
 that run's head SHA equals current `main`, downloads the matching
 `pages-site-<sha>` artifact, and verifies the site contents. Only the deployment
@@ -92,13 +101,13 @@ assurance.
 The ordered responsibilities are:
 
 1. `verify-release`: prepare and verify immutable release tarballs and bind them
-   to source/CI/digest metadata.
-2. `publish-packages`: protected `npm-release` environment; publish only the
-   retained tarballs through GitHub OIDC.
+   to source, CI, and digest metadata.
+2. `publish-packages`: use the protected `npm-release` environment and publish
+   only the retained tarballs through GitHub OIDC.
 3. `verify-registry-release`: verify registry metadata, signatures, provenance,
    and a fresh consumer.
-4. `create-release-record`: create/verify the annotated tag and GitHub release
-   after registry verification.
+4. `create-release-record`: create or verify the annotated tag and GitHub
+   release after registry verification.
 
 No workflow stores long-lived npm or personal-access credentials.
 
