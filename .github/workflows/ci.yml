@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - "integration/**"
   pull_request:
     branches:
       - main
@@ -16,7 +15,7 @@ permissions:
 
 concurrency:
   group: vyrnforge-ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
 
 jobs:
   plan:
@@ -36,6 +35,7 @@ jobs:
       browser: ${{ steps.scope.outputs.browser }}
       full: ${{ steps.scope.outputs.full }}
       docs_only: ${{ steps.scope.outputs.docs_only }}
+      delivery: ${{ steps.scope.outputs.delivery }}
       affected_packages: ${{ steps.scope.outputs.affected_packages }}
       plan_json: ${{ steps.scope.outputs.plan_json }}
     steps:
@@ -61,16 +61,20 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            # Manual repository validation is intentionally complete.
             node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
           elif [[ "$EVENT_NAME" == "pull_request" && "$PR_BASE_REF" == "main" ]]; then
-            # Every lane-to-main promotion and every emergency main hotfix gets the
-            # complete repository gate. main is the integrated release boundary.
+            # Promotion and emergency-hotfix PRs are the product-wide compatibility
+            # boundary. Validate the complete repository once before merge.
             node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
           elif [[ "$EVENT_NAME" == "push" && "$REF_NAME" == "main" ]]; then
-            node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
+            # The merge already passed the full main-boundary PR gate. Rebuild only
+            # the exact-main delivery surfaces needed by Pages/release consumers.
+            node scripts/detect-ci-scope.mjs --delivery --github-output "$GITHUB_OUTPUT"
           else
-            # Task PRs into integration lanes and exact post-merge lane commits use
-            # dependency-aware affected-scope validation.
+            # Normal task PRs into integration lanes use dependency-aware scope.
+            # Integration-lane pushes are intentionally not workflow triggers, so
+            # lane synchronization and accepted task merges do not duplicate CI.
             node scripts/detect-ci-scope.mjs \
               --base "$BASE_SHA" \
               --head "$HEAD_SHA" \
