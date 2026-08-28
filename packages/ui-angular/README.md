@@ -2,17 +2,15 @@
 
 Angular facade workspace for VyrnForge canonical custom elements.
 
-This workspace promotes the Angular directive slices proven during the S11 consumer/generator work into the supported package boundary. The directives adapt canonical `@vyrnforge/ui-elements` elements; they do not reimplement component behavior or styling.
+This workspace promotes Angular bindings generated from the same canonical VyrnForge component contracts used by the other framework surfaces. The directives adapt canonical `@vyrnforge/ui-elements` elements; they do not reimplement component behavior or styling.
 
 ## Current surface
 
-- `VfButton`
-- `VfTextInput`
-- `VfTabs`
-- `VfDialog`
-- `provideVyrnForge()` application setup
+The package exposes the full supported 59-contract non-grid Angular facade catalog. Every supported contract is generated from canonical VyrnForge metadata or must be backed by an active framework-exception record. `VfButton`, `VfTextInput`, `VfTabs`, and `VfDialog` retain their specialized generated bindings while participating in the same catalog and coverage contract.
 
-The package is intentionally private while the Angular distribution lane is being completed. Full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.
+Generated directives provide canonical selectors, typed input/output contracts, typed native-element references and method proxies, plus slot composition metadata/helpers. When a canonical property and output intentionally share the same Angular public name, the property remains a native Custom Element host binding while the directive owns the output alias; generated catalog metadata records those host-bound inputs.
+
+The package remains private while Forms promotion, SSR/hydration validation, and publication/release verification continue through later S12 tasks.
 
 ## Application setup
 
