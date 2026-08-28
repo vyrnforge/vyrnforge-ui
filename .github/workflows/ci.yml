@@ -1,38 +1,29 @@
 name: VyrnForge CI
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: vyrnforge-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   plan:
-    name: plan
+    name: plan-change-impact
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: read
     outputs:
       quality: ${{ steps.scope.outputs.quality }}
       integration: ${{ steps.scope.outputs.integration }}
       security: ${{ steps.scope.outputs.security }}
       metadata: ${{ steps.scope.outputs.metadata }}
-      ui_core: ${{ steps.scope.outputs.ui_core }}
-      ui_behaviors: ${{ steps.scope.outputs.ui_behaviors }}
-      ui_components: ${{ steps.scope.outputs.ui_components }}
-      ui_elements: ${{ steps.scope.outputs.ui_elements }}
-      ui_data_grid: ${{ steps.scope.outputs.ui_data_grid }}
       packages: ${{ steps.scope.outputs.packages }}
       consumer: ${{ steps.scope.outputs.consumer }}
       docs: ${{ steps.scope.outputs.docs }}
@@ -41,8 +32,8 @@ jobs:
       browser: ${{ steps.scope.outputs.browser }}
       full: ${{ steps.scope.outputs.full }}
       docs_only: ${{ steps.scope.outputs.docs_only }}
+      affected_packages: ${{ steps.scope.outputs.affected_packages }}
       plan_json: ${{ steps.scope.outputs.plan_json }}
-
     steps:
       - name: Checkout with history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -55,7 +46,7 @@ jobs:
           node-version-file: .nvmrc
           package-manager-cache: false
 
-      - name: Detect affected CI scopes
+      - name: Detect repository change impact
         id: scope
         shell: bash
         env:
@@ -64,9 +55,7 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           if [[ "$EVENT_NAME" == "workflow_dispatch" || "$EVENT_NAME" == "push" ]]; then
-            node scripts/detect-ci-scope.mjs \
-              --full \
-              --github-output "$GITHUB_OUTPUT"
+            node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
           else
             node scripts/detect-ci-scope.mjs \
               --base "$BASE_SHA" \
@@ -74,14 +63,14 @@ jobs:
               --github-output "$GITHUB_OUTPUT"
           fi
 
-      - name: Write readable CI plan
+      - name: Write readable change-impact plan
         env:
           CI_SUMMARY_MODE: plan
           PLAN_JSON: ${{ steps.scope.outputs.plan_json }}
         run: node scripts/write-ci-summary.mjs
 
-  quality-checks:
-    name: quality-checks
+  quality:
+    name: quality
     needs: plan
     if: needs.plan.outputs.quality == 'true'
     uses: ./.github/workflows/_quality.yml
@@ -91,15 +80,11 @@ jobs:
       node-version: "24.18.0"
       full: ${{ needs.plan.outputs.full == 'true' }}
       metadata: ${{ needs.plan.outputs.metadata == 'true' }}
-      ui-core: ${{ needs.plan.outputs.ui_core == 'true' }}
-      ui-behaviors: ${{ needs.plan.outputs.ui_behaviors == 'true' }}
-      ui-components: ${{ needs.plan.outputs.ui_components == 'true' }}
-      ui-elements: ${{ needs.plan.outputs.ui_elements == 'true' }}
-      ui-data-grid: ${{ needs.plan.outputs.ui_data_grid == 'true' }}
       fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}
+      affected-packages: ${{ needs.plan.outputs.affected_packages }}
 
-  integration-checks:
-    name: integration-checks
+  integration:
+    name: integration
     needs: plan
     if: needs.plan.outputs.integration == 'true'
     uses: ./.github/workflows/_integration.yml
@@ -114,8 +99,8 @@ jobs:
       playground: ${{ needs.plan.outputs.playground == 'true' }}
       pages-artifact: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
-  security-checks:
-    name: security-checks
+  security:
+    name: security
     needs: plan
     if: needs.plan.outputs.security == 'true'
     uses: ./.github/workflows/_security.yml
@@ -124,16 +109,12 @@ jobs:
       pull-requests: read
       security-events: write
     with:
-      dependency-review: true
+      dependency-review: ${{ github.event_name == 'pull_request' }}
       drift: false
 
   ci-gate:
     name: ci-gate
-    needs:
-      - plan
-      - quality-checks
-      - integration-checks
-      - security-checks
+    needs: [plan, quality, integration, security]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -149,12 +130,12 @@ jobs:
           node-version-file: .nvmrc
           package-manager-cache: false
 
-      - name: Report selected, skipped, and failed responsibilities
+      - name: Enforce selected responsibilities
         env:
           CI_SUMMARY_MODE: gate
           PLAN_JSON: ${{ needs.plan.outputs.plan_json }}
           PLAN_RESULT: ${{ needs.plan.result }}
-          QUALITY_RESULT: ${{ needs.quality-checks.result }}
-          INTEGRATION_RESULT: ${{ needs.integration-checks.result }}
-          SECURITY_RESULT: ${{ needs.security-checks.result }}
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          INTEGRATION_RESULT: ${{ needs.integration.result }}
+          SECURITY_RESULT: ${{ needs.security.result }}
         run: node scripts/write-ci-summary.mjs
