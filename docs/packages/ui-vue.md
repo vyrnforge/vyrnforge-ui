@@ -29,8 +29,12 @@ createApp(App).use(VyrnForgeVue).mount("#app");
 
 `createVyrnForgeVue(options)` and `installVyrnForgeVue(app, options)` are provided for controlled setup, including hosts that supply an explicit custom-element registry.
 
-The initial workspace promotes the proven generated Vue slices for button, dialog, tabs, and text input. Catalog-wide generation, model mapping, fixture migration, compatibility/accessibility evidence, and release-matrix integration remain separate dependency-tracked Vue work.
+## SSR and server imports
+
+Importing `@vyrnforge/ui-vue` is server-safe and does not require browser globals. Canonical custom-element registration is deferred safely by `@vyrnforge/ui-elements` when no `customElements` registry exists. The Vue package includes Node import plus Vite SSR build/execution verification, and a server-rendering test for the public facade/plugin path.
+
+The package now exposes the canonical-model-driven non-grid Vue catalog. Model mapping, fixture migration, compatibility/accessibility evidence, and release-matrix integration remain separate dependency-tracked Vue work.
 
 The workspace is intentionally private while the Vue lane is staged. The later release-integration task owns removing that staging guard and adding the Vue artifact to canonical package/release verification once its required compatibility and accessibility evidence is complete.
 
-This page records the package boundary, dependency contract, and setup contract only. Consumer API and migration guidance belongs to the dedicated Vue documentation task after the package-consumption cutover is complete.
+This page records the package boundary, dependency contract, setup contract, and SSR contract only. Consumer API and migration guidance belongs to the dedicated Vue documentation task after the package-consumption cutover is complete.

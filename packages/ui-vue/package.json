@@ -26,7 +26,8 @@
     "lint:fix": "npm run lint -- --fix",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors && npm run build --workspace @vyrnforge/ui-elements",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run && node ../../scripts/verify-vue-peer-policy.mjs && node ../../scripts/verify-vue-catalog-coverage.mjs"
+    "test": "vitest run && node ../../scripts/verify-vue-peer-policy.mjs && node ../../scripts/verify-vue-catalog-coverage.mjs && npm run verify:ssr",
+    "verify:ssr": "node ../../scripts/verify-vue-ssr.mjs"
   },
   "dependencies": {
     "@vyrnforge/ui-elements": "0.2.0-beta.2"
