@@ -38,6 +38,8 @@ If work genuinely requires an unmerged prerequisite from another lane, a tempora
 
 Do not establish permanent dependency chains such as `foundation -> native -> react -> angular -> vue`. Framework lanes are peers. A shared capability is implemented in the appropriate shared lane, promoted to `main`, then consumed independently by the framework lanes.
 
+Lane synchronization is repository state maintenance, not a new feature change. A synchronization push must not start another expensive CI run when the incoming commits have already crossed the required `main` validation boundary.
+
 ## Promotion to main
 
 Changes reach `main` through a promotion PR from `integration/<lane>` to `main`.
@@ -56,11 +58,11 @@ For `main`:
 
 - changes enter through promotion PRs or explicit emergency hotfix PRs;
 - `ci-gate` is required;
-- full repository validation is required;
+- full repository validation is required before merge;
 - the branch must be current before merge;
 - unresolved review conversations block merge;
 - force pushes and deletion are disabled;
-- production deployment/release automation may consume only successful current-`main` artifacts.
+- production deployment/release automation may consume only successful current-`main` delivery artifacts.
 
 For persistent integration lanes:
 
@@ -85,15 +87,18 @@ CI is organized by responsibilities rather than copied once per framework.
 4. **security** validates dependency and workflow/security changes.
 5. **ci-gate** is the stable merge-facing result and fails when any selected responsibility fails.
 
-Execution policy:
+Execution policy deliberately validates each lifecycle boundary once:
 
 - task PR -> `integration/<lane>`: affected-scope validation;
-- merge/push on `integration/<lane>`: affected-scope validation of the exact lane commit;
-- `integration/<lane>` -> `main` promotion PR: full validation;
-- emergency PR -> `main`: full validation;
-- push/merge on `main`: full validation of the exact integrated commit;
+- merge/push on `integration/<lane>`: no second CI run; the accepted task PR gate is authoritative and routine lane synchronization must not fan out duplicate workflow runs;
+- `integration/<lane>` -> `main` promotion PR: full repository validation;
+- emergency PR -> `main`: full repository validation;
+- push/merge on `main`: exact-main **delivery validation only** — rebuild package prerequisites plus docs/playground and create the commit-bound Pages artifact without rerunning quality, browser, consumer, or security suites already passed at the main-boundary PR;
 - manual repository CI: full validation;
-- unknown/unclassified paths: safe full validation.
+- scheduled weekly assurance: full quality/integration plus compatibility and security drift checks;
+- unknown/unclassified task-PR paths: safe full validation.
+
+The main push delivery run is intentionally not a second product-wide test gate. It exists to bind deployable artifacts and downstream release/deployment consumers to the exact commit that actually landed on `main`. A newer main push cancels an older in-progress delivery run so stale artifacts do not consume runner capacity.
 
 Package impact must be discovered from actual `packages/*/package.json` manifests and VyrnForge dependency relationships. Do not add framework-specific CI booleans every time a first-class surface appears.
 
@@ -131,7 +136,7 @@ The playground is a maintained consumer surface, not a dumping ground for every 
 
 Scheduled assurance runs expensive compatibility, browser, security-drift, and ecosystem checks that are not required on every task PR. Workflow names and schedules must agree; a weekly job must not be called nightly.
 
-Deployment and release jobs consume artifacts bound to a successful current-`main` CI commit. Do not rebuild arbitrary source in a deployment job when a validated immutable artifact already exists.
+Deployment jobs consume artifacts bound to a successful current-`main` delivery run. Release jobs may perform their own release-candidate verification, but they must bind the candidate to a successful current-main delivery run and must not publish from an integration lane. Do not repeat the full promotion suite merely to obtain a deployable artifact.
 
 ## Adding a package or framework surface
 
