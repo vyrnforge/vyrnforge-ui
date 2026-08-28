@@ -26,137 +26,11 @@ jobs:
         run: npm install --global npm@11.16.0
       - name: Install dependencies
         run: npm ci
-      - name: Diagnose catalog alias collisions
-        run: |
-          node --input-type=module <<'NODE'
-          import path from "node:path";
-          import { loadCanonicalComponentContracts } from "./scripts/canonical-component-contracts.mjs";
-          import { createFrameworkGenerationModel } from "./scripts/framework-generation.mjs";
-          const root = path.resolve(".");
-          const contracts = loadCanonicalComponentContracts({ root });
-          const model = createFrameworkGenerationModel(contracts);
-          const collisions = [];
-          for (const record of model.surfaces.angular.components) {
-            if (!["current", "target"].includes(record.status)) continue;
-            const outputs = new Set(record.events.map((event) => event.public));
-            const aliases = record.properties
-              .filter((property) => property.readOnly !== true && outputs.has(property.public))
-              .map((property) => property.public);
-            if (aliases.length > 0) collisions.push({ id: record.id, aliases });
-          }
-          console.log(`Angular input/output alias collisions: ${JSON.stringify(collisions)}`);
-          NODE
-      - name: Finalize catalog wiring
+      - name: Finalize public/package wiring
         run: |
           python3 <<'PY'
           from pathlib import Path
           import json
-
-          generator = Path('scripts/angular-catalog-generation.mjs')
-          text = generator.read_text()
-
-          old_collision = '''  const outputAliases = new Set(record.events.map((event) => event.public));
-          const properties = record.properties.filter(
-            (property) => property.readOnly !== true && property.binding !== "readonly",
-          );
-          if (!specialized) {
-            for (const property of properties) {
-              assert(
-                !outputAliases.has(property.public),
-                `${record.id}: input/output alias ${property.public} requires specialization or an approved exception`,
-              );
-            }
-            for (const event of record.events) {'''
-          new_collision = '''  const outputAliases = new Set(record.events.map((event) => event.public));
-          const properties = record.properties.filter(
-            (property) => property.readOnly !== true && property.binding !== "readonly",
-          );
-          const directiveProperties = properties.filter(
-            (property) => !outputAliases.has(property.public),
-          );
-          const hostBoundProperties = properties.filter((property) =>
-            outputAliases.has(property.public),
-          );
-          if (!specialized) {
-            for (const event of record.events) {'''
-          if old_collision not in text:
-              raise SystemExit('collision policy patch target not found')
-          text = text.replace(old_collision, new_collision)
-          text = text.replace(
-              '    properties: Object.freeze(properties.map((property) => Object.freeze({ ...property }))),\n    events:',
-              '    properties: Object.freeze(properties.map((property) => Object.freeze({ ...property }))),\n    directiveProperties: Object.freeze(\n      directiveProperties.map((property) => Object.freeze({ ...property })),\n    ),\n    hostBoundProperties: Object.freeze(\n      hostBoundProperties.map((property) => Object.freeze({ ...property })),\n    ),\n    events:',
-          )
-
-          old_event_type = '''function eventOutputType(event) {
-            if (event.detail === "event") return "Event";
-            const detailType = `VyrnForgeCanonicalEventDetailMap[\\"${event.canonical}\\"]`;
-            if (event.detail === "detail") return detailType;
-            const field = event.detail === "value" ? "value" : null;
-            return field ? `${detailType}[\\"${field}\\"]` : detailType;
-          }'''
-          new_event_type = '''function eventOutputType(component, event) {
-            if (event.detail === "event") return "Event";
-            const detailType = `VyrnForgeCanonicalEventDetailMap[\\"${event.canonical}\\"]`;
-            if (event.detail === "detail") return detailType;
-            const field = mappedEventField(component, event);
-            assert(
-              field,
-              `${component.id}: ${event.public} has no deterministic mapped detail field`,
-            );
-            return `${detailType}[\\"${field}\\"]`;
-          }'''
-          if old_event_type not in text:
-              raise SystemExit('eventOutputType patch target not found')
-          text = text.replace(old_event_type, new_event_type)
-          text = text.replace(
-              'new EventEmitter<${eventOutputType(event)}>()',
-              'new EventEmitter<${eventOutputType(component, event)}>()',
-          )
-
-          old_inputs = '  const inputs = component.properties.map((property) => inputSource(component, property));'
-          new_inputs = '  const inputs = component.directiveProperties.map((property) => inputSource(component, property));'
-          if old_inputs not in text:
-              raise SystemExit('directive input patch target not found')
-          text = text.replace(old_inputs, new_inputs)
-
-          input_interfaces_anchor = '''function genericDirectiveSource(component) {
-          '''
-          input_interfaces = '''function inputContractSource(component) {
-            const lines = component.properties
-              .map(
-                (property) =>
-                  `  ${JSON.stringify(property.public)}?: ${component.exportName}Element[\\"${property.canonical}\\"];`,
-              )
-              .join("\\n");
-            return `export interface ${component.exportName}Inputs {\\n${lines}\\n}`;
-          }
-
-          function outputContractSource(component) {
-            const lines = component.events
-              .map(
-                (event) =>
-                  `  ${JSON.stringify(event.public)}: ${eventOutputType(component, event)};`,
-              )
-              .join("\\n");
-            return `export interface ${component.exportName}Outputs {\\n${lines}\\n}`;
-          }
-
-          function genericDirectiveSource(component) {
-          '''
-          if input_interfaces_anchor not in text:
-              raise SystemExit('contract interface insertion target not found')
-          text = text.replace(input_interfaces_anchor, input_interfaces)
-          text = text.replace(
-              '  return `export type ${component.exportName}Element = VyrnForgeElementForTagName<\\"${component.tag}\\">;\\n\\n${slotSource(component)}',
-              '  return `export type ${component.exportName}Element = VyrnForgeElementForTagName<\\"${component.tag}\\">;\\n\\n${inputContractSource(component)}\\n\\n${outputContractSource(component)}\\n\\n${slotSource(component)}',
-          )
-
-          old_meta = '''`  Object.freeze({ id: "${component.id}", tag: "${component.tag}", selector: "${component.selector}", directive: ${component.exportName}, slots: ${component.exportName}SlotNames }),`,'''
-          new_meta = '''`  Object.freeze({ id: "${component.id}", tag: "${component.tag}", selector: "${component.selector}", directive: ${component.exportName}, slots: ${component.exportName}SlotNames, hostBoundInputs: Object.freeze([${component.hostBoundProperties.map((property) => `"${property.public}"`).join(", ")}]) }),`,'''
-          if old_meta not in text:
-              raise SystemExit('catalog metadata patch target not found')
-          text = text.replace(old_meta, new_meta)
-          generator.write_text(text)
 
           index = Path('packages/ui-angular/src/index.ts')
           text = index.read_text()
@@ -191,10 +65,21 @@ jobs:
 
           readme = Path('packages/ui-angular/README.md')
           text = readme.read_text()
-          text = text.replace(
-              '## Current surface\n\n- `VfButton`\n- `VfTextInput`\n- `VfTabs`\n- `VfDialog`\n\nThe package is intentionally private while the Angular distribution lane is being completed. One-step application setup, full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.',
-              '## Current surface\n\nThe package exposes the full supported 59-contract non-grid Angular facade catalog. Every supported contract is generated from canonical VyrnForge metadata or must be backed by an active framework-exception record. `VfButton`, `VfTextInput`, `VfTabs`, and `VfDialog` retain their specialized generated bindings while participating in the same catalog/coverage contract.\n\nGenerated directives provide canonical selectors, typed input/output contracts, typed native-element references and method proxies, plus slot composition metadata/helpers. When a canonical property and output intentionally share the same Angular public name, the property remains a native Custom Element host binding while the directive owns the output alias; generated catalog metadata records those host-bound inputs. The package remains private while Forms promotion, SSR/hydration validation, and publication/release verification continue through later S12 tasks.',
-          )
+          old = '''## Current surface
+
+- `VfButton`
+- `VfTextInput`
+- `VfTabs`
+- `VfDialog`
+
+The package is intentionally private while the Angular distribution lane is being completed. One-step application setup, full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.'''
+          new = '''## Current surface
+
+The package exposes the full supported 59-contract non-grid Angular facade catalog. Every supported contract is generated from canonical VyrnForge metadata or must be backed by an active framework-exception record. `VfButton`, `VfTextInput`, `VfTabs`, and `VfDialog` retain their specialized generated bindings while participating in the same catalog/coverage contract.
+
+Generated directives provide canonical selectors, typed input/output contracts, typed native-element references and method proxies, plus slot composition metadata/helpers. When a canonical property and output intentionally share the same Angular public name, the property remains a native Custom Element host binding while the directive owns the output alias; generated catalog metadata records those host-bound inputs. The package remains private while Forms promotion, SSR/hydration validation, and publication/release verification continue through later S12 tasks.'''
+          if old in text:
+              text = text.replace(old, new)
           readme.write_text(text)
 
           registry_test = Path('scripts/generated-framework-artifacts.test.mjs')
