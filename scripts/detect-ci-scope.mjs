@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { appendFileSync, readFileSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,11 +10,6 @@ export const scopeKeys = [
   "integration",
   "security",
   "metadata",
-  "ui_core",
-  "ui_behaviors",
-  "ui_components",
-  "ui_elements",
-  "ui_data_grid",
   "packages",
   "consumer",
   "docs",
@@ -42,6 +37,63 @@ const fullValidationFiles = new Set([
   "tsconfig.base.json",
 ]);
 
+function readJson(file) {
+  return JSON.parse(readFileSync(file, "utf8"));
+}
+
+function discoverPackages() {
+  const packagesRoot = path.join(root, "packages");
+  const records = [];
+
+  for (const directory of readdirSync(packagesRoot, { withFileTypes: true })) {
+    if (!directory.isDirectory()) continue;
+    const manifestPath = path.join(
+      packagesRoot,
+      directory.name,
+      "package.json",
+    );
+    if (!existsSync(manifestPath)) continue;
+
+    const manifest = readJson(manifestPath);
+    records.push({
+      directory: `packages/${directory.name}`,
+      shortName: directory.name,
+      name: manifest.name,
+      manifest,
+    });
+  }
+
+  const names = new Set(records.map((record) => record.name));
+  for (const record of records) {
+    const dependencyMaps = [
+      record.manifest.dependencies,
+      record.manifest.peerDependencies,
+      record.manifest.optionalDependencies,
+    ];
+    record.vyrnforgeDependencies = new Set(
+      dependencyMaps
+        .flatMap((dependencies) => Object.keys(dependencies ?? {}))
+        .filter((name) => names.has(name)),
+    );
+  }
+
+  return records.sort((a, b) => a.directory.localeCompare(b.directory));
+}
+
+const packageRecords = discoverPackages();
+const packageByDirectory = new Map(
+  packageRecords.map((record) => [record.directory, record]),
+);
+const reverseDependencies = new Map(
+  packageRecords.map((record) => [record.name, new Set()]),
+);
+
+for (const record of packageRecords) {
+  for (const dependency of record.vyrnforgeDependencies) {
+    reverseDependencies.get(dependency)?.add(record.name);
+  }
+}
+
 function createScope() {
   return Object.fromEntries(scopeKeys.map((key) => [key, false]));
 }
@@ -56,7 +108,23 @@ function isPackageTest(file) {
   );
 }
 
-function markPackageRuntime(scope, packageName) {
+function downstreamPackages(packageName) {
+  const selected = new Set([packageName]);
+  const queue = [packageName];
+
+  while (queue.length) {
+    const current = queue.shift();
+    for (const dependent of reverseDependencies.get(current) ?? []) {
+      if (selected.has(dependent)) continue;
+      selected.add(dependent);
+      queue.push(dependent);
+    }
+  }
+
+  return selected;
+}
+
+function markRuntimeImpact(scope, selectedPackages, packageName) {
   scope.quality = true;
   scope.packages = true;
   scope.consumer = true;
@@ -65,33 +133,9 @@ function markPackageRuntime(scope, packageName) {
   scope.fixtures = true;
   scope.browser = true;
 
-  if (packageName === "ui-core") {
-    scope.ui_core = true;
-    scope.ui_behaviors = true;
-    scope.ui_components = true;
-    scope.ui_elements = true;
-    scope.ui_data_grid = true;
-  } else if (packageName === "ui-behaviors") {
-    scope.ui_behaviors = true;
-    scope.ui_components = true;
-    scope.ui_elements = true;
-  } else if (packageName === "ui-components") {
-    scope.ui_components = true;
-    scope.ui_data_grid = true;
-  } else if (packageName === "ui-elements") {
-    scope.ui_elements = true;
-  } else {
-    scope.ui_data_grid = true;
+  for (const name of downstreamPackages(packageName)) {
+    selectedPackages.add(name);
   }
-}
-
-function markPackageTests(scope, packageName) {
-  scope.quality = true;
-  if (packageName === "ui-core") scope.ui_core = true;
-  else if (packageName === "ui-behaviors") scope.ui_behaviors = true;
-  else if (packageName === "ui-components") scope.ui_components = true;
-  else if (packageName === "ui-elements") scope.ui_elements = true;
-  else scope.ui_data_grid = true;
 }
 
 function markPackagePayload(scope) {
@@ -99,53 +143,58 @@ function markPackagePayload(scope) {
   scope.consumer = true;
 }
 
-function markFull(scope) {
+function markFull(scope, selectedPackages) {
   for (const key of scopeKeys) {
-    if (key !== "docs_only") {
-      scope[key] = true;
-    }
+    if (key !== "docs_only") scope[key] = true;
   }
+  for (const record of packageRecords) selectedPackages.add(record.name);
   scope.docs_only = false;
 }
 
-function classifyPackageFile(file, scope, reasons) {
-  const match =
-    /^packages\/(ui-core|ui-behaviors|ui-components|ui-elements|ui-data-grid)\/(.+)$/.exec(
-      file,
-    );
-  if (!match) {
-    return false;
-  }
+function findPackage(file) {
+  const match = /^packages\/([^/]+)\/(.+)$/.exec(file);
+  if (!match) return null;
+  const directory = `packages/${match[1]}`;
+  const record = packageByDirectory.get(directory);
+  return record ? { record, packagePath: match[2] } : null;
+}
 
-  const [, packageName, packagePath] = match;
+function classifyPackageFile(file, scope, selectedPackages, reasons) {
+  const match = findPackage(file);
+  if (!match) return false;
 
-  if (
-    [
-      "package.json",
-      "tsconfig.json",
-      "tsconfig.build.json",
-      "tsup.config.ts",
-    ].includes(packagePath)
-  ) {
-    markPackageRuntime(scope, packageName);
-    reasons.add(`${packageName} package configuration`);
+  const { record, packagePath } = match;
+  const configurationFiles = new Set([
+    "package.json",
+    "tsconfig.json",
+    "tsconfig.build.json",
+    "tsup.config.ts",
+    "vite.config.ts",
+  ]);
+
+  if (configurationFiles.has(packagePath)) {
+    markRuntimeImpact(scope, selectedPackages, record.name);
+    scope.metadata = true;
+    reasons.add(`${record.name} package configuration`);
     return true;
   }
 
   if (packagePath === "README.md" || packagePath === "LICENSE") {
     markPackagePayload(scope);
-    reasons.add(`${packageName} published payload metadata`);
+    selectedPackages.add(record.name);
+    reasons.add(`${record.name} published payload metadata`);
     return true;
   }
 
   if (isPackageTest(packagePath)) {
-    markPackageTests(scope, packageName);
-    reasons.add(`${packageName} tests`);
+    scope.quality = true;
+    selectedPackages.add(record.name);
+    reasons.add(`${record.name} tests`);
     return true;
   }
 
-  markPackageRuntime(scope, packageName);
-  reasons.add(`${packageName} runtime or public package surface`);
+  markRuntimeImpact(scope, selectedPackages, record.name);
+  reasons.add(`${record.name} runtime or public package surface`);
   return true;
 }
 
@@ -154,16 +203,17 @@ export function planCiScope(files, { forceFull = false } = {}) {
     ...new Set(files.map(normalizeFile).filter(Boolean)),
   ].sort();
   const scope = createScope();
+  const selectedPackages = new Set();
   const reasons = new Set();
 
   if (forceFull || changedFiles.length === 0) {
-    markFull(scope);
+    markFull(scope, selectedPackages);
     reasons.add(
       forceFull
-        ? "manual full validation"
+        ? "manual or promotion full validation"
         : "no diff available; safe full fallback",
     );
-    return { ...scope, changed_files: changedFiles, reasons: [...reasons] };
+    return finalize(scope, selectedPackages, changedFiles, reasons);
   }
 
   for (const file of changedFiles) {
@@ -173,14 +223,12 @@ export function planCiScope(files, { forceFull = false } = {}) {
       file.startsWith(".github/actions/") ||
       file.startsWith("scripts/")
     ) {
-      markFull(scope);
+      markFull(scope, selectedPackages);
       reasons.add(`shared CI/build configuration: ${file}`);
       continue;
     }
 
-    if (classifyPackageFile(file, scope, reasons)) {
-      continue;
-    }
+    if (classifyPackageFile(file, scope, selectedPackages, reasons)) continue;
 
     if (file === "LICENSE") {
       markPackagePayload(scope);
@@ -212,9 +260,9 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (file.startsWith("examples/basic-playground/")) {
+    if (file.startsWith("examples/")) {
       scope.playground = true;
-      reasons.add("playground application");
+      reasons.add("example or playground application");
       continue;
     }
 
@@ -236,7 +284,6 @@ export function planCiScope(files, { forceFull = false } = {}) {
     if (file.startsWith("tests/dom/")) {
       scope.quality = true;
       scope.fixtures = true;
-      scope.ui_components = true;
       reasons.add("shared DOM and accessibility test utilities");
       continue;
     }
@@ -282,17 +329,31 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    // An unknown file may affect tooling or build behavior. Prefer a safe full run.
-    markFull(scope);
+    markFull(scope, selectedPackages);
     reasons.add(`unclassified path uses safe full validation: ${file}`);
   }
 
+  return finalize(scope, selectedPackages, changedFiles, reasons);
+}
+
+function finalize(scope, selectedPackages, changedFiles, reasons) {
   scope.integration =
     scope.packages ||
     scope.consumer ||
     scope.docs ||
     scope.playground ||
     scope.browser;
+
+  scope.security =
+    scope.full ||
+    changedFiles.some(
+      (file) =>
+        file === "package.json" ||
+        file === "package-lock.json" ||
+        /(?:^|\/)package\.json$/.test(file) ||
+        file.startsWith(".github/workflows/") ||
+        file.startsWith(".github/actions/"),
+    );
 
   scope.docs_only =
     scope.docs &&
@@ -303,7 +364,14 @@ export function planCiScope(files, { forceFull = false } = {}) {
     !scope.playground &&
     !scope.fixtures;
 
-  return { ...scope, changed_files: changedFiles, reasons: [...reasons] };
+  const affectedPackages = [...selectedPackages].sort();
+  return {
+    ...scope,
+    affected_packages: affectedPackages,
+    affected_packages_csv: affectedPackages.join(","),
+    changed_files: changedFiles,
+    reasons: [...reasons],
+  };
 }
 
 function readArgument(name) {
@@ -316,13 +384,8 @@ function isZeroSha(value) {
 }
 
 function readChangedFiles({ base, head, filesFrom }) {
-  if (filesFrom) {
-    return readFileSync(filesFrom, "utf8").split(/\r?\n/);
-  }
-
-  if (isZeroSha(base) || !head) {
-    return [];
-  }
+  if (filesFrom) return readFileSync(filesFrom, "utf8").split(/\r?\n/);
+  if (isZeroSha(base) || !head) return [];
 
   try {
     return execFileSync(
@@ -342,6 +405,10 @@ function writeGitHubOutput(outputPath, plan) {
   for (const key of scopeKeys) {
     appendFileSync(outputPath, `${key}=${plan[key] ? "true" : "false"}\n`);
   }
+  appendFileSync(
+    outputPath,
+    `affected_packages=${plan.affected_packages_csv}\n`,
+  );
   appendFileSync(outputPath, `changed_count=${plan.changed_files.length}\n`);
   appendFileSync(
     outputPath,
@@ -368,9 +435,6 @@ if (isMainModule()) {
     forceFull: forceFull || isZeroSha(base) || !head,
   });
 
-  if (githubOutput) {
-    writeGitHubOutput(githubOutput, plan);
-  }
-
+  if (githubOutput) writeGitHubOutput(githubOutput, plan);
   process.stdout.write(`${JSON.stringify(plan, null, 2)}\n`);
 }

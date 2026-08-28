@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -21,14 +22,85 @@ function runNpm(args) {
   execFileSync(command, commandArgs, { cwd: root, stdio: "inherit" });
 }
 
+function workspaceManifest(packageName) {
+  const packagePath = packageName.replace(/^@vyrnforge\//, "");
+  const manifestPath = path.join(root, "packages", packagePath, "package.json");
+  if (!existsSync(manifestPath)) {
+    throw new Error(`CI selected unknown workspace ${packageName}`);
+  }
+  return JSON.parse(readFileSync(manifestPath, "utf8"));
+}
+
+function discoverPackageNames() {
+  const packagesRoot = path.join(root, "packages");
+  return readdirSync(packagesRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => path.join(packagesRoot, entry.name, "package.json"))
+    .filter(existsSync)
+    .map((manifestPath) => JSON.parse(readFileSync(manifestPath, "utf8")).name)
+    .filter(Boolean)
+    .sort();
+}
+
+function readAffectedPackages(full) {
+  if (full) return discoverPackageNames();
+  return [
+    ...new Set(
+      (process.env.CI_AFFECTED_PACKAGES ?? "")
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  ].sort();
+}
+
+function dependenciesFor(manifest) {
+  return new Set([
+    ...Object.keys(manifest.dependencies ?? {}),
+    ...Object.keys(manifest.peerDependencies ?? {}),
+    ...Object.keys(manifest.optionalDependencies ?? {}),
+  ]);
+}
+
+function orderSelectedPackages(packageNames) {
+  const selected = new Set(packageNames);
+  const manifests = new Map(
+    packageNames.map((name) => [name, workspaceManifest(name)]),
+  );
+  const ordered = [];
+  const visiting = new Set();
+  const visited = new Set();
+
+  function visit(name) {
+    if (visited.has(name)) return;
+    if (visiting.has(name)) {
+      throw new Error(
+        `Circular VyrnForge workspace dependency detected at ${name}`,
+      );
+    }
+    visiting.add(name);
+    for (const dependency of dependenciesFor(manifests.get(name))) {
+      if (selected.has(dependency)) visit(dependency);
+    }
+    visiting.delete(name);
+    visited.add(name);
+    ordered.push(name);
+  }
+
+  for (const name of [...packageNames].sort()) visit(name);
+  return ordered;
+}
+
+function runWorkspaceScript(packageName, script) {
+  const manifest = workspaceManifest(packageName);
+  if (!manifest.scripts?.[script]) return;
+  runNpm(["--ignore-scripts", "run", script, "--workspace", packageName]);
+}
+
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
-const core = full || readBoolean("CI_SCOPE_UI_CORE");
-const behaviors = full || readBoolean("CI_SCOPE_UI_BEHAVIORS");
-const components = full || readBoolean("CI_SCOPE_UI_COMPONENTS");
-const elements = full || readBoolean("CI_SCOPE_UI_ELEMENTS");
-const dataGrid = full || readBoolean("CI_SCOPE_UI_DATA_GRID");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
+const selectedPackages = orderSelectedPackages(readAffectedPackages(full));
 
 for (const command of [
   "format:check",
@@ -59,43 +131,22 @@ if (metadata) {
   }
 }
 
-const selected = [
-  [core, "@vyrnforge/ui-core"],
-  [behaviors, "@vyrnforge/ui-behaviors"],
-  [components, "@vyrnforge/ui-components"],
-  [elements, "@vyrnforge/ui-elements"],
-  [dataGrid, "@vyrnforge/ui-data-grid"],
-].filter(([enabled]) => enabled);
-
 if (fixtures) {
   runNpm(["run", "build:packages"]);
 } else {
-  if (core || behaviors || components || elements || dataGrid) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-core"]);
-  }
-  if (behaviors || components || elements) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-behaviors"]);
-  }
-  if (components || dataGrid) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-components"]);
-  }
-  if (elements) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"]);
-  }
-  if (dataGrid) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-data-grid"]);
+  for (const packageName of selectedPackages) {
+    runWorkspaceScript(packageName, "build");
   }
 }
 
-for (const [, workspace] of selected) {
-  runNpm(["--ignore-scripts", "run", "typecheck", "--workspace", workspace]);
-  runNpm([
-    "--ignore-scripts",
-    "run",
-    "test:coverage",
-    "--workspace",
-    workspace,
-  ]);
+for (const packageName of selectedPackages) {
+  runWorkspaceScript(packageName, "typecheck");
+  const manifest = workspaceManifest(packageName);
+  if (manifest.scripts?.["test:coverage"]) {
+    runWorkspaceScript(packageName, "test:coverage");
+  } else {
+    runWorkspaceScript(packageName, "test");
+  }
 }
 
 if (fixtures) {

@@ -1,10 +1,17 @@
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { execFileSync } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+const repositoryRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
 const VUE_PEER_RANGE = ">=3.5 <4";
 
-const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
+const readJson = async (relativePath) =>
+  JSON.parse(await readFile(path.join(repositoryRoot, relativePath), "utf8"));
 
 const vueManifest = await readJson("packages/ui-vue/package.json");
 const sharedManifests = await Promise.all(
@@ -46,7 +53,7 @@ const packResult = JSON.parse(
   execFileSync(
     process.platform === "win32" ? "npm.cmd" : "npm",
     ["pack", "--workspace", "@vyrnforge/ui-vue", "--dry-run", "--json"],
-    { encoding: "utf8" },
+    { cwd: repositoryRoot, encoding: "utf8" },
   ),
 );
 

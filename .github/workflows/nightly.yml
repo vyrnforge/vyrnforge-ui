@@ -1,4 +1,4 @@
-name: VyrnForge Nightly
+name: VyrnForge Weekly Assurance
 
 on:
   schedule:
@@ -9,12 +9,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: vyrnforge-nightly
+  group: vyrnforge-weekly-assurance
   cancel-in-progress: true
 
 jobs:
   quality:
-    name: quality
+    name: full-quality
     uses: ./.github/workflows/_quality.yml
     permissions:
       contents: read
@@ -22,15 +22,10 @@ jobs:
       node-version: "24.18.0"
       full: true
       metadata: true
-      ui-core: true
-      ui-behaviors: true
-      ui-components: true
-      ui-elements: true
-      ui-data-grid: true
       fixtures: true
 
   integration:
-    name: integration
+    name: full-integration
     uses: ./.github/workflows/_integration.yml
     permissions:
       contents: read
@@ -44,13 +39,13 @@ jobs:
       pages-artifact: false
 
   compatibility:
-    name: compatibility
+    name: ecosystem-compatibility
     uses: ./.github/workflows/_compatibility.yml
     permissions:
       contents: read
 
   security:
-    name: security
+    name: security-drift
     uses: ./.github/workflows/_security.yml
     permissions:
       contents: read
@@ -72,22 +67,18 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Aggregate nightly responsibilities
+      - name: Aggregate weekly assurance responsibilities
         env:
           RESULTS_JSON: >-
             {"quality":"${{ needs.quality.result }}","integration":"${{ needs.integration.result }}","compatibility":"${{ needs.compatibility.result }}","security":"${{ needs.security.result }}"}
         run: |
           node - <<'NODE'
           const results = JSON.parse(process.env.RESULTS_JSON);
-          const failures = Object.entries(results).filter(
-            ([, result]) => result !== "success",
-          );
+          const failures = Object.entries(results).filter(([, result]) => result !== "success");
           console.log(results);
           if (failures.length) {
             console.error(
-              `nightly-gate failed: ${failures
-                .map(([name, result]) => `${name}:${result}`)
-                .join("; ")}`,
+              `weekly assurance failed: ${failures.map(([name, result]) => `${name}:${result}`).join("; ")}`,
             );
             process.exit(1);
           }
