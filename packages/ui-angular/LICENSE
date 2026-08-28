@@ -1,0 +1,148 @@
+# VyrnForge Source License 1.0
+
+Copyright © 2026 VyrnForge. All rights reserved.
+
+This license is a source-available software license. It is not an open-source license.
+
+## 1. Definitions
+
+**“Software”** means the VyrnForge software made available with this license, including its source code, object code, packages, documentation, examples, modifications, and substantial portions.
+
+**“Licensor”** means VyrnForge and the applicable copyright owner of the Software.
+
+**“You”** means the individual or legal entity exercising rights under this license.
+
+**“Evaluation Use”** means internal, non-production use solely to inspect, test, learn, evaluate suitability, or create a temporary proof of concept.
+
+**“Production Use”** means any use of the Software to operate, support, provide, or deliver an application, service, workflow, product, or business process beyond Evaluation Use.
+
+**“Commercial Use”** means any use that directly or indirectly supports commercial activity, business operations, paid work, revenue generation, customer delivery, employee operations, or another commercial benefit.
+
+**“Redistribution”** means making the Software, its source code, its packages, or a substantial portion available to another person or entity, whether for payment or without payment.
+
+**“Competing Product”** means a reusable UI library, component library, design system, data-grid library, application framework, template product, UI builder, low-code or no-code platform, hosted component service, or other product or service with a substantially similar primary purpose.
+
+## 2. Evaluation License Grant
+
+Subject to this license, the Licensor grants You a limited, non-exclusive, non-transferable, non-sublicensable license to:
+
+1. view and inspect the Software;
+2. copy the Software for internal Evaluation Use;
+3. run the Software locally or in a private non-production evaluation environment;
+4. modify the Software solely for Evaluation Use; and
+5. create temporary internal prototypes that are not used in production, distributed, sold, or provided to third parties.
+
+No other rights are granted.
+
+## 3. Restrictions
+
+Unless the Licensor gives You separate written permission or a commercial license, You must not:
+
+1. use the Software for Production Use;
+2. use the Software for Commercial Use;
+3. use the Software in internal business operations beyond Evaluation Use;
+4. use the Software in a customer-facing, employee-facing, partner-facing, or public application;
+5. redistribute, publish, mirror, upload, or make the Software available through npm, another package registry, a repository, a download service, or another distribution channel;
+6. sell, rent, lease, sublicense, white-label, or otherwise commercially exploit the Software;
+7. bundle or distribute the Software as a standalone library, framework, toolkit, template, starter kit, or reusable development asset;
+8. use the Software or a substantial portion of it to create, improve, or operate a Competing Product;
+9. provide access to the Software’s source code to third parties;
+10. remove, obscure, or alter copyright, trademark, attribution, licensing, or proprietary notices;
+11. represent the Software as Your own original software;
+12. use the VyrnForge name, logo, or branding except to identify the Software accurately; or
+13. bypass, disable, interfere with, or circumvent any technical licensing, entitlement, or access-control mechanism included with the Software.
+
+## 4. Commercial Licensing
+
+A separate written commercial license is required for any Production Use or Commercial Use.
+
+A commercial license may permit, according to its written terms:
+
+1. production use in specified internal applications;
+2. production use in customer-facing applications;
+3. distribution of compiled application code that incorporates the Software;
+4. organization-wide or project-specific use;
+5. access to commercial packages, updates, support, or maintenance.
+
+Unless a commercial agreement expressly states otherwise, a commercial license does not permit You to:
+
+1. resell the Software as a standalone product;
+2. republish VyrnForge packages;
+3. sublicense the Software or its source code;
+4. disclose the Software’s source code outside the licensed organization or project;
+5. remove VyrnForge notices or branding requirements; or
+6. create or operate a Competing Product based on the Software.
+
+## 5. Ownership
+
+The Software is licensed, not sold.
+
+The Licensor and its licensors retain all right, title, and interest in and to the Software, including all copyrights, trademarks, trade secrets, patent rights, and other intellectual-property rights.
+
+No implied rights or licenses are granted.
+
+## 6. Modifications
+
+Any modifications You create under the Evaluation License Grant may be used only for Evaluation Use.
+
+You may not distribute, publish, sell, sublicense, or use those modifications in production without a separate written commercial license.
+
+The Licensor does not acquire ownership of Your independent code merely because it interoperates with the Software.
+
+## 7. Feedback
+
+When You voluntarily provide suggestions, ideas, or feedback about the Software, You grant the Licensor a worldwide, perpetual, irrevocable, royalty-free right to use and incorporate that feedback without restriction or obligation.
+
+This section does not transfer ownership of Your application code.
+
+## 8. Term and Termination
+
+This license begins when You first access or use the Software.
+
+Your rights under this license terminate automatically if You breach any term.
+
+Upon termination, You must stop using the Software and delete all copies under Your control, except copies that applicable law requires You to retain.
+
+Sections concerning restrictions, ownership, feedback, disclaimers, liability, and enforcement survive termination.
+
+## 9. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED “AS IS” AND “AS AVAILABLE,” WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR STATUTORY.
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR DISCLAIMS ALL WARRANTIES, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, ACCURACY, SECURITY, RELIABILITY, AND AVAILABILITY.
+
+## 10. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR BUSINESS OPPORTUNITY ARISING FROM OR RELATED TO THE SOFTWARE OR THIS LICENSE.
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR’S TOTAL LIABILITY ARISING FROM OR RELATED TO THE SOFTWARE OR THIS LICENSE WILL NOT EXCEED THE AMOUNT YOU PAID DIRECTLY TO THE LICENSOR FOR THE SOFTWARE DURING THE TWELVE MONTHS BEFORE THE EVENT GIVING RISE TO LIABILITY. FOR EVALUATION USE PROVIDED WITHOUT CHARGE, THE LICENSOR’S TOTAL LIABILITY WILL NOT EXCEED USD 10.
+
+## 11. Trademark
+
+This license does not grant permission to use the VyrnForge name, logos, product names, or other trademarks except as necessary to identify the Software accurately and comply with attribution requirements.
+
+## 12. Compliance With Law
+
+You are responsible for complying with applicable laws and regulations when accessing or using the Software.
+
+You may not use the Software where its use or distribution would violate applicable law.
+
+## 13. Severability
+
+If any provision of this license is held unenforceable, that provision will be enforced to the maximum extent permitted, and the remaining provisions will remain effective.
+
+## 14. No Waiver
+
+A failure to enforce any provision is not a waiver of the right to enforce it later.
+
+## 15. Entire Agreement
+
+This license is the entire agreement governing Evaluation Use of the Software unless You and the Licensor enter into a separate written agreement.
+
+A separate written commercial agreement controls to the extent it conflicts with this license.
+
+---
+
+**License identifier for package metadata:** `SEE LICENSE IN LICENSE`
+
+**Licensing classification:** Source-available; commercial use and production use require a separate written license.
