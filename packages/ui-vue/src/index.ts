@@ -1,3 +1,11 @@
+export {
+  VyrnForgeVue,
+  createVyrnForgeVue,
+  installVyrnForgeVue,
+  vyrnForgeVueComponents,
+} from "./plugin";
+export type { VyrnForgeVueOptions } from "./plugin";
+
 export { VfButton } from "./generated/VfButton.generated";
 export type { VfButtonElement } from "./generated/VfButton.generated";
 
