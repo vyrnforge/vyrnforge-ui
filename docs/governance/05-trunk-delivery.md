@@ -53,21 +53,19 @@ Unknown paths use safe full validation. Pushes to `main` and manual CI runs use 
 
 Changing code does not automatically mean every documentation or example file must change, but public changes require an explicit and testable impact decision.
 
-| Change | Required accompanying responsibility |
-| --- | --- |
-| Internal implementation with no contract change | affected package quality and tests |
-| Shared behavior or accessibility contract | downstream framework adapters, browser/accessibility coverage, shared contract evidence |
-| Public property, event, method, slot, model, or export | canonical metadata/reference, affected framework surface, docs |
-| New reusable component | canonical contract, native/shared implementation as applicable, framework adapters, docs/reference, representative example or playground coverage |
-| Token, theme, density, typography, motion, or visual-state change | token/style verification, relevant docs, browser/visual evidence |
-| Framework adapter change | framework package, packed consumer, SSR/build checks where applicable, representative cross-framework parity |
-| Package manifest or public-entrypoint change | package build/pack, external consumer, package-boundary verification, release lifecycle classification |
-| New publishable workspace | workspace quality, repository inventory, dependency graph, consumer evidence, docs, and release lifecycle classification in the same change |
-| Authored docs only | docs currentness/build/link validation |
-| Generated/reference metadata | regenerate/verify and fail on drift |
-| Playground/example only | playground lint/typecheck/build/smoke |
-| Workflow, shared CI script, root manifest, or toolchain change | full repository validation |
-| Release metadata | release-contract and artifact verification |
+- **Internal implementation with no contract change:** affected package quality and tests.
+- **Shared behavior or accessibility contract:** downstream framework adapters, browser/accessibility coverage, and shared contract evidence.
+- **Public property, event, method, slot, model, or export:** canonical metadata/reference, affected framework surface, and docs.
+- **New reusable component:** canonical contract, native/shared implementation as applicable, framework adapters, docs/reference, and representative example or playground coverage.
+- **Token, theme, density, typography, motion, or visual-state change:** token/style verification, relevant docs, and browser/visual evidence.
+- **Framework adapter change:** framework package, packed consumer, SSR/build checks where applicable, and representative cross-framework parity.
+- **Package manifest or public-entrypoint change:** package build/pack, external consumer, package-boundary verification, and release lifecycle classification.
+- **New publishable workspace:** workspace quality, repository inventory, dependency graph, consumer evidence, docs, and release lifecycle classification in the same change.
+- **Authored docs only:** docs currentness/build/link validation.
+- **Generated/reference metadata:** regenerate/verify and fail on drift.
+- **Playground/example only:** playground lint/typecheck/build/smoke.
+- **Workflow, shared CI script, root manifest, or toolchain change:** full repository validation.
+- **Release metadata:** release-contract and artifact verification.
 
 A publishable workspace may not exist in an unclassified release state. If it is intentionally not releasable yet, its repository metadata must represent that staged lifecycle explicitly rather than relying on CI exceptions.
 
