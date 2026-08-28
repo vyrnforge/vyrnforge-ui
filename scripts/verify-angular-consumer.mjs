@@ -229,7 +229,8 @@ function verifyFixture(root, failures) {
   const previewText = read(root, "tests/consumers/angular/preview.mjs");
 
   for (const marker of [
-    "@vyrnforge/ui-elements/register",
+    "@vyrnforge/ui-angular",
+    "provideVyrnForge",
     "provideZonelessChangeDetection",
     "bootstrapApplication",
   ]) {
@@ -401,6 +402,7 @@ function verifyArchitecture(root, failures) {
     );
     if (!existsSync(packagePath)) continue;
     const packageJson = JSON.parse(readFileSync(packagePath, "utf8"));
+    if (packageJson.name === "@vyrnforge/ui-angular") continue;
     const dependencyNames = Object.keys({
       ...packageJson.dependencies,
       ...packageJson.devDependencies,
