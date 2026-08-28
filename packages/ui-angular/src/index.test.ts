@@ -12,7 +12,9 @@ type TabsExport = Assert<HasExport<"VfTabs">>;
 type DialogExport = Assert<HasExport<"VfDialog">>;
 type SetupExport = Assert<HasExport<"provideVyrnForge">>;
 type CatalogExport = Assert<HasExport<"vyrnForgeAngularCatalog">>;
-type DirectivesExport = Assert<HasExport<"vyrnForgeAngularGeneratedDirectives">>;
+type DirectivesExport = Assert<
+  HasExport<"vyrnForgeAngularGeneratedDirectives">
+>;
 
 const publicSurfaceIsTyped: [
   ButtonExport,

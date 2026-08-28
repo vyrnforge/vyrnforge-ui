@@ -40,7 +40,10 @@ function identifier(value) {
 }
 
 function directiveMarker(exportName) {
-  assert(exportName.startsWith("Vf"), `${exportName}: expected Vf export prefix`);
+  assert(
+    exportName.startsWith("Vf"),
+    `${exportName}: expected Vf export prefix`,
+  );
   return `vfGenerated${exportName.slice(2)}`;
 }
 
@@ -61,21 +64,29 @@ function findActiveAngularException(registry, componentId) {
 }
 
 function mappedEventField(record, event) {
-  if (event.detail === "value") return "value";
+  const hasField = (name) =>
+    Boolean(name) && event.detailFields.some((field) => field.name === name);
+  const publicChangeField = event.public.endsWith("Change")
+    ? event.public.slice(0, -"Change".length)
+    : null;
+
+  if (event.detail === "value") {
+    if (hasField(publicChangeField)) return publicChangeField;
+    if (hasField("value")) return "value";
+    const modelProperty = record.model?.property;
+    if (hasField(modelProperty)) return modelProperty;
+    return null;
+  }
   if (event.detail !== "mapped") return null;
 
   const modelProperty = record.model?.property;
-  if (
-    modelProperty &&
-    event.detailFields.some((field) => field.name === modelProperty)
-  ) {
-    return modelProperty;
-  }
+  if (hasField(modelProperty)) return modelProperty;
+  if (hasField(publicChangeField)) return publicChangeField;
   if (event.detailFields.length === 1) return event.detailFields[0].name;
   return null;
 }
 
-function normalizeGeneratedComponent(record, nativeRecord) {
+function normalizeGeneratedComponent(record, nativeRecord, canonicalRecord) {
   assert(record.export, `${record.id}: Angular mapping requires an export`);
   assert(nativeRecord?.tag, `${record.id}: Native mapping requires a tag`);
   assert(
@@ -96,14 +107,41 @@ function normalizeGeneratedComponent(record, nativeRecord) {
   }
 
   const outputAliases = new Set(record.events.map((event) => event.public));
-  const properties = record.properties.filter(
-    (property) => property.readOnly !== true && property.binding !== "readonly",
-  );
+  const canonicalDefaultProperty =
+    canonicalRecord?.model?.defaultProperty ?? null;
+  const canonicalStateProperty = canonicalRecord?.model?.stateProperty ?? null;
+  const properties = record.properties
+    .filter(
+      (property) =>
+        property.readOnly !== true && property.binding !== "readonly",
+    )
+    .map((property) => {
+      const defaultInitializer =
+        canonicalDefaultProperty !== null &&
+        property.canonical === canonicalDefaultProperty;
+      if (defaultInitializer) {
+        assert(
+          canonicalStateProperty,
+          `${record.id}: default input ${property.public} requires a canonical state property`,
+        );
+      }
+      return Object.freeze({
+        ...property,
+        runtimeCanonical: defaultInitializer
+          ? canonicalStateProperty
+          : property.canonical,
+        defaultInitializer,
+      });
+    });
   const directiveProperties = properties.filter(
     (property) => !outputAliases.has(property.public),
   );
   const hostBoundProperties = properties.filter((property) =>
     outputAliases.has(property.public),
+  );
+  assert(
+    hostBoundProperties.every((property) => !property.defaultInitializer),
+    `${record.id}: default initializer cannot collide with an output alias`,
   );
 
   if (!specialized) {
@@ -112,16 +150,10 @@ function normalizeGeneratedComponent(record, nativeRecord) {
         event.mode === "output",
         `${record.id}: Angular event ${event.canonical} must use output mode`,
       );
-      if (event.detail === "mapped") {
+      if (event.detail === "mapped" || event.detail === "value") {
         assert(
           mappedEventField(record, event),
-          `${record.id}: mapped output ${event.public} needs a deterministic canonical field or specialization`,
-        );
-      }
-      if (event.detail === "value") {
-        assert(
-          event.detailFields.some((field) => field.name === "value"),
-          `${record.id}: value output ${event.public} is missing canonical detail.value`,
+          `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,
         );
       }
     }
@@ -147,14 +179,20 @@ function normalizeGeneratedComponent(record, nativeRecord) {
     events: Object.freeze(
       record.events.map((event) => Object.freeze({ ...event })),
     ),
-    slots: Object.freeze(record.slots.map((slot) => Object.freeze({ ...slot }))),
+    slots: Object.freeze(
+      record.slots.map((slot) => Object.freeze({ ...slot })),
+    ),
     methods: Object.freeze(
       record.methods.map((method) => Object.freeze({ ...method })),
     ),
   });
 }
 
-export function createAngularCatalogModel(generationModel, exceptionRegistry) {
+export function createAngularCatalogModel(
+  generationModel,
+  exceptionRegistry,
+  canonicalById,
+) {
   const angularById = new Map(
     generationModel.surfaces.angular.components.map((record) => [
       record.id,
@@ -174,8 +212,19 @@ export function createAngularCatalogModel(generationModel, exceptionRegistry) {
   const exceptions = [];
   for (const nativeRecord of nativeSupported) {
     const angularRecord = angularById.get(nativeRecord.id);
-    assert(angularRecord, `${nativeRecord.id}: missing Angular generation record`);
-    const exception = findActiveAngularException(exceptionRegistry, nativeRecord.id);
+    assert(
+      angularRecord,
+      `${nativeRecord.id}: missing Angular generation record`,
+    );
+    const canonicalRecord = canonicalById.get(nativeRecord.id);
+    assert(
+      canonicalRecord,
+      `${nativeRecord.id}: missing canonical component record`,
+    );
+    const exception = findActiveAngularException(
+      exceptionRegistry,
+      nativeRecord.id,
+    );
 
     if (angularRecord.status === "exception") {
       assert(
@@ -197,7 +246,9 @@ export function createAngularCatalogModel(generationModel, exceptionRegistry) {
       SUPPORTED_STATUSES.has(angularRecord.status),
       `${nativeRecord.id}: unsupported Angular status ${angularRecord.status}; use generated/current/target or an approved exception`,
     );
-    components.push(normalizeGeneratedComponent(angularRecord, nativeRecord));
+    components.push(
+      normalizeGeneratedComponent(angularRecord, nativeRecord, canonicalRecord),
+    );
   }
 
   assert(
@@ -205,11 +256,13 @@ export function createAngularCatalogModel(generationModel, exceptionRegistry) {
     "every supported contract must be generated/specialized or covered by an active Angular exception",
   );
   assert(
-    new Set(components.map((entry) => entry.exportName)).size === components.length,
+    new Set(components.map((entry) => entry.exportName)).size ===
+      components.length,
     "duplicate Angular exports",
   );
   assert(
-    new Set(components.map((entry) => entry.selector)).size === components.length,
+    new Set(components.map((entry) => entry.selector)).size ===
+      components.length,
     "duplicate Angular selectors",
   );
 
@@ -245,7 +298,25 @@ function eventOutputExpression(component, event) {
 
 function inputSource(component, property) {
   const member = identifier(`${property.public}Input`);
-  return `  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element[\"${property.canonical}\"] | undefined) {\n    if (value !== undefined) {\n      this.element.nativeElement[\"${property.canonical}\"] = value;\n    }\n  }`;
+  const runtimeCanonical = property.runtimeCanonical;
+  if (property.defaultInitializer) {
+    const guard = identifier(`${property.public}Applied`);
+    return `  private ${guard} = false;
+
+  @Input("${property.public}")
+  set ${member}(value: ${component.exportName}Element["${runtimeCanonical}"] | undefined) {
+    if (!this.${guard} && value !== undefined) {
+      this.element.nativeElement["${runtimeCanonical}"] = value;
+      this.${guard} = true;
+    }
+  }`;
+  }
+  return `  @Input("${property.public}")
+  set ${member}(value: ${component.exportName}Element["${runtimeCanonical}"] | undefined) {
+    if (value !== undefined) {
+      this.element.nativeElement["${runtimeCanonical}"] = value;
+    }
+  }`;
 }
 
 function outputSource(component, event) {
@@ -267,14 +338,27 @@ function methodSource(component, method) {
 
 function slotSource(component) {
   const values = component.slots.map((slot) => `"${slot.public}"`).join(", ");
-  return `export const ${component.exportName}SlotNames = Object.freeze([${values}] as const);\nexport type ${component.exportName}SlotName = (typeof ${component.exportName}SlotNames)[number];\n\nexport function compose${component.exportName}Slot(\n  element: HTMLElement,\n  slot: ${component.exportName}SlotName,\n): HTMLElement {\n  if (slot === "default") element.removeAttribute("slot");\n  else element.setAttribute("slot", slot);\n  return element;\n}`;
+  const hasDefault = component.slots.some((slot) => slot.public === "default");
+  const assignment = hasDefault
+    ? '  if (slot === "default") element.removeAttribute("slot");\n  else element.setAttribute("slot", slot);'
+    : '  element.setAttribute("slot", slot);';
+  return `export const ${component.exportName}SlotNames = Object.freeze([${values}] as const);
+export type ${component.exportName}SlotName = (typeof ${component.exportName}SlotNames)[number];
+
+export function compose${component.exportName}Slot(
+  element: HTMLElement,
+  slot: ${component.exportName}SlotName,
+): HTMLElement {
+${assignment}
+  return element;
+}`;
 }
 
 function inputContractSource(component) {
   const lines = component.properties
     .map(
       (property) =>
-        `  ${JSON.stringify(property.public)}?: ${component.exportName}Element[\"${property.canonical}\"];`,
+        `  ${JSON.stringify(property.public)}?: ${component.exportName}Element["${property.runtimeCanonical}"];`,
     )
     .join("\n");
   return `export interface ${component.exportName}Inputs {\n${lines}\n}`;
@@ -291,11 +375,15 @@ function outputContractSource(component) {
 }
 
 function genericDirectiveSource(component) {
-  const outputs = component.events.map((event) => outputSource(component, event));
+  const outputs = component.events.map((event) =>
+    outputSource(component, event),
+  );
   const inputs = component.directiveProperties.map((property) =>
     inputSource(component, property),
   );
-  const methods = component.methods.map((method) => methodSource(component, method));
+  const methods = component.methods.map((method) =>
+    methodSource(component, method),
+  );
   const marker = directiveMarker(component.exportName);
 
   const bodySections = [
@@ -304,7 +392,9 @@ function genericDirectiveSource(component) {
     ...outputs.map((output) => output.declaration),
     ...outputs.map((output) => output.handlerSource),
     `  constructor(private readonly element: ElementRef<${component.exportName}Element>) {\n    this.element.nativeElement.dataset[\"${marker}\"] = \"angular\";${
-      outputs.length > 0 ? `\n${outputs.map((output) => output.add).join("\n")}` : ""
+      outputs.length > 0
+        ? `\n${outputs.map((output) => output.add).join("\n")}`
+        : ""
     }\n  }`,
     ...methods,
     `  ngOnDestroy(): void {${
@@ -369,7 +459,14 @@ export function buildAngularCatalogArtifact({ root } = {}) {
   const contracts = loadCanonicalComponentContracts({ root });
   const generationModel = createFrameworkGenerationModel(contracts);
   const exceptionRegistry = loadFrameworkExceptions({ root });
-  const model = createAngularCatalogModel(generationModel, exceptionRegistry);
+  const canonicalById = new Map(
+    contracts.components.map((component) => [component.id, component]),
+  );
+  const model = createAngularCatalogModel(
+    generationModel,
+    exceptionRegistry,
+    canonicalById,
+  );
   return Object.freeze({
     path: ANGULAR_CATALOG_ARTIFACT_PATH,
     sourceRecords: Object.freeze([

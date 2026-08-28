@@ -63,7 +63,11 @@ function registerSliceArtifacts(artifacts, generator, command) {
   );
 }
 
-function registerAngularPackageSliceArtifact(artifacts, componentId, targetPath) {
+function registerAngularPackageSliceArtifact(
+  artifacts,
+  componentId,
+  targetPath,
+) {
   const angularArtifact = artifacts.find(
     (artifact) => artifact.framework === "angular",
   );

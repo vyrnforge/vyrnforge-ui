@@ -24,7 +24,10 @@ if (actual !== expected) {
   );
 }
 
-if (artifact.components.length + artifact.exceptions.length !== ANGULAR_CATALOG_EXPECTED_SIZE) {
+if (
+  artifact.components.length + artifact.exceptions.length !==
+  ANGULAR_CATALOG_EXPECTED_SIZE
+) {
   throw new Error(
     `Angular catalog coverage must account for ${ANGULAR_CATALOG_EXPECTED_SIZE} supported non-grid contracts`,
   );
@@ -35,14 +38,20 @@ const indexSource = readFileSync(
   "utf8",
 );
 if (!indexSource.includes("./generated/catalog.generated.js")) {
-  throw new Error("Angular public entrypoint does not export the generated catalog");
+  throw new Error(
+    "Angular public entrypoint does not export the generated catalog",
+  );
 }
 
 const packageJson = JSON.parse(
   readFileSync(path.join(root, "packages/ui-angular/package.json"), "utf8"),
 );
-if (!packageJson.scripts?.test?.includes("verify-angular-catalog-coverage.mjs")) {
-  throw new Error("Angular package test contract does not verify catalog coverage");
+if (
+  !packageJson.scripts?.test?.includes("verify-angular-catalog-coverage.mjs")
+) {
+  throw new Error(
+    "Angular package test contract does not verify catalog coverage",
+  );
 }
 
 for (const component of artifact.components) {
