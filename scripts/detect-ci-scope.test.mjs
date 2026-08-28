@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { planCiScope } from "./detect-ci-scope.mjs";
+import { planCiScope, planDeliveryScope } from "./detect-ci-scope.mjs";
 
 function expectEnabled(plan, keys) {
   for (const key of keys) {
@@ -172,6 +172,7 @@ test("root manifests and workflows force full validation", () => {
       "security",
     ]);
     assert.ok(plan.affected_packages.includes("@vyrnforge/ui-vue"));
+    assert.equal(plan.delivery, false);
   }
 });
 
@@ -215,4 +216,22 @@ test("visual regression metadata selects browser, fixture, quality, and docs", (
 test("dependency manifests select security validation", () => {
   const plan = planCiScope(["packages/ui-core/package.json"]);
   assert.equal(plan.security, true);
+});
+
+test("exact-main delivery rebuilds deployable surfaces without rerunning full validation", () => {
+  const plan = planDeliveryScope();
+  expectEnabled(plan, ["integration", "docs", "playground", "delivery"]);
+  expectDisabled(plan, [
+    "quality",
+    "security",
+    "metadata",
+    "packages",
+    "consumer",
+    "fixtures",
+    "browser",
+    "full",
+    "docs_only",
+  ]);
+  assert.deepEqual(plan.affected_packages, []);
+  assert.match(plan.reasons[0], /exact-main delivery/);
 });
