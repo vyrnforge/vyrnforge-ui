@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -21,14 +22,34 @@ function runNpm(args) {
   execFileSync(command, commandArgs, { cwd: root, stdio: "inherit" });
 }
 
+function readAffectedPackages() {
+  return [...new Set(
+    (process.env.CI_AFFECTED_PACKAGES ?? "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean),
+  )].sort();
+}
+
+function workspaceManifest(packageName) {
+  const packagePath = packageName.replace(/^@vyrnforge\//, "");
+  const manifestPath = path.join(root, "packages", packagePath, "package.json");
+  if (!existsSync(manifestPath)) {
+    throw new Error(`CI selected unknown workspace ${packageName}`);
+  }
+  return JSON.parse(readFileSync(manifestPath, "utf8"));
+}
+
+function runWorkspaceScript(packageName, script, extraArgs = []) {
+  const manifest = workspaceManifest(packageName);
+  if (!manifest.scripts?.[script]) return;
+  runNpm(["--ignore-scripts", "run", script, "--workspace", packageName, ...extraArgs]);
+}
+
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
-const core = full || readBoolean("CI_SCOPE_UI_CORE");
-const behaviors = full || readBoolean("CI_SCOPE_UI_BEHAVIORS");
-const components = full || readBoolean("CI_SCOPE_UI_COMPONENTS");
-const elements = full || readBoolean("CI_SCOPE_UI_ELEMENTS");
-const dataGrid = full || readBoolean("CI_SCOPE_UI_DATA_GRID");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
+const selectedPackages = readAffectedPackages();
 
 for (const command of [
   "format:check",
@@ -59,43 +80,22 @@ if (metadata) {
   }
 }
 
-const selected = [
-  [core, "@vyrnforge/ui-core"],
-  [behaviors, "@vyrnforge/ui-behaviors"],
-  [components, "@vyrnforge/ui-components"],
-  [elements, "@vyrnforge/ui-elements"],
-  [dataGrid, "@vyrnforge/ui-data-grid"],
-].filter(([enabled]) => enabled);
-
 if (fixtures) {
   runNpm(["run", "build:packages"]);
 } else {
-  if (core || behaviors || components || elements || dataGrid) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-core"]);
-  }
-  if (behaviors || components || elements) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-behaviors"]);
-  }
-  if (components || dataGrid) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-components"]);
-  }
-  if (elements) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"]);
-  }
-  if (dataGrid) {
-    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-data-grid"]);
+  for (const packageName of selectedPackages) {
+    runWorkspaceScript(packageName, "build");
   }
 }
 
-for (const [, workspace] of selected) {
-  runNpm(["--ignore-scripts", "run", "typecheck", "--workspace", workspace]);
-  runNpm([
-    "--ignore-scripts",
-    "run",
-    "test:coverage",
-    "--workspace",
-    workspace,
-  ]);
+for (const packageName of selectedPackages) {
+  runWorkspaceScript(packageName, "typecheck");
+  const manifest = workspaceManifest(packageName);
+  if (manifest.scripts?.["test:coverage"]) {
+    runWorkspaceScript(packageName, "test:coverage");
+  } else {
+    runWorkspaceScript(packageName, "test");
+  }
 }
 
 if (fixtures) {
