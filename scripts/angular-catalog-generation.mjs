@@ -99,13 +99,14 @@ function normalizeGeneratedComponent(record, nativeRecord) {
   const properties = record.properties.filter(
     (property) => property.readOnly !== true && property.binding !== "readonly",
   );
+  const directiveProperties = properties.filter(
+    (property) => !outputAliases.has(property.public),
+  );
+  const hostBoundProperties = properties.filter((property) =>
+    outputAliases.has(property.public),
+  );
+
   if (!specialized) {
-    for (const property of properties) {
-      assert(
-        !outputAliases.has(property.public),
-        `${record.id}: input/output alias ${property.public} requires specialization or an approved exception`,
-      );
-    }
     for (const event of record.events) {
       assert(
         event.mode === "output",
@@ -134,10 +135,22 @@ function normalizeGeneratedComponent(record, nativeRecord) {
     selector: `${nativeRecord.tag}[${directiveMarker(record.export)}]`,
     exportAs: exportAsName(record.export),
     specialized,
-    properties: Object.freeze(properties.map((property) => Object.freeze({ ...property }))),
-    events: Object.freeze(record.events.map((event) => Object.freeze({ ...event }))),
+    properties: Object.freeze(
+      properties.map((property) => Object.freeze({ ...property })),
+    ),
+    directiveProperties: Object.freeze(
+      directiveProperties.map((property) => Object.freeze({ ...property })),
+    ),
+    hostBoundProperties: Object.freeze(
+      hostBoundProperties.map((property) => Object.freeze({ ...property })),
+    ),
+    events: Object.freeze(
+      record.events.map((event) => Object.freeze({ ...event })),
+    ),
     slots: Object.freeze(record.slots.map((slot) => Object.freeze({ ...slot }))),
-    methods: Object.freeze(record.methods.map((method) => Object.freeze({ ...method }))),
+    methods: Object.freeze(
+      record.methods.map((method) => Object.freeze({ ...method })),
+    ),
   });
 }
 
@@ -206,12 +219,16 @@ export function createAngularCatalogModel(generationModel, exceptionRegistry) {
   });
 }
 
-function eventOutputType(event) {
+function eventOutputType(component, event) {
   if (event.detail === "event") return "Event";
   const detailType = `VyrnForgeCanonicalEventDetailMap[\"${event.canonical}\"]`;
   if (event.detail === "detail") return detailType;
-  const field = event.detail === "value" ? "value" : null;
-  return field ? `${detailType}[\"${field}\"]` : detailType;
+  const field = mappedEventField(component, event);
+  assert(
+    field,
+    `${component.id}: ${event.public} has no deterministic mapped detail field`,
+  );
+  return `${detailType}[\"${field}\"]`;
 }
 
 function eventOutputExpression(component, event) {
@@ -235,7 +252,7 @@ function outputSource(component, event) {
   const member = identifier(`${event.public}Output`);
   const handler = identifier(`handle_${event.public}`);
   return {
-    declaration: `  @Output("${event.public}")\n  readonly ${member} = new EventEmitter<${eventOutputType(event)}>();`,
+    declaration: `  @Output("${event.public}")\n  readonly ${member} = new EventEmitter<${eventOutputType(component, event)}>();`,
     handler,
     handlerSource: `  private readonly ${handler} = (event: Event) => {\n    this.${member}.emit(${eventOutputExpression(component, event)});\n  };`,
     add: `    this.element.nativeElement.addEventListener(\n      "${event.canonical}",\n      this.${handler},\n    );`,
@@ -253,9 +270,31 @@ function slotSource(component) {
   return `export const ${component.exportName}SlotNames = Object.freeze([${values}] as const);\nexport type ${component.exportName}SlotName = (typeof ${component.exportName}SlotNames)[number];\n\nexport function compose${component.exportName}Slot(\n  element: HTMLElement,\n  slot: ${component.exportName}SlotName,\n): HTMLElement {\n  if (slot === "default") element.removeAttribute("slot");\n  else element.setAttribute("slot", slot);\n  return element;\n}`;
 }
 
+function inputContractSource(component) {
+  const lines = component.properties
+    .map(
+      (property) =>
+        `  ${JSON.stringify(property.public)}?: ${component.exportName}Element[\"${property.canonical}\"];`,
+    )
+    .join("\n");
+  return `export interface ${component.exportName}Inputs {\n${lines}\n}`;
+}
+
+function outputContractSource(component) {
+  const lines = component.events
+    .map(
+      (event) =>
+        `  ${JSON.stringify(event.public)}: ${eventOutputType(component, event)};`,
+    )
+    .join("\n");
+  return `export interface ${component.exportName}Outputs {\n${lines}\n}`;
+}
+
 function genericDirectiveSource(component) {
   const outputs = component.events.map((event) => outputSource(component, event));
-  const inputs = component.properties.map((property) => inputSource(component, property));
+  const inputs = component.directiveProperties.map((property) =>
+    inputSource(component, property),
+  );
   const methods = component.methods.map((method) => methodSource(component, method));
   const marker = directiveMarker(component.exportName);
 
@@ -269,11 +308,13 @@ function genericDirectiveSource(component) {
     }\n  }`,
     ...methods,
     `  ngOnDestroy(): void {${
-      outputs.length > 0 ? `\n${outputs.map((output) => output.remove).join("\n")}` : ""
+      outputs.length > 0
+        ? `\n${outputs.map((output) => output.remove).join("\n")}`
+        : ""
     }\n  }`,
   ];
 
-  return `export type ${component.exportName}Element = VyrnForgeElementForTagName<\"${component.tag}\">;\n\n${slotSource(component)}\n\n@Directive({\n  selector: \"${component.selector}\",\n  standalone: true,\n  exportAs: \"${component.exportAs}\",\n})\nexport class ${component.exportName} implements OnDestroy {\n${bodySections.join("\n\n")}\n}`;
+  return `export type ${component.exportName}Element = VyrnForgeElementForTagName<\"${component.tag}\">;\n\n${inputContractSource(component)}\n\n${outputContractSource(component)}\n\n${slotSource(component)}\n\n@Directive({\n  selector: \"${component.selector}\",\n  standalone: true,\n  exportAs: \"${component.exportAs}\",\n})\nexport class ${component.exportName} implements OnDestroy {\n${bodySections.join("\n\n")}\n}`;
 }
 
 function specializedImports(components) {
@@ -287,16 +328,20 @@ function specializedImports(components) {
 }
 
 function registrySource(components) {
-  const lines = components.map((component) => `  ${component.exportName},`).join("\n");
+  const lines = components
+    .map((component) => `  ${component.exportName},`)
+    .join("\n");
   return `export const vyrnForgeAngularGeneratedDirectives = Object.freeze([\n${lines}\n]);`;
 }
 
 function metadataSource(components, exceptions) {
   const componentLines = components
-    .map(
-      (component) =>
-        `  Object.freeze({ id: "${component.id}", tag: "${component.tag}", selector: "${component.selector}", directive: ${component.exportName}, slots: ${component.exportName}SlotNames }),`,
-    )
+    .map((component) => {
+      const hostBoundInputs = component.hostBoundProperties
+        .map((property) => `"${property.public}"`)
+        .join(", ");
+      return `  Object.freeze({ id: "${component.id}", tag: "${component.tag}", selector: "${component.selector}", directive: ${component.exportName}, slots: ${component.exportName}SlotNames, hostBoundInputs: Object.freeze([${hostBoundInputs}]) }),`;
+    })
     .join("\n");
   const exceptionLines = exceptions
     .map(
@@ -314,7 +359,7 @@ export function serializeAngularCatalog(model) {
     .join("\n\n");
   const specializedSlotHelpers = model.components
     .filter((component) => component.specialized)
-    .map((component) => `${slotSource(component)}\n\nexport type ${component.exportName}Element = VyrnForgeElementForTagName<\"${component.tag}\">;`)
+    .map(slotSource)
     .join("\n\n");
 
   return `${GENERATED_HEADER}\nimport {\n  Directive,\n  ElementRef,\n  EventEmitter,\n  Input,\n  OnDestroy,\n  Output,\n} from "@angular/core";\nimport type {\n  VyrnForgeCanonicalEventDetailMap,\n  VyrnForgeElementForTagName,\n} from "@vyrnforge/ui-elements";\n\n${specializedImports(model.components)}\n\n${specializedSlotHelpers}\n\n${generic}\n\n${registrySource(model.components)}\n\n${metadataSource(model.components, model.exceptions)}\n`;
