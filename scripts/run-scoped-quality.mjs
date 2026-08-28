@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,15 +22,6 @@ function runNpm(args) {
   execFileSync(command, commandArgs, { cwd: root, stdio: "inherit" });
 }
 
-function readAffectedPackages() {
-  return [...new Set(
-    (process.env.CI_AFFECTED_PACKAGES ?? "")
-      .split(",")
-      .map((value) => value.trim())
-      .filter(Boolean),
-  )].sort();
-}
-
 function workspaceManifest(packageName) {
   const packagePath = packageName.replace(/^@vyrnforge\//, "");
   const manifestPath = path.join(root, "packages", packagePath, "package.json");
@@ -38,6 +29,27 @@ function workspaceManifest(packageName) {
     throw new Error(`CI selected unknown workspace ${packageName}`);
   }
   return JSON.parse(readFileSync(manifestPath, "utf8"));
+}
+
+function discoverPackageNames() {
+  const packagesRoot = path.join(root, "packages");
+  return readdirSync(packagesRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => path.join(packagesRoot, entry.name, "package.json"))
+    .filter(existsSync)
+    .map((manifestPath) => JSON.parse(readFileSync(manifestPath, "utf8")).name)
+    .filter(Boolean)
+    .sort();
+}
+
+function readAffectedPackages(full) {
+  if (full) return discoverPackageNames();
+  return [...new Set(
+    (process.env.CI_AFFECTED_PACKAGES ?? "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean),
+  )].sort();
 }
 
 function dependenciesFor(manifest) {
@@ -84,7 +96,7 @@ function runWorkspaceScript(packageName, script) {
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
-const selectedPackages = orderSelectedPackages(readAffectedPackages());
+const selectedPackages = orderSelectedPackages(readAffectedPackages(full));
 
 for (const command of [
   "format:check",
