@@ -35,9 +35,7 @@ export function installVyrnForgeVue(
   return app;
 }
 
-export function createVyrnForgeVue(
-  options: VyrnForgeVueOptions = {},
-): Plugin {
+export function createVyrnForgeVue(options: VyrnForgeVueOptions = {}): Plugin {
   return {
     install(app: App) {
       installVyrnForgeVue(app, options);

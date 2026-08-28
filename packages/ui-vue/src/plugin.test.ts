@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { VyrnForgeElementConstructor, VyrnForgeElementRegistry } from "@vyrnforge/ui-elements";
+import type {
+  VyrnForgeElementConstructor,
+  VyrnForgeElementRegistry,
+} from "@vyrnforge/ui-elements";
 import type { App, Component } from "vue";
 
 import {
