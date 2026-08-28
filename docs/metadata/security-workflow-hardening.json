@@ -45,7 +45,11 @@
   "protectedGate": {
     "workflow": ".github/workflows/ci.yml",
     "requiredCheck": "ci-gate",
-    "requiredJobs": ["quality-checks", "integration-checks", "security-checks"],
+    "requiredJobs": [
+      "quality-checks",
+      "integration-checks",
+      "security-checks"
+    ],
     "continueOnErrorForbidden": true,
     "unexpectedSkipsFail": true
   },
