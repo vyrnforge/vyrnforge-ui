@@ -24,7 +24,7 @@ function renderSlots(slots: Slots): unknown[] {
 
 function createVyrnForgeVueFacade(
   name: string,
-  tag: VyrnForgePublicElementTagName | "vf-alert",
+  tag: VyrnForgePublicElementTagName,
 ): Component {
   return defineComponent({
     name,
@@ -52,7 +52,7 @@ function createVyrnForgeVueFacade(
   });
 }
 
-export const VfAlert = createVyrnForgeVueFacade("VfAlert", "vf-alert");
+export const VfAlert = createVyrnForgeVueFacade("VfAlert", "vf-inline-message");
 export const VfAppShell = createVyrnForgeVueFacade("VfAppShell", "vf-app-shell");
 export const VfAutocomplete = createVyrnForgeVueFacade("VfAutocomplete", "vf-autocomplete");
 export const VfBadge = createVyrnForgeVueFacade("VfBadge", "vf-badge");
@@ -68,6 +68,7 @@ export const VfDateInput = createVyrnForgeVueFacade("VfDateInput", "vf-date-inpu
 export const VfDateTimeInput = createVyrnForgeVueFacade("VfDateTimeInput", "vf-datetime-input");
 export { VfDialog };
 export const VfDrawer = createVyrnForgeVueFacade("VfDrawer", "vf-drawer");
+export const VfDropdown = createVyrnForgeVueFacade("VfDropdown", "vf-popover");
 export const VfEmptyState = createVyrnForgeVueFacade("VfEmptyState", "vf-empty-state");
 export const VfErrorState = createVyrnForgeVueFacade("VfErrorState", "vf-error-state");
 export const VfField = createVyrnForgeVueFacade("VfField", "vf-field");
@@ -103,7 +104,6 @@ export const VfText = createVyrnForgeVueFacade("VfText", "vf-text");
 export { VfTextInput };
 export const VfTextarea = createVyrnForgeVueFacade("VfTextarea", "vf-textarea");
 export const VfToast = createVyrnForgeVueFacade("VfToast", "vf-toast");
-export const VfToastViewport = createVyrnForgeVueFacade("VfToastViewport", "vf-toast-viewport");
 export const VfToggleButton = createVyrnForgeVueFacade("VfToggleButton", "vf-toggle-button");
 export const VfToggleButtonGroup = createVyrnForgeVueFacade("VfToggleButtonGroup", "vf-toggle-button-group");
 export const VfToolbarButton = createVyrnForgeVueFacade("VfToolbarButton", "vf-toolbar-button");
@@ -129,6 +129,7 @@ export const vyrnForgeVueGeneratedComponents = Object.freeze([
   VfDateTimeInput,
   VfDialog,
   VfDrawer,
+  VfDropdown,
   VfEmptyState,
   VfErrorState,
   VfField,
@@ -164,7 +165,6 @@ export const vyrnForgeVueGeneratedComponents = Object.freeze([
   VfTextInput,
   VfTextarea,
   VfToast,
-  VfToastViewport,
   VfToggleButton,
   VfToggleButtonGroup,
   VfToolbarButton,
