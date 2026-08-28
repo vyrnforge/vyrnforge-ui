@@ -6,6 +6,9 @@ export {
 } from "./plugin";
 export type { VyrnForgeVueOptions } from "./plugin";
 
+export { useVyrnForgeModel } from "./model";
+export type { VyrnForgeModelAdapterOptions } from "./model";
+
 export * from "./generated/catalog.generated";
 
 export type { VfButtonElement } from "./generated/VfButton.generated";
