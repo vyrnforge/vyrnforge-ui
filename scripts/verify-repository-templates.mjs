@@ -22,9 +22,7 @@ const retiredPullRequestTemplates = [
 function read(root, relativePath, failures) {
   const absolutePath = path.join(root, relativePath);
   if (!existsSync(absolutePath)) {
-    failures.push(
-      `${relativePath}: required repository intake file is missing`,
-    );
+    failures.push(`${relativePath}: required repository intake file is missing`);
     return "";
   }
   return readFileSync(absolutePath, "utf8").replaceAll("\r\n", "\n");
@@ -45,14 +43,12 @@ function requireOrder(content, relativePath, markers, failures) {
   for (const marker of markers) {
     const index = content.indexOf(marker);
     if (index < 0) {
-      failures.push(
-        `${relativePath}: normal contribution path is missing ${marker}`,
-      );
+      failures.push(`${relativePath}: contribution path is missing ${marker}`);
       continue;
     }
     if (index <= previous) {
       failures.push(
-        `${relativePath}: normal contribution path must keep ${markers.join(" -> ")} in order`,
+        `${relativePath}: contribution path must keep ${markers.join(" -> ")} in order`,
       );
       return;
     }
@@ -97,14 +93,28 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     contributing,
     "CONTRIBUTING.md",
     [
-      "## Normal contribution path",
+      "## Integration-lane contribution path",
+      "`main` is the canonical integrated product branch.",
+      "integration/foundation",
+      "integration/native",
+      "integration/react",
+      "integration/angular",
+      "integration/vue",
+      "integration/data-grid",
+      "integration/docs",
+      "integration/platform",
+      "lane promotion",
+      "docs/governance/05-trunk-delivery.md",
       "npm ci",
       "npm run check",
       "npm test",
       "npm run build",
-      "Then open a pull request against `main`.",
+      "Open the task pull request against the owning `integration/<lane>`.",
       "scripts/detect-ci-scope.mjs",
+      "actual workspace dependency graph",
+      "Promotion PRs and pushes to `main`\nuse full validation",
       "The default pull-request template is the normal path.",
+      "A new publishable workspace must be introduced together with repository",
       "ci-cd-infrastructure.md",
       "release.md",
       "SECURITY.md",
@@ -120,7 +130,7 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
       "npm run check",
       "npm test",
       "npm run build",
-      "Then open a pull request against `main`.",
+      "Open the task pull request against the owning `integration/<lane>`.",
     ],
     failures,
   );
@@ -137,13 +147,24 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     normalTemplate,
     [
       "## Summary",
+      "## Branch / dependency",
       "## Impact",
       "## Validation",
       "## Notes",
+      "**Target lane:**",
+      "**Promotion PR:**",
+      "integration/foundation",
+      "integration/vue",
+      "**Playground or executable example:**",
+      "**Package/release lifecycle:**",
       "`npm run check`",
       "`npm test`",
       "`npm run build`",
+      "New or changed publishable workspaces have an explicit release lifecycle classification.",
+      "The PR targets the owning integration lane",
       "scripts/detect-ci-scope.mjs",
+      "Promotions into main use full CI.",
+      "docs/governance/05-trunk-delivery.md",
     ],
     failures,
   );
@@ -260,7 +281,7 @@ if (
     process.exitCode = 1;
   } else {
     console.log(
-      "Repository contribution contracts passed: one normal PR path, planner-owned CI scope, and specialist infrastructure/release intake.",
+      "Repository contribution contracts passed: integration-lane intake, promotion-to-main gates, planner-owned CI scope, and specialist infrastructure/release paths.",
     );
   }
 }
