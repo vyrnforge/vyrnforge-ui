@@ -8,7 +8,21 @@ The repository is source-available under the
 [VyrnForge Source License 1.0](LICENSE). Do not describe it as open source or
 broaden the rights granted by the license.
 
-## Normal contribution path
+## Trunk-based contribution path
+
+`main` is the only long-lived development branch. React, Angular, Vue, Native
+HTML, docs, and other package lanes use short-lived work branches rather than
+permanent framework or integration branches.
+
+Create a branch from current `main` for the tracker item or bounded
+infrastructure objective, for example `mfd-1301-vue-public-package` or
+`infra/trunk-ci-delivery-contract`. Only stack a branch on another unmerged branch
+when there is a real technical/tracker dependency; identify that dependency in
+the PR and rebase or retarget onto `main` after the prerequisite merges.
+
+The complete branch, change-impact, merge, documentation, playground, and
+deployment contract is documented in
+[`docs/governance/05-trunk-delivery.md`](docs/governance/05-trunk-delivery.md).
 
 Repository development uses the Node.js and npm versions pinned by `.nvmrc`,
 `.node-version`, and the root `packageManager`.
@@ -18,23 +32,24 @@ git clone https://github.com/vyrnforge/vyrnforge-ui.git
 cd vyrnforge-ui
 npm ci
 
-# make the focused change
+# create a short-lived branch and make the focused change
 
 npm run check
 npm test
 npm run build
 ```
 
-Then open a pull request against `main`.
+Open the pull request against `main` unless it is an explicitly documented
+stacked dependency.
 
-Those are the normal contributor commands. CI determines the required technical
-scope from the changed paths with `scripts/detect-ci-scope.mjs`; contributors do
-not need to predict package, consumer, docs, browser, or fixture jobs in the PR
-description.
+Those are the normal contributor commands. CI determines required technical
+scope from changed paths and the actual workspace dependency graph with
+`scripts/detect-ci-scope.mjs`; contributors do not maintain a duplicated package
+matrix in the PR description.
 
 `npm run ci` is available for complete local repository validation when a
-maintainer, infrastructure change, or unusually broad change needs it. It is not
-an extra step required for every normal pull request.
+maintainer, infrastructure change, or unusually broad change needs it. Pushes to
+`main` are always fully validated regardless of PR scope.
 
 ## Before changing UI
 
@@ -55,7 +70,7 @@ Package boundaries are documented in
 [`docs/architecture/01-package-boundaries.md`](docs/architecture/01-package-boundaries.md).
 The documentation entrypoint is [`docs/README.md`](docs/README.md).
 
-## Quality expectations
+## Quality and change-impact expectations
 
 Changes should preserve accessibility, keyboard behavior, focus management,
 theme and density behavior, internationalization readiness, package boundaries,
@@ -63,21 +78,29 @@ and public API compatibility where applicable.
 
 Add or update tests for changed public behavior. Update canonical docs and
 metadata when public APIs, components, tokens, package exports, release
-behavior, or supported usage changes. Prefer links to canonical documentation
-over duplicated procedures or component lists.
+behavior, installation, migration, or supported usage changes. Update the
+playground/example surface when a new or materially changed public capability
+benefits from executable demonstration; do not churn it for internal refactors.
 
-Do not commit credentials, `.env` files, `node_modules`, logs, archives, package
-tarballs, or generated build output that the repository does not explicitly
-track.
+A new publishable workspace must be introduced together with repository
+inventory, dependency/CI impact, consumer evidence, documentation impact, and an
+explicit release lifecycle classification. Publication may be deferred, but an
+unclassified publishable workspace is not an acceptable intermediate state.
+
+Prefer links to canonical documentation over duplicated procedures or component
+lists. Do not commit credentials, `.env` files, `node_modules`, logs, archives,
+package tarballs, or generated build output that the repository does not
+explicitly track.
 
 ## Pull requests
 
 The default pull-request template is the normal path. Describe:
 
 - what changed and why;
-- public API, CSS, behavior, documentation, or migration impact;
+- public API, CSS, behavior, documentation, playground/example, release, or
+  migration impact;
 - the validation you ran;
-- relevant screenshots, limitations, or follow-up work.
+- relevant screenshots, limitations, dependencies, or follow-up work.
 
 The CI planner is authoritative for executed checks. Do not copy a package
 matrix or internal CI workflow topology into the PR.
