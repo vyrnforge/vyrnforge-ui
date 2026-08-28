@@ -48,7 +48,9 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   if (manifest.task?.id !== "BT-8006" || manifest.task?.status !== "done") {
     failures.push("security contract must record BT-8006 as done");
   }
-  if (JSON.stringify(manifest.task?.dependsOn) !== JSON.stringify(["BT-8003"])) {
+  if (
+    JSON.stringify(manifest.task?.dependsOn) !== JSON.stringify(["BT-8003"])
+  ) {
     failures.push("BT-8006 must depend on BT-8003");
   }
   if (
@@ -71,11 +73,19 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "if: needs.plan.outputs.security == 'true'",
     "name: ci-gate",
   ]) {
-    if (!ci.includes(marker)) failures.push(`${ciWorkflowPath}: missing ${marker}`);
+    if (!ci.includes(marker)) {
+      failures.push(`${ciWorkflowPath}: missing ${marker}`);
+    }
   }
   const ciGate = ci.slice(ci.indexOf("  ci-gate:"));
-  for (const marker of ["- security-checks", "SECURITY_RESULT", "scripts/write-ci-summary.mjs"]) {
-    if (!ciGate.includes(marker)) failures.push(`ci-gate must evaluate ${marker}`);
+  for (const marker of [
+    "- security-checks",
+    "SECURITY_RESULT",
+    "scripts/write-ci-summary.mjs",
+  ]) {
+    if (!ciGate.includes(marker)) {
+      failures.push(`ci-gate must evaluate ${marker}`);
+    }
   }
   if (/continue-on-error:\s*true/u.test(ci)) {
     failures.push("CI security checks must not conceal mandatory failures");
@@ -104,9 +114,14 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   const verifyReleaseStart = release.indexOf("  verify-release:");
   const publishPackagesStart = release.indexOf("  publish-packages:");
   if (verifyReleaseStart < 0 || publishPackagesStart <= verifyReleaseStart) {
-    failures.push("release.yml is missing the canonical verify-release boundary");
+    failures.push(
+      "release.yml is missing the canonical verify-release boundary",
+    );
   } else {
-    const verifyReleaseSection = release.slice(verifyReleaseStart, publishPackagesStart);
+    const verifyReleaseSection = release.slice(
+      verifyReleaseStart,
+      publishPackagesStart,
+    );
     for (const marker of [
       "Resolve successful current-main CI run",
       "actions/workflows/ci.yml/runs",
@@ -115,32 +130,42 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
       "npm run verify:release-size-budgets",
     ]) {
       if (!verifyReleaseSection.includes(marker)) {
-        failures.push(`release.yml verify-release is missing current-main release control: ${marker}`);
+        failures.push(
+          `release.yml verify-release is missing current-main release control: ${marker}`,
+        );
       }
     }
   }
   if (release.includes("uses: ./.github/workflows/")) {
-    failures.push("release.yml must not repeat successful main CI through reusable workflows");
+    failures.push(
+      "release.yml must not repeat successful main CI through reusable workflows",
+    );
   }
 
   if (
     JSON.stringify(manifest.controls?.mandatoryAggregates) !==
     JSON.stringify(["ci-gate", "assurance-gate"])
   ) {
-    failures.push("security contract mandatory aggregates must be ci-gate and assurance-gate");
+    failures.push(
+      "security contract mandatory aggregates must be ci-gate and assurance-gate",
+    );
   }
   if (
     manifest.controls?.dependencyReview?.workflow !== ciWorkflowPath ||
     manifest.controls?.codeql?.workflow !== assuranceWorkflowPath
   ) {
-    failures.push("security contract must map dependency review to CI and CodeQL to weekly assurance");
+    failures.push(
+      "security contract must map dependency review to CI and CodeQL to weekly assurance",
+    );
   }
   if (
     manifest.releasePreflight?.successfulCurrentMainCiRequired !== true ||
     manifest.releasePreflight?.releaseArtifactVerificationRequired !== true ||
     manifest.releasePreflight?.releaseLineSizeBudgetVerificationRequired !== true
   ) {
-    failures.push("security contract release boundary must trust current-main CI and verify retained release artifacts");
+    failures.push(
+      "security contract release boundary must trust current-main CI and verify retained release artifacts",
+    );
   }
 
   const documentation = read(root, securityDocumentationPath);
