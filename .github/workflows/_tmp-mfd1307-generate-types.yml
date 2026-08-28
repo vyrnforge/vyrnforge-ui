@@ -1,0 +1,123 @@
+name: Temporary MFD-1307 generated type surface
+
+on:
+  push:
+    branches: [tmp/MFD-1307-generate-types]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - run: npm ci
+      - name: Register Vue typed catalog artifact
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from "node:fs";
+
+          const registryFile = "scripts/generated-framework-artifacts.mjs";
+          let registry = readFileSync(registryFile, "utf8");
+          const importAnchor = 'import { buildVueCatalogArtifact } from "./vue-catalog-generation.mjs";\n';
+          if (!registry.includes(importAnchor)) throw new Error("Vue catalog import anchor missing");
+          registry = registry.replace(
+            importAnchor,
+            `${importAnchor}import { buildVueTypedCatalogArtifact } from "./vue-type-generation.mjs";\n`,
+          );
+          const buildAnchor = "  const vueCatalog = buildVueCatalogArtifact({ root });\n";
+          if (!registry.includes(buildAnchor)) throw new Error("Vue catalog build anchor missing");
+          registry = registry.replace(
+            buildAnchor,
+            `${buildAnchor}  const vueTypes = buildVueTypedCatalogArtifact({ root });\n`,
+          );
+          const artifactAnchor = `    freezeArtifact({\n      path: vueCatalog.path,\n      generator: "scripts/vue-catalog-generation.mjs",\n      command: "npm run generate:framework-artifacts",\n      sourceRecords: vueCatalog.sourceRecords,\n      content: vueCatalog.content,\n    }),\n`;
+          if (!registry.includes(artifactAnchor)) throw new Error("Vue catalog artifact anchor missing");
+          registry = registry.replace(
+            artifactAnchor,
+            `${artifactAnchor}    freezeArtifact({\n      path: vueTypes.path,\n      generator: "scripts/vue-type-generation.mjs",\n      command: "npm run generate:framework-artifacts",\n      sourceRecords: vueTypes.sourceRecords,\n      content: vueTypes.content,\n    }),\n`,
+          );
+          writeFileSync(registryFile, registry, "utf8");
+
+          const testFile = "scripts/generated-framework-artifacts.test.mjs";
+          let test = readFileSync(testFile, "utf8");
+          if (!test.includes("assert.equal(artifacts.length, 21);")) throw new Error("artifact count anchor missing");
+          test = test.replace("assert.equal(artifacts.length, 21);", "assert.equal(artifacts.length, 22);");
+          const pathAnchor = '      "packages/ui-vue/src/generated/catalog.generated.ts",\n';
+          if (!test.includes(pathAnchor)) throw new Error("catalog path anchor missing");
+          test = test.replace(pathAnchor, `${pathAnchor}      "packages/ui-vue/src/generated/typed-catalog.generated.ts",\n`);
+          writeFileSync(testFile, test, "utf8");
+
+          const indexFile = "packages/ui-vue/src/index.ts";
+          let index = readFileSync(indexFile, "utf8");
+          const exportAnchor = 'export * from "./generated/catalog.generated";';
+          if (!index.includes(exportAnchor)) throw new Error("public catalog export anchor missing");
+          index = index.replace(exportAnchor, 'export * from "./generated/typed-catalog.generated";');
+          writeFileSync(indexFile, index, "utf8");
+          NODE
+      - name: Add Vue type-check consumer
+        run: |
+          cat > packages/ui-vue/src/type-surface.consumer.vue <<'VUE'
+          <script setup lang="ts">
+          import { ref } from "vue";
+          import {
+            VfDialog,
+            VfTextInput,
+            VfToggleButton,
+            type VfDialogRef,
+            type VfTextInputRef,
+          } from "./index";
+
+          const text = ref("typed");
+          const open = ref(false);
+          const pressed = ref(false);
+          const textRef = ref<VfTextInputRef | null>(null);
+          const dialogRef = ref<VfDialogRef | null>(null);
+
+          textRef.value?.focus();
+          textRef.value?.checkValidity();
+          dialogRef.value?.show();
+          dialogRef.value?.close();
+          </script>
+
+          <template>
+            <VfTextInput ref="textRef" v-model="text" label="Typed" />
+            <VfDialog ref="dialogRef" v-model:open="open">
+              <template #header>Header</template>
+              Typed dialog
+            </VfDialog>
+            <VfToggleButton v-model:pressed="pressed">Toggle</VfToggleButton>
+            <!-- @vue-expect-error modelValue is canonically a string -->
+            <VfTextInput :model-value="123" />
+            <!-- @vue-expect-error unknown slots are rejected by the generated public surface -->
+            <VfDialog><template #not-a-slot>Invalid</template></VfDialog>
+          </template>
+          VUE
+      - name: Install Vue type checker
+        run: npm install --save-dev vue-tsc --workspace @vyrnforge/ui-vue
+      - name: Wire Vue typecheck
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from "node:fs";
+          const file = "packages/ui-vue/package.json";
+          const pkg = JSON.parse(readFileSync(file, "utf8"));
+          pkg.scripts.typecheck = "vue-tsc -p tsconfig.json --noEmit";
+          writeFileSync(file, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
+          NODE
+      - run: npm run generate:framework-artifacts
+      - run: npx prettier scripts/vue-type-generation.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs packages/ui-vue/src/index.ts packages/ui-vue/src/type-surface.consumer.vue packages/ui-vue/package.json package-lock.json --write
+      - run: npm run typecheck --workspace @vyrnforge/ui-vue
+      - run: npm run test:generated-framework-artifacts
+      - name: Commit clean task tree
+        run: |
+          rm .github/workflows/_tmp-mfd1307-generate-types.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat(vue): generate typed public catalog"
+          git push
