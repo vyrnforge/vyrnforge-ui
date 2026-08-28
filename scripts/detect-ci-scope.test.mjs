@@ -37,7 +37,13 @@ test("package runtime changes derive affected workspaces from the dependency gra
 test("package tests select only their own workspace quality", () => {
   const plan = planCiScope(["packages/ui-data-grid/src/grid.test.tsx"]);
   expectEnabled(plan, ["quality"]);
-  expectDisabled(plan, ["packages", "consumer", "docs", "playground", "full"]);
+  expectDisabled(plan, [
+    "packages",
+    "consumer",
+    "docs",
+    "playground",
+    "full",
+  ]);
   assert.deepEqual(plan.affected_packages, ["@vyrnforge/ui-data-grid"]);
 });
 
@@ -50,7 +56,13 @@ test("package README changes verify the published payload and consumer", () => {
 
 test("package configuration changes include metadata validation", () => {
   const plan = planCiScope(["packages/ui-elements/package.json"]);
-  expectEnabled(plan, ["quality", "metadata", "packages", "consumer", "docs"]);
+  expectEnabled(plan, [
+    "quality",
+    "metadata",
+    "packages",
+    "consumer",
+    "docs",
+  ]);
   assert.ok(plan.affected_packages.includes("@vyrnforge/ui-elements"));
 });
 
@@ -71,13 +83,26 @@ test("canonical docs-only changes build docs without package runtime checks", ()
 test("metadata changes verify metadata and build docs", () => {
   const plan = planCiScope(["docs/metadata/components.json"]);
   expectEnabled(plan, ["quality", "metadata", "docs", "integration"]);
-  expectDisabled(plan, ["packages", "consumer", "playground", "full", "docs_only"]);
+  expectDisabled(plan, [
+    "packages",
+    "consumer",
+    "playground",
+    "full",
+    "docs_only",
+  ]);
 });
 
 test("playground changes build the playground without full fallback", () => {
   const plan = planCiScope(["examples/basic-playground/src/App.tsx"]);
   expectEnabled(plan, ["playground", "integration"]);
-  expectDisabled(plan, ["quality", "packages", "consumer", "docs", "browser", "full"]);
+  expectDisabled(plan, [
+    "quality",
+    "packages",
+    "consumer",
+    "docs",
+    "browser",
+    "full",
+  ]);
 });
 
 test("consumer fixture changes select the packed-consumer gate", () => {
@@ -87,14 +112,32 @@ test("consumer fixture changes select the packed-consumer gate", () => {
   ]) {
     const plan = planCiScope([file]);
     expectEnabled(plan, ["consumer", "integration"]);
-    expectDisabled(plan, ["quality", "packages", "docs", "playground", "full"]);
+    expectDisabled(plan, [
+      "quality",
+      "packages",
+      "docs",
+      "playground",
+      "full",
+    ]);
   }
 });
 
 test("multi-framework fixture changes run architecture, consumer, and docs checks", () => {
   const plan = planCiScope(["tests/consumers/angular/example.component.ts"]);
-  expectEnabled(plan, ["quality", "metadata", "consumer", "docs", "integration"]);
-  expectDisabled(plan, ["packages", "playground", "browser", "full", "docs_only"]);
+  expectEnabled(plan, [
+    "quality",
+    "metadata",
+    "consumer",
+    "docs",
+    "integration",
+  ]);
+  expectDisabled(plan, [
+    "packages",
+    "playground",
+    "browser",
+    "full",
+    "docs_only",
+  ]);
 });
 
 test("repository template changes run quality contract verification", () => {
@@ -168,7 +211,14 @@ test("browser contract changes run browser and quality checks", () => {
 
 test("visual regression metadata selects browser, fixture, quality, and docs", () => {
   const plan = planCiScope(["docs/metadata/visual-regression-matrix.json"]);
-  expectEnabled(plan, ["quality", "metadata", "docs", "fixtures", "browser", "integration"]);
+  expectEnabled(plan, [
+    "quality",
+    "metadata",
+    "docs",
+    "fixtures",
+    "browser",
+    "integration",
+  ]);
   expectDisabled(plan, ["full", "docs_only"]);
 });
 
