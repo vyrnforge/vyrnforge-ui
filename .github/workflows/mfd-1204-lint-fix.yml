@@ -26,8 +26,24 @@ jobs:
         run: npm install --global npm@11.16.0
       - name: Install dependencies
         run: npm ci
-      - name: Fix authored generator lint
-        run: npx eslint scripts/angular-catalog-generation.mjs scripts/verify-angular-catalog-coverage.mjs --config eslint.config.mjs --fix
+      - name: Remove unnecessary template quote escapes
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          target = chr(92) + '"'
+          for relative in [
+              'scripts/angular-catalog-generation.mjs',
+              'scripts/verify-angular-catalog-coverage.mjs',
+          ]:
+              path = Path(relative)
+              text = path.read_text()
+              count = text.count(target)
+              if count == 0:
+                  raise SystemExit(f'{relative}: no escaped quotes found')
+              path.write_text(text.replace(target, '"'))
+              print(f'{relative}: removed {count} unnecessary quote escapes')
+          PY
+          npx prettier --write scripts/angular-catalog-generation.mjs scripts/verify-angular-catalog-coverage.mjs
       - name: Regenerate and verify
         run: |
           npm run generate:framework-artifacts
