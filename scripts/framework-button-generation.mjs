@@ -5,7 +5,7 @@ export const FRAMEWORK_BUTTON_ARTIFACT_PATHS = Object.freeze({
   native: "tests/consumers/native-html/src/generated/vf-button.generated.ts",
   react: "tests/consumers/react/src/generated/Button.generated.tsx",
   angular: "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
-  vue: "tests/consumers/vue/src/generated/VfButton.generated.ts",
+  vue: "packages/ui-vue/src/generated/VfButton.generated.ts",
 });
 
 const GENERATED_HEADER = `/**

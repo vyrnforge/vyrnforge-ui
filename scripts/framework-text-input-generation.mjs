@@ -6,7 +6,7 @@ export const FRAMEWORK_TEXT_INPUT_ARTIFACT_PATHS = Object.freeze({
   react: "tests/consumers/react/src/generated/TextInput.generated.tsx",
   angular:
     "tests/consumers/angular/src/app/generated/vf-text-input.generated.ts",
-  vue: "tests/consumers/vue/src/generated/VfTextInput.generated.ts",
+  vue: "packages/ui-vue/src/generated/VfTextInput.generated.ts",
 });
 
 const TASK_ID = "MFD-1113";

@@ -4,7 +4,7 @@ export const FRAMEWORK_TABS_ARTIFACT_PATHS = Object.freeze({
   native: "tests/consumers/native-html/src/generated/vf-tabs.generated.ts",
   react: "tests/consumers/react/src/generated/Tabs.generated.tsx",
   angular: "tests/consumers/angular/src/app/generated/vf-tabs.generated.ts",
-  vue: "tests/consumers/vue/src/generated/VfTabs.generated.ts",
+  vue: "packages/ui-vue/src/generated/VfTabs.generated.ts",
 });
 
 const TASK_ID = "MFD-1114";
