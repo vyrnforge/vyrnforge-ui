@@ -26,6 +26,23 @@ jobs:
         run: npm install --global npm@11.16.0
       - name: Install dependencies
         run: npm ci
+      - name: Finalize canonical event field mapping
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          path = Path('scripts/angular-catalog-generation.mjs')
+          text = path.read_text()
+          old = 'function mappedEventField(record, event) {\n  if (event.detail === "value") return "value";\n  if (event.detail !== "mapped") return null;\n\n  const modelProperty = record.model?.property;\n  if (\n    modelProperty &&\n    event.detailFields.some((field) => field.name === modelProperty)\n  ) {\n    return modelProperty;\n  }\n  if (event.detailFields.length === 1) return event.detailFields[0].name;\n  return null;\n}'
+          new = 'function mappedEventField(record, event) {\n  const hasField = (name) =>\n    Boolean(name) && event.detailFields.some((field) => field.name === name);\n  const publicChangeField = event.public.endsWith("Change")\n    ? `${event.public.slice(0, -"Change".length)}`\n    : null;\n\n  if (event.detail === "value") {\n    if (hasField(publicChangeField)) return publicChangeField;\n    if (hasField("value")) return "value";\n    const modelProperty = record.model?.property;\n    if (hasField(modelProperty)) return modelProperty;\n    return null;\n  }\n  if (event.detail !== "mapped") return null;\n\n  const modelProperty = record.model?.property;\n  if (hasField(modelProperty)) return modelProperty;\n  if (hasField(publicChangeField)) return publicChangeField;\n  if (event.detailFields.length === 1) return event.detailFields[0].name;\n  return null;\n}'
+          if old not in text:
+              raise SystemExit('mappedEventField patch target not found')
+          text = text.replace(old, new)
+          old_validation = '      if (event.detail === "mapped") {\n        assert(\n          mappedEventField(record, event),\n          `${record.id}: mapped output ${event.public} needs a deterministic canonical field or specialization`,\n        );\n      }\n      if (event.detail === "value") {\n        assert(\n          event.detailFields.some((field) => field.name === "value"),\n          `${record.id}: value output ${event.public} is missing canonical detail.value`,\n        );\n      }'
+          new_validation = '      if (event.detail === "mapped" || event.detail === "value") {\n        assert(\n          mappedEventField(record, event),\n          `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,\n        );\n      }'
+          if old_validation not in text:
+              raise SystemExit('event validation patch target not found')
+          path.write_text(text)
+          PY
       - name: Format authored sources
         run: npx prettier --write scripts/angular-catalog-generation.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs scripts/verify-angular-catalog-coverage.mjs packages/ui-angular/src/index.ts packages/ui-angular/src/index.test.ts packages/ui-angular/package.json packages/ui-angular/README.md
       - name: Generate framework artifacts
