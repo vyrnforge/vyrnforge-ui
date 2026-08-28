@@ -18,6 +18,7 @@ export const scopeKeys = [
   "browser",
   "full",
   "docs_only",
+  "delivery",
 ];
 
 const rootDocumentationFiles = new Set([
@@ -145,10 +146,29 @@ function markPackagePayload(scope) {
 
 function markFull(scope, selectedPackages) {
   for (const key of scopeKeys) {
-    if (key !== "docs_only") scope[key] = true;
+    if (key !== "docs_only" && key !== "delivery") scope[key] = true;
   }
   for (const record of packageRecords) selectedPackages.add(record.name);
   scope.docs_only = false;
+  scope.delivery = false;
+}
+
+export function planDeliveryScope() {
+  const scope = createScope();
+  scope.integration = true;
+  scope.docs = true;
+  scope.playground = true;
+  scope.delivery = true;
+
+  return {
+    ...scope,
+    affected_packages: [],
+    affected_packages_csv: "",
+    changed_files: [],
+    reasons: [
+      "exact-main delivery rebuild after full promotion or hotfix validation",
+    ],
+  };
 }
 
 function findPackage(file) {
@@ -424,16 +444,19 @@ function isMainModule() {
 }
 
 if (isMainModule()) {
+  const delivery = process.argv.includes("--delivery");
   const forceFull = process.argv.includes("--full");
   const base = readArgument("--base") ?? process.env.CI_BASE_SHA;
   const head = readArgument("--head") ?? process.env.CI_HEAD_SHA;
   const filesFrom = readArgument("--files-from");
   const githubOutput =
     readArgument("--github-output") ?? process.env.GITHUB_OUTPUT;
-  const files = readChangedFiles({ base, head, filesFrom });
-  const plan = planCiScope(files, {
-    forceFull: forceFull || isZeroSha(base) || !head,
-  });
+  const files = delivery ? [] : readChangedFiles({ base, head, filesFrom });
+  const plan = delivery
+    ? planDeliveryScope()
+    : planCiScope(files, {
+        forceFull: forceFull || isZeroSha(base) || !head,
+      });
 
   if (githubOutput) writeGitHubOutput(githubOutput, plan);
   process.stdout.write(`${JSON.stringify(plan, null, 2)}\n`);
