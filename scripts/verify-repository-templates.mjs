@@ -22,7 +22,9 @@ const retiredPullRequestTemplates = [
 function read(root, relativePath, failures) {
   const absolutePath = path.join(root, relativePath);
   if (!existsSync(absolutePath)) {
-    failures.push(`${relativePath}: required repository intake file is missing`);
+    failures.push(
+      `${relativePath}: required repository intake file is missing`,
+    );
     return "";
   }
   return readFileSync(absolutePath, "utf8").replaceAll("\r\n", "\n");
