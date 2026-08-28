@@ -1,0 +1,29 @@
+name: Temporary MFD-1306 model generation
+on:
+  push:
+    branches: [tmp/MFD-1306-generate]
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - run: npm ci
+      - run: npm run generate:framework-artifacts
+      - run: npx prettier scripts/vue-catalog-generation.mjs scripts/verify-vue-model-matrix.mjs packages/ui-vue/src/model.test.ts packages/ui-vue/package.json packages/ui-vue/src/generated/catalog.generated.ts --write
+      - run: npm run typecheck --workspace @vyrnforge/ui-vue
+      - run: npm test --workspace @vyrnforge/ui-vue
+      - run: npm run test:generated-framework-artifacts
+      - name: Commit clean task tree
+        run: |
+          rm .github/workflows/_tmp-mfd1306-generate.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat(vue): generate canonical model matrix"
+          git push
