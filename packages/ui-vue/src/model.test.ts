@@ -4,7 +4,10 @@ import { describe, expect, it } from "vitest";
 import { useVyrnForgeModel } from "./model";
 
 class ModelEvent<T> extends Event {
-  constructor(name: string, readonly value: T) {
+  constructor(
+    name: string,
+    readonly value: T,
+  ) {
     super(name);
   }
 }
