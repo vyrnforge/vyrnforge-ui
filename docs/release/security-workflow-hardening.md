@@ -9,7 +9,7 @@ release boundary. The canonical control contract is
 Security responsibilities are owned directly by the two validation lifecycle
 workflows rather than by a separately exposed reusable workflow.
 
-`VyrnForge CI` performs pull-request dependency review when the change planner
+`VyrnForge CI` performs pull-request `dependency-review` when the change planner
 selects security work, fails on high-severity findings, installs the pinned
 actionlint 1.7.12 binary after validating its SHA-256, requires ShellCheck, and
 verifies VyrnForge workflow/security contracts and immutable external Action
