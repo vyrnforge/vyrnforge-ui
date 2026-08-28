@@ -94,13 +94,13 @@ export function serializeVueCatalog(components) {
 
   return `${GENERATED_HEADER}
 import { defineComponent, h, useAttrs } from "vue";
-import type { Component, Slots } from "vue";
+import type { Component, Slots, VNode } from "vue";
 import type { VyrnForgePublicElementTagName } from "@vyrnforge/ui-elements";
 
 ${specializedImports}
 
-function renderSlots(slots: Slots): unknown[] {
-  const children: unknown[] = [];
+function renderSlots(slots: Slots): VNode[] {
+  const children: VNode[] = [];
   if (slots.default) children.push(...slots.default());
   for (const [name, slot] of Object.entries(slots)) {
     if (name === "default" || !slot) continue;
