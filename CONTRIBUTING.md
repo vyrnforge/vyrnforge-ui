@@ -65,9 +65,11 @@ scope from changed paths and the actual workspace dependency graph with
 `scripts/detect-ci-scope.mjs`; contributors do not maintain a duplicated package
 matrix in the PR description.
 
-Task and lane commits use affected-scope CI. Promotion PRs and pushes to `main`
-use full validation so independently moving lanes are revalidated together at
-the canonical integration boundary.
+Task PRs use affected-scope CI. Promotion and emergency-hotfix PRs into `main`
+use full validation. Accepted integration-lane merges and routine lane
+synchronization do not start a duplicate CI run. After a successful main-boundary
+PR merges, the exact `main` push runs only the delivery scope required to build
+commit-bound deployment artifacts; it does not repeat the full promotion suite.
 
 `npm run ci` is available for complete local repository validation when a
 maintainer, infrastructure change, promotion preparation, or unusually broad
