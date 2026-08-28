@@ -50,7 +50,11 @@ const packResult = JSON.parse(
   ),
 );
 
-assert.equal(packResult.length, 1, "Vue workspace should produce one packed artifact");
+assert.equal(
+  packResult.length,
+  1,
+  "Vue workspace should produce one packed artifact",
+);
 assert.equal(packResult[0].name, "@vyrnforge/ui-vue");
 
 console.log(
