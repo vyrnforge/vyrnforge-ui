@@ -39,6 +39,7 @@ const packageDefinitions = [
     directory: "packages/ui-elements",
     customElements: true,
   },
+  { name: "@vyrnforge/ui-angular", directory: "packages/ui-angular" },
 ];
 
 const allFixtures = [
@@ -74,6 +75,12 @@ const allFixtures = [
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-elements",
+    ],
+    packedPackageNames: [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
+      "@vyrnforge/ui-angular",
     ],
   },
   {
@@ -347,7 +354,9 @@ function selectFixtureRegistryPackages(fixture) {
 }
 
 function selectFixtureTarballs(fixture, tarballs) {
-  const packageNames = new Set(fixture.packageNames);
+  const packageNames = new Set(
+    fixture.packedPackageNames ?? fixture.packageNames,
+  );
   return tarballs.filter((tarball) => packageNames.has(tarball.name));
 }
 
@@ -1234,9 +1243,12 @@ try {
     runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {
       stdio: "inherit",
     });
+    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-angular"], {
+      stdio: "inherit",
+    });
 
     console.log(
-      "Packing ui-core, ui-behaviors, ui-components, and ui-elements...",
+      "Packing ui-core, ui-behaviors, ui-components, ui-elements, and ui-angular...",
     );
     tarballs = packPackages();
   } else {

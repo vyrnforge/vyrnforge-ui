@@ -10,8 +10,27 @@ This workspace promotes the Angular directive slices proven during the S11 consu
 - `VfTextInput`
 - `VfTabs`
 - `VfDialog`
+- `provideVyrnForge()` application setup
 
-The package is intentionally private while the Angular distribution lane is being completed. One-step application setup, full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.
+The package is intentionally private while the Angular distribution lane is being completed. Full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.
+
+## Application setup
+
+Register the canonical VyrnForge elements once at the Angular application boundary:
+
+```ts
+import { provideZonelessChangeDetection } from "@angular/core";
+import { bootstrapApplication } from "@angular/platform-browser";
+import { provideVyrnForge } from "@vyrnforge/ui-angular";
+
+import { AppComponent } from "./app/app.component";
+
+bootstrapApplication(AppComponent, {
+  providers: [provideZonelessChangeDetection(), provideVyrnForge()],
+});
+```
+
+`provideVyrnForge()` uses an Angular environment initializer and delegates element registration to the canonical `@vyrnforge/ui-elements` registry. Applications do not need to copy registration code or import the native registration subpath themselves. An optional `elementRegistry` can be supplied for controlled hosts or tests.
 
 ## Dependency contract
 

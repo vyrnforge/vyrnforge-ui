@@ -11,19 +11,16 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from "@angular/forms";
-import type {
-  VyrnForgeActionDetail,
-  VyrnForgeElementForTagName,
-  VyrnForgeTabItem,
-} from "@vyrnforge/ui-elements";
-
-import { VfButton } from "./generated/vf-button.generated";
 import {
+  VfButton,
   VfDialog,
+  VfTabs,
+  VfTextInput,
   type GeneratedDialogDismissDetail,
-} from "./generated/vf-dialog.generated";
-import { VfTabs } from "./generated/vf-tabs.generated";
-import { VfTextInput } from "./generated/vf-text-input.generated";
+  type VyrnForgeActionDetail,
+  type VyrnForgeElementForTagName,
+  type VyrnForgeTabItem,
+} from "@vyrnforge/ui-angular";
 import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
 
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
