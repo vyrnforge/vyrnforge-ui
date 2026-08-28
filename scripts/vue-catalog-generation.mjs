@@ -20,6 +20,37 @@ function assert(condition, message) {
   if (!condition) throw new Error(`Vue catalog generation: ${message}`);
 }
 
+function createModelRecord(record) {
+  const model = record.adapter.vModel;
+  if (!model.enabled) return null;
+  const changeEvent = record.events.find(
+    (event) => event.canonical === model.canonicalChangeEvent,
+  );
+  assert(
+    changeEvent,
+    `${record.id}: canonical v-model change event ${model.canonicalChangeEvent} is missing`,
+  );
+  const preferredField = changeEvent.detailFields.find(
+    (field) =>
+      field.name === model.canonicalKind ||
+      field.name === model.canonicalProperty ||
+      field.name === "value",
+  );
+  const detailField = preferredField ?? changeEvent.detailFields[0];
+  assert(
+    detailField,
+    `${record.id}: canonical v-model event detail field is missing`,
+  );
+  return Object.freeze({
+    kind: model.canonicalKind,
+    canonicalProperty: model.canonicalProperty,
+    canonicalChangeEvent: model.canonicalChangeEvent,
+    publicProperty: model.publicProperty,
+    publicEvent: model.publicEvent,
+    detailField: detailField.name,
+  });
+}
+
 export function createVueCatalogModel(generationModel) {
   const vue = generationModel.surfaces.vue.components;
   const nativeById = new Map(
@@ -54,6 +85,7 @@ export function createVueCatalogModel(generationModel) {
         exportName: record.export,
         tag: native.tag,
         specialized: SPECIALIZED.has(record.id),
+        model: createModelRecord(record),
       };
     })
     .sort((left, right) => compareText(left.id, right.id));
@@ -61,6 +93,10 @@ export function createVueCatalogModel(generationModel) {
   assert(
     components.length === 59,
     `expected 59 supported non-grid contracts, received ${components.length}`,
+  );
+  assert(
+    components.filter((entry) => entry.model).length === 29,
+    "expected 29 canonical Vue model mappings",
   );
   assert(
     new Set(components.map((entry) => entry.id)).size === components.length,
@@ -74,9 +110,14 @@ export function createVueCatalogModel(generationModel) {
   return Object.freeze(components);
 }
 
+function serializeModel(model) {
+  if (!model) return "undefined";
+  return JSON.stringify(model);
+}
+
 function genericExportLine(component) {
   if (component.specialized) return `export { ${component.exportName} };`;
-  return `export const ${component.exportName} = createVyrnForgeVueFacade("${component.exportName}", "${component.tag}");`;
+  return `export const ${component.exportName} = createVyrnForgeVueFacade("${component.exportName}", "${component.tag}", ${serializeModel(component.model)});`;
 }
 
 export function serializeVueCatalog(components) {
@@ -93,11 +134,23 @@ export function serializeVueCatalog(components) {
     .join("\n");
 
   return `${GENERATED_HEADER}
-import { defineComponent, h, useAttrs } from "vue";
-import type { Component, Slots, VNode } from "vue";
+import { defineComponent, h, ref, toRef, useAttrs } from "vue";
+import type { Component, Ref, Slots, VNode } from "vue";
 import type { VyrnForgePublicElementTagName } from "@vyrnforge/ui-elements";
+import { useVyrnForgeModel } from "../model";
 
 ${specializedImports}
+
+interface GeneratedVueModel {
+  readonly kind: string;
+  readonly canonicalProperty: string;
+  readonly canonicalChangeEvent: string;
+  readonly publicProperty: string;
+  readonly publicEvent: string;
+  readonly detailField: string;
+}
+
+type GeneratedModelElement = Element & EventTarget & Record<string, unknown>;
 
 function renderSlots(slots: Slots): VNode[] {
   const children: VNode[] = [];
@@ -112,16 +165,34 @@ function renderSlots(slots: Slots): VNode[] {
 function createVyrnForgeVueFacade(
   name: string,
   tag: VyrnForgePublicElementTagName,
+  model?: GeneratedVueModel,
 ): Component {
   return defineComponent({
     name,
     inheritAttrs: false,
-    setup(_, { slots, expose }) {
+    props: model ? { [model.publicProperty]: null } : undefined,
+    emits: model ? [model.publicEvent] : undefined,
+    setup(props, { slots, expose, emit }) {
       const attrs = useAttrs();
-      let element: Element | null = null;
+      const element = ref<GeneratedModelElement | null>(null);
+
+      if (model) {
+        useVyrnForgeModel({
+          element,
+          modelValue: toRef(props, model.publicProperty) as Readonly<Ref<unknown>>,
+          eventName: model.canonicalChangeEvent,
+          write: (target, value) => {
+            target[model.canonicalProperty] = value;
+          },
+          read: (event: CustomEvent<Record<string, unknown>>) =>
+            event.detail?.[model.detailField],
+          emit: (value) => emit(model.publicEvent, value),
+        });
+      }
+
       expose({
         get element() {
-          return element;
+          return element.value;
         },
       });
       return () =>
@@ -130,7 +201,10 @@ function createVyrnForgeVueFacade(
           {
             ...attrs,
             ref: (value: unknown) => {
-              element = value instanceof Element ? value : null;
+              element.value =
+                value instanceof Element
+                  ? (value as GeneratedModelElement)
+                  : null;
             },
           },
           renderSlots(slots),
