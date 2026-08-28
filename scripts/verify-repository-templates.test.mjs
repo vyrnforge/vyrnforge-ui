@@ -69,7 +69,10 @@ test("rejects contributor guidance that drops the trunk contract", () => {
   const root = createFixture();
   try {
     mutate(root, "CONTRIBUTING.md", (content) =>
-      content.replace("## Trunk-based contribution path", "## Contribution path"),
+      content.replace(
+        "## Trunk-based contribution path",
+        "## Contribution path",
+      ),
     );
     assert(
       verifyRepositoryTemplates({ root }).some((failure) =>
