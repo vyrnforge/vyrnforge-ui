@@ -274,26 +274,26 @@ export function createAngularCatalogModel(
 
 function eventOutputType(component, event) {
   if (event.detail === "event") return "Event";
-  const detailType = `VyrnForgeCanonicalEventDetailMap[\"${event.canonical}\"]`;
+  const detailType = `VyrnForgeCanonicalEventDetailMap["${event.canonical}"]`;
   if (event.detail === "detail") return detailType;
   const field = mappedEventField(component, event);
   assert(
     field,
     `${component.id}: ${event.public} has no deterministic mapped detail field`,
   );
-  return `${detailType}[\"${field}\"]`;
+  return `${detailType}["${field}"]`;
 }
 
 function eventOutputExpression(component, event) {
   if (event.detail === "event") return "event";
-  const detail = `(event as CustomEvent<VyrnForgeCanonicalEventDetailMap[\"${event.canonical}\"]>).detail`;
+  const detail = `(event as CustomEvent<VyrnForgeCanonicalEventDetailMap["${event.canonical}"]>).detail`;
   if (event.detail === "detail") return detail;
   const field = mappedEventField(component, event);
   assert(
     field,
     `${component.id}: ${event.public} has no deterministic mapped detail field`,
   );
-  return `${detail}[\"${field}\"]`;
+  return `${detail}["${field}"]`;
 }
 
 function inputSource(component, property) {
@@ -333,7 +333,7 @@ function outputSource(component, event) {
 
 function methodSource(component, method) {
   const name = identifier(method.name);
-  return `  ${name}(\n    ...args: Parameters<${component.exportName}Element[\"${method.name}\"]>\n  ): ReturnType<${component.exportName}Element[\"${method.name}\"]> {\n    return this.element.nativeElement[\"${method.name}\"](...args);\n  }`;
+  return `  ${name}(\n    ...args: Parameters<${component.exportName}Element["${method.name}"]>\n  ): ReturnType<${component.exportName}Element["${method.name}"]> {\n    return this.element.nativeElement["${method.name}"](...args);\n  }`;
 }
 
 function slotSource(component) {
@@ -391,7 +391,7 @@ function genericDirectiveSource(component) {
     ...inputs,
     ...outputs.map((output) => output.declaration),
     ...outputs.map((output) => output.handlerSource),
-    `  constructor(private readonly element: ElementRef<${component.exportName}Element>) {\n    this.element.nativeElement.dataset[\"${marker}\"] = \"angular\";${
+    `  constructor(private readonly element: ElementRef<${component.exportName}Element>) {\n    this.element.nativeElement.dataset["${marker}"] = "angular";${
       outputs.length > 0
         ? `\n${outputs.map((output) => output.add).join("\n")}`
         : ""
@@ -404,7 +404,7 @@ function genericDirectiveSource(component) {
     }\n  }`,
   ];
 
-  return `export type ${component.exportName}Element = VyrnForgeElementForTagName<\"${component.tag}\">;\n\n${inputContractSource(component)}\n\n${outputContractSource(component)}\n\n${slotSource(component)}\n\n@Directive({\n  selector: \"${component.selector}\",\n  standalone: true,\n  exportAs: \"${component.exportAs}\",\n})\nexport class ${component.exportName} implements OnDestroy {\n${bodySections.join("\n\n")}\n}`;
+  return `export type ${component.exportName}Element = VyrnForgeElementForTagName<"${component.tag}">;\n\n${inputContractSource(component)}\n\n${outputContractSource(component)}\n\n${slotSource(component)}\n\n@Directive({\n  selector: "${component.selector}",\n  standalone: true,\n  exportAs: "${component.exportAs}",\n})\nexport class ${component.exportName} implements OnDestroy {\n${bodySections.join("\n\n")}\n}`;
 }
 
 function specializedImports(components) {

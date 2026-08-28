@@ -55,10 +55,10 @@ if (
 }
 
 for (const component of artifact.components) {
-  if (!actual.includes(`selector: \"${component.selector}\"`)) {
+  if (!actual.includes(`selector: "${component.selector}"`)) {
     throw new Error(`${component.id}: generated selector is missing`);
   }
-  if (!actual.includes(`id: \"${component.id}\"`)) {
+  if (!actual.includes(`id: "${component.id}"`)) {
     throw new Error(`${component.id}: catalog metadata is missing`);
   }
 }
