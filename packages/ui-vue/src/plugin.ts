@@ -1,22 +1,14 @@
 import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 import type { VyrnForgeElementRegistry } from "@vyrnforge/ui-elements";
-import type { App, Component, Plugin } from "vue";
+import type { App, Plugin } from "vue";
 
-import { VfButton } from "./generated/VfButton.generated";
-import { VfDialog } from "./generated/VfDialog.generated";
-import { VfTabs } from "./generated/VfTabs.generated";
-import { VfTextInput } from "./generated/VfTextInput.generated";
+import { vyrnForgeVueGeneratedComponents } from "./generated/catalog.generated";
 
 export interface VyrnForgeVueOptions {
   readonly elementRegistry?: VyrnForgeElementRegistry;
 }
 
-export const vyrnForgeVueComponents = Object.freeze([
-  VfButton,
-  VfDialog,
-  VfTabs,
-  VfTextInput,
-] as readonly Component[]);
+export const vyrnForgeVueComponents = vyrnForgeVueGeneratedComponents;
 
 export function installVyrnForgeVue(
   app: App,
