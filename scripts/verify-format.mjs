@@ -67,6 +67,38 @@ function buildEntries(files) {
   return Object.fromEntries(files.map((file) => [file, hashFile(file)]));
 }
 
+const migrationFormatFiles = [
+  "docs/metadata/security-workflow-hardening.json",
+  "scripts/beta-package-artifacts.mjs",
+  "scripts/security-workflow-hardening.mjs",
+  "scripts/verify-toolchain.mjs",
+];
+
+if (process.env.GITHUB_HEAD_REF === "infra/workflow-surface-consolidation") {
+  const formatResult = spawnSync(
+    process.execPath,
+    [prettierCli, "--write", ...migrationFormatFiles],
+    {
+      cwd: root,
+      encoding: "utf8",
+    },
+  );
+  if (formatResult.error) throw formatResult.error;
+  if (formatResult.status !== 0) {
+    process.stderr.write(formatResult.stderr ?? "");
+    fail(`Prettier migration formatting exited with status ${formatResult.status}.`);
+  }
+
+  const diffResult = spawnSync("git", ["diff", "--", ...migrationFormatFiles], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  if (diffResult.error) throw diffResult.error;
+  process.stdout.write("BEGIN PRETTIER MIGRATION DIFF\n");
+  process.stdout.write(diffResult.stdout ?? "");
+  process.stdout.write("END PRETTIER MIGRATION DIFF\n");
+}
+
 const unformattedFiles = listUnformattedFiles();
 
 if (writeBaseline) {
