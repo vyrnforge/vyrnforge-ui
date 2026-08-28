@@ -225,10 +225,14 @@ npm run build
 npm run ci
 ```
 
-`npm run ci` is the complete local equivalent of current main-branch
-validation. CI/CD changes must preserve the stable `ci-gate`, read-only normal
-CI, and separate Pages, npm OIDC, registry-verification, and repository-write
-permission boundaries.
+`npm run ci` is the complete local repository validation used for promotion
+preparation, manual full validation, and deep assurance. Normal task PRs may run
+a smaller dependency-aware subset. A successful main-boundary PR is the full
+merge gate; the subsequent exact-`main` push runs delivery validation only so it
+can build commit-bound deployment artifacts without repeating the full suite.
+CI/CD changes must preserve the stable `ci-gate`, read-only normal CI, and
+separate Pages, npm OIDC, registry-verification, and repository-write permission
+boundaries.
 
 Do not mark tasks or gates complete until acceptance criteria and required
 evidence pass. When CI fails, inspect and fix the cause rather than only
