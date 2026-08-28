@@ -1,0 +1,57 @@
+{
+  "name": "@vyrnforge/ui-vue",
+  "version": "0.2.0-beta.2",
+  "description": "Vue facade for VyrnForge canonical UI elements",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup && tsc -p tsconfig.build.json",
+    "lint": "eslint src tsup.config.ts --config ../../eslint.config.mjs",
+    "lint:fix": "npm run lint -- --fix",
+    "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors && npm run build --workspace @vyrnforge/ui-elements",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vyrnforge/ui-elements": "0.2.0-beta.2"
+  },
+  "peerDependencies": {
+    "vue": ">=3.5 <4"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.9",
+    "tsup": "*",
+    "typescript": "7.0.2",
+    "vitest": "*",
+    "vue": "^3.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vyrnforge/vyrnforge-ui.git",
+    "directory": "packages/ui-vue"
+  },
+  "homepage": "https://github.com/vyrnforge/vyrnforge-ui#readme",
+  "bugs": {
+    "url": "https://github.com/vyrnforge/vyrnforge-ui/issues"
+  },
+  "engines": {
+    "node": ">=22.12 <25",
+    "npm": ">=11.16 <12"
+  }
+}
