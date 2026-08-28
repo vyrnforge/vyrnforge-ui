@@ -90,6 +90,47 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     }
   }
 
+  const agents = read(root, "AGENTS.md", failures);
+  requireText(
+    agents,
+    "AGENTS.md",
+    [
+      "docs/governance/05-trunk-delivery.md",
+      "## Agent branch and delivery contract",
+      "integration/foundation",
+      "integration/native",
+      "integration/react",
+      "integration/angular",
+      "integration/vue",
+      "integration/data-grid",
+      "integration/docs",
+      "integration/platform",
+      "start the short-lived task branch from the owning `integration/<lane>`",
+      "open the task PR back to that same owning lane",
+      "`integration/<lane>` -> `main` promotion PR",
+      "full repository validation and a green `ci-gate`",
+      "Do not create a normal task branch from `main`",
+      "Persistent lanes are peers.",
+      "Repository-side agent behavior must follow this contract even when a host-level",
+      "Never use a missing protection rule",
+      "@vyrnforge/ui-vue",
+    ],
+    failures,
+  );
+  requireOrder(
+    agents,
+    "AGENTS.md",
+    [
+      "## Required reading",
+      "docs/governance/05-trunk-delivery.md",
+      "## Agent branch and delivery contract",
+      "start the short-lived task branch from the owning `integration/<lane>`",
+      "`integration/<lane>` -> `main` promotion PR",
+      "full repository validation and a green `ci-gate`",
+    ],
+    failures,
+  );
+
   const contributing = read(root, "CONTRIBUTING.md", failures);
   requireText(
     contributing,
@@ -283,7 +324,7 @@ if (
     process.exitCode = 1;
   } else {
     console.log(
-      "Repository contribution contracts passed: integration-lane intake, promotion-to-main gates, planner-owned CI scope, and specialist infrastructure/release paths.",
+      "Repository contribution contracts passed: agent lane routing, integration-lane intake, promotion-to-main gates, planner-owned CI scope, and specialist infrastructure/release paths.",
     );
   }
 }

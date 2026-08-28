@@ -20,6 +20,7 @@ const repositoryRoot = path.resolve(
 );
 
 const fixtureFiles = [
+  "AGENTS.md",
   "CONTRIBUTING.md",
   ".github/pull_request_template.md",
   ".github/PULL_REQUEST_TEMPLATE/ci-cd-infrastructure.md",
@@ -45,8 +46,86 @@ function mutate(root, relativePath, transform) {
   writeFileSync(file, content, "utf8");
 }
 
-test("accepts the integration-lane contributor intake contracts", () => {
+test("accepts the integration-lane contributor and agent contracts", () => {
   assert.deepEqual(verifyRepositoryTemplates(), []);
+});
+
+test("rejects agent guidance that drops the owning-lane task branch rule", () => {
+  const root = createFixture();
+  try {
+    mutate(root, "AGENTS.md", (content) =>
+      content.replace(
+        "start the short-lived task branch from the owning `integration/<lane>`",
+        "start a short-lived task branch",
+      ),
+    );
+    assert(
+      verifyRepositoryTemplates({ root }).some((failure) =>
+        failure.includes(
+          "start the short-lived task branch from the owning `integration/<lane>`",
+        ),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects agent guidance that permits normal direct-to-main task work", () => {
+  const root = createFixture();
+  try {
+    mutate(root, "AGENTS.md", (content) =>
+      content.replace(
+        "Do not create a normal task branch from `main`",
+        "Normal task branches may start from `main`",
+      ),
+    );
+    assert(
+      verifyRepositoryTemplates({ root }).some((failure) =>
+        failure.includes("Do not create a normal task branch from `main`"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects agent guidance that drops lane-to-main promotion", () => {
+  const root = createFixture();
+  try {
+    mutate(root, "AGENTS.md", (content) =>
+      content.replace(
+        "`integration/<lane>` -> `main` promotion PR",
+        "promotion PR",
+      ),
+    );
+    assert(
+      verifyRepositoryTemplates({ root }).some((failure) =>
+        failure.includes("`integration/<lane>` -> `main` promotion PR"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects agent guidance that treats missing branch protection as permission", () => {
+  const root = createFixture();
+  try {
+    mutate(root, "AGENTS.md", (content) =>
+      content.replace(
+        "Never use a missing protection rule",
+        "A missing protection rule may be bypassed",
+      ),
+    );
+    assert(
+      verifyRepositoryTemplates({ root }).some((failure) =>
+        failure.includes("Never use a missing protection rule"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("rejects repository setup that drops npm ci", () => {
