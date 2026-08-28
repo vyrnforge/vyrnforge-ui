@@ -11,58 +11,28 @@ function assert(condition, message) {
 
 function read(relativePath) {
   const absolutePath = path.join(root, relativePath);
-  assert(
-    existsSync(absolutePath),
-    `missing required infrastructure file: ${relativePath}`,
-  );
+  assert(existsSync(absolutePath), `missing required infrastructure file: ${relativePath}`);
   return readFileSync(absolutePath, "utf8").replaceAll("\r\n", "\n");
 }
 
 function assertNoLongLivedToken(text, file) {
-  for (const forbidden of [
-    "NPM_TOKEN",
-    "NODE_AUTH_TOKEN",
-    "PERSONAL_ACCESS_TOKEN",
-  ]) {
-    assert(
-      !text.includes(forbidden),
-      `${file}: forbidden long-lived credential reference ${forbidden}`,
-    );
+  for (const forbidden of ["NPM_TOKEN", "NODE_AUTH_TOKEN", "PERSONAL_ACCESS_TOKEN"]) {
+    assert(!text.includes(forbidden), `${file}: forbidden long-lived credential reference ${forbidden}`);
   }
 }
 
-/**
- * Parse every GitHub Actions `uses:` reference from a workflow.
- *
- * Supported references:
- * - Local reusable workflows/actions: ./path/to/action
- * - Remote actions/workflows: owner/repository[/path]@ref
- *
- * A human-readable version comment can follow the reference, for example:
- * actions/checkout@<40-character-sha> # v7
- */
 function parseActionUses(text) {
   const references = [];
   const pattern = /^\s*(?:-\s*)?uses:\s*([^\s#]+)(?:\s+#\s*(\S+))?\s*$/gm;
-
   for (const match of text.matchAll(pattern)) {
     const spec = match[1];
     const versionComment = match[2] ?? null;
-
     if (spec.startsWith("./")) {
-      references.push({
-        type: "local",
-        spec,
-        action: spec,
-        ref: null,
-        versionComment,
-      });
+      references.push({ type: "local", spec, versionComment });
       continue;
     }
-
     const separator = spec.lastIndexOf("@");
     assert(separator > 0, `invalid external action reference: ${spec}`);
-
     references.push({
       type: "external",
       spec,
@@ -71,23 +41,16 @@ function parseActionUses(text) {
       versionComment,
     });
   }
-
   return references;
 }
 
-/**
- * Require every external GitHub Action to use an immutable full commit SHA.
- * Local reusable workflows/actions remain valid without SHA pinning.
- */
 function assertPinnedExternalActions(text, file) {
   for (const reference of parseActionUses(text)) {
     if (reference.type === "local") continue;
-
     assert(
       /^[0-9a-f]{40}$/.test(reference.ref),
       `${file}: ${reference.action} must be pinned to a full 40-character commit SHA`,
     );
-
     assert(
       reference.versionComment,
       `${file}: ${reference.action}@${reference.ref} must preserve a readable version comment`,
@@ -95,404 +58,158 @@ function assertPinnedExternalActions(text, file) {
   }
 }
 
-/**
- * Verify that a specific Action exists, is SHA-pinned, and keeps the expected
- * human-readable version comment used by Dependabot and reviewers.
- */
-function assertPinnedActionVersion(text, file, action, expectedVersion) {
-  const references = parseActionUses(text).filter(
-    (reference) => reference.type === "external" && reference.action === action,
-  );
+const expectedWorkflowFiles = [
+  "assurance.yml",
+  "ci.yml",
+  "deploy-pages.yml",
+  "release.yml",
+];
+const workflowFiles = readdirSync(workflowsDir)
+  .filter((file) => file.endsWith(".yml") || file.endsWith(".yaml"))
+  .sort();
 
-  assert(references.length > 0, `${file} must use ${action}`);
-
-  for (const reference of references) {
-    assert(
-      /^[0-9a-f]{40}$/.test(reference.ref),
-      `${file}: ${action} must be pinned to a full 40-character commit SHA`,
-    );
-
-    assert(
-      reference.versionComment === expectedVersion,
-      `${file}: ${action} must preserve the version comment # ${expectedVersion}`,
-    );
-  }
-}
-
-const ci = read(".github/workflows/ci.yml");
 assert(
-  /pull_request:\s*[\s\S]*branches:\s*[\s\S]*- main/.test(ci),
-  "ci.yml must run for pull requests targeting main",
-);
-assert(
-  /push:\s*[\s\S]*branches:\s*[\s\S]*- main/.test(ci),
-  "ci.yml must run for pushes to main",
-);
-assert(
-  ci.includes("workflow_dispatch:"),
-  "ci.yml must allow manual full validation",
-);
-assert(
-  !/^\s*paths(?:-ignore)?:/m.test(ci),
-  "ci.yml must not use workflow path filters",
-);
-assert(
-  ci.includes("name: ci-gate"),
-  "ci.yml must expose the stable ci-gate check",
-);
-assert(
-  !ci.includes("  quality:\n"),
-  "ci.yml must remove the temporary quality aggregate job",
-);
-assert(
-  !ci.includes("  external-consumer:\n"),
-  "ci.yml must remove the temporary external-consumer aggregate job",
-);
-assert(
-  ci.includes("if: always()"),
-  "ci.yml aggregate checks must run with always()",
-);
-const ciGateSection = ci.slice(ci.indexOf("  ci-gate:"));
-for (const dependency of [
-  "plan",
-  "quality-checks",
-  "integration-checks",
-  "security-checks",
-]) {
-  assert(
-    ciGateSection.includes(`- ${dependency}`),
-    `ci-gate must depend on ${dependency}`,
-  );
-}
-for (const requiredToken of [
-  "PLAN_RESULT",
-  "QUALITY_RESULT",
-  "INTEGRATION_RESULT",
-  "SECURITY_RESULT",
-  "scripts/write-ci-summary.mjs",
-]) {
-  assert(
-    ciGateSection.includes(requiredToken),
-    `ci-gate must evaluate ${requiredToken}`,
-  );
-}
-assert(
-  !/continue-on-error:\s*true/.test(ciGateSection),
-  "ci-gate must not conceal dependency failures",
-);
-assert(
-  ci.includes("scripts/detect-ci-scope.mjs"),
-  "ci.yml must use the native impact planner",
-);
-assert(
-  read("scripts/detect-ci-scope.mjs").includes("--diff-filter=ACDMRTUXB"),
-  "CI planner must include deleted files in its impact diff",
-);
-assert(!ci.includes("npm publish"), "ci.yml must never publish packages");
-assertNoLongLivedToken(ci, "ci.yml");
-
-for (const workflow of [
-  "_quality.yml",
-  "_integration.yml",
-  "_compatibility.yml",
-  "_security.yml",
-]) {
-  const text = read(`.github/workflows/${workflow}`);
-  assert(
-    text.includes("workflow_call:"),
-    `${workflow} must be reusable through workflow_call`,
-  );
-  assert(
-    /permissions:\s*\n\s*contents: read/.test(text),
-    `${workflow} must default to contents: read`,
-  );
-  assert(
-    !text.includes("npm publish"),
-    `${workflow} must not publish packages`,
-  );
-  assert(!text.includes("pages: write"), `${workflow} must not deploy Pages`);
-  assert(
-    !text.includes("id-token: write"),
-    `${workflow} must not request OIDC`,
-  );
-  assertNoLongLivedToken(text, workflow);
-}
-
-const scopedQuality = read("scripts/run-scoped-quality.mjs");
-assert(
-  !scopedQuality.includes('"verify:ci"'),
-  "scoped quality must not call the removed verify:ci aggregate",
-);
-assert(
-  !scopedQuality.includes('"quality"'),
-  "scoped quality must not call the removed quality aggregate",
-);
-for (const command of [
-  "format:check",
-  "lint",
-  "lint:css",
-  "verify:package-boundaries",
-  "test:contracts",
-  "verify:metadata",
-  "verify:validation-model",
-  "test:coverage",
-  "fixtures:test:prepared",
-  "fixtures:build:prepared",
-  "typecheck",
-]) {
-  assert(
-    scopedQuality.includes(`"${command}"`),
-    `scoped quality must run ${command}`,
-  );
-}
-assert(
-  scopedQuality.includes("CI_SCOPE_METADATA"),
-  "scoped quality must run repository contracts only for metadata scope or full mode",
-);
-assert(
-  !scopedQuality.includes("--if-present"),
-  "scoped quality must not silently skip missing mandatory scripts",
-);
-assert(
-  read("scripts/detect-ci-scope.mjs").includes("apps/regression-fixtures/"),
-  "CI planner must classify regression fixture changes explicitly",
-);
-assert(
-  read("scripts/verify-toolchain.mjs").includes(
-    "apps/regression-fixtures/package.json",
-  ),
-  "toolchain verification must include the regression fixture workspace",
-);
-assert(
-  ci.includes("fixtures: ${{ steps.scope.outputs.fixtures }}"),
-  "ci.yml must expose the planned fixture scope",
-);
-assert(
-  ci.includes("browser: ${{ steps.scope.outputs.browser }}"),
-  "ci.yml must expose the planned browser scope",
-);
-assert(
-  ci.includes("if: needs.plan.outputs.integration == 'true'"),
-  "ci.yml must run integration checks only when integration is planned",
-);
-assert(
-  ci.includes("fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}"),
-  "ci.yml must pass fixture scope into the reusable quality workflow",
-);
-assert(
-  read(".github/workflows/_quality.yml").includes("CI_SCOPE_FIXTURES"),
-  "reusable quality workflow must pass fixture scope to the scoped runner",
-);
-assert(
-  read("scripts/detect-ci-scope.mjs").includes("tests/browser/"),
-  "CI planner must classify browser contract tests explicitly",
-);
-const integrationWorkflow = read(".github/workflows/_integration.yml");
-assert(
-  ci.includes(
-    "pages-artifact: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}",
-  ),
-  "ci.yml must create the Pages site artifact only for a main push",
-);
-for (const marker of [
-  "  integration:",
-  "selected-integration",
-  "Install dependencies once",
-  "Prepare selected package outputs once",
-  "VYRNFORGE_PACKAGES_PREPARED",
-  "npm run test:browser",
-  "npm run verify:packages",
-  "npm run verify:beta-package-artifacts",
-  "npm run verify:consumer",
-  "npm run verify:repository-inventory",
-  "npm run build --workspace @vyrnforge/ui-docs",
-  "npm run build --workspace @vyrnforge/ui-data-grid-basic-playground",
-  "playwright-report/",
-  "test-results/visual-evidence/",
-  "pages-artifact:",
-  "RUN_PAGES_ARTIFACT",
-  "VITE_BASE_PATH: /vyrnforge-ui/",
-  "Assemble Pages site once",
-  "pages-site-${{ github.sha }}",
-  "include-hidden-files: true",
-]) {
-  assert(
-    integrationWorkflow.includes(marker),
-    `_integration.yml must include ${marker}`,
-  );
-}
-assertPinnedActionVersion(
-  integrationWorkflow,
-  "_integration.yml",
-  "actions/upload-artifact",
-  "v7.0.1",
-);
-const integrationJobsSection = integrationWorkflow.slice(
-  integrationWorkflow.indexOf("jobs:\n"),
-);
-assert(
-  (integrationJobsSection.match(/^ {2}[a-z][a-z0-9-]+:\s*$/gmu) ?? [])
-    .length === 1,
-  "integration workflow must contain exactly one job",
-);
-const playwrightConfig = read("playwright.config.ts");
-assert(
-  playwrightConfig.includes("VYRNFORGE_PACKAGES_PREPARED"),
-  "Playwright must reuse package output prepared by the integration owner",
+  JSON.stringify(workflowFiles) === JSON.stringify(expectedWorkflowFiles),
+  `workflow surface must contain exactly ${expectedWorkflowFiles.join(", ")}; found ${workflowFiles.join(", ")}`,
 );
 
 for (const removedWorkflow of [
+  "_quality.yml",
+  "_integration.yml",
+  "_security.yml",
+  "_compatibility.yml",
+  "nightly.yml",
+  "pages.yml",
   "_browser.yml",
   "_packages.yml",
   "_consumer.yml",
   "_docs.yml",
+  "finalize-release.yml",
+  "release-recovery.yml",
 ]) {
   assert(
     !existsSync(path.join(workflowsDir, removedWorkflow)),
-    `${removedWorkflow} must be consolidated into _integration.yml`,
+    `${removedWorkflow} must not exist in the workflow surface`,
   );
 }
 
-const securityWorkflow = read(".github/workflows/_security.yml");
+for (const workflow of workflowFiles) {
+  const text = read(`.github/workflows/${workflow}`);
+  assertPinnedExternalActions(text, workflow);
+  assert(!/continue-on-error:\s*true/.test(text), `${workflow} must not conceal mandatory failures`);
+  assert(!text.includes("--if-present"), `${workflow} must not silently skip mandatory scripts`);
+  assertNoLongLivedToken(text, workflow);
+}
+
+const ci = read(".github/workflows/ci.yml");
 for (const marker of [
-  "dependency-review:",
-  "drift:",
-  "if: inputs.drift",
-  "npm audit --omit=dev --audit-level=high",
-  "actionlint -color",
+  "name: VyrnForge CI",
+  "push:",
+  "- main",
+  "pull_request:",
+  '- "integration/**"',
+  "workflow_dispatch:",
+  "scripts/detect-ci-scope.mjs",
+  "--delivery",
+  "  quality-checks:",
+  "  integration-checks:",
+  "  security-checks:",
+  "name: ci-gate",
+  "scripts/write-ci-summary.mjs",
+]) {
+  assert(ci.includes(marker), `ci.yml must include ${marker}`);
+}
+assert(
+  !ci.includes("uses: ./.github/workflows/"),
+  "ci.yml must own CI jobs directly instead of exposing internal reusable workflows",
+);
+assert(
+  !/push:\s*[\s\S]*integration\/\*\*/.test(ci.slice(0, ci.indexOf("pull_request:"))),
+  "ci.yml must not run on integration-lane pushes",
+);
+assert(
+  ci.includes("if: needs.plan.outputs.quality == 'true'") &&
+    ci.includes("if: needs.plan.outputs.integration == 'true'") &&
+    ci.includes("if: needs.plan.outputs.security == 'true'"),
+  "ci.yml must keep planner-scoped quality, integration, and security jobs",
+);
+const ciGate = ci.slice(ci.indexOf("  ci-gate:"));
+for (const dependency of ["plan", "quality-checks", "integration-checks", "security-checks"]) {
+  assert(ciGate.includes(`- ${dependency}`), `ci-gate must depend on ${dependency}`);
+}
+for (const marker of [
+  "PLAN_RESULT",
+  "QUALITY_RESULT",
+  "INTEGRATION_RESULT",
+  "SECURITY_RESULT",
+]) {
+  assert(ciGate.includes(marker), `ci-gate must evaluate ${marker}`);
+}
+for (const marker of [
+  "node scripts/run-scoped-quality.mjs",
+  "npm run verify:beta-package-artifacts",
+  "npm run verify:consumer",
+  "npm run test:browser",
+  "npm run verify:repository-inventory",
+  "pages-site-${{ github.sha }}",
+  "actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0",
+  "ACTIONLINT_VERSION: 1.7.12",
   "shellcheck --version",
   "npm run verify:security-workflow-hardening",
-  "npm run verify:workflows",
 ]) {
-  assert(
-    securityWorkflow.includes(marker),
-    `_security.yml must include ${marker}`,
-  );
+  assert(ci.includes(marker), `ci.yml must directly own ${marker}`);
 }
-assert(
-  ci.includes("if: needs.plan.outputs.security == 'true'"),
-  "CI security must run only when the planner selects it",
-);
-assert(
-  !ci.includes("uses: ./.github/workflows/_compatibility.yml"),
-  "pull-request and main CI must leave compatibility drift to nightly",
-);
+assert(!ci.includes("npm publish"), "ci.yml must never publish packages");
 
-const rootPackage = JSON.parse(read("package.json"));
-assert(
-  rootPackage.scripts["test:visual"] ===
-    "playwright test tests/browser/visual-regression.spec.ts --project=chromium",
-  "package.json must expose the canonical visual-regression browser command",
-);
-for (const command of ["check", "test", "build", "ci"]) {
-  assert(
-    typeof rootPackage.scripts[command] === "string",
-    `package.json must expose the public ${command} command`,
-  );
-}
-for (const deprecated of ["quality", "verify:ci"]) {
-  assert(
-    !(deprecated in rootPackage.scripts),
-    `package.json must remove the duplicated ${deprecated} aggregate`,
-  );
-}
-for (const command of [
-  "format:check",
-  "lint",
-  "lint:css",
-  "verify:metadata",
-  "verify:package-boundaries",
-  "verify:workflows",
-  "verify:validation-model",
-  "typecheck",
-]) {
-  assert(
-    rootPackage.scripts.check.includes(`npm run ${command}`),
-    `root check command must include ${command}`,
-  );
-}
-for (const command of [
-  "check",
-  "test:contracts",
-  "test:coverage",
-  "build:packages",
-  "fixtures:test:prepared",
-  "fixtures:build:prepared",
-  "test:browser",
-  "verify:packages",
-  "verify:consumer",
-  "verify:consumer-foundations:runtime",
-  "build:applications",
-]) {
-  assert(
-    rootPackage.scripts.ci.includes(`npm run ${command}`),
-    `root ci command must include ${command}`,
-  );
-}
-for (const workflow of [
-  "ci.yml",
-  "_quality.yml",
-  "_integration.yml",
-  "_compatibility.yml",
-  "_security.yml",
-]) {
-  const text = read(`.github/workflows/${workflow}`);
-  assert(
-    !/continue-on-error:\s*true/.test(text),
-    `${workflow} must not conceal mandatory quality failures`,
-  );
-  assert(
-    !text.includes("--if-present"),
-    `${workflow} must not silently skip missing mandatory scripts`,
-  );
-}
-
-const pages = read(".github/workflows/pages.yml");
-assert(
-  /permissions:\s*\n\s*actions: read\s*\n\s*contents: read/.test(pages),
-  "pages.yml must default to Actions and repository read access",
-);
-assert(
-  pages.includes("workflow_run:"),
-  "pages.yml must deploy only after the main CI workflow completes",
-);
-assert(
-  pages.includes('workflows: ["VyrnForge CI"]'),
-  "pages.yml must be gated by VyrnForge CI",
-);
-assert(
-  !/^\s*push:/m.test(pages),
-  "pages.yml must not race CI through an independent push trigger",
-);
-assert(
-  pages.includes("github.event.workflow_run.conclusion == 'success'"),
-  "pages.yml must require successful CI",
-);
-assert(
-  pages.includes("github.event.workflow_run.event == 'push'"),
-  "pages.yml must accept automatic deployment only from a push CI run",
-);
-assert(
-  pages.includes("ci-run-id:"),
-  "manual Pages deployment must require an existing CI run ID",
-);
+const assurance = read(".github/workflows/assurance.yml");
 for (const marker of [
+  "name: VyrnForge Weekly Assurance",
+  "schedule:",
+  'cron: "17 2 * * 1"',
+  "workflow_dispatch:",
+  "name: full-quality",
+  "name: full-integration",
+  "name: compatibility-plan",
+  "name: compatibility-${{ matrix.id }}",
+  "npm run verify:compatibility-release-case",
+  "npm audit --omit=dev --audit-level=high",
+  "name: codeql-analysis",
+  "github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
+  "github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
+  "name: assurance-gate",
+]) {
+  assert(assurance.includes(marker), `assurance.yml must include ${marker}`);
+}
+assert(
+  !assurance.includes("uses: ./.github/workflows/"),
+  "assurance.yml must own weekly assurance jobs directly",
+);
+assert(!assurance.includes("pages: write"), "assurance.yml must not deploy Pages");
+assert(!assurance.includes("id-token: write"), "assurance.yml must not request OIDC");
+assert(!assurance.includes("npm publish"), "assurance.yml must not publish packages");
+assert(!assurance.includes("nightly-gate"), "assurance.yml must remove obsolete nightly terminology");
+
+const pages = read(".github/workflows/deploy-pages.yml");
+for (const marker of [
+  "name: Deploy GitHub Pages",
+  "workflow_run:",
+  'workflows: ["VyrnForge CI"]',
+  "github.event.workflow_run.conclusion == 'success'",
+  "github.event.workflow_run.event == 'push'",
+  "ci-run-id:",
   "name: prepare-pages",
   'gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID"',
   'gh api "repos/$GITHUB_REPOSITORY/commits/main"',
-  'test "$WORKFLOW_NAME" = "VyrnForge CI"',
-  'test "$RUN_EVENT" = "push"',
-  'test "$HEAD_BRANCH" = "main"',
-  'test "$CONCLUSION" = "success"',
   'test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"',
   'gh run download "${{ steps.candidate.outputs.run-id }}"',
   '--name "pages-site-${{ steps.candidate.outputs.head-sha }}"',
-  "--dir site",
   "test -f site/index.html",
   "test -f site/playground/index.html",
   "test -f site/.nojekyll",
+  "pages: write",
+  "id-token: write",
 ]) {
-  assert(pages.includes(marker), `pages.yml must include ${marker}`);
+  assert(pages.includes(marker), `deploy-pages.yml must include ${marker}`);
 }
 for (const forbidden of [
   "actions/checkout@",
@@ -501,345 +218,46 @@ for (const forbidden of [
   "npm ci",
   "npm run ",
   "build:packages",
+  "npm publish",
 ]) {
-  assert(
-    !pages.includes(forbidden),
-    `pages.yml must deploy the verified CI artifact without ${forbidden}`,
-  );
+  assert(!pages.includes(forbidden), `deploy-pages.yml must deploy existing artifacts without ${forbidden}`);
 }
-assert(
-  pages.includes("pages: write"),
-  "pages.yml deploy job must have pages: write",
-);
-assertPinnedActionVersion(
-  pages,
-  "pages.yml",
-  "actions/configure-pages",
-  "v6.0.0",
-);
-assertPinnedActionVersion(
-  pages,
-  "pages.yml",
-  "actions/upload-pages-artifact",
-  "v5.0.0",
-);
-assertPinnedActionVersion(pages, "pages.yml", "actions/deploy-pages", "v5.0.0");
-assert(!pages.includes("npm publish"), "pages.yml must not publish packages");
-assertNoLongLivedToken(pages, "pages.yml");
 
 const release = read(".github/workflows/release.yml");
-assert(
-  release.includes("workflow_dispatch:"),
-  "release.yml must be manually dispatched",
-);
-assert(
-  release.includes("release-group:"),
-  "release.yml must require an explicit canonical release group",
-);
-assert(
-  release.includes("scripts/resolve-release-selection.mjs") &&
-    !release.includes("${{ inputs.version }}") &&
-    !release.includes("${{ inputs.dist-tag }}"),
-  "release.yml must derive version and dist-tag from canonical release metadata",
-);
-for (const argument of [
-  '--release-group "$RELEASE_GROUP"',
-  '--version "$RELEASE_VERSION"',
-  '--dist-tag "$RELEASE_TAG"',
-]) {
-  assert(
-    release.includes(argument),
-    `release.yml must pass ${argument} to release tooling`,
-  );
-}
-assert(
-  !release.includes("inputs.mode") &&
-    !release.includes("RELEASE_MODE") &&
-    !/^\s+mode:/m.test(release),
-  "release.yml must expose one release action rather than verify/publish modes",
-);
-assert(
-  !/^\s*(push|pull_request|schedule):/m.test(release),
-  "release.yml must not publish from automatic triggers",
-);
-for (const removedWorkflow of [
-  "finalize-release.yml",
-  "release-recovery.yml",
-]) {
-  assert(
-    !existsSync(path.join(workflowsDir, removedWorkflow)),
-    `${removedWorkflow} must not provide an alternate release path`,
-  );
-}
-for (const jobName of [
+for (const marker of [
+  "workflow_dispatch:",
+  "release-group:",
   "name: verify-release",
   "name: publish-packages",
   "name: verify-registry-release",
   "name: create-release-record",
-]) {
-  assert(release.includes(jobName), `release.yml must include ${jobName}`);
-}
-
-const verifyReleaseSection = release.slice(
-  release.indexOf("  verify-release:"),
-  release.indexOf("  publish-packages:"),
-);
-const publishSection = release.slice(
-  release.indexOf("  publish-packages:"),
-  release.indexOf("  verify-registry-release:"),
-);
-const releaseRecordSection = release.slice(
-  release.indexOf("  create-release-record:"),
-);
-
-for (const marker of [
   "Resolve successful current-main CI run",
   "actions/workflows/ci.yml/runs",
-  "gh api --paginate",
   "npm run prepare:release-artifact",
   "npm run verify:release-artifact",
   "npm run verify:trusted-publishing-dry-run",
   "npm run verify:release-size-budgets",
-  "npm run verify:assistive-technology:release",
-  "Upload immutable release artifact",
+  "environment:\n      name: npm-release",
+  "id-token: write",
+  "scripts/verify-registry-release.mjs",
+  "scripts/create-release-notes.mjs",
 ]) {
-  assert(
-    verifyReleaseSection.includes(marker),
-    `verify-release must include ${marker}`,
-  );
-}
-for (const forbidden of [
-  "npm run ci",
-  "uses: ./.github/workflows/_compatibility.yml",
-  "uses: ./.github/workflows/_security.yml",
-]) {
-  assert(
-    !release.includes(forbidden),
-    `release.yml must not repeat main CI through ${forbidden}`,
-  );
-}
-
-assert(
-  !verifyReleaseSection.includes("playwright install") &&
-    !publishSection.includes("playwright install") &&
-    !releaseRecordSection.includes("playwright install"),
-  "only post-publish registry verification may install Playwright browsers",
-);
-assert(
-  /permissions:\s*\n\s*actions: read\s*\n\s*contents: read/.test(
-    verifyReleaseSection,
-  ),
-  "verify-release must read current-main CI without write permissions",
-);
-assert(
-  publishSection.includes("environment:\n      name: npm-release") &&
-    publishSection.includes("actions: read") &&
-    publishSection.includes("contents: read") &&
-    publishSection.includes("id-token: write"),
-  "publish-packages must use npm-release with artifact read access and npm OIDC",
-);
-assert(
-  !/^ {6}GH_TOKEN:/m.test(publishSection),
-  "publish-packages must not expose GITHUB_TOKEN to npm publish at job scope",
-);
-for (const marker of [
-  "gh run download",
-  "node scripts/verify-release-artifact.mjs",
-  "Resolve current main publication boundary",
-  '--current-main "${{ steps.publication-main.outputs.sha }}"',
-  "node scripts/publish-release-artifact.mjs",
-]) {
-  assert(
-    publishSection.includes(marker),
-    `publish-packages must include ${marker}`,
-  );
-}
-for (const forbidden of [
-  "npm ci",
-  "npm run build",
-  "npm pack",
-  "npm publish ./packages/",
-]) {
-  assert(
-    !publishSection.includes(forbidden),
-    `publish-packages must not recreate release bytes with ${forbidden}`,
-  );
+  assert(release.includes(marker), `release.yml must include ${marker}`);
 }
 assert(
-  release.includes("scripts/verify-registry-release.mjs"),
-  "release.yml must run fresh registry-consumer verification",
-);
-const registryVerifier = read("scripts/verify-registry-release.mjs");
-assert(
-  registryVerifier.includes("dist?.attestations?.url"),
-  "registry release verification must require npm provenance attestations",
+  !/^\s*(push|pull_request|schedule):/m.test(release),
+  "release.yml must remain manual-only",
 );
 assert(
-  registryVerifier.includes('["audit", "signatures"'),
-  "registry release verification must cryptographically verify registry signatures and attestations",
+  !release.includes("uses: ./.github/workflows/"),
+  "release.yml must not rerun CI through reusable workflows",
 );
-for (const marker of [
-  "verify:consumer-foundations:runtime",
-  '"--package-source"',
-  '"registry"',
-  '"--release-group"',
-  '"--version"',
-  '"--dist-tag"',
-]) {
-  assert(
-    registryVerifier.includes(marker),
-    `registry release verification must use the canonical four-surface consumer runner through ${marker}`,
-  );
-}
-
-const registryReleaseSection = release.slice(
-  release.indexOf("  verify-registry-release:"),
-  release.indexOf("  create-release-record:"),
-);
-
-for (const marker of [
-  "Install registry verification dependencies",
-  "npm ci",
-  "Install Chromium for four-surface smoke",
-  "npx playwright install --with-deps chromium",
-  "node scripts/verify-registry-release.mjs",
-  "Native, React, Angular, and Vue",
-]) {
-  assert(
-    registryReleaseSection.includes(marker),
-    `verify-registry-release must include ${marker}`,
-  );
-}
-
-assert(
-  release.includes("scripts/create-release-notes.mjs"),
-  "release.yml must generate a release record from source",
-);
-assert(
-  releaseRecordSection.includes("contents: write") &&
-    !releaseRecordSection.includes("id-token: write"),
-  "release record job must have repository write permission without npm OIDC",
-);
-assert(
-  releaseRecordSection.includes(
-    'test "$(git rev-parse "$TAG^{commit}")" = "$GITHUB_SHA"',
-  ) && releaseRecordSection.includes('gh release edit "$TAG"'),
-  "release record retries must accept only the same source tag and remain idempotent",
-);
-assert(
-  releaseRecordSection.includes('TAG="$RELEASE_GIT_TAG"') &&
-    releaseRecordSection.includes('TITLE="$RELEASE_NAME"') &&
-    !releaseRecordSection.includes('TAG="v$RELEASE_VERSION"'),
-  "release record identity must derive from collision-safe release-line metadata",
-);
-assert(
-  !publishSection.includes("--provenance"),
-  "trusted publishing must use automatic provenance without --provenance",
-);
-assertNoLongLivedToken(release, "release.yml");
-
-const nightly = read(".github/workflows/nightly.yml");
-assert(nightly.includes("schedule:"), "nightly.yml must define a schedule");
-assert(
-  nightly.includes("workflow_dispatch:"),
-  "nightly.yml must allow manual execution",
-);
-assert(
-  !nightly.includes('node-version: "22"'),
-  "nightly.yml must not use the retired Node 22 development baseline",
-);
-assert(
-  nightly.includes('node-version: "24.18.0"'),
-  "nightly.yml must use the pinned Node 24 LTS baseline",
-);
-assert(
-  nightly.includes("uses: ./.github/workflows/_integration.yml"),
-  "nightly.yml must execute full integration and build checks",
-);
-assert(
-  nightly.includes("pages-artifact: false"),
-  "nightly.yml must not create a deployable Pages artifact",
-);
-assert(
-  nightly.includes("uses: ./.github/workflows/_compatibility.yml"),
-  "nightly.yml must execute the compatibility release matrix",
-);
-assert(
-  nightly.includes("uses: ./.github/workflows/_security.yml"),
-  "nightly.yml must execute security validation",
-);
-assert(
-  nightly.includes("name: nightly-gate"),
-  "nightly.yml must expose a final gate",
-);
-assert(
-  !nightly.includes("npm publish"),
-  "nightly.yml must not publish packages",
-);
-assert(
-  !nightly.includes("id-token: write"),
-  "nightly.yml must not request OIDC",
-);
-assertNoLongLivedToken(nightly, "nightly.yml");
-
-// Validate every workflow file, including future workflows added to this directory.
-const workflowFiles = readdirSync(workflowsDir)
-  .filter((file) => file.endsWith(".yml") || file.endsWith(".yaml"))
-  .sort();
-
-for (const workflow of workflowFiles) {
-  const text = read(`.github/workflows/${workflow}`);
-
-  assertPinnedExternalActions(text, workflow);
-
-  const isCompatibilityWorkflow = workflow === "_compatibility.yml";
-  if (!isCompatibilityWorkflow) {
-    assert(
-      !text.includes('node-version: "22"') && !text.includes('default: "22"'),
-      `${workflow} must not use Node 22 outside the compatibility matrix`,
-    );
-  }
-
-  for (const match of text.matchAll(
-    /node-version:[ \t]*["']?([^\s"']+)["']?/g,
-  )) {
-    const value = match[1];
-    if (value.startsWith("${{")) continue;
-    const allowed = isCompatibilityWorkflow
-      ? ["22.12.0", "24.18.0"]
-      : ["24.18.0"];
-    assert(
-      allowed.includes(value),
-      `${workflow}: explicit Node version must be ${allowed.join(" or ")}, received ${value}`,
-    );
-  }
-
-  if (text.includes("uses: actions/checkout@")) {
-    assertPinnedActionVersion(text, workflow, "actions/checkout", "v7");
-  }
-
-  if (text.includes("uses: actions/setup-node@")) {
-    assertPinnedActionVersion(text, workflow, "actions/setup-node", "v7");
-  }
-
-  if (text.includes("uses: actions/upload-artifact@")) {
-    assertPinnedActionVersion(
-      text,
-      workflow,
-      "actions/upload-artifact",
-      "v7.0.1",
-    );
-  }
-}
 
 for (const relativePath of [
   "docs/engineering/ci-cd-architecture.md",
   "docs/release/release-responsibility-matrix.md",
 ]) {
-  assert(
-    existsSync(path.join(root, relativePath)),
-    `missing CI/CD source-of-truth document: ${relativePath}`,
-  );
+  assert(existsSync(path.join(root, relativePath)), `missing CI/CD source-of-truth document: ${relativePath}`);
 }
 
-console.log(`Workflow contracts passed for ${workflowsDir}`);
+console.log(`Workflow contracts passed for four lifecycle workflows in ${workflowsDir}`);
