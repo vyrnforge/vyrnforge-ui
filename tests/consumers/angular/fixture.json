@@ -2,10 +2,11 @@
   "id": "angular",
   "supportClaim": "packed-angular-runtime-verified",
   "frameworkRuntime": "Angular 22.0.8",
-  "rendererPackages": ["@vyrnforge/ui-elements"],
+  "rendererPackages": ["@vyrnforge/ui-elements", "@vyrnforge/ui-angular"],
   "requiredPatterns": [
     "CUSTOM_ELEMENTS_SCHEMA",
-    "@vyrnforge/ui-elements/register",
+    "@vyrnforge/ui-angular",
+    "provideVyrnForge",
     "(vf-action)",
     "[items]",
     "slot=\"status\"",
@@ -20,6 +21,7 @@
   "evidence": [
     "clean tarball installation",
     "Angular application build with strict template checking",
+    "public @vyrnforge/ui-angular setup and directive consumption",
     "CUSTOM_ELEMENTS_SCHEMA",
     "object property binding without attribute serialization",
     "canonical vf-action template event binding",
