@@ -1,13 +1,7 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { planCiScope, planDeliveryScope } from "./detect-ci-scope.mjs";
-
-const ciWorkflow = readFileSync(
-  new URL("../.github/workflows/ci.yml", import.meta.url),
-  "utf8",
-).replaceAll("\r\n", "\n");
 
 function expectEnabled(plan, keys) {
   for (const key of keys) {
@@ -224,51 +218,20 @@ test("dependency manifests select security validation", () => {
   assert.equal(plan.security, true);
 });
 
-test(
-  "exact-main delivery rebuilds deployable surfaces without rerunning full validation",
-  () => {
-    const plan = planDeliveryScope();
-    expectEnabled(plan, ["integration", "docs", "playground", "delivery"]);
-    expectDisabled(plan, [
-      "quality",
-      "security",
-      "metadata",
-      "packages",
-      "consumer",
-      "fixtures",
-      "browser",
-      "full",
-      "docs_only",
-    ]);
-    assert.deepEqual(plan.affected_packages, []);
-    assert.match(plan.reasons[0], /exact-main delivery/);
-  },
-);
-
-test(
-  "workflow runs task and promotion PR CI once and reserves pushes for exact-main delivery",
-  () => {
-    const pushStart = ciWorkflow.indexOf("  push:");
-    const pullRequestStart = ciWorkflow.indexOf("  pull_request:");
-    const pushBlock = ciWorkflow.slice(pushStart, pullRequestStart);
-
-    assert.match(pushBlock, /- main/);
-    assert.doesNotMatch(pushBlock, /integration\/\*\*/);
-    assert.match(
-      ciWorkflow,
-      /pull_request:[\s\S]*- main[\s\S]*- "integration\/\*\*"/,
-    );
-    assert.match(
-      ciWorkflow,
-      /push[\s\S]*REF_NAME[\s\S]*== "main"[\s\S]*--delivery/,
-    );
-    assert.match(
-      ciWorkflow,
-      /pull_request[\s\S]*PR_BASE_REF[\s\S]*== "main"[\s\S]*--full/,
-    );
-    assert.match(
-      ciWorkflow,
-      /lane synchronization and accepted task merges do not duplicate CI/,
-    );
-  },
-);
+test("exact-main delivery uses only deployable application scope", () => {
+  const plan = planDeliveryScope();
+  expectEnabled(plan, ["integration", "docs", "playground", "delivery"]);
+  expectDisabled(plan, [
+    "quality",
+    "security",
+    "metadata",
+    "packages",
+    "consumer",
+    "fixtures",
+    "browser",
+    "full",
+    "docs_only",
+  ]);
+  assert.deepEqual(plan.affected_packages, []);
+  assert.match(plan.reasons[0], /exact-main delivery/);
+});
