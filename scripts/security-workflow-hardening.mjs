@@ -10,7 +10,8 @@ export const securityManifestPath =
   "docs/metadata/security-workflow-hardening.json";
 export const securityDocumentationPath =
   "docs/release/security-workflow-hardening.md";
-export const securityWorkflowPath = ".github/workflows/_security.yml";
+export const ciWorkflowPath = ".github/workflows/ci.yml";
+export const assuranceWorkflowPath = ".github/workflows/assurance.yml";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8").replaceAll(
@@ -32,7 +33,8 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   for (const requiredFile of [
     securityManifestPath,
     securityDocumentationPath,
-    securityWorkflowPath,
+    ciWorkflowPath,
+    assuranceWorkflowPath,
     "scripts/verify-security-workflow-hardening.mjs",
     "scripts/verify-security-workflow-hardening.test.mjs",
   ]) {
@@ -46,9 +48,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   if (manifest.task?.id !== "BT-8006" || manifest.task?.status !== "done") {
     failures.push("security contract must record BT-8006 as done");
   }
-  if (
-    JSON.stringify(manifest.task?.dependsOn) !== JSON.stringify(["BT-8003"])
-  ) {
+  if (JSON.stringify(manifest.task?.dependsOn) !== JSON.stringify(["BT-8003"])) {
     failures.push("BT-8006 must depend on BT-8003");
   }
   if (
@@ -58,76 +58,55 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     failures.push("BT-8006 must unlock BT-8007 and BT-8008 after merge");
   }
 
-  const securityWorkflow = read(root, securityWorkflowPath);
+  const ci = read(root, ciWorkflowPath);
   for (const marker of [
-    "workflow_call:",
     "actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0",
-    "github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
-    "github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
-    "npm audit --omit=dev --audit-level=high",
+    "github.event_name == 'pull_request'",
     "ACTIONLINT_VERSION: 1.7.12",
     "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
     "shellcheck --version",
     "npm run verify:security-workflow-hardening",
     "npm run verify:workflows",
+    "  security-checks:",
+    "if: needs.plan.outputs.security == 'true'",
+    "name: ci-gate",
   ]) {
-    if (!securityWorkflow.includes(marker)) {
-      failures.push(`${securityWorkflowPath}: missing ${marker}`);
-    }
+    if (!ci.includes(marker)) failures.push(`${ciWorkflowPath}: missing ${marker}`);
   }
-  if (!securityWorkflow.includes("github.event_name == 'pull_request'")) {
-    failures.push("dependency review must be scoped to pull requests");
-  }
-  if (/continue-on-error:\s*true/u.test(securityWorkflow)) {
-    failures.push("security workflow must not conceal mandatory failures");
-  }
-
-  const ci = read(root, ".github/workflows/ci.yml");
   const ciGate = ci.slice(ci.indexOf("  ci-gate:"));
-  if (ci.includes("  compatibility-checks:")) {
-    failures.push("ci.yml must leave compatibility drift to nightly");
+  for (const marker of ["- security-checks", "SECURITY_RESULT", "scripts/write-ci-summary.mjs"]) {
+    if (!ciGate.includes(marker)) failures.push(`ci-gate must evaluate ${marker}`);
   }
-  if (!ci.includes("  security-checks:")) {
-    failures.push("ci.yml is missing scoped security-checks");
-  }
-  if (!ci.includes("if: needs.plan.outputs.security == 'true'")) {
-    failures.push("security-checks must be selected by the CI planner");
-  }
-  if (!ciGate.includes("- security-checks")) {
-    failures.push("ci-gate must depend on security-checks");
-  }
-  for (const marker of ["SECURITY_RESULT", "scripts/write-ci-summary.mjs"]) {
-    if (!ciGate.includes(marker)) {
-      failures.push(`ci-gate must evaluate ${marker}`);
-    }
+  if (/continue-on-error:\s*true/u.test(ci)) {
+    failures.push("CI security checks must not conceal mandatory failures");
   }
 
-  const nightly = read(root, ".github/workflows/nightly.yml");
+  const assurance = read(root, assuranceWorkflowPath);
   for (const marker of [
-    "uses: ./.github/workflows/_compatibility.yml",
-    "uses: ./.github/workflows/_security.yml",
-    "- compatibility",
-    "- security",
+    "npm audit --omit=dev --audit-level=high",
+    "github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
+    "github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
+    "ACTIONLINT_VERSION: 1.7.12",
+    "shellcheck --version",
+    "name: assurance-gate",
+    "- security-drift",
+    "- codeql",
   ]) {
-    if (!nightly.includes(marker)) {
-      failures.push(`nightly.yml is missing ${marker}`);
+    if (!assurance.includes(marker)) {
+      failures.push(`${assuranceWorkflowPath}: missing ${marker}`);
     }
+  }
+  if (/continue-on-error:\s*true/u.test(assurance)) {
+    failures.push("weekly assurance must not conceal mandatory failures");
   }
 
   const release = read(root, ".github/workflows/release.yml");
   const verifyReleaseStart = release.indexOf("  verify-release:");
   const publishPackagesStart = release.indexOf("  publish-packages:");
-
   if (verifyReleaseStart < 0 || publishPackagesStart <= verifyReleaseStart) {
-    failures.push(
-      "release.yml is missing the canonical verify-release boundary",
-    );
+    failures.push("release.yml is missing the canonical verify-release boundary");
   } else {
-    const verifyReleaseSection = release.slice(
-      verifyReleaseStart,
-      publishPackagesStart,
-    );
-
+    const verifyReleaseSection = release.slice(verifyReleaseStart, publishPackagesStart);
     for (const marker of [
       "Resolve successful current-main CI run",
       "actions/workflows/ci.yml/runs",
@@ -136,48 +115,34 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
       "npm run verify:release-size-budgets",
     ]) {
       if (!verifyReleaseSection.includes(marker)) {
-        failures.push(
-          `release.yml verify-release is missing current-main release control: ${marker}`,
-        );
+        failures.push(`release.yml verify-release is missing current-main release control: ${marker}`);
       }
     }
   }
-
-  for (const forbiddenMarker of [
-    "uses: ./.github/workflows/_compatibility.yml",
-    "uses: ./.github/workflows/_security.yml",
-    "  compatibility-checks:",
-    "  security-checks:",
-    "npm run verify:beta-package-artifacts",
-  ]) {
-    if (release.includes(forbiddenMarker)) {
-      failures.push(
-        `release.yml must not repeat successful main CI through ${forbiddenMarker}`,
-      );
-    }
+  if (release.includes("uses: ./.github/workflows/")) {
+    failures.push("release.yml must not repeat successful main CI through reusable workflows");
   }
 
   if (
     JSON.stringify(manifest.controls?.mandatoryAggregates) !==
-    JSON.stringify(["ci-gate", "nightly-gate"])
+    JSON.stringify(["ci-gate", "assurance-gate"])
   ) {
-    failures.push(
-      "security contract mandatory aggregates must be ci-gate and nightly-gate",
-    );
+    failures.push("security contract mandatory aggregates must be ci-gate and assurance-gate");
   }
-
+  if (
+    manifest.controls?.dependencyReview?.workflow !== ciWorkflowPath ||
+    manifest.controls?.codeql?.workflow !== assuranceWorkflowPath
+  ) {
+    failures.push("security contract must map dependency review to CI and CodeQL to weekly assurance");
+  }
   if (
     manifest.releasePreflight?.successfulCurrentMainCiRequired !== true ||
-    manifest.releasePreflight?.reusableSecurityWorkflowRepeated !== false ||
-    manifest.releasePreflight?.reusableCompatibilityWorkflowRepeated !==
-      false ||
     manifest.releasePreflight?.releaseArtifactVerificationRequired !== true ||
     manifest.releasePreflight?.releaseLineSizeBudgetVerificationRequired !== true
   ) {
-    failures.push(
-      "security contract release boundary must trust current-main CI and verify the retained release artifact",
-    );
+    failures.push("security contract release boundary must trust current-main CI and verify retained release artifacts");
   }
+
   const documentation = read(root, securityDocumentationPath);
   for (const marker of [
     "BT-8006",
@@ -186,7 +151,8 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "actionlint 1.7.12",
     "ShellCheck",
     "ci-gate",
-    "nightly-gate",
+    "assurance-gate",
+    "VyrnForge Weekly Assurance",
     "verify-release",
   ]) {
     if (!documentation.includes(marker)) {
