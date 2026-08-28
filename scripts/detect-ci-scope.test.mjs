@@ -37,13 +37,7 @@ test("package runtime changes derive affected workspaces from the dependency gra
 test("package tests select only their own workspace quality", () => {
   const plan = planCiScope(["packages/ui-data-grid/src/grid.test.tsx"]);
   expectEnabled(plan, ["quality"]);
-  expectDisabled(plan, [
-    "packages",
-    "consumer",
-    "docs",
-    "playground",
-    "full",
-  ]);
+  expectDisabled(plan, ["packages", "consumer", "docs", "playground", "full"]);
   assert.deepEqual(plan.affected_packages, ["@vyrnforge/ui-data-grid"]);
 });
 
@@ -56,13 +50,7 @@ test("package README changes verify the published payload and consumer", () => {
 
 test("package configuration changes include metadata validation", () => {
   const plan = planCiScope(["packages/ui-elements/package.json"]);
-  expectEnabled(plan, [
-    "quality",
-    "metadata",
-    "packages",
-    "consumer",
-    "docs",
-  ]);
+  expectEnabled(plan, ["quality", "metadata", "packages", "consumer", "docs"]);
   assert.ok(plan.affected_packages.includes("@vyrnforge/ui-elements"));
 });
 
@@ -112,13 +100,7 @@ test("consumer fixture changes select the packed-consumer gate", () => {
   ]) {
     const plan = planCiScope([file]);
     expectEnabled(plan, ["consumer", "integration"]);
-    expectDisabled(plan, [
-      "quality",
-      "packages",
-      "docs",
-      "playground",
-      "full",
-    ]);
+    expectDisabled(plan, ["quality", "packages", "docs", "playground", "full"]);
   }
 });
 
