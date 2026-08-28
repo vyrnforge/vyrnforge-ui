@@ -35,28 +35,13 @@ jobs:
           path = Path('scripts/angular-catalog-generation.mjs')
           text = path.read_text()
 
-          def replace_once(old, new, label):
+          def sub(pattern, replacement, label):
               global text
-              if old not in text:
-                  raise SystemExit(f'{label} patch target not found')
-              text = text.replace(old, new, 1)
+              text, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
+              if count != 1:
+                  raise SystemExit(f'{label} structural patch target not found')
 
-          replace_once(
-          '''function mappedEventField(record, event) {
-            if (event.detail === "value") return "value";
-            if (event.detail !== "mapped") return null;
-
-            const modelProperty = record.model?.property;
-            if (
-              modelProperty &&
-              event.detailFields.some((field) => field.name === modelProperty)
-            ) {
-              return modelProperty;
-            }
-            if (event.detailFields.length === 1) return event.detailFields[0].name;
-            return null;
-          }''',
-          '''function mappedEventField(record, event) {
+          mapped = '''function mappedEventField(record, event) {
             const hasField = (name) =>
               Boolean(name) && event.detailFields.some((field) => field.name === name);
             const publicChangeField = event.public.endsWith("Change")
@@ -77,44 +62,16 @@ jobs:
             if (hasField(publicChangeField)) return publicChangeField;
             if (event.detailFields.length === 1) return event.detailFields[0].name;
             return null;
-          }''',
-          'event field mapping')
+          }
 
-          event_validation_pattern = re.compile(
-              r'''      if \(event\.detail === "mapped"\) \{.*?      \}\n      if \(event\.detail === "value"\) \{.*?      \}''',
-              re.S,
+          function normalizeGeneratedComponent(record, nativeRecord, canonicalRecord) {'''
+          sub(
+              r'function mappedEventField\(record, event\) \{.*?\n\}\n\nfunction normalizeGeneratedComponent\(record, nativeRecord\) \{',
+              mapped,
+              'mapped event + normalize signature',
           )
-          event_validation_replacement = '''      if (event.detail === "mapped" || event.detail === "value") {
-                assert(
-                  mappedEventField(record, event),
-                  `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,
-                );
-              }'''
-          text, count = event_validation_pattern.subn(
-              event_validation_replacement,
-              text,
-              count=1,
-          )
-          if count != 1:
-              raise SystemExit('event validation structural patch target not found')
 
-          replace_once(
-          'function normalizeGeneratedComponent(record, nativeRecord) {',
-          'function normalizeGeneratedComponent(record, nativeRecord, canonicalRecord) {',
-          'canonical record signature')
-
-          replace_once(
-          '''  const outputAliases = new Set(record.events.map((event) => event.public));
-            const properties = record.properties.filter(
-              (property) => property.readOnly !== true && property.binding !== "readonly",
-            );
-            const directiveProperties = properties.filter(
-              (property) => !outputAliases.has(property.public),
-            );
-            const hostBoundProperties = properties.filter((property) =>
-              outputAliases.has(property.public),
-            );''',
-          '''  const outputAliases = new Set(record.events.map((event) => event.public));
+          property_model = '''  const outputAliases = new Set(record.events.map((event) => event.public));
             const canonicalDefaultProperty = canonicalRecord?.model?.defaultProperty ?? null;
             const canonicalStateProperty = canonicalRecord?.model?.stateProperty ?? null;
             const properties = record.properties
@@ -149,74 +106,107 @@ jobs:
             assert(
               hostBoundProperties.every((property) => !property.defaultInitializer),
               `${record.id}: default initializer cannot collide with an output alias`,
-            );''',
-          'default initializer model')
+            );
 
-          replace_once(
-          'export function createAngularCatalogModel(generationModel, exceptionRegistry) {',
-          'export function createAngularCatalogModel(\n  generationModel,\n  exceptionRegistry,\n  canonicalById,\n) {',
-          'catalog model signature')
+            if (!specialized) {'''
+          sub(
+              r'  const outputAliases = new Set\(record\.events\.map\(\(event\) => event\.public\)\);.*?\n\n  if \(!specialized\) \{',
+              property_model,
+              'default initializer model',
+          )
 
-          replace_once(
-          '''    const angularRecord = angularById.get(nativeRecord.id);
-              assert(angularRecord, `${nativeRecord.id}: missing Angular generation record`);
-              const exception = findActiveAngularException(exceptionRegistry, nativeRecord.id);''',
-          '''    const angularRecord = angularById.get(nativeRecord.id);
+          event_validation = '''      if (event.detail === "mapped" || event.detail === "value") {
+                assert(
+                  mappedEventField(record, event),
+                  `${record.id}: ${event.detail} output ${event.public} needs a deterministic canonical field or specialization`,
+                );
+              }'''
+          sub(
+              r'      if \(event\.detail === "mapped"\) \{.*?\n      \}\n      if \(event\.detail === "value"\) \{.*?\n      \}',
+              event_validation,
+              'event validation',
+          )
+
+          sub(
+              r'export function createAngularCatalogModel\(generationModel, exceptionRegistry\) \{',
+              '''export function createAngularCatalogModel(
+            generationModel,
+            exceptionRegistry,
+            canonicalById,
+          ) {''',
+              'catalog model signature',
+          )
+
+          sub(
+              r'    const angularRecord = angularById\.get\(nativeRecord\.id\);\n    assert\(angularRecord, `\$\{nativeRecord\.id\}: missing Angular generation record`\);\n    const exception = findActiveAngularException\(exceptionRegistry, nativeRecord\.id\);',
+              '''    const angularRecord = angularById.get(nativeRecord.id);
               assert(angularRecord, `${nativeRecord.id}: missing Angular generation record`);
               const canonicalRecord = canonicalById.get(nativeRecord.id);
               assert(canonicalRecord, `${nativeRecord.id}: missing canonical component record`);
               const exception = findActiveAngularException(exceptionRegistry, nativeRecord.id);''',
-          'canonical lookup')
+              'canonical component lookup',
+          )
 
-          replace_once(
-          '    components.push(normalizeGeneratedComponent(angularRecord, nativeRecord));',
-          '''    components.push(
+          sub(
+              r'    components\.push\(normalizeGeneratedComponent\(angularRecord, nativeRecord\)\);',
+              '''    components.push(
                 normalizeGeneratedComponent(angularRecord, nativeRecord, canonicalRecord),
               );''',
-          'normalize call')
+              'normalize component call',
+          )
 
-          replace_once(
-          '''function inputSource(component, property) {
-            const member = identifier(`${property.public}Input`);
-            return `  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element[\"${property.canonical}\"] | undefined) {\n    if (value !== undefined) {\n      this.element.nativeElement[\"${property.canonical}\"] = value;\n    }\n  }`;
-          }''',
-          '''function inputSource(component, property) {
+          input_source = '''function inputSource(component, property) {
             const member = identifier(`${property.public}Input`);
             const runtimeCanonical = property.runtimeCanonical;
             if (property.defaultInitializer) {
               const guard = identifier(`${property.public}Applied`);
-              return `  private ${guard} = false;\n\n  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element[\"${runtimeCanonical}\"] | undefined) {\n    if (!this.${guard} && value !== undefined) {\n      this.element.nativeElement[\"${runtimeCanonical}\"] = value;\n      this.${guard} = true;\n    }\n  }`;
+              return `  private ${guard} = false;\n\n  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element["${runtimeCanonical}"] | undefined) {\n    if (!this.${guard} && value !== undefined) {\n      this.element.nativeElement["${runtimeCanonical}"] = value;\n      this.${guard} = true;\n    }\n  }`;
             }
-            return `  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element[\"${runtimeCanonical}\"] | undefined) {\n    if (value !== undefined) {\n      this.element.nativeElement[\"${runtimeCanonical}\"] = value;\n    }\n  }`;
-          }''',
-          'input runtime target')
+            return `  @Input("${property.public}")\n  set ${member}(value: ${component.exportName}Element["${runtimeCanonical}"] | undefined) {\n    if (value !== undefined) {\n      this.element.nativeElement["${runtimeCanonical}"] = value;\n    }\n  }`;
+          }
 
-          replace_once(
-          '''function slotSource(component) {
-            const values = component.slots.map((slot) => `"${slot.public}"`).join(", ");
-            return `export const ${component.exportName}SlotNames = Object.freeze([${values}] as const);\nexport type ${component.exportName}SlotName = (typeof ${component.exportName}SlotNames)[number];\n\nexport function compose${component.exportName}Slot(\n  element: HTMLElement,\n  slot: ${component.exportName}SlotName,\n): HTMLElement {\n  if (slot === "default") element.removeAttribute("slot");\n  else element.setAttribute("slot", slot);\n  return element;\n}`;
-          }''',
-          '''function slotSource(component) {
+          function outputSource'''
+          sub(
+              r'function inputSource\(component, property\) \{.*?\n\}\n\nfunction outputSource',
+              input_source,
+              'input source',
+          )
+
+          slot_source = '''function slotSource(component) {
             const values = component.slots.map((slot) => `"${slot.public}"`).join(", ");
             const hasDefault = component.slots.some((slot) => slot.public === "default");
             const assignment = hasDefault
               ? '  if (slot === "default") element.removeAttribute("slot");\\n  else element.setAttribute("slot", slot);'
               : '  element.setAttribute("slot", slot);';
             return `export const ${component.exportName}SlotNames = Object.freeze([${values}] as const);\nexport type ${component.exportName}SlotName = (typeof ${component.exportName}SlotNames)[number];\n\nexport function compose${component.exportName}Slot(\n  element: HTMLElement,\n  slot: ${component.exportName}SlotName,\n): HTMLElement {\n${assignment}\n  return element;\n}`;
-          }''',
-          'slot composition')
+          }
 
-          replace_once(
-          '        `  ${JSON.stringify(property.public)}?: ${component.exportName}Element[\\"${property.canonical}\\"];`,',
-          '        `  ${JSON.stringify(property.public)}?: ${component.exportName}Element[\\"${property.runtimeCanonical}\\"];`,',
-          'typed input contract')
+          function inputContractSource'''
+          sub(
+              r'function slotSource\(component\) \{.*?\n\}\n\nfunction inputContractSource',
+              slot_source,
+              'slot source',
+          )
 
-          replace_once(
-          '''  const contracts = loadCanonicalComponentContracts({ root });
-            const generationModel = createFrameworkGenerationModel(contracts);
-            const exceptionRegistry = loadFrameworkExceptions({ root });
-            const model = createAngularCatalogModel(generationModel, exceptionRegistry);''',
-          '''  const contracts = loadCanonicalComponentContracts({ root });
+          input_contract = '''function inputContractSource(component) {
+            const lines = component.properties
+              .map(
+                (property) =>
+                  `  ${JSON.stringify(property.public)}?: ${component.exportName}Element["${property.runtimeCanonical}"];`,
+              )
+              .join("\\n");
+            return `export interface ${component.exportName}Inputs {\\n${lines}\\n}`;
+          }
+
+          function outputContractSource'''
+          sub(
+              r'function inputContractSource\(component\) \{.*?\n\}\n\nfunction outputContractSource',
+              input_contract,
+              'input contract source',
+          )
+
+          build_prefix = '''export function buildAngularCatalogArtifact({ root } = {}) {
+            const contracts = loadCanonicalComponentContracts({ root });
             const generationModel = createFrameworkGenerationModel(contracts);
             const exceptionRegistry = loadFrameworkExceptions({ root });
             const canonicalById = new Map(
@@ -226,8 +216,12 @@ jobs:
               generationModel,
               exceptionRegistry,
               canonicalById,
-            );''',
-          'artifact canonical index')
+            );'''
+          sub(
+              r'export function buildAngularCatalogArtifact\(\{ root \} = \{\}\) \{\n  const contracts = loadCanonicalComponentContracts\(\{ root \}\);\n  const generationModel = createFrameworkGenerationModel\(contracts\);\n  const exceptionRegistry = loadFrameworkExceptions\(\{ root \}\);\n  const model = createAngularCatalogModel\(generationModel, exceptionRegistry\);',
+              build_prefix,
+              'artifact canonical index',
+          )
 
           path.write_text(text)
           PY
