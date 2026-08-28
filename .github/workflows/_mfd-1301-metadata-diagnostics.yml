@@ -1,0 +1,41 @@
+name: MFD-1301 metadata diagnostics
+on:
+  push:
+    branches: [mfd-1301-diagnostics]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+      - run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - run: npm ci
+      - name: Contract tests
+        run: npm run test:contracts
+      - name: Metadata verification
+        run: npm run verify:metadata
+      - name: Design tokens
+        run: npm run verify:design-tokens
+      - name: Token adoption
+        run: npm run verify:token-adoption
+      - name: Visual regression metadata
+        run: npm run verify:visual-regression
+      - name: Component maturity
+        run: npm run verify:component-maturity
+      - name: Maturity closure
+        run: npm run verify:maturity-closure
+      - name: Assistive technology evidence
+        run: npm run verify:assistive-technology
+      - name: Repository inventory
+        run: npm run verify:repository-inventory
+      - name: Workflow verification
+        run: npm run verify:workflows
+      - name: Templates
+        run: npm run verify:templates
+      - name: Validation model
+        run: npm run verify:validation-model
