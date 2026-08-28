@@ -14,8 +14,23 @@ The supported Vue runtime contract is `>=3.5 <4`.
 - The major-version ceiling is deliberate: Vue 4 requires an explicit compatibility review rather than being accepted implicitly.
 - The repository peer-policy verifier checks the manifest, shared-foundation isolation, and the packed package metadata.
 
-The initial workspace promotes the proven generated Vue slices for button, dialog, tabs, and text input. Catalog-wide generation, Vue setup/plugin ergonomics, model mapping, fixture migration, compatibility/accessibility evidence, and release-matrix integration remain separate dependency-tracked Vue work.
+## Normal Vue setup
+
+The supported low-friction path is the package plugin:
+
+```ts
+import { createApp } from "vue";
+import { VyrnForgeVue } from "@vyrnforge/ui-vue";
+
+createApp(App).use(VyrnForgeVue).mount("#app");
+```
+
+`VyrnForgeVue` registers the canonical VyrnForge custom elements plus the package's public `Vf*` facade components. Normal consumers therefore do not copy the internal fixture's `@vyrnforge/ui-elements/register` side-effect import and do not need Vue compiler `isCustomElement` configuration when they consume the facade components.
+
+`createVyrnForgeVue(options)` and `installVyrnForgeVue(app, options)` are provided for controlled setup, including hosts that supply an explicit custom-element registry.
+
+The initial workspace promotes the proven generated Vue slices for button, dialog, tabs, and text input. Catalog-wide generation, model mapping, fixture migration, compatibility/accessibility evidence, and release-matrix integration remain separate dependency-tracked Vue work.
 
 The workspace is intentionally private while the Vue lane is staged. The later release-integration task owns removing that staging guard and adding the Vue artifact to canonical package/release verification once its required compatibility and accessibility evidence is complete.
 
-This page records the package boundary and dependency contract only. Consumer API and migration guidance belongs to the dedicated Vue documentation task after the package-consumption cutover is complete.
+This page records the package boundary, dependency contract, and setup contract only. Consumer API and migration guidance belongs to the dedicated Vue documentation task after the package-consumption cutover is complete.
