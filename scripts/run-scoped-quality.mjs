@@ -44,12 +44,14 @@ function discoverPackageNames() {
 
 function readAffectedPackages(full) {
   if (full) return discoverPackageNames();
-  return [...new Set(
-    (process.env.CI_AFFECTED_PACKAGES ?? "")
-      .split(",")
-      .map((value) => value.trim())
-      .filter(Boolean),
-  )].sort();
+  return [
+    ...new Set(
+      (process.env.CI_AFFECTED_PACKAGES ?? "")
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  ].sort();
 }
 
 function dependenciesFor(manifest) {
@@ -72,7 +74,9 @@ function orderSelectedPackages(packageNames) {
   function visit(name) {
     if (visited.has(name)) return;
     if (visiting.has(name)) {
-      throw new Error(`Circular VyrnForge workspace dependency detected at ${name}`);
+      throw new Error(
+        `Circular VyrnForge workspace dependency detected at ${name}`,
+      );
     }
     visiting.add(name);
     for (const dependency of dependenciesFor(manifests.get(name))) {
