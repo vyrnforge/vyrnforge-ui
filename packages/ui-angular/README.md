@@ -11,7 +11,18 @@ This workspace promotes the Angular directive slices proven during the S11 consu
 - `VfTabs`
 - `VfDialog`
 
-The package is intentionally private while the Angular distribution lane is being completed. Angular peer-range policy, one-step application setup, full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.
+The package is intentionally private while the Angular distribution lane is being completed. One-step application setup, full-catalog generation, Forms integration, SSR/hydration validation, and publication/release verification are tracked as later S12 work and are not claimed by this package yet.
+
+## Dependency contract
+
+The currently validated consumer line is Angular 22. The package declares:
+
+- `@angular/core >=22 <23` as a required peer;
+- `@angular/forms >=22 <23` as an optional peer, so applications that do not use the Forms adapter do not need to install Forms for this facade;
+- `rxjs ^6.5.3 || ^7.4.0` as the Angular-compatible peer range;
+- `tslib ^2.8.1` as a direct package dependency for emitted library helpers.
+
+Angular runtime packages and RxJS remain outside VyrnForge shared foundations. Exact Angular/RxJS versions in `devDependencies` are repository validation pins and do not narrow the supported consumer peer ranges.
 
 ## Development
 

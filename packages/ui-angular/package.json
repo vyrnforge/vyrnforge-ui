@@ -26,14 +26,27 @@
     "lint:fix": "npm run lint -- --fix",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors && npm run build --workspace @vyrnforge/ui-elements",
     "typecheck": "ngc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run && node ../../scripts/verify-angular-peer-policy.mjs"
   },
   "dependencies": {
-    "@vyrnforge/ui-elements": "0.2.0-beta.2"
+    "@vyrnforge/ui-elements": "0.2.0-beta.2",
+    "tslib": "^2.8.1"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=22 <23",
+    "@angular/forms": ">=22 <23",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/forms": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@angular/compiler-cli": "22.0.8",
     "@angular/core": "22.0.8",
+    "@angular/forms": "22.0.8",
+    "rxjs": "7.8.2",
     "typescript": "6.0.2",
     "vitest": "*"
   },
