@@ -1,0 +1,75 @@
+name: MFD-1301 contract diagnostics
+on:
+  push:
+    branches: [mfd-1301-diagnostics]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+      - run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - run: npm ci
+      - name: canonical contracts
+        run: npm run test:canonical-contracts
+      - name: framework generation
+        run: npm run test:framework-generation
+      - name: CI scope
+        run: npm run test:ci-scope
+      - name: package boundaries
+        run: npm run test:package-boundaries
+      - name: component metadata
+        run: npm run test:component-metadata
+      - name: beta scope
+        run: npm run test:beta-scope
+      - name: release groups
+        run: npm run test:release-groups
+      - name: beta package contract
+        run: npm run test:beta-package-contract
+      - name: beta package size budgets
+        run: npm run test:beta-package-size-budgets
+      - name: release size budgets
+        run: npm run test:release-size-budgets
+      - name: compatibility release matrix
+        run: npm run test:compatibility-release-matrix
+      - name: security workflow hardening
+        run: npm run test:security-workflow-hardening
+      - name: trusted publishing provenance
+        run: npm run test:trusted-publishing-provenance
+      - name: trusted publishing dry run
+        run: npm run test:trusted-publishing-dry-run
+      - name: release artifact
+        run: npm run test:release-artifact
+      - name: release dry run
+        run: npm run test:release-dry-run
+      - name: multi framework
+        run: npm run test:multi-framework
+      - name: component maturity
+        run: npm run test:component-maturity
+      - name: design tokens
+        run: npm run test:design-tokens
+      - name: token adoption
+        run: npm run test:token-adoption
+      - name: visual regression
+        run: npm run test:visual-regression
+      - name: consumer foundations
+        run: npm run test:consumer-foundations
+      - name: component reference
+        run: npm run test:component-reference
+      - name: maturity closure
+        run: npm run test:maturity-closure
+      - name: assistive technology
+        run: npm run test:assistive-technology
+      - name: templates
+        run: npm run test:templates
+      - name: documentation current
+        run: npm run test:documentation-current
+      - name: validation model
+        run: npm run test:validation-model
+      - name: generated framework artifacts
+        run: npm run test:generated-framework-artifacts
