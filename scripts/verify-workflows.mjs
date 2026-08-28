@@ -11,13 +11,23 @@ function assert(condition, message) {
 
 function read(relativePath) {
   const absolutePath = path.join(root, relativePath);
-  assert(existsSync(absolutePath), `missing required infrastructure file: ${relativePath}`);
+  assert(
+    existsSync(absolutePath),
+    `missing required infrastructure file: ${relativePath}`,
+  );
   return readFileSync(absolutePath, "utf8").replaceAll("\r\n", "\n");
 }
 
 function assertNoLongLivedToken(text, file) {
-  for (const forbidden of ["NPM_TOKEN", "NODE_AUTH_TOKEN", "PERSONAL_ACCESS_TOKEN"]) {
-    assert(!text.includes(forbidden), `${file}: forbidden long-lived credential reference ${forbidden}`);
+  for (const forbidden of [
+    "NPM_TOKEN",
+    "NODE_AUTH_TOKEN",
+    "PERSONAL_ACCESS_TOKEN",
+  ]) {
+    assert(
+      !text.includes(forbidden),
+      `${file}: forbidden long-lived credential reference ${forbidden}`,
+    );
   }
 }
 
@@ -96,8 +106,14 @@ for (const removedWorkflow of [
 for (const workflow of workflowFiles) {
   const text = read(`.github/workflows/${workflow}`);
   assertPinnedExternalActions(text, workflow);
-  assert(!/continue-on-error:\s*true/.test(text), `${workflow} must not conceal mandatory failures`);
-  assert(!text.includes("--if-present"), `${workflow} must not silently skip mandatory scripts`);
+  assert(
+    !/continue-on-error:\s*true/.test(text),
+    `${workflow} must not conceal mandatory failures`,
+  );
+  assert(
+    !text.includes("--if-present"),
+    `${workflow} must not silently skip mandatory scripts`,
+  );
   assertNoLongLivedToken(text, workflow);
 }
 
@@ -124,7 +140,9 @@ assert(
   "ci.yml must own CI jobs directly instead of exposing internal reusable workflows",
 );
 assert(
-  !/push:\s*[\s\S]*integration\/\*\*/.test(ci.slice(0, ci.indexOf("pull_request:"))),
+  !/push:\s*[\s\S]*integration\/\*\*/.test(
+    ci.slice(0, ci.indexOf("pull_request:")),
+  ),
   "ci.yml must not run on integration-lane pushes",
 );
 assert(
@@ -134,8 +152,16 @@ assert(
   "ci.yml must keep planner-scoped quality, integration, and security jobs",
 );
 const ciGate = ci.slice(ci.indexOf("  ci-gate:"));
-for (const dependency of ["plan", "quality-checks", "integration-checks", "security-checks"]) {
-  assert(ciGate.includes(`- ${dependency}`), `ci-gate must depend on ${dependency}`);
+for (const dependency of [
+  "plan",
+  "quality-checks",
+  "integration-checks",
+  "security-checks",
+]) {
+  assert(
+    ciGate.includes(`- ${dependency}`),
+    `ci-gate must depend on ${dependency}`,
+  );
 }
 for (const marker of [
   "PLAN_RESULT",
@@ -184,10 +210,22 @@ assert(
   !assurance.includes("uses: ./.github/workflows/"),
   "assurance.yml must own weekly assurance jobs directly",
 );
-assert(!assurance.includes("pages: write"), "assurance.yml must not deploy Pages");
-assert(!assurance.includes("id-token: write"), "assurance.yml must not request OIDC");
-assert(!assurance.includes("npm publish"), "assurance.yml must not publish packages");
-assert(!assurance.includes("nightly-gate"), "assurance.yml must remove obsolete nightly terminology");
+assert(
+  !assurance.includes("pages: write"),
+  "assurance.yml must not deploy Pages",
+);
+assert(
+  !assurance.includes("id-token: write"),
+  "assurance.yml must not request OIDC",
+);
+assert(
+  !assurance.includes("npm publish"),
+  "assurance.yml must not publish packages",
+);
+assert(
+  !assurance.includes("nightly-gate"),
+  "assurance.yml must remove obsolete nightly terminology",
+);
 
 const pages = read(".github/workflows/deploy-pages.yml");
 for (const marker of [
@@ -220,7 +258,10 @@ for (const forbidden of [
   "build:packages",
   "npm publish",
 ]) {
-  assert(!pages.includes(forbidden), `deploy-pages.yml must deploy existing artifacts without ${forbidden}`);
+  assert(
+    !pages.includes(forbidden),
+    `deploy-pages.yml must deploy existing artifacts without ${forbidden}`,
+  );
 }
 
 const release = read(".github/workflows/release.yml");
@@ -257,7 +298,12 @@ for (const relativePath of [
   "docs/engineering/ci-cd-architecture.md",
   "docs/release/release-responsibility-matrix.md",
 ]) {
-  assert(existsSync(path.join(root, relativePath)), `missing CI/CD source-of-truth document: ${relativePath}`);
+  assert(
+    existsSync(path.join(root, relativePath)),
+    `missing CI/CD source-of-truth document: ${relativePath}`,
+  );
 }
 
-console.log(`Workflow contracts passed for four lifecycle workflows in ${workflowsDir}`);
+console.log(
+  `Workflow contracts passed for four lifecycle workflows in ${workflowsDir}`,
+);
