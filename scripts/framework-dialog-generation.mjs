@@ -4,7 +4,7 @@ export const FRAMEWORK_DIALOG_ARTIFACT_PATHS = Object.freeze({
   native: "tests/consumers/native-html/src/generated/vf-dialog.generated.ts",
   react: "tests/consumers/react/src/generated/Dialog.generated.tsx",
   angular: "tests/consumers/angular/src/app/generated/vf-dialog.generated.ts",
-  vue: "tests/consumers/vue/src/generated/VfDialog.generated.ts",
+  vue: "packages/ui-vue/src/generated/VfDialog.generated.ts",
 });
 
 const TASK_ID = "MFD-1115";

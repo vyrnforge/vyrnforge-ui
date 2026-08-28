@@ -90,6 +90,28 @@
         "reviewMilestone": "S14 React convergence"
       },
       {
+        "id": "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
+        "framework": "react",
+        "scope": [
+          "caption",
+          "code-text",
+          "heading",
+          "label",
+          "text"
+        ],
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Typography/Caption.tsx",
+          "packages/ui-components/src/components/Typography/CodeText.tsx",
+          "packages/ui-components/src/components/Typography/Heading.tsx",
+          "packages/ui-components/src/components/Typography/Label.tsx",
+          "packages/ui-components/src/components/Typography/Text.tsx",
+          "packages/ui-components/src/components/Typography/Typography.types.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
+      },
+      {
         "id": "MFD-EX-REACT-USE-TOAST",
         "framework": "react",
         "scope": "use-toast",
