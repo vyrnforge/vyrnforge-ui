@@ -40,16 +40,51 @@ function workspaceManifest(packageName) {
   return JSON.parse(readFileSync(manifestPath, "utf8"));
 }
 
-function runWorkspaceScript(packageName, script, extraArgs = []) {
+function dependenciesFor(manifest) {
+  return new Set([
+    ...Object.keys(manifest.dependencies ?? {}),
+    ...Object.keys(manifest.peerDependencies ?? {}),
+    ...Object.keys(manifest.optionalDependencies ?? {}),
+  ]);
+}
+
+function orderSelectedPackages(packageNames) {
+  const selected = new Set(packageNames);
+  const manifests = new Map(
+    packageNames.map((name) => [name, workspaceManifest(name)]),
+  );
+  const ordered = [];
+  const visiting = new Set();
+  const visited = new Set();
+
+  function visit(name) {
+    if (visited.has(name)) return;
+    if (visiting.has(name)) {
+      throw new Error(`Circular VyrnForge workspace dependency detected at ${name}`);
+    }
+    visiting.add(name);
+    for (const dependency of dependenciesFor(manifests.get(name))) {
+      if (selected.has(dependency)) visit(dependency);
+    }
+    visiting.delete(name);
+    visited.add(name);
+    ordered.push(name);
+  }
+
+  for (const name of [...packageNames].sort()) visit(name);
+  return ordered;
+}
+
+function runWorkspaceScript(packageName, script) {
   const manifest = workspaceManifest(packageName);
   if (!manifest.scripts?.[script]) return;
-  runNpm(["--ignore-scripts", "run", script, "--workspace", packageName, ...extraArgs]);
+  runNpm(["--ignore-scripts", "run", script, "--workspace", packageName]);
 }
 
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
-const selectedPackages = readAffectedPackages();
+const selectedPackages = orderSelectedPackages(readAffectedPackages());
 
 for (const command of [
   "format:check",
