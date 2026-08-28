@@ -1,10 +1,12 @@
 name: VyrnForge CI
 
 on:
-  pull_request:
-    branches: [main]
   push:
-    branches: [main]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -69,7 +71,7 @@ jobs:
           PLAN_JSON: ${{ steps.scope.outputs.plan_json }}
         run: node scripts/write-ci-summary.mjs
 
-  quality:
+  quality-checks:
     name: quality
     needs: plan
     if: needs.plan.outputs.quality == 'true'
@@ -83,7 +85,7 @@ jobs:
       fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}
       affected-packages: ${{ needs.plan.outputs.affected_packages }}
 
-  integration:
+  integration-checks:
     name: integration
     needs: plan
     if: needs.plan.outputs.integration == 'true'
@@ -99,7 +101,7 @@ jobs:
       playground: ${{ needs.plan.outputs.playground == 'true' }}
       pages-artifact: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
-  security:
+  security-checks:
     name: security
     needs: plan
     if: needs.plan.outputs.security == 'true'
@@ -114,7 +116,11 @@ jobs:
 
   ci-gate:
     name: ci-gate
-    needs: [plan, quality, integration, security]
+    needs:
+      - plan
+      - quality-checks
+      - integration-checks
+      - security-checks
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -135,7 +141,7 @@ jobs:
           CI_SUMMARY_MODE: gate
           PLAN_JSON: ${{ needs.plan.outputs.plan_json }}
           PLAN_RESULT: ${{ needs.plan.result }}
-          QUALITY_RESULT: ${{ needs.quality.result }}
-          INTEGRATION_RESULT: ${{ needs.integration.result }}
-          SECURITY_RESULT: ${{ needs.security.result }}
+          QUALITY_RESULT: ${{ needs.quality-checks.result }}
+          INTEGRATION_RESULT: ${{ needs.integration-checks.result }}
+          SECURITY_RESULT: ${{ needs.security-checks.result }}
         run: node scripts/write-ci-summary.mjs
