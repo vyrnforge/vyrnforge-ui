@@ -1,5 +1,10 @@
 import { execFileSync } from "node:child_process";
-import { appendFileSync, existsSync, readFileSync, readdirSync } from "node:fs";
+import {
+  appendFileSync,
+  existsSync,
+  readFileSync,
+  readdirSync,
+} from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -195,7 +200,9 @@ function classifyPackageFile(file, scope, selectedPackages, reasons) {
 }
 
 export function planCiScope(files, { forceFull = false } = {}) {
-  const changedFiles = [...new Set(files.map(normalizeFile).filter(Boolean))].sort();
+  const changedFiles = [
+    ...new Set(files.map(normalizeFile).filter(Boolean)),
+  ].sort();
   const scope = createScope();
   const selectedPackages = new Set();
   const reasons = new Set();
@@ -203,7 +210,9 @@ export function planCiScope(files, { forceFull = false } = {}) {
   if (forceFull || changedFiles.length === 0) {
     markFull(scope, selectedPackages);
     reasons.add(
-      forceFull ? "manual full validation" : "no diff available; safe full fallback",
+      forceFull
+        ? "manual full validation"
+        : "no diff available; safe full fallback",
     );
     return finalize(scope, selectedPackages, changedFiles, reasons);
   }
@@ -290,7 +299,10 @@ export function planCiScope(files, { forceFull = false } = {}) {
       continue;
     }
 
-    if (file.startsWith("docs/metadata/") || file === ".ai/COMPONENT_MAP.json") {
+    if (
+      file.startsWith("docs/metadata/") ||
+      file === ".ai/COMPONENT_MAP.json"
+    ) {
       scope.quality = true;
       scope.metadata = true;
       scope.docs = true;
@@ -333,13 +345,16 @@ function finalize(scope, selectedPackages, changedFiles, reasons) {
     scope.playground ||
     scope.browser;
 
-  scope.security = scope.full || changedFiles.some((file) =>
-    file === "package.json" ||
-    file === "package-lock.json" ||
-    /(?:^|\/)package\.json$/.test(file) ||
-    file.startsWith(".github/workflows/") ||
-    file.startsWith(".github/actions/")
-  );
+  scope.security =
+    scope.full ||
+    changedFiles.some(
+      (file) =>
+        file === "package.json" ||
+        file === "package-lock.json" ||
+        /(?:^|\/)package\.json$/.test(file) ||
+        file.startsWith(".github/workflows/") ||
+        file.startsWith(".github/actions/"),
+    );
 
   scope.docs_only =
     scope.docs &&
@@ -391,7 +406,10 @@ function writeGitHubOutput(outputPath, plan) {
   for (const key of scopeKeys) {
     appendFileSync(outputPath, `${key}=${plan[key] ? "true" : "false"}\n`);
   }
-  appendFileSync(outputPath, `affected_packages=${plan.affected_packages_csv}\n`);
+  appendFileSync(
+    outputPath,
+    `affected_packages=${plan.affected_packages_csv}\n`,
+  );
   appendFileSync(outputPath, `changed_count=${plan.changed_files.length}\n`);
   appendFileSync(
     outputPath,
@@ -400,7 +418,10 @@ function writeGitHubOutput(outputPath, plan) {
 }
 
 function isMainModule() {
-  return process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+  return (
+    process.argv[1] &&
+    path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+  );
 }
 
 if (isMainModule()) {
@@ -408,7 +429,8 @@ if (isMainModule()) {
   const base = readArgument("--base") ?? process.env.CI_BASE_SHA;
   const head = readArgument("--head") ?? process.env.CI_HEAD_SHA;
   const filesFrom = readArgument("--files-from");
-  const githubOutput = readArgument("--github-output") ?? process.env.GITHUB_OUTPUT;
+  const githubOutput =
+    readArgument("--github-output") ?? process.env.GITHUB_OUTPUT;
   const files = readChangedFiles({ base, head, filesFrom });
   const plan = planCiScope(files, {
     forceFull: forceFull || isZeroSha(base) || !head,
