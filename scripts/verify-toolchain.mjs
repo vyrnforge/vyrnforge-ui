@@ -317,20 +317,15 @@ assert(
 );
 
 assert(
-  lockfile.packages?.["node_modules/typescript"]?.version ===
-    expected.typescript,
+  lockfile.packages?.["node_modules/typescript"]?.version === expected.typescript,
   `lockfile must resolve TypeScript ${expected.typescript}`,
 );
 
 const workflowFiles = [
+  ".github/workflows/assurance.yml",
   ".github/workflows/ci.yml",
-  ".github/workflows/nightly.yml",
-  ".github/workflows/pages.yml",
+  ".github/workflows/deploy-pages.yml",
   ".github/workflows/release.yml",
-  ".github/workflows/_quality.yml",
-  ".github/workflows/_integration.yml",
-  ".github/workflows/_compatibility.yml",
-  ".github/workflows/_security.yml",
 ];
 
 for (const workflowPath of workflowFiles) {
@@ -343,7 +338,7 @@ for (const workflowPath of workflowFiles) {
 
   assert(
     !workflow.includes('default: "22"'),
-    `${workflowPath}: reusable workflow default must not use Node 22`,
+    `${workflowPath}: workflow defaults must not use Node 22`,
   );
 }
 
