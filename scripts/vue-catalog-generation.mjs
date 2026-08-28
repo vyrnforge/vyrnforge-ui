@@ -23,20 +23,32 @@ function assert(condition, message) {
 export function createVueCatalogModel(generationModel) {
   const vue = generationModel.surfaces.vue.components;
   const nativeById = new Map(
-    generationModel.surfaces.native.components.map((record) => [record.id, record]),
+    generationModel.surfaces.native.components.map((record) => [
+      record.id,
+      record,
+    ]),
   );
   const components = vue
     .filter((record) => ["current", "target"].includes(record.status))
     .map((record) => {
       const native = nativeById.get(record.id);
       assert(record.export, `${record.id}: Vue mapping requires an export`);
-      assert(native?.tag, `${record.id}: canonical Native mapping requires a tag`);
-      assert(record.package === "@vyrnforge/ui-vue", `${record.id}: unexpected Vue package`);
+      assert(
+        native?.tag,
+        `${record.id}: canonical Native mapping requires a tag`,
+      );
+      assert(
+        record.package === "@vyrnforge/ui-vue",
+        `${record.id}: unexpected Vue package`,
+      );
       assert(
         record.adapter.canonicalRenderer === "@vyrnforge/ui-elements",
         `${record.id}: Vue facade must delegate rendering to ui-elements`,
       );
-      assert(!record.id.includes("data-grid"), `${record.id}: data grid is not part of the base Vue catalog`);
+      assert(
+        !record.id.includes("data-grid"),
+        `${record.id}: data grid is not part of the base Vue catalog`,
+      );
       return {
         id: record.id,
         exportName: record.export,
@@ -46,9 +58,19 @@ export function createVueCatalogModel(generationModel) {
     })
     .sort((left, right) => compareText(left.id, right.id));
 
-  assert(components.length === 59, `expected 59 supported non-grid contracts, received ${components.length}`);
-  assert(new Set(components.map((entry) => entry.exportName)).size === components.length, "duplicate Vue exports");
-  assert(new Set(components.map((entry) => entry.tag)).size === components.length, "duplicate canonical tags");
+  assert(
+    components.length === 59,
+    `expected 59 supported non-grid contracts, received ${components.length}`,
+  );
+  assert(
+    new Set(components.map((entry) => entry.exportName)).size ===
+      components.length,
+    "duplicate Vue exports",
+  );
+  assert(
+    new Set(components.map((entry) => entry.tag)).size === components.length,
+    "duplicate canonical tags",
+  );
   return Object.freeze(components);
 }
 
@@ -58,13 +80,24 @@ function genericExportLine(component) {
 }
 
 export function serializeVueCatalog(components) {
-  const specialized = components.filter((entry) => entry.specialized);
+  const specializedImports = components
+    .filter((entry) => entry.specialized)
+    .map(
+      (entry) =>
+        `import { ${entry.exportName} } from "./${entry.exportName}.generated";`,
+    )
+    .join("\n");
+  const exportLines = components.map(genericExportLine).join("\n");
+  const registryLines = components
+    .map((entry) => `  ${entry.exportName},`)
+    .join("\n");
+
   return `${GENERATED_HEADER}
 import { defineComponent, h, useAttrs } from "vue";
 import type { Component, Slots } from "vue";
 import type { VyrnForgePublicElementTagName } from "@vyrnforge/ui-elements";
 
-${specialized.map((entry) => `import { ${entry.exportName} } from "./${entry.exportName}.generated";`).join("\n")}
+${specializedImports}
 
 function renderSlots(slots: Slots): unknown[] {
   const children: unknown[] = [];
@@ -106,10 +139,10 @@ function createVyrnForgeVueFacade(
   });
 }
 
-${components.map(genericExportLine).join("\n")}
+${exportLines}
 
 export const vyrnForgeVueGeneratedComponents = Object.freeze([
-${components.map((entry) => `  ${entry.exportName},`).join("\n")}
+${registryLines}
 ] as readonly Component[]);
 `;
 }
