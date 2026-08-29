@@ -21,7 +21,7 @@ import {
   type VyrnForgeElementForTagName,
   type VyrnForgeTabItem,
 } from "@vyrnforge/ui-angular";
-import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
+import { VyrnForgeFormControlDirective } from "@vyrnforge/ui-angular/forms";
 
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;

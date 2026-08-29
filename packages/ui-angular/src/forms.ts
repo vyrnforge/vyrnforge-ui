@@ -26,7 +26,7 @@ interface VyrnForgeAngularFormElement extends HTMLElement {
   readonly willValidate: boolean;
 }
 
-type VyrnForgeAngularFormValue =
+export type VyrnForgeAngularFormValue =
   boolean | number | readonly string[] | string | null;
 
 type ChangeCallback = (value: VyrnForgeAngularFormValue) => void;
