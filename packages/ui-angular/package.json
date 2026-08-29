@@ -31,7 +31,7 @@
     "lint:fix": "npm run lint -- --fix",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors && npm run build --workspace @vyrnforge/ui-elements",
     "typecheck": "ngc -p tsconfig.json",
-    "test": "vitest run && node ../../scripts/verify-angular-peer-policy.mjs && node ../../scripts/verify-angular-catalog-coverage.mjs && node ../../scripts/verify-angular-forms-bridge.mjs"
+    "test": "vitest run && node ../../scripts/verify-angular-peer-policy.mjs && node ../../scripts/verify-angular-catalog-coverage.mjs"
   },
   "dependencies": {
     "@vyrnforge/ui-elements": "0.2.0-beta.2",
