@@ -274,7 +274,9 @@ export function verifySizeBudgetContract({ root = repositoryRoot } = {}) {
     "utf8",
   );
   if (!packageWorkflow.includes("verify:beta-package-size-budgets")) {
-    failures.push(`${packageWorkflowPath} must enforce beta package size budgets`);
+    failures.push(
+      `${packageWorkflowPath} must enforce beta package size budgets`,
+    );
   }
   if (!packageWorkflow.includes("size-report.json")) {
     failures.push(
