@@ -10,7 +10,9 @@ The package exposes the full supported 59-contract non-grid Angular facade catal
 
 Generated directives provide canonical selectors, typed input/output contracts, typed native-element references and method proxies, plus slot composition metadata/helpers. When a canonical property and output intentionally share the same Angular public name, the property remains a native Custom Element host binding while the directive owns the output alias; generated catalog metadata records those host-bound inputs.
 
-The package remains private while Forms promotion, SSR/hydration validation, and publication/release verification continue through later S12 tasks.
+Angular Forms integration is available from the dedicated `@vyrnforge/ui-angular/forms` entrypoint. `VyrnForgeFormControlDirective` is a generic `ControlValueAccessor` and validator bridge for the supported form-associated VyrnForge controls. It delegates value, checked, disabled, touched, and validity behavior to the canonical Custom Elements rather than duplicating control behavior in Angular.
+
+The package remains private while SSR/hydration validation and publication/release verification continue through later S12 tasks.
 
 ## Application setup
 
@@ -30,12 +32,34 @@ bootstrapApplication(AppComponent, {
 
 `provideVyrnForge()` uses an Angular environment initializer and delegates element registration to the canonical `@vyrnforge/ui-elements` registry. Applications do not need to copy registration code or import the native registration subpath themselves. An optional `elementRegistry` can be supplied for controlled hosts or tests.
 
+## Angular Forms
+
+Install Angular Forms only when the consuming application uses Forms integration, then import the standalone directive from the Forms entrypoint:
+
+```ts
+import { ReactiveFormsModule } from "@angular/forms";
+import { VyrnForgeFormControlDirective } from "@vyrnforge/ui-angular/forms";
+
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, VyrnForgeFormControlDirective],
+})
+export class ProfileFormComponent {}
+```
+
+```html
+<vf-text-input vfFormControl formControlName="owner"></vf-text-input>
+<vf-checkbox vfFormControl name="enabled" [(ngModel)]="enabled"></vf-checkbox>
+```
+
+The bridge currently supports `vf-autocomplete`, `vf-checkbox`, `vf-date-input`, `vf-datetime-input`, `vf-multi-select`, `vf-number-input`, `vf-rating`, `vf-search-input`, `vf-select`, `vf-slider`, `vf-switch`, `vf-text-input`, `vf-textarea`, and `vf-transfer-list`. Reactive and template-driven Forms share the same directive and canonical VyrnForge event/validity contracts.
+
 ## Dependency contract
 
 The currently validated consumer line is Angular 22. The package declares:
 
 - `@angular/core >=22 <23` as a required peer;
-- `@angular/forms >=22 <23` as an optional peer, so applications that do not use the Forms adapter do not need to install Forms for this facade;
+- `@angular/forms >=22 <23` as an optional peer, isolated behind `@vyrnforge/ui-angular/forms` so applications that do not use Forms do not need to install it;
 - `rxjs ^6.5.3 || ^7.4.0` as the Angular-compatible peer range;
 - `tslib ^2.8.1` as a direct package dependency for emitted library helpers.
 
