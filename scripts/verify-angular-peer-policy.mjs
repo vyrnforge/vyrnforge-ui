@@ -53,6 +53,16 @@ assert.equal(
   `@vyrnforge/ui-angular must ship tslib ${TSLIB_DEPENDENCY_RANGE}`,
 );
 
+assert.deepEqual(
+  angularManifest.exports?.["./forms"],
+  {
+    types: "./dist/forms.d.ts",
+    import: "./dist/forms.js",
+    default: "./dist/forms.js",
+  },
+  "@vyrnforge/ui-angular/forms must be a dedicated optional Forms entrypoint",
+);
+
 for (const runtimeName of ["@angular/core", "@angular/forms", "rxjs"]) {
   assert.equal(
     angularManifest.dependencies?.[runtimeName],
@@ -92,5 +102,5 @@ assert.equal(
 assert.equal(packResult[0].name, "@vyrnforge/ui-angular");
 
 console.log(
-  `Angular peer policy verified: core/forms ${ANGULAR_PEER_RANGE}, RxJS ${RXJS_PEER_RANGE}, tslib ${TSLIB_DEPENDENCY_RANGE}; packed artifact ${packResult[0].filename}`,
+  `Angular peer policy verified: core/forms ${ANGULAR_PEER_RANGE}, RxJS ${RXJS_PEER_RANGE}, tslib ${TSLIB_DEPENDENCY_RANGE}; optional Forms subpath; packed artifact ${packResult[0].filename}`,
 );
