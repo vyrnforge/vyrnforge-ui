@@ -27,13 +27,17 @@ const supportedTags = [
   "vf-transfer-list",
 ];
 
-const [formsSource, consumerSource, consumerTemplate, packageManifestSource] =
-  await Promise.all([
-    readText("packages/ui-angular/src/forms.ts"),
-    readText("tests/consumers/angular/src/app/app.component.ts"),
-    readText("tests/consumers/angular/src/app/app.component.html"),
-    readText("packages/ui-angular/package.json"),
-  ]);
+const [
+  formsSource,
+  consumerSource,
+  consumerTemplate,
+  packageManifestSource,
+] = await Promise.all([
+  readText("packages/ui-angular/src/forms.ts"),
+  readText("tests/consumers/angular/src/app/app.component.ts"),
+  readText("tests/consumers/angular/src/app/app.component.html"),
+  readText("packages/ui-angular/package.json"),
+]);
 const packageManifest = JSON.parse(packageManifestSource);
 
 for (const tag of supportedTags) {
