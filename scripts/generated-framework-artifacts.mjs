@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { buildAngularCatalogArtifact } from "./angular-catalog-generation.mjs";
 import { buildFrameworkButtonSliceArtifacts } from "./generate-framework-button-slice.mjs";
 import { buildFrameworkDialogSliceArtifacts } from "./generate-framework-dialog-slice.mjs";
 import { buildFrameworkTabsSliceArtifacts } from "./generate-framework-tabs-slice.mjs";
@@ -62,6 +63,26 @@ function registerSliceArtifacts(artifacts, generator, command) {
   );
 }
 
+function registerAngularPackageSliceArtifact(
+  artifacts,
+  componentId,
+  targetPath,
+) {
+  const angularArtifact = artifacts.find(
+    (artifact) => artifact.framework === "angular",
+  );
+  if (!angularArtifact) {
+    throw new Error(`${componentId}: missing Angular slice artifact`);
+  }
+  return freezeArtifact({
+    path: targetPath,
+    generator: `scripts/generate-framework-${componentId}-slice.mjs`,
+    command: "npm run generate:framework-artifacts",
+    sourceRecords: angularArtifact.sourceRecords,
+    content: angularArtifact.content,
+  });
+}
+
 export function buildGeneratedFrameworkArtifacts({
   root = repositoryRoot,
 } = {}) {
@@ -71,6 +92,7 @@ export function buildGeneratedFrameworkArtifacts({
   const textInput = buildFrameworkTextInputSliceArtifacts({ root });
   const tabs = buildFrameworkTabsSliceArtifacts({ root });
   const dialog = buildFrameworkDialogSliceArtifacts({ root });
+  const angularCatalog = buildAngularCatalogArtifact({ root });
 
   return Object.freeze([
     freezeArtifact({
@@ -122,6 +144,33 @@ export function buildGeneratedFrameworkArtifacts({
       "scripts/generate-framework-dialog-slice.mjs",
       "npm run generate:framework-artifacts",
     ),
+    registerAngularPackageSliceArtifact(
+      button.artifacts,
+      "button",
+      "packages/ui-angular/src/generated/vf-button.generated.ts",
+    ),
+    registerAngularPackageSliceArtifact(
+      textInput.artifacts,
+      "text-input",
+      "packages/ui-angular/src/generated/vf-text-input.generated.ts",
+    ),
+    registerAngularPackageSliceArtifact(
+      tabs.artifacts,
+      "tabs",
+      "packages/ui-angular/src/generated/vf-tabs.generated.ts",
+    ),
+    registerAngularPackageSliceArtifact(
+      dialog.artifacts,
+      "dialog",
+      "packages/ui-angular/src/generated/vf-dialog.generated.ts",
+    ),
+    freezeArtifact({
+      path: angularCatalog.path,
+      generator: "scripts/angular-catalog-generation.mjs",
+      command: "npm run generate:framework-artifacts",
+      sourceRecords: angularCatalog.sourceRecords,
+      content: angularCatalog.content,
+    }),
   ]);
 }
 

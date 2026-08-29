@@ -61,14 +61,19 @@ test("stale generated artifacts identify their canonical source records", () => 
   }
 });
 
-test("generated framework artifact registry covers every S11 owned output", () => {
+test("generated framework artifact registry covers every owned output", () => {
   const artifacts = buildGeneratedFrameworkArtifacts();
-  assert.equal(artifacts.length, 20);
+  assert.equal(artifacts.length, 25);
   assert.deepEqual(
     artifacts.map((artifact) => artifact.path).sort(),
     [
       "docs/generated/framework-api-reference.json",
       "docs/generated/framework-button-slice.json",
+      "packages/ui-angular/src/generated/catalog.generated.ts",
+      "packages/ui-angular/src/generated/vf-button.generated.ts",
+      "packages/ui-angular/src/generated/vf-dialog.generated.ts",
+      "packages/ui-angular/src/generated/vf-tabs.generated.ts",
+      "packages/ui-angular/src/generated/vf-text-input.generated.ts",
       "packages/ui-elements/custom-elements.json",
       "packages/ui-elements/src/custom-elements.ts",
       "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
