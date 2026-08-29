@@ -45,7 +45,7 @@ export function loadVisualRegressionInputs(root = repositoryRoot) {
       root,
       "packages/ui-data-grid/src/styles/tokens/data-grid.tokens.css",
     ),
-    browserWorkflow: read(root, ".github/workflows/_integration.yml"),
+    browserWorkflow: read(root, ".github/workflows/ci.yml"),
     packageJson: readJson(root, "package.json"),
   };
 }
@@ -230,9 +230,7 @@ export function verifyVisualRegressionContract({
     !browserWorkflow.includes("test-results/visual-evidence/") ||
     !browserWorkflow.includes("Upload visual regression evidence")
   ) {
-    failures.push(
-      "_integration.yml must upload successful visual-regression evidence",
-    );
+    failures.push("ci.yml must upload successful visual-regression evidence");
   }
 
   for (const evidencePath of Object.values(matrix.evidence ?? {})) {
