@@ -161,7 +161,8 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   if (
     manifest.releasePreflight?.successfulCurrentMainCiRequired !== true ||
     manifest.releasePreflight?.releaseArtifactVerificationRequired !== true ||
-    manifest.releasePreflight?.releaseLineSizeBudgetVerificationRequired !== true
+    manifest.releasePreflight?.releaseLineSizeBudgetVerificationRequired !==
+      true
   ) {
     failures.push(
       "security contract release boundary must trust current-main CI and verify retained release artifacts",
