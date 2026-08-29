@@ -317,7 +317,8 @@ assert(
 );
 
 assert(
-  lockfile.packages?.["node_modules/typescript"]?.version === expected.typescript,
+  lockfile.packages?.["node_modules/typescript"]?.version ===
+    expected.typescript,
   `lockfile must resolve TypeScript ${expected.typescript}`,
 );
 
