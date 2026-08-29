@@ -6,22 +6,23 @@
   "requiredPatterns": [
     "CUSTOM_ELEMENTS_SCHEMA",
     "@vyrnforge/ui-angular",
+    "@vyrnforge/ui-angular/forms",
     "provideVyrnForge",
     "(vf-action)",
     "[items]",
     "slot=\"status\"",
     "new FormData",
     "provideZonelessChangeDetection",
+    "VyrnForgeFormControlDirective",
     "vfFormControl",
     "formControlName",
-    "[(ngModel)]",
-    "NG_VALUE_ACCESSOR",
-    "NG_VALIDATORS"
+    "[(ngModel)]"
   ],
   "evidence": [
     "clean tarball installation",
     "Angular application build with strict template checking",
     "public @vyrnforge/ui-angular setup and directive consumption",
+    "package-owned @vyrnforge/ui-angular/forms ControlValueAccessor consumption",
     "CUSTOM_ELEMENTS_SCHEMA",
     "object property binding without attribute serialization",
     "canonical vf-action template event binding",
