@@ -49,7 +49,10 @@ for (const tag of supportedTags) {
 }
 assert.match(formsSource, /provide:\s*NG_VALUE_ACCESSOR/);
 assert.match(formsSource, /provide:\s*NG_VALIDATORS/);
-assert.match(formsSource, /implements ControlValueAccessor, OnDestroy, Validator/);
+assert.match(
+  formsSource,
+  /implements ControlValueAccessor, OnDestroy, Validator/,
+);
 assert.match(formsSource, /"vf-value-change"/);
 assert.match(formsSource, /"vf-checked-change"/);
 assert.match(formsSource, /"focusout"/);
