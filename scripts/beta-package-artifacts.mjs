@@ -392,7 +392,7 @@ export function verifyBetaPackageContract({ root = repositoryRoot } = {}) {
     }
   }
 
-  const packageWorkflowPath = ".github/workflows/_integration.yml";
+  const packageWorkflowPath = ".github/workflows/ci.yml";
   const packageWorkflow = readFileSync(
     path.join(root, packageWorkflowPath),
     "utf8",
