@@ -80,7 +80,7 @@
     {
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
-      "sha1": "6e77698d9d3889898c755de9e04bccd97d0188f9",
+      "sha1": "5e9000e63ce9d74d3ad43f934c5c0450e9d9778b",
       "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
@@ -105,6 +105,11 @@
       "task": "MFD-1409",
       "reason": "Button and IconButton moved to canonical Light-DOM action facades while preserving the documented React API, native HTMLButtonElement refs, native event surface, SSR output, CSS hooks, and accessibility behavior.",
       "evidence": "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx"
+    },
+    {
+      "task": "workflow-surface-consolidation",
+      "reason": "Compatibility matrix orchestration moved from the retired reusable _compatibility.yml workflow to assurance.yml without changing tested React versions or compatibility cases.",
+      "evidence": "docs/metadata/compatibility-release-matrix.json"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
