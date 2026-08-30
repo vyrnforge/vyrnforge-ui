@@ -1,130 +1,128 @@
 # Release Responsibility Matrix
 
-This document defines who or what owns each VyrnForge UI delivery step. The
-roles are responsibilities, not assumptions about current team size. One
-maintainer may currently perform several roles.
+This document defines ownership of VyrnForge UI validation, delivery, and
+release responsibilities. Workflow names refer only to the four lifecycle
+workflows exposed in GitHub Actions.
 
-## Responsibility matrix
+## Validation and delivery ownership
 
-| Responsibility                                  | Trigger                                            | Owner role               | Workflow/job                                                                 | Permission                                                       | Output                                                                                                                                       |
-| ----------------------------------------------- | -------------------------------------------------- | ------------------------ | ---------------------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Change impact planning                          | Every PR/main push                                 | CI planner               | `ci.yml / plan`                                                              | `contents: read`                                                 | Machine-readable CI scope                                                                                                                    |
-| Pull-request classification and review evidence | Every PR                                           | Change author + reviewer | `.github/pull_request_template.md` plus `.github/PULL_REQUEST_TEMPLATE/*.md` | None                                                             | Focused scope, impact, and validation record                                                                                                 |
-| CI/CD infrastructure intake                     | Report or proposal                                 | Release engineering      | `.github/ISSUE_TEMPLATE/ci-cd-infrastructure.yml`                            | None                                                             | Focused infrastructure issue                                                                                                                 |
-| Release-readiness intake                        | Candidate or published release problem             | Release owner            | `.github/ISSUE_TEMPLATE/release-readiness.yml`                               | None                                                             | Versioned release evidence                                                                                                                   |
-| Package quality                                 | Planned changes                                    | Package maintainer       | `_quality.yml`                                                               | `contents: read`                                                 | Toolchain, format, lint, CSS, metadata/maturity, typecheck, coverage, unit/DOM, and accessibility result                                     |
-| Package payload and size verification           | Planned package/public payload changes             | Release engineering      | `_integration.yml`                                                           | `contents: read`                                                 | BT-8003 tarball evidence plus BT-8004 package/CSS size report                                                                                |
-| External consumer verification                  | Planned public-boundary changes                    | Release engineering      | `_integration.yml`                                                           | `contents: read`                                                 | Packed consumer build                                                                                                                        |
-| Documentation validation                        | Planned docs/playground changes                    | Documentation owner      | `_integration.yml`                                                           | `contents: read`                                                 | Static build result                                                                                                                          |
-| Compatibility release matrix                    | Nightly                                            | Release engineering      | `_compatibility.yml`                                                         | `contents: read`                                                 | BT-8005 Node/framework/browser case reports                                                                                                  |
-| Security validation                             | Planned dependency/workflow changes and nightly    | Repository governance    | `_security.yml`                                                              | Read-only except CodeQL results                                  | Dependency review, shipped-dependency audit, CodeQL, actionlint, ShellCheck, and contract evidence                                           |
-| Branch merge gate                               | Every PR/main push                                 | Repository governance    | `ci.yml / ci-gate`                                                           | `contents: read`                                                 | Stable required check                                                                                                                        |
-| Pages site artifact                             | Successful CI push on current `main`               | Documentation owner      | `_integration.yml / selected-integration`                                    | `contents: read`                                                 | Commit-bound docs and playground site                                                                                                        |
-| Pages deployment                                | Existing successful current-main CI artifact       | GitHub Pages environment | `pages.yml / prepare-pages`, `deploy-pages`                                  | `actions: read`, then `pages: write` and `id-token: write`       | Public docs site                                                                                                                             |
-| Release artifact verification                   | Manual dispatch from current `main`                | Release owner            | `release.yml / verify-release`                                               | `actions: read`, `contents: read`                                | CI-bound immutable package tarballs and manifest                                                                                             |
-| Complete release dry-run                        | Release-engine changes and release-readiness proof | Release engineering      | `npm run verify:release-dry-run`                                             | No npm OIDC, repository write, or publishing credential required | Dependency-ordered all-release-line artifact, publish-dry-run, release-identity, release-note, size-policy, and packed four-surface evidence |
-| npm publication                                 | Approved artifact from the same release run        | npm release environment  | `release.yml / publish-packages`                                             | `actions: read`, `contents: read`, `id-token: write`             | Exact verified BT-8002 `.tgz` files                                                                                                          |
-| Registry verification                           | Successful publication                             | Release engineering      | `release.yml / verify-registry-release`                                      | `contents: read`                                                 | Fresh registry consumer proof                                                                                                                |
-| Git tag and GitHub Release                      | Successful registry verification                   | Release owner            | `release.yml / create-release-record`                                        | `contents: write`                                                | Annotated tag and prerelease                                                                                                                 |
-| Scheduled drift detection                       | Weekly/manual                                      | Release engineering      | `nightly.yml`                                                                | `contents: read`                                                 | Full matrix and audit result                                                                                                                 |
+- Change impact planning runs in `ci.yml / plan` for every validated pull
+  request and main push. It is read-only and produces the machine-readable CI
+  scope.
+- Package and repository quality runs in `ci.yml / quality-checks`. It owns
+  format, lint, contracts, coverage, fixtures, and typechecking.
+- Package, consumer, browser, documentation, and playground integration runs in
+  `ci.yml / integration-checks`. It also creates `pages-site-<sha>` only for a
+  successful exact-main delivery run.
+- Pull-request dependency and workflow security runs in
+  `ci.yml / security-checks`. It owns dependency review, actionlint,
+  ShellCheck, and security contracts with read-only permissions.
+- `ci.yml / ci-gate` is the stable required branch check.
+- Full compatibility and security drift runs in `assurance.yml`. It owns full
+  quality and integration, the compatibility matrix, shipped-dependency audit,
+  workflow lint, ShellCheck, and CodeQL.
+- `assurance.yml / assurance-gate` is the weekly deep-validation aggregate.
+- `deploy-pages.yml` consumes the verified current-main Pages artifact. Only
+  its deploy job receives `pages: write` and OIDC.
+- `release.yml / verify-release` creates and verifies the immutable release
+  artifact from current `main`.
+- `release.yml / publish-packages` publishes only that retained artifact through
+  the protected `npm-release` environment and GitHub OIDC.
+- `release.yml / verify-registry-release` owns fresh public-registry proof.
+- `release.yml / create-release-record` owns the annotated tag and GitHub
+  Release after registry verification.
 
 ## Package responsibility
 
-| Area                        | Owns                                                      | Must not own                                            |
-| --------------------------- | --------------------------------------------------------- | ------------------------------------------------------- |
-| `@vyrnforge/ui-core`        | Shared tokens, themes, density, CSS variables, utilities  | React application components or data-grid behavior      |
-| `@vyrnforge/ui-behaviors`   | Framework-neutral interaction and state-machine contracts | React rendering or consuming-app state management       |
-| `@vyrnforge/ui-components`  | Shared React primitives and app components                | Data-grid-only behavior or consuming-app business state |
-| `@vyrnforge/ui-elements`    | Native Custom Elements over shared foundations            | React-specific APIs or application business logic       |
-| `@vyrnforge/ui-data-grid`   | Enterprise data-management grid behavior                  | Global application state or unrelated shared tokens     |
-| `apps/docs`                 | Human documentation viewer                                | Canonical API truth                                     |
-| `examples/basic-playground` | Interactive examples                                      | Package implementation logic                            |
-| `scripts/verify-*`          | Public-boundary and release evidence                      | Runtime feature behavior                                |
-| `.github/workflows`         | Orchestration and permission boundaries                   | Package API or visual behavior                          |
+- `@vyrnforge/ui-core` owns shared tokens, themes, density, CSS variables, and
+  utilities. It must not own framework application components or grid behavior.
+- `@vyrnforge/ui-behaviors` owns framework-neutral interaction and state
+  contracts. It must not own framework rendering or consuming-app state.
+- `@vyrnforge/ui-elements` owns canonical native and Custom Element surfaces
+  over shared foundations. It must not own React-specific APIs or application
+  business logic.
+- `@vyrnforge/ui-components` owns React adapters and facades over shared
+  foundations. It must not own grid-only behavior or application state.
+- `@vyrnforge/ui-angular` owns Angular adapters and facades over shared
+  foundations. It must not become an independent Angular-only component
+  architecture.
+- `@vyrnforge/ui-vue` owns Vue adapters and facades over shared foundations. It
+  must not become an independent Vue-only component architecture.
+- `@vyrnforge/ui-data-grid` owns enterprise data-management grid capability. It
+  must not own global application state or unrelated shared tokens.
+- `apps/docs` owns the human documentation viewer, not canonical package
+  implementation truth.
+- `examples/basic-playground` owns interactive examples, not package
+  implementation logic.
+- `scripts/verify-*` owns public-boundary and release evidence, not runtime
+  feature behavior.
+- `.github/workflows` owns the four lifecycle orchestration and permission
+  boundaries, not package APIs or visual behavior.
 
-## Change-to-workflow matrix
+## Change-to-CI responsibility
 
-| Change                                    | CI scope                                                             | Release implication                              |
-| ----------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
-| Markdown documentation only               | Docs build                                                           | No package release by itself                     |
-| Docs app source                           | Docs build                                                           | No package release by itself                     |
-| Playground example                        | Playground build                                                     | No package release by itself                     |
-| ui-core source                            | All package quality, payload, size, consumer, docs, playground       | Coordinated release when user-visible            |
-| ui-behaviors source                       | Behaviors, components, elements, payload, size, consumer             | Coordinated beta release when user-visible       |
-| ui-components source                      | Components + grid quality, payload, size, consumer, docs, playground | Coordinated release when user-visible            |
-| ui-elements source                        | Elements quality, payload, size, consumer                            | Coordinated beta release when user-visible       |
-| ui-data-grid source                       | Grid quality, payload, consumer, docs, playground                    | Coordinated release when user-visible            |
-| Package manifest/export/CSS entry/LICENSE | Package payload and consumer verification                            | Coordinated release if published payload changes |
-| CI workflow or verification script        | Full CI                                                              | No package release unless package output changes |
-| Release documentation                     | Docs build                                                           | No package release                               |
-| Version manifests                         | Release artifact verification                                        | Required before release dispatch/approval        |
+- Documentation-only changes run the documentation build and do not require a
+  package release by themselves.
+- Playground changes run the playground build and do not require a package
+  release by themselves.
+- Shared or runtime package source changes run affected package validation plus
+  downstream consumer, documentation, playground, fixture, and browser work as
+  selected by the planner.
+- Package manifest, export, CSS entry, or LICENSE changes run package payload
+  and consumer verification.
+- CI, workflow, or verification infrastructure changes run full task
+  validation.
+- Release metadata changes require release artifact verification before release
+  dispatch or approval.
 
-## Intake boundaries
-
-- Pull-request classifications are informational; the CI planner decides the
-  executed scope.
-- General CI/CD, Pages, branch-protection, nightly, or automation work uses the
-  infrastructure issue form.
-- Candidate-specific package, registry, provenance, dist-tag, consumer, or
-  release-record failures use the release-readiness form.
-- Product features, component defects, and accessibility concerns stay in their
-  dedicated forms so infrastructure work does not distort the UI backlog.
+`scripts/detect-ci-scope.mjs` is authoritative for technical scope. Pull-request
+checkboxes and contributor estimates are not a second CI planner.
 
 ## Approval boundaries
 
 ### Pull requests
 
-- `ci-gate` is the stable aggregate check. It fails when planned quality,
-  integration, or security work fails, is cancelled, or is skipped
-  unexpectedly.
-- Compatibility drift runs nightly rather than in every pull request; release
-  consumes the successful current-main CI result.
-- Pull requests do not create deployable Pages artifacts. No pull-request
-  workflow may publish, deploy Pages, create tags, or create releases.
+- `ci-gate` is the stable required aggregate.
+- Task PRs target their owning `integration/*` lane and run affected-scope CI.
+- Promotion or emergency hotfix PRs targeting `main` run the full repository
+  boundary.
+- Integration-lane push synchronization does not rerun CI.
+- Pull-request workflows may not publish packages, deploy Pages, create tags,
+  or create releases.
 
-### Complete release dry-run
+### Weekly assurance
 
-- `npm run verify:release-dry-run` resolves every publishable release line from canonical release metadata and executes them in release-dependency order.
-- The dry-run reuses immutable artifact preparation and verification, credential-free `npm publish --dry-run`, release-line size policy, release-note generation, and the packed Native HTML, React, Angular, and Vue consumer fixtures.
-- The dry-run must not publish to the npm registry, create or push Git tags, mutate GitHub Releases, or require npm/GitHub publication credentials.
-- Release-engine development may exercise this proof earlier, but final release-readiness acceptance must be rerun after all required framework gates and final integration work have converged.
+`assurance-gate` covers full quality and integration, the canonical
+compatibility matrix, shipped-dependency audit, workflow and shell validation,
+and CodeQL. Weekly assurance never publishes, deploys, creates tags, or
+requests npm OIDC.
 
 ### npm publication
 
-- Publication has one manual entry point through `release.yml`; there is no separate finalize/recovery workflow or verify/publish mode split.
-- The publishing job requires approval through the `npm-release` environment.
+- `release.yml` is the only normal publication entrypoint.
+- The selected release group, version, and dist-tag come from canonical release
+  metadata.
+- `publish-packages` requires the protected `npm-release` environment.
 - npm authorization is short-lived GitHub OIDC.
-- The selected BT-8002 release group determines package order: non-grid beta publishes core → behaviors → components → elements; grid alpha publishes only ui-data-grid.
-- The selected prerelease dist-tag and exact version must match the release-group manifest.
+- Publication uses the exact immutable artifact produced by `verify-release`;
+  it does not rebuild or repack.
 
 ### Repository release record
 
-- The annotated tag and GitHub Release are created after registry verification.
-- The release-record job receives repository write permission but no npm OIDC.
-- A package publication failure or registry-consumer failure prevents the tag
-  and GitHub Release from being created.
+The annotated tag and GitHub Release are created only after registry
+verification. The release-record job receives repository write permission but
+no npm OIDC.
 
 ## Failure ownership
 
-| Failure                                | First responder                       |
-| -------------------------------------- | ------------------------------------- |
-| Planner classifies a path incorrectly  | Release engineering                   |
-| Package test/typecheck                 | Owning package maintainer             |
-| Package payload or export verification | Release engineering + package owner   |
-| Packed consumer                        | Public API/package owner              |
-| Docs/playground build                  | Documentation/example owner           |
-| Pages deployment                       | Documentation owner + GitHub admin    |
-| OIDC publication                       | Release owner + npm admin             |
-| Registry metadata or fresh install     | Release engineering                   |
-| Git tag/GitHub Release creation        | Release owner + GitHub admin          |
-| Compatibility matrix failure           | Release engineering + framework owner |
-| Package or CSS budget failure          | Release engineering + package owner   |
-| Dependency review or audit             | Release engineering                   |
-| CodeQL, actionlint, or ShellCheck      | Repository governance                 |
-
-## Current operating model
-
-VyrnForge UI uses two approved release groups. The four-package non-grid beta
-remains synchronized, while `ui-data-grid` has an independent alpha version.
-CI testing is package-impact aware, and publication requires an explicit group
-selection plus the exact version and dist-tag from the canonical manifest.
+- CI planner classification: release or platform engineering.
+- Package test or typecheck: owning package or framework maintainer.
+- Package payload, export, or size: release engineering plus package owner.
+- Packed consumer or browser: public API, package, or framework owner.
+- Documentation or playground build: documentation or example owner.
+- Dependency review or audit: repository governance.
+- CodeQL, actionlint, or ShellCheck: repository governance.
+- Pages deployment: documentation owner plus GitHub administrator.
+- npm OIDC publication: release owner plus npm administrator.
+- Registry verification: release engineering.
+- Tag or GitHub Release creation: release owner plus GitHub administrator.

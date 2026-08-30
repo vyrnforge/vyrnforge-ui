@@ -1,0 +1,264 @@
+name: VyrnForge Weekly Assurance
+
+on:
+  schedule:
+    - cron: "17 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vyrnforge-weekly-assurance
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: full-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI_SCOPE_FULL: "true"
+      CI_SCOPE_METADATA: "true"
+      CI_SCOPE_FIXTURES: "true"
+      CI_AFFECTED_PACKAGES: "@vyrnforge/ui-behaviors,@vyrnforge/ui-components,@vyrnforge/ui-core,@vyrnforge/ui-data-grid,@vyrnforge/ui-elements,@vyrnforge/ui-vue"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run full repository quality checks
+        run: node scripts/run-scoped-quality.mjs
+
+  integration:
+    name: full-integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies once
+        run: npm ci
+      - name: Prepare package outputs once
+        run: |
+          npm run verify:beta-package-artifacts
+          npm run build --workspace @vyrnforge/ui-data-grid
+          VYRNFORGE_PACKAGES_PREPARED=true npm run verify:packages
+          npm run verify:beta-package-size-budgets
+          test -f test-results/beta-package-artifacts/size-report.json
+      - name: Verify packed external consumer
+        env:
+          VYRNFORGE_PACKAGES_PREPARED: "true"
+        run: npm run verify:consumer
+      - name: Install Chromium once
+        run: npx playwright install --with-deps chromium
+      - name: Run browser contracts
+        env:
+          VYRNFORGE_PACKAGES_PREPARED: "true"
+        run: npm run test:browser
+      - name: Run packed four-surface generation smoke
+        run: |
+          node scripts/verify-packed-four-surface-generation-smoke.mjs
+          test -f test-results/cross-framework-matrix/accessibility-report.json
+          test -f test-results/packed-four-surface-smoke/report.json
+      - name: Verify generated repository inventory
+        run: npm run verify:repository-inventory
+      - name: Build documentation application
+        run: npm run build --workspace @vyrnforge/ui-docs
+      - name: Build playground
+        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
+      - name: Upload beta package artifact reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: beta-package-artifacts
+          path: test-results/beta-package-artifacts/
+          if-no-files-found: error
+      - name: Upload visual regression evidence
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-regression-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/visual-evidence/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload browser failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-browser-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            playwright-report/
+            test-results/browser/
+            test-results/browser-results.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Upload cross-framework browser matrix
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cross-framework-browser-matrix
+          path: |
+            test-results/cross-framework-matrix/
+            test-results/packed-four-surface-smoke/
+          if-no-files-found: error
+
+  compatibility-plan:
+    name: compatibility-plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Read canonical compatibility matrix
+        id: matrix
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const { appendFileSync, readFileSync } = require("node:fs");
+          const manifest = JSON.parse(readFileSync("docs/metadata/compatibility-release-matrix.json", "utf8"));
+          const include = manifest.cases.map(({ id, node, browser }) => ({ id, node, browser }));
+          appendFileSync(process.env.GITHUB_OUTPUT, `matrix=${JSON.stringify({ include })}\n`);
+          NODE
+
+  compatibility:
+    name: compatibility-${{ matrix.id }}
+    needs: compatibility-plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.compatibility-plan.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Use repository package manager
+        env:
+          npm_config_engine_strict: "false"
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install repository dependencies
+        env:
+          npm_config_engine_strict: "false"
+        run: npm ci
+      - name: Install matrix browser
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run compatibility release case
+        env:
+          npm_config_engine_strict: "false"
+        run: npm run verify:compatibility-release-case -- --case ${{ matrix.id }}
+      - name: Upload compatibility case evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: compatibility-release-matrix-${{ matrix.id }}
+          path: test-results/compatibility-release-matrix/${{ matrix.id }}.json
+          if-no-files-found: error
+
+  security-drift:
+    name: security-drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      ACTIONLINT_VERSION: 1.7.12
+      ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit shipped dependency findings
+        run: npm audit --omit=dev --audit-level=high
+      - name: Install verified actionlint
+        shell: bash
+        run: |
+          archive="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          curl --fail --silent --show-error --location --output "$archive" "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/${archive}"
+          echo "${ACTIONLINT_SHA256}  ${archive}" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive" actionlint
+          sudo install -m 0755 actionlint /usr/local/bin/actionlint
+          actionlint -version
+      - name: Validate workflows and shell snippets
+        shell: bash
+        run: |
+          shellcheck --version
+          actionlint -color
+          find . -path ./.git -prune -o -type f -name '*.sh' -print0 | xargs -0 -r shellcheck
+      - name: Verify security and workflow contracts
+        run: |
+          npm run verify:security-workflow-hardening
+          npm run verify:workflows
+
+  codeql:
+    name: codeql-analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        with:
+          languages: javascript-typescript
+          build-mode: none
+      - name: Analyze JavaScript and TypeScript
+        uses: github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        with:
+          category: /language:javascript-typescript
+
+  assurance-gate:
+    name: assurance-gate
+    needs:
+      - quality
+      - integration
+      - compatibility
+      - security-drift
+      - codeql
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Aggregate weekly assurance responsibilities
+        env:
+          RESULTS_JSON: >-
+            {"quality":"${{ needs.quality.result }}","integration":"${{ needs.integration.result }}","compatibility":"${{ needs.compatibility.result }}","security":"${{ needs.security-drift.result }}","codeql":"${{ needs.codeql.result }}"}
+        run: |
+          node - <<'NODE'
+          const results = JSON.parse(process.env.RESULTS_JSON);
+          const failures = Object.entries(results).filter(([, result]) => result !== "success");
+          console.log(results);
+          if (failures.length) {
+            console.error(`weekly assurance failed: ${failures.map(([name, result]) => `${name}:${result}`).join("; ")}`);
+            process.exit(1);
+          }
+          NODE

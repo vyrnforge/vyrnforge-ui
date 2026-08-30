@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceOfTruth": {
     "canonical": true,
     "task": "BT-8006",
@@ -14,39 +14,38 @@
   },
   "controls": {
     "dependencyReview": {
-      "workflow": ".github/workflows/_security.yml",
+      "workflow": ".github/workflows/ci.yml",
       "event": "pull_request",
       "failOnSeverity": "high"
     },
     "dependencyAudit": {
+      "workflow": ".github/workflows/assurance.yml",
       "command": "npm audit --omit=dev --audit-level=high",
-      "events": ["pull_request", "push", "workflow_dispatch", "schedule"]
+      "events": ["schedule", "workflow_dispatch"]
     },
     "codeql": {
+      "workflow": ".github/workflows/assurance.yml",
       "language": "javascript-typescript",
       "buildMode": "none",
-      "events": ["pull_request", "push", "workflow_dispatch", "schedule"]
+      "events": ["schedule", "workflow_dispatch"]
     },
     "workflowLint": {
+      "workflows": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/assurance.yml"
+      ],
       "actionlintVersion": "1.7.12",
       "actionlintSha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
       "shellcheckRequired": true
     },
     "immutableActions": true,
     "longLivedTokensForbidden": true,
-    "mandatoryAggregates": ["ci-gate", "nightly-gate"]
+    "mandatoryAggregates": ["ci-gate", "assurance-gate"]
   },
   "protectedGate": {
     "workflow": ".github/workflows/ci.yml",
     "requiredCheck": "ci-gate",
-    "requiredJobs": [
-      "quality-checks",
-      "browser-checks",
-      "package-checks",
-      "consumer-checks",
-      "docs-checks",
-      "security-checks"
-    ],
+    "requiredJobs": ["quality-checks", "integration-checks", "security-checks"],
     "continueOnErrorForbidden": true,
     "unexpectedSkipsFail": true
   },
@@ -55,14 +54,12 @@
     "requiredJobs": ["verify-release"],
     "releaseLineSizeBudgetVerificationRequired": true,
     "successfulCurrentMainCiRequired": true,
-    "reusableSecurityWorkflowRepeated": false,
-    "reusableCompatibilityWorkflowRepeated": false,
     "releaseArtifactVerificationRequired": true
   },
   "verification": {
     "command": "npm run verify:security-workflow-hardening",
     "testCommand": "npm run test:security-workflow-hardening",
-    "workflow": ".github/workflows/_security.yml"
+    "workflows": [".github/workflows/ci.yml", ".github/workflows/assurance.yml"]
   },
   "releaseReadiness": "not-ready"
 }
