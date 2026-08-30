@@ -12,6 +12,7 @@ export const compatibilityDocumentationPath =
   "docs/testing/compatibility-release-matrix.md";
 export const compatibilityReportDirectory =
   "test-results/compatibility-release-matrix";
+export const compatibilityWorkflowPath = ".github/workflows/assurance.yml";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -44,7 +45,7 @@ export function verifyCompatibilityMatrixContract({
     compatibilityDocumentationPath,
     "scripts/run-compatibility-release-case.mjs",
     "scripts/verify-compatibility-release-matrix.test.mjs",
-    ".github/workflows/_compatibility.yml",
+    compatibilityWorkflowPath,
   ]) {
     if (!existsSync(path.join(root, requiredFile))) {
       failures.push(`BT-8005 required file is missing: ${requiredFile}`);
@@ -102,7 +103,7 @@ export function verifyCompatibilityMatrixContract({
     }
   }
 
-  const workflow = read(root, ".github/workflows/_compatibility.yml");
+  const workflow = read(root, compatibilityWorkflowPath);
   for (const marker of [
     compatibilityMatrixPath,
     "compatibility-plan",
@@ -113,8 +114,14 @@ export function verifyCompatibilityMatrixContract({
     "compatibility-release-matrix-${{ matrix.id }}",
   ]) {
     if (!workflow.includes(marker)) {
-      failures.push(`_compatibility.yml is missing ${marker}`);
+      failures.push(`${compatibilityWorkflowPath} is missing ${marker}`);
     }
+  }
+
+  if (matrix.verification?.workflow !== compatibilityWorkflowPath) {
+    failures.push(
+      `compatibility matrix verification workflow must be ${compatibilityWorkflowPath}`,
+    );
   }
 
   const runtime = read(root, "scripts/verify-consumer-foundations-runtime.mjs");

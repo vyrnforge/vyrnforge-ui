@@ -277,6 +277,6 @@
   "evidence": {
     "documentation": "docs/testing/visual-regression.md",
     "fixtureRegistry": "apps/regression-fixtures/src/fixtureRegistry.ts",
-    "workflow": ".github/workflows/_integration.yml"
+    "workflow": ".github/workflows/ci.yml"
   }
 }

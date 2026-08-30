@@ -6,44 +6,44 @@ release boundary. The canonical control contract is
 
 ## Mandatory controls
 
-The reusable security workflow performs all of the following:
+Security responsibilities are owned directly by the two validation lifecycle
+workflows rather than by a separately exposed reusable workflow.
 
-- reviews pull-request dependency changes and fails on high-severity findings;
-- audits shipped, non-development npm dependencies at high severity with
-  `npm audit --omit=dev --audit-level=high`;
-- runs CodeQL for JavaScript and TypeScript;
-- installs the pinned actionlint 1.7.12 binary after validating its SHA-256;
-- requires ShellCheck and validates shell files plus workflow shell snippets;
-- verifies VyrnForge workflow contracts and immutable external Action pins.
+`VyrnForge CI` performs pull-request `dependency-review` when the change planner
+selects security work, fails on high-severity findings, installs the pinned
+actionlint 1.7.12 binary after validating its SHA-256, requires ShellCheck, and
+verifies VyrnForge workflow/security contracts and immutable external Action
+pins.
 
-The dependency-review step is pull-request-specific. The shipped-dependency
-audit, workflow lint, ShellCheck, CodeQL, and repository security contract run
-through the normal CI and scheduled security paths. The release workflow does
-not rerun those general validation suites after current-main CI has passed.
+`VyrnForge Weekly Assurance` owns deep drift validation. It audits shipped,
+non-development npm dependencies at high severity with
+`npm audit --omit=dev --audit-level=high`, runs CodeQL for JavaScript and
+TypeScript, repeats workflow lint and ShellCheck, and runs the complete
+compatibility matrix.
+
+The release workflow does not rerun those general validation suites after
+current-main CI has passed.
 
 ## Protected gates
 
-`ci-gate` requires the planned quality, browser, package, consumer,
-documentation, and scoped security jobs. A required job that fails, is
-cancelled, or is unexpectedly skipped fails the gate. Mandatory jobs may not
-use `continue-on-error`.
+`ci-gate` requires the planner-selected quality, integration, and security
+responsibilities. A required job that fails, is cancelled, or is unexpectedly
+skipped fails the gate. Mandatory jobs may not use `continue-on-error`.
 
-Compatibility drift remains a nightly responsibility. `nightly-gate` requires
-the complete compatibility matrix and security workflow.
+Deep ecosystem and security drift are owned by `VyrnForge Weekly Assurance`.
+`assurance-gate` requires full quality, full integration, the complete
+compatibility matrix, dependency/security drift validation, and CodeQL.
 
-The manual release workflow instead uses `verify-release` to confirm that its
-source commit is current `main` and that a successful `VyrnForge CI` push run
-exists for that exact commit. It does not call the reusable compatibility or
-security workflows again.
-
-Release-specific verification then validates the immutable retained release
-artifact and enforces release-line size budgets declared in canonical release
-metadata before publication can begin.
+The manual release workflow uses `verify-release` to confirm that its source
+commit is current `main` and that a successful `VyrnForge CI` push run exists
+for that exact commit. Release-specific verification then validates the
+immutable retained release artifact and enforces release-line size budgets
+before publication can begin.
 
 ## Permission boundaries
 
 Normal validation defaults to `contents: read`. Dependency review receives
-`pull-requests: read`, and only the CodeQL workflow receives
+`pull-requests: read`. Only the CodeQL job in weekly assurance receives
 `security-events: write`.
 
 Release verification receives only the read access required to confirm the
