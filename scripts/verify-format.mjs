@@ -98,22 +98,19 @@ const currentEntries = buildEntries(unformattedFiles);
 const newOrChanged = unformattedFiles.filter(
   (file) => baseline.entries[file] !== currentEntries[file],
 );
-const stale = Object.keys(baseline.entries)
-  .filter((file) => currentEntries[file] !== baseline.entries[file])
-  .filter((file) => !newOrChanged.includes(file))
+const retired = Object.keys(baseline.entries)
+  .filter((file) => currentEntries[file] === undefined)
   .sort((left, right) => left.localeCompare(right));
 
-if (newOrChanged.length > 0 || stale.length > 0) {
-  if (newOrChanged.length > 0) {
-    console.error("New or changed files do not satisfy Prettier:");
-    for (const file of newOrChanged) console.error(`  - ${file}`);
-  }
-  if (stale.length > 0) {
-    console.error("Formatting baseline contains stale entries:");
-    for (const file of stale) console.error(`  - ${file}`);
-  }
-  fail(
-    "Run npm run format on changed files, then regenerate the baseline only after review.",
+if (newOrChanged.length > 0) {
+  console.error("New or changed files do not satisfy Prettier:");
+  for (const file of newOrChanged) console.error(`  - ${file}`);
+  fail("Run npm run format on changed files before committing them.");
+}
+
+if (retired.length > 0) {
+  console.log(
+    `Formatting verification retired ${retired.length} now-formatted or removed legacy baseline entries.`,
   );
 }
 

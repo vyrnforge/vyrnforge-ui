@@ -268,16 +268,19 @@ export function verifySizeBudgetContract({ root = repositoryRoot } = {}) {
     }
   }
 
+  const packageWorkflowPath = ".github/workflows/ci.yml";
   const packageWorkflow = readFileSync(
-    path.join(root, ".github/workflows/_integration.yml"),
+    path.join(root, packageWorkflowPath),
     "utf8",
   );
   if (!packageWorkflow.includes("verify:beta-package-size-budgets")) {
-    failures.push("_integration.yml must enforce beta package size budgets");
+    failures.push(
+      `${packageWorkflowPath} must enforce beta package size budgets`,
+    );
   }
   if (!packageWorkflow.includes("size-report.json")) {
     failures.push(
-      "_integration.yml must retain the size report as CI evidence",
+      `${packageWorkflowPath} must retain the size report as CI evidence`,
     );
   }
 

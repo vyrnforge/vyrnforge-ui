@@ -43,13 +43,11 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
-
       - name: Detect repository change impact
         id: scope
         shell: bash
@@ -61,26 +59,17 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
-            # Manual repository validation is intentionally complete.
             node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
           elif [[ "$EVENT_NAME" == "pull_request" && "$PR_BASE_REF" == "main" ]]; then
-            # Promotion and emergency-hotfix PRs are the product-wide compatibility
-            # boundary. Validate the complete repository once before merge.
             node scripts/detect-ci-scope.mjs --full --github-output "$GITHUB_OUTPUT"
           elif [[ "$EVENT_NAME" == "push" && "$REF_NAME" == "main" ]]; then
-            # The merge already passed the full main-boundary PR gate. Rebuild only
-            # the exact-main delivery surfaces needed by Pages/release consumers.
             node scripts/detect-ci-scope.mjs --delivery --github-output "$GITHUB_OUTPUT"
           else
-            # Normal task PRs into integration lanes use dependency-aware scope.
-            # Integration-lane pushes are intentionally not workflow triggers, so
-            # lane synchronization and accepted task merges do not duplicate CI.
             node scripts/detect-ci-scope.mjs \
               --base "$BASE_SHA" \
               --head "$HEAD_SHA" \
               --github-output "$GITHUB_OUTPUT"
           fi
-
       - name: Write readable change-impact plan
         env:
           CI_SUMMARY_MODE: plan
@@ -91,44 +80,213 @@ jobs:
     name: quality
     needs: plan
     if: needs.plan.outputs.quality == 'true'
-    uses: ./.github/workflows/_quality.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-      full: ${{ needs.plan.outputs.full == 'true' }}
-      metadata: ${{ needs.plan.outputs.metadata == 'true' }}
-      fixtures: ${{ needs.plan.outputs.fixtures == 'true' }}
-      affected-packages: ${{ needs.plan.outputs.affected_packages }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI_SCOPE_FULL: ${{ needs.plan.outputs.full }}
+      CI_SCOPE_METADATA: ${{ needs.plan.outputs.metadata }}
+      CI_SCOPE_FIXTURES: ${{ needs.plan.outputs.fixtures }}
+      CI_AFFECTED_PACKAGES: ${{ needs.plan.outputs.affected_packages }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run repository and affected-workspace quality checks
+        run: node scripts/run-scoped-quality.mjs
 
   integration-checks:
     name: integration
     needs: plan
     if: needs.plan.outputs.integration == 'true'
-    uses: ./.github/workflows/_integration.yml
-    permissions:
-      contents: read
-    with:
-      node-version: "24.18.0"
-      browser: ${{ needs.plan.outputs.browser == 'true' }}
-      packages: ${{ needs.plan.outputs.packages == 'true' }}
-      consumer: ${{ needs.plan.outputs.consumer == 'true' }}
-      docs: ${{ needs.plan.outputs.docs == 'true' }}
-      playground: ${{ needs.plan.outputs.playground == 'true' }}
-      pages-artifact: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      RUN_BROWSER: ${{ needs.plan.outputs.browser }}
+      RUN_PACKAGES: ${{ needs.plan.outputs.packages }}
+      RUN_CONSUMER: ${{ needs.plan.outputs.consumer }}
+      RUN_DOCS: ${{ needs.plan.outputs.docs }}
+      RUN_PLAYGROUND: ${{ needs.plan.outputs.playground }}
+      RUN_PAGES_ARTIFACT: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies once
+        run: npm ci
+      - name: Prepare selected package outputs once
+        shell: bash
+        run: |
+          if [[ "$RUN_PACKAGES" == "true" ]]; then
+            npm run verify:beta-package-artifacts
+            npm run build --workspace @vyrnforge/ui-data-grid
+            VYRNFORGE_PACKAGES_PREPARED=true npm run verify:packages
+            npm run verify:beta-package-size-budgets
+            test -f test-results/beta-package-artifacts/size-report.json
+          elif [[ "$RUN_CONSUMER" == "true" ]]; then
+            npm run verify:packages
+          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" || "$RUN_PAGES_ARTIFACT" == "true" ]]; then
+            npm run build:packages
+          elif [[ "$RUN_DOCS" == "true" ]]; then
+            npm run build --workspace @vyrnforge/ui-core
+            npm run build --workspace @vyrnforge/ui-behaviors
+            npm run build --workspace @vyrnforge/ui-components
+          fi
+      - name: Verify packed external consumer
+        if: env.RUN_CONSUMER == 'true'
+        env:
+          VYRNFORGE_PACKAGES_PREPARED: "true"
+        run: npm run verify:consumer
+      - name: Install Chromium once
+        if: env.RUN_BROWSER == 'true' || env.RUN_CONSUMER == 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Run affected browser contracts
+        if: env.RUN_BROWSER == 'true'
+        env:
+          VYRNFORGE_PACKAGES_PREPARED: "true"
+        run: npm run test:browser
+      - name: Run packed four-surface generation smoke
+        if: env.RUN_CONSUMER == 'true'
+        run: |
+          node scripts/verify-packed-four-surface-generation-smoke.mjs
+          test -f test-results/cross-framework-matrix/accessibility-report.json
+          test -f test-results/packed-four-surface-smoke/report.json
+      - name: Verify generated repository inventory
+        if: env.RUN_DOCS == 'true'
+        run: npm run verify:repository-inventory
+      - name: Build documentation application
+        if: env.RUN_DOCS == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
+        run: npm run build --workspace @vyrnforge/ui-docs
+      - name: Build playground
+        if: env.RUN_PLAYGROUND == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
+        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
+      - name: Build documentation application for Pages
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        run: npm run build --workspace @vyrnforge/ui-docs
+        env:
+          VITE_BASE_PATH: /vyrnforge-ui/
+      - name: Build playground for Pages
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
+        env:
+          VITE_BASE_PATH: /vyrnforge-ui/playground/
+      - name: Assemble Pages site once
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        shell: bash
+        run: |
+          rm -rf site
+          mkdir -p site/playground
+          cp -R apps/docs/dist/. site/
+          cp -R examples/basic-playground/dist/. site/playground/
+          touch site/.nojekyll
+      - name: Upload commit-bound Pages site
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pages-site-${{ github.sha }}
+          path: site/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload beta package artifact reports
+        if: always() && env.RUN_PACKAGES == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: beta-package-artifacts
+          path: test-results/beta-package-artifacts/
+          if-no-files-found: error
+      - name: Upload visual regression evidence
+        if: success() && env.RUN_BROWSER == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-regression-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/visual-evidence/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload browser failure artifacts
+        if: failure() && env.RUN_BROWSER == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-browser-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            playwright-report/
+            test-results/browser/
+            test-results/browser-results.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Upload cross-framework browser matrix
+        if: always() && env.RUN_CONSUMER == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cross-framework-browser-matrix
+          path: |
+            test-results/cross-framework-matrix/
+            test-results/packed-four-surface-smoke/
+          if-no-files-found: error
 
   security-checks:
     name: security
     needs: plan
     if: needs.plan.outputs.security == 'true'
-    uses: ./.github/workflows/_security.yml
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
     permissions:
       contents: read
       pull-requests: read
-      security-events: write
-    with:
-      dependency-review: ${{ github.event_name == 'pull_request' }}
-      drift: false
+    env:
+      ACTIONLINT_VERSION: 1.7.12
+      ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+    steps:
+      - name: Review dependency changes
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: high
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Install verified actionlint
+        shell: bash
+        run: |
+          archive="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          curl --fail --silent --show-error --location \
+            --output "$archive" \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/${archive}"
+          echo "${ACTIONLINT_SHA256}  ${archive}" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive" actionlint
+          sudo install -m 0755 actionlint /usr/local/bin/actionlint
+          actionlint -version
+      - name: Validate workflows and shell snippets
+        shell: bash
+        run: |
+          shellcheck --version
+          actionlint -color
+          find . -path ./.git -prune -o -type f -name '*.sh' -print0 | xargs -0 -r shellcheck
+      - name: Verify security and workflow contracts
+        run: |
+          npm run verify:security-workflow-hardening
+          npm run verify:workflows
 
   ci-gate:
     name: ci-gate
@@ -145,13 +303,11 @@ jobs:
     steps:
       - name: Checkout gate reporter
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
-
       - name: Enforce selected responsibilities
         env:
           CI_SUMMARY_MODE: gate
