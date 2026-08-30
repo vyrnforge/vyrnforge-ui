@@ -123,7 +123,7 @@
     "contractCommand": "npm run verify:compatibility-release-matrix",
     "testCommand": "npm run test:compatibility-release-matrix",
     "caseCommand": "npm run verify:compatibility-release-case -- --case <case-id>",
-    "workflow": ".github/workflows/_compatibility.yml",
+    "workflow": ".github/workflows/assurance.yml",
     "reportDirectory": "test-results/compatibility-release-matrix"
   },
   "releaseReadiness": "not-ready"

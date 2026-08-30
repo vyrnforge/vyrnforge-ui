@@ -36,7 +36,6 @@ jobs:
     permissions:
       actions: read
       contents: read
-
     steps:
       - name: Resolve successful current-main CI run
         id: candidate
@@ -48,43 +47,27 @@ jobs:
           MANUAL_RUN_ID: ${{ inputs.ci-run-id }}
         run: |
           set -euo pipefail
-
           if [[ "$EVENT_NAME" == "workflow_run" ]]; then
             RUN_ID="$AUTOMATIC_RUN_ID"
           else
             RUN_ID="$MANUAL_RUN_ID"
           fi
-
           if [[ ! "$RUN_ID" =~ ^[0-9]+$ ]]; then
             echo "A numeric VyrnForge CI run ID is required."
             exit 1
           fi
-
           IFS=$'\t' read -r WORKFLOW_NAME RUN_EVENT HEAD_BRANCH CONCLUSION HEAD_SHA < <(
             gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" \
               --jq '[.name, .event, .head_branch, .conclusion, .head_sha] | @tsv'
           )
-          CURRENT_MAIN_SHA="$(
-            gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha'
-          )"
-
+          CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha')"
           test "$WORKFLOW_NAME" = "VyrnForge CI"
           test "$RUN_EVENT" = "push"
           test "$HEAD_BRANCH" = "main"
           test "$CONCLUSION" = "success"
           test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"
-
           echo "run-id=$RUN_ID" >> "$GITHUB_OUTPUT"
           echo "head-sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
-
-          {
-            echo "## GitHub Pages candidate"
-            echo
-            echo "- CI run: \`$RUN_ID\`"
-            echo "- Commit: \`$HEAD_SHA\`"
-            echo "- Source: successful VyrnForge CI push on current \`main\`"
-          } >> "$GITHUB_STEP_SUMMARY"
-
       - name: Download commit-bound Pages site
         shell: bash
         env:
@@ -96,17 +79,14 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --name "pages-site-${{ steps.candidate.outputs.head-sha }}" \
             --dir site
-
       - name: Verify downloaded Pages site
         shell: bash
         run: |
           test -f site/index.html
           test -f site/playground/index.html
           test -f site/.nojekyll
-
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
