@@ -119,7 +119,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "integration/docs",
     "integration/platform",
   ]) {
-    if (!laneDrift.includes(`\"${lane}\"`)) {
+    if (!laneDrift.includes(`"${lane}"`)) {
       failures.push(`lane drift verifier must include ${lane}`);
     }
   }
