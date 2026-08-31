@@ -51,10 +51,9 @@ describe("MFD-1411 React navigation and selection canonical facades", () => {
     const bold = screen.getByRole("button", { name: "Bold" });
     const italic = screen.getByRole("button", { name: "Italic" });
     bold.focus();
-    fireEvent.keyDown(
-      screen.getByRole("group", { name: "Formatting" }),
-      { key: "ArrowRight" },
-    );
+    fireEvent.keyDown(screen.getByRole("group", { name: "Formatting" }), {
+      key: "ArrowRight",
+    });
     expect(italic).toHaveFocus();
   });
 
