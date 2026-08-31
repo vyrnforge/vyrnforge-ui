@@ -1,7 +1,5 @@
 import { appendFileSync } from "node:fs";
-import {
-  verifyCurrentGitHubPullRequestLaneDrift,
-} from "./verify-lane-drift.mjs";
+import { verifyCurrentGitHubPullRequestLaneDrift } from "./verify-lane-drift.mjs";
 
 function parsePlan() {
   const raw = process.env.PLAN_JSON;
@@ -56,14 +54,12 @@ const reasons = Array.isArray(plan.reasons) ? plan.reasons : [];
 const selected = responsibilities
   .filter((responsibility) => responsibility.selected)
   .map(
-    (responsibility) =>
-      `\`${responsibility.id}\` — ${responsibility.command}`,
+    (responsibility) => `\`${responsibility.id}\` — ${responsibility.command}`,
   );
 const skipped = responsibilities
   .filter((responsibility) => !responsibility.selected)
   .map(
-    (responsibility) =>
-      `\`${responsibility.id}\` — intentionally not required`,
+    (responsibility) => `\`${responsibility.id}\` — intentionally not required`,
   );
 
 if ((process.env.CI_SUMMARY_MODE ?? "plan") === "plan") {
