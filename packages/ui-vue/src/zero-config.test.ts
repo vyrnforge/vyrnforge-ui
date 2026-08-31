@@ -9,7 +9,7 @@ const repositoryRoot = path.resolve(
 );
 
 describe("@vyrnforge/ui-vue zero-config application path", () => {
-  it("builds facade templates without custom-element compiler configuration", () => {
+  it("builds public facade components without custom-element compiler configuration", () => {
     execFileSync(
       process.execPath,
       [path.join(repositoryRoot, "scripts/verify-vue-zero-config.mjs")],
