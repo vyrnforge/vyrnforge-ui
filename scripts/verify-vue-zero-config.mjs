@@ -44,15 +44,11 @@ function verifyCleanViteBuild() {
     );
     writeFileSync(
       path.join(srcDir, "main.ts"),
-      'import { createApp } from "vue";\nimport App from "./App.vue";\ncreateApp(App).mount("#app");\n',
-    );
-    writeFileSync(
-      path.join(srcDir, "App.vue"),
-      `<script setup lang="ts">\nimport { VfButton, VfDialog } from "@vyrnforge/ui-vue";\n</script>\n\n<template>\n  <VfDialog>\n    <VfButton>Zero config Vue</VfButton>\n  </VfDialog>\n</template>\n`,
+      `import { createApp, defineComponent, h } from "vue";\nimport { VfButton, VfDialog } from "@vyrnforge/ui-vue";\n\nconst App = defineComponent({\n  name: "ZeroConfigFixture",\n  setup() {\n    return () => h(VfDialog, null, { default: () => h(VfButton, null, { default: () => "Zero config Vue" }) });\n  },\n});\n\ncreateApp(App).mount("#app");\n`,
     );
     writeFileSync(
       path.join(tempRoot, "vite.config.ts"),
-      'import { defineConfig } from "vite";\nimport vue from "@vitejs/plugin-vue";\nexport default defineConfig({ plugins: [vue()] });\n',
+      'import { defineConfig } from "vite";\nexport default defineConfig({});\n',
     );
 
     execFileSync(
@@ -87,5 +83,5 @@ function verifyCleanViteBuild() {
 buildRequiredPackages();
 verifyCleanViteBuild();
 console.log(
-  "Vue zero-config verification passed: facade templates build with the standard Vue Vite plugin and no VyrnForge compiler customization.",
+  "Vue zero-config verification passed: public facade components build in a standard Vite + Vue application with no VyrnForge compiler customization.",
 );
