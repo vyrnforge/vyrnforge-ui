@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "7b587b3f1f0acc6b4e32f40fa6a094f31be8438c",
+      "sha1": "9f352566a55a3de2f1e39ecd92f3719bcfb42464",
       "covers": [
         "component props and types",
         "callbacks",
@@ -90,7 +90,8 @@
     "packages/ui-components/src/components/__tests__/dom-interactions.test.tsx",
     "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
     "packages/ui-components/src/components/__tests__/primitives.test.tsx",
-    "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx"
+    "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx",
+    "packages/ui-components/src/__tests__/react-batch-2-forms.test.tsx"
   ],
   "compatibilityInvariants": [
     "public root exports unchanged",
@@ -105,6 +106,11 @@
       "task": "MFD-1409",
       "reason": "Button and IconButton moved to canonical Light-DOM action facades while preserving the documented React API, native HTMLButtonElement refs, native event surface, SSR output, CSS hooks, and accessibility behavior.",
       "evidence": "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx"
+    },
+    {
+      "task": "MFD-1410",
+      "reason": "Simple form controls moved to canonical Light-DOM ownership while preserving public React props and callbacks, native control refs and form semantics, accessibility behavior, SSR output, and documented CSS hooks.",
+      "evidence": "packages/ui-components/src/__tests__/react-batch-2-forms.test.tsx"
     },
     {
       "task": "workflow-surface-consolidation",

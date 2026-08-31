@@ -148,6 +148,26 @@
       "reviewMilestone": "G14 React convergence"
     },
     {
+      "id": "MFD-EX-REACT-RATING-RADIO-SEMANTICS",
+      "framework": "react",
+      "scope": "rating",
+      "exceptionClass": "accessibility-focus-form",
+      "reason": "The current React Rating renderer owns a native radio-group form contract, while the canonical vf-rating renderer replaces its Light DOM with button-based radio roles on every update. Wrapping the current React renderer would destroy its native radio inputs and form semantics instead of preserving them.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Rating/Rating.tsx",
+        "packages/ui-components/src/components/Rating/Rating.types.ts",
+        "packages/ui-elements/src/components/values.ts"
+      ],
+      "evidence": [
+        "MFD-1410 inspection confirms VyrnForgeRatingElement.update() calls replaceChildren() and recreates button role=radio controls.",
+        "The React Rating baseline uses native radio inputs and must retain its current form, keyboard, and accessibility contract during S14 convergence."
+      ],
+      "exitCriteria": "Add canonical rating Light-DOM adoption that preserves native radio controls, form value, keyboard behavior, labels, and React ref/event compatibility, then migrate Rating through the MFD-1410 parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
       "id": "MFD-EX-NATIVE-TOAST-VIEWPORT",
       "framework": "native",
       "scope": "toast-viewport",
