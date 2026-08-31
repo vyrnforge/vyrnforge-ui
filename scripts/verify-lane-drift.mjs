@@ -148,7 +148,9 @@ export function readPullRequestCoordinatesFromGitHubEvent({
     !pullRequest?.head?.ref ||
     !pullRequest?.head?.sha
   ) {
-    throw new Error("GitHub pull-request event is missing base/head coordinates");
+    throw new Error(
+      "GitHub pull-request event is missing base/head coordinates",
+    );
   }
   return {
     baseRef: pullRequest.base.ref,
