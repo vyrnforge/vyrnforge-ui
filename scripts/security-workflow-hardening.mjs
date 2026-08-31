@@ -242,16 +242,3 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
 
   return failures.sort();
 }
-
-if (process.env.GITHUB_ACTIONS === "true") {
-  const { format } = await import("prettier");
-  for (const file of [
-    "scripts/verify-lane-drift.mjs",
-    "scripts/write-ci-summary.mjs",
-  ]) {
-    const formatted = await format(read(repositoryRoot, file), { filepath: file });
-    console.log(
-      `VYRNFORGE_PRETTIER:${file}:${Buffer.from(formatted).toString("base64")}`,
-    );
-  }
-}
