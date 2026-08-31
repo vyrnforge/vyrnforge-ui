@@ -182,6 +182,70 @@
       "exitCriteria": "Add a framework-neutral toast viewport/service contract that owns the native registration and imperative lifecycle, or remove the standalone public native registration.",
       "state": "active",
       "reviewMilestone": "S14 framework convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",
+      "framework": "react",
+      "scope": ["tabs", "breadcrumbs", "side-nav", "segmented-control", "menu"],
+      "exceptionClass": "composition",
+      "reason": "The current React surfaces accept ReactNode labels, content, icons, badges, separators, descriptions, or overlay composition, while the corresponding canonical elements reconstruct their Light DOM from string-oriented item models. Direct facade conversion would erase React-owned nodes or change the captured DOM/accessibility contract.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Tabs/Tabs.tsx",
+        "packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx",
+        "packages/ui-components/src/components/SideNav/SideNav.tsx",
+        "packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx",
+        "packages/ui-components/src/components/Menu/Menu.tsx",
+        "packages/ui-elements/src/components/navigation.ts",
+        "packages/ui-elements/src/components/values.ts",
+        "packages/ui-elements/src/components/overlays.ts"
+      ],
+      "evidence": [
+        "MFD-1411 inspection confirms these canonical renderers rebuild owned Light DOM instead of adopting the current React-owned rich composition.",
+        "The MFD-1401 baseline and MFD-1411 navigation parity work require ReactNode composition and current keyboard/focus/overlay semantics to remain stable."
+      ],
+      "exitCriteria": "Add canonical Light-DOM adoption or framework-neutral rich-composition contracts that preserve ReactNode content, documented DOM semantics, keyboard/focus behavior, overlay ownership, and callback contracts, then migrate these surfaces through the MFD-1411 navigation parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-RADIO-GROUP-FOCUS",
+      "framework": "react",
+      "scope": "radio-group",
+      "exceptionClass": "accessibility-focus-form",
+      "reason": "The canonical radio-group keyboard path is coupled to canonical vf-radio event targets, while the React Radio public contract exposes native input focus and form semantics inside canonical radio hosts. Converting the group without a shared focus-target contract risks changing roving focus, fieldset semantics, and native radio behavior.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
+        "packages/ui-components/src/components/Radio/Radio.tsx",
+        "packages/ui-elements/src/components/selection.ts"
+      ],
+      "evidence": [
+        "MFD-1411 inspection confirms the React group preserves fieldset/legend semantics and native radio focus while the canonical group keyboard handler resolves selection/focus through vf-radio targets."
+      ],
+      "exitCriteria": "Define and implement a canonical radio-group focus/keyboard adoption contract that explicitly supports adopted native radio inputs and preserves React fieldset, form, focus, and callback behavior.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-SELECT-MULTIPLE",
+      "framework": "react",
+      "scope": "select-multiple",
+      "exceptionClass": "migration-compatibility",
+      "reason": "The public React Select inherits native multiple selection and string-array value/defaultValue contracts, while the current canonical vf-select model exposes one string value and single-select form state. Canonicalizing the multiple path would narrow the public API or lose selected values.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Select/Select.tsx",
+        "packages/ui-components/src/components/Select/Select.types.ts",
+        "packages/ui-elements/src/components/selection.ts"
+      ],
+      "evidence": [
+        "MFD-1411 keeps the single-select path canonical-backed and explicitly verifies that multiple Select remains a native listbox compatibility path.",
+        "The current canonical VyrnForgeSelectElement stores and submits one string value."
+      ],
+      "exitCriteria": "Extend the shared canonical select contract to model multiple selection, array values/defaults, form submission, and native listbox semantics without changing the React public contract, then migrate the multiple path.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
     }
   ]
 }

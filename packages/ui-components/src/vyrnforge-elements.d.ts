@@ -46,6 +46,33 @@ type CanonicalSliderProps<TElement extends HTMLElement> =
     value?: number;
   };
 
+type CanonicalToggleButtonProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    disabled?: boolean;
+    pressed?: boolean;
+    size?: "sm" | "md" | "lg";
+    type?: "button" | "reset" | "submit";
+    value?: string;
+    variant?: "default" | "quiet" | "outline";
+  };
+
+type CanonicalToggleButtonGroupProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    disabled?: boolean;
+    orientation?: "horizontal" | "vertical";
+    type?: "single" | "multiple";
+    value?: string | string[];
+  };
+
+type CanonicalSelectProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    disabled?: boolean;
+    invalid?: boolean;
+    required?: boolean;
+    size?: "sm" | "md" | "lg";
+    value?: string;
+  };
+
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
@@ -83,6 +110,16 @@ declare module "react" {
       "vf-slider": CanonicalSliderProps<
         VyrnForgeElementForTagName<"vf-slider">
       >;
+      "vf-toggle-button": CanonicalToggleButtonProps<
+        VyrnForgeElementForTagName<"vf-toggle-button">
+      >;
+      "vf-toggle-button-group": CanonicalToggleButtonGroupProps<
+        VyrnForgeElementForTagName<"vf-toggle-button-group">
+      >;
+      "vf-select": CanonicalSelectProps<
+        VyrnForgeElementForTagName<"vf-select">
+      >;
+      "vf-top-nav": ElementProps<VyrnForgeElementForTagName<"vf-top-nav">>;
     }
   }
 }
