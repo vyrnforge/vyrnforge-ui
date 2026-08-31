@@ -50,10 +50,10 @@ export function refContainsOrMatchesMain(mainRef, laneRef, options = {}) {
     return { current: true, reason: "tree-equivalent" };
   }
 
-  const ancestor = git(
-    ["merge-base", "--is-ancestor", mainRef, laneRef],
-    { ...options, allowFailure: true },
-  );
+  const ancestor = git(["merge-base", "--is-ancestor", mainRef, laneRef], {
+    ...options,
+    allowFailure: true,
+  });
   return ancestor !== null
     ? { current: true, reason: "contains-main" }
     : { current: false, reason: "missing-main" };
@@ -176,7 +176,7 @@ function argument(name) {
 function isMainModule() {
   return Boolean(
     process.argv[1] &&
-      path.resolve(process.argv[1]) === fileURLToPath(import.meta.url),
+    path.resolve(process.argv[1]) === fileURLToPath(import.meta.url),
   );
 }
 
