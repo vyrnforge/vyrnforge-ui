@@ -1,5 +1,7 @@
 import { appendFileSync } from "node:fs";
-import { verifyCurrentGitHubPullRequestLaneDrift } from "./verify-lane-drift.mjs";
+import {
+  verifyCurrentGitHubPullRequestLaneDrift,
+} from "./verify-lane-drift.mjs";
 
 function parsePlan() {
   const raw = process.env.PLAN_JSON;
