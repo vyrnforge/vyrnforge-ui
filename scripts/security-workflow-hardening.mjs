@@ -102,7 +102,9 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "### Lane freshness",
   ]) {
     if (!ciSummary.includes(marker)) {
-      failures.push(`ci-gate reporter must enforce lane freshness via ${marker}`);
+      failures.push(
+        `ci-gate reporter must enforce lane freshness via ${marker}`,
+      );
     }
   }
 
@@ -156,7 +158,9 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     try {
       verifyAllPersistentLanes({ cwd: root });
     } catch (error) {
-      failures.push(`weekly integration-lane drift audit failed: ${error.message}`);
+      failures.push(
+        `weekly integration-lane drift audit failed: ${error.message}`,
+      );
     }
   }
 
