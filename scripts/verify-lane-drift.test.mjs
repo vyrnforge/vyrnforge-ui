@@ -32,10 +32,13 @@ test("accepts a lane that contains current main", () => {
   git(cwd, "switch", "-c", "integration/test");
   commit(cwd, "lane.txt", "lane\n", "lane change");
 
-  assert.deepEqual(refContainsOrMatchesMain(main, "integration/test", { cwd }), {
-    current: true,
-    reason: "contains-main",
-  });
+  assert.deepEqual(
+    refContainsOrMatchesMain(main, "integration/test", { cwd }),
+    {
+      current: true,
+      reason: "contains-main",
+    },
+  );
 });
 
 test("accepts squash-equivalent lane trees", () => {
@@ -45,10 +48,13 @@ test("accepts squash-equivalent lane trees", () => {
   git(cwd, "switch", "-c", "integration/test", base);
   commit(cwd, "state.txt", "promoted\n", "lane equivalent");
 
-  assert.deepEqual(refContainsOrMatchesMain(main, "integration/test", { cwd }), {
-    current: true,
-    reason: "tree-equivalent",
-  });
+  assert.deepEqual(
+    refContainsOrMatchesMain(main, "integration/test", { cwd }),
+    {
+      current: true,
+      reason: "tree-equivalent",
+    },
+  );
 });
 
 test("rejects a lane missing current main content", () => {
@@ -58,8 +64,11 @@ test("rejects a lane missing current main content", () => {
   git(cwd, "switch", "-c", "integration/test", base);
   commit(cwd, "lane.txt", "lane\n", "lane change");
 
-  assert.deepEqual(refContainsOrMatchesMain(main, "integration/test", { cwd }), {
-    current: false,
-    reason: "missing-main",
-  });
+  assert.deepEqual(
+    refContainsOrMatchesMain(main, "integration/test", { cwd }),
+    {
+      current: false,
+      reason: "missing-main",
+    },
+  );
 });
