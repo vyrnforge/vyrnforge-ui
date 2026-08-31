@@ -32,7 +32,12 @@ function fetchRef(remote, ref, options = {}) {
 }
 
 function ensureCommit(remote, sha, options = {}) {
-  if (git(["cat-file", "-e", `${sha}^{commit}`], { ...options, allowFailure: true }) !== null) {
+  if (
+    git(["cat-file", "-e", `${sha}^{commit}`], {
+      ...options,
+      allowFailure: true,
+    }) !== null
+  ) {
     return;
   }
   fetchRef(remote, sha, options);
@@ -64,7 +69,9 @@ export function verifyPullRequestLaneDrift({
   cwd = process.cwd(),
 }) {
   if (!baseRef || !baseSha || !headRef || !headSha) {
-    throw new Error("lane drift verification requires PR base/head refs and SHAs");
+    throw new Error(
+      "lane drift verification requires PR base/head refs and SHAs",
+    );
   }
 
   fetchRef(remote, "main", { cwd });
@@ -109,7 +116,10 @@ export function verifyAllPersistentLanes({
 
   const results = persistentIntegrationLanes.map((lane) => {
     const remoteLane = `${remote}/${lane}`;
-    return { lane, ...refContainsOrMatchesMain(mainRef, remoteLane, { cwd }) };
+    return {
+      lane,
+      ...refContainsOrMatchesMain(mainRef, remoteLane, { cwd }),
+    };
   });
   const stale = results.filter((result) => !result.current);
   if (stale.length) {
@@ -126,11 +136,18 @@ export function readPullRequestCoordinatesFromGitHubEvent({
 } = {}) {
   if (eventName !== "pull_request") return null;
   if (!eventPath) {
-    throw new Error("GITHUB_EVENT_PATH is required for pull-request lane drift verification");
+    throw new Error(
+      "GITHUB_EVENT_PATH is required for pull-request lane drift verification",
+    );
   }
   const event = JSON.parse(readFileSync(eventPath, "utf8"));
   const pullRequest = event.pull_request;
-  if (!pullRequest?.base?.ref || !pullRequest?.base?.sha || !pullRequest?.head?.ref || !pullRequest?.head?.sha) {
+  if (
+    !pullRequest?.base?.ref ||
+    !pullRequest?.base?.sha ||
+    !pullRequest?.head?.ref ||
+    !pullRequest?.head?.sha
+  ) {
     throw new Error("GitHub pull-request event is missing base/head coordinates");
   }
   return {
