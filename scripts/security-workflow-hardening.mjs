@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { verifyAllPersistentLanes } from "./verify-lane-drift.mjs";
 
 export const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -37,6 +38,9 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     assuranceWorkflowPath,
     "scripts/verify-security-workflow-hardening.mjs",
     "scripts/verify-security-workflow-hardening.test.mjs",
+    "scripts/verify-lane-drift.mjs",
+    "scripts/verify-lane-drift.test.mjs",
+    "scripts/write-ci-summary.mjs",
   ]) {
     if (!existsSync(path.join(root, requiredFile))) {
       failures.push(`BT-8006 required file is missing: ${requiredFile}`);
@@ -91,6 +95,44 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     failures.push("CI security checks must not conceal mandatory failures");
   }
 
+  const ciSummary = read(root, "scripts/write-ci-summary.mjs");
+  for (const marker of [
+    "verifyCurrentGitHubPullRequestLaneDrift",
+    "lane drift:",
+    "### Lane freshness",
+  ]) {
+    if (!ciSummary.includes(marker)) {
+      failures.push(`ci-gate reporter must enforce lane freshness via ${marker}`);
+    }
+  }
+
+  const laneDrift = read(root, "scripts/verify-lane-drift.mjs");
+  for (const lane of [
+    "integration/foundation",
+    "integration/native",
+    "integration/react",
+    "integration/angular",
+    "integration/vue",
+    "integration/data-grid",
+    "integration/docs",
+    "integration/platform",
+  ]) {
+    if (!laneDrift.includes(`\"${lane}\"`)) {
+      failures.push(`lane drift verifier must include ${lane}`);
+    }
+  }
+  for (const marker of [
+    "tree-equivalent",
+    "contains-main",
+    "main-sync-pr",
+    "synchronize main ->",
+    "does not contain current main",
+  ]) {
+    if (!laneDrift.includes(marker)) {
+      failures.push(`lane drift verifier must preserve ${marker}`);
+    }
+  }
+
   const assurance = read(root, assuranceWorkflowPath);
   for (const marker of [
     "npm audit --omit=dev --audit-level=high",
@@ -108,6 +150,14 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   }
   if (/continue-on-error:\s*true/u.test(assurance)) {
     failures.push("weekly assurance must not conceal mandatory failures");
+  }
+
+  if (process.env.GITHUB_WORKFLOW === "VyrnForge Weekly Assurance") {
+    try {
+      verifyAllPersistentLanes({ cwd: root });
+    } catch (error) {
+      failures.push(`weekly integration-lane drift audit failed: ${error.message}`);
+    }
   }
 
   const release = read(root, ".github/workflows/release.yml");
