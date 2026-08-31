@@ -1,4 +1,7 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export const persistentIntegrationLanes = [
   "integration/foundation",
@@ -24,6 +27,17 @@ function git(args, { cwd = process.cwd(), allowFailure = false } = {}) {
   }
 }
 
+function fetchRef(remote, ref, options = {}) {
+  git(["fetch", "--no-tags", remote, ref], options);
+}
+
+function ensureCommit(remote, sha, options = {}) {
+  if (git(["cat-file", "-e", `${sha}^{commit}`], { ...options, allowFailure: true }) !== null) {
+    return;
+  }
+  fetchRef(remote, sha, options);
+}
+
 export function refContainsOrMatchesMain(mainRef, laneRef, options = {}) {
   const mainTree = git(["rev-parse", `${mainRef}^{tree}`], options);
   const laneTree = git(["rev-parse", `${laneRef}^{tree}`], options);
@@ -40,10 +54,6 @@ export function refContainsOrMatchesMain(mainRef, laneRef, options = {}) {
     : { current: false, reason: "missing-main" };
 }
 
-function fetchRef(remote, ref, options = {}) {
-  git(["fetch", "--no-tags", "--prune", remote, ref], options);
-}
-
 export function verifyPullRequestLaneDrift({
   baseRef,
   baseSha,
@@ -58,6 +68,8 @@ export function verifyPullRequestLaneDrift({
   }
 
   fetchRef(remote, "main", { cwd });
+  ensureCommit(remote, baseSha, { cwd });
+  ensureCommit(remote, headSha, { cwd });
 
   if (baseRef.startsWith("integration/")) {
     if (headRef === "main") {
@@ -108,13 +120,45 @@ export function verifyAllPersistentLanes({
   return results;
 }
 
+export function readPullRequestCoordinatesFromGitHubEvent({
+  eventName = process.env.GITHUB_EVENT_NAME,
+  eventPath = process.env.GITHUB_EVENT_PATH,
+} = {}) {
+  if (eventName !== "pull_request") return null;
+  if (!eventPath) {
+    throw new Error("GITHUB_EVENT_PATH is required for pull-request lane drift verification");
+  }
+  const event = JSON.parse(readFileSync(eventPath, "utf8"));
+  const pullRequest = event.pull_request;
+  if (!pullRequest?.base?.ref || !pullRequest?.base?.sha || !pullRequest?.head?.ref || !pullRequest?.head?.sha) {
+    throw new Error("GitHub pull-request event is missing base/head coordinates");
+  }
+  return {
+    baseRef: pullRequest.base.ref,
+    baseSha: pullRequest.base.sha,
+    headRef: pullRequest.head.ref,
+    headSha: pullRequest.head.sha,
+  };
+}
+
+export function verifyCurrentGitHubPullRequestLaneDrift(options = {}) {
+  const coordinates = readPullRequestCoordinatesFromGitHubEvent(options);
+  if (!coordinates) {
+    return { mode: "not-applicable", current: true, reason: "non-pr-event" };
+  }
+  return verifyPullRequestLaneDrift({ ...coordinates, ...options });
+}
+
 function argument(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : undefined;
 }
 
 function isMainModule() {
-  return process.argv[1] && import.meta.url.endsWith(process.argv[1].replaceAll("\\", "/"));
+  return Boolean(
+    process.argv[1] &&
+      path.resolve(process.argv[1]) === fileURLToPath(import.meta.url),
+  );
 }
 
 if (isMainModule()) {
@@ -122,6 +166,9 @@ if (isMainModule()) {
   if (process.argv.includes("--all")) {
     const results = verifyAllPersistentLanes({ cwd });
     console.log(JSON.stringify(results, null, 2));
+  } else if (process.argv.includes("--github-event")) {
+    const result = verifyCurrentGitHubPullRequestLaneDrift({ cwd });
+    console.log(JSON.stringify(result, null, 2));
   } else {
     const result = verifyPullRequestLaneDrift({
       baseRef: argument("--base-ref") ?? process.env.PR_BASE_REF,
