@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "task": "MFD-1415",
+  "deliverable": "React exception catalog",
+  "policy": "A React-specific renderer or integration may remain handwritten only when current technical evidence requires it. Historical existence is never sufficient. Every retained path must have an owner, evidence, exit criteria, and a reviewable source record.",
+  "owner": "UI Platform",
+  "sources": [
+    {
+      "kind": "adr-008-exceptions",
+      "path": "docs/metadata/framework-exceptions.json",
+      "framework": "react",
+      "allowedStates": ["active", "retiring"],
+      "requiredFields": [
+        "id",
+        "framework",
+        "scope",
+        "exceptionClass",
+        "reason",
+        "owner",
+        "sourcePaths",
+        "evidence",
+        "exitCriteria",
+        "state",
+        "reviewMilestone"
+      ],
+      "evidence": "Canonical exception registry for handwritten React integrations and dedicated-renderer exceptions under ADR-008."
+    },
+    {
+      "kind": "batch-parity-blockers",
+      "path": "docs/metadata/react-batch-5-overlay-convergence.json",
+      "task": "MFD-1413",
+      "evidence": "packages/ui-components/src/__tests__/react-batch-5-overlay-convergence.test.ts",
+      "exitCriteriaField": "surfaces[].exitCriteria"
+    },
+    {
+      "kind": "batch-parity-blockers",
+      "path": "docs/metadata/react-batch-6-catalog-convergence.json",
+      "task": "MFD-1414",
+      "evidence": "packages/ui-components/src/__tests__/react-batch-6-catalog-convergence.test.ts",
+      "exitCriteriaField": "exitCriteria"
+    }
+  ],
+  "resolvedTemporaryLegacy": [
+    {
+      "export": "ToastProvider",
+      "strategy": "approved-framework-integration",
+      "exceptionId": "MFD-EX-REACT-TOAST-PROVIDER",
+      "reason": "ToastProvider owns React context and lifecycle integration rather than an alternate canonical DOM renderer, and the active ADR-008 exception records its technical reason, evidence, owner, and exit criteria."
+    }
+  ],
+  "nonRendererIntegrationApis": [
+    {
+      "export": "useToast",
+      "exceptionId": "MFD-EX-REACT-USE-TOAST",
+      "reason": "useToast is a React hook/service binding, not a component renderer, and remains governed by the ADR-008 integration exception until a shared service contract can generate framework bindings."
+    }
+  ],
+  "rules": [
+    "The React migration matrix must contain no temporary-legacy strategy after MFD-1415.",
+    "Every active or retiring React ADR-008 exception must contain every registry-required field, at least one source path, current evidence, and substantive exit criteria.",
+    "Every retained React source path recorded by an ADR-008 exception must exist in the repository.",
+    "Every Batch-5 or Batch-6 parity blocker must carry technical rationale and exit criteria and point to existing source files.",
+    "No exception may be justified by historical existence, prior ownership, or convenience alone."
+  ]
+}
