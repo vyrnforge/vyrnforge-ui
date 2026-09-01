@@ -54,7 +54,9 @@ describe("MFD-1413 React overlay and feedback convergence", () => {
       "ConfirmDialog",
     ]);
     expect(
-      convergence.surfaces.every(({ status }) => status === "blocked-by-parity"),
+      convergence.surfaces.every(
+        ({ status }) => status === "blocked-by-parity",
+      ),
     ).toBe(true);
   });
 
