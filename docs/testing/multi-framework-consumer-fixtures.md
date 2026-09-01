@@ -55,18 +55,22 @@ Each supported consumer must prove:
 
 ## React fixture
 
-The React fixture covers both the first-class React package and explicit native
-element registration. The React package remains the recommended React path.
+The React fixture verifies the normal first-class React package path. Application
+code imports React components, types, and styling from
+`@vyrnforge/ui-components` and does not import or register native packages.
+Shared VyrnForge implementation packages may be installed transitively by the
+React package, but they are not consumer-facing setup requirements.
 
 ```tsx
 import { Button } from "@vyrnforge/ui-components";
+import "@vyrnforge/ui-components/styles/index.css";
+
+<Button variant="primary">Save</Button>;
 ```
 
-```tsx
-import "@vyrnforge/ui-elements/register";
-
-<vf-button variant="primary">Save</vf-button>;
-```
+Direct Custom Element consumption remains a separate native/web-platform
+surface, verified by `tests/consumers/native-html`; it is not part of the normal
+React fixture path.
 
 ## Native HTML fixture
 

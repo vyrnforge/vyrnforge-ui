@@ -17,14 +17,16 @@ const fixtures = Object.freeze([
     opener: "#native-dialog [data-dialog-trigger]",
     dialog: '#native-dialog[data-vf-generated-dialog="native"]',
     root: "[data-consumer-root]",
+    canonical: true,
   }),
   Object.freeze({
     id: "react",
     directory: "tests/consumers/react",
     port: 4182,
-    opener: 'vf-dialog[data-vf-generated-dialog="react"] [data-dialog-trigger]',
-    dialog: 'vf-dialog[data-vf-generated-dialog="react"]',
+    opener: "[data-react-dialog-trigger]",
+    dialog: '.react-public-dialog[role="dialog"]',
     root: "[data-react-consumer]",
+    canonical: false,
   }),
   Object.freeze({
     id: "angular",
@@ -34,6 +36,7 @@ const fixtures = Object.freeze([
       'vf-dialog[data-vf-generated-dialog="angular"] [data-dialog-trigger]',
     dialog: 'vf-dialog[data-vf-generated-dialog="angular"]',
     root: "[data-angular-consumer]",
+    canonical: true,
   }),
   Object.freeze({
     id: "vue",
@@ -42,6 +45,7 @@ const fixtures = Object.freeze([
     opener: 'vf-dialog[data-vf-generated-dialog="vue"] [data-dialog-trigger]',
     dialog: 'vf-dialog[data-vf-generated-dialog="vue"]',
     root: "[data-vue-consumer]",
+    canonical: true,
   }),
 ]);
 
@@ -161,27 +165,34 @@ async function verifyDialogFixture(browser, fixture) {
     const opener = page.locator(fixture.opener);
     const dialog = page.locator(fixture.dialog);
     await opener.waitFor({ state: "visible" });
-    await dialog.waitFor({ state: "attached" });
 
-    assert(
-      (await dialog.evaluate((element) => element.tagName)) === "VF-DIALOG",
-      `${fixture.id}: generated Dialog did not retain the canonical vf-dialog renderer`,
-    );
-    assert(
-      await dialog.evaluate(
-        (element) =>
-          typeof element.show === "function" &&
-          typeof element.close === "function" &&
-          typeof element.focus === "function",
-      ),
-      `${fixture.id}: generated Dialog methods are not exposed by the canonical renderer`,
-    );
+    if (fixture.canonical) {
+      await dialog.waitFor({ state: "attached" });
+      assert(
+        (await dialog.evaluate((element) => element.tagName)) === "VF-DIALOG",
+        `${fixture.id}: generated Dialog did not retain the canonical vf-dialog renderer`,
+      );
+      assert(
+        await dialog.evaluate(
+          (element) =>
+            typeof element.show === "function" &&
+            typeof element.close === "function" &&
+            typeof element.focus === "function",
+        ),
+        `${fixture.id}: generated Dialog methods are not exposed by the canonical renderer`,
+      );
+    }
 
     await opener.click();
-    await page.waitForFunction(
-      (selector) => document.querySelector(selector)?.open === true,
-      fixture.dialog,
-    );
+    if (fixture.canonical) {
+      await page.waitForFunction(
+        (selector) => document.querySelector(selector)?.open === true,
+        fixture.dialog,
+      );
+    } else {
+      await dialog.waitFor({ state: "visible" });
+    }
+
     await page.waitForFunction((selector) => {
       const dialogElement = document.querySelector(selector);
       const active = document.activeElement;
@@ -197,7 +208,6 @@ async function verifyDialogFixture(browser, fixture) {
       ),
       `${fixture.id}: modal Dialog did not contain backward Tab focus`,
     );
-
     await page.keyboard.press("Tab");
     assert(
       await dialog.evaluate(
@@ -209,10 +219,14 @@ async function verifyDialogFixture(browser, fixture) {
     );
 
     await page.keyboard.press("Escape");
-    await page.waitForFunction(
-      (selector) => document.querySelector(selector)?.open === false,
-      fixture.dialog,
-    );
+    if (fixture.canonical) {
+      await page.waitForFunction(
+        (selector) => document.querySelector(selector)?.open === false,
+        fixture.dialog,
+      );
+    } else {
+      await dialog.waitFor({ state: "hidden" });
+    }
     await page.waitForFunction(
       (selector) => document.activeElement === document.querySelector(selector),
       fixture.opener,
@@ -231,29 +245,31 @@ async function verifyDialogFixture(browser, fixture) {
       `${fixture.id}: framework dismissal mapping did not expose escape-key`,
     );
 
-    await dialog.evaluate((element) => element.show());
-    await page.waitForFunction(
-      (selector) => document.querySelector(selector)?.open === true,
-      fixture.dialog,
-    );
-    await dialog.evaluate((element) => element.focus());
-    assert(
-      await dialog.evaluate(
-        (element) =>
-          document.activeElement !== null &&
-          element.contains(document.activeElement),
-      ),
-      `${fixture.id}: Dialog focus() did not focus the overlay`,
-    );
-    await dialog.evaluate((element) => element.close());
-    await page.waitForFunction(
-      (selector) => document.querySelector(selector)?.open === false,
-      fixture.dialog,
-    );
+    if (fixture.canonical) {
+      await dialog.evaluate((element) => element.show());
+      await page.waitForFunction(
+        (selector) => document.querySelector(selector)?.open === true,
+        fixture.dialog,
+      );
+      await dialog.evaluate((element) => element.focus());
+      assert(
+        await dialog.evaluate(
+          (element) =>
+            document.activeElement !== null &&
+            element.contains(document.activeElement),
+        ),
+        `${fixture.id}: Dialog focus() did not focus the overlay`,
+      );
+      await dialog.evaluate((element) => element.close());
+      await page.waitForFunction(
+        (selector) => document.querySelector(selector)?.open === false,
+        fixture.dialog,
+      );
+    }
 
     await page.close();
     console.log(
-      `DIALOG ${fixture.id}: trigger, focus containment/restoration, Escape dismissal, model mapping, and methods passed.`,
+      `DIALOG ${fixture.id}: trigger, focus containment/restoration, Escape dismissal, and state mapping passed.`,
     );
   } catch (error) {
     throw new Error(
@@ -280,5 +296,5 @@ try {
 }
 
 console.log(
-  `MFD-1115 Dialog runtime passed across ${fixtures.length} framework surfaces.`,
+  `Dialog runtime passed across ${fixtures.length} framework surfaces using each surface's current public renderer contract.`,
 );
