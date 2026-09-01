@@ -10,7 +10,19 @@
       "path": "docs/metadata/framework-exceptions.json",
       "framework": "react",
       "allowedStates": ["active", "retiring"],
-      "requiredFields": ["id", "framework", "scope", "exceptionClass", "reason", "owner", "sourcePaths", "evidence", "exitCriteria", "state", "reviewMilestone"],
+      "requiredFields": [
+        "id",
+        "framework",
+        "scope",
+        "exceptionClass",
+        "reason",
+        "owner",
+        "sourcePaths",
+        "evidence",
+        "exitCriteria",
+        "state",
+        "reviewMilestone"
+      ],
       "evidence": "docs/architecture/adr-008-framework-exception-policy.md"
     },
     {
