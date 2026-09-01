@@ -16,6 +16,10 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const siteDirectory = path.join(repositoryRoot, "site");
+const releaseSnapshotDirectory = path.join(
+  repositoryRoot,
+  ".pages-release-snapshot",
+);
 const releaseGroupsPath = path.join(
   repositoryRoot,
   "docs/metadata/release-groups.json",
@@ -80,6 +84,7 @@ function copyDirectory(source, destination) {
 function buildReleasedDocs(releaseTag) {
   const worktree = path.join(repositoryRoot, ".pages-release-worktree");
   rmSync(worktree, { recursive: true, force: true });
+  rmSync(releaseSnapshotDirectory, { recursive: true, force: true });
 
   run("git", ["worktree", "add", "--detach", worktree, releaseTag]);
   try {
@@ -107,15 +112,17 @@ function buildReleasedDocs(releaseTag) {
       },
       stdio: "inherit",
     });
-
-    return path.join(worktree, "apps/docs/dist");
+    copyDirectory(
+      path.join(worktree, "apps/docs/dist"),
+      releaseSnapshotDirectory,
+    );
   } finally {
     run("git", ["worktree", "remove", "--force", worktree]);
   }
 }
 
 const releaseTag = resolveReleaseTag();
-const releasedDocsDirectory = buildReleasedDocs(releaseTag);
+buildReleasedDocs(releaseTag);
 
 rmSync(siteDirectory, { recursive: true, force: true });
 mkdirSync(siteDirectory, { recursive: true });
@@ -125,9 +132,10 @@ copyDirectory(
   path.join(siteDirectory, "playground"),
 );
 copyDirectory(
-  releasedDocsDirectory,
+  releaseSnapshotDirectory,
   path.join(siteDirectory, "versions", `v${releaseLine.version}`),
 );
+rmSync(releaseSnapshotDirectory, { recursive: true, force: true });
 
 writeFileSync(path.join(siteDirectory, ".nojekyll"), "");
 writeFileSync(
