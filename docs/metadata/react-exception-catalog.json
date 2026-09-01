@@ -23,7 +23,7 @@
         "state",
         "reviewMilestone"
       ],
-      "evidence": "Canonical exception registry for handwritten React integrations and dedicated-renderer exceptions under ADR-008."
+      "evidence": "docs/architecture/adr-008-framework-exception-policy.md"
     },
     {
       "kind": "batch-parity-blockers",
