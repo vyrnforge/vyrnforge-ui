@@ -62,6 +62,23 @@ function dependenciesFor(manifest) {
   ]);
 }
 
+function expandWorkspaceDependencyClosure(packageNames) {
+  const available = new Set(discoverPackageNames());
+  const expanded = new Set();
+
+  function visit(name) {
+    if (expanded.has(name)) return;
+    const manifest = workspaceManifest(name);
+    expanded.add(name);
+    for (const dependency of dependenciesFor(manifest)) {
+      if (available.has(dependency)) visit(dependency);
+    }
+  }
+
+  for (const name of packageNames) visit(name);
+  return [...expanded].sort();
+}
+
 function orderSelectedPackages(packageNames) {
   const selected = new Set(packageNames);
   const manifests = new Map(
@@ -101,6 +118,9 @@ const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
 const selectedPackages = orderSelectedPackages(readAffectedPackages(full));
+const buildPackages = orderSelectedPackages(
+  expandWorkspaceDependencyClosure(selectedPackages),
+);
 
 for (const command of [
   "format:check",
@@ -134,7 +154,7 @@ if (metadata) {
 if (fixtures) {
   runNpm(["run", "build:packages"]);
 } else {
-  for (const packageName of selectedPackages) {
+  for (const packageName of buildPackages) {
     runWorkspaceScript(packageName, "build");
   }
 }
