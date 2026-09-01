@@ -112,17 +112,27 @@ export function getFramework(frameworkId: string | null | undefined) {
 }
 
 export function getDocsVersion(versionId: string | null | undefined) {
-  return docsVersions.find((version) => version.id === versionId) ?? docsVersions[0];
+  return (
+    docsVersions.find((version) => version.id === versionId) ?? docsVersions[0]
+  );
 }
 
 export function getCurrentDocsVersionId() {
-  const configuredVersion = import.meta.env.VITE_DOCS_VERSION_ID as string | undefined;
+  const configuredVersion = import.meta.env.VITE_DOCS_VERSION_ID as
+    | string
+    | undefined;
   return configuredVersion ?? "next";
 }
 
 export function getRepositoryPagesRoot() {
-  const configuredRoot = import.meta.env.VITE_DOCS_ROOT_PATH as string | undefined;
-  if (configuredRoot) return configuredRoot.endsWith("/") ? configuredRoot : `${configuredRoot}/`;
+  const configuredRoot = import.meta.env.VITE_DOCS_ROOT_PATH as
+    | string
+    | undefined;
+  if (configuredRoot) {
+    return configuredRoot.endsWith("/")
+      ? configuredRoot
+      : `${configuredRoot}/`;
+  }
 
   const base = import.meta.env.BASE_URL || "/";
   const versionsMarker = "/versions/";
@@ -130,9 +140,13 @@ export function getRepositoryPagesRoot() {
   return markerIndex >= 0 ? base.slice(0, markerIndex + 1) : base;
 }
 
-export function getVersionHref(version: DocsVersion, frameworkId: DocsFrameworkId) {
+export function getVersionHref(
+  version: DocsVersion,
+  frameworkId: DocsFrameworkId,
+) {
   const root = getRepositoryPagesRoot();
-  const versionPath = version.id === "next" ? "" : version.path.replace(/^\//, "");
+  const versionPath =
+    version.id === "next" ? "" : version.path.replace(/^\//, "");
   const query = new URLSearchParams({ framework: frameworkId });
   return `${root}${versionPath}?${query.toString()}${window.location.hash}`;
 }
