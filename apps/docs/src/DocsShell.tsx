@@ -10,8 +10,8 @@ import {
 } from "@vyrnforge/ui-components";
 import {
   docsFrameworks,
-  docsVersions,
   getVersionHref,
+  releaseLineVersions,
   type DocsFramework,
   type DocsFrameworkId,
   type DocsVersion,
@@ -24,6 +24,7 @@ import { docsLinks } from "./deploymentLinks";
 type DocsShellProps = {
   activeRoute: DocsRoute;
   docsVersion: DocsVersion;
+  docsVersions: DocsVersion[];
   framework: DocsFramework;
   headerAction?: ReactNode;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
@@ -33,6 +34,7 @@ type DocsShellProps = {
 export function DocsShell({
   activeRoute,
   docsVersion,
+  docsVersions,
   framework,
   headerAction,
   onFrameworkChange,
@@ -84,7 +86,7 @@ export function DocsShell({
       <section className="vf-docs-context" aria-label="Documentation context">
         <div className="vf-docs-context__selectors">
           <div className="vf-docs-context__field">
-            <Label htmlFor="vf-docs-version">Library version</Label>
+            <Label htmlFor="vf-docs-version">Documentation version</Label>
             <Select
               id="vf-docs-version"
               onChange={(event) => {
@@ -136,13 +138,22 @@ export function DocsShell({
               {framework.supportLevel}
             </Badge>
             <Badge variant="neutral" tone="subtle">
-              {docsVersion.releaseLine} · {docsVersion.version}
+              Docs: {docsVersion.releaseLine} · {docsVersion.version}
             </Badge>
+            {releaseLineVersions.map((releaseLine) => (
+              <Badge key={releaseLine.id} variant="neutral" tone="subtle">
+                {releaseLine.id}: {releaseLine.version}
+              </Badge>
+            ))}
           </div>
           <Text tone="muted">{framework.guidance}</Text>
         </div>
       </section>
-      <DocsPage route={activeRoute} />
+      <DocsPage
+        frameworkId={framework.id}
+        onFrameworkChange={onFrameworkChange}
+        route={activeRoute}
+      />
     </AppShell>
   );
 }
