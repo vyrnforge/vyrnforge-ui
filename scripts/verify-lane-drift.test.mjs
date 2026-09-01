@@ -57,6 +57,23 @@ test("accepts squash-equivalent lane trees", () => {
   );
 });
 
+test("accepts replayed current-main content plus lane-only work", () => {
+  const cwd = repository();
+  const base = git(cwd, "rev-parse", "HEAD");
+  const main = commit(cwd, "state.txt", "promoted\n", "main promotion");
+  git(cwd, "switch", "-c", "integration/test", base);
+  commit(cwd, "state.txt", "promoted\n", "replay main content");
+  commit(cwd, "lane.txt", "lane-only\n", "lane-only work");
+
+  assert.deepEqual(
+    refContainsOrMatchesMain(main, "integration/test", { cwd }),
+    {
+      current: true,
+      reason: "contains-main-content",
+    },
+  );
+});
+
 test("rejects a lane missing current main content", () => {
   const cwd = repository();
   const base = git(cwd, "rev-parse", "HEAD");
