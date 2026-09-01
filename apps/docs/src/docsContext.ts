@@ -211,9 +211,12 @@ export function getRepositoryPagesRoot() {
 
 export async function loadDocsVersions() {
   try {
-    const response = await fetch(`${getRepositoryPagesRoot()}docs-versions.json`, {
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${getRepositoryPagesRoot()}docs-versions.json`,
+      {
+        cache: "no-store",
+      },
+    );
     if (!response.ok) return docsVersions;
 
     const manifest = (await response.json()) as DocsVersionManifest;
