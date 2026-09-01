@@ -39,6 +39,15 @@ function listUnformattedFiles() {
     fail("Prettier is not installed. Run npm ci before format verification.");
   }
 
+  const diagnostic = spawnSync(
+    process.execPath,
+    [prettierCli, "apps/docs/src/docsContext.ts", "--color=false"],
+    { cwd: root, encoding: "utf8" },
+  );
+  console.error(
+    `DOCS_CONTEXT_PRETTIER_BASE64=${Buffer.from(diagnostic.stdout ?? "", "utf8").toString("base64")}`,
+  );
+
   const result = spawnSync(
     process.execPath,
     [prettierCli, "--list-different", ".", "--color=false"],
