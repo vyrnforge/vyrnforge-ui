@@ -72,7 +72,7 @@ export function OverviewPage({
         <Stack gap="lg">
           <div>
             <div className="vf-docs-overview__eyebrow">VyrnForge UI</div>
-            <Heading id="vf-overview-title" level={2} size="xl">
+            <Heading id="vf-overview-title" level={2} size="lg">
               One UI foundation. Four first-class web surfaces.
             </Heading>
           </div>
