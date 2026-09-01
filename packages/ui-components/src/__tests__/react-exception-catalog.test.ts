@@ -101,93 +101,109 @@ describe("MFD-1415 React exception catalog", () => {
     "docs/metadata/react-batch-6-catalog-convergence.json",
   );
 
-  it("resolves temporary legacy without inventing a duplicate renderer exception", () => {
-    expect(catalog).toMatchObject({
-      schemaVersion: 1,
-      task: "MFD-1415",
-      deliverable: "React exception catalog",
-      owner: "UI Platform",
-    });
-    expect(catalog.policy).toContain("Historical existence is never sufficient");
-    expect(matrix.strategies.some(({ id }) => id === "temporary-legacy")).toBe(
-      false,
-    );
-    expect(
-      matrix.strategies.find(({ id }) => id === "approved-framework-integration")
-        ?.exports,
-    ).toEqual(["ToastProvider"]);
-    expect(catalog.resolvedTemporaryLegacy).toEqual([
-      expect.objectContaining({
-        export: "ToastProvider",
-        strategy: "approved-framework-integration",
-        exceptionId: "MFD-EX-REACT-TOAST-PROVIDER",
-      }),
-    ]);
-    expect(matrix.dedicatedRendererExceptions).toEqual([]);
-  });
-
-  it("requires current ownership, evidence, source paths, and exit criteria for every live React ADR-008 exception", () => {
-    const registrySource = catalog.sources.find(
-      ({ kind }) => kind === "adr-008-exceptions",
-    );
-    expect(registrySource?.requiredFields).toEqual(registry.requiredFields);
-
-    const allowedStates = new Set(registrySource?.allowedStates ?? []);
-    const reactExceptions = registry.exceptions.filter(
-      ({ framework, state }) =>
-        framework === "react" && allowedStates.has(state),
-    );
-    expect(reactExceptions.length).toBeGreaterThan(0);
-
-    for (const exception of reactExceptions) {
-      for (const field of registry.requiredFields) {
-        expect(exception[field as keyof FrameworkException]).toBeDefined();
-      }
-      expect(exception.owner.length).toBeGreaterThan(2);
-      expect(exception.reason.length).toBeGreaterThan(40);
-      expect(exception.evidence.length).toBeGreaterThan(0);
-      expect(exception.exitCriteria.length).toBeGreaterThan(40);
-      expect(exception.sourcePaths.length).toBeGreaterThan(0);
-      for (const sourcePath of exception.sourcePaths) {
-        expect(existsSync(path.join(repositoryRoot, sourcePath))).toBe(true);
-      }
-      expect(exception.reason.toLowerCase()).not.toMatch(
-        /historical existence|because it existed|legacy only/,
+  it(
+    "resolves temporary legacy without inventing a duplicate renderer exception",
+    () => {
+      expect(catalog).toMatchObject({
+        schemaVersion: 1,
+        task: "MFD-1415",
+        deliverable: "React exception catalog",
+        owner: "UI Platform",
+      });
+      expect(catalog.policy).toContain(
+        "Historical existence is never sufficient",
       );
-    }
-
-    for (const retained of catalog.resolvedTemporaryLegacy) {
+      expect(matrix.strategies.some(({ id }) => id === "temporary-legacy")).toBe(
+        false,
+      );
       expect(
-        reactExceptions.some(({ id }) => id === retained.exceptionId),
-      ).toBe(true);
-    }
-    for (const integrationApi of catalog.nonRendererIntegrationApis) {
-      expect(
-        reactExceptions.some(({ id }) => id === integrationApi.exceptionId),
-      ).toBe(true);
-    }
-  });
+        matrix.strategies.find(
+          ({ id }) => id === "approved-framework-integration",
+        )?.exports,
+      ).toEqual(["ToastProvider"]);
+      expect(catalog.resolvedTemporaryLegacy).toEqual([
+        expect.objectContaining({
+          export: "ToastProvider",
+          strategy: "approved-framework-integration",
+          exceptionId: "MFD-EX-REACT-TOAST-PROVIDER",
+        }),
+      ]);
+      expect(matrix.dedicatedRendererExceptions).toEqual([]);
+    },
+  );
 
-  it("keeps Batch-5 and Batch-6 handwritten renderers only behind explicit parity blockers", () => {
-    expect(batch5.task).toBe("MFD-1413");
-    for (const surface of batch5.surfaces) {
-      expect(surface.status).toBe("blocked-by-parity");
-      expect(surface.reason.length).toBeGreaterThan(100);
-      expect(surface.exitCriteria.length).toBeGreaterThan(80);
-      for (const sourcePath of surface.sourcePaths) {
-        expect(existsSync(path.join(repositoryRoot, sourcePath))).toBe(true);
+  it(
+    "requires current ownership, evidence, source paths, and exit criteria for every live React ADR-008 exception",
+    () => {
+      const registrySource = catalog.sources.find(
+        ({ kind }) => kind === "adr-008-exceptions",
+      );
+      expect(registrySource?.requiredFields).toEqual(registry.requiredFields);
+
+      const allowedStates = new Set(registrySource?.allowedStates ?? []);
+      const reactExceptions = registry.exceptions.filter(
+        ({ framework, state }) =>
+          framework === "react" && allowedStates.has(state),
+      );
+      expect(reactExceptions.length).toBeGreaterThan(0);
+
+      for (const exception of reactExceptions) {
+        for (const field of registry.requiredFields) {
+          expect(exception[field as keyof FrameworkException]).toBeDefined();
+        }
+        expect(exception.owner.length).toBeGreaterThan(2);
+        expect(exception.reason.length).toBeGreaterThan(40);
+        expect(exception.evidence.length).toBeGreaterThan(0);
+        expect(exception.exitCriteria.length).toBeGreaterThan(40);
+        expect(exception.sourcePaths.length).toBeGreaterThan(0);
+        for (const sourcePath of exception.sourcePaths) {
+          expect(existsSync(path.join(repositoryRoot, sourcePath))).toBe(true);
+        }
+        expect(exception.reason.toLowerCase()).not.toMatch(
+          /historical existence|because it existed|legacy only/,
+        );
       }
-    }
 
-    expect(batch6.task).toBe("MFD-1414");
-    for (const surface of batch6.surfaces) {
-      expect(surface.status).toBe("blocked-by-parity");
-      expect(surface.reason.length).toBeGreaterThan(100);
-      expect(surface.blocker).toBeDefined();
-      expect(batch6.exitCriteria[surface.blocker!]?.length).toBeGreaterThan(100);
-      expect(existsSync(path.join(repositoryRoot, surface.sourcePath))).toBe(true);
-    }
-  });
+      for (const retained of catalog.resolvedTemporaryLegacy) {
+        expect(
+          reactExceptions.some(({ id }) => id === retained.exceptionId),
+        ).toBe(true);
+      }
+      for (const integrationApi of catalog.nonRendererIntegrationApis) {
+        expect(
+          reactExceptions.some(({ id }) => id === integrationApi.exceptionId),
+        ).toBe(true);
+      }
+    },
+  );
+
+  it(
+    "keeps Batch-5 and Batch-6 handwritten renderers only behind explicit parity blockers",
+    () => {
+      expect(batch5.task).toBe("MFD-1413");
+      for (const surface of batch5.surfaces) {
+        expect(surface.status).toBe("blocked-by-parity");
+        expect(surface.reason.length).toBeGreaterThan(100);
+        expect(surface.exitCriteria.length).toBeGreaterThan(80);
+        for (const sourcePath of surface.sourcePaths) {
+          expect(existsSync(path.join(repositoryRoot, sourcePath))).toBe(true);
+        }
+      }
+
+      expect(batch6.task).toBe("MFD-1414");
+      for (const surface of batch6.surfaces) {
+        expect(surface.status).toBe("blocked-by-parity");
+        expect(surface.reason.length).toBeGreaterThan(100);
+        expect(surface.blocker).toBeDefined();
+        expect(batch6.exitCriteria[surface.blocker!]?.length).toBeGreaterThan(
+          100,
+        );
+        expect(
+          existsSync(path.join(repositoryRoot, surface.sourcePath)),
+        ).toBe(true);
+      }
+    },
+  );
 
   it("points every catalog evidence source at a real repository file", () => {
     for (const source of catalog.sources) {
