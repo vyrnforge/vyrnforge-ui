@@ -2,10 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@vyrnforge/ui-components";
 import {
   defaultDocsFramework,
+  docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
   getDocsVersion,
   getFramework,
+  loadDocsVersions,
   type DocsFrameworkId,
+  type DocsVersion,
 } from "./docsContext";
 import { getRouteById } from "./docsRegistry";
 import { DocsShell } from "./DocsShell";
@@ -27,6 +30,8 @@ export default function App() {
   const [frameworkId, setFrameworkId] = useState<DocsFrameworkId>(
     getFrameworkFromLocation,
   );
+  const [docsVersions, setDocsVersions] =
+    useState<DocsVersion[]>(initialDocsVersions);
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
@@ -36,14 +41,24 @@ export default function App() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    void loadDocsVersions().then((versions) => {
+      if (active) setDocsVersions(versions);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const activeRoute = useMemo(
     () => getRouteById(activeRouteId),
     [activeRouteId],
   );
   const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);
   const docsVersion = useMemo(
-    () => getDocsVersion(getCurrentDocsVersionId()),
-    [],
+    () => getDocsVersion(getCurrentDocsVersionId(), docsVersions),
+    [docsVersions],
   );
 
   const handleRouteChange = (routeId: string) => {
@@ -67,6 +82,7 @@ export default function App() {
       <DocsShell
         activeRoute={activeRoute}
         docsVersion={docsVersion}
+        docsVersions={docsVersions}
         framework={framework}
         headerAction={
           <Button
