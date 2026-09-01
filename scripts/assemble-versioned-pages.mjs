@@ -16,7 +16,10 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const siteDirectory = path.join(repositoryRoot, "site");
-const snapshotsDirectory = path.join(repositoryRoot, ".pages-release-snapshots");
+const snapshotsDirectory = path.join(
+  repositoryRoot,
+  ".pages-release-snapshots",
+);
 const releaseGroupsPath = path.join(
   repositoryRoot,
   "docs/metadata/release-groups.json",
@@ -71,7 +74,9 @@ function compareVersions(left, right) {
   if (a.patch !== b.patch) return b.patch - a.patch;
   if (!a.prerelease && b.prerelease) return -1;
   if (a.prerelease && !b.prerelease) return 1;
-  return b.prerelease.localeCompare(a.prerelease, undefined, { numeric: true });
+  return b.prerelease.localeCompare(a.prerelease, undefined, {
+    numeric: true,
+  });
 }
 
 function channelForVersion(version) {
@@ -98,7 +103,9 @@ function discoverDocumentationReleases() {
     const canonical = tag.match(/^(non-grid[^/]*)\/v(.+)$/);
     const legacy = tag.match(/^v(.+)$/);
     const version = canonical?.[2] ?? legacy?.[1];
-    if (!version || !parseSemver(version) || seenVersions.has(version)) continue;
+    if (!version || !parseSemver(version) || seenVersions.has(version)) {
+      continue;
+    }
 
     releases.push({
       id: `v${version}`,
