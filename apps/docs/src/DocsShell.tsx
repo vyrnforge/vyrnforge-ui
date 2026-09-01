@@ -3,9 +3,19 @@ import {
   AppShell,
   Badge,
   Heading,
+  Label,
+  Select,
   Text,
   TopNav,
 } from "@vyrnforge/ui-components";
+import {
+  docsFrameworks,
+  getVersionHref,
+  releaseLineVersions,
+  type DocsFramework,
+  type DocsFrameworkId,
+  type DocsVersion,
+} from "./docsContext";
 import type { DocsRoute } from "./docsRegistry";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
@@ -13,13 +23,21 @@ import { docsLinks } from "./deploymentLinks";
 
 type DocsShellProps = {
   activeRoute: DocsRoute;
+  docsVersion: DocsVersion;
+  docsVersions: DocsVersion[];
+  framework: DocsFramework;
   headerAction?: ReactNode;
+  onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
 };
 
 export function DocsShell({
   activeRoute,
+  docsVersion,
+  docsVersions,
+  framework,
   headerAction,
+  onFrameworkChange,
   onRouteChange,
 }: DocsShellProps) {
   return (
@@ -32,11 +50,12 @@ export function DocsShell({
             <div>
               <div className="vf-docs-header__eyebrow">VyrnForge UI Docs</div>
               <Heading level={1} size="lg" className="vf-docs-header__title">
-                AI context and source-of-truth reference
+                Multi-framework source-of-truth reference
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Inspect canonical documentation and generated task-scoped
-                context. AI tools should consume the generated JSON directly.
+                Shared contracts stay canonical while examples, package
+                guidance, and integration notes follow the selected framework
+                surface.
               </Text>
             </div>
           }
@@ -49,7 +68,7 @@ export function DocsShell({
                 GitHub
               </a>
               <Badge variant="info" tone="subtle">
-                Docs viewer
+                {docsVersion.channel}
               </Badge>
             </div>
           }
@@ -64,7 +83,77 @@ export function DocsShell({
       sidebarPosition="sticky"
       sidebarWidth={260}
     >
-      <DocsPage route={activeRoute} />
+      <section className="vf-docs-context" aria-label="Documentation context">
+        <div className="vf-docs-context__selectors">
+          <div className="vf-docs-context__field">
+            <Label htmlFor="vf-docs-version">Documentation version</Label>
+            <Select
+              id="vf-docs-version"
+              onChange={(event) => {
+                const version = docsVersions.find(
+                  (candidate) => candidate.id === event.currentTarget.value,
+                );
+                if (version && version.id !== docsVersion.id) {
+                  window.location.assign(getVersionHref(version, framework.id));
+                }
+              }}
+              options={docsVersions.map((version) => ({
+                label: version.label,
+                value: version.id,
+              }))}
+              size="sm"
+              value={docsVersion.id}
+            />
+          </div>
+          <div className="vf-docs-context__field">
+            <Label htmlFor="vf-docs-framework">Framework / language</Label>
+            <Select
+              id="vf-docs-framework"
+              onChange={(event) =>
+                onFrameworkChange(event.currentTarget.value as DocsFrameworkId)
+              }
+              options={docsFrameworks.map((candidate) => ({
+                label: `${candidate.label} · ${candidate.language}`,
+                value: candidate.id,
+              }))}
+              size="sm"
+              value={framework.id}
+            />
+          </div>
+        </div>
+        <div className="vf-docs-context__summary">
+          <div>
+            <Text size="sm" tone="muted">
+              Selected surface
+            </Text>
+            <Heading level={2} size="md">
+              {framework.label}
+            </Heading>
+          </div>
+          <div className="vf-docs-context__badges">
+            <Badge variant="neutral" tone="subtle">
+              {framework.renderer}
+            </Badge>
+            <Badge variant="neutral" tone="subtle">
+              {framework.supportLevel}
+            </Badge>
+            <Badge variant="neutral" tone="subtle">
+              Docs: {docsVersion.releaseLine} · {docsVersion.version}
+            </Badge>
+            {releaseLineVersions.map((releaseLine) => (
+              <Badge key={releaseLine.id} variant="neutral" tone="subtle">
+                {releaseLine.id}: {releaseLine.version}
+              </Badge>
+            ))}
+          </div>
+          <Text tone="muted">{framework.guidance}</Text>
+        </div>
+      </section>
+      <DocsPage
+        frameworkId={framework.id}
+        onFrameworkChange={onFrameworkChange}
+        route={activeRoute}
+      />
     </AppShell>
   );
 }

@@ -114,10 +114,13 @@ jobs:
       RUN_CONSUMER: ${{ needs.plan.outputs.consumer }}
       RUN_DOCS: ${{ needs.plan.outputs.docs }}
       RUN_PLAYGROUND: ${{ needs.plan.outputs.playground }}
+      RUN_PAGES_VERIFY: ${{ needs.plan.outputs.docs == 'true' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
       RUN_PAGES_ARTIFACT: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
@@ -138,7 +141,7 @@ jobs:
             test -f test-results/beta-package-artifacts/size-report.json
           elif [[ "$RUN_CONSUMER" == "true" ]]; then
             npm run verify:packages
-          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" || "$RUN_PAGES_ARTIFACT" == "true" ]]; then
+          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" || "$RUN_PAGES_VERIFY" == "true" ]]; then
             npm run build:packages
           elif [[ "$RUN_DOCS" == "true" ]]; then
             npm run build --workspace @vyrnforge/ui-core
@@ -168,30 +171,32 @@ jobs:
         if: env.RUN_DOCS == 'true'
         run: npm run verify:repository-inventory
       - name: Build documentation application
-        if: env.RUN_DOCS == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
+        if: env.RUN_DOCS == 'true' && env.RUN_PAGES_VERIFY != 'true'
         run: npm run build --workspace @vyrnforge/ui-docs
       - name: Build playground
-        if: env.RUN_PLAYGROUND == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
+        if: env.RUN_PLAYGROUND == 'true' && env.RUN_PAGES_VERIFY != 'true'
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
       - name: Build documentation application for Pages
-        if: env.RUN_PAGES_ARTIFACT == 'true'
+        if: env.RUN_PAGES_VERIFY == 'true'
         run: npm run build --workspace @vyrnforge/ui-docs
         env:
           VITE_BASE_PATH: /vyrnforge-ui/
+          VITE_DOCS_ROOT_PATH: /vyrnforge-ui/
+          VITE_DOCS_VERSION_ID: next
       - name: Build playground for Pages
-        if: env.RUN_PAGES_ARTIFACT == 'true'
+        if: env.RUN_PAGES_VERIFY == 'true'
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
         env:
           VITE_BASE_PATH: /vyrnforge-ui/playground/
-      - name: Assemble Pages site once
-        if: env.RUN_PAGES_ARTIFACT == 'true'
-        shell: bash
+      - name: Assemble and verify versioned Pages site
+        if: env.RUN_PAGES_VERIFY == 'true'
         run: |
-          rm -rf site
-          mkdir -p site/playground
-          cp -R apps/docs/dist/. site/
-          cp -R examples/basic-playground/dist/. site/playground/
-          touch site/.nojekyll
+          node scripts/assemble-versioned-pages.mjs
+          test -f site/index.html
+          test -f site/playground/index.html
+          test -f site/docs-versions.json
+          test -f site/.nojekyll
+          node -e 'const manifest=require("./site/docs-versions.json"); if (!Array.isArray(manifest.releases) || manifest.releases.length < 1) process.exit(1)'
       - name: Upload commit-bound Pages site
         if: env.RUN_PAGES_ARTIFACT == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

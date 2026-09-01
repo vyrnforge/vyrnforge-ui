@@ -18,10 +18,6 @@ permissions:
   actions: read
   contents: read
 
-concurrency:
-  group: github-pages
-  cancel-in-progress: true
-
 jobs:
   prepare:
     name: prepare-pages
@@ -85,6 +81,7 @@ jobs:
           test -f site/index.html
           test -f site/playground/index.html
           test -f site/.nojekyll
+          test -f site/docs-versions.json
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - name: Upload Pages artifact
@@ -94,6 +91,9 @@ jobs:
 
   deploy:
     name: deploy-pages
+    concurrency:
+      group: github-pages
+      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
