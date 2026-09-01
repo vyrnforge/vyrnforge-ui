@@ -237,6 +237,81 @@ jobs:
             test-results/packed-four-surface-smoke/
           if-no-files-found: error
 
+  react-compatibility-plan:
+    name: react-compatibility-plan
+    if: >-
+      github.event_name == 'pull_request' &&
+      (github.event.pull_request.base.ref == 'integration/react' ||
+      (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'integration/react'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Read supported React compatibility cases
+        id: matrix
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const { appendFileSync, readFileSync } = require("node:fs");
+          const manifest = JSON.parse(
+            readFileSync("docs/metadata/compatibility-release-matrix.json", "utf8"),
+          );
+          const include = manifest.cases
+            .filter(({ fixture }) => fixture === "react")
+            .map(({ id, node, browser }) => ({ id, node, browser }));
+          if (include.length !== manifest.supportPolicy.react.length) {
+            throw new Error(
+              `React compatibility case count ${include.length} does not match supported React versions ${manifest.supportPolicy.react.length}`,
+            );
+          }
+          appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `matrix=${JSON.stringify({ include })}\n`,
+          );
+          NODE
+
+  react-compatibility:
+    name: react-compatibility-${{ matrix.id }}
+    needs: react-compatibility-plan
+    if: needs.react-compatibility-plan.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.react-compatibility-plan.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Use repository package manager
+        env:
+          npm_config_engine_strict: "false"
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install repository dependencies
+        env:
+          npm_config_engine_strict: "false"
+        run: npm ci
+      - name: Install matrix browser
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run supported React compatibility case
+        env:
+          npm_config_engine_strict: "false"
+        run: npm run verify:compatibility-release-case -- --case ${{ matrix.id }}
+      - name: Upload React compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: react-compatibility-${{ matrix.id }}
+          path: test-results/compatibility-release-matrix/${{ matrix.id }}.json
+          if-no-files-found: error
+
   security-checks:
     name: security
     needs: plan
@@ -294,6 +369,8 @@ jobs:
       - plan
       - quality-checks
       - integration-checks
+      - react-compatibility-plan
+      - react-compatibility
       - security-checks
     if: always()
     runs-on: ubuntu-latest
@@ -316,4 +393,12 @@ jobs:
           QUALITY_RESULT: ${{ needs.quality-checks.result }}
           INTEGRATION_RESULT: ${{ needs.integration-checks.result }}
           SECURITY_RESULT: ${{ needs.security-checks.result }}
-        run: node scripts/write-ci-summary.mjs
+          REACT_COMPATIBILITY_REQUIRED: ${{ github.event_name == 'pull_request' && (github.event.pull_request.base.ref == 'integration/react' || (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'integration/react')) }}
+          REACT_COMPATIBILITY_PLAN_RESULT: ${{ needs.react-compatibility-plan.result }}
+          REACT_COMPATIBILITY_RESULT: ${{ needs.react-compatibility.result }}
+        run: |
+          if [[ "$REACT_COMPATIBILITY_REQUIRED" == "true" ]]; then
+            test "$REACT_COMPATIBILITY_PLAN_RESULT" = "success"
+            test "$REACT_COMPATIBILITY_RESULT" = "success"
+          fi
+          node scripts/write-ci-summary.mjs
