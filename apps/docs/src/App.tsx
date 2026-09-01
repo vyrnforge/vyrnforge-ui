@@ -16,8 +16,9 @@ function getHashRoute() {
 
 function getFrameworkFromLocation() {
   return (
-    (new URLSearchParams(window.location.search).get("framework") as DocsFrameworkId | null) ??
-    defaultDocsFramework
+    (new URLSearchParams(window.location.search).get(
+      "framework",
+    ) as DocsFrameworkId | null) ?? defaultDocsFramework
   );
 }
 
