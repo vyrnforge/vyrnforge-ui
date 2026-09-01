@@ -54,9 +54,19 @@ export function refContainsOrMatchesMain(mainRef, laneRef, options = {}) {
     ...options,
     allowFailure: true,
   });
-  return ancestor !== null
-    ? { current: true, reason: "contains-main" }
-    : { current: false, reason: "missing-main" };
+  if (ancestor !== null) {
+    return { current: true, reason: "contains-main" };
+  }
+
+  const mergedTree = git(["merge-tree", "--write-tree", mainRef, laneRef], {
+    ...options,
+    allowFailure: true,
+  });
+  if (mergedTree?.split("\n", 1)[0] === laneTree) {
+    return { current: true, reason: "contains-main-content" };
+  }
+
+  return { current: false, reason: "missing-main" };
 }
 
 export function verifyPullRequestLaneDrift({
