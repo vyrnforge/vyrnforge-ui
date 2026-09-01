@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@vyrnforge/ui-components";
+import {
+  defaultDocsFramework,
+  getCurrentDocsVersionId,
+  getDocsVersion,
+  getFramework,
+  type DocsFrameworkId,
+} from "./docsContext";
 import { getRouteById } from "./docsRegistry";
 import { DocsShell } from "./DocsShell";
 
@@ -7,8 +14,18 @@ function getHashRoute() {
   return window.location.hash.replace(/^#\/?/, "") || "overview";
 }
 
+function getFrameworkFromLocation() {
+  return (
+    (new URLSearchParams(window.location.search).get("framework") as DocsFrameworkId | null) ??
+    defaultDocsFramework
+  );
+}
+
 export default function App() {
   const [activeRouteId, setActiveRouteId] = useState(getHashRoute);
+  const [frameworkId, setFrameworkId] = useState<DocsFrameworkId>(
+    getFrameworkFromLocation,
+  );
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
@@ -20,7 +37,12 @@ export default function App() {
 
   const activeRoute = useMemo(
     () => getRouteById(activeRouteId),
-    [activeRouteId]
+    [activeRouteId],
+  );
+  const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);
+  const docsVersion = useMemo(
+    () => getDocsVersion(getCurrentDocsVersionId()),
+    [],
   );
 
   const handleRouteChange = (routeId: string) => {
@@ -28,23 +50,37 @@ export default function App() {
     setActiveRouteId(routeId);
   };
 
+  const handleFrameworkChange = (nextFrameworkId: DocsFrameworkId) => {
+    const query = new URLSearchParams(window.location.search);
+    query.set("framework", nextFrameworkId);
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}?${query.toString()}${window.location.hash}`,
+    );
+    setFrameworkId(nextFrameworkId);
+  };
+
   return (
     <div className="vf-docs-app" data-theme={theme}>
       <DocsShell
         activeRoute={activeRoute}
+        docsVersion={docsVersion}
+        framework={framework}
         headerAction={
           <Button
             size="sm"
             variant="subtle"
             onClick={() =>
               setTheme((currentTheme) =>
-                currentTheme === "light" ? "dark" : "light"
+                currentTheme === "light" ? "dark" : "light",
               )
             }
           >
             {theme === "light" ? "Dark" : "Light"}
           </Button>
         }
+        onFrameworkChange={handleFrameworkChange}
         onRouteChange={handleRouteChange}
       />
     </div>
