@@ -10,19 +10,7 @@
       "path": "docs/metadata/framework-exceptions.json",
       "framework": "react",
       "allowedStates": ["active", "retiring"],
-      "requiredFields": [
-        "id",
-        "framework",
-        "scope",
-        "exceptionClass",
-        "reason",
-        "owner",
-        "sourcePaths",
-        "evidence",
-        "exitCriteria",
-        "state",
-        "reviewMilestone"
-      ],
+      "requiredFields": ["id", "framework", "scope", "exceptionClass", "reason", "owner", "sourcePaths", "evidence", "exitCriteria", "state", "reviewMilestone"],
       "evidence": "docs/architecture/adr-008-framework-exception-policy.md"
     },
     {
@@ -40,7 +28,7 @@
       "exitCriteriaField": "exitCriteria"
     }
   ],
-  "resolvedTemporaryLegacy": [
+  "approvedFrameworkIntegrations": [
     {
       "export": "ToastProvider",
       "strategy": "approved-framework-integration",
@@ -56,7 +44,7 @@
     }
   ],
   "rules": [
-    "The React migration matrix must contain no temporary-legacy strategy after MFD-1415.",
+    "The React migration matrix must contain no unapproved fallback strategy.",
     "Every active or retiring React ADR-008 exception must contain every registry-required field, at least one source path, current evidence, and substantive exit criteria.",
     "Every retained React source path recorded by an ADR-008 exception must exist in the repository.",
     "Every Batch-5 or Batch-6 parity blocker must carry technical rationale and exit criteria and point to existing source files.",
