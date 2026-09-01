@@ -109,8 +109,9 @@ export const releaseLineVersions: ReleaseLineVersion[] = Object.entries(
 }));
 
 const primaryReleaseLine =
-  releaseLineVersions.find((releaseLine) => releaseLine.id.startsWith("non-grid")) ??
-  releaseLineVersions[0];
+  releaseLineVersions.find((releaseLine) =>
+    releaseLine.id.startsWith("non-grid"),
+  ) ?? releaseLineVersions[0];
 
 if (!primaryReleaseLine) {
   throw new Error("VyrnForge docs require at least one release line.");
@@ -144,7 +145,8 @@ function configuredDocsVersion(): DocsVersion | null {
   const channel =
     (import.meta.env.VITE_DOCS_RELEASE_CHANNEL as string | undefined) ??
     primaryReleaseLine.channel;
-  const path = import.meta.env.BASE_URL || `/versions/${releaseLine}/v${version}/`;
+  const path =
+    import.meta.env.BASE_URL || `/versions/${releaseLine}/v${version}/`;
   const configured = {
     id,
     releaseLine,
@@ -190,15 +192,13 @@ export function getDocsVersion(
 
 export function getCurrentDocsVersionId() {
   const configuredVersionId = import.meta.env.VITE_DOCS_VERSION_ID as
-    | string
-    | undefined;
+    string | undefined;
   return configuredVersionId ?? "next";
 }
 
 export function getRepositoryPagesRoot() {
   const configuredRoot = import.meta.env.VITE_DOCS_ROOT_PATH as
-    | string
-    | undefined;
+    string | undefined;
   if (configuredRoot) {
     return configuredRoot.endsWith("/") ? configuredRoot : `${configuredRoot}/`;
   }
