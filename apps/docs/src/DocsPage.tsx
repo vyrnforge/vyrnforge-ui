@@ -6,19 +6,34 @@ import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { MarkdownView } from "./MarkdownView";
 import { MetadataPage } from "./MetadataPage";
+import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
 
 type DocsPageProps = {
   route: DocsRoute;
   frameworkId: DocsFrameworkId;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
+  onRouteChange: (routeId: string) => void;
 };
 
 export function DocsPage({
   route,
   frameworkId,
   onFrameworkChange,
+  onRouteChange,
 }: DocsPageProps) {
+  if (route.id === "overview") {
+    return (
+      <main className="vf-docs-page vf-docs-page--overview">
+        <OverviewPage
+          frameworkId={frameworkId}
+          onFrameworkChange={onFrameworkChange}
+          onRouteChange={onRouteChange}
+        />
+      </main>
+    );
+  }
+
   return (
     <main className="vf-docs-page">
       <div className="vf-docs-page__intro">

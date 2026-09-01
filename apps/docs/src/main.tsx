@@ -5,6 +5,7 @@ import "@vyrnforge/ui-components/styles/index.css";
 import App from "./App";
 import "./styles/docs.css";
 import "./styles/docs-context.css";
+import "./styles/docs-overview.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
