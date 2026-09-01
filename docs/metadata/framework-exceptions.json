@@ -246,6 +246,48 @@
       "exitCriteria": "Extend the shared canonical select contract to model multiple selection, array values/defaults, form submission, and native listbox semantics without changing the React public contract, then migrate the multiple path.",
       "state": "active",
       "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-AUTOCOMPLETE-ADVANCED-CONTRACT",
+      "framework": "react",
+      "scope": "autocomplete",
+      "exceptionClass": "migration-compatibility",
+      "reason": "The React Autocomplete contract includes custom filterOptions, renderOption, portalContainer, placement, trigger-width matching, ReactNode loading/empty states, controlled input/open/value channels, and an anchored dismissable overlay. The current canonical vf-autocomplete rebuilds its own input/listbox Light DOM, uses its internal filter/controller and inline listbox, and cannot preserve those extension points without narrowing the public React API.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx",
+        "packages/ui-components/src/components/Autocomplete/Autocomplete.types.ts",
+        "packages/ui-elements/src/components/collections.ts"
+      ],
+      "evidence": [
+        "packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx preserves React filtering, keyboard selection, controlled callback, and hidden form submission behavior.",
+        "MFD-1412 inspection confirms VyrnForgeAutocompleteElement creates/replaces its own input, listbox, and option DOM and does not expose the React overlay/render/filter extension contract."
+      ],
+      "exitCriteria": "Define canonical advanced-autocomplete contracts for custom filtering/rendering, overlay/placement ownership, controlled input/open/value channels, and Light-DOM adoption that preserve the current React API, then migrate through the Batch-4 parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-COLLECTION-RICH-COMPOSITION",
+      "framework": "react",
+      "scope": ["multi-select", "transfer-list"],
+      "exceptionClass": "composition",
+      "reason": "React MultiSelect accepts ReactNode option labels/descriptions and owns searchable roving-focus option controls, while React TransferList accepts ReactNode titles/descriptions/empty states plus renderOption, custom panel filtering, selection callbacks, and repeated hidden form values. The current canonical elements rebuild their Light DOM from string-oriented item models and do not adopt React-owned composition or preserve the full keyboard/form extension surface.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
+        "packages/ui-components/src/components/MultiSelect/MultiSelect.types.ts",
+        "packages/ui-components/src/components/TransferList/TransferList.tsx",
+        "packages/ui-components/src/components/TransferList/TransferList.types.ts",
+        "packages/ui-elements/src/components/collections.ts"
+      ],
+      "evidence": [
+        "packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx preserves MultiSelect rich labels, search and roving focus plus TransferList custom option composition, movement callbacks and repeated form values.",
+        "MFD-1412 inspection confirms VyrnForgeMultiSelectElement and VyrnForgeTransferListElement replace their owned Light DOM from canonical string item models on update."
+      ],
+      "exitCriteria": "Add framework-neutral rich collection composition and Light-DOM adoption contracts that preserve ReactNode rendering, search/filter hooks, roving focus, selection callbacks, and array/repeated form submission semantics, then migrate both surfaces through the Batch-4 parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
     }
   ]
 }
