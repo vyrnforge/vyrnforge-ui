@@ -119,19 +119,15 @@ export function getDocsVersion(versionId: string | null | undefined) {
 
 export function getCurrentDocsVersionId() {
   const configuredVersion = import.meta.env.VITE_DOCS_VERSION_ID as
-    | string
-    | undefined;
+    string | undefined;
   return configuredVersion ?? "next";
 }
 
 export function getRepositoryPagesRoot() {
   const configuredRoot = import.meta.env.VITE_DOCS_ROOT_PATH as
-    | string
-    | undefined;
+    string | undefined;
   if (configuredRoot) {
-    return configuredRoot.endsWith("/")
-      ? configuredRoot
-      : `${configuredRoot}/`;
+    return configuredRoot.endsWith("/") ? configuredRoot : `${configuredRoot}/`;
   }
 
   const base = import.meta.env.BASE_URL || "/";
