@@ -80,9 +80,9 @@ export function OverviewPage({
             </Heading>
           </div>
           <Text size="lg" tone="muted" className="vf-docs-overview__lede">
-            Build enterprise web applications with shared design tokens, behavior
-            contracts, accessibility rules, component semantics, and release
-            evidence across Native HTML, React, Angular, and Vue.
+            Build enterprise web applications with shared design tokens,
+            behavior contracts, accessibility rules, component semantics, and
+            release evidence across Native HTML, React, Angular, and Vue.
           </Text>
           <Inline gap="sm" className="vf-docs-overview__actions">
             <Button onClick={() => onRouteChange("component-reference")}>
