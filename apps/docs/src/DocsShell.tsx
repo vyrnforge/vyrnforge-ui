@@ -51,8 +51,9 @@ export function DocsShell({
                 Multi-framework source-of-truth reference
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Shared contracts stay canonical while examples, package guidance,
-                and integration notes follow the selected framework surface.
+                Shared contracts stay canonical while examples, package
+                guidance, and integration notes follow the selected framework
+                surface.
               </Text>
             </div>
           }
