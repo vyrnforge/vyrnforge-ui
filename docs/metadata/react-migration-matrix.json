@@ -100,7 +100,7 @@
       "reason": "This is a React hook rather than a component renderer. Its compatibility remains part of the public baseline and is governed by the active ADR-008 use-toast exception."
     }
   ],
-  "dedicatedRendererExceptions": ["ToastProvider"],
+  "dedicatedRendererExceptions": [],
   "rules": [
     "Every public React component value export is classified exactly once.",
     "Generated facade is the default target; parity blockers are temporary exception overlays and must not become historical-only forks.",
