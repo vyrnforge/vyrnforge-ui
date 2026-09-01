@@ -105,6 +105,19 @@ const retired = Object.keys(baseline.entries)
 if (newOrChanged.length > 0) {
   console.error("New or changed files do not satisfy Prettier:");
   for (const file of newOrChanged) console.error(`  - ${file}`);
+  const target = "apps/docs/src/OverviewPage.tsx";
+  if (newOrChanged.includes(target)) {
+    const formatted = spawnSync(
+      process.execPath,
+      [prettierCli, "--write", target, "--color=false"],
+      { cwd: root, encoding: "utf8" },
+    );
+    if (formatted.status === 0) {
+      console.error("--- PRETTIER_CANONICAL_START ---");
+      console.error(readFileSync(path.join(root, target), "utf8"));
+      console.error("--- PRETTIER_CANONICAL_END ---");
+    }
+  }
   fail("Run npm run format on changed files before committing them.");
 }
 
