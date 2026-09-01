@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "task": "MFD-1416",
+  "deliverable": "Reduced React implementation duplication",
+  "policy": "Migrated React components keep one supported implementation path. Canonical-backed surfaces may retain compatibility code required by the public React contract, while non-canonical renderers must be justified by a live framework exception or parity blocker. Duplicate dormant implementations are forbidden.",
+  "cleanupResult": "in-place-replacement",
+  "removedDuplicateFiles": [],
+  "auditedCanonicalBacked": [
+    {"component":"Button","sourcePath":"packages/ui-components/src/components/Button/Button.tsx","canonicalTag":"vf-button"},
+    {"component":"IconButton","sourcePath":"packages/ui-components/src/components/IconButton/IconButton.tsx","canonicalTag":"vf-icon-button"},
+    {"component":"TextInput","sourcePath":"packages/ui-components/src/components/TextInput/TextInput.tsx","canonicalTag":"vf-text-input"},
+    {"component":"SearchInput","sourcePath":"packages/ui-components/src/components/SearchInput/SearchInput.tsx","canonicalTag":"vf-search-input"},
+    {"component":"Textarea","sourcePath":"packages/ui-components/src/components/Textarea/Textarea.tsx","canonicalTag":"vf-textarea"},
+    {"component":"NumberInput","sourcePath":"packages/ui-components/src/components/NumberInput/NumberInput.tsx","canonicalTag":"vf-number-input"},
+    {"component":"DateInput","sourcePath":"packages/ui-components/src/components/DateInput/DateInput.tsx","canonicalTag":"vf-date-input"},
+    {"component":"DateTimeInput","sourcePath":"packages/ui-components/src/components/DateTimeInput/DateTimeInput.tsx","canonicalTag":"vf-date-time-input"},
+    {"component":"Checkbox","sourcePath":"packages/ui-components/src/components/Checkbox/Checkbox.tsx","canonicalTag":"vf-checkbox"},
+    {"component":"Radio","sourcePath":"packages/ui-components/src/components/Radio/Radio.tsx","canonicalTag":"vf-radio"},
+    {"component":"Switch","sourcePath":"packages/ui-components/src/components/Switch/Switch.tsx","canonicalTag":"vf-switch"},
+    {"component":"Slider","sourcePath":"packages/ui-components/src/components/Slider/Slider.tsx","canonicalTag":"vf-slider"},
+    {"component":"Select","sourcePath":"packages/ui-components/src/components/Select/Select.tsx","canonicalTag":"vf-select"},
+    {"component":"ToggleButton","sourcePath":"packages/ui-components/src/components/ToggleButton/ToggleButton.tsx","canonicalTag":"vf-toggle-button"},
+    {"component":"ToggleButtonGroup","sourcePath":"packages/ui-components/src/components/ToggleButtonGroup/ToggleButtonGroup.tsx","canonicalTag":"vf-toggle-button-group"},
+    {"component":"TopNav","sourcePath":"packages/ui-components/src/components/TopNav/TopNav.tsx","canonicalTag":"vf-top-nav"}
+  ],
+  "exceptionBacked": [
+    {"scope":"typography","exceptionId":"MFD-EX-REACT-TYPOGRAPHY-SEMANTICS"},
+    {"scope":"rating","exceptionId":"MFD-EX-REACT-RATING-RADIO-SEMANTICS"},
+    {"scope":"select-multiple","exceptionId":"MFD-EX-REACT-SELECT-MULTIPLE"},
+    {"scope":"radio-group","exceptionId":"MFD-EX-REACT-RADIO-GROUP-FOCUS"},
+    {"scope":"navigation-rich-composition","exceptionId":"MFD-EX-REACT-NAV-RICH-COMPOSITION"},
+    {"scope":"autocomplete","exceptionId":"MFD-EX-REACT-AUTOCOMPLETE-ADVANCED-CONTRACT"},
+    {"scope":"collection-rich-composition","exceptionId":"MFD-EX-REACT-COLLECTION-RICH-COMPOSITION"}
+  ],
+  "parityBlockerSources": [
+    "docs/metadata/react-batch-5-overlay-convergence.json",
+    "docs/metadata/react-batch-6-catalog-convergence.json"
+  ],
+  "staleTransitionMetadataCleaned": [
+    "docs/metadata/react-batch-1-readiness.json",
+    "docs/metadata/react-exception-catalog.json",
+    "docs/metadata/react-migration-matrix.json"
+  ],
+  "forbiddenDuplicateSuffixes": [".legacy.tsx", ".old.tsx", ".deprecated.tsx", ".fallback.tsx", ".temporary.tsx"],
+  "rules": [
+    "Repository history is the rollback mechanism; do not retain a second implementation solely for rollback.",
+    "A compatibility branch inside the supported implementation is allowed only when a live exception explicitly requires that public contract.",
+    "A migrated source file must reference its canonical tag unless its non-canonical path is covered by a live exception.",
+    "No public API may be removed as part of implementation cleanup."
+  ]
+}
