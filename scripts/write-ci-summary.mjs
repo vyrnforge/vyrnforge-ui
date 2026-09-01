@@ -11,6 +11,12 @@ function parsePlan() {
   }
 }
 
+function readBoolean(name, defaultValue = false) {
+  const value = process.env[name];
+  if (value === undefined) return defaultValue;
+  return value === "true" || value === "1";
+}
+
 function list(values) {
   return values.length
     ? values.map((value) => `- ${value}`).join("\n")
@@ -54,13 +60,13 @@ const selected = responsibilities
   .filter((responsibility) => responsibility.selected)
   .map(
     (responsibility) =>
-      `\`${responsibility.id}\` â€” ${responsibility.command}`,
+      `\`${responsibility.id}\` — ${responsibility.command}`,
   );
 const skipped = responsibilities
   .filter((responsibility) => !responsibility.selected)
   .map(
     (responsibility) =>
-      `\`${responsibility.id}\` â€” intentionally not required`,
+      `\`${responsibility.id}\` — intentionally not required`,
   );
 
 if ((process.env.CI_SUMMARY_MODE ?? "plan") === "plan") {
@@ -81,6 +87,7 @@ ${list(skipped)}
   process.exit(0);
 }
 
+const reactCompatibilityRequired = readBoolean("REACT_COMPATIBILITY_REQUIRED");
 const checks = [
   {
     id: "plan",
@@ -96,6 +103,16 @@ const checks = [
     id: "integration",
     required: plan.integration === true,
     result: process.env.INTEGRATION_RESULT,
+  },
+  {
+    id: "react-compatibility-plan",
+    required: reactCompatibilityRequired,
+    result: process.env.REACT_COMPATIBILITY_PLAN_RESULT,
+  },
+  {
+    id: "react-compatibility",
+    required: reactCompatibilityRequired,
+    result: process.env.REACT_COMPATIBILITY_RESULT,
   },
   {
     id: "security",
@@ -132,7 +149,7 @@ ${list(skipped)}
 ${list(
   checks.map(
     (check) =>
-      `\`${check.id}\` â€” ${check.required ? "required" : "not required"} â€” \`${check.result ?? "unknown"}\``,
+      `\`${check.id}\` — ${check.required ? "required" : "not required"} — \`${check.result ?? "unknown"}\``,
   ),
 )}
 
