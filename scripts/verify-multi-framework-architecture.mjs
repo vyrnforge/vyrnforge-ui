@@ -54,14 +54,14 @@ const expectedFrameworks = new Map([
 ]);
 
 const expectedBetaClaims = new Map([
-  ["react", "custom-elements-consumer-verified"],
+  ["react", "react-public-package-consumer-verified"],
   ["native-html", "packed-consumer-verified"],
   ["angular", "packed-consumer-verified"],
   ["vue", "packed-consumer-verified"],
 ]);
 
 const expectedFixtureClaims = new Map([
-  ["react", "packed-custom-elements-runtime-verified"],
+  ["react", "packed-react-public-package-runtime-verified"],
   ["native-html", "packed-runtime-verified"],
   ["angular", "packed-angular-runtime-verified"],
   ["vue", "packed-vue-runtime-verified"],

@@ -148,6 +148,26 @@
       "reviewMilestone": "G14 React convergence"
     },
     {
+      "id": "MFD-EX-REACT-RATING-RADIO-SEMANTICS",
+      "framework": "react",
+      "scope": "rating",
+      "exceptionClass": "accessibility-focus-form",
+      "reason": "The current React Rating renderer owns a native radio-group form contract, while the canonical vf-rating renderer replaces its Light DOM with button-based radio roles on every update. Wrapping the current React renderer would destroy its native radio inputs and form semantics instead of preserving them.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Rating/Rating.tsx",
+        "packages/ui-components/src/components/Rating/Rating.types.ts",
+        "packages/ui-elements/src/components/values.ts"
+      ],
+      "evidence": [
+        "MFD-1410 inspection confirms VyrnForgeRatingElement.update() calls replaceChildren() and recreates button role=radio controls.",
+        "The React Rating baseline uses native radio inputs and must retain its current form, keyboard, and accessibility contract during S14 convergence."
+      ],
+      "exitCriteria": "Add canonical rating Light-DOM adoption that preserves native radio controls, form value, keyboard behavior, labels, and React ref/event compatibility, then migrate Rating through the MFD-1410 parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
       "id": "MFD-EX-NATIVE-TOAST-VIEWPORT",
       "framework": "native",
       "scope": "toast-viewport",
@@ -162,6 +182,112 @@
       "exitCriteria": "Add a framework-neutral toast viewport/service contract that owns the native registration and imperative lifecycle, or remove the standalone public native registration.",
       "state": "active",
       "reviewMilestone": "S14 framework convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",
+      "framework": "react",
+      "scope": ["tabs", "breadcrumbs", "side-nav", "segmented-control", "menu"],
+      "exceptionClass": "composition",
+      "reason": "The current React surfaces accept ReactNode labels, content, icons, badges, separators, descriptions, or overlay composition, while the corresponding canonical elements reconstruct their Light DOM from string-oriented item models. Direct facade conversion would erase React-owned nodes or change the captured DOM/accessibility contract.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Tabs/Tabs.tsx",
+        "packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx",
+        "packages/ui-components/src/components/SideNav/SideNav.tsx",
+        "packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx",
+        "packages/ui-components/src/components/Menu/Menu.tsx",
+        "packages/ui-elements/src/components/navigation.ts",
+        "packages/ui-elements/src/components/values.ts",
+        "packages/ui-elements/src/components/overlays.ts"
+      ],
+      "evidence": [
+        "MFD-1411 inspection confirms these canonical renderers rebuild owned Light DOM instead of adopting the current React-owned rich composition.",
+        "The MFD-1401 baseline and MFD-1411 navigation parity work require ReactNode composition and current keyboard/focus/overlay semantics to remain stable."
+      ],
+      "exitCriteria": "Add canonical Light-DOM adoption or framework-neutral rich-composition contracts that preserve ReactNode content, documented DOM semantics, keyboard/focus behavior, overlay ownership, and callback contracts, then migrate these surfaces through the MFD-1411 navigation parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-RADIO-GROUP-FOCUS",
+      "framework": "react",
+      "scope": "radio-group",
+      "exceptionClass": "accessibility-focus-form",
+      "reason": "The canonical radio-group keyboard path is coupled to canonical vf-radio event targets, while the React Radio public contract exposes native input focus and form semantics inside canonical radio hosts. Converting the group without a shared focus-target contract risks changing roving focus, fieldset semantics, and native radio behavior.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
+        "packages/ui-components/src/components/Radio/Radio.tsx",
+        "packages/ui-elements/src/components/selection.ts"
+      ],
+      "evidence": [
+        "MFD-1411 inspection confirms the React group preserves fieldset/legend semantics and native radio focus while the canonical group keyboard handler resolves selection/focus through vf-radio targets."
+      ],
+      "exitCriteria": "Define and implement a canonical radio-group focus/keyboard adoption contract that explicitly supports adopted native radio inputs and preserves React fieldset, form, focus, and callback behavior.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-SELECT-MULTIPLE",
+      "framework": "react",
+      "scope": "select-multiple",
+      "exceptionClass": "migration-compatibility",
+      "reason": "The public React Select inherits native multiple selection and string-array value/defaultValue contracts, while the current canonical vf-select model exposes one string value and single-select form state. Canonicalizing the multiple path would narrow the public API or lose selected values.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Select/Select.tsx",
+        "packages/ui-components/src/components/Select/Select.types.ts",
+        "packages/ui-elements/src/components/selection.ts"
+      ],
+      "evidence": [
+        "MFD-1411 keeps the single-select path canonical-backed and explicitly verifies that multiple Select remains a native listbox compatibility path.",
+        "The current canonical VyrnForgeSelectElement stores and submits one string value."
+      ],
+      "exitCriteria": "Extend the shared canonical select contract to model multiple selection, array values/defaults, form submission, and native listbox semantics without changing the React public contract, then migrate the multiple path.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-AUTOCOMPLETE-ADVANCED-CONTRACT",
+      "framework": "react",
+      "scope": "autocomplete",
+      "exceptionClass": "migration-compatibility",
+      "reason": "The React Autocomplete contract includes custom filterOptions, renderOption, portalContainer, placement, trigger-width matching, ReactNode loading/empty states, controlled input/open/value channels, and an anchored dismissable overlay. The current canonical vf-autocomplete rebuilds its own input/listbox Light DOM, uses its internal filter/controller and inline listbox, and cannot preserve those extension points without narrowing the public React API.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx",
+        "packages/ui-components/src/components/Autocomplete/Autocomplete.types.ts",
+        "packages/ui-elements/src/components/collections.ts"
+      ],
+      "evidence": [
+        "packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx preserves React filtering, keyboard selection, controlled callback, and hidden form submission behavior.",
+        "MFD-1412 inspection confirms VyrnForgeAutocompleteElement creates/replaces its own input, listbox, and option DOM and does not expose the React overlay/render/filter extension contract."
+      ],
+      "exitCriteria": "Define canonical advanced-autocomplete contracts for custom filtering/rendering, overlay/placement ownership, controlled input/open/value channels, and Light-DOM adoption that preserve the current React API, then migrate through the Batch-4 parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
+    },
+    {
+      "id": "MFD-EX-REACT-COLLECTION-RICH-COMPOSITION",
+      "framework": "react",
+      "scope": ["multi-select", "transfer-list"],
+      "exceptionClass": "composition",
+      "reason": "React MultiSelect accepts ReactNode option labels/descriptions and owns searchable roving-focus option controls, while React TransferList accepts ReactNode titles/descriptions/empty states plus renderOption, custom panel filtering, selection callbacks, and repeated hidden form values. The current canonical elements rebuild their Light DOM from string-oriented item models and do not adopt React-owned composition or preserve the full keyboard/form extension surface.",
+      "owner": "UI Platform",
+      "sourcePaths": [
+        "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
+        "packages/ui-components/src/components/MultiSelect/MultiSelect.types.ts",
+        "packages/ui-components/src/components/TransferList/TransferList.tsx",
+        "packages/ui-components/src/components/TransferList/TransferList.types.ts",
+        "packages/ui-elements/src/components/collections.ts"
+      ],
+      "evidence": [
+        "packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx preserves MultiSelect rich labels, search and roving focus plus TransferList custom option composition, movement callbacks and repeated form values.",
+        "MFD-1412 inspection confirms VyrnForgeMultiSelectElement and VyrnForgeTransferListElement replace their owned Light DOM from canonical string item models on update."
+      ],
+      "exitCriteria": "Add framework-neutral rich collection composition and Light-DOM adoption contracts that preserve ReactNode rendering, search/filter hooks, roving focus, selection callbacks, and array/repeated form submission semantics, then migrate both surfaces through the Batch-4 parity suite.",
+      "state": "active",
+      "reviewMilestone": "G14 React convergence"
     }
   ]
 }
