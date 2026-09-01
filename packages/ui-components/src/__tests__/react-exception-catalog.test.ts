@@ -101,7 +101,7 @@ describe("MFD-1415 React exception catalog", () => {
     "docs/metadata/react-batch-6-catalog-convergence.json",
   );
 
-  it("removes temporary legacy as a valid React migration outcome", () => {
+  it("resolves temporary legacy without inventing a duplicate renderer exception", () => {
     expect(catalog).toMatchObject({
       schemaVersion: 1,
       task: "MFD-1415",
@@ -112,6 +112,10 @@ describe("MFD-1415 React exception catalog", () => {
     expect(matrix.strategies.some(({ id }) => id === "temporary-legacy")).toBe(
       false,
     );
+    expect(
+      matrix.strategies.find(({ id }) => id === "approved-framework-integration")
+        ?.exports,
+    ).toEqual(["ToastProvider"]);
     expect(catalog.resolvedTemporaryLegacy).toEqual([
       expect.objectContaining({
         export: "ToastProvider",
@@ -119,7 +123,7 @@ describe("MFD-1415 React exception catalog", () => {
         exceptionId: "MFD-EX-REACT-TOAST-PROVIDER",
       }),
     ]);
-    expect(matrix.dedicatedRendererExceptions).toEqual(["ToastProvider"]);
+    expect(matrix.dedicatedRendererExceptions).toEqual([]);
   });
 
   it("requires current ownership, evidence, source paths, and exit criteria for every live React ADR-008 exception", () => {
