@@ -74,7 +74,7 @@ type Catalog = {
     allowedStates?: string[];
     requiredFields?: string[];
   }>;
-  resolvedTemporaryLegacy: Array<{
+  approvedFrameworkIntegrations: Array<{
     export: string;
     strategy: string;
     exceptionId: string;
@@ -103,7 +103,7 @@ describe("MFD-1415 React exception catalog", () => {
     "docs/metadata/react-batch-6-catalog-convergence.json",
   );
 
-  it("resolves temporary legacy", () => {
+  it("uses only approved React migration outcomes", () => {
     expect(catalog).toMatchObject({
       schemaVersion: 1,
       task: "MFD-1415",
@@ -113,14 +113,14 @@ describe("MFD-1415 React exception catalog", () => {
     expect(catalog.policy).toContain(
       "Historical existence is never sufficient",
     );
-    expect(matrix.strategies.some(({ id }) => id === "temporary-legacy")).toBe(
-      false,
-    );
+    expect(
+      matrix.strategies.some(({ id }) => /temporary|legacy/.test(id)),
+    ).toBe(false);
     const integration = matrix.strategies.find(
       ({ id }) => id === "approved-framework-integration",
     );
     expect(integration?.exports).toEqual(["ToastProvider"]);
-    expect(catalog.resolvedTemporaryLegacy).toEqual([
+    expect(catalog.approvedFrameworkIntegrations).toEqual([
       expect.objectContaining({
         export: "ToastProvider",
         strategy: "approved-framework-integration",
@@ -158,8 +158,8 @@ describe("MFD-1415 React exception catalog", () => {
       );
     }
 
-    for (const retained of catalog.resolvedTemporaryLegacy) {
-      expect(live.some(({ id }) => id === retained.exceptionId)).toBe(true);
+    for (const integration of catalog.approvedFrameworkIntegrations) {
+      expect(live.some(({ id }) => id === integration.exceptionId)).toBe(true);
     }
     for (const api of catalog.nonRendererIntegrationApis) {
       expect(live.some(({ id }) => id === api.exceptionId)).toBe(true);
