@@ -12,12 +12,13 @@
     "publicExports": "docs/metadata/react-behavior-adoption.json",
     "canonicalCatalog": "docs/metadata/components.json",
     "exceptionRegistry": "docs/metadata/framework-exceptions.json",
+    "reactExceptionCatalog": "docs/metadata/react-exception-catalog.json",
     "strategy": "docs/architecture/adr-009-react-canonical-convergence.md"
   },
   "strategies": [
     {
       "id": "generated-facade",
-      "reason": "The public component has a canonical non-grid browser implementation and should converge to a generated or generic React facade while preserving the captured React API.",
+      "reason": "The public component has a canonical non-grid browser implementation and should converge to a generated or generic React facade while preserving the captured React API. Active parity blockers are exception overlays, not permanent alternate architecture.",
       "exports": [
         "Button",
         "ButtonGroup",
@@ -87,8 +88,8 @@
       ]
     },
     {
-      "id": "temporary-legacy",
-      "reason": "React provider ownership is framework-specific integration rather than canonical DOM rendering. Retain it until MFD-1415 determines whether a narrow integration adapter or an ADR-008 exception is required; historical existence alone is not sufficient for a permanent dedicated renderer.",
+      "id": "approved-framework-integration",
+      "reason": "React provider ownership is framework-specific service integration rather than a duplicate canonical DOM renderer. Retention requires an active ADR-008 exception with ownership, evidence, and exit criteria.",
       "exports": ["ToastProvider"]
     }
   ],
@@ -96,14 +97,14 @@
     {
       "name": "useToast",
       "strategy": "react-integration-api",
-      "reason": "This is a React hook rather than a component renderer. Its compatibility remains part of the public baseline and ToastProvider migration work."
+      "reason": "This is a React hook rather than a component renderer. Its compatibility remains part of the public baseline and is governed by the active ADR-008 use-toast exception."
     }
   ],
-  "dedicatedRendererExceptions": [],
+  "dedicatedRendererExceptions": ["ToastProvider"],
   "rules": [
     "Every public React component value export is classified exactly once.",
-    "Generated facade is the default target; temporary legacy status is not a permanent exception.",
-    "Dedicated-renderer status requires an active or retiring ADR-008 framework exception record.",
+    "Generated facade is the default target; parity blockers are temporary exception overlays and must not become historical-only forks.",
+    "Approved framework integration or dedicated-renderer status requires an active or retiring ADR-008 framework exception record.",
     "Migration batches remain reversible and must preserve the MFD-1401 compatibility baseline unless a separate public migration is approved."
   ]
 }
