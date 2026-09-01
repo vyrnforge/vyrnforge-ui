@@ -118,6 +118,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
@@ -178,20 +180,16 @@ jobs:
         run: npm run build --workspace @vyrnforge/ui-docs
         env:
           VITE_BASE_PATH: /vyrnforge-ui/
+          VITE_DOCS_ROOT_PATH: /vyrnforge-ui/
+          VITE_DOCS_VERSION_ID: next
       - name: Build playground for Pages
         if: env.RUN_PAGES_ARTIFACT == 'true'
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
         env:
           VITE_BASE_PATH: /vyrnforge-ui/playground/
-      - name: Assemble Pages site once
+      - name: Assemble versioned Pages site once
         if: env.RUN_PAGES_ARTIFACT == 'true'
-        shell: bash
-        run: |
-          rm -rf site
-          mkdir -p site/playground
-          cp -R apps/docs/dist/. site/
-          cp -R examples/basic-playground/dist/. site/playground/
-          touch site/.nojekyll
+        run: node scripts/assemble-versioned-pages.mjs
       - name: Upload commit-bound Pages site
         if: env.RUN_PAGES_ARTIFACT == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
