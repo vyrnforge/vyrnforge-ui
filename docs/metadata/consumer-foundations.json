@@ -31,17 +31,17 @@
     },
     {
       "id": "react",
-      "supportClaim": "packed-custom-elements-runtime-verified",
+      "supportClaim": "packed-react-public-package-runtime-verified",
       "frameworkRuntime": "React 19",
       "directory": "tests/consumers/react",
       "evidence": [
-        "clean tarball installation",
+        "clean packed installation of @vyrnforge/ui-components",
+        "React application imports only the public React package and its stylesheet",
         "TypeScript typecheck",
         "production Vite build",
-        "Chromium canonical-event interaction",
-        "React Custom Element property assignment",
-        "typed refs and application-owned JSX declarations",
-        "explicit native registration"
+        "SSR-safe React package import",
+        "Chromium interaction and keyboard accessibility",
+        "no direct ui-elements, ui-core, or ui-behaviors consumer imports"
       ]
     },
     {

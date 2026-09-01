@@ -6,6 +6,7 @@ export type ToggleButtonGroupContextValue = {
   disabled: boolean;
   size?: ToggleButtonSize;
   isPressed: (value: string) => boolean;
+  restoreCanonicalValue: () => void;
   toggle: (value: string, reason?: BehaviorChangeReason) => void;
 };
 
