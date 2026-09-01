@@ -33,11 +33,15 @@ const fixtures = Object.freeze([
     id: "react",
     source: "tests/consumers/react/src/main.tsx",
     styles: "tests/consumers/react/src/styles.css",
-    requiredMarkers: [
+    requiredMarkers: ["Button", "TextInput", "Tabs", "Dialog"],
+    forbiddenMarkers: [
       "GeneratedButton",
       "GeneratedTextInput",
       "GeneratedTabs",
       "GeneratedDialog",
+      "@vyrnforge/ui-elements",
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
     ],
   },
   {
@@ -87,6 +91,12 @@ function verifyFixtureContract(fixture) {
     assert(
       source.includes(marker),
       `${fixture.id}: representative packed smoke is missing ${marker}`,
+    );
+  }
+  for (const marker of fixture.forbiddenMarkers ?? []) {
+    assert(
+      !source.includes(marker),
+      `${fixture.id}: representative packed smoke contains forbidden ${marker}`,
     );
   }
 

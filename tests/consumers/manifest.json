@@ -6,13 +6,8 @@
       "framework": "React",
       "directory": "tests/consumers/react",
       "contractFile": "fixture.json",
-      "exampleFiles": [
-        "example.tsx",
-        "src/main.tsx",
-        "src/vyrnforge-elements.d.ts",
-        "package.json"
-      ],
-      "supportClaim": "packed-custom-elements-runtime-verified"
+      "exampleFiles": ["example.tsx", "src/main.tsx", "package.json"],
+      "supportClaim": "packed-react-public-package-runtime-verified"
     },
     {
       "id": "native-html",
