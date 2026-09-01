@@ -13,7 +13,7 @@
     {"component":"Textarea","sourcePath":"packages/ui-components/src/components/Textarea/Textarea.tsx","canonicalTag":"vf-textarea"},
     {"component":"NumberInput","sourcePath":"packages/ui-components/src/components/NumberInput/NumberInput.tsx","canonicalTag":"vf-number-input"},
     {"component":"DateInput","sourcePath":"packages/ui-components/src/components/DateInput/DateInput.tsx","canonicalTag":"vf-date-input"},
-    {"component":"DateTimeInput","sourcePath":"packages/ui-components/src/components/DateTimeInput/DateTimeInput.tsx","canonicalTag":"vf-date-time-input"},
+    {"component":"DateTimeInput","sourcePath":"packages/ui-components/src/components/DateTimeInput/DateTimeInput.tsx","canonicalTag":"vf-datetime-input"},
     {"component":"Checkbox","sourcePath":"packages/ui-components/src/components/Checkbox/Checkbox.tsx","canonicalTag":"vf-checkbox"},
     {"component":"Radio","sourcePath":"packages/ui-components/src/components/Radio/Radio.tsx","canonicalTag":"vf-radio"},
     {"component":"Switch","sourcePath":"packages/ui-components/src/components/Switch/Switch.tsx","canonicalTag":"vf-switch"},
