@@ -152,6 +152,7 @@ export function DocsShell({
       <DocsPage
         frameworkId={framework.id}
         onFrameworkChange={onFrameworkChange}
+        onRouteChange={onRouteChange}
         route={activeRoute}
       />
     </AppShell>
