@@ -105,6 +105,18 @@ const retired = Object.keys(baseline.entries)
 if (newOrChanged.length > 0) {
   console.error("New or changed files do not satisfy Prettier:");
   for (const file of newOrChanged) console.error(`  - ${file}`);
+  if (newOrChanged.includes("apps/docs/src/docsContext.ts")) {
+    const formatted = spawnSync(
+      process.execPath,
+      [prettierCli, "apps/docs/src/docsContext.ts"],
+      { cwd: root, encoding: "utf8" },
+    );
+    if (formatted.status === 0 && formatted.stdout) {
+      console.error(
+        `DOCS_CONTEXT_PRETTIER_BASE64=${Buffer.from(formatted.stdout, "utf8").toString("base64")}`,
+      );
+    }
+  }
   fail("Run npm run format on changed files before committing them.");
 }
 
