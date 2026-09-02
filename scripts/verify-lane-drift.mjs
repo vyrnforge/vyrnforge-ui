@@ -36,17 +36,21 @@ function isShallowRepository(options = {}) {
   );
 }
 
-function fetchRef(remote, ref, options = {}) {
+function fetchRef(remote, ref, { fullHistory = false, ...options } = {}) {
   const args = ["fetch", "--no-tags"];
-  if (isShallowRepository(options)) {
+  if (fullHistory) {
     args.push("--depth=2147483647");
   }
   git([...args, remote, ref], options);
 }
 
-function ensureCommit(remote, sha, options = {}) {
-  if (isShallowRepository(options)) {
-    fetchRef(remote, sha, options);
+function ensureCommit(
+  remote,
+  sha,
+  { fullHistory = false, ...options } = {},
+) {
+  if (fullHistory) {
+    fetchRef(remote, sha, { ...options, fullHistory: true });
     return;
   }
   if (
@@ -101,9 +105,10 @@ export function verifyPullRequestLaneDrift({
     );
   }
 
-  fetchRef(remote, "main", { cwd });
-  ensureCommit(remote, baseSha, { cwd });
-  ensureCommit(remote, headSha, { cwd });
+  const hydrateHistory = isShallowRepository({ cwd });
+  fetchRef(remote, "main", { cwd, fullHistory: hydrateHistory });
+  ensureCommit(remote, baseSha, { cwd, fullHistory: hydrateHistory });
+  ensureCommit(remote, headSha, { cwd, fullHistory: hydrateHistory });
 
   if (baseRef.startsWith("integration/")) {
     if (headRef === "main") {
