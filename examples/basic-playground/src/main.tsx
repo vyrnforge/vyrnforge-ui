@@ -5,6 +5,7 @@ import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 import App from "./App";
 import "./styles/playground.css";
+import "./styles/reference-shell.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
