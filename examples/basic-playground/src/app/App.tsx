@@ -4,7 +4,10 @@ import { PlaygroundShell } from "./PlaygroundShell";
 import {
   defaultPlaygroundFramework,
   defaultPlaygroundVersion,
+  loadPlaygroundVersions,
+  playgroundVersionHref,
   type PlaygroundFrameworkId,
+  type PlaygroundVersion,
 } from "./playgroundContext";
 import { routes } from "./routes";
 
@@ -42,14 +45,19 @@ export default function App() {
     getFrameworkFromLocation,
   );
   const [theme, setTheme] = useState("light");
-  const [versionId, setVersionId] = useState(
-    defaultPlaygroundVersion?.id ?? "current",
-  );
+  const [versions, setVersions] = useState<PlaygroundVersion[]>([
+    defaultPlaygroundVersion,
+  ]);
+  const versionId = defaultPlaygroundVersion.id;
   const activeRoute = useMemo(
     () => routes.find((route) => route.id === activeRouteId) ?? routes[0],
     [activeRouteId],
   );
   const ActivePage = activeRoute.Component;
+
+  useEffect(() => {
+    void loadPlaygroundVersions().then(setVersions);
+  }, []);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -84,6 +92,17 @@ export default function App() {
     setFrameworkId(nextFrameworkId);
   };
 
+  const changeVersion = (nextVersionId: string) => {
+    const nextVersion = versions.find(
+      (version) => version.id === nextVersionId,
+    );
+    if (!nextVersion || nextVersion.id === versionId) {
+      return;
+    }
+
+    window.location.assign(playgroundVersionHref(nextVersion));
+  };
+
   return (
     <PlaygroundFrameworkProvider
       frameworkId={frameworkId}
@@ -96,11 +115,12 @@ export default function App() {
         frameworkId={frameworkId}
         routes={routes}
         versionId={versionId}
+        versions={versions}
         onRouteChange={changeRoute}
         onDensityChange={setDensity}
         onFrameworkChange={changeFramework}
         onThemeChange={setTheme}
-        onVersionChange={setVersionId}
+        onVersionChange={changeVersion}
         theme={theme}
       >
         <ActivePage />
