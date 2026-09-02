@@ -1,11 +1,15 @@
-# React packed Custom Element consumer fixture
+# React packed consumer fixture
 
-CF-7002 verifies React 19 consuming `@vyrnforge/ui-elements` directly from
-clean package tarballs. The application keeps its JSX declaration adapter
-local, so the framework-neutral native package does not depend on React.
+MFD-1417 verifies the first-class React package path from a clean packed
+installation. Application code imports components, types, and styles only from
+`@vyrnforge/ui-components`; it does not import, register, type, or otherwise
+know about `@vyrnforge/ui-elements`, `@vyrnforge/ui-core`, or
+`@vyrnforge/ui-behaviors`.
 
-The fixture proves typed refs, non-scalar property assignment, explicit
-registration, canonical DOM events, production Vite output, and Chromium
-interaction evidence. `@vyrnforge/ui-components` remains the recommended
-first-class React renderer; this fixture validates the supported direct
-Custom Element path.
+Internal VyrnForge packages may be installed transitively because they are
+implementation dependencies of the React package. They are not part of the
+normal React consumer setup or public application code.
+
+The fixture verifies typecheck, production Vite build, SSR-safe package import,
+canonical-backed runtime behavior, keyboard accessibility, and Chromium
+interaction from packed artifacts.

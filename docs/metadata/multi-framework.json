@@ -80,7 +80,7 @@
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-components",
       "fixture": "tests/consumers/react",
-      "betaClaim": "custom-elements-consumer-verified"
+      "betaClaim": "react-public-package-consumer-verified"
     },
     {
       "id": "native-html",
@@ -118,7 +118,7 @@
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
     "currentClaim": "native-html-react-angular-vue-consumer-foundation-complete",
-    "rule": "Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through public package outputs. Framework-specific adapters remain thin translation layers over shared native contracts.",
+    "rule": "Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through their intended public package outputs. React application code consumes @vyrnforge/ui-components without direct native-package knowledge; framework-specific adapters remain thin translation layers over shared contracts.",
     "evidence": "docs/metadata/consumer-foundations.json",
     "angularEvidence": "docs/metadata/angular-consumer.json",
     "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json",

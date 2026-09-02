@@ -51,7 +51,9 @@ export function PlaygroundNav({
 
   const items: SideNavItem[] = routeGroups.flatMap<SideNavItem>(
     (group): SideNavItem[] => {
-      const groupRoutes = visibleRoutes.filter((route) => route.group === group);
+      const groupRoutes = visibleRoutes.filter(
+        (route) => route.group === group,
+      );
 
       if (group === "Components") {
         const subgroups = [
@@ -110,7 +112,9 @@ export function PlaygroundNav({
         items={items}
       />
       {items.length === 0 ? (
-        <p className="vf-playground-nav-empty">No reference pages match “{query}”.</p>
+        <p className="vf-playground-nav-empty">
+          No reference pages match “{query}”.
+        </p>
       ) : null}
     </div>
   );
