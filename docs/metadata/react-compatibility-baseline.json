@@ -23,7 +23,7 @@
     {
       "path": "packages/ui-components/package.json",
       "kind": "blob",
-      "sha1": "9164ec370fe4de812162f6a06fdc03fa2a03903d",
+      "sha1": "e9bf510287ea473447732980f775a0ac554d253c",
       "covers": [
         "package exports",
         "CSS entrypoints",
@@ -122,6 +122,11 @@
       "task": "workflow-surface-consolidation",
       "reason": "Compatibility matrix orchestration moved from the retired reusable _compatibility.yml workflow to assurance.yml without changing tested React versions or compatibility cases.",
       "evidence": "docs/metadata/compatibility-release-matrix.json"
+    },
+    {
+      "task": "development-dependency-refresh-2026-09-01",
+      "reason": "Development-only dependency versions changed in the React package manifest while public exports, React peer support, converged component implementation fingerprints, runtime/browser parity evidence, packed-consumer checks, and compatibility cases remain unchanged.",
+      "evidence": "packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
