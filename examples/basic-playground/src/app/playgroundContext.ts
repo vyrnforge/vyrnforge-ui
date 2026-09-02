@@ -32,24 +32,24 @@ const frameworkLabels: Record<PlaygroundFrameworkId, string> = {
   vue: "Vue",
 };
 
-export const playgroundFrameworks: PlaygroundFramework[] = multiFramework.frameworks.map(
-  (framework) => ({
+export const playgroundFrameworks: PlaygroundFramework[] =
+  multiFramework.frameworks.map((framework) => ({
     ...framework,
     label: frameworkLabels[framework.id],
-  }),
-);
+  }));
 
-export const playgroundVersions = Object.entries(releaseGroups.releaseLines).map(
-  ([id, releaseLine]) => ({
-    id,
-    label: `${releaseLine.version} · ${releaseLine.channel}`,
-    version: releaseLine.version,
-    channel: releaseLine.channel,
-  }),
-);
+export const playgroundVersions = Object.entries(
+  releaseGroups.releaseLines,
+).map(([id, releaseLine]) => ({
+  id,
+  label: `${releaseLine.version} · ${releaseLine.channel}`,
+  version: releaseLine.version,
+  channel: releaseLine.channel,
+}));
 
 export const defaultPlaygroundFramework: PlaygroundFrameworkId = "react";
 
 export const defaultPlaygroundVersion =
-  playgroundVersions.find((releaseLine) => releaseLine.id.startsWith("non-grid")) ??
-  playgroundVersions[0];
+  playgroundVersions.find((releaseLine) =>
+    releaseLine.id.startsWith("non-grid"),
+  ) ?? playgroundVersions[0];
