@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { findMissingMarkers } from "./security-workflow-hardening.mjs";
-import "./verify-lane-drift.test.mjs";
 
 test("accepts a complete mandatory security marker set", () => {
   assert.deepEqual(
