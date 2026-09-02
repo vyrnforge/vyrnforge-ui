@@ -189,7 +189,8 @@ export function ComponentDemoPage({
       ? [{ id: "related-components", label: "Related components" }]
       : []),
   ];
-  const resolvedPackage = selectedFrameworkUsage?.package ?? canonical?.package ?? packageName;
+  const resolvedPackage =
+    selectedFrameworkUsage?.package ?? canonical?.package ?? packageName;
   const resolvedImportCode = selectedFrameworkUsage?.setup || importCode;
   const maturity = canonical?.maturity as
     keyof typeof maturityVariant | undefined;
