@@ -55,7 +55,8 @@ export const playgroundFrameworks: PlaygroundFramework[] =
 
 export const defaultPlaygroundFramework: PlaygroundFrameworkId = "react";
 
-const configuredVersionId = import.meta.env.VITE_PLAYGROUND_VERSION_ID || "next";
+const configuredVersionId =
+  import.meta.env.VITE_PLAYGROUND_VERSION_ID || "next";
 const configuredReleaseVersion =
   import.meta.env.VITE_PLAYGROUND_RELEASE_VERSION || "Next";
 const configuredReleaseChannel =
@@ -73,9 +74,7 @@ export const defaultPlaygroundVersion: PlaygroundVersion = {
 };
 
 function versionLabel(entry: VersionCatalogEntry) {
-  return entry.id === "next"
-    ? "Next"
-    : `${entry.version} · ${entry.channel}`;
+  return entry.id === "next" ? "Next" : `${entry.version} · ${entry.channel}`;
 }
 
 export async function loadPlaygroundVersions(): Promise<PlaygroundVersion[]> {

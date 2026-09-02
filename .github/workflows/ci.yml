@@ -114,13 +114,13 @@ jobs:
       RUN_CONSUMER: ${{ needs.plan.outputs.consumer }}
       RUN_DOCS: ${{ needs.plan.outputs.docs }}
       RUN_PLAYGROUND: ${{ needs.plan.outputs.playground }}
-      RUN_PAGES_VERIFY: ${{ needs.plan.outputs.docs == 'true' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
       RUN_PAGES_ARTIFACT: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          fetch-depth: 0
+          fetch-depth: ${{ env.RUN_PAGES_ARTIFACT == 'true' && 0 || 1 }}
+          fetch-tags: ${{ env.RUN_PAGES_ARTIFACT == 'true' }}
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
@@ -141,7 +141,7 @@ jobs:
             test -f test-results/beta-package-artifacts/size-report.json
           elif [[ "$RUN_CONSUMER" == "true" ]]; then
             npm run verify:packages
-          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" || "$RUN_PAGES_VERIFY" == "true" ]]; then
+          elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" || "$RUN_PAGES_ARTIFACT" == "true" ]]; then
             npm run build:packages
           elif [[ "$RUN_DOCS" == "true" ]]; then
             npm run build --workspace @vyrnforge/ui-core
@@ -171,32 +171,29 @@ jobs:
         if: env.RUN_DOCS == 'true'
         run: npm run verify:repository-inventory
       - name: Build documentation application
-        if: env.RUN_DOCS == 'true' && env.RUN_PAGES_VERIFY != 'true'
+        if: env.RUN_DOCS == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
         run: npm run build --workspace @vyrnforge/ui-docs
       - name: Build playground
-        if: env.RUN_PLAYGROUND == 'true' && env.RUN_PAGES_VERIFY != 'true'
+        if: env.RUN_PLAYGROUND == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
       - name: Build documentation application for Pages
-        if: env.RUN_PAGES_VERIFY == 'true'
+        if: env.RUN_PAGES_ARTIFACT == 'true'
         run: npm run build --workspace @vyrnforge/ui-docs
         env:
           VITE_BASE_PATH: /vyrnforge-ui/
-          VITE_DOCS_ROOT_PATH: /vyrnforge-ui/
-          VITE_DOCS_VERSION_ID: next
       - name: Build playground for Pages
-        if: env.RUN_PAGES_VERIFY == 'true'
+        if: env.RUN_PAGES_ARTIFACT == 'true'
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
         env:
           VITE_BASE_PATH: /vyrnforge-ui/playground/
-      - name: Assemble and verify versioned Pages site
-        if: env.RUN_PAGES_VERIFY == 'true'
-        run: |
-          node scripts/assemble-versioned-pages.mjs
-          test -f site/index.html
-          test -f site/playground/index.html
-          test -f site/docs-versions.json
-          test -f site/.nojekyll
-          node -e 'const manifest=require("./site/docs-versions.json"); if (!Array.isArray(manifest.releases) || manifest.releases.length < 1) process.exit(1)'
+          VITE_PLAYGROUND_ROOT_PATH: /vyrnforge-ui/
+          VITE_PLAYGROUND_VERSION_ID: next
+      - name: Assemble versioned Pages reference
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        run: node scripts/assemble-versioned-pages.mjs
+      - name: Verify versioned Pages reference
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        run: node scripts/verify-pages-site.mjs
       - name: Upload commit-bound Pages site
         if: env.RUN_PAGES_ARTIFACT == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -240,6 +237,81 @@ jobs:
           path: |
             test-results/cross-framework-matrix/
             test-results/packed-four-surface-smoke/
+          if-no-files-found: error
+
+  react-compatibility-plan:
+    name: react-compatibility-plan
+    if: >-
+      github.event_name == 'pull_request' &&
+      (github.event.pull_request.base.ref == 'integration/react' ||
+      (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'integration/react'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Read supported React compatibility cases
+        id: matrix
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const { appendFileSync, readFileSync } = require("node:fs");
+          const manifest = JSON.parse(
+            readFileSync("docs/metadata/compatibility-release-matrix.json", "utf8"),
+          );
+          const include = manifest.cases
+            .filter(({ fixture }) => fixture === "react")
+            .map(({ id, node, browser }) => ({ id, node, browser }));
+          if (include.length !== manifest.supportPolicy.react.length) {
+            throw new Error(
+              `React compatibility case count ${include.length} does not match supported React versions ${manifest.supportPolicy.react.length}`,
+            );
+          }
+          appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `matrix=${JSON.stringify({ include })}\n`,
+          );
+          NODE
+
+  react-compatibility:
+    name: react-compatibility-${{ matrix.id }}
+    needs: react-compatibility-plan
+    if: needs.react-compatibility-plan.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.react-compatibility-plan.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Use repository package manager
+        env:
+          npm_config_engine_strict: "false"
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install repository dependencies
+        env:
+          npm_config_engine_strict: "false"
+        run: npm ci
+      - name: Install matrix browser
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run supported React compatibility case
+        env:
+          npm_config_engine_strict: "false"
+        run: npm run verify:compatibility-release-case -- --case ${{ matrix.id }}
+      - name: Upload React compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: react-compatibility-${{ matrix.id }}
+          path: test-results/compatibility-release-matrix/${{ matrix.id }}.json
           if-no-files-found: error
 
   security-checks:
@@ -299,6 +371,8 @@ jobs:
       - plan
       - quality-checks
       - integration-checks
+      - react-compatibility-plan
+      - react-compatibility
       - security-checks
     if: always()
     runs-on: ubuntu-latest
@@ -308,6 +382,8 @@ jobs:
     steps:
       - name: Checkout gate reporter
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
@@ -321,4 +397,12 @@ jobs:
           QUALITY_RESULT: ${{ needs.quality-checks.result }}
           INTEGRATION_RESULT: ${{ needs.integration-checks.result }}
           SECURITY_RESULT: ${{ needs.security-checks.result }}
-        run: node scripts/write-ci-summary.mjs
+          REACT_COMPATIBILITY_REQUIRED: ${{ github.event_name == 'pull_request' && (github.event.pull_request.base.ref == 'integration/react' || (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'integration/react')) }}
+          REACT_COMPATIBILITY_PLAN_RESULT: ${{ needs.react-compatibility-plan.result }}
+          REACT_COMPATIBILITY_RESULT: ${{ needs.react-compatibility.result }}
+        run: |
+          if [[ "$REACT_COMPATIBILITY_REQUIRED" == "true" ]]; then
+            test "$REACT_COMPATIBILITY_PLAN_RESULT" = "success"
+            test "$REACT_COMPATIBILITY_RESULT" = "success"
+          fi
+          node scripts/write-ci-summary.mjs

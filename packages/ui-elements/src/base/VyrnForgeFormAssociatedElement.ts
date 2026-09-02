@@ -208,8 +208,11 @@ export abstract class VyrnForgeFormAssociatedElement<
         attachInternals?: () => ElementInternals;
       }
     ).attachInternals;
-    return typeof attachInternals === "function"
-      ? attachInternals.call(this)
+    if (typeof attachInternals !== "function") return null;
+
+    const internals = attachInternals.call(this);
+    return typeof internals.setFormValue === "function"
+      ? (internals as VyrnForgeFormInternals)
       : null;
   }
 

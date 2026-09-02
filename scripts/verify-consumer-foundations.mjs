@@ -12,14 +12,14 @@ const repositoryRoot = path.resolve(
 
 const allowedFixtureClaims = new Map([
   ["native-html", new Set(["packed-runtime-verified"])],
-  ["react", new Set(["packed-custom-elements-runtime-verified"])],
+  ["react", new Set(["packed-react-public-package-runtime-verified"])],
   ["angular", new Set(["packed-angular-runtime-verified"])],
   ["vue", new Set(["packed-vue-runtime-verified"])],
 ]);
 
 const allowedBetaClaims = new Map([
   ["native-html", new Set(["packed-consumer-verified"])],
-  ["react", new Set(["custom-elements-consumer-verified"])],
+  ["react", new Set(["react-public-package-consumer-verified"])],
   ["angular", new Set(["packed-consumer-verified"])],
   ["vue", new Set(["packed-consumer-verified"])],
 ]);
@@ -34,7 +34,6 @@ const requiredDocuments = [
   "tests/consumers/native-html/src/main.ts",
   "tests/consumers/react/package.json",
   "tests/consumers/react/src/main.tsx",
-  "tests/consumers/react/src/vyrnforge-elements.d.ts",
   "tests/consumers/vue/package.json",
   "tests/consumers/vue/src/main.ts",
   "tests/consumers/vue/src/App.vue",
@@ -286,6 +285,15 @@ function verifyFixtures(root, failures, metadata, architecture) {
         addFailure(
           failures,
           `${fixture.id} fixture examples are missing required pattern ${pattern}`,
+        );
+      }
+    }
+
+    for (const pattern of contract.forbiddenPatterns ?? []) {
+      if (exampleText.includes(pattern)) {
+        addFailure(
+          failures,
+          `${fixture.id} fixture examples contain forbidden pattern ${pattern}`,
         );
       }
     }

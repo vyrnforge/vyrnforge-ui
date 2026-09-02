@@ -25,10 +25,10 @@ const releaseGroupsPath = path.join(
   "docs/metadata/release-groups.json",
 );
 const releaseGroups = JSON.parse(readFileSync(releaseGroupsPath, "utf8"));
+const releaseLineEntries = Object.entries(releaseGroups.releaseLines ?? {});
 const primaryReleaseLine =
-  Object.entries(releaseGroups.releaseLines ?? {}).find(([id]) =>
-    id.startsWith("non-grid"),
-  ) ?? Object.entries(releaseGroups.releaseLines ?? {})[0];
+  releaseLineEntries.find(([id]) => id.startsWith("non-grid")) ??
+  releaseLineEntries[0];
 
 if (!primaryReleaseLine?.[1]?.version) {
   throw new Error("Missing primary release-line metadata for documentation.");
@@ -93,31 +93,34 @@ function discoverDocumentationReleases() {
     ["for-each-ref", "--format=%(refname:strip=2)", "refs/tags"],
     { cwd: repositoryRoot, encoding: "utf8" },
   )
-    .split(/\r?\n/)
+    .split(/\r?\n/u)
     .map((tag) => tag.trim())
     .filter(Boolean);
 
   const releases = [];
   const seenVersions = new Set();
   for (const tag of refs) {
-    const canonical = tag.match(/^(non-grid[^/]*)\/v(.+)$/);
-    const legacy = tag.match(/^v(.+)$/);
+    const canonical = tag.match(/^(non-grid[^/]*)\/v(.+)$/u);
+    const legacy = tag.match(/^v(.+)$/u);
     const version = canonical?.[2] ?? legacy?.[1];
     if (!version || !parseSemver(version) || seenVersions.has(version)) {
       continue;
     }
 
+    const releaseLine =
+      canonical?.[1] ??
+      (version === primaryRelease.version
+        ? primaryReleaseLineId
+        : "non-grid-legacy");
     releases.push({
       id: `v${version}`,
-      releaseLine:
-        canonical?.[1] ??
-        (version === primaryRelease.version
-          ? primaryReleaseLineId
-          : "non-grid-legacy"),
+      releaseLine,
       version,
       channel: channelForVersion(version),
       tag,
       path: `/versions/v${version}/`,
+      docsPath: `/versions/v${version}/`,
+      playgroundPath: `/versions/v${version}/playground/`,
       legacy: Boolean(legacy && !canonical),
     });
     seenVersions.add(version);
@@ -126,10 +129,10 @@ function discoverDocumentationReleases() {
   return releases.sort(compareVersions);
 }
 
-function buildReleasedDocs(release) {
+function buildReleasedReference(release) {
   const worktree = path.join(
     repositoryRoot,
-    `.pages-release-worktree-${release.version.replace(/[^0-9A-Za-z.-]/g, "-")}`,
+    `.pages-release-worktree-${release.version.replace(/[^0-9A-Za-z.-]/gu, "-")}`,
   );
   const snapshot = path.join(snapshotsDirectory, `v${release.version}`);
   rmSync(worktree, { recursive: true, force: true });
@@ -141,7 +144,11 @@ function buildReleasedDocs(release) {
       cwd: worktree,
       stdio: "inherit",
     });
-    execFileSync("npm", ["run", "build:docs"], {
+    execFileSync("npm", ["run", "build:packages"], {
+      cwd: worktree,
+      stdio: "inherit",
+    });
+    execFileSync("npm", ["run", "build", "--workspace", "@vyrnforge/ui-docs"], {
       cwd: worktree,
       env: {
         ...process.env,
@@ -154,7 +161,34 @@ function buildReleasedDocs(release) {
       },
       stdio: "inherit",
     });
+    execFileSync(
+      "npm",
+      [
+        "run",
+        "build",
+        "--workspace",
+        "@vyrnforge/ui-data-grid-basic-playground",
+      ],
+      {
+        cwd: worktree,
+        env: {
+          ...process.env,
+          VITE_BASE_PATH: `/vyrnforge-ui/versions/v${release.version}/playground/`,
+          VITE_PLAYGROUND_ROOT_PATH: "/vyrnforge-ui/",
+          VITE_PLAYGROUND_VERSION_ID: release.id,
+          VITE_PLAYGROUND_RELEASE_LINE: release.releaseLine,
+          VITE_PLAYGROUND_RELEASE_VERSION: release.version,
+          VITE_PLAYGROUND_RELEASE_CHANNEL: release.channel,
+        },
+        stdio: "inherit",
+      },
+    );
+
     copyDirectory(path.join(worktree, "apps/docs/dist"), snapshot);
+    copyDirectory(
+      path.join(worktree, "examples/basic-playground/dist"),
+      path.join(snapshot, "playground"),
+    );
   } finally {
     run("git", ["worktree", "remove", "--force", worktree]);
   }
@@ -168,7 +202,7 @@ if (releases.length === 0) {
 rmSync(snapshotsDirectory, { recursive: true, force: true });
 mkdirSync(snapshotsDirectory, { recursive: true });
 for (const release of releases) {
-  buildReleasedDocs(release);
+  buildReleasedReference(release);
 }
 
 rmSync(siteDirectory, { recursive: true, force: true });
@@ -186,27 +220,65 @@ for (const release of releases) {
 }
 rmSync(snapshotsDirectory, { recursive: true, force: true });
 
+const currentCommit =
+  process.env.GITHUB_SHA ??
+  execFileSync("git", ["rev-parse", "HEAD"], {
+    cwd: repositoryRoot,
+    encoding: "utf8",
+  }).trim();
+const current = {
+  id: "next",
+  releaseLine: primaryReleaseLineId,
+  version: primaryRelease.version,
+  channel: "next",
+  sourceChannel: primaryRelease.channel,
+  path: "/",
+  docsPath: "/",
+  playgroundPath: "/playground/",
+  commit: currentCommit,
+};
+const releaseLines = releaseLineEntries.map(([id, releaseLine]) => ({
+  id,
+  intent: releaseLine.intent,
+  channel: releaseLine.channel,
+  version: releaseLine.version,
+  distTag: releaseLine.distTag,
+  publishable: Boolean(releaseLine.publication?.publishable),
+  publishTogether: Boolean(releaseLine.publication?.publishTogether),
+  packages: (releaseLine.packages ?? []).map(
+    (packageEntry) => packageEntry.name,
+  ),
+}));
+const versionCatalog = {
+  schemaVersion: 2,
+  generatedFrom: "docs/metadata/release-groups.json + Git release tags",
+  current,
+  releaseLines,
+  releases,
+};
+const legacyDocsManifest = {
+  schemaVersion: 1,
+  current: {
+    id: current.id,
+    releaseLine: current.releaseLine,
+    version: current.version,
+    path: current.path,
+  },
+  releases,
+};
+
 writeFileSync(path.join(siteDirectory, ".nojekyll"), "");
 writeFileSync(
+  path.join(siteDirectory, "vyrnforge-versions.json"),
+  `${JSON.stringify(versionCatalog, null, 2)}\n`,
+);
+writeFileSync(
   path.join(siteDirectory, "docs-versions.json"),
-  `${JSON.stringify(
-    {
-      schemaVersion: 1,
-      current: {
-        id: "next",
-        releaseLine: primaryReleaseLineId,
-        version: primaryRelease.version,
-        path: "/",
-      },
-      releases,
-    },
-    null,
-    2,
-  )}\n`,
+  `${JSON.stringify(legacyDocsManifest, null, 2)}\n`,
 );
 
 console.log(
-  `Assembled Pages site with next docs and ${releases.length} retained non-grid release snapshot(s): ${releases
+  `Assembled Pages reference with current main and ${releases.length} retained release snapshot(s): ${releases
     .map((release) => release.version)
     .join(", ")}.`,
 );

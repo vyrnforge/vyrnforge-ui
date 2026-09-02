@@ -68,7 +68,10 @@ export function OverviewPage({
 
   return (
     <div className="vf-docs-overview">
-      <section className="vf-docs-overview__hero" aria-labelledby="vf-overview-title">
+      <section
+        className="vf-docs-overview__hero"
+        aria-labelledby="vf-overview-title"
+      >
         <Stack gap="lg">
           <div>
             <div className="vf-docs-overview__eyebrow">VyrnForge UI</div>
@@ -77,9 +80,9 @@ export function OverviewPage({
             </Heading>
           </div>
           <Text size="lg" tone="muted" className="vf-docs-overview__lede">
-            Build enterprise web applications with shared design tokens, behavior
-            contracts, accessibility rules, component semantics, and release
-            evidence across Native HTML, React, Angular, and Vue.
+            Build enterprise web applications with shared design tokens,
+            behavior contracts, accessibility rules, component semantics, and
+            release evidence across Native HTML, React, Angular, and Vue.
           </Text>
           <Inline gap="sm" className="vf-docs-overview__actions">
             <Button onClick={() => onRouteChange("component-reference")}>
@@ -95,7 +98,10 @@ export function OverviewPage({
         </Stack>
       </section>
 
-      <section className="vf-docs-overview__section" aria-labelledby="vf-surface-title">
+      <section
+        className="vf-docs-overview__section"
+        aria-labelledby="vf-surface-title"
+      >
         <Stack gap="md">
           <div>
             <Heading id="vf-surface-title" level={2} size="lg">
@@ -145,7 +151,9 @@ export function OverviewPage({
                       variant={selected ? "subtle" : "ghost"}
                       onClick={() => onFrameworkChange(candidate.id)}
                     >
-                      {selected ? "Using this surface" : `Use ${candidate.label}`}
+                      {selected
+                        ? "Using this surface"
+                        : `Use ${candidate.label}`}
                     </Button>
                   </Stack>
                 </Card>
@@ -155,7 +163,10 @@ export function OverviewPage({
         </Stack>
       </section>
 
-      <section className="vf-docs-overview__section" aria-labelledby="vf-discover-title">
+      <section
+        className="vf-docs-overview__section"
+        aria-labelledby="vf-discover-title"
+      >
         <Stack gap="md">
           <div>
             <Heading id="vf-discover-title" level={2} size="lg">
@@ -190,7 +201,10 @@ export function OverviewPage({
         </Stack>
       </section>
 
-      <section className="vf-docs-overview__section" aria-labelledby="vf-release-title">
+      <section
+        className="vf-docs-overview__section"
+        aria-labelledby="vf-release-title"
+      >
         <Card padding="md" variant="bordered">
           <Stack gap="md">
             <div>
@@ -206,7 +220,8 @@ export function OverviewPage({
             <Inline gap="sm" className="vf-docs-overview__release-lines">
               {releaseLineVersions.map((releaseLine) => (
                 <Badge key={releaseLine.id} variant="neutral" tone="subtle">
-                  {releaseLine.id} · {releaseLine.version} · {releaseLine.channel}
+                  {releaseLine.id} · {releaseLine.version} ·{" "}
+                  {releaseLine.channel}
                 </Badge>
               ))}
             </Inline>

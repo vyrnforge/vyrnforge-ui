@@ -18,6 +18,10 @@ permissions:
   actions: read
   contents: read
 
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
 jobs:
   prepare:
     name: prepare-pages
@@ -77,11 +81,33 @@ jobs:
             --dir site
       - name: Verify downloaded Pages site
         shell: bash
+        env:
+          EXPECTED_HEAD_SHA: ${{ steps.candidate.outputs.head-sha }}
         run: |
           test -f site/index.html
           test -f site/playground/index.html
           test -f site/.nojekyll
+          test -f site/vyrnforge-versions.json
           test -f site/docs-versions.json
+          node - <<'NODE'
+          const { existsSync, readFileSync } = require("node:fs");
+          const path = require("node:path");
+          const catalog = JSON.parse(readFileSync("site/vyrnforge-versions.json", "utf8"));
+          if (catalog.schemaVersion !== 2) throw new Error("Unsupported version catalog schema.");
+          if (catalog.current?.commit !== process.env.EXPECTED_HEAD_SHA) {
+            throw new Error("Pages version catalog is not bound to the selected main commit.");
+          }
+          if (!Array.isArray(catalog.releases) || catalog.releases.length === 0) {
+            throw new Error("Pages version catalog has no retained releases.");
+          }
+          for (const release of catalog.releases) {
+            const docs = path.join("site", release.docsPath.replace(/^\/+|\/+$/g, ""), "index.html");
+            const playground = path.join("site", release.playgroundPath.replace(/^\/+|\/+$/g, ""), "index.html");
+            if (!existsSync(docs) || !existsSync(playground)) {
+              throw new Error(`Incomplete retained release ${release.id}.`);
+            }
+          }
+          NODE
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - name: Upload Pages artifact
@@ -91,9 +117,6 @@ jobs:
 
   deploy:
     name: deploy-pages
-    concurrency:
-      group: github-pages
-      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -208,8 +208,10 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   );
   for (const marker of [
     "consumer-knowledge.json",
-    "framework-usage",
     "canonicalKnowledge",
+    "usePlaygroundFramework",
+    "selectedFrameworkUsage",
+    'title="Usage"',
   ]) {
     if (!playgroundPage.includes(marker))
       failures.push(`playground component reference is missing ${marker}`);
