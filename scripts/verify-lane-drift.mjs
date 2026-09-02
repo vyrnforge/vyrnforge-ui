@@ -75,6 +75,16 @@ export function refContainsOrMatchesMain(mainRef, laneRef, options = {}) {
     return { current: true, reason: "contains-main" };
   }
 
+  const firstParentTrees = git(
+    ["log", "--first-parent", "--format=%T", laneRef],
+    options,
+  )
+    ?.split("\n")
+    .filter(Boolean);
+  if (firstParentTrees?.includes(mainTree)) {
+    return { current: true, reason: "contains-main-content" };
+  }
+
   const mergedTree = git(["merge-tree", "--write-tree", mainRef, laneRef], {
     ...options,
     allowFailure: true,
