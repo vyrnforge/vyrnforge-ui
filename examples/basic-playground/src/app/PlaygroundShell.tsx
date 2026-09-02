@@ -131,7 +131,8 @@ export function PlaygroundShell({
           }
           userArea={
             <Badge tone="subtle">
-              {selectedFramework?.label ?? frameworkId} · {selectedVersion?.channel ?? "current"}
+              {selectedFramework?.label ?? frameworkId} ·{" "}
+              {selectedVersion?.channel ?? "current"}
             </Badge>
           }
         />
@@ -153,7 +154,9 @@ export function PlaygroundShell({
       <Page
         actions={
           <div className="vf-playground-page-context">
-            <Badge tone="subtle">{selectedFramework?.label ?? frameworkId}</Badge>
+            <Badge tone="subtle">
+              {selectedFramework?.label ?? frameworkId}
+            </Badge>
             <Badge tone="subtle">{selectedVersion?.version ?? versionId}</Badge>
           </div>
         }
