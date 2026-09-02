@@ -44,11 +44,7 @@ function fetchRef(remote, ref, { fullHistory = false, ...options } = {}) {
   git([...args, remote, ref], options);
 }
 
-function ensureCommit(
-  remote,
-  sha,
-  { fullHistory = false, ...options } = {},
-) {
+function ensureCommit(remote, sha, { fullHistory = false, ...options } = {}) {
   if (fullHistory) {
     fetchRef(remote, sha, { ...options, fullHistory: true });
     return;
