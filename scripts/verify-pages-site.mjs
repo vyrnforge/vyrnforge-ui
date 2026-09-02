@@ -40,7 +40,8 @@ assert(
   "Version catalog must expose current main as next.",
 );
 assert(
-  typeof catalog.current?.commit === "string" && catalog.current.commit.length >= 7,
+  typeof catalog.current?.commit === "string" &&
+    catalog.current.commit.length >= 7,
   "Version catalog current entry must be commit-bound.",
 );
 assert(
