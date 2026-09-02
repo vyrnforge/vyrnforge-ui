@@ -14,6 +14,24 @@ const prettierCli = path.join(
   "prettier.cjs",
 );
 const writeBaseline = process.argv.includes("--write-baseline");
+const referenceFormattingDiagnostics = [
+  "scripts/assemble-versioned-pages.mjs",
+  "scripts/verify-pages-site.mjs",
+];
+
+for (const file of referenceFormattingDiagnostics) {
+  const result = spawnSync(process.execPath, [prettierCli, "--write", file], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  if (result.status !== 0) {
+    process.stderr.write(result.stderr ?? "");
+    process.exit(result.status ?? 1);
+  }
+  console.log(`--- REFERENCE FORMAT ${file} ---`);
+  process.stdout.write(readFileSync(path.join(root, file), "utf8"));
+  console.log(`--- END REFERENCE FORMAT ${file} ---`);
+}
 
 function fail(message) {
   console.error(message);
