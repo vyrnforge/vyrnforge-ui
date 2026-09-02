@@ -92,13 +92,20 @@ export function verifyPullRequestLaneDrift({
     if (headRef === "main") {
       return { mode: "lane-sync", current: true, reason: "main-sync-pr" };
     }
-    const status = refContainsOrMatchesMain(mainRef, baseSha, { cwd });
-    if (!status.current) {
+
+    const baseStatus = refContainsOrMatchesMain(mainRef, baseSha, { cwd });
+    if (!baseStatus.current) {
+      if (headRef.startsWith("sync/")) {
+        const headStatus = refContainsOrMatchesMain(mainRef, headSha, { cwd });
+        if (headStatus.current) {
+          return { mode: "lane-sync", ...headStatus };
+        }
+      }
       throw new Error(
         `${baseRef} is stale relative to main; synchronize main -> ${baseRef} before merging task work`,
       );
     }
-    return { mode: "task", ...status };
+    return { mode: "task", ...baseStatus };
   }
 
   if (baseRef === "main" && headRef.startsWith("integration/")) {
