@@ -98,7 +98,6 @@ test("accepts a sync branch containing current main when the target lane is stal
   const cwd = repository();
   const base = git(cwd, "rev-parse", "HEAD");
   const main = commit(cwd, "state.txt", "main\n", "main change");
-  git(cwd, "branch", "-f", "main", main);
   git(cwd, "switch", "-c", "integration/platform", base);
   const lane = commit(cwd, "lane.txt", "lane\n", "lane work");
   git(cwd, "switch", "-c", "sync/platform-current-main", main);
@@ -125,7 +124,6 @@ test("rejects an ordinary task branch when the target lane is stale", () => {
   const cwd = repository();
   const base = git(cwd, "rev-parse", "HEAD");
   const main = commit(cwd, "state.txt", "main\n", "main change");
-  git(cwd, "branch", "-f", "main", main);
   git(cwd, "switch", "-c", "integration/platform", base);
   const lane = commit(cwd, "lane.txt", "lane\n", "lane work");
   git(cwd, "switch", "-c", "feat/platform-task");
