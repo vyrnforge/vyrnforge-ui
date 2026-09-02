@@ -148,26 +148,27 @@ function buildReleasedReference(release) {
       cwd: worktree,
       stdio: "inherit",
     });
-    execFileSync(
-      "npm",
-      ["run", "build", "--workspace", "@vyrnforge/ui-docs"],
-      {
-        cwd: worktree,
-        env: {
-          ...process.env,
-          VITE_BASE_PATH: `/vyrnforge-ui/versions/v${release.version}/`,
-          VITE_DOCS_ROOT_PATH: "/vyrnforge-ui/",
-          VITE_DOCS_VERSION_ID: release.id,
-          VITE_DOCS_RELEASE_LINE: release.releaseLine,
-          VITE_DOCS_RELEASE_VERSION: release.version,
-          VITE_DOCS_RELEASE_CHANNEL: release.channel,
-        },
-        stdio: "inherit",
+    execFileSync("npm", ["run", "build", "--workspace", "@vyrnforge/ui-docs"], {
+      cwd: worktree,
+      env: {
+        ...process.env,
+        VITE_BASE_PATH: `/vyrnforge-ui/versions/v${release.version}/`,
+        VITE_DOCS_ROOT_PATH: "/vyrnforge-ui/",
+        VITE_DOCS_VERSION_ID: release.id,
+        VITE_DOCS_RELEASE_LINE: release.releaseLine,
+        VITE_DOCS_RELEASE_VERSION: release.version,
+        VITE_DOCS_RELEASE_CHANNEL: release.channel,
       },
-    );
+      stdio: "inherit",
+    });
     execFileSync(
       "npm",
-      ["run", "build", "--workspace", "@vyrnforge/ui-data-grid-basic-playground"],
+      [
+        "run",
+        "build",
+        "--workspace",
+        "@vyrnforge/ui-data-grid-basic-playground",
+      ],
       {
         cwd: worktree,
         env: {
