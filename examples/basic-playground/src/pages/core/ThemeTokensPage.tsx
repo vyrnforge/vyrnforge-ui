@@ -1,30 +1,5 @@
 import { Heading, Text } from "@vyrnforge/ui-components";
-
-const tokens = [
-  ["Background", "--vf-bg", "var(--vf-bg)"],
-  ["Surface", "--vf-surface", "var(--vf-surface)"],
-  ["Subtle surface", "--vf-surface-subtle", "var(--vf-surface-subtle)"],
-  ["Text", "--vf-text", "var(--vf-text)"],
-  ["Muted text", "--vf-text-muted", "var(--vf-text-muted)"],
-  ["Border", "--vf-border", "var(--vf-border)"],
-  ["Primary", "--vf-primary", "var(--vf-primary)"],
-  ["Danger", "--vf-danger", "var(--vf-danger)"],
-  ["Warning", "--vf-warning", "var(--vf-warning)"],
-  ["Success", "--vf-success", "var(--vf-success)"],
-  ["Info", "--vf-info", "var(--vf-info)"],
-  ["Focus", "--vf-focus-ring", "var(--vf-focus-ring)"],
-];
-
-const scaleTokens = [
-  ["Small radius", "--vf-radius-sm"],
-  ["Medium radius", "--vf-radius-md"],
-  ["Large radius", "--vf-radius-lg"],
-  ["Control height", "--vf-control-height"],
-  ["Row height", "--vf-row-height"],
-  ["Space 2", "--vf-space-2"],
-  ["Space 3", "--vf-space-3"],
-  ["Space 4", "--vf-space-4"],
-];
+import { referenceTokenCategories } from "../../data/referenceMetadata";
 
 export function ThemeTokensPage() {
   return (
@@ -33,36 +8,40 @@ export function ThemeTokensPage() {
         <div>
           <Heading size="md">Shared vf token contract</Heading>
           <Text tone="muted">
-            Components and grid examples inherit these values from ui-core.
+            This page is generated from the canonical ui-core token metadata for
+            the selected VyrnForge snapshot.
           </Text>
         </div>
       </div>
-      <div className="vf-playground-token-grid">
-        {tokens.map(([label, name, value]) => (
-          <div className="vf-playground-token-card" key={name}>
-            <span
-              className="vf-playground-token-swatch"
-              style={{ background: value }}
-            />
-            <strong>{label}</strong>
-            <code>{name}</code>
+
+      {referenceTokenCategories.map((category) => (
+        <section className="vf-playground-section" key={category.id}>
+          <div className="vf-playground-section-heading">
+            <div>
+              <Heading size="sm">{category.id}</Heading>
+              <Text tone="muted">{category.purpose}</Text>
+            </div>
           </div>
-        ))}
-      </div>
-      <div className="vf-playground-scale-grid">
-        {scaleTokens.map(([label, name]) => (
-          <div className="vf-playground-scale-row" key={name}>
-            <strong>{label}</strong>
-            <code>{name}</code>
-            <span
-              style={{
-                width: `var(${name}, 24px)`,
-                borderRadius: name.includes("radius") ? `var(${name}, 8px)` : 4,
-              }}
-            />
+          <div className="vf-playground-token-grid">
+            {category.tokens.map((token) => (
+              <div className="vf-playground-token-card" key={token.name}>
+                {token.themeScoped && (
+                  <span
+                    aria-hidden="true"
+                    className="vf-playground-token-swatch"
+                    style={{ background: `var(${token.name})` }}
+                  />
+                )}
+                <strong>{token.purpose}</strong>
+                <code>{token.name}</code>
+                <Text size="sm" tone="muted">
+                  {token.themeScoped ? "Theme scoped" : "Shared scale"}
+                </Text>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </section>
+      ))}
     </section>
   );
 }
