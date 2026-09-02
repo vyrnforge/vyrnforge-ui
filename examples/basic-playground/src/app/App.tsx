@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { PlaygroundShell } from "./PlaygroundShell";
+import {
+  defaultPlaygroundFramework,
+  defaultPlaygroundVersion,
+  type PlaygroundFrameworkId,
+} from "./playgroundContext";
 import { routes } from "./routes";
 
 function normalizeHashRoute(hash: string) {
@@ -15,15 +20,33 @@ function getRouteFromHash() {
   });
 }
 
+function getFrameworkFromLocation(): PlaygroundFrameworkId {
+  const framework = new URLSearchParams(window.location.search).get(
+    "framework",
+  );
+  return framework === "native-html" ||
+    framework === "react" ||
+    framework === "angular" ||
+    framework === "vue"
+    ? framework
+    : defaultPlaygroundFramework;
+}
+
 export default function App() {
   const [activeRouteId, setActiveRouteId] = useState(() => {
     return getRouteFromHash()?.id ?? routes[0].id;
   });
   const [density, setDensity] = useState("standard");
+  const [frameworkId, setFrameworkId] = useState<PlaygroundFrameworkId>(
+    getFrameworkFromLocation,
+  );
   const [theme, setTheme] = useState("light");
+  const [versionId, setVersionId] = useState(
+    defaultPlaygroundVersion?.id ?? "current",
+  );
   const activeRoute = useMemo(
     () => routes.find((route) => route.id === activeRouteId) ?? routes[0],
-    [activeRouteId]
+    [activeRouteId],
   );
   const ActivePage = activeRoute.Component;
 
@@ -49,15 +72,30 @@ export default function App() {
     setActiveRouteId(routeId);
   };
 
+  const changeFramework = (nextFrameworkId: PlaygroundFrameworkId) => {
+    const query = new URLSearchParams(window.location.search);
+    query.set("framework", nextFrameworkId);
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}?${query.toString()}${window.location.hash}`,
+    );
+    setFrameworkId(nextFrameworkId);
+  };
+
   return (
     <PlaygroundShell
       activeRoute={activeRoute}
       activeRouteId={activeRoute.id}
       density={density}
+      frameworkId={frameworkId}
       routes={routes}
+      versionId={versionId}
       onRouteChange={changeRoute}
       onDensityChange={setDensity}
+      onFrameworkChange={changeFramework}
       onThemeChange={setTheme}
+      onVersionChange={setVersionId}
       theme={theme}
     >
       <ActivePage />
