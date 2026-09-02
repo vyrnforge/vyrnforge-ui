@@ -34,7 +34,10 @@ requireFile(".nojekyll");
 const catalog = readJson("vyrnforge-versions.json");
 const legacyDocsManifest = readJson("docs-versions.json");
 
-assert(catalog.schemaVersion === 2, "Unsupported VyrnForge version catalog schema.");
+assert(
+  catalog.schemaVersion === 2,
+  "Unsupported VyrnForge version catalog schema.",
+);
 assert(
   catalog.current?.id === "next",
   "Version catalog must expose current main as next.",
