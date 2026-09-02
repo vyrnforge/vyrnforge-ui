@@ -9,6 +9,8 @@ import {
   type TabItem,
 } from "@vyrnforge/ui-components";
 import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
+import { usePlaygroundFramework } from "../app/PlaygroundFrameworkContext";
+import type { PlaygroundFrameworkId } from "../app/playgroundContext";
 import { CodeBlock } from "./CodeBlock";
 import { PageOutline, type PageOutlineItem } from "./PageOutline";
 import { PropsTable, type PropsTableRow } from "./PropsTable";
@@ -155,7 +157,9 @@ export function ComponentDemoPage({
   props,
   relatedComponents,
 }: ComponentDemoPageProps) {
+  const { frameworkId, onFrameworkChange } = usePlaygroundFramework();
   const canonical = getCanonicalKnowledge(title);
+  const selectedFrameworkUsage = canonical?.frameworks[frameworkId];
   const canonicalUseWhen = canonical?.guidance.useWhen
     ? [canonical.guidance.useWhen]
     : useWhen;
@@ -168,9 +172,10 @@ export function ComponentDemoPage({
         ...(canonical.contract?.accessibility ?? []),
       ]
     : accessibility;
+  const importSectionLabel = frameworkId === "react" ? "Import" : "Setup";
   const outlineItems: PageOutlineItem[] = [
     { id: "overview", label: "Overview" },
-    { id: "import", label: "Import" },
+    { id: "import", label: importSectionLabel },
     ...(canonical ? [{ id: "framework-usage", label: "Framework usage" }] : []),
     ...sections.map(({ id, label }) => ({ id, label })),
     ...(canonicalUseWhen?.length || canonicalAvoidWhen?.length
@@ -184,7 +189,9 @@ export function ComponentDemoPage({
       ? [{ id: "related-components", label: "Related components" }]
       : []),
   ];
-  const resolvedPackage = canonical?.package ?? packageName;
+  const resolvedPackage =
+    selectedFrameworkUsage?.package ?? canonical?.package ?? packageName;
+  const resolvedImportCode = selectedFrameworkUsage?.setup || importCode;
   const maturity = canonical?.maturity as
     keyof typeof maturityVariant | undefined;
 
@@ -215,8 +222,8 @@ export function ComponentDemoPage({
           />
         </section>
         <section className="vf-playground-section" id="import">
-          <Panel title="Import">
-            <CodeBlock code={importCode} />
+          <Panel title={importSectionLabel}>
+            <CodeBlock code={resolvedImportCode} />
           </Panel>
         </section>
         {canonical && (
@@ -229,8 +236,11 @@ export function ComponentDemoPage({
               <Tabs
                 aria-label={`${title} framework usage`}
                 items={frameworkTabs(canonical)}
-                defaultValue="react"
+                onValueChange={(value) =>
+                  onFrameworkChange(value as PlaygroundFrameworkId)
+                }
                 size="sm"
+                value={frameworkId}
               />
             </Panel>
           </section>
