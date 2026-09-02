@@ -39,6 +39,9 @@ export default function App() {
     getFrameworkFromLocation,
   );
   const [theme, setTheme] = useState("light");
+  const [versionId, setVersionId] = useState(
+    defaultPlaygroundVersion?.id ?? "current",
+  );
   const activeRoute = useMemo(
     () => routes.find((route) => route.id === activeRouteId) ?? routes[0],
     [activeRouteId],
@@ -85,11 +88,12 @@ export default function App() {
       density={density}
       frameworkId={frameworkId}
       routes={routes}
-      versionId={defaultPlaygroundVersion?.id ?? "current"}
+      versionId={versionId}
       onRouteChange={changeRoute}
       onDensityChange={setDensity}
       onFrameworkChange={changeFramework}
       onThemeChange={setTheme}
+      onVersionChange={setVersionId}
       theme={theme}
     >
       <ActivePage />
