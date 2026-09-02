@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { PlaygroundFrameworkProvider } from "./PlaygroundFrameworkContext";
 import { PlaygroundShell } from "./PlaygroundShell";
 import {
   defaultPlaygroundFramework,
@@ -82,21 +83,26 @@ export default function App() {
   };
 
   return (
-    <PlaygroundShell
-      activeRoute={activeRoute}
-      activeRouteId={activeRoute.id}
-      density={density}
+    <PlaygroundFrameworkProvider
       frameworkId={frameworkId}
-      routes={routes}
-      versionId={versionId}
-      onRouteChange={changeRoute}
-      onDensityChange={setDensity}
       onFrameworkChange={changeFramework}
-      onThemeChange={setTheme}
-      onVersionChange={setVersionId}
-      theme={theme}
     >
-      <ActivePage />
-    </PlaygroundShell>
+      <PlaygroundShell
+        activeRoute={activeRoute}
+        activeRouteId={activeRoute.id}
+        density={density}
+        frameworkId={frameworkId}
+        routes={routes}
+        versionId={versionId}
+        onRouteChange={changeRoute}
+        onDensityChange={setDensity}
+        onFrameworkChange={changeFramework}
+        onThemeChange={setTheme}
+        onVersionChange={setVersionId}
+        theme={theme}
+      >
+        <ActivePage />
+      </PlaygroundShell>
+    </PlaygroundFrameworkProvider>
   );
 }
