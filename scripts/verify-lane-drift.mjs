@@ -27,11 +27,28 @@ function git(args, { cwd = process.cwd(), allowFailure = false } = {}) {
   }
 }
 
+function isShallowRepository(options = {}) {
+  return (
+    git(["rev-parse", "--is-shallow-repository"], {
+      ...options,
+      allowFailure: true,
+    }) === "true"
+  );
+}
+
 function fetchRef(remote, ref, options = {}) {
-  git(["fetch", "--no-tags", remote, ref], options);
+  const args = ["fetch", "--no-tags"];
+  if (isShallowRepository(options)) {
+    args.push("--depth=2147483647");
+  }
+  git([...args, remote, ref], options);
 }
 
 function ensureCommit(remote, sha, options = {}) {
+  if (isShallowRepository(options)) {
+    fetchRef(remote, sha, options);
+    return;
+  }
   if (
     git(["cat-file", "-e", `${sha}^{commit}`], {
       ...options,
