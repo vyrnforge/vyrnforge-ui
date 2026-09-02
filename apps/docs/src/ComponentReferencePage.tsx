@@ -9,6 +9,7 @@ import {
 
 import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
+import type { DocsFrameworkId } from "./docsContext";
 
 type FrameworkUsage = {
   label: string;
@@ -41,15 +42,17 @@ type ComponentReferenceItem = {
     tagName: string;
     description: string;
   } | null;
-  frameworks: Record<
-    "react" | "native-html" | "angular" | "vue",
-    FrameworkUsage
-  >;
+  frameworks: Record<DocsFrameworkId, FrameworkUsage>;
   contract: ContractDetail | null;
 };
 
 type ConsumerKnowledge = {
   components: ComponentReferenceItem[];
+};
+
+type ComponentReferencePageProps = {
+  frameworkId: DocsFrameworkId;
+  onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
 };
 
 const reference = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
@@ -157,7 +160,10 @@ const componentAreas = Object.entries(
   ),
 ).sort(([left], [right]) => left.localeCompare(right));
 
-export function ComponentReferencePage() {
+export function ComponentReferencePage({
+  frameworkId,
+  onFrameworkChange,
+}: ComponentReferencePageProps) {
   return (
     <div className="vf-docs-reference">
       {componentAreas.map(([area, components]) => (
@@ -202,9 +208,12 @@ export function ComponentReferencePage() {
                     <Tabs
                       aria-label={`${component.displayName} framework usage`}
                       className="vf-docs-framework-tabs"
-                      defaultValue="react"
                       items={frameworkTabs(component)}
+                      onValueChange={(value) =>
+                        onFrameworkChange(value as DocsFrameworkId)
+                      }
                       size="sm"
+                      value={frameworkId}
                     />
 
                     <div className="vf-docs-contract-section">
