@@ -40,12 +40,6 @@ Do not establish permanent dependency chains such as `foundation -> native -> re
 
 Lane synchronization is repository state maintenance, not a new feature change. A synchronization push must not start another expensive CI run when the incoming commits have already crossed the required `main` validation boundary.
 
-Lane freshness is enforced by the stable `ci-gate`, not by making framework lanes depend on one another. For every task PR targeting `integration/<lane>`, the target lane must already contain current `main` or have an identical tree to current `main` where squash promotion produced equivalent content with different commit ancestry. A `main` -> `integration/<lane>` synchronization PR is explicitly allowed even when the lane is stale. For every `integration/<lane>` -> `main` promotion PR, the lane head must contain the current `main` base or be tree-equivalent before promotion is allowed.
-
-The tree-equivalence exception is intentionally narrow. It exists for cases such as a squash promotion where the lane and `main` have the same repository content but sibling commit identities. It must not be used to excuse missing `main` content or to force-move protected lane refs.
-
-Weekly assurance also audits all persistent integration lanes against `main`. That audit is read-only: it detects idle-lane drift but does not bypass protected branches, mutate refs, or create privileged synchronization commits.
-
 ## Promotion to main
 
 Changes reach `main` through a promotion PR from `integration/<lane>` to `main`.
@@ -76,14 +70,12 @@ For persistent integration lanes:
 - `ci-gate` is required;
 - affected-scope validation is allowed;
 - force pushes and deletion are disabled;
-- task PRs are blocked when the target lane is stale relative to `main`;
-- promotion PRs are blocked when the lane does not contain current `main` or an accepted tree-equivalent state;
-- `main` -> lane synchronization PRs are the normal repair path for drift;
+- the lane must stay synchronized with `main` when promoted shared changes affect it;
 - production deployment and npm publication are forbidden.
 
 Release tags remain immutable and separately protected.
 
-GitHub branch/ruleset settings enforce PR entry, required checks, deletion protection, and non-fast-forward protection. Repository-owned CI additionally enforces lane freshness because the persistent lanes remain peers and are not configured as strict branch-update chains.
+GitHub branch/ruleset settings are enforcement. This document is the repository-owned policy those settings must implement.
 
 ## CI execution model
 
@@ -93,18 +85,17 @@ CI is organized by responsibilities rather than copied once per framework.
 2. **quality** validates repository contracts and affected workspaces.
 3. **integration** verifies packed consumers, browser behavior, documentation, examples/playground, fixtures, and deployable Pages artifacts when selected.
 4. **security** validates dependency and workflow/security changes.
-5. **ci-gate** is the stable merge-facing result, enforces integration-lane freshness for PRs, and fails when any selected responsibility fails.
+5. **ci-gate** is the stable merge-facing result and fails when any selected responsibility fails.
 
 Execution policy deliberately validates each lifecycle boundary once:
 
-- task PR -> `integration/<lane>`: affected-scope validation plus lane-freshness enforcement at `ci-gate`;
-- `main` -> `integration/<lane>` synchronization PR: affected-scope validation is allowed and lane-drift enforcement recognizes the PR as the repair path;
-- merge/push on `integration/<lane>`: no second CI run; the accepted task/synchronization PR gate is authoritative and routine lane synchronization must not fan out duplicate workflow runs;
-- `integration/<lane>` -> `main` promotion PR: full repository validation plus current-main containment/tree-equivalence enforcement;
+- task PR -> `integration/<lane>`: affected-scope validation;
+- merge/push on `integration/<lane>`: no second CI run; the accepted task PR gate is authoritative and routine lane synchronization must not fan out duplicate workflow runs;
+- `integration/<lane>` -> `main` promotion PR: full repository validation;
 - emergency PR -> `main`: full repository validation;
 - push/merge on `main`: exact-main **delivery validation only** — rebuild package prerequisites plus docs/playground and create the commit-bound Pages artifact without rerunning quality, browser, consumer, or security suites already passed at the main-boundary PR;
 - manual repository CI: full validation;
-- scheduled weekly assurance: full quality/integration plus compatibility, security, and persistent-lane drift checks;
+- scheduled weekly assurance: full quality/integration plus compatibility and security drift checks;
 - unknown/unclassified task-PR paths: safe full validation.
 
 The main push delivery run is intentionally not a second product-wide test gate. It exists to bind deployable artifacts and downstream release/deployment consumers to the exact commit that actually landed on `main`. A newer main push cancels an older in-progress delivery run so stale artifacts do not consume runner capacity.
@@ -143,7 +134,7 @@ The playground is a maintained consumer surface, not a dumping ground for every 
 
 ## Scheduled assurance and release
 
-Scheduled assurance runs expensive compatibility, browser, security-drift, persistent-lane drift, and ecosystem checks that are not required on every task PR. Workflow names and schedules must agree; a weekly job must not be called nightly.
+Scheduled assurance runs expensive compatibility, browser, security-drift, and ecosystem checks that are not required on every task PR. Workflow names and schedules must agree; a weekly job must not be called nightly.
 
 Deployment jobs consume artifacts bound to a successful current-`main` delivery run. Release jobs may perform their own release-candidate verification, but they must bind the candidate to a successful current-main delivery run and must not publish from an integration lane. Do not repeat the full promotion suite merely to obtain a deployable artifact.
 
