@@ -11,8 +11,8 @@ import type { PlaygroundRoute } from "./routes";
 import { playgroundLinks } from "./deploymentLinks";
 import {
   playgroundFrameworks,
-  playgroundVersions,
   type PlaygroundFrameworkId,
+  type PlaygroundVersion,
 } from "./playgroundContext";
 import { PlaygroundNav } from "./PlaygroundNav";
 
@@ -23,6 +23,7 @@ export type PlaygroundShellProps = {
   frameworkId: PlaygroundFrameworkId;
   routes: PlaygroundRoute[];
   versionId: string;
+  versions: PlaygroundVersion[];
   onRouteChange: (routeId: string) => void;
   onDensityChange: (density: string) => void;
   onFrameworkChange: (frameworkId: PlaygroundFrameworkId) => void;
@@ -40,6 +41,7 @@ export function PlaygroundShell({
   frameworkId,
   theme,
   versionId,
+  versions,
   onDensityChange,
   onFrameworkChange,
   onRouteChange,
@@ -50,9 +52,7 @@ export function PlaygroundShell({
   const selectedFramework = playgroundFrameworks.find(
     (framework) => framework.id === frameworkId,
   );
-  const selectedVersion = playgroundVersions.find(
-    (version) => version.id === versionId,
-  );
+  const selectedVersion = versions.find((version) => version.id === versionId);
 
   return (
     <AppShell
@@ -73,9 +73,9 @@ export function PlaygroundShell({
           actions={
             <div className="vf-playground-top-controls">
               <Select
-                aria-label="VyrnForge release line"
+                aria-label="VyrnForge reference version"
                 onChange={(event) => onVersionChange(event.currentTarget.value)}
-                options={playgroundVersions.map((version) => ({
+                options={versions.map((version) => ({
                   label: version.label,
                   value: version.id,
                 }))}
@@ -131,7 +131,8 @@ export function PlaygroundShell({
           }
           userArea={
             <Badge tone="subtle">
-              {selectedFramework?.label ?? frameworkId} · {selectedVersion?.channel ?? "current"}
+              {selectedFramework?.label ?? frameworkId} ·{" "}
+              {selectedVersion?.label ?? versionId}
             </Badge>
           }
         />
@@ -153,8 +154,10 @@ export function PlaygroundShell({
       <Page
         actions={
           <div className="vf-playground-page-context">
-            <Badge tone="subtle">{selectedFramework?.label ?? frameworkId}</Badge>
-            <Badge tone="subtle">{selectedVersion?.version ?? versionId}</Badge>
+            <Badge tone="subtle">
+              {selectedFramework?.label ?? frameworkId}
+            </Badge>
+            <Badge tone="subtle">{selectedVersion?.label ?? versionId}</Badge>
           </div>
         }
         description={activeRoute.gallery ? undefined : activeRoute.description}
