@@ -1,17 +1,39 @@
 import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
+import type { DocsFrameworkId } from "./docsContext";
 import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
 import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { MarkdownView } from "./MarkdownView";
 import { MetadataPage } from "./MetadataPage";
+import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
 
 type DocsPageProps = {
   route: DocsRoute;
+  frameworkId: DocsFrameworkId;
+  onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
+  onRouteChange: (routeId: string) => void;
 };
 
-export function DocsPage({ route }: DocsPageProps) {
+export function DocsPage({
+  route,
+  frameworkId,
+  onFrameworkChange,
+  onRouteChange,
+}: DocsPageProps) {
+  if (route.id === "overview") {
+    return (
+      <main className="vf-docs-page vf-docs-page--overview">
+        <OverviewPage
+          frameworkId={frameworkId}
+          onFrameworkChange={onFrameworkChange}
+          onRouteChange={onRouteChange}
+        />
+      </main>
+    );
+  }
+
   return (
     <main className="vf-docs-page">
       <div className="vf-docs-page__intro">
@@ -48,7 +70,10 @@ export function DocsPage({ route }: DocsPageProps) {
       {route.kind === "ai-context-index" ? (
         <AiContextIndexPage />
       ) : route.kind === "component-reference" ? (
-        <ComponentReferencePage />
+        <ComponentReferencePage
+          frameworkId={frameworkId}
+          onFrameworkChange={onFrameworkChange}
+        />
       ) : route.kind === "package-reference" ? (
         <PackageReferencePage />
       ) : route.kind === "metadata" ? (
