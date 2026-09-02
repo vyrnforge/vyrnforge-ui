@@ -14,27 +14,6 @@ const prettierCli = path.join(
   "prettier.cjs",
 );
 const writeBaseline = process.argv.includes("--write-baseline");
-const playgroundFormattingDiagnostics = [
-  "examples/basic-playground/src/app/App.tsx",
-  "examples/basic-playground/src/app/playgroundContext.ts",
-  "examples/basic-playground/src/app/PlaygroundNav.tsx",
-  "examples/basic-playground/src/app/PlaygroundShell.tsx",
-  "examples/basic-playground/src/main.tsx",
-];
-
-for (const file of playgroundFormattingDiagnostics) {
-  const result = spawnSync(process.execPath, [prettierCli, "--write", file], {
-    cwd: root,
-    encoding: "utf8",
-  });
-  if (result.status !== 0) {
-    process.stderr.write(result.stderr ?? "");
-    process.exit(result.status ?? 1);
-  }
-  console.log(`--- PLAYGROUND FORMAT ${file} ---`);
-  process.stdout.write(readFileSync(path.join(root, file), "utf8"));
-  console.log(`--- END PLAYGROUND FORMAT ${file} ---`);
-}
 
 function fail(message) {
   console.error(message);
