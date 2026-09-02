@@ -21,7 +21,9 @@ function getRouteFromHash() {
 }
 
 function getFrameworkFromLocation(): PlaygroundFrameworkId {
-  const framework = new URLSearchParams(window.location.search).get("framework");
+  const framework = new URLSearchParams(window.location.search).get(
+    "framework",
+  );
   return framework === "native-html" ||
     framework === "react" ||
     framework === "angular" ||
