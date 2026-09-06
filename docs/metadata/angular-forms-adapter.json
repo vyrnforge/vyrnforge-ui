@@ -43,24 +43,35 @@
     "validationMessage"
   ],
   "valueMapping": {
-    "string": [
-      "vf-autocomplete",
+    "value": [
       "vf-date-input",
       "vf-datetime-input",
-      "vf-number-input",
       "vf-search-input",
-      "vf-select",
       "vf-text-input",
       "vf-textarea"
     ],
-    "number": ["vf-rating", "vf-slider"],
-    "boolean": ["vf-checkbox", "vf-switch"],
-    "stringArray": ["vf-multi-select", "vf-transfer-list"],
-    "mixedCheckedValue": "null"
+    "checked": ["vf-checkbox", "vf-switch"],
+    "numeric": ["vf-number-input", "vf-rating", "vf-slider"],
+    "collection": ["vf-multi-select", "vf-transfer-list"],
+    "selection": ["vf-autocomplete", "vf-select"],
+    "coercionPolicy": "reject-incompatible-runtime-values",
+    "nullSemantics": {
+      "valueAndSelectionWrite": "empty-string",
+      "checkedWrite": "false",
+      "numberInputWrite": "empty-string",
+      "numericRangeWrite": "zero",
+      "collectionWrite": "empty-array",
+      "mixedCheckedRead": "null",
+      "emptyNumberInputRead": "null"
+    }
   },
   "evidence": [
     "reactive FormGroup and formControlName value synchronization",
     "template-driven ngModel boolean synchronization",
+    "explicit value, checked, numeric, collection, and selection model table across all fourteen supported controls",
+    "string-backed vf-number-input converts between native numeric strings and Angular number-or-null values",
+    "incompatible runtime values are rejected instead of silently stringifying, boolean-coercing, or rewriting collection entries",
+    "value conversion suite covers null/reset semantics, mixed checked values, collection immutability, unsupported tags, and invalid numeric values",
     "dirty and touched state propagation with validator refresh on external focusout",
     "disabled state propagation through setDisabledState with validator refresh",
     "native ElementInternals validity mapped through Validator",
