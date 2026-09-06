@@ -18,6 +18,7 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const directivePath = "packages/ui-angular/src/forms.ts";
+const valueModelsPath = "packages/ui-angular/src/forms-value-models.ts";
 
 function withRepositoryCopy(mutate, callback) {
   const temporaryRoot = mkdtempSync(
@@ -116,6 +117,60 @@ test("rejects touched propagation without validator refresh", () => {
       assert.ok(
         verifyAngularFormsAdapter(root).some((failure) =>
           failure.includes("requestValidatorRefresh"),
+        ),
+      ),
+  );
+});
+
+test("rejects a missing numeric model for the string-backed number input", () => {
+  withRepositoryCopy(
+    (root) =>
+      replaceInFile(
+        root,
+        valueModelsPath,
+        'tagName: "vf-number-input",\n    kind: "numeric"',
+        'tagName: "vf-number-input",\n    kind: "value"',
+      ),
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("numeric") || failure.includes("value-model table"),
+        ),
+      ),
+  );
+});
+
+test("rejects removal of strict runtime conversion policy", () => {
+  withRepositoryCopy(
+    (root) =>
+      replaceInFile(
+        root,
+        "docs/metadata/angular-forms-adapter.json",
+        '"coercionPolicy": "reject-incompatible-runtime-values"',
+        '"coercionPolicy": "coerce"',
+      ),
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("reject incompatible runtime values"),
+        ),
+      ),
+  );
+});
+
+test("rejects missing collection conversion coverage", () => {
+  withRepositoryCopy(
+    (root) =>
+      replaceInFile(
+        root,
+        "packages/ui-angular/src/forms-value-models.test.ts",
+        '"vf-multi-select", ["alpha", 2]',
+        '"vf-multi-select", ["alpha", "2"]',
+      ),
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("conversion suite"),
         ),
       ),
   );
