@@ -1,8 +1,25 @@
 import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
+import frameworkApiReferenceRaw from "../../../../docs/generated/framework-api-reference.json?raw";
 import designTokensRaw from "../../../../docs/metadata/design-tokens.json?raw";
 import nativeAdvancedElementsRaw from "../../../../docs/metadata/native-advanced-elements.json?raw";
 import nativeCoreElementsRaw from "../../../../docs/metadata/native-core-elements.json?raw";
 import releaseGroupsRaw from "../../../../docs/metadata/release-groups.json?raw";
+
+export type ReferenceFrameworkId = "native" | "react" | "angular" | "vue";
+export type ReferencePlaygroundFrameworkId =
+  | "native-html"
+  | "react"
+  | "angular"
+  | "vue";
+
+export type ReferenceFrameworkUsage = {
+  label: string;
+  status: string;
+  package: string | null;
+  setup: string;
+  example: string;
+  note: string;
+};
 
 export type ReferenceToken = {
   name: string;
@@ -25,6 +42,44 @@ export type ReferenceComponent = {
   maturity: string;
   availability: string;
   purpose: string;
+  guidance: {
+    useWhen: string | null;
+    avoidWhen: string | null;
+    aiUsageNotes: string | null;
+    relatedComponents: string[];
+  };
+  accessibilityNotes: string | null;
+  knownLimitations: string[];
+  frameworks: Record<ReferencePlaygroundFrameworkId, ReferenceFrameworkUsage>;
+  contract: { accessibility?: string[] } | null;
+};
+
+export type ReferenceApiMember = {
+  canonical: string;
+  public: string;
+  type?: string;
+  required?: boolean;
+  default?: unknown;
+  binding?: string;
+  controlled?: boolean;
+  mode?: string;
+  content?: string;
+  multiple?: boolean;
+};
+
+export type ReferenceApiComponent = {
+  id: string;
+  category: string;
+  package: string;
+  status: string;
+  export: string | null;
+  tag: string | null;
+  properties: ReferenceApiMember[];
+  events: ReferenceApiMember[];
+  slots: ReferenceApiMember[];
+  methods: ReferenceApiMember[];
+  accessibility: string[];
+  setup: string[];
 };
 
 export type ReferenceElement = {
@@ -32,6 +87,7 @@ export type ReferenceElement = {
   family: string;
   package: string;
   wave: "core" | "advanced";
+  componentId: string | null;
 };
 
 export type ReferenceReleaseLine = {
@@ -66,6 +122,16 @@ type ConsumerKnowledge = {
     runtime: string;
     cssImport: string;
   }>;
+};
+
+type FrameworkApiReference = {
+  surfaces: Record<
+    ReferenceFrameworkId,
+    {
+      package: string;
+      components: ReferenceApiComponent[];
+    }
+  >;
 };
 
 type DesignTokens = {
@@ -106,6 +172,9 @@ type ReleaseGroups = {
 };
 
 const consumerKnowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
+const frameworkApiReference = JSON.parse(
+  frameworkApiReferenceRaw,
+) as FrameworkApiReference;
 const designTokens = JSON.parse(designTokensRaw) as DesignTokens;
 const nativeCoreElements = JSON.parse(
   nativeCoreElementsRaw,
@@ -114,6 +183,11 @@ const nativeAdvancedElements = JSON.parse(
   nativeAdvancedElementsRaw,
 ) as NativeAdvancedElements;
 const releaseGroups = JSON.parse(releaseGroupsRaw) as ReleaseGroups;
+const nativeApiByTag = new Map(
+  frameworkApiReference.surfaces.native.components
+    .filter((component) => component.tag)
+    .map((component) => [component.tag!, component] as const),
+);
 
 function elementFamilyLookup(families: Record<string, string[]>) {
   return new Map(
@@ -136,11 +210,13 @@ function elementEntries(
     family: familyByTag.get(tag) ?? "uncategorized",
     package: packageName,
     wave,
+    componentId: nativeApiByTag.get(tag)?.id ?? null,
   }));
 }
 
 export const referenceComponents = consumerKnowledge.components;
 export const referenceTokenCategories = designTokens.categories;
+export const referenceFrameworkSurfaces = frameworkApiReference.surfaces;
 
 export const referenceElements: ReferenceElement[] = [
   ...elementEntries(
@@ -184,6 +260,20 @@ export const referencePackages: ReferencePackage[] =
       version: releaseLine?.version ?? null,
     };
   });
+
+export function toReferenceFrameworkId(
+  frameworkId: ReferencePlaygroundFrameworkId,
+): ReferenceFrameworkId {
+  return frameworkId === "native-html" ? "native" : frameworkId;
+}
+
+export function getReferenceFrameworkComponent(
+  frameworkId: ReferencePlaygroundFrameworkId,
+  componentId: string,
+) {
+  const surface = referenceFrameworkSurfaces[toReferenceFrameworkId(frameworkId)];
+  return surface.components.find((component) => component.id === componentId);
+}
 
 export const referenceSnapshot = {
   components: referenceComponents,
