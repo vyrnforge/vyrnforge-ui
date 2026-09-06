@@ -27,6 +27,13 @@ export type ReferenceComponent = {
   purpose: string;
 };
 
+export type ReferenceElement = {
+  tag: string;
+  family: string;
+  package: string;
+  wave: "core" | "advanced";
+};
+
 export type ReferenceReleaseLine = {
   id: string;
   intent: string;
@@ -38,8 +45,27 @@ export type ReferenceReleaseLine = {
   packages: string[];
 };
 
+export type ReferencePackage = {
+  name: string;
+  purpose: string;
+  status: string;
+  releaseTrack: string;
+  runtime: string;
+  cssImport: string;
+  releaseLineId: string | null;
+  version: string | null;
+};
+
 type ConsumerKnowledge = {
   components: ReferenceComponent[];
+  packages: Array<{
+    name: string;
+    purpose: string;
+    status: string;
+    releaseTrack: string;
+    runtime: string;
+    cssImport: string;
+  }>;
 };
 
 type DesignTokens = {
@@ -51,6 +77,7 @@ type NativeCoreElements = {
   registration: {
     tags: string[];
   };
+  families: Record<string, string[]>;
 };
 
 type NativeAdvancedElements = {
@@ -58,6 +85,7 @@ type NativeAdvancedElements = {
   registration: {
     addedTags: string[];
   };
+  families: Record<string, string[]>;
 };
 
 type ReleaseGroups = {
@@ -85,12 +113,46 @@ const nativeAdvancedElements = JSON.parse(
 ) as NativeAdvancedElements;
 const releaseGroups = JSON.parse(releaseGroupsRaw) as ReleaseGroups;
 
+function elementFamilyLookup(families: Record<string, string[]>) {
+  return new Map(
+    Object.entries(families).flatMap(([family, tags]) =>
+      tags.map((tag) => [tag, family] as const),
+    ),
+  );
+}
+
+function elementEntries(
+  tags: string[],
+  families: Record<string, string[]>,
+  packageName: string,
+  wave: ReferenceElement["wave"],
+): ReferenceElement[] {
+  const familyByTag = elementFamilyLookup(families);
+
+  return tags.map((tag) => ({
+    tag,
+    family: familyByTag.get(tag) ?? "uncategorized",
+    package: packageName,
+    wave,
+  }));
+}
+
 export const referenceComponents = consumerKnowledge.components;
 export const referenceTokenCategories = designTokens.categories;
 
-export const referenceElements = [
-  ...nativeCoreElements.registration.tags,
-  ...nativeAdvancedElements.registration.addedTags,
+export const referenceElements: ReferenceElement[] = [
+  ...elementEntries(
+    nativeCoreElements.registration.tags,
+    nativeCoreElements.families,
+    nativeCoreElements.package,
+    "core",
+  ),
+  ...elementEntries(
+    nativeAdvancedElements.registration.addedTags,
+    nativeAdvancedElements.families,
+    nativeAdvancedElements.package,
+    "advanced",
+  ),
 ];
 
 export const referenceElementPackage = nativeCoreElements.package;
@@ -108,10 +170,24 @@ export const referenceReleaseLines: ReferenceReleaseLine[] = Object.entries(
   packages: (releaseLine.packages ?? []).map(({ name }) => name),
 }));
 
+export const referencePackages: ReferencePackage[] = consumerKnowledge.packages.map(
+  (packageKnowledge) => {
+    const releaseLine = referenceReleaseLines.find((candidate) =>
+      candidate.packages.includes(packageKnowledge.name),
+    );
+
+    return {
+      ...packageKnowledge,
+      releaseLineId: releaseLine?.id ?? null,
+      version: releaseLine?.version ?? null,
+    };
+  },
+);
+
 export const referenceSnapshot = {
   components: referenceComponents,
   elements: referenceElements,
-  elementPackage: referenceElementPackage,
+  packages: referencePackages,
   tokenCategories: referenceTokenCategories,
   releaseLines: referenceReleaseLines,
 };
