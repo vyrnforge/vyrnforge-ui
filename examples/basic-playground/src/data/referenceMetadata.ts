@@ -83,7 +83,7 @@ export type ReferenceElement = {
   tag: string;
   family: string;
   package: string;
-  wave: "core" | "advanced";
+  wave: "core" | "advanced" | "canonical";
   componentId: string | null;
 };
 
@@ -215,7 +215,7 @@ export const referenceComponents = consumerKnowledge.components;
 export const referenceTokenCategories = designTokens.categories;
 export const referenceFrameworkSurfaces = frameworkApiReference.surfaces;
 
-export const referenceElements: ReferenceElement[] = [
+const phaseElementEntries: ReferenceElement[] = [
   ...elementEntries(
     nativeCoreElements.registration.tags,
     nativeCoreElements.families,
@@ -228,6 +228,28 @@ export const referenceElements: ReferenceElement[] = [
     nativeAdvancedElements.package,
     "advanced",
   ),
+];
+const phaseElementTags = new Set(phaseElementEntries.map((element) => element.tag));
+const canonicalNativeElementEntries: ReferenceElement[] = Array.from(
+  nativeApiByTag.values(),
+)
+  .filter(
+    (component) =>
+      component.status === "current" &&
+      component.tag &&
+      !phaseElementTags.has(component.tag),
+  )
+  .map((component) => ({
+    tag: component.tag!,
+    family: component.category,
+    package: component.package,
+    wave: "canonical",
+    componentId: component.id,
+  }));
+
+export const referenceElements: ReferenceElement[] = [
+  ...phaseElementEntries,
+  ...canonicalNativeElementEntries,
 ];
 
 export const referenceElementPackage = nativeCoreElements.package;
