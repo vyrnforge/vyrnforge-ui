@@ -61,9 +61,11 @@
   "evidence": [
     "reactive FormGroup and formControlName value synchronization",
     "template-driven ngModel boolean synchronization",
-    "dirty and touched state propagation",
-    "disabled state propagation through setDisabledState",
+    "dirty and touched state propagation with validator refresh on external focusout",
+    "disabled state propagation through setDisabledState with validator refresh",
     "native ElementInternals validity mapped through Validator",
+    "native validationMessage and serialized ValidityState exposed through the vyrnForge Angular error",
+    "invalid-to-valid value transitions clear the Angular validation error",
     "packed @vyrnforge/ui-angular/forms production consumption and Chromium interaction",
     "@angular/forms remains an optional peer isolated behind the Forms entrypoint",
     "framework-neutral VyrnForge foundations remain Angular-independent",
