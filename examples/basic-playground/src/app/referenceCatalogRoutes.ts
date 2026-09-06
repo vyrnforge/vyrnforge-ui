@@ -1,4 +1,7 @@
-import { referenceComponents, referenceElements } from "../data/referenceMetadata";
+import {
+  referenceComponents,
+  referenceElements,
+} from "../data/referenceMetadata";
 import {
   ComponentsCatalogPage,
   NativeElementsCatalogPage,
@@ -55,15 +58,17 @@ const componentDetailRoutes: PlaygroundRoute[] = referenceComponents.map(
   }),
 );
 
-const elementDetailRoutes: PlaygroundRoute[] = referenceElements.map((element) => ({
-  id: `reference-element-${element.tag}`,
-  label: `<${element.tag}>`,
-  title: `<${element.tag}> Reference`,
-  description: `Canonical ${element.family} Custom Element reference.`,
-  group: "Overview",
-  path: `/reference/elements/${element.tag}`,
-  Component: createElementReferenceDetailPage(element.tag),
-}));
+const elementDetailRoutes: PlaygroundRoute[] = referenceElements.map(
+  (element) => ({
+    id: `reference-element-${element.tag}`,
+    label: `<${element.tag}>`,
+    title: `<${element.tag}> Reference`,
+    description: `Canonical ${element.family} Custom Element reference.`,
+    group: "Overview",
+    path: `/reference/elements/${element.tag}`,
+    Component: createElementReferenceDetailPage(element.tag),
+  }),
+);
 
 export const referenceDetailRoutes: PlaygroundRoute[] = [
   ...componentDetailRoutes,
