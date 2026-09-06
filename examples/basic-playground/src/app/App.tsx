@@ -9,7 +9,14 @@ import {
   type PlaygroundFrameworkId,
   type PlaygroundVersion,
 } from "./playgroundContext";
-import { routes } from "./routes";
+import { referenceCatalogRoutes } from "./referenceCatalogRoutes";
+import { routes as baseRoutes } from "./routes";
+
+const routes = [
+  baseRoutes[0],
+  ...referenceCatalogRoutes,
+  ...baseRoutes.slice(1),
+];
 
 function normalizeHashRoute(hash: string) {
   return hash.replace(/^#\/?/, "").replace(/^\/+/, "");
