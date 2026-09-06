@@ -52,7 +52,7 @@
           id="disable-reactive-owner"
           type="button"
           action="disable-owner"
-          variant="secondary"
+          variant="default"
           (vf-action)="disableOwner()"
         >
           Disable owner
@@ -62,7 +62,7 @@
           id="enable-reactive-owner"
           type="button"
           action="enable-owner"
-          variant="secondary"
+          variant="default"
           (vf-action)="enableOwner()"
         >
           Enable owner
@@ -105,10 +105,10 @@
         vfGeneratedTextInput
         label="Owner"
         name="owner"
-        required
+        [required]="true"
         [value]="owner"
       ></vf-text-input>
-      <vf-button vfGeneratedButton type="submit" variant="secondary">
+      <vf-button vfGeneratedButton type="submit" variant="default">
         Submit Angular form
       </vf-button>
     </form>
