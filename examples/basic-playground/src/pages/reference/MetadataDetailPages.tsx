@@ -82,7 +82,11 @@ function ApiMemberList({
   );
 }
 
-function ReferenceApiSections({ api }: { api: ReferenceApiComponent | undefined }) {
+function ReferenceApiSections({
+  api,
+}: {
+  api: ReferenceApiComponent | undefined;
+}) {
   const props = toPropsRows(api);
 
   return (
@@ -169,7 +173,11 @@ function AccessibilityPanel({
   );
 }
 
-function ComponentReferenceDetail({ component }: { component: ReferenceComponent }) {
+function ComponentReferenceDetail({
+  component,
+}: {
+  component: ReferenceComponent;
+}) {
   const { frameworkId } = usePlaygroundFramework();
   const api = getReferenceFrameworkComponent(frameworkId, component.id);
   const usage = component.frameworks[frameworkId];
@@ -229,7 +237,9 @@ function ComponentReferenceDetail({ component }: { component: ReferenceComponent
 function ElementReferenceDetail({ element }: { element: ReferenceElement }) {
   const { frameworkId } = usePlaygroundFramework();
   const component = element.componentId
-    ? referenceComponents.find((candidate) => candidate.id === element.componentId)
+    ? referenceComponents.find(
+        (candidate) => candidate.id === element.componentId,
+      )
     : undefined;
   const api = element.componentId
     ? getReferenceFrameworkComponent(frameworkId, element.componentId)
