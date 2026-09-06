@@ -10,7 +10,8 @@ const angularVersion = "22.0.8";
 const expectedSupportClaim = "angular-forms-adapter-verified";
 const directivePath = "packages/ui-angular/src/forms.ts";
 const valueModelsPath = "packages/ui-angular/src/forms-value-models.ts";
-const valueModelsTestPath = "packages/ui-angular/src/forms-value-models.test.ts";
+const valueModelsTestPath =
+  "packages/ui-angular/src/forms-value-models.test.ts";
 const supportedTags = [
   "vf-autocomplete",
   "vf-checkbox",
@@ -135,9 +136,7 @@ function verifyMetadata(root, failures) {
       );
     }
   }
-  if (
-    valueMapping.coercionPolicy !== "reject-incompatible-runtime-values"
-  ) {
+  if (valueMapping.coercionPolicy !== "reject-incompatible-runtime-values") {
     addFailure(
       failures,
       "Angular Forms value models must reject incompatible runtime values",
@@ -229,15 +228,15 @@ function verifyValueModels(root, failures) {
   const models = read(root, valueModelsPath);
   const tests = read(root, valueModelsTestPath);
 
-  for (const tag of supportedTags) {
-    if (!models.includes(`tagName: "${tag}"`)) {
-      addFailure(failures, `Angular Forms value-model table is missing ${tag}`);
-    }
-  }
-
-  for (const kind of Object.keys(expectedValueModels)) {
-    if (!models.includes(`kind: "${kind}"`)) {
-      addFailure(failures, `Angular Forms value-model table is missing ${kind}`);
+  for (const [kind, tags] of Object.entries(expectedValueModels)) {
+    for (const tag of tags) {
+      const marker = `tagName: "${tag}",\n    kind: "${kind}"`;
+      if (!models.includes(marker)) {
+        addFailure(
+          failures,
+          `Angular Forms value-model table must map ${tag} to ${kind}`,
+        );
+      }
     }
   }
 
@@ -250,7 +249,10 @@ function verifyValueModels(root, failures) {
     "Object.freeze([...value])",
   ]) {
     if (!models.includes(marker)) {
-      addFailure(failures, `Angular Forms value-model source is missing ${marker}`);
+      addFailure(
+        failures,
+        `Angular Forms value-model source is missing ${marker}`,
+      );
     }
   }
 
@@ -264,7 +266,10 @@ function verifyValueModels(root, failures) {
     "Number.POSITIVE_INFINITY",
   ]) {
     if (!tests.includes(marker)) {
-      addFailure(failures, `Angular Forms conversion suite is missing ${marker}`);
+      addFailure(
+        failures,
+        `Angular Forms conversion suite is missing ${marker}`,
+      );
     }
   }
 }
