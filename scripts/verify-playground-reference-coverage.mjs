@@ -8,6 +8,7 @@ const repositoryRoot = path.resolve(
 );
 
 const frameworkIds = ["native-html", "react", "angular", "vue"];
+const apiSurfaceIds = ["native", "react", "angular", "vue"];
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -32,6 +33,7 @@ export function verifyPlaygroundReferenceCoverage({
 } = {}) {
   const failures = [];
   const knowledge = json(root, "docs/generated/consumer-knowledge.json");
+  const contracts = json(root, "docs/metadata/component-contracts.json");
   const frameworkApi = json(
     root,
     "docs/generated/framework-api-reference.json",
@@ -44,22 +46,11 @@ export function verifyPlaygroundReferenceCoverage({
 
   const components = knowledge.components ?? [];
   const componentIds = components.map((component) => component.id);
+  const componentIdSet = new Set(componentIds);
   for (const id of duplicates(componentIds)) {
     failures.push(`consumer knowledge has duplicate component id: ${id}`);
   }
-
-  const surfaceComponents = Object.values(frameworkApi.surfaces ?? {}).flatMap(
-    (surface) => surface.components ?? [],
-  );
-  const surfaceComponentIds = new Set(
-    surfaceComponents.map((component) => component.id),
-  );
   for (const component of components) {
-    if (!surfaceComponentIds.has(component.id)) {
-      failures.push(
-        `${component.id}: component has no generated framework API surface`,
-      );
-    }
     for (const frameworkId of frameworkIds) {
       if (!component.frameworks?.[frameworkId]) {
         failures.push(
@@ -69,31 +60,51 @@ export function verifyPlaygroundReferenceCoverage({
     }
   }
 
+  const canonicalIds = (contracts.componentContracts ?? []).map(
+    (component) => component.id,
+  );
+  for (const id of duplicates(canonicalIds)) {
+    failures.push(`canonical component contracts have duplicate id: ${id}`);
+  }
+  for (const componentId of canonicalIds) {
+    if (!componentIdSet.has(componentId)) {
+      failures.push(
+        `${componentId}: canonical component is missing consumer knowledge`,
+      );
+    }
+    for (const surfaceId of apiSurfaceIds) {
+      const apiIds = new Set(
+        (frameworkApi.surfaces?.[surfaceId]?.components ?? []).map(
+          (component) => component.id,
+        ),
+      );
+      if (!apiIds.has(componentId)) {
+        failures.push(
+          `${componentId}: canonical component is missing ${surfaceId} generated API coverage`,
+        );
+      }
+    }
+  }
+
   const registeredTags = [
     ...(nativeCore.registration?.tags ?? []),
     ...(nativeAdvanced.registration?.addedTags ?? []),
   ];
+  const registeredTagSet = new Set(registeredTags);
   for (const tag of duplicates(registeredTags)) {
     failures.push(`native element registration has duplicate tag: ${tag}`);
   }
 
-  const nativeApiByTag = new Map(
-    (frameworkApi.surfaces?.native?.components ?? [])
-      .filter((component) => component.tag)
-      .map((component) => [component.tag, component]),
-  );
-  for (const tag of registeredTags) {
-    const apiComponent = nativeApiByTag.get(tag);
-    if (!apiComponent) {
-      failures.push(
-        `registered native element ${tag} is missing a generated native API mapping`,
-      );
-      continue;
-    }
-    if (!componentIds.includes(apiComponent.id)) {
-      failures.push(
-        `registered native element ${tag} maps to unknown component ${apiComponent.id}`,
-      );
+  const nativeApiComponents = frameworkApi.surfaces?.native?.components ?? [];
+  const nativeApiTags = nativeApiComponents
+    .filter((component) => component.status === "current" && component.tag)
+    .map((component) => component.tag);
+  for (const tag of duplicates(nativeApiTags)) {
+    failures.push(`generated native API has duplicate current tag: ${tag}`);
+  }
+  for (const tag of nativeApiTags) {
+    if (!registeredTagSet.has(tag)) {
+      failures.push(`generated native API tag ${tag} is not registered`);
     }
   }
 
