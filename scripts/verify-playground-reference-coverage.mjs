@@ -32,7 +32,10 @@ export function verifyPlaygroundReferenceCoverage({
 } = {}) {
   const failures = [];
   const knowledge = json(root, "docs/generated/consumer-knowledge.json");
-  const frameworkApi = json(root, "docs/generated/framework-api-reference.json");
+  const frameworkApi = json(
+    root,
+    "docs/generated/framework-api-reference.json",
+  );
   const nativeCore = json(root, "docs/metadata/native-core-elements.json");
   const nativeAdvanced = json(
     root,
@@ -100,7 +103,9 @@ export function verifyPlaygroundReferenceCoverage({
   const elementPaths = registeredTags.map(
     (tag) => `/reference/elements/${tag}`,
   );
-  for (const referencePath of duplicates([...componentPaths, ...elementPaths])) {
+  for (
+    const referencePath of duplicates([...componentPaths, ...elementPaths])
+  ) {
     failures.push(`generated reference path is not unique: ${referencePath}`);
   }
 
