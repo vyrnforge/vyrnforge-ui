@@ -109,35 +109,25 @@ test("rejects hand-written playground maturity status", () =>
       ),
   ));
 
-test("rejects a registered native element without generated API mapping", () =>
+test("rejects a current canonical native API tag that is not registered", () =>
   fixture(
     (root) => {
-      const registrationFile = path.join(
-        root,
-        "docs/metadata/native-core-elements.json",
+      const file = path.join(root, "docs/metadata/native-advanced-elements.json");
+      const value = JSON.parse(readFileSync(file, "utf8"));
+      const tag = "vf-dialog";
+      assert(
+        value.registration.addedTags.includes(tag),
+        "fixture needs vf-dialog in advanced element registration",
       );
-      const registration = JSON.parse(readFileSync(registrationFile, "utf8"));
-      const tag = registration.registration.tags[0];
-      const apiFile = path.join(
-        root,
-        "docs/generated/framework-api-reference.json",
+      value.registration.addedTags = value.registration.addedTags.filter(
+        (entry) => entry !== tag,
       );
-      const api = JSON.parse(readFileSync(apiFile, "utf8"));
-      const before = api.surfaces.native.components.length;
-      api.surfaces.native.components = api.surfaces.native.components.filter(
-        (component) => component.tag !== tag,
-      );
-      assert.equal(
-        api.surfaces.native.components.length,
-        before - 1,
-        "fixture needs the registered tag in the generated native API",
-      );
-      writeFileSync(apiFile, `${JSON.stringify(api, null, 2)}\n`);
+      writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("is missing a generated native API mapping"),
+          failure.includes("generated native API tag vf-dialog is not registered"),
         ),
       ),
   ));
