@@ -7,10 +7,7 @@ import releaseGroupsRaw from "../../../../docs/metadata/release-groups.json?raw"
 
 export type ReferenceFrameworkId = "native" | "react" | "angular" | "vue";
 export type ReferencePlaygroundFrameworkId =
-  | "native-html"
-  | "react"
-  | "angular"
-  | "vue";
+  "native-html" | "react" | "angular" | "vue";
 
 export type ReferenceFrameworkUsage = {
   label: string;
