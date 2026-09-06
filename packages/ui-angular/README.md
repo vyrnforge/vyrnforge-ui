@@ -52,7 +52,9 @@ export class ProfileFormComponent {}
 <vf-checkbox vfFormControl name="enabled" [(ngModel)]="enabled"></vf-checkbox>
 ```
 
-The bridge currently supports `vf-autocomplete`, `vf-checkbox`, `vf-date-input`, `vf-datetime-input`, `vf-multi-select`, `vf-number-input`, `vf-rating`, `vf-search-input`, `vf-select`, `vf-slider`, `vf-switch`, `vf-text-input`, `vf-textarea`, and `vf-transfer-list`. Reactive and template-driven Forms share the same directive and canonical VyrnForge event/validity contracts.
+The bridge supports `vf-autocomplete`, `vf-checkbox`, `vf-date-input`, `vf-datetime-input`, `vf-multi-select`, `vf-number-input`, `vf-rating`, `vf-search-input`, `vf-select`, `vf-slider`, `vf-switch`, `vf-text-input`, `vf-textarea`, and `vf-transfer-list`. Reactive and template-driven Forms share the same directive and canonical VyrnForge event/validity contracts.
+
+Form values use five explicit model categories: string values, checked booleans, numeric values, immutable string collections, and selections. `vf-number-input` is numeric for Angular even though its native `value` property is string-backed; empty native input maps to `null`, while finite numeric strings map to numbers. `vf-autocomplete` and `vf-select` use the selection model rather than the generic text-value model. Incompatible runtime values are rejected instead of being silently stringified, boolean-coerced, or rewritten element-by-element in collections.
 
 ## Dependency contract
 

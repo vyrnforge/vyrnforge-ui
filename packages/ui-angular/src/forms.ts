@@ -19,6 +19,13 @@ import type {
   VyrnForgeValueChangeDetail,
 } from "@vyrnforge/ui-elements";
 
+import {
+  convertAngularFormValueToElement,
+  convertElementValueToAngularForm,
+  getVyrnForgeAngularFormValueModel,
+  type VyrnForgeAngularFormValue,
+} from "./forms-value-models.js";
+
 interface VyrnForgeAngularFormElement extends HTMLElement {
   disabled: boolean;
   readonly validationMessage: string;
@@ -26,38 +33,9 @@ interface VyrnForgeAngularFormElement extends HTMLElement {
   readonly willValidate: boolean;
 }
 
-export type VyrnForgeAngularFormValue =
-  boolean | number | readonly string[] | string | null;
-
 type ChangeCallback = (value: VyrnForgeAngularFormValue) => void;
 type TouchedCallback = () => void;
 type ValidatorChangeCallback = () => void;
-
-const checkedTagNames = new Set(["vf-checkbox", "vf-switch"]);
-const numericTagNames = new Set(["vf-rating", "vf-slider"]);
-const stringArrayTagNames = new Set(["vf-multi-select", "vf-transfer-list"]);
-
-function isCheckedElement(element: VyrnForgeAngularFormElement): boolean {
-  return checkedTagNames.has(element.localName);
-}
-
-function normalizeValueForElement(
-  element: VyrnForgeAngularFormElement,
-  value: unknown,
-): VyrnForgeAngularFormValue {
-  if (stringArrayTagNames.has(element.localName)) {
-    return Array.isArray(value)
-      ? Object.freeze(value.map((entry) => String(entry)))
-      : Object.freeze([]);
-  }
-
-  if (numericTagNames.has(element.localName)) {
-    const numericValue = Number(value ?? 0);
-    return Number.isFinite(numericValue) ? numericValue : 0;
-  }
-
-  return value == null ? "" : String(value);
-}
 
 function serializeValidity(
   validity: ValidityState,
@@ -150,15 +128,15 @@ export class VyrnForgeFormControlDirective
 
   writeValue(value: unknown): void {
     const element = this.elementRef.nativeElement;
-    if (isCheckedElement(element)) {
-      this.renderer.setProperty(element, "checked", value === true);
-    } else {
-      this.renderer.setProperty(
-        element,
-        "value",
-        normalizeValueForElement(element, value),
-      );
-    }
+    const converted = convertAngularFormValueToElement(
+      element.localName,
+      value,
+    );
+    this.renderer.setProperty(
+      element,
+      converted.property,
+      converted.elementValue,
+    );
     this.requestValidatorRefresh();
   }
 
@@ -202,17 +180,27 @@ export class VyrnForgeFormControlDirective
   }
 
   handleValueChange(event: Event): void {
-    if (isCheckedElement(this.elementRef.nativeElement)) return;
+    const element = this.elementRef.nativeElement;
+    const model = getVyrnForgeAngularFormValueModel(element.localName);
+    if (model.eventName !== "vf-value-change") return;
+
     const detail = (event as CustomEvent<VyrnForgeValueChangeDetail<unknown>>)
       .detail;
-    this.onChange(detail.value as VyrnForgeAngularFormValue);
+    this.onChange(
+      convertElementValueToAngularForm(element.localName, detail.value),
+    );
     this.requestValidatorRefresh();
   }
 
   handleCheckedChange(event: Event): void {
-    if (!isCheckedElement(this.elementRef.nativeElement)) return;
+    const element = this.elementRef.nativeElement;
+    const model = getVyrnForgeAngularFormValueModel(element.localName);
+    if (model.eventName !== "vf-checked-change") return;
+
     const detail = (event as CustomEvent<VyrnForgeCheckedChangeDetail>).detail;
-    this.onChange(detail.checked === "mixed" ? null : detail.checked);
+    this.onChange(
+      convertElementValueToAngularForm(element.localName, detail.checked),
+    );
     this.requestValidatorRefresh();
   }
 
@@ -236,3 +224,5 @@ export class VyrnForgeFormControlDirective
     queueMicrotask(() => this.onValidatorChange());
   }
 }
+
+export type { VyrnForgeAngularFormValue } from "./forms-value-models.js";

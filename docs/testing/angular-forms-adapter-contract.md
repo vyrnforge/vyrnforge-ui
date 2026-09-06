@@ -55,16 +55,43 @@ Custom Element state after value, checked, disabled, invalid, or touched
 transitions have settled. Disabled or non-validating native elements produce no
 Angular validation error.
 
-## Supported values
+## Supported value models
 
-The bridge covers string, number, boolean, and string-array form values across
-fourteen form-associated tags. `vf-radio` and `vf-radio-group` remain excluded
-because radio-group registration and identity require a dedicated Angular
-contract rather than a generic value accessor.
+The bridge defines one explicit conversion model for each of the fourteen
+supported form-associated controls. The models are package-owned in
+`forms-value-models.ts` and fall into five categories:
+
+- **value** — `vf-date-input`, `vf-datetime-input`, `vf-search-input`,
+  `vf-text-input`, and `vf-textarea` use string Angular values;
+- **checked** — `vf-checkbox` and `vf-switch` use boolean Angular values, with a
+  native mixed checked state represented as `null`;
+- **numeric** — `vf-number-input`, `vf-rating`, and `vf-slider` use numeric
+  Angular values. `vf-number-input` is string-backed natively, so finite native
+  numeric strings are converted to numbers and its empty native value becomes
+  `null`;
+- **collection** — `vf-multi-select` and `vf-transfer-list` use immutable
+  `readonly string[]` Angular values;
+- **selection** — `vf-autocomplete` and `vf-select` use explicit string-or-null
+  selection values rather than the generic text-value path.
+
+Null writes use each native control's reset representation: empty string for
+value/selection and `vf-number-input`, `false` for checked controls, `0` for the
+numeric range/rating controls, and an empty array for collection controls.
+
+The adapter does not silently coerce incompatible runtime values. It does not
+stringify arbitrary values, boolean-coerce truthy/falsy values, rewrite
+collection entries with `String(...)`, or accept numeric-looking strings for
+number-valued rating/slider controls. Unsupported tags and incompatible values
+produce an explicit `TypeError` so application model mistakes cannot silently
+change meaning.
+
+`vf-radio` and `vf-radio-group` remain excluded because radio-group registration
+and identity require a dedicated Angular contract rather than a generic value
+accessor.
 
 ## Evidence
 
-The packed Angular fixture and repository verifier must prove:
+The packed Angular fixture, conversion suite, and repository verifier must prove:
 
 1. a reactive `FormGroup` writes and receives a `vf-text-input` value;
 2. dirty and touched state propagate from native interaction;
@@ -75,13 +102,22 @@ The packed Angular fixture and repository verifier must prove:
    flags, including `valueMissing` for a required empty text input;
 6. returning to a valid native value clears the Angular validation error;
 7. template-driven `ngModel` writes and receives a `vf-checkbox` checked value;
-8. the existing native FormData/ElementInternals evidence remains intact;
-9. Angular runtime dependencies remain confined to `@vyrnforge/ui-angular` and
-   do not leak into framework-neutral VyrnForge foundations.
+8. value, checked, numeric, collection, and selection models each have explicit
+   conversion coverage across all fourteen supported tags;
+9. `vf-number-input` converts finite native numeric strings to Angular numbers,
+   maps its empty native value to `null`, and rejects invalid numeric input;
+10. collection conversion preserves string-array meaning without mutating or
+    stringifying entries;
+11. incompatible runtime values and unsupported tags fail explicitly instead of
+    falling back to implicit conversion;
+12. the existing native FormData/ElementInternals evidence remains intact;
+13. Angular runtime dependencies remain confined to `@vyrnforge/ui-angular` and
+    do not leak into framework-neutral VyrnForge foundations.
 
 The verifier and deliberate failure tests are:
 
 ```text
+packages/ui-angular/src/forms-value-models.test.ts
 scripts/verify-angular-forms-adapter.mjs
 scripts/verify-angular-forms-adapter.test.mjs
 ```
