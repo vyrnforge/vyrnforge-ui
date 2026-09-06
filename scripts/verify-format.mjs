@@ -103,6 +103,16 @@ const retired = Object.keys(baseline.entries)
   .sort((left, right) => left.localeCompare(right));
 
 if (newOrChanged.length > 0) {
+  const result = spawnSync(
+    process.execPath,
+    [prettierCli, "--write", ...newOrChanged, "--color=false"],
+    { cwd: root, encoding: "utf8" },
+  );
+  if (result.error) throw result.error;
+  for (const file of newOrChanged) {
+    console.error(`--- PRETTIER ${file} ---`);
+    console.error(readFileSync(path.join(root, file), "utf8"));
+  }
   console.error("New or changed files do not satisfy Prettier:");
   for (const file of newOrChanged) console.error(`  - ${file}`);
   fail("Run npm run format on changed files before committing them.");
