@@ -161,7 +161,11 @@ export function convertAngularFormValueToElement(
     case "value":
     case "selection": {
       if (value == null) {
-        return { property: model.property, modelValue: null, elementValue: "" };
+        return {
+          property: model.property,
+          modelValue: null,
+          elementValue: "",
+        };
       }
       assertString(tagName, value, "Angular model value");
       return {
@@ -172,7 +176,11 @@ export function convertAngularFormValueToElement(
     }
     case "checked": {
       if (value == null) {
-        return { property: model.property, modelValue: null, elementValue: false };
+        return {
+          property: model.property,
+          modelValue: null,
+          elementValue: false,
+        };
       }
       assertBoolean(tagName, value, "Angular model value");
       return {
@@ -285,7 +293,10 @@ function cloneStringArray(
   value: unknown,
   expected: string,
 ): readonly string[] {
-  if (!Array.isArray(value) || !value.every((entry) => typeof entry === "string")) {
+  if (
+    !Array.isArray(value) ||
+    !value.every((entry) => typeof entry === "string")
+  ) {
     throw conversionError(tagName, `${expected} as readonly string[]`, value);
   }
   return Object.freeze([...value]);
