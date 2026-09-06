@@ -170,8 +170,8 @@ export const referenceReleaseLines: ReferenceReleaseLine[] = Object.entries(
   packages: (releaseLine.packages ?? []).map(({ name }) => name),
 }));
 
-export const referencePackages: ReferencePackage[] = consumerKnowledge.packages.map(
-  (packageKnowledge) => {
+export const referencePackages: ReferencePackage[] =
+  consumerKnowledge.packages.map((packageKnowledge) => {
     const releaseLine = referenceReleaseLines.find((candidate) =>
       candidate.packages.includes(packageKnowledge.name),
     );
@@ -181,8 +181,7 @@ export const referencePackages: ReferencePackage[] = consumerKnowledge.packages.
       releaseLineId: releaseLine?.id ?? null,
       version: releaseLine?.version ?? null,
     };
-  },
-);
+  });
 
 export const referenceSnapshot = {
   components: referenceComponents,
