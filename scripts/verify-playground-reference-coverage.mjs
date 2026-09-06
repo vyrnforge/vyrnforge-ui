@@ -27,7 +27,9 @@ function duplicates(values) {
   return [...repeated].sort();
 }
 
-export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}) {
+export function verifyPlaygroundReferenceCoverage({
+  root = repositoryRoot,
+} = {}) {
   const failures = [];
   const knowledge = json(root, "docs/generated/consumer-knowledge.json");
   const frameworkApi = json(root, "docs/generated/framework-api-reference.json");
@@ -95,7 +97,9 @@ export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}
   const componentPaths = componentIds.map(
     (id) => `/reference/components/${id}`,
   );
-  const elementPaths = registeredTags.map((tag) => `/reference/elements/${tag}`);
+  const elementPaths = registeredTags.map(
+    (tag) => `/reference/elements/${tag}`,
+  );
   for (const referencePath of duplicates([...componentPaths, ...elementPaths])) {
     failures.push(`generated reference path is not unique: ${referencePath}`);
   }
