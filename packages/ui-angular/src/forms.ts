@@ -128,8 +128,15 @@ export class VyrnForgeFormControlDirective
 
   writeValue(value: unknown): void {
     const element = this.elementRef.nativeElement;
-    const converted = convertAngularFormValueToElement(element.localName, value);
-    this.renderer.setProperty(element, converted.property, converted.elementValue);
+    const converted = convertAngularFormValueToElement(
+      element.localName,
+      value,
+    );
+    this.renderer.setProperty(
+      element,
+      converted.property,
+      converted.elementValue,
+    );
     this.requestValidatorRefresh();
   }
 
