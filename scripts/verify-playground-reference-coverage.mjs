@@ -103,9 +103,10 @@ export function verifyPlaygroundReferenceCoverage({
   const elementPaths = registeredTags.map(
     (tag) => `/reference/elements/${tag}`,
   );
-  for (
-    const referencePath of duplicates([...componentPaths, ...elementPaths])
-  ) {
+  for (const referencePath of duplicates([
+    ...componentPaths,
+    ...elementPaths,
+  ])) {
     failures.push(`generated reference path is not unique: ${referencePath}`);
   }
 
