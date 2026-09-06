@@ -1,22 +1,22 @@
 # Angular Forms adapter contract
 
-CF-7004 adds a thin Angular Forms bridge for the existing native
-`@vyrnforge/ui-elements` renderer. It does not create a second Angular renderer,
-change the four-package non-grid beta release group, or add Angular dependencies
-to VyrnForge packages.
+The supported Angular Forms bridge adapts the canonical VyrnForge form-associated
+Custom Elements to Angular Forms. It does not create a second renderer or a
+second validation model.
 
-## Reference integration
+## Supported integration
 
-The standalone `VyrnForgeFormControlDirective` lives in the isolated Angular
-consumer fixture:
+`VyrnForgeFormControlDirective` is package-owned and exported from the dedicated
+Forms entrypoint:
 
 ```text
-tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts
+packages/ui-angular/src/forms.ts
+@vyrnforge/ui-angular/forms
 ```
 
 Consumers opt in with `vfFormControl` on a supported VyrnForge form-associated
-Custom Element. The directive provides Angular's `NG_VALUE_ACCESSOR` and
-`NG_VALIDATORS` contracts and can be used by both reactive and template-driven
+Custom Element. The standalone directive provides Angular's `NG_VALUE_ACCESSOR`
+and `NG_VALIDATORS` contracts and works with both reactive and template-driven
 Forms.
 
 ```html
@@ -33,35 +33,51 @@ Forms.
 
 The adapter translates Angular conventions only:
 
-- `writeValue` assigns the native `value` or `checked` property;
+- `writeValue` assigns the canonical native `value` or `checked` property;
 - `vf-value-change` and `vf-checked-change` notify Angular of user changes;
-- `focusout` notifies Angular when the control is touched;
-- `setDisabledState` assigns the native `disabled` property;
-- the `Validator` implementation reads native `validity` and
-  `validationMessage` after the VyrnForge control updates.
+- external `focusout` notifies Angular that the control is touched and requests
+  a validator refresh;
+- `setDisabledState` assigns the native `disabled` property and requests a
+  validator refresh;
+- `vf-invalid` requests a validator refresh without replacing the native
+  validity source;
+- the Angular `Validator` reads native `validity`, `willValidate`, and
+  `validationMessage` after the VyrnForge control updates;
+- invalid native validity is exposed under the single Angular `vyrnForge` error
+  with the canonical message and a serialized validity snapshot.
 
 Rendering, keyboard behavior, ElementInternals form participation, validation
 rules, messages, focus behavior, tokens, and accessibility remain owned by
 `@vyrnforge/ui-elements`.
 
+Validator refreshes are queued in a microtask so Angular observes the canonical
+Custom Element state after value, checked, disabled, invalid, or touched
+transitions have settled. Disabled or non-validating native elements produce no
+Angular validation error.
+
 ## Supported values
 
-The initial reference adapter covers string, number, boolean, and string-array
-form values across fourteen form-associated tags. `vf-radio` and
-`vf-radio-group` remain excluded because radio-group registration and identity
-need a dedicated Angular contract rather than a generic value accessor.
+The bridge covers string, number, boolean, and string-array form values across
+fourteen form-associated tags. `vf-radio` and `vf-radio-group` remain excluded
+because radio-group registration and identity require a dedicated Angular
+contract rather than a generic value accessor.
 
 ## Evidence
 
-The packed Angular fixture must prove:
+The packed Angular fixture and repository verifier must prove:
 
 1. a reactive `FormGroup` writes and receives a `vf-text-input` value;
 2. dirty and touched state propagate from native interaction;
-3. disabling and enabling the `FormControl` updates the Custom Element;
+3. disabling and enabling the `FormControl` updates the Custom Element and
+   refreshes Angular validation;
 4. native required validity appears as a `vyrnForge` Angular validation error;
-5. template-driven `ngModel` writes and receives a `vf-checkbox` checked value;
-6. the existing native FormData/ElementInternals evidence remains intact;
-7. no package under `packages/` depends on Angular.
+5. the `vyrnForge` error exposes the native validation message and validity
+   flags, including `valueMissing` for a required empty text input;
+6. returning to a valid native value clears the Angular validation error;
+7. template-driven `ngModel` writes and receives a `vf-checkbox` checked value;
+8. the existing native FormData/ElementInternals evidence remains intact;
+9. Angular runtime dependencies remain confined to `@vyrnforge/ui-angular` and
+   do not leak into framework-neutral VyrnForge foundations.
 
 The verifier and deliberate failure tests are:
 

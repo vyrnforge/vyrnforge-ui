@@ -27,6 +27,11 @@ type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
+type VyrnForgeValidationError = {
+  message?: string;
+  validity?: Readonly<Record<string, boolean>>;
+};
+
 @Component({
   selector: "app-root",
   standalone: true,
@@ -76,6 +81,21 @@ export class AppComponent implements AfterViewInit {
 
   get ownerControl(): FormControl<string> {
     return this.profileForm.controls.owner;
+  }
+
+  get ownerValidationMessage(): string {
+    return this.ownerValidationError?.message ?? "";
+  }
+
+  get ownerValueMissing(): boolean {
+    return this.ownerValidationError?.validity?.["valueMissing"] === true;
+  }
+
+  private get ownerValidationError(): VyrnForgeValidationError | null {
+    const error = this.ownerControl.getError("vyrnForge") as unknown;
+    return error && typeof error === "object"
+      ? (error as VyrnForgeValidationError)
+      : null;
   }
 
   ngAfterViewInit(): void {

@@ -225,6 +225,7 @@ export class VyrnForgeFormControlDirective
       return;
     }
     this.onTouched();
+    this.requestValidatorRefresh();
   }
 
   handleInvalid(_event: Event): void {

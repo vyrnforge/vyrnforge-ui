@@ -17,6 +17,7 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
+const directivePath = "packages/ui-angular/src/forms.ts";
 
 function withRepositoryCopy(mutate, callback) {
   const temporaryRoot = mkdtempSync(
@@ -53,7 +54,7 @@ test("rejects a missing Angular value-accessor provider", () => {
     (root) =>
       replaceInFile(
         root,
-        "tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts",
+        directivePath,
         "provide: NG_VALUE_ACCESSOR",
         'provide: Symbol.for("missing-value-accessor")',
       ),
@@ -61,6 +62,60 @@ test("rejects a missing Angular value-accessor provider", () => {
       assert.ok(
         verifyAngularFormsAdapter(root).some((failure) =>
           failure.includes("NG_VALUE_ACCESSOR"),
+        ),
+      ),
+  );
+});
+
+test("rejects missing native validation-message mapping", () => {
+  withRepositoryCopy(
+    (root) =>
+      replaceInFile(
+        root,
+        directivePath,
+        "message: element.validationMessage",
+        'message: "adapter-owned message"',
+      ),
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("message: element.validationMessage"),
+        ),
+      ),
+  );
+});
+
+test("rejects missing serialized native validity mapping", () => {
+  withRepositoryCopy(
+    (root) =>
+      replaceInFile(
+        root,
+        directivePath,
+        "validity: serializeValidity(element.validity)",
+        "validity: {}",
+      ),
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("serializeValidity"),
+        ),
+      ),
+  );
+});
+
+test("rejects touched propagation without validator refresh", () => {
+  withRepositoryCopy(
+    (root) =>
+      replaceInFile(
+        root,
+        directivePath,
+        "this.onTouched();\n    this.requestValidatorRefresh();",
+        "this.onTouched();",
+      ),
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("requestValidatorRefresh"),
         ),
       ),
   );
@@ -84,7 +139,25 @@ test("rejects missing template-driven Forms evidence", () => {
   );
 });
 
-test("rejects Angular dependency leakage into ui-elements", () => {
+test("rejects missing packed validation-message evidence", () => {
+  withRepositoryCopy(
+    (root) =>
+      replaceInFile(
+        root,
+        "tests/consumers/angular/src/app/app.component.html",
+        "message={{ ownerValidationMessage }}",
+        "message=removed",
+      ),
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("ownerValidationMessage"),
+        ),
+      ),
+  );
+});
+
+test("rejects Angular dependency leakage into shared foundations", () => {
   withRepositoryCopy(
     (root) => {
       const target = path.join(root, "packages/ui-elements/package.json");
@@ -95,27 +168,7 @@ test("rejects Angular dependency leakage into ui-elements", () => {
     (root) =>
       assert.ok(
         verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("must not depend on Angular"),
-        ),
-      ),
-  );
-});
-
-test("rejects an invented published Angular package", () => {
-  withRepositoryCopy(
-    (root) => {
-      const target = path.join(
-        root,
-        "docs/metadata/angular-forms-adapter.json",
-      );
-      const metadata = JSON.parse(readFileSync(target, "utf8"));
-      metadata.adapter.publishedPackage = "@vyrnforge/angular";
-      writeFileSync(target, `${JSON.stringify(metadata, null, 2)}\n`);
-    },
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("must not invent a published Angular package"),
+          failure.includes("Angular-independent"),
         ),
       ),
   );
@@ -144,7 +197,7 @@ test("rejects Angular host-listener metadata over typed Custom Element unions", 
     (root) =>
       replaceInFile(
         root,
-        "tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts",
+        directivePath,
         "private readonly listenerCleanup",
         'host: { "(vf-value-change)": "handleValueChange($event)" };\n  private readonly listenerCleanup',
       ),
