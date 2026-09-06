@@ -271,7 +271,8 @@ export function getReferenceFrameworkComponent(
   frameworkId: ReferencePlaygroundFrameworkId,
   componentId: string,
 ) {
-  const surface = referenceFrameworkSurfaces[toReferenceFrameworkId(frameworkId)];
+  const surface =
+    referenceFrameworkSurfaces[toReferenceFrameworkId(frameworkId)];
   return surface.components.find((component) => component.id === componentId);
 }
 
