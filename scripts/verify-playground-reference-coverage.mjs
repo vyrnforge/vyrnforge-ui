@@ -86,32 +86,27 @@ export function verifyPlaygroundReferenceCoverage({
     }
   }
 
-  const registeredTags = [
+  const phaseTags = [
     ...(nativeCore.registration?.tags ?? []),
     ...(nativeAdvanced.registration?.addedTags ?? []),
   ];
-  const registeredTagSet = new Set(registeredTags);
-  for (const tag of duplicates(registeredTags)) {
-    failures.push(`native element registration has duplicate tag: ${tag}`);
+  for (const tag of duplicates(phaseTags)) {
+    failures.push(`native element phase metadata has duplicate tag: ${tag}`);
   }
 
-  const nativeApiComponents = frameworkApi.surfaces?.native?.components ?? [];
-  const nativeApiTags = nativeApiComponents
-    .filter((component) => component.status === "current" && component.tag)
-    .map((component) => component.tag);
-  for (const tag of duplicates(nativeApiTags)) {
-    failures.push(`generated native API has duplicate current tag: ${tag}`);
-  }
-  for (const tag of nativeApiTags) {
-    if (!registeredTagSet.has(tag)) {
-      failures.push(`generated native API tag ${tag} is not registered`);
-    }
-  }
+  const canonicalNativeTags = [
+    ...new Set(
+      (frameworkApi.surfaces?.native?.components ?? [])
+        .filter((component) => component.status === "current" && component.tag)
+        .map((component) => component.tag),
+    ),
+  ];
+  const referenceElementTags = [...new Set([...phaseTags, ...canonicalNativeTags])];
 
   const componentPaths = componentIds.map(
     (id) => `/reference/components/${id}`,
   );
-  const elementPaths = registeredTags.map(
+  const elementPaths = referenceElementTags.map(
     (tag) => `/reference/elements/${tag}`,
   );
   for (const referencePath of duplicates([
@@ -119,6 +114,21 @@ export function verifyPlaygroundReferenceCoverage({
     ...elementPaths,
   ])) {
     failures.push(`generated reference path is not unique: ${referencePath}`);
+  }
+
+  const metadataSource = read(
+    root,
+    "examples/basic-playground/src/data/referenceMetadata.ts",
+  );
+  for (const marker of [
+    "phaseElementEntries",
+    "phaseElementTags",
+    "canonicalNativeElementEntries",
+    "...canonicalNativeElementEntries",
+  ]) {
+    if (!metadataSource.includes(marker)) {
+      failures.push(`reference metadata projection is missing ${marker}`);
+    }
   }
 
   const routeSource = read(
