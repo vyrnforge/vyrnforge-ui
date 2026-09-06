@@ -71,8 +71,9 @@
     <output data-reactive-state>
       status={{ ownerControl.status }}; dirty={{ ownerControl.dirty }};
       touched={{ ownerControl.touched }}; disabled={{ ownerControl.disabled }};
-      vyrnForgeError={{ ownerControl.hasError("vyrnForge") }};
-      message={{ ownerValidationMessage }}; valueMissing={{ ownerValueMissing }}
+      vyrnForgeError={{ ownerControl.hasError("vyrnForge") }}; message={{
+        ownerValidationMessage
+      }}; valueMissing={{ ownerValueMissing }}
     </output>
   </section>
 
