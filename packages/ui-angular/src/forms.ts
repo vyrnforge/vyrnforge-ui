@@ -223,9 +223,3 @@ export class VyrnForgeFormControlDirective
 }
 
 export type { VyrnForgeAngularFormValue } from "./forms-value-models.js";
-export {
-  convertAngularFormValueToElement,
-  convertElementValueToAngularForm,
-  getVyrnForgeAngularFormValueModel,
-  vyrnForgeAngularFormValueModels,
-} from "./forms-value-models.js";
