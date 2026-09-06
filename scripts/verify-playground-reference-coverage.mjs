@@ -101,7 +101,9 @@ export function verifyPlaygroundReferenceCoverage({
         .map((component) => component.tag),
     ),
   ];
-  const referenceElementTags = [...new Set([...phaseTags, ...canonicalNativeTags])];
+  const referenceElementTags = [
+    ...new Set([...phaseTags, ...canonicalNativeTags]),
+  ];
 
   const componentPaths = componentIds.map(
     (id) => `/reference/components/${id}`,
