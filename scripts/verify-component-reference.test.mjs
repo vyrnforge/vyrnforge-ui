@@ -112,7 +112,10 @@ test("rejects hand-written playground maturity status", () =>
 test("rejects a current canonical native API tag that is not registered", () =>
   fixture(
     (root) => {
-      const file = path.join(root, "docs/metadata/native-advanced-elements.json");
+      const file = path.join(
+        root,
+        "docs/metadata/native-advanced-elements.json",
+      );
       const value = JSON.parse(readFileSync(file, "utf8"));
       const tag = "vf-dialog";
       assert(
@@ -127,7 +130,9 @@ test("rejects a current canonical native API tag that is not registered", () =>
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("generated native API tag vf-dialog is not registered"),
+          failure.includes(
+            "generated native API tag vf-dialog is not registered",
+          ),
         ),
       ),
   ));
