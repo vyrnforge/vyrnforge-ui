@@ -14,11 +14,6 @@ const prettierCli = path.join(
   "prettier.cjs",
 );
 const writeBaseline = process.argv.includes("--write-baseline");
-const diagnosticFiles = [
-  "packages/ui-angular/src/forms-value-models.test.ts",
-  "packages/ui-angular/src/forms-value-models.ts",
-  "packages/ui-angular/src/forms.ts",
-];
 
 function fail(message) {
   console.error(message);
@@ -37,22 +32,6 @@ function hashFile(relativePath) {
   );
 
   return createHash("sha256").update(normalizedContent, "utf8").digest("hex");
-}
-
-function captureDiagnosticFormatting() {
-  if (!existsSync(prettierCli)) return;
-
-  for (const file of diagnosticFiles) {
-    const result = spawnSync(process.execPath, [prettierCli, "--write", file], {
-      cwd: root,
-      encoding: "utf8",
-    });
-    if (result.status !== 0) continue;
-    const content = readFileSync(path.join(root, file), "utf8");
-    console.log(`PRETTIER_OUTPUT_BEGIN ${file}`);
-    console.log(Buffer.from(content, "utf8").toString("base64"));
-    console.log(`PRETTIER_OUTPUT_END ${file}`);
-  }
 }
 
 function listUnformattedFiles() {
@@ -88,7 +67,6 @@ function buildEntries(files) {
   return Object.fromEntries(files.map((file) => [file, hashFile(file)]));
 }
 
-captureDiagnosticFormatting();
 const unformattedFiles = listUnformattedFiles();
 
 if (writeBaseline) {
