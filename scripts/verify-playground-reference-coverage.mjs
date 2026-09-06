@@ -1,0 +1,171 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const repositoryRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
+
+const frameworkIds = ["native-html", "react", "angular", "vue"];
+
+function read(root, relativePath) {
+  return readFileSync(path.join(root, relativePath), "utf8");
+}
+
+function json(root, relativePath) {
+  return JSON.parse(read(root, relativePath));
+}
+
+function duplicates(values) {
+  const seen = new Set();
+  const repeated = new Set();
+  for (const value of values) {
+    if (seen.has(value)) repeated.add(value);
+    seen.add(value);
+  }
+  return [...repeated].sort();
+}
+
+export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}) {
+  const failures = [];
+  const knowledge = json(root, "docs/generated/consumer-knowledge.json");
+  const frameworkApi = json(root, "docs/generated/framework-api-reference.json");
+  const nativeCore = json(root, "docs/metadata/native-core-elements.json");
+  const nativeAdvanced = json(
+    root,
+    "docs/metadata/native-advanced-elements.json",
+  );
+
+  const components = knowledge.components ?? [];
+  const componentIds = components.map((component) => component.id);
+  for (const id of duplicates(componentIds)) {
+    failures.push(`consumer knowledge has duplicate component id: ${id}`);
+  }
+
+  const surfaceComponents = Object.values(frameworkApi.surfaces ?? {}).flatMap(
+    (surface) => surface.components ?? [],
+  );
+  const surfaceComponentIds = new Set(
+    surfaceComponents.map((component) => component.id),
+  );
+  for (const component of components) {
+    if (!surfaceComponentIds.has(component.id)) {
+      failures.push(
+        `${component.id}: component has no generated framework API surface`,
+      );
+    }
+    for (const frameworkId of frameworkIds) {
+      if (!component.frameworks?.[frameworkId]) {
+        failures.push(
+          `${component.id}: reference detail usage is missing ${frameworkId}`,
+        );
+      }
+    }
+  }
+
+  const registeredTags = [
+    ...(nativeCore.registration?.tags ?? []),
+    ...(nativeAdvanced.registration?.addedTags ?? []),
+  ];
+  for (const tag of duplicates(registeredTags)) {
+    failures.push(`native element registration has duplicate tag: ${tag}`);
+  }
+
+  const nativeApiByTag = new Map(
+    (frameworkApi.surfaces?.native?.components ?? [])
+      .filter((component) => component.tag)
+      .map((component) => [component.tag, component]),
+  );
+  for (const tag of registeredTags) {
+    const apiComponent = nativeApiByTag.get(tag);
+    if (!apiComponent) {
+      failures.push(
+        `registered native element ${tag} is missing a generated native API mapping`,
+      );
+      continue;
+    }
+    if (!componentIds.includes(apiComponent.id)) {
+      failures.push(
+        `registered native element ${tag} maps to unknown component ${apiComponent.id}`,
+      );
+    }
+  }
+
+  const componentPaths = componentIds.map(
+    (id) => `/reference/components/${id}`,
+  );
+  const elementPaths = registeredTags.map((tag) => `/reference/elements/${tag}`);
+  for (const referencePath of duplicates([...componentPaths, ...elementPaths])) {
+    failures.push(`generated reference path is not unique: ${referencePath}`);
+  }
+
+  const routeSource = read(
+    root,
+    "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
+  );
+  for (const marker of [
+    "referenceComponents.map",
+    "referenceElements.map",
+    "referenceDetailRoutes",
+    "`/reference/components/${component.id}`",
+    "`/reference/elements/${element.tag}`",
+  ]) {
+    if (!routeSource.includes(marker)) {
+      failures.push(`generated reference routes are missing ${marker}`);
+    }
+  }
+
+  const catalogSource = read(
+    root,
+    "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
+  );
+  for (const marker of [
+    "`#/reference/components/${component.id}`",
+    "`#/reference/elements/${element.tag}`",
+  ]) {
+    if (!catalogSource.includes(marker)) {
+      failures.push(`reference catalog links are missing ${marker}`);
+    }
+  }
+
+  const appSource = read(root, "examples/basic-playground/src/app/App.tsx");
+  for (const marker of [
+    "const navigationRoutes = [",
+    "const routes = [...navigationRoutes, ...referenceDetailRoutes]",
+    "routes={navigationRoutes}",
+  ]) {
+    if (!appSource.includes(marker)) {
+      failures.push(`playground route separation is missing ${marker}`);
+    }
+  }
+
+  const detailSource = read(
+    root,
+    "examples/basic-playground/src/pages/reference/MetadataDetailPages.tsx",
+  );
+  for (const marker of [
+    "getReferenceFrameworkComponent",
+    "usePlaygroundFramework",
+    "findDemoRoute",
+    "createComponentReferenceDetailPage",
+    "createElementReferenceDetailPage",
+  ]) {
+    if (!detailSource.includes(marker)) {
+      failures.push(`reference detail renderer is missing ${marker}`);
+    }
+  }
+
+  return failures.sort();
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const failures = verifyPlaygroundReferenceCoverage();
+  if (failures.length > 0) {
+    console.error("Playground reference coverage verification failed:");
+    for (const failure of failures) console.error(`- ${failure}`);
+    process.exitCode = 1;
+  } else {
+    console.log("Playground reference coverage verification passed.");
+  }
+}
