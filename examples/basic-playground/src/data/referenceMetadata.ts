@@ -229,7 +229,9 @@ const phaseElementEntries: ReferenceElement[] = [
     "advanced",
   ),
 ];
-const phaseElementTags = new Set(phaseElementEntries.map((element) => element.tag));
+const phaseElementTags = new Set(
+  phaseElementEntries.map((element) => element.tag),
+);
 const canonicalNativeElementEntries: ReferenceElement[] = Array.from(
   nativeApiByTag.values(),
 )
