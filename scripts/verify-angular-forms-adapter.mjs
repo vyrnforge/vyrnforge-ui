@@ -73,7 +73,10 @@ function verifyMetadata(root, failures) {
     addFailure(failures, "Angular Forms directive identity is invalid");
   }
   if (adapter.selectorAttribute !== "vfFormControl") {
-    addFailure(failures, "Angular Forms selector attribute must be vfFormControl");
+    addFailure(
+      failures,
+      "Angular Forms selector attribute must be vfFormControl",
+    );
   }
   if (adapter.renderer !== "@vyrnforge/ui-elements") {
     addFailure(failures, "Angular Forms adapter must target ui-elements");
@@ -164,7 +167,10 @@ function verifyDirective(root, failures) {
     "host: {",
   ]) {
     if (directive.includes(forbidden)) {
-      addFailure(failures, `Angular Forms directive must not contain ${forbidden}`);
+      addFailure(
+        failures,
+        `Angular Forms directive must not contain ${forbidden}`,
+      );
     }
   }
 }
