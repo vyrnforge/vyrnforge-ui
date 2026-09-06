@@ -15,23 +15,14 @@ export type VyrnForgeAngularFormControlTag =
   | "vf-transfer-list";
 
 export type VyrnForgeAngularFormModelKind =
-  | "value"
-  | "checked"
-  | "numeric"
-  | "collection"
-  | "selection";
+  "value" | "checked" | "numeric" | "collection" | "selection";
 
 export type VyrnForgeAngularFormValue =
-  | boolean
-  | number
-  | readonly string[]
-  | string
-  | null;
+  boolean | number | readonly string[] | string | null;
 
 export type VyrnForgeAngularFormModelProperty = "checked" | "value";
 export type VyrnForgeAngularFormModelEvent =
-  | "vf-checked-change"
-  | "vf-value-change";
+  "vf-checked-change" | "vf-value-change";
 
 export interface VyrnForgeAngularFormValueModel {
   readonly tagName: VyrnForgeAngularFormControlTag;
@@ -265,7 +256,8 @@ function assertString(
   value: unknown,
   expected: string,
 ): asserts value is string {
-  if (typeof value !== "string") throw conversionError(tagName, expected, value);
+  if (typeof value !== "string")
+    throw conversionError(tagName, expected, value);
 }
 
 function assertBoolean(
