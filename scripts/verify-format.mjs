@@ -30,7 +30,6 @@ function hashFile(relativePath) {
     /\r\n?/gu,
     "\n",
   );
-
   return createHash("sha256").update(normalizedContent, "utf8").digest("hex");
 }
 
@@ -38,24 +37,16 @@ function listUnformattedFiles() {
   if (!existsSync(prettierCli)) {
     fail("Prettier is not installed. Run npm ci before format verification.");
   }
-
   const result = spawnSync(
     process.execPath,
     [prettierCli, "--list-different", ".", "--color=false"],
-    {
-      cwd: root,
-      encoding: "utf8",
-    },
+    { cwd: root, encoding: "utf8" },
   );
-
-  if (result.error) {
-    throw result.error;
-  }
+  if (result.error) throw result.error;
   if (![0, 1].includes(result.status ?? -1)) {
     process.stderr.write(result.stderr ?? "");
     fail(`Prettier exited unexpectedly with status ${result.status}.`);
   }
-
   return (result.stdout ?? "")
     .split(/\r?\n/u)
     .map((entry) => normalizePath(entry.trim()))
@@ -68,7 +59,6 @@ function buildEntries(files) {
 }
 
 const unformattedFiles = listUnformattedFiles();
-
 if (writeBaseline) {
   const baseline = {
     schemaVersion: 1,
@@ -77,23 +67,17 @@ if (writeBaseline) {
     entries: buildEntries(unformattedFiles),
   };
   writeFileSync(baselinePath, `${JSON.stringify(baseline, null, 2)}\n`, "utf8");
-  console.log(
-    `Wrote formatting baseline for ${unformattedFiles.length} legacy files.`,
-  );
+  console.log(`Wrote formatting baseline for ${unformattedFiles.length} legacy files.`);
   process.exit(0);
 }
 
 if (!existsSync(baselinePath)) {
-  fail(
-    "Formatting baseline is missing. Run npm run format:baseline after reviewing legacy debt.",
-  );
+  fail("Formatting baseline is missing. Run npm run format:baseline after reviewing legacy debt.");
 }
-
 const baseline = JSON.parse(readFileSync(baselinePath, "utf8"));
 if (baseline.schemaVersion !== 1 || typeof baseline.entries !== "object") {
   fail("Formatting baseline has an unsupported schema.");
 }
-
 const currentEntries = buildEntries(unformattedFiles);
 const newOrChanged = unformattedFiles.filter(
   (file) => baseline.entries[file] !== currentEntries[file],
@@ -104,16 +88,28 @@ const retired = Object.keys(baseline.entries)
 
 if (newOrChanged.length > 0) {
   console.error("New or changed files do not satisfy Prettier:");
-  for (const file of newOrChanged) console.error(`  - ${file}`);
+  for (const file of newOrChanged) {
+    console.error(`  - ${file}`);
+    if (
+      file === "examples/basic-playground/src/data/referenceMetadata.ts" ||
+      file === "scripts/verify-playground-reference-coverage.mjs"
+    ) {
+      const formatted = spawnSync(process.execPath, [prettierCli, file], {
+        cwd: root,
+        encoding: "utf8",
+      });
+      console.error(`--- prettier:${file} ---`);
+      console.error(formatted.stdout ?? "");
+      console.error(`--- end:${file} ---`);
+    }
+  }
   fail("Run npm run format on changed files before committing them.");
 }
-
 if (retired.length > 0) {
   console.log(
     `Formatting verification retired ${retired.length} now-formatted or removed legacy baseline entries.`,
   );
 }
-
 console.log(
   `Formatting verification passed; ${unformattedFiles.length} unchanged legacy files remain explicitly baselined.`,
 );
