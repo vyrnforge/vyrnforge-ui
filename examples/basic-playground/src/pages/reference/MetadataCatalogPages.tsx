@@ -61,6 +61,9 @@ export function ComponentsCatalogPage() {
                   <Text size="sm" tone="muted">
                     {component.purpose}
                   </Text>
+                  <a href={`#/reference/components/${component.id}`}>
+                    Open API reference
+                  </a>
                 </div>
               ))}
             </div>
@@ -108,6 +111,9 @@ export function NativeElementsCatalogPage() {
                   <Text size="sm" tone="muted">
                     {element.package}
                   </Text>
+                  <a href={`#/reference/elements/${element.tag}`}>
+                    Open API reference
+                  </a>
                 </div>
               ))}
             </div>
