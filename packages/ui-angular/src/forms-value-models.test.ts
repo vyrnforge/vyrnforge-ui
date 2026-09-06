@@ -11,7 +11,8 @@ describe("VyrnForge Angular Forms value models", () => {
   it("covers every supported tag exactly once across the five model kinds", () => {
     expect(vyrnForgeAngularFormValueModels).toHaveLength(14);
     expect(
-      new Set(vyrnForgeAngularFormValueModels.map((model) => model.tagName)).size,
+      new Set(vyrnForgeAngularFormValueModels.map((model) => model.tagName))
+        .size,
     ).toBe(14);
     expect(
       new Set(vyrnForgeAngularFormValueModels.map((model) => model.kind)),
