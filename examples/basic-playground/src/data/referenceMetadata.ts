@@ -107,7 +107,9 @@ type ReleaseGroups = {
 
 const consumerKnowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
 const designTokens = JSON.parse(designTokensRaw) as DesignTokens;
-const nativeCoreElements = JSON.parse(nativeCoreElementsRaw) as NativeCoreElements;
+const nativeCoreElements = JSON.parse(
+  nativeCoreElementsRaw,
+) as NativeCoreElements;
 const nativeAdvancedElements = JSON.parse(
   nativeAdvancedElementsRaw,
 ) as NativeAdvancedElements;
