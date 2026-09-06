@@ -35,9 +35,9 @@ describe("VyrnForge Angular Forms value models", () => {
     expect(convertElementValueToAngularForm("vf-search-input", "query")).toBe(
       "query",
     );
-    expect(() =>
-      convertAngularFormValueToElement("vf-textarea", 42),
-    ).toThrow(TypeError);
+    expect(() => convertAngularFormValueToElement("vf-textarea", 42)).toThrow(
+      TypeError,
+    );
     expect(() =>
       convertElementValueToAngularForm("vf-text-input", true),
     ).toThrow(TypeError);
@@ -72,9 +72,9 @@ describe("VyrnForge Angular Forms value models", () => {
     });
     expect(convertElementValueToAngularForm("vf-checkbox", "mixed")).toBeNull();
     expect(convertElementValueToAngularForm("vf-switch", false)).toBe(false);
-    expect(() =>
-      convertAngularFormValueToElement("vf-switch", "true"),
-    ).toThrow(TypeError);
+    expect(() => convertAngularFormValueToElement("vf-switch", "true")).toThrow(
+      TypeError,
+    );
   });
 
   it("adapts the string-backed number input to a numeric Angular model", () => {
