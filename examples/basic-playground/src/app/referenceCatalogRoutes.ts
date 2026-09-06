@@ -1,4 +1,7 @@
-import { referenceComponents, referenceElements } from "../data/referenceMetadata";
+import {
+  referenceComponents,
+  referenceElements,
+} from "../data/referenceMetadata";
 import {
   ComponentsCatalogPage,
   NativeElementsCatalogPage,
