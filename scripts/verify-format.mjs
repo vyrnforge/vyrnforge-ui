@@ -104,7 +104,18 @@ const retired = Object.keys(baseline.entries)
 
 if (newOrChanged.length > 0) {
   console.error("New or changed files do not satisfy Prettier:");
-  for (const file of newOrChanged) console.error(`  - ${file}`);
+  for (const file of newOrChanged) {
+    console.error(`  - ${file}`);
+    if (file === "scripts/verify-component-reference.test.mjs") {
+      const formatted = spawnSync(process.execPath, [prettierCli, file], {
+        cwd: root,
+        encoding: "utf8",
+      });
+      console.error(`--- prettier:${file} ---`);
+      console.error(formatted.stdout ?? "");
+      console.error(`--- end:${file} ---`);
+    }
+  }
   fail("Run npm run format on changed files before committing them.");
 }
 
