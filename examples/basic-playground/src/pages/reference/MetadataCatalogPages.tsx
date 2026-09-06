@@ -30,8 +30,8 @@ export function ComponentsCatalogPage() {
           <Heading size="md">Canonical component catalog</Heading>
           <Text tone="muted">
             Component identity, package ownership, maturity, availability, and
-            purpose are generated from canonical VyrnForge consumer knowledge for
-            this exact playground snapshot.
+            purpose are generated from canonical VyrnForge consumer knowledge
+            for this exact playground snapshot.
           </Text>
         </div>
         <Badge tone="subtle">{referenceComponents.length} components</Badge>
@@ -79,7 +79,8 @@ export function NativeElementsCatalogPage() {
           <Heading size="md">Native element catalog</Heading>
           <Text tone="muted">
             Registered Custom Elements are composed from the canonical core and
-            advanced native-element programs captured by this playground version.
+            advanced native-element programs captured by this playground
+            version.
           </Text>
         </div>
         <Badge tone="subtle">{referenceElements.length} elements</Badge>
