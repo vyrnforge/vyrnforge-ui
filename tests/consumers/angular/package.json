@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "ng build --configuration development",
+    "verify:ssr": "node ../../../scripts/verify-angular-ssr-safe.mjs",
+    "typecheck": "npm run verify:ssr && ng build --configuration development",
     "build": "ng build --configuration production",
     "preview": "node preview.mjs"
   },
