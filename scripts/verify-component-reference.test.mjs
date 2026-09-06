@@ -109,30 +109,26 @@ test("rejects hand-written playground maturity status", () =>
       ),
   ));
 
-test("rejects a current canonical native API tag that is not registered", () =>
+test("rejects canonical native API tags dropped from the reference projection", () =>
   fixture(
     (root) => {
       const file = path.join(
         root,
-        "docs/metadata/native-advanced-elements.json",
+        "examples/basic-playground/src/data/referenceMetadata.ts",
       );
-      const value = JSON.parse(readFileSync(file, "utf8"));
-      const tag = "vf-dialog";
-      assert(
-        value.registration.addedTags.includes(tag),
-        "fixture needs vf-dialog in advanced element registration",
+      const content = readFileSync(file, "utf8");
+      const next = content.replace("...canonicalNativeElementEntries,", "");
+      assert.notEqual(
+        next,
+        content,
+        "fixture needs the canonical native element projection",
       );
-      value.registration.addedTags = value.registration.addedTags.filter(
-        (entry) => entry !== tag,
-      );
-      writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
+      writeFileSync(file, next);
     },
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes(
-            "generated native API tag vf-dialog is not registered",
-          ),
+          failure.includes("reference metadata projection is missing"),
         ),
       ),
   ));
