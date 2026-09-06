@@ -6,6 +6,7 @@ import {
   buildComponentReference,
   buildConsumerKnowledge,
 } from "./generate-component-reference.mjs";
+import { verifyPlaygroundReferenceCoverage } from "./verify-playground-reference-coverage.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -50,6 +51,7 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   if (!existsSync(path.join(root, programMetadataPath))) {
     return [`consumer knowledge metadata is missing: ${programMetadataPath}`];
   }
+  failures.push(...verifyPlaygroundReferenceCoverage({ root }));
   const program = json(root, programMetadataPath);
   if (program.status !== "current") {
     failures.push("consumer knowledge pipeline status must be current");
