@@ -122,19 +122,19 @@ test("rejects touched propagation without validator refresh", () => {
   );
 });
 
-test("rejects a missing numeric model for the string-backed number input", () => {
+test("rejects loss of string-backed number-input conversion", () => {
   withRepositoryCopy(
     (root) =>
       replaceInFile(
         root,
         valueModelsPath,
-        'tagName: "vf-number-input",\n    kind: "numeric"',
-        'tagName: "vf-number-input",\n    kind: "value"',
+        'tagName === "vf-number-input" ? String(value) : value',
+        "value",
       ),
     (root) =>
       assert.ok(
         verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("numeric") || failure.includes("value-model table"),
+          failure.includes("vf-number-input"),
         ),
       ),
   );
