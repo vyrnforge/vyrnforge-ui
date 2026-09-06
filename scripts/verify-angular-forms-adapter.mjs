@@ -9,6 +9,8 @@ const repositoryRoot = path.resolve(
 const angularVersion = "22.0.8";
 const expectedSupportClaim = "angular-forms-adapter-verified";
 const directivePath = "packages/ui-angular/src/forms.ts";
+const valueModelsPath = "packages/ui-angular/src/forms-value-models.ts";
+const valueModelsTestPath = "packages/ui-angular/src/forms-value-models.test.ts";
 const supportedTags = [
   "vf-autocomplete",
   "vf-checkbox",
@@ -25,10 +27,25 @@ const supportedTags = [
   "vf-textarea",
   "vf-transfer-list",
 ];
+const expectedValueModels = {
+  value: [
+    "vf-date-input",
+    "vf-datetime-input",
+    "vf-search-input",
+    "vf-text-input",
+    "vf-textarea",
+  ],
+  checked: ["vf-checkbox", "vf-switch"],
+  numeric: ["vf-number-input", "vf-rating", "vf-slider"],
+  collection: ["vf-multi-select", "vf-transfer-list"],
+  selection: ["vf-autocomplete", "vf-select"],
+};
 const requiredFiles = [
   "docs/metadata/angular-forms-adapter.json",
   "docs/testing/angular-forms-adapter-contract.md",
   directivePath,
+  valueModelsPath,
+  valueModelsTestPath,
   "packages/ui-angular/package.json",
   "tests/consumers/angular/src/app/app.component.ts",
   "tests/consumers/angular/src/app/app.component.html",
@@ -48,6 +65,14 @@ function readJson(root, relativePath) {
 
 function addFailure(failures, message) {
   failures.push(message);
+}
+
+function sameSet(actual, expected) {
+  const actualSet = new Set(actual ?? []);
+  return (
+    actualSet.size === expected.length &&
+    expected.every((entry) => actualSet.has(entry))
+  );
 }
 
 function verifyMetadata(root, failures) {
@@ -97,12 +122,32 @@ function verifyMetadata(root, failures) {
     );
   }
 
-  const actualTags = new Set(adapter.supportedTags ?? []);
-  if (
-    actualTags.size !== supportedTags.length ||
-    !supportedTags.every((tag) => actualTags.has(tag))
-  ) {
+  if (!sameSet(adapter.supportedTags, supportedTags)) {
     addFailure(failures, "Angular Forms supported tag catalog is incomplete");
+  }
+
+  const valueMapping = metadata.valueMapping ?? {};
+  for (const [kind, tags] of Object.entries(expectedValueModels)) {
+    if (!sameSet(valueMapping[kind], tags)) {
+      addFailure(
+        failures,
+        `Angular Forms ${kind} value-model metadata is incomplete`,
+      );
+    }
+  }
+  if (
+    valueMapping.coercionPolicy !== "reject-incompatible-runtime-values"
+  ) {
+    addFailure(
+      failures,
+      "Angular Forms value models must reject incompatible runtime values",
+    );
+  }
+  if (valueMapping.nullSemantics?.mixedCheckedRead !== "null") {
+    addFailure(failures, "mixed checked values must map to null");
+  }
+  if (valueMapping.nullSemantics?.emptyNumberInputRead !== "null") {
+    addFailure(failures, "empty number-input values must map to null");
   }
 
   for (const contract of [
@@ -142,6 +187,9 @@ function verifyDirective(root, failures) {
     '"vf-checked-change"',
     '"vf-invalid"',
     '"vf-value-change"',
+    "convertAngularFormValueToElement(element.localName, value)",
+    "convertElementValueToAngularForm(element.localName, detail.value)",
+    "convertElementValueToAngularForm(element.localName, detail.checked)",
     "element.disabled || !element.willValidate || element.validity.valid",
     "message: element.validationMessage",
     "validity: serializeValidity(element.validity)",
@@ -165,12 +213,58 @@ function verifyDirective(root, failures) {
     "@vyrnforge/ui-components",
     "@vyrnforge/ui-data-grid",
     "host: {",
+    "value.map((entry) => String(entry))",
+    "Number(value ?? 0)",
   ]) {
     if (directive.includes(forbidden)) {
       addFailure(
         failures,
         `Angular Forms directive must not contain ${forbidden}`,
       );
+    }
+  }
+}
+
+function verifyValueModels(root, failures) {
+  const models = read(root, valueModelsPath);
+  const tests = read(root, valueModelsTestPath);
+
+  for (const tag of supportedTags) {
+    if (!models.includes(`tagName: "${tag}"`)) {
+      addFailure(failures, `Angular Forms value-model table is missing ${tag}`);
+    }
+  }
+
+  for (const kind of Object.keys(expectedValueModels)) {
+    if (!models.includes(`kind: "${kind}"`)) {
+      addFailure(failures, `Angular Forms value-model table is missing ${kind}`);
+    }
+  }
+
+  for (const marker of [
+    "convertAngularFormValueToElement",
+    "convertElementValueToAngularForm",
+    "Unsupported form control tag",
+    'tagName === "vf-number-input" ? String(value) : value',
+    'if (value === "mixed") return null',
+    "Object.freeze([...value])",
+  ]) {
+    if (!models.includes(marker)) {
+      addFailure(failures, `Angular Forms value-model source is missing ${marker}`);
+    }
+  }
+
+  for (const marker of [
+    '"vf-number-input", 42.5',
+    '"vf-checkbox", "mixed"',
+    '"vf-multi-select", ["alpha", 2]',
+    '"vf-autocomplete").kind',
+    '"vf-select").kind',
+    '"vf-radio"',
+    "Number.POSITIVE_INFINITY",
+  ]) {
+    if (!tests.includes(marker)) {
+      addFailure(failures, `Angular Forms conversion suite is missing ${marker}`);
     }
   }
 }
@@ -328,6 +422,7 @@ export function verifyAngularFormsAdapter(root = repositoryRoot) {
 
   verifyMetadata(root, failures);
   verifyDirective(root, failures);
+  verifyValueModels(root, failures);
   verifyPackageEntrypoint(root, failures);
   verifyFixture(root, failures);
   verifyRuntimeEvidence(root, failures);
