@@ -32,7 +32,8 @@
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-elements",
-      "@vyrnforge/ui-components"
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-angular"
     ],
     "excludedPackages": [
       {
@@ -46,7 +47,8 @@
         "@vyrnforge/ui-core",
         "@vyrnforge/ui-behaviors",
         "@vyrnforge/ui-components",
-        "@vyrnforge/ui-elements"
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-angular"
       ],
       "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
     },

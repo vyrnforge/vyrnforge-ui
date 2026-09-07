@@ -43,6 +43,14 @@
       "cssImport": "@vyrnforge/ui-elements/styles/index.css"
     },
     {
+      "name": "@vyrnforge/ui-angular",
+      "purpose": "First-class Angular adapter over VyrnForge canonical Custom Elements with generated typed facades, package-owned setup, Forms integration, composition, and imperative references.",
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "runtime": null,
+      "cssImport": "not-applicable"
+    },
+    {
       "name": "@vyrnforge/ui-data-grid",
       "purpose": "Specialized enterprise data-management grid and grid contracts.",
       "status": "react-alpha-deferred",

@@ -69,22 +69,45 @@ attributes.
 
 ## Angular
 
-Angular is a verified consumer of the native Custom Element renderer, not a
-separate VyrnForge component implementation.
+Angular applications use `@vyrnforge/ui-angular` as the first-class facade over
+the canonical Custom Element implementation.
 
-Install and register `@vyrnforge/ui-elements` using the native setup above, then
-configure the consuming Angular application for Custom Elements. Use DOM
-properties for complex values and canonical `vf-*` events for component
-events.
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-angular@beta
+```
 
-Applications that need reactive Forms, template-driven Forms, or `ngModel`
-translation can use the thin reference integration described in:
+Import the shared package styles once, then register VyrnForge at the Angular
+application boundary:
 
-- [Angular Consumer Contract](../testing/angular-consumer-contract.md)
-- [Angular Forms Adapter Contract](../testing/angular-forms-adapter-contract.md)
+```ts
+import "@vyrnforge/ui-core/styles/index.css";
+import "@vyrnforge/ui-elements/styles/index.css";
 
-The adapter translates Angular form state to the public native element contract;
-it does not add Angular as a VyrnForge runtime dependency.
+import { provideZonelessChangeDetection } from "@angular/core";
+import { bootstrapApplication } from "@angular/platform-browser";
+import { provideVyrnForge } from "@vyrnforge/ui-angular";
+
+import { AppComponent } from "./app/app.component";
+
+bootstrapApplication(AppComponent, {
+  providers: [provideZonelessChangeDetection(), provideVyrnForge()],
+});
+```
+
+The generated facade supplies Angular selectors, typed inputs/outputs, content
+composition metadata, typed element references, and supported imperative method
+access without requiring applications to copy registration code or private
+fixture adapters.
+
+Applications that use reactive Forms, template-driven Forms, or `ngModel`
+import the package-owned Forms bridge from `@vyrnforge/ui-angular/forms`.
+`@angular/forms` remains an optional peer for applications that do not use that
+entrypoint.
+
+See [Angular Package](../packages/ui-angular.md) for Forms, events, composition,
+typed references, SSR guidance, migration steps, limitations, and supported
+escape hatches. Use the generated component reference for the exact per-component
+Angular surface.
 
 ## Vue
 
@@ -150,7 +173,7 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-Native HTML:
+Native HTML and Angular:
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
@@ -193,8 +216,10 @@ See [Theming And Styling](../architecture/03-theming-and-styling.md) and
 - Keep framework runtimes out of shared foundations.
 - Prefer VyrnForge tokens and behavior contracts before creating one-off
   application equivalents.
-- Treat React and native HTML as first-class renderers.
-- Treat Angular and Vue as verified consumers of the native renderer.
+- Treat React, native HTML, and Angular as first-class non-grid consumption
+  surfaces through their public packages.
+- Treat Vue as a verified consumer of the native renderer until its facade lane
+  completes its release integration.
 - Treat the data grid as a separate React alpha track.
 
 ## Licensing

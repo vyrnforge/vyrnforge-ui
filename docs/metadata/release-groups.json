@@ -125,6 +125,26 @@
               "cssBytes": 105000
             }
           }
+        },
+        {
+          "name": "@vyrnforge/ui-angular",
+          "directory": "packages/ui-angular",
+          "role": "angular-renderer-adapter",
+          "dependencies": {
+            "@vyrnforge/ui-elements": "0.2.0-beta.2"
+          },
+          "policies": {
+            "hasCss": false,
+            "versionExport": null,
+            "sizeBudget": {
+              "packedBytes": 200000,
+              "unpackedBytes": 1200000,
+              "fileCount": 260,
+              "runtimeJavaScriptBytes": 600000,
+              "declarationBytes": 600000,
+              "cssBytes": 0
+            }
+          }
         }
       ]
     },
