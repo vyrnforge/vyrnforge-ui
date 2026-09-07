@@ -12,7 +12,7 @@ Generated directives provide canonical selectors, typed input/output contracts, 
 
 Angular Forms integration is available from the dedicated `@vyrnforge/ui-angular/forms` entrypoint. `VyrnForgeFormControlDirective` is a generic `ControlValueAccessor` and validator bridge for the supported form-associated VyrnForge controls. It delegates value, checked, disabled, touched, and validity behavior to the canonical Custom Elements rather than duplicating control behavior in Angular.
 
-The package remains private while SSR/hydration validation and publication/release verification continue through later S12 tasks.
+The package is a publishable first-class artifact in the canonical non-grid beta release group. Consumer-facing setup, Forms, events, composition, typed-reference, SSR, migration, limitation, and escape-hatch guidance lives in [`../../docs/packages/ui-angular.md`](../../docs/packages/ui-angular.md); generated per-component framework API details live in [`../../docs/generated/component-reference.json`](../../docs/generated/component-reference.json).
 
 ## Application setup
 
