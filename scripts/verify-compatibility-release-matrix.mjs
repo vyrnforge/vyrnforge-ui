@@ -6,7 +6,9 @@ const failures = [
   ...verifyAngularSupportEvidence(),
 ].sort();
 if (failures.length) {
-  console.error("Compatibility and Angular support evidence verification failed:");
+  console.error(
+    "Compatibility and Angular support evidence verification failed:",
+  );
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
