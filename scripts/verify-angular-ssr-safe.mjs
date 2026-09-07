@@ -10,6 +10,12 @@ for (const name of domGlobals) {
   Reflect.deleteProperty(globalThis, name);
 }
 
+// Angular libraries are distributed in partial compilation mode. Load the
+// compiler so a bare Node probe can evaluate the package without requiring a
+// browser bootstrap; the assertions below still guarantee VyrnForge itself
+// does not create browser globals or register Custom Elements eagerly.
+await import("@angular/compiler");
+
 const angularPackage = await import("@vyrnforge/ui-angular");
 await import("@vyrnforge/ui-angular/forms");
 
