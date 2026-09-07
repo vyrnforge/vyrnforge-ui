@@ -31,9 +31,13 @@ const registry = {
   },
 };
 
-const providers = angularPackage.provideVyrnForge({ elementRegistry: registry });
+const providers = angularPackage.provideVyrnForge({
+  elementRegistry: registry,
+});
 if (!providers) {
-  throw new Error("provideVyrnForge() did not return Angular environment providers.");
+  throw new Error(
+    "provideVyrnForge() did not return Angular environment providers.",
+  );
 }
 if (registrations !== 0) {
   throw new Error(
