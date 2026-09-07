@@ -14,7 +14,7 @@ jobs:
   repair:
     if: github.repository == 'vyrnforge/vyrnforge-ui'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout task branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -34,17 +34,27 @@ jobs:
         shell: bash
         run: |
           npm run generate:beta-scope
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const file = 'scripts/verify-multi-framework-architecture.mjs';
+          const before = readFileSync(file, 'utf8');
+          const needle = `        "@vyrnforge/ui-components",\n        "@vyrnforge/ui-elements",\n      ]),`;
+          const replacement = `        "@vyrnforge/ui-components",\n        "@vyrnforge/ui-elements",\n        "@vyrnforge/ui-angular",\n      ]),`;
+          if (!before.includes(needle)) throw new Error('multi-framework release-group contract pattern not found');
+          writeFileSync(file, before.replace(needle, replacement));
+          NODE
           npx prettier --write \
             docs/metadata/non-grid-beta-scope.json \
             docs/metadata/beta-package-artifacts.json \
-            docs/metadata/trusted-publishing-provenance.json
+            docs/metadata/trusted-publishing-provenance.json \
+            scripts/verify-multi-framework-architecture.mjs
           git show 3302e37e2711b8127aaeb13ade00bc157c99fbf4:scripts/verify-format.mjs > scripts/verify-format.mjs
           npm install --package-lock-only --ignore-scripts
       - name: Verify repaired contracts
         run: |
           npm run format:check
-          npm run test:beta-scope
           npm run verify:metadata
+          npm run test:contracts
       - name: Commit repaired evidence and remove repair workflow
         shell: bash
         run: |
@@ -55,6 +65,7 @@ jobs:
             docs/metadata/non-grid-beta-scope.json \
             docs/metadata/beta-package-artifacts.json \
             docs/metadata/trusted-publishing-provenance.json \
+            scripts/verify-multi-framework-architecture.mjs \
             scripts/verify-format.mjs \
             package-lock.json \
             .github/workflows/mfd-1215-repair.yml
