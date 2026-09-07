@@ -1,0 +1,66 @@
+name: MFD-1215 release evidence repair
+
+on:
+  push:
+    branches:
+      - mfd-1215-angular-release-verification
+    paths:
+      - .github/workflows/mfd-1215-repair.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.repository == 'vyrnforge/vyrnforge-ui'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout task branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: mfd-1215-angular-release-verification
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Refresh canonical downstream evidence
+        shell: bash
+        run: |
+          npm run generate:beta-scope
+          npx prettier --write \
+            docs/metadata/non-grid-beta-scope.json \
+            docs/metadata/beta-package-artifacts.json \
+            docs/metadata/trusted-publishing-provenance.json
+          git show 3302e37e2711b8127aaeb13ade00bc157c99fbf4:scripts/verify-format.mjs > scripts/verify-format.mjs
+          npm install --package-lock-only --ignore-scripts
+      - name: Verify repaired contracts
+        run: |
+          npm run format:check
+          npm run test:beta-scope
+          npm run verify:metadata
+      - name: Commit repaired evidence and remove repair workflow
+        shell: bash
+        run: |
+          rm .github/workflows/mfd-1215-repair.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add \
+            docs/metadata/non-grid-beta-scope.json \
+            docs/metadata/beta-package-artifacts.json \
+            docs/metadata/trusted-publishing-provenance.json \
+            scripts/verify-format.mjs \
+            package-lock.json \
+            .github/workflows/mfd-1215-repair.yml
+          if git diff --cached --quiet; then
+            echo 'No repair changes were required.'
+            exit 0
+          fi
+          git commit -m 'MFD-1215: refresh downstream release evidence'
+          git push origin HEAD:mfd-1215-angular-release-verification
