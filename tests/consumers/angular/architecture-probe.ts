@@ -34,7 +34,10 @@ const autocompleteSlots = [
   "item",
 ] satisfies readonly VfAutocompleteSlotName[];
 const dialogSlots = ["trigger", "content"] satisfies readonly VfDialogSlotName[];
-const pageHeaderSlots = ["status", "actions"] satisfies readonly VfPageHeaderSlotName[];
+const pageHeaderSlots = [
+  "status",
+  "actions",
+] satisfies readonly VfPageHeaderSlotName[];
 
 for (const slot of autocompleteSlots) {
   composeVfAutocompleteSlot(document.createElement("span"), slot);
