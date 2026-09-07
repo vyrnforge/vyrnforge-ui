@@ -174,10 +174,17 @@ export class AppComponent implements AfterViewInit {
           );
         }
       }
-      if (!dialogElement.querySelector('[slot="trigger"]')) {
+
+      const dialogTrigger = document.querySelector<HTMLElement>(
+        "[data-dialog-trigger]",
+      );
+      if (dialogTrigger?.getAttribute("slot") !== "trigger") {
         throw new Error("Angular Dialog did not preserve its trigger region.");
       }
-      if (!dialogElement.querySelector('[slot="content"]')) {
+      const dialogContent = document.querySelector<HTMLElement>(
+        '[data-composition-slot="dialog-content"]',
+      );
+      if (dialogContent?.getAttribute("slot") !== "content") {
         throw new Error("Angular Dialog did not preserve its content region.");
       }
 
