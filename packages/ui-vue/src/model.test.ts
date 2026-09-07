@@ -57,7 +57,15 @@ describe("useVyrnForgeModel", () => {
     await verifyModelRoundTrip("vf-checked-change", false, true);
   });
 
+  it("bridges selection arrays without duplicate update loops", async () => {
+    await verifyModelRoundTrip("vf-value-change", ["first"], ["second"]);
+  });
+
   it("bridges open models without duplicate update loops", async () => {
     await verifyModelRoundTrip("vf-open-change", false, true);
+  });
+
+  it("bridges pressed models without duplicate update loops", async () => {
+    await verifyModelRoundTrip("vf-pressed-change", false, true);
   });
 });
