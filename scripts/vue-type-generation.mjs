@@ -41,7 +41,9 @@ function elementType(component) {
 }
 
 function renderMetadataType(type) {
-  if (["string", "number", "boolean", "bigint", "void", "unknown"].includes(type)) {
+  if (
+    ["string", "number", "boolean", "bigint", "void", "unknown"].includes(type)
+  ) {
     return type;
   }
   if (type === "boolean | mixed") return 'boolean | "mixed"';
@@ -137,7 +139,10 @@ function serializeComponent(component) {
 
 export function createVueTypeModel(generationModel) {
   const nativeById = new Map(
-    generationModel.surfaces.native.components.map((record) => [record.id, record]),
+    generationModel.surfaces.native.components.map((record) => [
+      record.id,
+      record,
+    ]),
   );
   const components = generationModel.surfaces.vue.components
     .filter((record) => ["current", "target"].includes(record.status))
@@ -157,7 +162,10 @@ export function createVueTypeModel(generationModel) {
       };
     })
     .sort((left, right) => compareText(left.id, right.id));
-  assert(components.length === 59, `expected 59 components, got ${components.length}`);
+  assert(
+    components.length === 59,
+    `expected 59 components, got ${components.length}`,
+  );
   return Object.freeze(components);
 }
 
