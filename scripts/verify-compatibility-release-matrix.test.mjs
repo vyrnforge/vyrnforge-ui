@@ -36,7 +36,10 @@ function angularEvidenceFixture(mutator, callback) {
     }
     mkdirSync(path.join(root, "scripts"), { recursive: true });
     cpSync(
-      path.join(repositoryRoot, "scripts/verify-angular-packed-fixture-ownership.mjs"),
+      path.join(
+        repositoryRoot,
+        "scripts/verify-angular-packed-fixture-ownership.mjs",
+      ),
       path.join(root, "scripts/verify-angular-packed-fixture-ownership.mjs"),
     );
     mutator?.(root);
@@ -78,14 +81,19 @@ test("accepts the first-class Angular 22 compatibility and accessibility evidenc
 test("rejects widening the Angular support claim beyond the public peer range", () =>
   angularEvidenceFixture(
     (root) => {
-      const file = path.join(root, "docs/metadata/angular-support-evidence.json");
+      const file = path.join(
+        root,
+        "docs/metadata/angular-support-evidence.json",
+      );
       const value = JSON.parse(readFileSync(file, "utf8"));
       value.package.peerRange = ">=21 <23";
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) =>
       assert(
-        failures.some((failure) => failure.includes(">=22 <23 core peer contract")),
+        failures.some((failure) =>
+          failure.includes(">=22 <23 core peer contract"),
+        ),
       ),
   ));
 
@@ -101,7 +109,9 @@ test("rejects missing Angular manual accessibility evidence", () =>
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) =>
-      assert(failures.includes("MFD-1214 Angular NVDA evidence is incomplete")),
+      assert(
+        failures.includes("MFD-1214 Angular NVDA evidence is incomplete"),
+      ),
   ));
 
 test("rejects missing packed Angular ownership enforcement", () =>
