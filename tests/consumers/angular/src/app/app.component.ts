@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import {
+  VfAutocomplete,
   VfButton,
   VfDialog,
   VfPageHeader,
@@ -18,6 +19,7 @@ import {
 } from "@vyrnforge/ui-angular";
 import { VyrnForgeFormControlDirective } from "@vyrnforge/ui-angular/forms";
 
+type AutocompleteElement = VyrnForgeElementForTagName<"vf-autocomplete">;
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
@@ -33,6 +35,7 @@ type VyrnForgeValidationError = {
   imports: [
     FormsModule,
     ReactiveFormsModule,
+    VfAutocomplete,
     VfButton,
     VfDialog,
     VfPageHeader,
@@ -52,6 +55,9 @@ export class AppComponent implements AfterViewInit {
   @ViewChild("dialogElement", { read: ElementRef })
   private dialogRef?: ElementRef<DialogElement>;
 
+  @ViewChild("compositionAutocomplete", { read: ElementRef })
+  private compositionAutocompleteRef?: ElementRef<AutocompleteElement>;
+
   readonly owner = "Operations";
   readonly profileForm = new FormGroup({
     owner: new FormControl("Operations", { nonNullable: true }),
@@ -68,6 +74,10 @@ export class AppComponent implements AfterViewInit {
       content: "Angular value/valueChange mapping",
     },
   ] satisfies readonly VyrnForgeTabItem[];
+  readonly autocompleteOptions = [
+    { value: "operations", label: "Operations" },
+    { value: "platform", label: "Platform" },
+  ] as const;
 
   activeTab = "summary";
   dialogOpen = false;
@@ -98,7 +108,14 @@ export class AppComponent implements AfterViewInit {
       const tabsElement = this.tabsRef?.nativeElement;
       const ownerElement = this.ownerInputRef?.nativeElement;
       const dialogElement = this.dialogRef?.nativeElement;
-      if (!tabsElement || !ownerElement || !dialogElement) {
+      const compositionAutocomplete =
+        this.compositionAutocompleteRef?.nativeElement;
+      if (
+        !tabsElement ||
+        !ownerElement ||
+        !dialogElement ||
+        !compositionAutocomplete
+      ) {
         throw new Error("Angular did not attach the Custom Element refs.");
       }
 
@@ -137,9 +154,46 @@ export class AppComponent implements AfterViewInit {
         );
       }
 
+      const requiredAutocompleteSlots = [
+        "label",
+        "description",
+        "prefix",
+        "suffix",
+        "item",
+        "empty",
+        "loading",
+      ] as const;
+      for (const slot of requiredAutocompleteSlots) {
+        if (
+          !Array.from(compositionAutocomplete.children).some(
+            (child) => child.getAttribute("slot") === slot,
+          )
+        ) {
+          throw new Error(
+            `Angular Autocomplete did not preserve the ${slot} composition region.`,
+          );
+        }
+      }
+
+      if (
+        !dialogElement.querySelector(
+          ".vf-dialog__trigger > [data-dialog-trigger]",
+        )
+      ) {
+        throw new Error("Angular Dialog did not preserve its trigger region.");
+      }
+      if (
+        !dialogElement.querySelector(
+          '.vf-dialog__body > [data-composition-slot="dialog-content"]',
+        )
+      ) {
+        throw new Error("Angular Dialog did not preserve its content region.");
+      }
+
       const root = document.querySelector<HTMLElement>(
         "[data-angular-consumer]",
       );
+      root?.setAttribute("data-composition", "verified");
       root?.setAttribute("data-consumer-property", "verified");
       root?.setAttribute("data-consumer-ready", "true");
     });
