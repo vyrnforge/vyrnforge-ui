@@ -109,9 +109,7 @@ test("rejects missing Angular manual accessibility evidence", () =>
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) =>
-      assert(
-        failures.includes("MFD-1214 Angular NVDA evidence is incomplete"),
-      ),
+      assert(failures.includes("MFD-1214 Angular NVDA evidence is incomplete")),
   ));
 
 test("rejects missing packed Angular ownership enforcement", () =>
