@@ -3,14 +3,26 @@
  * Source: docs/metadata/component-contracts.json
  * DO NOT EDIT. Regenerate with: npm run generate:framework-artifacts
  */
-import { defineComponent, h, useAttrs } from "vue";
-import type { Component, Slots, VNode } from "vue";
+import { defineComponent, h, ref, toRef, useAttrs } from "vue";
+import type { Component, Ref, Slots, VNode } from "vue";
 import type { VyrnForgePublicElementTagName } from "@vyrnforge/ui-elements";
+import { useVyrnForgeModel } from "../model";
 
 import { VfButton } from "./VfButton.generated";
 import { VfDialog } from "./VfDialog.generated";
 import { VfTabs } from "./VfTabs.generated";
 import { VfTextInput } from "./VfTextInput.generated";
+
+interface GeneratedVueModel {
+  readonly kind: string;
+  readonly canonicalProperty: string;
+  readonly canonicalChangeEvent: string;
+  readonly publicProperty: string;
+  readonly publicEvent: string;
+  readonly detailField: string;
+}
+
+type GeneratedModelElement = Element & EventTarget & Record<string, unknown>;
 
 function renderSlots(slots: Slots): VNode[] {
   const children: VNode[] = [];
@@ -25,16 +37,34 @@ function renderSlots(slots: Slots): VNode[] {
 function createVyrnForgeVueFacade(
   name: string,
   tag: VyrnForgePublicElementTagName,
+  model?: GeneratedVueModel,
 ): Component {
   return defineComponent({
     name,
     inheritAttrs: false,
-    setup(_, { slots, expose }) {
+    props: model ? { [model.publicProperty]: null } : undefined,
+    emits: model ? [model.publicEvent] : undefined,
+    setup(props, { slots, expose, emit }) {
       const attrs = useAttrs();
-      let element: Element | null = null;
+      const element = ref<GeneratedModelElement | null>(null);
+
+      if (model) {
+        useVyrnForgeModel({
+          element,
+          modelValue: toRef(props, model.publicProperty) as Readonly<Ref<unknown>>,
+          eventName: model.canonicalChangeEvent,
+          write: (target, value) => {
+            target[model.canonicalProperty] = value;
+          },
+          read: (event: CustomEvent<Record<string, unknown>>) =>
+            event.detail?.[model.detailField],
+          emit: (value) => emit(model.publicEvent, value),
+        });
+      }
+
       expose({
         get element() {
-          return element;
+          return element.value;
         },
       });
       return () =>
@@ -43,7 +73,10 @@ function createVyrnForgeVueFacade(
           {
             ...attrs,
             ref: (value: unknown) => {
-              element = value instanceof Element ? value : null;
+              element.value =
+                value instanceof Element
+                  ? (value as GeneratedModelElement)
+                  : null;
             },
           },
           renderSlots(slots),
@@ -52,65 +85,65 @@ function createVyrnForgeVueFacade(
   });
 }
 
-export const VfAlert = createVyrnForgeVueFacade("VfAlert", "vf-inline-message");
-export const VfAppShell = createVyrnForgeVueFacade("VfAppShell", "vf-app-shell");
-export const VfAutocomplete = createVyrnForgeVueFacade("VfAutocomplete", "vf-autocomplete");
-export const VfBadge = createVyrnForgeVueFacade("VfBadge", "vf-badge");
-export const VfBreadcrumbs = createVyrnForgeVueFacade("VfBreadcrumbs", "vf-breadcrumbs");
+export const VfAlert = createVyrnForgeVueFacade("VfAlert", "vf-inline-message", undefined);
+export const VfAppShell = createVyrnForgeVueFacade("VfAppShell", "vf-app-shell", undefined);
+export const VfAutocomplete = createVyrnForgeVueFacade("VfAutocomplete", "vf-autocomplete", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfBadge = createVyrnForgeVueFacade("VfBadge", "vf-badge", undefined);
+export const VfBreadcrumbs = createVyrnForgeVueFacade("VfBreadcrumbs", "vf-breadcrumbs", undefined);
 export { VfButton };
-export const VfButtonGroup = createVyrnForgeVueFacade("VfButtonGroup", "vf-button-group");
-export const VfCaption = createVyrnForgeVueFacade("VfCaption", "vf-caption");
-export const VfCard = createVyrnForgeVueFacade("VfCard", "vf-card");
-export const VfCheckbox = createVyrnForgeVueFacade("VfCheckbox", "vf-checkbox");
-export const VfCodeText = createVyrnForgeVueFacade("VfCodeText", "vf-code-text");
-export const VfConfirmDialog = createVyrnForgeVueFacade("VfConfirmDialog", "vf-confirm-dialog");
-export const VfDateInput = createVyrnForgeVueFacade("VfDateInput", "vf-date-input");
-export const VfDateTimeInput = createVyrnForgeVueFacade("VfDateTimeInput", "vf-datetime-input");
+export const VfButtonGroup = createVyrnForgeVueFacade("VfButtonGroup", "vf-button-group", undefined);
+export const VfCaption = createVyrnForgeVueFacade("VfCaption", "vf-caption", undefined);
+export const VfCard = createVyrnForgeVueFacade("VfCard", "vf-card", undefined);
+export const VfCheckbox = createVyrnForgeVueFacade("VfCheckbox", "vf-checkbox", {"kind":"checked","canonicalProperty":"checked","canonicalChangeEvent":"vf-checked-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"checked"});
+export const VfCodeText = createVyrnForgeVueFacade("VfCodeText", "vf-code-text", undefined);
+export const VfConfirmDialog = createVyrnForgeVueFacade("VfConfirmDialog", "vf-confirm-dialog", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"});
+export const VfDateInput = createVyrnForgeVueFacade("VfDateInput", "vf-date-input", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfDateTimeInput = createVyrnForgeVueFacade("VfDateTimeInput", "vf-datetime-input", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
 export { VfDialog };
-export const VfDrawer = createVyrnForgeVueFacade("VfDrawer", "vf-drawer");
-export const VfDropdown = createVyrnForgeVueFacade("VfDropdown", "vf-popover");
-export const VfEmptyState = createVyrnForgeVueFacade("VfEmptyState", "vf-empty-state");
-export const VfErrorState = createVyrnForgeVueFacade("VfErrorState", "vf-error-state");
-export const VfField = createVyrnForgeVueFacade("VfField", "vf-field");
-export const VfHeading = createVyrnForgeVueFacade("VfHeading", "vf-heading");
-export const VfIcon = createVyrnForgeVueFacade("VfIcon", "vf-icon");
-export const VfIconButton = createVyrnForgeVueFacade("VfIconButton", "vf-icon-button");
-export const VfInline = createVyrnForgeVueFacade("VfInline", "vf-inline");
-export const VfInlineMessage = createVyrnForgeVueFacade("VfInlineMessage", "vf-inline-message");
-export const VfLabel = createVyrnForgeVueFacade("VfLabel", "vf-label");
-export const VfLoadingState = createVyrnForgeVueFacade("VfLoadingState", "vf-loading-state");
-export const VfMenu = createVyrnForgeVueFacade("VfMenu", "vf-menu");
-export const VfMultiSelect = createVyrnForgeVueFacade("VfMultiSelect", "vf-multi-select");
-export const VfNumberInput = createVyrnForgeVueFacade("VfNumberInput", "vf-number-input");
-export const VfPage = createVyrnForgeVueFacade("VfPage", "vf-page");
-export const VfPageHeader = createVyrnForgeVueFacade("VfPageHeader", "vf-page-header");
-export const VfPageToolbar = createVyrnForgeVueFacade("VfPageToolbar", "vf-page-toolbar");
-export const VfPanel = createVyrnForgeVueFacade("VfPanel", "vf-panel");
-export const VfPopover = createVyrnForgeVueFacade("VfPopover", "vf-popover");
-export const VfRadio = createVyrnForgeVueFacade("VfRadio", "vf-radio");
-export const VfRadioGroup = createVyrnForgeVueFacade("VfRadioGroup", "vf-radio-group");
-export const VfRating = createVyrnForgeVueFacade("VfRating", "vf-rating");
-export const VfSearchInput = createVyrnForgeVueFacade("VfSearchInput", "vf-search-input");
-export const VfSection = createVyrnForgeVueFacade("VfSection", "vf-section");
-export const VfSegmentedControl = createVyrnForgeVueFacade("VfSegmentedControl", "vf-segmented-control");
-export const VfSelect = createVyrnForgeVueFacade("VfSelect", "vf-select");
-export const VfSideNav = createVyrnForgeVueFacade("VfSideNav", "vf-side-nav");
-export const VfSkeleton = createVyrnForgeVueFacade("VfSkeleton", "vf-skeleton");
-export const VfSlider = createVyrnForgeVueFacade("VfSlider", "vf-slider");
-export const VfStack = createVyrnForgeVueFacade("VfStack", "vf-stack");
-export const VfSwitch = createVyrnForgeVueFacade("VfSwitch", "vf-switch");
+export const VfDrawer = createVyrnForgeVueFacade("VfDrawer", "vf-drawer", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"});
+export const VfDropdown = createVyrnForgeVueFacade("VfDropdown", "vf-popover", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"});
+export const VfEmptyState = createVyrnForgeVueFacade("VfEmptyState", "vf-empty-state", undefined);
+export const VfErrorState = createVyrnForgeVueFacade("VfErrorState", "vf-error-state", undefined);
+export const VfField = createVyrnForgeVueFacade("VfField", "vf-field", undefined);
+export const VfHeading = createVyrnForgeVueFacade("VfHeading", "vf-heading", undefined);
+export const VfIcon = createVyrnForgeVueFacade("VfIcon", "vf-icon", undefined);
+export const VfIconButton = createVyrnForgeVueFacade("VfIconButton", "vf-icon-button", undefined);
+export const VfInline = createVyrnForgeVueFacade("VfInline", "vf-inline", undefined);
+export const VfInlineMessage = createVyrnForgeVueFacade("VfInlineMessage", "vf-inline-message", undefined);
+export const VfLabel = createVyrnForgeVueFacade("VfLabel", "vf-label", undefined);
+export const VfLoadingState = createVyrnForgeVueFacade("VfLoadingState", "vf-loading-state", undefined);
+export const VfMenu = createVyrnForgeVueFacade("VfMenu", "vf-menu", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"});
+export const VfMultiSelect = createVyrnForgeVueFacade("VfMultiSelect", "vf-multi-select", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfNumberInput = createVyrnForgeVueFacade("VfNumberInput", "vf-number-input", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfPage = createVyrnForgeVueFacade("VfPage", "vf-page", undefined);
+export const VfPageHeader = createVyrnForgeVueFacade("VfPageHeader", "vf-page-header", undefined);
+export const VfPageToolbar = createVyrnForgeVueFacade("VfPageToolbar", "vf-page-toolbar", undefined);
+export const VfPanel = createVyrnForgeVueFacade("VfPanel", "vf-panel", undefined);
+export const VfPopover = createVyrnForgeVueFacade("VfPopover", "vf-popover", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"});
+export const VfRadio = createVyrnForgeVueFacade("VfRadio", "vf-radio", {"kind":"checked","canonicalProperty":"checked","canonicalChangeEvent":"vf-checked-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"checked"});
+export const VfRadioGroup = createVyrnForgeVueFacade("VfRadioGroup", "vf-radio-group", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfRating = createVyrnForgeVueFacade("VfRating", "vf-rating", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfSearchInput = createVyrnForgeVueFacade("VfSearchInput", "vf-search-input", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfSection = createVyrnForgeVueFacade("VfSection", "vf-section", undefined);
+export const VfSegmentedControl = createVyrnForgeVueFacade("VfSegmentedControl", "vf-segmented-control", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfSelect = createVyrnForgeVueFacade("VfSelect", "vf-select", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfSideNav = createVyrnForgeVueFacade("VfSideNav", "vf-side-nav", {"kind":"value","canonicalProperty":"activeId","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfSkeleton = createVyrnForgeVueFacade("VfSkeleton", "vf-skeleton", undefined);
+export const VfSlider = createVyrnForgeVueFacade("VfSlider", "vf-slider", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfStack = createVyrnForgeVueFacade("VfStack", "vf-stack", undefined);
+export const VfSwitch = createVyrnForgeVueFacade("VfSwitch", "vf-switch", {"kind":"checked","canonicalProperty":"checked","canonicalChangeEvent":"vf-checked-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"checked"});
 export { VfTabs };
-export const VfText = createVyrnForgeVueFacade("VfText", "vf-text");
+export const VfText = createVyrnForgeVueFacade("VfText", "vf-text", undefined);
 export { VfTextInput };
-export const VfTextarea = createVyrnForgeVueFacade("VfTextarea", "vf-textarea");
-export const VfToast = createVyrnForgeVueFacade("VfToast", "vf-toast");
-export const VfToggleButton = createVyrnForgeVueFacade("VfToggleButton", "vf-toggle-button");
-export const VfToggleButtonGroup = createVyrnForgeVueFacade("VfToggleButtonGroup", "vf-toggle-button-group");
-export const VfToolbarButton = createVyrnForgeVueFacade("VfToolbarButton", "vf-toolbar-button");
-export const VfTooltip = createVyrnForgeVueFacade("VfTooltip", "vf-tooltip");
-export const VfTopNav = createVyrnForgeVueFacade("VfTopNav", "vf-top-nav");
-export const VfTransferList = createVyrnForgeVueFacade("VfTransferList", "vf-transfer-list");
-export const VfValidationMessage = createVyrnForgeVueFacade("VfValidationMessage", "vf-validation-message");
+export const VfTextarea = createVyrnForgeVueFacade("VfTextarea", "vf-textarea", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfToast = createVyrnForgeVueFacade("VfToast", "vf-toast", undefined);
+export const VfToggleButton = createVyrnForgeVueFacade("VfToggleButton", "vf-toggle-button", {"kind":"pressed","canonicalProperty":"pressed","canonicalChangeEvent":"vf-pressed-change","publicProperty":"pressed","publicEvent":"update:pressed","detailField":"pressed"});
+export const VfToggleButtonGroup = createVyrnForgeVueFacade("VfToggleButtonGroup", "vf-toggle-button-group", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfToolbarButton = createVyrnForgeVueFacade("VfToolbarButton", "vf-toolbar-button", {"kind":"pressed","canonicalProperty":"pressed","canonicalChangeEvent":"vf-pressed-change","publicProperty":"pressed","publicEvent":"update:pressed","detailField":"pressed"});
+export const VfTooltip = createVyrnForgeVueFacade("VfTooltip", "vf-tooltip", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"});
+export const VfTopNav = createVyrnForgeVueFacade("VfTopNav", "vf-top-nav", undefined);
+export const VfTransferList = createVyrnForgeVueFacade("VfTransferList", "vf-transfer-list", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"});
+export const VfValidationMessage = createVyrnForgeVueFacade("VfValidationMessage", "vf-validation-message", undefined);
 
 export const vyrnForgeVueGeneratedComponents = Object.freeze([
   VfAlert,

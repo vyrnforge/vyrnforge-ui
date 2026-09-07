@@ -9,7 +9,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const artifact = buildVueCatalogArtifact({ root });
 const models = artifact.components.filter((component) => component.model);
 
-assert.equal(models.length, 29, "Vue model matrix must cover 29 canonical models");
+assert.equal(
+  models.length,
+  29,
+  "Vue model matrix must cover 29 canonical models",
+);
 assert.deepEqual(
   [...new Set(models.map((component) => component.model.kind))].sort(),
   ["checked", "open", "pressed", "value"],
@@ -18,14 +22,23 @@ assert.deepEqual(
 
 for (const component of models) {
   const model = component.model;
-  assert.ok(model.publicProperty, `${component.id}: public model property missing`);
+  assert.ok(
+    model.publicProperty,
+    `${component.id}: public model property missing`,
+  );
   assert.ok(model.publicEvent, `${component.id}: public model event missing`);
-  assert.ok(model.canonicalProperty, `${component.id}: canonical property missing`);
+  assert.ok(
+    model.canonicalProperty,
+    `${component.id}: canonical property missing`,
+  );
   assert.ok(
     model.canonicalChangeEvent,
     `${component.id}: canonical change event missing`,
   );
-  assert.ok(model.detailField, `${component.id}: canonical detail field missing`);
+  assert.ok(
+    model.detailField,
+    `${component.id}: canonical detail field missing`,
+  );
 }
 
 const namedModels = new Map(
