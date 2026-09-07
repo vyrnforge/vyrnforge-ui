@@ -14,7 +14,7 @@ jobs:
   repair:
     if: github.repository == 'vyrnforge/vyrnforge-ui'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - name: Checkout task branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -43,6 +43,7 @@ jobs:
           if (!before.includes(needle)) throw new Error('multi-framework release-group contract pattern not found');
           writeFileSync(file, before.replace(needle, replacement));
           NODE
+          npm run generate:consumer-knowledge
           npx prettier --write \
             docs/metadata/non-grid-beta-scope.json \
             docs/metadata/beta-package-artifacts.json \
@@ -61,14 +62,8 @@ jobs:
           rm .github/workflows/mfd-1215-repair.yml
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add \
-            docs/metadata/non-grid-beta-scope.json \
-            docs/metadata/beta-package-artifacts.json \
-            docs/metadata/trusted-publishing-provenance.json \
-            scripts/verify-multi-framework-architecture.mjs \
-            scripts/verify-format.mjs \
-            package-lock.json \
-            .github/workflows/mfd-1215-repair.yml
+          git add -u
+          git add package-lock.json docs/metadata/non-grid-beta-scope.json docs/metadata/beta-package-artifacts.json docs/metadata/trusted-publishing-provenance.json scripts/verify-multi-framework-architecture.mjs
           if git diff --cached --quiet; then
             echo 'No repair changes were required.'
             exit 0
