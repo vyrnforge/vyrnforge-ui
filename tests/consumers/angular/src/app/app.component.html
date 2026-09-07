@@ -1,5 +1,6 @@
 <main class="vf-consumer-angular" data-angular-consumer>
   <vf-page-header
+    vfGeneratedPageHeader
     eyebrow="GMF4 consumer evidence"
     title="Angular packed consumer"
     description="Angular 22 consumes the native VyrnForge package directly."
@@ -47,19 +48,21 @@
 
       <div class="vf-consumer-angular-actions">
         <vf-button
+          vfGeneratedButton
           id="disable-reactive-owner"
           type="button"
           action="disable-owner"
-          variant="secondary"
+          variant="default"
           (vf-action)="disableOwner()"
         >
           Disable owner
         </vf-button>
         <vf-button
+          vfGeneratedButton
           id="enable-reactive-owner"
           type="button"
           action="enable-owner"
-          variant="secondary"
+          variant="default"
           (vf-action)="enableOwner()"
         >
           Enable owner
@@ -99,12 +102,13 @@
     >
       <vf-text-input
         #ownerInput
+        vfGeneratedTextInput
         label="Owner"
         name="owner"
-        required
+        [required]="true"
         [value]="owner"
       ></vf-text-input>
-      <vf-button type="submit" variant="secondary">
+      <vf-button vfGeneratedButton type="submit" variant="default">
         Submit Angular form
       </vf-button>
     </form>

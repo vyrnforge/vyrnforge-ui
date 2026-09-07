@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
 import {
   FormControl,
   FormGroup,
@@ -14,6 +8,7 @@ import {
 import {
   VfButton,
   VfDialog,
+  VfPageHeader,
   VfTabs,
   VfTextInput,
   type GeneratedDialogDismissDetail,
@@ -40,11 +35,11 @@ type VyrnForgeValidationError = {
     ReactiveFormsModule,
     VfButton,
     VfDialog,
+    VfPageHeader,
     VfTabs,
     VfTextInput,
     VyrnForgeFormControlDirective,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements AfterViewInit {
