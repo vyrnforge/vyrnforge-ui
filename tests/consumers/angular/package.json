@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "verify:ssr": "node ../../../scripts/verify-angular-ssr-safe.mjs",
-    "typecheck": "npm run verify:ssr && ng build --configuration development",
+    "verify:ownership": "node ../../../scripts/verify-angular-packed-fixture-ownership.mjs",
+    "typecheck": "npm run verify:ssr && npm run verify:ownership && ng build --configuration development",
     "build": "ng build --configuration production",
     "preview": "node preview.mjs"
   },
