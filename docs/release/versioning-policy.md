@@ -24,11 +24,13 @@ The first multi-framework non-grid beta is synchronized at
 2. `@vyrnforge/ui-behaviors`
 3. `@vyrnforge/ui-components`
 4. `@vyrnforge/ui-elements`
+5. `@vyrnforge/ui-angular`
 
-All four packages publish together and use exact internal `0.2.0-beta.2`
-dependencies. The synchronized version does not promote component maturity by
-itself; component maturity remains owned by the component metadata and evidence
-policy.
+All five packages publish together and use exact internal `0.2.0-beta.2`
+dependencies. Angular framework dependencies remain peers; the package's
+VyrnForge runtime dependency is the exact synchronized `@vyrnforge/ui-elements`
+version. The synchronized version does not promote component maturity by itself;
+component maturity remains owned by the component metadata and evidence policy.
 
 ### `data-grid-alpha`
 
@@ -65,6 +67,7 @@ treat it as a stable-release signal before stable approval.
 - `@vyrnforge/ui-behaviors` may depend on `@vyrnforge/ui-core`.
 - `@vyrnforge/ui-components` may depend on `ui-core` and `ui-behaviors`.
 - `@vyrnforge/ui-elements` may depend on `ui-core` and `ui-behaviors`.
+- `@vyrnforge/ui-angular` may depend on `ui-elements`; Angular runtime packages remain peers.
 - `@vyrnforge/ui-data-grid` may depend on `ui-core` and `ui-components`.
 - Inter-package versions are exact and derive from the canonical release-group
   manifest.

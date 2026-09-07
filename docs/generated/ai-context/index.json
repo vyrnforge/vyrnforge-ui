@@ -33,6 +33,12 @@
       "runtime": "custom-elements"
     },
     {
+      "name": "@vyrnforge/ui-angular",
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "runtime": null
+    },
+    {
       "name": "@vyrnforge/ui-data-grid",
       "status": "react-alpha-deferred",
       "releaseTrack": "independent-alpha",

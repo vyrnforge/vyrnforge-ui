@@ -51,6 +51,13 @@ const packageDefinitions = [
     forbiddenFrameworkSpecifiers: ["react", "react-dom", "vue", "@angular/"],
   },
   {
+    name: "@vyrnforge/ui-angular",
+    directory: "packages/ui-angular",
+    required: false,
+    allowedDependencies: new Set(["@vyrnforge/ui-elements"]),
+    forbiddenFrameworkSpecifiers: [],
+  },
+  {
     name: "@vyrnforge/ui-data-grid",
     directory: "packages/ui-data-grid",
     required: true,
