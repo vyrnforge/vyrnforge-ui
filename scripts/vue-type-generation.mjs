@@ -11,6 +11,15 @@ const GENERATED_HEADER = `/**
  * DO NOT EDIT. Regenerate with: npm run generate:framework-artifacts
  */`;
 
+// These Vue adapter props are intentionally represented in framework metadata,
+// but their canonical Native element interfaces do not currently expose a
+// matching public property. Keep the exceptions narrow and metadata-typed.
+const ELEMENT_PROPERTY_TYPE_EXCEPTIONS = new Set([
+  "button:name",
+  "tabs:disabledValues",
+  "tabs:orientation",
+]);
+
 function compareText(left, right) {
   return left < right ? -1 : left > right ? 1 : 0;
 }
@@ -53,8 +62,11 @@ function nativePropertyFor(component, canonicalProperty) {
 }
 
 function propertyType(component, property) {
+  const exceptionKey = `${component.id}:${property.canonical}`;
   const nativeProperty = nativePropertyFor(component, property.canonical);
-  if (!nativeProperty) return renderMetadataType(property.type);
+  if (!nativeProperty || ELEMENT_PROPERTY_TYPE_EXCEPTIONS.has(exceptionKey)) {
+    return renderMetadataType(property.type);
+  }
   return `${elementType(component)}[${JSON.stringify(nativeProperty.public)}]`;
 }
 
