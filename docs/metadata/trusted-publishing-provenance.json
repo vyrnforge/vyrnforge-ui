@@ -30,11 +30,7 @@
     "runner": "ubuntu-latest",
     "environment": "npm-release",
     "concurrencyGroup": "vyrnforge-npm-release",
-    "publishPermissions": {
-      "actions": "read",
-      "contents": "read",
-      "id-token": "write"
-    },
+    "publishPermissions": {"actions":"read","contents":"read","id-token":"write"},
     "verificationMustNotRequestOidc": true,
     "releaseRecordMustNotRequestOidc": true,
     "singleDispatch": true,
@@ -56,39 +52,15 @@
       "metadataPath": "dist.attestations.url",
       "signatureCommand": "npm audit signatures"
     },
-    "forbiddenCredentialMarkers": [
-      "NODE_AUTH_TOKEN",
-      "NPM_TOKEN",
-      "secrets.NPM_TOKEN",
-      "_authToken"
-    ]
+    "forbiddenCredentialMarkers": ["NODE_AUTH_TOKEN","NPM_TOKEN","secrets.NPM_TOKEN","_authToken"]
   },
   "packages": [
-    {
-      "name": "@vyrnforge/ui-core",
-      "directory": "packages/ui-core",
-      "releaseGroup": "non-grid-beta"
-    },
-    {
-      "name": "@vyrnforge/ui-behaviors",
-      "directory": "packages/ui-behaviors",
-      "releaseGroup": "non-grid-beta"
-    },
-    {
-      "name": "@vyrnforge/ui-components",
-      "directory": "packages/ui-components",
-      "releaseGroup": "non-grid-beta"
-    },
-    {
-      "name": "@vyrnforge/ui-elements",
-      "directory": "packages/ui-elements",
-      "releaseGroup": "non-grid-beta"
-    },
-    {
-      "name": "@vyrnforge/ui-data-grid",
-      "directory": "packages/ui-data-grid",
-      "releaseGroup": "data-grid-alpha"
-    }
+    {"name":"@vyrnforge/ui-core","directory":"packages/ui-core","releaseGroup":"non-grid-beta"},
+    {"name":"@vyrnforge/ui-behaviors","directory":"packages/ui-behaviors","releaseGroup":"non-grid-beta"},
+    {"name":"@vyrnforge/ui-components","directory":"packages/ui-components","releaseGroup":"non-grid-beta"},
+    {"name":"@vyrnforge/ui-elements","directory":"packages/ui-elements","releaseGroup":"non-grid-beta"},
+    {"name":"@vyrnforge/ui-angular","directory":"packages/ui-angular","releaseGroup":"non-grid-beta"},
+    {"name":"@vyrnforge/ui-data-grid","directory":"packages/ui-data-grid","releaseGroup":"data-grid-alpha"}
   ],
   "dryRun": {
     "command": "npm run verify:trusted-publishing-dry-run -- --release-group <release-group> --version <version> --dist-tag <dist-tag> --artifact-dir test-results/release-artifact",
