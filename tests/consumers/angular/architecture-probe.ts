@@ -33,7 +33,10 @@ const autocompleteSlots = [
   "loading",
   "item",
 ] satisfies readonly VfAutocompleteSlotName[];
-const dialogSlots = ["trigger", "content"] satisfies readonly VfDialogSlotName[];
+const dialogSlots = [
+  "trigger",
+  "content",
+] satisfies readonly VfDialogSlotName[];
 const pageHeaderSlots = [
   "status",
   "actions",
