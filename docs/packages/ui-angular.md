@@ -57,7 +57,10 @@ import { VyrnForgeFormControlDirective } from "@vyrnforge/ui-angular/forms";
 @Component({
   standalone: true,
   imports: [ReactiveFormsModule, VyrnForgeFormControlDirective],
-  template: `<vf-text-input vfFormControl formControlName="owner"></vf-text-input>`,
+  template: `<vf-text-input
+    vfFormControl
+    formControlName="owner"
+  ></vf-text-input>`,
 })
 export class ProfileFormComponent {}
 ```
