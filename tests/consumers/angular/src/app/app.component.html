@@ -93,6 +93,28 @@
     <output data-template-value>{{ notifications }}</output>
   </section>
 
+  <section class="vf-consumer-angular-section" aria-labelledby="composition-title">
+    <h2 id="composition-title">Generated Angular composition</h2>
+    <vf-autocomplete
+      #compositionAutocomplete
+      vfGeneratedAutocomplete
+      name="compositionOwner"
+      [options]="autocompleteOptions"
+      [open]="true"
+      placeholder="Find an owner"
+    >
+      <span slot="label" data-composition-slot="label">Owner</span>
+      <span slot="description" data-composition-slot="description">
+        Search the owner directory
+      </span>
+      <span slot="prefix" data-composition-slot="prefix">@</span>
+      <span slot="suffix" data-composition-slot="suffix">⌘K</span>
+      <span slot="item" data-composition-slot="item">Owner item template</span>
+      <span slot="empty" data-composition-slot="empty">No owners</span>
+      <span slot="loading" data-composition-slot="loading">Loading owners</span>
+    </vf-autocomplete>
+  </section>
+
   <section class="vf-consumer-angular-section" aria-labelledby="native-title">
     <h2 id="native-title">Native ElementInternals form</h2>
     <form
@@ -126,7 +148,7 @@
     <button slot="trigger" type="button" data-dialog-trigger>
       Open Angular dialog
     </button>
-    <div slot="content">
+    <div slot="content" data-composition-slot="dialog-content">
       <button type="button" data-dialog-first>First dialog action</button>
       <button type="button" data-dialog-last>Last dialog action</button>
     </div>
