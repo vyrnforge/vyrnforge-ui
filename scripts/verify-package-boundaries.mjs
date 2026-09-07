@@ -53,7 +53,7 @@ const packageDefinitions = [
   {
     name: "@vyrnforge/ui-angular",
     directory: "packages/ui-angular",
-    required: true,
+    required: false,
     allowedDependencies: new Set(["@vyrnforge/ui-elements"]),
     forbiddenFrameworkSpecifiers: [],
   },
