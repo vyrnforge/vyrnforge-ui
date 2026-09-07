@@ -55,6 +55,15 @@ export class AppComponent implements AfterViewInit {
   @ViewChild("dialogElement", { read: ElementRef })
   private dialogRef?: ElementRef<DialogElement>;
 
+  @ViewChild("saveButton")
+  private saveButtonApi?: VfButton;
+
+  @ViewChild("ownerInputApi")
+  private ownerInputApi?: VfTextInput;
+
+  @ViewChild("dialogApi")
+  private dialogApi?: VfDialog;
+
   @ViewChild("compositionAutocomplete", { read: ElementRef })
   private compositionAutocompleteRef?: ElementRef<AutocompleteElement>;
 
@@ -110,13 +119,19 @@ export class AppComponent implements AfterViewInit {
       const dialogElement = this.dialogRef?.nativeElement;
       const compositionAutocomplete =
         this.compositionAutocompleteRef?.nativeElement;
+      const saveButtonApi = this.saveButtonApi;
+      const ownerInputApi = this.ownerInputApi;
+      const dialogApi = this.dialogApi;
       if (
         !tabsElement ||
         !ownerElement ||
         !dialogElement ||
-        !compositionAutocomplete
+        !compositionAutocomplete ||
+        !saveButtonApi ||
+        !ownerInputApi ||
+        !dialogApi
       ) {
-        throw new Error("Angular did not attach the Custom Element refs.");
+        throw new Error("Angular did not attach the typed VyrnForge refs.");
       }
 
       const assignedItems = tabsElement.items;
@@ -190,12 +205,41 @@ export class AppComponent implements AfterViewInit {
         throw new Error("Angular Dialog did not preserve its content region.");
       }
 
+      ownerInputApi.focus();
+      ownerInputApi.select();
+      ownerInputApi.setCustomValidity("Angular imperative validity probe");
+      if (ownerInputApi.checkValidity()) {
+        throw new Error("Angular TextInput checkValidity() did not delegate.");
+      }
+      ownerInputApi.setCustomValidity("");
+      if (!ownerInputApi.reportValidity()) {
+        throw new Error("Angular TextInput reportValidity() did not delegate.");
+      }
+
+      dialogApi.show();
+      if (!dialogElement.open) {
+        throw new Error("Angular Dialog show() did not delegate.");
+      }
+      dialogApi.close();
+      if (dialogElement.open) {
+        throw new Error("Angular Dialog close() did not delegate.");
+      }
+
+      saveButtonApi.focus();
+      saveButtonApi.click();
+
       const root = document.querySelector<HTMLElement>(
         "[data-angular-consumer]",
       );
-      root?.setAttribute("data-composition", "verified");
-      root?.setAttribute("data-consumer-property", "verified");
-      root?.setAttribute("data-consumer-ready", "true");
+      if (root?.getAttribute("data-generated-button-action") !== "received") {
+        throw new Error(
+          "Angular Button click() did not emit canonical action.",
+        );
+      }
+      root.setAttribute("data-composition", "verified");
+      root.setAttribute("data-imperative-apis", "verified");
+      root.setAttribute("data-consumer-property", "verified");
+      root.setAttribute("data-consumer-ready", "true");
     });
   }
 
