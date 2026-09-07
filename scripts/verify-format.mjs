@@ -34,28 +34,6 @@ function hashFile(relativePath) {
   return createHash("sha256").update(normalizedContent, "utf8").digest("hex");
 }
 
-for (const diagnosticFile of [
-  "docs/metadata/beta-package-artifacts.json",
-  "docs/metadata/trusted-publishing-provenance.json",
-]) {
-  const diagnosticResult = spawnSync(
-    process.execPath,
-    [prettierCli, "--write", diagnosticFile],
-    { cwd: root, encoding: "utf8" },
-  );
-  if (diagnosticResult.status !== 0) {
-    process.stderr.write(diagnosticResult.stderr ?? "");
-    fail(`Diagnostic Prettier failed for ${diagnosticFile}.`);
-  }
-  console.log(`PRETTIER_OUTPUT_BEGIN ${diagnosticFile}`);
-  console.log(
-    Buffer.from(readFileSync(path.join(root, diagnosticFile), "utf8")).toString(
-      "base64",
-    ),
-  );
-  console.log(`PRETTIER_OUTPUT_END ${diagnosticFile}`);
-}
-
 function listUnformattedFiles() {
   if (!existsSync(prettierCli)) {
     fail("Prettier is not installed. Run npm ci before format verification.");
