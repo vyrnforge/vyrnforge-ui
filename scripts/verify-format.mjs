@@ -34,6 +34,30 @@ function hashFile(relativePath) {
   return createHash("sha256").update(normalizedContent, "utf8").digest("hex");
 }
 
+const diagnosticFiles = [
+  "scripts/angular-support-evidence.mjs",
+  "scripts/verify-compatibility-release-matrix.test.mjs",
+  "scripts/verify-format.mjs",
+];
+for (const file of diagnosticFiles) {
+  const result = spawnSync(process.execPath, [prettierCli, "--write", file], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  if (result.status !== 0) {
+    process.stderr.write(result.stderr ?? "");
+    fail(`Diagnostic Prettier failed for ${file}.`);
+  }
+}
+for (const file of diagnosticFiles.slice(0, 2)) {
+  const encoded = Buffer.from(readFileSync(path.join(root, file), "utf8")).toString(
+    "base64",
+  );
+  console.log(`PRETTIER_OUTPUT_BEGIN ${file}`);
+  console.log(encoded);
+  console.log(`PRETTIER_OUTPUT_END ${file}`);
+}
+
 function listUnformattedFiles() {
   if (!existsSync(prettierCli)) {
     fail("Prettier is not installed. Run npm ci before format verification.");
