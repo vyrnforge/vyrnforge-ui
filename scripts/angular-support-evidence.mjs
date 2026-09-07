@@ -38,7 +38,7 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
     "tests/consumers/angular/src/app/app.component.ts",
     "scripts/verify-angular-packed-fixture-ownership.mjs",
     ".github/workflows/assurance.yml",
-    ".github/workflows/_integration.yml",
+    ".github/workflows/ci.yml",
   ];
   for (const file of requiredFiles) {
     if (!existsSync(path.join(root, file))) {
@@ -195,10 +195,7 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
     failures.push("MFD-1214 Angular Forms evidence is incomplete");
   }
 
-  const fixturePackage = readJson(
-    root,
-    "tests/consumers/angular/package.json",
-  );
+  const fixturePackage = readJson(root, "tests/consumers/angular/package.json");
   if (
     !fixturePackage.scripts?.["verify:ownership"]?.includes(
       "verify-angular-packed-fixture-ownership.mjs",
@@ -222,7 +219,9 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
     'from "@vyrnforge/ui-angular/forms"',
   ]) {
     if (!component.includes(entrypoint)) {
-      failures.push(`MFD-1214 packed Angular consumer is missing ${entrypoint}`);
+      failures.push(
+        `MFD-1214 packed Angular consumer is missing ${entrypoint}`,
+      );
     }
   }
 
