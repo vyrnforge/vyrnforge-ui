@@ -31,7 +31,7 @@ function elementType(component) {
   return `VyrnForgeElementForTagName<${JSON.stringify(component.tag)}>`;
 }
 
-function primitiveDetailType(type) {
+function renderMetadataType(type) {
   if (["string", "number", "boolean", "bigint", "void", "unknown"].includes(type)) {
     return type;
   }
@@ -41,9 +41,31 @@ function primitiveDetailType(type) {
     const item = type.slice(0, -2);
     return ["string", "number", "boolean", "unknown"].includes(item)
       ? `${item}[]`
-      : "unknown[]";
+      : "readonly unknown[]";
   }
   return "unknown";
+}
+
+function nativePropertyFor(component, canonicalProperty) {
+  return component.nativeProperties.find(
+    (property) => property.canonical === canonicalProperty,
+  );
+}
+
+function propertyType(component, property) {
+  const nativeProperty = nativePropertyFor(component, property.canonical);
+  if (!nativeProperty) return renderMetadataType(property.type);
+  return `${elementType(component)}[${JSON.stringify(nativeProperty.public)}]`;
+}
+
+function modelValueType(component) {
+  const canonicalProperty = component.vModel.canonicalProperty;
+  const nativeProperty = nativePropertyFor(component, canonicalProperty);
+  assert(
+    nativeProperty,
+    `${component.id}: canonical model property ${canonicalProperty} is missing from Native`,
+  );
+  return `${elementType(component)}[${JSON.stringify(nativeProperty.public)}]`;
 }
 
 function eventDetailType(event) {
@@ -51,16 +73,15 @@ function eventDetailType(event) {
   return `{ ${event.detailFields
     .map(
       (field) =>
-        `${propertyName(field.name)}${field.required ? "" : "?"}: ${primitiveDetailType(field.type)};`,
+        `${propertyName(field.name)}${field.required ? "" : "?"}: ${renderMetadataType(field.type)};`,
     )
     .join(" ")} }`;
 }
 
 function serializeProps(component) {
-  const element = elementType(component);
   const lines = component.properties.map(
     (property) =>
-      `  readonly ${propertyName(property.public)}${property.required ? "" : "?"}: ${element}[${JSON.stringify(property.canonical)}];`,
+      `  readonly ${propertyName(property.public)}${property.required ? "" : "?"}: ${propertyType(component, property)};`,
   );
   return `export interface ${componentTypeName(component, "Props")} {\n${lines.join("\n")}\n}`;
 }
@@ -68,9 +89,8 @@ function serializeProps(component) {
 function serializeEmits(component) {
   const signatures = [];
   if (component.vModel?.enabled) {
-    const canonicalProperty = component.vModel.canonicalProperty;
     signatures.push(
-      `  (event: ${JSON.stringify(component.vModel.publicEvent)}, value: ${elementType(component)}[${JSON.stringify(canonicalProperty)}]): void;`,
+      `  (event: ${JSON.stringify(component.vModel.publicEvent)}, value: ${modelValueType(component)}): void;`,
     );
   }
   for (const event of component.events) {
@@ -118,6 +138,7 @@ export function createVueTypeModel(generationModel) {
         exportName: record.export,
         tag: native.tag,
         properties: record.properties,
+        nativeProperties: native.properties,
         events: record.events,
         slots: record.slots,
         vModel: record.adapter.vModel,
