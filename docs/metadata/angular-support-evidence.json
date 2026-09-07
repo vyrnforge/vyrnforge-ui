@@ -90,7 +90,7 @@
   "verification": {
     "compatibilityCommand": "npm run verify:compatibility-release-matrix",
     "compatibilityWorkflow": ".github/workflows/assurance.yml",
-    "packedWorkflow": ".github/workflows/_integration.yml"
+    "packedWorkflow": ".github/workflows/ci.yml"
   },
   "unresolvedBlockers": [],
   "releaseReadiness": "evidence-complete-not-release-ready"
