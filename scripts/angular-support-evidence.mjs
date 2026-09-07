@@ -55,7 +55,9 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
   ) {
     failures.push("MFD-1214 evidence metadata must be evidence-complete");
   }
-  if (evidence.supportClaim !== "angular-compatibility-accessibility-verified") {
+  if (
+    evidence.supportClaim !== "angular-compatibility-accessibility-verified"
+  ) {
     failures.push("MFD-1214 support claim is invalid");
   }
   if ((evidence.unresolvedBlockers ?? []).length !== 0) {
@@ -69,13 +71,17 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
   const peerRange = angularPackage.peerDependencies?.["@angular/core"];
   const formsPeerRange = angularPackage.peerDependencies?.["@angular/forms"];
   if (peerRange !== ">=22 <23" || evidence.package?.peerRange !== peerRange) {
-    failures.push("MFD-1214 Angular support must match the >=22 <23 core peer contract");
+    failures.push(
+      "MFD-1214 Angular support must match the >=22 <23 core peer contract",
+    );
   }
   if (
     formsPeerRange !== ">=22 <23" ||
     evidence.package?.formsPeerRange !== formsPeerRange
   ) {
-    failures.push("MFD-1214 Forms support must match the >=22 <23 Forms peer contract");
+    failures.push(
+      "MFD-1214 Forms support must match the >=22 <23 Forms peer contract",
+    );
   }
   if (
     !includesAll(evidence.package?.entrypoints, [
@@ -84,10 +90,14 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
     ]) ||
     !angularPackage.exports?.["./forms"]
   ) {
-    failures.push("MFD-1214 must cover root and Forms Angular package entrypoints");
+    failures.push(
+      "MFD-1214 must cover root and Forms Angular package entrypoints",
+    );
   }
   if (evidence.package?.published !== false) {
-    failures.push("MFD-1214 must not claim the private Angular package is published");
+    failures.push(
+      "MFD-1214 must not claim the private Angular package is published",
+    );
   }
 
   const compatibility = readJson(
@@ -106,16 +116,21 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
     supportedCase?.node !== "24.18.0" ||
     supportedCase?.browser !== "chromium"
   ) {
-    failures.push("MFD-1214 supported Angular 22 compatibility case is incomplete");
+    failures.push(
+      "MFD-1214 supported Angular 22 compatibility case is incomplete",
+    );
   }
   const additionalCase = (compatibility.cases ?? []).find(
-    (entry) => entry.id === evidence.additionalCompatibilityProbe?.compatibilityCase,
+    (entry) =>
+      entry.id === evidence.additionalCompatibilityProbe?.compatibilityCase,
   );
   if (
     additionalCase?.id !== "angular21-node22-chromium" ||
     evidence.additionalCompatibilityProbe?.supportClaim !== false
   ) {
-    failures.push("MFD-1214 must distinguish the Angular 21 probe from supported package range");
+    failures.push(
+      "MFD-1214 must distinguish the Angular 21 probe from supported package range",
+    );
   }
 
   const browserMatrix = readJson(
@@ -130,7 +145,9 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
       evidence.packedRuntime?.requiredScenarios ?? [],
     )
   ) {
-    failures.push("MFD-1214 packed Angular browser-matrix evidence is incomplete");
+    failures.push(
+      "MFD-1214 packed Angular browser-matrix evidence is incomplete",
+    );
   }
 
   const accessibility = readJson(
@@ -147,7 +164,9 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
     accessibility.automatedReview?.report !==
       evidence.accessibility?.automatedReport
   ) {
-    failures.push("MFD-1214 automated Angular accessibility evidence is incomplete");
+    failures.push(
+      "MFD-1214 automated Angular accessibility evidence is incomplete",
+    );
   }
 
   const manualEvidence = readJson(
@@ -176,11 +195,23 @@ export function verifyAngularSupportEvidence({ root = repositoryRoot } = {}) {
     failures.push("MFD-1214 Angular Forms evidence is incomplete");
   }
 
-  const fixturePackage = readJson(root, "tests/consumers/angular/package.json");
-  if (!fixturePackage.scripts?.["verify:ownership"]?.includes("verify-angular-packed-fixture-ownership.mjs")) {
-    failures.push("MFD-1214 packed Angular fixture must enforce package ownership");
+  const fixturePackage = readJson(
+    root,
+    "tests/consumers/angular/package.json",
+  );
+  if (
+    !fixturePackage.scripts?.["verify:ownership"]?.includes(
+      "verify-angular-packed-fixture-ownership.mjs",
+    )
+  ) {
+    failures.push(
+      "MFD-1214 packed Angular fixture must enforce package ownership",
+    );
   }
-  const component = read(root, "tests/consumers/angular/src/app/app.component.ts");
+  const component = read(
+    root,
+    "tests/consumers/angular/src/app/app.component.ts",
+  );
   for (const marker of evidence.imperativeAndFocus?.requiredMarkers ?? []) {
     if (!component.includes(marker)) {
       failures.push(`MFD-1214 imperative/focus evidence is missing ${marker}`);
