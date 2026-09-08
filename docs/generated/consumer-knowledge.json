@@ -28,7 +28,7 @@
     },
     {
       "name": "@vyrnforge/ui-components",
-      "purpose": "First-class React renderer for reusable VyrnForge primitives and application components.",
+      "purpose": "First-class React surface for reusable VyrnForge primitives and application components, converging on the canonical native implementation where compatible.",
       "status": "current",
       "releaseTrack": "non-grid-beta",
       "runtime": "react",
@@ -36,7 +36,7 @@
     },
     {
       "name": "@vyrnforge/ui-elements",
-      "purpose": "Browser-native Custom Element registration, lifecycle, property reflection, typed vf-* events, Light DOM CSS, form foundations, and non-grid renderers.",
+      "purpose": "Canonical browser-native Custom Element implementation and first-class Native HTML surface.",
       "status": "current",
       "releaseTrack": "non-grid-beta",
       "runtime": "custom-elements",
@@ -44,15 +44,15 @@
     },
     {
       "name": "@vyrnforge/ui-angular",
-      "purpose": "First-class Angular adapter over VyrnForge canonical Custom Elements with generated typed facades, package-owned setup, Forms integration, composition, and imperative references.",
+      "purpose": "First-class Angular facade over VyrnForge canonical Custom Elements with generated typed bindings, package-owned setup, Forms integration, composition, and imperative references.",
       "status": "current",
       "releaseTrack": "non-grid-beta",
-      "runtime": null,
+      "runtime": "angular",
       "cssImport": "not-applicable"
     },
     {
       "name": "@vyrnforge/ui-vue",
-      "purpose": "First-class Vue facade over the canonical VyrnForge Custom Element renderer and shared contracts.",
+      "purpose": "First-class Vue facade over the canonical VyrnForge Custom Element implementation and shared contracts.",
       "status": "current",
       "releaseTrack": "non-grid-beta",
       "runtime": "vue",
@@ -80,8 +80,8 @@
     },
     {
       "id": "angular",
-      "supportLevel": "verified-consumer",
-      "renderer": "@vyrnforge/ui-elements"
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-angular"
     },
     {
       "id": "vue",
