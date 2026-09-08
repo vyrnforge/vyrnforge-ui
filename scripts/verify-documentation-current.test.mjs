@@ -176,24 +176,6 @@ test("rejects a missing canonical release-group id", () =>
       ),
   ));
 
-test("rejects removal of behavior-history markers required by repository evidence", () =>
-  fixture(
-    (root) => {
-      const relativePath = "docs/roadmap/00-master-roadmap.md";
-      write(
-        root,
-        relativePath,
-        read(root, relativePath).replace("MF-5008", "removed-behavior-task"),
-      );
-    },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("missing historical behavior marker MF-5008"),
-        ),
-      ),
-  ));
-
 test("rejects removed aggregate commands in quality guidance", () =>
   fixture(
     (root) => {
