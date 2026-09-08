@@ -1,0 +1,66 @@
+name: MFD-1315 Consumer Claim Sync
+
+on:
+  push:
+    branches:
+      - feat/MFD-1315-vue-release-integration
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: ${{ !contains(github.event.head_commit.message, '[mfd-1315-claim-sync]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/MFD-1315-vue-release-integration
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - name: Update current Vue release claims
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          function replace(path, from, to) {
+            const source = fs.readFileSync(path, 'utf8');
+            if (!source.includes(from)) throw new Error(`${path}: missing replacement marker`);
+            fs.writeFileSync(path, source.replace(from, to));
+          }
+
+          replace(
+            'scripts/verify-consumer-foundations.mjs',
+            '["vue", new Set(["packed-consumer-verified"])],',
+            '["vue", new Set(["first-class-package-verified"])],'
+          );
+
+          replace(
+            'scripts/generate-beta-scope.mjs',
+            '"Angular and Vue are verified consumers of @vyrnforge/ui-elements; they are not separate component implementations or published renderer packages.",',
+            '"Angular remains a verified consumer of @vyrnforge/ui-elements. Vue publishes a first-class @vyrnforge/ui-vue facade over the same canonical element renderer rather than a separate rendering implementation.",'
+          );
+          replace(
+            'scripts/generate-beta-scope.mjs',
+            '"React and native HTML are first-class renderers; Angular and Vue are verified consumers of the native renderer.",',
+            '"React, native HTML, and Vue are first-class framework surfaces; Vue remains a thin published facade over the canonical native renderer, while Angular is a verified consumer of that renderer.",'
+          );
+          replace(
+            'scripts/generate-beta-scope.mjs',
+            '"Angular Forms and Vue v-model bridges are reference adapters and are not separate published component libraries.",',
+            '"Angular Forms remains a reference adapter; Vue v-model is exposed through the published @vyrnforge/ui-vue facade while canonical rendering and behavior remain shared.",'
+          );
+          NODE
+      - run: npm ci
+      - run: npm run test:consumer-foundations
+      - run: npm run generate:beta-scope
+      - run: npx prettier --write scripts/verify-consumer-foundations.mjs scripts/generate-beta-scope.mjs docs/metadata/non-grid-beta-scope.json
+      - name: Commit synchronized contracts
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add scripts/verify-consumer-foundations.mjs scripts/generate-beta-scope.mjs docs/metadata/non-grid-beta-scope.json
+          git commit -m 'fix(release): align Vue first-class consumer claims [mfd-1315-claim-sync]' || exit 0
+          git push
