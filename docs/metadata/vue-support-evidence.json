@@ -35,5 +35,15 @@
     "claimedComplete": false,
     "reason": "MFD-1314 records automated browser, keyboard/focus, axe, model, and compatibility evidence only; manual screen-reader evidence remains governed by the canonical assistive-technology review process."
   },
-  "releaseIntegrationOwner": "MFD-1315"
+  "releaseIntegrationOwner": "MFD-1315",
+  "releaseIntegrationEvidence": {
+    "reconciliationPr": 297,
+    "reconciledLaneCommit": "047b021bf81cf78575bb821be251800f687533f5",
+    "protectedCiRun": 34200710832,
+    "releaseGroup": "non-grid-beta",
+    "releaseGroupPackageCount": 6,
+    "generatorOwnershipReconciled": true,
+    "generatorOwnershipNote": "The aggregate legacy framework-artifact verifier no longer requires fixture-local React, Angular, or Vue adapters after those framework surfaces moved to package-owned first-class integrations.",
+    "note": "S13 reconciliation preserves current main framework and CI work while integrating @vyrnforge/ui-vue as a first-class synchronized beta package."
+  }
 }
