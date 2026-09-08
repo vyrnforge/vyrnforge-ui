@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: feat/MFD-1312-vue-public-fixture
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24.18.0
@@ -25,30 +25,63 @@ jobs:
       - run: npm ci
       - name: Restore verifier and add staged Vue tarball narrowly
         run: |
-          git checkout HEAD^ -- scripts/verify-consumer-foundations-runtime.mjs
+          git checkout f6eba018792dde12b2a9b431cd6aaa99777e57ea -- scripts/verify-consumer-foundations-runtime.mjs
           node <<'NODE'
           const fs = require('node:fs');
           const path = 'scripts/verify-consumer-foundations-runtime.mjs';
           let source = fs.readFileSync(path, 'utf8');
-          const replacements = [
-            [
-              '  {\n    name: "@vyrnforge/ui-elements",\n    directory: "packages/ui-elements",\n    customElements: true,\n  },\n];',
-              '  {\n    name: "@vyrnforge/ui-elements",\n    directory: "packages/ui-elements",\n    customElements: true,\n  },\n  { name: "@vyrnforge/ui-vue", directory: "packages/ui-vue", staged: true },\n];',
-            ],
-            [
-              '    packageNames: [\n      "@vyrnforge/ui-core",\n      "@vyrnforge/ui-behaviors",\n      "@vyrnforge/ui-elements",\n    ],\n  },\n];',
-              '    packageNames: [\n      "@vyrnforge/ui-core",\n      "@vyrnforge/ui-behaviors",\n      "@vyrnforge/ui-elements",\n      "@vyrnforge/ui-vue",\n    ],\n  },\n];',
-            ],
-            [
-              '    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {\n      stdio: "inherit",\n    });\n\n    console.log(\n      "Packing ui-core, ui-behaviors, ui-components, and ui-elements...",\n    );',
-              '    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {\n      stdio: "inherit",\n    });\n    if (fixtures.some((fixture) => fixture.id === "vue")) {\n      runNpm(["run", "build", "--workspace", "@vyrnforge/ui-vue"], {\n        stdio: "inherit",\n      });\n    }\n\n    console.log(\n      "Packing ui-core, ui-behaviors, ui-components, ui-elements, and staged ui-vue...",\n    );',
-            ],
-          ];
-          for (const [before, after] of replacements) {
-            const count = source.split(before).length - 1;
-            if (count !== 1) throw new Error(`expected one replacement, found ${count}`);
-            source = source.replace(before, after);
-          }
+
+          const packageBlock = /(
+  \{
+    name: "@vyrnforge\/ui-elements",
+    directory: "packages\/ui-elements",
+    customElements: true,
+  \},)(
+\];)/;
+          if (!packageBlock.test(source)) throw new Error('ui-elements package definition anchor missing');
+          source = source.replace(
+            packageBlock,
+            '$1\n  { name: "@vyrnforge/ui-vue", directory: "packages/ui-vue", staged: true },$2',
+          );
+
+          const vueStart = source.indexOf('    id: "vue",');
+          if (vueStart < 0) throw new Error('Vue fixture anchor missing');
+          const vueEnd = source.indexOf('  },\n];', vueStart);
+          if (vueEnd < 0) throw new Error('Vue fixture end missing');
+          const vueBlock = source.slice(vueStart, vueEnd);
+          const vuePackageAnchor = '      "@vyrnforge/ui-elements",';
+          if (!vueBlock.includes(vuePackageAnchor)) throw new Error('Vue package anchor missing');
+          const patchedVueBlock = vueBlock.replace(
+            vuePackageAnchor,
+            `${vuePackageAnchor}\n      "@vyrnforge/ui-vue",`,
+          );
+          source = source.slice(0, vueStart) + patchedVueBlock + source.slice(vueEnd);
+
+          const mapAnchor = '  return packageDefinitions.map((packageDefinition) => {';
+          if (!source.includes(mapAnchor)) throw new Error('packPackages map anchor missing');
+          source = source.replace(
+            mapAnchor,
+            '  const requestedPackageNames = new Set(\n    fixtures.flatMap((fixture) => fixture.packageNames),\n  );\n\n  return packageDefinitions\n    .filter((packageDefinition) => requestedPackageNames.has(packageDefinition.name))\n    .map((packageDefinition) => {',
+          );
+          const packMapClose = '    };\n  });\n}\n\nfunction verifyInstalledPackages';
+          if (!source.includes(packMapClose)) throw new Error('packPackages close anchor missing');
+          source = source.replace(
+            packMapClose,
+            '    };\n    });\n}\n\nfunction verifyInstalledPackages',
+          );
+
+          const buildAnchor = '    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {\n      stdio: "inherit",\n    });';
+          const buildCount = source.split(buildAnchor).length - 1;
+          if (buildCount !== 1) throw new Error(`expected one ui-elements build anchor, found ${buildCount}`);
+          source = source.replace(
+            buildAnchor,
+            `${buildAnchor}\n    if (fixtures.some((fixture) => fixture.id === "vue")) {\n      runNpm(["run", "build", "--workspace", "@vyrnforge/ui-vue"], {\n        stdio: "inherit",\n      });\n    }`,
+          );
+          source = source.replace(
+            'Packing ui-core, ui-behaviors, ui-components, and ui-elements...',
+            'Packing selected consumer packages, including staged ui-vue for Vue...',
+          );
+
           fs.writeFileSync(path, source);
           NODE
       - run: npx prettier --write scripts/verify-consumer-foundations-runtime.mjs
