@@ -62,4 +62,10 @@ describe("VyrnForge Vue setup", () => {
     plugin.install(app);
     expect(registrations.size).toBe(vyrnForgeVueComponents.length);
   });
+
+  it("rejects values that do not implement the Vue application contract", () => {
+    expect(() => installVyrnForgeVue({})).toThrow(
+      "VyrnForge Vue setup requires a Vue application instance",
+    );
+  });
 });
