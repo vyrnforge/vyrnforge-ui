@@ -176,7 +176,7 @@ onMounted(async () => {
         id="vue-owner-preview"
         ref="ownerElement"
         name="ownerPreview"
-        :value.prop="owner"
+        :value="owner"
         @vf-value-change="handleOwnerValueChange"
       ></vf-text-input>
       <output data-vue-value>{{ owner }}</output>
