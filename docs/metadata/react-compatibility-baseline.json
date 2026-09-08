@@ -80,7 +80,7 @@
     {
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
-      "sha1": "5e9000e63ce9d74d3ad43f934c5c0450e9d9778b",
+      "sha1": "3a3a7fd429bc6b57248061ec5e0422f5991479f0",
       "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
@@ -109,6 +109,11 @@
     {
       "task": "workflow-surface-consolidation",
       "reason": "Compatibility matrix orchestration moved from the retired reusable _compatibility.yml workflow to assurance.yml without changing tested React versions or compatibility cases.",
+      "evidence": "docs/metadata/compatibility-release-matrix.json"
+    },
+    {
+      "task": "MFD-1314",
+      "reason": "The shared compatibility matrix replaced the stale unsupported Vue 3.4 case with supported Vue 3.5 minimum/current cases while preserving the recorded React 18.3.1 and 19.2.7 support policy and React compatibility cases.",
       "evidence": "docs/metadata/compatibility-release-matrix.json"
     }
   ],
