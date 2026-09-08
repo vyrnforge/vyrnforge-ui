@@ -108,6 +108,12 @@ function serializeEmits(component) {
     );
   }
   for (const event of component.events) {
+    if (
+      component.vModel?.enabled &&
+      event.public === component.vModel.publicEvent
+    ) {
+      continue;
+    }
     signatures.push(
       `  (event: ${JSON.stringify(event.public)}, payload: ${eventDetailType(event)}): void;`,
     );
@@ -181,6 +187,7 @@ export function serializeVueTypedCatalog(components) {
 import type {
   AllowedComponentProps,
   ComponentCustomProps,
+  HTMLAttributes,
   VNode,
   VNodeProps,
 } from "vue";
@@ -191,7 +198,7 @@ ${runtimeImports}
 
 export type VyrnForgeVueComponentType<Props, Emits, Slots, Ref> = {
   new (): {
-    $props: Props & VNodeProps & AllowedComponentProps & ComponentCustomProps;
+    $props: Props & HTMLAttributes & VNodeProps & AllowedComponentProps & ComponentCustomProps;
     $emit: Emits;
     $slots: Slots;
   } & Ref;
