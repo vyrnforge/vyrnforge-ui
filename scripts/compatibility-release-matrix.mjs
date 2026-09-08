@@ -126,7 +126,9 @@ export function verifyCompatibilityMatrixContract({
       "vue35-current-node24-chromium",
     ])
   ) {
-    failures.push("Vue compatibility cases must match the supported 3.5 policy");
+    failures.push(
+      "Vue compatibility cases must match the supported 3.5 policy",
+    );
   }
   if (
     vueCases.some(
@@ -135,7 +137,9 @@ export function verifyCompatibilityMatrixContract({
         !["22.12.0", "24.18.0"].includes(testCase.node),
     )
   ) {
-    failures.push("Vue compatibility cases must use supported Node/Chromium lanes");
+    failures.push(
+      "Vue compatibility cases must use supported Node/Chromium lanes",
+    );
   }
 
   const workflow = read(root, compatibilityWorkflowPath);
@@ -170,7 +174,9 @@ export function verifyCompatibilityMatrixContract({
     "Vue model state did not propagate back to native value and checked properties",
   ]) {
     if (!runtime.includes(marker)) {
-      failures.push(`consumer runtime is missing Vue support evidence marker ${marker}`);
+      failures.push(
+        `consumer runtime is missing Vue support evidence marker ${marker}`,
+      );
     }
   }
 
@@ -191,7 +197,9 @@ export function verifyCompatibilityMatrixContract({
     evidence.sourceOfTruth?.canonical !== true ||
     evidence.sourceOfTruth?.task !== "MFD-1314"
   ) {
-    failures.push("Vue support evidence must use canonical MFD-1314 schema version 1");
+    failures.push(
+      "Vue support evidence must use canonical MFD-1314 schema version 1",
+    );
   }
   if (
     evidence.package !== "@vyrnforge/ui-vue" ||
@@ -199,14 +207,21 @@ export function verifyCompatibilityMatrixContract({
   ) {
     failures.push("Vue support evidence package/peer policy is stale");
   }
-  if (JSON.stringify(evidence.compatibilityCases) !== JSON.stringify(vueCases.map(({ id }) => id))) {
+  if (
+    JSON.stringify(evidence.compatibilityCases) !==
+    JSON.stringify(vueCases.map(({ id }) => id))
+  ) {
     failures.push("Vue support evidence compatibility cases are stale");
   }
   if (evidence.manualAssistiveTechnology?.claimedComplete !== false) {
-    failures.push("MFD-1314 must not claim unverified manual assistive-technology completion");
+    failures.push(
+      "MFD-1314 must not claim unverified manual assistive-technology completion",
+    );
   }
   if (evidence.releaseIntegrationOwner !== "MFD-1315") {
-    failures.push("Vue support evidence must reserve release integration for MFD-1315");
+    failures.push(
+      "Vue support evidence must reserve release integration for MFD-1315",
+    );
   }
 
   return failures.sort();
