@@ -456,7 +456,8 @@ export const docsRoutes: DocsRoute[] = [
     id: "ui-vue",
     title: "ui-vue",
     group: "Packages",
-    description: "First-class Vue facade, slots, refs, and v-model integration.",
+    description:
+      "First-class Vue facade, slots, refs, and v-model integration.",
     sourcePath: "docs/packages/ui-vue.md",
     aiPurpose: "Use this before changing Vue bindings or model behavior.",
     tags: ["package", "ui-vue", "vue"],
@@ -467,7 +468,8 @@ export const docsRoutes: DocsRoute[] = [
     id: "ui-data-grid",
     title: "ui-data-grid",
     group: "Packages",
-    description: "Separate React alpha data-grid package scope and API direction.",
+    description:
+      "Separate React alpha data-grid package scope and API direction.",
     sourcePath: "docs/packages/ui-data-grid.md",
     aiPurpose: "Use this before changing grid behavior.",
     tags: ["package", "ui-data-grid", "react", "alpha"],
