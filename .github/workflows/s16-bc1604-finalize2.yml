@@ -1,0 +1,102 @@
+name: S16 BC-1604 Finalize Aggregate Cleanup
+
+on:
+  push:
+    branches:
+      - s16/bc-1604-tooling-cleanup
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s16/bc-1604-tooling-cleanup
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - name: Apply idempotent aggregate ownership cleanup
+        shell: python
+        run: |
+          from pathlib import Path
+          root = Path('.')
+
+          generation = root / 'scripts/framework-generation.mjs'
+          text = generation.read_text()
+          if 'export const FRAMEWORK_GENERATION_TASKS' not in text:
+              marker = 'export const FRAMEWORK_SURFACES = Object.freeze([\n  "native",\n  "react",\n  "angular",\n  "vue",\n]);\n'
+              tasks = '\nexport const FRAMEWORK_GENERATION_TASKS = Object.freeze([\n' + ''.join(f'  "MFD-{n}",\n' for n in range(1102, 1113)) + ']);\n'
+              text = text.replace(marker, marker + tasks)
+          generation.write_text(text)
+
+          test_path = root / 'scripts/framework-generation.test.mjs'
+          text = test_path.read_text()
+          if 'FRAMEWORK_GENERATION_TASKS,' not in text:
+              text = text.replace('import {\n  FRAMEWORK_SURFACES,\n', 'import {\n  FRAMEWORK_SURFACES,\n  FRAMEWORK_GENERATION_TASKS,\n')
+          anchor = '  assert.equal(button.surfaces.vue.events[0].public, "action");\n'
+          if 'FRAMEWORK_GENERATION_TASKS.includes("MFD-1111")' not in text:
+              text = text.replace(anchor, anchor + '  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1111"));\n  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1112"));\n')
+          test_path.write_text(text)
+
+          aggregate = root / 'scripts/generated-framework-artifacts.mjs'
+          text = aggregate.read_text()
+          for line in (
+              'import { buildFrameworkDialogSliceArtifacts } from "./generate-framework-dialog-slice.mjs";\n',
+              'import { buildFrameworkTabsSliceArtifacts } from "./generate-framework-tabs-slice.mjs";\n',
+              'import { buildFrameworkTextInputSliceArtifacts } from "./generate-framework-text-input-slice.mjs";\n',
+          ):
+              text = text.replace(line, '')
+          if 'createFrameworkDialogSliceModel' not in text:
+              text = text.replace(
+                  'import { createFrameworkGenerationModel } from "./framework-generation.mjs";\n',
+                  'import {\n  buildFrameworkDialogArtifacts,\n  createFrameworkDialogSliceModel,\n} from "./framework-dialog-generation.mjs";\nimport { createFrameworkGenerationModel } from "./framework-generation.mjs";\nimport {\n  buildFrameworkTabsArtifacts,\n  createFrameworkTabsSliceModel,\n} from "./framework-tabs-generation.mjs";\nimport {\n  buildFrameworkTextInputArtifacts,\n  createFrameworkTextInputSliceModel,\n} from "./framework-text-input-generation.mjs";\n',
+              )
+          start = '\nfunction buildFrameworkButtonSliceArtifacts({ root = repositoryRoot } = {}) {'
+          if start in text:
+              before, rest = text.split(start, 1)
+              _, after = rest.split('\n}\n', 1)
+              text = before + '\n' + after
+          old = '  const native = buildNativeElementArtifacts({ root });\n  const apiReference = buildFrameworkApiReference({ root });\n  const button = buildFrameworkButtonSliceArtifacts({ root });\n  const textInput = buildFrameworkTextInputSliceArtifacts({ root });\n  const tabs = buildFrameworkTabsSliceArtifacts({ root });\n  const dialog = buildFrameworkDialogSliceArtifacts({ root });\n'
+          new = '  const native = buildNativeElementArtifacts({ root });\n  const apiReference = buildFrameworkApiReference({ root });\n  const contracts = loadCanonicalComponentContracts({ root });\n  const generationModel = createFrameworkGenerationModel(contracts);\n  const buttonModel = createFrameworkButtonSliceModel(generationModel);\n  const textInputModel = createFrameworkTextInputSliceModel(generationModel);\n  const tabsModel = createFrameworkTabsSliceModel(generationModel);\n  const dialogModel = createFrameworkDialogSliceModel(generationModel);\n  const button = { model: buttonModel, artifacts: buildFrameworkButtonArtifacts(buttonModel) };\n  const textInput = { model: textInputModel, artifacts: buildFrameworkTextInputArtifacts(textInputModel) };\n  const tabs = { model: tabsModel, artifacts: buildFrameworkTabsArtifacts(tabsModel) };\n  const dialog = { model: dialogModel, artifacts: buildFrameworkDialogArtifacts(dialogModel) };\n'
+          if old in text:
+              text = text.replace(old, new)
+          aggregate.write_text(text)
+
+          button = root / 'scripts/framework-button-generation.mjs'
+          text = button.read_text()
+          if 'task: "MFD-1112"' not in text:
+              text = text.replace('  return {\n    schemaVersion: 1,\n    component: FRAMEWORK_BUTTON_COMPONENT_ID,\n', '  return {\n    schemaVersion: 1,\n    task: "MFD-1112",\n    component: FRAMEWORK_BUTTON_COMPONENT_ID,\n')
+          text = text.replace(' * @generated by scripts/generate-framework-button-slice.mjs\n', ' * @generated by scripts/generate-framework-artifacts.mjs\n')
+          button.write_text(text)
+
+          for filename, old_name in (
+              ('framework-text-input-generation.mjs', 'generate-framework-text-input-slice.mjs'),
+              ('framework-tabs-generation.mjs', 'generate-framework-tabs-slice.mjs'),
+              ('framework-dialog-generation.mjs', 'generate-framework-dialog-slice.mjs'),
+          ):
+              path = root / 'scripts' / filename
+              text = path.read_text().replace(f' * @generated by scripts/{old_name}\n', ' * @generated by scripts/generate-framework-artifacts.mjs\n')
+              path.write_text(text)
+
+          for relative in ('scripts/generate-framework-text-input-slice.mjs','scripts/generate-framework-tabs-slice.mjs','scripts/generate-framework-dialog-slice.mjs'):
+              path = root / relative
+              if path.exists(): path.unlink()
+      - name: Generate and verify
+        run: |
+          npx --yes npm@11.16.0 ci
+          npx prettier --write scripts/framework-generation.mjs scripts/framework-generation.test.mjs scripts/generated-framework-artifacts.mjs scripts/framework-button-generation.mjs scripts/framework-text-input-generation.mjs scripts/framework-tabs-generation.mjs scripts/framework-dialog-generation.mjs
+          npm run generate:framework-artifacts
+          npm run verify:generated-framework-artifacts
+      - name: Remove helpers and commit
+        shell: bash
+        run: |
+          git rm -f .github/workflows/s16-bc1604-finalize-helper.yml .github/workflows/s16-bc1604-finalize2.yml
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: centralize framework artifact generation"
+          git push origin HEAD:s16/bc-1604-tooling-cleanup
