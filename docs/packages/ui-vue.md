@@ -11,7 +11,7 @@ The supported Vue runtime contract is `>=3.5 <4`.
 - The Vue facade delegates canonical rendering to `@vyrnforge/ui-elements`; application state management remains a consumer concern.
 - The base Vue package exposes the canonical non-grid catalog. Data-grid framework work remains independently packaged and tracked.
 
-The workspace remains private while the Vue lane is staged. Release integration owns removing that staging guard after compatibility and accessibility evidence passes.
+The package is publishable on the synchronized non-grid beta release line. Compatibility and accessibility support evidence remains separately governed, and trusted-publisher external evidence remains tracked by the release controls.
 
 ## Setup
 

@@ -11,7 +11,7 @@ Run the complete gate with:
 npm run verify:beta-package-artifacts
 ```
 
-The command builds the four beta packages, creates real npm tarballs, checks the
+The command builds the five beta packages, creates real npm tarballs, checks the
 exact packed payload, installs those tarballs into a clean fixture with npm
 `--offline`, resolves every public entry point from the installed package, runs a
 TypeScript typecheck and production Vite build, writes reviewable reports, and
@@ -46,6 +46,10 @@ removes generated tarballs, lockfiles, `node_modules`, and build output.
 - `@vyrnforge/ui-elements/style.css`
 - `@vyrnforge/ui-elements/styles/index.css`
 
+### `@vyrnforge/ui-vue`
+
+- `@vyrnforge/ui-vue`
+
 For conditional exports, the gate requires the declared `types`, ESM `import`,
 and CommonJS `require` targets. String exports must resolve to the documented CSS
 or JSON artifact. Every target must be present in the tarball and in the clean
@@ -66,14 +70,14 @@ published dependency specifications are also rejected.
 ## Offline consumer evidence
 
 The fixture at `tests/beta-package-consumer` installs ordinary third-party
-fixture dependencies first. The four VyrnForge tarballs are then installed in a
+fixture dependencies first. The five VyrnForge tarballs are then installed in a
 separate npm invocation using `--offline --no-save`. The gate rejects workspace
 symlinks and verifies:
 
-- every installed package version is `0.2.0-beta.1`;
+- every installed package version is `0.2.0-beta.2`;
 - every public JS, CSS, JSON, and type target exists;
 - CommonJS/package and ESM resolution stay inside the installed package;
-- TypeScript resolves all documented package entry points;
+- TypeScript resolves all documented package entry points, including the Vue facade;
 - a production Vite build succeeds and emits shared `--vf-*` CSS variables.
 
 ## Reports

@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "vue": "3.5.40"
   },
   "devDependencies": {
     "@types/react": "latest",

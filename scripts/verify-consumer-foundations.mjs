@@ -21,7 +21,7 @@ const allowedBetaClaims = new Map([
   ["native-html", new Set(["packed-consumer-verified"])],
   ["react", new Set(["custom-elements-consumer-verified"])],
   ["angular", new Set(["packed-consumer-verified"])],
-  ["vue", new Set(["packed-consumer-verified"])],
+  ["vue", new Set(["first-class-package-verified"])],
 ]);
 
 const requiredDocuments = [

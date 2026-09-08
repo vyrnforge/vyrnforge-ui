@@ -306,12 +306,12 @@ export function verifyBetaPackageContract({ root = repositoryRoot } = {}) {
   }
 
   if (
-    actual.releaseGroup.packageCount !== 4 ||
+    actual.releaseGroup.packageCount !== 5 ||
     actual.packages.some((packageRecord) =>
       packageRecord.name.includes("ui-data-grid"),
     )
   ) {
-    failures.push("BT-8003 must verify exactly four non-grid beta packages");
+    failures.push("BT-8003 must verify exactly five non-grid beta packages");
   }
 
   for (const packageRecord of actual.packages) {

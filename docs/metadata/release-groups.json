@@ -125,6 +125,26 @@
               "cssBytes": 105000
             }
           }
+        },
+        {
+          "name": "@vyrnforge/ui-vue",
+          "directory": "packages/ui-vue",
+          "role": "vue-renderer",
+          "dependencies": {
+            "@vyrnforge/ui-elements": "0.2.0-beta.2"
+          },
+          "policies": {
+            "hasCss": false,
+            "versionExport": null,
+            "sizeBudget": {
+              "packedBytes": 50000,
+              "unpackedBytes": 250000,
+              "fileCount": 20,
+              "runtimeJavaScriptBytes": 70000,
+              "declarationBytes": 150000,
+              "cssBytes": 0
+            }
+          }
         }
       ]
     },

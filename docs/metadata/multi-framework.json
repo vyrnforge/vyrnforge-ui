@@ -65,6 +65,23 @@
       "foundationStage": "native-parity-current"
     },
     {
+      "name": "@vyrnforge/ui-vue",
+      "directory": "packages/ui-vue",
+      "status": "current",
+      "betaIncluded": true,
+      "runtime": "vue",
+      "dependsOn": ["@vyrnforge/ui-elements"],
+      "owns": [
+        "Vue component facades",
+        "v-model translations",
+        "typed emits",
+        "Vue slots",
+        "typed refs",
+        "Vue plugin setup"
+      ],
+      "foundationStage": "first-class-package-current"
+    },
+    {
       "name": "@vyrnforge/ui-data-grid",
       "directory": "packages/ui-data-grid",
       "status": "react-alpha-deferred",
@@ -100,11 +117,11 @@
     },
     {
       "id": "vue",
-      "supportLevel": "verified-consumer",
-      "renderer": "@vyrnforge/ui-elements",
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-vue",
       "fixture": "tests/consumers/vue",
-      "betaClaim": "packed-consumer-verified",
-      "modelIntegration": "vue-model-adapter-verified"
+      "betaClaim": "first-class-package-verified",
+      "modelIntegration": "first-class-vue-facade-verified"
     }
   ],
   "styling": {
@@ -118,7 +135,7 @@
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
     "currentClaim": "native-html-react-angular-vue-consumer-foundation-complete",
-    "rule": "Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through public package outputs. Framework-specific adapters remain thin translation layers over shared native contracts.",
+    "rule": "Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through public package outputs. Framework-specific facades and adapters remain thin translation layers over shared native contracts.",
     "evidence": "docs/metadata/consumer-foundations.json",
     "angularEvidence": "docs/metadata/angular-consumer.json",
     "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json",
@@ -165,7 +182,7 @@
     "status": "complete",
     "metadata": "docs/metadata/vue-model-adapter.json",
     "supportClaim": "vue-model-adapter-verified",
-    "publishedPackage": null
+    "publishedPackage": "@vyrnforge/ui-vue"
   },
   "ssrBundlerCompatibility": {
     "status": "complete",
