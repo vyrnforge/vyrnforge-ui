@@ -527,6 +527,7 @@ import type { PropType } from "vue";
 import type {
 ${typeImportBlock.map((name) => `  ${name},`).join("\n")}
 } from "@vyrnforge/ui-elements";
+import { renderVyrnForgeSlots } from "../slots";
 
 export type VfButtonElement = VyrnForgeElementForTagName<"vf-button">;
 
@@ -589,15 +590,7 @@ ${vueAssignmentLines(record).join("\n")}
           ref: elementRef,
           "data-vf-generated-button": "vue",
         },
-        [
-          slots.${prefixSlot?.public ?? "prefix"}
-            ? h("span", { slot: "prefix" }, slots.${prefixSlot?.public ?? "prefix"}?.())
-            : null,
-          slots.${defaultSlot.public}?.(),
-          slots.${suffixSlot?.public ?? "suffix"}
-            ? h("span", { slot: "suffix" }, slots.${suffixSlot?.public ?? "suffix"}?.())
-            : null,
-        ],
+        renderVyrnForgeSlots(slots),
       );
   },
 });
