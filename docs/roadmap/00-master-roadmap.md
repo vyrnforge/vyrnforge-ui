@@ -6,32 +6,17 @@ VyrnForge is a native-owned, dependency-minimal, general-purpose UI system with
 enterprise-grade depth. The canonical product identity and long-term scope live
 in [`../governance/01-project-source-of-truth.md`](../governance/01-project-source-of-truth.md).
 
-S0 through S8 established the repository foundations, quality model,
-multi-framework non-grid architecture, native renderer, cross-framework
-verification, and prerelease release groups.
+The foundational multi-framework architecture is established. React, native
+HTML / Custom Elements, Angular, and Vue are first-class non-grid web surfaces
+sharing canonical contracts, behaviors, tokens, styling, accessibility rules,
+and terminology. The data grid remains a specialized React alpha on its own
+release track.
 
-S9 completed the repository-and-delivery simplification program. Validation,
-delivery, release, documentation, and contribution paths now use the simplified
-repository model while preserving the established package architecture and trust
-boundaries.
+The active priority is **not feature expansion**. The repository now enters a
+baseline cleanup and hardening program so future product work starts from a
+small, current, understandable, and fully verified foundation.
 
-The **VyrnForge Multi-Framework Distribution Architecture** program (S10-S15) is
-complete. React, native HTML, Angular, and Vue are equally first-class supported
-web surfaces. Support status is a consumer guarantee; it does not require four
-independent implementations or the same renderer strategy for every framework.
-
-The completed model shares tokens, contracts, behaviors, styling, accessibility
-expectations, and component semantics across supported surfaces. The canonical
-component model drives generated or generic framework integration wherever
-practical, with handwritten framework-specific code reserved for concrete,
-evidence-backed technical exceptions governed by the framework exception policy.
-
-The data-grid package remains a specialized React alpha on an independent
-release track. Multi-framework data-grid work and other advanced optional
-capabilities were intentionally outside the S10-S15 critical path and remain
-valid future scope only when separately prioritized and evidenced.
-
-## Release groups
+## Current release tracks
 
 ### Non-grid beta
 
@@ -44,299 +29,406 @@ valid future scope only when separately prioritized and evidenced.
 @vyrnforge/ui-vue
 ```
 
-### Deferred independent alpha
+### Independent alpha
 
 ```text
 @vyrnforge/ui-data-grid
 ```
 
-The canonical exact versions, dist-tags, package membership, and internal
-dependency alignment live in
+Exact versions, dist-tags, package membership, and internal dependency alignment
+are owned by
 [`../metadata/release-groups.json`](../metadata/release-groups.json).
+Repository release-readiness evidence must not be confused with actual registry
+publication status.
 
-Current package manifests, release metadata, packed-consumer evidence, and the
-final S15 dry-run make the four non-grid framework surfaces release-ready by
-repository evidence. This is not a claim that every package has been published
-to npm. Real registry publication, release tags, and GitHub Releases remain
-separate explicitly authorized operations.
+## Completed foundation history
 
-## Sprint plan
+Detailed closed task history belongs to merged Git history, pull requests, CI
+evidence, and retained historical records. This roadmap keeps only the milestones
+needed to understand the current baseline.
 
-| Sprint | Name                                            | Goal                                                                                                                      | Gate / state  |
-| ------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| S0     | Baseline and Change Control                     | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed   |
-| S1     | Quality Foundation                              | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
-| S2     | Interaction and Accessibility Evidence          | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
-| S3     | Semantic Tokens and Component Consistency       | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
-| S4     | Multi-Framework Architecture                    | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed |
-| S5     | Framework-Neutral Behaviors                     | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed |
-| S6     | Native Custom Elements                          | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed |
-| S7     | Cross-Framework Verification and Docs           | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed |
-| S8     | Non-Grid Beta Release                           | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete      |
-| S9     | Repository and Delivery Simplification          | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete      |
-| S10    | Canonical Component & Distribution Architecture | Establish the target architecture, complete canonical contract model, package strategy, and migration rules.              | G10 — passed  |
-| S11    | Framework Generation Foundation                 | Prove deterministic generation and shared vertical slices across all four supported surfaces.                             | G11 — passed  |
-| S12    | First-Class Angular Distribution                | Deliver low-friction Angular distribution with generated integration and framework-native forms/DX.                       | G12 — passed  |
-| S13    | First-Class Vue Distribution                    | Deliver low-friction Vue distribution with generated integration and framework-native model/slot/ref DX.                  | G13 — passed  |
-| S14    | React Canonical-Renderer Convergence            | Converge eligible React components toward the canonical implementation while preserving public ergonomics and parity.     | G14 — passed  |
-| S15    | Multi-Framework Packaging & Release             | Make packaging, release verification, documentation, and four-surface distribution metadata-driven and release-ready.     | G15 — passed  |
+| Sprints | Program | Result | State |
+| --- | --- | --- | --- |
+| S0-S3 | Repository and quality foundation | Established inventory, quality gates, interaction/accessibility evidence, semantic tokens, and component consistency. | Complete |
+| S4-S8 | Multi-framework foundation | Established shared contracts and behaviors, canonical Custom Elements, cross-framework consumers, and prerelease release groups. | Complete |
+| S9 | Repository and delivery simplification | Simplified contributor commands, CI orchestration, Pages delivery, release progression, and documentation entrypoints. | Complete |
+| S10-S15 | Multi-framework distribution architecture | Established canonical component metadata/generation and first-class React, native HTML, Angular, and Vue distribution. | Complete |
 
-The execution workbook and merged repository evidence own detailed task history.
-This roadmap records the closed architecture and planning state rather than
-repeating fast-changing execution percentages.
+Historical sprint task lists are intentionally not duplicated here. Reintroduce
+historical detail only when it is required to explain a current contract or
+migration decision.
 
-## S4 architecture tasks
+# Active Sprint — S16 Baseline Cleanup & Hardening
 
-- MF-4001: multi-framework web support ADR
-- MF-4002: package topology and dependency rules
-- MF-4003: canonical component-contract schema
-- MF-4004: canonical event vocabulary
-- MF-4005: composition and slot vocabulary
-- MF-4006: Light DOM and styling policy
-- MF-4007: form-associated element contract
-- MF-4008: React, native HTML, Angular, and Vue fixture foundation
-- MF-4009: create the `@vyrnforge/ui-behaviors` package foundation
-- MF-4010: create the `@vyrnforge/ui-elements` package foundation
-- MF-4011: add complete framework-parity catalog metadata
-- MF-4012: complete GMF1 architecture gate evidence
+**Gate:** G16 — Clean Baseline
 
-S4 established the package and contract foundations for the multi-framework
-program.
+**Goal:** reduce repository, documentation, architecture, tooling, CI/CD, and
+release complexity to the smallest set that accurately represents and protects
+the current VyrnForge architecture.
 
-## S5 behavior tasks
+S16 is a cleanup program, not a redesign program. Existing working architecture
+should be preserved unless concrete repository evidence shows that it is stale,
+duplicated, incorrectly owned, or unnecessarily complex.
 
-### Foundation batch — implemented
+## S16 execution rules
 
-- MF-5001: controllable state primitives
-- MF-5002: collection and active-item primitives
-- MF-5003: single, multiple, toggle, and range selection models
-- MF-5004: canonical controller event model
+- No new product features, components, framework surfaces, or speculative
+  abstractions.
+- Do not rewrite working code merely to make it stylistically cleaner.
+- Prefer deletion, consolidation, and reuse over adding another layer.
+- One concept should have one canonical source of truth.
+- Historical material should not live in current operational paths unless it is
+  still required evidence.
+- Temporary cleanup inventories, migration notes, and one-time scripts must be
+  removed before G16 closes unless they become an intentionally retained source
+  of truth.
+- Current package manifests, public entrypoints, canonical metadata, and tested
+  runtime behavior override stale planning prose.
+- Framework-specific exceptions must remain narrow, explicit, evidenced, and
+  tested.
+- Cleanup must preserve dependency-minimal, framework-independent shared
+  foundations and first-class React, native HTML, Angular, and Vue support.
 
-### Completed behavior work
+## S16 jobs
 
-- MF-5005: simple action and toggle behaviors — implemented
-- MF-5006: simple form-control behaviors — implemented
-- MF-5007: Tabs and composite navigation behavior — implemented
-- MF-5008: Autocomplete behavior — implemented
-- MF-5009: MultiSelect behavior — implemented
-- MF-5010: Transfer List behavior — implemented
-- MF-5011: Menu and SideNav navigation behavior — implemented
-- MF-5012: overlay lifecycle and DOM-adapter boundary — implemented
-- MF-5013: Dialog, Drawer, Popover, and Tooltip controllers — implemented
-- MF-5014: Toast and ConfirmDialog behavior — implemented
-- MF-5015: complete React behavior adoption and compatibility audit — implemented
-- MF-5016: shared behavior parity gate — implemented
+| Task | Job | Depends on | Status |
+| --- | --- | --- | --- |
+| BC-1601 | Repository truth and cleanup inventory | — | Not started |
+| BC-1602 | Documentation and source-of-truth cleanup | BC-1601 | Not started |
+| BC-1603 | Architecture and package-boundary cleanup | BC-1601 | Not started |
+| BC-1604 | Repository and tooling cleanup | BC-1601, BC-1603 | Not started |
+| BC-1605 | CI/CD cleanup and validation ownership | BC-1601, BC-1604 | Not started |
+| BC-1606 | Release and distribution cleanup | BC-1601, BC-1603, BC-1604 | Not started |
+| BC-1607 | Quality, maturity, and evidence cleanup | BC-1602, BC-1603 | Not started |
+| BC-1608 | Clean-baseline verification | BC-1602 through BC-1607 | Not started |
+| BC-1609 | Cleanup closeout and temporary-artifact removal | BC-1608 | Not started |
 
-The behavior foundation is complete. `@vyrnforge/ui-behaviors` remains
-framework- and DOM-neutral while renderers own framework lifecycle and DOM
-execution.
+BC-1602 and BC-1603 may proceed in parallel after BC-1601. Other work should be
+serialized only where the dependencies above represent a real technical
+ordering requirement.
 
-## S6 native element tasks
+## BC-1601 — Repository truth and cleanup inventory
 
-### Foundation batch — implemented
+Establish the evidence-backed current state before deleting or restructuring
+anything.
 
-- EL-6001: native registration and lifecycle foundation
-- EL-6002: base element and property reflection
-- EL-6003: typed event dispatch utilities — implemented
-- EL-6004: form-associated element base — implemented
-- EL-6005 through EL-6017: public non-grid native component ports — implemented
-- EL-6018: native non-grid parity gate — implemented
+### Work
 
-S6 closed with the complete native non-grid renderer and its deterministic
-public Custom Element catalog.
+- Inventory packages, applications, examples, fixtures, scripts, workflows,
+  generated artifacts, documentation trees, metadata, release files, and root
+  configuration.
+- Identify current canonical sources versus derived, historical, duplicated,
+  transitional, or orphaned material.
+- Map package dependency direction and public versus internal entrypoints.
+- Identify scripts and CI checks that verify the same invariant through multiple
+  paths.
+- Identify stale framework assumptions, obsolete consumer fixtures, abandoned
+  experiments, dead files, and one-time migration artifacts.
+- Identify documentation that restates architecture, maturity, release, or
+  component facts already owned elsewhere.
+- Classify each cleanup candidate as keep, consolidate, regenerate, replace, or
+  delete, with the owning current source of truth.
 
-## S7 and S8 closure
+### Acceptance
 
-S7 completed the cross-framework evidence chain for React, native HTML, Angular,
-and Vue consumers. Retained evidence remains historical proof and does not
-replace current manifests or active architecture metadata.
+- Every planned deletion or consolidation is backed by a current replacement or
+  proof that the artifact is no longer required.
+- No package, public API, release track, framework surface, or verification path
+  is inferred solely from old sprint documentation.
+- The inventory is used to execute S16, not retained as a permanent duplicate
+  roadmap unless it proves to be a necessary canonical artifact.
 
-S8 established the synchronized non-grid beta release group, independent
-data-grid alpha track, artifact verification, compatibility/security contracts,
-and controlled prerelease publication model. Current release-group metadata is
-retained in
-[`../metadata/release-groups.json`](../metadata/release-groups.json).
+## BC-1602 — Documentation and source-of-truth cleanup
 
-## S9 repository and delivery simplification
+Make current documentation concise, navigable, non-duplicated, and clearly
+owned.
 
-| Task    | Goal                                                                         | Status |
-| ------- | ---------------------------------------------------------------------------- | ------ |
-| RS-9001 | Simplify validation ownership.                                               | Done   |
-| RS-9002 | Simplify the root command graph.                                             | Done   |
-| RS-9003 | Simplify CI orchestration and the merge gate.                                | Done   |
-| RS-9004 | Build Pages once in CI and deploy the verified artifact.                     | Done   |
-| RS-9005 | Simplify prerelease publication into one controlled progression.             | Done   |
-| RS-9006 | Restructure documentation around reader intent and current sources of truth. | Done   |
-| RS-9007 | Simplify contributor-facing setup, validation, and pull-request guidance.    | Done   |
+### Work
 
-S9 is complete. Normal contributors use one setup and validation path, CI
-derives technical scope from changed paths, and specialist intake remains only
-where infrastructure or release operations require additional evidence.
+- Reconfirm `docs/README.md` as the human documentation entrypoint and the
+  project source-of-truth document as product identity authority.
+- Reduce duplicate architecture, framework, package, release, maturity,
+  contributor, testing, and CI explanations.
+- Keep generated references generated; do not maintain handwritten copies of
+  generated facts.
+- Remove or relocate closed sprint execution narratives from current reader
+  paths when Git/PR/CI history already owns that evidence.
+- Delete obsolete roadmap documents rather than preserving them merely because
+  they once existed.
+- Ensure current docs distinguish consumer guidance, maintainer architecture,
+  generated API reference, planning, and historical evidence.
+- Repair links and navigation after deletion/consolidation.
 
-## S10-S15 multi-framework distribution closure
+### Acceptance
 
-S10-S15 completed the transition from a mixed implementation/support hierarchy
-to one cohesive multi-framework distribution model. The closed support surface
-is:
+- Each important project fact has one obvious canonical owner.
+- Current documentation does not require understanding historical sprint IDs.
+- No known stale publication, framework-support, package, or maturity claims
+  remain.
+- Documentation checks and the docs application build pass from a clean clone.
 
-| Surface     | Consumer package           | Support status | Implementation strategy                                                                                  |
-| ----------- | -------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- |
-| React       | `@vyrnforge/ui-components` | First-class    | Canonical-backed public React surface with narrow explicit exceptions                                    |
-| Native HTML | `@vyrnforge/ui-elements`   | First-class    | Default browser implementation through canonical `vf-*` Custom Elements                                  |
-| Angular     | `@vyrnforge/ui-angular`    | First-class    | Generated/generic Angular facade over shared canonical foundations, including Forms integration          |
-| Vue         | `@vyrnforge/ui-vue`        | First-class    | Generated/generic Vue facade over shared canonical foundations with idiomatic model/slot/ref integration |
+## BC-1603 — Architecture and package-boundary cleanup
 
-Implementation strategy is not a support ranking. Shared contracts, behaviors,
-tokens, accessibility rules, terminology, and generated metadata remain the
-source for cross-framework consistency; framework-specific exceptions stay
-narrow, explicit, and governed by
-[`../architecture/adr-008-framework-exception-policy.md`](../architecture/adr-008-framework-exception-policy.md).
+Verify the architecture that actually exists and remove transitional structure
+that no longer has a purpose.
 
-### Closure evidence
+### Work
 
-The final convergence sequence is recorded by merged repository and CI evidence:
+- Revalidate responsibilities and dependency direction for `ui-core`,
+  `ui-behaviors`, `ui-elements`, `ui-components`, `ui-angular`, `ui-vue`, and
+  `ui-data-grid`.
+- Confirm framework-neutral contracts, tokens, schemas, behaviors, and generated
+  metadata remain outside framework-specific packages where practical.
+- Confirm Angular and Vue remain adapters/facades over canonical shared
+  foundations rather than independent component implementations.
+- Audit React canonical-renderer exceptions and retain only evidenced exceptions.
+- Remove dead compatibility shims, obsolete adapter layers, unused abstractions,
+  accidental cross-package imports, and internal APIs leaked through public
+  entrypoints.
+- Normalize terminology and ownership where equivalent concepts have diverged.
+- Preserve separate data-grid maturity/release ownership; do not pull grid
+  internals into the non-grid critical path during cleanup.
 
-- MFD-1513: framework-first installation guidance merged in PR #303;
-- MFD-1514: target multi-framework architecture documentation merged in PR #304;
-- MFD-1515: obsolete fixture adapters and stale consumer-only assumptions removed in PR #305, merged as `29f7d1d9b05d2268f585014d39a1e76f830c8250`;
-- MFD-1516: repository inventory, component reference, and consumer knowledge regenerated with zero drift and verified in GitHub Actions run `34244635279`;
-- MFD-1517: the complete all-release-line non-publishing dry-run passed against the converged main commit in GitHub Actions run `34245452473`.
+### Acceptance
 
-The final release proof built and verified release artifacts, release-line size
-budgets, trusted-publishing dry-run contracts, release notes, and the four-surface
-consumer runtime matrix. Its report explicitly recorded
-`publishingPerformed: false`.
+- Every package has a concise responsibility and justified dependencies.
+- Package-boundary verification reflects the intended architecture rather than
+  historical exceptions.
+- No duplicated framework implementation remains where the canonical foundation
+  can own the capability once.
+- Public entrypoints expose intentional supported API only.
 
-No npm publication, production release tag, or GitHub Release is part of this
-closure. Those remain separately authorized release operations.
+## BC-1604 — Repository and tooling cleanup
 
-### Migration and consumer model
+Make a clean clone understandable and reduce permanent maintenance surface.
 
-Normal consumers start from one obvious surface package rather than installing
-or understanding VyrnForge's internal foundation graph:
+### Work
 
-- React: `@vyrnforge/ui-components`;
-- Native HTML: `@vyrnforge/ui-elements`;
-- Angular: `@vyrnforge/ui-angular`;
-- Vue: `@vyrnforge/ui-vue`.
+- Remove dead scripts, unused configuration, obsolete fixtures, stale generated
+  output, abandoned examples, and migration-only files found by BC-1601.
+- Consolidate one-off verification helpers when a maintained shared verifier
+  already owns the invariant.
+- Normalize package and root command naming where equivalent operations use
+  inconsistent terminology.
+- Keep the normal contributor command surface centered on:
 
-Framework-first installation and setup guidance is canonical in the README and
-package/import documentation. Historical consumer-fixture terminology remains
-only where it is useful evidence and must not be presented as current support
-status.
+  ```bash
+  npm ci
+  npm run check
+  npm run test
+  npm run build
+  ```
 
-### Explicit deferred scope
+- Keep specialist commands only when they protect a distinct release,
+  compatibility, security, accessibility, browser, packaging, or generation
+  responsibility.
+- Verify generated artifacts are either reproducible and checked, or removed
+  from source control when retention has no value.
 
-The data-grid multi-framework renderer program remains deferred and separate.
-The current `@vyrnforge/ui-data-grid` package stays on its independent React
-alpha release line. No S10-S15 closure claim promotes the data grid to the four
-non-grid framework surfaces.
+### Acceptance
 
-### Next planning inputs
+- No known dead root script or tracked obsolete fixture remains.
+- A new contributor can identify normal setup, validation, test, and build paths
+  without reading CI internals.
+- Root commands and package scripts have clear ownership and minimal duplication.
+- Clean-clone local behavior matches CI assumptions.
 
-Post-S15 planning should build on the closed foundation rather than reopen the
-support architecture without evidence. Priority inputs are:
+## BC-1605 — CI/CD cleanup and validation ownership
 
-- mature component and package stability using the canonical evidence model;
-- deepen general-purpose visual quality, onboarding, themes, density, keyboard,
-  performance, compatibility, and enterprise ergonomics;
-- continue AI-native consumer context generated from canonical metadata;
-- define optional advanced-module architecture before adding heavyweight
-  capabilities;
-- separately prioritize data-grid multi-framework evolution only when product
-  requirements and measured technical need justify it.
+Reduce workflow complexity without weakening meaningful guarantees.
 
-## Deferred data-grid track
+### Work
 
-The broad grid decomposition and multi-framework renderer work remains a
-separate post-beta track. It should be replanned only when explicitly prioritized
-by current product requirements, advanced-module architecture, and measured
-technical need.
+- Inventory every required check and map it to the invariant it owns.
+- Remove duplicate validation performed at multiple orchestration levels without
+  additional evidence value.
+- Keep fast merge validation separate from expensive assurance, release, or
+  manually authorized publication work.
+- Ensure CI calls repository-owned commands instead of reimplementing validation
+  logic in YAML where practical.
+- Simplify changed-path scope detection only where correctness is preserved.
+- Keep package-boundary, generated-artifact, packed-consumer, accessibility,
+  browser/runtime, SSR/bundler, security, and release checks when they protect
+  distinct contracts.
+- Improve failure naming/output so a failed check identifies the violated
+  contract rather than only a wrapper job.
+- Remove obsolete workflow triggers and closed-program automation.
 
-Deferred work includes:
+### Acceptance
 
-- internal grid-controller decomposition;
-- query and persistence refactoring;
-- column, selection, grouping, keyboard, and visual-region decomposition;
-- scale benchmarks and virtualization decisions;
-- framework-neutral grid core and additional renderers.
+- Every persistent workflow and required check has one documented purpose.
+- The merge gate is strong but not a duplicate execution of the full release
+  pipeline.
+- Release/publication operations remain explicitly separated from ordinary CI.
+- CI passes on the cleaned repository and branch protection references only
+  checks that still exist and matter.
 
-Grid defects, security corrections, accessibility fixes, and compatibility
-maintenance remain allowed. Feature expansion is not part of the completed
-S10-S15 multi-framework distribution critical path.
+## BC-1606 — Release and distribution cleanup
 
-## Post-S15 strategic horizon
+Align repository claims, package metadata, release tracks, and consumer evidence.
 
-The long-term roadmap extends beyond four-framework distribution. These are
-planning horizons, not commitments that the capabilities already exist.
+### Work
 
-### First-class product maturity
+- Verify release-group metadata against package manifests and public dependency
+  relationships.
+- Remove stale prerelease/release scripts, notes, manifests, or dry-run machinery
+  superseded by the current release model.
+- Verify React, native HTML, Angular, and Vue non-grid packages through packed
+  package consumers rather than workspace-only imports.
+- Verify the data grid remains independently versioned/matured where intended.
+- Ensure GitHub release documentation, npm dist-tag assumptions, registry
+  publication status, and repository readiness are not conflated.
+- Retain trusted publishing/provenance/security checks only in the smallest
+  release path that actually needs them.
+- Verify SSR/server-safe imports and supported bundler consumption from packed
+  artifacts.
 
-- mature component/package stability through the canonical evidence model;
-- strengthen general-purpose visual quality and onboarding;
-- preserve and deepen enterprise themes, density, data-management, and keyboard
-  ergonomics;
-- establish long-term compatibility, migration, performance, browser, and
-  support guarantees;
-- gather real application evidence across general-purpose and enterprise usage.
+### Acceptance
 
-### AI-native developer experience
+- Release metadata and package manifests describe one consistent release model.
+- A fresh external-style consumer can install and build each supported surface
+  from packed artifacts.
+- No obsolete release-line or publication path remains active.
+- No cleanup task performs an npm publication or stable-release promotion.
 
-- define a consumer-facing AI contract derived from canonical metadata;
-- generate compact task-scoped component/framework context;
-- add reusable pattern/composition metadata;
-- measure context/token efficiency and AI-generated implementation correctness;
-- verify AI guidance cannot drift from canonical public contracts.
+## BC-1607 — Quality, maturity, and evidence cleanup
 
-### Optional advanced-module architecture
+Make quality evidence current and proportional to what VyrnForge actually
+claims.
 
-Before adding multiple heavyweight capabilities, define shared rules for:
+### Work
 
-- dependency isolation and optional external engines;
-- package ownership and framework facade generation;
-- token/CSS ownership;
-- tree shaking and size/performance budgets;
-- public entrypoints and packed consumers;
-- independent maturity/release lines where justified;
-- accessibility and AI metadata requirements.
+- Audit component maturity metadata against present implementation,
+  documentation, tests, accessibility evidence, and cross-framework support.
+- Remove obsolete maturity evidence formats and closed migration exceptions when
+  they no longer affect current promotion rules.
+- Consolidate accessibility, visual-regression, compatibility, performance, and
+  consumer evidence where multiple artifacts encode the same result.
+- Keep manual evidence requirements explicit where automation cannot replace
+  them.
+- Ensure beta/alpha labels remain honest and are not upgraded merely because S16
+  cleanup passes.
 
-### Candidate advanced capability programs
+### Acceptance
 
-Prioritize from reusable product need rather than component-count goals. Valid
-future programs include:
+- Maturity metadata has no known legacy exception that exists only because an
+  old migration once needed it.
+- Current automated evidence is reproducible.
+- Manual evidence remains clearly separated from automated green checks.
+- G16 makes no unsupported production-readiness or stable-maturity claim.
 
-- TreeView and TreeGrid foundations;
-- data-grid evolution;
-- charting and visualization UI;
-- advanced form composition and reusable form patterns;
-- application templates/pattern contracts;
-- workflow and diagram editor UI;
-- rich editors and advanced interaction surfaces;
-- later spatial/3D UI exploration with external rendering-engine boundaries.
+## BC-1608 — Clean-baseline verification
 
-VyrnForge may own sophisticated reusable UI without owning the corresponding
-business, BI, workflow execution, backend, CMS, routing, spreadsheet, or 3D
-rendering engines.
+Run the cleaned repository as a consumer and contributor would, and fix causes
+rather than documenting around failures.
+
+### Required evidence
+
+- fresh install with `npm ci`;
+- `npm run check`;
+- `npm run test`;
+- `npm run build`;
+- full repository CI equivalent;
+- package packing and package-boundary verification;
+- React, native HTML, Angular, and Vue packed-consumer builds/runtime checks;
+- data-grid alpha checks without promoting it into the non-grid release group;
+- browser, accessibility, and visual checks required by current contracts;
+- SSR/bundler verification;
+- documentation application build and link/currentness validation;
+- release dry-run where current release policy requires it, with publishing
+  disabled.
+
+### Acceptance
+
+- All required evidence passes from the cleaned repository state.
+- There are no unexplained ignored failures, temporary bypasses, or cleanup-only
+  exceptions.
+- Any intentionally deferred debt is concrete, current, and recorded outside the
+  G16 acceptance path rather than hidden inside passing scripts.
+
+## BC-1609 — Cleanup closeout and temporary-artifact removal
+
+Close S16 without leaving a cleanup project embedded permanently in the product.
+
+### Work
+
+- Delete temporary inventories, migration notes, one-time scripts, temporary
+  workflows, debug artifacts, and cleanup-only flags created during S16.
+- Regenerate intentional generated references after final structure changes.
+- Update this roadmap to mark S16/G16 complete and reduce S16 execution detail to
+  the minimum historical summary needed for future planning.
+- Update canonical documentation only where final repository behavior changed.
+- Confirm the final commit still passes the required G16 evidence after temporary
+  cleanup material is removed.
+
+### Acceptance
+
+- S16 leaves behind the cleaned product and its durable sources of truth, not a
+  permanent pile of cleanup scaffolding.
+- The active roadmap is ready for the next product-development sprint without
+  carrying closed S16 task detail indefinitely.
+
+## G16 — Clean Baseline gate
+
+G16 passes only when all of the following are true:
+
+1. Current documentation has clear canonical ownership with no known stale or
+   unnecessary duplicate operational docs.
+2. Package responsibilities, public entrypoints, and dependency direction match
+   the intended multi-framework architecture.
+3. Obsolete repository files, scripts, fixtures, generated artifacts, migration
+   scaffolding, and closed-program automation identified by S16 are removed.
+4. Normal contributor commands are small, documented, and reproducible from a
+   clean clone.
+5. Persistent CI/CD checks have distinct responsibilities and the required merge
+   gate is green.
+6. Release metadata and packed-package consumer evidence accurately represent
+   current beta/alpha tracks without making a stable-release claim.
+7. Component maturity and quality evidence are current and do not depend on
+   obsolete migration exceptions.
+8. React, native HTML, Angular, and Vue retain first-class non-grid support from
+   the same shared VyrnForge foundations.
+9. The React data-grid alpha remains valid and isolated from unrelated S16
+   expansion work.
+10. Temporary S16 artifacts are removed and the final cleaned state still passes
+    the complete required validation.
+
+## Explicitly deferred until G16 passes
+
+Feature expansion is frozen during S16 except for fixes required to preserve
+existing contracts or make the clean baseline pass. Deferred work includes:
+
+- new general-purpose components;
+- new advanced modules;
+- data-grid feature expansion or multi-framework grid renderers;
+- new framework targets;
+- AI-native consumer features beyond cleanup of already-existing context;
+- broad visual redesign;
+- speculative architecture revisions;
+- maturity promotion to stable solely because cleanup completed.
+
+After G16, product planning should be driven by real consumer/application needs,
+with reusable capabilities implemented once in shared VyrnForge foundations and
+adapted consistently across supported surfaces.
 
 ## Planning rules
 
-- The closed S10-S15 execution workbook and merged GitHub evidence describe the
-  completed distribution program; future work should start from this closed
-  architecture rather than historical consumer-only stages.
-- Accepted architecture overrides historical sprint notes.
-- Current package manifests and release metadata override stale planning
-  examples about implemented state. External publication status remains a
-  separate fact and must not be inferred from release readiness.
-- `docs/metadata/components.json` owns structured component status and maturity.
-- Historical task identifiers remain only where they provide useful planning or
-  evidence context; normal usage guidance should not require them.
-- New reusable UI should extend existing VyrnForge foundations before creating a
-  separate implementation.
-- Advanced capabilities should be optional and must not impose unnecessary
-  runtime, dependency, CSS, or setup cost on consumers that do not use them.
-- Application-specific business logic and runtime engines remain in consuming
-  applications or explicit external integrations.
 - Product identity and long-term scope are canonical in
   `docs/governance/01-project-source-of-truth.md`.
-- The detailed scope comparison and transition rationale are recorded in
-  `docs/roadmap/04-vision-mission-scope-alignment-review.md`.
+- `docs/metadata/components.json` owns structured component status and maturity.
+- `docs/metadata/release-groups.json` owns release-group membership and exact
+  release metadata.
+- Current package manifests and tested public entrypoints override stale planning
+  examples about implemented state.
+- Historical task identifiers belong in Git/PR/CI evidence unless they remain
+  necessary to explain a current contract or migration.
+- New reusable UI should extend existing VyrnForge foundations before creating a
+  separate implementation.
+- Shared tokens, contracts, schemas, metadata, generators, and framework-neutral
+  logic remain framework-agnostic where practical.
+- Framework packages remain adapters/facades over shared foundations, with narrow
+  evidenced exceptions.
+- Application-specific business logic and runtime engines stay outside core
+  VyrnForge packages.
+- Advanced capabilities must be optional and must not impose unnecessary
+  dependency, runtime, CSS, or setup cost on consumers that do not use them.
