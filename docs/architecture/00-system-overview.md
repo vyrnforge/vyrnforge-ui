@@ -164,6 +164,10 @@ package for framework adapters.
 canonical model and shared foundations. Framework runtime peers stay isolated to
 the framework package that needs them.
 
+Concrete dependency directions are canonical in
+[Package Boundaries](01-package-boundaries.md) and package manifests; this
+overview intentionally does not maintain a second dependency ledger.
+
 ### Optional advanced modules
 
 Advanced capabilities such as data grids, trees/tree-grids, visualization,
@@ -239,7 +243,6 @@ architecture source.
 - [Custom Elements and Form Association](10-custom-elements-and-form-association.md)
 - [ADR-005: Canonical Web Implementation](adr-005-canonical-web-implementation.md)
 - [ADR-006: Public Framework Package Strategy](adr-006-framework-package-strategy.md)
-- [ADR-007: Framework Facade Package Boundaries](adr-007-framework-facade-package-boundaries.md)
 - [ADR-008: Framework Exception Policy](adr-008-framework-exception-policy.md)
 - [ADR-010: AI Consumption Contract](adr-010-ai-consumption-contract.md)
 - [ADR-011: Optional Advanced Module Architecture](adr-011-optional-advanced-module-architecture.md)
