@@ -1,0 +1,40 @@
+name: MFD-1518 Format Closure Roadmap
+
+on:
+  push:
+    branches:
+      - mfd-1518-program-closure
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: mfd-1518-program-closure
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Format roadmap
+        run: npx prettier --write docs/roadmap/00-master-roadmap.md
+      - name: Commit formatting
+        shell: bash
+        run: |
+          if git diff --quiet -- docs/roadmap/00-master-roadmap.md; then
+            echo "Roadmap already formatted."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/roadmap/00-master-roadmap.md
+          git commit -m "docs: format S10-S15 closure roadmap"
+          git push origin HEAD:mfd-1518-program-closure
