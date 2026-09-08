@@ -226,7 +226,10 @@
       ],
       "status": "current",
       "releaseTrack": "non-grid-beta",
-      "publicEntryPoints": ["@vyrnforge/ui-angular", "@vyrnforge/ui-angular/forms"],
+      "publicEntryPoints": [
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-angular/forms"
+      ],
       "notes": "First-class Angular facade over ui-elements; Angular framework dependencies remain peer dependencies."
     },
     {
