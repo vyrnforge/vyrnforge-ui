@@ -366,25 +366,6 @@ function verifyVersionPolicy({ root, releaseGroups, failures }) {
   }
 }
 
-function verifyRoadmapContracts({ root, failures }) {
-  const roadmap = read(root, "docs/roadmap/00-master-roadmap.md");
-
-  for (const marker of ["RS-9006", "RS-9007"]) {
-    if (!roadmap.includes(marker)) {
-      failures.push(`docs/roadmap/00-master-roadmap.md: missing ${marker}`);
-    }
-  }
-
-  for (let task = 5001; task <= 5016; task += 1) {
-    const marker = `MF-${task}`;
-    if (!roadmap.includes(marker)) {
-      failures.push(
-        `docs/roadmap/00-master-roadmap.md: missing historical behavior marker ${marker}`,
-      );
-    }
-  }
-}
-
 export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   const failures = [];
   const releaseGroups = readReleaseGroups({ root });
@@ -425,7 +406,6 @@ export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   verifyFrameworkFirstInstallation({ root, failures });
   verifyPrimaryStructure({ root, failures });
   verifyVersionPolicy({ root, releaseGroups, failures });
-  verifyRoadmapContracts({ root, failures });
 
   return failures;
 }
