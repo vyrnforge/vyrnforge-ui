@@ -1,0 +1,47 @@
+name: S16 Documentation Currentness Helper
+
+on:
+  push:
+    branches:
+      - s16/bc-1602-docs-cleanup
+
+permissions:
+  contents: write
+
+jobs:
+  align-doc-currentness:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: s16/bc-1602-docs-cleanup
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Align documentation currentness verifier
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path("scripts/verify-documentation-current.mjs")
+          text = path.read_text()
+          text = text.replace('    "## Project planning",', '    "## Execution and planning",')
+          start = text.index("  const componentInventory = read(root);")
+          end = text.index("\n}\n\nfunction verifyVersionPolicy", start)
+          text = text[:start] + text[end:]
+          path.write_text(text)
+      - name: Format verifier
+        run: npx prettier --write scripts/verify-documentation-current.mjs
+      - name: Commit verifier alignment
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/verify-documentation-current.mjs
+          git commit -m "chore: align docs currentness with Drive-owned planning"
+          git push origin HEAD:s16/bc-1602-docs-cleanup
