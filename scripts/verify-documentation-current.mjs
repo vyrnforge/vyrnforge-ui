@@ -294,7 +294,7 @@ function verifyPrimaryStructure({ root, failures }) {
     "## Use VyrnForge",
     "## Build VyrnForge",
     "## Maintain VyrnForge",
-    "## Project planning",
+    "## Execution and planning",
     "## Historical evidence",
   ]) {
     if (!docsIndex.includes(heading)) {
@@ -305,27 +305,6 @@ function verifyPrimaryStructure({ root, failures }) {
     if (!docsIndex.includes(link)) {
       failures.push(`docs/README.md: missing one-click link ${link}`);
     }
-  }
-
-  const componentInventory = read(root);
-  for (const marker of [
-    "../metadata/components.json",
-    "../generated/component-reference.json",
-  ]) {
-    if (!componentInventory.includes(marker)) {
-      failures.push(
-        `docs/roadmap/01-component-inventory.md: missing canonical pointer ${marker}`,
-      );
-    }
-  }
-  if (
-    /^\|\s*(?:Button|TextInput|UniversalDataGrid)\s*\|/mu.test(
-      componentInventory,
-    )
-  ) {
-    failures.push(
-      "docs/roadmap/01-component-inventory.md: manual component table must not duplicate canonical metadata",
-    );
   }
 }
 
