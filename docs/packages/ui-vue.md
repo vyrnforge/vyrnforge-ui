@@ -65,10 +65,7 @@ The facade translates between Vue model events and the canonical element propert
 Use Vue-facing emits for normal facade integration. Generated emits are typed from canonical event metadata.
 
 ```vue
-<VfDialog
-  v-model:open="open"
-  @dismiss="handleDismiss"
-/>
+<VfDialog v-model:open="open" @dismiss="handleDismiss" />
 ```
 
 Canonical `vf-*` DOM listeners are also available as typed passthrough attributes when a consumer intentionally needs the native event contract:

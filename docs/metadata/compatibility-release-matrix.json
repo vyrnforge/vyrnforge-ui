@@ -17,7 +17,7 @@
     "node": ["22.12.0", "24.18.0"],
     "react": ["18.3.1", "19.2.7"],
     "angular": ["21.2.18", "22.0.8"],
-    "vue": ["3.4.38", "3.5.40"],
+    "vue": ["3.5.0", "3.5.40"],
     "nativeBrowsers": ["chromium", "firefox", "webkit"]
   },
   "cases": [
@@ -98,14 +98,14 @@
       "overrides": {}
     },
     {
-      "id": "vue34-node22-chromium",
+      "id": "vue35-min-node22-chromium",
       "fixture": "vue",
       "node": "22.12.0",
       "browser": "chromium",
-      "overrides": { "dependencies": { "vue": "3.4.38" } }
+      "overrides": { "dependencies": { "vue": "3.5.0" } }
     },
     {
-      "id": "vue35-node24-chromium",
+      "id": "vue35-current-node24-chromium",
       "fixture": "vue",
       "node": "24.18.0",
       "browser": "chromium",

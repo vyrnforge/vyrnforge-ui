@@ -37,26 +37,26 @@ try {
   const overridden = applyDependencyOverrides(packageJson, testCase.overrides);
   writeFileSync(packagePath, `${JSON.stringify(overridden, null, 2)}\n`);
 
-  execFileSync(
-    process.execPath,
-    [
-      path.join(
-        repositoryRoot,
-        "scripts/verify-consumer-foundations-runtime.mjs",
-      ),
-      "--fixture",
-      testCase.fixture,
-    ],
-    {
-      cwd: repositoryRoot,
-      stdio: "inherit",
-      env: {
-        ...process.env,
-        VYRNFORGE_BROWSER: testCase.browser,
-        npm_config_engine_strict: "false",
-      },
+  const runtimeArguments = [
+    path.join(
+      repositoryRoot,
+      "scripts/verify-consumer-foundations-runtime.mjs",
+    ),
+    "--fixture",
+    testCase.fixture,
+  ];
+  if (testCase.fixture === "vue")
+    runtimeArguments.push("--accessibility-smoke");
+
+  execFileSync(process.execPath, runtimeArguments, {
+    cwd: repositoryRoot,
+    stdio: "inherit",
+    env: {
+      ...process.env,
+      VYRNFORGE_BROWSER: testCase.browser,
+      npm_config_engine_strict: "false",
     },
-  );
+  });
   status = "passed";
 } catch (error) {
   errorMessage = error instanceof Error ? error.message : String(error);
@@ -84,6 +84,7 @@ try {
           typecheck: status,
           productionBuild: status,
           browserSmoke: status,
+          ...(testCase.fixture === "vue" ? { accessibilitySmoke: status } : {}),
         },
         ...(errorMessage ? { error: errorMessage } : {}),
       },
