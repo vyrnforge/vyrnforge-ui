@@ -23,11 +23,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run generate:beta-scope
-      - run: npx prettier --write docs/metadata/beta-scope.json
       - name: Commit generated beta scope
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add docs/metadata/beta-scope.json
+          git add docs/metadata/non-grid-beta-scope.json
           git commit -m 'chore(release): regenerate beta scope [mfd-1315-beta-scope]' || exit 0
           git push
