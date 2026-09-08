@@ -34,7 +34,9 @@
     },
     "vue": {
       "status": "verified-consumer",
-      "package": "@vyrnforge/ui-elements"
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfUseToast></VfUseToast>"
     }
   },
   "contract": null,

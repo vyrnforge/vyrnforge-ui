@@ -37,6 +37,14 @@ const expectedPackages = new Map([
     },
   ],
   [
+    "@vyrnforge/ui-vue",
+    {
+      status: "current",
+      betaIncluded: true,
+      dependsOn: ["@vyrnforge/ui-elements"],
+    },
+  ],
+  [
     "@vyrnforge/ui-data-grid",
     {
       status: "react-alpha-deferred",
@@ -50,14 +58,14 @@ const expectedFrameworks = new Map([
   ["react", "first-class"],
   ["native-html", "first-class"],
   ["angular", "verified-consumer"],
-  ["vue", "verified-consumer"],
+  ["vue", "first-class"],
 ]);
 
 const expectedBetaClaims = new Map([
   ["react", "react-public-package-consumer-verified"],
   ["native-html", "packed-consumer-verified"],
   ["angular", "packed-consumer-verified"],
-  ["vue", "packed-consumer-verified"],
+  ["vue", "first-class-package-verified"],
 ]);
 
 const expectedFixtureClaims = new Map([
@@ -219,6 +227,7 @@ function verifyPackageTopology(root, failures, architecture) {
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
         "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue",
       ]),
     )
   ) {

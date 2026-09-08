@@ -50,9 +50,9 @@
     },
     "vue": {
       "status": "verified-consumer",
-      "package": "@vyrnforge/ui-elements",
-      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
-      "example": "<vf-caption></vf-caption>"
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfCaption></VfCaption>"
     }
   },
   "contract": {

@@ -51,10 +51,7 @@
         "architecture-probe.ts",
         "src/main.ts",
         "src/App.vue",
-        "src/styles.css",
-        "src/adapters/useVyrnForgeModel.ts",
-        "src/adapters/VyrnForgeTextInputModel.vue",
-        "src/adapters/VyrnForgeCheckboxModel.vue"
+        "src/styles.css"
       ],
       "supportClaim": "packed-vue-runtime-verified",
       "verificationStatus": "runtime-verified",
