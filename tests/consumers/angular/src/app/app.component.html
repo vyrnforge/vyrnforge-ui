@@ -1,11 +1,13 @@
 <main class="vf-consumer-angular" data-angular-consumer>
   <vf-page-header
+    vfGeneratedPageHeader
     eyebrow="GMF4 consumer evidence"
     title="Angular packed consumer"
     description="Angular 22 consumes the native VyrnForge package directly."
   >
     <span slot="status" data-angular-slot="status">Angular 22</span>
     <vf-button
+      #saveButton="vfButton"
       id="angular-save"
       vfGeneratedButton
       slot="actions"
@@ -47,19 +49,21 @@
 
       <div class="vf-consumer-angular-actions">
         <vf-button
+          vfGeneratedButton
           id="disable-reactive-owner"
           type="button"
           action="disable-owner"
-          variant="secondary"
+          variant="default"
           (vf-action)="disableOwner()"
         >
           Disable owner
         </vf-button>
         <vf-button
+          vfGeneratedButton
           id="enable-reactive-owner"
           type="button"
           action="enable-owner"
-          variant="secondary"
+          variant="default"
           (vf-action)="enableOwner()"
         >
           Enable owner
@@ -71,7 +75,9 @@
     <output data-reactive-state>
       status={{ ownerControl.status }}; dirty={{ ownerControl.dirty }};
       touched={{ ownerControl.touched }}; disabled={{ ownerControl.disabled }};
-      vyrnForgeError={{ ownerControl.hasError("vyrnForge") }}
+      vyrnForgeError={{ ownerControl.hasError("vyrnForge") }}; message={{
+        ownerValidationMessage
+      }}; valueMissing={{ ownerValueMissing }}
     </output>
   </section>
 
@@ -88,6 +94,33 @@
     <output data-template-value>{{ notifications }}</output>
   </section>
 
+  <section
+    class="vf-consumer-angular-section"
+    aria-labelledby="composition-title"
+  >
+    <h2 id="composition-title">Generated Angular composition</h2>
+    <vf-autocomplete
+      #compositionAutocomplete
+      vfGeneratedAutocomplete
+      name="compositionOwner"
+      [options]="autocompleteOptions"
+      [open]="true"
+      placeholder="Find an owner"
+    >
+      <span slot="label" data-composition-slot="label">Owner</span>
+      <span slot="description" data-composition-slot="description">
+        Search the owner directory
+      </span>
+      <span slot="prefix" data-composition-slot="prefix">@</span>
+      <span slot="suffix" data-composition-slot="suffix">⌘K</span>
+      <span slot="item" data-composition-slot="item">Owner item template</span>
+      <span slot="empty" data-composition-slot="empty">No owners</span>
+      <span slot="loading" data-composition-slot="loading">
+        Loading owners
+      </span>
+    </vf-autocomplete>
+  </section>
+
   <section class="vf-consumer-angular-section" aria-labelledby="native-title">
     <h2 id="native-title">Native ElementInternals form</h2>
     <form
@@ -97,12 +130,14 @@
     >
       <vf-text-input
         #ownerInput
+        #ownerInputApi="vfTextInput"
+        vfGeneratedTextInput
         label="Owner"
         name="owner"
-        required
+        [required]="true"
         [value]="owner"
       ></vf-text-input>
-      <vf-button type="submit" variant="secondary">
+      <vf-button vfGeneratedButton type="submit" variant="default">
         Submit Angular form
       </vf-button>
     </form>
@@ -110,6 +145,7 @@
 
   <vf-dialog
     #dialogElement
+    #dialogApi="vfDialog"
     vfGeneratedDialog
     [open]="dialogOpen"
     title="Angular generated dialog"
@@ -120,7 +156,7 @@
     <button slot="trigger" type="button" data-dialog-trigger>
       Open Angular dialog
     </button>
-    <div slot="content">
+    <div slot="content" data-composition-slot="dialog-content">
       <button type="button" data-dialog-first>First dialog action</button>
       <button type="button" data-dialog-last>Last dialog action</button>
     </div>

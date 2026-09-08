@@ -9,7 +9,18 @@ import {
   type PlaygroundFrameworkId,
   type PlaygroundVersion,
 } from "./playgroundContext";
-import { routes } from "./routes";
+import {
+  referenceCatalogRoutes,
+  referenceDetailRoutes,
+} from "./referenceCatalogRoutes";
+import { routes as baseRoutes } from "./routes";
+
+const navigationRoutes = [
+  baseRoutes[0],
+  ...referenceCatalogRoutes,
+  ...baseRoutes.slice(1),
+];
+const routes = [...navigationRoutes, ...referenceDetailRoutes];
 
 function normalizeHashRoute(hash: string) {
   return hash.replace(/^#\/?/, "").replace(/^\/+/, "");
@@ -113,7 +124,7 @@ export default function App() {
         activeRouteId={activeRoute.id}
         density={density}
         frameworkId={frameworkId}
-        routes={routes}
+        routes={navigationRoutes}
         versionId={versionId}
         versions={versions}
         onRouteChange={changeRoute}

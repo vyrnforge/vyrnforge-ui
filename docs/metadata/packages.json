@@ -32,6 +32,8 @@
         "@vyrnforge/ui-behaviors",
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue",
         "@vyrnforge/ui-data-grid",
         "React",
         "Vue",
@@ -78,6 +80,8 @@
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue",
         "@vyrnforge/ui-data-grid",
         "React",
         "React DOM",
@@ -96,29 +100,32 @@
     },
     {
       "name": "@vyrnforge/ui-components",
-      "purpose": "First-class React renderer for reusable VyrnForge primitives and application components.",
+      "purpose": "First-class React surface for reusable VyrnForge primitives and application components, converging on the canonical native implementation where compatible.",
       "owns": [
-        "actions",
-        "typography",
-        "forms",
-        "data management",
-        "feedback",
-        "layout",
-        "overlays",
-        "shared vf-* classes"
+        "React props and callbacks",
+        "React refs and composition",
+        "React lifecycle integration",
+        "React compatibility behavior",
+        "React surface styling"
       ],
       "doesNotOwn": [
+        "canonical component semantics",
+        "Angular or Vue integration",
         "data grid algorithms",
-        "grid row models",
         "backend data",
         "global store",
         "tenant/auth/permissions"
       ],
       "cssImport": "@vyrnforge/ui-components/styles/index.css",
       "apiDoc": "docs/api/ui-components-api.md",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-elements"
+      ],
       "mustNotDependOn": [
-        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue",
         "@vyrnforge/ui-data-grid",
         "Redux",
         "TanStack",
@@ -133,12 +140,12 @@
         "@vyrnforge/ui-components/style.css",
         "@vyrnforge/ui-components/index.css"
       ],
-      "notes": "First-class React renderer over shared VyrnForge foundations. The public package name remains stable through the current beta track.",
+      "notes": "First-class React surface over shared VyrnForge foundations. The ui-elements dependency is the implemented canonical-backed convergence path; React-specific exceptions remain governed separately.",
       "releaseTrack": "non-grid-beta"
     },
     {
       "name": "@vyrnforge/ui-elements",
-      "purpose": "Browser-native Custom Element registration, lifecycle, property reflection, typed vf-* events, Light DOM CSS, form foundations, and non-grid renderers.",
+      "purpose": "Canonical browser-native Custom Element implementation and first-class Native HTML surface.",
       "owns": [
         "vf-* Custom Elements",
         "property and attribute reflection",
@@ -148,9 +155,9 @@
         "explicit registration entry points"
       ],
       "doesNotOwn": [
-        "React rendering",
-        "Angular component rendering",
-        "Vue component rendering",
+        "React framework API",
+        "Angular framework API",
+        "Vue framework API",
         "application state",
         "backend workflows",
         "data grid rendering"
@@ -160,6 +167,8 @@
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue",
         "@vyrnforge/ui-data-grid",
         "React",
         "React DOM",
@@ -181,7 +190,89 @@
         "@vyrnforge/ui-elements/index.css",
         "@vyrnforge/ui-elements/custom-elements.json"
       ],
-      "notes": "First-class Native HTML / Custom Elements renderer. Clean packed React, Native HTML, Angular, and Vue consumers verify the shared element contract; Angular and Vue first-class package work remains governed by forward-looking distribution gates."
+      "notes": "First-class Native HTML / Custom Elements surface and default canonical browser implementation shared by framework facades."
+    },
+    {
+      "name": "@vyrnforge/ui-angular",
+      "purpose": "First-class Angular facade over VyrnForge canonical Custom Elements with generated typed bindings, package-owned setup, Forms integration, composition, and imperative references.",
+      "owns": [
+        "Angular generated facade directives and components",
+        "Angular setup and registration integration",
+        "Angular Forms ControlValueAccessor and Validator integration",
+        "Angular-specific template, projection, and reference ergonomics"
+      ],
+      "doesNotOwn": [
+        "canonical component behavior",
+        "Custom Element implementation",
+        "shared design tokens or themes",
+        "application state",
+        "backend workflows"
+      ],
+      "cssImport": "not-applicable",
+      "apiDoc": "packages/ui-angular/README.md",
+      "dependsOn": ["@vyrnforge/ui-elements"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-vue",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "React DOM",
+        "Vue",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "publicEntryPoints": [
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-angular/forms"
+      ],
+      "notes": "First-class Angular facade over ui-elements; Angular framework dependencies remain peer dependencies."
+    },
+    {
+      "name": "@vyrnforge/ui-vue",
+      "purpose": "First-class Vue facade over the canonical VyrnForge Custom Element implementation and shared contracts.",
+      "owns": [
+        "Vue component facades",
+        "Vue-native props and typed emits",
+        "v-model translations",
+        "Vue slot projection",
+        "typed component refs",
+        "Vue setup and plugin helpers"
+      ],
+      "doesNotOwn": [
+        "canonical Custom Element rendering",
+        "framework-neutral behavior controllers",
+        "design tokens",
+        "application state",
+        "backend workflows",
+        "data grid rendering"
+      ],
+      "cssImport": "not-applicable",
+      "apiDoc": "docs/packages/ui-vue.md",
+      "dependsOn": ["@vyrnforge/ui-elements"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "React DOM",
+        "Angular",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
+      "status": "current",
+      "publicEntryPoints": ["@vyrnforge/ui-vue"],
+      "notes": "First-class Vue facade over @vyrnforge/ui-elements. Vue remains a peer dependency, canonical rendering and behavior stay shared, and the package participates in the synchronized non-grid beta release line.",
+      "releaseTrack": "non-grid-beta"
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -218,11 +309,13 @@
   "dependencyRules": [
     "ui-core depends on no VyrnForge package",
     "ui-behaviors may depend on ui-core only",
-    "ui-components may depend on ui-core and ui-behaviors",
-    "ui-elements may depend on ui-core and ui-behaviors",
+    "ui-elements may depend on ui-core and ui-behaviors only",
+    "ui-components may depend on ui-core, ui-behaviors, and ui-elements only",
+    "ui-angular may depend on ui-elements and Angular peer dependencies only",
+    "ui-vue may depend on ui-elements and Vue peer dependencies only",
     "ui-data-grid may depend on ui-core and ui-components",
     "ui-core and ui-behaviors must not depend on React, Vue, Angular, or a DOM renderer",
-    "ui-components and ui-elements must not depend on ui-data-grid",
+    "framework facades must not depend on one another or ui-data-grid",
     "ui-data-grid remains outside the non-grid beta release group"
   ],
   "releaseGroups": {
@@ -230,7 +323,9 @@
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-components",
-      "@vyrnforge/ui-elements"
+      "@vyrnforge/ui-elements",
+      "@vyrnforge/ui-angular",
+      "@vyrnforge/ui-vue"
     ],
     "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
   }

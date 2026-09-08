@@ -23,7 +23,7 @@
     {
       "path": "packages/ui-components/package.json",
       "kind": "blob",
-      "sha1": "e9bf510287ea473447732980f775a0ac554d253c",
+      "sha1": "9164ec370fe4de812162f6a06fdc03fa2a03903d",
       "covers": [
         "package exports",
         "CSS entrypoints",
@@ -80,7 +80,7 @@
     {
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
-      "sha1": "5e9000e63ce9d74d3ad43f934c5c0450e9d9778b",
+      "sha1": "f95919a980e055452eebb197e7e5f00c7546e37a",
       "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
@@ -124,9 +124,9 @@
       "evidence": "docs/metadata/compatibility-release-matrix.json"
     },
     {
-      "task": "development-dependency-refresh-2026-09-01",
-      "reason": "Development-only dependency versions changed in the React package manifest while public exports, React peer support, converged component implementation fingerprints, runtime/browser parity evidence, packed-consumer checks, and compatibility cases remain unchanged.",
-      "evidence": "packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts"
+      "task": "S13-vue-main-reconciliation",
+      "reason": "The shared compatibility release matrix gained first-class Vue support and Vue 3.5 compatibility cases during S13 reconciliation. React support policy, tested React versions, public API, runtime behavior, and React compatibility cases remain unchanged; only the shared metadata blob fingerprint is intentionally recaptured.",
+      "evidence": "docs/metadata/compatibility-release-matrix.json"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

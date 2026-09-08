@@ -1,7 +1,10 @@
+import type * as Angular from "@vyrnforge/ui-angular";
+import type * as AngularForms from "@vyrnforge/ui-angular/forms";
 import type * as Behaviors from "@vyrnforge/ui-behaviors";
 import type * as Components from "@vyrnforge/ui-components";
 import type * as Core from "@vyrnforge/ui-core";
 import type * as Elements from "@vyrnforge/ui-elements";
+import type * as VueFacade from "@vyrnforge/ui-vue";
 
 import "@vyrnforge/ui-core/index.css";
 import "@vyrnforge/ui-core/style.css";
@@ -17,10 +20,13 @@ import "@vyrnforge/ui-elements/styles/index.css";
 import elementsManifest from "@vyrnforge/ui-elements/custom-elements.json";
 
 export type BetaEntryPointTypes = {
+  angular: typeof Angular;
+  angularForms: typeof AngularForms;
   behaviors: typeof Behaviors;
   components: typeof Components;
   core: typeof Core;
   elements: typeof Elements;
+  vue: typeof VueFacade;
 };
 
 export const registeredTagCount = elementsManifest.vyrnforge.registeredTagCount;

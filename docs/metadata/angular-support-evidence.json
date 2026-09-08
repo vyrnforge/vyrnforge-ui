@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "id": "MFD-1214",
+    "status": "evidence-complete",
+    "title": "Add Angular compatibility and accessibility evidence"
+  },
+  "framework": "Angular",
+  "supportClaim": "angular-compatibility-accessibility-verified",
+  "package": {
+    "name": "@vyrnforge/ui-angular",
+    "peerRange": ">=22 <23",
+    "formsPeerRange": ">=22 <23",
+    "entrypoints": ["@vyrnforge/ui-angular", "@vyrnforge/ui-angular/forms"],
+    "published": false
+  },
+  "supportedRuntime": {
+    "angular": "22.0.8",
+    "node": "24.18.0",
+    "browser": "chromium",
+    "compatibilityCase": "angular22-node24-chromium",
+    "compatibilityMatrix": "docs/metadata/compatibility-release-matrix.json"
+  },
+  "additionalCompatibilityProbe": {
+    "angular": "21.2.18",
+    "node": "22.12.0",
+    "browser": "chromium",
+    "compatibilityCase": "angular21-node22-chromium",
+    "supportClaim": false,
+    "reason": "The shared compatibility matrix probes Angular 21, but the public @vyrnforge/ui-angular peer contract starts at Angular 22."
+  },
+  "packedRuntime": {
+    "fixture": "tests/consumers/angular",
+    "ownershipVerifier": "scripts/verify-angular-packed-fixture-ownership.mjs",
+    "crossFrameworkMatrix": "docs/metadata/cross-framework-browser-matrix.json",
+    "report": "test-results/cross-framework-matrix/report.json",
+    "artifact": "cross-framework-browser-matrix",
+    "requiredScenarios": [
+      "canonical-action-event",
+      "tabs-property-assignment",
+      "text-input-value-property"
+    ]
+  },
+  "accessibility": {
+    "metadata": "docs/metadata/cross-framework-accessibility-review.json",
+    "automatedReport": "test-results/cross-framework-matrix/accessibility-report.json",
+    "manualEvidence": "docs/quality/assistive-technology-results/cf-7010-cross-framework-nvda.json",
+    "requiredAutomatedScenarios": [
+      "axe-serious-critical",
+      "keyboard-action-activation",
+      "keyboard-tabs-navigation",
+      "text-input-accessible-name"
+    ],
+    "manualConsumer": "angular",
+    "manualOutcome": "passed"
+  },
+  "forms": {
+    "metadata": "docs/metadata/angular-forms-adapter.json",
+    "supportClaim": "angular-forms-adapter-verified",
+    "entrypoint": "@vyrnforge/ui-angular/forms",
+    "requiredRuntimeEvidence": [
+      "reactive FormGroup and formControlName value synchronization",
+      "template-driven ngModel boolean synchronization",
+      "packed @vyrnforge/ui-angular/forms production consumption and Chromium interaction"
+    ]
+  },
+  "imperativeAndFocus": {
+    "fixtureSource": "tests/consumers/angular/src/app/app.component.ts",
+    "requiredMarkers": [
+      "ownerInputApi.focus()",
+      "ownerInputApi.select()",
+      "dialogApi.show()",
+      "dialogApi.close()",
+      "saveButtonApi.focus()",
+      "saveButtonApi.click()",
+      "data-imperative-apis"
+    ]
+  },
+  "requiredChecks": [
+    "clean-install",
+    "package-tarballs",
+    "typecheck",
+    "production-build",
+    "browser-smoke",
+    "keyboard-focus",
+    "axe-serious-critical",
+    "manual-nvda",
+    "angular-forms"
+  ],
+  "verification": {
+    "compatibilityCommand": "npm run verify:compatibility-release-matrix",
+    "compatibilityWorkflow": ".github/workflows/assurance.yml",
+    "packedWorkflow": ".github/workflows/ci.yml"
+  },
+  "unresolvedBlockers": [],
+  "releaseReadiness": "evidence-complete-not-release-ready"
+}
