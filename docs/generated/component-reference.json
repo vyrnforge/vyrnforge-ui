@@ -78,10 +78,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-card></vf-card>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -205,10 +205,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-inline></vf-inline>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -367,10 +367,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-page></vf-page>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -497,10 +497,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-page-header></vf-page-header>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -659,10 +659,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-page-toolbar></vf-page-toolbar>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -809,10 +809,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-panel></vf-panel>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -901,10 +901,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-section></vf-section>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -992,10 +992,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-stack></vf-stack>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -1144,10 +1144,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-transfer-list></vf-transfer-list>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -1462,10 +1462,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-inline-message></vf-inline-message>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -1589,10 +1589,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-badge></vf-badge>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -1734,10 +1734,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-empty-state></vf-empty-state>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -1826,10 +1826,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-error-state></vf-error-state>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -1937,10 +1937,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-inline-message></vf-inline-message>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -2064,10 +2064,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-loading-state></vf-loading-state>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -2155,10 +2155,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-skeleton></vf-skeleton>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -2305,10 +2305,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-badge></vf-badge>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -2388,10 +2388,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-toast></vf-toast>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -2589,10 +2589,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-autocomplete></vf-autocomplete>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -3043,10 +3043,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-checkbox></vf-checkbox>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -3366,10 +3366,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-date-input></vf-date-input>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -3694,10 +3694,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-datetime-input></vf-datetime-input>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -4023,10 +4023,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-field></vf-field>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -4265,10 +4265,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-multi-select></vf-multi-select>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -4573,10 +4573,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-number-input></vf-number-input>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -4981,10 +4981,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-radio></vf-radio>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -5288,10 +5288,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-radio-group></vf-radio-group>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -5468,10 +5468,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-rating></vf-rating>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -5745,10 +5745,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-search-input></vf-search-input>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -6072,10 +6072,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-select></vf-select>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -6354,10 +6354,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-slider></vf-slider>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -6654,10 +6654,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-switch></vf-switch>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -6960,10 +6960,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-textarea></vf-textarea>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -7288,10 +7288,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-text-input></vf-text-input>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -7615,10 +7615,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-validation-message></vf-validation-message>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -7743,10 +7743,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-app-shell></vf-app-shell>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -8002,10 +8002,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-breadcrumbs></vf-breadcrumbs>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -8140,10 +8140,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-side-nav></vf-side-nav>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -8305,10 +8305,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-tabs></vf-tabs>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -8523,10 +8523,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-top-nav></vf-top-nav>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -8634,10 +8634,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-confirm-dialog></vf-confirm-dialog>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -8895,10 +8895,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-dialog></vf-dialog>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -9194,10 +9194,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-drawer></vf-drawer>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -9510,10 +9510,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-popover></vf-popover>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -9661,10 +9661,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-menu></vf-menu>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -9839,10 +9839,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-popover></vf-popover>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -10131,10 +10131,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-tooltip></vf-tooltip>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -10331,10 +10331,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-button></vf-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -10612,10 +10612,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-button-group></vf-button-group>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -10757,10 +10757,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-caption></vf-caption>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -10861,10 +10861,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -10929,10 +10929,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11003,10 +11003,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-code-text></vf-code-text>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11114,10 +11114,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-heading></vf-heading>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11259,10 +11259,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-icon></vf-icon>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11414,10 +11414,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11638,10 +11638,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-label></vf-label>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11776,10 +11776,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11844,10 +11844,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-icon-button></vf-icon-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -11919,10 +11919,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-segmented-control></vf-segmented-control>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -12084,10 +12084,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-text></vf-text>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -12201,10 +12201,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-toast[action-label]></vf-toast[action-label]>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -12269,10 +12269,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-toast-viewport></vf-toast-viewport>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -12348,10 +12348,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-toggle-button></vf-toggle-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -12608,10 +12608,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-toggle-button-group></vf-toggle-button-group>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -12782,10 +12782,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-toolbar-button></vf-toolbar-button>",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
@@ -13043,10 +13043,10 @@
         "angular": {
           "label": "Angular",
           "status": "verified-consumer",
-          "package": "@vyrnforge/ui-elements",
-          "setup": "",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "",
-          "note": "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes."
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",

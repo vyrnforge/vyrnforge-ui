@@ -30,7 +30,8 @@
     },
     "angular": {
       "status": "verified-consumer",
-      "package": "@vyrnforge/ui-elements"
+      "package": "@vyrnforge/ui-angular",
+      "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers"
     },
     "vue": {
       "status": "verified-consumer",
