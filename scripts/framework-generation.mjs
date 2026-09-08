@@ -5,20 +5,6 @@ export const FRAMEWORK_SURFACES = Object.freeze([
   "vue",
 ]);
 
-export const FRAMEWORK_GENERATION_TASKS = Object.freeze([
-  "MFD-1102",
-  "MFD-1103",
-  "MFD-1104",
-  "MFD-1105",
-  "MFD-1106",
-  "MFD-1107",
-  "MFD-1108",
-  "MFD-1109",
-  "MFD-1110",
-  "MFD-1111",
-  "MFD-1112",
-]);
-
 export class FrameworkGenerationError extends Error {
   constructor(message) {
     super(message);

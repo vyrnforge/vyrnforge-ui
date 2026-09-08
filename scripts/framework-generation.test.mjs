@@ -12,7 +12,6 @@ import {
 } from "./framework-exceptions.mjs";
 import {
   FRAMEWORK_SURFACES,
-  FRAMEWORK_GENERATION_TASKS,
   createFrameworkApiReference,
   createFrameworkGenerationModel,
   deriveCanonicalNativeTags,
@@ -335,11 +334,9 @@ test("Button representative slice preserves equivalent canonical semantics acros
   assert.equal(button.surfaces.react.events[0].public, "onClick");
   assert.equal(button.surfaces.angular.events[0].public, "action");
   assert.equal(button.surfaces.vue.events[0].public, "action");
-  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1111"));
-  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1112"));
 });
 
-test("Button representative generators emit removable proof artifacts without premature framework packages", () => {
+test("Button representative generators preserve four-surface consumer artifacts", () => {
   const contracts = loadContracts();
   const model = createFrameworkButtonSliceModel(
     createFrameworkGenerationModel(contracts),
@@ -349,7 +346,7 @@ test("Button representative generators emit removable proof artifacts without pr
     artifacts.map((artifact) => [artifact.framework, artifact]),
   );
 
-  assert.equal(artifacts.length, 5);
+  assert.equal(artifacts.length, 4);
   assert.match(byFramework.get("native").content, /bindGeneratedVfButton/u);
   assert.match(byFramework.get("react").content, /forwardRef/u);
   assert.match(byFramework.get("angular").content, /@Directive/u);

@@ -2,7 +2,12 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { buildFrameworkButtonSliceArtifacts } from "./generate-framework-button-slice.mjs";
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import {
+  buildFrameworkButtonArtifacts,
+  createFrameworkButtonSliceModel,
+} from "./framework-button-generation.mjs";
+import { createFrameworkGenerationModel } from "./framework-generation.mjs";
 import { buildFrameworkDialogSliceArtifacts } from "./generate-framework-dialog-slice.mjs";
 import { buildFrameworkTabsSliceArtifacts } from "./generate-framework-tabs-slice.mjs";
 import { buildFrameworkTextInputSliceArtifacts } from "./generate-framework-text-input-slice.mjs";
@@ -68,6 +73,13 @@ function registerSliceArtifacts(artifacts, generator, command) {
     );
 }
 
+function buildFrameworkButtonSliceArtifacts({ root = repositoryRoot } = {}) {
+  const contracts = loadCanonicalComponentContracts({ root });
+  const generationModel = createFrameworkGenerationModel(contracts);
+  const model = createFrameworkButtonSliceModel(generationModel);
+  return { model, artifacts: buildFrameworkButtonArtifacts(model) };
+}
+
 export function buildGeneratedFrameworkArtifacts({
   root = repositoryRoot,
 } = {}) {
@@ -110,8 +122,8 @@ export function buildGeneratedFrameworkArtifacts({
     }),
     ...registerSliceArtifacts(
       button.artifacts,
-      "scripts/generate-framework-button-slice.mjs",
-      "npm run generate:framework-button-slice",
+      "scripts/generate-framework-artifacts.mjs",
+      "npm run generate:framework-artifacts",
     ),
     ...registerSliceArtifacts(
       textInput.artifacts,
