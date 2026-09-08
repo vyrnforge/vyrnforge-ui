@@ -94,21 +94,21 @@ text rather than duplicate it.
 ## Project planning
 
 Planning documents describe current direction and intentional future work. They
-do not override accepted architecture, current package manifests, or canonical
-public API contracts.
+do not override accepted architecture, current package manifests, canonical
+metadata, or public API contracts.
 
-| Topic                                         | Canonical documentation                                                                         |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Current roadmap                               | [Master Roadmap](roadmap/00-master-roadmap.md)                                                  |
-| Component catalog pointer and planning rules  | [Component Inventory](roadmap/01-component-inventory.md)                                        |
-| Current gaps                                  | [Gap Analysis](roadmap/02-gap-analysis.md)                                                      |
-| Explicitly deferred work                      | [Do Not Build Yet](roadmap/03-do-not-build-yet.md)                                              |
-| Proposed vision, mission, and scope alignment | [Vision, Mission & Scope Alignment Review](roadmap/04-vision-mission-scope-alignment-review.md) |
-| Component lifecycle and promotion             | [Component Maturity Model](governance/component-maturity-model.md)                              |
+| Topic                             | Canonical documentation                                            |
+| --------------------------------- | ------------------------------------------------------------------ |
+| Active sprint and current roadmap | [Master Roadmap](roadmap/00-master-roadmap.md)                     |
+| Product identity and scope        | [Project Source of Truth](governance/01-project-source-of-truth.md) |
+| Component maturity and promotion  | [Component Maturity Model](governance/component-maturity-model.md) |
+| Component status and evidence     | [Component Metadata](metadata/components.json)                     |
+| Release-group state               | [Release Groups](metadata/release-groups.json)                     |
 
-Current planning may use active task identifiers where they are useful for
-execution. Normal usage guidance should not require readers to understand
-historical sprint or gate identifiers.
+Closed sprint task lists and superseded planning reviews are not retained as
+current documentation merely for historical completeness. Git history, merged
+pull requests, CI evidence, and retained evidence records are the recovery and
+audit path when historical detail is actually needed.
 
 ## Historical evidence
 
@@ -134,4 +134,8 @@ documentation rather than defining a separate architecture.
 
 ## AI consumer context
 
-AI consumers should begin with [`generated/ai-context/index.json`](generated/ai-context/index.json) and retrieve the smallest relevant pattern, category, or component slice. The generated files derive from canonical metadata and are also published by the docs application; they are not a second source of truth.
+AI consumers should begin with
+[`generated/ai-context/index.json`](generated/ai-context/index.json) and retrieve
+the smallest relevant pattern, category, or component slice. The generated files
+derive from canonical metadata and are also published by the docs application;
+they are not a second source of truth.
