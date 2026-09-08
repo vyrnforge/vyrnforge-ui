@@ -11,11 +11,12 @@ Run the complete gate with:
 npm run verify:beta-package-artifacts
 ```
 
-The command builds the four beta packages, creates real npm tarballs, checks the
-exact packed payload, installs those tarballs into a clean fixture with npm
-`--offline`, resolves every public entry point from the installed package, runs a
-TypeScript typecheck and production Vite build, writes reviewable reports, and
-removes generated tarballs, lockfiles, `node_modules`, and build output.
+The command builds every package in the `non-grid-beta` release group, creates
+real npm tarballs, checks the exact packed payload, installs those tarballs into
+a clean fixture with npm `--offline`, resolves every public entry point from the
+installed package, runs a TypeScript typecheck and production Vite build, writes
+reviewable reports, and removes generated tarballs, lockfiles, `node_modules`,
+and build output.
 
 ## Verified packages and public entry points
 
@@ -46,10 +47,18 @@ removes generated tarballs, lockfiles, `node_modules`, and build output.
 - `@vyrnforge/ui-elements/style.css`
 - `@vyrnforge/ui-elements/styles/index.css`
 
-For conditional exports, the gate requires the declared `types`, ESM `import`,
-and CommonJS `require` targets. String exports must resolve to the documented CSS
-or JSON artifact. Every target must be present in the tarball and in the clean
-installed package.
+### `@vyrnforge/ui-angular`
+
+- `@vyrnforge/ui-angular`
+- `@vyrnforge/ui-angular/forms`
+
+### `@vyrnforge/ui-vue`
+
+- `@vyrnforge/ui-vue`
+
+For conditional exports, the gate requires every declared type and runtime
+target. String exports must resolve to the documented CSS or JSON artifact.
+Every target must be present in the tarball and in the clean installed package.
 
 ## Payload policy
 
@@ -66,15 +75,21 @@ published dependency specifications are also rejected.
 ## Offline consumer evidence
 
 The fixture at `tests/beta-package-consumer` installs ordinary third-party
-fixture dependencies first. The four VyrnForge tarballs are then installed in a
+fixture dependencies first. The VyrnForge tarballs are then installed in a
 separate npm invocation using `--offline --no-save`. The gate rejects workspace
 symlinks and verifies:
 
-- every installed package version is `0.2.0-beta.1`;
+- every installed package version matches the synchronized beta release version;
 - every public JS, CSS, JSON, and type target exists;
 - CommonJS/package and ESM resolution stay inside the installed package;
-- TypeScript resolves all documented package entry points;
+- TypeScript resolves all documented package entry points, including Angular root and Forms entrypoints and the Vue facade entrypoint;
 - a production Vite build succeeds and emits shared `--vf-*` CSS variables.
+
+Angular framework dependencies are fixture-owned third-party dependencies and
+are installed before the offline VyrnForge tarball step; the gate still requires
+the actual `@vyrnforge/ui-angular` tarball and forbids workspace links.
+
+Vue framework dependencies are fixture-owned third-party dependencies and are installed before the offline VyrnForge tarball step; the gate still requires the actual `@vyrnforge/ui-vue` tarball and forbids workspace links.
 
 ## Reports
 

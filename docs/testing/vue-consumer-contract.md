@@ -1,50 +1,87 @@
 # Vue Consumer Contract
 
-CF-7005 verifies Vue as a packed consumer
-of the framework-neutral native renderer. The machine-readable source of truth is
-`docs/metadata/vue-consumer.json`.
+The Vue consumer contract verifies `@vyrnforge/ui-vue` as the first-class Vue
+facade over VyrnForge's framework-neutral/native foundations. The
+machine-readable fixture source of truth is `docs/metadata/vue-consumer.json`;
+Vue package support evidence is recorded in
+`docs/metadata/vue-support-evidence.json`.
 
-## Supported fixture line
+## Supported Vue line
 
-The fixture pins Vue 3.5.40, Vite 8.1.5, `@vitejs/plugin-vue` 6.0.8,
-`vue-tsc` 3.3.8, and TypeScript 6.0.3. It remains outside the VyrnForge npm
-workspace so the pending runtime evidence cannot be satisfied by workspace
-links. Strict template checking uses the consumer-local
-`tests/consumers/vue/src/vyrnforge-elements.d.ts` bridge. VyrnForge remains
-framework-neutral and does not publish Vue-specific declarations.
+The public package peer policy is `>=3.5 <4`. Compatibility evidence covers the
+supported Vue 3.5 line at the repository's minimum/current compatibility cases.
+The clean consumer fixture remains outside the VyrnForge npm workspace so packed
+runtime evidence cannot be satisfied by workspace links.
 
-## Vue references
+Vue, Vite, `@vitejs/plugin-vue`, `vue-tsc`, and TypeScript are fixture-owned
+third-party tooling. VyrnForge's shared foundations remain Vue-independent; the
+Vue runtime is a peer of `@vyrnforge/ui-vue` and is not bundled into the package.
 
-- https://www.npmjs.com/package/vue
-- https://www.npmjs.com/package/@vitejs/plugin-vue
-- https://www.npmjs.com/package/vue-tsc
+## Normal application contract
 
-## Runtime contract
+`tests/consumers/vue` proves the package-owned facade path:
 
-`tests/consumers/vue` proves:
+1. clean installation from packed VyrnForge package artifacts;
+2. no workspace symlink, repository-source import, or fixture-local generated
+   facade copy;
+3. application setup through `VyrnForgeVue` for canonical element registration
+   and public facade registration;
+4. generated `Vf*` components and package-owned TypeScript declarations;
+5. scalar/object/array property behavior derived from canonical metadata;
+6. typed Vue-facing emits plus canonical `vf-*` DOM-event interoperability;
+7. generated `v-model` mappings for canonical value/checked/open/pressed and
+   other modeled state;
+8. named Vue slots preserving canonical Light DOM composition;
+9. typed component refs and supported imperative methods;
+10. native `ElementInternals` validity and form submission;
+11. strict `vue-tsc`, production Vite build, SSR-safe import/server rendering,
+    and Chromium interaction;
+12. automated keyboard/focus and accessibility checks covered by the current
+    repository evidence model.
 
-1. clean Vue dependency installation;
-2. clean installation of packed `ui-core`, `ui-behaviors`, and `ui-elements`;
-3. no workspace symlink or repository-source import;
-4. compiler recognition of every `vf-*` tag through `isCustomElement`;
-5. explicit `@vyrnforge/ui-elements/register` registration;
-6. scalar attributes and forced DOM property binding through `.prop`;
-7. canonical DOM event binding through `@vf-action` and
-   `@vf-value-change`;
-8. named Light DOM composition;
-9. native `ElementInternals` form submission;
-10. consumer-local Custom Element, canonical event, native `slot`, and `data-*` template typings;
-11. strict `vue-tsc`, production Vite build, and Chromium interaction.
+Raw `<vf-*>` templates remain a supported Native HTML interoperability escape
+hatch. That path may require Vue compiler `isCustomElement` configuration and
+local template typing, but those requirements do not apply to normal `Vf*`
+facade consumption.
 
 ## `v-model` boundary
 
-CF-7005 defines direct property and canonical event consumption. Vue's
-component-oriented `v-model` protocol expects `modelValue` and
-`update:modelValue`, which does not automatically map to native VyrnForge
-`value`/`checked` properties and `vf-value-change`/`vf-checked-change` events.
-CF-7006 supplies the separate thin integration adapter described in
-`vue-model-adapter-contract.md`. It translates Vue syntax without duplicating
-native rendering, validation, selection, or form-association behavior.
+Vue models are generated from the canonical component model contract rather than
+maintained as a separate application adapter layer. The facade translates Vue
+model properties and `update:*` emits to the canonical element property/event
+pair while preserving the native renderer's validation, selection, composition,
+and form-association behavior.
+
+Representative mappings include:
+
+```vue
+<VfTextInput v-model="text" />
+<VfCheckbox v-model="checked" />
+<VfDialog v-model:open="open" />
+<VfToggleButton v-model:pressed="pressed" />
+```
+
+Consumers should not recreate fixture-local `modelValue` bridges for mappings
+already provided by `@vyrnforge/ui-vue`.
+
+## Slots, refs, and native integration
+
+Generated slot metadata maps Vue slots to canonical Light DOM slots. Generated
+ref types expose documented canonical methods directly, including focus,
+validity, selection, and overlay operations where supported. The underlying
+canonical element remains available as an advanced interoperability escape hatch,
+but private DOM traversal is not the normal public API.
+
+Native form participation remains owned by the Custom Element implementation;
+the Vue facade does not replace `ElementInternals` validity or submission
+semantics.
+
+## SSR and bundler contract
+
+Importing `@vyrnforge/ui-vue` must not require browser globals. Verification
+covers direct Node import, Vue server rendering, SSR bundler execution, clean
+production Vite output, and later browser registration in a browser-capable
+environment.
 
 ## Required commands
 
@@ -52,11 +89,12 @@ native rendering, validation, selection, or form-association behavior.
 npm run test:vue-consumer
 npm run verify:vue-consumer
 npm run verify:vue-consumer:runtime
+npm run verify:compatibility-release-matrix
 npm run quality
 ```
 
-GMF4 remains in progress. CF-7005 is `packed-vue-runtime-verified` after the
-clean packed installation, strict `vue-tsc`, production Vite build, and
-Chromium matrix pass. The Vue model adapter, shared browser and accessibility
-matrices, documentation generation, and final compatibility review remain S7
-work.
+The broader release gate additionally verifies the real Vue tarball, package
+contents/declarations, size budgets, packed four-surface integration, and
+release-group metadata. Repository automation does not by itself claim completed
+manual screen-reader review or completed external trusted-publisher evidence;
+those controls remain separately governed.

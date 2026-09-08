@@ -80,7 +80,7 @@
     {
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
-      "sha1": "5e9000e63ce9d74d3ad43f934c5c0450e9d9778b",
+      "sha1": "f95919a980e055452eebb197e7e5f00c7546e37a",
       "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
@@ -121,6 +121,11 @@
     {
       "task": "workflow-surface-consolidation",
       "reason": "Compatibility matrix orchestration moved from the retired reusable _compatibility.yml workflow to assurance.yml without changing tested React versions or compatibility cases.",
+      "evidence": "docs/metadata/compatibility-release-matrix.json"
+    },
+    {
+      "task": "S13-vue-main-reconciliation",
+      "reason": "The shared compatibility release matrix gained first-class Vue support and Vue 3.5 compatibility cases during S13 reconciliation. React support policy, tested React versions, public API, runtime behavior, and React compatibility cases remain unchanged; only the shared metadata blob fingerprint is intentionally recaptured.",
       "evidence": "docs/metadata/compatibility-release-matrix.json"
     }
   ],
