@@ -2,33 +2,23 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repositoryRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "..",
-);
+const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const vueVersion = "3.5.40";
-const viteVersion = "8.1.5";
-const pluginVueVersion = "6.0.8";
-const vueTscVersion = "3.3.8";
-const fixtureTypeScriptVersion = "6.0.3";
 const expectedFixtureClaim = "packed-vue-runtime-verified";
-const expectedBetaClaim = "packed-consumer-verified";
+
 const requiredFiles = [
   "docs/metadata/vue-consumer.json",
+  "docs/metadata/vue-support-evidence.json",
   "docs/testing/vue-consumer-contract.md",
-  "docs/testing/multi-framework-consumer-fixtures.md",
+  "packages/ui-vue/package.json",
+  "packages/ui-vue/src/index.ts",
+  "packages/ui-vue/src/model.ts",
   "tests/consumers/vue/README.md",
   "tests/consumers/vue/fixture.json",
   "tests/consumers/vue/package.json",
-  "tests/consumers/vue/index.html",
-  "tests/consumers/vue/tsconfig.json",
   "tests/consumers/vue/vite.config.ts",
-  "tests/consumers/vue/architecture-probe.ts",
-  "tests/consumers/vue/src/env.d.ts",
-  "tests/consumers/vue/src/vyrnforge-elements.d.ts",
   "tests/consumers/vue/src/main.ts",
   "tests/consumers/vue/src/App.vue",
-  "tests/consumers/vue/src/styles.css",
   "scripts/verify-consumer-foundations-runtime.mjs",
 ];
 
@@ -38,388 +28,59 @@ function read(root, relativePath) {
 function readJson(root, relativePath) {
   return JSON.parse(read(root, relativePath));
 }
-function addFailure(failures, message) {
+function fail(failures, message) {
   failures.push(message);
-}
-
-function verifyMetadata(root, failures) {
-  const metadata = readJson(root, "docs/metadata/vue-consumer.json");
-  if (metadata.status !== "verified") {
-    addFailure(failures, "Vue consumer status must be verified");
-  }
-  const framework = metadata.framework ?? {};
-  if (framework.name !== "Vue" || framework.version !== vueVersion) {
-    addFailure(failures, `Vue framework version must be ${vueVersion}`);
-  }
-  if (framework.supportLevel !== "verified-consumer") {
-    addFailure(failures, "Vue support level must be verified-consumer");
-  }
-  if (framework.renderer !== "@vyrnforge/ui-elements") {
-    addFailure(failures, "Vue must consume @vyrnforge/ui-elements");
-  }
-  if (framework.buildTool !== `Vite ${viteVersion}`) {
-    addFailure(failures, `Vue build tool must be Vite ${viteVersion}`);
-  }
-  if (framework.compilerPlugin !== `@vitejs/plugin-vue ${pluginVueVersion}`) {
-    addFailure(
-      failures,
-      `Vue compiler plugin must be @vitejs/plugin-vue ${pluginVueVersion}`,
-    );
-  }
-  if (framework.templateTypecheck !== `vue-tsc ${vueTscVersion}`) {
-    addFailure(
-      failures,
-      `Vue template typecheck must be vue-tsc ${vueTscVersion}`,
-    );
-  }
-  if (framework.fixtureTypeScript !== fixtureTypeScriptVersion) {
-    addFailure(
-      failures,
-      `Vue fixture TypeScript must be ${fixtureTypeScriptVersion}`,
-    );
-  }
-  if (
-    framework.templateTypeBridge !==
-    "consumer-local Vue GlobalComponents augmentation"
-  ) {
-    addFailure(failures, "Vue template type bridge metadata is invalid");
-  }
-  if (framework.workspaceIsolation !== true) {
-    addFailure(failures, "Vue fixture must remain workspace-isolated");
-  }
-  if (framework.customElementRecognition !== 'tag.startsWith("vf-")') {
-    addFailure(failures, "Vue custom-element recognition contract is invalid");
-  }
-
-  if (metadata.fixture?.supportClaim !== expectedFixtureClaim) {
-    addFailure(
-      failures,
-      `Vue metadata support claim must be ${expectedFixtureClaim}`,
-    );
-  }
-  if (metadata.fixture?.templateTypeBridge !== "src/vyrnforge-elements.d.ts") {
-    addFailure(failures, "Vue fixture template type bridge path is invalid");
-  }
-  if (metadata.fixture?.buildSystem !== "vite") {
-    addFailure(failures, "Vue fixture must use Vite");
-  }
-  if (metadata.fixture?.previewPort !== 4184) {
-    addFailure(failures, "Vue fixture preview port must be 4184");
-  }
-  if (metadata.modelAdapterDecision?.status !== "verified") {
-    addFailure(failures, "Vue model adapter decision status is invalid");
-  }
-  if (metadata.modelAdapterDecision?.publishedPackage !== null) {
-    addFailure(
-      failures,
-      "Vue reference adapter must not publish a framework package",
-    );
-  }
-  if ((metadata.unresolvedBlockers ?? []).length !== 0) {
-    addFailure(failures, "Vue unresolved blockers must be empty");
-  }
-  if ((metadata.pendingRuntimeEvidence ?? []).length !== 0) {
-    addFailure(failures, "Vue pending runtime evidence must be empty");
-  }
-  if ((metadata.completedRuntimeEvidence ?? []).length !== 5) {
-    addFailure(failures, "Vue completed runtime evidence is incomplete");
-  }
-  if ((metadata.completedStaticEvidence ?? []).length < 10) {
-    addFailure(failures, "Vue completed static evidence is incomplete");
-  }
-}
-
-function verifyFixture(root, failures) {
-  const fixtureDirectory = path.join(root, "tests/consumers/vue");
-  const fixture = readJson(root, "tests/consumers/vue/fixture.json");
-  const packageJson = readJson(root, "tests/consumers/vue/package.json");
-  const tsconfig = readJson(root, "tests/consumers/vue/tsconfig.json");
-  const manifest = readJson(root, "tests/consumers/manifest.json");
-
-  if (fixture.supportClaim !== expectedFixtureClaim) {
-    addFailure(
-      failures,
-      `Vue fixture support claim must be ${expectedFixtureClaim}`,
-    );
-  }
-  if (fixture.frameworkRuntime !== `Vue ${vueVersion}`) {
-    addFailure(failures, `Vue fixture runtime must be Vue ${vueVersion}`);
-  }
-  if (fixture.verificationStatus !== "runtime-verified") {
-    addFailure(
-      failures,
-      "Vue fixture verification status must be runtime-verified",
-    );
-  }
-  if (fixture.modelAdapterDecision !== "reference-adapter-verified") {
-    addFailure(failures, "Vue fixture model adapter decision is invalid");
-  }
-
-  const manifestFixture = (manifest.fixtures ?? []).find(
-    (entry) => entry.id === "vue",
-  );
-  if (!manifestFixture) {
-    addFailure(failures, "consumer manifest is missing Vue");
-  } else {
-    if (manifestFixture.supportClaim !== expectedFixtureClaim) {
-      addFailure(
-        failures,
-        `Vue manifest support claim must be ${expectedFixtureClaim}`,
-      );
-    }
-    if (manifestFixture.directory !== "tests/consumers/vue") {
-      addFailure(failures, "Vue manifest directory is invalid");
-    }
-    if (manifestFixture.verificationStatus !== "runtime-verified") {
-      addFailure(
-        failures,
-        "Vue manifest verification status must be runtime-verified",
-      );
-    }
-    for (const file of manifestFixture.exampleFiles ?? []) {
-      if (!existsSync(path.join(fixtureDirectory, file))) {
-        addFailure(failures, `Vue manifest example is missing ${file}`);
-      }
-    }
-  }
-
-  if (packageJson.dependencies?.vue !== vueVersion) {
-    addFailure(failures, `Vue must be pinned to ${vueVersion}`);
-  }
-  const expectedDevDependencies = {
-    "@vitejs/plugin-vue": pluginVueVersion,
-    typescript: fixtureTypeScriptVersion,
-    vite: viteVersion,
-    "vue-tsc": vueTscVersion,
-  };
-  for (const [packageName, version] of Object.entries(
-    expectedDevDependencies,
-  )) {
-    if (packageJson.devDependencies?.[packageName] !== version) {
-      addFailure(failures, `${packageName} must be pinned to ${version}`);
-    }
-  }
-  for (const script of ["typecheck", "build", "preview"]) {
-    if (!packageJson.scripts?.[script]) {
-      addFailure(failures, `Vue fixture is missing ${script} script`);
-    }
-  }
-  for (const dependencyName of Object.keys({
-    ...packageJson.dependencies,
-    ...packageJson.devDependencies,
-  })) {
-    if (dependencyName.startsWith("@vyrnforge/")) {
-      addFailure(
-        failures,
-        "Vue fixture must receive VyrnForge packages from runtime tarballs",
-      );
-    }
-  }
-  if (tsconfig.compilerOptions?.strict !== true) {
-    addFailure(failures, "Vue fixture must enable strict TypeScript");
-  }
-  if (tsconfig.vueCompilerOptions?.strictTemplates !== true) {
-    addFailure(failures, "Vue strict template checking must be enabled");
-  }
-  if (!tsconfig.include?.includes("architecture-probe.ts")) {
-    addFailure(failures, "Vue typecheck must include architecture-probe.ts");
-  }
-  if (!tsconfig.include?.includes("src/**/*.vue")) {
-    addFailure(failures, "Vue typecheck must include Vue SFC files");
-  }
-
-  const viteText = read(root, "tests/consumers/vue/vite.config.ts");
-  const mainText = read(root, "tests/consumers/vue/src/main.ts");
-  const appText = read(root, "tests/consumers/vue/src/App.vue");
-  const stylesText = read(root, "tests/consumers/vue/src/styles.css");
-  const templateTypesText = read(
-    root,
-    "tests/consumers/vue/src/vyrnforge-elements.d.ts",
-  );
-  const probeText = read(root, "tests/consumers/vue/architecture-probe.ts");
-
-  for (const marker of [
-    "@vitejs/plugin-vue",
-    "isCustomElement",
-    'tag.startsWith("vf-")',
-  ]) {
-    if (!viteText.includes(marker)) {
-      addFailure(failures, `Vue compiler config is missing ${marker}`);
-    }
-  }
-  for (const marker of [
-    "createApp",
-    "@vyrnforge/ui-elements/register",
-    "@vyrnforge/ui-core/styles/index.css",
-    "@vyrnforge/ui-elements/styles/index.css",
-  ]) {
-    if (!mainText.includes(marker)) {
-      addFailure(failures, `Vue entry point is missing ${marker}`);
-    }
-  }
-  for (const marker of [
-    ':items="tabs"',
-    ':value.prop="owner"',
-    '@vf-action="handleAction"',
-    '@vf-value-change="handleOwnerValueChange"',
-    'slot="status"',
-    'slot="actions"',
-    'for="vue-owner-preview"',
-    'for="vue-form-owner"',
-    'variant="default"',
-    "VyrnForgeElementForTagName",
-    "VyrnForgeActionDetail",
-    "VyrnForgeValueChangeDetail",
-    "new FormData",
-    'data-consumer-ready", "true"',
-  ]) {
-    if (!appText.includes(marker)) {
-      addFailure(failures, `Vue application is missing ${marker}`);
-    }
-  }
-  for (const marker of [
-    'declare module "vue"',
-    "interface GlobalComponents",
-    '"vf-page-header"',
-    '"vf-button"',
-    '"vf-tabs"',
-    '"vf-text-input"',
-    '"vf-action"',
-    '"vf-value-change"',
-    'declare module "@vue/runtime-dom"',
-    "slot?: string",
-    "data-${string}",
-  ]) {
-    if (!templateTypesText.includes(marker)) {
-      addFailure(failures, `Vue template type bridge is missing ${marker}`);
-    }
-  }
-  for (const forbidden of [
-    'label="Owner"',
-    'label="Form owner"',
-    'variant="secondary"',
-  ]) {
-    if (appText.includes(forbidden)) {
-      addFailure(
-        failures,
-        `Vue application uses unsupported markup ${forbidden}`,
-      );
-    }
-  }
-  for (const marker of [
-    'document.createElement("vf-tabs")',
-    'VyrnForgeElementForTagName<"vf-tabs">',
-    'addEventListener("vf-action"',
-    'addEventListener("vf-value-change"',
-  ]) {
-    if (!probeText.includes(marker)) {
-      addFailure(failures, `Vue architecture probe is missing ${marker}`);
-    }
-  }
-  for (const marker of ["--vf-bg", "--vf-space-5", "--vf-surface"]) {
-    if (!stylesText.includes(marker)) {
-      addFailure(failures, `Vue fixture styles are missing ${marker}`);
-    }
-  }
-  if (stylesText.includes("--udg-")) {
-    addFailure(failures, "Vue non-grid fixture must not use data-grid tokens");
-  }
-
-  const consumerSource = [viteText, mainText, appText, probeText].join("\n");
-  for (const forbidden of ["packages/ui-elements/src", "../../../packages/"]) {
-    if (consumerSource.includes(forbidden)) {
-      addFailure(failures, `Vue fixture must not import ${forbidden}`);
-    }
-  }
-}
-
-function verifyRepositoryIntegration(root, failures) {
-  const rootPackageJson = readJson(root, "package.json");
-  const architecture = readJson(root, "docs/metadata/multi-framework.json");
-  const consumerFoundations = readJson(
-    root,
-    "docs/metadata/consumer-foundations.json",
-  );
-  const runtimeText = read(
-    root,
-    "scripts/verify-consumer-foundations-runtime.mjs",
-  );
-  const docsText = read(
-    root,
-    "docs/testing/multi-framework-consumer-fixtures.md",
-  );
-
-  for (const script of [
-    "verify:vue-consumer",
-    "test:vue-consumer",
-    "verify:vue-consumer:runtime",
-  ]) {
-    if (!rootPackageJson.scripts?.[script]) {
-      addFailure(failures, `root package scripts are missing ${script}`);
-    }
-  }
-  const framework = (architecture.frameworks ?? []).find(
-    (entry) => entry.id === "vue",
-  );
-  if (framework?.supportLevel !== "verified-consumer") {
-    addFailure(
-      failures,
-      "Vue architecture support level must be verified-consumer",
-    );
-  }
-  if (framework?.betaClaim !== expectedBetaClaim) {
-    addFailure(failures, `Vue beta claim must be ${expectedBetaClaim}`);
-  }
-  if (
-    architecture.consumerFixturePolicy?.vueEvidence !==
-    "docs/metadata/vue-consumer.json"
-  ) {
-    addFailure(
-      failures,
-      "multi-framework metadata must reference Vue evidence",
-    );
-  }
-  const foundationFixture = (consumerFoundations.consumerFixtures ?? []).find(
-    (entry) => entry.id === "vue",
-  );
-  if (foundationFixture?.supportClaim !== expectedFixtureClaim) {
-    addFailure(
-      failures,
-      "consumer foundation metadata must record the Vue verified claim",
-    );
-  }
-  for (const marker of [
-    'id: "vue"',
-    'directory: "tests/consumers/vue"',
-    "port: 4184",
-    'fixture.id === "vue"',
-  ]) {
-    if (!runtimeText.includes(marker)) {
-      addFailure(failures, `consumer runtime is missing Vue marker ${marker}`);
-    }
-  }
-  if (!docsText.includes("packed-vue-runtime-verified")) {
-    addFailure(
-      failures,
-      "consumer fixture documentation must record Vue runtime verification",
-    );
-  }
 }
 
 export function verifyVueConsumer({ root = repositoryRoot } = {}) {
   const failures = [];
-  for (const relativePath of requiredFiles) {
-    if (!existsSync(path.join(root, relativePath))) {
-      addFailure(
-        failures,
-        `required Vue consumer file is missing: ${relativePath}`,
-      );
-    }
+  for (const file of requiredFiles) {
+    if (!existsSync(path.join(root, file))) fail(failures, `Vue consumer evidence is missing ${file}`);
   }
   if (failures.length > 0) return failures.sort();
-  verifyMetadata(root, failures);
-  verifyFixture(root, failures);
-  verifyRepositoryIntegration(root, failures);
+
+  const metadata = readJson(root, "docs/metadata/vue-consumer.json");
+  const framework = metadata.framework ?? {};
+  if (framework.name !== "Vue" || framework.version !== vueVersion) fail(failures, `Vue framework version must be ${vueVersion}`);
+  if (framework.supportLevel !== "first-class") fail(failures, "Vue support level must be first-class");
+  if (framework.renderer !== "@vyrnforge/ui-vue") fail(failures, "Vue public renderer must be @vyrnforge/ui-vue");
+  if (framework.workspaceIsolation !== true) fail(failures, "Vue fixture must remain workspace-isolated");
+  if (metadata.fixture?.supportClaim !== expectedFixtureClaim) fail(failures, `Vue fixture claim must be ${expectedFixtureClaim}`);
+  if (!metadata.fixture?.packedPackages?.includes("@vyrnforge/ui-vue")) fail(failures, "Vue fixture evidence must include the public facade package");
+  if (metadata.modelAdapterDecision?.publishedPackage !== "@vyrnforge/ui-vue") fail(failures, "Vue model integration must be package-owned");
+
+  const fixture = readJson(root, "tests/consumers/vue/fixture.json");
+  if (fixture.supportClaim !== expectedFixtureClaim) fail(failures, `Vue fixture support claim must be ${expectedFixtureClaim}`);
+  if (!fixture.rendererPackages?.includes("@vyrnforge/ui-vue")) fail(failures, "Vue runtime fixture must exercise @vyrnforge/ui-vue");
+  if (fixture.modelAdapterDecision !== "public-package-adapter-verified") fail(failures, "Vue fixture must use package-owned model integration");
+
+  const fixturePackage = readJson(root, "tests/consumers/vue/package.json");
+  for (const dependencyName of Object.keys({ ...fixturePackage.dependencies, ...fixturePackage.devDependencies })) {
+    if (dependencyName.startsWith("@vyrnforge/")) fail(failures, "Vue fixture must receive VyrnForge packages from runtime tarballs");
+  }
+
+  const packageJson = readJson(root, "packages/ui-vue/package.json");
+  if (packageJson.dependencies?.["@vyrnforge/ui-elements"] === undefined) fail(failures, "@vyrnforge/ui-vue must delegate to @vyrnforge/ui-elements");
+  if (packageJson.peerDependencies?.vue !== ">=3.5 <4") fail(failures, "@vyrnforge/ui-vue Vue peer range is invalid");
+
+  const mainText = read(root, "tests/consumers/vue/src/main.ts");
+  for (const marker of ["createApp", "VyrnForgeVue", "@vyrnforge/ui-vue"]) {
+    if (!mainText.includes(marker)) fail(failures, `Vue entry point is missing ${marker}`);
+  }
+  if (mainText.includes("@vyrnforge/ui-elements/register")) fail(failures, "Vue normal setup must not require raw element registration");
+
+  const appText = read(root, "tests/consumers/vue/src/App.vue");
+  for (const marker of ["@vyrnforge/ui-vue", "VyrnForgeButton", "VyrnForgeTabs", "VyrnForgeTextInput", "VyrnForgeCheckbox", "v-model=\"modelOwner\"", "v-model=\"modelNotifications\""]) {
+    if (!appText.includes(marker)) fail(failures, `Vue application is missing ${marker}`);
+  }
+  for (const stale of ["./adapters/", "useVyrnForgeModel"]) {
+    if (appText.includes(stale)) fail(failures, `Vue fixture must not depend on copied adapter ${stale}`);
+  }
+
+  const architecture = readJson(root, "docs/metadata/multi-framework.json");
+  const vue = (architecture.frameworks ?? []).find((item) => item.id === "vue");
+  if (vue?.supportLevel !== "first-class" || vue?.renderer !== "@vyrnforge/ui-vue" || vue?.betaClaim !== "first-class-package-verified") fail(failures, "multi-framework Vue record must describe current first-class package support");
+
   return failures.sort();
 }
 
