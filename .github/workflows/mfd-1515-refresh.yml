@@ -1,0 +1,81 @@
+name: MFD-1515 Refresh Current Framework Evidence
+
+on:
+  push:
+    branches:
+      - mfd-1515-cleanup-stale-framework-claims
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: mfd-1515-cleanup-stale-framework-claims
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Remove stale generator and inventory assumptions
+        shell: python
+        run: |
+          from pathlib import Path
+
+          generator = Path("scripts/generate-component-reference.mjs")
+          text = generator.read_text()
+          old_note = '    return "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes.";'
+          new_note = '    return "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations.";'
+          if old_note not in text:
+            raise SystemExit("Angular framework note pattern not found")
+          text = text.replace(old_note, new_note)
+          old_example = '''      package:\n        parity.angular?.consumes ??\n        (nativeTag ? "@vyrnforge/ui-elements" : null),\n      setup: nativeTag\n        ? 'schemas: [CUSTOM_ELEMENTS_SCHEMA]\\n// import "@vyrnforge/ui-elements/register" from application bootstrap'\n        : "",'''
+          new_example = '''      package:\n        angularStatus === "not-supported" ? null : "@vyrnforge/ui-angular",\n      setup:\n        angularStatus === "not-supported"\n          ? ""\n          : 'import { provideVyrnForge } from "@vyrnforge/ui-angular";\\n// add provideVyrnForge() to bootstrapApplication providers','''
+          if old_example not in text:
+            raise SystemExit("Angular framework example pattern not found")
+          generator.write_text(text.replace(old_example, new_example))
+
+          verifier = Path("scripts/verify-consumer-foundations.mjs")
+          text = verifier.read_text()
+          old_count = '''  if (definitions.length !== 58) {\n    addFailure(\n      failures,\n      `consumer foundation expected 58 registry tags, received ${definitions.length}`,\n    );\n  }'''
+          new_count = '''  if (definitions.length === 0) {\n    addFailure(failures, "consumer foundation registry must not be empty");\n  }'''
+          if old_count not in text:
+            raise SystemExit("hard-coded registry count pattern not found")
+          text = text.replace(old_count, new_count)
+          old_manifest = '''  if (manifest.vyrnforge?.registeredTagCount !== 58) {\n    addFailure(failures, "custom-elements.json must record 58 tags");\n  }'''
+          new_manifest = '''  if (manifest.vyrnforge?.registeredTagCount !== definitions.length) {\n    addFailure(\n      failures,\n      `custom-elements.json must record the current registry count (${definitions.length})`,\n    );\n  }'''
+          if old_manifest not in text:
+            raise SystemExit("hard-coded manifest count pattern not found")
+          verifier.write_text(text.replace(old_manifest, new_manifest))
+      - name: Format touched scripts
+        run: npx prettier --write scripts/generate-component-reference.mjs scripts/verify-consumer-foundations.mjs
+      - name: Regenerate consumer knowledge
+        run: npm run generate:consumer-knowledge
+      - name: Verify focused cleanup contracts
+        run: |
+          node scripts/verify-angular-consumer.mjs
+          node scripts/verify-vue-consumer.mjs
+          node scripts/verify-vue-model-adapter.mjs
+          node scripts/verify-consumer-foundations.mjs
+          npm run verify:consumer-knowledge
+      - name: Commit refresh
+        shell: bash
+        run: |
+          git status --short
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/generate-component-reference.mjs scripts/verify-consumer-foundations.mjs docs/generated
+          if git diff --cached --quiet; then
+            echo "No refresh changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: refresh current framework consumer knowledge"
+          git push origin HEAD:mfd-1515-cleanup-stale-framework-claims
