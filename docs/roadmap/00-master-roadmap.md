@@ -15,23 +15,21 @@ delivery, release, documentation, and contribution paths now use the simplified
 repository model while preserving the established package architecture and trust
 boundaries.
 
-The active approved distribution program is **VyrnForge Multi-Framework
-Distribution Architecture**. Its product support model treats React, native
-HTML, Angular, and Vue as equally first-class supported web surfaces. Support
-status is a consumer guarantee; it does not require four independent
-implementations or the same renderer strategy for every framework.
+The **VyrnForge Multi-Framework Distribution Architecture** program (S10-S15) is
+complete. React, native HTML, Angular, and Vue are equally first-class supported
+web surfaces. Support status is a consumer guarantee; it does not require four
+independent implementations or the same renderer strategy for every framework.
 
-The program continues to share tokens, contracts, behaviors, styling,
-accessibility expectations, and component semantics across supported surfaces.
-Framework-specific implementation should be generated or generic wherever
+The completed model shares tokens, contracts, behaviors, styling, accessibility
+expectations, and component semantics across supported surfaces. The canonical
+component model drives generated or generic framework integration wherever
 practical, with handwritten framework-specific code reserved for concrete,
-evidence-backed technical exceptions.
+evidence-backed technical exceptions governed by the framework exception policy.
 
 The data-grid package remains a specialized React alpha on an independent
 release track. Multi-framework data-grid work and other advanced optional
-capabilities are outside the S10-S15 critical path unless separately
-reprioritized. They remain valid long-term UI scope when supported by dedicated
-architecture and evidence.
+capabilities were intentionally outside the S10-S15 critical path and remain
+valid future scope only when separately prioritized and evidenced.
 
 ## Release groups
 
@@ -40,8 +38,10 @@ architecture and evidence.
 ```text
 @vyrnforge/ui-core
 @vyrnforge/ui-behaviors
-@vyrnforge/ui-components
 @vyrnforge/ui-elements
+@vyrnforge/ui-components
+@vyrnforge/ui-angular
+@vyrnforge/ui-vue
 ```
 
 ### Deferred independent alpha
@@ -54,35 +54,36 @@ The canonical exact versions, dist-tags, package membership, and internal
 dependency alignment live in
 [`../metadata/release-groups.json`](../metadata/release-groups.json).
 
-Current package names and release-group membership describe implemented state.
-Target framework packages are governed by accepted ADRs and must not be treated
-as shipped until manifests, packages, consumer evidence, and release gates make
-them current.
+Current package manifests, release metadata, packed-consumer evidence, and the
+final S15 dry-run make the four non-grid framework surfaces release-ready by
+repository evidence. This is not a claim that every package has been published
+to npm. Real registry publication, release tags, and GitHub Releases remain
+separate explicitly authorized operations.
 
 ## Sprint plan
 
-| Sprint | Name                                            | Goal                                                                                                                      | Gate / state                |
-| ------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| S0     | Baseline and Change Control                     | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed                 |
-| S1     | Quality Foundation                              | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed                 |
-| S2     | Interaction and Accessibility Evidence          | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed                 |
-| S3     | Semantic Tokens and Component Consistency       | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed                 |
-| S4     | Multi-Framework Architecture                    | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed               |
-| S5     | Framework-Neutral Behaviors                     | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed               |
-| S6     | Native Custom Elements                          | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed               |
-| S7     | Cross-Framework Verification and Docs           | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed               |
-| S8     | Non-Grid Beta Release                           | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete                    |
-| S9     | Repository and Delivery Simplification          | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete                    |
-| S10    | Canonical Component & Distribution Architecture | Establish the target architecture, complete canonical contract model, package strategy, and migration rules.              | See active program evidence |
-| S11    | Framework Generation Foundation                 | Prove deterministic generation and shared vertical slices across all four supported surfaces.                             | See active program evidence |
-| S12    | First-Class Angular Distribution                | Deliver low-friction Angular distribution with generated integration and framework-native forms/DX.                       | G12 program track           |
-| S13    | First-Class Vue Distribution                    | Deliver low-friction Vue distribution with generated integration and framework-native model/slot/ref DX.                  | G13 program track           |
-| S14    | React Canonical-Renderer Convergence            | Converge eligible React components toward the canonical implementation while preserving public ergonomics and parity.     | G14 program track           |
-| S15    | Multi-Framework Packaging & Release             | Make packaging, release verification, documentation, and four-surface distribution metadata-driven and release-ready.     | G15 program track           |
+| Sprint | Name                                            | Goal                                                                                                                      | Gate / state  |
+| ------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| S0     | Baseline and Change Control                     | Lock inventory, toolchain, governance, and ownership.                                                                     | G0 — passed   |
+| S1     | Quality Foundation                              | Enforce lint, tests, metadata, packages, consumers, and stable CI aggregation.                                            | G1 — passed   |
+| S2     | Interaction and Accessibility Evidence          | Prove critical keyboard, focus, overlay, form, navigation, feedback, and grid behavior.                                   | G2 — passed   |
+| S3     | Semantic Tokens and Component Consistency       | Establish semantic tokens and align shared components and grid styling.                                                   | G3 — passed   |
+| S4     | Multi-Framework Architecture                    | Approve support scope, package topology, component contracts, events, composition, styling, forms, and fixture ownership. | GMF1 — passed |
+| S5     | Framework-Neutral Behaviors                     | Extract reusable non-grid controllers while preserving React API and behavior.                                            | GMF2 — passed |
+| S6     | Native Custom Elements                          | Implement native non-grid elements with form, browser, accessibility, theme, and density parity.                          | GMF3 — passed |
+| S7     | Cross-Framework Verification and Docs           | Verify React, plain HTML, Angular, and Vue consumers and publish generated framework documentation.                       | GMF4 — passed |
+| S8     | Non-Grid Beta Release                           | Harden packages, release groups, artifacts, compatibility, security, and prerelease delivery.                             | Complete      |
+| S9     | Repository and Delivery Simplification          | Simplify validation, CI, Pages, release, documentation, and contributor experience.                                       | Complete      |
+| S10    | Canonical Component & Distribution Architecture | Establish the target architecture, complete canonical contract model, package strategy, and migration rules.              | G10 — passed  |
+| S11    | Framework Generation Foundation                 | Prove deterministic generation and shared vertical slices across all four supported surfaces.                             | G11 — passed  |
+| S12    | First-Class Angular Distribution                | Deliver low-friction Angular distribution with generated integration and framework-native forms/DX.                       | G12 — passed  |
+| S13    | First-Class Vue Distribution                    | Deliver low-friction Vue distribution with generated integration and framework-native model/slot/ref DX.                  | G13 — passed  |
+| S14    | React Canonical-Renderer Convergence            | Converge eligible React components toward the canonical implementation while preserving public ergonomics and parity.     | G14 — passed  |
+| S15    | Multi-Framework Packaging & Release             | Make packaging, release verification, documentation, and four-surface distribution metadata-driven and release-ready.     | G15 — passed  |
 
-The execution workbook and merged repository evidence own live task/gate status.
-This roadmap intentionally avoids duplicating fast-changing percentages and task
-completion state that can drift from implementation.
+The execution workbook and merged repository evidence own detailed task history.
+This roadmap records the closed architecture and planning state rather than
+repeating fast-changing execution percentages.
 
 ## S4 architecture tasks
 
@@ -148,7 +149,7 @@ public Custom Element catalog.
 
 S7 completed the cross-framework evidence chain for React, native HTML, Angular,
 and Vue consumers. Retained evidence remains historical proof and does not
-replace current manifests or active program state.
+replace current manifests or active architecture metadata.
 
 S8 established the synchronized non-grid beta release group, independent
 data-grid alpha track, artifact verification, compatibility/security contracts,
@@ -172,21 +173,78 @@ S9 is complete. Normal contributors use one setup and validation path, CI
 derives technical scope from changed paths, and specialist intake remains only
 where infrastructure or release operations require additional evidence.
 
-## S10-S15 multi-framework distribution program
+## S10-S15 multi-framework distribution closure
 
-S10-S15 establishes the first-class distribution architecture without pretending
-that target surfaces already exist before their gates pass. The approved support
-target is React, native HTML, Angular, and Vue.
+S10-S15 completed the transition from a mixed implementation/support hierarchy
+to one cohesive multi-framework distribution model. The closed support surface
+is:
 
-Execution is dependency-driven rather than a fully sequential sprint queue.
-Independent React, Angular, Vue, release, and documentation work should proceed
-in parallel once their real prerequisite gates are satisfied.
+| Surface     | Consumer package                  | Support status | Implementation strategy |
+| ----------- | --------------------------------- | -------------- | ----------------------- |
+| React       | `@vyrnforge/ui-components`        | First-class    | Canonical-backed public React surface with narrow explicit exceptions |
+| Native HTML | `@vyrnforge/ui-elements`          | First-class    | Default browser implementation through canonical `vf-*` Custom Elements |
+| Angular     | `@vyrnforge/ui-angular`           | First-class    | Generated/generic Angular facade over shared canonical foundations, including Forms integration |
+| Vue         | `@vyrnforge/ui-vue`               | First-class    | Generated/generic Vue facade over shared canonical foundations with idiomatic model/slot/ref integration |
 
-Framework convergence is subordinate to first-class correctness. Public API,
-typing, accessibility, SSR behavior, composition, refs, forms, and performance
-must not be weakened merely to remove implementation duplication. Use the
-framework exception policy when shared/generic integration cannot preserve an
-approved framework contract.
+Implementation strategy is not a support ranking. Shared contracts, behaviors,
+tokens, accessibility rules, terminology, and generated metadata remain the
+source for cross-framework consistency; framework-specific exceptions stay
+narrow, explicit, and governed by
+[`../architecture/adr-008-framework-exception-policy.md`](../architecture/adr-008-framework-exception-policy.md).
+
+### Closure evidence
+
+The final convergence sequence is recorded by merged repository and CI evidence:
+
+- MFD-1513: framework-first installation guidance merged in PR #303;
+- MFD-1514: target multi-framework architecture documentation merged in PR #304;
+- MFD-1515: obsolete fixture adapters and stale consumer-only assumptions removed in PR #305, merged as `29f7d1d9b05d2268f585014d39a1e76f830c8250`;
+- MFD-1516: repository inventory, component reference, and consumer knowledge regenerated with zero drift and verified in GitHub Actions run `34244635279`;
+- MFD-1517: the complete all-release-line non-publishing dry-run passed against the converged main commit in GitHub Actions run `34245452473`.
+
+The final release proof built and verified release artifacts, release-line size
+budgets, trusted-publishing dry-run contracts, release notes, and the four-surface
+consumer runtime matrix. Its report explicitly recorded
+`publishingPerformed: false`.
+
+No npm publication, production release tag, or GitHub Release is part of this
+closure. Those remain separately authorized release operations.
+
+### Migration and consumer model
+
+Normal consumers start from one obvious surface package rather than installing
+or understanding VyrnForge's internal foundation graph:
+
+- React: `@vyrnforge/ui-components`;
+- Native HTML: `@vyrnforge/ui-elements`;
+- Angular: `@vyrnforge/ui-angular`;
+- Vue: `@vyrnforge/ui-vue`.
+
+Framework-first installation and setup guidance is canonical in the README and
+package/import documentation. Historical consumer-fixture terminology remains
+only where it is useful evidence and must not be presented as current support
+status.
+
+### Explicit deferred scope
+
+The data-grid multi-framework renderer program remains deferred and separate.
+The current `@vyrnforge/ui-data-grid` package stays on its independent React
+alpha release line. No S10-S15 closure claim promotes the data grid to the four
+non-grid framework surfaces.
+
+### Next planning inputs
+
+Post-S15 planning should build on the closed foundation rather than reopen the
+support architecture without evidence. Priority inputs are:
+
+- mature component and package stability using the canonical evidence model;
+- deepen general-purpose visual quality, onboarding, themes, density, keyboard,
+  performance, compatibility, and enterprise ergonomics;
+- continue AI-native consumer context generated from canonical metadata;
+- define optional advanced-module architecture before adding heavyweight
+  capabilities;
+- separately prioritize data-grid multi-framework evolution only when product
+  requirements and measured technical need justify it.
 
 ## Deferred data-grid track
 
@@ -204,14 +262,13 @@ Deferred work includes:
 - framework-neutral grid core and additional renderers.
 
 Grid defects, security corrections, accessibility fixes, and compatibility
-maintenance remain allowed. Feature expansion is not part of the S10-S15
-multi-framework distribution critical path.
+maintenance remain allowed. Feature expansion is not part of the completed
+S10-S15 multi-framework distribution critical path.
 
 ## Post-S15 strategic horizon
 
 The long-term roadmap extends beyond four-framework distribution. These are
-planning horizons, not commitments that the capabilities already exist or should
-interrupt S10-S15.
+planning horizons, not commitments that the capabilities already exist.
 
 ### First-class product maturity
 
@@ -263,12 +320,13 @@ rendering engines.
 
 ## Planning rules
 
-- The active S10-S15 execution workbook and merged GitHub evidence describe
-  program execution; reconcile them when tracker state lags repository reality.
+- The closed S10-S15 execution workbook and merged GitHub evidence describe the
+  completed distribution program; future work should start from this closed
+  architecture rather than historical consumer-only stages.
 - Accepted architecture overrides historical sprint notes.
 - Current package manifests and release metadata override stale planning
-  examples about implemented state, but do not override explicitly approved
-  future target architecture.
+  examples about implemented state. External publication status remains a
+  separate fact and must not be inferred from release readiness.
 - `docs/metadata/components.json` owns structured component status and maturity.
 - Historical task identifiers remain only where they provide useful planning or
   evidence context; normal usage guidance should not require them.
