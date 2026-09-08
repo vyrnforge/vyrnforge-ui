@@ -13,7 +13,15 @@
       "betaIncluded": true,
       "runtime": "framework-neutral",
       "dependsOn": [],
-      "owns": ["semantic tokens", "themes", "density", "typography", "motion", "layers", "utilities"]
+      "owns": [
+        "semantic tokens",
+        "themes",
+        "density",
+        "typography",
+        "motion",
+        "layers",
+        "utilities"
+      ]
     },
     {
       "name": "@vyrnforge/ui-behaviors",
@@ -22,7 +30,14 @@
       "betaIncluded": true,
       "runtime": "framework-neutral",
       "dependsOn": ["@vyrnforge/ui-core"],
-      "owns": ["controlled and uncontrolled state transitions", "collection models", "selection models", "keyboard decision models", "validation state", "canonical controller events"],
+      "owns": [
+        "controlled and uncontrolled state transitions",
+        "collection models",
+        "selection models",
+        "keyboard decision models",
+        "validation state",
+        "canonical controller events"
+      ],
       "foundationStage": "complete"
     },
     {
@@ -32,7 +47,13 @@
       "betaIncluded": true,
       "runtime": "custom-elements",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
-      "owns": ["canonical native Custom Element renderers", "property and attribute reflection", "typed DOM events", "form-associated element integration", "explicit registration entry points"],
+      "owns": [
+        "canonical native Custom Element renderers",
+        "property and attribute reflection",
+        "typed DOM events",
+        "form-associated element integration",
+        "explicit registration entry points"
+      ],
       "foundationStage": "canonical-native-current"
     },
     {
@@ -41,7 +62,11 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "react",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors", "@vyrnforge/ui-elements"],
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-elements"
+      ],
       "foundationStage": "first-class-react-converged"
     },
     {
@@ -51,7 +76,13 @@
       "betaIncluded": true,
       "runtime": "angular",
       "dependsOn": ["@vyrnforge/ui-elements"],
-      "owns": ["Angular generated facade bindings", "Angular package setup and registration", "Angular Forms integration", "Angular content composition", "typed Angular element references"],
+      "owns": [
+        "Angular generated facade bindings",
+        "Angular package setup and registration",
+        "Angular Forms integration",
+        "Angular content composition",
+        "typed Angular element references"
+      ],
       "foundationStage": "first-class-package-current"
     },
     {
@@ -61,7 +92,14 @@
       "betaIncluded": true,
       "runtime": "vue",
       "dependsOn": ["@vyrnforge/ui-elements"],
-      "owns": ["Vue component facades", "v-model translations", "typed emits", "Vue slots", "typed refs", "Vue plugin setup"],
+      "owns": [
+        "Vue component facades",
+        "v-model translations",
+        "typed emits",
+        "Vue slots",
+        "typed refs",
+        "Vue plugin setup"
+      ],
       "foundationStage": "first-class-package-current"
     },
     {
