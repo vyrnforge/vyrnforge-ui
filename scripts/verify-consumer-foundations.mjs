@@ -20,7 +20,7 @@ const allowedFixtureClaims = new Map([
 const allowedBetaClaims = new Map([
   ["native-html", new Set(["packed-consumer-verified"])],
   ["react", new Set(["react-public-package-consumer-verified"])],
-  ["angular", new Set(["packed-consumer-verified"])],
+  ["angular", new Set(["first-class-package-verified"])],
   ["vue", new Set(["first-class-package-verified"])],
 ]);
 
