@@ -48,7 +48,6 @@ jobs:
           const write = (p,v) => fs.writeFileSync(p, JSON.stringify(v,null,2)+'\n');
           const unique = (a) => [...new Set(a)];
 
-          // Generalized release line: preserve current main packages and append Vue's verified record.
           {
             const p='docs/metadata/release-groups.json'; const cur=read(p); const src=lane(p);
             const line=cur.releaseLines['non-grid-beta'];
@@ -57,8 +56,6 @@ jobs:
             line.packages.push(vue);
             write(p,cur);
           }
-
-          // Package topology: preserve Angular, append Vue and the Vue boundary rules.
           {
             const p='docs/metadata/packages.json'; const cur=read(p); const src=lane(p);
             const vue=src.packages.find(x=>x.name==='@vyrnforge/ui-vue');
@@ -67,16 +64,12 @@ jobs:
             cur.packages.splice(grid<0?cur.packages.length:grid,0,vue);
             for (const pkg of cur.packages) {
               const lanePkg=src.packages.find(x=>x.name===pkg.name);
-              if (lanePkg?.mustNotDependOn?.includes('@vyrnforge/ui-vue')) {
-                pkg.mustNotDependOn=unique([...(pkg.mustNotDependOn||[]),'@vyrnforge/ui-vue']);
-              }
+              if (lanePkg?.mustNotDependOn?.includes('@vyrnforge/ui-vue')) pkg.mustNotDependOn=unique([...(pkg.mustNotDependOn||[]),'@vyrnforge/ui-vue']);
             }
             cur.dependencyRules=unique([...cur.dependencyRules,...src.dependencyRules.filter(x=>x.includes('ui-vue'))]);
             cur.releaseGroups.nonGridBeta=unique([...cur.releaseGroups.nonGridBeta,'@vyrnforge/ui-vue']);
             write(p,cur);
           }
-
-          // Multi-framework architecture: preserve current main, promote only Vue using lane evidence.
           {
             const p='docs/metadata/multi-framework.json'; const cur=read(p); const src=lane(p);
             const vuePkg=src.packages.find(x=>x.name==='@vyrnforge/ui-vue');
@@ -88,26 +81,16 @@ jobs:
             cur.consumerFixturePolicy.rule=src.consumerFixturePolicy.rule;
             write(p,cur);
           }
-
-          // Provenance metadata: preserve Angular and append Vue's repository-side trusted-publishing contract.
           {
             const p='docs/metadata/trusted-publishing-provenance.json'; const cur=read(p); const src=lane(p);
             const vue=src.packages.find(x=>x.name==='@vyrnforge/ui-vue');
-            cur.packages=cur.packages.filter(x=>x.name!=='@vyrnforge/ui-vue');
-            cur.packages.push(vue);
-            write(p,cur);
+            cur.packages=cur.packages.filter(x=>x.name!=='@vyrnforge/ui-vue'); cur.packages.push(vue); write(p,cur);
           }
-
-          // Size evidence: preserve current main baselines and append Vue's measured baseline/budget.
           {
             const p='docs/metadata/beta-package-size-budgets.json'; const cur=read(p); const src=lane(p);
             const vue=src.packages.find(x=>x.name==='@vyrnforge/ui-vue');
-            cur.packages=cur.packages.filter(x=>x.name!=='@vyrnforge/ui-vue');
-            cur.packages.push(vue);
-            write(p,cur);
+            cur.packages=cur.packages.filter(x=>x.name!=='@vyrnforge/ui-vue'); cur.packages.push(vue); write(p,cur);
           }
-
-          // Compatibility matrix: union Vue policy/cases from the validated Vue lane with current main Angular cases.
           {
             const p='docs/metadata/compatibility-release-matrix.json'; const cur=read(p); const src=lane(p);
             if (src.frameworkPolicies?.vue) cur.frameworkPolicies.vue=src.frameworkPolicies.vue;
@@ -118,25 +101,19 @@ jobs:
             }
             write(p,cur);
           }
-
-          // Clean beta consumer must prove both framework packages without dropping Angular.
           {
             const p='tests/beta-package-consumer/package.json'; const cur=read(p); const src=lane(p);
-            if (src.dependencies?.vue) cur.dependencies.vue=src.dependencies.vue;
-            write(p,cur);
+            if (src.dependencies?.vue) cur.dependencies.vue=src.dependencies.vue; write(p,cur);
           }
           {
             const p='tests/beta-package-consumer/src/entrypoints.ts'; let text=fs.readFileSync(p,'utf8');
             if (!text.includes('@vyrnforge/ui-vue')) {
-              const importLine='import type * as VueFacade from "@vyrnforge/ui-vue";\n';
-              const lastImport=[...text.matchAll(/^import type .*;$/gm)].at(-1);
-              if (!lastImport) throw new Error('entrypoints import anchor missing');
-              const pos=lastImport.index+lastImport[0].length+1;
-              text=text.slice(0,pos)+importLine+text.slice(pos);
-              const mapAnchor='export type VyrnForgeBetaPackageEntryPoints = {';
-              const idx=text.indexOf(mapAnchor); if(idx<0) throw new Error('entrypoint type map missing');
-              const brace=text.indexOf('\n',idx)+1;
-              text=text.slice(0,brace)+'  vue: typeof VueFacade;\n'+text.slice(brace);
+              const importAnchor='import type * as Elements from "@vyrnforge/ui-elements";\n';
+              if (!text.includes(importAnchor)) throw new Error('entrypoints import anchor missing');
+              text=text.replace(importAnchor, importAnchor+'import type * as VueFacade from "@vyrnforge/ui-vue";\n');
+              const typeAnchor='  elements: typeof Elements;\n';
+              if (!text.includes(typeAnchor)) throw new Error('entrypoint type anchor missing');
+              text=text.replace(typeAnchor, typeAnchor+'  vue: typeof VueFacade;\n');
               fs.writeFileSync(p,text);
             }
           }
