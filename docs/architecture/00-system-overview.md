@@ -87,13 +87,21 @@ canonical model into idiomatic framework APIs.
 
 ## First-class framework surfaces
 
-| Surface                        | Public package                   | Support status           | Implementation strategy                                                                                                                |
-| ------------------------------ | -------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| React                          | `@vyrnforge/ui-components`       | First-class, non-grid beta | React API preserved; canonical-backed implementation is the default convergence direction, with explicit exceptions where required.   |
-| Native HTML / Custom Elements  | `@vyrnforge/ui-elements`         | First-class, non-grid beta | Direct canonical native implementation.                                                                                                |
-| Angular                        | `@vyrnforge/ui-angular`          | First-class, non-grid beta | Angular facade over canonical Custom Elements, including setup, typed bindings, Forms integration, composition, and refs.              |
-| Vue                            | `@vyrnforge/ui-vue`              | First-class, non-grid beta | Vue facade over canonical Custom Elements, including plugin setup, props/emits, `v-model`, slots, and refs.                            |
-| Data grid                      | `@vyrnforge/ui-data-grid`        | Specialized React alpha  | Independent optional advanced module; not part of the non-grid framework convergence claim.                                            |
+- **React** — `@vyrnforge/ui-components`; first-class non-grid beta. React API
+  compatibility is preserved, while canonical-backed implementation is the
+  default convergence direction and explicit exceptions remain available when
+  required.
+- **Native HTML / Custom Elements** — `@vyrnforge/ui-elements`; first-class
+  non-grid beta with direct canonical native implementation.
+- **Angular** — `@vyrnforge/ui-angular`; first-class non-grid beta through an
+  Angular facade over canonical Custom Elements, including setup, typed
+  bindings, Forms integration, composition, and refs.
+- **Vue** — `@vyrnforge/ui-vue`; first-class non-grid beta through a Vue facade
+  over canonical Custom Elements, including plugin setup, props/emits,
+  `v-model`, slots, and refs.
+- **Data grid** — `@vyrnforge/ui-data-grid`; specialized React alpha and an
+  independent optional advanced module outside the non-grid framework
+  convergence claim.
 
 A surface can be first-class even when it is implemented through a facade over
 the canonical native layer. Product support level and internal renderer strategy
