@@ -4,9 +4,10 @@
  * DO NOT EDIT. Regenerate with: npm run generate:framework-artifacts
  */
 import { defineComponent, h, ref, toRef, useAttrs } from "vue";
-import type { Component, Ref, Slots, VNode } from "vue";
+import type { Component, Ref } from "vue";
 import type { VyrnForgePublicElementTagName } from "@vyrnforge/ui-elements";
 import { useVyrnForgeModel } from "../model";
+import { renderVyrnForgeSlots } from "../slots";
 
 import { VfButton } from "./VfButton.generated";
 import { VfDialog } from "./VfDialog.generated";
@@ -23,16 +24,6 @@ interface GeneratedVueModel {
 }
 
 type GeneratedModelElement = Element & EventTarget & Record<string, unknown>;
-
-function renderSlots(slots: Slots): VNode[] {
-  const children: VNode[] = [];
-  if (slots.default) children.push(...slots.default());
-  for (const [name, slot] of Object.entries(slots)) {
-    if (name === "default" || !slot) continue;
-    children.push(h("span", { slot: name }, slot()));
-  }
-  return children;
-}
 
 function createVyrnForgeVueFacade(
   name: string,
@@ -79,7 +70,7 @@ function createVyrnForgeVueFacade(
                   : null;
             },
           },
-          renderSlots(slots),
+          renderVyrnForgeSlots(slots),
         );
     },
   });
