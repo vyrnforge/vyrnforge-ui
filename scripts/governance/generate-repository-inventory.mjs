@@ -133,7 +133,10 @@ const outputLines = [
     [
       ["Documentation entrypoint", "`docs/README.md`"],
       ["Project identity", "`docs/governance/01-project-source-of-truth.md`"],
-      ["Active sprint/task/gate execution", "Drive `VyrnForge Progress Tracker — Live Status`"],
+      [
+        "Active sprint/task/gate execution",
+        "Drive `VyrnForge Progress Tracker — Live Status`",
+      ],
       ["Package boundaries", "`docs/architecture/01-package-boundaries.md`"],
       ["Public API", "`docs/api/README.md` and package API documents"],
       ["Component catalog and maturity", "`docs/metadata/components.json`"],
@@ -142,7 +145,10 @@ const outputLines = [
       ["CI/CD architecture", "`docs/engineering/ci-cd-architecture.md`"],
       ["Documentation system", "`docs/engineering/documentation-system.md`"],
       ["Docs application route registry", "`apps/docs/src/docsRegistry.ts`"],
-      ["AI context", "`AGENTS.md`, canonical metadata, and `docs/generated/ai-context/`"],
+      [
+        "AI context",
+        "`AGENTS.md`, canonical metadata, and `docs/generated/ai-context/`",
+      ],
     ],
   ),
   "",

@@ -54,15 +54,20 @@ cannot preserve them.
 
 ## Current implemented package roles
 
-| Package | Current role | Release track |
-| --- | --- | --- |
-| `@vyrnforge/ui-core` | Framework-neutral tokens, themes, density, typography, motion, layers, and utilities. | Non-grid beta |
-| `@vyrnforge/ui-behaviors` | Framework-neutral component controllers, state rules, and reasoned events. | Non-grid beta |
-| `@vyrnforge/ui-components` | First-class React package. | Non-grid beta |
-| `@vyrnforge/ui-elements` | First-class Native HTML / Custom Elements package. | Non-grid beta |
-| `@vyrnforge/ui-angular` | First-class Angular facade over canonical Custom Elements. | Non-grid beta |
-| `@vyrnforge/ui-vue` | First-class Vue facade over canonical Custom Elements. | Non-grid beta |
-| `@vyrnforge/ui-data-grid` | Specialized React data-grid package. | Independent alpha |
+- `@vyrnforge/ui-core`: framework-neutral tokens, themes, density, typography,
+  motion, layers, and utilities. Non-grid beta release track.
+- `@vyrnforge/ui-behaviors`: framework-neutral component controllers, state
+  rules, and reasoned events. Non-grid beta release track.
+- `@vyrnforge/ui-components`: first-class React package. Non-grid beta release
+  track.
+- `@vyrnforge/ui-elements`: first-class Native HTML / Custom Elements package.
+  Non-grid beta release track.
+- `@vyrnforge/ui-angular`: first-class Angular facade over canonical Custom
+  Elements. Non-grid beta release track.
+- `@vyrnforge/ui-vue`: first-class Vue facade over canonical Custom Elements.
+  Non-grid beta release track.
+- `@vyrnforge/ui-data-grid`: specialized React data-grid package. Independent
+  alpha release track.
 
 Exact versions, dependencies, release-group membership, and tags are canonical in
 [`../metadata/release-groups.json`](../metadata/release-groups.json) and package
@@ -148,16 +153,16 @@ AI retrieval context are views, not independent facts to edit by hand.
 
 Use the source that owns the question:
 
-- **Product identity, durable scope, and non-goals:** this document.
-- **Exact current package state:** package manifests, public entrypoints,
+- Product identity, durable scope, and non-goals: this document.
+- Exact current package state: package manifests, public entrypoints,
   `docs/metadata/packages.json`, and `docs/metadata/release-groups.json`.
-- **Architecture decisions:** accepted ADRs and architecture contracts.
-- **Component contracts and maturity:** canonical component metadata plus
-  executable evidence.
-- **Active sprint, task, dependency, and gate execution:** Drive spreadsheet
+- Architecture decisions: accepted ADRs and architecture contracts.
+- Component contracts and maturity: canonical component metadata plus executable
+  evidence.
+- Active sprint, task, dependency, and gate execution: Drive spreadsheet
   `VyrnForge Progress Tracker — Live Status`.
-- **Historical evidence:** retained evidence records with explicit continuing
-  audit, migration, regression, compatibility, or architectural value.
+- Historical evidence: retained evidence records with explicit continuing audit,
+  migration, regression, compatibility, or architectural value.
 
 Repository history is the recovery mechanism for superseded sprint prose; the
 repository does not maintain a competing execution roadmap.

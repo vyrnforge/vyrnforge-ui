@@ -12,20 +12,23 @@ The documentation system itself is described in
 
 ## Canonical ownership
 
-| Topic | Canonical source |
-| --- | --- |
-| Documentation entrypoint | `docs/README.md` |
-| Documentation organization and docs-app ownership | `docs/engineering/documentation-system.md` |
-| Project identity, scope, and durable product boundaries | `docs/governance/01-project-source-of-truth.md` |
-| Active sprint/task execution and gate status | Drive spreadsheet `VyrnForge Progress Tracker — Live Status` |
-| Package boundaries | `docs/architecture/01-package-boundaries.md` |
-| State ownership | `docs/architecture/02-state-and-adapter-ownership.md` |
-| Theming and styling | `docs/architecture/03-theming-and-styling.md` |
-| Component catalog, maturity, and per-component limitations | `docs/metadata/components.json` |
-| Generated component/framework reference | `docs/generated/component-reference.json` |
-| Generated AI retrieval context | `docs/generated/ai-context/` |
-| CI/CD architecture | `docs/engineering/ci-cd-architecture.md` |
-| Release procedure | `docs/release/publication-procedure.md` |
+- Documentation entrypoint: `docs/README.md`.
+- Documentation organization and docs-app ownership:
+  `docs/engineering/documentation-system.md`.
+- Project identity, scope, and durable product boundaries:
+  `docs/governance/01-project-source-of-truth.md`.
+- Active sprint/task execution and gate status: Drive spreadsheet
+  `VyrnForge Progress Tracker — Live Status`.
+- Package boundaries: `docs/architecture/01-package-boundaries.md`.
+- State ownership: `docs/architecture/02-state-and-adapter-ownership.md`.
+- Theming and styling: `docs/architecture/03-theming-and-styling.md`.
+- Component catalog, maturity, and per-component limitations:
+  `docs/metadata/components.json`.
+- Generated component/framework reference:
+  `docs/generated/component-reference.json`.
+- Generated AI retrieval context: `docs/generated/ai-context/`.
+- CI/CD architecture: `docs/engineering/ci-cd-architecture.md`.
+- Release procedure: `docs/release/publication-procedure.md`.
 
 Package manifests, public entrypoints, implementation, executable tests, and
 canonical metadata remain authoritative for exact current implementation facts.
