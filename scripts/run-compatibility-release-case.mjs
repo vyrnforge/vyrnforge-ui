@@ -38,11 +38,15 @@ try {
   writeFileSync(packagePath, `${JSON.stringify(overridden, null, 2)}\n`);
 
   const runtimeArguments = [
-    path.join(repositoryRoot, "scripts/verify-consumer-foundations-runtime.mjs"),
+    path.join(
+      repositoryRoot,
+      "scripts/verify-consumer-foundations-runtime.mjs",
+    ),
     "--fixture",
     testCase.fixture,
   ];
-  if (testCase.fixture === "vue") runtimeArguments.push("--accessibility-smoke");
+  if (testCase.fixture === "vue")
+    runtimeArguments.push("--accessibility-smoke");
 
   execFileSync(process.execPath, runtimeArguments, {
     cwd: repositoryRoot,
