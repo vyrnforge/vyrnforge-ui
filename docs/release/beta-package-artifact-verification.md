@@ -52,6 +52,10 @@ and build output.
 - `@vyrnforge/ui-angular`
 - `@vyrnforge/ui-angular/forms`
 
+### `@vyrnforge/ui-vue`
+
+- `@vyrnforge/ui-vue`
+
 For conditional exports, the gate requires every declared type and runtime
 target. String exports must resolve to the documented CSS or JSON artifact.
 Every target must be present in the tarball and in the clean installed package.
@@ -78,12 +82,14 @@ symlinks and verifies:
 - every installed package version matches the synchronized beta release version;
 - every public JS, CSS, JSON, and type target exists;
 - CommonJS/package and ESM resolution stay inside the installed package;
-- TypeScript resolves all documented package entry points, including Angular root and Forms entrypoints;
+- TypeScript resolves all documented package entry points, including Angular root and Forms entrypoints and the Vue facade entrypoint;
 - a production Vite build succeeds and emits shared `--vf-*` CSS variables.
 
 Angular framework dependencies are fixture-owned third-party dependencies and
 are installed before the offline VyrnForge tarball step; the gate still requires
 the actual `@vyrnforge/ui-angular` tarball and forbids workspace links.
+
+Vue framework dependencies are fixture-owned third-party dependencies and are installed before the offline VyrnForge tarball step; the gate still requires the actual `@vyrnforge/ui-vue` tarball and forbids workspace links.
 
 ## Reports
 

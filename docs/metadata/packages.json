@@ -226,6 +226,47 @@
       "notes": "First-class Angular package adapter over shared VyrnForge foundations and ui-elements; Angular framework dependencies remain peer dependencies."
     },
     {
+      "name": "@vyrnforge/ui-vue",
+      "purpose": "First-class Vue facade over the canonical VyrnForge Custom Element renderer and shared contracts.",
+      "owns": [
+        "Vue component facades",
+        "Vue-native props and typed emits",
+        "v-model translations",
+        "Vue slot projection",
+        "typed component refs",
+        "Vue setup and plugin helpers"
+      ],
+      "doesNotOwn": [
+        "canonical Custom Element rendering",
+        "framework-neutral behavior controllers",
+        "design tokens",
+        "application state",
+        "backend workflows",
+        "data grid rendering"
+      ],
+      "cssImport": "not-applicable",
+      "apiDoc": "docs/packages/ui-vue.md",
+      "dependsOn": ["@vyrnforge/ui-elements"],
+      "mustNotDependOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-data-grid",
+        "React",
+        "React DOM",
+        "Angular",
+        "Redux",
+        "TanStack",
+        "MUI",
+        "Radix",
+        "Tailwind"
+      ],
+      "status": "current",
+      "publicEntryPoints": ["@vyrnforge/ui-vue"],
+      "notes": "First-class Vue facade over @vyrnforge/ui-elements. Vue remains a peer dependency, canonical rendering and behavior stay shared, and the package participates in the synchronized non-grid beta release line.",
+      "releaseTrack": "non-grid-beta"
+    },
+    {
       "name": "@vyrnforge/ui-data-grid",
       "purpose": "Specialized enterprise data-management grid and grid contracts.",
       "owns": [
@@ -266,7 +307,9 @@
     "ui-data-grid may depend on ui-core and ui-components",
     "ui-core and ui-behaviors must not depend on React, Vue, Angular, or a DOM renderer",
     "framework renderers and adapters must not depend on ui-data-grid",
-    "ui-data-grid remains outside the non-grid beta release group"
+    "ui-data-grid remains outside the non-grid beta release group",
+    "ui-vue may depend on ui-elements only",
+    "ui-components, ui-elements, and ui-vue must not depend on ui-data-grid"
   ],
   "releaseGroups": {
     "nonGridBeta": [
@@ -274,7 +317,8 @@
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-components",
       "@vyrnforge/ui-elements",
-      "@vyrnforge/ui-angular"
+      "@vyrnforge/ui-angular",
+      "@vyrnforge/ui-vue"
     ],
     "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
   }

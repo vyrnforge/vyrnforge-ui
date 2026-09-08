@@ -55,7 +55,10 @@
       "node": "22.12.0",
       "browser": "chromium",
       "overrides": {
-        "dependencies": { "react": "18.3.1", "react-dom": "18.3.1" },
+        "dependencies": {
+          "react": "18.3.1",
+          "react-dom": "18.3.1"
+        },
         "devDependencies": {
           "@types/react": "18.3.31",
           "@types/react-dom": "18.3.7"
@@ -102,10 +105,25 @@
       "fixture": "vue",
       "node": "22.12.0",
       "browser": "chromium",
-      "overrides": { "dependencies": { "vue": "3.4.38" } }
+      "overrides": {
+        "dependencies": {
+          "vue": "3.4.38"
+        }
+      }
     },
     {
-      "id": "vue35-node24-chromium",
+      "id": "vue35-min-node22-chromium",
+      "fixture": "vue",
+      "node": "22.12.0",
+      "browser": "chromium",
+      "overrides": {
+        "dependencies": {
+          "vue": "3.5.0"
+        }
+      }
+    },
+    {
+      "id": "vue35-current-node24-chromium",
       "fixture": "vue",
       "node": "24.18.0",
       "browser": "chromium",
