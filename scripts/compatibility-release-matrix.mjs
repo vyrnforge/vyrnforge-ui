@@ -13,6 +13,7 @@ export const compatibilityDocumentationPath =
 export const compatibilityReportDirectory =
   "test-results/compatibility-release-matrix";
 export const compatibilityWorkflowPath = ".github/workflows/assurance.yml";
+export const vueSupportEvidencePath = "docs/metadata/vue-support-evidence.json";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -46,6 +47,7 @@ export function verifyCompatibilityMatrixContract({
     "scripts/run-compatibility-release-case.mjs",
     "scripts/verify-compatibility-release-matrix.test.mjs",
     compatibilityWorkflowPath,
+    vueSupportEvidencePath,
   ]) {
     if (!existsSync(path.join(root, requiredFile))) {
       failures.push(`BT-8005 required file is missing: ${requiredFile}`);
@@ -103,6 +105,39 @@ export function verifyCompatibilityMatrixContract({
     }
   }
 
+  const vuePeer = JSON.parse(read(root, "packages/ui-vue/package.json"))
+    .peerDependencies?.vue;
+  if (vuePeer !== ">=3.5 <4") {
+    failures.push("ui-vue peer policy must remain >=3.5 <4");
+  }
+  if (
+    JSON.stringify(matrix.supportPolicy?.vue) !==
+    JSON.stringify(["3.5.0", "3.5.40"])
+  ) {
+    failures.push(
+      "Vue compatibility policy must cover supported minimum 3.5.0 and current 3.5.40",
+    );
+  }
+  const vueCases = cases.filter((testCase) => testCase.fixture === "vue");
+  if (
+    JSON.stringify(vueCases.map((testCase) => testCase.id)) !==
+    JSON.stringify([
+      "vue35-min-node22-chromium",
+      "vue35-current-node24-chromium",
+    ])
+  ) {
+    failures.push("Vue compatibility cases must match the supported 3.5 policy");
+  }
+  if (
+    vueCases.some(
+      (testCase) =>
+        testCase.browser !== "chromium" ||
+        !["22.12.0", "24.18.0"].includes(testCase.node),
+    )
+  ) {
+    failures.push("Vue compatibility cases must use supported Node/Chromium lanes");
+  }
+
   const workflow = read(root, compatibilityWorkflowPath);
   for (const marker of [
     compatibilityMatrixPath,
@@ -125,10 +160,53 @@ export function verifyCompatibilityMatrixContract({
   }
 
   const runtime = read(root, "scripts/verify-consumer-foundations-runtime.mjs");
-  for (const marker of ["chromium, firefox, webkit", "VYRNFORGE_BROWSER"]) {
+  for (const marker of [
+    "chromium, firefox, webkit",
+    "VYRNFORGE_BROWSER",
+    "verifySharedAccessibilityScenario",
+    "keyboard-action-activation",
+    "keyboard-tabs-navigation",
+    "data-vue-model-programmatic",
+    "Vue model state did not propagate back to native value and checked properties",
+  ]) {
     if (!runtime.includes(marker)) {
-      failures.push(`consumer runtime is missing browser selector ${marker}`);
+      failures.push(`consumer runtime is missing Vue support evidence marker ${marker}`);
     }
+  }
+
+  const caseRunner = read(root, "scripts/run-compatibility-release-case.mjs");
+  for (const marker of [
+    'testCase.fixture === "vue"',
+    'runtimeArguments.push("--accessibility-smoke")',
+    "accessibilitySmoke",
+  ]) {
+    if (!caseRunner.includes(marker)) {
+      failures.push(`compatibility case runner is missing ${marker}`);
+    }
+  }
+
+  const evidence = JSON.parse(read(root, vueSupportEvidencePath));
+  if (
+    evidence.schemaVersion !== 1 ||
+    evidence.sourceOfTruth?.canonical !== true ||
+    evidence.sourceOfTruth?.task !== "MFD-1314"
+  ) {
+    failures.push("Vue support evidence must use canonical MFD-1314 schema version 1");
+  }
+  if (
+    evidence.package !== "@vyrnforge/ui-vue" ||
+    evidence.peerPolicy !== vuePeer
+  ) {
+    failures.push("Vue support evidence package/peer policy is stale");
+  }
+  if (JSON.stringify(evidence.compatibilityCases) !== JSON.stringify(vueCases.map(({ id }) => id))) {
+    failures.push("Vue support evidence compatibility cases are stale");
+  }
+  if (evidence.manualAssistiveTechnology?.claimedComplete !== false) {
+    failures.push("MFD-1314 must not claim unverified manual assistive-technology completion");
+  }
+  if (evidence.releaseIntegrationOwner !== "MFD-1315") {
+    failures.push("Vue support evidence must reserve release integration for MFD-1315");
   }
 
   return failures.sort();
