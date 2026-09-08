@@ -94,8 +94,8 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   const assurance = read(root, assuranceWorkflowPath);
   for (const marker of [
     "npm audit --omit=dev --audit-level=high",
-    "github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
-    "github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
+    "github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9",
+    "github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9",
     "ACTIONLINT_VERSION: 1.7.12",
     "shellcheck --version",
     "name: assurance-gate",
