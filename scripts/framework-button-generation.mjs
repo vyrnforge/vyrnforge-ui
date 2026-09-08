@@ -497,8 +497,6 @@ function vueSource(model) {
     (event) => event.canonical === "vf-action",
   );
   const defaultSlot = record.slots.find((slot) => slot.canonical === "default");
-  const prefixSlot = record.slots.find((slot) => slot.canonical === "prefix");
-  const suffixSlot = record.slots.find((slot) => slot.canonical === "suffix");
   assert(
     actionEvent?.mode === "emit",
     "vue: Button vf-action must generate an emit",
