@@ -16,6 +16,7 @@ Start here when consuming VyrnForge from an application.
 | Public API                                           | [API Reference](api/README.md)                                                                    |
 | Generated component/framework reference              | [Generated Component Reference](generated/component-reference.json)                               |
 | Framework selection and integration                  | [Multi-Framework Migration and Limitations](release/multi-framework-migration-and-limitations.md) |
+| Angular facade, Forms, refs, SSR, and migration      | [Angular Package](packages/ui-angular.md)                                                         |
 | Themes and CSS                                       | [Theming and Styling](architecture/03-theming-and-styling.md)                                     |
 | CSS tokens                                           | [CSS Token Reference](api/css-token-reference.md)                                                 |
 | Public CSS classes                                   | [CSS Class Reference](api/css-class-reference.md)                                                 |
@@ -28,6 +29,7 @@ Package-specific guidance:
 - [ui-behaviors](packages/ui-behaviors.md)
 - [ui-components](packages/ui-components.md)
 - [ui-elements](packages/ui-elements.md)
+- [ui-angular](packages/ui-angular.md)
 - [ui-data-grid](packages/ui-data-grid.md)
 
 ## Build VyrnForge

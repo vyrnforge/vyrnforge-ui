@@ -33,6 +33,9 @@ queryable repository facts and current evidence records.
   slot, form, build, and Chromium evidence.
 - `angular-forms-adapter.json` records the Angular Forms reference-adapter
   contract and runtime evidence.
+- `angular-support-evidence.json` ties the public Angular peer contract to the
+  shared compatibility matrix, packed browser/runtime evidence, accessibility
+  review, Forms evidence, and imperative/focus coverage.
 - `vue-consumer.json` records Vue compiler, typing, property, event, slot, form,
   build, and Chromium evidence.
 - `vue-model-adapter.json` records the thin Vue `v-model` reference-adapter
