@@ -20,6 +20,13 @@ const ELEMENT_PROPERTY_TYPE_EXCEPTIONS = new Set([
   "tabs:orientation",
 ]);
 
+// Specialized Vue facades may expose a small ergonomic prop that maps to a
+// native attribute rather than a canonical element property. Keep these
+// exceptions explicit until the shared contract models attribute aliases.
+const SPECIALIZED_PROP_EXTENSIONS = new Map([
+  ["tabs", [{ public: "ariaLabel", type: "string", required: false }]],
+]);
+
 function compareText(left, right) {
   return left < right ? -1 : left > right ? 1 : 0;
 }
@@ -32,12 +39,23 @@ function propertyName(name) {
   return /^[A-Za-z_$][\w$]*$/.test(name) ? name : JSON.stringify(name);
 }
 
+function eventListenerProperty(name) {
+  return `on${name
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("")}`;
+}
+
 function componentTypeName(component, suffix) {
   return `${component.exportName}${suffix}`;
 }
 
 function elementType(component) {
   return `VyrnForgeElementForTagName<${JSON.stringify(component.tag)}>`;
+}
+
+function canonicalEventDetailType(event) {
+  return `VyrnForgeCanonicalEventDetailMap[${JSON.stringify(event.canonical)}]`;
 }
 
 function renderMetadataType(type) {
@@ -82,21 +100,21 @@ function modelValueType(component) {
   return `${elementType(component)}[${JSON.stringify(nativeProperty.public)}]`;
 }
 
-function eventDetailType(event) {
-  if (event.detailFields.length === 0) return "unknown";
-  return `{ ${event.detailFields
-    .map(
-      (field) =>
-        `${propertyName(field.name)}${field.required ? "" : "?"}: ${renderMetadataType(field.type)};`,
-    )
-    .join(" ")} }`;
-}
-
 function serializeProps(component) {
   const lines = component.properties.map(
     (property) =>
       `  readonly ${propertyName(property.public)}${property.required ? "" : "?"}: ${propertyType(component, property)};`,
   );
+  for (const extension of SPECIALIZED_PROP_EXTENSIONS.get(component.id) ?? []) {
+    lines.push(
+      `  readonly ${propertyName(extension.public)}${extension.required ? "" : "?"}: ${renderMetadataType(extension.type)};`,
+    );
+  }
+  for (const event of component.events) {
+    lines.push(
+      `  readonly ${propertyName(eventListenerProperty(event.canonical))}?: (event: CustomEvent<${canonicalEventDetailType(event)}>) => unknown;`,
+    );
+  }
   return `export interface ${componentTypeName(component, "Props")} {\n${lines.join("\n")}\n}`;
 }
 
@@ -108,8 +126,14 @@ function serializeEmits(component) {
     );
   }
   for (const event of component.events) {
+    if (
+      component.vModel?.enabled &&
+      event.public === component.vModel.publicEvent
+    ) {
+      continue;
+    }
     signatures.push(
-      `  (event: ${JSON.stringify(event.public)}, payload: ${eventDetailType(event)}): void;`,
+      `  (event: ${JSON.stringify(event.public)}, payload: ${canonicalEventDetailType(event)}): void;`,
     );
   }
   if (signatures.length === 0) signatures.push("  (event: never): void;");
@@ -181,17 +205,21 @@ export function serializeVueTypedCatalog(components) {
 import type {
   AllowedComponentProps,
   ComponentCustomProps,
+  HTMLAttributes,
   VNode,
   VNodeProps,
 } from "vue";
-import type { VyrnForgeElementForTagName } from "@vyrnforge/ui-elements";
+import type {
+  VyrnForgeCanonicalEventDetailMap,
+  VyrnForgeElementForTagName,
+} from "@vyrnforge/ui-elements";
 import {
 ${runtimeImports}
 } from "./catalog.generated";
 
 export type VyrnForgeVueComponentType<Props, Emits, Slots, Ref> = {
   new (): {
-    $props: Props & VNodeProps & AllowedComponentProps & ComponentCustomProps;
+    $props: Props & HTMLAttributes & VNodeProps & AllowedComponentProps & ComponentCustomProps;
     $emit: Emits;
     $slots: Slots;
   } & Ref;

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from "vue";
 
-import VyrnForgeCheckboxModel from "./adapters/VyrnForgeCheckboxModel.vue";
-import VfButton from "./generated/VfButton.generated";
-import VfDialog, {
+import {
+  VfButton as VyrnForgeButton,
+  VfCheckbox as VyrnForgeCheckbox,
+  VfDialog as VyrnForgeDialog,
+  VfTabs as VyrnForgeTabs,
+  VfTextInput as VyrnForgeTextInput,
   type GeneratedDialogDismissDetail,
-} from "./generated/VfDialog.generated";
-import GeneratedVfTabs from "./generated/VfTabs.generated";
-import GeneratedVfTextInput from "./generated/VfTextInput.generated";
+} from "@vyrnforge/ui-vue";
 import type {
   VyrnForgeActionDetail,
   VyrnForgeElementForTagName,
@@ -148,7 +149,7 @@ onMounted(async () => {
       description="Vue 3 consumes the native VyrnForge package directly."
     >
       <span slot="status" data-vue-slot="status">Vue 3.5</span>
-      <VfButton
+      <VyrnForgeButton
         id="vue-save"
         slot="actions"
         action="vue-save"
@@ -157,10 +158,10 @@ onMounted(async () => {
         @action="handleGeneratedButtonAction"
       >
         Save from Vue
-      </VfButton>
+      </VyrnForgeButton>
     </vf-page-header>
 
-    <GeneratedVfTabs
+    <VyrnForgeTabs
       v-model="activeTab"
       ariaLabel="Vue consumer sections"
       activation-mode="automatic"
@@ -184,7 +185,7 @@ onMounted(async () => {
     <section class="vf-consumer-vue-section" aria-labelledby="model-title">
       <h2 id="model-title">Generated Vue v-model facade</h2>
       <label for="vue-model-owner">Model owner</label>
-      <GeneratedVfTextInput
+      <VyrnForgeTextInput
         id="vue-model-owner"
         v-model="modelOwner"
         name="modelOwner"
@@ -192,7 +193,7 @@ onMounted(async () => {
       />
       <output data-vue-model-value>{{ modelOwner }}</output>
 
-      <VyrnForgeCheckboxModel
+      <VyrnForgeCheckbox
         id="vue-model-notifications"
         v-model="modelNotifications"
         name="modelNotifications"
@@ -224,7 +225,7 @@ onMounted(async () => {
       </form>
     </section>
 
-    <VfDialog
+    <VyrnForgeDialog
       v-model:open="dialogOpen"
       title="Vue generated dialog"
       description="Generated Vue Dialog focus lifecycle evidence"
@@ -240,7 +241,7 @@ onMounted(async () => {
           <button type="button" data-dialog-last>Last dialog action</button>
         </div>
       </template>
-    </VfDialog>
+    </VyrnForgeDialog>
 
     <output aria-live="polite" data-consumer-status>{{ status }}</output>
   </main>
