@@ -1,0 +1,35 @@
+name: MFD-1515 Format Verifiers
+
+on:
+  push:
+    branches:
+      - mfd-1515-cleanup-stale-framework-claims
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: mfd-1515-cleanup-stale-framework-claims
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - run: npm ci
+      - name: Format verifier files
+        run: npx prettier --write scripts/verify-angular-consumer.mjs scripts/verify-vue-consumer.mjs scripts/verify-vue-model-adapter.mjs
+      - name: Commit formatting
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/verify-angular-consumer.mjs scripts/verify-vue-consumer.mjs scripts/verify-vue-model-adapter.mjs
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "style: format framework consumer verifiers"
+          git push origin HEAD:mfd-1515-cleanup-stale-framework-claims
