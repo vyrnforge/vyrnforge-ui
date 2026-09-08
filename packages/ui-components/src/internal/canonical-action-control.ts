@@ -2,14 +2,14 @@ import { type RefObject, useEffect } from "react";
 
 /**
  * Preserves consumer-supplied React className tokens on a canonical Light-DOM
- * native action control. Canonical action elements own their managed vf-* class
- * set and may rewrite the control class attribute after property updates.
+ * native control. Canonical elements own their managed vf-* class set and may
+ * rewrite the control class attribute after property updates.
  *
  * This helper owns only the React className translation. It does not recreate
- * canonical action state, accessibility, or event behavior.
+ * canonical state, accessibility, or event behavior.
  */
-export function useCanonicalActionControlClassName(
-  controlRef: RefObject<HTMLButtonElement | null>,
+export function useCanonicalControlClassName<TElement extends HTMLElement>(
+  controlRef: RefObject<TElement | null>,
   className: string | undefined,
 ): void {
   useEffect(() => {
@@ -41,3 +41,5 @@ export function useCanonicalActionControlClassName(
     return () => observer.disconnect();
   }, [className, controlRef]);
 }
+
+export const useCanonicalActionControlClassName = useCanonicalControlClassName;

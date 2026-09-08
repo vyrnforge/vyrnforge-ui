@@ -1,4 +1,5 @@
-import { forwardRef, useMemo } from "react";
+import { VyrnForgeElement } from "@vyrnforge/ui-elements";
+import { createElement, forwardRef, useMemo } from "react";
 import { render, screen } from "../../../../tests/dom";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -97,5 +98,54 @@ describe("MFD-1403 React canonical element bridge", () => {
       { value: "next" },
       expect.objectContaining({ type: "vf-change" }),
     );
+  });
+
+  it("seeds VyrnForge properties before custom-element upgrade captures state", () => {
+    const tagName = "vf-react-bridge-preupgrade-test";
+
+    class PreUpgradeElement extends VyrnForgeElement {
+      static override readonly properties = Object.freeze({
+        value: { reflect: true, type: "string" as const },
+      });
+
+      connectedValue = "";
+
+      get value(): string {
+        return this.getPropertyValue("value", "");
+      }
+
+      set value(value: string) {
+        this.setPropertyValue("value", value);
+      }
+
+      protected override connected(): void {
+        this.connectedValue = this.value;
+      }
+    }
+
+    const register = vi.fn(() => {
+      customElements.define(tagName, PreUpgradeElement);
+    });
+
+    function Fixture() {
+      const properties = useMemo(() => ({ value: "seeded" }), []);
+      const elementRef = useCanonicalElementBridge<PreUpgradeElement>(null, {
+        tagName,
+        register,
+        properties,
+      });
+
+      return createElement(tagName, {
+        "data-testid": "preupgrade-host",
+        ref: elementRef,
+      });
+    }
+
+    render(<Fixture />);
+    const host = screen.getByTestId("preupgrade-host") as PreUpgradeElement;
+
+    expect(register).toHaveBeenCalledTimes(1);
+    expect(host.value).toBe("seeded");
+    expect(host.connectedValue).toBe("seeded");
   });
 });

@@ -1,4 +1,5 @@
 import { appendFileSync } from "node:fs";
+import { verifyCurrentGitHubPullRequestLaneDrift } from "./verify-lane-drift.mjs";
 
 function parsePlan() {
   const raw = process.env.PLAN_JSON;
@@ -53,14 +54,12 @@ const reasons = Array.isArray(plan.reasons) ? plan.reasons : [];
 const selected = responsibilities
   .filter((responsibility) => responsibility.selected)
   .map(
-    (responsibility) =>
-      `\`${responsibility.id}\` â€” ${responsibility.command}`,
+    (responsibility) => `\`${responsibility.id}\` — ${responsibility.command}`,
   );
 const skipped = responsibilities
   .filter((responsibility) => !responsibility.selected)
   .map(
-    (responsibility) =>
-      `\`${responsibility.id}\` â€” intentionally not required`,
+    (responsibility) => `\`${responsibility.id}\` — intentionally not required`,
   );
 
 if ((process.env.CI_SUMMARY_MODE ?? "plan") === "plan") {
@@ -117,6 +116,22 @@ const failures = checks.flatMap((check) => {
   return [];
 });
 
+let laneDrift = {
+  mode: "not-applicable",
+  current: true,
+  reason: "non-pr-event",
+};
+try {
+  laneDrift = verifyCurrentGitHubPullRequestLaneDrift();
+} catch (error) {
+  failures.push(`lane drift: ${error.message}`);
+  laneDrift = {
+    mode: "blocked",
+    current: false,
+    reason: error.message,
+  };
+}
+
 writeSummary(`## VyrnForge CI result
 
 ### What changed
@@ -128,11 +143,16 @@ ${list(selected)}
 ### Skipped responsibilities
 ${list(skipped)}
 
+### Lane freshness
+- mode: \`${laneDrift.mode}\`
+- current with \`main\`: \`${laneDrift.current}\`
+- reason: \`${laneDrift.reason}\`
+
 ### Results
 ${list(
   checks.map(
     (check) =>
-      `\`${check.id}\` â€” ${check.required ? "required" : "not required"} â€” \`${check.result ?? "unknown"}\``,
+      `\`${check.id}\` — ${check.required ? "required" : "not required"} — \`${check.result ?? "unknown"}\``,
   ),
 )}
 

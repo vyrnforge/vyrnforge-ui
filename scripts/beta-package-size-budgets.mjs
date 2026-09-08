@@ -2,6 +2,8 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { getReleaseGroup, readReleaseGroups } from "./release-groups.mjs";
+
 export const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -206,16 +208,17 @@ export function verifySizeBudgetContract({ root = repositoryRoot } = {}) {
   ) {
     failures.push("BT-8004 must unlock BT-8012 after merge");
   }
-  const expectedPackages = [
-    "@vyrnforge/ui-core",
-    "@vyrnforge/ui-behaviors",
-    "@vyrnforge/ui-components",
-    "@vyrnforge/ui-elements",
-  ];
+
+  const releaseManifest = readReleaseGroups({ root });
+  const betaReleaseGroup = getReleaseGroup("non-grid-beta", {
+    root,
+    manifest: releaseManifest,
+  });
+  const expectedPackages = betaReleaseGroup.packages.map(({ name }) => name);
   const actualPackages = (manifest.packages ?? []).map(({ name }) => name);
   if (JSON.stringify(actualPackages) !== JSON.stringify(expectedPackages)) {
     failures.push(
-      "BT-8004 must budget exactly the four non-grid beta packages",
+      "BT-8004 must budget every package in the canonical non-grid-beta release group, in release order",
     );
   }
   if (actualPackages.some((name) => name.includes("ui-data-grid"))) {

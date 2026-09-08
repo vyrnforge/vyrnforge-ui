@@ -6,15 +6,16 @@ foundation.
 ## Install
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta
+npm install @vyrnforge/ui-elements@beta
 ```
+
+Shared VyrnForge foundations are package dependencies and are installed
+transitively. Native HTML applications do not need to install or coordinate the
+internal foundation graph separately.
 
 ## Register and use
 
 ```ts
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-elements/styles/index.css";
-
 import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 
 registerVyrnForgeElements();
@@ -24,7 +25,16 @@ registerVyrnForgeElements();
 <vf-button variant="primary">Save changes</vf-button>
 ```
 
-The package root is side-effect free. Applications may instead use:
+The public package entrypoint loads the Native HTML surface styling. Hosts that
+intentionally manage stylesheet loading can import the public surface CSS
+explicitly:
+
+```ts
+import "@vyrnforge/ui-elements/styles/index.css";
+```
+
+The package root does not register Custom Elements automatically. Applications
+may instead opt into the explicit registration side-effect entrypoint:
 
 ```ts
 import "@vyrnforge/ui-elements/register";
@@ -34,8 +44,10 @@ The native renderer uses Light DOM, canonical `vf-*` events, shared VyrnForge
 tokens, and the documented native form-association model. It has no React,
 Angular, or Vue runtime dependency.
 
-Angular and Vue are verified consumers of this native renderer. Their
-forms/model integrations remain thin consumer adapters.
+Angular and Vue are first-class facades over this canonical renderer. Normal
+Angular and Vue applications should consume `@vyrnforge/ui-angular` or
+`@vyrnforge/ui-vue` rather than assembling the native implementation packages
+themselves.
 
 Canonical documentation:
 

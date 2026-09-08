@@ -306,12 +306,14 @@ export function verifyBetaPackageContract({ root = repositoryRoot } = {}) {
   }
 
   if (
-    actual.releaseGroup.packageCount !== 4 ||
+    actual.releaseGroup.packageCount !== actual.packages.length ||
     actual.packages.some((packageRecord) =>
       packageRecord.name.includes("ui-data-grid"),
     )
   ) {
-    failures.push("BT-8003 must verify exactly four non-grid beta packages");
+    failures.push(
+      "BT-8003 must verify every package classified in the non-grid beta release group and exclude ui-data-grid",
+    );
   }
 
   for (const packageRecord of actual.packages) {

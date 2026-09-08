@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "task": "MFD-1413",
+  "deliverable": "React batch 5",
+  "paritySuite": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
+  "canonicalCutovers": [],
+  "surfaces": [
+    {
+      "name": "Dialog",
+      "canonicalTag": "vf-dialog",
+      "status": "blocked-by-parity",
+      "reason": "React preserves ReactNode title/description/footer composition, portalContainer, initialFocusRef, autofocus interception callbacks, trapped focus, scroll locking, and restoration. The canonical dialog rebuilds its owned Light DOM and does not expose the complete React portal/focus/composition contract.",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Dialog/Dialog.tsx",
+        "packages/ui-components/src/components/Dialog/Dialog.types.ts",
+        "packages/ui-elements/src/components/overlays.ts"
+      ],
+      "exitCriteria": "Add a shared modal-overlay adoption contract for rich composition, portal targeting, initial focus, autofocus interception, focus containment/restoration, and dismissal without narrowing React props."
+    },
+    {
+      "name": "Drawer",
+      "canonicalTag": "vf-drawer",
+      "status": "blocked-by-parity",
+      "reason": "Drawer shares the React modal overlay runtime and rich composition/portal/focus contract while the canonical renderer owns and reconstructs its modal Light DOM.",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Drawer/Drawer.tsx",
+        "packages/ui-components/src/components/Drawer/Drawer.types.ts",
+        "packages/ui-elements/src/components/overlays.ts"
+      ],
+      "exitCriteria": "Use the same shared modal-overlay adoption contract required by Dialog while preserving Drawer placement and size behavior."
+    },
+    {
+      "name": "Popover",
+      "canonicalTag": "vf-popover",
+      "status": "blocked-by-parity",
+      "reason": "React clones an arbitrary trigger, preserves its handlers, owns controlled/default open state, portal targeting, anchored placement/offset/trigger-width matching, dismissable layering, and optional modal focus behavior. Canonicalization cannot currently adopt that React trigger/content ownership without changing behavior.",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Popover/Popover.tsx",
+        "packages/ui-components/src/components/Popover/Popover.types.ts",
+        "packages/ui-elements/src/components/overlays.ts"
+      ],
+      "exitCriteria": "Add framework-neutral trigger adoption plus anchored overlay placement, portal, dismissal, and focus contracts that preserve the existing React composition API."
+    },
+    {
+      "name": "Tooltip",
+      "canonicalTag": "vf-tooltip",
+      "status": "blocked-by-parity",
+      "reason": "React owns arbitrary trigger handler composition, delayed pointer/focus activation, aria-describedby merging, Escape dismissal, portal targeting, and anchored positioning. The canonical tooltip owns its trigger/content model and cannot preserve the full React trigger event contract yet.",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Tooltip/Tooltip.tsx",
+        "packages/ui-components/src/components/Tooltip/Tooltip.types.ts",
+        "packages/ui-elements/src/components/overlays.ts"
+      ],
+      "exitCriteria": "Add canonical trigger adoption and timing/ARIA/portal/anchored-position contracts with equivalent event-handler composition."
+    },
+    {
+      "name": "Toast",
+      "canonicalTag": "vf-toast",
+      "status": "blocked-by-parity",
+      "reason": "React Toast accepts ReactNode title, description, and action content plus hover/focus pause-resume callbacks and renders VyrnForge Icon/IconButton composition. The canonical toast rebuilds string-oriented title/description/actionLabel DOM.",
+      "sourcePaths": [
+        "packages/ui-components/src/components/Toast/Toast.tsx",
+        "packages/ui-components/src/components/Toast/Toast.types.ts",
+        "packages/ui-elements/src/components/feedback.ts"
+      ],
+      "exitCriteria": "Add rich toast content/action adoption and pause-resume lifecycle contracts before replacing the React renderer. ToastProvider, ToastAction, and useToast remain covered by their existing S14 framework exceptions."
+    },
+    {
+      "name": "ConfirmDialog",
+      "canonicalTag": "vf-confirm-dialog",
+      "status": "blocked-by-parity",
+      "reason": "React ConfirmDialog composes the React Dialog plus canonical-backed Button controls and preserves ReactNode title/description, loading cancellation rules, and controller callbacks. Migrating it before the modal overlay contract would transitively narrow Dialog behavior.",
+      "sourcePaths": [
+        "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
+        "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.types.ts",
+        "packages/ui-elements/src/components/feedback.ts"
+      ],
+      "exitCriteria": "Migrate after the shared Dialog/modal overlay adoption contract can preserve React rich composition, focus, portal, dismissal, loading, and action callback semantics."
+    }
+  ]
+}

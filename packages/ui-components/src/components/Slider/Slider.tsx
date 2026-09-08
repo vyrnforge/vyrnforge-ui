@@ -1,7 +1,15 @@
-import { useId, type ChangeEvent, type CSSProperties } from "react";
+import {
+  type VyrnForgeElementForTagName,
+  vyrnForgeElementRegistrations,
+} from "@vyrnforge/ui-elements";
+import { useId, useMemo, useRef, type CSSProperties } from "react";
 import { useNumericBehavior } from "../../internal/behaviors";
+import { useCanonicalElementBridge } from "../../internal/react-native-bridge";
 import { joinClassNames } from "../../utils/classNames";
 import type { SliderProps } from "./Slider.types";
+
+type CanonicalSliderElement = VyrnForgeElementForTagName<"vf-slider">;
+const registerCanonicalSlider = vyrnForgeElementRegistrations["vf-slider"];
 
 export function Slider({
   ariaLabel,
@@ -34,64 +42,107 @@ export function Slider({
     value,
   });
   const currentValue = behavior.value;
+  const initialValueRef = useRef(value ?? defaultValue ?? min);
+  const canonicalValue = value ?? initialValueRef.current;
   const descriptionId = description ? `${controlId}-description` : undefined;
   const describedBy =
     [props["aria-describedby"], descriptionId].filter(Boolean).join(" ") ||
     undefined;
   const percentage =
     rangeMax === min ? 0 : ((currentValue - min) / (rangeMax - min)) * 100;
+  const canonicalLabel = ariaLabel ?? (typeof label === "string" ? label : "");
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    behavior.setValue(Number(event.currentTarget.value), "pointer");
-  };
+  const canonicalProperties = useMemo(
+    () => ({
+      disabled,
+      label: canonicalLabel,
+      max: rangeMax,
+      min,
+      required,
+      step,
+      ...(value === undefined ? {} : { value }),
+    }),
+    [canonicalLabel, disabled, min, rangeMax, required, step, value],
+  );
+  const canonicalEvents = useMemo(
+    () => ({
+      "vf-value-change": (detail: unknown, event: CustomEvent<unknown>) => {
+        const nextValue = Number((detail as { value?: unknown } | null)?.value);
+        if (!Number.isFinite(nextValue)) return;
+        behavior.setValue(nextValue, "pointer");
+        if (value !== undefined) {
+          (event.currentTarget as CanonicalSliderElement).value = value;
+        }
+      },
+    }),
+    [behavior, value],
+  );
+  const elementRef = useCanonicalElementBridge<CanonicalSliderElement>(null, {
+    tagName: "vf-slider",
+    register: registerCanonicalSlider,
+    properties: canonicalProperties,
+    events: canonicalEvents,
+  });
 
   return (
-    <div
-      className={joinClassNames(
-        "vf-slider",
-        disabled && "vf-slider--disabled",
-        className,
-      )}
-      style={style}
+    <vf-slider
+      disabled={disabled}
+      label={canonicalLabel}
+      max={rangeMax}
+      min={min}
+      ref={elementRef}
+      required={required}
+      step={step}
+      style={{ display: "contents" }}
+      value={canonicalValue}
     >
-      {(label || showValue) && (
-        <div className="vf-slider__header">
-          {label && <span className="vf-slider__label">{label}</span>}
-          {showValue && (
-            <output className="vf-slider__value" htmlFor={controlId}>
-              {formatValue?.(currentValue) ?? currentValue}
-            </output>
-          )}
-        </div>
-      )}
-      <span
-        className="vf-slider__track"
-        style={{ "--vf-slider-progress": `${percentage}%` } as CSSProperties}
+      <div
+        className={joinClassNames(
+          "vf-slider",
+          disabled && "vf-slider--disabled",
+          className,
+        )}
+        style={style}
       >
-        <input
-          aria-describedby={describedBy}
-          aria-label={
-            ariaLabel ?? (typeof label === "string" ? label : undefined)
-          }
-          className="vf-slider__control"
-          disabled={disabled}
-          id={controlId}
-          max={rangeMax}
-          min={min}
-          name={name}
-          onChange={handleChange}
-          required={required}
-          step={step}
-          type="range"
-          value={currentValue}
-          {...props}
-        />
-      </span>
-      {description && (
-        <span className="vf-slider__description" id={descriptionId}>
-          {description}
+        {(label || showValue) && (
+          <div className="vf-slider__header">
+            {label && <span className="vf-slider__label">{label}</span>}
+            {showValue && (
+              <output className="vf-slider__value" htmlFor={controlId}>
+                {formatValue?.(currentValue) ?? currentValue}
+              </output>
+            )}
+          </div>
+        )}
+        <span
+          className="vf-slider__track"
+          style={{ "--vf-slider-progress": `${percentage}%` } as CSSProperties}
+        >
+          <input
+            {...props}
+            aria-describedby={describedBy}
+            aria-label={
+              ariaLabel ?? (typeof label === "string" ? label : undefined)
+            }
+            className="vf-slider__control"
+            data-vf-slider-control=""
+            disabled={disabled}
+            id={controlId}
+            max={rangeMax}
+            min={min}
+            name={name}
+            required={required}
+            step={step}
+            type="range"
+            value={currentValue}
+          />
         </span>
-      )}
-    </div>
+        {description && (
+          <span className="vf-slider__description" id={descriptionId}>
+            {description}
+          </span>
+        )}
+      </div>
+    </vf-slider>
   );
 }
