@@ -148,7 +148,14 @@ function serializeSlots(component) {
 }
 
 function serializeRef(component) {
-  return `export interface ${componentTypeName(component, "Ref")} {\n  readonly element: ${elementType(component)} | null;\n}`;
+  const lines = [
+    `  readonly element: ${elementType(component)} | null;`,
+    ...component.methods.map(
+      (method) =>
+        `  readonly ${propertyName(method.name)}: ${elementType(component)}[${JSON.stringify(method.name)}];`,
+    ),
+  ];
+  return `export interface ${componentTypeName(component, "Ref")} {\n${lines.join("\n")}\n}`;
 }
 
 function serializeComponent(component) {
@@ -182,6 +189,7 @@ export function createVueTypeModel(generationModel) {
         nativeProperties: native.properties,
         events: record.events,
         slots: record.slots,
+        methods: record.methods,
         vModel: record.adapter.vModel,
       };
     })

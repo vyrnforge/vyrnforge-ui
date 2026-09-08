@@ -176,6 +176,11 @@ export interface VfAutocompleteSlots {
 
 export interface VfAutocompleteRef {
   readonly element: VyrnForgeElementForTagName<"vf-autocomplete"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-autocomplete">["focus"];
+  readonly clear: VyrnForgeElementForTagName<"vf-autocomplete">["clear"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-autocomplete">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-autocomplete">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-autocomplete">["setCustomValidity"];
 }
 
 export const VfAutocomplete = VfAutocompleteRuntime as unknown as VyrnForgeVueComponentType<VfAutocompleteProps, VfAutocompleteEmits, VfAutocompleteSlots, VfAutocompleteRef>;
@@ -246,6 +251,8 @@ export interface VfButtonSlots {
 
 export interface VfButtonRef {
   readonly element: VyrnForgeElementForTagName<"vf-button"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-button">["focus"];
+  readonly click: VyrnForgeElementForTagName<"vf-button">["click"];
 }
 
 export const VfButton = VfButtonRuntime as unknown as VyrnForgeVueComponentType<VfButtonProps, VfButtonEmits, VfButtonSlots, VfButtonRef>;
@@ -338,6 +345,10 @@ export interface VfCheckboxSlots {
 
 export interface VfCheckboxRef {
   readonly element: VyrnForgeElementForTagName<"vf-checkbox"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-checkbox">["focus"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-checkbox">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-checkbox">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-checkbox">["setCustomValidity"];
 }
 
 export const VfCheckbox = VfCheckboxRuntime as unknown as VyrnForgeVueComponentType<VfCheckboxProps, VfCheckboxEmits, VfCheckboxSlots, VfCheckboxRef>;
@@ -387,6 +398,8 @@ export interface VfConfirmDialogSlots {
 
 export interface VfConfirmDialogRef {
   readonly element: VyrnForgeElementForTagName<"vf-confirm-dialog"> | null;
+  readonly cancel: VyrnForgeElementForTagName<"vf-confirm-dialog">["cancel"];
+  readonly confirm: VyrnForgeElementForTagName<"vf-confirm-dialog">["confirm"];
 }
 
 export const VfConfirmDialog = VfConfirmDialogRuntime as unknown as VyrnForgeVueComponentType<VfConfirmDialogProps, VfConfirmDialogEmits, VfConfirmDialogSlots, VfConfirmDialogRef>;
@@ -420,6 +433,11 @@ export interface VfDateInputSlots {
 
 export interface VfDateInputRef {
   readonly element: VyrnForgeElementForTagName<"vf-date-input"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-date-input">["focus"];
+  readonly select: VyrnForgeElementForTagName<"vf-date-input">["select"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-date-input">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-date-input">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-date-input">["setCustomValidity"];
 }
 
 export const VfDateInput = VfDateInputRuntime as unknown as VyrnForgeVueComponentType<VfDateInputProps, VfDateInputEmits, VfDateInputSlots, VfDateInputRef>;
@@ -453,6 +471,11 @@ export interface VfDateTimeInputSlots {
 
 export interface VfDateTimeInputRef {
   readonly element: VyrnForgeElementForTagName<"vf-datetime-input"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-datetime-input">["focus"];
+  readonly select: VyrnForgeElementForTagName<"vf-datetime-input">["select"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-datetime-input">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-datetime-input">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-datetime-input">["setCustomValidity"];
 }
 
 export const VfDateTimeInput = VfDateTimeInputRuntime as unknown as VyrnForgeVueComponentType<VfDateTimeInputProps, VfDateTimeInputEmits, VfDateTimeInputSlots, VfDateTimeInputRef>;
@@ -486,6 +509,9 @@ export interface VfDialogSlots {
 
 export interface VfDialogRef {
   readonly element: VyrnForgeElementForTagName<"vf-dialog"> | null;
+  readonly show: VyrnForgeElementForTagName<"vf-dialog">["show"];
+  readonly close: VyrnForgeElementForTagName<"vf-dialog">["close"];
+  readonly focus: VyrnForgeElementForTagName<"vf-dialog">["focus"];
 }
 
 export const VfDialog = VfDialogRuntime as unknown as VyrnForgeVueComponentType<VfDialogProps, VfDialogEmits, VfDialogSlots, VfDialogRef>;
@@ -520,6 +546,9 @@ export interface VfDrawerSlots {
 
 export interface VfDrawerRef {
   readonly element: VyrnForgeElementForTagName<"vf-drawer"> | null;
+  readonly show: VyrnForgeElementForTagName<"vf-drawer">["show"];
+  readonly close: VyrnForgeElementForTagName<"vf-drawer">["close"];
+  readonly focus: VyrnForgeElementForTagName<"vf-drawer">["focus"];
 }
 
 export const VfDrawer = VfDrawerRuntime as unknown as VyrnForgeVueComponentType<VfDrawerProps, VfDrawerEmits, VfDrawerSlots, VfDrawerRef>;
@@ -670,6 +699,7 @@ export interface VfIconButtonSlots {
 
 export interface VfIconButtonRef {
   readonly element: VyrnForgeElementForTagName<"vf-icon-button"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-icon-button">["focus"];
 }
 
 export const VfIconButton = VfIconButtonRuntime as unknown as VyrnForgeVueComponentType<VfIconButtonProps, VfIconButtonEmits, VfIconButtonSlots, VfIconButtonRef>;
@@ -806,6 +836,10 @@ export interface VfMultiSelectSlots {
 
 export interface VfMultiSelectRef {
   readonly element: VyrnForgeElementForTagName<"vf-multi-select"> | null;
+  readonly clear: VyrnForgeElementForTagName<"vf-multi-select">["clear"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-multi-select">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-multi-select">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-multi-select">["setCustomValidity"];
 }
 
 export const VfMultiSelect = VfMultiSelectRuntime as unknown as VyrnForgeVueComponentType<VfMultiSelectProps, VfMultiSelectEmits, VfMultiSelectSlots, VfMultiSelectRef>;
@@ -843,6 +877,11 @@ export interface VfNumberInputSlots {
 
 export interface VfNumberInputRef {
   readonly element: VyrnForgeElementForTagName<"vf-number-input"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-number-input">["focus"];
+  readonly select: VyrnForgeElementForTagName<"vf-number-input">["select"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-number-input">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-number-input">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-number-input">["setCustomValidity"];
 }
 
 export const VfNumberInput = VfNumberInputRuntime as unknown as VyrnForgeVueComponentType<VfNumberInputProps, VfNumberInputEmits, VfNumberInputSlots, VfNumberInputRef>;
@@ -953,6 +992,9 @@ export interface VfPopoverSlots {
 
 export interface VfPopoverRef {
   readonly element: VyrnForgeElementForTagName<"vf-popover"> | null;
+  readonly show: VyrnForgeElementForTagName<"vf-popover">["show"];
+  readonly close: VyrnForgeElementForTagName<"vf-popover">["close"];
+  readonly toggle: VyrnForgeElementForTagName<"vf-popover">["toggle"];
 }
 
 export const VfPopover = VfPopoverRuntime as unknown as VyrnForgeVueComponentType<VfPopoverProps, VfPopoverEmits, VfPopoverSlots, VfPopoverRef>;
@@ -987,6 +1029,10 @@ export interface VfRadioSlots {
 
 export interface VfRadioRef {
   readonly element: VyrnForgeElementForTagName<"vf-radio"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-radio">["focus"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-radio">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-radio">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-radio">["setCustomValidity"];
 }
 
 export const VfRadio = VfRadioRuntime as unknown as VyrnForgeVueComponentType<VfRadioProps, VfRadioEmits, VfRadioSlots, VfRadioRef>;
@@ -1041,6 +1087,9 @@ export interface VfRatingSlots {
 
 export interface VfRatingRef {
   readonly element: VyrnForgeElementForTagName<"vf-rating"> | null;
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-rating">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-rating">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-rating">["setCustomValidity"];
 }
 
 export const VfRating = VfRatingRuntime as unknown as VyrnForgeVueComponentType<VfRatingProps, VfRatingEmits, VfRatingSlots, VfRatingRef>;
@@ -1074,6 +1123,11 @@ export interface VfSearchInputSlots {
 
 export interface VfSearchInputRef {
   readonly element: VyrnForgeElementForTagName<"vf-search-input"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-search-input">["focus"];
+  readonly select: VyrnForgeElementForTagName<"vf-search-input">["select"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-search-input">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-search-input">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-search-input">["setCustomValidity"];
 }
 
 export const VfSearchInput = VfSearchInputRuntime as unknown as VyrnForgeVueComponentType<VfSearchInputProps, VfSearchInputEmits, VfSearchInputSlots, VfSearchInputRef>;
@@ -1146,6 +1200,10 @@ export interface VfSelectSlots {
 
 export interface VfSelectRef {
   readonly element: VyrnForgeElementForTagName<"vf-select"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-select">["focus"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-select">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-select">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-select">["setCustomValidity"];
 }
 
 export const VfSelect = VfSelectRuntime as unknown as VyrnForgeVueComponentType<VfSelectProps, VfSelectEmits, VfSelectSlots, VfSelectRef>;
@@ -1222,6 +1280,10 @@ export interface VfSliderSlots {
 
 export interface VfSliderRef {
   readonly element: VyrnForgeElementForTagName<"vf-slider"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-slider">["focus"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-slider">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-slider">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-slider">["setCustomValidity"];
 }
 
 export const VfSlider = VfSliderRuntime as unknown as VyrnForgeVueComponentType<VfSliderProps, VfSliderEmits, VfSliderSlots, VfSliderRef>;
@@ -1276,6 +1338,10 @@ export interface VfSwitchSlots {
 
 export interface VfSwitchRef {
   readonly element: VyrnForgeElementForTagName<"vf-switch"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-switch">["focus"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-switch">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-switch">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-switch">["setCustomValidity"];
 }
 
 export const VfSwitch = VfSwitchRuntime as unknown as VyrnForgeVueComponentType<VfSwitchProps, VfSwitchEmits, VfSwitchSlots, VfSwitchRef>;
@@ -1355,6 +1421,11 @@ export interface VfTextInputSlots {
 
 export interface VfTextInputRef {
   readonly element: VyrnForgeElementForTagName<"vf-text-input"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-text-input">["focus"];
+  readonly select: VyrnForgeElementForTagName<"vf-text-input">["select"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-text-input">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-text-input">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-text-input">["setCustomValidity"];
 }
 
 export const VfTextInput = VfTextInputRuntime as unknown as VyrnForgeVueComponentType<VfTextInputProps, VfTextInputEmits, VfTextInputSlots, VfTextInputRef>;
@@ -1388,6 +1459,11 @@ export interface VfTextareaSlots {
 
 export interface VfTextareaRef {
   readonly element: VyrnForgeElementForTagName<"vf-textarea"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-textarea">["focus"];
+  readonly select: VyrnForgeElementForTagName<"vf-textarea">["select"];
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-textarea">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-textarea">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-textarea">["setCustomValidity"];
 }
 
 export const VfTextarea = VfTextareaRuntime as unknown as VyrnForgeVueComponentType<VfTextareaProps, VfTextareaEmits, VfTextareaSlots, VfTextareaRef>;
@@ -1443,6 +1519,7 @@ export interface VfToggleButtonSlots {
 
 export interface VfToggleButtonRef {
   readonly element: VyrnForgeElementForTagName<"vf-toggle-button"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-toggle-button">["focus"];
 }
 
 export const VfToggleButton = VfToggleButtonRuntime as unknown as VyrnForgeVueComponentType<VfToggleButtonProps, VfToggleButtonEmits, VfToggleButtonSlots, VfToggleButtonRef>;
@@ -1496,6 +1573,7 @@ export interface VfToolbarButtonSlots {
 
 export interface VfToolbarButtonRef {
   readonly element: VyrnForgeElementForTagName<"vf-toolbar-button"> | null;
+  readonly focus: VyrnForgeElementForTagName<"vf-toolbar-button">["focus"];
 }
 
 export const VfToolbarButton = VfToolbarButtonRuntime as unknown as VyrnForgeVueComponentType<VfToolbarButtonProps, VfToolbarButtonEmits, VfToolbarButtonSlots, VfToolbarButtonRef>;
@@ -1577,6 +1655,9 @@ export interface VfTransferListSlots {
 
 export interface VfTransferListRef {
   readonly element: VyrnForgeElementForTagName<"vf-transfer-list"> | null;
+  readonly checkValidity: VyrnForgeElementForTagName<"vf-transfer-list">["checkValidity"];
+  readonly reportValidity: VyrnForgeElementForTagName<"vf-transfer-list">["reportValidity"];
+  readonly setCustomValidity: VyrnForgeElementForTagName<"vf-transfer-list">["setCustomValidity"];
 }
 
 export const VfTransferList = VfTransferListRuntime as unknown as VyrnForgeVueComponentType<VfTransferListProps, VfTransferListEmits, VfTransferListSlots, VfTransferListRef>;
