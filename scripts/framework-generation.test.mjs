@@ -12,6 +12,7 @@ import {
 } from "./framework-exceptions.mjs";
 import {
   FRAMEWORK_SURFACES,
+  FRAMEWORK_GENERATION_TASKS,
   createFrameworkApiReference,
   createFrameworkGenerationModel,
   deriveCanonicalNativeTags,
@@ -334,6 +335,8 @@ test("Button representative slice preserves equivalent canonical semantics acros
   assert.equal(button.surfaces.react.events[0].public, "onClick");
   assert.equal(button.surfaces.angular.events[0].public, "action");
   assert.equal(button.surfaces.vue.events[0].public, "action");
+  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1111"));
+  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1112"));
 });
 
 test("Button representative generators preserve four-surface consumer artifacts", () => {
