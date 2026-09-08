@@ -13,12 +13,17 @@ describe("Vue slot composition bridge", () => {
   });
 
   it("assigns named slots to element roots without inserting wrappers", () => {
-    const child = h("button", { type: "button" }, "Trigger");
+    const child = h(
+      "button",
+      { type: "button", "data-trigger": "preserved" },
+      "Trigger",
+    );
     const rendered = renderVyrnForgeSlots({ trigger: () => [child] });
 
     expect(rendered).toHaveLength(1);
     expect(rendered[0]?.type).toBe("button");
     expect(rendered[0]?.props?.slot).toBe("trigger");
+    expect(rendered[0]?.props?.["data-trigger"]).toBe("preserved");
     expect(rendered[0]).not.toBe(child);
   });
 
