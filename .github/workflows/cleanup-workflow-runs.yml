@@ -1,0 +1,66 @@
+name: Cleanup old workflow runs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/cleanup-workflow-runs.yml"
+  schedule:
+    - cron: "23 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: cleanup-old-workflow-runs
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    name: Delete runs older than 3 days
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Delete workflow runs before cutoff date
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          cutoff="$(date -u -d '3 days ago' +'%Y-%m-%dT00:00:00Z')"
+
+          mapfile -t run_ids < <(
+            gh api --method GET \
+              "repos/${GITHUB_REPOSITORY}/actions/runs" \
+              -f created="<${cutoff}" \
+              -f per_page=100 \
+              --paginate \
+              --jq '.workflow_runs[].id'
+          )
+
+          deleted=0
+          failed=0
+
+          for run_id in "${run_ids[@]}"; do
+            if gh api --method DELETE \
+              "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}" >/dev/null; then
+              ((deleted += 1))
+            else
+              ((failed += 1))
+            fi
+          done
+
+          {
+            echo "### Workflow-run cleanup"
+            echo "- Cutoff: \`${cutoff}\`"
+            echo "- Deleted: ${deleted}"
+            echo "- Failed: ${failed}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          if (( failed > 0 )); then
+            exit 1
+          fi
