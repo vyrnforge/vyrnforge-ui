@@ -111,21 +111,38 @@ Angular surface.
 
 ## Vue
 
-Vue is a verified consumer of the native Custom Element renderer, not a
-separate VyrnForge component implementation.
+Vue applications use `@vyrnforge/ui-vue` as the first-class Vue facade over the
+same canonical Custom Element implementation. The supported Vue peer range is
+`>=3.5 <4`.
 
-Install and register `@vyrnforge/ui-elements` using the native setup above, then
-configure the consuming Vue compiler to recognize the `vf-*` Custom Elements.
-Use DOM property binding for complex values and canonical events for component
-changes.
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-vue@beta vue
+```
 
-For idiomatic `v-model` translation, follow:
+Install the package plugin at the Vue application boundary:
 
-- [Vue Consumer Contract](../testing/vue-consumer-contract.md)
-- [Vue Model Adapter Contract](../testing/vue-model-adapter-contract.md)
+```ts
+import { createApp } from "vue";
+import { VyrnForgeVue } from "@vyrnforge/ui-vue";
+import App from "./App.vue";
 
-The model adapter is a thin consumer integration over the shared native
-contract.
+createApp(App).use(VyrnForgeVue).mount("#app");
+```
+
+The plugin registers the canonical VyrnForge custom elements and public `Vf*`
+facade components. Normal facade consumers do not need to copy
+`@vyrnforge/ui-elements/register`, configure Vue compiler `isCustomElement`
+rules, or maintain fixture-local wrappers.
+
+Use generated `v-model` mappings, Vue-facing typed emits, named slots, and typed
+component refs for normal Vue integration. Raw `<vf-*>` elements and canonical
+`vf-*` DOM events remain supported interoperability escape hatches when the
+application deliberately needs the Native HTML contract.
+
+See [Vue Package](../packages/ui-vue.md) for model mappings, events, slots,
+typed refs, native forms, SSR behavior, migration guidance, and supported escape
+hatches. Use the generated component reference for the exact per-component Vue
+surface.
 
 ## Framework-neutral behaviors
 
@@ -173,7 +190,7 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-Native HTML and Angular:
+Native HTML, Angular, and Vue facade applications:
 
 ```ts
 import "@vyrnforge/ui-core/styles/index.css";
@@ -216,10 +233,10 @@ See [Theming And Styling](../architecture/03-theming-and-styling.md) and
 - Keep framework runtimes out of shared foundations.
 - Prefer VyrnForge tokens and behavior contracts before creating one-off
   application equivalents.
-- Treat React, native HTML, and Angular as first-class non-grid consumption
-  surfaces through their public packages.
-- Treat Vue as a verified consumer of the native renderer until its facade lane
-  completes its release integration.
+- Treat React, Native HTML, Angular, and Vue as first-class non-grid consumption
+  surfaces through their public packages/contracts.
+- Prefer `@vyrnforge/ui-angular` and `@vyrnforge/ui-vue` over application-owned
+  framework wrappers that only duplicate canonical VyrnForge behavior.
 - Treat the data grid as a separate React alpha track.
 
 ## Licensing
