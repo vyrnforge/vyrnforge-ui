@@ -10,6 +10,7 @@ on:
       - "docs/metadata/vue-support-evidence.json"
       - "scripts/compatibility-release-matrix.mjs"
       - "scripts/run-compatibility-release-case.mjs"
+      - "tests/consumers/vue/src/App.vue"
 
 permissions:
   contents: read
