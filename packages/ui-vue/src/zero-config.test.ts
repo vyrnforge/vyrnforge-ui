@@ -7,6 +7,7 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "../../..",
 );
+const zeroConfigVerificationTimeout = 30_000;
 
 describe("@vyrnforge/ui-vue zero-config application path", () => {
   it("builds public facade components without custom-element compiler configuration", () => {
@@ -18,5 +19,5 @@ describe("@vyrnforge/ui-vue zero-config application path", () => {
         stdio: "inherit",
       },
     );
-  }, 30_000);
+  }, zeroConfigVerificationTimeout);
 });
