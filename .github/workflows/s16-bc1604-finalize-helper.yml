@@ -54,26 +54,28 @@ jobs:
               flags=re.S,
           )
           text = text.replace('export const GENERATED_FRAMEWORK_ARTIFACT_TASK = "MFD-1111";\n\n', '')
-          old = '''  const native = buildNativeElementArtifacts({ root });
-  const apiReference = buildFrameworkApiReference({ root });
-  const button = buildFrameworkButtonSliceArtifacts({ root });
-  const textInput = buildFrameworkTextInputSliceArtifacts({ root });
-  const tabs = buildFrameworkTabsSliceArtifacts({ root });
-  const dialog = buildFrameworkDialogSliceArtifacts({ root });
-'''
-          new = '''  const native = buildNativeElementArtifacts({ root });
-  const apiReference = buildFrameworkApiReference({ root });
-  const contracts = loadCanonicalComponentContracts({ root });
-  const generationModel = createFrameworkGenerationModel(contracts);
-  const buttonModel = createFrameworkButtonSliceModel(generationModel);
-  const textInputModel = createFrameworkTextInputSliceModel(generationModel);
-  const tabsModel = createFrameworkTabsSliceModel(generationModel);
-  const dialogModel = createFrameworkDialogSliceModel(generationModel);
-  const button = { model: buttonModel, artifacts: buildFrameworkButtonArtifacts(buttonModel) };
-  const textInput = { model: textInputModel, artifacts: buildFrameworkTextInputArtifacts(textInputModel) };
-  const tabs = { model: tabsModel, artifacts: buildFrameworkTabsArtifacts(tabsModel) };
-  const dialog = { model: dialogModel, artifacts: buildFrameworkDialogArtifacts(dialogModel) };
-'''
+          old = (
+              '  const native = buildNativeElementArtifacts({ root });\n'
+              '  const apiReference = buildFrameworkApiReference({ root });\n'
+              '  const button = buildFrameworkButtonSliceArtifacts({ root });\n'
+              '  const textInput = buildFrameworkTextInputSliceArtifacts({ root });\n'
+              '  const tabs = buildFrameworkTabsSliceArtifacts({ root });\n'
+              '  const dialog = buildFrameworkDialogSliceArtifacts({ root });\n'
+          )
+          new = (
+              '  const native = buildNativeElementArtifacts({ root });\n'
+              '  const apiReference = buildFrameworkApiReference({ root });\n'
+              '  const contracts = loadCanonicalComponentContracts({ root });\n'
+              '  const generationModel = createFrameworkGenerationModel(contracts);\n'
+              '  const buttonModel = createFrameworkButtonSliceModel(generationModel);\n'
+              '  const textInputModel = createFrameworkTextInputSliceModel(generationModel);\n'
+              '  const tabsModel = createFrameworkTabsSliceModel(generationModel);\n'
+              '  const dialogModel = createFrameworkDialogSliceModel(generationModel);\n'
+              '  const button = { model: buttonModel, artifacts: buildFrameworkButtonArtifacts(buttonModel) };\n'
+              '  const textInput = { model: textInputModel, artifacts: buildFrameworkTextInputArtifacts(textInputModel) };\n'
+              '  const tabs = { model: tabsModel, artifacts: buildFrameworkTabsArtifacts(tabsModel) };\n'
+              '  const dialog = { model: dialogModel, artifacts: buildFrameworkDialogArtifacts(dialogModel) };\n'
+          )
           if old not in text:
               raise SystemExit('aggregate construction block did not match')
           aggregate.write_text(text.replace(old, new))
