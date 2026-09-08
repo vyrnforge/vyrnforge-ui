@@ -14,39 +14,30 @@ function verifyFixture(name) {
   return verifyPackageBoundaries({ root: path.join(fixturesRoot, name) });
 }
 
-test("permits the approved current and planned package dependency graph", () => {
+test("permits the approved seven-package dependency graph", () => {
   assert.deepEqual(verifyFixture("valid"), []);
 });
 
 test("rejects forbidden VyrnForge dependency directions", () => {
   const failures = verifyFixture("invalid");
 
+  for (const expected of [
+    "core-to-components.ts: @vyrnforge/ui-core must not import @vyrnforge/ui-components",
+    "core-to-grid.ts: @vyrnforge/ui-core must not import @vyrnforge/ui-data-grid",
+    "components-to-grid.ts: @vyrnforge/ui-components must not import @vyrnforge/ui-data-grid",
+    "renderer-leak.ts: @vyrnforge/ui-behaviors must not import @vyrnforge/ui-components",
+  ]) {
+    assert(failures.some((failure) => failure.includes(expected)));
+  }
+
   assert(
-    failures.some((failure) =>
-      failure.includes(
-        "core-to-components.ts: @vyrnforge/ui-core must not import @vyrnforge/ui-components",
-      ),
+    failures.includes(
+      "packages/ui-angular/package.json: @vyrnforge/ui-angular must not declare @vyrnforge/ui-components in dependencies",
     ),
   );
   assert(
-    failures.some((failure) =>
-      failure.includes(
-        "core-to-grid.ts: @vyrnforge/ui-core must not import @vyrnforge/ui-data-grid",
-      ),
-    ),
-  );
-  assert(
-    failures.some((failure) =>
-      failure.includes(
-        "components-to-grid.ts: @vyrnforge/ui-components must not import @vyrnforge/ui-data-grid",
-      ),
-    ),
-  );
-  assert(
-    failures.some((failure) =>
-      failure.includes(
-        "renderer-leak.ts: @vyrnforge/ui-behaviors must not import @vyrnforge/ui-components",
-      ),
+    failures.includes(
+      "packages/ui-vue/package.json: @vyrnforge/ui-vue must not declare @vyrnforge/ui-angular in dependencies",
     ),
   );
 });
@@ -71,35 +62,45 @@ test("rejects application state managers in published package boundaries", () =>
   );
 });
 
-test("reserves framework-neutral boundaries for core, behaviors, and elements", () => {
+test("keeps framework runtimes inside their owning facade or React package", () => {
   const failures = verifyFixture("invalid");
 
   assert(
     failures.some((failure) =>
       failure.includes(
-        "@vyrnforge/ui-behaviors must remain framework-neutral and must not declare react",
+        "@vyrnforge/ui-behaviors must not declare framework runtime react",
       ),
     ),
   );
   assert(
     failures.some((failure) =>
       failure.includes(
-        "react-leak.ts: @vyrnforge/ui-behaviors must remain framework-neutral and must not import react",
+        "react-leak.ts: @vyrnforge/ui-behaviors must not import framework runtime react",
       ),
     ),
   );
   assert(
     failures.some((failure) =>
       failure.includes(
-        "@vyrnforge/ui-elements must remain framework-neutral and must not declare vue",
+        "@vyrnforge/ui-elements must not declare framework runtime vue",
       ),
     ),
   );
   assert(
     failures.some((failure) =>
       failure.includes(
-        "react-leak.ts: @vyrnforge/ui-elements must remain framework-neutral and must not import react-dom",
+        "react-leak.ts: @vyrnforge/ui-elements must not import framework runtime react-dom",
       ),
+    ),
+  );
+  assert(
+    failures.includes(
+      "packages/ui-angular/package.json: @vyrnforge/ui-angular must not declare framework runtime react in dependencies",
+    ),
+  );
+  assert(
+    failures.includes(
+      "packages/ui-vue/package.json: @vyrnforge/ui-vue must not declare framework runtime @angular/core in dependencies",
     ),
   );
 });
