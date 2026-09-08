@@ -3,7 +3,6 @@ import {
   ElementRef,
   Renderer2,
   forwardRef,
-  inject,
   type OnDestroy,
 } from "@angular/core";
 import {
@@ -96,35 +95,39 @@ function serializeValidity(
 export class VyrnForgeFormControlDirective
   implements ControlValueAccessor, OnDestroy, Validator
 {
-  private readonly elementRef =
-    inject<ElementRef<VyrnForgeAngularFormElement>>(ElementRef);
-  private readonly renderer = inject(Renderer2);
-  private readonly listenerCleanup: ReadonlyArray<() => void> = [
-    this.renderer.listen(
-      this.elementRef.nativeElement,
-      "focusout",
-      (event: Event) => this.handleFocusOut(event as FocusEvent),
-    ),
-    this.renderer.listen(
-      this.elementRef.nativeElement,
-      "vf-checked-change",
-      (event: Event) => this.handleCheckedChange(event),
-    ),
-    this.renderer.listen(
-      this.elementRef.nativeElement,
-      "vf-invalid",
-      (event: Event) => this.handleInvalid(event),
-    ),
-    this.renderer.listen(
-      this.elementRef.nativeElement,
-      "vf-value-change",
-      (event: Event) => this.handleValueChange(event),
-    ),
-  ];
+  private readonly listenerCleanup: ReadonlyArray<() => void>;
 
   private onChange: ChangeCallback = () => undefined;
   private onTouched: TouchedCallback = () => undefined;
   private onValidatorChange: ValidatorChangeCallback = () => undefined;
+
+  constructor(
+    private readonly elementRef: ElementRef<VyrnForgeAngularFormElement>,
+    private readonly renderer: Renderer2,
+  ) {
+    this.listenerCleanup = [
+      this.renderer.listen(
+        this.elementRef.nativeElement,
+        "focusout",
+        (event: Event) => this.handleFocusOut(event as FocusEvent),
+      ),
+      this.renderer.listen(
+        this.elementRef.nativeElement,
+        "vf-checked-change",
+        (event: Event) => this.handleCheckedChange(event),
+      ),
+      this.renderer.listen(
+        this.elementRef.nativeElement,
+        "vf-invalid",
+        (event: Event) => this.handleInvalid(event),
+      ),
+      this.renderer.listen(
+        this.elementRef.nativeElement,
+        "vf-value-change",
+        (event: Event) => this.handleValueChange(event),
+      ),
+    ];
+  }
 
   writeValue(value: unknown): void {
     const element = this.elementRef.nativeElement;
