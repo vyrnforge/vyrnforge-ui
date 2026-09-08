@@ -1,0 +1,60 @@
+name: S12 Architecture Reconcile
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: github.head_ref == 'scratch/s12-architecture-reconcile'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout scratch branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: scratch/s12-architecture-reconcile
+          fetch-depth: 0
+
+      - name: Apply narrow architecture reconciliation
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const verifierPath = 'scripts/verify-multi-framework-architecture.mjs';
+          let verifier = fs.readFileSync(verifierPath, 'utf8');
+          const before = `      normalizeSet(releaseGroups.nonGridBeta),\n      new Set([\n        "@vyrnforge/ui-core",\n        "@vyrnforge/ui-behaviors",\n        "@vyrnforge/ui-components",\n        "@vyrnforge/ui-elements",\n      ]),`;
+          const after = `      normalizeSet(releaseGroups.nonGridBeta),\n      new Set([\n        "@vyrnforge/ui-core",\n        "@vyrnforge/ui-behaviors",\n        "@vyrnforge/ui-components",\n        "@vyrnforge/ui-elements",\n        "@vyrnforge/ui-angular",\n      ]),`;
+          if (!verifier.includes(before)) {
+            throw new Error('Expected nonGridBeta verifier block was not found');
+          }
+          verifier = verifier.replace(before, after);
+          fs.writeFileSync(verifierPath, verifier);
+
+          const manifestPath = 'tests/consumers/manifest.json';
+          const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+          const angular = manifest.fixtures.find((fixture) => fixture.id === 'angular');
+          if (!angular) throw new Error('Angular fixture entry was not found');
+          const legacyPath = 'src/app/vyrnforge-form-control.directive.ts';
+          if (!angular.exampleFiles.includes(legacyPath)) {
+            throw new Error('Expected legacy Angular fixture-local Forms path was not found');
+          }
+          angular.exampleFiles = angular.exampleFiles.filter((file) => file !== legacyPath);
+          fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+          NODE
+
+          git diff --check
+          node --test scripts/verify-multi-framework-architecture.test.mjs
+
+      - name: Commit generated reconciliation
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/verify-multi-framework-architecture.mjs tests/consumers/manifest.json
+          git commit -m "test(angular): reconcile promoted architecture contracts"
+          git push origin HEAD:scratch/s12-architecture-reconcile
