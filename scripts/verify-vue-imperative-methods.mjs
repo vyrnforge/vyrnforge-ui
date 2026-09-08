@@ -23,6 +23,10 @@ const catalog = buildVueCatalogArtifact({ root });
 const typed = buildVueTypedCatalogArtifact({ root });
 const generatedCatalog = readFileSync(path.join(root, catalog.path), "utf8");
 const generatedTyped = readFileSync(path.join(root, typed.path), "utf8");
+const typeConsumer = readFileSync(
+  path.join(root, "packages/ui-vue/src/type-surface.consumer.vue"),
+  "utf8",
+);
 if (generatedCatalog !== catalog.content)
   throw new Error("Vue catalog is stale");
 if (generatedTyped !== typed.content)
@@ -57,6 +61,20 @@ for (const marker of [
 ]) {
   if (!generatedTyped.includes(marker))
     throw new Error(`Missing typed ref marker: ${marker}`);
+}
+if (typeConsumer.includes(".element?.")) {
+  throw new Error(
+    "Documented Vue imperative integration must use direct typed ref methods rather than element indirection",
+  );
+}
+for (const marker of [
+  "textRef.value?.checkValidity()",
+  "dialogRef.value?.show()",
+  "popoverRef.value?.toggle()",
+]) {
+  if (!typeConsumer.includes(marker)) {
+    throw new Error(`Missing direct Vue ref consumer marker: ${marker}`);
+  }
 }
 console.log(
   "Vue imperative method verification passed for 23 canonical method-bearing components.",
