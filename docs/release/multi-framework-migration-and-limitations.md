@@ -11,15 +11,16 @@ framework/component usage lives in `docs/generated/component-reference.json`.
 Use `@vyrnforge/ui-components` in React applications when a first-class React
 component exists.
 
-Use `@vyrnforge/ui-elements` for native HTML, other web frameworks, or an
+Use `@vyrnforge/ui-elements` for Native HTML, other web frameworks, or an
 interoperability boundary that specifically needs Custom Elements.
 
 Use `@vyrnforge/ui-angular` for the supported Angular facade. It adapts the same
 canonical Custom Elements rather than reimplementing VyrnForge behavior or
 styling.
 
-Vue currently remains on its verified native-element consumer path while its
-first-class facade lane is staged separately.
+Use `@vyrnforge/ui-vue` for the supported Vue facade. It provides generated
+Vue-native components, models, events, slots, and refs over the same canonical
+Custom Elements rather than creating a separate Vue implementation.
 
 These surfaces share VyrnForge tokens, behavior contracts, accessibility
 expectations, and component semantics. They are not separate design systems.
@@ -94,15 +95,36 @@ guidance.
 
 ## Vue
 
-Vue consumes the native element package while its facade release lane remains
-staged.
+```bash
+npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-vue@beta vue
+```
 
-Configure the Vue compiler to recognize the `vf-*` namespace, use DOM property
-binding for complex values, and listen for canonical events. Use the thin
-`v-model` reference adapter only when model translation improves application
-ergonomics.
+Use `VyrnForgeVue` once at the application boundary, then consume the generated
+`Vf*` facade instead of configuring application-owned Custom Element compiler
+rules or copying fixture adapters.
 
-The adapter does not create a separate VyrnForge Vue component implementation.
+The normal migration from the pre-package Vue/native-element fixture pattern is:
+
+1. add `@vyrnforge/ui-vue` and keep shared `ui-core` / `ui-elements` style
+   imports;
+2. replace facade-only `@vyrnforge/ui-elements/register` setup with
+   `app.use(VyrnForgeVue)`;
+3. replace fixture-local `modelValue` bridges with generated `v-model` mappings;
+4. replace copied generated wrappers and declaration bridges with public package
+   components and types;
+5. use Vue slots and typed refs instead of private DOM traversal or wrapper-only
+   composition conventions;
+6. keep raw `<vf-*>` elements only where the application deliberately needs the
+   Native HTML contract;
+7. keep business validation, routing, data fetching, workflow state, and
+   application stores outside VyrnForge.
+
+The supported Vue peer range is `>=3.5 <4`. The package verifies SSR-safe import,
+Vue server rendering, generated model/type coverage, packed production builds,
+browser interaction, native forms, slots, and accessibility automation.
+
+See [Vue Package](../packages/ui-vue.md) for detailed setup, models, events,
+slots, typed refs, SSR behavior, limitations, and migration guidance.
 
 ## Current guarantees
 
@@ -110,18 +132,21 @@ The non-grid beta model verifies:
 
 - shared design tokens and package-owned CSS;
 - framework-neutral behavior contracts;
-- React and native HTML renderer integration;
-- the first-class Angular facade over canonical elements;
-- Vue consumption of native elements;
+- first-class React, Native HTML, Angular, and Vue non-grid consumption paths;
+- generated Angular and Vue facades over canonical elements;
 - canonical properties/events and composition;
-- representative framework forms/model translation;
+- framework forms/model translation where applicable;
 - packed-package installation and production builds;
 - server-safe package imports and supported bundler output;
 - browser and accessibility behavior covered by the repository's current
-  evidence model.
+  automated evidence model.
 
 Component maturity is still evaluated per component. A beta package channel does
 not make every public component stable.
+
+Repository verification does not itself claim completed manual screen-reader
+review or completed external trusted-publisher configuration. Those controls
+remain separately governed release evidence.
 
 ## Current limitations
 
@@ -129,9 +154,8 @@ not make every public component stable.
 - Angular is supported through `@vyrnforge/ui-angular` on the validated Angular
   `>=22 <23` peer range; a new Angular major requires an explicit compatibility
   update.
-- The Vue facade is not yet part of the canonical release group; Vue continues
-  to use the verified native-element consumer path until its release-integration
-  work is complete.
+- Vue is supported through `@vyrnforge/ui-vue` on the validated Vue `>=3.5 <4`
+  peer range; a new Vue major requires an explicit compatibility update.
 - Framework form/model adapters translate canonical control contracts; they are
   not arbitrary business-form abstractions.
 - Mobile-native renderers are outside the current web support model.
@@ -144,10 +168,11 @@ not make every public component stable.
 ## Migrating one-off wrappers
 
 1. Identify whether the wrapper only registers an element, forwards properties,
-   or renames canonical events.
-2. Replace Angular wrappers that only duplicate facade behavior with
-   `@vyrnforge/ui-angular`; remove wrappers in other surfaces when they add no
-   framework value.
+   translates an already-supported framework convention, or renames canonical
+   events.
+2. Replace wrappers that duplicate supported facade behavior with
+   `@vyrnforge/ui-angular` or `@vyrnforge/ui-vue`; remove wrappers in other
+   surfaces when they add no framework value.
 3. Keep thin adapters only for a real framework convention not already owned by
    VyrnForge.
 4. Keep business validation, data fetching, state ownership, and workflow
