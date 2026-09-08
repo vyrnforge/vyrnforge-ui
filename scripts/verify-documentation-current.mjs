@@ -307,9 +307,7 @@ function verifyPrimaryStructure({ root, failures }) {
     }
   }
 
-  const componentInventory = read(
-    root,
-    );
+  const componentInventory = read(root);
   for (const marker of [
     "../metadata/components.json",
     "../generated/component-reference.json",
