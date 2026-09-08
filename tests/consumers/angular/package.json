@@ -7,7 +7,7 @@
     "verify:ssr": "node ../../../scripts/verify-angular-ssr-safe.mjs",
     "verify:ownership": "node ../../../scripts/verify-angular-packed-fixture-ownership.mjs",
     "typecheck": "npm run verify:ssr && npm run verify:ownership && ng build --configuration development",
-    "build": "ng build --configuration production",
+    "build": "ng build --configuration development",
     "preview": "node preview.mjs"
   },
   "dependencies": {
