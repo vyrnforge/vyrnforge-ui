@@ -1,0 +1,134 @@
+name: MFD-1315 Release Integration
+
+on:
+  push:
+    branches:
+      - feat/MFD-1315-vue-release-integration
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    if: ${{ !contains(github.event.head_commit.message, '[mfd-1315-generated]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/MFD-1315-vue-release-integration
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - name: Update release integration contracts
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          function readJson(path) { return JSON.parse(fs.readFileSync(path, 'utf8')); }
+          function writeJson(path, value) { fs.writeFileSync(path, JSON.stringify(value, null, 2) + '\n'); }
+          function replace(path, from, to) {
+            const source = fs.readFileSync(path, 'utf8');
+            if (!source.includes(from)) throw new Error(`${path}: missing replacement marker`);
+            fs.writeFileSync(path, source.replace(from, to));
+          }
+
+          const mf = readJson('docs/metadata/multi-framework.json');
+          const gridIndex = mf.packages.findIndex((entry) => entry.name === '@vyrnforge/ui-data-grid');
+          if (!mf.packages.some((entry) => entry.name === '@vyrnforge/ui-vue')) {
+            mf.packages.splice(gridIndex, 0, {
+              name: '@vyrnforge/ui-vue',
+              directory: 'packages/ui-vue',
+              status: 'current',
+              betaIncluded: true,
+              runtime: 'vue',
+              dependsOn: ['@vyrnforge/ui-elements'],
+              owns: ['Vue component facades', 'v-model translations', 'typed emits', 'Vue slots', 'typed refs', 'Vue plugin setup'],
+              foundationStage: 'first-class-package-current'
+            });
+          }
+          const vueFramework = mf.frameworks.find((entry) => entry.id === 'vue');
+          vueFramework.supportLevel = 'first-class';
+          vueFramework.renderer = '@vyrnforge/ui-vue';
+          vueFramework.betaClaim = 'first-class-package-verified';
+          vueFramework.modelIntegration = 'first-class-vue-facade-verified';
+          mf.consumerFixturePolicy.rule = 'Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through public package outputs. Framework-specific facades and adapters remain thin translation layers over shared native contracts.';
+          mf.vueModelAdapter.publishedPackage = '@vyrnforge/ui-vue';
+          writeJson('docs/metadata/multi-framework.json', mf);
+
+          const provenance = readJson('docs/metadata/trusted-publishing-provenance.json');
+          if (!provenance.packages.some((entry) => entry.name === '@vyrnforge/ui-vue')) {
+            const grid = provenance.packages.findIndex((entry) => entry.name === '@vyrnforge/ui-data-grid');
+            provenance.packages.splice(grid, 0, {
+              name: '@vyrnforge/ui-vue',
+              directory: 'packages/ui-vue',
+              releaseGroup: 'non-grid-beta'
+            });
+          }
+          writeJson('docs/metadata/trusted-publishing-provenance.json', provenance);
+
+          replace('scripts/beta-package-artifacts.mjs', 'actual.releaseGroup.packageCount !== 4', 'actual.releaseGroup.packageCount !== 5');
+          replace('scripts/beta-package-artifacts.mjs', 'BT-8003 must verify exactly four non-grid beta packages', 'BT-8003 must verify exactly five non-grid beta packages');
+          replace('scripts/verify-beta-package-contract.mjs', 'four beta packages have documented public entries', 'five beta packages have documented public entries');
+
+          const sizeScript = 'scripts/beta-package-size-budgets.mjs';
+          replace(sizeScript,
+            '    "@vyrnforge/ui-elements",\n  ];',
+            '    "@vyrnforge/ui-elements",\n    "@vyrnforge/ui-vue",\n  ];');
+          replace(sizeScript, 'BT-8004 must budget exactly the four non-grid beta packages', 'BT-8004 must budget exactly the five non-grid beta packages');
+
+          const boundary = 'scripts/verify-package-boundaries.mjs';
+          replace(boundary,
+            '  {\n    name: "@vyrnforge/ui-data-grid",',
+            '  {\n    name: "@vyrnforge/ui-vue",\n    directory: "packages/ui-vue",\n    required: true,\n    allowedDependencies: new Set(["@vyrnforge/ui-elements"]),\n    forbiddenFrameworkSpecifiers: ["react", "react-dom", "@angular/"],\n  },\n  {\n    name: "@vyrnforge/ui-data-grid",');
+
+          const arch = 'scripts/verify-multi-framework-architecture.mjs';
+          replace(arch,
+            '  [\n    "@vyrnforge/ui-data-grid",',
+            '  [\n    "@vyrnforge/ui-vue",\n    {\n      status: "current",\n      betaIncluded: true,\n      dependsOn: ["@vyrnforge/ui-elements"],\n    },\n  ],\n  [\n    "@vyrnforge/ui-data-grid",');
+          replace(arch, '["vue", "verified-consumer"]', '["vue", "first-class"]');
+          replace(arch, '["vue", "packed-consumer-verified"]', '["vue", "first-class-package-verified"]');
+          replace(arch,
+            '        "@vyrnforge/ui-elements",\n      ]),',
+            '        "@vyrnforge/ui-elements",\n        "@vyrnforge/ui-vue",\n      ]),');
+
+          replace('docs/packages/ui-vue.md',
+            'The workspace remains private while the Vue lane is staged. Release integration owns removing that staging guard after compatibility and accessibility evidence passes.',
+            'The package is publishable on the synchronized non-grid beta release line. Compatibility and accessibility support evidence remains separately governed, and trusted-publisher external evidence remains tracked by the release controls.');
+
+          for (const path of ['docs/release/beta-package-artifact-verification.md', 'docs/release/beta-package-size-budgets.md']) {
+            let text = fs.readFileSync(path, 'utf8').replaceAll('four beta packages', 'five beta packages').replaceAll('four non-grid beta packages', 'five non-grid beta packages').replaceAll('four package', 'five package');
+            fs.writeFileSync(path, text);
+          }
+          NODE
+      - name: Update lockfile and generated beta contract
+        run: |
+          npm install --package-lock-only --ignore-scripts
+          npm ci
+          npm run generate:beta-package-contract
+      - name: Seed Vue size budget
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'docs/metadata/beta-package-size-budgets.json';
+          const doc = JSON.parse(fs.readFileSync(path, 'utf8'));
+          if (!doc.packages.some((entry) => entry.name === '@vyrnforge/ui-vue')) {
+            doc.packages.push({
+              name: '@vyrnforge/ui-vue',
+              directory: 'packages/ui-vue',
+              baseline: { packedBytes: 50000, unpackedBytes: 250000, fileCount: 20, runtimeJavaScriptBytes: 70000, declarationBytes: 150000, cssBytes: 0 },
+              budgets: { packedBytes: 50000, unpackedBytes: 250000, fileCount: 20, runtimeJavaScriptBytes: 70000, declarationBytes: 150000, cssBytes: 0 }
+            });
+          }
+          fs.writeFileSync(path, JSON.stringify(doc, null, 2) + '\n');
+          NODE
+      - name: Format deterministic changes
+        run: npx prettier --write docs/metadata/packages.json docs/metadata/multi-framework.json docs/metadata/trusted-publishing-provenance.json docs/metadata/beta-package-artifacts.json docs/metadata/beta-package-size-budgets.json docs/packages/ui-vue.md docs/release/beta-package-artifact-verification.md docs/release/beta-package-size-budgets.md scripts/beta-package-artifacts.mjs scripts/verify-beta-package-contract.mjs scripts/beta-package-size-budgets.mjs scripts/verify-package-boundaries.mjs scripts/verify-multi-framework-architecture.mjs package-lock.json tests/beta-package-consumer/package.json tests/beta-package-consumer/src/entrypoints.ts
+      - name: Commit generated release integration
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add docs scripts package-lock.json tests packages/ui-vue/package.json
+          git commit -m 'chore(release): synchronize Vue beta contracts [mfd-1315-generated]' || exit 0
+          git push
