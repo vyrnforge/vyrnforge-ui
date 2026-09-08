@@ -15,6 +15,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: s16/bc-1604-tooling-cleanup
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
       - name: Consolidate retired Button transition tooling
         shell: python
         run: |
@@ -118,8 +122,7 @@ jobs:
 
       - name: Format changed sources
         run: |
-          npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
-          npm ci
+          npx --yes npm@11.16.0 ci
           npx prettier --write package.json scripts/framework-generation.mjs scripts/framework-generation.test.mjs scripts/framework-button-generation.mjs scripts/generated-framework-artifacts.mjs scripts/generated-framework-artifacts.test.mjs
       - name: Remove helper and commit
         shell: bash
