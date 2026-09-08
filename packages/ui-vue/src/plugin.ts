@@ -21,7 +21,9 @@ function asVueApp(app: unknown): App {
     !("component" in app) ||
     typeof (app as { component?: unknown }).component !== "function"
   ) {
-    throw new TypeError("VyrnForge Vue setup requires a Vue application instance");
+    throw new TypeError(
+      "VyrnForge Vue setup requires a Vue application instance",
+    );
   }
   return app as App;
 }

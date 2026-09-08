@@ -6,10 +6,14 @@
 import type {
   AllowedComponentProps,
   ComponentCustomProps,
+  HTMLAttributes,
   VNode,
   VNodeProps,
 } from "vue";
-import type { VyrnForgeElementForTagName } from "@vyrnforge/ui-elements";
+import type {
+  VyrnForgeCanonicalEventDetailMap,
+  VyrnForgeElementForTagName,
+} from "@vyrnforge/ui-elements";
 import {
   VfAlert as VfAlertRuntime,
   VfAppShell as VfAppShellRuntime,
@@ -74,7 +78,7 @@ import {
 
 export type VyrnForgeVueComponentType<Props, Emits, Slots, Ref> = {
   new (): {
-    $props: Props & VNodeProps & AllowedComponentProps & ComponentCustomProps;
+    $props: Props & HTMLAttributes & VNodeProps & AllowedComponentProps & ComponentCustomProps;
     $emit: Emits;
     $slots: Slots;
   } & Ref;
@@ -145,15 +149,19 @@ export interface VfAutocompleteProps {
   readonly readOnly?: VyrnForgeElementForTagName<"vf-autocomplete">["readOnly"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-autocomplete">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInputValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-input-value-change"]>) => unknown;
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfAutocompleteEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-autocomplete">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "input-value-change", payload: { value: string; }): void;
-  (event: "open-change", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "input-value-change", payload: VyrnForgeCanonicalEventDetailMap["vf-input-value-change"]): void;
+  (event: "open-change", payload: VyrnForgeCanonicalEventDetailMap["vf-open-change"]): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfAutocompleteSlots {
@@ -196,10 +204,11 @@ export interface VfBreadcrumbsProps {
   readonly items?: VyrnForgeElementForTagName<"vf-breadcrumbs">["items"];
   readonly label?: VyrnForgeElementForTagName<"vf-breadcrumbs">["label"];
   readonly separator?: VyrnForgeElementForTagName<"vf-breadcrumbs">["separator"];
+  readonly onVfAction?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-action"]>) => unknown;
 }
 
 export interface VfBreadcrumbsEmits {
-  (event: "action", payload: { action?: string; value?: unknown; id?: string; reason?: string; }): void;
+  (event: "action", payload: VyrnForgeCanonicalEventDetailMap["vf-action"]): void;
 }
 
 export interface VfBreadcrumbsSlots {
@@ -222,10 +231,11 @@ export interface VfButtonProps {
   readonly name?: string;
   readonly value?: VyrnForgeElementForTagName<"vf-button">["value"];
   readonly action?: VyrnForgeElementForTagName<"vf-button">["action"];
+  readonly onVfAction?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-action"]>) => unknown;
 }
 
 export interface VfButtonEmits {
-  (event: "action", payload: { action?: string; value?: unknown; id?: string; reason?: string; }): void;
+  (event: "action", payload: VyrnForgeCanonicalEventDetailMap["vf-action"]): void;
 }
 
 export interface VfButtonSlots {
@@ -309,14 +319,17 @@ export interface VfCheckboxProps {
   readonly readOnly?: VyrnForgeElementForTagName<"vf-checkbox">["readOnly"];
   readonly size?: VyrnForgeElementForTagName<"vf-checkbox">["size"];
   readonly value?: VyrnForgeElementForTagName<"vf-checkbox">["value"];
+  readonly onVfCheckedChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-checked-change"]>) => unknown;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfCheckboxEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-checkbox">["checked"]): void;
-  (event: "update:modelValue", payload: { checked: boolean | "mixed"; previousChecked?: unknown; reason: string; }): void;
-  (event: "value-change", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "value-change", payload: VyrnForgeCanonicalEventDetailMap["vf-value-change"]): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfCheckboxSlots {
@@ -357,13 +370,15 @@ export interface VfConfirmDialogProps {
   readonly defaultOpen?: boolean;
   readonly title?: VyrnForgeElementForTagName<"vf-confirm-dialog">["title"];
   readonly variant?: VyrnForgeElementForTagName<"vf-confirm-dialog">["variant"];
+  readonly onVfCancel?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-cancel"]>) => unknown;
+  readonly onVfConfirm?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-confirm"]>) => unknown;
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
 }
 
 export interface VfConfirmDialogEmits {
   (event: "update:open", value: VyrnForgeElementForTagName<"vf-confirm-dialog">["open"]): void;
-  (event: "cancel", payload: { reason: string; }): void;
-  (event: "confirm", payload: { reason: string; }): void;
-  (event: "update:open", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
+  (event: "cancel", payload: VyrnForgeCanonicalEventDetailMap["vf-cancel"]): void;
+  (event: "confirm", payload: VyrnForgeCanonicalEventDetailMap["vf-confirm"]): void;
 }
 
 export interface VfConfirmDialogSlots {
@@ -388,13 +403,15 @@ export interface VfDateInputProps {
   readonly size?: VyrnForgeElementForTagName<"vf-date-input">["size"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-date-input">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfDateInputEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-date-input">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfDateInputSlots {
@@ -419,13 +436,15 @@ export interface VfDateTimeInputProps {
   readonly size?: VyrnForgeElementForTagName<"vf-datetime-input">["size"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-datetime-input">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfDateTimeInputEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-datetime-input">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfDateTimeInputSlots {
@@ -448,12 +467,13 @@ export interface VfDialogProps {
   readonly disabled?: VyrnForgeElementForTagName<"vf-dialog">["disabled"];
   readonly size?: VyrnForgeElementForTagName<"vf-dialog">["size"];
   readonly title?: VyrnForgeElementForTagName<"vf-dialog">["title"];
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
+  readonly onVfDismiss?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-dismiss"]>) => unknown;
 }
 
 export interface VfDialogEmits {
   (event: "update:open", value: VyrnForgeElementForTagName<"vf-dialog">["open"]): void;
-  (event: "update:open", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
-  (event: "dismiss", payload: { id?: string; reason: string; }): void;
+  (event: "dismiss", payload: VyrnForgeCanonicalEventDetailMap["vf-dismiss"]): void;
 }
 
 export interface VfDialogSlots {
@@ -481,12 +501,13 @@ export interface VfDrawerProps {
   readonly size?: VyrnForgeElementForTagName<"vf-drawer">["size"];
   readonly title?: VyrnForgeElementForTagName<"vf-drawer">["title"];
   readonly side?: VyrnForgeElementForTagName<"vf-drawer">["side"];
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
+  readonly onVfDismiss?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-dismiss"]>) => unknown;
 }
 
 export interface VfDrawerEmits {
   (event: "update:open", value: VyrnForgeElementForTagName<"vf-drawer">["open"]): void;
-  (event: "update:open", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
-  (event: "dismiss", payload: { id?: string; reason: string; }): void;
+  (event: "dismiss", payload: VyrnForgeCanonicalEventDetailMap["vf-dismiss"]): void;
 }
 
 export interface VfDrawerSlots {
@@ -507,11 +528,11 @@ export interface VfDropdownProps {
   readonly open?: VyrnForgeElementForTagName<"vf-popover">["open"];
   readonly defaultOpen?: boolean;
   readonly placement?: VyrnForgeElementForTagName<"vf-popover">["placement"];
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
 }
 
 export interface VfDropdownEmits {
   (event: "update:open", value: VyrnForgeElementForTagName<"vf-popover">["open"]): void;
-  (event: "update:open", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
 }
 
 export interface VfDropdownSlots {
@@ -636,10 +657,11 @@ export interface VfIconButtonProps {
   readonly size?: VyrnForgeElementForTagName<"vf-icon-button">["size"];
   readonly value?: VyrnForgeElementForTagName<"vf-icon-button">["value"];
   readonly variant?: VyrnForgeElementForTagName<"vf-icon-button">["variant"];
+  readonly onVfAction?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-action"]>) => unknown;
 }
 
 export interface VfIconButtonEmits {
-  (event: "action", payload: { action?: string; value?: unknown; id?: string; reason?: string; }): void;
+  (event: "action", payload: VyrnForgeCanonicalEventDetailMap["vf-action"]): void;
 }
 
 export interface VfIconButtonSlots {
@@ -736,12 +758,13 @@ export interface VfMenuProps {
   readonly defaultOpen?: boolean;
   readonly placement?: VyrnForgeElementForTagName<"vf-menu">["placement"];
   readonly size?: VyrnForgeElementForTagName<"vf-menu">["size"];
+  readonly onVfAction?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-action"]>) => unknown;
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
 }
 
 export interface VfMenuEmits {
   (event: "update:open", value: VyrnForgeElementForTagName<"vf-menu">["open"]): void;
-  (event: "action", payload: { action?: string; value?: unknown; id?: string; reason?: string; }): void;
-  (event: "update:open", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
+  (event: "action", payload: VyrnForgeCanonicalEventDetailMap["vf-action"]): void;
 }
 
 export interface VfMenuSlots {
@@ -766,13 +789,15 @@ export interface VfMultiSelectProps {
   readonly searchable?: VyrnForgeElementForTagName<"vf-multi-select">["searchable"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-multi-select">["value"];
   readonly defaultValue?: string[];
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfMultiSelectEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-multi-select">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfMultiSelectSlots {
@@ -801,13 +826,15 @@ export interface VfNumberInputProps {
   readonly step?: VyrnForgeElementForTagName<"vf-number-input">["step"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-number-input">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfNumberInputEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-number-input">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfNumberInputSlots {
@@ -912,11 +939,11 @@ export interface VfPopoverProps {
   readonly open?: VyrnForgeElementForTagName<"vf-popover">["open"];
   readonly defaultOpen?: boolean;
   readonly placement?: VyrnForgeElementForTagName<"vf-popover">["placement"];
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
 }
 
 export interface VfPopoverEmits {
   (event: "update:open", value: VyrnForgeElementForTagName<"vf-popover">["open"]): void;
-  (event: "update:open", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
 }
 
 export interface VfPopoverSlots {
@@ -941,14 +968,17 @@ export interface VfRadioProps {
   readonly readOnly?: VyrnForgeElementForTagName<"vf-radio">["readOnly"];
   readonly size?: VyrnForgeElementForTagName<"vf-radio">["size"];
   readonly value?: VyrnForgeElementForTagName<"vf-radio">["value"];
+  readonly onVfCheckedChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-checked-change"]>) => unknown;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfRadioEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-radio">["checked"]): void;
-  (event: "update:modelValue", payload: { checked: boolean | "mixed"; previousChecked?: unknown; reason: string; }): void;
-  (event: "value-change", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "value-change", payload: VyrnForgeCanonicalEventDetailMap["vf-value-change"]): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfRadioSlots {
@@ -967,11 +997,11 @@ export interface VfRadioGroupProps {
   readonly orientation?: VyrnForgeElementForTagName<"vf-radio-group">["orientation"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-radio-group">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
 }
 
 export interface VfRadioGroupEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-radio-group">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
 }
 
 export interface VfRadioGroupSlots {
@@ -994,13 +1024,15 @@ export interface VfRatingProps {
   readonly readOnly?: VyrnForgeElementForTagName<"vf-rating">["readOnly"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-rating">["value"];
   readonly defaultValue?: number;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfRatingEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-rating">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfRatingSlots {
@@ -1025,13 +1057,15 @@ export interface VfSearchInputProps {
   readonly size?: VyrnForgeElementForTagName<"vf-search-input">["size"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-search-input">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfSearchInputEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-search-input">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfSearchInputSlots {
@@ -1068,11 +1102,11 @@ export interface VfSegmentedControlProps {
   readonly size?: VyrnForgeElementForTagName<"vf-segmented-control">["size"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-segmented-control">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
 }
 
 export interface VfSegmentedControlEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-segmented-control">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
 }
 
 export interface VfSegmentedControlSlots {
@@ -1095,13 +1129,15 @@ export interface VfSelectProps {
   readonly size?: VyrnForgeElementForTagName<"vf-select">["size"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-select">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfSelectEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-select">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfSelectSlots {
@@ -1120,11 +1156,11 @@ export interface VfSideNavProps {
   readonly collapsed?: VyrnForgeElementForTagName<"vf-side-nav">["collapsed"];
   readonly items?: VyrnForgeElementForTagName<"vf-side-nav">["items"];
   readonly label?: VyrnForgeElementForTagName<"vf-side-nav">["label"];
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
 }
 
 export interface VfSideNavEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-side-nav">["activeId"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
 }
 
 export interface VfSideNavSlots {
@@ -1169,13 +1205,15 @@ export interface VfSliderProps {
   readonly step?: VyrnForgeElementForTagName<"vf-slider">["step"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-slider">["value"];
   readonly defaultValue?: number;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfSliderEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-slider">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfSliderSlots {
@@ -1219,14 +1257,17 @@ export interface VfSwitchProps {
   readonly readOnly?: VyrnForgeElementForTagName<"vf-switch">["readOnly"];
   readonly size?: VyrnForgeElementForTagName<"vf-switch">["size"];
   readonly value?: VyrnForgeElementForTagName<"vf-switch">["value"];
+  readonly onVfCheckedChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-checked-change"]>) => unknown;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfSwitchEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-switch">["checked"]): void;
-  (event: "update:modelValue", payload: { checked: boolean | "mixed"; previousChecked?: unknown; reason: string; }): void;
-  (event: "value-change", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "value-change", payload: VyrnForgeCanonicalEventDetailMap["vf-value-change"]): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfSwitchSlots {
@@ -1248,11 +1289,12 @@ export interface VfTabsProps {
   readonly disabledValues?: string[];
   readonly size?: VyrnForgeElementForTagName<"vf-tabs">["size"];
   readonly variant?: VyrnForgeElementForTagName<"vf-tabs">["variant"];
+  readonly ariaLabel?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
 }
 
 export interface VfTabsEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-tabs">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
 }
 
 export interface VfTabsSlots {
@@ -1296,13 +1338,15 @@ export interface VfTextInputProps {
   readonly size?: VyrnForgeElementForTagName<"vf-text-input">["size"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-text-input">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfTextInputEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-text-input">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfTextInputSlots {
@@ -1327,13 +1371,15 @@ export interface VfTextareaProps {
   readonly size?: VyrnForgeElementForTagName<"vf-textarea">["size"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-textarea">["value"];
   readonly defaultValue?: string;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfTextareaEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-textarea">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfTextareaSlots {
@@ -1353,11 +1399,13 @@ export interface VfToastProps {
   readonly toastId?: VyrnForgeElementForTagName<"vf-toast">["toastId"];
   readonly title?: VyrnForgeElementForTagName<"vf-toast">["title"];
   readonly tone?: VyrnForgeElementForTagName<"vf-toast">["tone"];
+  readonly onVfAction?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-action"]>) => unknown;
+  readonly onVfDismiss?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-dismiss"]>) => unknown;
 }
 
 export interface VfToastEmits {
-  (event: "action", payload: { action?: string; value?: unknown; id?: string; reason?: string; }): void;
-  (event: "dismiss", payload: { id?: string; reason: string; }): void;
+  (event: "action", payload: VyrnForgeCanonicalEventDetailMap["vf-action"]): void;
+  (event: "dismiss", payload: VyrnForgeCanonicalEventDetailMap["vf-dismiss"]): void;
 }
 
 export interface VfToastSlots {
@@ -1380,12 +1428,13 @@ export interface VfToggleButtonProps {
   readonly size?: VyrnForgeElementForTagName<"vf-toggle-button">["size"];
   readonly value?: VyrnForgeElementForTagName<"vf-toggle-button">["value"];
   readonly variant?: VyrnForgeElementForTagName<"vf-toggle-button">["variant"];
+  readonly onVfPressedChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-pressed-change"]>) => unknown;
+  readonly onVfAction?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-action"]>) => unknown;
 }
 
 export interface VfToggleButtonEmits {
   (event: "update:pressed", value: VyrnForgeElementForTagName<"vf-toggle-button">["pressed"]): void;
-  (event: "update:pressed", payload: { pressed: boolean; previousPressed?: boolean; reason: string; }): void;
-  (event: "action", payload: { action?: string; value?: unknown; id?: string; reason?: string; }): void;
+  (event: "action", payload: VyrnForgeCanonicalEventDetailMap["vf-action"]): void;
 }
 
 export interface VfToggleButtonSlots {
@@ -1404,11 +1453,11 @@ export interface VfToggleButtonGroupProps {
   readonly type?: VyrnForgeElementForTagName<"vf-toggle-button-group">["type"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-toggle-button-group">["value"];
   readonly defaultValue?: unknown;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
 }
 
 export interface VfToggleButtonGroupEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-toggle-button-group">["value"]): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
 }
 
 export interface VfToggleButtonGroupSlots {
@@ -1432,12 +1481,13 @@ export interface VfToolbarButtonProps {
   readonly size?: VyrnForgeElementForTagName<"vf-toolbar-button">["size"];
   readonly value?: VyrnForgeElementForTagName<"vf-toolbar-button">["value"];
   readonly variant?: VyrnForgeElementForTagName<"vf-toolbar-button">["variant"];
+  readonly onVfPressedChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-pressed-change"]>) => unknown;
+  readonly onVfAction?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-action"]>) => unknown;
 }
 
 export interface VfToolbarButtonEmits {
   (event: "update:pressed", value: VyrnForgeElementForTagName<"vf-toolbar-button">["pressed"]): void;
-  (event: "update:pressed", payload: { pressed: boolean; previousPressed?: boolean; reason: string; }): void;
-  (event: "action", payload: { action?: string; value?: unknown; id?: string; reason?: string; }): void;
+  (event: "action", payload: VyrnForgeCanonicalEventDetailMap["vf-action"]): void;
 }
 
 export interface VfToolbarButtonSlots {
@@ -1457,11 +1507,11 @@ export interface VfTooltipProps {
   readonly offset?: VyrnForgeElementForTagName<"vf-tooltip">["offset"];
   readonly open?: VyrnForgeElementForTagName<"vf-tooltip">["open"];
   readonly placement?: VyrnForgeElementForTagName<"vf-tooltip">["placement"];
+  readonly onVfOpenChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-open-change"]>) => unknown;
 }
 
 export interface VfTooltipEmits {
   (event: "update:open", value: VyrnForgeElementForTagName<"vf-tooltip">["open"]): void;
-  (event: "update:open", payload: { open: boolean; previousOpen?: boolean; reason: string; }): void;
 }
 
 export interface VfTooltipSlots {
@@ -1508,14 +1558,17 @@ export interface VfTransferListProps {
   readonly targetTitle?: VyrnForgeElementForTagName<"vf-transfer-list">["targetTitle"];
   readonly modelValue?: VyrnForgeElementForTagName<"vf-transfer-list">["value"];
   readonly defaultValue?: string[];
+  readonly onVfSelectionChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-selection-change"]>) => unknown;
+  readonly onVfValueChange?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-value-change"]>) => unknown;
+  readonly onVfInvalid?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-invalid"]>) => unknown;
+  readonly onVfReset?: (event: CustomEvent<VyrnForgeCanonicalEventDetailMap["vf-reset"]>) => unknown;
 }
 
 export interface VfTransferListEmits {
   (event: "update:modelValue", value: VyrnForgeElementForTagName<"vf-transfer-list">["value"]): void;
-  (event: "selection-change", payload: { selectedKeys?: string[]; selection?: unknown; reason?: string; }): void;
-  (event: "update:modelValue", payload: { value: unknown; previousValue?: unknown; reason: string; }): void;
-  (event: "invalid", payload: { message: string; reason: string; validity: ValidityState; }): void;
-  (event: "reset", payload: { reason: string; }): void;
+  (event: "selection-change", payload: VyrnForgeCanonicalEventDetailMap["vf-selection-change"]): void;
+  (event: "invalid", payload: VyrnForgeCanonicalEventDetailMap["vf-invalid"]): void;
+  (event: "reset", payload: VyrnForgeCanonicalEventDetailMap["vf-reset"]): void;
 }
 
 export interface VfTransferListSlots {

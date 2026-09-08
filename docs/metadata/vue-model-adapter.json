@@ -25,7 +25,10 @@
     "open",
     "pressed"
   ],
-  "referenceAdapters": ["useVyrnForgeModel", "generated Vue catalog model mappings"],
+  "referenceAdapters": [
+    "useVyrnForgeModel",
+    "generated Vue catalog model mappings"
+  ],
   "ownership": {
     "nativeElement": "rendering, accessibility, keyboard behavior, validation, form association, canonical events",
     "vueAdapter": "generated Vue model prop/update-event translation only"
