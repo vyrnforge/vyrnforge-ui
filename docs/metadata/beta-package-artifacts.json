@@ -18,7 +18,7 @@
     "channel": "beta",
     "version": "0.2.0-beta.2",
     "distTag": "beta",
-    "packageCount": 5,
+    "packageCount": 6,
     "excludes": ["@vyrnforge/ui-data-grid"]
   },
   "packages": [
@@ -258,6 +258,36 @@
       "requiredPayload": [
         "dist/forms.d.ts",
         "dist/forms.js",
+        "dist/index.d.ts",
+        "dist/index.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-vue",
+      "directory": "packages/ui-vue",
+      "version": "0.2.0-beta.2",
+      "files": ["dist", "README.md"],
+      "sideEffects": false,
+      "main": "./dist/index.cjs",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "entryPoints": [
+        {
+          "exportKey": ".",
+          "specifier": "@vyrnforge/ui-vue",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+          }
+        }
+      ],
+      "requiredPayload": [
+        "dist/index.cjs",
         "dist/index.d.ts",
         "dist/index.js",
         "LICENSE",

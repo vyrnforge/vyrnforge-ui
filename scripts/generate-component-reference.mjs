@@ -63,7 +63,7 @@ function frameworkNote(frameworkId, status) {
   if (frameworkId === "angular") {
     return "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes.";
   }
-  return "Vue is currently a verified consumer of the canonical Custom Element contract. A first-class Vue package must not be claimed until its distribution gate passes.";
+  return "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements.";
 }
 
 function frameworkExamples(component, context) {
@@ -85,6 +85,14 @@ function frameworkExamples(component, context) {
   const vueStatus = parity.vue?.status ?? "not-supported";
   const reactSetup = cleanText(component.importExample) ?? "";
   const reactExample = cleanText(component.basicUsageExample) ?? "";
+  const vueComponentName = component.displayName
+    ? `Vf${component.displayName
+        .replace(/[^A-Za-z0-9]+/g, " ")
+        .trim()
+        .split(/\s+/)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join("")}`
+    : null;
 
   return {
     react: {
@@ -120,12 +128,15 @@ function frameworkExamples(component, context) {
     vue: {
       label: "Vue",
       status: vueStatus,
-      package:
-        parity.vue?.consumes ?? (nativeTag ? "@vyrnforge/ui-elements" : null),
-      setup: nativeTag
-        ? "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }"
-        : "",
-      example: nativeTag ? `<${nativeTag}></${nativeTag}>` : "",
+      package: vueStatus === "not-supported" ? null : "@vyrnforge/ui-vue",
+      setup:
+        vueStatus === "not-supported"
+          ? ""
+          : 'import { VyrnForgeVue } from "@vyrnforge/ui-vue";\napp.use(VyrnForgeVue);',
+      example:
+        vueStatus === "not-supported" || !vueComponentName
+          ? ""
+          : `<${vueComponentName}></${vueComponentName}>`,
       note: frameworkNote("vue", vueStatus),
     },
   };
