@@ -1,37 +1,41 @@
 # Consumer Foundation Contracts
 
-CF-7001, CF-7002, and CF-7008 establish the first runtime evidence inside
-S7 / GMF4. The canonical machine-readable record is
+The consumer foundation contracts establish clean packed runtime evidence for
+VyrnForge's framework surfaces. The canonical machine-readable record is
 `docs/metadata/consumer-foundations.json`.
 
 ## Scope
 
-This batch verifies two packed-package consumers:
+The consumer foundation verifies clean packed consumption for:
 
-- native HTML with no framework runtime;
-- React 19 consuming `@vyrnforge/ui-elements` directly.
+- Native HTML through `@vyrnforge/ui-elements`;
+- React through the public `@vyrnforge/ui-components` package;
+- Angular through the public `@vyrnforge/ui-angular` package;
+- Vue through the public `@vyrnforge/ui-vue` package.
 
-Angular is verified separately by CF-7003 and
-`docs/metadata/angular-consumer.json`. CF-7005 makes the Vue fixture and runtime
-verifier ready, with pending evidence recorded in
-`docs/metadata/vue-consumer.json`. The data grid remains outside the non-grid
-beta gate.
+Angular and Vue remain adapters over the canonical Custom Element implementation;
+they do not create independent VyrnForge renderers. The data grid remains
+outside the non-grid beta gate.
 
 ## Clean package rule
 
-Runtime fixtures install npm tarballs for:
+Verification packs the VyrnForge packages needed to exercise each surface.
+Installed artifacts must be ordinary files under each fixture's `node_modules`,
+not workspace symlinks. Consumer source must not use `packages/*/src`,
+TypeScript path aliases, repository-relative imports, fixture-local generated
+facade copies, or application-owned wrappers that duplicate package behavior.
 
-```text
-@vyrnforge/ui-core
-@vyrnforge/ui-behaviors
-@vyrnforge/ui-elements
-```
+For the React fixture, normal application code imports only
+`@vyrnforge/ui-components` and its public stylesheet. Shared implementation
+packages may be installed transitively, but React application code must not
+import, register, or type against private implementation paths.
 
-Installed packages must be ordinary files under each fixture's
-`node_modules`, not workspace symlinks. Consumer source must not use
-`packages/*/src`, TypeScript path aliases, or repository-relative imports.
+For the Angular and Vue fixtures, normal application code consumes the public
+framework package and package-owned generated facade. `@vyrnforge/ui-elements`
+remains the canonical runtime dependency and an explicit interoperability escape
+hatch, not a reason to recreate framework adapters in each consumer.
 
-## CF-7001 native HTML evidence
+## Native HTML evidence
 
 `tests/consumers/native-html` proves:
 
@@ -44,33 +48,55 @@ Installed packages must be ordinary files under each fixture's
 7. `ElementInternals` form submission;
 8. production Vite output and Chromium interaction.
 
-## CF-7002 React evidence
+## React evidence
 
-`tests/consumers/react` proves React 19 can consume native VyrnForge
-elements directly from packed packages. The application owns its JSX
-declaration adapter, so `@vyrnforge/ui-elements` remains independent from
-React.
+`tests/consumers/react` proves React can consume VyrnForge through the intended
+first-class public package from packed artifacts. The fixture imports
+components, component types, and styles from `@vyrnforge/ui-components` only.
+It does not carry a Custom Element JSX declaration shim, generated local native
+wrappers, explicit element registration, or direct native-package imports.
 
-Evidence covers typed refs, non-scalar property assignment, explicit
-registration, canonical DOM listeners, production output, and Chromium
-interaction. `@vyrnforge/ui-components` remains the recommended first-class
-React renderer.
+Evidence covers clean packed installation, TypeScript typecheck, production
+Vite output, SSR-safe import, canonical-backed runtime behavior, controlled
+React state, keyboard interaction, and accessibility checks.
 
-## CF-7008 declaration and metadata evidence
+## Angular evidence
 
-The package exposes:
+`tests/consumers/angular` verifies the packed `@vyrnforge/ui-angular` package,
+package-owned registration, generated component coverage, typed inputs/outputs,
+composition, native form participation, Angular Forms integration where
+applicable, SSR safety, production build, and Chromium interaction. Fixture-local
+CVA/directive copies are not the supported path after package cutover.
+
+## Vue evidence
+
+`tests/consumers/vue` verifies the packed `@vyrnforge/ui-vue` package and the
+normal `VyrnForgeVue` facade path. Evidence covers generated component/type
+coverage, Vue `v-model` mappings, typed emits, named slots, typed refs and
+imperative methods, native form participation, SSR-safe import/server rendering,
+strict `vue-tsc`, production Vite output, Chromium interaction, and automated
+accessibility behavior. Fixture-local generated wrappers and model adapters are
+not the supported application path after package cutover.
+
+## Declaration and metadata evidence
+
+The native package separately exposes:
 
 - `VyrnForgeHTMLElementTagNameMap`;
-- global `HTMLElementTagNameMap` augmentation for all 58 public tags;
+- global `HTMLElementTagNameMap` augmentation for all public tags;
 - `VyrnForgeElementForTagName<TTagName>`;
 - typed canonical event listener overloads on `VyrnForgeElement`;
 - `customElements: "./custom-elements.json"` in package metadata;
 - the public `@vyrnforge/ui-elements/custom-elements.json` export.
 
-`scripts/generate-ui-elements-manifest.mjs` generates the editor-facing
-Custom Elements Manifest from the deterministic registry and component
-metadata. `npm run verify:consumer-foundations` rejects drift between the
-registry, declarations, manifest, fixture claims, and program metadata.
+Framework packages add their own package-owned generated TypeScript surface
+without moving canonical component metadata or rendering ownership out of the
+shared/native foundations.
+
+`scripts/generate-ui-elements-manifest.mjs` generates the editor-facing Custom
+Elements Manifest from the deterministic registry and component metadata.
+Repository verifiers reject drift between the registry, declarations, manifests,
+framework generators, fixture claims, and program metadata.
 
 ## Required commands
 
@@ -88,7 +114,6 @@ npm run verify:packages
 npm run quality
 ```
 
-GMF4 remains in progress. CF-7003 adds Angular runtime evidence, while CF-7005
-completes the Vue clean packed build and Chromium evidence. Vue `v-model`,
-cross-framework matrices, compatibility documentation, and final gate sign-off
-remain S7 work.
+Repository automation covers browser and accessibility evidence, but this
+contract does not itself claim completion of manual assistive-technology review
+or external trusted-publisher configuration.

@@ -32,7 +32,9 @@
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-elements",
-      "@vyrnforge/ui-components"
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-angular",
+      "@vyrnforge/ui-vue"
     ],
     "excludedPackages": [
       {
@@ -46,17 +48,19 @@
         "@vyrnforge/ui-core",
         "@vyrnforge/ui-behaviors",
         "@vyrnforge/ui-components",
-        "@vyrnforge/ui-elements"
+        "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue"
       ],
       "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
     },
     "firstClassRenderers": {
       "react": "@vyrnforge/ui-components",
-      "nativeHtml": "@vyrnforge/ui-elements"
+      "nativeHtml": "@vyrnforge/ui-elements",
+      "vue": "@vyrnforge/ui-vue"
     },
     "verifiedConsumers": {
-      "angular": "@vyrnforge/ui-elements",
-      "vue": "@vyrnforge/ui-elements"
+      "angular": "@vyrnforge/ui-elements"
     },
     "excludedPlatforms": [
       "react-native",

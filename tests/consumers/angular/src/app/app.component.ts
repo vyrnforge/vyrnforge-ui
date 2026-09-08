@@ -1,34 +1,33 @@
-import {
-  AfterViewInit,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
 import {
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
 } from "@angular/forms";
-import type {
-  VyrnForgeActionDetail,
-  VyrnForgeElementForTagName,
-  VyrnForgeTabItem,
-} from "@vyrnforge/ui-elements";
-
-import { VfButton } from "./generated/vf-button.generated";
 import {
+  VfAutocomplete,
+  VfButton,
   VfDialog,
+  VfPageHeader,
+  VfTabs,
+  VfTextInput,
   type GeneratedDialogDismissDetail,
-} from "./generated/vf-dialog.generated";
-import { VfTabs } from "./generated/vf-tabs.generated";
-import { VfTextInput } from "./generated/vf-text-input.generated";
-import { VyrnForgeFormControlDirective } from "./vyrnforge-form-control.directive";
+  type VyrnForgeActionDetail,
+  type VyrnForgeElementForTagName,
+  type VyrnForgeTabItem,
+} from "@vyrnforge/ui-angular";
+import { VyrnForgeFormControlDirective } from "@vyrnforge/ui-angular/forms";
 
+type AutocompleteElement = VyrnForgeElementForTagName<"vf-autocomplete">;
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
+
+type VyrnForgeValidationError = {
+  message?: string;
+  validity?: Readonly<Record<string, boolean>>;
+};
 
 @Component({
   selector: "app-root",
@@ -36,13 +35,14 @@ type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
   imports: [
     FormsModule,
     ReactiveFormsModule,
+    VfAutocomplete,
     VfButton,
     VfDialog,
+    VfPageHeader,
     VfTabs,
     VfTextInput,
     VyrnForgeFormControlDirective,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements AfterViewInit {
@@ -54,6 +54,18 @@ export class AppComponent implements AfterViewInit {
 
   @ViewChild("dialogElement", { read: ElementRef })
   private dialogRef?: ElementRef<DialogElement>;
+
+  @ViewChild("saveButton")
+  private saveButtonApi?: VfButton;
+
+  @ViewChild("ownerInputApi")
+  private ownerInputApi?: VfTextInput;
+
+  @ViewChild("dialogApi")
+  private dialogApi?: VfDialog;
+
+  @ViewChild("compositionAutocomplete", { read: ElementRef })
+  private compositionAutocompleteRef?: ElementRef<AutocompleteElement>;
 
   readonly owner = "Operations";
   readonly profileForm = new FormGroup({
@@ -71,6 +83,10 @@ export class AppComponent implements AfterViewInit {
       content: "Angular value/valueChange mapping",
     },
   ] satisfies readonly VyrnForgeTabItem[];
+  readonly autocompleteOptions = [
+    { value: "operations", label: "Operations" },
+    { value: "platform", label: "Platform" },
+  ] as const;
 
   activeTab = "summary";
   dialogOpen = false;
@@ -81,13 +97,41 @@ export class AppComponent implements AfterViewInit {
     return this.profileForm.controls.owner;
   }
 
+  get ownerValidationMessage(): string {
+    return this.ownerValidationError?.message ?? "";
+  }
+
+  get ownerValueMissing(): boolean {
+    return this.ownerValidationError?.validity?.["valueMissing"] === true;
+  }
+
+  private get ownerValidationError(): VyrnForgeValidationError | null {
+    const error = this.ownerControl.getError("vyrnForge") as unknown;
+    return error && typeof error === "object"
+      ? (error as VyrnForgeValidationError)
+      : null;
+  }
+
   ngAfterViewInit(): void {
     queueMicrotask(() => {
       const tabsElement = this.tabsRef?.nativeElement;
       const ownerElement = this.ownerInputRef?.nativeElement;
       const dialogElement = this.dialogRef?.nativeElement;
-      if (!tabsElement || !ownerElement || !dialogElement) {
-        throw new Error("Angular did not attach the Custom Element refs.");
+      const compositionAutocomplete =
+        this.compositionAutocompleteRef?.nativeElement;
+      const saveButtonApi = this.saveButtonApi;
+      const ownerInputApi = this.ownerInputApi;
+      const dialogApi = this.dialogApi;
+      if (
+        !tabsElement ||
+        !ownerElement ||
+        !dialogElement ||
+        !compositionAutocomplete ||
+        !saveButtonApi ||
+        !ownerInputApi ||
+        !dialogApi
+      ) {
+        throw new Error("Angular did not attach the typed VyrnForge refs.");
       }
 
       const assignedItems = tabsElement.items;
@@ -125,11 +169,77 @@ export class AppComponent implements AfterViewInit {
         );
       }
 
+      const requiredAutocompleteSlots = [
+        "label",
+        "description",
+        "prefix",
+        "suffix",
+        "item",
+        "empty",
+        "loading",
+      ] as const;
+      for (const slot of requiredAutocompleteSlots) {
+        if (
+          !Array.from(compositionAutocomplete.children).some(
+            (child) => child.getAttribute("slot") === slot,
+          )
+        ) {
+          throw new Error(
+            `Angular Autocomplete did not preserve the ${slot} composition region.`,
+          );
+        }
+      }
+
+      if (
+        !dialogElement.querySelector(
+          ".vf-dialog__trigger > [data-dialog-trigger]",
+        )
+      ) {
+        throw new Error("Angular Dialog did not preserve its trigger region.");
+      }
+      if (
+        !dialogElement.querySelector(
+          '.vf-dialog__body > [data-composition-slot="dialog-content"]',
+        )
+      ) {
+        throw new Error("Angular Dialog did not preserve its content region.");
+      }
+
+      ownerInputApi.focus();
+      ownerInputApi.select();
+      ownerInputApi.setCustomValidity("Angular imperative validity probe");
+      if (ownerInputApi.checkValidity()) {
+        throw new Error("Angular TextInput checkValidity() did not delegate.");
+      }
+      ownerInputApi.setCustomValidity("");
+      if (!ownerInputApi.reportValidity()) {
+        throw new Error("Angular TextInput reportValidity() did not delegate.");
+      }
+
+      dialogApi.show();
+      if (!dialogElement.open) {
+        throw new Error("Angular Dialog show() did not delegate.");
+      }
+      dialogApi.close();
+      if (dialogElement.open) {
+        throw new Error("Angular Dialog close() did not delegate.");
+      }
+
+      saveButtonApi.focus();
+      saveButtonApi.click();
+
       const root = document.querySelector<HTMLElement>(
         "[data-angular-consumer]",
       );
-      root?.setAttribute("data-consumer-property", "verified");
-      root?.setAttribute("data-consumer-ready", "true");
+      if (root?.getAttribute("data-generated-button-action") !== "received") {
+        throw new Error(
+          "Angular Button click() did not emit canonical action.",
+        );
+      }
+      root.setAttribute("data-composition", "verified");
+      root.setAttribute("data-imperative-apis", "verified");
+      root.setAttribute("data-consumer-property", "verified");
+      root.setAttribute("data-consumer-ready", "true");
     });
   }
 

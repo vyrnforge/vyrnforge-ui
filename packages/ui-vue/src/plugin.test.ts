@@ -8,6 +8,7 @@ import type { App, Component } from "vue";
 import {
   createVyrnForgeVue,
   installVyrnForgeVue,
+  VyrnForgeVue,
   vyrnForgeVueComponents,
 } from "./plugin";
 
@@ -50,15 +51,21 @@ describe("VyrnForge Vue setup", () => {
     );
   });
 
-  it("provides a standard Vue plugin", () => {
+  it("provides a structurally portable standard Vue plugin", () => {
     const registrations = new Map<string, Component>();
     const app = createAppStub(registrations);
     const plugin = createVyrnForgeVue({ elementRegistry: createRegistry() });
 
     expect(typeof plugin).toBe("object");
-    if (typeof plugin === "object" && plugin && "install" in plugin) {
-      plugin.install(app);
-    }
+    expect(typeof plugin.install).toBe("function");
+    expect(typeof VyrnForgeVue.install).toBe("function");
+    plugin.install(app);
     expect(registrations.size).toBe(vyrnForgeVueComponents.length);
+  });
+
+  it("rejects values that do not implement the Vue application contract", () => {
+    expect(() => installVyrnForgeVue({})).toThrow(
+      "VyrnForge Vue setup requires a Vue application instance",
+    );
   });
 });

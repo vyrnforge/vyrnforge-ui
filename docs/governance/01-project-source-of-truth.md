@@ -118,7 +118,9 @@ must not be read as the complete long-term distribution topology.
 | `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, typography, motion, layers, and utilities. | Non-grid beta     |
 | `@vyrnforge/ui-behaviors`  | Framework-neutral component controllers, state rules, and reasoned events.            | Non-grid beta     |
 | `@vyrnforge/ui-components` | First-class React package.                                                            | Non-grid beta     |
-| `@vyrnforge/ui-elements`   | First-class native HTML Custom Element package.                                       | Non-grid beta     |
+| `@vyrnforge/ui-elements`   | First-class Native HTML / Custom Elements package.                                    | Non-grid beta     |
+| `@vyrnforge/ui-angular`    | First-class Angular facade over canonical Custom Elements.                            | Non-grid beta     |
+| `@vyrnforge/ui-vue`        | First-class Vue facade over canonical Custom Elements.                                | Non-grid beta     |
 | `@vyrnforge/ui-data-grid`  | Specialized React data-grid package.                                                  | Independent alpha |
 
 Exact current repository release versions and dependencies are canonical in
@@ -127,17 +129,23 @@ Exact current repository release versions and dependencies are canonical in
 ## Current implemented framework state
 
 Current package manifests and release metadata are authoritative for what ships.
-React and native HTML are implemented first-class packages. Angular and Vue are
-in the approved first-class distribution program and must not be described as
-shipped public packages until their implementation and release gates pass.
+React, Native HTML, Angular, and Vue are implemented first-class non-grid
+surfaces. Angular and Vue remain adapters over the canonical Custom Element
+implementation and share the same VyrnForge design, behavior, accessibility,
+styling, metadata, and verification foundations.
+
+The supported Angular and Vue ranges are governed by current compatibility
+metadata and package peer policies. Framework package availability does not by
+itself claim completion of separately governed manual assistive-technology or
+external trusted-publisher evidence.
 
 Current and historical framework evidence is documented by the applicable ADRs,
-metadata, consumer fixtures, and package manifests.
+metadata, consumer fixtures, package manifests, and protected CI evidence.
 
 ## Approved S10-S15 target architecture
 
 The approved product support target is four equally first-class supported web
-surfaces: React, native HTML, Angular, and Vue. VyrnForge is not creating four
+surfaces: React, Native HTML, Angular, and Vue. VyrnForge is not creating four
 independent component libraries.
 
 Accepted target decisions include:
@@ -147,16 +155,16 @@ Accepted target decisions include:
   implementation; generated or generic framework facades are preferred and
   dedicated renderers require explicit technical exceptions.
 - [ADR-006](../architecture/adr-006-framework-package-strategy.md): React keeps
-  `@vyrnforge/ui-components`, native HTML keeps `@vyrnforge/ui-elements`, and
-  the target Angular/Vue packages are `@vyrnforge/ui-angular` and
+  `@vyrnforge/ui-components`, Native HTML keeps `@vyrnforge/ui-elements`, and
+  the Angular/Vue packages are `@vyrnforge/ui-angular` and
   `@vyrnforge/ui-vue`.
 - [ADR-008](../architecture/adr-008-framework-exception-policy.md): framework
   exceptions must be narrow, evidence-backed, owned, tested, and have explicit
   exit/review criteria.
 
-Target decisions define intended architecture even when corresponding packages
-or dependency edges have not yet shipped. Current manifests and release metadata
-remain authoritative for implemented distribution state.
+These decisions now describe both the intended architecture and the implemented
+non-grid package topology. Current manifests and release metadata remain
+authoritative for exact versions, dependency edges, and release classification.
 
 The data grid remains React-only on its independent alpha track during S10-S15.
 Multi-framework grid implementation and additional advanced modules require

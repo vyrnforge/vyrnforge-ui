@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "sprint": "S14",
+    "id": "MFD-1418",
+    "title": "Run full React parity, performance, accessibility, and compatibility gate",
+    "status": "enforced"
+  },
+  "package": "@vyrnforge/ui-components",
+  "baseline": "docs/metadata/react-compatibility-baseline.json",
+  "evidence": {
+    "parity": [
+      "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx",
+      "packages/ui-components/src/__tests__/react-batch-2-forms.test.tsx",
+      "packages/ui-components/src/__tests__/react-batch-3-navigation.test.tsx",
+      "packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx",
+      "packages/ui-components/src/__tests__/react-batch-5-overlay-convergence.test.ts",
+      "packages/ui-components/src/__tests__/react-batch-6-catalog-convergence.test.ts",
+      "packages/ui-components/src/__tests__/react-exception-catalog.test.ts",
+      "packages/ui-components/src/__tests__/react-implementation-cleanup.test.ts"
+    ],
+    "accessibility": [
+      "packages/ui-components/src/components/__tests__/accessibility.test.tsx",
+      "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
+      "docs/metadata/cross-framework-accessibility-review.json",
+      "test-results/cross-framework-matrix/accessibility-report.json"
+    ],
+    "performance": {
+      "budgetSource": "docs/metadata/beta-package-size-budgets.json",
+      "artifactReport": "test-results/beta-package-artifacts/size-report.json",
+      "package": "@vyrnforge/ui-components"
+    },
+    "compatibility": {
+      "matrix": "docs/metadata/compatibility-release-matrix.json",
+      "fixture": "tests/consumers/react",
+      "requiredCases": ["react18-node22-chromium", "react19-node24-chromium"]
+    },
+    "consumer": "tests/consumers/react/fixture.json",
+    "ssr": "docs/metadata/react-ssr-hydration-contract.json",
+    "cleanup": "docs/metadata/react-implementation-cleanup.json"
+  },
+  "protectedCi": {
+    "workflow": ".github/workflows/ci.yml",
+    "reactLaneBase": "integration/react",
+    "requiredResponsibilities": [
+      "quality",
+      "integration",
+      "react-compatibility",
+      "ci-gate"
+    ],
+    "compatibilitySourceOfTruth": "docs/metadata/compatibility-release-matrix.json"
+  },
+  "regressionPolicy": {
+    "materialRegressionRequiresExplicitException": true,
+    "regressionExceptions": [],
+    "implementationExceptionCatalog": "docs/metadata/react-exception-catalog.json",
+    "noDormantDuplicateImplementation": true
+  },
+  "acceptance": [
+    "Captured React public API and behavior invariants remain enforced.",
+    "React accessibility and browser interaction evidence remains green.",
+    "The @vyrnforge/ui-components package remains within canonical BT-8004 package and CSS budgets.",
+    "Every supported React major is exercised through the canonical packed compatibility matrix on React-lane pull requests.",
+    "The normal packed React consumer uses only the intended public React package path.",
+    "No material public DX, accessibility, behavior, compatibility, or performance regression is accepted without an explicit governed exception.",
+    "No dormant duplicate implementation path is retained for rollback or historical reasons."
+  ]
+}
