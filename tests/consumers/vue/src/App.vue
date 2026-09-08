@@ -149,16 +149,17 @@ onMounted(async () => {
       description="Vue 3 consumes the native VyrnForge package directly."
     >
       <span slot="status" data-vue-slot="status">Vue 3.5</span>
-      <VyrnForgeButton
-        id="vue-save"
-        slot="actions"
-        action="vue-save"
-        variant="primary"
-        @vf-action="handleAction"
-        @action="handleGeneratedButtonAction"
-      >
-        Save from Vue
-      </VyrnForgeButton>
+      <span slot="actions" data-vue-slot="actions">
+        <VyrnForgeButton
+          id="vue-save"
+          action="vue-save"
+          variant="primary"
+          @vf-action="handleAction"
+          @action="handleGeneratedButtonAction"
+        >
+          Save from Vue
+        </VyrnForgeButton>
+      </span>
     </vf-page-header>
 
     <VyrnForgeTabs
