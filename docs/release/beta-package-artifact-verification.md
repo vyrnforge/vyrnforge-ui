@@ -11,7 +11,7 @@ Run the complete gate with:
 npm run verify:beta-package-artifacts
 ```
 
-The command builds the four beta packages, creates real npm tarballs, checks the
+The command builds the five beta packages, creates real npm tarballs, checks the
 exact packed payload, installs those tarballs into a clean fixture with npm
 `--offline`, resolves every public entry point from the installed package, runs a
 TypeScript typecheck and production Vite build, writes reviewable reports, and

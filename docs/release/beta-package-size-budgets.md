@@ -1,6 +1,6 @@
 # Beta package size budgets
 
-BT-8004 makes package growth a reviewed release decision for the four packages in the `non-grid-beta` release group. `@vyrnforge/ui-data-grid` remains outside this gate.
+BT-8004 makes package growth a reviewed release decision for the five packages in the `non-grid-beta` release group. `@vyrnforge/ui-data-grid` remains outside this gate.
 
 The canonical limits live in [`docs/metadata/beta-package-size-budgets.json`](../metadata/beta-package-size-budgets.json). Initial packed and unpacked baselines come from the successful BT-8003 package artifact run for commit `bf55580f4fcafc2cf286958490f6f4d51382b746`.
 

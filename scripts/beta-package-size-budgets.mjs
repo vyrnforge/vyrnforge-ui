@@ -211,11 +211,12 @@ export function verifySizeBudgetContract({ root = repositoryRoot } = {}) {
     "@vyrnforge/ui-behaviors",
     "@vyrnforge/ui-components",
     "@vyrnforge/ui-elements",
+    "@vyrnforge/ui-vue",
   ];
   const actualPackages = (manifest.packages ?? []).map(({ name }) => name);
   if (JSON.stringify(actualPackages) !== JSON.stringify(expectedPackages)) {
     failures.push(
-      "BT-8004 must budget exactly the four non-grid beta packages",
+      "BT-8004 must budget exactly the five non-grid beta packages",
     );
   }
   if (actualPackages.some((name) => name.includes("ui-data-grid"))) {
