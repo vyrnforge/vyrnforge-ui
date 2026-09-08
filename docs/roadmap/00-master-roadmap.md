@@ -179,12 +179,12 @@ S10-S15 completed the transition from a mixed implementation/support hierarchy
 to one cohesive multi-framework distribution model. The closed support surface
 is:
 
-| Surface     | Consumer package                  | Support status | Implementation strategy |
-| ----------- | --------------------------------- | -------------- | ----------------------- |
-| React       | `@vyrnforge/ui-components`        | First-class    | Canonical-backed public React surface with narrow explicit exceptions |
-| Native HTML | `@vyrnforge/ui-elements`          | First-class    | Default browser implementation through canonical `vf-*` Custom Elements |
-| Angular     | `@vyrnforge/ui-angular`           | First-class    | Generated/generic Angular facade over shared canonical foundations, including Forms integration |
-| Vue         | `@vyrnforge/ui-vue`               | First-class    | Generated/generic Vue facade over shared canonical foundations with idiomatic model/slot/ref integration |
+| Surface     | Consumer package           | Support status | Implementation strategy                                                                                  |
+| ----------- | -------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- |
+| React       | `@vyrnforge/ui-components` | First-class    | Canonical-backed public React surface with narrow explicit exceptions                                    |
+| Native HTML | `@vyrnforge/ui-elements`   | First-class    | Default browser implementation through canonical `vf-*` Custom Elements                                  |
+| Angular     | `@vyrnforge/ui-angular`    | First-class    | Generated/generic Angular facade over shared canonical foundations, including Forms integration          |
+| Vue         | `@vyrnforge/ui-vue`        | First-class    | Generated/generic Vue facade over shared canonical foundations with idiomatic model/slot/ref integration |
 
 Implementation strategy is not a support ranking. Shared contracts, behaviors,
 tokens, accessibility rules, terminology, and generated metadata remain the
