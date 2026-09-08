@@ -24,10 +24,10 @@ alpha track, not the definition of the library.
 
 ## Maturity and release channels
 
-| Track           | Packages                                                                                                                                                              | npm tag |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| Non-grid beta   | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-angular`, `@vyrnforge/ui-vue`                     | `beta`  |
-| Data-grid alpha | `@vyrnforge/ui-data-grid`                                                                                                                                             | `alpha` |
+| Track           | Packages                                                                                                                                            | npm tag |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| Non-grid beta   | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-angular`, `@vyrnforge/ui-vue` | `beta`  |
+| Data-grid alpha | `@vyrnforge/ui-data-grid`                                                                                                                           | `alpha` |
 
 Use explicit prerelease tags. A registry-managed `latest` tag is not a
 VyrnForge stability signal while the packages remain prerelease. Component
