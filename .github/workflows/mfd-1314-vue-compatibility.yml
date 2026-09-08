@@ -1,0 +1,58 @@
+name: MFD-1314 Vue Compatibility Evidence
+
+on:
+  push:
+    branches:
+      - feat/MFD-1314-vue-support-evidence
+    paths:
+      - ".github/workflows/mfd-1314-vue-compatibility.yml"
+      - "docs/metadata/compatibility-release-matrix.json"
+      - "docs/metadata/vue-support-evidence.json"
+      - "scripts/compatibility-release-matrix.mjs"
+      - "scripts/run-compatibility-release-case.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  vue-compatibility:
+    name: vue-compatibility-${{ matrix.id }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: vue35-min-node22-chromium
+            node: "22.12.0"
+          - id: vue35-current-node24-chromium
+            node: "24.18.0"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Use repository package manager
+        env:
+          npm_config_engine_strict: "false"
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install repository dependencies
+        env:
+          npm_config_engine_strict: "false"
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run explicit Vue compatibility case
+        env:
+          npm_config_engine_strict: "false"
+        run: npm run verify:compatibility-release-case -- --case ${{ matrix.id }}
+      - name: Upload compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: mfd-1314-${{ matrix.id }}
+          path: test-results/compatibility-release-matrix/${{ matrix.id }}.json
+          if-no-files-found: error
