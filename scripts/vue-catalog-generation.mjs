@@ -86,6 +86,7 @@ export function createVueCatalogModel(generationModel) {
         tag: native.tag,
         specialized: SPECIALIZED.has(record.id),
         model: createModelRecord(record),
+        methods: record.methods.map((method) => method.name),
       };
     })
     .sort((left, right) => compareText(left.id, right.id));
@@ -115,9 +116,13 @@ function serializeModel(model) {
   return JSON.stringify(model);
 }
 
+function serializeMethods(methods) {
+  return JSON.stringify(methods);
+}
+
 function genericExportLine(component) {
   if (component.specialized) return `export { ${component.exportName} };`;
-  return `export const ${component.exportName} = createVyrnForgeVueFacade("${component.exportName}", "${component.tag}", ${serializeModel(component.model)});`;
+  return `export const ${component.exportName} = createVyrnForgeVueFacade("${component.exportName}", "${component.tag}", ${serializeModel(component.model)}, ${serializeMethods(component.methods)});`;
 }
 
 export function serializeVueCatalog(components) {
@@ -157,6 +162,7 @@ function createVyrnForgeVueFacade(
   name: string,
   tag: VyrnForgePublicElementTagName,
   model?: GeneratedVueModel,
+  methods: readonly string[] = [],
 ): Component {
   return defineComponent({
     name,
@@ -181,11 +187,22 @@ function createVyrnForgeVueFacade(
         });
       }
 
-      expose({
+      const exposed: Record<string, unknown> = {
         get element() {
           return element.value;
         },
-      });
+      };
+      for (const methodName of methods) {
+        exposed[methodName] = (...args: unknown[]) => {
+          const target = element.value;
+          const method = target?.[methodName];
+          return typeof method === "function"
+            ? method.apply(target, args)
+            : undefined;
+        };
+      }
+      expose(exposed);
+
       return () =>
         h(
           tag,
