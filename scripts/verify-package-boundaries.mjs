@@ -324,7 +324,10 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
           path.dirname(sourceFile),
           specifier,
         );
-        for (const [targetPackageName, targetPackageDirectory] of packageLocations) {
+        for (const [
+          targetPackageName,
+          targetPackageDirectory,
+        ] of packageLocations) {
           if (
             targetPackageName !== packageDefinition.name &&
             isWithin(targetPackageDirectory, resolvedImport)
