@@ -15,8 +15,6 @@ import {
   buildNativeElementArtifacts,
   serializeCustomElementsManifest,
 } from "./generate-ui-elements-manifest.mjs";
-import { buildVueCatalogArtifact } from "./vue-catalog-generation.mjs";
-import { buildVueTypedCatalogArtifact } from "./vue-type-generation.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -73,8 +71,6 @@ export function buildGeneratedFrameworkArtifacts({
   const textInput = buildFrameworkTextInputSliceArtifacts({ root });
   const tabs = buildFrameworkTabsSliceArtifacts({ root });
   const dialog = buildFrameworkDialogSliceArtifacts({ root });
-  const vueCatalog = buildVueCatalogArtifact({ root });
-  const vueTypes = buildVueTypedCatalogArtifact({ root });
 
   return Object.freeze([
     freezeArtifact({
@@ -126,20 +122,6 @@ export function buildGeneratedFrameworkArtifacts({
       "scripts/generate-framework-dialog-slice.mjs",
       "npm run generate:framework-artifacts",
     ),
-    freezeArtifact({
-      path: vueCatalog.path,
-      generator: "scripts/vue-catalog-generation.mjs",
-      command: "npm run generate:framework-artifacts",
-      sourceRecords: vueCatalog.sourceRecords,
-      content: vueCatalog.content,
-    }),
-    freezeArtifact({
-      path: vueTypes.path,
-      generator: "scripts/vue-type-generation.mjs",
-      command: "npm run generate:framework-artifacts",
-      sourceRecords: vueTypes.sourceRecords,
-      content: vueTypes.content,
-    }),
   ]);
 }
 

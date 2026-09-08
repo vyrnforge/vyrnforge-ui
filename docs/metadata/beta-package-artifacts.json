@@ -18,7 +18,7 @@
     "channel": "beta",
     "version": "0.2.0-beta.2",
     "distTag": "beta",
-    "packageCount": 5,
+    "packageCount": 6,
     "excludes": ["@vyrnforge/ui-data-grid"]
   },
   "packages": [
@@ -217,6 +217,47 @@
       "requiredPayload": [
         "dist/index.cjs",
         "dist/index.css",
+        "dist/index.d.ts",
+        "dist/index.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+      ]
+    },
+    {
+      "name": "@vyrnforge/ui-angular",
+      "directory": "packages/ui-angular",
+      "version": "0.2.0-beta.2",
+      "files": ["dist", "README.md"],
+      "sideEffects": false,
+      "main": "./dist/index.js",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "entryPoints": [
+        {
+          "exportKey": ".",
+          "specifier": "@vyrnforge/ui-angular",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+          }
+        },
+        {
+          "exportKey": "./forms",
+          "specifier": "@vyrnforge/ui-angular/forms",
+          "kind": "conditional",
+          "targets": {
+            "types": "./dist/forms.d.ts",
+            "import": "./dist/forms.js",
+            "default": "./dist/forms.js"
+          }
+        }
+      ],
+      "requiredPayload": [
+        "dist/forms.d.ts",
+        "dist/forms.js",
         "dist/index.d.ts",
         "dist/index.js",
         "LICENSE",

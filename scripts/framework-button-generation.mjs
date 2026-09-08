@@ -5,7 +5,7 @@ export const FRAMEWORK_BUTTON_ARTIFACT_PATHS = Object.freeze({
   native: "tests/consumers/native-html/src/generated/vf-button.generated.ts",
   react: "tests/consumers/react/src/generated/Button.generated.tsx",
   angular: "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
-  vue: "packages/ui-vue/src/generated/VfButton.generated.ts",
+  vue: "tests/consumers/vue/src/generated/VfButton.generated.ts",
 });
 
 const GENERATED_HEADER = `/**
@@ -497,6 +497,8 @@ function vueSource(model) {
     (event) => event.canonical === "vf-action",
   );
   const defaultSlot = record.slots.find((slot) => slot.canonical === "default");
+  const prefixSlot = record.slots.find((slot) => slot.canonical === "prefix");
+  const suffixSlot = record.slots.find((slot) => slot.canonical === "suffix");
   assert(
     actionEvent?.mode === "emit",
     "vue: Button vf-action must generate an emit",
@@ -525,7 +527,6 @@ import type { PropType } from "vue";
 import type {
 ${typeImportBlock.map((name) => `  ${name},`).join("\n")}
 } from "@vyrnforge/ui-elements";
-import { renderVyrnForgeSlots } from "../slots";
 
 export type VfButtonElement = VyrnForgeElementForTagName<"vf-button">;
 
@@ -588,7 +589,15 @@ ${vueAssignmentLines(record).join("\n")}
           ref: elementRef,
           "data-vf-generated-button": "vue",
         },
-        renderVyrnForgeSlots(slots),
+        [
+          slots.${prefixSlot?.public ?? "prefix"}
+            ? h("span", { slot: "prefix" }, slots.${prefixSlot?.public ?? "prefix"}?.())
+            : null,
+          slots.${defaultSlot.public}?.(),
+          slots.${suffixSlot?.public ?? "suffix"}
+            ? h("span", { slot: "suffix" }, slots.${suffixSlot?.public ?? "suffix"}?.())
+            : null,
+        ],
       );
   },
 });

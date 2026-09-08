@@ -1,0 +1,107 @@
+.vf-docs-page--overview {
+  gap: 0;
+}
+
+.vf-docs-overview {
+  display: grid;
+  gap: 28px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.vf-docs-overview__hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(24px, 5vw, 48px);
+  border: 1px solid var(--vf-border, #e2e8f0);
+  border-radius: var(--vf-radius-xl, 12px);
+  background:
+    radial-gradient(
+      circle at top right,
+      var(--vf-primary-soft, #dbeafe),
+      transparent 42%
+    ),
+    var(--vf-surface, #ffffff);
+  box-shadow: var(--vf-shadow-md, 0 4px 12px rgba(15, 23, 42, 0.08));
+}
+
+.vf-docs-overview__hero .vf-heading {
+  max-width: 760px;
+}
+
+.vf-docs-overview__eyebrow {
+  margin-bottom: 8px;
+  color: var(--vf-primary, #2563eb);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vf-docs-overview__lede {
+  max-width: 780px;
+}
+
+.vf-docs-overview__actions {
+  flex-wrap: wrap;
+}
+
+.vf-docs-overview__section {
+  min-width: 0;
+}
+
+.vf-docs-overview__framework-grid,
+.vf-docs-overview__discovery-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.vf-docs-overview__framework-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.vf-docs-overview__discovery-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.vf-docs-overview__framework-card {
+  min-width: 0;
+}
+
+.vf-docs-overview__framework-card:has(.vf-badge--info) {
+  border-color: var(--vf-primary, #2563eb);
+}
+
+.vf-docs-overview__framework-card .vf-button,
+.vf-docs-overview__discovery-grid .vf-button {
+  margin-top: auto;
+}
+
+.vf-docs-overview__release-lines {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1080px) {
+  .vf-docs-overview__framework-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vf-docs-overview__discovery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .vf-docs-overview {
+    gap: 22px;
+  }
+
+  .vf-docs-overview__hero {
+    padding: 22px;
+  }
+
+  .vf-docs-overview__framework-grid,
+  .vf-docs-overview__discovery-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

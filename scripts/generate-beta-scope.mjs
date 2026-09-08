@@ -212,7 +212,7 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
       maturityRule:
         "Scope inclusion does not promote component maturity. Canonical maturity remains owned by docs/metadata/components.json and its maturity evidence policy.",
       angularVueRule:
-        "Angular remains a verified consumer of @vyrnforge/ui-elements. Vue publishes a first-class @vyrnforge/ui-vue facade over the same canonical element renderer rather than a separate rendering implementation.",
+        "Angular and Vue are verified consumers of @vyrnforge/ui-elements; they are not separate component implementations or published renderer packages.",
       gridRule:
         "All @vyrnforge/ui-data-grid public exports remain on the independent React alpha track and are deferred from this beta release group.",
     },
@@ -301,8 +301,8 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
     ],
     scopeBlockers: [],
     acceptedLimitations: [
-      "React, native HTML, and Vue are first-class framework surfaces; Vue remains a thin published facade over the canonical native renderer, while Angular is a verified consumer of that renderer.",
-      "Angular Forms remains a reference adapter; Vue v-model is exposed through the published @vyrnforge/ui-vue facade while canonical rendering and behavior remain shared.",
+      "React and native HTML are first-class renderers; Angular and Vue are verified consumers of the native renderer.",
+      "Angular Forms and Vue v-model bridges are reference adapters and are not separate published component libraries.",
       "The React data grid remains explicitly deferred from the non-grid beta release group.",
       "Non-web native platforms remain outside this beta support claim.",
     ],

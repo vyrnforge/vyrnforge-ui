@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "task": "MFD-1414",
+  "deliverable": "React batch 6",
+  "policy": "Every reviewed non-grid layout/data-management surface must be canonical-backed or carry an explicit parity blocker; eligible-legacy is forbidden.",
+  "canonicalCutovers": [],
+  "surfaces": [
+    {
+      "name": "Card",
+      "canonicalTag": "vf-card",
+      "status": "blocked-by-parity",
+      "blocker": "native-host-contract",
+      "sourcePath": "packages/ui-components/src/components/Card/Card.tsx",
+      "reason": "React Card exposes HTMLAttributes<HTMLDivElement> and a div root. Replacing that public native host with a Custom Element changes DOM/tag and event-currentTarget semantics; the generic canonical display element does not yet adopt an existing native root."
+    },
+    {
+      "name": "Stack",
+      "canonicalTag": "vf-stack",
+      "status": "blocked-by-parity",
+      "blocker": "native-host-contract",
+      "sourcePath": "packages/ui-components/src/components/Stack/Stack.tsx",
+      "reason": "React Stack exposes HTMLAttributes<HTMLDivElement> over its div root. Canonical vf-stack preserves children but cannot adopt that native host without changing the captured React DOM and event target contract."
+    },
+    {
+      "name": "Inline",
+      "canonicalTag": "vf-inline",
+      "status": "blocked-by-parity",
+      "blocker": "native-host-contract",
+      "sourcePath": "packages/ui-components/src/components/Inline/Inline.tsx",
+      "reason": "React Inline exposes HTMLAttributes<HTMLDivElement> and native div event semantics. Direct Custom Element replacement would change the public DOM host despite visual-property parity."
+    },
+    {
+      "name": "Panel",
+      "canonicalTag": "vf-panel",
+      "status": "blocked-by-parity",
+      "blocker": "rich-composition",
+      "sourcePath": "packages/ui-components/src/components/Panel/Panel.tsx",
+      "reason": "React Panel owns section/header/heading/body structure with ReactNode title, description, actions, and children. Generic vf-panel only provides a region host and cannot preserve that composed DOM contract."
+    },
+    {
+      "name": "Section",
+      "canonicalTag": "vf-section",
+      "status": "blocked-by-parity",
+      "blocker": "rich-composition",
+      "sourcePath": "packages/ui-components/src/components/Section/Section.tsx",
+      "reason": "React Section owns semantic section/header/action composition with ReactNode content while the generic canonical display host does not reproduce or adopt that structure."
+    },
+    {
+      "name": "AppShell",
+      "canonicalTag": "vf-app-shell",
+      "status": "blocked-by-parity",
+      "blocker": "rich-composition",
+      "sourcePath": "packages/ui-components/src/components/AppShell/AppShell.tsx",
+      "reason": "React AppShell owns header/sidebar/main/footer ReactNode regions and native div root semantics; vf-app-shell consumes and rewrites Light-DOM slot nodes into its own scaffold, so direct conversion changes ownership and host behavior."
+    },
+    {
+      "name": "Page",
+      "canonicalTag": "vf-page",
+      "status": "blocked-by-parity",
+      "blocker": "rich-composition",
+      "sourcePath": "packages/ui-components/src/components/Page/Page.tsx",
+      "reason": "React Page owns a semantic main root, composes PageHeader and toolbar/body regions, and accepts rich title/status/action content. Direct vf-page adoption cannot preserve the current native host and composed React subtree contract."
+    },
+    {
+      "name": "PageHeader",
+      "canonicalTag": "vf-page-header",
+      "status": "blocked-by-parity",
+      "blocker": "rich-composition",
+      "sourcePath": "packages/ui-components/src/components/PageHeader/PageHeader.tsx",
+      "reason": "React PageHeader accepts ReactNode title, description, eyebrow, status, metadata, actions, and breadcrumbs; canonical vf-page-header models title/description/eyebrow as strings and rewrites named Light-DOM regions."
+    },
+    {
+      "name": "PageToolbar",
+      "canonicalTag": "vf-page-toolbar",
+      "status": "blocked-by-parity",
+      "blocker": "rich-composition",
+      "sourcePath": "packages/ui-components/src/components/PageToolbar/PageToolbar.tsx",
+      "reason": "React PageToolbar owns left/right ReactNode regions on a native div root. Canonical vf-page-toolbar rewrites Light-DOM slot ownership and adds toolbar host semantics, which requires an adoption contract before parity-safe migration."
+    }
+  ],
+  "exitCriteria": {
+    "native-host-contract": "Add a shared canonical Light-DOM/native-host adoption capability that preserves documented native root tag, HTML attribute typing, event currentTarget/ref semantics, classes, and children.",
+    "rich-composition": "Add framework-neutral rich named-region composition/adoption that preserves ReactNode content, semantic native roots, existing wrapper DOM, and consumer event/ref contracts without canonical DOM replacement."
+  }
+}

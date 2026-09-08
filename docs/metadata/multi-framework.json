@@ -97,7 +97,7 @@
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-components",
       "fixture": "tests/consumers/react",
-      "betaClaim": "custom-elements-consumer-verified"
+      "betaClaim": "react-public-package-consumer-verified"
     },
     {
       "id": "native-html",

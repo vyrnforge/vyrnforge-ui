@@ -1,12 +1,14 @@
 # Beta package size budgets
 
-BT-8004 makes package growth a reviewed release decision for the five packages in the `non-grid-beta` release group. `@vyrnforge/ui-data-grid` remains outside this gate.
+BT-8004 makes package growth a reviewed release decision for every package in the canonical `non-grid-beta` release group. `@vyrnforge/ui-data-grid` remains outside this gate.
 
-The canonical limits live in [`docs/metadata/beta-package-size-budgets.json`](../metadata/beta-package-size-budgets.json). The original four-package baselines come from the retained BT-8003 artifact evidence recorded in that manifest. The `@vyrnforge/ui-vue` baseline was measured during MFD-1315 in GitHub Actions run `34188917610` from the publishable five-package release set: 20,609 packed bytes, 162,815 unpacked bytes, 16 files, 61,003 runtime JavaScript bytes, 89,517 declaration bytes, and 0 CSS bytes.
+The canonical limits live in [`docs/metadata/beta-package-size-budgets.json`](../metadata/beta-package-size-budgets.json), and package coverage/order derives from [`docs/metadata/release-groups.json`](../metadata/release-groups.json). The original foundation/renderer baselines come from the successful BT-8003 package artifact run for commit `bf55580f4fcafc2cf286958490f6f4d51382b746`; framework-adapter baselines retain their task-specific protected-run evidence. Angular's combined-state baseline was captured in protected reconciliation CI run `34199514851`, and Vue's baseline was captured in MFD-1315 artifact run `34188917610`.
 
 ## Measured dimensions
 
 Each package is checked for npm packed bytes, npm unpacked bytes, published file count, runtime JavaScript bytes, declaration bytes, and CSS bytes. The runtime dimensions are calculated from the built `dist/` directory after BT-8003 creates and verifies the real beta tarballs.
+
+The current synchronized beta line covers `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-components`, `@vyrnforge/ui-angular`, and `@vyrnforge/ui-vue`, in canonical release order. Adding or removing a future beta package updates this gate through the release-group source of truth rather than a hard-coded package count.
 
 ## Waivers
 

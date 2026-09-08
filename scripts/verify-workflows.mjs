@@ -177,6 +177,9 @@ for (const marker of [
   "npm run verify:consumer",
   "npm run test:browser",
   "npm run verify:repository-inventory",
+  "node scripts/assemble-versioned-pages.mjs",
+  "node scripts/verify-pages-site.mjs",
+  "VITE_PLAYGROUND_VERSION_ID: next",
   "pages-site-${{ github.sha }}",
   "actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0",
   "ACTIONLINT_VERSION: 1.7.12",
@@ -185,6 +188,10 @@ for (const marker of [
 ]) {
   assert(ci.includes(marker), `ci.yml must directly own ${marker}`);
 }
+assert(
+  ci.includes("fetch-depth:") && ci.includes("fetch-tags:"),
+  "ci.yml exact-main delivery must fetch history and tags for retained reference snapshots",
+);
 assert(!ci.includes("npm publish"), "ci.yml must never publish packages");
 
 const assurance = read(".github/workflows/assurance.yml");
@@ -244,6 +251,10 @@ for (const marker of [
   "test -f site/index.html",
   "test -f site/playground/index.html",
   "test -f site/.nojekyll",
+  "test -f site/vyrnforge-versions.json",
+  "test -f site/docs-versions.json",
+  "catalog.current?.commit",
+  "release.playgroundPath",
   "pages: write",
   "id-token: write",
 ]) {
@@ -297,6 +308,8 @@ assert(
 for (const relativePath of [
   "docs/engineering/ci-cd-architecture.md",
   "docs/release/release-responsibility-matrix.md",
+  "scripts/assemble-versioned-pages.mjs",
+  "scripts/verify-pages-site.mjs",
 ]) {
   assert(
     existsSync(path.join(root, relativePath)),

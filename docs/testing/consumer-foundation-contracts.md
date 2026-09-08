@@ -1,35 +1,32 @@
 # Consumer Foundation Contracts
 
-CF-7001, CF-7002, and CF-7008 establish the first runtime evidence inside
+CF-7001, CF-7002, and CF-7008 established the original runtime evidence inside
 S7 / GMF4. The canonical machine-readable record is
-`docs/metadata/consumer-foundations.json`.
+`docs/metadata/consumer-foundations.json`. MFD-1417 promotes the React fixture
+to the final first-class package path without changing the native HTML contract.
 
 ## Scope
 
-This batch verifies two packed-package consumers:
+The consumer foundation verifies clean packed consumption for:
 
-- native HTML with no framework runtime;
-- React 19 consuming `@vyrnforge/ui-elements` directly.
+- native HTML through `@vyrnforge/ui-elements`;
+- React through the public `@vyrnforge/ui-components` package;
+- Angular and Vue through their current verified native-element integrations.
 
-Angular is verified separately by CF-7003 and
-`docs/metadata/angular-consumer.json`. CF-7005 makes the Vue fixture and runtime
-verifier ready, with pending evidence recorded in
-`docs/metadata/vue-consumer.json`. The data grid remains outside the non-grid
-beta gate.
+The data grid remains outside the non-grid beta gate.
 
 ## Clean package rule
 
-Runtime fixtures install npm tarballs for:
-
-```text
-@vyrnforge/ui-core
-@vyrnforge/ui-behaviors
-@vyrnforge/ui-elements
-```
-
-Installed packages must be ordinary files under each fixture's
+Verification packs the shared VyrnForge packages needed to exercise each
+surface. Installed artifacts must be ordinary files under each fixture's
 `node_modules`, not workspace symlinks. Consumer source must not use
 `packages/*/src`, TypeScript path aliases, or repository-relative imports.
+
+For the React fixture, normal application code imports only
+`@vyrnforge/ui-components` and its public stylesheet. `@vyrnforge/ui-core`,
+`@vyrnforge/ui-behaviors`, and `@vyrnforge/ui-elements` may be present as
+transitive implementation dependencies, but React application code must not
+import, register, or type against them.
 
 ## CF-7001 native HTML evidence
 
@@ -44,21 +41,21 @@ Installed packages must be ordinary files under each fixture's
 7. `ElementInternals` form submission;
 8. production Vite output and Chromium interaction.
 
-## CF-7002 React evidence
+## MFD-1417 React evidence
 
-`tests/consumers/react` proves React 19 can consume native VyrnForge
-elements directly from packed packages. The application owns its JSX
-declaration adapter, so `@vyrnforge/ui-elements` remains independent from
-React.
+`tests/consumers/react` proves React can consume VyrnForge through the intended
+first-class public package from packed artifacts. The fixture imports
+components, component types, and styles from `@vyrnforge/ui-components` only.
+It does not carry a Custom Element JSX declaration shim, generated local native
+wrappers, explicit element registration, or direct native-package imports.
 
-Evidence covers typed refs, non-scalar property assignment, explicit
-registration, canonical DOM listeners, production output, and Chromium
-interaction. `@vyrnforge/ui-components` remains the recommended first-class
-React renderer.
+Evidence covers clean packed installation, TypeScript typecheck, production
+Vite output, SSR-safe import, canonical-backed runtime behavior, controlled
+React state, keyboard interaction, and accessibility checks.
 
 ## CF-7008 declaration and metadata evidence
 
-The package exposes:
+The native package separately exposes:
 
 - `VyrnForgeHTMLElementTagNameMap`;
 - global `HTMLElementTagNameMap` augmentation for all 58 public tags;
@@ -87,8 +84,3 @@ npm run verify:vue-consumer:runtime
 npm run verify:packages
 npm run quality
 ```
-
-GMF4 remains in progress. CF-7003 adds Angular runtime evidence, while CF-7005
-completes the Vue clean packed build and Chromium evidence. Vue `v-model`,
-cross-framework matrices, compatibility documentation, and final gate sign-off
-remain S7 work.

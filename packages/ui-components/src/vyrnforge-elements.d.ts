@@ -6,6 +6,73 @@ type ElementProps<TElement extends HTMLElement> = DetailedHTMLProps<
   TElement
 >;
 
+type CanonicalTextControlProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    autocomplete?: string;
+    disabled?: boolean;
+    inputMode?: string;
+    invalid?: boolean;
+    label?: string;
+    max?: number | string;
+    min?: number | string;
+    mode?: "decimal" | "integer";
+    placeholder?: string;
+    readOnly?: boolean;
+    required?: boolean;
+    size?: "sm" | "md" | "lg";
+    step?: number | string;
+    value?: string;
+  };
+
+type CanonicalChoiceControlProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    checked?: boolean;
+    disabled?: boolean;
+    invalid?: boolean;
+    readOnly?: boolean;
+    required?: boolean;
+    size?: "sm" | "md" | "lg";
+    value?: string;
+  };
+
+type CanonicalSliderProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    disabled?: boolean;
+    label?: string;
+    max?: number;
+    min?: number;
+    required?: boolean;
+    step?: number;
+    value?: number;
+  };
+
+type CanonicalToggleButtonProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    disabled?: boolean;
+    pressed?: boolean;
+    size?: "sm" | "md" | "lg";
+    type?: "button" | "reset" | "submit";
+    value?: string;
+    variant?: "default" | "quiet" | "outline";
+  };
+
+type CanonicalToggleButtonGroupProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    disabled?: boolean;
+    orientation?: "horizontal" | "vertical";
+    type?: "single" | "multiple";
+    value?: string | string[];
+  };
+
+type CanonicalSelectProps<TElement extends HTMLElement> =
+  ElementProps<TElement> & {
+    disabled?: boolean;
+    invalid?: boolean;
+    required?: boolean;
+    size?: "sm" | "md" | "lg";
+    value?: string;
+  };
+
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
@@ -13,6 +80,46 @@ declare module "react" {
       "vf-icon-button": ElementProps<
         VyrnForgeElementForTagName<"vf-icon-button">
       >;
+      "vf-text-input": CanonicalTextControlProps<
+        VyrnForgeElementForTagName<"vf-text-input">
+      >;
+      "vf-textarea": CanonicalTextControlProps<
+        VyrnForgeElementForTagName<"vf-textarea">
+      >;
+      "vf-search-input": CanonicalTextControlProps<
+        VyrnForgeElementForTagName<"vf-search-input">
+      >;
+      "vf-number-input": CanonicalTextControlProps<
+        VyrnForgeElementForTagName<"vf-number-input">
+      >;
+      "vf-date-input": CanonicalTextControlProps<
+        VyrnForgeElementForTagName<"vf-date-input">
+      >;
+      "vf-datetime-input": CanonicalTextControlProps<
+        VyrnForgeElementForTagName<"vf-datetime-input">
+      >;
+      "vf-checkbox": CanonicalChoiceControlProps<
+        VyrnForgeElementForTagName<"vf-checkbox">
+      >;
+      "vf-radio": CanonicalChoiceControlProps<
+        VyrnForgeElementForTagName<"vf-radio">
+      >;
+      "vf-switch": CanonicalChoiceControlProps<
+        VyrnForgeElementForTagName<"vf-switch">
+      >;
+      "vf-slider": CanonicalSliderProps<
+        VyrnForgeElementForTagName<"vf-slider">
+      >;
+      "vf-toggle-button": CanonicalToggleButtonProps<
+        VyrnForgeElementForTagName<"vf-toggle-button">
+      >;
+      "vf-toggle-button-group": CanonicalToggleButtonGroupProps<
+        VyrnForgeElementForTagName<"vf-toggle-button-group">
+      >;
+      "vf-select": CanonicalSelectProps<
+        VyrnForgeElementForTagName<"vf-select">
+      >;
+      "vf-top-nav": ElementProps<VyrnForgeElementForTagName<"vf-top-nav">>;
     }
   }
 }

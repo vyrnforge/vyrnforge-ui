@@ -4,7 +4,7 @@ export const FRAMEWORK_DIALOG_ARTIFACT_PATHS = Object.freeze({
   native: "tests/consumers/native-html/src/generated/vf-dialog.generated.ts",
   react: "tests/consumers/react/src/generated/Dialog.generated.tsx",
   angular: "tests/consumers/angular/src/app/generated/vf-dialog.generated.ts",
-  vue: "packages/ui-vue/src/generated/VfDialog.generated.ts",
+  vue: "tests/consumers/vue/src/generated/VfDialog.generated.ts",
 });
 
 const TASK_ID = "MFD-1115";
@@ -518,7 +518,6 @@ import {
 } from "vue";
 import type { PropType } from "vue";
 import type { VyrnForgeElementForTagName } from "@vyrnforge/ui-elements";
-import { renderVyrnForgeSlots } from "../slots";
 
 export type VfDialogElement = VyrnForgeElementForTagName<"vf-dialog">;
 
@@ -612,7 +611,13 @@ export const VfDialog = defineComponent({
           ref: elementRef,
           "data-vf-generated-dialog": "vue",
         },
-        renderVyrnForgeSlots(slots),
+        [
+          slots.trigger ? h("span", { slot: "trigger" }, slots.trigger()) : null,
+          slots.header ? h("div", { slot: "header" }, slots.header()) : null,
+          h("div", { slot: "content" }, slots.content?.() ?? []),
+          slots.actions ? h("div", { slot: "actions" }, slots.actions()) : null,
+          slots.footer ? h("div", { slot: "footer" }, slots.footer()) : null,
+        ],
       );
   },
 });

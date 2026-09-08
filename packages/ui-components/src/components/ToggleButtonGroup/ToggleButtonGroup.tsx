@@ -1,7 +1,19 @@
+import {
+  type VyrnForgeElementForTagName,
+  vyrnForgeElementRegistrations,
+} from "@vyrnforge/ui-elements";
+import { type HTMLAttributes, useMemo } from "react";
 import { useToggleGroupBehavior } from "../../internal/behaviors";
+import { useCanonicalElementBridge } from "../../internal/react-native-bridge";
 import { joinClassNames } from "../../utils/classNames";
 import { ToggleButtonGroupContext } from "./ToggleButtonGroup.context";
 import type { ToggleButtonGroupProps } from "./ToggleButtonGroup.types";
+
+type CanonicalToggleButtonGroupElement =
+  VyrnForgeElementForTagName<"vf-toggle-button-group">;
+
+const registerCanonicalToggleButtonGroup =
+  vyrnForgeElementRegistrations["vf-toggle-button-group"];
 
 export function ToggleButtonGroup({
   ariaLabel,
@@ -24,17 +36,43 @@ export function ToggleButtonGroup({
     type,
     value,
   });
+  const canonicalProperties = useMemo(
+    () => ({
+      disabled,
+      orientation,
+      type,
+      value: behavior.value,
+    }),
+    [behavior.value, disabled, orientation, type],
+  );
+  const elementRef =
+    useCanonicalElementBridge<CanonicalToggleButtonGroupElement>(null, {
+      tagName: "vf-toggle-button-group",
+      register: registerCanonicalToggleButtonGroup,
+      properties: canonicalProperties,
+    });
+
+  const restoreCanonicalValue = () => {
+    if (elementRef.current) elementRef.current.value = behavior.value;
+  };
+  const canonicalHostProps =
+    props as unknown as HTMLAttributes<CanonicalToggleButtonGroupElement>;
 
   return (
     <ToggleButtonGroupContext.Provider
       value={{
         disabled,
         isPressed: behavior.isPressed,
+        restoreCanonicalValue,
         size,
-        toggle: behavior.toggle,
+        toggle: (itemValue, reason) => {
+          behavior.toggle(itemValue, reason);
+          if (value !== undefined) restoreCanonicalValue();
+        },
       }}
     >
-      <div
+      <vf-toggle-button-group
+        {...canonicalHostProps}
         aria-label={ariaLabel}
         aria-orientation={orientation}
         className={joinClassNames(
@@ -44,8 +82,11 @@ export function ToggleButtonGroup({
           disabled && "vf-toggle-button-group--disabled",
           className,
         )}
+        disabled={disabled}
         onKeyDown={(event) => {
-          onKeyDown?.(event);
+          onKeyDown?.(
+            event as unknown as Parameters<NonNullable<typeof onKeyDown>>[0],
+          );
           if (
             event.defaultPrevented ||
             !["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(
@@ -73,12 +114,14 @@ export function ToggleButtonGroup({
             buttons.length;
           buttons[nextIndex]?.focus();
         }}
+        orientation={orientation}
+        ref={elementRef}
         role="group"
         style={style}
-        {...props}
+        type={type}
       >
         {children}
-      </div>
+      </vf-toggle-button-group>
     </ToggleButtonGroupContext.Provider>
   );
 }

@@ -6,6 +6,7 @@ import {
 import type { VyrnForgePropertyDeclarations } from "../base/VyrnForgeElement";
 
 export type VyrnForgeInputSize = "sm" | "md" | "lg";
+export type VyrnForgeInputConstraint = number | string | null;
 export type VyrnForgeTextControlKind =
   "date" | "datetime-local" | "number" | "search" | "text" | "textarea";
 
@@ -19,15 +20,16 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
   static override readonly properties: VyrnForgePropertyDeclarations =
     Object.freeze({
       autocomplete: { reflect: true, type: "string" },
+      inputMode: { attribute: "inputmode", reflect: true, type: "string" },
       invalid: { reflect: true, type: "boolean" },
       label: { reflect: true, type: "string" },
-      max: { reflect: true, type: "number" },
-      min: { reflect: true, type: "number" },
+      max: { reflect: true, type: "string" },
+      min: { reflect: true, type: "string" },
       mode: { reflect: true, type: "string" },
       placeholder: { reflect: true, type: "string" },
       readOnly: { attribute: "readonly", reflect: true, type: "boolean" },
       size: { reflect: true, type: "string" },
-      step: { reflect: true, type: "number" },
+      step: { reflect: true, type: "string" },
       value: { reflect: true, type: "string" },
     });
 
@@ -38,6 +40,13 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
   }
   set autocomplete(value: string) {
     this.setPropertyValue("autocomplete", value);
+  }
+
+  get inputMode(): string {
+    return this.getPropertyValue("inputMode", "");
+  }
+  set inputMode(value: string) {
+    this.setPropertyValue("inputMode", value);
   }
 
   get invalid(): boolean {
@@ -54,17 +63,17 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
     this.setPropertyValue("label", value);
   }
 
-  get max(): number | null {
-    return this.getPropertyValue<number | null>("max", null);
+  get max(): VyrnForgeInputConstraint {
+    return this.getPropertyValue<VyrnForgeInputConstraint>("max", null);
   }
-  set max(value: number | null) {
+  set max(value: VyrnForgeInputConstraint) {
     this.setPropertyValue("max", value);
   }
 
-  get min(): number | null {
-    return this.getPropertyValue<number | null>("min", null);
+  get min(): VyrnForgeInputConstraint {
+    return this.getPropertyValue<VyrnForgeInputConstraint>("min", null);
   }
-  set min(value: number | null) {
+  set min(value: VyrnForgeInputConstraint) {
     this.setPropertyValue("min", value);
   }
 
@@ -96,10 +105,10 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
     this.setPropertyValue("size", value);
   }
 
-  get step(): number | null {
-    return this.getPropertyValue<number | null>("step", null);
+  get step(): VyrnForgeInputConstraint {
+    return this.getPropertyValue<VyrnForgeInputConstraint>("step", null);
   }
-  set step(value: number | null) {
+  set step(value: VyrnForgeInputConstraint) {
     this.setPropertyValue("step", value);
   }
 
@@ -166,7 +175,15 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
     if (this.autocomplete)
       control.setAttribute("autocomplete", this.autocomplete);
     else control.removeAttribute("autocomplete");
-    control.setAttribute("aria-invalid", String(this.invalid));
+    if (this.inputMode) control.setAttribute("inputmode", this.inputMode);
+    else if (this.elementConfig.kind === "number") {
+      control.setAttribute(
+        "inputmode",
+        this.mode === "integer" ? "numeric" : "decimal",
+      );
+    } else control.removeAttribute("inputmode");
+    if (this.invalid) control.setAttribute("aria-invalid", "true");
+    else control.removeAttribute("aria-invalid");
     const accessibleLabel =
       this.label ||
       Array.from(this.labels ?? [])
@@ -181,15 +198,9 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
         this.elementConfig.kind === "textarea"
           ? "text"
           : this.elementConfig.kind;
-      control.inputMode =
-        this.elementConfig.kind === "number"
-          ? this.mode === "integer"
-            ? "numeric"
-            : "decimal"
-          : "";
-      this.syncNumberAttribute(control, "min", this.min);
-      this.syncNumberAttribute(control, "max", this.max);
-      this.syncNumberAttribute(control, "step", this.step);
+      this.syncConstraintAttribute(control, "min", this.min);
+      this.syncConstraintAttribute(control, "max", this.max);
+      this.syncConstraintAttribute(control, "step", this.step);
     }
 
     this.syncFormContract(this.value, control);
@@ -243,11 +254,14 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
     if (this.elementConfig.kind === "number" && value !== "") {
       const parsed = Number(value);
       if (Number.isFinite(parsed)) {
+        const min = this.toFiniteNumber(this.min);
+        const max = this.toFiniteNumber(this.max);
+        const step = this.toFiniteNumber(this.step);
         nextValue = String(
           normalizeNumericValue(parsed, {
-            ...(this.min === null ? {} : { min: this.min }),
-            ...(this.max === null ? {} : { max: this.max }),
-            ...(this.step === null ? {} : { step: this.step }),
+            ...(min === null ? {} : { min }),
+            ...(max === null ? {} : { max }),
+            ...(step === null ? {} : { step }),
             alignToStep: reason === "change",
             precision: this.mode === "integer" ? 0 : undefined,
           }),
@@ -288,14 +302,19 @@ export abstract class VyrnForgeTextControlElement extends VyrnForgeFormAssociate
     );
   }
 
-  private syncNumberAttribute(
+  private syncConstraintAttribute(
     control: HTMLInputElement,
     name: "max" | "min" | "step",
-    value: number | null,
+    value: VyrnForgeInputConstraint,
   ): void {
-    if (value === null || !Number.isFinite(value))
-      control.removeAttribute(name);
+    if (value === null || value === "") control.removeAttribute(name);
     else control.setAttribute(name, String(value));
+  }
+
+  private toFiniteNumber(value: VyrnForgeInputConstraint): number | null {
+    if (value === null || value === "" || value === "any") return null;
+    const numberValue = Number(value);
+    return Number.isFinite(numberValue) ? numberValue : null;
   }
 
   private readonly handleInput = (event: Event) => {

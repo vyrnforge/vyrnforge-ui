@@ -339,7 +339,7 @@ test("Button representative slice preserves equivalent canonical semantics acros
   assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1112"));
 });
 
-test("Button representative generators track framework artifact ownership", () => {
+test("Button representative generators emit removable proof artifacts without premature framework packages", () => {
   const contracts = loadContracts();
   const model = createFrameworkButtonSliceModel(
     createFrameworkGenerationModel(contracts),
@@ -377,6 +377,6 @@ test("Button representative generators track framework artifact ownership", () =
   );
   assert.equal(
     FRAMEWORK_BUTTON_ARTIFACT_PATHS.vue.startsWith("packages/ui-vue/"),
-    true,
+    false,
   );
 });

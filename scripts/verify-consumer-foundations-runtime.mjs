@@ -39,7 +39,7 @@ const packageDefinitions = [
     directory: "packages/ui-elements",
     customElements: true,
   },
-  { name: "@vyrnforge/ui-vue", directory: "packages/ui-vue", staged: true },
+  { name: "@vyrnforge/ui-angular", directory: "packages/ui-angular" },
 ];
 
 const allFixtures = [
@@ -76,6 +76,12 @@ const allFixtures = [
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-elements",
     ],
+    packedPackageNames: [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
+      "@vyrnforge/ui-angular",
+    ],
   },
   {
     id: "vue",
@@ -86,7 +92,6 @@ const allFixtures = [
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-elements",
-      "@vyrnforge/ui-vue",
     ],
   },
 ];
@@ -226,36 +231,28 @@ function removeAllGeneratedOutput() {
 function packPackages() {
   mkdirSync(tempPackageDir, { recursive: true });
 
-  const requestedPackageNames = new Set(
-    fixtures.flatMap((fixture) => fixture.packageNames),
-  );
+  return packageDefinitions.map((packageDefinition) => {
+    const packageDirectory = path.join(
+      repositoryRoot,
+      packageDefinition.directory,
+    );
+    const output = runNpm(
+      ["pack", "--pack-destination", tempPackageDir, "--json"],
+      { cwd: packageDirectory },
+    );
+    const [packInfo] = JSON.parse(output);
+    const tarballPath = path.join(tempPackageDir, packInfo.filename);
+    assert(
+      existsSync(tarballPath),
+      `${packageDefinition.name}: tarball was not created`,
+    );
 
-  return packageDefinitions
-    .filter((packageDefinition) =>
-      requestedPackageNames.has(packageDefinition.name),
-    )
-    .map((packageDefinition) => {
-      const packageDirectory = path.join(
-        repositoryRoot,
-        packageDefinition.directory,
-      );
-      const output = runNpm(
-        ["pack", "--pack-destination", tempPackageDir, "--json"],
-        { cwd: packageDirectory },
-      );
-      const [packInfo] = JSON.parse(output);
-      const tarballPath = path.join(tempPackageDir, packInfo.filename);
-      assert(
-        existsSync(tarballPath),
-        `${packageDefinition.name}: tarball was not created`,
-      );
-
-      return {
-        ...packageDefinition,
-        filename: packInfo.filename,
-        tarballPath,
-      };
-    });
+    return {
+      ...packageDefinition,
+      filename: packInfo.filename,
+      tarballPath,
+    };
+  });
 }
 
 function verifyInstalledPackages(fixtureDirectory, tarballs) {
@@ -357,7 +354,9 @@ function selectFixtureRegistryPackages(fixture) {
 }
 
 function selectFixtureTarballs(fixture, tarballs) {
-  const packageNames = new Set(fixture.packageNames);
+  const packageNames = new Set(
+    fixture.packedPackageNames ?? fixture.packageNames,
+  );
   return tarballs.filter((tarball) => packageNames.has(tarball.name));
 }
 
@@ -1244,14 +1243,12 @@ try {
     runNpm(["run", "build", "--workspace", "@vyrnforge/ui-elements"], {
       stdio: "inherit",
     });
-    if (fixtures.some((fixture) => fixture.id === "vue")) {
-      runNpm(["run", "build", "--workspace", "@vyrnforge/ui-vue"], {
-        stdio: "inherit",
-      });
-    }
+    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-angular"], {
+      stdio: "inherit",
+    });
 
     console.log(
-      "Packing selected consumer packages, including staged ui-vue for Vue...",
+      "Packing ui-core, ui-behaviors, ui-components, ui-elements, and ui-angular...",
     );
     tarballs = packPackages();
   } else {
