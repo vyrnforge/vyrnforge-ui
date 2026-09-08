@@ -1,8 +1,8 @@
 # Beta package size budgets
 
-BT-8004 makes package growth a reviewed release decision for the four packages in the `non-grid-beta` release group. `@vyrnforge/ui-data-grid` remains outside this gate.
+BT-8004 makes package growth a reviewed release decision for the five packages in the `non-grid-beta` release group. `@vyrnforge/ui-data-grid` remains outside this gate.
 
-The canonical limits live in [`docs/metadata/beta-package-size-budgets.json`](../metadata/beta-package-size-budgets.json). Initial packed and unpacked baselines come from the successful BT-8003 package artifact run for commit `bf55580f4fcafc2cf286958490f6f4d51382b746`.
+The canonical limits live in [`docs/metadata/beta-package-size-budgets.json`](../metadata/beta-package-size-budgets.json). The original four-package baselines come from the retained BT-8003 artifact evidence recorded in that manifest. The `@vyrnforge/ui-vue` baseline was measured during MFD-1315 in GitHub Actions run `34188917610` from the publishable five-package release set: 20,609 packed bytes, 162,815 unpacked bytes, 16 files, 61,003 runtime JavaScript bytes, 89,517 declaration bytes, and 0 CSS bytes.
 
 ## Measured dimensions
 

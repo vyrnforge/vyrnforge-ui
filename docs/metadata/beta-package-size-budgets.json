@@ -108,6 +108,26 @@
         "declarationBytes": 84000,
         "cssBytes": 110000
       }
+    },
+    {
+      "name": "@vyrnforge/ui-vue",
+      "directory": "packages/ui-vue",
+      "baseline": {
+        "packedBytes": 20609,
+        "unpackedBytes": 162815,
+        "fileCount": 16,
+        "runtimeJavaScriptBytes": 61003,
+        "declarationBytes": 89517,
+        "cssBytes": 0
+      },
+      "budgets": {
+        "packedBytes": 50000,
+        "unpackedBytes": 250000,
+        "fileCount": 20,
+        "runtimeJavaScriptBytes": 70000,
+        "declarationBytes": 150000,
+        "cssBytes": 0
+      }
     }
   ],
   "waivers": [],
