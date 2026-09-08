@@ -61,9 +61,9 @@
     },
     "vue": {
       "status": "verified-consumer",
-      "package": "@vyrnforge/ui-elements",
-      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
-      "example": "<vf-autocomplete></vf-autocomplete>"
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfAutocomplete></VfAutocomplete>"
     }
   },
   "contract": {
