@@ -106,15 +106,19 @@ becoming a separate hand-maintained product truth.
 
 ## Current implemented package roles
 
-| Package | Current role | Release track |
-| --- | --- | --- |
-| `@vyrnforge/ui-core` | Framework-neutral tokens, themes, density, typography, motion, layers, and utilities. | Non-grid beta |
-| `@vyrnforge/ui-behaviors` | Framework-neutral component controllers, state rules, and reasoned events. | Non-grid beta |
-| `@vyrnforge/ui-components` | First-class React package. | Non-grid beta |
-| `@vyrnforge/ui-elements` | First-class Native HTML / Custom Elements package. | Non-grid beta |
-| `@vyrnforge/ui-angular` | First-class Angular facade over canonical Custom Elements. | Non-grid beta |
-| `@vyrnforge/ui-vue` | First-class Vue facade over canonical Custom Elements. | Non-grid beta |
-| `@vyrnforge/ui-data-grid` | Specialized React data-grid package. | Independent alpha |
+- `@vyrnforge/ui-core`: framework-neutral tokens, themes, density, typography,
+  motion, layers, and utilities; non-grid beta.
+- `@vyrnforge/ui-behaviors`: framework-neutral component controllers, state
+  rules, and reasoned events; non-grid beta.
+- `@vyrnforge/ui-components`: first-class React package; non-grid beta.
+- `@vyrnforge/ui-elements`: first-class Native HTML / Custom Elements package;
+  non-grid beta.
+- `@vyrnforge/ui-angular`: first-class Angular facade over canonical Custom
+  Elements; non-grid beta.
+- `@vyrnforge/ui-vue`: first-class Vue facade over canonical Custom Elements;
+  non-grid beta.
+- `@vyrnforge/ui-data-grid`: specialized React data-grid package; independent
+  alpha.
 
 Exact current versions, dependency edges, public entrypoints, and release-group
 membership are canonical in package manifests and
@@ -125,16 +129,15 @@ membership are canonical in package manifests and
 React, Native HTML / Custom Elements, Angular, and Vue are first-class non-grid
 surfaces. VyrnForge is not four independent component libraries.
 
-- [ADR-005](../architecture/adr-005-canonical-web-implementation.md): the
-  native/DOM implementation is the default canonical non-grid web implementation;
-  generated or generic framework facades are preferred and dedicated renderers
-  require explicit technical exceptions.
-- [ADR-006](../architecture/adr-006-framework-package-strategy.md): React uses
-  `@vyrnforge/ui-components`, Native HTML uses `@vyrnforge/ui-elements`, Angular
-  uses `@vyrnforge/ui-angular`, and Vue uses `@vyrnforge/ui-vue`.
-- [ADR-008](../architecture/adr-008-framework-exception-policy.md): framework
-  exceptions are narrow, evidence-backed, owned, tested, and have explicit
-  review/exit criteria.
+- [ADR-005](../architecture/adr-005-canonical-web-implementation.md) makes the
+  native/DOM implementation the default canonical non-grid browser
+  implementation. Generated or generic framework facades are preferred, and
+  dedicated renderers require explicit technical exceptions.
+- [ADR-006](../architecture/adr-006-framework-package-strategy.md) defines the
+  public React, Native HTML, Angular, and Vue package identities.
+- [ADR-008](../architecture/adr-008-framework-exception-policy.md) requires
+  framework exceptions to be narrow, evidence-backed, owned, tested, and
+  reviewable.
 
 Angular and Vue remain thin/generated facades over shared foundations. React
 retains framework-specific implementation only where compatibility, developer
@@ -221,17 +224,16 @@ architecture and explicit planning.
 
 Use the sources according to the question being answered:
 
-- **Product identity and durable scope:** this document.
-- **Current implemented state:** package manifests, current release/package
-  metadata, package-boundary metadata, implementation docs, and executable
-  evidence.
-- **Architecture:** accepted ADRs and canonical contract metadata.
-- **Component maturity:** `docs/metadata/components.json`.
-- **Current limitations:** `docs/quality/03-known-limitations.md`.
-- **Program execution:** the Google Drive spreadsheet **VyrnForge Progress
-  Tracker — Live Status**. Repository evidence proves implementation and
-  validation; the repository does not maintain a second sprint tracker.
-- **Historical evidence:** retained audit/release/regression records may prove
+- Product identity and durable scope: this document.
+- Current implemented state: package manifests, release/package metadata,
+  package-boundary metadata, implementation docs, and executable evidence.
+- Architecture: accepted ADRs and canonical contract metadata.
+- Component maturity: `docs/metadata/components.json`.
+- Current limitations: `docs/quality/03-known-limitations.md`.
+- Program execution: the Google Drive spreadsheet **VyrnForge Progress Tracker —
+  Live Status**. Repository evidence proves implementation and validation; the
+  repository does not maintain a second sprint tracker.
+- Historical evidence: retained audit, release, or regression records may prove
   what was true at a point in time but do not override later current sources.
 
 ## Canonical related sources

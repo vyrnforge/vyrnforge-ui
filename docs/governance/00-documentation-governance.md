@@ -11,21 +11,24 @@ The documentation system itself is described in
 
 ## Canonical ownership
 
-| Topic | Canonical source |
-| --- | --- |
-| Documentation entrypoint | `docs/README.md` |
-| Documentation organization and docs-app ownership | `docs/engineering/documentation-system.md` |
-| Project identity and durable scope | `docs/governance/01-project-source-of-truth.md` |
-| Package boundaries | `docs/architecture/01-package-boundaries.md` |
-| State ownership | `docs/architecture/02-state-and-adapter-ownership.md` |
-| Theming and styling | `docs/architecture/03-theming-and-styling.md` |
-| Active sprint, task status, dependencies, sequencing, and gate status | Google Drive spreadsheet `VyrnForge Progress Tracker — Live Status` |
-| Component catalog, maturity, and per-component limitations | `docs/metadata/components.json` |
-| Generated component/framework reference | `docs/generated/component-reference.json` |
-| Generated AI consumer context | `docs/generated/ai-context/` |
-| CI/CD architecture | `docs/engineering/ci-cd-architecture.md` |
-| Release procedure | `docs/release/publication-procedure.md` |
-| Repository coding-agent operational rules | `AGENTS.md` |
+- Documentation entrypoint: `docs/README.md`.
+- Documentation organization and docs-app ownership:
+  `docs/engineering/documentation-system.md`.
+- Project identity and durable scope:
+  `docs/governance/01-project-source-of-truth.md`.
+- Package boundaries: `docs/architecture/01-package-boundaries.md`.
+- State ownership: `docs/architecture/02-state-and-adapter-ownership.md`.
+- Theming and styling: `docs/architecture/03-theming-and-styling.md`.
+- Active sprint, task status, dependencies, sequencing, and gate status: the
+  Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status**.
+- Component catalog, maturity, and per-component limitations:
+  `docs/metadata/components.json`.
+- Generated component/framework reference:
+  `docs/generated/component-reference.json`.
+- Generated AI consumer context: `docs/generated/ai-context/`.
+- CI/CD architecture: `docs/engineering/ci-cd-architecture.md`.
+- Release procedure: `docs/release/publication-procedure.md`.
+- Repository coding-agent operational rules: `AGENTS.md`.
 
 The GitHub repository is the implementation, canonical technical documentation,
 and evidence source. It does not maintain a second sprint or execution tracker.
