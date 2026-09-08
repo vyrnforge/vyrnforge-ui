@@ -395,6 +395,7 @@ import type {
   VyrnForgeElementForTagName,
   VyrnForgeValueChangeDetail,
 } from "@vyrnforge/ui-elements";
+import { renderVyrnForgeSlots } from "../slots";
 
 export type VfTextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
@@ -413,7 +414,7 @@ export const VfTextInput = defineComponent({
     "update:modelValue": (_value: string) => true,
     "vf-value-change": (_event: Event) => true,
   },
-  setup(props, { attrs, emit, expose }) {
+  setup(props, { attrs, emit, expose, slots }) {
     const elementRef = ref<VfTextInputElement | null>(null);
 
     watchEffect(() => {
@@ -452,12 +453,16 @@ export const VfTextInput = defineComponent({
     });
 
     return () =>
-      h("vf-text-input", {
-        ...attrs,
-        id: props.id,
-        ref: elementRef,
-        "data-vf-generated-text-input": "vue",
-      });
+      h(
+        "vf-text-input",
+        {
+          ...attrs,
+          id: props.id,
+          ref: elementRef,
+          "data-vf-generated-text-input": "vue",
+        },
+        renderVyrnForgeSlots(slots),
+      );
   },
 });
 
