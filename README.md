@@ -39,14 +39,18 @@ release-group versions and dependency rules.
 
 ## Packages
 
+Choose a first-class surface package for normal application work. Shared
+foundation packages are dependencies of those surfaces and are primarily useful
+when consuming framework-neutral VyrnForge APIs directly.
+
 | Package                    | Responsibility                                                                                                           |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations. |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.     |
 | `@vyrnforge/ui-components` | First-class React package over shared VyrnForge foundations.                                                             |
 | `@vyrnforge/ui-elements`   | First-class browser-native Custom Elements package over shared VyrnForge foundations.                                    |
 | `@vyrnforge/ui-angular`    | First-class Angular facade over canonical VyrnForge Custom Elements.                                                     |
 | `@vyrnforge/ui-vue`        | First-class Vue facade over canonical VyrnForge Custom Elements.                                                         |
+| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations. |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.     |
 | `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                    |
 
 Native HTML, React, Angular, and Vue are first-class web surfaces. They share
@@ -55,63 +59,43 @@ contracts while remaining idiomatic to each framework. Future framework support
 must follow the framework admission and evidence model rather than creating an
 independent VyrnForge component library.
 
-## Product principles
-
-- Native-owned means VyrnForge owns its UI implementation rather than wrapping
-  another large UI library; it does not mean Native HTML is the only first-class
-  surface.
-- Shared contracts, metadata, tokens, behaviors, accessibility semantics, and
-  generation stay framework-neutral where practical.
-- Framework packages are adapters/facades over shared VyrnForge foundations,
-  with narrow evidence-backed exceptions when required.
-- Optional advanced capabilities must not make unrelated consumers pay their
-  dependency, runtime, CSS, or bundle cost.
-- Application state management, authentication, backend services, business
-  workflow execution, and other application/runtime semantics remain outside
-  VyrnForge.
-- Public metadata and contracts should serve both human developers and AI
-  systems without creating parallel sources of truth.
-
 ## Installation
+
+Start with the package for the framework surface your application uses. Its
+VyrnForge implementation dependencies are installed transitively; normal
+consumers do not need to understand or reproduce the internal foundation graph.
 
 React:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta
+npm install @vyrnforge/ui-components@beta
 ```
 
 Native HTML / Custom Elements:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta
+npm install @vyrnforge/ui-elements@beta
 ```
 
 Angular:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-angular@beta
+npm install @vyrnforge/ui-angular@beta
 ```
 
 Vue:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-vue@beta vue
+npm install @vyrnforge/ui-vue@beta vue
 ```
 
-Framework-neutral behavior APIs:
+Applications that intentionally consume framework-neutral behavior APIs can
+install `@vyrnforge/ui-behaviors@beta` directly. React applications that need
+the specialized data grid add `@vyrnforge/ui-data-grid@alpha` alongside the
+normal React surface.
 
-```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-behaviors@beta
-```
-
-React data grid:
-
-```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
-```
-
-See [Import and Setup](docs/api/import-and-setup.md) for framework-specific
-registration, framework Forms/model integration, CSS, SSR, and escape-hatch
+See [Import and Setup](docs/api/import-and-setup.md) for registration,
+framework Forms/model integration, CSS behavior, SSR, peers, and escape-hatch
 guidance.
 
 ## Minimal usage
@@ -119,9 +103,6 @@ guidance.
 React:
 
 ```tsx
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
-
 import { Button, Card, Stack } from "@vyrnforge/ui-components";
 
 export function ActionsPanel() {
@@ -138,8 +119,6 @@ export function ActionsPanel() {
 Native HTML:
 
 ```ts
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-elements/styles/index.css";
 import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 
 registerVyrnForgeElements();
@@ -148,6 +127,11 @@ registerVyrnForgeElements();
 ```html
 <vf-button variant="primary">Save changes</vf-button>
 ```
+
+The public React and Native package entrypoints load their surface styling. The
+Angular and Vue setup paths load the same canonical element styling through
+their package-owned integration. Explicit public CSS entrypoints remain
+available for hosts that intentionally manage stylesheet ordering themselves.
 
 Angular and Vue use their public framework packages rather than copied
 application adapters. See the package-specific docs for idiomatic setup and
