@@ -19,12 +19,12 @@ architecture.
 
 VyrnForge uses **one canonical public install package per supported web surface**:
 
-| Surface | Canonical public package | Compatibility decision |
-| --- | --- | --- |
-| React | `@vyrnforge/ui-components` | Keep the established React entrypoint. |
-| Native HTML | `@vyrnforge/ui-elements` | Keep the established native entrypoint. |
-| Angular | `@vyrnforge/ui-angular` | First-class Angular facade package. |
-| Vue | `@vyrnforge/ui-vue` | First-class Vue facade package. |
+| Surface     | Canonical public package   | Compatibility decision                  |
+| ----------- | -------------------------- | --------------------------------------- |
+| React       | `@vyrnforge/ui-components` | Keep the established React entrypoint.  |
+| Native HTML | `@vyrnforge/ui-elements`   | Keep the established native entrypoint. |
+| Angular     | `@vyrnforge/ui-angular`    | First-class Angular facade package.     |
+| Vue         | `@vyrnforge/ui-vue`        | First-class Vue facade package.         |
 
 Normal framework consumers install their framework package as the obvious
 VyrnForge component entrypoint:
