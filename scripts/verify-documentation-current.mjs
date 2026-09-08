@@ -22,6 +22,8 @@ export const documentationCurrentPaths = [
   "docs/packages/ui-behaviors.md",
   "docs/packages/ui-components.md",
   "docs/packages/ui-elements.md",
+  "docs/packages/ui-angular.md",
+  "docs/packages/ui-vue.md",
   "docs/packages/ui-data-grid.md",
   "docs/governance/00-documentation-governance.md",
   "docs/governance/01-project-source-of-truth.md",
@@ -49,6 +51,8 @@ export const documentationCurrentPaths = [
   "packages/ui-behaviors/README.md",
   "packages/ui-components/README.md",
   "packages/ui-elements/README.md",
+  "packages/ui-angular/README.md",
+  "packages/ui-vue/README.md",
   "packages/ui-data-grid/README.md",
   ".ai/AI_CONTEXT.md",
   ".ai/REPO_MAP.md",
@@ -60,11 +64,15 @@ export const documentationInstallGuidancePaths = [
   "docs/api/import-and-setup.md",
   "docs/api/ui-components-api.md",
   "docs/api/ui-elements-api.md",
+  "docs/packages/ui-angular.md",
+  "docs/packages/ui-vue.md",
   "docs/release/multi-framework-migration-and-limitations.md",
   "packages/ui-core/README.md",
   "packages/ui-behaviors/README.md",
   "packages/ui-components/README.md",
   "packages/ui-elements/README.md",
+  "packages/ui-angular/README.md",
+  "packages/ui-vue/README.md",
   "packages/ui-data-grid/README.md",
 ];
 
@@ -81,6 +89,8 @@ export const documentationTaskFreePaths = [
   "docs/packages/ui-behaviors.md",
   "docs/packages/ui-components.md",
   "docs/packages/ui-elements.md",
+  "docs/packages/ui-angular.md",
+  "docs/packages/ui-vue.md",
   "docs/packages/ui-data-grid.md",
   "docs/governance/01-project-source-of-truth.md",
   "docs/architecture/00-system-overview.md",
@@ -98,6 +108,8 @@ export const documentationTaskFreePaths = [
   "packages/ui-behaviors/README.md",
   "packages/ui-components/README.md",
   "packages/ui-elements/README.md",
+  "packages/ui-angular/README.md",
+  "packages/ui-vue/README.md",
   "packages/ui-data-grid/README.md",
   ".ai/AI_CONTEXT.md",
   ".ai/REPO_MAP.md",
@@ -126,6 +138,46 @@ const stalePatterns = [
   ],
   [/\bnpm run quality\b/u, "removed public command: npm run quality"],
   [/\bnpm run verify:ci\b/u, "removed public command: npm run verify:ci"],
+];
+
+const frameworkFirstInstallContracts = [
+  {
+    path: "README.md",
+    required: [
+      "npm install @vyrnforge/ui-components@beta",
+      "npm install @vyrnforge/ui-elements@beta",
+      "npm install @vyrnforge/ui-angular@beta",
+      "npm install @vyrnforge/ui-vue@beta vue",
+    ],
+  },
+  {
+    path: "docs/api/import-and-setup.md",
+    required: [
+      "npm install @vyrnforge/ui-components@beta",
+      "npm install @vyrnforge/ui-elements@beta",
+      "npm install @vyrnforge/ui-angular@beta",
+      "npm install @vyrnforge/ui-vue@beta vue",
+    ],
+  },
+  {
+    path: "packages/ui-components/README.md",
+    required: ["npm install @vyrnforge/ui-components@beta"],
+  },
+  {
+    path: "packages/ui-elements/README.md",
+    required: ["npm install @vyrnforge/ui-elements@beta"],
+  },
+  {
+    path: "docs/packages/ui-angular.md",
+    required: ["npm install @vyrnforge/ui-angular@beta"],
+  },
+];
+
+const obsoleteFoundationFirstInstalls = [
+  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta",
+  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta",
+  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-angular@beta",
+  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-vue@beta vue",
 ];
 
 function read(root, relativePath) {
@@ -178,6 +230,37 @@ function verifyInstallCommands({ root, channels, failures }) {
             `${relativePath}: ${packageName} install uses @${channel}; expected @${expected}`,
           );
         }
+      }
+    }
+  }
+}
+
+function verifyFrameworkFirstInstallation({ root, failures }) {
+  for (const contract of frameworkFirstInstallContracts) {
+    const content = read(root, contract.path);
+    for (const marker of contract.required) {
+      if (!content.includes(marker)) {
+        failures.push(
+          `${contract.path}: missing framework-first install guidance ${marker}`,
+        );
+      }
+    }
+  }
+
+  for (const relativePath of [
+    "README.md",
+    "docs/api/import-and-setup.md",
+    "packages/ui-components/README.md",
+    "packages/ui-elements/README.md",
+    "docs/packages/ui-angular.md",
+    "docs/packages/ui-vue.md",
+  ]) {
+    const content = read(root, relativePath);
+    for (const obsolete of obsoleteFoundationFirstInstalls) {
+      if (content.includes(obsolete)) {
+        failures.push(
+          `${relativePath}: normal setup must be framework-first instead of exposing the foundation graph`,
+        );
       }
     }
   }
@@ -339,6 +422,7 @@ export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   }
 
   verifyInstallCommands({ root, channels, failures });
+  verifyFrameworkFirstInstallation({ root, failures });
   verifyPrimaryStructure({ root, failures });
   verifyVersionPolicy({ root, releaseGroups, failures });
   verifyRoadmapContracts({ root, failures });
