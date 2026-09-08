@@ -15,10 +15,10 @@
   },
   "releaseGroup": "non-grid-beta",
   "baseline": {
-    "source": "VyrnForge CI run 30878924986 / beta-package-artifacts",
+    "source": "Base packages: VyrnForge CI run 30878924986; Angular adapter: protected reconciliation CI run 34199514851; Vue adapter: MFD-1315 artifact run 34188917610",
     "headSha": "bf55580f4fcafc2cf286958490f6f4d51382b746",
     "capturedAt": "2026-08-04T04:52:49.949Z",
-    "headroomPolicy": "Initial limits round measured BT-8003 artifacts upward with reviewable growth headroom."
+    "headroomPolicy": "Initial limits round measured artifacts upward with reviewable growth headroom; framework adapter baselines retain their task-specific protected-run evidence."
   },
   "metrics": [
     "packedBytes",
@@ -70,6 +70,26 @@
       }
     },
     {
+      "name": "@vyrnforge/ui-elements",
+      "directory": "packages/ui-elements",
+      "baseline": {
+        "packedBytes": 124813,
+        "unpackedBytes": 805463,
+        "fileCount": 31,
+        "runtimeJavaScriptBytes": 622191,
+        "declarationBytes": 62277,
+        "cssBytes": 84369
+      },
+      "budgets": {
+        "packedBytes": 165000,
+        "unpackedBytes": 1050000,
+        "fileCount": 40,
+        "runtimeJavaScriptBytes": 810000,
+        "declarationBytes": 84000,
+        "cssBytes": 110000
+      }
+    },
+    {
       "name": "@vyrnforge/ui-components",
       "directory": "packages/ui-components",
       "baseline": {
@@ -90,23 +110,23 @@
       }
     },
     {
-      "name": "@vyrnforge/ui-elements",
-      "directory": "packages/ui-elements",
+      "name": "@vyrnforge/ui-angular",
+      "directory": "packages/ui-angular",
       "baseline": {
-        "packedBytes": 124813,
-        "unpackedBytes": 805463,
-        "fileCount": 31,
-        "runtimeJavaScriptBytes": 622191,
-        "declarationBytes": 62277,
-        "cssBytes": 84369
+        "packedBytes": 43363,
+        "unpackedBytes": 472986,
+        "fileCount": 21,
+        "runtimeJavaScriptBytes": 300256,
+        "declarationBytes": 156967,
+        "cssBytes": 0
       },
       "budgets": {
-        "packedBytes": 165000,
-        "unpackedBytes": 1050000,
-        "fileCount": 40,
-        "runtimeJavaScriptBytes": 810000,
-        "declarationBytes": 84000,
-        "cssBytes": 110000
+        "packedBytes": 200000,
+        "unpackedBytes": 1200000,
+        "fileCount": 260,
+        "runtimeJavaScriptBytes": 600000,
+        "declarationBytes": 600000,
+        "cssBytes": 0
       }
     },
     {
