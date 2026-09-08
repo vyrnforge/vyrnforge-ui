@@ -26,6 +26,35 @@ jobs:
           from pathlib import Path
 
           root = Path('.')
+
+          generation = root / 'scripts/framework-generation.mjs'
+          generation_text = generation.read_text()
+          if 'export const FRAMEWORK_GENERATION_TASKS' not in generation_text:
+              marker = 'export const FRAMEWORK_SURFACES = Object.freeze([\n  "native",\n  "react",\n  "angular",\n  "vue",\n]);\n'
+              tasks = '\nexport const FRAMEWORK_GENERATION_TASKS = Object.freeze([\n' + ''.join(
+                  f'  "MFD-{task}",\n' for task in range(1102, 1113)
+              ) + ']);\n'
+              if marker not in generation_text:
+                  raise SystemExit('framework surfaces marker did not match')
+              generation.write_text(generation_text.replace(marker, marker + tasks))
+
+          generation_test = root / 'scripts/framework-generation.test.mjs'
+          test_text = generation_test.read_text()
+          if 'FRAMEWORK_GENERATION_TASKS,' not in test_text:
+              test_text = test_text.replace(
+                  'import {\n  FRAMEWORK_SURFACES,\n',
+                  'import {\n  FRAMEWORK_SURFACES,\n  FRAMEWORK_GENERATION_TASKS,\n',
+              )
+          anchor = '  assert.equal(button.surfaces.vue.events[0].public, "action");\n'
+          if 'FRAMEWORK_GENERATION_TASKS.includes("MFD-1111")' not in test_text:
+              test_text = test_text.replace(
+                  anchor,
+                  anchor
+                  + '  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1111"));\n'
+                  + '  assert(FRAMEWORK_GENERATION_TASKS.includes("MFD-1112"));\n',
+              )
+          generation_test.write_text(test_text)
+
           aggregate = root / 'scripts/generated-framework-artifacts.mjs'
           text = aggregate.read_text()
           text = text.replace('import { buildFrameworkDialogSliceArtifacts } from "./generate-framework-dialog-slice.mjs";\n', '')
@@ -53,7 +82,6 @@ jobs:
               text,
               flags=re.S,
           )
-          text = text.replace('export const GENERATED_FRAMEWORK_ARTIFACT_TASK = "MFD-1111";\n\n', '')
           old = (
               '  const native = buildNativeElementArtifacts({ root });\n'
               '  const apiReference = buildFrameworkApiReference({ root });\n'
@@ -106,8 +134,9 @@ jobs:
       - name: Regenerate and format aggregate-owned artifacts
         run: |
           npx --yes npm@11.16.0 ci
-          npx prettier --write scripts/generated-framework-artifacts.mjs scripts/framework-button-generation.mjs scripts/framework-text-input-generation.mjs scripts/framework-tabs-generation.mjs scripts/framework-dialog-generation.mjs
+          npx prettier --write scripts/framework-generation.mjs scripts/framework-generation.test.mjs scripts/generated-framework-artifacts.mjs scripts/framework-button-generation.mjs scripts/framework-text-input-generation.mjs scripts/framework-tabs-generation.mjs scripts/framework-dialog-generation.mjs
           npm run generate:framework-artifacts
+          npm run verify:framework-artifacts
       - name: Remove helper and commit
         shell: bash
         run: |
