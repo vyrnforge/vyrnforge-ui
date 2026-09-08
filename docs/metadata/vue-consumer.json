@@ -4,15 +4,15 @@
   "framework": {
     "name": "Vue",
     "version": "3.5.40",
-    "supportLevel": "verified-consumer",
-    "renderer": "@vyrnforge/ui-elements",
+    "supportLevel": "first-class",
+    "renderer": "@vyrnforge/ui-vue",
     "buildTool": "Vite 8.1.5",
     "compilerPlugin": "@vitejs/plugin-vue 6.0.8",
     "templateTypecheck": "vue-tsc 3.3.8",
     "fixtureTypeScript": "6.0.3",
     "workspaceIsolation": true,
-    "customElementRecognition": "tag.startsWith(\"vf-\")",
-    "templateTypeBridge": "consumer-local Vue GlobalComponents augmentation"
+    "customElementRecognition": "tag.startsWith(\"vf-\") for explicit raw-native escape-hatch examples",
+    "templateTypeBridge": "public @vyrnforge/ui-vue facade types plus consumer-local raw Custom Element augmentation"
   },
   "fixture": {
     "directory": "tests/consumers/vue",
@@ -22,30 +22,31 @@
     "packedPackages": [
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
-      "@vyrnforge/ui-elements"
+      "@vyrnforge/ui-elements",
+      "@vyrnforge/ui-vue"
     ],
-    "templateTypeBridge": "src/vyrnforge-elements.d.ts"
+    "templateTypeBridge": "@vyrnforge/ui-vue with src/vyrnforge-elements.d.ts reserved for raw vf-* examples"
   },
   "completedStaticEvidence": [
-    "isolated Vue fixture without VyrnForge workspace dependencies",
+    "isolated Vue fixture without VyrnForge source imports",
     "pinned Vue, Vite, plugin, vue-tsc, and TypeScript versions",
-    "vf-* Custom Element compiler recognition configuration",
-    "explicit native registration entry point",
-    "consumer-local Vue GlobalComponents, canonical event, slot, and data-* template type bridge",
+    "public @vyrnforge/ui-vue facade imports and VyrnForgeVue plugin setup",
+    "consumer-local raw Custom Element template bridge only for explicit vf-* escape-hatch examples",
     "object-valued property binding patterns",
     "canonical vf-action and vf-value-change template event binding patterns",
     "named Light DOM composition patterns",
     "native FormData submission path",
     "typed DOM architecture probe",
     "shared token CSS without data-grid tokens",
-    "runtime verifier integration for the Vue fixture"
+    "runtime verifier integration for the Vue fixture",
+    "no copied fixture-side Vue adapters or generated wrappers"
   ],
   "pendingRuntimeEvidence": [],
   "modelAdapterDecision": {
     "status": "verified",
-    "reason": "Vue v-model expects modelValue and update:modelValue, while native VyrnForge controls expose value or checked properties plus canonical vf-value-change or vf-checked-change DOM events.",
-    "boundary": "A thin Vue-only directive, composable, or wrapper may translate the protocol but must not duplicate rendering, validation, selection, or form-association logic.",
-    "publishedPackage": null,
+    "reason": "Canonical component model metadata is translated by the first-class Vue package into idiomatic Vue v-model props and update events.",
+    "boundary": "@vyrnforge/ui-vue owns Vue-only model protocol translation while rendering, validation, selection, and form-association behavior remain in canonical VyrnForge foundations.",
+    "publishedPackage": "@vyrnforge/ui-vue",
     "evidence": "docs/metadata/vue-model-adapter.json"
   },
   "unresolvedBlockers": [],
@@ -56,13 +57,11 @@
   ],
   "completedRuntimeEvidence": [
     "clean Vue dependency installation",
-    "clean VyrnForge tarball installation without workspace symlinks",
+    "clean VyrnForge tarball installation without workspace source coupling",
     "strict vue-tsc template and script type checking",
     "Vite production application build",
-    "Chromium property, event, slot, and native-form interaction evidence"
+    "Chromium property, event, slot, model, and native-form interaction evidence",
+    "public @vyrnforge/ui-vue package consumption"
   ],
-  "deferred": [
-    "official first-class Vue package cutover",
-    "data-grid multi-framework work"
-  ]
+  "deferred": ["data-grid multi-framework work"]
 }

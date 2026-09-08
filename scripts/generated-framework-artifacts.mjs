@@ -50,16 +50,22 @@ function freezeArtifact(record) {
   });
 }
 
+function isLegacyFixtureLocalFrameworkArtifact(artifact) {
+  return /^tests\/consumers\/(react|angular|vue)\//.test(artifact.path);
+}
+
 function registerSliceArtifacts(artifacts, generator, command) {
-  return artifacts.map((artifact) =>
-    freezeArtifact({
-      path: artifact.path,
-      generator,
-      command,
-      sourceRecords: artifact.sourceRecords,
-      content: artifact.content,
-    }),
-  );
+  return artifacts
+    .filter((artifact) => !isLegacyFixtureLocalFrameworkArtifact(artifact))
+    .map((artifact) =>
+      freezeArtifact({
+        path: artifact.path,
+        generator,
+        command,
+        sourceRecords: artifact.sourceRecords,
+        content: artifact.content,
+      }),
+    );
 }
 
 export function buildGeneratedFrameworkArtifacts({
