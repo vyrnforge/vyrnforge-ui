@@ -11,7 +11,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exitCode = 1;
   } else {
     console.log(
-      "BT-8003 contract passed: four beta packages have documented public entries, exact payload rules, offline-consumer evidence, and CI artifact integration.",
+      "BT-8003 contract passed: all canonical non-grid beta packages have documented public entries, exact payload rules, offline-consumer evidence, and CI artifact integration.",
     );
   }
 }
