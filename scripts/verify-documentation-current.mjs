@@ -35,10 +35,6 @@ export const documentationCurrentPaths = [
   "docs/architecture/adr-004-multi-framework-web-support.md",
   "docs/architecture/09-component-contracts-and-events.md",
   "docs/architecture/10-custom-elements-and-form-association.md",
-  "docs/roadmap/00-master-roadmap.md",
-  "docs/roadmap/01-component-inventory.md",
-  "docs/roadmap/02-gap-analysis.md",
-  "docs/roadmap/03-do-not-build-yet.md",
   "docs/quality/00-quality-gates.md",
   "docs/quality/03-known-limitations.md",
   "docs/testing/browser-testing.md",
@@ -313,8 +309,7 @@ function verifyPrimaryStructure({ root, failures }) {
 
   const componentInventory = read(
     root,
-    "docs/roadmap/01-component-inventory.md",
-  );
+    );
   for (const marker of [
     "../metadata/components.json",
     "../generated/component-reference.json",
