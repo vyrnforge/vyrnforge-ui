@@ -54,6 +54,100 @@
         "reviewMilestone": "S14 React convergence"
       },
       {
+        "id": "MFD-EX-REACT-AUTOCOMPLETE-ADVANCED-CONTRACT",
+        "framework": "react",
+        "scope": "autocomplete",
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx",
+          "packages/ui-components/src/components/Autocomplete/Autocomplete.types.ts",
+          "packages/ui-elements/src/components/collections.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-COLLECTION-RICH-COMPOSITION",
+        "framework": "react",
+        "scope": [
+          "multi-select",
+          "transfer-list"
+        ],
+        "exceptionClass": "composition",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
+          "packages/ui-components/src/components/MultiSelect/MultiSelect.types.ts",
+          "packages/ui-components/src/components/TransferList/TransferList.tsx",
+          "packages/ui-components/src/components/TransferList/TransferList.types.ts",
+          "packages/ui-elements/src/components/collections.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",
+        "framework": "react",
+        "scope": [
+          "breadcrumbs",
+          "menu",
+          "segmented-control",
+          "side-nav",
+          "tabs"
+        ],
+        "exceptionClass": "composition",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx",
+          "packages/ui-components/src/components/Menu/Menu.tsx",
+          "packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx",
+          "packages/ui-components/src/components/SideNav/SideNav.tsx",
+          "packages/ui-components/src/components/Tabs/Tabs.tsx",
+          "packages/ui-elements/src/components/navigation.ts",
+          "packages/ui-elements/src/components/overlays.ts",
+          "packages/ui-elements/src/components/values.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-RADIO-GROUP-FOCUS",
+        "framework": "react",
+        "scope": "radio-group",
+        "exceptionClass": "accessibility-focus-form",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Radio/Radio.tsx",
+          "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
+          "packages/ui-elements/src/components/selection.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-RATING-RADIO-SEMANTICS",
+        "framework": "react",
+        "scope": "rating",
+        "exceptionClass": "accessibility-focus-form",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Rating/Rating.tsx",
+          "packages/ui-components/src/components/Rating/Rating.types.ts",
+          "packages/ui-elements/src/components/values.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-SELECT-MULTIPLE",
+        "framework": "react",
+        "scope": "select-multiple",
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Select/Select.tsx",
+          "packages/ui-components/src/components/Select/Select.types.ts",
+          "packages/ui-elements/src/components/selection.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
+      },
+      {
         "id": "MFD-EX-REACT-STATUS-BADGE",
         "framework": "react",
         "scope": "status-badge",
@@ -88,6 +182,28 @@
           "packages/ui-components/src/components/Toast/useToast.ts"
         ],
         "reviewMilestone": "S14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
+        "framework": "react",
+        "scope": [
+          "caption",
+          "code-text",
+          "heading",
+          "label",
+          "text"
+        ],
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Typography/Caption.tsx",
+          "packages/ui-components/src/components/Typography/CodeText.tsx",
+          "packages/ui-components/src/components/Typography/Heading.tsx",
+          "packages/ui-components/src/components/Typography/Label.tsx",
+          "packages/ui-components/src/components/Typography/Text.tsx",
+          "packages/ui-components/src/components/Typography/Typography.types.ts"
+        ],
+        "reviewMilestone": "G14 React convergence"
       },
       {
         "id": "MFD-EX-REACT-USE-TOAST",
