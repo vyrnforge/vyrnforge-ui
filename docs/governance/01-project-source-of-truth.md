@@ -3,267 +3,164 @@
 ## Canonical positioning
 
 VyrnForge UI is a native-owned, dependency-minimal, general-purpose UI system
-with enterprise-grade depth.
-
-It is designed to be a first-class UI foundation for web applications ranging
-from public-facing and SaaS products to internal tools, admin and customer
-portals, IAM systems, workflow applications, reporting interfaces, dashboards,
-data-heavy products, and other sophisticated enterprise platforms.
-
-Enterprise capability is a first-class strength, not the boundary of the
-library's intended audience.
+with enterprise-grade depth. It supports applications ranging from public-facing
+and SaaS products to internal tools, admin and customer portals, IAM systems,
+workflow applications, reporting interfaces, dashboards, and data-heavy
+products.
 
 VyrnForge is not only a component library or data-grid package. It is one
-contract-driven UI system spanning design, behavior, accessibility, components,
-framework integration, tooling, and optional advanced UI capabilities.
+contract-driven UI foundation spanning design, behavior, accessibility,
+components, framework integration, tooling, and optional advanced UI
+capabilities.
 
-## Vision
+## Vision and mission
 
 Provide one high-quality UI system that applications can adopt without making a
 frontend framework, third-party UI runtime, or application state library the
 owner of their design system, component semantics, accessibility model, or
 interaction contracts.
 
-## Mission
-
-Build and maintain a portable, accessible, themeable, contract-driven UI system
-that:
+VyrnForge therefore:
 
 - owns its core UI implementation rather than wrapping another large UI library;
 - remains lightweight and dependency-minimal for normal consumers;
-- supports Native HTML, React, Angular, Vue, and future justified web frameworks
-  through one shared VyrnForge model;
-- provides idiomatic first-class framework experiences without creating
-  unrelated framework-specific design systems;
-- supports both common primitives and optional sophisticated UI capabilities;
+- supports Native HTML / Custom Elements, React, Angular, and Vue as first-class
+  non-grid surfaces through one shared VyrnForge model;
+- keeps shared tokens, contracts, behaviors, accessibility rules, terminology,
+  styling, and metadata framework-neutral where practical;
+- provides idiomatic framework experiences without creating unrelated
+  framework-specific design systems;
 - treats accessibility, keyboard/focus behavior, internationalization,
   responsive behavior, SSR safety, performance, compatibility, and migration as
-  core product requirements;
-- serves both human developers and AI software-development systems through
-  stable, machine-readable contracts and concise generated guidance.
+  core requirements;
+- serves human and AI developers from the same canonical contracts and generated
+  views.
 
-## Meaning of native-owned
+## Native-owned implementation
 
 Native-owned means VyrnForge owns its UI foundation and implementation strategy.
-It does not mean that only Native HTML is a supported consumption surface.
+It does not mean Native HTML is the only first-class surface.
 
-VyrnForge should prefer browser standards, DOM/CSS/platform APIs, shared
-VyrnForge contracts, and narrowly justified focused dependencies. It should not
-require MUI, Ant Design, Tailwind, Radix, TanStack, Redux, Zustand, or another
-large UI/state ecosystem as the implementation foundation.
+VyrnForge prefers browser standards, DOM/CSS/platform APIs, shared VyrnForge
+contracts, and narrowly justified focused dependencies. It does not require MUI,
+Ant Design, Tailwind, Radix, TanStack, Redux, Zustand, or another large UI/state
+ecosystem as its implementation foundation.
 
-Native HTML / Custom Elements remains a first-class surface and the default
-canonical non-grid browser implementation strategy where technically suitable.
-Framework correctness and idiomatic developer experience remain product
-requirements; evidence-backed framework-specific exceptions are allowed where a
-generic facade cannot preserve them.
-
-## Product promises
-
-### First-class UI quality
-
-Cross-framework portability must not excuse weaker visual quality, incomplete
-interaction behavior, poor typing, or non-idiomatic framework APIs. VyrnForge
-should be competitive as a UI system even when a consumer only needs one
-framework.
-
-### General-purpose with enterprise-grade depth
-
-Common application UI and enterprise/data-heavy UI belong to the same design
-system. Enterprise themes, density, advanced keyboard interaction, complex
-forms, large data interfaces, and long-lived compatibility are first-class
-capabilities rather than a separate product identity.
-
-### Lightweight by default, deep when needed
-
-Advanced capabilities must not make every consumer ship their runtime,
-dependencies, CSS, or setup. Future sophisticated modules such as tree/tree-grid,
-visualization, advanced forms, workflow/diagram UI, rich editors, dashboards,
-or spatial/3D UI should be independently consumable and reuse shared VyrnForge
-foundations.
-
-Exact future package names and dependency topology require explicit architecture
-decisions; this source of truth does not invent them in advance.
-
-### One contract, multiple first-class experiences
-
-Shared semantics should be defined once through canonical tokens, behavior,
-component contracts, accessibility obligations, form/model semantics,
-composition regions, framework mappings, metadata, and verification.
-
-Framework packages translate that system into idiomatic APIs. Support parity is
-a consumer guarantee; it does not require identical source implementation.
-
-### Human and AI developer experience
-
-VyrnForge is designed for human developers and AI systems that generate,
-analyze, migrate, or maintain UI code.
-
-Canonical structured metadata should let either consumer determine component
-purpose, use/avoid guidance, legal properties, state models, events,
-composition, accessibility obligations, framework mappings, related components,
-limitations, and correct setup without reconstructing those rules from
-framework implementation source.
-
-AI-oriented context must be generated from canonical contracts rather than
-becoming a separate hand-maintained product truth.
+Native HTML / Custom Elements is a first-class surface and the default canonical
+non-grid browser implementation strategy where technically suitable. Framework
+correctness and idiomatic developer experience remain product requirements;
+evidence-backed framework-specific exceptions are allowed where a generic facade
+cannot preserve them.
 
 ## Current implemented package roles
 
-The following table describes the currently implemented package topology. It
-must not be read as the complete long-term distribution topology.
+| Package | Current role | Release track |
+| --- | --- | --- |
+| `@vyrnforge/ui-core` | Framework-neutral tokens, themes, density, typography, motion, layers, and utilities. | Non-grid beta |
+| `@vyrnforge/ui-behaviors` | Framework-neutral component controllers, state rules, and reasoned events. | Non-grid beta |
+| `@vyrnforge/ui-components` | First-class React package. | Non-grid beta |
+| `@vyrnforge/ui-elements` | First-class Native HTML / Custom Elements package. | Non-grid beta |
+| `@vyrnforge/ui-angular` | First-class Angular facade over canonical Custom Elements. | Non-grid beta |
+| `@vyrnforge/ui-vue` | First-class Vue facade over canonical Custom Elements. | Non-grid beta |
+| `@vyrnforge/ui-data-grid` | Specialized React data-grid package. | Independent alpha |
 
-| Package                    | Current role                                                                          | Release track     |
-| -------------------------- | ------------------------------------------------------------------------------------- | ----------------- |
-| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, density, typography, motion, layers, and utilities. | Non-grid beta     |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral component controllers, state rules, and reasoned events.            | Non-grid beta     |
-| `@vyrnforge/ui-components` | First-class React package.                                                            | Non-grid beta     |
-| `@vyrnforge/ui-elements`   | First-class Native HTML / Custom Elements package.                                    | Non-grid beta     |
-| `@vyrnforge/ui-angular`    | First-class Angular facade over canonical Custom Elements.                            | Non-grid beta     |
-| `@vyrnforge/ui-vue`        | First-class Vue facade over canonical Custom Elements.                                | Non-grid beta     |
-| `@vyrnforge/ui-data-grid`  | Specialized React data-grid package.                                                  | Independent alpha |
+Exact versions, dependencies, release-group membership, and tags are canonical in
+[`../metadata/release-groups.json`](../metadata/release-groups.json) and package
+manifests.
 
-Exact current repository release versions and dependencies are canonical in
-[`../metadata/release-groups.json`](../metadata/release-groups.json).
+## Multi-framework architecture
 
-## Current implemented framework state
+React, Native HTML / Custom Elements, Angular, and Vue are first-class non-grid
+surfaces. They share one design system, behavior model, accessibility model,
+styling foundation, terminology, component contracts, metadata, and verification
+model.
 
-Current package manifests and release metadata are authoritative for what ships.
-React, Native HTML, Angular, and Vue are implemented first-class non-grid
-surfaces. Angular and Vue remain adapters over the canonical Custom Element
-implementation and share the same VyrnForge design, behavior, accessibility,
-styling, metadata, and verification foundations.
+Accepted architecture decisions include:
 
-The supported Angular and Vue ranges are governed by current compatibility
-metadata and package peer policies. Framework package availability does not by
-itself claim completion of separately governed manual assistive-technology or
-external trusted-publisher evidence.
-
-Current and historical framework evidence is documented by the applicable ADRs,
-metadata, consumer fixtures, package manifests, and protected CI evidence.
-
-## Approved S10-S15 target architecture
-
-The approved product support target is four equally first-class supported web
-surfaces: React, Native HTML, Angular, and Vue. VyrnForge is not creating four
-independent component libraries.
-
-Accepted target decisions include:
-
-- [ADR-005](../architecture/adr-005-canonical-web-implementation.md): the
-  native/DOM implementation is the default canonical non-grid web
-  implementation; generated or generic framework facades are preferred and
-  dedicated renderers require explicit technical exceptions.
+- [ADR-005](../architecture/adr-005-canonical-web-implementation.md): native/DOM
+  implementation is the default canonical non-grid web implementation; generated
+  or generic facades are preferred and dedicated renderers require evidence.
 - [ADR-006](../architecture/adr-006-framework-package-strategy.md): React keeps
   `@vyrnforge/ui-components`, Native HTML keeps `@vyrnforge/ui-elements`, and
-  the Angular/Vue packages are `@vyrnforge/ui-angular` and
-  `@vyrnforge/ui-vue`.
+  Angular/Vue use `@vyrnforge/ui-angular` and `@vyrnforge/ui-vue`.
 - [ADR-008](../architecture/adr-008-framework-exception-policy.md): framework
-  exceptions must be narrow, evidence-backed, owned, tested, and have explicit
-  exit/review criteria.
+  exceptions are narrow, evidence-backed, owned, tested, and reviewable.
 
-These decisions now describe both the intended architecture and the implemented
-non-grid package topology. Current manifests and release metadata remain
-authoritative for exact versions, dependency edges, and release classification.
+Angular and Vue remain thin/generated facades over shared foundations with only
+narrow handwritten integration where framework semantics require it. React keeps
+framework-specific implementation only when compatibility, developer
+experience, SSR, accessibility, or performance evidence justifies the exception.
 
-The data grid remains React-only on its independent alpha track during S10-S15.
-Multi-framework grid implementation and additional advanced modules require
-separate planning and evidence; they are not permanently excluded from the
-long-term product scope.
+The data grid remains a separate React alpha track. Multi-framework grid
+renderers require a separate product/architecture decision and evidence program.
 
-## Framework extensibility
+## State, styling, and dependency boundaries
 
-Native HTML, React, Angular, and Vue are the currently approved first-class web
-surfaces. They are not a permanent architectural ceiling.
+Application state management remains outside VyrnForge. Consuming applications
+may use Redux, Zustand, Pinia, NgRx, or other stores, but VyrnForge does not
+require them.
 
-A future framework should be supportable through canonical contracts, a
-framework integration/generation model, narrowly scoped exceptions, real
-consumer verification, and package/release metadata rather than a complete
-reimplementation of VyrnForge.
+Shared styling is token-driven through VyrnForge design tokens and CSS custom
+properties. Light DOM remains the default native-element strategy unless a
+specific evidence-backed exception requires otherwise.
 
-No additional framework is considered supported until an explicit requirement,
-implementation, documentation, compatibility policy, and evidence gate approve
-it.
+Large UI frameworks, styling ecosystems, and state-management libraries are not
+required implementation dependencies. A dependency is introduced only when its
+value outweighs portability, maintenance, accessibility, and bundle costs.
 
-## Advanced UI scope
+## Advanced UI scope and non-goals
 
-VyrnForge may own sophisticated reusable UI when the primary responsibility is
-how users see, enter, manipulate, navigate, visualize, or interact with
-application information.
+Sophisticated reusable UI can belong to VyrnForge when its primary
+responsibility is how users see, enter, manipulate, navigate, visualize, or
+interact with application information. Potential future families include tree
+and tree-grid UI, visualization, advanced forms, workflow/diagram interfaces,
+dashboards, rich editors, advanced drag/drop, and spatial UI controls.
 
-Potential future capability families include advanced data UI, tree/tree-grid,
-visualization/charting UI, complex form composition, dashboard patterns,
-workflow/diagram interfaces, rich editors, advanced drag/drop, and spatial/3D
-UI controls.
+Those capabilities require deliberate optional-module boundaries and evidence;
+S16 does not start them. Exact future package names or topology are not invented
+in advance.
 
-These capabilities should live behind optional, explicit package/module
-boundaries when their dependency, size, maturity, or release characteristics
-justify separation.
+VyrnForge does not thereby become:
 
-VyrnForge does not thereby become the application's business runtime. Business
-workflow execution, backend services, database/query backends, authorization
-policy, required application state management, BI calculation engines, CMS
-runtime, routing, game/3D rendering engines, and product-specific business logic
-remain outside the shared UI system.
+- an application state, authentication, authorization, backend, routing, CMS, or
+  workflow-execution runtime;
+- a spreadsheet or BI calculation/pivot engine;
+- a required mobile-native renderer;
+- a 3D/game rendering engine;
+- a wrapper around a large third-party UI ecosystem;
+- four unrelated framework-specific component libraries sharing only a brand.
 
-## Principles
+Renaming current packages solely for symmetry, universal Shadow DOM, a large
+required Custom Element runtime, or broad data-grid decomposition require
+concrete product/technical evidence rather than aesthetic cleanup.
 
-- Native-owned, native-first, and browser-standards-oriented.
-- One shared semantic token and CSS-variable foundation.
-- One canonical semantic and accessibility model where concepts are shared.
-- Framework-neutral behavior where reuse provides value.
-- Generated or thin framework facades rather than duplicated behavior by default.
-- Framework-specific exceptions are narrow, explicit, traceable, tested, and
-  justified by product correctness or framework constraints.
-- Dependency-minimal and application-store agnostic.
-- Controlled and uncontrolled state contracts where appropriate.
-- Light DOM by default for native elements unless an evidence-backed exception
-  requires otherwise.
-- Accessibility, keyboard behavior, focus management, internationalization,
-  responsive behavior, performance, SSR/server safety, reduced motion, and
-  compatibility are core requirements.
-- Enterprise density and advanced data-management use cases matter without
-  limiting the library to enterprise-only applications.
-- Optional advanced capabilities must not impose cost on consumers that do not
-  use them.
-- Human documentation and AI context derive from canonical sources rather than
-  parallel hand-maintained truths.
-- Business-specific logic remains in consuming applications.
-- Documentation and metadata remain source-of-truth oriented.
+## Public and generated truth
 
-## Non-goals
+Shared component semantics are defined once through canonical tokens, behavior
+contracts, accessibility obligations, form/model semantics, composition regions,
+framework mappings, metadata, and verification.
 
-VyrnForge does not aim to be:
-
-- a Material or Ant Design clone;
-- a Tailwind, Radix, TanStack, or other large UI ecosystem wrapper;
-- a required Redux, Zustand, Pinia, NgRx, or other application-store framework;
-- unrelated framework-specific component libraries sharing only a brand;
-- a mobile-native renderer in the current web program;
-- a spreadsheet product or BI calculation/pivot/report-generation engine;
-- a workflow execution engine, application backend, router, CMS, or application
-  business runtime;
-- a 3D/game rendering engine.
-
-Charting/visualization UI, tree UI, workflow-editor UI, advanced forms, and
-spatial UI controls are not excluded merely because they are sophisticated;
-they require deliberate optional-module architecture and roadmap approval.
+Human documentation and AI context derive from those canonical sources.
+Generated component references, repository inventories, framework API views, and
+AI retrieval context are views, not independent facts to edit by hand.
 
 ## Source authority
 
-Use the sources according to the question being answered:
+Use the source that owns the question:
 
-- **Product identity and long-term scope:** this document.
-- **Current implemented state:** package manifests, release metadata, current
-  package-boundary metadata, implementation docs, and executable evidence.
-- **Approved target architecture:** accepted ADRs and canonical contract metadata.
-- **Program execution:** the approved active program tracker plus repository
-  evidence; stale tracker status must not override merged implementation.
-- **Detailed strategic review:**
-  [Vision, Mission & Scope Alignment Review](../roadmap/04-vision-mission-scope-alignment-review.md).
-- **Historical evidence:** retained closure/evidence records prove what was
-  implemented or verified at that time but do not override later accepted
-  decisions.
+- **Product identity, durable scope, and non-goals:** this document.
+- **Exact current package state:** package manifests, public entrypoints,
+  `docs/metadata/packages.json`, and `docs/metadata/release-groups.json`.
+- **Architecture decisions:** accepted ADRs and architecture contracts.
+- **Component contracts and maturity:** canonical component metadata plus
+  executable evidence.
+- **Active sprint, task, dependency, and gate execution:** Drive spreadsheet
+  `VyrnForge Progress Tracker — Live Status`.
+- **Historical evidence:** retained evidence records with explicit continuing
+  audit, migration, regression, compatibility, or architectural value.
+
+Repository history is the recovery mechanism for superseded sprint prose; the
+repository does not maintain a competing execution roadmap.
 
 ## Canonical related sources
 
@@ -272,8 +169,6 @@ Use the sources according to the question being answered:
 - [Package Boundaries](../architecture/01-package-boundaries.md)
 - [State and Adapter Ownership](../architecture/02-state-and-adapter-ownership.md)
 - [Component Contracts and Events](../architecture/09-component-contracts-and-events.md)
-- [Canonical Web Implementation Target](../architecture/adr-005-canonical-web-implementation.md)
-- [Framework Package Strategy Target](../architecture/adr-006-framework-package-strategy.md)
+- [Canonical Web Implementation](../architecture/adr-005-canonical-web-implementation.md)
+- [Framework Package Strategy](../architecture/adr-006-framework-package-strategy.md)
 - [Framework Exception Policy](../architecture/adr-008-framework-exception-policy.md)
-- [Current Roadmap](../roadmap/00-master-roadmap.md)
-- [Vision, Mission & Scope Alignment Review](../roadmap/04-vision-mission-scope-alignment-review.md)

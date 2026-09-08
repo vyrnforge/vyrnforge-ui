@@ -2,74 +2,74 @@
 
 ## Purpose
 
-VyrnForge documentation should have one current source of truth per topic.
-Reader-facing entrypoints link to canonical documents rather than repeating
-their full content.
+VyrnForge documentation has one current owner per important fact. Reader-facing
+entrypoints link to canonical documents or generated views instead of repeating
+the same package, framework, maturity, release, or execution state in multiple
+places.
 
 The documentation system itself is described in
 [Documentation System](../engineering/documentation-system.md).
 
 ## Canonical ownership
 
-| Topic                                                      | Canonical source                                      |
-| ---------------------------------------------------------- | ----------------------------------------------------- |
-| Documentation entrypoint                                   | `docs/README.md`                                      |
-| Documentation organization and docs-app ownership          | `docs/engineering/documentation-system.md`            |
-| Project identity                                           | `docs/governance/01-project-source-of-truth.md`       |
-| Package boundaries                                         | `docs/architecture/01-package-boundaries.md`          |
-| State ownership                                            | `docs/architecture/02-state-and-adapter-ownership.md` |
-| Theming and styling                                        | `docs/architecture/03-theming-and-styling.md`         |
-| Current roadmap                                            | `docs/roadmap/00-master-roadmap.md`                   |
-| Component catalog, maturity, and per-component limitations | `docs/metadata/components.json`                       |
-| Generated component/framework reference                    | `docs/generated/component-reference.json`             |
-| CI/CD architecture                                         | `docs/engineering/ci-cd-architecture.md`              |
-| Release procedure                                          | `docs/release/publication-procedure.md`               |
-| AI context                                                 | `.ai/AI_CONTEXT.md`                                   |
+| Topic | Canonical source |
+| --- | --- |
+| Documentation entrypoint | `docs/README.md` |
+| Documentation organization and docs-app ownership | `docs/engineering/documentation-system.md` |
+| Project identity, scope, and durable product boundaries | `docs/governance/01-project-source-of-truth.md` |
+| Active sprint/task execution and gate status | Drive spreadsheet `VyrnForge Progress Tracker — Live Status` |
+| Package boundaries | `docs/architecture/01-package-boundaries.md` |
+| State ownership | `docs/architecture/02-state-and-adapter-ownership.md` |
+| Theming and styling | `docs/architecture/03-theming-and-styling.md` |
+| Component catalog, maturity, and per-component limitations | `docs/metadata/components.json` |
+| Generated component/framework reference | `docs/generated/component-reference.json` |
+| Generated AI retrieval context | `docs/generated/ai-context/` |
+| CI/CD architecture | `docs/engineering/ci-cd-architecture.md` |
+| Release procedure | `docs/release/publication-procedure.md` |
 
-Generated inventories and references may summarize canonical metadata, but they
-must not become competing manually maintained catalogs.
+Package manifests, public entrypoints, implementation, executable tests, and
+canonical metadata remain authoritative for exact current implementation facts.
+The Drive progress tracker owns execution state; the repository must not maintain
+a competing sprint tracker.
 
 ## Core rules
 
 ### One source of truth per topic
 
 Before creating a document, identify whether an existing canonical source
-already owns the subject. Update that source and link to it instead of creating
-another version.
+already owns the subject. Update that owner and link to it instead of creating a
+second version.
 
 ### Current guidance before history
 
-Normal usage, architecture, package, and release docs describe current behavior.
-Completed sprint narratives, gate-closure reports, old audits, and
-release-specific evidence belong under clearly marked historical/evidence areas
-only when they retain audit, migration, regression, or architectural value.
+Normal usage, architecture, package, release, and quality docs describe current
+behavior. Completed sprint narratives, gate ledgers, old audits, and
+release-specific evidence remain only when they retain current audit, migration,
+regression, compatibility, or architectural value.
 
 Historical evidence never overrides current guidance.
 
 ### Retain history intentionally
 
-Git history is the fallback history for ordinary documentation changes. Do not
-archive every replaced file by default.
-
-Archive replaced guidance when the old material has continuing value for audit
-evidence, migrations, regressions, or architectural context. Delete obsolete
-one-time prompts, task instructions, reproducible copies, and duplicate guidance
-when they have no continuing value.
+Git history is the recovery mechanism for ordinary replaced guidance. Do not
+create documentation archives merely to avoid deletion. Retain old material only
+when its continuing evidence value is explicit and current.
 
 See [Document Lifecycle](02-document-lifecycle.md) for the retention rules.
 
-### Keep generated catalogs generated
+### Keep generated facts generated
 
-Component lists and framework-reference views must derive from canonical
-metadata. Do not hand-maintain the same component/status table in the README,
-roadmap, package docs, API index, and metadata.
+Component lists, framework-reference views, repository inventories, and AI
+retrieval context derive from canonical metadata or repository state. Do not
+hand-maintain the same facts in parallel Markdown, JSON, agent files, and
+application routes.
 
 ### Keep executable inventories executable
 
-When code already owns a current inventory or mapping, documentation should
-explain the durable contract and link to the implementation rather than copy the
-inventory into Markdown. For example, documentation routes and source mappings
-are owned by `apps/docs/src/docsRegistry.ts`.
+When code owns a current inventory or mapping, documentation explains the durable
+contract and links to the implementation rather than copying the inventory. For
+example, documentation routes and source mappings are owned by
+`apps/docs/src/docsRegistry.ts`.
 
 ### Human and machine-readable sources must agree
 
@@ -77,14 +77,9 @@ Markdown owns human-readable decisions. Structured metadata supports
 verification, generated docs, and AI lookup and must stay aligned with those
 decisions.
 
-Agent-facing files should remain concise pointers and implementation guardrails;
-they should not become a second architecture manual.
-
-## Important document lifecycle
-
-Stable or canonical documents should state their purpose, scope, non-goals where
-needed, and related sources. See [Document Lifecycle](02-document-lifecycle.md)
-for retention, archive, replacement, and deletion rules.
+Agent-facing files stay concise and operational. Product/package/component truth
+comes from canonical docs, manifests, metadata, and generated AI context rather
+than a second hand-maintained architecture manual.
 
 ## Verification
 
@@ -92,5 +87,5 @@ for retention, archive, replacement, and deletion rules.
 channels, hardcoded prerelease versions, obsolete project-state language, and
 reader-entrypoint structure.
 
-Documentation application changes should also preserve a successful docs build
-because `apps/docs` imports repository documentation directly.
+Documentation changes also preserve a successful docs build and valid links and
+navigation because `apps/docs` imports repository documentation directly.
