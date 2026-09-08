@@ -63,12 +63,11 @@ test("stale generated artifacts identify their canonical source records", () => 
 
 test("generated framework artifact registry covers aggregate-owned outputs only", () => {
   const artifacts = buildGeneratedFrameworkArtifacts();
-  assert.equal(artifacts.length, 8);
+  assert.equal(artifacts.length, 7);
   assert.deepEqual(
     artifacts.map((artifact) => artifact.path).sort(),
     [
       "docs/generated/framework-api-reference.json",
-      "docs/generated/framework-button-slice.json",
       "packages/ui-elements/custom-elements.json",
       "packages/ui-elements/src/custom-elements.ts",
       "tests/consumers/native-html/src/generated/vf-button.generated.ts",
