@@ -9,7 +9,7 @@ import themingAndStyling from "../../../docs/architecture/03-theming-and-styling
 import cleanCodeBoundaries from "../../../docs/architecture/04-clean-code-boundaries.md?raw";
 import accessibilityStandards from "../../../docs/architecture/05-accessibility-standards.md?raw";
 import semanticTokenContract from "../../../docs/architecture/08-semantic-token-contract.md?raw";
-import multiFrameworkDecision from "../../../docs/architecture/adr-004-multi-framework-web-support.md?raw";
+import canonicalWebImplementation from "../../../docs/architecture/adr-005-canonical-web-implementation.md?raw";
 import componentContracts from "../../../docs/architecture/09-component-contracts-and-events.md?raw";
 import customElementsAndForms from "../../../docs/architecture/10-custom-elements-and-form-association.md?raw";
 import multiFrameworkFixtures from "../../../docs/testing/multi-framework-consumer-fixtures.md?raw";
@@ -129,36 +129,13 @@ export const docsRoutes: DocsRoute[] = [
     title: "Documentation System",
     group: "Start Here",
     description:
-      "Documentation application, lifecycle, generation, and source ownership.",
+      "Canonical documentation ownership, lifecycle, docs application, and AI source-of-truth rules.",
     sourcePath: "docs/engineering/documentation-system.md",
     aiPurpose:
-      "Use this before changing the documentation application or generated docs infrastructure.",
-    tags: ["canonical", "documentation", "engineering"],
+      "Use this before adding, moving, consolidating, or deleting documentation.",
+    tags: ["canonical", "documentation", "governance"],
     canonical: true,
     content: documentationSystem,
-  },
-  {
-    id: "component-reference",
-    title: "Component Reference",
-    group: "Start Here",
-    description:
-      "Generated multi-framework usage and framework-neutral contract reference.",
-    sourcePath: "docs/generated/component-reference.json",
-    aiPurpose:
-      "Use this as a generated viewer. Canonical component and contract metadata remain the source of truth.",
-    tags: ["components", "reference", "multi-framework", "generated"],
-    kind: "component-reference",
-  },
-  {
-    id: "package-reference",
-    title: "Package Reference",
-    group: "Start Here",
-    description: "Generated viewer summary of package responsibilities.",
-    sourcePath: "docs/architecture/01-package-boundaries.md",
-    aiPurpose:
-      "Use this as a navigable summary. Architecture docs and package metadata remain the source of truth.",
-    tags: ["packages", "reference"],
-    kind: "package-reference",
   },
   {
     id: "system-overview",
@@ -186,7 +163,7 @@ export const docsRoutes: DocsRoute[] = [
     id: "state-and-adapters",
     title: "State and Adapters",
     group: "Architecture",
-    description: "State ownership and adapter boundaries.",
+    description: "State ownership, Redux policy, and adapter boundaries.",
     sourcePath: "docs/architecture/02-state-and-adapter-ownership.md",
     aiPurpose:
       "Use this before adding state, persistence, server, or export behavior.",
@@ -239,17 +216,17 @@ export const docsRoutes: DocsRoute[] = [
     content: semanticTokenContract,
   },
   {
-    id: "multi-framework-decision",
-    title: "Multi-Framework Web Support",
+    id: "canonical-web-implementation",
+    title: "Canonical Web Implementation",
     group: "Architecture",
     description:
-      "Accepted multi-framework support decision and separate data-grid scope.",
-    sourcePath: "docs/architecture/adr-004-multi-framework-web-support.md",
+      "Current canonical browser implementation and framework-facade model.",
+    sourcePath: "docs/architecture/adr-005-canonical-web-implementation.md",
     aiPurpose:
-      "Use this before changing renderer scope, package identity, or framework support claims.",
+      "Use this before changing renderer ownership or framework implementation strategy.",
     tags: ["canonical", "architecture", "multi-framework", "adr"],
     canonical: true,
-    content: multiFrameworkDecision,
+    content: canonicalWebImplementation,
   },
   {
     id: "component-contracts-events",
@@ -269,7 +246,7 @@ export const docsRoutes: DocsRoute[] = [
     title: "Custom Elements And Forms",
     group: "Architecture",
     description:
-      "Custom Element lifecycle and native form-association policy.",
+      "Light DOM, Custom Element lifecycle, and native form-association policy.",
     sourcePath: "docs/architecture/10-custom-elements-and-form-association.md",
     aiPurpose:
       "Use this before implementing native elements, reflection, or form integration.",
@@ -309,7 +286,7 @@ export const docsRoutes: DocsRoute[] = [
       "Current component, repository, accessibility, token, and merge-quality requirements.",
     sourcePath: "docs/quality/00-quality-gates.md",
     aiPurpose:
-      "Use this to determine current blocking quality expectations for repository changes.",
+      "Use this to determine the current blocking quality expectations for repository changes.",
     tags: ["canonical", "quality", "testing", "ci"],
     canonical: true,
     content: qualityGates,
@@ -377,7 +354,7 @@ export const docsRoutes: DocsRoute[] = [
     id: "publication-procedure",
     title: "Publication Procedure",
     group: "Release",
-    description: "Publication and trusted-publishing procedure.",
+    description: "Manual publication and trusted-publishing procedure.",
     sourcePath: "docs/release/publication-procedure.md",
     aiPurpose: "Use this before package publication planning.",
     tags: ["release", "publication"],
@@ -399,10 +376,10 @@ export const docsRoutes: DocsRoute[] = [
     title: "Multi-Framework Migration and Limitations",
     group: "Release",
     description:
-      "Framework selection, integration, migration, and current release limitations.",
+      "Guidance for choosing React components or native elements, integrating Angular and Vue, and understanding current framework and release limitations.",
     sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
     aiPurpose:
-      "Use this before migrating an application across React, Native HTML, Angular, or Vue.",
+      "Use this before migrating an application to VyrnForge across React, Native HTML, Angular, or Vue.",
     tags: ["release", "migration", "multi-framework"],
     canonical: true,
     content: multiFrameworkMigrationGuide,
@@ -445,7 +422,7 @@ export const docsRoutes: DocsRoute[] = [
     id: "ui-components",
     title: "ui-components",
     group: "Packages",
-    description: "First-class React surface.",
+    description: "First-class React components and integration surface.",
     sourcePath: "docs/packages/ui-components.md",
     aiPurpose: "Use this before changing the React package.",
     tags: ["package", "ui-components", "react"],
@@ -456,9 +433,10 @@ export const docsRoutes: DocsRoute[] = [
     id: "ui-elements",
     title: "ui-elements",
     group: "Packages",
-    description: "Native Custom Element surface and form/event integration.",
+    description: "Native Custom Element renderer and form/event integration.",
     sourcePath: "docs/packages/ui-elements.md",
-    aiPurpose: "Use this before changing native elements.",
+    aiPurpose:
+      "Use this before changing native elements or verified framework consumer integrations.",
     tags: ["package", "ui-elements", "custom-elements"],
     canonical: true,
     content: uiElementsDoc,
@@ -497,6 +475,122 @@ export const docsRoutes: DocsRoute[] = [
     content: uiDataGridDoc,
   },
   {
+    id: "metadata-packages",
+    title: "Metadata / Packages",
+    group: "Metadata",
+    description:
+      "Machine-readable package ownership, dependencies, CSS imports, and entry points.",
+    sourcePath: "docs/metadata/packages.json",
+    aiPurpose:
+      "Use this for package ownership and dependency direction lookup.",
+    tags: ["metadata", "packages", "json"],
+    kind: "metadata",
+    content: metadataPackages,
+  },
+  {
+    id: "metadata-multi-framework",
+    title: "Metadata / Multi-Framework",
+    group: "Metadata",
+    description:
+      "Machine-readable renderer support, package topology, release groups, and fixture policy.",
+    sourcePath: "docs/metadata/multi-framework.json",
+    aiPurpose:
+      "Use this for approved framework support and package topology lookup.",
+    tags: ["metadata", "multi-framework", "packages", "json"],
+    kind: "metadata",
+    content: metadataMultiFramework,
+  },
+  {
+    id: "metadata-cross-framework-browser-matrix",
+    title: "Metadata / Cross-Framework Browser Matrix",
+    group: "Metadata",
+    description:
+      "Packed Native HTML, React, Angular, and Vue shared browser scenarios and runtime evidence.",
+    sourcePath: "docs/metadata/cross-framework-browser-matrix.json",
+    aiPurpose:
+      "Use this for the current shared browser matrix scenarios, report path, and trace evidence status.",
+    tags: ["metadata", "multi-framework", "browser", "json"],
+    kind: "metadata",
+    content: metadataCrossFrameworkBrowserMatrix,
+  },
+  {
+    id: "metadata-cross-framework-accessibility",
+    title: "Metadata / Cross-Framework Accessibility",
+    group: "Metadata",
+    description:
+      "Automated accessibility, keyboard, and manual assistive-technology evidence across packed framework consumers.",
+    sourcePath: "docs/metadata/cross-framework-accessibility-review.json",
+    aiPurpose:
+      "Use this to determine whether cross-framework accessibility automation and named NVDA evidence are complete.",
+    tags: ["metadata", "accessibility", "multi-framework", "json"],
+    kind: "metadata",
+    content: metadataCrossFrameworkAccessibility,
+  },
+  {
+    id: "metadata-multi-framework-migration-guide",
+    title: "Metadata / Multi-Framework Migration Guide",
+    group: "Metadata",
+    description:
+      "Migration and limitations guide review status and required coverage.",
+    sourcePath: "docs/metadata/multi-framework-migration-guide.json",
+    aiPurpose:
+      "Use this to verify the canonical multi-framework migration guide and its review evidence.",
+    tags: ["metadata", "migration", "multi-framework", "json"],
+    kind: "metadata",
+    content: metadataMultiFrameworkMigrationGuide,
+  },
+  {
+    id: "metadata-component-reference-program",
+    title: "Metadata / Component Reference Program",
+    group: "Metadata",
+    description:
+      "Generated framework usage tabs and component-contract reference status.",
+    sourcePath: "docs/metadata/component-reference-program.json",
+    aiPurpose:
+      "Use this to determine the verification state and source-of-truth policy for generated multi-framework component documentation.",
+    tags: ["metadata", "components", "reference", "multi-framework", "json"],
+    kind: "metadata",
+    content: metadataComponentReferenceProgram,
+  },
+  {
+    id: "metadata-component-contracts",
+    title: "Metadata / Component Contracts",
+    group: "Metadata",
+    description:
+      "Machine-readable events, slots, form association, and representative component contracts.",
+    sourcePath: "docs/metadata/component-contracts.json",
+    aiPurpose:
+      "Use this before adding renderer-specific component APIs or event names.",
+    tags: ["metadata", "contracts", "events", "slots", "json"],
+    kind: "metadata",
+    content: metadataComponentContracts,
+  },
+  {
+    id: "metadata-component-contract-schema",
+    title: "Metadata / Component Contract Schema",
+    group: "Metadata",
+    description:
+      "JSON Schema for the cross-framework component contract catalog.",
+    sourcePath: "docs/metadata/component-contract.schema.json",
+    aiPurpose: "Use this to validate new canonical component-contract records.",
+    tags: ["metadata", "schema", "contracts", "json"],
+    kind: "metadata",
+    content: metadataComponentContractSchema,
+  },
+  {
+    id: "metadata-design-tokens",
+    title: "Metadata / Design Tokens",
+    group: "Metadata",
+    description:
+      "Machine-readable semantic token categories, themes, density, motion, layers, and compatibility bridges.",
+    sourcePath: "docs/metadata/design-tokens.json",
+    aiPurpose:
+      "Use this before changing shared token names, roles, aliases, or ownership.",
+    tags: ["metadata", "tokens", "theme", "json"],
+    kind: "metadata",
+    content: metadataDesignTokens,
+  },
+  {
     id: "api-overview",
     title: "API Overview",
     group: "API Reference",
@@ -533,7 +627,7 @@ export const docsRoutes: DocsRoute[] = [
     group: "API Reference",
     description: "Public React component API overview.",
     sourcePath: "docs/api/ui-components-api.md",
-    aiPurpose: "Use this before using React components.",
+    aiPurpose: "Use this before using VyrnForge components.",
     tags: ["api", "ui-components"],
     content: apiUiComponents,
   },
@@ -579,19 +673,6 @@ export const docsRoutes: DocsRoute[] = [
     content: apiPublicVsInternal,
   },
   {
-    id: "metadata-packages",
-    title: "Metadata / Packages",
-    group: "Metadata",
-    description:
-      "Machine-readable package ownership, dependencies, CSS imports, and entry points.",
-    sourcePath: "docs/metadata/packages.json",
-    aiPurpose:
-      "Use this for package ownership and dependency direction lookup.",
-    tags: ["metadata", "packages", "json"],
-    kind: "metadata",
-    content: metadataPackages,
-  },
-  {
     id: "metadata-components",
     title: "Metadata / Components",
     group: "Metadata",
@@ -602,109 +683,6 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["metadata", "components", "json"],
     kind: "metadata",
     content: metadataComponents,
-  },
-  {
-    id: "metadata-multi-framework",
-    title: "Metadata / Multi-Framework",
-    group: "Metadata",
-    description:
-      "Machine-readable renderer support, package topology, release groups, and fixture policy.",
-    sourcePath: "docs/metadata/multi-framework.json",
-    aiPurpose:
-      "Use this for approved framework support and package topology lookup.",
-    tags: ["metadata", "multi-framework", "packages", "json"],
-    kind: "metadata",
-    content: metadataMultiFramework,
-  },
-  {
-    id: "metadata-cross-framework-browser-matrix",
-    title: "Metadata / Cross-Framework Browser Matrix",
-    group: "Metadata",
-    description:
-      "Packed Native HTML, React, Angular, and Vue shared browser scenarios and runtime evidence.",
-    sourcePath: "docs/metadata/cross-framework-browser-matrix.json",
-    aiPurpose:
-      "Use this for current shared browser matrix scenarios and evidence.",
-    tags: ["metadata", "multi-framework", "browser", "json"],
-    kind: "metadata",
-    content: metadataCrossFrameworkBrowserMatrix,
-  },
-  {
-    id: "metadata-cross-framework-accessibility",
-    title: "Metadata / Cross-Framework Accessibility",
-    group: "Metadata",
-    description:
-      "Automated accessibility, keyboard, and manual assistive-technology evidence across packed framework consumers.",
-    sourcePath: "docs/metadata/cross-framework-accessibility-review.json",
-    aiPurpose:
-      "Use this for current cross-framework accessibility evidence.",
-    tags: ["metadata", "accessibility", "multi-framework", "json"],
-    kind: "metadata",
-    content: metadataCrossFrameworkAccessibility,
-  },
-  {
-    id: "metadata-multi-framework-migration-guide",
-    title: "Metadata / Multi-Framework Migration Guide",
-    group: "Metadata",
-    description:
-      "Migration and limitations guide review status and required coverage.",
-    sourcePath: "docs/metadata/multi-framework-migration-guide.json",
-    aiPurpose:
-      "Use this to verify the canonical multi-framework migration guide.",
-    tags: ["metadata", "migration", "multi-framework", "json"],
-    kind: "metadata",
-    content: metadataMultiFrameworkMigrationGuide,
-  },
-  {
-    id: "metadata-component-reference-program",
-    title: "Metadata / Component Reference Program",
-    group: "Metadata",
-    description:
-      "Generated framework usage tabs and component-contract reference status.",
-    sourcePath: "docs/metadata/component-reference-program.json",
-    aiPurpose:
-      "Use this to determine the verification state and source policy for generated component documentation.",
-    tags: ["metadata", "components", "reference", "multi-framework", "json"],
-    kind: "metadata",
-    content: metadataComponentReferenceProgram,
-  },
-  {
-    id: "metadata-component-contracts",
-    title: "Metadata / Component Contracts",
-    group: "Metadata",
-    description:
-      "Machine-readable events, slots, form association, and component contracts.",
-    sourcePath: "docs/metadata/component-contracts.json",
-    aiPurpose:
-      "Use this before adding renderer-specific component APIs or event names.",
-    tags: ["metadata", "contracts", "events", "slots", "json"],
-    kind: "metadata",
-    content: metadataComponentContracts,
-  },
-  {
-    id: "metadata-component-contract-schema",
-    title: "Metadata / Component Contract Schema",
-    group: "Metadata",
-    description:
-      "JSON Schema for the cross-framework component contract catalog.",
-    sourcePath: "docs/metadata/component-contract.schema.json",
-    aiPurpose: "Use this to validate canonical component-contract records.",
-    tags: ["metadata", "schema", "contracts", "json"],
-    kind: "metadata",
-    content: metadataComponentContractSchema,
-  },
-  {
-    id: "metadata-design-tokens",
-    title: "Metadata / Design Tokens",
-    group: "Metadata",
-    description:
-      "Machine-readable semantic token categories, themes, density, motion, layers, and compatibility bridges.",
-    sourcePath: "docs/metadata/design-tokens.json",
-    aiPurpose:
-      "Use this before changing shared token names, roles, aliases, or ownership.",
-    tags: ["metadata", "tokens", "theme", "json"],
-    kind: "metadata",
-    content: metadataDesignTokens,
   },
   {
     id: "metadata-css-imports",
@@ -750,6 +728,29 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["ai", "agent"],
     kind: "ai",
     content: agents,
+  },
+  {
+    id: "component-reference",
+    title: "Component Reference",
+    group: "Start Here",
+    description:
+      "Generated multi-framework usage and framework-neutral contract reference.",
+    sourcePath: "docs/generated/component-reference.json",
+    aiPurpose:
+      "Use this as a generated viewer. Canonical component, contract, and Custom Element metadata remain the source of truth.",
+    tags: ["components", "reference", "multi-framework", "generated"],
+    kind: "component-reference",
+  },
+  {
+    id: "package-reference",
+    title: "Package Reference",
+    group: "Start Here",
+    description: "Generated viewer summary of package responsibilities.",
+    sourcePath: "docs/architecture/01-package-boundaries.md",
+    aiPurpose:
+      "Use this as a navigable summary. Architecture docs remain source of truth.",
+    tags: ["packages", "reference"],
+    kind: "package-reference",
   },
 ];
 
