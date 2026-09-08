@@ -1,0 +1,11 @@
+{
+  "name": "@vyrnforge/ui-vue",
+  "dependencies": {
+    "@vyrnforge/ui-elements": "1.0.0",
+    "@vyrnforge/ui-angular": "1.0.0",
+    "@angular/core": "22.0.8"
+  },
+  "peerDependencies": {
+    "vue": ">=3.5 <4"
+  }
+}

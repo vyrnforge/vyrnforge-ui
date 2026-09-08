@@ -1,35 +1,39 @@
 # ADR-008: Framework Exception Policy
 
-- Status: Accepted target architecture
-- Task: MFD-1009
-- Depends on: MFD-1005
+- Status: Accepted
+- Scope: Narrow framework-specific deviations from canonical/generated integration
 - Registry: `docs/metadata/framework-exceptions.json`
 
 ## Decision
 
-Generated or generic canonical-backed framework integration remains the default. Any handwritten framework adapter, component-specific generator branch, or dedicated framework renderer requires an explicit exception record.
+Generated or generic canonical-backed framework integration is the default. Any
+handwritten framework adapter, component-specific generator branch, or dedicated
+framework renderer that changes the normal shared path requires an explicit
+exception record.
 
-An exception is technical debt with an owner and exit condition, not an alternate architecture path.
+An exception is a bounded technical deviation with an owner, evidence, review
+criteria, and exit condition. It is not an alternate architecture path.
 
 ## Required exception data
 
-Every exception records:
+Every active exception records:
 
 - stable exception id;
 - framework;
-- affected component(s) or package scope;
+- affected component(s), API surface, or package scope;
 - exception class and concrete technical reason;
 - implementation owner;
 - source paths owned by the exception;
 - validation/tests or evidence that justify and protect it;
-- migration/exit criteria;
-- review status and review milestone.
+- migration or exit criteria;
+- review state and review trigger/milestone.
 
-Preference, familiarity, historical implementation, avoiding generator work, or minor syntax differences are not valid exception reasons.
+Preference, familiarity, historical implementation, avoiding generator work, or
+minor syntax differences are not valid exception reasons.
 
 ## Allowed exception classes
 
-The registry may classify evidence-backed exceptions such as:
+Evidence-backed exception classes may include:
 
 - SSR/hydration incompatibility;
 - measured performance regression;
@@ -37,36 +41,59 @@ The registry may classify evidence-backed exceptions such as:
 - framework composition incompatibility;
 - imperative/ref incompatibility;
 - framework compiler/type-system limitation;
-- temporary migration compatibility requirement.
+- temporary compatibility requirement with a defined retirement condition.
 
-A dedicated renderer is the highest-cost exception and must document why a narrower adapter cannot satisfy the requirement.
+A dedicated renderer is the highest-cost exception and must document why a
+narrower adapter cannot satisfy the requirement.
 
 ## Scope rules
 
-Exceptions should be as narrow as possible. Prefer one property/event/composition adapter over a whole-component exception, and a whole-component exception over a package-wide renderer fork.
+Exceptions are as narrow as practical. Prefer one property/event/composition
+adapter over a whole-component exception, and a whole-component exception over a
+package-wide renderer fork.
 
-An exception must not move shared tokens, behavior contracts, accessibility rules, or business logic into framework-specific code.
+An exception must not move shared tokens, behavior contracts, accessibility
+rules, application state, or business logic into framework-specific code.
 
-## Source ownership
+## Generated and handwritten source ownership
 
-Source paths listed in an exception may be handwritten. Generated-source paths remain governed by MFD-1011 and must not be edited merely because an exception exists; the generator consumes exception metadata and emits or omits the appropriate output.
+Generated framework source remains generated. An exception is represented in
+canonical exception metadata and generator behavior where applicable; generated
+files are not manually edited merely because an exception exists.
 
-## Verification design
+Handwritten framework-specific source must be traceable to either:
 
-A future verifier must fail when:
+- normal framework integration responsibility documented by package boundaries;
+  or
+- a matching active exception record.
 
-- handwritten framework-specific implementation exists without a matching active exception;
-- an exception omits owner, evidence/tests, or exit criteria;
-- source paths escape the declared scope;
-- a closed exception still owns active handwritten source;
-- generator code contains undeclared component-name conditionals that should be represented as exception metadata.
+## Verification
+
+Current verification must fail when:
+
+- exception metadata omits required scope, owner, evidence, or exit/review
+  criteria;
+- declared source paths escape the exception scope;
+- a closed exception still owns active exception-only source;
+- framework-specific component conditionals that alter shared semantics exist
+  without an appropriate declared exception;
+- an exception attempts to justify duplicated shared product semantics.
+
+Repository checks should validate exception metadata together with current
+framework/package tests rather than rely on closed migration-task ledgers.
 
 ## Lifecycle
 
 Exception states are `proposed`, `active`, `retiring`, or `closed`.
 
-Only `active` and narrowly-scoped `retiring` exceptions may justify handwritten target implementation. Closing an exception requires either canonical/generic support or removal of the affected public surface.
+Only `active` and narrowly scoped `retiring` exceptions may justify exception-only
+handwritten implementation. Closing an exception requires canonical/generic
+support or removal of the affected public surface, followed by removal of source
+that existed solely for the exception.
 
-## Acceptance mapping
+## Review rule
 
-This policy makes every handwritten framework implementation or dedicated renderer explicit by framework, reason, scope, owner, tests/evidence, and migration/exit criteria while keeping generated/thin integration as the default.
+S16 and later cleanup must not preserve an exception merely because an old
+migration required it. Every surviving exception must still protect a current
+compatibility, developer-experience, SSR, accessibility, performance, or
+framework-correctness guarantee and must remain tested.
