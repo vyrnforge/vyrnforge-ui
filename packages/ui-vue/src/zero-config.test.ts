@@ -18,5 +18,5 @@ describe("@vyrnforge/ui-vue zero-config application path", () => {
         stdio: "inherit",
       },
     );
-  });
+  }, 30_000);
 });

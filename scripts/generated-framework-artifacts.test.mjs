@@ -63,7 +63,7 @@ test("stale generated artifacts identify their canonical source records", () => 
 
 test("generated framework artifact registry covers every owned output", () => {
   const artifacts = buildGeneratedFrameworkArtifacts();
-  assert.equal(artifacts.length, 21);
+  assert.equal(artifacts.length, 22);
   assert.deepEqual(
     artifacts.map((artifact) => artifact.path).sort(),
     [
@@ -72,6 +72,7 @@ test("generated framework artifact registry covers every owned output", () => {
       "packages/ui-elements/custom-elements.json",
       "packages/ui-elements/src/custom-elements.ts",
       "packages/ui-vue/src/generated/catalog.generated.ts",
+      "packages/ui-vue/src/generated/typed-catalog.generated.ts",
       "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
       "tests/consumers/angular/src/app/generated/vf-dialog.generated.ts",
       "tests/consumers/angular/src/app/generated/vf-tabs.generated.ts",

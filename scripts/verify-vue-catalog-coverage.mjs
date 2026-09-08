@@ -23,9 +23,18 @@ const indexSource = readFileSync(
   path.join(root, "packages/ui-vue/src/index.ts"),
   "utf8",
 );
-if (!indexSource.includes("./generated/catalog.generated")) {
+if (!indexSource.includes("./generated/typed-catalog.generated")) {
   throw new Error(
-    "Vue public entrypoint does not export the generated catalog",
+    "Vue public entrypoint does not export the generated typed catalog",
+  );
+}
+const typedCatalogSource = readFileSync(
+  path.join(root, "packages/ui-vue/src/generated/typed-catalog.generated.ts"),
+  "utf8",
+);
+if (!typedCatalogSource.includes("./catalog.generated")) {
+  throw new Error(
+    "Vue typed catalog does not delegate runtime ownership to the generated catalog",
   );
 }
 const pluginSource = readFileSync(

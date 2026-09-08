@@ -25,7 +25,7 @@
     "lint": "eslint src tsup.config.ts --config ../../eslint.config.mjs",
     "lint:fix": "npm run lint -- --fix",
     "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors && npm run build --workspace @vyrnforge/ui-elements",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit && node ../../scripts/verify-vue-sfc-types.mjs",
     "test": "vitest run && node ../../scripts/verify-vue-peer-policy.mjs && node ../../scripts/verify-vue-catalog-coverage.mjs && node ../../scripts/verify-vue-model-matrix.mjs && npm run verify:ssr",
     "verify:ssr": "node ../../scripts/verify-vue-ssr.mjs"
   },
@@ -42,10 +42,12 @@
   },
   "devDependencies": {
     "@types/node": "24.10.9",
+    "@typescript/typescript6": "^6.0.2",
     "tsup": "*",
     "typescript": "7.0.2",
     "vitest": "*",
-    "vue": "^3.5.0"
+    "vue": "^3.5.0",
+    "vue-tsc": "^3.3.11"
   },
   "repository": {
     "type": "git",
