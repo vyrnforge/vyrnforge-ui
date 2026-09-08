@@ -218,6 +218,7 @@ function verifyPackageTopology(root, failures, architecture) {
         "@vyrnforge/ui-behaviors",
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-angular",
       ]),
     )
   ) {
