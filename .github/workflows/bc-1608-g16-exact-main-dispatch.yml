@@ -26,5 +26,5 @@ jobs:
       - name: Dispatch canonical assurance workflow on main
         shell: bash
         run: |
-          # BC-1608 rerun after persistent integration-lane synchronization.
+          # BC-1609 final post-cleanup G16 rerun.
           gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/workflows/assurance.yml/dispatches" -f ref=main
