@@ -12,96 +12,64 @@ const metrics = {
   cssBytes: 6,
 };
 
-function manifest(overrides = {}) {
+function manifest(budgets = {}) {
   return {
-    waiverPolicy: { maximumDurationDays: 30 },
     packages: [
       {
         name: "@vyrnforge/ui-core",
-        budgets: { ...metrics, ...overrides.budgets },
+        budgets: { ...metrics, ...budgets },
       },
     ],
-    waivers: overrides.waivers ?? [],
   };
 }
 
 const measurements = [{ name: "@vyrnforge/ui-core", ...metrics }];
-const now = new Date("2026-08-04T00:00:00Z");
 
-test("accepts measurements within every budget", () => {
+test("accepts measurements within every canonical release-group budget", () => {
   const result = evaluateSizeBudgets({
     manifest: manifest(),
     measurements,
-    now,
   });
   assert.deepEqual(result.failures, []);
+  assert.deepEqual(result.waiverResults, []);
 });
 
-test("rejects a package budget regression without a waiver", () => {
+test("rejects a package budget regression", () => {
   const result = evaluateSizeBudgets({
-    manifest: manifest({ budgets: { cssBytes: 5 } }),
+    manifest: manifest({ cssBytes: 5 }),
     measurements,
-    now,
   });
   assert(
     result.failures.some((failure) => failure.includes("cssBytes 6 exceeds 5")),
   );
 });
 
-test("accepts a narrow unexpired waiver", () => {
+test("rejects missing measurements", () => {
   const result = evaluateSizeBudgets({
-    manifest: manifest({
-      budgets: { cssBytes: 5 },
-      waivers: [
-        {
-          package: "@vyrnforge/ui-core",
-          metric: "cssBytes",
-          maxValue: 7,
-          owner: "Quality Engineering",
-          reason: "Temporary reviewed beta regression",
-          expiresOn: "2026-08-20",
-        },
-      ],
-    }),
-    measurements,
-    now,
+    manifest: manifest(),
+    measurements: [],
   });
-  assert.deepEqual(result.failures, []);
-  assert.equal(result.waiverResults.length, 1);
+  assert.deepEqual(result.failures, [
+    "@vyrnforge/ui-core: size measurement is missing",
+  ]);
 });
 
-test("rejects expired, excessive, and insufficient waivers", () => {
-  for (const waiver of [
-    {
-      package: "@vyrnforge/ui-core",
-      metric: "cssBytes",
-      maxValue: 7,
-      owner: "Quality Engineering",
-      reason: "Expired",
-      expiresOn: "2026-08-03",
+test("rejects missing canonical metric limits", () => {
+  const { cssBytes: _cssBytes, ...incomplete } = metrics;
+  const result = evaluateSizeBudgets({
+    manifest: {
+      packages: [
+        {
+          name: "@vyrnforge/ui-core",
+          budgets: incomplete,
+        },
+      ],
     },
-    {
-      package: "@vyrnforge/ui-core",
-      metric: "cssBytes",
-      maxValue: 7,
-      owner: "Quality Engineering",
-      reason: "Too long",
-      expiresOn: "2026-12-31",
-    },
-    {
-      package: "@vyrnforge/ui-core",
-      metric: "cssBytes",
-      maxValue: 5,
-      owner: "Quality Engineering",
-      reason: "Too small",
-      expiresOn: "2026-08-20",
-    },
-  ]) {
-    const result = evaluateSizeBudgets({
-      manifest: manifest({ budgets: { cssBytes: 5 }, waivers: [waiver] }),
-      measurements,
-      now,
-    });
-    assert(result.failures.length > 0);
-  }
+    measurements,
+  });
+  assert(
+    result.failures.some((failure) =>
+      failure.includes("cssBytes budget is invalid"),
+    ),
+  );
 });
