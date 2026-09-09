@@ -40,6 +40,7 @@ const packageDefinitions = [
     customElements: true,
   },
   { name: "@vyrnforge/ui-angular", directory: "packages/ui-angular" },
+  { name: "@vyrnforge/ui-vue", directory: "packages/ui-vue" },
 ];
 
 const allFixtures = [
@@ -92,6 +93,12 @@ const allFixtures = [
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-elements",
+    ],
+    packedPackageNames: [
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
+      "@vyrnforge/ui-vue",
     ],
   },
 ];
@@ -1246,9 +1253,12 @@ try {
     runNpm(["run", "build", "--workspace", "@vyrnforge/ui-angular"], {
       stdio: "inherit",
     });
+    runNpm(["run", "build", "--workspace", "@vyrnforge/ui-vue"], {
+      stdio: "inherit",
+    });
 
     console.log(
-      "Packing ui-core, ui-behaviors, ui-components, ui-elements, and ui-angular...",
+      "Packing ui-core, ui-behaviors, ui-components, ui-elements, ui-angular, and ui-vue...",
     );
     tarballs = packPackages();
   } else {

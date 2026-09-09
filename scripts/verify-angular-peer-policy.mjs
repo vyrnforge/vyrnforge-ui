@@ -8,7 +8,7 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const ANGULAR_PEER_RANGE = ">=22 <23";
+const ANGULAR_PEER_RANGE = ">=21 <23";
 const RXJS_PEER_RANGE = "^6.5.3 || ^7.4.0";
 const TSLIB_DEPENDENCY_RANGE = "^2.8.1";
 
