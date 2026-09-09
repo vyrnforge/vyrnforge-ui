@@ -23,6 +23,7 @@ import {
   validateReleaseArtifactManifest,
   verifyReleaseArtifactFiles,
 } from "./release-artifact.mjs";
+import { collectPackageExportEntries } from "./release-package-exports.mjs";
 import { repositoryRoot } from "./release-groups.mjs";
 
 const npmCliPath = process.env.npm_execpath;
@@ -49,32 +50,6 @@ function lockedVersion(lockfile, packageName) {
   return version;
 }
 
-function exportSpecifier(packageName, exportKey) {
-  return exportKey === "."
-    ? packageName
-    : `${packageName}/${exportKey.replace(/^\.\//u, "")}`;
-}
-
-function stringTargets(value) {
-  if (typeof value === "string") return [value];
-  if (Array.isArray(value)) return value.flatMap(stringTargets);
-  if (value && typeof value === "object") {
-    return Object.values(value).flatMap(stringTargets);
-  }
-  return [];
-}
-
-function exportEntries(packageName, exportsMap = {}) {
-  return Object.entries(exportsMap)
-    .sort(([left], [right]) => left.localeCompare(right))
-    .map(([exportKey, value]) => ({
-      exportKey,
-      specifier: exportSpecifier(packageName, exportKey),
-      targets: stringTargets(value),
-      value,
-    }));
-}
-
 function sourcePackageJson(packageInfo) {
   return JSON.parse(
     readFileSync(
@@ -91,10 +66,15 @@ function consumerSource(releaseGroup) {
 
   for (const packageInfo of releaseGroup.packages) {
     const packageJson = sourcePackageJson(packageInfo);
-    for (const entry of exportEntries(packageInfo.name, packageJson.exports)) {
+    for (const entry of collectPackageExportEntries(
+      packageInfo.name,
+      packageJson.exports,
+    )) {
       const targets = entry.targets;
-      const isCss = targets.length > 0 && targets.every((target) => target.endsWith(".css"));
-      const isJson = targets.length > 0 && targets.every((target) => target.endsWith(".json"));
+      const isCss =
+        targets.length > 0 && targets.every((target) => target.endsWith(".css"));
+      const isJson =
+        targets.length > 0 && targets.every((target) => target.endsWith(".json"));
       if (isCss) {
         imports.push(`import "${entry.specifier}";`);
         continue;
@@ -125,7 +105,9 @@ function resolveEsmEntries(consumerDirectory, specifiers) {
 }
 
 function verifyInstalledEntryPoints({ consumerDirectory, releaseGroup }) {
-  const consumerRequire = createRequire(path.join(consumerDirectory, "package.json"));
+  const consumerRequire = createRequire(
+    path.join(consumerDirectory, "package.json"),
+  );
   const packageRecords = releaseGroup.packages.map((packageInfo) => {
     const installedPath = path.join(
       consumerDirectory,
@@ -139,7 +121,7 @@ function verifyInstalledEntryPoints({ consumerDirectory, releaseGroup }) {
       packageInfo,
       installedPath,
       packageJson,
-      entries: exportEntries(packageInfo.name, packageJson.exports),
+      entries: collectPackageExportEntries(packageInfo.name, packageJson.exports),
     };
   });
   const specifiers = packageRecords.flatMap(({ entries }) =>
@@ -150,9 +132,14 @@ function verifyInstalledEntryPoints({ consumerDirectory, releaseGroup }) {
   for (const { packageInfo, installedPath, entries } of packageRecords) {
     for (const entry of entries) {
       for (const target of entry.targets) {
-        const targetPath = path.join(installedPath, target.replace(/^\.\//u, ""));
+        const targetPath = path.join(
+          installedPath,
+          target.replace(/^\.\//u, ""),
+        );
         if (!existsSync(targetPath)) {
-          throw new Error(`${entry.specifier}: installed export target is missing (${target})`);
+          throw new Error(
+            `${entry.specifier}: installed export target is missing (${target})`,
+          );
         }
       }
 
@@ -161,7 +148,9 @@ function verifyInstalledEntryPoints({ consumerDirectory, releaseGroup }) {
         throw new Error(`${entry.specifier}: ESM package resolution failed`);
       }
       if (!fileURLToPath(esmResolution).startsWith(installedPath)) {
-        throw new Error(`${entry.specifier}: ESM resolution escaped ${packageInfo.name}`);
+        throw new Error(
+          `${entry.specifier}: ESM resolution escaped ${packageInfo.name}`,
+        );
       }
 
       if (
@@ -172,7 +161,9 @@ function verifyInstalledEntryPoints({ consumerDirectory, releaseGroup }) {
       ) {
         const requireResolution = consumerRequire.resolve(entry.specifier);
         if (!requireResolution.startsWith(installedPath)) {
-          throw new Error(`${entry.specifier}: CommonJS resolution escaped ${packageInfo.name}`);
+          throw new Error(
+            `${entry.specifier}: CommonJS resolution escaped ${packageInfo.name}`,
+          );
         }
       }
     }
