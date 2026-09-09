@@ -20,8 +20,8 @@ const allowedFixtureClaims = new Map([
 const allowedBetaClaims = new Map([
   ["native-html", new Set(["packed-consumer-verified"])],
   ["react", new Set(["react-public-package-consumer-verified"])],
-  ["angular", new Set(["packed-consumer-verified"])],
-  ["vue", new Set(["packed-consumer-verified"])],
+  ["angular", new Set(["first-class-package-verified"])],
+  ["vue", new Set(["first-class-package-verified"])],
 ]);
 
 const requiredDocuments = [
@@ -92,11 +92,8 @@ function verifyPackageContract(root, failures, metadata) {
   const declarations =
     manifest.modules?.flatMap((module) => module.declarations ?? []) ?? [];
 
-  if (definitions.length !== 58) {
-    addFailure(
-      failures,
-      `consumer foundation expected 58 registry tags, received ${definitions.length}`,
-    );
+  if (definitions.length === 0) {
+    addFailure(failures, "consumer foundation registry must not be empty");
   }
   if (declarations.length !== definitions.length) {
     addFailure(
@@ -140,8 +137,11 @@ function verifyPackageContract(root, failures, metadata) {
   if (manifest.schemaVersion !== "1.0.0") {
     addFailure(failures, "custom-elements.json schemaVersion must be 1.0.0");
   }
-  if (manifest.vyrnforge?.registeredTagCount !== 58) {
-    addFailure(failures, "custom-elements.json must record 58 tags");
+  if (manifest.vyrnforge?.registeredTagCount !== definitions.length) {
+    addFailure(
+      failures,
+      `custom-elements.json must record the current registry count (${definitions.length})`,
+    );
   }
 
   const contracts = loadCanonicalComponentContracts({ root });

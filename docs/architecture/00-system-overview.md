@@ -1,198 +1,238 @@
 # VyrnForge UI System Overview
 
 VyrnForge UI is a native-owned, dependency-minimal, general-purpose UI system
-with enterprise-grade depth. Its architecture separates shared design,
-behavior, accessibility, metadata, and component contracts from framework
-integration so supported framework surfaces remain one VyrnForge system rather
-than independent component libraries.
+with enterprise-grade depth. React, Native HTML / Custom Elements, Angular, and
+Vue are first-class non-grid web surfaces over one shared VyrnForge component
+model. First-class support describes the product, package, compatibility,
+accessibility, documentation, and release commitment; it does not require four
+independent component implementations.
 
-This document distinguishes **current implemented architecture** from the
-**approved target architecture**. Current package manifests and release metadata
-remain authoritative for what is shipped today.
+Current package manifests, canonical metadata, generated references, and
+validated consumer evidence remain authoritative for shipped behavior.
 
-## Current implemented architecture
+## Implemented multi-framework model
 
 ```text
-                         @vyrnforge/ui-core
-       tokens · themes · density · typography · motion · layers · utilities
-                                  |
-                         @vyrnforge/ui-behaviors
-       framework-neutral controllers · collections · selection · events
-                                  |
-              +-------------------+-------------------+
-              |                                       |
- @vyrnforge/ui-components                    @vyrnforge/ui-elements
- current React package                       native Custom Elements
-              |                                       |
-              +----------- consuming applications ----+
-                          React · HTML · Angular · Vue
+canonical component contracts + metadata
+                |
+       +--------+--------+
+       |                 |
+    ui-core         ui-behaviors
+ tokens/themes      portable decisions
+       |                 |
+       +--------+--------+
+                |
+       ui-elements / native DOM
+ canonical default browser implementation
+                |
+   +------------+------------+------------+
+   |                         |            |
+Native HTML               Angular        Vue
+public surface             facade         facade
+
+React public surface
+@vyrnforge/ui-components
+  |-- canonical-backed integration where converged
+  `-- narrow framework-specific implementation only where an explicit,
+      evidence-backed exception preserves React compatibility or semantics
 
 Separate release track:
 @vyrnforge/ui-data-grid — specialized React data grid
 ```
 
-`ui-components` and `ui-elements` also depend directly on `ui-core`.
-`ui-data-grid` depends on `ui-core` and `ui-components`.
+The diagram expresses implementation strategy, not support rank. Native HTML,
+React, Angular, and Vue are equally first-class supported non-grid surfaces.
+The native DOM / Custom Element implementation is the default canonical browser
+implementation because it lets rendering, accessibility projection, form
+association, events, styling, and browser behavior be solved once where that
+model satisfies each framework's public contract.
 
-The current repository does not yet contain the approved Angular and Vue public
-facade package workspaces. Angular and Vue currently consume the canonical
-native foundation through verified integration fixtures while S12 and S13
-complete their first-class distribution packages.
+## One canonical component model
 
-## Approved multi-framework target
+The canonical model defines shared VyrnForge semantics independently of any one
+framework. It owns the cross-framework source of truth for:
 
-Native HTML, React, Angular, and Vue are the currently approved first-class web
-surfaces. They share one canonical VyrnForge model for:
+- component identity, maturity, categories, and terminology;
+- properties, models, defaults, constraints, and public methods;
+- canonical events, details, reasons, and interaction semantics;
+- slots/composition regions and native form semantics;
+- accessibility roles, states, relationships, keyboard behavior, and focus
+  obligations;
+- token and styling contracts;
+- framework mappings for React, Angular, Vue, and Native HTML;
+- generation metadata and explicit framework exceptions;
+- documentation, testing, release, and AI-facing derived references.
 
-- design tokens, themes, density, and CSS custom properties;
-- component semantics and public terminology;
-- framework-neutral behavior and state contracts;
-- canonical properties, models, events, reasons, and methods;
-- composition regions and form semantics;
-- accessibility and keyboard/focus obligations;
-- framework mappings, generated integration, and explicit exceptions;
-- documentation, testing, release metadata, and AI-facing context.
+Framework packages consume or adapt these contracts; they do not maintain an
+independent component catalog or semantic model.
 
-Framework packages should remain adapters/facades over those shared foundations
-rather than become separate design systems. Generated or generic canonical-backed
-integration is the default; a framework-specific implementation requires the
-narrow exception process defined by ADR-008.
+## Default implementation strategy
 
-The architecture is framework-extensible. A future framework is not supported
-merely because it can render Custom Elements; first-class admission requires an
-approved framework descriptor, package/integration decision, compatibility and
-accessibility evidence, packed consumer verification, documentation, release
-coverage, and provenance according to ADR-012.
+For non-grid web components, `@vyrnforge/ui-elements` is the canonical default
+browser implementation. It owns the reusable DOM/Custom Element layer,
+including Light DOM structure, canonical `vf-*` events, property/attribute
+reflection, form association, public imperative methods, package-owned styling,
+and browser-specific behavior not already owned by `ui-behaviors`.
 
-## Current support model
+`@vyrnforge/ui-core` remains framework-neutral and owns tokens, themes, density,
+typography, motion, layers, utilities, and shared style foundations.
 
-| Surface       | Current role                                            | Current release scope | Approved target                      |
-| ------------- | ------------------------------------------------------- | --------------------- | ------------------------------------ |
-| React         | First-class package through `@vyrnforge/ui-components`. | Non-grid beta         | First-class canonical-backed facade  |
-| Native HTML   | First-class package through `@vyrnforge/ui-elements`.   | Non-grid beta         | First-class canonical native surface |
-| Angular       | Verified consumer of `@vyrnforge/ui-elements`.          | Integration evidence  | Official first-class facade package  |
-| Vue           | Verified consumer of `@vyrnforge/ui-elements`.          | Integration evidence  | Official first-class facade package  |
-| Data grid     | Specialized React package.                              | Independent alpha     | Optional advanced capability         |
-| Mobile-native | Not part of the current web framework program.          | Excluded              | Separate future product decision     |
+`@vyrnforge/ui-behaviors` remains framework-neutral and owns portable decisions
+and state transitions such as collections, selection, keyboard decisions,
+validation state, overlays, and reasoned controller events.
 
-Do not use the approved target column as evidence that an unshipped package is
-already available. Current support claims must follow package/release metadata
-and the applicable framework gate.
+The default implementation is not a requirement that framework consumers use
+raw Custom Elements or raw DOM event names. Framework facades translate the
+canonical model into idiomatic framework APIs.
 
-## Architectural layers
+## First-class framework surfaces
+
+- **React** — `@vyrnforge/ui-components`; first-class non-grid beta. React API
+  compatibility is preserved, while canonical-backed implementation is the
+  default convergence direction and explicit exceptions remain available when
+  required.
+- **Native HTML / Custom Elements** — `@vyrnforge/ui-elements`; first-class
+  non-grid beta with direct canonical native implementation.
+- **Angular** — `@vyrnforge/ui-angular`; first-class non-grid beta through an
+  Angular facade over canonical Custom Elements, including setup, typed
+  bindings, Forms integration, composition, and refs.
+- **Vue** — `@vyrnforge/ui-vue`; first-class non-grid beta through a Vue facade
+  over canonical Custom Elements, including plugin setup, props/emits,
+  `v-model`, slots, and refs.
+- **Data grid** — `@vyrnforge/ui-data-grid`; specialized React alpha and an
+  independent optional advanced module outside the non-grid framework
+  convergence claim.
+
+A surface can be first-class even when it is implemented through a facade over
+the canonical native layer. Product support level and internal renderer strategy
+are separate concepts.
+
+## Framework facade model
+
+Framework facades may own framework-specific translation and lifecycle concerns,
+including:
+
+- React props/callbacks/refs/children and compatibility behavior;
+- Angular inputs/outputs, content projection, Forms/CVA integration, setup, and
+  typed references;
+- Vue props/emits, slots, `v-model`, plugin setup, and typed refs;
+- Native HTML registration and direct DOM consumption.
+
+They must not duplicate shared design tokens, canonical product semantics,
+portable controller decisions, accessibility obligations, or application
+business state merely to make a framework package feel independent.
+
+Generated or generic canonical-backed integration is preferred. Handwritten
+framework code is narrow integration code, not a second component library.
+
+## Explicit framework exception policy
+
+A framework-specific implementation exception is valid only when the canonical
+implementation plus facade cannot satisfy a required public contract with
+acceptable correctness. Examples include evidence-backed SSR/hydration,
+performance, composition, accessibility/focus, forms, or imperative-ref
+constraints.
+
+Preference, naming symmetry, framework familiarity, or avoiding generator work
+are not valid exceptions.
+
+Every exception must be explicit, scoped, traceable to canonical metadata,
+carry validation evidence, and define review or exit criteria. An exception does
+not create a second canonical model; the shared component contract remains the
+source of product semantics.
+
+See [ADR-008: Framework Exception Policy](adr-008-framework-exception-policy.md).
+
+## Package layers
 
 ### Shared foundations
 
-`@vyrnforge/ui-core` owns framework-neutral design foundations such as tokens,
-themes, density, typography, motion, layers, utilities, and shared styling
-contracts.
+`@vyrnforge/ui-core` and `@vyrnforge/ui-behaviors` stay framework-independent.
+They must not require React, Angular, Vue, application state management, or
+optional advanced modules.
 
-`@vyrnforge/ui-behaviors` owns reusable framework-neutral behavioral decisions
-such as collections, selection, navigation, validation state, overlays,
-reasoned events, and other portable interaction logic.
+### Canonical native implementation
 
-Shared foundations must not depend on React, Angular, Vue, application state
-management, or optional advanced modules.
+`@vyrnforge/ui-elements` owns the browser-native implementation and remains a
+first-class public surface in its own right. It is not merely a hidden backing
+package for framework adapters.
 
-### Canonical web implementation
+### Framework packages
 
-The native DOM / Custom Element foundation is the canonical default web
-implementation strategy where it preserves required API, accessibility,
-performance, SSR, composition, and framework semantics.
+`@vyrnforge/ui-components`, `@vyrnforge/ui-angular`, and
+`@vyrnforge/ui-vue` expose idiomatic framework-facing APIs while reusing the
+canonical model and shared foundations. Framework runtime peers stay isolated to
+the framework package that needs them.
 
-Canonical does not mean that every public framework component must be a trivial
-wrapper around one fixed Custom Element. Framework correctness and public API
-compatibility take precedence; ADR-008 governs narrow exceptions when generic
-integration cannot satisfy the contract.
-
-### Framework facades
-
-Framework packages translate canonical VyrnForge semantics into idiomatic
-framework APIs. They may own framework-specific typing, lifecycle integration,
-forms/model adapters, slots/templates/content projection, refs, and setup, but
-they must not duplicate shared design, behavior, accessibility, or product
-semantics without an explicit exception.
+Concrete dependency directions are canonical in
+[Package Boundaries](01-package-boundaries.md) and package manifests; this
+overview intentionally does not maintain a second dependency ledger.
 
 ### Optional advanced modules
 
 Advanced capabilities such as data grids, trees/tree-grids, visualization,
 complex editors, workflow/diagram UI, rich form composition, and spatial UI are
-valid VyrnForge UI scope when justified. ADR-011 requires them to remain
-optional and dependency-isolated so unrelated consumers do not pay their
-runtime, bundle, CSS, or engine cost.
-
-External rendering/calculation/workflow engines may be integrated through
-adapters where appropriate; VyrnForge does not automatically own those engines
-or the consuming application's business/runtime semantics.
-
-### Reusable patterns and templates
-
-ADR-013 defines a semantic pattern/template layer above individual components.
-Patterns may describe reusable regions, compositions, responsive/density rules,
-accessibility obligations, and framework recipes while continuing to reference
-canonical component contracts rather than copying them.
-
-Templates/scaffolds are derived consumer starting points, not a second source of
-component or application business logic.
-
-## Human and AI consumers
-
-The contract system is a shared technical foundation for human developers,
-framework generation, documentation, verification, and AI systems. ADR-010
-requires AI-facing context to be deterministic, bounded, task/framework scoped,
-and derived from canonical metadata instead of becoming another handwritten
-architecture.
-
-## Core principles
-
-- One semantic token and CSS-variable foundation.
-- One framework-neutral behavior contract where behavior is shared.
-- One canonical component semantics and accessibility model.
-- Framework adapters/facades remain thin where practical and idiomatic where
-  required.
-- Light DOM remains the default native-element styling/interoperability model.
-- Public packages remain application-store agnostic.
-- Application business state, backend requests, authorization, persistence, and
-  workflow execution remain outside VyrnForge.
-- Optional advanced capability depth must not make the common foundation
-  heavyweight.
-- First-class support claims require package, compatibility, accessibility,
-  packed-consumer, release, and documentation evidence.
-- Data-grid specialization and future advanced modules must not redefine the
-  whole library.
+valid VyrnForge scope when justified. They remain optional and dependency
+isolated so unrelated consumers do not pay their runtime, bundle, CSS, or engine
+cost.
 
 ## State and rendering separation
 
-Shared controllers own portable decisions and transitions. DOM adapters own
-browser execution. Framework facades/renderers own framework lifecycle and
-output.
-
 ```text
+canonical contract
+  product semantics
+  public properties/events/models/methods
+  accessibility obligations
+  framework mappings
+
 shared controller
-  state transitions
+  portable state transitions
   collection and selection rules
   keyboard decisions
   validation state
   reasoned events
 
-DOM adapter
-  focus execution
-  browser events
-  positioning and observers
-  ARIA relationship application
+canonical DOM implementation
+  browser execution
+  DOM structure and Light DOM composition
+  focus/observer/overlay execution
+  form association
+  canonical DOM events
 
-canonical/native implementation
-  DOM and Custom Element behavior
-  Light DOM composition
-  form association where applicable
-
-framework facade/renderer
+framework facade
   idiomatic framework API
   framework lifecycle
-  models/forms
+  forms/models
   children/templates/slots
   refs and imperative integration
 ```
+
+Application business state, backend requests, authorization, persistence,
+routing, and workflow execution remain outside VyrnForge.
+
+## Human and AI consumers
+
+The canonical contract system is shared by human documentation, framework
+generation, verification, and AI-facing context. Generated references must
+derive from canonical metadata instead of becoming another handwritten
+architecture source.
+
+## Core principles
+
+- One canonical non-grid component model across all first-class web surfaces.
+- One semantic token and CSS-variable foundation.
+- One framework-neutral behavior contract where behavior is shared.
+- Native DOM / Custom Elements are the default canonical browser implementation,
+  not a higher-ranked product surface.
+- Framework facades remain thin where practical and idiomatic where required.
+- Framework-specific implementation exceptions are narrow, explicit, and
+  evidence-backed.
+- Light DOM remains the default native-element styling/interoperability model.
+- Public packages remain application-store agnostic.
+- Optional advanced capability depth must not make the common foundation
+  heavyweight.
+- First-class support claims require package, compatibility, accessibility,
+  packed-consumer, release, and documentation evidence.
 
 ## Canonical sources
 
@@ -203,11 +243,10 @@ framework facade/renderer
 - [Custom Elements and Form Association](10-custom-elements-and-form-association.md)
 - [ADR-005: Canonical Web Implementation](adr-005-canonical-web-implementation.md)
 - [ADR-006: Public Framework Package Strategy](adr-006-framework-package-strategy.md)
-- [ADR-007: Framework Facade Package Boundaries](adr-007-framework-facade-package-boundaries.md)
 - [ADR-008: Framework Exception Policy](adr-008-framework-exception-policy.md)
 - [ADR-010: AI Consumption Contract](adr-010-ai-consumption-contract.md)
 - [ADR-011: Optional Advanced Module Architecture](adr-011-optional-advanced-module-architecture.md)
 - [ADR-012: Framework Extensibility Contract](adr-012-framework-extensibility-contract.md)
 - [ADR-013: Reusable Pattern and Template Contract](adr-013-pattern-template-contract.md)
-- [`../metadata/multi-framework.json`](../metadata/multi-framework.json)
 - [`../metadata/component-contracts.json`](../metadata/component-contracts.json)
+- [`../metadata/multi-framework.json`](../metadata/multi-framework.json)
