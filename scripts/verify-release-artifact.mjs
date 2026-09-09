@@ -10,8 +10,10 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import {
   readArgument,
@@ -21,6 +23,7 @@ import {
   validateReleaseArtifactManifest,
   verifyReleaseArtifactFiles,
 } from "./release-artifact.mjs";
+import { collectPackageExportEntries } from "./release-package-exports.mjs";
 import { repositoryRoot } from "./release-groups.mjs";
 
 const npmCliPath = process.env.npm_execpath;
@@ -47,18 +50,129 @@ function lockedVersion(lockfile, packageName) {
   return version;
 }
 
+function sourcePackageJson(packageInfo) {
+  return JSON.parse(
+    readFileSync(
+      path.join(repositoryRoot, packageInfo.directory, "package.json"),
+      "utf8",
+    ),
+  );
+}
+
 function consumerSource(releaseGroup) {
-  const imports = releaseGroup.packages.map(
-    (packageInfo, index) =>
-      `import * as package${index} from "${packageInfo.name}";`,
+  const imports = [];
+  const references = [];
+  let index = 0;
+
+  for (const packageInfo of releaseGroup.packages) {
+    const packageJson = sourcePackageJson(packageInfo);
+    for (const entry of collectPackageExportEntries(
+      packageInfo.name,
+      packageJson.exports,
+    )) {
+      const targets = entry.targets;
+      const isCss =
+        targets.length > 0 &&
+        targets.every((target) => target.endsWith(".css"));
+      const isJson =
+        targets.length > 0 &&
+        targets.every((target) => target.endsWith(".json"));
+      if (isCss) {
+        imports.push(`import "${entry.specifier}";`);
+        continue;
+      }
+      if (isJson) {
+        imports.push(`import entry${index} from "${entry.specifier}";`);
+      } else {
+        imports.push(`import * as entry${index} from "${entry.specifier}";`);
+      }
+      references.push(`void entry${index};`);
+      index += 1;
+    }
+  }
+
+  return [...imports, "", ...references, ""].join("\n");
+}
+
+function resolveEsmEntries(consumerDirectory, specifiers) {
+  const resolverPath = path.join(consumerDirectory, ".vyrnforge-resolve.mjs");
+  writeFileSync(
+    resolverPath,
+    `const specifiers = ${JSON.stringify(specifiers)};\n` +
+      "console.log(JSON.stringify(Object.fromEntries(specifiers.map((specifier) => [specifier, import.meta.resolve(specifier)]))));\n",
   );
-  const cssImports = releaseGroup.packages
-    .filter((packageInfo) => packageInfo.policies?.hasCss === true)
-    .map((packageInfo) => `import "${packageInfo.name}/styles/index.css";`);
-  const references = releaseGroup.packages.map(
-    (_packageInfo, index) => `void package${index};`,
+  return JSON.parse(
+    run(process.execPath, [resolverPath], { cwd: consumerDirectory }),
   );
-  return [...imports, ...cssImports, "", ...references, ""].join("\n");
+}
+
+function verifyInstalledEntryPoints({ consumerDirectory, releaseGroup }) {
+  const consumerRequire = createRequire(
+    path.join(consumerDirectory, "package.json"),
+  );
+  const packageRecords = releaseGroup.packages.map((packageInfo) => {
+    const installedPath = path.join(
+      consumerDirectory,
+      "node_modules",
+      ...packageInfo.name.split("/"),
+    );
+    const packageJson = JSON.parse(
+      readFileSync(path.join(installedPath, "package.json"), "utf8"),
+    );
+    return {
+      packageInfo,
+      installedPath,
+      packageJson,
+      entries: collectPackageExportEntries(
+        packageInfo.name,
+        packageJson.exports,
+      ),
+    };
+  });
+  const specifiers = packageRecords.flatMap(({ entries }) =>
+    entries.map(({ specifier }) => specifier),
+  );
+  const esmResolutions = resolveEsmEntries(consumerDirectory, specifiers);
+
+  for (const { packageInfo, installedPath, entries } of packageRecords) {
+    for (const entry of entries) {
+      for (const target of entry.targets) {
+        const targetPath = path.join(
+          installedPath,
+          target.replace(/^\.\//u, ""),
+        );
+        if (!existsSync(targetPath)) {
+          throw new Error(
+            `${entry.specifier}: installed export target is missing (${target})`,
+          );
+        }
+      }
+
+      const esmResolution = esmResolutions[entry.specifier];
+      if (!esmResolution?.startsWith("file:")) {
+        throw new Error(`${entry.specifier}: ESM package resolution failed`);
+      }
+      if (!fileURLToPath(esmResolution).startsWith(installedPath)) {
+        throw new Error(
+          `${entry.specifier}: ESM resolution escaped ${packageInfo.name}`,
+        );
+      }
+
+      if (
+        entry.value &&
+        typeof entry.value === "object" &&
+        !Array.isArray(entry.value) &&
+        typeof entry.value.require === "string"
+      ) {
+        const requireResolution = consumerRequire.resolve(entry.specifier);
+        if (!requireResolution.startsWith(installedPath)) {
+          throw new Error(
+            `${entry.specifier}: CommonJS resolution escaped ${packageInfo.name}`,
+          );
+        }
+      }
+    }
+  }
 }
 
 function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
@@ -130,17 +244,19 @@ function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
         packageInfo.filename,
       ),
     );
-    const installArgs = [
-      "install",
-
-      "--no-package-lock",
-      "--no-save",
-      "--ignore-scripts",
-      "--no-audit",
-      "--no-fund",
-      ...tarballs,
-    ];
-    runNpm(installArgs, { cwd: consumerDirectory, stdio: "inherit" });
+    runNpm(
+      [
+        "install",
+        "--offline",
+        "--no-package-lock",
+        "--no-save",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund",
+        ...tarballs,
+      ],
+      { cwd: consumerDirectory, stdio: "inherit" },
+    );
 
     for (const packageInfo of releaseGroup.packages) {
       const installedPath = path.join(
@@ -163,6 +279,8 @@ function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
         throw new Error(`${packageInfo.name}: installed version mismatch`);
       }
     }
+
+    verifyInstalledEntryPoints({ consumerDirectory, releaseGroup });
 
     runNpm(["run", "typecheck"], {
       cwd: consumerDirectory,
