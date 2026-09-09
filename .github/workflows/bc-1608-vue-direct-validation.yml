@@ -1,0 +1,41 @@
+name: BC-1608 Vue direct validation
+
+on:
+  pull_request:
+    branches:
+      - integration/vue
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    name: ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - case: vue34-node22-chromium
+            node: "22.12.0"
+          - case: vue35-min-node22-chromium
+            node: "22.12.0"
+          - case: vue35-current-node24-chromium
+            node: "24.18.0"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run canonical compatibility case
+        run: npm run verify:compatibility-release-case -- --case ${{ matrix.case }}
