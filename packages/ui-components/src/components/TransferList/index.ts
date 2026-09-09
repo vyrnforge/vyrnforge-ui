@@ -2,5 +2,5 @@ export { TransferList } from "./TransferList";
 export type {
   TransferListFilterFunction,
   TransferListOptionData,
-  TransferListProps
+  TransferListProps,
 } from "./TransferList.types";

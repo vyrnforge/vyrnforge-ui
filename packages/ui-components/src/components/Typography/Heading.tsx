@@ -16,7 +16,7 @@ export function Heading({
         "vf-heading",
         `vf-heading--${size}`,
         tone !== "default" && `vf-text--${tone}`,
-        className
+        className,
       )}
       {...props}
     />

@@ -12,7 +12,7 @@ export function ToastViewport({
   onHoverPause,
   onHoverResume,
   position = "bottom-end",
-  toasts
+  toasts,
 }: ToastViewportProps) {
   if (toasts.length === 0) {
     return null;
@@ -24,7 +24,7 @@ export function ToastViewport({
         aria-label={label}
         className={joinClassNames(
           "vf-toast-viewport",
-          toastViewportClass(position)
+          toastViewportClass(position),
         )}
       >
         {toasts.map((toast) => (

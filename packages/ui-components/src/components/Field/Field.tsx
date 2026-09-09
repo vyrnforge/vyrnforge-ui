@@ -1,11 +1,15 @@
 import { useId } from "react";
 import { joinClassNames } from "../../utils/classNames";
 import { ValidationMessage } from "../ValidationMessage";
-import type { FieldChildren, FieldControlProps, FieldProps } from "./Field.types";
+import type {
+  FieldChildren,
+  FieldControlProps,
+  FieldProps,
+} from "./Field.types";
 
 function getChildren(
   children: FieldChildren | undefined,
-  controlProps: FieldControlProps
+  controlProps: FieldControlProps,
 ) {
   return typeof children === "function" ? children(controlProps) : children;
 }
@@ -35,7 +39,8 @@ export function Field({
   const isInvalid = invalid || Boolean(error);
   const hasWarning = Boolean(warning) && !isInvalid;
   const hasSuccess = Boolean(success) && !isInvalid && !hasWarning;
-  const describedBy = [descriptionId, messageId].filter(Boolean).join(" ") || undefined;
+  const describedBy =
+    [descriptionId, messageId].filter(Boolean).join(" ") || undefined;
   const labelFor = typeof children === "function" ? controlId : htmlFor;
   const controlProps: FieldControlProps = {
     id: controlId,
@@ -43,7 +48,7 @@ export function Field({
     "aria-invalid": isInvalid || undefined,
     "aria-required": required || undefined,
     disabled: disabled || undefined,
-    required: required || undefined
+    required: required || undefined,
   };
 
   return (
@@ -55,16 +60,21 @@ export function Field({
         hasWarning && "vf-field--warning",
         hasSuccess && "vf-field--success",
         disabled && "vf-field--disabled",
-        className
+        className,
       )}
       data-disabled={disabled || undefined}
       data-invalid={isInvalid || undefined}
       {...props}
-      >
+    >
       {label && (
         <label className="vf-field__label" htmlFor={labelFor}>
           {label}
-          {required && <span aria-hidden="true" className="vf-field__required"> *</span>}
+          {required && (
+            <span aria-hidden="true" className="vf-field__required">
+              {" "}
+              *
+            </span>
+          )}
         </label>
       )}
       {description && (
@@ -77,7 +87,15 @@ export function Field({
         <ValidationMessage
           className="vf-field__message"
           id={messageId}
-          tone={isInvalid ? "error" : hasWarning ? "warning" : hasSuccess ? "success" : "info"}
+          tone={
+            isInvalid
+              ? "error"
+              : hasWarning
+                ? "warning"
+                : hasSuccess
+                  ? "success"
+                  : "info"
+          }
         >
           {messageContent}
         </ValidationMessage>

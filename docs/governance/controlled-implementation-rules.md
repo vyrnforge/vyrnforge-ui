@@ -72,11 +72,11 @@ for dependency state, owner, review, scope, and evidence requirements.
 Follow [Package Boundaries](../architecture/01-package-boundaries.md) and
 [State and Adapter Ownership](../architecture/02-state-and-adapter-ownership.md).
 
-| Package | Responsibility | Allowed dependencies |
-| --- | --- | --- |
-| `@vyrnforge/ui-core` | tokens, themes, density, shared utilities | none of the other VyrnForge packages |
-| `@vyrnforge/ui-components` | reusable UI primitives and application components | `ui-core` |
-| `@vyrnforge/ui-data-grid` | enterprise data-management grid capabilities | `ui-core`, `ui-components` |
+| Package                    | Responsibility                                    | Allowed dependencies                 |
+| -------------------------- | ------------------------------------------------- | ------------------------------------ |
+| `@vyrnforge/ui-core`       | tokens, themes, density, shared utilities         | none of the other VyrnForge packages |
+| `@vyrnforge/ui-components` | reusable UI primitives and application components | `ui-core`                            |
+| `@vyrnforge/ui-data-grid`  | enterprise data-management grid capabilities      | `ui-core`, `ui-components`           |
 
 VyrnForge packages remain store-agnostic. Consuming applications may use Redux,
 but VyrnForge cannot require it. Do not add MUI, Tailwind, Radix, TanStack,
@@ -107,7 +107,7 @@ consumer-facing contracts; a broad migration requires a dedicated task.
 - [ ] Changed files match the approved task scope and predecessors are complete.
 - [ ] Public API and package-boundary impacts are reviewed.
 - [ ] Required tests, accessibility, theme/density, and applicable performance
-  review pass.
+      review pass.
 - [ ] Documentation is current and acceptance evidence is attached.
 - [ ] No unrelated changes are included and the change manifest is complete.
 

@@ -17,7 +17,7 @@ export function Text({
         "vf-text",
         `vf-text--${size}`,
         tone !== "default" && `vf-text--${tone}`,
-        className
+        className,
       )}
       {...props}
     />

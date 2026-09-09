@@ -7,7 +7,12 @@ export function CloseButton({
   ...props
 }: ActionIconButtonProps) {
   return (
-    <IconButton aria-label={ariaLabel} tooltip={ariaLabel} variant="ghost" {...props}>
+    <IconButton
+      aria-label={ariaLabel}
+      tooltip={ariaLabel}
+      variant="ghost"
+      {...props}
+    >
       <Icon name="Close" />
     </IconButton>
   );
@@ -18,7 +23,12 @@ export function ClearButton({
   ...props
 }: ActionIconButtonProps) {
   return (
-    <IconButton aria-label={ariaLabel} tooltip={ariaLabel} variant="ghost" {...props}>
+    <IconButton
+      aria-label={ariaLabel}
+      tooltip={ariaLabel}
+      variant="ghost"
+      {...props}
+    >
       <Icon name="Close" />
     </IconButton>
   );
@@ -29,7 +39,12 @@ export function RefreshButton({
   ...props
 }: ActionIconButtonProps) {
   return (
-    <IconButton aria-label={ariaLabel} tooltip={ariaLabel} variant="subtle" {...props}>
+    <IconButton
+      aria-label={ariaLabel}
+      tooltip={ariaLabel}
+      variant="subtle"
+      {...props}
+    >
       <Icon name="Refresh" />
     </IconButton>
   );
@@ -40,7 +55,12 @@ export function MoreButton({
   ...props
 }: ActionIconButtonProps) {
   return (
-    <IconButton aria-label={ariaLabel} tooltip={ariaLabel} variant="ghost" {...props}>
+    <IconButton
+      aria-label={ariaLabel}
+      tooltip={ariaLabel}
+      variant="ghost"
+      {...props}
+    >
       <Icon name="MoreHorizontal" />
     </IconButton>
   );

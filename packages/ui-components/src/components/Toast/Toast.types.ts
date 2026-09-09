@@ -1,15 +1,6 @@
-import type {
-  CSSProperties,
-  MouseEventHandler,
-  ReactNode
-} from "react";
+import type { CSSProperties, MouseEventHandler, ReactNode } from "react";
 
-export type ToastTone =
-  | "neutral"
-  | "info"
-  | "success"
-  | "warning"
-  | "error";
+export type ToastTone = "neutral" | "info" | "success" | "warning" | "error";
 
 export type ToastPosition =
   | "top-start"

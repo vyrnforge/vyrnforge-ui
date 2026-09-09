@@ -15,7 +15,7 @@ export function Caption({
       className={joinClassNames(
         "vf-caption",
         tone !== "default" && `vf-text--${tone}`,
-        className
+        className,
       )}
       {...props}
     />

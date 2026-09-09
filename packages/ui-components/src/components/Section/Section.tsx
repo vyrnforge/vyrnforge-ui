@@ -15,7 +15,9 @@ export function Section({
         <div className="vf-section__header">
           <div>
             {title && <h2 className="vf-section__title">{title}</h2>}
-            {description && <p className="vf-section__description">{description}</p>}
+            {description && (
+              <p className="vf-section__description">{description}</p>
+            )}
           </div>
           {actions && <div className="vf-section__actions">{actions}</div>}
         </div>

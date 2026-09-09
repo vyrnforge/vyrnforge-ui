@@ -10,5 +10,5 @@ export type {
   ToastProps,
   ToastProviderProps,
   ToastRecord,
-  ToastTone
+  ToastTone,
 } from "./Toast.types";
