@@ -35,10 +35,6 @@ export const documentationCurrentPaths = [
   "docs/architecture/adr-004-multi-framework-web-support.md",
   "docs/architecture/09-component-contracts-and-events.md",
   "docs/architecture/10-custom-elements-and-form-association.md",
-  "docs/roadmap/00-master-roadmap.md",
-  "docs/roadmap/01-component-inventory.md",
-  "docs/roadmap/02-gap-analysis.md",
-  "docs/roadmap/03-do-not-build-yet.md",
   "docs/quality/00-quality-gates.md",
   "docs/quality/03-known-limitations.md",
   "docs/testing/browser-testing.md",
@@ -298,7 +294,7 @@ function verifyPrimaryStructure({ root, failures }) {
     "## Use VyrnForge",
     "## Build VyrnForge",
     "## Maintain VyrnForge",
-    "## Project planning",
+    "## Execution and planning",
     "## Historical evidence",
   ]) {
     if (!docsIndex.includes(heading)) {
@@ -309,30 +305,6 @@ function verifyPrimaryStructure({ root, failures }) {
     if (!docsIndex.includes(link)) {
       failures.push(`docs/README.md: missing one-click link ${link}`);
     }
-  }
-
-  const componentInventory = read(
-    root,
-    "docs/roadmap/01-component-inventory.md",
-  );
-  for (const marker of [
-    "../metadata/components.json",
-    "../generated/component-reference.json",
-  ]) {
-    if (!componentInventory.includes(marker)) {
-      failures.push(
-        `docs/roadmap/01-component-inventory.md: missing canonical pointer ${marker}`,
-      );
-    }
-  }
-  if (
-    /^\|\s*(?:Button|TextInput|UniversalDataGrid)\s*\|/mu.test(
-      componentInventory,
-    )
-  ) {
-    failures.push(
-      "docs/roadmap/01-component-inventory.md: manual component table must not duplicate canonical metadata",
-    );
   }
 }
 
@@ -362,25 +334,6 @@ function verifyVersionPolicy({ root, releaseGroups, failures }) {
           `docs/release/versioning-policy.md: missing release package ${packageInfo.name}`,
         );
       }
-    }
-  }
-}
-
-function verifyRoadmapContracts({ root, failures }) {
-  const roadmap = read(root, "docs/roadmap/00-master-roadmap.md");
-
-  for (const marker of ["RS-9006", "RS-9007"]) {
-    if (!roadmap.includes(marker)) {
-      failures.push(`docs/roadmap/00-master-roadmap.md: missing ${marker}`);
-    }
-  }
-
-  for (let task = 5001; task <= 5016; task += 1) {
-    const marker = `MF-${task}`;
-    if (!roadmap.includes(marker)) {
-      failures.push(
-        `docs/roadmap/00-master-roadmap.md: missing historical behavior marker ${marker}`,
-      );
     }
   }
 }
@@ -425,7 +378,6 @@ export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   verifyFrameworkFirstInstallation({ root, failures });
   verifyPrimaryStructure({ root, failures });
   verifyVersionPolicy({ root, releaseGroups, failures });
-  verifyRoadmapContracts({ root, failures });
 
   return failures;
 }

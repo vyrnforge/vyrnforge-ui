@@ -2,10 +2,24 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { buildFrameworkButtonSliceArtifacts } from "./generate-framework-button-slice.mjs";
-import { buildFrameworkDialogSliceArtifacts } from "./generate-framework-dialog-slice.mjs";
-import { buildFrameworkTabsSliceArtifacts } from "./generate-framework-tabs-slice.mjs";
-import { buildFrameworkTextInputSliceArtifacts } from "./generate-framework-text-input-slice.mjs";
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import {
+  buildFrameworkButtonArtifacts,
+  createFrameworkButtonSliceModel,
+} from "./framework-button-generation.mjs";
+import {
+  buildFrameworkDialogArtifacts,
+  createFrameworkDialogSliceModel,
+} from "./framework-dialog-generation.mjs";
+import { createFrameworkGenerationModel } from "./framework-generation.mjs";
+import {
+  buildFrameworkTabsArtifacts,
+  createFrameworkTabsSliceModel,
+} from "./framework-tabs-generation.mjs";
+import {
+  buildFrameworkTextInputArtifacts,
+  createFrameworkTextInputSliceModel,
+} from "./framework-text-input-generation.mjs";
 import {
   FRAMEWORK_API_REFERENCE_PATH,
   buildFrameworkApiReference,
@@ -73,10 +87,28 @@ export function buildGeneratedFrameworkArtifacts({
 } = {}) {
   const native = buildNativeElementArtifacts({ root });
   const apiReference = buildFrameworkApiReference({ root });
-  const button = buildFrameworkButtonSliceArtifacts({ root });
-  const textInput = buildFrameworkTextInputSliceArtifacts({ root });
-  const tabs = buildFrameworkTabsSliceArtifacts({ root });
-  const dialog = buildFrameworkDialogSliceArtifacts({ root });
+  const contracts = loadCanonicalComponentContracts({ root });
+  const generationModel = createFrameworkGenerationModel(contracts);
+  const buttonModel = createFrameworkButtonSliceModel(generationModel);
+  const textInputModel = createFrameworkTextInputSliceModel(generationModel);
+  const tabsModel = createFrameworkTabsSliceModel(generationModel);
+  const dialogModel = createFrameworkDialogSliceModel(generationModel);
+  const button = {
+    model: buttonModel,
+    artifacts: buildFrameworkButtonArtifacts(buttonModel),
+  };
+  const textInput = {
+    model: textInputModel,
+    artifacts: buildFrameworkTextInputArtifacts(textInputModel),
+  };
+  const tabs = {
+    model: tabsModel,
+    artifacts: buildFrameworkTabsArtifacts(tabsModel),
+  };
+  const dialog = {
+    model: dialogModel,
+    artifacts: buildFrameworkDialogArtifacts(dialogModel),
+  };
 
   return Object.freeze([
     freezeArtifact({
@@ -110,8 +142,8 @@ export function buildGeneratedFrameworkArtifacts({
     }),
     ...registerSliceArtifacts(
       button.artifacts,
-      "scripts/generate-framework-button-slice.mjs",
-      "npm run generate:framework-button-slice",
+      "scripts/generate-framework-artifacts.mjs",
+      "npm run generate:framework-artifacts",
     ),
     ...registerSliceArtifacts(
       textInput.artifacts,

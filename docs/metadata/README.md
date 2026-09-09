@@ -1,9 +1,9 @@
 # VyrnForge UI Metadata
 
 These files are structured indexes for the docs app, contributors, automation,
-and AI agents. Human-readable policy remains in the canonical architecture,
-governance, testing, release, and quality documents. Metadata provides
-queryable repository facts and current evidence records.
+and AI consumers. Human-readable policy remains in canonical architecture,
+governance, testing, release, and quality documents. Metadata provides queryable
+repository facts and current evidence records.
 
 ## Core metadata
 
@@ -12,7 +12,8 @@ queryable repository facts and current evidence records.
 - `multi-framework.json` owns current package topology, framework support,
   styling policy, and the four-surface consumer-fixture policy.
 - `component-contracts.json` and `component-contract.schema.json` own shared
-  renderer-neutral component, event, slot, and form contracts.
+  renderer-neutral component, event, slot, method, accessibility, and form
+  contracts.
 - `components.json` owns the normalized component catalog, public-contract
   inventory, maturity, and evidence.
 - `patterns.json` owns reusable application composition patterns and task-routing
@@ -29,17 +30,17 @@ queryable repository facts and current evidence records.
 - `consumer-foundations.json` indexes current packed Native HTML, React,
   Angular, and Vue fixtures together with Custom Element declarations and
   canonical events.
-- `angular-consumer.json` records Angular packed-consumer, property, event,
-  slot, form, build, and Chromium evidence.
-- `angular-forms-adapter.json` records the Angular Forms reference-adapter
-  contract and runtime evidence.
-- `angular-support-evidence.json` ties the public Angular peer contract to the
-  shared compatibility matrix, packed browser/runtime evidence, accessibility
-  review, Forms evidence, and imperative/focus coverage.
+- `angular-consumer.json` records Angular packed-consumer property, event, slot,
+  form, build, and Chromium evidence.
+- `angular-forms-adapter.json` records the Angular Forms integration contract and
+  runtime evidence.
+- `angular-support-evidence.json` ties the public Angular peer contract to
+  compatibility, packed browser/runtime, accessibility, Forms, and focus
+  evidence.
 - `vue-consumer.json` records Vue compiler, typing, property, event, slot, form,
   build, and Chromium evidence.
-- `vue-model-adapter.json` records the thin Vue `v-model` reference-adapter
-  contract and runtime evidence.
+- `vue-model-adapter.json` records package-owned Vue `v-model` integration and
+  runtime evidence.
 - `ssr-bundler-compatibility.json` records server-safe import and packed bundler
   compatibility evidence.
 - `cross-framework-browser-matrix.json` records shared packed browser scenarios,
@@ -48,16 +49,22 @@ queryable repository facts and current evidence records.
   cross-framework accessibility evidence.
 - `multi-framework-migration-guide.json` records migration and limitations guide
   verification evidence.
-- `multi-framework-program-gates.json` defines forward-looking G11-G15 evidence
-  categories for first-class multi-framework distribution.
+
+Closed S11-S15 execution gates are not current metadata. Their reusable
+invariants are owned by current quality, compatibility, accessibility,
+package-artifact, consumer, SSR/bundler, performance, release, and exception
+contracts.
 
 ## Native, quality, and release evidence
 
 Native renderer evidence lives in `native-element-foundations.json`,
-`native-core-elements.json`, and `native-advanced-elements.json`. Release and
-scope contracts live in `non-grid-beta-scope.json`, `release-groups.json`,
-`release-groups.schema.json`, `beta-package-artifacts.json`,
-`beta-package-size-budgets.json`, and `compatibility-release-matrix.json`.
+`native-core-elements.json`, and `native-advanced-elements.json`.
+
+Release and scope contracts include `non-grid-beta-scope.json`,
+`release-groups.json`, `release-groups.schema.json`, current package/release
+artifact metadata, and `compatibility-release-matrix.json`. Release-group package
+entries own current package size limits through `policies.sizeBudget`; there is
+no separate beta-specific size-budget source of truth.
 
 Accessibility, visual, security, provenance, validation, and AI policy evidence
 lives in `assistive-technology-reviews.json`,
@@ -68,15 +75,11 @@ lives in `assistive-technology-reviews.json`,
 ## Multi-framework architecture
 
 `multi-framework.json` describes the current reusable architecture rather than a
-completed sprint ledger. Native HTML / Custom Elements, React, Angular, and Vue
-consumer evidence is indexed through `consumer-foundations.json` and
+sprint ledger. Native HTML / Custom Elements, React, Angular, and Vue consumer
+evidence is indexed through `consumer-foundations.json` and
 `tests/consumers/manifest.json`. Framework-specific Forms and model adapters
 remain thin translation layers over shared VyrnForge rendering, accessibility,
 validation, event, and form-association contracts.
-
-Forward-looking multi-framework release gates are defined separately in
-`multi-framework-program-gates.json` and
-`docs/quality/multi-framework-program-gates.md`.
 
 ```bash
 npm run test:multi-framework
