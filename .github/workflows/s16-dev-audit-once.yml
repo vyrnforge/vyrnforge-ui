@@ -27,8 +27,10 @@ jobs:
         run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
       - name: Verify package manager
         run: npm --version && test "$(npm --version)" = "11.16.0"
-      - name: Apply lock-only audit remediation
-        run: npm audit fix --package-lock-only
+      - name: Apply compatible lock-only remediation
+        run: |
+          npm audit fix --package-lock-only || true
+          npm update vitest @vitest/coverage-v8 esbuild --workspaces --include-workspace-root --package-lock-only
       - name: Verify full audit
         run: npm audit --audit-level=low
       - name: Commit lockfile remediation
