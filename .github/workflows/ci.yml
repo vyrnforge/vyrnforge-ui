@@ -187,14 +187,6 @@ jobs:
         env:
           VITE_BASE_PATH: /vyrnforge-ui/
       - name: Build playground for Pages
-        if: env.RUN_PLAYGROUND == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
-        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
-      - name: Build documentation application for Pages
-        if: env.RUN_PAGES_ARTIFACT == 'true'
-        run: npm run build --workspace @vyrnforge/ui-docs
-        env:
-          VITE_BASE_PATH: /vyrnforge-ui/
-      - name: Build playground for Pages
         if: env.RUN_PAGES_ARTIFACT == 'true'
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
         env:
