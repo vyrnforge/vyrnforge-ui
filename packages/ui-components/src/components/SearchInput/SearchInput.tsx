@@ -135,7 +135,9 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             defaultValue={defaultValue}
             disabled={disabled}
             inputMode={inputMode}
-            onChange={value === undefined ? undefined : ignoreControlledReactChange}
+            onChange={
+              value === undefined ? undefined : ignoreControlledReactChange
+            }
             onInputCapture={handleInputCapture}
             placeholder={placeholder}
             readOnly={readOnly}
