@@ -1,0 +1,56 @@
+name: Temporary BC-1607 final ledger cleanup
+
+on:
+  push:
+    branches:
+      - tmp/bc-1607-final-ledger-cleanup
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Consolidate remaining transition ledgers
+        shell: bash
+        run: |
+          node .tmp/bc1607-finalize.mjs
+          npx prettier --write package.json scripts/verify-framework-exceptions.mjs scripts/verify-workflows.mjs
+          npm run inventory:repository
+          npx prettier --write docs/governance/repository-inventory.md
+          npm run test:framework-exceptions
+          npm run verify:framework-exceptions
+          npm run test:react-behavior-adoption
+          npm run verify:react-behavior-adoption
+          npm run verify:workflows
+          npm run verify:repository-inventory
+          ! grep -R --line-number --fixed-strings 'react-migration-matrix.json' docs scripts packages/ui-components/src || false
+          test ! -e docs/metadata/react-batch-1-readiness.json
+          test ! -e docs/metadata/react-convergence-gate.json
+          test ! -e docs/metadata/react-implementation-cleanup.json
+          test ! -e docs/metadata/react-migration-matrix.json
+      - name: Commit final tree and remove helpers
+        shell: bash
+        run: |
+          rm .github/workflows/tmp-bc1607-finalize.yml
+          rm .tmp/bc1607-finalize.mjs
+          rmdir .tmp 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "test: retire obsolete React transition ledgers"
+          git push
