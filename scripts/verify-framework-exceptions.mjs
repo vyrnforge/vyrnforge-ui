@@ -1,13 +1,30 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const modulePath = fileURLToPath(import.meta.url);
 const defaultRoot = path.resolve(path.dirname(modulePath), "..");
+const forbiddenReactDuplicateSuffixes = [
+  ".legacy.tsx",
+  ".old.tsx",
+  ".deprecated.tsx",
+  ".fallback.tsx",
+  ".temporary.tsx",
+];
 
 function scopesOf(entry) {
   return Array.isArray(entry.scope) ? entry.scope : [entry.scope];
+}
+
+function collectFiles(directory) {
+  const files = [];
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const absolutePath = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...collectFiles(absolutePath));
+    else files.push(absolutePath);
+  }
+  return files;
 }
 
 export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
@@ -71,8 +88,13 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
 
   const liveReact = live.filter(({ framework }) => framework === "react");
   const byId = new Map(liveReact.map((entry) => [entry.id, entry]));
-  assert.ok(byId.has("MFD-EX-REACT-TOAST-PROVIDER"));
-  assert.ok(byId.has("MFD-EX-REACT-USE-TOAST"));
+  for (const requiredId of [
+    "MFD-EX-REACT-TOAST-PROVIDER",
+    "MFD-EX-REACT-USE-TOAST",
+    "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
+  ]) {
+    assert.ok(byId.has(requiredId), requiredId + " must remain a live exception");
+  }
   assert.deepEqual(
     scopesOf(byId.get("MFD-EX-REACT-OVERLAY-COMPOSITION")).sort(),
     ["confirm-dialog", "dialog", "drawer", "popover", "toast", "tooltip"],
@@ -85,6 +107,21 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
     scopesOf(byId.get("MFD-EX-REACT-LAYOUT-RICH-COMPOSITION")).sort(),
     ["app-shell", "page", "page-header", "page-toolbar", "panel", "section"],
   );
+
+  const reactSourceRoot = path.join(
+    repositoryRoot,
+    "packages/ui-components/src/components",
+  );
+  for (const sourcePath of collectFiles(reactSourceRoot)) {
+    const relativePath = path.relative(repositoryRoot, sourcePath);
+    for (const suffix of forbiddenReactDuplicateSuffixes) {
+      assert.equal(
+        relativePath.endsWith(suffix),
+        false,
+        "dormant duplicate React implementation is forbidden: " + relativePath,
+      );
+    }
+  }
 
   return registry;
 }
