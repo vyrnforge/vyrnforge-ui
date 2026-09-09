@@ -10,6 +10,8 @@ import {
 } from "./transferList.utils";
 import { useTransferList } from "./useTransferList";
 
+const ignoreHiddenInputChange = () => undefined;
+
 function actionLabel(
   action: "all" | "selected",
   direction: "source" | "target",
@@ -224,10 +226,11 @@ export function TransferList({
         !disabled &&
         targetValues.map((targetValue) => (
           <input
-            defaultValue={targetValue}
             key={targetValue}
             name={name}
+            onChange={ignoreHiddenInputChange}
             type="hidden"
+            value={targetValue}
           />
         ))}
     </div>
