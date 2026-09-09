@@ -190,7 +190,10 @@ for (const marker of [
 }
 for (const marker of [
   "node scripts/run-scoped-quality.mjs",
-  "npm run verify:beta-package-artifacts",
+  "npm run prepare:release-artifact",
+  "npm run verify:release-artifact",
+  "npm run verify:trusted-publishing-dry-run",
+  "npm run verify:release-size-budgets",
   "npm run verify:consumer",
   "npm run test:browser",
   "npm run verify:repository-inventory",
