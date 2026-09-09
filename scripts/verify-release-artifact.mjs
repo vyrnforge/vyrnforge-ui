@@ -210,8 +210,18 @@ function verifyConsumer({ artifactManifest, artifactDir, releaseGroup }) {
         build: "tsc -b && vite build",
       },
       dependencies: {
+        "@angular/common": lockedVersion(lockfile, "@angular/common"),
+        "@angular/core": lockedVersion(lockfile, "@angular/core"),
+        "@angular/forms": lockedVersion(lockfile, "@angular/forms"),
+        "@angular/platform-browser": lockedVersion(
+          lockfile,
+          "@angular/platform-browser",
+        ),
         react: lockedVersion(lockfile, "react"),
         "react-dom": lockedVersion(lockfile, "react-dom"),
+        rxjs: lockedVersion(lockfile, "rxjs"),
+        tslib: lockedVersion(lockfile, "tslib"),
+        vue: lockedVersion(lockfile, "vue"),
       },
       devDependencies: {
         "@types/react": lockedVersion(lockfile, "@types/react"),
