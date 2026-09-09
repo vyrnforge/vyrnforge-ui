@@ -20,6 +20,7 @@ type CanonicalSearchInputElement =
   VyrnForgeElementForTagName<"vf-search-input">;
 const registerCanonicalSearchInput =
   vyrnForgeElementRegistrations["vf-search-input"];
+const ignoreControlledReactChange = () => undefined;
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
   function SearchInput(
@@ -134,6 +135,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             defaultValue={defaultValue}
             disabled={disabled}
             inputMode={inputMode}
+            onChange={value === undefined ? undefined : ignoreControlledReactChange}
             onInputCapture={handleInputCapture}
             placeholder={placeholder}
             readOnly={readOnly}
