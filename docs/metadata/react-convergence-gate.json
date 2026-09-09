@@ -14,10 +14,8 @@
       "packages/ui-components/src/__tests__/react-batch-2-forms.test.tsx",
       "packages/ui-components/src/__tests__/react-batch-3-navigation.test.tsx",
       "packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx",
-      "packages/ui-components/src/__tests__/react-batch-5-overlay-convergence.test.ts",
-      "packages/ui-components/src/__tests__/react-batch-6-catalog-convergence.test.ts",
-      "packages/ui-components/src/__tests__/react-exception-catalog.test.ts",
-      "packages/ui-components/src/__tests__/react-implementation-cleanup.test.ts"
+      "packages/ui-components/src/__tests__/react-implementation-cleanup.test.ts",
+      "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx"
     ],
     "accessibility": [
       "packages/ui-components/src/components/__tests__/accessibility.test.tsx",
@@ -53,7 +51,7 @@
   "regressionPolicy": {
     "materialRegressionRequiresExplicitException": true,
     "regressionExceptions": [],
-    "implementationExceptionCatalog": "docs/metadata/react-exception-catalog.json",
+    "implementationExceptionCatalog": "docs/metadata/framework-exceptions.json",
     "noDormantDuplicateImplementation": true
   },
   "acceptance": [
