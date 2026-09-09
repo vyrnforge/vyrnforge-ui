@@ -12,7 +12,7 @@ jobs:
   remediate:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -24,7 +24,7 @@ jobs:
           node-version: "24.18.0"
           cache: npm
       - name: Use repository package manager
-        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
       - name: Apply minimal development-tool remediation
         run: |
           node --input-type=module <<'NODE'
@@ -32,11 +32,16 @@ jobs:
           const path = "package.json";
           const pkg = JSON.parse(readFileSync(path, "utf8"));
           pkg.devDependencies["@vitest/coverage-v8"] = "^5.0.0";
-          pkg.overrides = { ...(pkg.overrides ?? {}), esbuild: "0.28.2" };
+          pkg.overrides = {
+            ...(pkg.overrides ?? {}),
+            tsup: { esbuild: "0.28.2" },
+            vite: { esbuild: "0.28.2" }
+          };
           pkg.allowScripts = { "esbuild@0.28.2": true };
           writeFileSync(path, `${JSON.stringify(pkg, null, 2)}\n`);
           NODE
-          npm install --package-lock-only
+          npm update vitest @vitest/coverage-v8 --workspaces --include-workspace-root --package-lock-only
+          npm audit fix --package-lock-only || true
       - name: Verify clean install and zero audit
         run: |
           npm ci
