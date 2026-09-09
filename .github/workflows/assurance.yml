@@ -19,9 +19,6 @@ jobs:
     timeout-minutes: 35
     env:
       CI_SCOPE_FULL: "true"
-      CI_SCOPE_METADATA: "true"
-      CI_SCOPE_FIXTURES: "true"
-      CI_AFFECTED_PACKAGES: "@vyrnforge/ui-behaviors,@vyrnforge/ui-components,@vyrnforge/ui-core,@vyrnforge/ui-data-grid,@vyrnforge/ui-elements,@vyrnforge/ui-vue"
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -125,7 +122,7 @@ jobs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Read canonical compatibility matrix
         id: matrix
         shell: bash
@@ -147,7 +144,7 @@ jobs:
       matrix: ${{ fromJSON(needs.compatibility-plan.outputs.matrix) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
@@ -227,12 +224,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        uses: github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           languages: javascript-typescript
           build-mode: none
       - name: Analyze JavaScript and TypeScript
-        uses: github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           category: /language:javascript-typescript
 

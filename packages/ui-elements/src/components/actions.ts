@@ -135,6 +135,10 @@ export abstract class VyrnForgeActionElement extends VyrnForgeDomElement {
     this.#button?.focus(options);
   }
 
+  override click(): void {
+    this.#button?.click();
+  }
+
   protected override connected(): void {
     this.ensureButton();
     this.observeExternalContent();

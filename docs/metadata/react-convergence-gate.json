@@ -26,7 +26,7 @@
       "test-results/cross-framework-matrix/accessibility-report.json"
     ],
     "performance": {
-      "budgetSource": "docs/metadata/beta-package-size-budgets.json",
+      "budgetSource": "docs/metadata/release-groups.json",
       "artifactReport": "test-results/beta-package-artifacts/size-report.json",
       "package": "@vyrnforge/ui-components"
     },
@@ -59,7 +59,7 @@
   "acceptance": [
     "Captured React public API and behavior invariants remain enforced.",
     "React accessibility and browser interaction evidence remains green.",
-    "The @vyrnforge/ui-components package remains within canonical BT-8004 package and CSS budgets.",
+    "The @vyrnforge/ui-components package remains within canonical release-group package and CSS budgets.",
     "Every supported React major is exercised through the canonical packed compatibility matrix on React-lane pull requests.",
     "The normal packed React consumer uses only the intended public React package path.",
     "No material public DX, accessibility, behavior, compatibility, or performance regression is accepted without an explicit governed exception.",

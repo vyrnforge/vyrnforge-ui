@@ -1,6 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
+import { PlaygroundFrameworkProvider } from "./PlaygroundFrameworkContext";
 import { PlaygroundShell } from "./PlaygroundShell";
-import { routes } from "./routes";
+import {
+  defaultPlaygroundFramework,
+  defaultPlaygroundVersion,
+  loadPlaygroundVersions,
+  playgroundVersionHref,
+  type PlaygroundFrameworkId,
+  type PlaygroundVersion,
+} from "./playgroundContext";
+import {
+  referenceCatalogRoutes,
+  referenceDetailRoutes,
+} from "./referenceCatalogRoutes";
+import { routes as baseRoutes } from "./routes";
+
+const navigationRoutes = [
+  baseRoutes[0],
+  ...referenceCatalogRoutes,
+  ...baseRoutes.slice(1),
+];
+const routes = [...navigationRoutes, ...referenceDetailRoutes];
 
 function normalizeHashRoute(hash: string) {
   return hash.replace(/^#\/?/, "").replace(/^\/+/, "");
@@ -15,17 +35,40 @@ function getRouteFromHash() {
   });
 }
 
+function getFrameworkFromLocation(): PlaygroundFrameworkId {
+  const framework = new URLSearchParams(window.location.search).get(
+    "framework",
+  );
+  return framework === "native-html" ||
+    framework === "react" ||
+    framework === "angular" ||
+    framework === "vue"
+    ? framework
+    : defaultPlaygroundFramework;
+}
+
 export default function App() {
   const [activeRouteId, setActiveRouteId] = useState(() => {
     return getRouteFromHash()?.id ?? routes[0].id;
   });
   const [density, setDensity] = useState("standard");
+  const [frameworkId, setFrameworkId] = useState<PlaygroundFrameworkId>(
+    getFrameworkFromLocation,
+  );
   const [theme, setTheme] = useState("light");
+  const [versions, setVersions] = useState<PlaygroundVersion[]>([
+    defaultPlaygroundVersion,
+  ]);
+  const versionId = defaultPlaygroundVersion.id;
   const activeRoute = useMemo(
     () => routes.find((route) => route.id === activeRouteId) ?? routes[0],
-    [activeRouteId]
+    [activeRouteId],
   );
   const ActivePage = activeRoute.Component;
+
+  useEffect(() => {
+    void loadPlaygroundVersions().then(setVersions);
+  }, []);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -49,18 +92,50 @@ export default function App() {
     setActiveRouteId(routeId);
   };
 
+  const changeFramework = (nextFrameworkId: PlaygroundFrameworkId) => {
+    const query = new URLSearchParams(window.location.search);
+    query.set("framework", nextFrameworkId);
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}?${query.toString()}${window.location.hash}`,
+    );
+    setFrameworkId(nextFrameworkId);
+  };
+
+  const changeVersion = (nextVersionId: string) => {
+    const nextVersion = versions.find(
+      (version) => version.id === nextVersionId,
+    );
+    if (!nextVersion || nextVersion.id === versionId) {
+      return;
+    }
+
+    window.location.assign(playgroundVersionHref(nextVersion));
+  };
+
   return (
-    <PlaygroundShell
-      activeRoute={activeRoute}
-      activeRouteId={activeRoute.id}
-      density={density}
-      routes={routes}
-      onRouteChange={changeRoute}
-      onDensityChange={setDensity}
-      onThemeChange={setTheme}
-      theme={theme}
+    <PlaygroundFrameworkProvider
+      frameworkId={frameworkId}
+      onFrameworkChange={changeFramework}
     >
-      <ActivePage />
-    </PlaygroundShell>
+      <PlaygroundShell
+        activeRoute={activeRoute}
+        activeRouteId={activeRoute.id}
+        density={density}
+        frameworkId={frameworkId}
+        routes={navigationRoutes}
+        versionId={versionId}
+        versions={versions}
+        onRouteChange={changeRoute}
+        onDensityChange={setDensity}
+        onFrameworkChange={changeFramework}
+        onThemeChange={setTheme}
+        onVersionChange={changeVersion}
+        theme={theme}
+      >
+        <ActivePage />
+      </PlaygroundShell>
+    </PlaygroundFrameworkProvider>
   );
 }
