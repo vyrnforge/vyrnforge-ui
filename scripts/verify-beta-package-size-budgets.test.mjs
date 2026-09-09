@@ -55,7 +55,8 @@ test("rejects missing measurements", () => {
 });
 
 test("rejects missing canonical metric limits", () => {
-  const { cssBytes: _cssBytes, ...incomplete } = metrics;
+  const incomplete = { ...metrics };
+  delete incomplete.cssBytes;
   const result = evaluateSizeBudgets({
     manifest: {
       packages: [
