@@ -1,37 +1,8 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { contractTestFiles } from "./run-contract-tests.mjs";
 
-export const activeContractTests = [
-  "test:canonical-contracts",
-  "test:framework-generation",
-  "test:ci-scope",
-  "test:package-boundaries",
-  "test:component-metadata",
-  "test:framework-exceptions",
-  "test:react-behavior-adoption",
-  "test:beta-scope",
-  "test:release-groups",
-  "test:release-size-budgets",
-  "test:compatibility-release-matrix",
-  "test:security-workflow-hardening",
-  "test:trusted-publishing-provenance",
-  "test:trusted-publishing-dry-run",
-  "test:release-artifact",
-  "test:release-dry-run",
-  "test:multi-framework",
-  "test:component-maturity",
-  "test:design-tokens",
-  "test:token-adoption",
-  "test:visual-regression",
-  "test:consumer-foundations",
-  "test:component-reference",
-  "test:maturity-closure",
-  "test:assistive-technology",
-  "test:templates",
-  "test:documentation-current",
-  "test:validation-model",
-  "test:generated-framework-artifacts",
-];
+export const activeContractTests = contractTestFiles;
 
 export const activeMetadataVerifiers = [
   "verify:component-metadata",
@@ -132,6 +103,37 @@ function exactDependencies(graph, scriptName, expected) {
   );
 }
 
+function commandTarget(command) {
+  const npmMatch = command.match(/^npm run ([A-Za-z0-9:._-]+)$/u);
+  if (npmMatch) return { type: "npm", value: npmMatch[1] };
+
+  const nodeMatch = command.match(/^node ([^\s]+\.mjs)(?:\s|$)/u);
+  if (nodeMatch) return { type: "file", value: nodeMatch[1] };
+
+  const workflowMatch = command.match(/^(\.github\/workflows\/[^#\s]+)(?:#.+)?$/u);
+  if (workflowMatch) return { type: "file", value: workflowMatch[1] };
+
+  return null;
+}
+
+function assertResolvableCommand({ root, scripts, command, owner }) {
+  const target = commandTarget(command);
+  if (!target) return;
+
+  if (target.type === "npm") {
+    assert(
+      Object.hasOwn(scripts, target.value),
+      `${owner} references missing root command: ${target.value}`,
+    );
+    return;
+  }
+
+  assert(
+    existsSync(path.join(root, target.value)),
+    `${owner} references missing repository target: ${target.value}`,
+  );
+}
+
 export function verifyRepositoryValidationModel({ root, writeReport = true }) {
   const packageJson = JSON.parse(
     readFileSync(path.join(root, "package.json"), "utf8"),
@@ -178,6 +180,25 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
     "validation metadata must define pull-request, main, nightly, and release in order",
   );
 
+  for (const [layer, config] of Object.entries(metadata.layers ?? {})) {
+    assertResolvableCommand({
+      root,
+      scripts,
+      command: config.entrypoint,
+      owner: `validation layer ${layer}`,
+    });
+  }
+  for (const [group, command] of Object.entries(
+    metadata.internalCommandGroups ?? {},
+  )) {
+    assertResolvableCommand({
+      root,
+      scripts,
+      command,
+      owner: `validation command group ${group}`,
+    });
+  }
+
   const checkIds = new Set();
   const checkCommands = new Set();
   for (const check of metadata.checks ?? []) {
@@ -193,6 +214,12 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
       !checkCommands.has(check.command),
       `validation command has multiple owners: ${check.command}`,
     );
+    assertResolvableCommand({
+      root,
+      scripts,
+      command: check.command,
+      owner: `validation check ${check.id}`,
+    });
     checkIds.add(check.id);
     checkCommands.add(check.command);
   }
@@ -209,8 +236,8 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
   const graph = buildCommandGraph(scripts);
 
   assert(
-    exactDependencies(graph, "test:contracts", activeContractTests),
-    "test:contracts must contain the exact active contract test group",
+    scripts["test:contracts"] === "node scripts/run-contract-tests.mjs",
+    "test:contracts must use the deterministic contract-test runner",
   );
   assert(
     exactDependencies(graph, "verify:metadata", activeMetadataVerifiers),
