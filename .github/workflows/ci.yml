@@ -134,11 +134,16 @@ jobs:
         shell: bash
         run: |
           if [[ "$RUN_PACKAGES" == "true" ]]; then
-            npm run verify:beta-package-artifacts
+            RELEASE_GROUP=non-grid-beta
+            RELEASE_VERSION=0.2.0-beta.2
+            RELEASE_TAG=beta
+            npm run prepare:release-artifact -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID"
+            npm run verify:release-artifact -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID" --artifact-dir test-results/release-artifact
+            npm run verify:trusted-publishing-dry-run -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --artifact-dir test-results/release-artifact
+            npm run verify:release-size-budgets -- --release-group "$RELEASE_GROUP" --artifact-dir test-results/release-artifact
             npm run build --workspace @vyrnforge/ui-data-grid
             VYRNFORGE_PACKAGES_PREPARED=true npm run verify:packages
-            npm run verify:beta-package-size-budgets
-            test -f test-results/beta-package-artifacts/size-report.json
+            test -f test-results/release-artifact/manifest.json
           elif [[ "$RUN_CONSUMER" == "true" ]]; then
             npm run verify:packages
           elif [[ "$RUN_BROWSER" == "true" || "$RUN_PLAYGROUND" == "true" || "$RUN_PAGES_ARTIFACT" == "true" ]]; then
@@ -182,6 +187,14 @@ jobs:
         env:
           VITE_BASE_PATH: /vyrnforge-ui/
       - name: Build playground for Pages
+        if: env.RUN_PLAYGROUND == 'true' && env.RUN_PAGES_ARTIFACT != 'true'
+        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
+      - name: Build documentation application for Pages
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        run: npm run build --workspace @vyrnforge/ui-docs
+        env:
+          VITE_BASE_PATH: /vyrnforge-ui/
+      - name: Build playground for Pages
         if: env.RUN_PAGES_ARTIFACT == 'true'
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
         env:
@@ -203,12 +216,12 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
-      - name: Upload beta package artifact reports
+      - name: Upload generic release artifact reports
         if: always() && env.RUN_PACKAGES == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: beta-package-artifacts
-          path: test-results/beta-package-artifacts/
+          name: release-artifact-ci
+          path: test-results/release-artifact/
           if-no-files-found: error
       - name: Upload visual regression evidence
         if: success() && env.RUN_BROWSER == 'true'
