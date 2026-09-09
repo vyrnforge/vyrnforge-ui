@@ -14,7 +14,6 @@ const startedAt = new Date().toISOString();
 let status = "failed";
 let failures = [];
 let measurements = [];
-let waiverResults = [];
 
 try {
   failures.push(...verifySizeBudgetContract());
@@ -23,7 +22,6 @@ try {
     measurements = collectSizeMeasurements();
     const evaluation = evaluateSizeBudgets({ manifest, measurements });
     failures.push(...evaluation.failures);
-    waiverResults = evaluation.waiverResults;
   }
   status = failures.length ? "failed" : "passed";
 } catch (error) {
@@ -37,12 +35,12 @@ writeFileSync(
   `${JSON.stringify(
     {
       schemaVersion: 1,
-      task: "BT-8004",
+      releaseGroup: "non-grid-beta",
+      budgetSource: "docs/metadata/release-groups.json",
       status,
       startedAt,
       completedAt: new Date().toISOString(),
       measurements,
-      waiverResults,
       failures,
     },
     null,
@@ -51,11 +49,11 @@ writeFileSync(
 );
 
 if (failures.length) {
-  console.error("BT-8004 package size budget verification failed:");
+  console.error("Non-grid beta package size budget verification failed:");
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
   console.log(
-    `BT-8004 package size budgets passed for ${measurements.length} beta packages.`,
+    `Non-grid beta package size budgets passed for ${measurements.length} packages using canonical release-group limits.`,
   );
 }

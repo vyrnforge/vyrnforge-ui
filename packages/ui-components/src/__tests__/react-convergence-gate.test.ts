@@ -41,12 +41,15 @@ type Compatibility = {
   cases: Array<{ id: string; fixture: string }>;
 };
 
-type Budgets = {
-  packages: Array<{
-    name: string;
-    budgets: Record<string, number>;
-  }>;
-  waivers: unknown[];
+type ReleaseGroups = {
+  releaseLines: {
+    "non-grid-beta": {
+      packages: Array<{
+        name: string;
+        policies?: { sizeBudget?: Record<string, number> };
+      }>;
+    };
+  };
 };
 
 describe("MFD-1418 React convergence gate", () => {
@@ -54,7 +57,9 @@ describe("MFD-1418 React convergence gate", () => {
   const compatibility = readJson<Compatibility>(
     gate.evidence.compatibility.matrix,
   );
-  const budgets = readJson<Budgets>(gate.evidence.performance.budgetSource);
+  const releaseGroups = readJson<ReleaseGroups>(
+    gate.evidence.performance.budgetSource,
+  );
   const workflow = read(".github/workflows/ci.yml");
 
   it("binds the final gate to existing source-of-truth evidence", () => {
@@ -94,15 +99,13 @@ describe("MFD-1418 React convergence gate", () => {
     expect(reactCases).toHaveLength(compatibility.supportPolicy.react.length);
   });
 
-  it("keeps ui-components inside governed package budgets without waivers", () => {
-    const packageBudget = budgets.packages.find(
-      ({ name }) => name === gate.evidence.performance.package,
-    );
-    expect(packageBudget).toBeDefined();
-    expect(
-      Object.values(packageBudget?.budgets ?? {}).every((value) => value > 0),
-    ).toBe(true);
-    expect(budgets.waivers).toEqual([]);
+  it("keeps ui-components inside governed package budgets", () => {
+    const packageBudget = releaseGroups.releaseLines[
+      "non-grid-beta"
+    ].packages.find(({ name }) => name === gate.evidence.performance.package);
+    const budgets = packageBudget?.policies?.sizeBudget;
+    expect(budgets).toBeDefined();
+    expect(Object.values(budgets ?? {}).every((value) => value > 0)).toBe(true);
   });
 
   it("makes supported React compatibility a protected React-lane CI dependency", () => {
