@@ -21,7 +21,7 @@ const expectedPackages = new Map([
     },
   ],
   [
-    "@vyrnforge/ui-components",
+    "@vyrnforge/ui-elements",
     {
       status: "current",
       betaIncluded: true,
@@ -29,11 +29,31 @@ const expectedPackages = new Map([
     },
   ],
   [
-    "@vyrnforge/ui-elements",
+    "@vyrnforge/ui-components",
     {
       status: "current",
       betaIncluded: true,
-      dependsOn: ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      dependsOn: [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-elements",
+      ],
+    },
+  ],
+  [
+    "@vyrnforge/ui-angular",
+    {
+      status: "current",
+      betaIncluded: true,
+      dependsOn: ["@vyrnforge/ui-elements"],
+    },
+  ],
+  [
+    "@vyrnforge/ui-vue",
+    {
+      status: "current",
+      betaIncluded: true,
+      dependsOn: ["@vyrnforge/ui-elements"],
     },
   ],
   [
@@ -49,19 +69,19 @@ const expectedPackages = new Map([
 const expectedFrameworks = new Map([
   ["react", "first-class"],
   ["native-html", "first-class"],
-  ["angular", "verified-consumer"],
-  ["vue", "verified-consumer"],
+  ["angular", "first-class"],
+  ["vue", "first-class"],
 ]);
 
 const expectedBetaClaims = new Map([
-  ["react", "custom-elements-consumer-verified"],
+  ["react", "react-public-package-consumer-verified"],
   ["native-html", "packed-consumer-verified"],
-  ["angular", "packed-consumer-verified"],
-  ["vue", "packed-consumer-verified"],
+  ["angular", "first-class-package-verified"],
+  ["vue", "first-class-package-verified"],
 ]);
 
 const expectedFixtureClaims = new Map([
-  ["react", "packed-custom-elements-runtime-verified"],
+  ["react", "packed-react-public-package-runtime-verified"],
   ["native-html", "packed-runtime-verified"],
   ["angular", "packed-angular-runtime-verified"],
   ["vue", "packed-vue-runtime-verified"],
@@ -96,16 +116,22 @@ const expectedSlots = new Set([
 ]);
 
 const requiredDocuments = [
+  "docs/architecture/00-system-overview.md",
   "docs/architecture/adr-004-multi-framework-web-support.md",
+  "docs/architecture/adr-005-canonical-web-implementation.md",
+  "docs/architecture/adr-006-framework-package-strategy.md",
+  "docs/architecture/adr-008-framework-exception-policy.md",
   "docs/architecture/09-component-contracts-and-events.md",
   "docs/architecture/10-custom-elements-and-form-association.md",
   "docs/testing/multi-framework-consumer-fixtures.md",
   "docs/metadata/multi-framework.json",
+  "docs/metadata/packages.json",
   "docs/metadata/component-contracts.json",
   "docs/metadata/component-contract.schema.json",
   "docs/metadata/consumer-foundations.json",
   "docs/metadata/angular-consumer.json",
   "docs/metadata/angular-forms-adapter.json",
+  "docs/metadata/angular-support-evidence.json",
   "docs/metadata/vue-consumer.json",
   "docs/testing/vue-consumer-contract.md",
   "docs/api/ui-behaviors-api.md",
@@ -218,6 +244,8 @@ function verifyPackageTopology(root, failures, architecture) {
         "@vyrnforge/ui-behaviors",
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue",
       ]),
     )
   ) {
@@ -263,6 +291,43 @@ function verifyFrameworkSupport(failures, architecture) {
         `${frameworkId} beta claim must be ${expectedClaim}`,
       );
     }
+  }
+
+  if (frameworks.get("angular")?.renderer !== "@vyrnforge/ui-angular") {
+    addFailure(
+      failures,
+      "Angular first-class support must use @vyrnforge/ui-angular",
+    );
+  }
+  if (frameworks.get("vue")?.renderer !== "@vyrnforge/ui-vue") {
+    addFailure(failures, "Vue first-class support must use @vyrnforge/ui-vue");
+  }
+  if (
+    architecture.architecture?.canonicalComponentModel !==
+    "docs/metadata/component-contracts.json"
+  ) {
+    addFailure(
+      failures,
+      "multi-framework architecture must reference the canonical component model",
+    );
+  }
+  if (
+    architecture.architecture?.defaultBrowserImplementation !==
+    "@vyrnforge/ui-elements"
+  ) {
+    addFailure(
+      failures,
+      "multi-framework architecture must use ui-elements as the default browser implementation",
+    );
+  }
+  if (
+    architecture.architecture?.exceptionPolicy !==
+    "docs/architecture/adr-008-framework-exception-policy.md"
+  ) {
+    addFailure(
+      failures,
+      "multi-framework architecture must reference the explicit framework exception policy",
+    );
   }
 
   if (architecture.styling?.defaultDomMode !== "light-dom") {
@@ -313,6 +378,15 @@ function verifyFrameworkSupport(failures, architecture) {
     addFailure(
       failures,
       "consumer fixture policy must reference angular-forms-adapter.json",
+    );
+  }
+  if (
+    architecture.consumerFixturePolicy?.angularFirstClassEvidence !==
+    "docs/metadata/angular-support-evidence.json"
+  ) {
+    addFailure(
+      failures,
+      "consumer fixture policy must reference Angular first-class support evidence",
     );
   }
 }
@@ -601,6 +675,6 @@ if (
 ) {
   assertMultiFrameworkArchitecture();
   console.log(
-    "Multi-framework architecture passed: package topology, contracts, events, slots, forms, and consumer fixtures are aligned.",
+    "Multi-framework architecture passed: canonical model, package topology, framework support, contracts, and consumer fixtures are aligned.",
   );
 }

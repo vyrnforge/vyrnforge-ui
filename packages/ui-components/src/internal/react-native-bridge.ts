@@ -85,14 +85,17 @@ export function useCanonicalElementBridge<TElement extends HTMLElement>(
   useImperativeHandle(forwardedRef, () => elementRef.current as TElement, []);
 
   useEffect(() => {
-    ensureCanonicalElementRegistered(tagName, register);
-  }, [tagName, register]);
-
-  useEffect(() => {
     const element = elementRef.current;
     if (!element) return;
+
+    // Seed properties before registration so VyrnForgeElement.upgradeProperty()
+    // can transfer pre-upgrade React values before connectedCallback captures
+    // initial form/model state. Re-assign after registration for generic custom
+    // elements that do not implement the VyrnForge upgrade contract.
     assignCanonicalProperties(element, properties);
-  }, [properties]);
+    ensureCanonicalElementRegistered(tagName, register);
+    assignCanonicalProperties(element, properties);
+  }, [properties, register, tagName]);
 
   useEffect(() => {
     const element = elementRef.current;

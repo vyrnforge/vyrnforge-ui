@@ -1,20 +1,29 @@
 {
   "id": "react",
-  "supportClaim": "packed-custom-elements-runtime-verified",
-  "task": "CF-7002",
-  "rendererPackages": ["@vyrnforge/ui-components", "@vyrnforge/ui-elements"],
-  "runtime": "react-18-19-custom-elements",
+  "supportClaim": "packed-react-public-package-runtime-verified",
+  "task": "MFD-1417",
+  "rendererPackages": ["@vyrnforge/ui-components"],
+  "runtime": "react-18-19-first-class-package",
   "commands": ["npm run typecheck", "npm run build", "npm run preview"],
   "requiredPatterns": [
-    "react",
-    "@vyrnforge/ui-elements/register",
-    "@vyrnforge/ui-elements/styles/index.css",
-    "<vf-button",
-    "GeneratedTabs",
-    "items={tabs}",
+    "@vyrnforge/ui-components",
+    "@vyrnforge/ui-components/styles/index.css",
+    "Button",
+    "Tabs",
+    "TextInput",
+    "Dialog",
     "onValueChange",
-    "useRef<ButtonElement>",
-    "addEventListener(\"vf-action\"",
     "data-consumer-ready"
+  ],
+  "forbiddenPatterns": [
+    "@vyrnforge/ui-elements",
+    "@vyrnforge/ui-core",
+    "@vyrnforge/ui-behaviors",
+    "<vf-",
+    "VyrnForgeElementForTagName",
+    "GeneratedButton",
+    "GeneratedTabs",
+    "GeneratedTextInput",
+    "GeneratedDialog"
   ]
 }

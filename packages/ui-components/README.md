@@ -4,36 +4,50 @@ Native-first VyrnForge UI component primitives built with React, TypeScript, and
 
 ## Install
 
-VyrnForge UI is prerelease software. `@vyrnforge/ui-components` is part of the
-configured `non-grid-beta` release group. Use the explicit `beta` dist-tag for
-prerelease registry installations; component maturity remains tracked
-separately.
+VyrnForge UI is prerelease software. `@vyrnforge/ui-components` is the
+first-class React surface in the synchronized non-grid beta release line.
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta
+npm install @vyrnforge/ui-components@beta
 ```
 
-Public package entry points use the package root and CSS subpath exports:
+Shared VyrnForge foundations are package dependencies and are installed
+transitively. React applications do not need to install or coordinate the
+internal foundation graph separately. React and ReactDOM remain peer
+dependencies supplied by the application.
 
-```ts
-import { Button } from "@vyrnforge/ui-components";
-import "@vyrnforge/ui-components/styles/index.css";
-```
-
-The package is built from `dist` output. Public exports do not point at internal `src` files. React and ReactDOM are peer dependencies and are not bundled as duplicate runtimes.
-
-VyrnForge UI is source-available under the VyrnForge Source License 1.0. Source inspection, local evaluation, and temporary non-production prototypes are permitted. Production use, commercial use, redistribution, package republication, resale, sublicensing, white-labeling, and competing-library use require separate written permission or a separate written commercial license. Package metadata uses `SEE LICENSE IN LICENSE`, and the npm artifact includes a package-local LICENSE that matches the repository root license.
-
-Import core tokens first, then component styles:
+The package root loads the React surface styling:
 
 ```tsx
-import "@vyrnforge/ui-core/styles/index.css";
+import { Button } from "@vyrnforge/ui-components";
+```
+
+Hosts that intentionally manage stylesheet loading can use the public CSS
+subpath explicitly:
+
+```ts
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-`@vyrnforge/ui-components` consumes canonical semantic `--vf-*` roles from `@vyrnforge/ui-core`, so light, dark, enterprise, density, motion, focus, status, and scoped token overrides flow consistently through the primitives. Historical broad aliases remain app compatibility inputs but are not used by package CSS.
+The package is built from `dist` output. Public exports do not point at internal
+`src` files.
 
-`@vyrnforge/ui-components` owns reusable UI primitives only. It does not own app business state, backend data, grid behavior, or a global store.
+VyrnForge UI is source-available under the VyrnForge Source License 1.0. Source
+inspection, local evaluation, and temporary non-production prototypes are
+permitted. Production use, commercial use, redistribution, package
+republication, resale, sublicensing, white-labeling, and competing-library use
+require separate written permission or a separate written commercial license.
+Package metadata uses `SEE LICENSE IN LICENSE`, and the npm artifact includes a
+package-local LICENSE that matches the repository root license.
+
+`@vyrnforge/ui-components` consumes canonical semantic `--vf-*` roles from the
+shared VyrnForge foundation, so light, dark, enterprise, density, motion, focus,
+status, and scoped token overrides flow consistently through the primitives.
+Historical broad aliases remain app compatibility inputs but are not used by
+package CSS.
+
+`@vyrnforge/ui-components` owns reusable UI primitives only. It does not own app
+business state, backend data, grid behavior, or a global store.
 
 ## Components
 
