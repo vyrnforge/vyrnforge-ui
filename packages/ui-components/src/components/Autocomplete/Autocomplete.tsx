@@ -29,6 +29,8 @@ import {
   useAutocomplete,
 } from "./useAutocomplete";
 
+const ignoreHiddenInputChange = () => undefined;
+
 function optionId(listboxId: string, option: AutocompleteOptionData) {
   return `${listboxId}-${encodeURIComponent(option.value)}`;
 }
@@ -296,6 +298,7 @@ export function Autocomplete({
         <input
           disabled={disabled}
           name={name}
+          onChange={ignoreHiddenInputChange}
           type="hidden"
           value={selectedValue ?? ""}
         />
