@@ -36,6 +36,7 @@ jobs:
           npm run verify:framework-exceptions
           npm run test:react-behavior-adoption
           npm run verify:react-behavior-adoption
+          rm .github/workflows/tmp-bc1607-finalize.yml
           npm run verify:workflows
           npm run verify:repository-inventory
           ! grep -R --line-number --fixed-strings 'react-migration-matrix.json' docs scripts packages/ui-components/src || false
@@ -46,7 +47,7 @@ jobs:
       - name: Commit final tree and remove helpers
         shell: bash
         run: |
-          rm .github/workflows/tmp-bc1607-finalize.yml
+          rm -f .github/workflows/tmp-bc1607-finalize.yml
           rm .tmp/bc1607-finalize.mjs
           rmdir .tmp 2>/dev/null || true
           git config user.name "github-actions[bot]"
