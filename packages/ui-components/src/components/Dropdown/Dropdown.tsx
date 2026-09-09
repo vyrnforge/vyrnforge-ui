@@ -8,7 +8,7 @@ export function Dropdown({
   onOpenChange,
   open,
   placement = "bottom-start",
-  trigger
+  trigger,
 }: DropdownProps) {
   return (
     <Popover

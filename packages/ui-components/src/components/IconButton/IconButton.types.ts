@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-export type IconButtonVariant = "default" | "primary" | "danger" | "ghost" | "subtle";
+export type IconButtonVariant =
+  "default" | "primary" | "danger" | "ghost" | "subtle";
 
 export type IconButtonSize = "xs" | "sm" | "md" | "lg";
 

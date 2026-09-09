@@ -20,13 +20,13 @@ Shared styling uses `--vf-*` variables and `vf-*` classes. Data-grid styling use
 
 ## Deprecation expectations
 
-| Maturity | Notice expectation |
-| --- | --- |
-| Pre-alpha | Deprecation notices are useful but not required for every change. Broad public-facing changes should include migration notes. |
-| Alpha | Document deprecated APIs before removal when practical. Breaking changes must be listed in changelog and migration notes. |
-| Beta | Keep compatibility where practical. Deprecations should have a clear replacement and removal target. |
-| Stable 0.x | Remove only in minor releases unless security or correctness requires faster action. |
-| 1.x stable | Remove only in major releases except emergency security exceptions. |
+| Maturity   | Notice expectation                                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Pre-alpha  | Deprecation notices are useful but not required for every change. Broad public-facing changes should include migration notes. |
+| Alpha      | Document deprecated APIs before removal when practical. Breaking changes must be listed in changelog and migration notes.     |
+| Beta       | Keep compatibility where practical. Deprecations should have a clear replacement and removal target.                          |
+| Stable 0.x | Remove only in minor releases unless security or correctness requires faster action.                                          |
+| 1.x stable | Remove only in major releases except emergency security exceptions.                                                           |
 
 ## Migration notes
 

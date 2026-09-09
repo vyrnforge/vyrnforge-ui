@@ -1,14 +1,14 @@
 import type {
   DataGridRowId,
-  DataGridSelectionMode
+  DataGridSelectionMode,
 } from "../types/dataGrid.types";
 
 export type DataGridRowIdGetter<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = (row: RowData, index: number) => DataGridRowId;
 
 export type DataGridRowSelectableGetter<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = (row: RowData, index: number) => boolean;
 
 export type DataGridPageSelectionState = {
@@ -19,12 +19,10 @@ export type DataGridPageSelectionState = {
   totalSelectableCount: number;
 };
 
-export function getRowIdValue<
-  RowData extends Record<string, unknown>
->(
+export function getRowIdValue<RowData extends Record<string, unknown>>(
   row: RowData,
   index: number,
-  getRowId?: DataGridRowIdGetter<RowData>
+  getRowId?: DataGridRowIdGetter<RowData>,
 ): DataGridRowId {
   if (getRowId) {
     return getRowId(row, index);
@@ -36,19 +34,17 @@ export function getRowIdValue<
     : index;
 }
 
-export function isRowSelectable<
-  RowData extends Record<string, unknown>
->(
+export function isRowSelectable<RowData extends Record<string, unknown>>(
   row: RowData,
   index: number,
-  getRowSelectable?: DataGridRowSelectableGetter<RowData>
+  getRowSelectable?: DataGridRowSelectableGetter<RowData>,
 ) {
   return getRowSelectable?.(row, index) ?? true;
 }
 
 export function isRowSelected(
   selectedRowIds: DataGridRowId[],
-  rowId: DataGridRowId
+  rowId: DataGridRowId,
 ) {
   return selectedRowIds.includes(rowId);
 }
@@ -56,7 +52,7 @@ export function isRowSelected(
 export function toggleRowSelection(
   selectedRowIds: DataGridRowId[],
   rowId: DataGridRowId,
-  selectionMode: DataGridSelectionMode = "multiple"
+  selectionMode: DataGridSelectionMode = "multiple",
 ) {
   if (selectionMode === "none") {
     return selectedRowIds;
@@ -76,7 +72,7 @@ export function toggleRowSelection(
 export function selectRows(
   selectedRowIds: DataGridRowId[],
   rowIds: DataGridRowId[],
-  selectionMode: DataGridSelectionMode = "multiple"
+  selectionMode: DataGridSelectionMode = "multiple",
 ) {
   if (selectionMode === "none" || rowIds.length === 0) {
     return selectedRowIds;
@@ -93,7 +89,7 @@ export function selectRows(
 
 export function deselectRows(
   selectedRowIds: DataGridRowId[],
-  rowIds: DataGridRowId[]
+  rowIds: DataGridRowId[],
 ) {
   const rowIdSet = new Set(rowIds);
   return selectedRowIds.filter((rowId) => !rowIdSet.has(rowId));
@@ -103,12 +99,10 @@ export function clearSelection() {
   return [] as DataGridRowId[];
 }
 
-export function getSelectableRowIds<
-  RowData extends Record<string, unknown>
->(
+export function getSelectableRowIds<RowData extends Record<string, unknown>>(
   rows: RowData[],
   getRowId?: DataGridRowIdGetter<RowData>,
-  getRowSelectable?: DataGridRowSelectableGetter<RowData>
+  getRowSelectable?: DataGridRowSelectableGetter<RowData>,
 ) {
   return rows.reduce<DataGridRowId[]>((rowIds, row, index) => {
     if (!isRowSelectable(row, index, getRowSelectable)) {
@@ -120,26 +114,24 @@ export function getSelectableRowIds<
   }, []);
 }
 
-export function resolveSelectedRows<
-  RowData extends Record<string, unknown>
->(
+export function resolveSelectedRows<RowData extends Record<string, unknown>>(
   rows: RowData[],
   selectedRowIds: DataGridRowId[],
-  getRowId?: DataGridRowIdGetter<RowData>
+  getRowId?: DataGridRowIdGetter<RowData>,
 ) {
   const selectedRowIdSet = new Set(selectedRowIds);
   return rows.filter((row, index) =>
-    selectedRowIdSet.has(getRowIdValue(row, index, getRowId))
+    selectedRowIdSet.has(getRowIdValue(row, index, getRowId)),
   );
 }
 
 export function getSelectionStateForPage(
   selectedRowIds: DataGridRowId[],
-  pageSelectableRowIds: DataGridRowId[]
+  pageSelectableRowIds: DataGridRowId[],
 ): DataGridPageSelectionState {
   const selectedRowIdSet = new Set(selectedRowIds);
   const selectedCount = pageSelectableRowIds.filter((rowId) =>
-    selectedRowIdSet.has(rowId)
+    selectedRowIdSet.has(rowId),
   ).length;
   const totalSelectableCount = pageSelectableRowIds.length;
   const allSelected =
@@ -151,6 +143,6 @@ export function getSelectionStateForPage(
     indeterminate: !allSelected && !noneSelected,
     noneSelected,
     selectedCount,
-    totalSelectableCount
+    totalSelectableCount,
   };
 }

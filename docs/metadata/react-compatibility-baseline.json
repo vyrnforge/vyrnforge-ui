@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "1ce7a47574e8b58c5680a1286b86a70a5efb7524",
+      "sha1": "ec3620e541e48ef04cdcca10d3cfd79facdd9272",
       "covers": [
         "component props and types",
         "callbacks",
@@ -127,6 +127,11 @@
       "task": "S13-vue-main-reconciliation",
       "reason": "The shared compatibility release matrix gained first-class Vue support and Vue 3.5 compatibility cases during S13 reconciliation. React support policy, tested React versions, public API, runtime behavior, and React compatibility cases remain unchanged; only the shared metadata blob fingerprint is intentionally recaptured.",
       "evidence": "docs/metadata/compatibility-release-matrix.json"
+    },
+    {
+      "task": "BC-1604-formatting-cleanup",
+      "reason": "The repository-wide Prettier cleanup changed formatting-only bytes within the React component implementation tree. Public entrypoints, package metadata, styles, documented API, compatibility invariants, contract tests, and runtime evidence remain unchanged; only the implementation-tree fingerprint is intentionally recaptured.",
+      "evidence": "packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

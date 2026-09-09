@@ -22,7 +22,7 @@ function createMemoryStorage(): Storage {
     },
     setItem(key, value) {
       values.set(key, value);
-    }
+    },
   };
 }
 
@@ -31,21 +31,21 @@ describe("createLocalStorageGridPersistence", () => {
     const storage = createMemoryStorage();
     const adapter = createLocalStorageGridPersistence({
       namespace: "test",
-      storage
+      storage,
     });
 
     adapter.save("users", {
       search: "alpha",
       pagination: { pageIndex: 0, pageSize: 25 },
       columnSizing: { name: 220 },
-      density: "compact"
+      density: "compact",
     });
 
     expect(adapter.load("users")).toEqual({
       search: "alpha",
       pagination: { pageIndex: 0, pageSize: 25 },
       columnSizing: { name: 220 },
-      density: "compact"
+      density: "compact",
     });
 
     adapter.clear?.("users");
@@ -58,8 +58,8 @@ describe("createLocalStorageGridPersistence", () => {
 
     expect(
       createLocalStorageGridPersistence({ namespace: "test", storage }).load(
-        "users"
-      )
+        "users",
+      ),
     ).toBeNull();
   });
 });

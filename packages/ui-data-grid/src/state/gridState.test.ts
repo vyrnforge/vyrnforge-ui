@@ -4,7 +4,7 @@ import { createGridState } from "./gridState.merge";
 import { gridStateReducer } from "./gridState.reducer";
 import {
   pickPersistableGridState,
-  selectGridQueryState
+  selectGridQueryState,
 } from "./gridState.selectors";
 
 describe("grid state module", () => {
@@ -13,7 +13,7 @@ describe("grid state module", () => {
       search: "alpha",
       pagination: { pageIndex: 3, pageSize: 25 },
       selectedRowIds: [1, 2],
-      density: "compact"
+      density: "compact",
     });
 
     expect(state.pagination).toEqual({ pageIndex: 3, pageSize: 25 });
@@ -26,16 +26,16 @@ describe("grid state module", () => {
       columnOrder: [],
       columnSizing: {},
       grouping: [],
-      density: "compact"
+      density: "compact",
     });
     expect(pickPersistableGridState(state)).not.toHaveProperty(
-      "selectedRowIds"
+      "selectedRowIds",
     );
   });
 
   it("does not keep row data in grid state", () => {
     const state = createGridState({
-      rows: [{ id: 1, name: "Alpha" }]
+      rows: [{ id: 1, name: "Alpha" }],
     } as unknown as Partial<ReturnType<typeof createGridState>>);
 
     expect("rows" in state).toBe(false);
@@ -44,11 +44,11 @@ describe("grid state module", () => {
   it("applies reducer actions and resets search pagination", () => {
     const state = createGridState({
       search: "before",
-      pagination: { pageIndex: 4, pageSize: 50 }
+      pagination: { pageIndex: 4, pageSize: 50 },
     });
     const nextState = gridStateReducer(
       state,
-      gridStateActions.setSearch("after")
+      gridStateActions.setSearch("after"),
     );
 
     expect(nextState.search).toBe("after");
@@ -59,11 +59,11 @@ describe("grid state module", () => {
     const state = createGridState({
       search: "query",
       density: "comfortable",
-      selectedRowIds: [9]
+      selectedRowIds: [9],
     });
     const resetState = gridStateReducer(
       state,
-      gridStateActions.reset({ density: "compact" })
+      gridStateActions.reset({ density: "compact" }),
     );
 
     expect(resetState.search).toBe("");
@@ -75,7 +75,7 @@ describe("grid state module", () => {
     const state = createGridState({
       search: "workspace",
       grouping: ["status"],
-      pagination: { pageIndex: 1, pageSize: 10 }
+      pagination: { pageIndex: 1, pageSize: 10 },
     });
 
     expect(selectGridQueryState(state)).toEqual({
@@ -83,7 +83,7 @@ describe("grid state module", () => {
       filters: [],
       sort: [],
       grouping: ["status"],
-      pagination: { pageIndex: 1, pageSize: 10 }
+      pagination: { pageIndex: 1, pageSize: 10 },
     });
   });
 });

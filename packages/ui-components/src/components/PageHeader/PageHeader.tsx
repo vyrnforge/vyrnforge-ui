@@ -14,7 +14,9 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <header className={joinClassNames("vf-page-header", className)} {...props}>
-      {breadcrumbs && <div className="vf-page-header__breadcrumbs">{breadcrumbs}</div>}
+      {breadcrumbs && (
+        <div className="vf-page-header__breadcrumbs">{breadcrumbs}</div>
+      )}
       <div className="vf-page-header__row">
         <div className="vf-page-header__main">
           {eyebrow && <div className="vf-page-header__eyebrow">{eyebrow}</div>}
@@ -25,7 +27,9 @@ export function PageHeader({
           {description && (
             <div className="vf-page-header__description">{description}</div>
           )}
-          {metadata && <div className="vf-page-header__metadata">{metadata}</div>}
+          {metadata && (
+            <div className="vf-page-header__metadata">{metadata}</div>
+          )}
         </div>
         {actions && <div className="vf-page-header__actions">{actions}</div>}
       </div>

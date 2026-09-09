@@ -196,7 +196,11 @@ export function verifyMaturityMetadata(catalog) {
   const legacyList = model.transitionPolicy.legacyUnverifiedEntries ?? [];
   const legacyEntries = new Set(legacyList);
   if (legacyList.length > 0) {
-    for (const field of ["closureTask", "verificationDeadlineGate", "releaseBlock"]) {
+    for (const field of [
+      "closureTask",
+      "verificationDeadlineGate",
+      "releaseBlock",
+    ]) {
       if (!model.transitionPolicy[field]) {
         failures.push(
           `components.json: legacy maturity transition requires ${field}`,
@@ -213,10 +217,16 @@ export function verifyMaturityMetadata(catalog) {
   for (const legacyKey of legacyEntries) {
     const component = componentsById.get(legacyKey);
     if (!component) {
-      failures.push(`components.json: unknown legacy maturity entry ${legacyKey}`);
+      failures.push(
+        `components.json: unknown legacy maturity entry ${legacyKey}`,
+      );
       continue;
     }
-    if (!["alpha-stable", "beta-stable", "stable", "deprecated"].includes(component.maturity)) {
+    if (
+      !["alpha-stable", "beta-stable", "stable", "deprecated"].includes(
+        component.maturity,
+      )
+    ) {
       failures.push(
         `${legacyKey} (${component.maturity}): lower-maturity entries must not use the legacy evidence exception`,
       );
@@ -228,7 +238,12 @@ export function verifyMaturityMetadata(catalog) {
     if (maturity === "internal") continue;
     const evidence = model.entries[key];
     if (!evidence) {
-      if (legacyEntries.has(key) || maturity === "planned" || maturity === "experimental") continue;
+      if (
+        legacyEntries.has(key) ||
+        maturity === "planned" ||
+        maturity === "experimental"
+      )
+        continue;
       failures.push(`${key} (${maturity}): missing maturity evidence record`);
       continue;
     }

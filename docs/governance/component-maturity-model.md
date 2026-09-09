@@ -56,93 +56,93 @@ by this document.
 
 ### 1. Planned
 
-| Requirement | Expectation |
-| --- | --- |
-| Meaning | Intended capability that is not an available public contract. It may have a roadmap or design entry but is not implemented or exported for consumption. |
-| Appropriate production usage | None. Do not use it as an import, dependency, or delivery commitment. |
-| API compatibility expectation | None. Names, scope, props, behavior, CSS, and availability may change or disappear. |
-| Required test evidence | None; exploratory spikes are not maturity evidence. |
-| Required accessibility evidence | Initial accessibility risks and likely semantic pattern should be identified when interaction is proposed. |
-| Required documentation | Roadmap or planning description that says it is planned and not available; public docs must not imply an import exists. |
-| Consumer validation requirements | None. Consumer requests may inform the design but do not validate an unavailable API. |
-| Promotion criteria | A named owner accepts scope; a public API and accessibility approach are reviewed enough to begin an experimental implementation; the component is correctly exported and documented as Experimental when public. |
-| Demotion criteria | Reprioritization, supersession, or removal from the roadmap. Record the decision rather than leaving a misleading planned entry. |
-| Release expectations | Not listed as a usable release feature and never used to claim package coverage. |
+| Requirement                      | Expectation                                                                                                                                                                                                       |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meaning                          | Intended capability that is not an available public contract. It may have a roadmap or design entry but is not implemented or exported for consumption.                                                           |
+| Appropriate production usage     | None. Do not use it as an import, dependency, or delivery commitment.                                                                                                                                             |
+| API compatibility expectation    | None. Names, scope, props, behavior, CSS, and availability may change or disappear.                                                                                                                               |
+| Required test evidence           | None; exploratory spikes are not maturity evidence.                                                                                                                                                               |
+| Required accessibility evidence  | Initial accessibility risks and likely semantic pattern should be identified when interaction is proposed.                                                                                                        |
+| Required documentation           | Roadmap or planning description that says it is planned and not available; public docs must not imply an import exists.                                                                                           |
+| Consumer validation requirements | None. Consumer requests may inform the design but do not validate an unavailable API.                                                                                                                             |
+| Promotion criteria               | A named owner accepts scope; a public API and accessibility approach are reviewed enough to begin an experimental implementation; the component is correctly exported and documented as Experimental when public. |
+| Demotion criteria                | Reprioritization, supersession, or removal from the roadmap. Record the decision rather than leaving a misleading planned entry.                                                                                  |
+| Release expectations             | Not listed as a usable release feature and never used to claim package coverage.                                                                                                                                  |
 
 ### 2. Experimental
 
-| Requirement | Expectation |
-| --- | --- |
-| Meaning | A public, testable capability still being shaped through implementation and early feedback. |
-| Appropriate production usage | Avoid for production-critical or hard-to-migrate workflows. Controlled evaluation, prototypes, and opt-in early-adopter use may be appropriate when the risk is understood. |
-| API compatibility expectation | Change is allowed, including breaking change, with clear release notes when public behavior, imports, types, CSS, or accessibility contracts change. No long-term compatibility guarantee. |
-| Required test evidence | Focused rendering, logic, or unit tests where applicable, plus DOM interaction tests for interactive behavior that exists. Regressions found during evaluation must gain targeted coverage when practical. |
-| Required accessibility evidence | Automated scan for the rendered public path and documented known limitations. Interactive controls need an initial keyboard and semantic assessment. |
-| Required documentation | Public API reference, status statement, a minimal example, known limitations, and usage boundaries. |
-| Consumer validation requirements | Maintainer or playground validation of the documented path; external use is encouraged but not a promotion requirement. |
-| Promotion criteria | The complete Alpha Stable evidence is accepted, including a reviewed public API, named owner, interaction coverage, accessibility scan, theme and density validation, and documentation. |
-| Demotion criteria | The capability is withdrawn, its public path becomes unsuitable for evaluation, or defects/risks make the Experimental label materially misleading. Move it to Planned or Deprecated as appropriate and document the reason. |
-| Release expectations | May ship only with an explicit Experimental statement. Churn and breaking changes must follow the alpha release and migration guidance. |
+| Requirement                      | Expectation                                                                                                                                                                                                                  |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meaning                          | A public, testable capability still being shaped through implementation and early feedback.                                                                                                                                  |
+| Appropriate production usage     | Avoid for production-critical or hard-to-migrate workflows. Controlled evaluation, prototypes, and opt-in early-adopter use may be appropriate when the risk is understood.                                                  |
+| API compatibility expectation    | Change is allowed, including breaking change, with clear release notes when public behavior, imports, types, CSS, or accessibility contracts change. No long-term compatibility guarantee.                                   |
+| Required test evidence           | Focused rendering, logic, or unit tests where applicable, plus DOM interaction tests for interactive behavior that exists. Regressions found during evaluation must gain targeted coverage when practical.                   |
+| Required accessibility evidence  | Automated scan for the rendered public path and documented known limitations. Interactive controls need an initial keyboard and semantic assessment.                                                                         |
+| Required documentation           | Public API reference, status statement, a minimal example, known limitations, and usage boundaries.                                                                                                                          |
+| Consumer validation requirements | Maintainer or playground validation of the documented path; external use is encouraged but not a promotion requirement.                                                                                                      |
+| Promotion criteria               | The complete Alpha Stable evidence is accepted, including a reviewed public API, named owner, interaction coverage, accessibility scan, theme and density validation, and documentation.                                     |
+| Demotion criteria                | The capability is withdrawn, its public path becomes unsuitable for evaluation, or defects/risks make the Experimental label materially misleading. Move it to Planned or Deprecated as appropriate and document the reason. |
+| Release expectations             | May ship only with an explicit Experimental statement. Churn and breaking changes must follow the alpha release and migration guidance.                                                                                      |
 
 ### 3. Alpha Stable
 
-| Requirement | Expectation |
-| --- | --- |
-| Meaning | A complete, coherent public capability whose baseline behavior has been hardened for alpha adopters, while its API and real-world fit are still being proven. |
-| Appropriate production usage | Not recommended for production-critical use. It may support deliberate, monitored alpha pilots where consumers can absorb change. |
-| API compatibility expectation | Public API is reviewed and intentional, but changes remain possible in alpha. Public breaking changes require Architecture approval and migration guidance. |
-| Required test evidence | Reviewed public API and correct package-root public exports; unit or logic tests where applicable; DOM interaction tests; browser tests for complex components; regression coverage for material defects. |
-| Required accessibility evidence | Automated accessibility scan; documented keyboard contract; verified visible focus and relevant semantics; light and dark theme validation; density validation. Manual review is required when the Accessibility owner determines automation is insufficient. |
-| Required documentation | Accurate API documentation, examples, limitations, accessibility/keyboard guidance, and maturity statement. The accountable package documentation and public export guidance must agree. |
-| Consumer validation requirements | Maintainer validation of documented use and packaging/import paths. Consumer feedback is collected, but a real consuming application is not yet required. |
-| Promotion criteria | All Alpha Stable evidence is reviewed and accepted; no unresolved P0/P1 defect; Beta Stable additions are complete: real consuming-application use, compatibility validation, and migration notes for changed Experimental APIs. |
-| Demotion criteria | A P0/P1 defect, material accessibility failure, incorrect export/public-doc contract, or incompatible change without the required guidance that invalidates the alpha-hardening claim. Demote to Experimental until corrected. |
-| Release expectations | Released as an alpha capability with explicit maturity, known limitations, and public-change notes. It must not be represented as beta or stable. |
+| Requirement                      | Expectation                                                                                                                                                                                                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meaning                          | A complete, coherent public capability whose baseline behavior has been hardened for alpha adopters, while its API and real-world fit are still being proven.                                                                                                 |
+| Appropriate production usage     | Not recommended for production-critical use. It may support deliberate, monitored alpha pilots where consumers can absorb change.                                                                                                                             |
+| API compatibility expectation    | Public API is reviewed and intentional, but changes remain possible in alpha. Public breaking changes require Architecture approval and migration guidance.                                                                                                   |
+| Required test evidence           | Reviewed public API and correct package-root public exports; unit or logic tests where applicable; DOM interaction tests; browser tests for complex components; regression coverage for material defects.                                                     |
+| Required accessibility evidence  | Automated accessibility scan; documented keyboard contract; verified visible focus and relevant semantics; light and dark theme validation; density validation. Manual review is required when the Accessibility owner determines automation is insufficient. |
+| Required documentation           | Accurate API documentation, examples, limitations, accessibility/keyboard guidance, and maturity statement. The accountable package documentation and public export guidance must agree.                                                                      |
+| Consumer validation requirements | Maintainer validation of documented use and packaging/import paths. Consumer feedback is collected, but a real consuming application is not yet required.                                                                                                     |
+| Promotion criteria               | All Alpha Stable evidence is reviewed and accepted; no unresolved P0/P1 defect; Beta Stable additions are complete: real consuming-application use, compatibility validation, and migration notes for changed Experimental APIs.                              |
+| Demotion criteria                | A P0/P1 defect, material accessibility failure, incorrect export/public-doc contract, or incompatible change without the required guidance that invalidates the alpha-hardening claim. Demote to Experimental until corrected.                                |
+| Release expectations             | Released as an alpha capability with explicit maturity, known limitations, and public-change notes. It must not be represented as beta or stable.                                                                                                             |
 
 ### 4. Beta Stable
 
-| Requirement | Expectation |
-| --- | --- |
-| Meaning | A near-final public capability validated in real integration conditions and suitable for broad pre-production validation. |
-| Appropriate production usage | Limited, deliberate production validation may be considered only under the current release and licensing policy; do not treat beta as a blanket production commitment. |
-| API compatibility expectation | API is mostly stable. Avoid breaking changes; make them only for correctness, accessibility, security, or compelling compatibility reasons, with migration notes. |
-| Required test evidence | Retain Alpha Stable evidence and browser coverage for complex paths. Add regression evidence for integration defects and compatibility-sensitive behavior. |
-| Required accessibility evidence | Retain Alpha Stable evidence; resolve or formally disposition material accessibility findings and perform manual browser or assistive-technology review where the Accessibility owner requires it. |
-| Required documentation | Complete public API and examples, current limitations, release notes, and migration notes for changed Experimental APIs. |
-| Consumer validation requirements | Real consuming-application usage and compatibility validation are required. Validation must cover supported package imports and the consumer integration path that exercises the component or feature. |
-| Promotion criteria | Stable additions are accepted: API stability is demonstrated across release cycles, supported-browser evidence exists, Accessibility accepts the review, the deprecation policy is applied, and a maintainer commits to ongoing support. |
-| Demotion criteria | An unresolved critical defect, failed consumer compatibility, material accessibility regression, or significant API redesign. Demote to Alpha Stable or Experimental according to the remaining evidence. |
-| Release expectations | Released with beta maturity, migration guidance for every breaking change, and no unresolved critical defects. |
+| Requirement                      | Expectation                                                                                                                                                                                                                              |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meaning                          | A near-final public capability validated in real integration conditions and suitable for broad pre-production validation.                                                                                                                |
+| Appropriate production usage     | Limited, deliberate production validation may be considered only under the current release and licensing policy; do not treat beta as a blanket production commitment.                                                                   |
+| API compatibility expectation    | API is mostly stable. Avoid breaking changes; make them only for correctness, accessibility, security, or compelling compatibility reasons, with migration notes.                                                                        |
+| Required test evidence           | Retain Alpha Stable evidence and browser coverage for complex paths. Add regression evidence for integration defects and compatibility-sensitive behavior.                                                                               |
+| Required accessibility evidence  | Retain Alpha Stable evidence; resolve or formally disposition material accessibility findings and perform manual browser or assistive-technology review where the Accessibility owner requires it.                                       |
+| Required documentation           | Complete public API and examples, current limitations, release notes, and migration notes for changed Experimental APIs.                                                                                                                 |
+| Consumer validation requirements | Real consuming-application usage and compatibility validation are required. Validation must cover supported package imports and the consumer integration path that exercises the component or feature.                                   |
+| Promotion criteria               | Stable additions are accepted: API stability is demonstrated across release cycles, supported-browser evidence exists, Accessibility accepts the review, the deprecation policy is applied, and a maintainer commits to ongoing support. |
+| Demotion criteria                | An unresolved critical defect, failed consumer compatibility, material accessibility regression, or significant API redesign. Demote to Alpha Stable or Experimental according to the remaining evidence.                                |
+| Release expectations             | Released with beta maturity, migration guidance for every breaking change, and no unresolved critical defects.                                                                                                                           |
 
 ### 5. Stable
 
-| Requirement | Expectation |
-| --- | --- |
-| Meaning | A maintained public contract with demonstrated API durability, accepted quality evidence, and a commitment to compatibility and lifecycle management. |
-| Appropriate production usage | Appropriate for supported consumer use, subject to the VyrnForge Source License and any release-specific readiness or support statement. |
-| API compatibility expectation | Follow the applicable versioning and deprecation policies. Do not introduce unannounced incompatible API, CSS, behavior, or accessibility changes. |
-| Required test evidence | Retain relevant Alpha and Beta evidence, demonstrate API stability across release cycles, and maintain regression coverage for supported behavior, compatibility, and high-risk defects. |
-| Required accessibility evidence | Supported-browser evidence, accepted Accessibility review, and maintained keyboard, semantic, focus, contrast, reduced-motion, theme, and density evidence as applicable. |
-| Required documentation | Complete API reference, examples, keyboard/accessibility contract, compatibility and migration guidance, known limitations, and accurate stable maturity statement. |
-| Consumer validation requirements | Repeatable package/consumer validation plus evidence from real consuming application use. Revalidate when the public contract, supported browsers, themes, density, or integration assumptions change. |
-| Promotion criteria | Architecture confirms all Stable evidence, the accountable package owner accepts ongoing maintenance, and release approval is recorded under the release policy. |
-| Demotion criteria | A material unresolved P0/P1 defect, broken compatibility promise, unsupported browser claim, unacceptable accessibility finding, abandoned maintainer commitment, or major redesign. Demotion requires consumer communication, remediation/migration guidance, and release notes. |
-| Release expectations | Release notes and changelog accurately describe behavior, fixes, deprecations, and migrations. Apply the deprecation policy before removal or incompatible replacement. |
+| Requirement                      | Expectation                                                                                                                                                                                                                                                                       |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meaning                          | A maintained public contract with demonstrated API durability, accepted quality evidence, and a commitment to compatibility and lifecycle management.                                                                                                                             |
+| Appropriate production usage     | Appropriate for supported consumer use, subject to the VyrnForge Source License and any release-specific readiness or support statement.                                                                                                                                          |
+| API compatibility expectation    | Follow the applicable versioning and deprecation policies. Do not introduce unannounced incompatible API, CSS, behavior, or accessibility changes.                                                                                                                                |
+| Required test evidence           | Retain relevant Alpha and Beta evidence, demonstrate API stability across release cycles, and maintain regression coverage for supported behavior, compatibility, and high-risk defects.                                                                                          |
+| Required accessibility evidence  | Supported-browser evidence, accepted Accessibility review, and maintained keyboard, semantic, focus, contrast, reduced-motion, theme, and density evidence as applicable.                                                                                                         |
+| Required documentation           | Complete API reference, examples, keyboard/accessibility contract, compatibility and migration guidance, known limitations, and accurate stable maturity statement.                                                                                                               |
+| Consumer validation requirements | Repeatable package/consumer validation plus evidence from real consuming application use. Revalidate when the public contract, supported browsers, themes, density, or integration assumptions change.                                                                            |
+| Promotion criteria               | Architecture confirms all Stable evidence, the accountable package owner accepts ongoing maintenance, and release approval is recorded under the release policy.                                                                                                                  |
+| Demotion criteria                | A material unresolved P0/P1 defect, broken compatibility promise, unsupported browser claim, unacceptable accessibility finding, abandoned maintainer commitment, or major redesign. Demotion requires consumer communication, remediation/migration guidance, and release notes. |
+| Release expectations             | Release notes and changelog accurately describe behavior, fixes, deprecations, and migrations. Apply the deprecation policy before removal or incompatible replacement.                                                                                                           |
 
 ### 6. Deprecated
 
-| Requirement | Expectation |
-| --- | --- |
-| Meaning | A public capability or alias retained temporarily so consumers can move to a documented replacement, or marked as no longer recommended while removal is planned. |
-| Appropriate production usage | Do not start new usage. Existing consumers should migrate on the documented timeline; emergency exceptions follow the deprecation policy. |
-| API compatibility expectation | The deprecated surface remains available only for its stated notice period and removal condition. The replacement is the supported forward path. |
-| Required test evidence | Preserve regression tests needed to keep the deprecated path safe during its notice period, especially aliases and behavior-affecting shims. |
-| Required accessibility evidence | The deprecated path must not introduce known harmful accessibility regressions. The replacement’s accessible path and migration impact must be documented. |
-| Required documentation | Deprecation notice, replacement, rationale, removal target or condition, migration notes, affected imports/CSS/behavior, and changelog entry. |
-| Consumer validation requirements | Validate the replacement in at least one consuming path when practical; verify that documented migration steps and aliases work for affected consumers. |
-| Promotion criteria | Not applicable. A deprecated item is replaced, not promoted; a substantially redesigned successor enters the normal lifecycle. |
-| Demotion criteria | Removal once the notice period and removal criteria in `docs/release/deprecation-and-migration-policy.md` are met. Reinstatement requires Architecture approval and evidence appropriate to its new state. |
-| Release expectations | Every deprecation and removal is called out in release notes. Respect the maturity-specific notice periods and emergency exception rules. |
+| Requirement                      | Expectation                                                                                                                                                                                                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meaning                          | A public capability or alias retained temporarily so consumers can move to a documented replacement, or marked as no longer recommended while removal is planned.                                          |
+| Appropriate production usage     | Do not start new usage. Existing consumers should migrate on the documented timeline; emergency exceptions follow the deprecation policy.                                                                  |
+| API compatibility expectation    | The deprecated surface remains available only for its stated notice period and removal condition. The replacement is the supported forward path.                                                           |
+| Required test evidence           | Preserve regression tests needed to keep the deprecated path safe during its notice period, especially aliases and behavior-affecting shims.                                                               |
+| Required accessibility evidence  | The deprecated path must not introduce known harmful accessibility regressions. The replacement’s accessible path and migration impact must be documented.                                                 |
+| Required documentation           | Deprecation notice, replacement, rationale, removal target or condition, migration notes, affected imports/CSS/behavior, and changelog entry.                                                              |
+| Consumer validation requirements | Validate the replacement in at least one consuming path when practical; verify that documented migration steps and aliases work for affected consumers.                                                    |
+| Promotion criteria               | Not applicable. A deprecated item is replaced, not promoted; a substantially redesigned successor enters the normal lifecycle.                                                                             |
+| Demotion criteria                | Removal once the notice period and removal criteria in `docs/release/deprecation-and-migration-policy.md` are met. Reinstatement requires Architecture approval and evidence appropriate to its new state. |
+| Release expectations             | Every deprecation and removal is called out in release notes. Respect the maturity-specific notice periods and emergency exception rules.                                                                  |
 
 ## Special rules
 
@@ -220,18 +220,18 @@ It is a structured index of the evidence required by this model; Markdown,
 review records, and release records remain the human sources of truth. Each
 record uses repository-visible references and the following field families:
 
-| Field | Purpose |
-| --- | --- |
-| `maturityState`, `category`, `owner` | Lifecycle state, conditional category, and accountable owner. |
-| `publicApiReview`, `publicExportVerification` | Public API and package-export evidence. |
-| `logicUnitTests`, `domInteractionTests`, `browserTests` | Logic, DOM interaction, and browser evidence. |
-| `automatedAccessibility`, `keyboardContract`, `acceptedAccessibilityReview` | Automated scan, documented keyboard behavior, and accepted review. |
-| `lightThemeValidation`, `darkThemeValidation`, `densityValidation` | Light, dark, and density validation references. |
-| `documentation`, `playgroundExample`, `knownLimitations` | Public documentation, example, and limitations record. |
-| `supportedBrowserEvidence` | Browser/version matrix and validation date. |
-| `consumingApplication`, `compatibilityEvidence`, `criticalDefects` | Consumer, compatibility, and unresolved-critical-defect evidence. |
-| `migrationInformation`, `deprecationPolicyCompliance` | Migration and deprecation-policy evidence. |
-| `releaseApiStability`, `maintainerCommitment` | Release-cycle API stability and ongoing ownership. |
+| Field                                                                                     | Purpose                                                              |
+| ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `maturityState`, `category`, `owner`                                                      | Lifecycle state, conditional category, and accountable owner.        |
+| `publicApiReview`, `publicExportVerification`                                             | Public API and package-export evidence.                              |
+| `logicUnitTests`, `domInteractionTests`, `browserTests`                                   | Logic, DOM interaction, and browser evidence.                        |
+| `automatedAccessibility`, `keyboardContract`, `acceptedAccessibilityReview`               | Automated scan, documented keyboard behavior, and accepted review.   |
+| `lightThemeValidation`, `darkThemeValidation`, `densityValidation`                        | Light, dark, and density validation references.                      |
+| `documentation`, `playgroundExample`, `knownLimitations`                                  | Public documentation, example, and limitations record.               |
+| `supportedBrowserEvidence`                                                                | Browser/version matrix and validation date.                          |
+| `consumingApplication`, `compatibilityEvidence`, `criticalDefects`                        | Consumer, compatibility, and unresolved-critical-defect evidence.    |
+| `migrationInformation`, `deprecationPolicyCompliance`                                     | Migration and deprecation-policy evidence.                           |
+| `releaseApiStability`, `maintainerCommitment`                                             | Release-cycle API stability and ongoing ownership.                   |
 | `replacementOrReason`, `deprecationVersion`, `migrationGuidance`, `intendedRemovalWindow` | Deprecation replacement/reason, version, guidance, and removal plan. |
 
 The deterministic `npm run verify:component-maturity` command enforces the

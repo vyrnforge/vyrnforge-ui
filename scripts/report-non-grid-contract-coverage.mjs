@@ -8,7 +8,9 @@ const repositoryRoot = path.resolve(
 );
 
 function readJson(relativePath) {
-  return JSON.parse(readFileSync(path.join(repositoryRoot, relativePath), "utf8"));
+  return JSON.parse(
+    readFileSync(path.join(repositoryRoot, relativePath), "utf8"),
+  );
 }
 
 function scopedComponentIds(catalog) {
@@ -35,7 +37,8 @@ function isCompleteContract(contract) {
     "methods",
     "accessibility",
   ];
-  if (requiredArrays.some((field) => !Array.isArray(contract[field]))) return false;
+  if (requiredArrays.some((field) => !Array.isArray(contract[field])))
+    return false;
   if (!contract.form || !contract.model || !contract.ref) return false;
   const mappings = contract.frameworkMappings;
   return Boolean(
@@ -63,7 +66,8 @@ export function createCoverageReport() {
   const duplicateContractIds = [];
 
   for (const contract of contracts.componentContracts ?? []) {
-    if (contractRecords.has(contract.id)) duplicateContractIds.push(contract.id);
+    if (contractRecords.has(contract.id))
+      duplicateContractIds.push(contract.id);
     contractRecords.set(contract.id, contract);
   }
 

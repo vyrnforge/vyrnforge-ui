@@ -23,7 +23,7 @@ export function Page({
         "vf-page",
         `vf-page--max-${maxWidth}`,
         `vf-page--${density}`,
-        className
+        className,
       )}
       {...props}
     >

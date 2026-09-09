@@ -1,4 +1,9 @@
-import { forwardRef, type ChangeEvent, type FocusEvent, type KeyboardEvent } from "react";
+import {
+  forwardRef,
+  type ChangeEvent,
+  type FocusEvent,
+  type KeyboardEvent,
+} from "react";
 
 type AutocompleteInputProps = {
   id: string;
@@ -18,8 +23,11 @@ type AutocompleteInputProps = {
   onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
-export const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputProps>(
-  function AutocompleteInput({
+export const AutocompleteInput = forwardRef<
+  HTMLInputElement,
+  AutocompleteInputProps
+>(function AutocompleteInput(
+  {
     activeDescendantId,
     ariaDescribedBy,
     ariaLabel,
@@ -34,32 +42,33 @@ export const AutocompleteInput = forwardRef<HTMLInputElement, AutocompleteInputP
     placeholder,
     readOnly,
     required,
-    value
-  }, ref) {
-    return (
-      <input
-        aria-activedescendant={activeDescendantId}
-        aria-autocomplete="list"
-        aria-controls={expanded ? listboxId : undefined}
-        aria-describedby={ariaDescribedBy}
-        aria-expanded={expanded}
-        aria-invalid={invalid || undefined}
-        aria-label={ariaLabel}
-        aria-required={required || undefined}
-        className="vf-input vf-autocomplete__input"
-        disabled={disabled}
-        id={id}
-        onChange={onChange}
-        onFocus={onFocus}
-        onKeyDown={onKeyDown}
-        placeholder={placeholder}
-        readOnly={readOnly}
-        ref={ref}
-        required={required}
-        role="combobox"
-        type="text"
-        value={value}
-      />
-    );
-  }
-);
+    value,
+  },
+  ref,
+) {
+  return (
+    <input
+      aria-activedescendant={activeDescendantId}
+      aria-autocomplete="list"
+      aria-controls={expanded ? listboxId : undefined}
+      aria-describedby={ariaDescribedBy}
+      aria-expanded={expanded}
+      aria-invalid={invalid || undefined}
+      aria-label={ariaLabel}
+      aria-required={required || undefined}
+      className="vf-input vf-autocomplete__input"
+      disabled={disabled}
+      id={id}
+      onChange={onChange}
+      onFocus={onFocus}
+      onKeyDown={onKeyDown}
+      placeholder={placeholder}
+      readOnly={readOnly}
+      ref={ref}
+      required={required}
+      role="combobox"
+      type="text"
+      value={value}
+    />
+  );
+});
