@@ -30,13 +30,13 @@ jobs:
         run: |
           node .tmp/bc1607-finalize.mjs
           npx prettier --write package.json scripts/verify-framework-exceptions.mjs scripts/verify-workflows.mjs
+          rm .github/workflows/tmp-bc1607-finalize.yml
           npm run inventory:repository
           npx prettier --write docs/governance/repository-inventory.md
           npm run test:framework-exceptions
           npm run verify:framework-exceptions
           npm run test:react-behavior-adoption
           npm run verify:react-behavior-adoption
-          rm .github/workflows/tmp-bc1607-finalize.yml
           npm run verify:workflows
           npm run verify:repository-inventory
           ! grep -R --line-number --fixed-strings 'react-migration-matrix.json' docs scripts packages/ui-components/src || false
