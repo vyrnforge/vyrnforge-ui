@@ -226,6 +226,7 @@ export function TransferList({
           <input
             key={targetValue}
             name={name}
+            readOnly
             type="hidden"
             value={targetValue}
           />
