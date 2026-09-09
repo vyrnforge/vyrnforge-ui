@@ -21,9 +21,9 @@ function SelectionPageContent() {
       onClick: ({ selectedRows }: { selectedRows: typeof users }) => {
         toast.success({
           title: "Users enabled",
-          description: `${selectedRows.length} selected users were enabled.`
+          description: `${selectedRows.length} selected users were enabled.`,
         });
-      }
+      },
     },
     {
       id: "archive",
@@ -40,10 +40,10 @@ function SelectionPageContent() {
             >
               Undo
             </ToastAction>
-          )
+          ),
         });
-      }
-    }
+      },
+    },
   ];
 
   return (
@@ -51,7 +51,9 @@ function SelectionPageContent() {
       <div className="vf-playground-section-heading">
         <div>
           <h2>Selection and bulk actions</h2>
-          <GridNote>Suspended rows are visible but not selectable in this example.</GridNote>
+          <GridNote>
+            Suspended rows are visible but not selectable in this example.
+          </GridNote>
         </div>
       </div>
       <UniversalDataGrid

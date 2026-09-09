@@ -1,11 +1,17 @@
-import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import { Badge } from "../Badge";
 import { SearchInput } from "../SearchInput";
 import { TransferListOption } from "./TransferListOption";
 import type {
   TransferListOptionData,
   TransferListPanel as TransferListPanelSide,
-  TransferListProps
+  TransferListProps,
 } from "./TransferList.types";
 
 type TransferListPanelProps = {
@@ -51,7 +57,7 @@ export function TransferListPanel({
   searchPlaceholder,
   selectedValues,
   title,
-  visibleOptions
+  visibleOptions,
 }: TransferListPanelProps) {
   const generatedId = useId().replace(/:/g, "");
   const titleId = `vf-transfer-list-${generatedId}-title`;
@@ -60,16 +66,25 @@ export function TransferListPanel({
     ? `vf-transfer-list-${generatedId}-description`
     : undefined;
   const selectAllRef = useRef<HTMLInputElement>(null);
-  const enabledVisibleOptions = visibleOptions.filter((option) => !option.disabled);
-  const visibleValues = new Set(enabledVisibleOptions.map((option) => option.value));
+  const enabledVisibleOptions = visibleOptions.filter(
+    (option) => !option.disabled,
+  );
+  const visibleValues = new Set(
+    enabledVisibleOptions.map((option) => option.value),
+  );
   const visibleSelectedCount = selectedValues.filter((value) =>
-    visibleValues.has(value)
+    visibleValues.has(value),
   ).length;
-  const allVisibleSelected = enabledVisibleOptions.length > 0 &&
+  const allVisibleSelected =
+    enabledVisibleOptions.length > 0 &&
     visibleSelectedCount === enabledVisibleOptions.length;
-  const partiallyVisibleSelected = visibleSelectedCount > 0 && !allVisibleSelected;
+  const partiallyVisibleSelected =
+    visibleSelectedCount > 0 && !allVisibleSelected;
   const totalSelectedCount = selectedValues.length;
-  const panelLabel = textFromTitle(title, panel === "source" ? "available items" : "assigned items");
+  const panelLabel = textFromTitle(
+    title,
+    panel === "source" ? "available items" : "assigned items",
+  );
 
   useEffect(() => {
     if (selectAllRef.current) {
@@ -95,7 +110,9 @@ export function TransferListPanel({
 
   return (
     <section
-      aria-describedby={[descriptionId, countId].filter(Boolean).join(" ") || undefined}
+      aria-describedby={
+        [descriptionId, countId].filter(Boolean).join(" ") || undefined
+      }
       aria-labelledby={titleId}
       className="vf-transfer-list__panel"
       onKeyDown={handleKeyDown}
@@ -103,16 +120,27 @@ export function TransferListPanel({
     >
       <div className="vf-transfer-list__panel-header">
         <div className="vf-transfer-list__panel-heading">
-          <h3 className="vf-transfer-list__panel-title" id={titleId}>{title}</h3>
+          <h3 className="vf-transfer-list__panel-title" id={titleId}>
+            {title}
+          </h3>
           {description && (
-            <p className="vf-transfer-list__panel-description" id={descriptionId}>
+            <p
+              className="vf-transfer-list__panel-description"
+              id={descriptionId}
+            >
               {description}
             </p>
           )}
         </div>
         <div className="vf-transfer-list__panel-count" id={countId}>
-          <Badge size="sm" tone="subtle">{options.length} items</Badge>
-          <Badge size="sm" tone={totalSelectedCount > 0 ? "solid" : "subtle"} variant={totalSelectedCount > 0 ? "info" : "neutral"}>
+          <Badge size="sm" tone="subtle">
+            {options.length} items
+          </Badge>
+          <Badge
+            size="sm"
+            tone={totalSelectedCount > 0 ? "solid" : "subtle"}
+            variant={totalSelectedCount > 0 ? "info" : "neutral"}
+          >
             {totalSelectedCount} selected
           </Badge>
         </div>
@@ -146,7 +174,8 @@ export function TransferListPanel({
             const descriptionIdForOption = option.description
               ? `${checkboxId}-description`
               : undefined;
-            const optionDisabled = disabled || readOnly || Boolean(option.disabled);
+            const optionDisabled =
+              disabled || readOnly || Boolean(option.disabled);
 
             return (
               <TransferListOption

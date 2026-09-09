@@ -1,4 +1,4 @@
 export {
   defaultPersistKeys,
-  pickPersistableGridState
+  pickPersistableGridState,
 } from "../../state/gridState.selectors";

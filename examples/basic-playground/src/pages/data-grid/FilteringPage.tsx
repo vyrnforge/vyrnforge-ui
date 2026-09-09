@@ -8,7 +8,10 @@ export function FilteringPage() {
       <div className="vf-playground-section-heading">
         <div>
           <h2>Search and filters</h2>
-          <GridNote>This view starts with APAC active users and leaves the toolbar editable.</GridNote>
+          <GridNote>
+            This view starts with APAC active users and leaves the toolbar
+            editable.
+          </GridNote>
         </div>
       </div>
       <UniversalDataGrid
@@ -19,9 +22,14 @@ export function FilteringPage() {
         defaultState={{
           search: "APAC",
           filters: [
-            { id: "status-active", columnId: "status", operator: "equals", value: "Active" }
+            {
+              id: "status-active",
+              columnId: "status",
+              operator: "equals",
+              value: "Active",
+            },
           ],
-          pagination: { pageIndex: 0, pageSize: 10 }
+          pagination: { pageIndex: 0, pageSize: 10 },
         }}
         variant="card"
       />

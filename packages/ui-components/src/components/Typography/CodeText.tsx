@@ -15,7 +15,7 @@ export function CodeText({
       className={joinClassNames(
         "vf-code-text",
         tone !== "default" && `vf-text--${tone}`,
-        className
+        className,
       )}
       {...props}
     />

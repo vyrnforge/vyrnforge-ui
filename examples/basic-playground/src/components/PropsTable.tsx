@@ -31,9 +31,25 @@ export function PropsTable({ rows }: PropsTableProps) {
               <th scope="row">
                 <CodeText>{row.name}</CodeText>
               </th>
-              <td><CodeText>{row.type}</CodeText></td>
-              <td>{row.defaultValue ? <CodeText>{row.defaultValue}</CodeText> : "-"}</td>
-              <td>{row.required ? <Badge size="sm" variant="danger">Yes</Badge> : "No"}</td>
+              <td>
+                <CodeText>{row.type}</CodeText>
+              </td>
+              <td>
+                {row.defaultValue ? (
+                  <CodeText>{row.defaultValue}</CodeText>
+                ) : (
+                  "-"
+                )}
+              </td>
+              <td>
+                {row.required ? (
+                  <Badge size="sm" variant="danger">
+                    Yes
+                  </Badge>
+                ) : (
+                  "No"
+                )}
+              </td>
               <td>{row.description}</td>
             </tr>
           ))}

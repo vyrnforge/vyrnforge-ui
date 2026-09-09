@@ -5,21 +5,28 @@ import {
   useState,
   type ChangeEvent,
   type CSSProperties,
-  type KeyboardEvent
+  type KeyboardEvent,
 } from "react";
-import { DismissableLayer, Portal, useAnchoredPosition } from "../../internal/overlay";
+import {
+  DismissableLayer,
+  Portal,
+  useAnchoredPosition,
+} from "../../internal/overlay";
 import { joinClassNames } from "../../utils/classNames";
 import { Icon } from "../Icon";
 import { IconButton } from "../IconButton";
 import { AutocompleteInput } from "./AutocompleteInput";
 import { AutocompleteListbox } from "./AutocompleteListbox";
 import { AutocompleteOption } from "./AutocompleteOption";
-import type { AutocompleteOptionData, AutocompleteProps } from "./Autocomplete.types";
+import type {
+  AutocompleteOptionData,
+  AutocompleteProps,
+} from "./Autocomplete.types";
 import {
   getFirstEnabledIndex,
   getLastEnabledIndex,
   getNextEnabledIndex,
-  useAutocomplete
+  useAutocomplete,
 } from "./useAutocomplete";
 
 function optionId(listboxId: string, option: AutocompleteOptionData) {
@@ -61,7 +68,7 @@ export function Autocomplete({
   renderOption,
   required = false,
   style,
-  value
+  value,
 }: AutocompleteProps) {
   const generatedId = useId().replace(/:/g, "");
   const inputId = id ?? `vf-autocomplete-${generatedId}`;
@@ -69,8 +76,12 @@ export function Autocomplete({
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const activeOptionRef = useRef<HTMLDivElement>(null);
-  const [controlElement, setControlElement] = useState<HTMLDivElement | null>(null);
-  const [floatingElement, setFloatingElement] = useState<HTMLDivElement | null>(null);
+  const [controlElement, setControlElement] = useState<HTMLDivElement | null>(
+    null,
+  );
+  const [floatingElement, setFloatingElement] = useState<HTMLDivElement | null>(
+    null,
+  );
   const {
     activeIndex,
     clearSelection,
@@ -83,7 +94,7 @@ export function Autocomplete({
     selectedValue,
     setActiveIndex,
     setCurrentInputValue,
-    setOpenWithHighlight
+    setOpenWithHighlight,
   } = useAutocomplete({
     autoHighlight,
     defaultInputValue,
@@ -96,19 +107,20 @@ export function Autocomplete({
     onValueChange,
     open,
     options,
-    value
+    value,
   });
   const position = useAnchoredPosition({
     anchor: controlElement,
     floating: floatingElement,
     matchAnchorWidth: matchTriggerWidth,
-    placement
+    placement,
   });
   const resolvedInvalid = invalid || ariaInvalid || false;
   const resolvedRequired = required || ariaRequired || false;
   const resolvedAriaDescribedBy = ariaDescribedBy ?? ariaDescribedByAttribute;
   const interactive = !disabled && !readOnly;
-  const activeOption = activeIndex >= 0 ? filteredOptions[activeIndex] : undefined;
+  const activeOption =
+    activeIndex >= 0 ? filteredOptions[activeIndex] : undefined;
 
   useEffect(() => {
     if (disabled || readOnly) {
@@ -154,7 +166,13 @@ export function Autocomplete({
         setOpenWithHighlight(true, direction);
       } else {
         const fallback = direction === 1 ? -1 : 0;
-        setActiveIndex(getNextEnabledIndex(filteredOptions, activeIndex >= 0 ? activeIndex : fallback, direction));
+        setActiveIndex(
+          getNextEnabledIndex(
+            filteredOptions,
+            activeIndex >= 0 ? activeIndex : fallback,
+            direction,
+          ),
+        );
       }
       return;
     }
@@ -171,13 +189,22 @@ export function Autocomplete({
       return;
     }
 
-    if (event.key === "Enter" && isOpen && activeOption && !activeOption.disabled) {
+    if (
+      event.key === "Enter" &&
+      isOpen &&
+      activeOption &&
+      !activeOption.disabled
+    ) {
       event.preventDefault();
       selectOption(activeOption);
       return;
     }
 
-    if ((event.key === "Backspace" || event.key === "Delete") && currentInputValue === "" && clearable) {
+    if (
+      (event.key === "Backspace" || event.key === "Delete") &&
+      currentInputValue === "" &&
+      clearable
+    ) {
       clearSelection();
     }
   };
@@ -190,14 +217,18 @@ export function Autocomplete({
         disabled && "vf-autocomplete--disabled",
         readOnly && "vf-autocomplete--read-only",
         resolvedInvalid && "vf-autocomplete--invalid",
-        className
+        className,
       )}
       ref={rootRef}
       style={style}
     >
       <div className="vf-autocomplete__control" ref={setControlElement}>
         <AutocompleteInput
-          activeDescendantId={isOpen && activeOption ? optionId(listboxId, activeOption) : undefined}
+          activeDescendantId={
+            isOpen && activeOption
+              ? optionId(listboxId, activeOption)
+              : undefined
+          }
           ariaDescribedBy={resolvedAriaDescribedBy}
           ariaLabel={ariaLabel}
           disabled={disabled}
@@ -235,7 +266,11 @@ export function Autocomplete({
             </IconButton>
           )}
           {loading ? (
-            <span aria-label="Loading options" className="vf-autocomplete__loading" role="status" />
+            <span
+              aria-label="Loading options"
+              className="vf-autocomplete__loading"
+              role="status"
+            />
           ) : (
             <IconButton
               aria-label={isOpen ? "Close options" : "Open options"}
@@ -257,7 +292,14 @@ export function Autocomplete({
           )}
         </div>
       </div>
-      {name && <input disabled={disabled} name={name} type="hidden" value={selectedValue ?? ""} />}
+      {name && (
+        <input
+          disabled={disabled}
+          name={name}
+          type="hidden"
+          value={selectedValue ?? ""}
+        />
+      )}
       {isOpen && (
         <Portal container={portalContainer}>
           <DismissableLayer
@@ -270,11 +312,13 @@ export function Autocomplete({
               closeList(true);
             }}
             onLayerChange={setFloatingElement}
-            style={{
-              "--vf-overlay-x": `${position.x}px`,
-              "--vf-overlay-y": `${position.y}px`,
-              visibility: position.ready ? undefined : "hidden"
-            } as CSSProperties}
+            style={
+              {
+                "--vf-overlay-x": `${position.x}px`,
+                "--vf-overlay-y": `${position.y}px`,
+                visibility: position.ready ? undefined : "hidden",
+              } as CSSProperties
+            }
           >
             <AutocompleteListbox id={listboxId}>
               {filteredOptions.length > 0 ? (
@@ -297,20 +341,41 @@ export function Autocomplete({
                       option={option}
                       selected={selected}
                     >
-                      <div className="vf-autocomplete__option-main" ref={active ? activeOptionRef : undefined}>
-                        {renderOption ? renderOption(option, { active, selected, disabled: Boolean(option.disabled) }) : (
+                      <div
+                        className="vf-autocomplete__option-main"
+                        ref={active ? activeOptionRef : undefined}
+                      >
+                        {renderOption ? (
+                          renderOption(option, {
+                            active,
+                            selected,
+                            disabled: Boolean(option.disabled),
+                          })
+                        ) : (
                           <>
-                            <span className="vf-autocomplete__option-label">{option.label}</span>
-                            {option.description && <span className="vf-autocomplete__option-description">{option.description}</span>}
+                            <span className="vf-autocomplete__option-label">
+                              {option.label}
+                            </span>
+                            {option.description && (
+                              <span className="vf-autocomplete__option-description">
+                                {option.description}
+                              </span>
+                            )}
                           </>
                         )}
                       </div>
-                      {selected && <Icon aria-hidden="true" name="Check" size="sm" />}
+                      {selected && (
+                        <Icon aria-hidden="true" name="Check" size="sm" />
+                      )}
                     </AutocompleteOption>
                   );
                 })
               ) : (
-                <div aria-live="polite" className="vf-autocomplete__status" role="status">
+                <div
+                  aria-live="polite"
+                  className="vf-autocomplete__status"
+                  role="status"
+                >
                   {loading ? loadingText : noOptionsText}
                 </div>
               )}

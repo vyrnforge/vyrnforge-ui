@@ -7,7 +7,10 @@ export type SelectOption = {
   disabled?: boolean;
 };
 
-export type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & {
+export type SelectProps = Omit<
+  SelectHTMLAttributes<HTMLSelectElement>,
+  "size"
+> & {
   invalid?: boolean;
   options?: SelectOption[];
   size?: TextInputSize;

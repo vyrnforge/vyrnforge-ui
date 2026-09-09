@@ -8,7 +8,10 @@ export function ResizingPage() {
       <div className="vf-playground-section-heading">
         <div>
           <h2>Resizable columns</h2>
-          <GridNote>Columns define min widths and opt into the package’s resize handling.</GridNote>
+          <GridNote>
+            Columns define min widths and opt into the package’s resize
+            handling.
+          </GridNote>
         </div>
       </div>
       <UniversalDataGrid
@@ -17,7 +20,7 @@ export function ResizingPage() {
         columns={resizableUserColumns}
         getRowId={(row) => row.id}
         defaultState={{
-          columnSizing: { name: 260, role: 180, team: 180, status: 150 }
+          columnSizing: { name: 260, role: 180, team: 180, status: 150 },
         }}
         maxHeight={560}
         variant="bordered"

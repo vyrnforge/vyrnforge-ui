@@ -10,7 +10,7 @@ import {
   resolveOrderedColumns,
   resolveVisibleColumns,
   showAllColumns,
-  updateColumnVisibility
+  updateColumnVisibility,
 } from "./columnManagement";
 import type { DataGridColumnDef } from "../types/column.types";
 
@@ -25,21 +25,21 @@ const columns: DataGridColumnDef<Row>[] = [
   { id: "id", header: "ID", accessorKey: "id", hideable: false },
   { id: "name", header: "Name", accessorKey: "name" },
   { id: "status", header: "Status", accessorKey: "status", hidden: true },
-  { id: "score", header: "Score", accessorKey: "score" }
+  { id: "score", header: "Score", accessorKey: "score" },
 ];
 
 describe("columnManagement", () => {
   it("resolves visible columns and respects default hidden columns", () => {
-    expect(resolveVisibleColumns(columns, {}).map((column) => column.id)).toEqual([
-      "id",
-      "name",
-      "score"
-    ]);
+    expect(
+      resolveVisibleColumns(columns, {}).map((column) => column.id),
+    ).toEqual(["id", "name", "score"]);
   });
 
   it("allows default hidden columns to be shown through visibility state", () => {
     expect(
-      resolveVisibleColumns(columns, { status: true }).map((column) => column.id)
+      resolveVisibleColumns(columns, { status: true }).map(
+        (column) => column.id,
+      ),
     ).toContain("status");
   });
 
@@ -47,24 +47,21 @@ describe("columnManagement", () => {
     const nextVisibility = updateColumnVisibility(columns, {}, "id", false);
 
     expect(nextVisibility).toEqual({});
-    expect(resolveVisibleColumns(columns, { id: false }).map((column) => column.id)).toContain(
-      "id"
-    );
+    expect(
+      resolveVisibleColumns(columns, { id: false }).map((column) => column.id),
+    ).toContain("id");
   });
 
   it("filters column menu columns by header and id", () => {
-    expect(filterColumnMenuColumns(columns, "stat").map((column) => column.id)).toEqual([
-      "status"
-    ]);
-    expect(filterColumnMenuColumns(columns, "score").map((column) => column.id)).toEqual([
-      "score"
-    ]);
-    expect(filterColumnMenuColumns(columns, " ").map((column) => column.id)).toEqual([
-      "id",
-      "name",
-      "status",
-      "score"
-    ]);
+    expect(
+      filterColumnMenuColumns(columns, "stat").map((column) => column.id),
+    ).toEqual(["status"]);
+    expect(
+      filterColumnMenuColumns(columns, "score").map((column) => column.id),
+    ).toEqual(["score"]);
+    expect(
+      filterColumnMenuColumns(columns, " ").map((column) => column.id),
+    ).toEqual(["id", "name", "status", "score"]);
   });
 
   it("shows all columns without mutating existing visibility", () => {
@@ -72,7 +69,7 @@ describe("columnManagement", () => {
       id: true,
       name: true,
       status: true,
-      score: true
+      score: true,
     });
   });
 
@@ -81,47 +78,46 @@ describe("columnManagement", () => {
       id: true,
       name: false,
       status: false,
-      score: false
+      score: false,
     });
   });
 
   it("orders known columns and appends unknown/new columns safely", () => {
     expect(
       resolveOrderedColumns(columns, ["score", "missing", "name"]).map(
-        (column) => column.id
-      )
+        (column) => column.id,
+      ),
     ).toEqual(["score", "name", "id", "status"]);
   });
 
   it("moves columns up, down, first, and last without mutating input", () => {
     const originalOrder = ["id", "name", "status", "score"];
 
-    expect(moveColumnOrder(originalOrder, originalOrder, "status", "up")).toEqual([
+    expect(
+      moveColumnOrder(originalOrder, originalOrder, "status", "up"),
+    ).toEqual(["id", "status", "name", "score"]);
+    expect(
+      moveColumnOrder(originalOrder, originalOrder, "name", "down"),
+    ).toEqual(["id", "status", "name", "score"]);
+    expect(
+      moveColumnOrder(originalOrder, originalOrder, "score", "first")[0],
+    ).toBe("score");
+    const lastMove = moveColumnOrder(
+      originalOrder,
+      originalOrder,
       "id",
-      "status",
-      "name",
-      "score"
-    ]);
-    expect(moveColumnOrder(originalOrder, originalOrder, "name", "down")).toEqual([
-      "id",
-      "status",
-      "name",
-      "score"
-    ]);
-    expect(moveColumnOrder(originalOrder, originalOrder, "score", "first")[0]).toBe(
-      "score"
+      "last",
     );
-    const lastMove = moveColumnOrder(originalOrder, originalOrder, "id", "last");
     expect(lastMove[lastMove.length - 1]).toBe("id");
     expect(originalOrder).toEqual(["id", "name", "status", "score"]);
   });
 
   it("moves a dragged column before or after a visible target", () => {
     expect(
-      moveColumnBefore(["id", "name", "score"], [], "score", "name")
+      moveColumnBefore(["id", "name", "score"], [], "score", "name"),
     ).toEqual(["id", "score", "name"]);
     expect(
-      moveColumnBefore(["id", "name", "score"], [], "id", "score", "after")
+      moveColumnBefore(["id", "name", "score"], [], "id", "score", "after"),
     ).toEqual(["name", "score", "id"]);
   });
 
@@ -129,7 +125,7 @@ describe("columnManagement", () => {
     const originalOrder = ["id", "name", "score"];
 
     expect(
-      moveColumnBefore(originalOrder, originalOrder, "score", "status")
+      moveColumnBefore(originalOrder, originalOrder, "score", "status"),
     ).toEqual(originalOrder);
     expect(originalOrder).toEqual(["id", "name", "score"]);
   });
@@ -145,11 +141,11 @@ describe("columnManagement", () => {
       grouping: ["status"],
       expandedGroupIds: ["0:status:Active"],
       density: "comfortable",
-      selectedRowIds: [1]
+      selectedRowIds: [1],
     });
     const resetState = resetGridViewState(currentState, {
       pagination: { pageIndex: 0, pageSize: 25 },
-      density: "compact"
+      density: "compact",
     });
 
     expect(resetState.search).toBe("");
@@ -173,7 +169,7 @@ describe("columnManagement", () => {
       grouping: ["status"],
       expandedGroupIds: ["0:status:Active"],
       selectedRowIds: [1],
-      density: "compact"
+      density: "compact",
     });
 
     expect(pickPersistableGridState(state)).toEqual({
@@ -185,7 +181,7 @@ describe("columnManagement", () => {
       columnOrder: ["score"],
       columnSizing: { name: 220 },
       grouping: ["status"],
-      density: "compact"
+      density: "compact",
     });
   });
 });

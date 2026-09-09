@@ -13,7 +13,7 @@ export function DataGridSearch({
   value,
   onChange,
   placeholder = "Search",
-  debounceMs = 150
+  debounceMs = 150,
 }: DataGridSearchProps) {
   const [inputValue, setInputValue] = useState(value);
   const debouncedValue = useDebouncedValue(inputValue, debounceMs);

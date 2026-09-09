@@ -188,10 +188,14 @@ export function validatePackedPayload(packageInfo, packageJson, files) {
   const cssFiles = files.filter((file) => file.endsWith(".css"));
 
   if (packageJson.types && declarationFiles.length === 0) {
-    failures.push(`${packageInfo.name}: declarations are required by package metadata`);
+    failures.push(
+      `${packageInfo.name}: declarations are required by package metadata`,
+    );
   }
   if (packageInfo.policies?.hasCss === true && cssFiles.length === 0) {
-    failures.push(`${packageInfo.name}: CSS payload is required by release metadata`);
+    failures.push(
+      `${packageInfo.name}: CSS payload is required by release metadata`,
+    );
   }
 
   for (const requiredFile of uniqueRequiredFiles) {
@@ -244,7 +248,9 @@ export function validateReleaseArtifactManifest({
   }).map(({ name }) => name);
 
   if (!exactOrder(artifactManifest?.buildClosure ?? [], expectedBuildClosure)) {
-    failures.push("release artifact build closure does not match release metadata");
+    failures.push(
+      "release artifact build closure does not match release metadata",
+    );
   }
 
   if (artifactManifest?.schemaVersion !== releaseArtifactSchemaVersion) {

@@ -9,5 +9,5 @@ export type {
   DismissableLayerProps,
   FocusScopeProps,
   OverlayPlacement,
-  PortalProps
+  PortalProps,
 } from "./overlay.types";

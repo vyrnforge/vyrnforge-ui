@@ -44,7 +44,7 @@ export const demoRows: DemoRow[] = Array.from({ length: 64 }, (_, index) => {
     notes: `Long operational note for workspace ${id}: review ownership, retention settings, billing profile, and regional compliance before quarter close.`,
     owner: {
       name: `Owner ${String.fromCharCode(65 + (index % 12))}`,
-      team: teams[index % teams.length]
-    }
+      team: teams[index % teams.length],
+    },
   };
 });

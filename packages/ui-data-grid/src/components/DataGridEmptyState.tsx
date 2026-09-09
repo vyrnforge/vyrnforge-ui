@@ -9,10 +9,13 @@ export type DataGridEmptyStateProps = {
 export function DataGridEmptyState({
   message,
   columnCount = 1,
-  hasQuery = false
+  hasQuery = false,
 }: DataGridEmptyStateProps) {
   const resolvedMessage =
-    message ?? (hasQuery ? "No results match your search or filters." : "No data available.");
+    message ??
+    (hasQuery
+      ? "No results match your search or filters."
+      : "No data available.");
   const title = hasQuery ? "No matching results" : "No data";
 
   return (

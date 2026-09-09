@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
   TransferList,
-  ValidationMessage
+  ValidationMessage,
 } from "@vyrnforge/ui-components";
 
 const applicationOptions = [
@@ -15,42 +15,67 @@ const applicationOptions = [
     value: "iam",
     label: "Identity and Access Management",
     description: "Authentication, roles, and resource access.",
-    keywords: ["security", "roles"]
+    keywords: ["security", "roles"],
   },
   {
     value: "analytics",
     label: "Analytics Workspace",
     description: "Trusted analytics and operational insight.",
-    keywords: ["data", "documents"]
+    keywords: ["data", "documents"],
   },
   {
     value: "api-gateway",
     label: "API Gateway",
     description: "API gateway configuration and service routing.",
-    keywords: ["routing", "services"]
+    keywords: ["routing", "services"],
   },
   {
     value: "reports",
     label: "Reporting Workspace",
     description: "Operational and executive reporting.",
-    keywords: ["analytics"]
-  }
+    keywords: ["analytics"],
+  },
 ];
 
 const reportFieldOptions = [
-  { value: "orderId", label: "Order ID", description: "Stable transaction identifier." },
-  { value: "customer", label: "Customer", description: "Customer display name." },
+  {
+    value: "orderId",
+    label: "Order ID",
+    description: "Stable transaction identifier.",
+  },
+  {
+    value: "customer",
+    label: "Customer",
+    description: "Customer display name.",
+  },
   { value: "status", label: "Status", description: "Current workflow state." },
-  { value: "margin", label: "Margin", description: "Financial margin percentage." },
+  {
+    value: "margin",
+    label: "Margin",
+    description: "Financial margin percentage.",
+  },
   { value: "region", label: "Region", description: "Commercial region." },
-  { value: "owner", label: "Owner", description: "Responsible operations owner." }
+  {
+    value: "owner",
+    label: "Owner",
+    description: "Responsible operations owner.",
+  },
 ];
 
 const notificationOptions = [
-  { value: "email", label: "Email", description: "Standard workflow notifications." },
+  {
+    value: "email",
+    label: "Email",
+    description: "Standard workflow notifications.",
+  },
   { value: "slack", label: "Slack", description: "Team channel updates." },
   { value: "sms", label: "SMS", description: "Urgent operational alerts." },
-  { value: "webhook", label: "Webhook", description: "Managed by platform automation.", disabled: true }
+  {
+    value: "webhook",
+    label: "Webhook",
+    description: "Managed by platform automation.",
+    disabled: true,
+  },
 ];
 
 export function AssignmentPatternsPage() {
@@ -65,16 +90,22 @@ export function AssignmentPatternsPage() {
           <div>
             <Heading size="md">Assignment patterns</Heading>
             <Text tone="muted">
-              Bounded local assignment flows that should not require a full data grid.
+              Bounded local assignment flows that should not require a full data
+              grid.
             </Text>
           </div>
-          <Button leftSlot={<Icon name="Check" />} variant="primary">Save assignments</Button>
+          <Button leftSlot={<Icon name="Check" />} variant="primary">
+            Save assignments
+          </Button>
         </div>
 
         <Stack gap="sm">
-          <Heading level={3} size="sm">Application assignment</Heading>
+          <Heading level={3} size="sm">
+            Application assignment
+          </Heading>
           <Text tone="muted">
-            Use TransferList when available and assigned applications should stay visible.
+            Use TransferList when available and assigned applications should
+            stay visible.
           </Text>
           <TransferList
             onValueChange={setApplications}
@@ -90,9 +121,12 @@ export function AssignmentPatternsPage() {
         </Stack>
 
         <Stack gap="sm">
-          <Heading level={3} size="sm">Report field selection</Heading>
+          <Heading level={3} size="sm">
+            Report field selection
+          </Heading>
           <Text tone="muted">
-            Searchable panels work well for moderate local collections with simple metadata.
+            Searchable panels work well for moderate local collections with
+            simple metadata.
           </Text>
           <TransferList
             onValueChange={setFields}
@@ -107,7 +141,9 @@ export function AssignmentPatternsPage() {
         <Stack gap="sm">
           <div className="vf-playground-section-heading">
             <div>
-              <Heading level={3} size="sm">Notification channel assignment</Heading>
+              <Heading level={3} size="sm">
+                Notification channel assignment
+              </Heading>
               <Text tone="muted">
                 Disabled rows remain visible for policy-managed assignments.
               </Text>

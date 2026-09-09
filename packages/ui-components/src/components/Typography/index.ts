@@ -11,5 +11,5 @@ export type {
   LabelProps,
   TextProps,
   TextSize,
-  TextTone
+  TextTone,
 } from "./Typography.types";

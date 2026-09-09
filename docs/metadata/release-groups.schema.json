@@ -68,7 +68,12 @@
         "tagIdentity": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["scope", "legacyPolicy", "tagTemplate", "releaseNameTemplate"],
+          "required": [
+            "scope",
+            "legacyPolicy",
+            "tagTemplate",
+            "releaseNameTemplate"
+          ],
           "properties": {
             "scope": { "const": "release-line" },
             "legacyPolicy": { "enum": ["preserve-only", "none"] },
@@ -144,7 +149,14 @@
             "sizeBudget": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["packedBytes", "unpackedBytes", "fileCount", "runtimeJavaScriptBytes", "declarationBytes", "cssBytes"],
+              "required": [
+                "packedBytes",
+                "unpackedBytes",
+                "fileCount",
+                "runtimeJavaScriptBytes",
+                "declarationBytes",
+                "cssBytes"
+              ],
               "properties": {
                 "packedBytes": { "type": "integer", "minimum": 0 },
                 "unpackedBytes": { "type": "integer", "minimum": 0 },

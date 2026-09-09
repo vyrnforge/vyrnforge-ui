@@ -18,7 +18,9 @@ writeFileSync(
   `${JSON.stringify({ schemaVersion: 1, releaseGroup: releaseGroupId, failures }, null, 2)}\n`,
 );
 if (failures.length) {
-  throw new Error(`release size budget verification failed:\n- ${failures.join("\n- ")}`);
+  throw new Error(
+    `release size budget verification failed:\n- ${failures.join("\n- ")}`,
+  );
 }
 
 console.log(`Release size budgets passed: ${releaseGroupId}.`);

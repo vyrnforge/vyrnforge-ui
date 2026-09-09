@@ -1,8 +1,5 @@
 import { useCallback } from "react";
-import {
-  moveColumnBefore,
-  moveColumnOrder
-} from "../core/columnManagement";
+import { moveColumnBefore, moveColumnOrder } from "../core/columnManagement";
 
 export type ColumnReorderPlacement = "before" | "after";
 
@@ -15,22 +12,22 @@ export type UseColumnReorderParams = {
 export function useColumnReorder({
   allColumnIds,
   columnOrder,
-  onColumnOrderChange
+  onColumnOrderChange,
 }: UseColumnReorderParams) {
   const moveColumn = useCallback(
     (columnId: string, direction: "up" | "down" | "first" | "last") => {
       onColumnOrderChange(
-        moveColumnOrder(allColumnIds, columnOrder, columnId, direction)
+        moveColumnOrder(allColumnIds, columnOrder, columnId, direction),
       );
     },
-    [allColumnIds, columnOrder, onColumnOrderChange]
+    [allColumnIds, columnOrder, onColumnOrderChange],
   );
 
   const moveColumnTo = useCallback(
     (
       columnId: string,
       targetColumnId: string,
-      placement: ColumnReorderPlacement = "before"
+      placement: ColumnReorderPlacement = "before",
     ) => {
       onColumnOrderChange(
         moveColumnBefore(
@@ -38,11 +35,11 @@ export function useColumnReorder({
           columnOrder,
           columnId,
           targetColumnId,
-          placement
-        )
+          placement,
+        ),
       );
     },
-    [allColumnIds, columnOrder, onColumnOrderChange]
+    [allColumnIds, columnOrder, onColumnOrderChange],
   );
 
   const resetColumnOrder = useCallback(() => {
@@ -52,6 +49,6 @@ export function useColumnReorder({
   return {
     moveColumn,
     moveColumnTo,
-    resetColumnOrder
+    resetColumnOrder,
   };
 }

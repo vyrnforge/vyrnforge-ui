@@ -8,21 +8,21 @@ import {
   Menu,
   SearchInput,
   SegmentedControl,
-  ToolbarButton
+  ToolbarButton,
 } from "@vyrnforge/ui-components";
 import {
   filterColumnMenuColumns,
   resolveOrderedColumns,
-  resolveVisibleColumns
+  resolveVisibleColumns,
 } from "../core/columnManagement";
 import type {
   DataGridColumnDef,
-  DataGridColumnVisibilityState
+  DataGridColumnVisibilityState,
 } from "../types/column.types";
 import type { DataGridDensity } from "../types/dataGrid.types";
 
 export type DataGridColumnMenuProps<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   columns: DataGridColumnDef<RowData>[];
   columnVisibility: DataGridColumnVisibilityState;
@@ -32,7 +32,7 @@ export type DataGridColumnMenuProps<
   onColumnOrderChange: (columnOrder: string[]) => void;
   onMoveColumn: (
     columnId: string,
-    direction: "up" | "down" | "first" | "last"
+    direction: "up" | "down" | "first" | "last",
   ) => void;
   onDensityChange: (density: DataGridDensity) => void;
   onShowAllColumns: () => void;
@@ -47,7 +47,7 @@ export type DataGridColumnMenuProps<
 const densityOptions: DataGridDensity[] = [
   "compact",
   "standard",
-  "comfortable"
+  "comfortable",
 ];
 
 const densityOptionsConfig = densityOptions.map((densityOption) => ({
@@ -64,20 +64,20 @@ const densityOptionsConfig = densityOptions.map((densityOption) => ({
       }
       size="xs"
     />
-  )
+  ),
 }));
 
 const moveColumnInOrder = (
   orderedColumnIds: string[],
   draggedColumnId: string,
-  targetColumnId: string
+  targetColumnId: string,
 ) => {
   if (draggedColumnId === targetColumnId) {
     return orderedColumnIds;
   }
 
   const nextOrder = orderedColumnIds.filter(
-    (columnId) => columnId !== draggedColumnId
+    (columnId) => columnId !== draggedColumnId,
   );
   const targetIndex = nextOrder.indexOf(targetColumnId);
 
@@ -90,7 +90,7 @@ const moveColumnInOrder = (
 };
 
 export function DataGridColumnMenu<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 >({
   columns,
   columnVisibility,
@@ -106,7 +106,7 @@ export function DataGridColumnMenu<
   onResetColumnSize,
   onResetColumnSizes,
   onResetColumns,
-  onResetView
+  onResetView,
 }: DataGridColumnMenuProps<RowData>) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -114,27 +114,29 @@ export function DataGridColumnMenu<
   const [dropColumnId, setDropColumnId] = useState<string | null>(null);
   const orderedColumns = useMemo(
     () => resolveOrderedColumns(columns, columnOrder),
-    [columnOrder, columns]
+    [columnOrder, columns],
   );
   const filteredColumns = useMemo(
     () => filterColumnMenuColumns(orderedColumns, search),
-    [orderedColumns, search]
+    [orderedColumns, search],
   );
   const visibleColumnIds = useMemo(
     () =>
       new Set(
-        resolveVisibleColumns(columns, columnVisibility).map((column) => column.id)
+        resolveVisibleColumns(columns, columnVisibility).map(
+          (column) => column.id,
+        ),
       ),
-    [columnVisibility, columns]
+    [columnVisibility, columns],
   );
   const orderedColumnIds = useMemo(
     () => orderedColumns.map((column) => column.id),
-    [orderedColumns]
+    [orderedColumns],
   );
 
   const handleDrop = (
     event: DragEvent<HTMLDivElement>,
-    targetColumnId: string
+    targetColumnId: string,
   ) => {
     event.preventDefault();
 
@@ -143,7 +145,7 @@ export function DataGridColumnMenu<
     }
 
     onColumnOrderChange(
-      moveColumnInOrder(orderedColumnIds, draggedColumnId, targetColumnId)
+      moveColumnInOrder(orderedColumnIds, draggedColumnId, targetColumnId),
     );
     setDraggedColumnId(null);
     setDropColumnId(null);
@@ -198,18 +200,30 @@ export function DataGridColumnMenu<
             className="udg-column-menu__density udg-segmented-control"
             options={densityOptionsConfig.map((option) => ({
               ...option,
-              label: option.label
+              label: option.label,
             }))}
             size="sm"
             value={density}
-            onChange={(nextDensity) => onDensityChange(nextDensity as DataGridDensity)}
+            onChange={(nextDensity) =>
+              onDensityChange(nextDensity as DataGridDensity)
+            }
           />
 
           <div className="udg-column-menu__actions">
-            <Button size="sm" type="button" variant="subtle" onClick={onShowAllColumns}>
+            <Button
+              size="sm"
+              type="button"
+              variant="subtle"
+              onClick={onShowAllColumns}
+            >
               Show all
             </Button>
-            <Button size="sm" type="button" variant="subtle" onClick={onHideOptionalColumns}>
+            <Button
+              size="sm"
+              type="button"
+              variant="subtle"
+              onClick={onHideOptionalColumns}
+            >
               Hide optional
             </Button>
             <Menu
@@ -218,23 +232,23 @@ export function DataGridColumnMenu<
                 {
                   id: "reset-order",
                   label: "Reset order",
-                  onSelect: onResetColumnOrder
+                  onSelect: onResetColumnOrder,
                 },
                 {
                   id: "reset-sizes",
                   label: "Reset sizes",
-                  onSelect: onResetColumnSizes
+                  onSelect: onResetColumnSizes,
                 },
                 {
                   id: "reset-columns",
                   label: "Reset columns",
-                  onSelect: onResetColumns
+                  onSelect: onResetColumns,
                 },
                 {
                   id: "reset-view",
                   label: "Reset view",
-                  onSelect: onResetView
-                }
+                  onSelect: onResetView,
+                },
               ]}
               placement="bottom-end"
               size="sm"
@@ -259,7 +273,7 @@ export function DataGridColumnMenu<
               const hideable = column.hideable !== false;
               const visible = visibleColumnIds.has(column.id);
               const index = orderedColumns.findIndex(
-                (candidate) => candidate.id === column.id
+                (candidate) => candidate.id === column.id,
               );
 
               return (
@@ -267,8 +281,10 @@ export function DataGridColumnMenu<
                   className={[
                     "udg-column-menu__row",
                     draggedColumnId === column.id ? "udg-is-dragging" : "",
-                    dropColumnId === column.id ? "udg-is-drop-target" : ""
-                  ].filter(Boolean).join(" ")}
+                    dropColumnId === column.id ? "udg-is-drop-target" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   key={column.id}
                   onDragLeave={() => setDropColumnId(null)}
                   onDragOver={(event) => {
@@ -310,12 +326,15 @@ export function DataGridColumnMenu<
                     onChange={(event) =>
                       onColumnVisibilityChange(
                         column.id,
-                        event.currentTarget.checked
+                        event.currentTarget.checked,
                       )
                     }
                   />
 
-                  <span className="udg-column-menu__label" title={column.header}>
+                  <span
+                    className="udg-column-menu__label"
+                    title={column.header}
+                  >
                     {column.header}
                   </span>
 
@@ -356,17 +375,17 @@ export function DataGridColumnMenu<
                         {
                           id: "move-first",
                           label: "Move to first",
-                          onSelect: () => onMoveColumn(column.id, "first")
+                          onSelect: () => onMoveColumn(column.id, "first"),
                         },
                         {
                           id: "move-last",
                           label: "Move to last",
-                          onSelect: () => onMoveColumn(column.id, "last")
+                          onSelect: () => onMoveColumn(column.id, "last"),
                         },
                         {
                           id: "reset-size",
                           label: "Reset size",
-                          onSelect: () => onResetColumnSize(column.id)
+                          onSelect: () => onResetColumnSize(column.id),
                         },
                         ...(hideable
                           ? [
@@ -374,10 +393,10 @@ export function DataGridColumnMenu<
                                 id: "toggle-visibility",
                                 label: visible ? "Hide column" : "Show column",
                                 onSelect: () =>
-                                  onColumnVisibilityChange(column.id, !visible)
-                              }
+                                  onColumnVisibilityChange(column.id, !visible),
+                              },
                             ]
-                          : [])
+                          : []),
                       ]}
                       placement="bottom-end"
                       size="sm"

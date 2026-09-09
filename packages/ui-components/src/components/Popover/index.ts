@@ -2,5 +2,5 @@ export { Popover } from "./Popover";
 export type {
   PopoverAlign,
   PopoverPlacement,
-  PopoverProps
+  PopoverProps,
 } from "./Popover.types";

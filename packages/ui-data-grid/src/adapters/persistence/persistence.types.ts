@@ -1,12 +1,9 @@
 import type {
   DataGridPersistenceAdapter,
-  DataGridPersistedState
+  DataGridPersistedState,
 } from "../../types/dataGrid.types";
 
-export type {
-  DataGridPersistenceAdapter,
-  DataGridPersistedState
-};
+export type { DataGridPersistenceAdapter, DataGridPersistedState };
 
 export type LocalStorageGridPersistenceOptions = {
   namespace?: string;

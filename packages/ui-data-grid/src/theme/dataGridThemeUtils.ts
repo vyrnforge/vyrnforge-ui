@@ -1,5 +1,5 @@
 export {
   createDataGridTheme,
   mergeDataGridTheme,
-  toDataGridThemeStyle
+  toDataGridThemeStyle,
 } from "./createDataGridTheme";
