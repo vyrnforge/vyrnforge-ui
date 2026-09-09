@@ -16,7 +16,7 @@ export function PageToolbar({
         "vf-page-toolbar",
         `vf-page-toolbar--${density}`,
         sticky && "vf-page-toolbar--sticky",
-        className
+        className,
       )}
       {...props}
     >

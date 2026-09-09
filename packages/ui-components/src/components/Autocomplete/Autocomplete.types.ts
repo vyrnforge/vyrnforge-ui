@@ -10,16 +10,11 @@ export type AutocompleteOptionData = {
 
 export type AutocompleteFilterFunction = (
   options: readonly AutocompleteOptionData[],
-  query: string
+  query: string,
 ) => readonly AutocompleteOptionData[];
 
 export type AutocompletePlacement =
-  | "bottom-start"
-  | "bottom"
-  | "bottom-end"
-  | "top-start"
-  | "top"
-  | "top-end";
+  "bottom-start" | "bottom" | "bottom-end" | "top-start" | "top" | "top-end";
 
 export type AutocompleteProps = {
   id?: string;
@@ -27,7 +22,10 @@ export type AutocompleteProps = {
   options: readonly AutocompleteOptionData[];
   value?: string | null;
   defaultValue?: string | null;
-  onValueChange?: (value: string | null, option: AutocompleteOptionData | null) => void;
+  onValueChange?: (
+    value: string | null,
+    option: AutocompleteOptionData | null,
+  ) => void;
   inputValue?: string;
   defaultInputValue?: string;
   onInputValueChange?: (value: string) => void;
@@ -48,7 +46,7 @@ export type AutocompleteProps = {
   filterOptions?: AutocompleteFilterFunction;
   renderOption?: (
     option: AutocompleteOptionData,
-    state: { active: boolean; selected: boolean; disabled: boolean }
+    state: { active: boolean; selected: boolean; disabled: boolean },
   ) => ReactNode;
   placement?: AutocompletePlacement;
   matchTriggerWidth?: boolean;

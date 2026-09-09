@@ -123,15 +123,17 @@ test("rejects package version drift", () =>
         ),
       );
       const packageInfo = Object.values(manifest.releaseLines)[0].packages[0];
-      mutateJson(root, path.join(packageInfo.directory, "package.json"), (value) => {
-        value.version = "9.9.9-alpha.1";
-      });
+      mutateJson(
+        root,
+        path.join(packageInfo.directory, "package.json"),
+        (value) => {
+          value.version = "9.9.9-alpha.1";
+        },
+      );
     },
     (failures) =>
       assert(
-        failures.some((failure) =>
-          failure.includes("package version must be"),
-        ),
+        failures.some((failure) => failure.includes("package version must be")),
       ),
   ));
 
@@ -154,9 +156,7 @@ test("rejects inconsistent dependency declarations", () =>
       }),
     (failures) =>
       assert(
-        failures.some((failure) =>
-          failure.includes("metadata dependency"),
-        ),
+        failures.some((failure) => failure.includes("metadata dependency")),
       ),
   ));
 

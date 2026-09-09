@@ -1,23 +1,28 @@
 import { describe, expect, it } from "vitest";
 import { Button, Dialog, Field, TextInput } from "../../index";
-import { assertNoAccessibilityViolations, render } from "../../../../../tests/dom";
+import {
+  assertNoAccessibilityViolations,
+  render,
+} from "../../../../../tests/dom";
 
 describe("@vyrnforge/ui-components accessibility", () => {
   it("reports actionable rule details for an inaccessible fixture", async () => {
     const { container } = render(
       <main>
         <img src="/status.svg" />
-      </main>
+      </main>,
     );
 
-    await expect(assertNoAccessibilityViolations(container)).rejects.toThrow("image-alt");
+    await expect(assertNoAccessibilityViolations(container)).rejects.toThrow(
+      "image-alt",
+    );
   });
 
   it("scans a disabled basic control", async () => {
     const { container } = render(
       <main>
         <Button disabled>Save changes</Button>
-      </main>
+      </main>,
     );
 
     await assertNoAccessibilityViolations(container);
@@ -27,11 +32,17 @@ describe("@vyrnforge/ui-components accessibility", () => {
     const { container } = render(
       <main>
         <form>
-          <Field disabled error="Email is required" id="email" label="Email" required>
+          <Field
+            disabled
+            error="Email is required"
+            id="email"
+            label="Email"
+            required
+          >
             {(controlProps) => <TextInput {...controlProps} />}
           </Field>
         </form>
-      </main>
+      </main>,
     );
 
     await assertNoAccessibilityViolations(container);
@@ -51,7 +62,7 @@ describe("@vyrnforge/ui-components accessibility", () => {
         >
           Confirm the pending updates.
         </Dialog>
-      </>
+      </>,
     );
 
     await assertNoAccessibilityViolations(document.body);

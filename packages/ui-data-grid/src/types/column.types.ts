@@ -15,15 +15,10 @@ export type DataGridColumnDataType =
   | "custom";
 
 export type DataGridAggregationType =
-  | "count"
-  | "sum"
-  | "avg"
-  | "min"
-  | "max"
-  | "custom";
+  "count" | "sum" | "avg" | "min" | "max" | "custom";
 
 export type DataGridAggregationContext<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   columnId: string;
   rows: RowData[];
@@ -31,18 +26,18 @@ export type DataGridAggregationContext<
 };
 
 export type DataGridAggregationDef<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   type: DataGridAggregationType;
   accessor?: (row: RowData) => number | string | Date | null | undefined;
   render?: (
     value: unknown,
-    context: DataGridAggregationContext<RowData>
+    context: DataGridAggregationContext<RowData>,
   ) => ReactNode;
 };
 
 export type DataGridColumnDef<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   id: string;
   header: string;

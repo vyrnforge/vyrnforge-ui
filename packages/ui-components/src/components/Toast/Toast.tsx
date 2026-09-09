@@ -10,7 +10,7 @@ const toneIconMap: Record<ToastTone, IconName> = {
   info: "Info",
   success: "Success",
   warning: "Warning",
-  error: "Error"
+  error: "Error",
 };
 
 export function Toast({
@@ -26,12 +26,11 @@ export function Toast({
   onHoverResume,
   style,
   title,
-  tone = "neutral"
+  tone = "neutral",
 }: ToastProps) {
   const resolvedTone = getToastTone({ tone });
-  const role = resolvedTone === "warning" || resolvedTone === "error"
-    ? "alert"
-    : "status";
+  const role =
+    resolvedTone === "warning" || resolvedTone === "error" ? "alert" : "status";
 
   return (
     <div
@@ -39,7 +38,7 @@ export function Toast({
       className={joinClassNames(
         "vf-toast",
         `vf-toast--${resolvedTone}`,
-        className
+        className,
       )}
       id={id}
       onBlur={(event) => {

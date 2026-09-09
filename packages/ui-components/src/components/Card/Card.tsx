@@ -13,7 +13,7 @@ export function Card({
         "vf-card",
         `vf-card--${variant}`,
         `vf-card--padding-${padding}`,
-        className
+        className,
       )}
       {...props}
     />

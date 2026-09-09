@@ -37,7 +37,7 @@ export function AppShell({
     "--vf-app-shell-sidebar-collapsed-width": toCssSize(collapsedSidebarWidth),
     "--vf-app-shell-collapsed-sidebar-width": toCssSize(collapsedSidebarWidth),
     "--vf-app-shell-min-height": toCssSize(minHeight),
-    ...style
+    ...style,
   } as CSSProperties;
 
   return (
@@ -52,7 +52,7 @@ export function AppShell({
         `vf-app-shell--header-${headerPosition}`,
         `vf-app-shell--sidebar-${sidebarPosition}`,
         sidebarCollapsed && "vf-app-shell--sidebar-collapsed",
-        className
+        className,
       )}
       style={shellStyle}
       {...props}

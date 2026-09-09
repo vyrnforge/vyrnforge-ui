@@ -2,7 +2,7 @@ import type { DataGridColumnDef } from "../types/column.types";
 
 const getColumnValue = <RowData extends Record<string, unknown>>(
   row: RowData,
-  column: DataGridColumnDef<RowData>
+  column: DataGridColumnDef<RowData>,
 ) => {
   if (column.accessorFn) {
     return column.accessorFn(row);
@@ -18,7 +18,7 @@ const getColumnValue = <RowData extends Record<string, unknown>>(
 export function applySearch<RowData extends Record<string, unknown>>(
   rows: RowData[],
   columns: DataGridColumnDef<RowData>[],
-  search: string
+  search: string,
 ): RowData[] {
   const query = search.trim().toLowerCase();
 
@@ -26,12 +26,16 @@ export function applySearch<RowData extends Record<string, unknown>>(
     return rows;
   }
 
-  const searchableColumns = columns.filter((column) => column.searchable !== false);
+  const searchableColumns = columns.filter(
+    (column) => column.searchable !== false,
+  );
 
   return rows.filter((row) =>
     searchableColumns.some((column) => {
       const value = getColumnValue(row, column);
-      return String(value ?? "").toLowerCase().includes(query);
-    })
+      return String(value ?? "")
+        .toLowerCase()
+        .includes(query);
+    }),
   );
 }

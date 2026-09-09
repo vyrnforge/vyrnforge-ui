@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 export function useControlledState<State>(
   controlledValue: State | undefined,
   defaultValue: State,
-  onChange?: (nextValue: State) => void
+  onChange?: (nextValue: State) => void,
 ) {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const isControlled = controlledValue !== undefined;
@@ -22,7 +22,7 @@ export function useControlledState<State>(
 
       onChange?.(resolvedValue);
     },
-    [isControlled, onChange, value]
+    [isControlled, onChange, value],
   );
 
   return [value, setValue] as const;

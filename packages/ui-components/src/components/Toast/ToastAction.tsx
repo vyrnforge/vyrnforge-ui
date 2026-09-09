@@ -5,7 +5,7 @@ export function ToastAction({
   altText,
   children,
   disabled,
-  onClick
+  onClick,
 }: ToastActionProps) {
   return (
     <Button

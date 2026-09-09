@@ -14,20 +14,20 @@
 .udg *::after {
   box-sizing: border-box;
 }
-.udg[data-variant=card] {
+.udg[data-variant="card"] {
   border: 1px solid var(--udg-border);
   border-radius: var(--udg-radius-md);
   padding: var(--udg-space-4);
   background: var(--udg-surface);
   box-shadow: var(--udg-shadow-md);
 }
-.udg[data-variant=bordered] {
+.udg[data-variant="bordered"] {
   border: 1px solid var(--udg-border);
   border-radius: var(--udg-radius-md);
   padding: var(--udg-space-3);
   background: var(--udg-surface);
 }
-.udg[data-variant=plain] {
+.udg[data-variant="plain"] {
   background: transparent;
 }
 .udg-title {

@@ -13,7 +13,7 @@ export type TransferListOptionData = {
 export type TransferListFilterFunction = (
   options: readonly TransferListOptionData[],
   query: string,
-  panel: TransferListPanel
+  panel: TransferListPanel,
 ) => readonly TransferListOptionData[];
 
 export type TransferListProps = {
@@ -22,10 +22,7 @@ export type TransferListProps = {
   options: readonly TransferListOptionData[];
   value?: readonly string[];
   defaultValue?: readonly string[];
-  onValueChange?: (
-    value: string[],
-    options: TransferListOptionData[]
-  ) => void;
+  onValueChange?: (value: string[], options: TransferListOptionData[]) => void;
   sourceTitle?: ReactNode;
   targetTitle?: ReactNode;
   sourceDescription?: ReactNode;
@@ -49,12 +46,9 @@ export type TransferListProps = {
       selected: boolean;
       active: boolean;
       disabled: boolean;
-    }
+    },
   ) => ReactNode;
-  onSelectionChange?: (state: {
-    source: string[];
-    target: string[];
-  }) => void;
+  onSelectionChange?: (state: { source: string[]; target: string[] }) => void;
   ariaLabel?: string;
   ariaDescribedBy?: string;
   "aria-describedby"?: string;

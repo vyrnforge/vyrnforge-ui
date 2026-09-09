@@ -34,8 +34,8 @@ import "@vyrnforge/ui-core/styles/index.css";
 
 ## Public API
 
-| Export | Purpose |
-| --- | --- |
+| Export       | Purpose     |
+| ------------ | ----------- |
 | `ExportName` | Description |
 
 ## Dependency policy

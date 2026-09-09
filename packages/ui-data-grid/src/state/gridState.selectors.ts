@@ -1,7 +1,7 @@
 import type {
   DataGridPersistKey,
   DataGridPersistedState,
-  DataGridState
+  DataGridState,
 } from "./gridState.types";
 
 export const defaultPersistKeys: DataGridPersistKey[] = [
@@ -13,7 +13,7 @@ export const defaultPersistKeys: DataGridPersistKey[] = [
   "columnOrder",
   "columnSizing",
   "grouping",
-  "density"
+  "density",
 ];
 
 export function selectGridQueryState(state: DataGridState) {
@@ -22,13 +22,13 @@ export function selectGridQueryState(state: DataGridState) {
     filters: state.filters,
     sort: state.sort,
     grouping: state.grouping,
-    pagination: state.pagination
+    pagination: state.pagination,
   };
 }
 
 export function pickPersistableGridState(
   state: DataGridState,
-  keys: DataGridPersistKey[] = defaultPersistKeys
+  keys: DataGridPersistKey[] = defaultPersistKeys,
 ): DataGridPersistedState {
   const persistableState: DataGridPersistedState = {};
   const keySet = new Set(keys);
@@ -48,7 +48,7 @@ export function pickPersistableGridState(
   if (keySet.has("pagination")) {
     persistableState.pagination = {
       pageIndex: 0,
-      pageSize: state.pagination.pageSize
+      pageSize: state.pagination.pageSize,
     };
   }
 

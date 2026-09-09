@@ -15,7 +15,7 @@ export function Badge({
         `vf-badge--${variant}`,
         `vf-badge--${size}`,
         `vf-badge--${tone}`,
-        className
+        className,
       )}
       {...props}
     />

@@ -2,17 +2,14 @@ import type { DataGridColumnDef } from "./column.types";
 import type {
   DataGridGroupingState,
   DataGridPaginationState,
-  DataGridRowId
+  DataGridRowId,
 } from "./dataGrid.types";
 import type { DataGridFilter, DataGridSort } from "./filter.types";
 
 export type DataGridExportFormat = "csv" | "xlsx" | "pdf" | "json";
 
 export type DataGridExportScope =
-  | "current_page"
-  | "selected_rows"
-  | "filtered_rows"
-  | "all_rows";
+  "current_page" | "selected_rows" | "filtered_rows" | "all_rows";
 
 export type DataGridExportColumn = {
   id: string;
@@ -36,7 +33,7 @@ export type DataGridExportRequest = {
 };
 
 export type BuildDataGridExportRequestParams<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   tableId: string;
   columns: DataGridColumnDef<RowData>[];

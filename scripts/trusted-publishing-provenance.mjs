@@ -2,10 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-  getReleaseLineEntries,
-  readReleaseGroups,
-} from "./release-groups.mjs";
+import { getReleaseLineEntries, readReleaseGroups } from "./release-groups.mjs";
 
 export const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -140,13 +137,12 @@ export function readTrustedPublishingContract({ root = repositoryRoot } = {}) {
 }
 
 export function getTrustedPublishingPackages(releaseGroups) {
-  return getReleaseLineEntries(releaseGroups).flatMap(
-    ([releaseGroup, value]) =>
-      (value.packages ?? []).map((packageInfo) => ({
-        name: packageInfo.name,
-        directory: packageInfo.directory,
-        releaseGroup,
-      })),
+  return getReleaseLineEntries(releaseGroups).flatMap(([releaseGroup, value]) =>
+    (value.packages ?? []).map((packageInfo) => ({
+      name: packageInfo.name,
+      directory: packageInfo.directory,
+      releaseGroup,
+    })),
   );
 }
 

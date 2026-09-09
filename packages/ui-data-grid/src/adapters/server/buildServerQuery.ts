@@ -1,6 +1,6 @@
 import type {
   BuildDataGridServerQueryParams,
-  DataGridServerQuery
+  DataGridServerQuery,
 } from "./serverQuery.types";
 
 export function buildDataGridServerQuery({
@@ -9,7 +9,7 @@ export function buildDataGridServerQuery({
   filters,
   sort,
   grouping,
-  pagination
+  pagination,
 }: BuildDataGridServerQueryParams): DataGridServerQuery {
   return {
     tableId,
@@ -19,7 +19,7 @@ export function buildDataGridServerQuery({
     grouping,
     pagination: {
       pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize
-    }
+      pageSize: pagination.pageSize,
+    },
   };
 }
