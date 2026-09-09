@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "dd8e0bf45d4faf7f285822fddb61408f5f2762c5",
+      "sha1": "5f514cc6d9613e08b0bd8c8a693c3b7fac7dc36d",
       "covers": [
         "component props and types",
         "callbacks",
@@ -135,7 +135,7 @@
     },
     {
       "task": "S16-react-warning-cleanup",
-      "reason": "React test-noise cleanup made the Slider's native controlled range explicitly acknowledge React change semantics without introducing a second value-change path, and made TransferList submission-only hidden values uncontrolled. Public props, canonical value-change behavior, serialized form values, styles, and compatibility policy remain unchanged.",
+      "reason": "React test-noise cleanup made controlled native inputs explicitly acknowledge React change semantics while preserving VyrnForge's existing public callback and canonical value-change ownership. Slider keeps its canonical value-change path, SearchInput continues forwarding its public callback through the input-capture bridge, and Autocomplete/TransferList hidden form controls remain current serialized values. React 18 and React 19 compatibility cases passed before this intentional implementation-tree recapture.",
       "evidence": "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx"
     }
   ],
