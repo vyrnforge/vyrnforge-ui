@@ -62,10 +62,9 @@ Native renderer evidence lives in `native-element-foundations.json`,
 
 Release and scope contracts include `non-grid-beta-scope.json`,
 `release-groups.json`, `release-groups.schema.json`, current package/release
-artifact metadata, size-budget metadata, and `compatibility-release-matrix.json`.
-S16 may consolidate transitional beta-specific wrappers into the generic
-release-group model, but current verification requirements must remain covered
-until that consolidation passes.
+artifact metadata, and `compatibility-release-matrix.json`. Release-group package
+entries own current package size limits through `policies.sizeBudget`; there is
+no separate beta-specific size-budget source of truth.
 
 Accessibility, visual, security, provenance, validation, and AI policy evidence
 lives in `assistive-technology-reviews.json`,
