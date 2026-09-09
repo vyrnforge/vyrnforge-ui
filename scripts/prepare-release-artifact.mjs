@@ -115,42 +115,6 @@ writeFileSync(
   `${JSON.stringify(artifactManifest, null, 2)}\n`,
 );
 
-if (releaseGroupId === "non-grid-beta") {
-  const betaReportDirectory = path.join(
-    repositoryRoot,
-    "test-results/beta-package-artifacts",
-  );
-  mkdirSync(betaReportDirectory, { recursive: true });
-  writeFileSync(
-    path.join(betaReportDirectory, "tarball-report.json"),
-    `${JSON.stringify(
-      {
-        schemaVersion: 1,
-        task: "BT-8003",
-        releaseGroup: {
-          id: releaseGroupId,
-          version,
-          packageCount: releaseGroup.packages.length,
-        },
-        generatedAt: new Date().toISOString(),
-        packages: packageArtifacts.map((packageInfo) => ({
-          name: packageInfo.name,
-          version: packageInfo.version,
-          filename: packageInfo.filename,
-          integrity: packageInfo.integrity,
-          shasum: packageInfo.shasum,
-          packedSize: packageInfo.packedSize,
-          unpackedSize: packageInfo.unpackedSize,
-          fileCount: packageInfo.fileCount,
-          files: packageInfo.files,
-        })),
-      },
-      null,
-      2,
-    )}\n`,
-  );
-}
-
 console.log(
   `Prepared ${packageArtifacts.length} immutable release tarballs in ${artifactDir}.`,
 );

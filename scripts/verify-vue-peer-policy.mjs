@@ -8,7 +8,7 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const VUE_PEER_RANGE = ">=3.5 <4";
+const VUE_PEER_RANGE = ">=3.4 <4";
 
 const readJson = async (relativePath) =>
   JSON.parse(await readFile(path.join(repositoryRoot, relativePath), "utf8"));

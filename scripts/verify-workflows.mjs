@@ -190,7 +190,10 @@ for (const marker of [
 }
 for (const marker of [
   "node scripts/run-scoped-quality.mjs",
-  "npm run verify:beta-package-artifacts",
+  "npm run prepare:release-artifact",
+  "npm run verify:release-artifact",
+  "npm run verify:trusted-publishing-dry-run",
+  "npm run verify:release-size-budgets",
   "npm run verify:consumer",
   "npm run test:browser",
   "npm run verify:repository-inventory",
@@ -204,6 +207,13 @@ for (const marker of [
   "npm run verify:security-workflow-hardening",
 ]) {
   assert(ci.includes(marker), `ci.yml must directly own ${marker}`);
+}
+for (const forbidden of [
+  "verify:beta-package-artifacts",
+  "verify:beta-package-size-budgets",
+  "test-results/beta-package-artifacts",
+]) {
+  assert(!ci.includes(forbidden), `ci.yml must not use retired ${forbidden}`);
 }
 assert(
   ci.includes("fetch-depth:") && ci.includes("fetch-tags:"),
@@ -219,6 +229,13 @@ for (const marker of [
   "workflow_dispatch:",
   "name: full-quality",
   "name: full-integration",
+  "npm run prepare:release-artifact",
+  "npm run verify:release-artifact",
+  "npm run verify:trusted-publishing-dry-run",
+  "npm run verify:release-size-budgets",
+  "test-results/release-artifact/manifest.json",
+  "name: release-artifact-assurance",
+  "path: test-results/release-artifact/",
   "name: compatibility-plan",
   "name: compatibility-${{ matrix.id }}",
   "npm run verify:compatibility-release-case",
@@ -229,6 +246,17 @@ for (const marker of [
   "name: assurance-gate",
 ]) {
   assert(assurance.includes(marker), `assurance.yml must include ${marker}`);
+}
+for (const forbidden of [
+  "verify:beta-package-artifacts",
+  "verify:beta-package-size-budgets",
+  "test-results/beta-package-artifacts",
+  "name: beta-package-artifacts",
+]) {
+  assert(
+    !assurance.includes(forbidden),
+    `assurance.yml must not use retired ${forbidden}`,
+  );
 }
 assert(
   !assurance.includes("uses: ./.github/workflows/"),
