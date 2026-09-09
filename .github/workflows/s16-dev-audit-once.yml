@@ -24,11 +24,13 @@ jobs:
           cache: npm
       - name: Use repository package manager
         run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
-      - name: Install dependencies
-        run: npm ci
-      - name: Inspect patched versions and parents
+      - name: Inspect available parent tool releases
         run: |
+          echo "vite latest=$(npm view vite version)"
+          echo "vite esbuild=$(npm view vite@latest dependencies.esbuild)"
+          echo "tsup latest=$(npm view tsup version)"
+          echo "tsup esbuild=$(npm view tsup@latest dependencies.esbuild)"
+          echo "bundle-require latest=$(npm view bundle-require version)"
+          echo "bundle-require esbuild=$(npm view bundle-require@latest dependencies.esbuild)"
           echo "vitest latest=$(npm view vitest version)"
           echo "coverage latest=$(npm view @vitest/coverage-v8 version)"
-          echo "esbuild latest=$(npm view esbuild version)"
-          npm ls vitest @vitest/coverage-v8 esbuild --all || true
