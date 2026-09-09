@@ -51,13 +51,6 @@ type Matrix = {
   dedicatedRendererExceptions: string[];
 };
 
-type ExceptionCatalog = {
-  approvedFrameworkIntegrations: Array<{
-    export: string;
-    exceptionId: string;
-  }>;
-};
-
 describe("MFD-1416 React implementation cleanup", () => {
   const cleanup = readJson<Cleanup>(
     "docs/metadata/react-implementation-cleanup.json",
@@ -114,9 +107,6 @@ describe("MFD-1416 React implementation cleanup", () => {
     const matrix = readJson<Matrix>(
       "docs/metadata/react-migration-matrix.json",
     );
-    const catalog = readJson<ExceptionCatalog>(
-      "docs/metadata/react-exception-catalog.json",
-    );
 
     expect(batch1.task.status).toBe("complete");
     expect(
@@ -128,12 +118,14 @@ describe("MFD-1416 React implementation cleanup", () => {
       matrix.strategies.some(({ id }) => /temporary|legacy/.test(id)),
     ).toBe(false);
     expect(matrix.dedicatedRendererExceptions).toEqual([]);
-    expect(catalog.approvedFrameworkIntegrations).toEqual([
-      expect.objectContaining({
-        export: "ToastProvider",
-        exceptionId: "MFD-EX-REACT-TOAST-PROVIDER",
-      }),
-    ]);
+    expect(
+      registry.exceptions.some(
+        ({ id, framework, state }) =>
+          id === "MFD-EX-REACT-TOAST-PROVIDER" &&
+          framework === "react" &&
+          ["active", "retiring"].includes(state),
+      ),
+    ).toBe(true);
 
     for (const metadataPath of cleanup.staleTransitionMetadataCleaned) {
       expect(existsSync(path.join(root, metadataPath))).toBe(true);
