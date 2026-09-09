@@ -8,7 +8,10 @@ import {
 } from "./release-package-exports.mjs";
 
 test("release export helper derives package specifiers", () => {
-  assert.equal(exportSpecifier("@vyrnforge/ui-angular", "."), "@vyrnforge/ui-angular");
+  assert.equal(
+    exportSpecifier("@vyrnforge/ui-angular", "."),
+    "@vyrnforge/ui-angular",
+  );
   assert.equal(
     exportSpecifier("@vyrnforge/ui-angular", "./forms"),
     "@vyrnforge/ui-angular/forms",

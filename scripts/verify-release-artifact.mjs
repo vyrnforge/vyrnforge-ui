@@ -72,9 +72,11 @@ function consumerSource(releaseGroup) {
     )) {
       const targets = entry.targets;
       const isCss =
-        targets.length > 0 && targets.every((target) => target.endsWith(".css"));
+        targets.length > 0 &&
+        targets.every((target) => target.endsWith(".css"));
       const isJson =
-        targets.length > 0 && targets.every((target) => target.endsWith(".json"));
+        targets.length > 0 &&
+        targets.every((target) => target.endsWith(".json"));
       if (isCss) {
         imports.push(`import "${entry.specifier}";`);
         continue;
@@ -121,7 +123,10 @@ function verifyInstalledEntryPoints({ consumerDirectory, releaseGroup }) {
       packageInfo,
       installedPath,
       packageJson,
-      entries: collectPackageExportEntries(packageInfo.name, packageJson.exports),
+      entries: collectPackageExportEntries(
+        packageInfo.name,
+        packageJson.exports,
+      ),
     };
   });
   const specifiers = packageRecords.flatMap(({ entries }) =>
