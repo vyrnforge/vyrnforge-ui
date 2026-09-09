@@ -19,9 +19,6 @@ jobs:
     timeout-minutes: 35
     env:
       CI_SCOPE_FULL: "true"
-      CI_SCOPE_METADATA: "true"
-      CI_SCOPE_FIXTURES: "true"
-      CI_AFFECTED_PACKAGES: "@vyrnforge/ui-behaviors,@vyrnforge/ui-components,@vyrnforge/ui-core,@vyrnforge/ui-data-grid,@vyrnforge/ui-elements,@vyrnforge/ui-vue"
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
