@@ -7,6 +7,11 @@ if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = vi.fn();
 }
 
+Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
+  configurable: true,
+  value: vi.fn(() => null),
+});
+
 beforeEach(() => {
   getPortalRoot();
 });
