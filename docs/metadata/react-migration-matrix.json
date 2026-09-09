@@ -12,7 +12,6 @@
     "publicExports": "docs/metadata/react-behavior-adoption.json",
     "canonicalCatalog": "docs/metadata/components.json",
     "exceptionRegistry": "docs/metadata/framework-exceptions.json",
-    "reactExceptionCatalog": "docs/metadata/react-exception-catalog.json",
     "strategy": "docs/architecture/adr-009-react-canonical-convergence.md"
   },
   "strategies": [
