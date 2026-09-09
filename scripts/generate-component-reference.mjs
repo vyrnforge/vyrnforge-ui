@@ -61,7 +61,7 @@ function frameworkNote(frameworkId, status) {
     return "Native HTML consumes @vyrnforge/ui-elements directly through canonical vf-* Custom Elements and events.";
   }
   if (frameworkId === "angular") {
-    return "Angular is currently a verified consumer of the canonical Custom Element contract. A first-class Angular package must not be claimed until its distribution gate passes.";
+    return "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations.";
   }
   return "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements.";
 }
@@ -117,11 +117,11 @@ function frameworkExamples(component, context) {
       label: "Angular",
       status: angularStatus,
       package:
-        parity.angular?.consumes ??
-        (nativeTag ? "@vyrnforge/ui-elements" : null),
-      setup: nativeTag
-        ? 'schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import "@vyrnforge/ui-elements/register" from application bootstrap'
-        : "",
+        angularStatus === "not-supported" ? null : "@vyrnforge/ui-angular",
+      setup:
+        angularStatus === "not-supported"
+          ? ""
+          : 'import { provideVyrnForge } from "@vyrnforge/ui-angular";\n// add provideVyrnForge() to bootstrapApplication providers',
       example: nativeTag ? `<${nativeTag}></${nativeTag}>` : "",
       note: frameworkNote("angular", angularStatus),
     },

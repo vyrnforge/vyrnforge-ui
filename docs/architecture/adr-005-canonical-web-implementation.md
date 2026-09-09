@@ -1,211 +1,165 @@
 # ADR-005: Canonical Web Implementation Model
 
-- Status: Accepted target architecture
-- Task: MFD-1002
+- Status: Accepted
 - Scope: Non-grid web component implementation strategy
-- Depends on: MFD-1001
-- Current-state reference: [ADR-004](adr-004-multi-framework-web-support.md)
+- Related: [Package Boundaries](01-package-boundaries.md), [ADR-006](adr-006-framework-package-strategy.md), [ADR-008](adr-008-framework-exception-policy.md)
 
 ## Context
 
-VyrnForge now targets four first-class supported web surfaces: React, native
-HTML, Angular, and Vue. First-class support is a product and distribution
-commitment; it does not require four independently maintained renderers.
+VyrnForge supports React, Native HTML / Custom Elements, Angular, and Vue as
+first-class non-grid web surfaces. First-class support is a product and
+compatibility commitment; it does not require four independently maintained
+renderers.
 
-The current repository already has two substantial implementation surfaces:
-
-- the React renderer currently published through `@vyrnforge/ui-components`;
-- the browser-native Custom Element renderer currently published through
-  `@vyrnforge/ui-elements`.
-
-Angular and Vue currently consume the native element surface with reference
-framework adapters. Maintaining that model by adding independent handwritten
-Angular and Vue component implementations would multiply behavior, styling,
-accessibility, focus, event, form, and bug-fix ownership across the catalog.
-
-The S10-S15 program therefore needs one implementation default before contract
-expansion, generation, framework distribution, and React convergence begin.
+Maintaining independent browser implementations for every framework would
+multiply DOM, behavior, styling, accessibility, focus, event, form, and bug-fix
+ownership across the catalog.
 
 ## Decision
 
 For non-grid web components, the **canonical browser implementation is the
-native DOM / Custom Element implementation**.
+native DOM / Custom Element implementation** in `@vyrnforge/ui-elements`.
 
-Framework surfaces should use that canonical implementation through generated
-or generic facades and integration layers wherever the framework can preserve
-VyrnForge's public semantics, accessibility behavior, performance requirements,
-and framework-native developer experience.
+Framework surfaces use that implementation through generated or generic facades
+wherever the framework can preserve VyrnForge's public semantics,
+accessibility, performance, compatibility, and idiomatic developer experience.
 
-This is an implementation default, not a requirement that every public
-framework API expose raw Custom Elements or raw DOM event names.
-
-The target model is:
+This is an implementation default, not a requirement that framework APIs expose
+raw Custom Elements or raw DOM event names.
 
 ```text
-canonical component contracts
+canonical contracts / metadata
           |
-   ui-core / tokens
+      ui-core
           |
     ui-behaviors
           |
-canonical native/DOM implementation
+      ui-elements
+ canonical browser implementation
           |
- +--------+----------+----------+----------+
- |                   |          |          |
-Native              React     Angular     Vue
-public surface      facade    facade      facade
+ +--------+---------+---------+---------+
+ |                  |         |         |
+Native             React    Angular    Vue
+surface            surface  facade     facade
 ```
 
-Package dependency boundaries and the exact package topology are decided by
-MFD-1003 and MFD-1004. This ADR does not by itself change any current package
-manifest or dependency edge.
+Current concrete dependency edges are canonical in
+[Package Boundaries](01-package-boundaries.md) and package manifests.
 
 ## Canonical implementation responsibilities
 
-The canonical native/DOM implementation owns reusable browser behavior that
-must not be reimplemented independently by each framework surface, including:
+The native/DOM implementation owns reusable browser behavior that should not be
+reimplemented independently by each framework surface, including:
 
 - DOM structure and semantic element selection;
 - ARIA relationships and accessibility-state projection;
-- canonical `vf-*` event dispatch and event details;
+- canonical `vf-*` events and details;
 - property/attribute reflection and public imperative methods;
 - Light DOM composition and canonical slot semantics;
 - form association and browser form behavior where applicable;
 - package-owned component styling based on shared VyrnForge tokens;
 - DOM-level focus, overlay, observer, and browser lifecycle integration where
-  those concerns are not already owned by framework-neutral behaviors.
+  those concerns are not already framework-neutral behavior.
 
-Framework-neutral state transitions and reusable decision logic remain in
-`ui-behaviors`; tokens and theme foundations remain in `ui-core`.
+Framework-neutral state transitions and reusable decision logic belong in
+`@vyrnforge/ui-behaviors`; tokens and theme foundations belong in
+`@vyrnforge/ui-core`.
 
 ## Framework facade responsibilities
 
-A framework facade may translate the canonical implementation into native
-framework conventions without duplicating component behavior. Examples include:
+Framework integration translates the canonical implementation into idiomatic
+framework conventions without duplicating product semantics:
 
-- React props, callbacks, refs, children, controlled/uncontrolled conventions,
-  and lifecycle integration;
-- Angular inputs/outputs, content projection, directives, Forms/CVA integration,
-  and Angular typing;
-- Vue props/emits, slots, refs, `v-model`, plugin/component registration, and
-  Vue typing;
-- native HTML registration and direct DOM usage.
+- React: props, callbacks, refs, children/composition, controlled/uncontrolled
+  conventions, lifecycle, SSR/hydration, and compatibility behavior;
+- Angular: inputs/outputs, content projection, Forms integration, setup, typing,
+  refs, and lifecycle translation;
+- Vue: props/emits, slots, refs, `v-model`, plugin/setup, typing, and lifecycle;
+- Native HTML: registration and direct DOM usage.
 
-Facade code should be generated or generic wherever contract metadata can
-express the mapping. Repeated per-component handwritten forwarding code is not
-the default architecture.
+Facade code should be generated or generic wherever canonical metadata can
+express the mapping.
 
-## Dedicated renderer exception
+## Framework-specific exceptions
 
-A dedicated framework-specific renderer is allowed only when a concrete
-technical constraint prevents the canonical implementation plus facade from
-meeting required behavior.
+A dedicated or handwritten framework implementation is allowed only when a
+concrete technical constraint prevents the canonical-backed path from meeting a
+required guarantee, such as:
 
-Valid exception classes include evidence-backed problems such as:
+- SSR/hydration incompatibility;
+- measured performance regression;
+- composition semantics that cannot preserve the public contract;
+- accessibility, focus, or form behavior that cannot be preserved;
+- imperative/ref or framework type-system constraints.
 
-- framework SSR or hydration requirements that cannot be satisfied by the
-  canonical-backed facade;
-- unacceptable measured runtime or rendering performance;
-- framework composition semantics that cannot preserve the public contract;
-- accessibility, focus, or form semantics that cannot be preserved through the
-  canonical implementation;
-- an imperative/ref contract that cannot be exposed safely through the facade.
-
-Preference, familiarity, stylistic differences, or avoiding generator work are
-not sufficient reasons for a dedicated renderer.
-
-Every exception must eventually use the explicit framework-exception metadata
-mechanism defined by MFD-1009 and record its framework, reason, scope, owner,
-validation evidence, and migration or exit criteria.
+Preference, familiarity, or avoiding generator work are not valid reasons.
+Every exception follows [ADR-008](adr-008-framework-exception-policy.md) and is
+recorded in `docs/metadata/framework-exceptions.json` with scope, reason,
+evidence, owner, and review/exit criteria.
 
 ## React convergence
 
-The existing React renderer is not rewritten wholesale by this decision.
-
-React convergence must be incremental and compatibility-preserving. Existing
-React public ergonomics remain the contract unless a separately approved public
-API change says otherwise. Components may remain on the existing implementation
-until their canonical-backed facade passes the API, SSR/hydration, accessibility,
-performance, and rollback criteria defined by MFD-1012 and S14.
-
-This makes the current React implementation a migration source, not evidence
-that dual independent renderers remain the long-term default.
+React remains a first-class public surface through
+`@vyrnforge/ui-components`. React-specific implementation remains only where
+compatibility, developer experience, SSR, accessibility, or performance evidence
+justifies it. Canonical-backed reuse must not break established React API,
+behavior, typing, refs, SSR/hydration, accessibility, or performance guarantees.
 
 ## Native HTML
 
-Native HTML remains a first-class public surface rather than an internal
-implementation detail. Consumers must retain a direct, typed, documented native
-usage path even when the same canonical implementation also powers framework
-facades.
+Native HTML remains a first-class public surface, not an internal implementation
+detail. Consumers retain a direct, typed, documented
+`@vyrnforge/ui-elements` path.
 
 ## Angular and Vue
 
-Angular and Vue become first-class distributions without copying VyrnForge
-component implementations into consuming applications. Their framework-native
-forms/model, events, composition, registration, typing, and ref integration are
-framework facade responsibilities derived from canonical contracts wherever
-practical.
+`@vyrnforge/ui-angular` and `@vyrnforge/ui-vue` are first-class framework
+packages. They remain thin/generated facades over the canonical implementation
+with narrow handwritten integration only where framework semantics require it.
 
-## Non-grid scope
+## Data-grid boundary
 
-This decision applies to the non-grid web component catalog in the S10-S15
-program. It does not make `@vyrnforge/ui-data-grid` multi-framework and does not
-change the grid's current React-only implementation or release track.
+This decision applies to the non-grid catalog. `@vyrnforge/ui-data-grid`
+remains a separate React alpha track and is not made multi-framework by this ADR.
 
 ## Consequences
 
 Benefits:
 
-- one browser implementation receives most DOM, accessibility, form, styling,
-  and browser-behavior fixes;
-- Angular and Vue first-class support does not require separate handwritten
-  component libraries;
-- React can converge incrementally instead of forcing a flag-day rewrite;
-- generation has a clear default target and a clear exception boundary;
-- native HTML remains directly consumable rather than becoming a hidden
-  internal renderer.
+- most DOM, accessibility, form, styling, and browser-behavior fixes have one
+  implementation owner;
+- Angular and Vue do not become independent component libraries;
+- React can preserve idiomatic compatibility while reusing canonical behavior;
+- generation has a clear default target and explicit exception boundary;
+- Native HTML remains directly consumable.
 
 Costs and risks:
 
-- React facade quality must be proven against existing React ergonomics and
-  performance;
-- SSR and hydration require explicit testing rather than assumption;
+- React facade quality must be proven against existing React guarantees;
+- SSR/hydration and framework composition require explicit verification;
 - some components may need narrow documented exceptions;
-- contract metadata must become complete enough to generate framework mappings
-  without component-name conditionals.
+- canonical metadata must remain complete enough to generate mappings without
+  undeclared component-specific branches.
 
 ## Rejected alternatives
 
 ### Four independently maintained renderers
 
-Rejected because it duplicates behavior and accessibility ownership, increases
-framework drift, and conflicts with the program goal of generated or generic
-framework integration.
+Rejected because it duplicates behavior and accessibility ownership and creates
+framework drift.
 
-### Preserve React and native as permanent independent canonical renderers
+### Permanent independent React and native canonical renderers
 
-Rejected as the default because it leaves VyrnForge with two implementation
-sources for the full catalog and gives Angular/Vue no clear canonical source.
-Selected React exceptions remain possible when evidence justifies them.
+Rejected as the default because it leaves two sources for catalog semantics.
+Narrow React exceptions remain allowed when evidence justifies them.
 
-### Make React the canonical implementation
+### React as the canonical implementation
 
-Rejected because native HTML, Angular, and Vue must not acquire a hidden React
-runtime dependency, and the repository already has a browser-native renderer
-with framework-neutral behavior foundations.
+Rejected because Native HTML, Angular, and Vue must not acquire a hidden React
+runtime dependency.
 
-### Framework-neutral virtual renderer as a new runtime layer
+### A new framework-neutral virtual renderer runtime
 
-Not selected for S10. Introducing another rendering runtime would add a new
-abstraction before the existing canonical native implementation and generation
-model are proven insufficient.
-
-## Acceptance mapping
-
-MFD-1002 requires a documented default implementation strategy in which
-dedicated framework renderers require an explicit technical exception.
-
-This ADR establishes the native/DOM implementation as the default canonical
-non-grid web implementation, framework facades as the normal distribution
-mechanism, and evidence-backed explicit exceptions as the only path to dedicated
-framework renderers.
+Not adopted because the existing canonical native implementation plus shared
+behaviors and generated facades meet the current architecture without another
+permanent runtime layer.

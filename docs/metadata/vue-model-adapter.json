@@ -6,7 +6,8 @@
     "version": "3.5.40",
     "supportClaim": "vue-model-adapter-verified",
     "location": "packages/ui-vue/src/model.ts",
-    "renderer": "@vyrnforge/ui-elements",
+    "renderer": "@vyrnforge/ui-vue",
+    "canonicalRenderer": "@vyrnforge/ui-elements",
     "publishedPackage": "@vyrnforge/ui-vue",
     "duplicatesRendering": false,
     "duplicatesValidation": false
@@ -25,13 +26,10 @@
     "open",
     "pressed"
   ],
-  "referenceAdapters": [
-    "useVyrnForgeModel",
-    "generated Vue catalog model mappings"
-  ],
+  "referenceAdapters": ["generated Vue catalog model mappings"],
   "ownership": {
     "nativeElement": "rendering, accessibility, keyboard behavior, validation, form association, canonical events",
-    "vueAdapter": "generated Vue model prop/update-event translation only"
+    "vueAdapter": "package-owned generated Vue model prop/update-event translation only"
   },
   "pendingRuntimeEvidence": [],
   "unresolvedBlockers": [],

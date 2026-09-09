@@ -4,7 +4,7 @@
   "framework": {
     "name": "Vue",
     "version": "3.5.40",
-    "supportLevel": "verified-consumer",
+    "supportLevel": "first-class",
     "renderer": "@vyrnforge/ui-vue",
     "buildTool": "Vite 8.1.5",
     "compilerPlugin": "@vitejs/plugin-vue 6.0.8",

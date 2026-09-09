@@ -1,7 +1,9 @@
 # Import And Setup
 
-VyrnForge UI is package-based. Install and import only the packages your
-application uses.
+VyrnForge UI is consumed through a first-class surface package. Pick the surface
+that matches the application: React, Native HTML / Custom Elements, Angular, or
+Vue. Shared VyrnForge implementation dependencies are installed transitively and
+are not part of the normal application setup model.
 
 The non-grid foundation is distributed through the `beta` prerelease channel.
 `@vyrnforge/ui-data-grid` remains independently versioned on the `alpha`
@@ -12,17 +14,16 @@ release-group versions and dependency rules.
 
 ## React
 
-React applications use `@vyrnforge/ui-components` as the first-class React
-renderer.
+Install the first-class React surface:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta
+npm install @vyrnforge/ui-components@beta
 ```
 
-```tsx
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
+Use the public package entrypoint. It loads the React surface styling and the
+shared VyrnForge foundations required by that surface.
 
+```tsx
 import { Button, Card } from "@vyrnforge/ui-components";
 
 export function Example() {
@@ -34,20 +35,21 @@ export function Example() {
 }
 ```
 
-Import from package entrypoints, not package-internal `src` paths.
+Import from package entrypoints, not package-internal `src` paths. React and
+React DOM are peers supplied by the application; see the package manifest for
+the supported range.
 
-## Native HTML Custom Elements
+## Native HTML / Custom Elements
 
-Native HTML applications use `@vyrnforge/ui-elements`.
+Install the first-class browser-native surface:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta
+npm install @vyrnforge/ui-elements@beta
 ```
 
-```ts
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-elements/styles/index.css";
+Register the catalog once at the browser application boundary:
 
+```ts
 import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 
 registerVyrnForgeElements();
@@ -57,8 +59,10 @@ registerVyrnForgeElements();
 <vf-button variant="primary">Save changes</vf-button>
 ```
 
-The package root is side-effect free. Applications may also opt into the
-explicit registration entrypoint:
+The package root loads the Native HTML surface styling. It is otherwise safe to
+import in the validated server environment and does not register elements until
+registration is requested. Applications may also opt into the explicit
+registration side-effect entrypoint:
 
 ```ts
 import "@vyrnforge/ui-elements/register";
@@ -69,20 +73,19 @@ attributes.
 
 ## Angular
 
-Angular applications use `@vyrnforge/ui-angular` as the first-class facade over
-the canonical Custom Element implementation.
+Install the first-class Angular facade in an Angular application:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-angular@beta
+npm install @vyrnforge/ui-angular@beta
 ```
 
-Import the shared package styles once, then register VyrnForge at the Angular
-application boundary:
+`@angular/core` and RxJS are peers supplied by the Angular application.
+`@angular/forms` is optional and is needed only when the Forms entrypoint is
+used.
+
+Register VyrnForge once at the Angular application boundary:
 
 ```ts
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-elements/styles/index.css";
-
 import { provideZonelessChangeDetection } from "@angular/core";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { provideVyrnForge } from "@vyrnforge/ui-angular";
@@ -94,29 +97,28 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-The generated facade supplies Angular selectors, typed inputs/outputs, content
-composition metadata, typed element references, and supported imperative method
-access without requiring applications to copy registration code or private
-fixture adapters.
+`provideVyrnForge()` owns canonical element registration for normal Angular
+consumers. The facade supplies Angular selectors, typed inputs/outputs, content
+composition metadata, typed element references, supported imperative methods,
+and the canonical VyrnForge styling through its element dependency. Consumers
+do not install or configure the implementation dependency graph separately.
 
 Applications that use reactive Forms, template-driven Forms, or `ngModel`
-import the package-owned Forms bridge from `@vyrnforge/ui-angular/forms`.
-`@angular/forms` remains an optional peer for applications that do not use that
-entrypoint.
+import the package-owned bridge from `@vyrnforge/ui-angular/forms`.
 
 See [Angular Package](../packages/ui-angular.md) for Forms, events, composition,
 typed references, SSR guidance, migration steps, limitations, and supported
-escape hatches. Use the generated component reference for the exact per-component
-Angular surface.
+escape hatches. Use the generated component reference for the exact
+per-component Angular surface.
 
 ## Vue
 
-Vue applications use `@vyrnforge/ui-vue` as the first-class Vue facade over the
-same canonical Custom Element implementation. The supported Vue peer range is
-`>=3.5 <4`.
+Install the first-class Vue facade. Existing Vue applications only need the
+VyrnForge package; the command below also shows the required Vue peer for a new
+or minimal project:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-vue@beta vue
+npm install @vyrnforge/ui-vue@beta vue
 ```
 
 Install the package plugin at the Vue application boundary:
@@ -129,10 +131,10 @@ import App from "./App.vue";
 createApp(App).use(VyrnForgeVue).mount("#app");
 ```
 
-The plugin registers the canonical VyrnForge custom elements and public `Vf*`
-facade components. Normal facade consumers do not need to copy
-`@vyrnforge/ui-elements/register`, configure Vue compiler `isCustomElement`
-rules, or maintain fixture-local wrappers.
+The plugin registers the canonical VyrnForge elements and public `Vf*` facade
+components. Normal facade consumers do not copy element registration, configure
+Vue compiler `isCustomElement` rules, install VyrnForge implementation packages
+individually, or maintain fixture-local wrappers.
 
 Use generated `v-model` mappings, Vue-facing typed emits, named slots, and typed
 component refs for normal Vue integration. Raw `<vf-*>` elements and canonical
@@ -144,31 +146,31 @@ typed refs, native forms, SSR behavior, migration guidance, and supported escape
 hatches. Use the generated component reference for the exact per-component Vue
 surface.
 
-## Framework-neutral behaviors
+## Framework-neutral behavior APIs
 
-Applications may consume the shared controller APIs directly:
+Most applications should start from a framework surface package. Applications
+that intentionally build on the shared controller layer directly can install the
+framework-neutral behavior package:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-behaviors@beta
+npm install @vyrnforge/ui-behaviors@beta
 ```
 
 `@vyrnforge/ui-behaviors` owns portable state transitions and interaction
-decisions. It does not own framework rendering, DOM execution, application
-state, backend requests, or business workflows.
+decisions. Its shared dependencies are installed transitively. It does not own
+framework rendering, DOM execution, application state, backend requests, or
+business workflows.
 
 ## Data grid
 
 The data grid is a specialized React package on an independent alpha track.
+Start from the normal React surface and add the grid package:
 
 ```bash
-npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
+npm install @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
 ```
 
 ```tsx
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
-import "@vyrnforge/ui-data-grid/styles/index.css";
-
 import {
   UniversalDataGrid,
   type DataGridColumnDef,
@@ -176,36 +178,28 @@ import {
 ```
 
 The grid remains React-only. The non-grid multi-framework support model does not
-imply native HTML, Angular, or Vue grid renderers.
+imply Native HTML, Angular, or Vue grid renderers.
 
-## CSS order
+## Styles and explicit CSS entrypoints
 
-Foundation styles come first, followed by the renderer or specialized package
-styles used by the application.
+Normal surface-package imports load the VyrnForge CSS used by that surface. This
+is the same path exercised by the clean packed-consumer fixtures.
 
-React:
+Explicit public CSS entrypoints remain available for hosts that deliberately
+manage stylesheet loading or ordering. For example:
 
 ```ts
-import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-Native HTML, Angular, and Vue facade applications:
+or:
 
 ```ts
-import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-elements/styles/index.css";
 ```
 
-React plus data grid:
-
-```ts
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
-import "@vyrnforge/ui-data-grid/styles/index.css";
-```
-
-Do not import package-internal CSS files.
+Do not import package-internal CSS files. Do not require applications to install
+shared foundation packages merely to reproduce the internal dependency graph.
 
 ## Themes and overrides
 
@@ -228,15 +222,12 @@ See [Theming And Styling](../architecture/03-theming-and-styling.md) and
 
 ## Package rules
 
-- Keep application business logic, authentication, routing, permissions, and
-  application state outside VyrnForge.
+- Choose React, Native HTML, Angular, or Vue first; use its public package as the normal application entrypoint.
+- Keep application business logic, authentication, routing, permissions, and application state outside VyrnForge.
 - Keep framework runtimes out of shared foundations.
-- Prefer VyrnForge tokens and behavior contracts before creating one-off
-  application equivalents.
-- Treat React, Native HTML, Angular, and Vue as first-class non-grid consumption
-  surfaces through their public packages/contracts.
-- Prefer `@vyrnforge/ui-angular` and `@vyrnforge/ui-vue` over application-owned
-  framework wrappers that only duplicate canonical VyrnForge behavior.
+- Prefer VyrnForge tokens and behavior contracts before creating one-off application equivalents.
+- Prefer `@vyrnforge/ui-angular` and `@vyrnforge/ui-vue` over application-owned framework wrappers that duplicate canonical VyrnForge behavior.
+- Treat `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, and transitive renderer dependencies as architecture details unless an application intentionally consumes their public framework-neutral APIs.
 - Treat the data grid as a separate React alpha track.
 
 ## Licensing

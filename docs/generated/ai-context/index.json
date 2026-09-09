@@ -36,7 +36,7 @@
       "name": "@vyrnforge/ui-angular",
       "status": "current",
       "releaseTrack": "non-grid-beta",
-      "runtime": null
+      "runtime": "angular"
     },
     {
       "name": "@vyrnforge/ui-vue",
@@ -64,8 +64,8 @@
     },
     {
       "id": "angular",
-      "supportLevel": "verified-consumer",
-      "renderer": "@vyrnforge/ui-elements"
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-angular"
     },
     {
       "id": "vue",

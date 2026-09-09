@@ -3,7 +3,7 @@
   "sourceOfTruth": {
     "canonical": true,
     "scope": "multi-framework web support, package topology, renderer status, and consumer-fixture policy",
-    "documentation": "docs/architecture/adr-004-multi-framework-web-support.md"
+    "documentation": "docs/architecture/00-system-overview.md"
   },
   "packages": [
     {
@@ -41,14 +41,6 @@
       "foundationStage": "complete"
     },
     {
-      "name": "@vyrnforge/ui-components",
-      "directory": "packages/ui-components",
-      "status": "current",
-      "betaIncluded": true,
-      "runtime": "react",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"]
-    },
-    {
       "name": "@vyrnforge/ui-elements",
       "directory": "packages/ui-elements",
       "status": "current",
@@ -56,13 +48,42 @@
       "runtime": "custom-elements",
       "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "owns": [
-        "native Custom Element renderers",
+        "canonical native Custom Element renderers",
         "property and attribute reflection",
         "typed DOM events",
         "form-associated element integration",
         "explicit registration entry points"
       ],
-      "foundationStage": "native-parity-current"
+      "foundationStage": "canonical-native-current"
+    },
+    {
+      "name": "@vyrnforge/ui-components",
+      "directory": "packages/ui-components",
+      "status": "current",
+      "betaIncluded": true,
+      "runtime": "react",
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors",
+        "@vyrnforge/ui-elements"
+      ],
+      "foundationStage": "first-class-react-converged"
+    },
+    {
+      "name": "@vyrnforge/ui-angular",
+      "directory": "packages/ui-angular",
+      "status": "current",
+      "betaIncluded": true,
+      "runtime": "angular",
+      "dependsOn": ["@vyrnforge/ui-elements"],
+      "owns": [
+        "Angular generated facade bindings",
+        "Angular package setup and registration",
+        "Angular Forms integration",
+        "Angular content composition",
+        "typed Angular element references"
+      ],
+      "foundationStage": "first-class-package-current"
     },
     {
       "name": "@vyrnforge/ui-vue",
@@ -97,7 +118,8 @@
       "supportLevel": "first-class",
       "renderer": "@vyrnforge/ui-components",
       "fixture": "tests/consumers/react",
-      "betaClaim": "react-public-package-consumer-verified"
+      "betaClaim": "react-public-package-consumer-verified",
+      "implementationStrategy": "canonical-backed convergence with explicit framework exceptions"
     },
     {
       "id": "native-html",
@@ -105,15 +127,16 @@
       "renderer": "@vyrnforge/ui-elements",
       "fixture": "tests/consumers/native-html",
       "betaClaim": "packed-consumer-verified",
-      "rendererFoundation": "native-parity-current"
+      "rendererFoundation": "canonical-native-current"
     },
     {
       "id": "angular",
-      "supportLevel": "verified-consumer",
-      "renderer": "@vyrnforge/ui-elements",
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-angular",
       "fixture": "tests/consumers/angular",
-      "betaClaim": "packed-consumer-verified",
-      "formsIntegration": "angular-forms-adapter-verified"
+      "betaClaim": "first-class-package-verified",
+      "formsIntegration": "angular-forms-adapter-verified",
+      "supportEvidence": "docs/metadata/angular-support-evidence.json"
     },
     {
       "id": "vue",
@@ -124,6 +147,13 @@
       "modelIntegration": "first-class-vue-facade-verified"
     }
   ],
+  "architecture": {
+    "canonicalComponentModel": "docs/metadata/component-contracts.json",
+    "defaultBrowserImplementation": "@vyrnforge/ui-elements",
+    "facadePolicy": "generated-or-generic-canonical-backed",
+    "exceptionPolicy": "docs/architecture/adr-008-framework-exception-policy.md",
+    "supportRule": "First-class support status is independent from whether a surface owns a dedicated renderer or adapts the canonical native implementation."
+  },
   "styling": {
     "defaultDomMode": "light-dom",
     "sharedTokens": "--vf-*",
@@ -135,10 +165,11 @@
   "consumerFixturePolicy": {
     "manifest": "tests/consumers/manifest.json",
     "currentClaim": "native-html-react-angular-vue-consumer-foundation-complete",
-    "rule": "Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through public package outputs. Framework-specific facades and adapters remain thin translation layers over shared native contracts.",
+    "rule": "Native HTML, React, Angular, and Vue fixtures verify clean packed consumption through public package outputs. Current framework support status is recorded separately from historical fixture-stage terminology.",
     "evidence": "docs/metadata/consumer-foundations.json",
     "angularEvidence": "docs/metadata/angular-consumer.json",
     "angularFormsEvidence": "docs/metadata/angular-forms-adapter.json",
+    "angularFirstClassEvidence": "docs/metadata/angular-support-evidence.json",
     "vueEvidence": "docs/metadata/vue-consumer.json",
     "vueModelEvidence": "docs/metadata/vue-model-adapter.json"
   },
@@ -154,14 +185,16 @@
     "nativeCoreMetadata": "docs/metadata/native-core-elements.json",
     "registeredPublicTags": 58,
     "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
-    "foundationStage": "native-parity-current"
+    "foundationStage": "canonical-native-current"
   },
   "angularConsumer": {
     "status": "complete",
     "frameworkVersion": "22.0.8",
     "metadata": "docs/metadata/angular-consumer.json",
     "runtimeFixture": "tests/consumers/angular",
-    "supportClaim": "packed-angular-runtime-verified"
+    "supportClaim": "packed-angular-runtime-verified",
+    "firstClassEvidence": "docs/metadata/angular-support-evidence.json",
+    "publishedPackage": null
   },
   "angularFormsAdapter": {
     "status": "complete",
@@ -176,7 +209,8 @@
     "frameworkVersion": "3.5.40",
     "metadata": "docs/metadata/vue-consumer.json",
     "runtimeFixture": "tests/consumers/vue",
-    "supportClaim": "packed-vue-runtime-verified"
+    "supportClaim": "packed-vue-runtime-verified",
+    "publishedPackage": "@vyrnforge/ui-vue"
   },
   "vueModelAdapter": {
     "status": "complete",
