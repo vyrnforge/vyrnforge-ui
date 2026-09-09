@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "task": "MFD-1416",
   "deliverable": "Reduced React implementation duplication",
-  "policy": "Migrated React components keep one supported implementation path. Canonical-backed surfaces may retain compatibility code required by the public React contract, while non-canonical renderers must be justified by a live framework exception or parity blocker. Duplicate dormant implementations are forbidden.",
+  "policy": "Migrated React components keep one supported implementation path. Canonical-backed surfaces may retain compatibility code required by the public React contract, while non-canonical renderers must be justified by a live framework exception. Duplicate dormant implementations are forbidden.",
   "cleanupResult": "in-place-replacement",
   "removedDuplicateFiles": [],
   "auditedCanonicalBacked": [
@@ -117,13 +117,8 @@
       "exceptionId": "MFD-EX-REACT-COLLECTION-RICH-COMPOSITION"
     }
   ],
-  "parityBlockerSources": [
-    "docs/metadata/react-batch-5-overlay-convergence.json",
-    "docs/metadata/react-batch-6-catalog-convergence.json"
-  ],
   "staleTransitionMetadataCleaned": [
     "docs/metadata/react-batch-1-readiness.json",
-    "docs/metadata/react-exception-catalog.json",
     "docs/metadata/react-migration-matrix.json"
   ],
   "forbiddenDuplicateSuffixes": [
