@@ -131,6 +131,7 @@ export function Slider({
             max={rangeMax}
             min={min}
             name={name}
+            onChange={props.onChange ?? (() => undefined)}
             required={required}
             step={step}
             type="range"
