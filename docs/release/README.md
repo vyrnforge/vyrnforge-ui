@@ -29,8 +29,8 @@ second beta-specific budget manifest.
 | [release-policy.md](release-policy.md)                                                       | Release maturity stages and expectations.                                            |
 | [versioning-policy.md](versioning-policy.md)                                                 | Release groups, exact repository versions, prerelease tags, and compatibility rules. |
 | [publication-procedure.md](publication-procedure.md)                                         | The single controlled publication progression.                                       |
-| [release-responsibility-matrix.md](release-responsibility-matrix.md)                         | CI, package, deployment, npm, registry, and release-record ownership.                 |
-| [deprecation-and-migration-policy.md](deprecation-and-migration-policy.md)                    | Deprecation, compatibility, migration, and removal rules.                            |
+| [release-responsibility-matrix.md](release-responsibility-matrix.md)                         | CI, package, deployment, npm, registry, and release-record ownership.                |
+| [deprecation-and-migration-policy.md](deprecation-and-migration-policy.md)                   | Deprecation, compatibility, migration, and removal rules.                            |
 | [multi-framework-migration-and-limitations.md](multi-framework-migration-and-limitations.md) | Framework selection, integration boundaries, guarantees, and limitations.            |
 | [release-readiness-checklist.md](release-readiness-checklist.md)                             | Reusable prerelease/stable release readiness checklist.                              |
 | [external-consumer-verification.md](external-consumer-verification.md)                       | Packed package consumer verification.                                                |
