@@ -50,8 +50,8 @@
   },
   "devDependencies": {
     "@types/node": "24.10.9",
-    "tsup": "latest",
+    "tsup": "*",
     "typescript": "7.0.2",
-    "vitest": "latest"
+    "vitest": "^5.0.0"
   }
 }

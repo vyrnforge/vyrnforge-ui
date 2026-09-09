@@ -59,13 +59,13 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@vyrnforge/ui-core": "0.2.0-beta.2",
-    "@vyrnforge/ui-behaviors": "0.2.0-beta.2"
+    "@vyrnforge/ui-behaviors": "0.2.0-beta.2",
+    "@vyrnforge/ui-core": "0.2.0-beta.2"
   },
   "devDependencies": {
-    "tsup": "latest",
+    "tsup": "*",
     "typescript": "7.0.2",
-    "vitest": "latest"
+    "vitest": "^5.0.0"
   },
   "customElements": "./custom-elements.json"
 }

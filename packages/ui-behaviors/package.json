@@ -47,8 +47,8 @@
     "@vyrnforge/ui-core": "0.2.0-beta.2"
   },
   "devDependencies": {
-    "tsup": "latest",
+    "tsup": "*",
     "typescript": "7.0.2",
-    "vitest": "latest"
+    "vitest": "^5.0.0"
   }
 }
