@@ -40,6 +40,8 @@ Current component maturity and catalog facts are owned by [`metadata/components.
 - [Repository inventory](governance/repository-inventory.md)
 - [AGENTS.md](../AGENTS.md) for repository coding-agent rules
 
+## Execution and planning
+
 The live Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status** owns active sprint execution, task status, dependencies, acceptance criteria, sequencing, validation requirements, and gate status. GitHub does not maintain a competing sprint tracker.
 
 ## Machine-readable sources
@@ -48,5 +50,7 @@ The live Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status**
 - Component catalog and maturity: [`metadata/components.json`](metadata/components.json)
 - Generated component/framework reference: [`generated/component-reference.json`](generated/component-reference.json)
 - Generated AI context: [`generated/ai-context/index.json`](generated/ai-context/index.json)
+
+## Historical evidence
 
 Historical task narratives and reproducible audit reports are not current documentation. Keep them only when they retain explicit release, migration, regression, security, or architectural value; otherwise Git history is the recovery path.
