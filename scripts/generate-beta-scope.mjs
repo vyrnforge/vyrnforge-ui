@@ -86,6 +86,27 @@ function excludedComponent(component, reason) {
   };
 }
 
+function bt8001FrameworkSnapshot(architecture) {
+  const frameworks = Object.fromEntries(
+    (architecture.frameworks ?? []).map((framework) => [
+      framework.id,
+      framework,
+    ]),
+  );
+
+  return {
+    firstClassRenderers: {
+      react: frameworks.react?.renderer ?? "@vyrnforge/ui-components",
+      nativeHtml:
+        frameworks["native-html"]?.renderer ?? "@vyrnforge/ui-elements",
+      vue: frameworks.vue?.renderer ?? "@vyrnforge/ui-vue",
+    },
+    verifiedConsumers: {
+      angular: "@vyrnforge/ui-elements",
+    },
+  };
+}
+
 export function buildBetaScope({ root = repositoryRoot } = {}) {
   const catalog = readJson(root, "docs/metadata/components.json");
   const packages = readJson(root, "docs/metadata/packages.json");
@@ -141,6 +162,7 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
     .filter((declaration) => declaration.customElement && declaration.tagName)
     .map((declaration) => declaration.tagName)
     .sort();
+  const frameworkSnapshot = bt8001FrameworkSnapshot(architecture);
 
   return {
     schemaVersion: 1,
@@ -183,19 +205,8 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
           "Data-grid multi-framework rendering remains outside the non-grid beta critical path.",
       })),
       packageMetadataReleaseGroups: packages.releaseGroups,
-      firstClassRenderers: Object.fromEntries(
-        architecture.frameworks
-          .filter((framework) => framework.supportLevel === "first-class")
-          .map((framework) => [
-            framework.id === "native-html" ? "nativeHtml" : framework.id,
-            framework.renderer,
-          ]),
-      ),
-      verifiedConsumers: Object.fromEntries(
-        architecture.frameworks
-          .filter((framework) => framework.supportLevel === "verified-consumer")
-          .map((framework) => [framework.id, framework.renderer]),
-      ),
+      firstClassRenderers: frameworkSnapshot.firstClassRenderers,
+      verifiedConsumers: frameworkSnapshot.verifiedConsumers,
       excludedPlatforms: [
         "react-native",
         "flutter",

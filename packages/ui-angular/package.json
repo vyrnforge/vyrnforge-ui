@@ -1,0 +1,73 @@
+{
+  "name": "@vyrnforge/ui-angular",
+  "version": "0.2.0-beta.2",
+  "description": "Angular facade for VyrnForge canonical UI elements",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./forms": {
+      "types": "./dist/forms.d.ts",
+      "import": "./dist/forms.js",
+      "default": "./dist/forms.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "ngc -p tsconfig.build.json",
+    "lint": "eslint src --config ../../eslint.config.mjs",
+    "lint:fix": "npm run lint -- --fix",
+    "pretypecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-behaviors && npm run build --workspace @vyrnforge/ui-elements",
+    "typecheck": "ngc -p tsconfig.json",
+    "test": "vitest run && node ../../scripts/verify-angular-peer-policy.mjs && node ../../scripts/verify-angular-catalog-coverage.mjs"
+  },
+  "dependencies": {
+    "@vyrnforge/ui-elements": "0.2.0-beta.2",
+    "tslib": "^2.8.1"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=21 <23",
+    "@angular/forms": ">=21 <23",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/forms": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "22.0.8",
+    "@angular/core": "22.0.8",
+    "@angular/forms": "22.0.8",
+    "rxjs": "7.8.2",
+    "typescript": "6.0.2",
+    "vitest": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vyrnforge/vyrnforge-ui.git",
+    "directory": "packages/ui-angular"
+  },
+  "homepage": "https://github.com/vyrnforge/vyrnforge-ui#readme",
+  "bugs": {
+    "url": "https://github.com/vyrnforge/vyrnforge-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=24.18 <25",
+    "npm": ">=11.16 <12"
+  }
+}

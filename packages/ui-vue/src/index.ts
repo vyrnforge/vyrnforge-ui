@@ -6,18 +6,16 @@ export {
 } from "./plugin";
 export type { VyrnForgeVueOptions } from "./plugin";
 
-export { VfButton } from "./generated/VfButton.generated";
-export type { VfButtonElement } from "./generated/VfButton.generated";
+export { useVyrnForgeModel } from "./model";
+export type { VyrnForgeModelAdapterOptions } from "./model";
 
-export { VfDialog } from "./generated/VfDialog.generated";
+export * from "./generated/typed-catalog.generated";
+
+export type { VfButtonElement } from "./generated/VfButton.generated";
 export type {
   GeneratedDialogDismissDetail,
   GeneratedDialogOpenChangeDetail,
   VfDialogElement,
 } from "./generated/VfDialog.generated";
-
-export { VfTabs } from "./generated/VfTabs.generated";
 export type { VfTabsElement } from "./generated/VfTabs.generated";
-
-export { VfTextInput } from "./generated/VfTextInput.generated";
 export type { VfTextInputElement } from "./generated/VfTextInput.generated";

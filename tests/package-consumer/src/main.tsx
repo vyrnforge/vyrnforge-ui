@@ -16,12 +16,14 @@ import {
   Card,
   Field,
   Inline,
+  MultiSelect,
   Page,
   SideNav,
   Stack,
   Text,
   TextInput,
   TopNav,
+  TransferList,
 } from "@vyrnforge/ui-components";
 import {
   createVyrnForgeTheme,
@@ -118,6 +120,34 @@ function VerificationContent() {
               openOnFocus
             />
           </Field>
+
+          <Field label="Regions">
+            <MultiSelect
+              aria-label="Regions"
+              defaultValue={["us"]}
+              options={[
+                { value: "us", label: <strong>United States</strong> },
+                { value: "eu", label: <em>Europe</em> },
+                { value: "apac", label: "Asia Pacific" },
+              ]}
+              searchable
+            />
+          </Field>
+
+          <TransferList
+            ariaLabel="Team assignment"
+            defaultValue={["operations"]}
+            name="team-member"
+            options={[
+              { value: "access", label: "Access team" },
+              { value: "workflow", label: "Workflow team" },
+              { value: "operations", label: "Operations team" },
+            ]}
+            renderOption={(option) => <strong>{option.label}</strong>}
+            searchable
+            sourceTitle="Available teams"
+            targetTitle="Assigned teams"
+          />
         </Stack>
       </Card>
 

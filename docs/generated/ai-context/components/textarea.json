@@ -47,15 +47,15 @@
     },
     "angular": {
       "status": "verified-consumer",
-      "package": "@vyrnforge/ui-elements",
-      "setup": "schemas: [CUSTOM_ELEMENTS_SCHEMA]\n// import \"@vyrnforge/ui-elements/register\" from application bootstrap",
+      "package": "@vyrnforge/ui-angular",
+      "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
       "example": "<vf-textarea></vf-textarea>"
     },
     "vue": {
       "status": "verified-consumer",
-      "package": "@vyrnforge/ui-elements",
-      "setup": "compilerOptions: { isCustomElement: (tag) => tag.startsWith('vf-') }",
-      "example": "<vf-textarea></vf-textarea>"
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfTextarea></VfTextarea>"
     }
   },
   "contract": {

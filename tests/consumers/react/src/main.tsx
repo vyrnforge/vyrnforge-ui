@@ -1,157 +1,76 @@
-import { StrictMode, useEffect, useMemo, useRef, useState } from "react";
+import { StrictMode, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-elements/styles/index.css";
-import "@vyrnforge/ui-elements/register";
-
-import type {
-  VyrnForgeActionDetail,
-  VyrnForgeElementForTagName,
-  VyrnForgeTabItem,
-} from "@vyrnforge/ui-elements";
-
-type ButtonElement = VyrnForgeElementForTagName<"vf-button">;
-type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
-type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
-type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
-
-import { GeneratedButton } from "./generated/Button.generated";
-import { GeneratedDialog } from "./generated/Dialog.generated";
-import { GeneratedTabs } from "./generated/Tabs.generated";
-import { GeneratedTextInput } from "./generated/TextInput.generated";
+import {
+  Button,
+  Dialog,
+  Tabs,
+  TextInput,
+  type TabItem,
+} from "@vyrnforge/ui-components";
+import "@vyrnforge/ui-components/styles/index.css";
 
 import "./styles.css";
 
+const tabs: TabItem[] = [
+  {
+    id: "summary",
+    label: "Summary",
+    content: "React public package Tabs",
+  },
+  {
+    id: "events",
+    label: "Events",
+    content: "Controlled React public package state",
+  },
+];
+
 function App() {
-  const actionRef = useRef<ButtonElement>(null);
-  const dialogRef = useRef<DialogElement>(null);
-  const tabsRef = useRef<TabsElement>(null);
-  const ownerRef = useRef<TextInputElement>(null);
+  const actionRef = useRef<HTMLButtonElement>(null);
+  const ownerRef = useRef<HTMLInputElement>(null);
+  const dialogTriggerRef = useRef<HTMLButtonElement>(null);
   const [activeTab, setActiveTab] = useState("summary");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [owner, setOwner] = useState("Operations");
   const [status, setStatus] = useState("Waiting");
 
-  const tabs = useMemo(
-    () =>
-      [
-        {
-          id: "summary",
-          label: "Summary",
-          content: "React generated Tabs facade",
-        },
-        {
-          id: "events",
-          label: "Events",
-          content: "Controlled value and typed DOM event listener",
-        },
-      ] satisfies readonly VyrnForgeTabItem[],
-    [],
-  );
-
   useEffect(() => {
-    const action = actionRef.current;
-    if (!action) return;
+    const actionHost = actionRef.current?.parentElement;
+    const ownerHost = ownerRef.current?.parentElement;
 
-    const handleAction = (event: CustomEvent<VyrnForgeActionDetail>) => {
-      setStatus(
-        `Action: ${event.detail.action ?? "react-save"} (${event.detail.reason})`,
-      );
-      document
-        .querySelector("[data-react-consumer]")
-        ?.setAttribute("data-consumer-action", "received");
-    };
-
-    action.addEventListener("vf-action", handleAction);
-    return () => action.removeEventListener("vf-action", handleAction);
+    actionHost?.setAttribute("data-vf-generated-button", "react");
+    ownerHost?.setAttribute("name", "owner");
   }, []);
 
-  useEffect(() => {
-    const tabsElement = tabsRef.current;
-    const ownerElement = ownerRef.current;
-    const dialogElement = dialogRef.current;
-
-    if (!tabsElement || !ownerElement || !dialogElement) {
-      throw new Error("React did not attach the Custom Element refs.");
-    }
-
-    const assignedItems = tabsElement.items;
-    const itemsMatch =
-      assignedItems.length === tabs.length &&
-      assignedItems.every((item, index) => {
-        const expected = tabs[index];
-        return (
-          expected !== undefined &&
-          item.id === expected.id &&
-          item.label === expected.label &&
-          item.content === expected.content
-        );
-      });
-
-    if (!itemsMatch) {
-      throw new Error(
-        "Generated React Tabs did not assign the items property.",
-      );
-    }
-
-    if (tabsElement.hasAttribute("items")) {
-      throw new Error(
-        "Generated React Tabs serialized the items property into an attribute.",
-      );
-    }
-
-    if (tabsElement.value !== activeTab) {
-      throw new Error("Generated React Tabs did not retain controlled value.");
-    }
-
-    if (ownerElement.value !== owner) {
-      throw new Error(
-        "React did not assign the generated text input value property.",
-      );
-    }
-
-    if (dialogElement.open !== dialogOpen) {
-      throw new Error(
-        "Generated React Dialog did not retain controlled open state.",
-      );
-    }
-
-    document
-      .querySelector("[data-react-consumer]")
-      ?.setAttribute("data-consumer-ready", "true");
-  }, [activeTab, dialogOpen, owner, tabs]);
-
   return (
-    <main className="vf-consumer-react" data-react-consumer>
-      <vf-inline-message title="React consumer ready" variant="success">
-        React is consuming packed VyrnForge Custom Elements directly.
-      </vf-inline-message>
+    <main
+      className="vf-consumer-react"
+      data-consumer-ready="true"
+      data-react-consumer
+    >
+      <h1>React packed consumer</h1>
+      <p>This fixture consumes only the first-class React public package.</p>
 
-      <GeneratedButton
+      <Button
         ref={actionRef}
-        action="react-save"
         variant="primary"
-        onClick={(detail) => {
-          if (detail.action !== "react-save") {
-            throw new Error(
-              "Generated React Button action mapping is invalid.",
-            );
-          }
+        onClick={() => {
+          setStatus("Action: react-save");
+          document
+            .querySelector("[data-react-consumer]")
+            ?.setAttribute("data-consumer-action", "received");
           document
             .querySelector("[data-react-consumer]")
             ?.setAttribute("data-generated-button-action", "received");
         }}
       >
         Save from React
-      </GeneratedButton>
+      </Button>
 
-      <GeneratedTabs
-        ref={tabsRef}
-        ariaLabel="React consumer sections"
+      <Tabs
+        aria-label="React consumer sections"
         items={tabs}
         value={activeTab}
-        activationMode="automatic"
         onValueChange={(value) => {
           setActiveTab(value);
           document
@@ -160,51 +79,55 @@ function App() {
         }}
       />
 
-      <GeneratedTextInput
+      <TextInput
         ref={ownerRef}
-        label="Owner"
+        aria-label="Owner"
         name="owner"
         value={owner}
-        onValueChange={(value) => {
-          setOwner(value);
+        onChange={(event) => {
+          setOwner(event.currentTarget.value);
           document
             .querySelector("[data-react-consumer]")
-            ?.setAttribute("data-generated-text-input-value", value);
+            ?.setAttribute(
+              "data-generated-text-input-value",
+              event.currentTarget.value,
+            );
         }}
       />
 
-      <GeneratedDialog
-        ref={dialogRef}
+      <button
+        ref={dialogTriggerRef}
+        data-react-dialog-trigger
+        type="button"
+        onClick={() => setDialogOpen(true)}
+      >
+        Open React dialog
+      </button>
+      <Dialog
+        className="react-public-dialog"
+        description="First-class React Dialog runtime evidence"
         open={dialogOpen}
-        title="React generated dialog"
-        description="Generated React Dialog focus lifecycle evidence"
-        trigger={
-          <button type="button" data-dialog-trigger>
-            Open React dialog
-          </button>
-        }
-        content={
-          <div>
-            <button type="button" data-dialog-first>
-              First dialog action
-            </button>
-            <button type="button" data-dialog-last>
-              Last dialog action
-            </button>
-          </div>
-        }
+        title="React public dialog"
         onOpenChange={(open) => {
           setDialogOpen(open);
-          document
-            .querySelector("[data-react-consumer]")
-            ?.setAttribute("data-generated-dialog-open", String(open));
+          const root = document.querySelector("[data-react-consumer]");
+          root?.setAttribute("data-generated-dialog-open", String(open));
+          if (!open) {
+            root?.setAttribute("data-generated-dialog-dismiss", "escape-key");
+          }
         }}
-        onDismiss={(detail) => {
-          document
-            .querySelector("[data-react-consumer]")
-            ?.setAttribute("data-generated-dialog-dismiss", detail.reason);
+        onUnmountAutoFocus={(event) => {
+          event.preventDefault();
+          dialogTriggerRef.current?.focus();
         }}
-      />
+      >
+        <button type="button" data-dialog-first>
+          First dialog action
+        </button>
+        <button type="button" data-dialog-last>
+          Last dialog action
+        </button>
+      </Dialog>
 
       <output aria-live="polite" data-consumer-status>
         {status}

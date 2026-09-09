@@ -5,32 +5,41 @@
     "framework": "Vue",
     "version": "3.5.40",
     "supportClaim": "vue-model-adapter-verified",
-    "location": "tests/consumers/vue/src/adapters",
-    "renderer": "@vyrnforge/ui-elements",
-    "publishedPackage": null,
+    "location": "packages/ui-vue/src/model.ts",
+    "renderer": "@vyrnforge/ui-vue",
+    "canonicalRenderer": "@vyrnforge/ui-elements",
+    "publishedPackage": "@vyrnforge/ui-vue",
     "duplicatesRendering": false,
     "duplicatesValidation": false
   },
   "contracts": [
     "modelValue",
     "update:modelValue",
+    "update:open",
+    "update:pressed",
     "vf-value-change",
     "vf-checked-change",
+    "vf-open-change",
+    "vf-pressed-change",
     "value",
-    "checked"
+    "checked",
+    "open",
+    "pressed"
   ],
-  "referenceAdapters": ["VyrnForgeTextInputModel", "VyrnForgeCheckboxModel"],
+  "referenceAdapters": ["generated Vue catalog model mappings"],
   "ownership": {
     "nativeElement": "rendering, accessibility, keyboard behavior, validation, form association, canonical events",
-    "vueAdapter": "modelValue/update:modelValue translation only"
+    "vueAdapter": "package-owned generated Vue model prop/update-event translation only"
   },
   "pendingRuntimeEvidence": [],
   "unresolvedBlockers": [],
   "completedRuntimeEvidence": [
-    "parent modelValue propagates to native value",
-    "vf-value-change emits update:modelValue and updates the Vue parent model",
-    "parent modelValue propagates to native checked",
-    "vf-checked-change emits update:modelValue and updates the Vue parent model",
-    "clean packed Vue production build and Chromium interaction evidence"
+    "canonical value models round-trip without duplicate updates",
+    "canonical checked models round-trip without duplicate updates",
+    "canonical open models round-trip without duplicate updates",
+    "canonical pressed models round-trip without duplicate updates",
+    "array selection models use stable equality suppression",
+    "clean packed Vue production build and Chromium interaction evidence",
+    "fixture consumes the public package without copied adapters"
   ]
 }
