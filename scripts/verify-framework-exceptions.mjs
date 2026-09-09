@@ -25,13 +25,17 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   );
   assert.equal(registry.defaultPolicy, "generated-or-generic");
   assert.ok(
-    Array.isArray(registry.requiredFields) && registry.requiredFields.length > 0,
+    Array.isArray(registry.requiredFields) &&
+      registry.requiredFields.length > 0,
   );
 
   const live = registry.exceptions.filter(({ state }) =>
     ["active", "retiring"].includes(state),
   );
-  assert.ok(live.length > 0, "at least one live framework exception is expected");
+  assert.ok(
+    live.length > 0,
+    "at least one live framework exception is expected",
+  );
 
   for (const entry of live) {
     for (const field of registry.requiredFields) {
