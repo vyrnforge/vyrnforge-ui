@@ -24,7 +24,7 @@ jobs:
           node-version: "24.18.0"
           cache: npm
       - name: Use repository package manager
-        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
       - name: Verify package manager
         run: npm --version && test "$(npm --version)" = "11.16.0"
       - name: Apply lock-only audit remediation
