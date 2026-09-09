@@ -108,11 +108,15 @@ export function evaluateSizeBudgets({ manifest, measurements }) {
       const actual = measurement[metric];
       const limit = packageBudget.budgets?.[metric];
       if (!Number.isInteger(actual) || actual < 0) {
-        failures.push(`${packageBudget.name}: ${metric} measurement is invalid`);
+        failures.push(
+          `${packageBudget.name}: ${metric} measurement is invalid`,
+        );
       } else if (!Number.isInteger(limit) || limit < 0) {
         failures.push(`${packageBudget.name}: ${metric} budget is invalid`);
       } else if (actual > limit) {
-        failures.push(`${packageBudget.name}: ${metric} ${actual} exceeds ${limit}`);
+        failures.push(
+          `${packageBudget.name}: ${metric} ${actual} exceeds ${limit}`,
+        );
       }
     }
   }
@@ -128,7 +132,9 @@ export function verifySizeBudgetContract({ root = repositoryRoot } = {}) {
     "scripts/verify-beta-package-size-budgets.test.mjs",
   ]) {
     if (!existsSync(path.join(root, requiredFile))) {
-      failures.push(`size-budget implementation file is missing: ${requiredFile}`);
+      failures.push(
+        `size-budget implementation file is missing: ${requiredFile}`,
+      );
     }
   }
   if (failures.length) return failures;
