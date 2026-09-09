@@ -34,7 +34,6 @@ write(validationPath, validation);
 
 const preparePath = "scripts/prepare-release-artifact.mjs";
 let prepare = read(preparePath);
-prepare = prepare.replace("import { mkdirSync, rmSync, writeFileSync } from \"node:fs\";", "import { mkdirSync, rmSync, writeFileSync } from \"node:fs\";");
 const betaStart = '\nif (releaseGroupId === "non-grid-beta") {';
 const betaIndex = prepare.indexOf(betaStart);
 if (betaIndex !== -1) {
@@ -43,17 +42,6 @@ if (betaIndex !== -1) {
   prepare = prepare.slice(0, betaIndex) + prepare.slice(consoleIndex);
 }
 write(preparePath, prepare);
-
-const ciPath = ".github/workflows/ci.yml";
-let ci = read(ciPath);
-const oldBlock = `          if [[ "$RUN_PACKAGES" == "true" ]]; then\n            npm run verify:beta-package-artifacts\n            npm run build --workspace @vyrnforge/ui-data-grid\n            VYRNFORGE_PACKAGES_PREPARED=true npm run verify:packages\n            npm run verify:beta-package-size-budgets\n            test -f test-results/beta-package-artifacts/size-report.json`;
-const newBlock = `          if [[ "$RUN_PACKAGES" == "true" ]]; then\n            RELEASE_GROUP=non-grid-beta\n            RELEASE_VERSION=0.2.0-beta.2\n            RELEASE_TAG=beta\n            npm run prepare:release-artifact -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID"\n            npm run verify:release-artifact -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID" --artifact-dir test-results/release-artifact\n            npm run verify:trusted-publishing-dry-run -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --artifact-dir test-results/release-artifact\n            npm run verify:release-size-budgets -- --release-group "$RELEASE_GROUP" --artifact-dir test-results/release-artifact\n            npm run build --workspace @vyrnforge/ui-data-grid\n            VYRNFORGE_PACKAGES_PREPARED=true npm run verify:packages\n            test -f test-results/release-artifact/manifest.json`;
-if (!ci.includes(oldBlock)) throw new Error("CI beta artifact block anchor missing");
-ci = ci.replace(oldBlock, newBlock);
-ci = ci.replace("      - name: Upload beta package artifact reports", "      - name: Upload generic release artifact reports");
-ci = ci.replace("          name: beta-package-artifacts", "          name: release-artifact-ci");
-ci = ci.replace("          path: test-results/beta-package-artifacts/", "          path: test-results/release-artifact/");
-write(ciPath, ci);
 
 for (const file of [
   "scripts/beta-package-artifacts.mjs",
