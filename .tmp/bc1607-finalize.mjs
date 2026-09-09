@@ -14,15 +14,41 @@ if (!packageJson.scripts["test:contracts"].includes("test:react-behavior-adoptio
     "npm run test:framework-exceptions && npm run test:react-behavior-adoption &&",
   );
 }
-fs.writeFileSync(packagePath, `${JSON.stringify(packageJson, null, 2)}\n`);
+fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2) + "\n");
 
 const workflowVerifierPath = "scripts/verify-workflows.mjs";
 let workflowVerifier = fs.readFileSync(workflowVerifierPath, "utf8");
-const anchor = `assert(\n  !ci.includes("uses: ./.github/workflows/"),\n  "ci.yml must own CI jobs directly instead of exposing internal reusable workflows",\n);\n`;
-const addition = `${anchor}\nfor (const marker of [\n  "  react-compatibility-plan:",\n  "  react-compatibility:",\n  "docs/metadata/compatibility-release-matrix.json",\n  "npm run verify:compatibility-release-case -- --case \\${{ matrix.id }}",\n  "- react-compatibility-plan",\n  "- react-compatibility",\n  "REACT_COMPATIBILITY_REQUIRED",\n  "REACT_COMPATIBILITY_PLAN_RESULT",\n  "REACT_COMPATIBILITY_RESULT",\n]) {\n  assert(ci.includes(marker), \\`ci.yml must enforce React compatibility through \\${marker}\\`);\n}\n`;
+const anchor = [
+  'assert(',
+  '  !ci.includes("uses: ./.github/workflows/"),',
+  '  "ci.yml must own CI jobs directly instead of exposing internal reusable workflows",',
+  ');',
+  ''
+].join("\n");
+const markerBlock = [
+  'for (const marker of [',
+  '  "  react-compatibility-plan:",',
+  '  "  react-compatibility:",',
+  '  "docs/metadata/compatibility-release-matrix.json",',
+  '  "npm run verify:compatibility-release-case -- --case ${{ matrix.id }}",',
+  '  "- react-compatibility-plan",',
+  '  "- react-compatibility",',
+  '  "REACT_COMPATIBILITY_REQUIRED",',
+  '  "REACT_COMPATIBILITY_PLAN_RESULT",',
+  '  "REACT_COMPATIBILITY_RESULT",',
+  ']) {',
+  '  assert(',
+  '    ci.includes(marker),',
+  '    "ci.yml must enforce React compatibility through " + marker,',
+  '  );',
+  '}',
+  ''
+].join("\n");
 if (!workflowVerifier.includes("REACT_COMPATIBILITY_PLAN_RESULT")) {
-  if (!workflowVerifier.includes(anchor)) throw new Error("workflow verifier insertion anchor missing");
-  workflowVerifier = workflowVerifier.replace(anchor, addition);
+  if (!workflowVerifier.includes(anchor)) {
+    throw new Error("workflow verifier insertion anchor missing");
+  }
+  workflowVerifier = workflowVerifier.replace(anchor, anchor + "\n" + markerBlock);
 }
 fs.writeFileSync(workflowVerifierPath, workflowVerifier);
 
