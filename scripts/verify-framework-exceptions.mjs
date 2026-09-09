@@ -93,7 +93,10 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
     "MFD-EX-REACT-USE-TOAST",
     "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
   ]) {
-    assert.ok(byId.has(requiredId), requiredId + " must remain a live exception");
+    assert.ok(
+      byId.has(requiredId),
+      requiredId + " must remain a live exception",
+    );
   }
   assert.deepEqual(
     scopesOf(byId.get("MFD-EX-REACT-OVERLAY-COMPOSITION")).sort(),
