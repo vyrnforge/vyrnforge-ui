@@ -7,6 +7,8 @@ export const activeContractTests = [
   "test:ci-scope",
   "test:package-boundaries",
   "test:component-metadata",
+  "test:framework-exceptions",
+  "test:react-behavior-adoption",
   "test:beta-scope",
   "test:release-groups",
   "test:beta-package-contract",
@@ -35,6 +37,8 @@ export const activeContractTests = [
 
 export const activeMetadataVerifiers = [
   "verify:component-metadata",
+  "verify:framework-exceptions",
+  "verify:react-behavior-adoption",
   "verify:beta-scope",
   "verify:release-groups",
   "verify:beta-package-contract",
