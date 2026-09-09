@@ -16,7 +16,6 @@ import multiFrameworkFixtures from "../../../docs/testing/multi-framework-consum
 import visualRegression from "../../../docs/testing/visual-regression.md?raw";
 import qualityGates from "../../../docs/quality/00-quality-gates.md?raw";
 import knownLimitations from "../../../docs/quality/03-known-limitations.md?raw";
-import multiFrameworkArchitectureEvidence from "../../../docs/quality/s4-multi-framework-architecture.md?raw";
 import releaseDocsIndex from "../../../docs/release/README.md?raw";
 import releasePolicy from "../../../docs/release/release-policy.md?raw";
 import versioningPolicy from "../../../docs/release/versioning-policy.md?raw";
@@ -303,18 +302,6 @@ export const docsRoutes: DocsRoute[] = [
     tags: ["canonical", "quality", "limitations"],
     canonical: true,
     content: knownLimitations,
-  },
-  {
-    id: "s4-multi-framework-architecture",
-    title: "Multi-Framework Architecture Evidence",
-    group: "Quality",
-    description:
-      "Current shared architecture, renderer boundaries, and framework-support evidence.",
-    sourcePath: "docs/quality/s4-multi-framework-architecture.md",
-    aiPurpose:
-      "Use this to review current multi-framework architecture evidence and support boundaries.",
-    tags: ["quality", "multi-framework", "evidence"],
-    content: multiFrameworkArchitectureEvidence,
   },
   {
     id: "release-docs",
