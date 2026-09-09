@@ -110,7 +110,9 @@ function commandTarget(command) {
   const nodeMatch = command.match(/^node ([^\s]+\.mjs)(?:\s|$)/u);
   if (nodeMatch) return { type: "file", value: nodeMatch[1] };
 
-  const workflowMatch = command.match(/^(\.github\/workflows\/[^#\s]+)(?:#.+)?$/u);
+  const workflowMatch = command.match(
+    /^(\.github\/workflows\/[^#\s]+)(?:#.+)?$/u,
+  );
   if (workflowMatch) return { type: "file", value: workflowMatch[1] };
 
   return null;
