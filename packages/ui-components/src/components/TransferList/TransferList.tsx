@@ -224,11 +224,10 @@ export function TransferList({
         !disabled &&
         targetValues.map((targetValue) => (
           <input
+            defaultValue={targetValue}
             key={targetValue}
             name={name}
-            readOnly
             type="hidden"
-            value={targetValue}
           />
         ))}
     </div>
