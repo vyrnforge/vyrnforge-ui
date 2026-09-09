@@ -51,12 +51,18 @@ jobs:
       - name: Install dependencies once
         run: npm ci
       - name: Prepare package outputs once
+        shell: bash
         run: |
-          npm run verify:beta-package-artifacts
+          RELEASE_GROUP=non-grid-beta
+          RELEASE_VERSION=0.2.0-beta.2
+          RELEASE_TAG=beta
+          npm run prepare:release-artifact -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID"
+          npm run verify:release-artifact -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID" --artifact-dir test-results/release-artifact
+          npm run verify:trusted-publishing-dry-run -- --release-group "$RELEASE_GROUP" --version "$RELEASE_VERSION" --dist-tag "$RELEASE_TAG" --artifact-dir test-results/release-artifact
+          npm run verify:release-size-budgets -- --release-group "$RELEASE_GROUP" --artifact-dir test-results/release-artifact
           npm run build --workspace @vyrnforge/ui-data-grid
           VYRNFORGE_PACKAGES_PREPARED=true npm run verify:packages
-          npm run verify:beta-package-size-budgets
-          test -f test-results/beta-package-artifacts/size-report.json
+          test -f test-results/release-artifact/manifest.json
       - name: Verify packed external consumer
         env:
           VYRNFORGE_PACKAGES_PREPARED: "true"
@@ -78,12 +84,12 @@ jobs:
         run: npm run build --workspace @vyrnforge/ui-docs
       - name: Build playground
         run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
-      - name: Upload beta package artifact reports
+      - name: Upload generic release artifact reports
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: beta-package-artifacts
-          path: test-results/beta-package-artifacts/
+          name: release-artifact-assurance
+          path: test-results/release-artifact/
           if-no-files-found: error
       - name: Upload visual regression evidence
         if: success()
