@@ -17,7 +17,7 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
       variant = "default",
       ...props
     },
-    ref
+    ref,
   ) {
     const button = (
       <button
@@ -27,7 +27,7 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
           `vf-toolbar-button--${variant}`,
           `vf-toolbar-button--${size}`,
           active && "vf-toolbar-button--active",
-          className
+          className,
         )}
         ref={ref}
         type={type}
@@ -43,5 +43,5 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
     }
 
     return button;
-  }
+  },
 );

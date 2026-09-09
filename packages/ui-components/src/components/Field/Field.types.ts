@@ -10,10 +10,12 @@ export type FieldControlProps = {
 };
 
 export type FieldChildren =
-  | ReactNode
-  | ((controlProps: FieldControlProps) => ReactNode);
+  ReactNode | ((controlProps: FieldControlProps) => ReactNode);
 
-export type FieldProps = Omit<HTMLAttributes<HTMLDivElement>, "children" | "id"> & {
+export type FieldProps = Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "children" | "id"
+> & {
   /**
    * The generated control id used by a Field render function. For static
    * children, continue to pair `htmlFor` with the child control's `id`.

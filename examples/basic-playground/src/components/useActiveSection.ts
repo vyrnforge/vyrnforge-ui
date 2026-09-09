@@ -4,7 +4,10 @@ export function useActiveSection(sectionIds: string[]) {
   const [activeId, setActiveId] = useState<string>();
 
   useEffect(() => {
-    if (typeof IntersectionObserver === "undefined" || sectionIds.length === 0) {
+    if (
+      typeof IntersectionObserver === "undefined" ||
+      sectionIds.length === 0
+    ) {
       return;
     }
 
@@ -18,7 +21,7 @@ export function useActiveSection(sectionIds: string[]) {
           setActiveId(visibleEntry.target.id);
         }
       },
-      { rootMargin: "-96px 0px -60% 0px", threshold: [0, 0.2, 0.6] }
+      { rootMargin: "-96px 0px -60% 0px", threshold: [0, 0.2, 0.6] },
     );
 
     const elements = sectionIds

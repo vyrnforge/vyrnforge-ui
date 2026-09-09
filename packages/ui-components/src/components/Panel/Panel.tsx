@@ -15,7 +15,9 @@ export function Panel({
         <div className="vf-panel__header">
           <div className="vf-panel__heading">
             {title && <h2 className="vf-panel__title">{title}</h2>}
-            {description && <p className="vf-panel__description">{description}</p>}
+            {description && (
+              <p className="vf-panel__description">{description}</p>
+            )}
           </div>
           {actions && <div className="vf-panel__actions">{actions}</div>}
         </div>

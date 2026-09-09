@@ -10,7 +10,7 @@ export type CodeBlockProps = {
 export function CodeBlock({
   code,
   language = "tsx",
-  copyable = true
+  copyable = true,
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
@@ -27,7 +27,9 @@ export function CodeBlock({
   return (
     <div className="vf-playground-code-block">
       <div className="vf-playground-code-block__toolbar">
-        <Text size="sm" tone="muted">{language}</Text>
+        <Text size="sm" tone="muted">
+          {language}
+        </Text>
         {copyable && (
           <Button onClick={copy} size="sm" variant="ghost">
             {copied ? "Copied" : "Copy"}

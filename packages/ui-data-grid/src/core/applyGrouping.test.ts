@@ -8,7 +8,7 @@ import {
   getGroupLeafRowIds,
   normalizeGrouping,
   resolveGroupableColumns,
-  toggleGroupExpanded
+  toggleGroupExpanded,
 } from "./applyGrouping";
 import { applyPagination } from "./applyPagination";
 import { applySearch } from "./applySearch";
@@ -27,7 +27,7 @@ const rows: Row[] = [
   { id: 1, name: "Alpha", owner: "Ava", status: "Active", score: 20 },
   { id: 2, name: "Beta", owner: "Ava", status: "Pending", score: 40 },
   { id: 3, name: "Gamma", owner: "Ben", status: "Active", score: 30 },
-  { id: 4, name: "Delta", owner: "Ben", status: "Pending", score: 10 }
+  { id: 4, name: "Delta", owner: "Ben", status: "Pending", score: 10 },
 ];
 
 const columns: DataGridColumnDef<Row>[] = [
@@ -39,18 +39,18 @@ const columns: DataGridColumnDef<Row>[] = [
     id: "locked",
     header: "Locked",
     accessorFn: () => "locked",
-    groupable: false
-  }
+    groupable: false,
+  },
 ];
 
 describe("applyGrouping", () => {
   it("normalizes grouping by ignoring unknown and non-groupable columns", () => {
     expect(
-      normalizeGrouping(columns, ["missing", "locked", "status", "status"])
+      normalizeGrouping(columns, ["missing", "locked", "status", "status"]),
     ).toEqual(["status"]);
-    expect(resolveGroupableColumns(columns).map((column) => column.id)).not.toContain(
-      "locked"
-    );
+    expect(
+      resolveGroupableColumns(columns).map((column) => column.id),
+    ).not.toContain("locked");
   });
 
   it("groups rows by one column with stable row counts and ids", () => {
@@ -58,7 +58,7 @@ describe("applyGrouping", () => {
       rows,
       columns,
       grouping: ["status"],
-      getRowId: (row) => row.id
+      getRowId: (row) => row.id,
     });
 
     expect(groupedRows.map((row) => row.type)).toEqual(["group", "group"]);
@@ -66,7 +66,7 @@ describe("applyGrouping", () => {
       type: "group",
       id: "0:status:Active",
       rowCount: 2,
-      leafRowIds: [1, 3]
+      leafRowIds: [1, 3],
     });
   });
 
@@ -76,7 +76,7 @@ describe("applyGrouping", () => {
       columns,
       grouping: ["owner", "status"],
       expandedGroupIds: ["0:owner:Ava"],
-      getRowId: (row) => row.id
+      getRowId: (row) => row.id,
     });
     const firstGroup = groupedRows[0];
 
@@ -84,7 +84,7 @@ describe("applyGrouping", () => {
     if (firstGroup.type === "group") {
       expect(firstGroup.children.map((row) => row.type)).toEqual([
         "group",
-        "group"
+        "group",
       ]);
       expect(firstGroup.rowCount).toBe(2);
     }
@@ -95,14 +95,14 @@ describe("applyGrouping", () => {
       rows,
       columns,
       grouping: ["status"],
-      getRowId: (row) => row.id
+      getRowId: (row) => row.id,
     });
     const expanded = buildGroupedRows({
       rows,
       columns,
       grouping: ["status"],
       expandedGroupIds: ["0:status:Active"],
-      getRowId: (row) => row.id
+      getRowId: (row) => row.id,
     });
 
     expect(flattenGroupedRows(collapsed)).toHaveLength(2);
@@ -110,7 +110,7 @@ describe("applyGrouping", () => {
       "group",
       "row",
       "row",
-      "group"
+      "group",
     ]);
   });
 
@@ -119,19 +119,19 @@ describe("applyGrouping", () => {
       rows,
       columns,
       grouping: ["status"],
-      getRowId: (row) => row.id
+      getRowId: (row) => row.id,
     });
 
     expect(expandAllGroups(groupedRows)).toEqual([
       "0:status:Active",
-      "0:status:Pending"
+      "0:status:Pending",
     ]);
     expect(collapseAllGroups()).toEqual([]);
     expect(toggleGroupExpanded([], "0:status:Active")).toEqual([
-      "0:status:Active"
+      "0:status:Active",
     ]);
     expect(toggleGroupExpanded(["0:status:Active"], "0:status:Active")).toEqual(
-      []
+      [],
     );
   });
 
@@ -142,24 +142,24 @@ describe("applyGrouping", () => {
         id: "status-active",
         columnId: "status",
         operator: "equals",
-        value: "Active"
-      }
+        value: "Active",
+      },
     ]);
     const sortedRows = applySorting(filteredRows, columns, [
-      { columnId: "score", direction: "desc" }
+      { columnId: "score", direction: "desc" },
     ]);
     const groupedRows = buildGroupedRows({
       rows: sortedRows,
       columns,
       grouping: ["status"],
       expandedGroupIds: ["0:status:Active"],
-      getRowId: (row) => row.id
+      getRowId: (row) => row.id,
     });
     const displayRows = flattenGroupedRows(groupedRows);
 
     expect(getGroupLeafRowIds(groupedRows)).toEqual([3, 1]);
-    expect(applyPagination(displayRows, { pageIndex: 0, pageSize: 2 })).toHaveLength(
-      2
-    );
+    expect(
+      applyPagination(displayRows, { pageIndex: 0, pageSize: 2 }),
+    ).toHaveLength(2);
   });
 });

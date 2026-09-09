@@ -10,7 +10,7 @@ const defaultVariantMap: Record<string, BadgeVariant> = {
   warning: "warning",
   danger: "danger",
   error: "danger",
-  info: "info"
+  info: "info",
 };
 
 export function StatusBadge({
@@ -22,7 +22,9 @@ export function StatusBadge({
 }: StatusBadgeProps) {
   const normalizedStatus = String(status).toLowerCase();
   const variant =
-    variantMap?.[normalizedStatus] ?? defaultVariantMap[normalizedStatus] ?? "neutral";
+    variantMap?.[normalizedStatus] ??
+    defaultVariantMap[normalizedStatus] ??
+    "neutral";
 
   return (
     <Badge variant={variant} {...props}>

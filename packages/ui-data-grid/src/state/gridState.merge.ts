@@ -2,34 +2,32 @@ import { defaultDataGridState } from "./gridState.defaults";
 import type { DataGridState } from "./gridState.types";
 
 export function createGridState(
-  initialState?: Partial<DataGridState>
+  initialState?: Partial<DataGridState>,
 ): DataGridState {
   const nextState: DataGridState = {
     search: initialState?.search ?? defaultDataGridState.search,
     filters: initialState?.filters ?? defaultDataGridState.filters,
     sort:
-      initialState?.sort ??
-      initialState?.sorting ??
-      defaultDataGridState.sort,
+      initialState?.sort ?? initialState?.sorting ?? defaultDataGridState.sort,
     grouping: initialState?.grouping ?? defaultDataGridState.grouping,
     expandedGroupIds:
       initialState?.expandedGroupIds ?? defaultDataGridState.expandedGroupIds,
     pagination: {
       ...defaultDataGridState.pagination,
-      ...initialState?.pagination
+      ...initialState?.pagination,
     },
     columnVisibility: {
       ...defaultDataGridState.columnVisibility,
-      ...initialState?.columnVisibility
+      ...initialState?.columnVisibility,
     },
     columnOrder: initialState?.columnOrder ?? defaultDataGridState.columnOrder,
     columnSizing: {
       ...defaultDataGridState.columnSizing,
-      ...initialState?.columnSizing
+      ...initialState?.columnSizing,
     },
     selectedRowIds:
       initialState?.selectedRowIds ?? defaultDataGridState.selectedRowIds,
-    density: initialState?.density ?? defaultDataGridState.density
+    density: initialState?.density ?? defaultDataGridState.density,
   };
 
   if (initialState?.sorting !== undefined) {
@@ -43,7 +41,7 @@ export const mergeGridState = createGridState;
 
 export function resetGridViewState(
   currentState: DataGridState,
-  defaultState?: Partial<DataGridState>
+  defaultState?: Partial<DataGridState>,
 ) {
   const baselineState = createGridState(defaultState);
 
@@ -56,7 +54,7 @@ export function resetGridViewState(
     pagination: {
       ...currentState.pagination,
       ...baselineState.pagination,
-      pageIndex: 0
+      pageIndex: 0,
     },
     columnVisibility: baselineState.columnVisibility,
     columnOrder: baselineState.columnOrder,
@@ -64,6 +62,6 @@ export function resetGridViewState(
     grouping: baselineState.grouping,
     expandedGroupIds: baselineState.expandedGroupIds,
     selectedRowIds: baselineState.selectedRowIds,
-    density: baselineState.density
+    density: baselineState.density,
   };
 }

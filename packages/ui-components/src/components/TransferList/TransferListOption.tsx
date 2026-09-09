@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { joinClassNames } from "../../utils/classNames";
 import type {
   TransferListOptionData,
-  TransferListPanel
+  TransferListPanel,
 } from "./TransferList.types";
 
 export type TransferListOptionProps = {
@@ -19,7 +19,7 @@ export type TransferListOptionProps = {
       selected: boolean;
       active: boolean;
       disabled: boolean;
-    }
+    },
   ) => ReactNode;
   selected: boolean;
   onActiveChange: (value: string) => void;
@@ -36,7 +36,7 @@ export function TransferListOption({
   renderOption,
   selected,
   onActiveChange,
-  onToggle
+  onToggle,
 }: TransferListOptionProps) {
   return (
     <label
@@ -44,7 +44,7 @@ export function TransferListOption({
         "vf-transfer-list__option",
         selected && "vf-transfer-list__option--selected",
         active && "vf-transfer-list__option--active",
-        disabled && "vf-transfer-list__option--disabled"
+        disabled && "vf-transfer-list__option--disabled",
       )}
       onPointerEnter={() => onActiveChange(option.value)}
     >
@@ -70,7 +70,9 @@ export function TransferListOption({
           </>
         ) : (
           <>
-            <span className="vf-transfer-list__option-label">{option.label}</span>
+            <span className="vf-transfer-list__option-label">
+              {option.label}
+            </span>
             {option.description && (
               <span
                 className="vf-transfer-list__option-description"

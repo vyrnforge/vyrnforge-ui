@@ -490,10 +490,9 @@ body {
 
 .vf-docs-metadata-table--imports .vf-docs-metadata-table__head,
 .vf-docs-metadata-table--imports .vf-docs-metadata-table__row {
-  grid-template-columns: minmax(160px, 0.8fr) minmax(220px, 1fr) minmax(
-      260px,
-      1.2fr
-    ) minmax(240px, 1.2fr);
+  grid-template-columns:
+    minmax(160px, 0.8fr) minmax(220px, 1fr) minmax(260px, 1.2fr)
+    minmax(240px, 1.2fr);
 }
 
 .vf-docs-metadata-table--rules .vf-docs-metadata-table__head,

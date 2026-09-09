@@ -167,9 +167,7 @@ export function validateReleaseGroupsV2(manifest) {
   const failures = [];
   if (!isRecord(manifest)) return ["release-group manifest must be an object"];
   if (manifest.schemaVersion !== releaseGroupsSchemaVersion) {
-    failures.push(
-      `schemaVersion must be ${releaseGroupsSchemaVersion}`,
-    );
+    failures.push(`schemaVersion must be ${releaseGroupsSchemaVersion}`);
     return failures;
   }
   if (
@@ -177,7 +175,9 @@ export function validateReleaseGroupsV2(manifest) {
     manifest.sourceOfTruth?.scope !== "release-groups" ||
     typeof manifest.sourceOfTruth?.documentation !== "string"
   ) {
-    failures.push("sourceOfTruth must identify canonical release-groups documentation");
+    failures.push(
+      "sourceOfTruth must identify canonical release-groups documentation",
+    );
   }
 
   const releaseLines = manifest.releaseLines;
@@ -203,7 +203,9 @@ export function validateReleaseGroupsV2(manifest) {
         failures.push(`${releaseLineId}: ${field} must be a non-empty string`);
       }
     }
-    if (!["synchronized", "independent"].includes(releaseLine.versioning?.mode)) {
+    if (
+      !["synchronized", "independent"].includes(releaseLine.versioning?.mode)
+    ) {
       failures.push(`${releaseLineId}: versioning.mode is invalid`);
     }
     if (
@@ -233,8 +235,13 @@ export function validateReleaseGroupsV2(manifest) {
     if (!Array.isArray(releaseLine.releaseDependencies)) {
       failures.push(`${releaseLineId}: releaseDependencies must be an array`);
     }
-    if (!Array.isArray(releaseLine.packages) || releaseLine.packages.length === 0) {
-      failures.push(`${releaseLineId}: packages must be a non-empty ordered array`);
+    if (
+      !Array.isArray(releaseLine.packages) ||
+      releaseLine.packages.length === 0
+    ) {
+      failures.push(
+        `${releaseLineId}: packages must be a non-empty ordered array`,
+      );
       continue;
     }
 
@@ -243,7 +250,9 @@ export function validateReleaseGroupsV2(manifest) {
         typeof packageInfo.name !== "string" ||
         !packageInfo.name.startsWith("@vyrnforge/")
       ) {
-        failures.push(`${releaseLineId}[${packageIndex}]: invalid package name`);
+        failures.push(
+          `${releaseLineId}[${packageIndex}]: invalid package name`,
+        );
         continue;
       }
       if (
@@ -252,7 +261,10 @@ export function validateReleaseGroupsV2(manifest) {
       ) {
         failures.push(`${packageInfo.name}: invalid workspace directory`);
       }
-      if (typeof packageInfo.role !== "string" || packageInfo.role.length === 0) {
+      if (
+        typeof packageInfo.role !== "string" ||
+        packageInfo.role.length === 0
+      ) {
         failures.push(`${packageInfo.name}: role must be declared`);
       }
       if (!isRecord(packageInfo.dependencies)) {
@@ -311,7 +323,9 @@ export function validateReleaseGroupsV2(manifest) {
     for (const [packageIndex, packageInfo] of (
       releaseLine.packages ?? []
     ).entries()) {
-      for (const dependencyName of Object.keys(packageInfo.dependencies ?? {})) {
+      for (const dependencyName of Object.keys(
+        packageInfo.dependencies ?? {},
+      )) {
         const targetReleaseLine = packageOwners.get(dependencyName);
         if (!targetReleaseLine) {
           failures.push(
@@ -320,7 +334,9 @@ export function validateReleaseGroupsV2(manifest) {
           continue;
         }
         if (targetReleaseLine === releaseLineId) {
-          if ((packageIndexes.get(dependencyName) ?? Infinity) >= packageIndex) {
+          if (
+            (packageIndexes.get(dependencyName) ?? Infinity) >= packageIndex
+          ) {
             failures.push(
               `${packageInfo.name}: ${dependencyName} must appear earlier in release order`,
             );
@@ -392,7 +408,9 @@ export function migrateReleaseGroupsV1(
       if (!classification?.role) {
         throw new Error(`missing package role for ${packageInfo.name}`);
       }
-      for (const dependencyName of Object.keys(packageInfo.dependencies ?? {})) {
+      for (const dependencyName of Object.keys(
+        packageInfo.dependencies ?? {},
+      )) {
         const targetReleaseLine = packageOwner.get(dependencyName);
         if (targetReleaseLine && targetReleaseLine !== releaseLineId) {
           releaseDependencies.add(targetReleaseLine);
@@ -436,10 +454,12 @@ export function migrateReleaseGroupsV1(
         consumer: true,
         ...(policy.validation ?? {}),
       },
-      releaseDependencies: [...releaseDependencies].map((targetReleaseLine) => ({
-        releaseLine: targetReleaseLine,
-        policy: "exact",
-      })),
+      releaseDependencies: [...releaseDependencies].map(
+        (targetReleaseLine) => ({
+          releaseLine: targetReleaseLine,
+          policy: "exact",
+        }),
+      ),
       packages,
     };
   }
@@ -459,7 +479,9 @@ export function migrateReleaseGroupsV1(
 
   const failures = validateReleaseGroupsV2(migrated);
   if (failures.length > 0) {
-    throw new Error(`migrated release metadata is invalid: ${failures.join("; ")}`);
+    throw new Error(
+      `migrated release metadata is invalid: ${failures.join("; ")}`,
+    );
   }
   return migrated;
 }

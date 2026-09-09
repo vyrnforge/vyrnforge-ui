@@ -25,14 +25,14 @@ function splitBlocks(markdown: string): MarkdownBlock[] {
         blocks.push({
           type: "code",
           language: codeBlock.language,
-          lines: codeBlock.lines
+          lines: codeBlock.lines,
         });
         codeBlock = null;
       } else {
         flushTable();
         codeBlock = {
           language: line.replace("```", "").trim() || undefined,
-          lines: []
+          lines: [],
         };
       }
       continue;
@@ -56,7 +56,7 @@ function splitBlocks(markdown: string): MarkdownBlock[] {
     blocks.push({
       type: "code",
       language: codeBlock.language,
-      lines: codeBlock.lines
+      lines: codeBlock.lines,
     });
   }
 
@@ -78,19 +78,21 @@ function renderTextLine(line: string, index: number) {
   const trimmed = line.trim();
 
   if (!trimmed) {
-    return <div aria-hidden="true" className="vf-docs-markdown__space" key={index} />;
+    return (
+      <div aria-hidden="true" className="vf-docs-markdown__space" key={index} />
+    );
   }
 
   const headingMatch = /^(#{1,4})\s+(.*)$/.exec(trimmed);
   if (headingMatch) {
     const level = headingMatch[1].length;
     const HeadingTag = `h${Math.min(level + 1, 5)}` as
-      | "h2"
-      | "h3"
-      | "h4"
-      | "h5";
+      "h2" | "h3" | "h4" | "h5";
     return (
-      <HeadingTag className={`vf-docs-markdown__heading vf-docs-markdown__heading--${level}`} key={index}>
+      <HeadingTag
+        className={`vf-docs-markdown__heading vf-docs-markdown__heading--${level}`}
+        key={index}
+      >
         {parseInlineCode(headingMatch[2])}
       </HeadingTag>
     );
@@ -106,7 +108,10 @@ function renderTextLine(line: string, index: number) {
 
   if (/^\d+\.\s+/.test(trimmed)) {
     return (
-      <div className="vf-docs-markdown__list-item vf-docs-markdown__list-item--ordered" key={index}>
+      <div
+        className="vf-docs-markdown__list-item vf-docs-markdown__list-item--ordered"
+        key={index}
+      >
         {parseInlineCode(trimmed.replace(/^\d+\.\s+/, ""))}
       </div>
     );
@@ -133,7 +138,7 @@ function renderTable(lines: string[], index: number) {
       line
         .split("|")
         .slice(1, -1)
-        .map((cell) => cell.trim())
+        .map((cell) => cell.trim()),
     )
     .filter((row) => !row.every((cell) => /^:?-{3,}:?$/.test(cell)));
   const [header, ...body] = rows;

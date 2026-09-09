@@ -3,15 +3,12 @@ import {
   useEffect,
   useRef,
   useState,
-  type PointerEvent as ReactPointerEvent
+  type PointerEvent as ReactPointerEvent,
 } from "react";
-import {
-  resolveColumnWidth,
-  setColumnSize
-} from "../core/columnSizing";
+import { resolveColumnWidth, setColumnSize } from "../core/columnSizing";
 import type {
   DataGridColumnDef,
-  DataGridColumnSizingState
+  DataGridColumnSizingState,
 } from "../types/column.types";
 
 type ResizeSession = {
@@ -22,11 +19,11 @@ type ResizeSession = {
 };
 
 export function useColumnResize<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 >({
   columns,
   columnSizing,
-  onColumnSizingChange
+  onColumnSizingChange,
 }: {
   columns: DataGridColumnDef<RowData>[];
   columnSizing: DataGridColumnSizingState;
@@ -47,7 +44,7 @@ export function useColumnResize<
         cancelAnimationFrame(frameRef.current);
       }
     },
-    []
+    [],
   );
 
   const setSize = useCallback(
@@ -56,13 +53,13 @@ export function useColumnResize<
         columns,
         latestSizingRef.current,
         columnId,
-        width
+        width,
       );
 
       latestSizingRef.current = nextSizing;
       onColumnSizingChange(nextSizing);
     },
-    [columns, onColumnSizingChange]
+    [columns, onColumnSizingChange],
   );
 
   const stopResize = useCallback((event?: PointerEvent) => {
@@ -98,7 +95,7 @@ export function useColumnResize<
         setSize(session.columnId, nextWidth);
       });
     },
-    [setSize]
+    [setSize],
   );
 
   useEffect(() => {
@@ -121,7 +118,7 @@ export function useColumnResize<
     (
       event: ReactPointerEvent<HTMLElement>,
       column: DataGridColumnDef<RowData>,
-      currentWidth?: number
+      currentWidth?: number,
     ) => {
       if (column.resizable === false) {
         return;
@@ -136,12 +133,12 @@ export function useColumnResize<
         pointerId: event.pointerId,
         startX: event.clientX,
         startWidth:
-          currentWidth ?? resolveColumnWidth(column, latestSizingRef.current)
+          currentWidth ?? resolveColumnWidth(column, latestSizingRef.current),
       };
       setActiveColumnId(column.id);
       document.body.classList.add("udg-is-resizing");
     },
-    []
+    [],
   );
 
   const resizeBy = useCallback(
@@ -152,10 +149,10 @@ export function useColumnResize<
 
       setSize(
         column.id,
-        resolveColumnWidth(column, latestSizingRef.current) + delta
+        resolveColumnWidth(column, latestSizingRef.current) + delta,
       );
     },
-    [setSize]
+    [setSize],
   );
 
   return {
@@ -163,6 +160,6 @@ export function useColumnResize<
     resizeBy,
     setSize,
     startResize,
-    stopResize
+    stopResize,
   };
 }

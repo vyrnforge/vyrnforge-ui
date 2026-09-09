@@ -11,29 +11,25 @@ type Row = {
 const rows: Row[] = [
   { id: 1, name: "Beta", count: 2 },
   { id: 2, name: "Alpha", count: 3 },
-  { id: 3, name: "Gamma", count: 1 }
+  { id: 3, name: "Gamma", count: 1 },
 ];
 
 const columns: DataGridColumnDef<Row>[] = [
   { id: "name", header: "Name", accessorKey: "name" },
-  { id: "count", header: "Count", accessorKey: "count" }
+  { id: "count", header: "Count", accessorKey: "count" },
 ];
 
 describe("applySorting", () => {
   it("sorts ascending by a single column", () => {
-    expect(applySorting(rows, columns, [{ columnId: "name", direction: "asc" }])).toEqual([
-      rows[1],
-      rows[0],
-      rows[2]
-    ]);
+    expect(
+      applySorting(rows, columns, [{ columnId: "name", direction: "asc" }]),
+    ).toEqual([rows[1], rows[0], rows[2]]);
   });
 
   it("sorts descending by a single column", () => {
-    expect(applySorting(rows, columns, [{ columnId: "count", direction: "desc" }])).toEqual([
-      rows[1],
-      rows[0],
-      rows[2]
-    ]);
+    expect(
+      applySorting(rows, columns, [{ columnId: "count", direction: "desc" }]),
+    ).toEqual([rows[1], rows[0], rows[2]]);
   });
 
   it("does not mutate the input rows", () => {

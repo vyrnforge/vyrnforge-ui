@@ -10,9 +10,17 @@ export function LiveError() {
   }
 
   return (
-    <Alert className="vf-playground-live-error" title="Example error" variant="danger">
-      <Text size="sm">Fix the highlighted example source to restore the preview.</Text>
-      <div className="vf-playground-live-error__details"><ReactLiveError /></div>
+    <Alert
+      className="vf-playground-live-error"
+      title="Example error"
+      variant="danger"
+    >
+      <Text size="sm">
+        Fix the highlighted example source to restore the preview.
+      </Text>
+      <div className="vf-playground-live-error__details">
+        <ReactLiveError />
+      </div>
     </Alert>
   );
 }
