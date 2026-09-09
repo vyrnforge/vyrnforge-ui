@@ -1,4 +1,4 @@
-name: Temporary S16 Dev Audit Remediation Once
+name: Temporary S16 Dev Audit Patch Inspect
 
 on:
   push:
@@ -6,13 +6,12 @@ on:
       - infra/s16-dev-audit
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  remediate:
-    if: github.actor != 'github-actions[bot]'
+  inspect:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -23,40 +22,11 @@ jobs:
         with:
           node-version: "24.18.0"
           cache: npm
-      - name: Use repository package manager
-        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
-      - name: Apply minimal development-tool remediation
+      - name: Verify repository package manager
+        run: npm --version && test "$(npm --version)" = "11.16.0"
+      - name: Inspect patched 4.x versions
         run: |
-          node --input-type=module <<'NODE'
-          import { readFileSync, writeFileSync } from "node:fs";
-          const path = "package.json";
-          const pkg = JSON.parse(readFileSync(path, "utf8"));
-          pkg.devDependencies["@vitest/coverage-v8"] = "^5.0.0";
-          pkg.overrides = {
-            ...(pkg.overrides ?? {}),
-            tsup: { esbuild: "0.28.2" },
-            vite: { esbuild: "0.28.2" }
-          };
-          pkg.allowScripts = { "esbuild@0.28.2": true };
-          writeFileSync(path, `${JSON.stringify(pkg, null, 2)}\n`);
-          NODE
-          npm update vitest @vitest/coverage-v8 --workspaces --include-workspace-root --package-lock-only
-          npm audit fix --package-lock-only || true
-      - name: Verify clean install and zero audit
-        run: |
-          npm ci
-          npm audit --audit-level=low
-          npm ls vitest @vitest/coverage-v8 esbuild --all
-      - name: Run focused tooling checks
-        run: |
-          npm run test:contracts
-          npm run test:coverage
-          npm run build:packages
-      - name: Commit validated remediation
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          git commit -m "BC-1606: remediate development dependency advisories"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "vitest 4=$(npm view vitest@4 version --json)"
+          echo "coverage 4=$(npm view @vitest/coverage-v8@4 version --json)"
+          echo "vitest 4.1.11=$(npm view vitest@4.1.11 version 2>/dev/null || true)"
+          echo "coverage 4.1.11=$(npm view @vitest/coverage-v8@4.1.11 version 2>/dev/null || true)"
