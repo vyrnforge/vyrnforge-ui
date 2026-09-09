@@ -2,11 +2,24 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { buildAngularCatalogArtifact } from "./angular-catalog-generation.mjs";
-import { buildFrameworkButtonSliceArtifacts } from "./generate-framework-button-slice.mjs";
-import { buildFrameworkDialogSliceArtifacts } from "./generate-framework-dialog-slice.mjs";
-import { buildFrameworkTabsSliceArtifacts } from "./generate-framework-tabs-slice.mjs";
-import { buildFrameworkTextInputSliceArtifacts } from "./generate-framework-text-input-slice.mjs";
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import {
+  buildFrameworkButtonArtifacts,
+  createFrameworkButtonSliceModel,
+} from "./framework-button-generation.mjs";
+import {
+  buildFrameworkDialogArtifacts,
+  createFrameworkDialogSliceModel,
+} from "./framework-dialog-generation.mjs";
+import { createFrameworkGenerationModel } from "./framework-generation.mjs";
+import {
+  buildFrameworkTabsArtifacts,
+  createFrameworkTabsSliceModel,
+} from "./framework-tabs-generation.mjs";
+import {
+  buildFrameworkTextInputArtifacts,
+  createFrameworkTextInputSliceModel,
+} from "./framework-text-input-generation.mjs";
 import {
   FRAMEWORK_API_REFERENCE_PATH,
   buildFrameworkApiReference,
@@ -51,36 +64,22 @@ function freezeArtifact(record) {
   });
 }
 
-function registerSliceArtifacts(artifacts, generator, command) {
-  return artifacts.map((artifact) =>
-    freezeArtifact({
-      path: artifact.path,
-      generator,
-      command,
-      sourceRecords: artifact.sourceRecords,
-      content: artifact.content,
-    }),
-  );
+function isLegacyFixtureLocalFrameworkArtifact(artifact) {
+  return /^tests\/consumers\/(react|angular|vue)\//.test(artifact.path);
 }
 
-function registerAngularPackageSliceArtifact(
-  artifacts,
-  componentId,
-  targetPath,
-) {
-  const angularArtifact = artifacts.find(
-    (artifact) => artifact.framework === "angular",
-  );
-  if (!angularArtifact) {
-    throw new Error(`${componentId}: missing Angular slice artifact`);
-  }
-  return freezeArtifact({
-    path: targetPath,
-    generator: `scripts/generate-framework-${componentId}-slice.mjs`,
-    command: "npm run generate:framework-artifacts",
-    sourceRecords: angularArtifact.sourceRecords,
-    content: angularArtifact.content,
-  });
+function registerSliceArtifacts(artifacts, generator, command) {
+  return artifacts
+    .filter((artifact) => !isLegacyFixtureLocalFrameworkArtifact(artifact))
+    .map((artifact) =>
+      freezeArtifact({
+        path: artifact.path,
+        generator,
+        command,
+        sourceRecords: artifact.sourceRecords,
+        content: artifact.content,
+      }),
+    );
 }
 
 export function buildGeneratedFrameworkArtifacts({
@@ -88,11 +87,28 @@ export function buildGeneratedFrameworkArtifacts({
 } = {}) {
   const native = buildNativeElementArtifacts({ root });
   const apiReference = buildFrameworkApiReference({ root });
-  const button = buildFrameworkButtonSliceArtifacts({ root });
-  const textInput = buildFrameworkTextInputSliceArtifacts({ root });
-  const tabs = buildFrameworkTabsSliceArtifacts({ root });
-  const dialog = buildFrameworkDialogSliceArtifacts({ root });
-  const angularCatalog = buildAngularCatalogArtifact({ root });
+  const contracts = loadCanonicalComponentContracts({ root });
+  const generationModel = createFrameworkGenerationModel(contracts);
+  const buttonModel = createFrameworkButtonSliceModel(generationModel);
+  const textInputModel = createFrameworkTextInputSliceModel(generationModel);
+  const tabsModel = createFrameworkTabsSliceModel(generationModel);
+  const dialogModel = createFrameworkDialogSliceModel(generationModel);
+  const button = {
+    model: buttonModel,
+    artifacts: buildFrameworkButtonArtifacts(buttonModel),
+  };
+  const textInput = {
+    model: textInputModel,
+    artifacts: buildFrameworkTextInputArtifacts(textInputModel),
+  };
+  const tabs = {
+    model: tabsModel,
+    artifacts: buildFrameworkTabsArtifacts(tabsModel),
+  };
+  const dialog = {
+    model: dialogModel,
+    artifacts: buildFrameworkDialogArtifacts(dialogModel),
+  };
 
   return Object.freeze([
     freezeArtifact({
@@ -126,8 +142,8 @@ export function buildGeneratedFrameworkArtifacts({
     }),
     ...registerSliceArtifacts(
       button.artifacts,
-      "scripts/generate-framework-button-slice.mjs",
-      "npm run generate:framework-button-slice",
+      "scripts/generate-framework-artifacts.mjs",
+      "npm run generate:framework-artifacts",
     ),
     ...registerSliceArtifacts(
       textInput.artifacts,
@@ -144,33 +160,6 @@ export function buildGeneratedFrameworkArtifacts({
       "scripts/generate-framework-dialog-slice.mjs",
       "npm run generate:framework-artifacts",
     ),
-    registerAngularPackageSliceArtifact(
-      button.artifacts,
-      "button",
-      "packages/ui-angular/src/generated/vf-button.generated.ts",
-    ),
-    registerAngularPackageSliceArtifact(
-      textInput.artifacts,
-      "text-input",
-      "packages/ui-angular/src/generated/vf-text-input.generated.ts",
-    ),
-    registerAngularPackageSliceArtifact(
-      tabs.artifacts,
-      "tabs",
-      "packages/ui-angular/src/generated/vf-tabs.generated.ts",
-    ),
-    registerAngularPackageSliceArtifact(
-      dialog.artifacts,
-      "dialog",
-      "packages/ui-angular/src/generated/vf-dialog.generated.ts",
-    ),
-    freezeArtifact({
-      path: angularCatalog.path,
-      generator: "scripts/angular-catalog-generation.mjs",
-      command: "npm run generate:framework-artifacts",
-      sourceRecords: angularCatalog.sourceRecords,
-      content: angularCatalog.content,
-    }),
   ]);
 }
 

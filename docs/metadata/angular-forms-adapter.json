@@ -7,8 +7,10 @@
     "supportClaim": "angular-forms-adapter-verified",
     "directive": "VyrnForgeFormControlDirective",
     "selectorAttribute": "vfFormControl",
-    "renderer": "@vyrnforge/ui-elements",
+    "renderer": "@vyrnforge/ui-angular",
+    "canonicalRenderer": "@vyrnforge/ui-elements",
     "location": "packages/ui-angular/src/forms.ts",
+    "publicEntrypoint": "@vyrnforge/ui-angular/forms",
     "publishedPackage": null,
     "standalone": true,
     "duplicatesRendering": false,
@@ -75,12 +77,12 @@
     "dirty and touched state propagation with validator refresh on external focusout",
     "disabled state propagation through setDisabledState with validator refresh",
     "native ElementInternals validity mapped through Validator",
-    "native validationMessage and serialized ValidityState exposed through the vyrnForge Angular error",
+    "native validationMessage and serialized ValidityState exposed through the VyrnForge Angular error",
     "invalid-to-valid value transitions clear the Angular validation error",
     "packed @vyrnforge/ui-angular/forms production consumption and Chromium interaction",
     "@angular/forms remains an optional peer isolated behind the Forms entrypoint",
     "framework-neutral VyrnForge foundations remain Angular-independent",
-    "approved four-package non-grid beta release group remains unchanged"
+    "synchronized non-grid beta release group includes the Angular facade package"
   ],
   "unresolvedBlockers": [],
   "sources": [

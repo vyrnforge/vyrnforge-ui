@@ -1,7 +1,7 @@
 # CI/CD Architecture
 
 This document is the source of truth for VyrnForge UI continuous integration,
-weekly assurance, documentation deployment, and package release orchestration.
+weekly assurance, reference-site deployment, and package release orchestration.
 
 ## Lifecycle workflows
 
@@ -57,12 +57,39 @@ affected or full typechecking according to planner output.
 The `integration-checks` job owns package output preparation, packed consumer
 verification, Chromium contracts, cross-framework generation smoke, repository
 inventory, documentation and playground builds, and the commit-bound Pages
-artifact. It prepares package output once per selected job and reuses it across
-downstream checks.
+reference artifact. It prepares package output once per selected job and reuses
+it across downstream checks.
 
 Only a successful push CI run for current `main` creates
 `pages-site-<commit>`. Pull requests and weekly assurance never create a
 deployable Pages artifact.
+
+Exact-main delivery builds the current documentation inspector and the current
+human-facing playground, then runs `scripts/assemble-versioned-pages.mjs`.
+That assembler uses two distinct sources of truth:
+
+- `docs/metadata/release-groups.json` describes current source release lines,
+  package membership, channels, and publication intent.
+- Real SemVer Git release tags describe which historical reference versions
+  actually exist and may be retained in the deployed site.
+
+Release lines are not treated as interchangeable site versions. For example,
+the independent data-grid alpha line remains visible as package/release status,
+while the reference-site version selector is based on `Next` plus retained
+SemVer release snapshots.
+
+For every retained release tag, exact-main delivery checks out the tag in an
+isolated worktree and builds both surfaces from that release's source:
+
+- `/versions/v<version>/` contains the release documentation inspector.
+- `/versions/v<version>/playground/` contains the release playground.
+
+The current main surfaces remain at `/` and `/playground/`. The assembled site
+contains `vyrnforge-versions.json`, a machine-readable catalog bound to the
+exact main commit, plus the temporary backward-compatible `docs-versions.json`
+consumed by `apps/docs`. `scripts/verify-pages-site.mjs` requires the current
+surfaces, catalog, release lines, and every retained docs/playground pair before
+the artifact can be uploaded.
 
 ### Security
 
@@ -87,9 +114,14 @@ requests npm OIDC.
 `deploy-pages.yml` is intentionally separate from normal CI to preserve least
 privilege. Its preparation job has only Actions and repository read access. It
 accepts only a successful `VyrnForge CI` push run for current `main`, verifies
-that run's head SHA equals current `main`, downloads the matching
-`pages-site-<sha>` artifact, and verifies the site contents. Only the deployment
-job receives `pages: write` and `id-token: write`.
+that run's head SHA equals current `main`, and downloads the matching
+`pages-site-<sha>` artifact.
+
+Before deployment, the preparation job verifies the current docs and playground,
+`vyrnforge-versions.json`, the compatibility manifest, exact-main commit
+binding, and every retained release docs/playground pair. It never checks out
+source or rebuilds the site. Only the deployment job receives `pages: write`
+and `id-token: write`.
 
 ## Release pipeline
 
@@ -109,6 +141,11 @@ The ordered responsibilities are:
 4. `create-release-record`: create or verify the annotated tag and GitHub
    release after registry verification.
 
+A Git release tag becomes eligible for the next exact-main retained reference
+artifact. Package publication state and reference-site availability therefore
+remain traceable to the same immutable release source without making the Pages
+deployment workflow capable of publishing packages or creating tags.
+
 No workflow stores long-lived npm or personal-access credentials.
 
 ## Toolchain baseline
@@ -123,6 +160,11 @@ SHAs with readable version comments.
 Repository rulesets are host configuration and must protect `main` and every
 persistent `integration/*` lane. `ci-gate` is the required PR status check;
 force pushes and deletion must be blocked for persistent lanes.
+
+Because repository policy uses squash merges for protected-lane PRs, a lane may
+be content-current while Git ancestry remains topologically divergent from
+`main`. Lane synchronization must still use protected PRs; force-moving a
+persistent lane is not an acceptable workaround for ancestry shape.
 
 ## Local verification
 

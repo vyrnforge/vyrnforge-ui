@@ -139,6 +139,23 @@ assert(
   !ci.includes("uses: ./.github/workflows/"),
   "ci.yml must own CI jobs directly instead of exposing internal reusable workflows",
 );
+
+for (const marker of [
+  "  react-compatibility-plan:",
+  "  react-compatibility:",
+  "docs/metadata/compatibility-release-matrix.json",
+  "npm run verify:compatibility-release-case -- --case ${{ matrix.id }}",
+  "- react-compatibility-plan",
+  "- react-compatibility",
+  "REACT_COMPATIBILITY_REQUIRED",
+  "REACT_COMPATIBILITY_PLAN_RESULT",
+  "REACT_COMPATIBILITY_RESULT",
+]) {
+  assert(
+    ci.includes(marker),
+    "ci.yml must enforce React compatibility through " + marker,
+  );
+}
 assert(
   !/push:\s*[\s\S]*integration\/\*\*/.test(
     ci.slice(0, ci.indexOf("pull_request:")),
@@ -173,10 +190,16 @@ for (const marker of [
 }
 for (const marker of [
   "node scripts/run-scoped-quality.mjs",
-  "npm run verify:beta-package-artifacts",
+  "npm run prepare:release-artifact",
+  "npm run verify:release-artifact",
+  "npm run verify:trusted-publishing-dry-run",
+  "npm run verify:release-size-budgets",
   "npm run verify:consumer",
   "npm run test:browser",
   "npm run verify:repository-inventory",
+  "node scripts/assemble-versioned-pages.mjs",
+  "node scripts/verify-pages-site.mjs",
+  "VITE_PLAYGROUND_VERSION_ID: next",
   "pages-site-${{ github.sha }}",
   "actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0",
   "ACTIONLINT_VERSION: 1.7.12",
@@ -185,6 +208,17 @@ for (const marker of [
 ]) {
   assert(ci.includes(marker), `ci.yml must directly own ${marker}`);
 }
+for (const forbidden of [
+  "verify:beta-package-artifacts",
+  "verify:beta-package-size-budgets",
+  "test-results/beta-package-artifacts",
+]) {
+  assert(!ci.includes(forbidden), `ci.yml must not use retired ${forbidden}`);
+}
+assert(
+  ci.includes("fetch-depth:") && ci.includes("fetch-tags:"),
+  "ci.yml exact-main delivery must fetch history and tags for retained reference snapshots",
+);
 assert(!ci.includes("npm publish"), "ci.yml must never publish packages");
 
 const assurance = read(".github/workflows/assurance.yml");
@@ -195,16 +229,34 @@ for (const marker of [
   "workflow_dispatch:",
   "name: full-quality",
   "name: full-integration",
+  "npm run prepare:release-artifact",
+  "npm run verify:release-artifact",
+  "npm run verify:trusted-publishing-dry-run",
+  "npm run verify:release-size-budgets",
+  "test-results/release-artifact/manifest.json",
+  "name: release-artifact-assurance",
+  "path: test-results/release-artifact/",
   "name: compatibility-plan",
   "name: compatibility-${{ matrix.id }}",
   "npm run verify:compatibility-release-case",
   "npm audit --omit=dev --audit-level=high",
   "name: codeql-analysis",
-  "github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
-  "github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0",
+  "github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9",
+  "github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9",
   "name: assurance-gate",
 ]) {
   assert(assurance.includes(marker), `assurance.yml must include ${marker}`);
+}
+for (const forbidden of [
+  "verify:beta-package-artifacts",
+  "verify:beta-package-size-budgets",
+  "test-results/beta-package-artifacts",
+  "name: beta-package-artifacts",
+]) {
+  assert(
+    !assurance.includes(forbidden),
+    `assurance.yml must not use retired ${forbidden}`,
+  );
 }
 assert(
   !assurance.includes("uses: ./.github/workflows/"),
@@ -244,6 +296,10 @@ for (const marker of [
   "test -f site/index.html",
   "test -f site/playground/index.html",
   "test -f site/.nojekyll",
+  "test -f site/vyrnforge-versions.json",
+  "test -f site/docs-versions.json",
+  "catalog.current?.commit",
+  "release.playgroundPath",
   "pages: write",
   "id-token: write",
 ]) {
@@ -297,6 +353,8 @@ assert(
 for (const relativePath of [
   "docs/engineering/ci-cd-architecture.md",
   "docs/release/release-responsibility-matrix.md",
+  "scripts/assemble-versioned-pages.mjs",
+  "scripts/verify-pages-site.mjs",
 ]) {
   assert(
     existsSync(path.join(root, relativePath)),

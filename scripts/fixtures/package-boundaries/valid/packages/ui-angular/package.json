@@ -1,0 +1,10 @@
+{
+  "name": "@vyrnforge/ui-angular",
+  "dependencies": {
+    "@vyrnforge/ui-elements": "1.0.0"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=22 <23",
+    "@angular/forms": ">=22 <23"
+  }
+}

@@ -19,6 +19,7 @@ import type {
   VyrnForgeButtonVariant,
   VyrnForgeElementForTagName,
 } from "@vyrnforge/ui-elements";
+import { renderVyrnForgeSlots } from "../slots";
 
 export type VfButtonElement = VyrnForgeElementForTagName<"vf-button">;
 
@@ -124,15 +125,7 @@ export const VfButton = defineComponent({
           ref: elementRef,
           "data-vf-generated-button": "vue",
         },
-        [
-          slots.prefix
-            ? h("span", { slot: "prefix" }, slots.prefix?.())
-            : null,
-          slots.default?.(),
-          slots.suffix
-            ? h("span", { slot: "suffix" }, slots.suffix?.())
-            : null,
-        ],
+        renderVyrnForgeSlots(slots),
       );
   },
 });

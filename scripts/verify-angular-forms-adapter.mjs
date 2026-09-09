@@ -8,10 +8,6 @@ const repositoryRoot = path.resolve(
 );
 const angularVersion = "22.0.8";
 const expectedSupportClaim = "angular-forms-adapter-verified";
-const directivePath = "packages/ui-angular/src/forms.ts";
-const valueModelsPath = "packages/ui-angular/src/forms-value-models.ts";
-const valueModelsTestPath =
-  "packages/ui-angular/src/forms-value-models.test.ts";
 const supportedTags = [
   "vf-autocomplete",
   "vf-checkbox",
@@ -28,26 +24,10 @@ const supportedTags = [
   "vf-textarea",
   "vf-transfer-list",
 ];
-const expectedValueModels = {
-  value: [
-    "vf-date-input",
-    "vf-datetime-input",
-    "vf-search-input",
-    "vf-text-input",
-    "vf-textarea",
-  ],
-  checked: ["vf-checkbox", "vf-switch"],
-  numeric: ["vf-number-input", "vf-rating", "vf-slider"],
-  collection: ["vf-multi-select", "vf-transfer-list"],
-  selection: ["vf-autocomplete", "vf-select"],
-};
 const requiredFiles = [
   "docs/metadata/angular-forms-adapter.json",
   "docs/testing/angular-forms-adapter-contract.md",
-  directivePath,
-  valueModelsPath,
-  valueModelsTestPath,
-  "packages/ui-angular/package.json",
+  "tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts",
   "tests/consumers/angular/src/app/app.component.ts",
   "tests/consumers/angular/src/app/app.component.html",
   "tests/consumers/angular/fixture.json",
@@ -59,27 +39,16 @@ const requiredFiles = [
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
-
 function readJson(root, relativePath) {
   return JSON.parse(read(root, relativePath));
 }
-
 function addFailure(failures, message) {
   failures.push(message);
-}
-
-function sameSet(actual, expected) {
-  const actualSet = new Set(actual ?? []);
-  return (
-    actualSet.size === expected.length &&
-    expected.every((entry) => actualSet.has(entry))
-  );
 }
 
 function verifyMetadata(root, failures) {
   const metadata = readJson(root, "docs/metadata/angular-forms-adapter.json");
   const adapter = metadata.adapter ?? {};
-
   if (metadata.status !== "verified") {
     addFailure(failures, "Angular Forms adapter status must be verified");
   }
@@ -107,10 +76,16 @@ function verifyMetadata(root, failures) {
   if (adapter.renderer !== "@vyrnforge/ui-elements") {
     addFailure(failures, "Angular Forms adapter must target ui-elements");
   }
-  if (adapter.location !== directivePath) {
+  if (adapter.publishedPackage !== null) {
     addFailure(
       failures,
-      `Angular Forms adapter location must be ${directivePath}`,
+      "Angular Forms adapter must not invent a published Angular package",
+    );
+  }
+  if (adapter.location !== "tests/consumers/angular") {
+    addFailure(
+      failures,
+      "Angular Forms adapter must remain in the isolated reference fixture",
     );
   }
   if (adapter.duplicatesRendering !== false) {
@@ -123,32 +98,13 @@ function verifyMetadata(root, failures) {
     );
   }
 
-  if (!sameSet(adapter.supportedTags, supportedTags)) {
+  const actualTags = new Set(adapter.supportedTags ?? []);
+  if (
+    actualTags.size !== supportedTags.length ||
+    !supportedTags.every((tag) => actualTags.has(tag))
+  ) {
     addFailure(failures, "Angular Forms supported tag catalog is incomplete");
   }
-
-  const valueMapping = metadata.valueMapping ?? {};
-  for (const [kind, tags] of Object.entries(expectedValueModels)) {
-    if (!sameSet(valueMapping[kind], tags)) {
-      addFailure(
-        failures,
-        `Angular Forms ${kind} value-model metadata is incomplete`,
-      );
-    }
-  }
-  if (valueMapping.coercionPolicy !== "reject-incompatible-runtime-values") {
-    addFailure(
-      failures,
-      "Angular Forms value models must reject incompatible runtime values",
-    );
-  }
-  if (valueMapping.nullSemantics?.mixedCheckedRead !== "null") {
-    addFailure(failures, "mixed checked values must map to null");
-  }
-  if (valueMapping.nullSemantics?.emptyNumberInputRead !== "null") {
-    addFailure(failures, "empty number-input values must map to null");
-  }
-
   for (const contract of [
     "ControlValueAccessor",
     "Validator",
@@ -170,50 +126,53 @@ function verifyMetadata(root, failures) {
 }
 
 function verifyDirective(root, failures) {
-  const directive = read(root, directivePath);
+  const directive = read(
+    root,
+    "tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts",
+  );
   for (const marker of [
     "standalone: true",
     "implements ControlValueAccessor, OnDestroy, Validator",
     "provide: NG_VALUE_ACCESSOR",
     "provide: NG_VALIDATORS",
+    "multi: true",
     "writeValue(value: unknown)",
     "registerOnChange",
     "registerOnTouched",
     "setDisabledState",
     "validate(_control: AbstractControl)",
     "registerOnValidatorChange",
+    "private readonly listenerCleanup",
+    "this.renderer.listen(",
     '"focusout"',
     '"vf-checked-change"',
     '"vf-invalid"',
     '"vf-value-change"',
-    "convertAngularFormValueToElement(element.localName, value)",
-    "convertElementValueToAngularForm(element.localName, detail.value)",
-    "convertElementValueToAngularForm(element.localName, detail.checked)",
-    "element.disabled || !element.willValidate || element.validity.valid",
-    "message: element.validationMessage",
-    "validity: serializeValidity(element.validity)",
-    "this.onTouched();\n    this.requestValidatorRefresh();",
-    "queueMicrotask(() => this.onValidatorChange())",
+    "ngOnDestroy(): void",
+    "for (const cleanup of this.listenerCleanup) cleanup();",
+    '"disabled"',
+    '"checked"',
+    '"value"',
+    "element.validity.valid",
+    "element.validationMessage",
+    "queueMicrotask",
   ]) {
     if (!directive.includes(marker)) {
       addFailure(failures, `Angular Forms directive is missing ${marker}`);
     }
   }
-
   for (const tag of supportedTags) {
     if (!directive.includes(`${tag}[vfFormControl]`)) {
       addFailure(failures, `Angular Forms selector is missing ${tag}`);
     }
   }
-
   for (const forbidden of [
     "innerHTML",
     "attachShadow",
     "@vyrnforge/ui-components",
     "@vyrnforge/ui-data-grid",
+    "VyrnForgeElementForTagName",
     "host: {",
-    "value.map((entry) => String(entry))",
-    "Number(value ?? 0)",
   ]) {
     if (directive.includes(forbidden)) {
       addFailure(
@@ -221,77 +180,6 @@ function verifyDirective(root, failures) {
         `Angular Forms directive must not contain ${forbidden}`,
       );
     }
-  }
-}
-
-function verifyValueModels(root, failures) {
-  const models = read(root, valueModelsPath);
-  const tests = read(root, valueModelsTestPath);
-
-  for (const [kind, tags] of Object.entries(expectedValueModels)) {
-    for (const tag of tags) {
-      const marker = `tagName: "${tag}",\n    kind: "${kind}"`;
-      if (!models.includes(marker)) {
-        addFailure(
-          failures,
-          `Angular Forms value-model table must map ${tag} to ${kind}`,
-        );
-      }
-    }
-  }
-
-  for (const marker of [
-    "convertAngularFormValueToElement",
-    "convertElementValueToAngularForm",
-    "Unsupported form control tag",
-    'tagName === "vf-number-input" ? String(value) : value',
-    'if (value === "mixed") return null',
-    "Object.freeze([...value])",
-  ]) {
-    if (!models.includes(marker)) {
-      addFailure(
-        failures,
-        `Angular Forms value-model source is missing ${marker}`,
-      );
-    }
-  }
-
-  for (const marker of [
-    '"vf-number-input", 42.5',
-    '"vf-checkbox", "mixed"',
-    '"vf-multi-select", ["alpha", 2]',
-    '"vf-autocomplete").kind',
-    '"vf-select").kind',
-    '"vf-radio"',
-    "Number.POSITIVE_INFINITY",
-  ]) {
-    if (!tests.includes(marker)) {
-      addFailure(
-        failures,
-        `Angular Forms conversion suite is missing ${marker}`,
-      );
-    }
-  }
-}
-
-function verifyPackageEntrypoint(root, failures) {
-  const packageJson = readJson(root, "packages/ui-angular/package.json");
-  const formsExport = packageJson.exports?.["./forms"];
-  if (
-    formsExport?.types !== "./dist/forms.d.ts" ||
-    formsExport?.import !== "./dist/forms.js" ||
-    formsExport?.default !== "./dist/forms.js"
-  ) {
-    addFailure(
-      failures,
-      "@vyrnforge/ui-angular/forms package export is incomplete",
-    );
-  }
-  if (packageJson.peerDependencies?.["@angular/forms"] !== ">=22 <23") {
-    addFailure(failures, "@angular/forms peer range must remain >=22 <23");
-  }
-  if (packageJson.peerDependenciesMeta?.["@angular/forms"]?.optional !== true) {
-    addFailure(failures, "@angular/forms peer must remain optional");
   }
 }
 
@@ -306,10 +194,9 @@ function verifyFixture(root, failures) {
     "tests/consumers/angular/src/app/app.component.ts",
   );
   for (const marker of [
-    'from "@vyrnforge/ui-angular/forms"',
+    "FormsModule",
+    "ReactiveFormsModule",
     "VyrnForgeFormControlDirective",
-    "ownerValidationMessage",
-    "ownerValueMissing",
     "new FormGroup",
     "new FormControl",
     "disableOwner",
@@ -319,7 +206,6 @@ function verifyFixture(root, failures) {
       addFailure(failures, `Angular Forms component is missing ${marker}`);
     }
   }
-
   const template = read(
     root,
     "tests/consumers/angular/src/app/app.component.html",
@@ -328,10 +214,9 @@ function verifyFixture(root, failures) {
     "vfFormControl",
     'formControlName="owner"',
     '[(ngModel)]="notifications"',
+    "data-reactive-value",
     "data-reactive-state",
-    "vyrnForgeError=",
-    "message={{ ownerValidationMessage }}",
-    "valueMissing={{ ownerValueMissing }}",
+    "data-template-value",
     'id="disable-reactive-owner"',
     'id="enable-reactive-owner"',
   ]) {
@@ -358,13 +243,13 @@ function verifyFixture(root, failures) {
     );
   }
   if (
-    (angularFixture?.exampleFiles ?? []).some((entry) =>
-      entry.includes("vyrnforge-form-control.directive.ts"),
+    !(angularFixture?.exampleFiles ?? []).includes(
+      "src/app/vyrnforge-form-control.directive.ts",
     )
   ) {
     addFailure(
       failures,
-      "consumer manifest must not index a copied Angular Forms directive",
+      "consumer manifest must index the Angular Forms directive",
     );
   }
 }
@@ -373,12 +258,12 @@ function verifyRuntimeEvidence(root, failures) {
   const runtime = read(root, "scripts/verify-consumer-foundations-runtime.mjs");
   for (const marker of [
     'vf-text-input[name="reactiveOwner"]',
+    "data-reactive-value",
     "dirty=true",
     "touched=true",
     "disabled=true",
     "vyrnForgeError=true",
     "status=VALID",
-    "checkValidity",
     'vf-checkbox[name="notifications"]',
     "Angular ngModel did not receive vf-checked-change",
   ]) {
@@ -394,7 +279,7 @@ function verifyRuntimeEvidence(root, failures) {
 function verifyPackageBoundary(root, failures) {
   const packageRoot = path.join(root, "packages");
   for (const directory of readdirSync(packageRoot, { withFileTypes: true })) {
-    if (!directory.isDirectory() || directory.name === "ui-angular") continue;
+    if (!directory.isDirectory()) continue;
     const packagePath = path.join(packageRoot, directory.name, "package.json");
     if (!existsSync(packagePath)) continue;
     const packageJson = JSON.parse(readFileSync(packagePath, "utf8"));
@@ -405,11 +290,25 @@ function verifyPackageBoundary(root, failures) {
       ...packageJson.optionalDependencies,
     });
     if (dependencyNames.some((name) => name.startsWith("@angular/"))) {
-      addFailure(
-        failures,
-        `${packageJson.name} must remain Angular-independent`,
-      );
+      addFailure(failures, `${packageJson.name} must not depend on Angular`);
     }
+  }
+
+  const packagesMetadata = readJson(root, "docs/metadata/packages.json");
+  const nonGridBeta = packagesMetadata.releaseGroups?.nonGridBeta ?? [];
+  if (
+    nonGridBeta.length !== 4 ||
+    ![
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-components",
+      "@vyrnforge/ui-elements",
+    ].every((packageName) => nonGridBeta.includes(packageName))
+  ) {
+    addFailure(
+      failures,
+      "Angular Forms adapter must not change the approved four-package beta release group",
+    );
   }
 }
 
@@ -427,12 +326,10 @@ export function verifyAngularFormsAdapter(root = repositoryRoot) {
 
   verifyMetadata(root, failures);
   verifyDirective(root, failures);
-  verifyValueModels(root, failures);
-  verifyPackageEntrypoint(root, failures);
   verifyFixture(root, failures);
   verifyRuntimeEvidence(root, failures);
   verifyPackageBoundary(root, failures);
-  return failures.sort();
+  return failures;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

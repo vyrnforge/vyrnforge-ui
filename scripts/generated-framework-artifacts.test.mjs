@@ -61,38 +61,27 @@ test("stale generated artifacts identify their canonical source records", () => 
   }
 });
 
-test("generated framework artifact registry covers every owned output", () => {
+test("generated framework artifact registry covers aggregate-owned outputs only", () => {
   const artifacts = buildGeneratedFrameworkArtifacts();
-  assert.equal(artifacts.length, 25);
+  assert.equal(artifacts.length, 7);
   assert.deepEqual(
     artifacts.map((artifact) => artifact.path).sort(),
     [
       "docs/generated/framework-api-reference.json",
-      "docs/generated/framework-button-slice.json",
-      "packages/ui-angular/src/generated/catalog.generated.ts",
-      "packages/ui-angular/src/generated/vf-button.generated.ts",
-      "packages/ui-angular/src/generated/vf-dialog.generated.ts",
-      "packages/ui-angular/src/generated/vf-tabs.generated.ts",
-      "packages/ui-angular/src/generated/vf-text-input.generated.ts",
       "packages/ui-elements/custom-elements.json",
       "packages/ui-elements/src/custom-elements.ts",
-      "tests/consumers/angular/src/app/generated/vf-button.generated.ts",
-      "tests/consumers/angular/src/app/generated/vf-dialog.generated.ts",
-      "tests/consumers/angular/src/app/generated/vf-tabs.generated.ts",
-      "tests/consumers/angular/src/app/generated/vf-text-input.generated.ts",
       "tests/consumers/native-html/src/generated/vf-button.generated.ts",
       "tests/consumers/native-html/src/generated/vf-dialog.generated.ts",
       "tests/consumers/native-html/src/generated/vf-tabs.generated.ts",
       "tests/consumers/native-html/src/generated/vf-text-input.generated.ts",
-      "tests/consumers/react/src/generated/Button.generated.tsx",
-      "tests/consumers/react/src/generated/Dialog.generated.tsx",
-      "tests/consumers/react/src/generated/Tabs.generated.tsx",
-      "tests/consumers/react/src/generated/TextInput.generated.tsx",
-      "tests/consumers/vue/src/generated/VfButton.generated.ts",
-      "tests/consumers/vue/src/generated/VfDialog.generated.ts",
-      "tests/consumers/vue/src/generated/VfTabs.generated.ts",
-      "tests/consumers/vue/src/generated/VfTextInput.generated.ts",
     ].sort(),
+  );
+  assert.equal(
+    artifacts.some((artifact) =>
+      /^tests\/consumers\/(react|angular|vue)\//u.test(artifact.path),
+    ),
+    false,
+    "package-owned framework integrations must not regress to fixture-local aggregate outputs",
   );
   for (const artifact of artifacts) {
     assert(

@@ -36,7 +36,13 @@
       "name": "@vyrnforge/ui-angular",
       "status": "current",
       "releaseTrack": "non-grid-beta",
-      "runtime": null
+      "runtime": "angular"
+    },
+    {
+      "name": "@vyrnforge/ui-vue",
+      "status": "current",
+      "releaseTrack": "non-grid-beta",
+      "runtime": "vue"
     },
     {
       "name": "@vyrnforge/ui-data-grid",
@@ -58,13 +64,13 @@
     },
     {
       "id": "angular",
-      "supportLevel": "verified-consumer",
-      "renderer": "@vyrnforge/ui-elements"
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-angular"
     },
     {
       "id": "vue",
-      "supportLevel": "verified-consumer",
-      "renderer": "@vyrnforge/ui-elements"
+      "supportLevel": "first-class",
+      "renderer": "@vyrnforge/ui-vue"
     }
   ],
   "categories": [

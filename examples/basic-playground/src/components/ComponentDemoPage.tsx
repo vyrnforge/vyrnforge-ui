@@ -4,11 +4,10 @@ import {
   CodeText,
   PageHeader,
   Panel,
-  Tabs,
   Text,
-  type TabItem,
 } from "@vyrnforge/ui-components";
 import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
+import { usePlaygroundFramework } from "../app/PlaygroundFrameworkContext";
 import { CodeBlock } from "./CodeBlock";
 import { PageOutline, type PageOutlineItem } from "./PageOutline";
 import { PropsTable, type PropsTableRow } from "./PropsTable";
@@ -78,13 +77,6 @@ export type ComponentDemoPageProps = {
 const consumerKnowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
 export const canonicalKnowledge = consumerKnowledge.components;
 
-const frameworkOrder = [
-  { id: "react", label: "React" },
-  { id: "native-html", label: "Native HTML" },
-  { id: "angular", label: "Angular" },
-  { id: "vue", label: "Vue" },
-] as const;
-
 const maturityVariant = {
   planned: "neutral",
   experimental: "info",
@@ -119,30 +111,6 @@ function GuidanceList({ title, items }: { title: string; items?: string[] }) {
   );
 }
 
-function FrameworkUsagePanel({ usage }: { usage: FrameworkUsage }) {
-  return (
-    <div className="vf-playground-framework-usage">
-      <div className="vf-playground-demo-page__badges">
-        <Badge tone="subtle">{usage.status}</Badge>
-        {usage.package && <Badge tone="subtle">{usage.package}</Badge>}
-      </div>
-      {usage.setup && <CodeBlock code={usage.setup} />}
-      {usage.example && <CodeBlock code={usage.example} />}
-      <Text size="sm" tone="muted">
-        {usage.note}
-      </Text>
-    </div>
-  );
-}
-
-function frameworkTabs(component: CanonicalComponentKnowledge): TabItem[] {
-  return frameworkOrder.map(({ id, label }) => ({
-    id,
-    label,
-    content: <FrameworkUsagePanel usage={component.frameworks[id]} />,
-  }));
-}
-
 export function ComponentDemoPage({
   title,
   description,
@@ -155,7 +123,9 @@ export function ComponentDemoPage({
   props,
   relatedComponents,
 }: ComponentDemoPageProps) {
+  const { frameworkId } = usePlaygroundFramework();
   const canonical = getCanonicalKnowledge(title);
+  const selectedFrameworkUsage = canonical?.frameworks[frameworkId];
   const canonicalUseWhen = canonical?.guidance.useWhen
     ? [canonical.guidance.useWhen]
     : useWhen;
@@ -170,8 +140,7 @@ export function ComponentDemoPage({
     : accessibility;
   const outlineItems: PageOutlineItem[] = [
     { id: "overview", label: "Overview" },
-    { id: "import", label: "Import" },
-    ...(canonical ? [{ id: "framework-usage", label: "Framework usage" }] : []),
+    { id: "import", label: "Usage" },
     ...sections.map(({ id, label }) => ({ id, label })),
     ...(canonicalUseWhen?.length || canonicalAvoidWhen?.length
       ? [{ id: "usage-guidance", label: "Usage guidance" }]
@@ -184,7 +153,15 @@ export function ComponentDemoPage({
       ? [{ id: "related-components", label: "Related components" }]
       : []),
   ];
-  const resolvedPackage = canonical?.package ?? packageName;
+  const resolvedPackage =
+    canonical && selectedFrameworkUsage
+      ? selectedFrameworkUsage.package
+      : (canonical?.package ?? packageName);
+  const resolvedSetupCode = selectedFrameworkUsage
+    ? selectedFrameworkUsage.setup
+    : importCode;
+  const resolvedExampleCode = selectedFrameworkUsage?.example ?? "";
+  const resolvedUsageNote = selectedFrameworkUsage?.note ?? "";
   const maturity = canonical?.maturity as
     keyof typeof maturityVariant | undefined;
 
@@ -215,26 +192,16 @@ export function ComponentDemoPage({
           />
         </section>
         <section className="vf-playground-section" id="import">
-          <Panel title="Import">
-            <CodeBlock code={importCode} />
+          <Panel title="Usage">
+            {resolvedSetupCode && <CodeBlock code={resolvedSetupCode} />}
+            {resolvedExampleCode && <CodeBlock code={resolvedExampleCode} />}
+            {resolvedUsageNote && (
+              <Text size="sm" tone="muted">
+                {resolvedUsageNote}
+              </Text>
+            )}
           </Panel>
         </section>
-        {canonical && (
-          <section className="vf-playground-section" id="framework-usage">
-            <Panel title="Framework usage">
-              <Text tone="muted">
-                Current support and setup are generated from canonical VyrnForge
-                framework metadata.
-              </Text>
-              <Tabs
-                aria-label={`${title} framework usage`}
-                items={frameworkTabs(canonical)}
-                defaultValue="react"
-                size="sm"
-              />
-            </Panel>
-          </section>
-        )}
         {sections.map((section) => (
           <section
             className="vf-playground-section"

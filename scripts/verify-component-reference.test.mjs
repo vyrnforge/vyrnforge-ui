@@ -108,3 +108,50 @@ test("rejects hand-written playground maturity status", () =>
         ),
       ),
   ));
+
+test("rejects canonical native API tags dropped from the reference projection", () =>
+  fixture(
+    (root) => {
+      const file = path.join(
+        root,
+        "examples/basic-playground/src/data/referenceMetadata.ts",
+      );
+      const content = readFileSync(file, "utf8");
+      const next = content.replace("...canonicalNativeElementEntries,", "");
+      assert.notEqual(
+        next,
+        content,
+        "fixture needs the canonical native element projection",
+      );
+      writeFileSync(file, next);
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("reference metadata projection is missing"),
+        ),
+      ),
+  ));
+
+test("rejects catalog links that drift from generated detail paths", () =>
+  fixture(
+    (root) => {
+      const file = path.join(
+        root,
+        "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
+      );
+      const content = readFileSync(file, "utf8");
+      const next = content.replace(
+        "`#/reference/components/${component.id}`",
+        "`#/reference/component/${component.id}`",
+      );
+      assert.notEqual(next, content, "fixture needs the component detail link");
+      writeFileSync(file, next);
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("reference catalog links are missing"),
+        ),
+      ),
+  ));

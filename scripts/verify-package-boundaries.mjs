@@ -30,17 +30,6 @@ const packageDefinitions = [
     forbiddenFrameworkSpecifiers: ["react", "react-dom", "vue", "@angular/"],
   },
   {
-    name: "@vyrnforge/ui-components",
-    directory: "packages/ui-components",
-    required: true,
-    allowedDependencies: new Set([
-      "@vyrnforge/ui-core",
-      "@vyrnforge/ui-behaviors",
-      "@vyrnforge/ui-elements",
-    ]),
-    forbiddenFrameworkSpecifiers: [],
-  },
-  {
     name: "@vyrnforge/ui-elements",
     directory: "packages/ui-elements",
     required: true,
@@ -51,11 +40,29 @@ const packageDefinitions = [
     forbiddenFrameworkSpecifiers: ["react", "react-dom", "vue", "@angular/"],
   },
   {
+    name: "@vyrnforge/ui-components",
+    directory: "packages/ui-components",
+    required: true,
+    allowedDependencies: new Set([
+      "@vyrnforge/ui-core",
+      "@vyrnforge/ui-behaviors",
+      "@vyrnforge/ui-elements",
+    ]),
+    forbiddenFrameworkSpecifiers: ["vue", "@angular/"],
+  },
+  {
     name: "@vyrnforge/ui-angular",
     directory: "packages/ui-angular",
-    required: false,
+    required: true,
     allowedDependencies: new Set(["@vyrnforge/ui-elements"]),
-    forbiddenFrameworkSpecifiers: [],
+    forbiddenFrameworkSpecifiers: ["react", "react-dom", "vue"],
+  },
+  {
+    name: "@vyrnforge/ui-vue",
+    directory: "packages/ui-vue",
+    required: true,
+    allowedDependencies: new Set(["@vyrnforge/ui-elements"]),
+    forbiddenFrameworkSpecifiers: ["react", "react-dom", "@angular/"],
   },
   {
     name: "@vyrnforge/ui-data-grid",
@@ -65,7 +72,7 @@ const packageDefinitions = [
       "@vyrnforge/ui-core",
       "@vyrnforge/ui-components",
     ]),
-    forbiddenFrameworkSpecifiers: [],
+    forbiddenFrameworkSpecifiers: ["vue", "@angular/"],
   },
 ];
 for (const packageDefinition of packageDefinitions) {
@@ -244,7 +251,7 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
           )
         ) {
           failures.push(
-            `${relativePath(root, packageJsonPath)}: ${packageDefinition.name} must remain framework-neutral and must not declare ${dependencyName} in ${dependencyGroup}`,
+            `${relativePath(root, packageJsonPath)}: ${packageDefinition.name} must not declare framework runtime ${dependencyName} in ${dependencyGroup}`,
           );
         }
         if (
@@ -284,7 +291,7 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
           )
         ) {
           failures.push(
-            `${sourceFilePath}: ${packageDefinition.name} must remain framework-neutral and must not import ${specifier}`,
+            `${sourceFilePath}: ${packageDefinition.name} must not import framework runtime ${specifier}`,
           );
           continue;
         }

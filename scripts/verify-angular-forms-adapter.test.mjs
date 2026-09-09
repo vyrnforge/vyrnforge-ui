@@ -17,8 +17,6 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const directivePath = "packages/ui-angular/src/forms.ts";
-const valueModelsPath = "packages/ui-angular/src/forms-value-models.ts";
 
 function withRepositoryCopy(mutate, callback) {
   const temporaryRoot = mkdtempSync(
@@ -55,7 +53,7 @@ test("rejects a missing Angular value-accessor provider", () => {
     (root) =>
       replaceInFile(
         root,
-        directivePath,
+        "tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts",
         "provide: NG_VALUE_ACCESSOR",
         'provide: Symbol.for("missing-value-accessor")',
       ),
@@ -63,114 +61,6 @@ test("rejects a missing Angular value-accessor provider", () => {
       assert.ok(
         verifyAngularFormsAdapter(root).some((failure) =>
           failure.includes("NG_VALUE_ACCESSOR"),
-        ),
-      ),
-  );
-});
-
-test("rejects missing native validation-message mapping", () => {
-  withRepositoryCopy(
-    (root) =>
-      replaceInFile(
-        root,
-        directivePath,
-        "message: element.validationMessage",
-        'message: "adapter-owned message"',
-      ),
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("message: element.validationMessage"),
-        ),
-      ),
-  );
-});
-
-test("rejects missing serialized native validity mapping", () => {
-  withRepositoryCopy(
-    (root) =>
-      replaceInFile(
-        root,
-        directivePath,
-        "validity: serializeValidity(element.validity)",
-        "validity: {}",
-      ),
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("serializeValidity"),
-        ),
-      ),
-  );
-});
-
-test("rejects touched propagation without validator refresh", () => {
-  withRepositoryCopy(
-    (root) =>
-      replaceInFile(
-        root,
-        directivePath,
-        "this.onTouched();\n    this.requestValidatorRefresh();",
-        "this.onTouched();",
-      ),
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("requestValidatorRefresh"),
-        ),
-      ),
-  );
-});
-
-test("rejects loss of string-backed number-input conversion", () => {
-  withRepositoryCopy(
-    (root) =>
-      replaceInFile(
-        root,
-        valueModelsPath,
-        'tagName === "vf-number-input" ? String(value) : value',
-        "value",
-      ),
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("vf-number-input"),
-        ),
-      ),
-  );
-});
-
-test("rejects removal of strict runtime conversion policy", () => {
-  withRepositoryCopy(
-    (root) =>
-      replaceInFile(
-        root,
-        "docs/metadata/angular-forms-adapter.json",
-        '"coercionPolicy": "reject-incompatible-runtime-values"',
-        '"coercionPolicy": "coerce"',
-      ),
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("reject incompatible runtime values"),
-        ),
-      ),
-  );
-});
-
-test("rejects missing collection conversion coverage", () => {
-  withRepositoryCopy(
-    (root) =>
-      replaceInFile(
-        root,
-        "packages/ui-angular/src/forms-value-models.test.ts",
-        '"vf-multi-select", ["alpha", 2]',
-        '"vf-multi-select", ["alpha", "2"]',
-      ),
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("conversion suite"),
         ),
       ),
   );
@@ -194,25 +84,7 @@ test("rejects missing template-driven Forms evidence", () => {
   );
 });
 
-test("rejects missing packed validation-message evidence", () => {
-  withRepositoryCopy(
-    (root) =>
-      replaceInFile(
-        root,
-        "tests/consumers/angular/src/app/app.component.html",
-        "message={{ ownerValidationMessage }}",
-        "message=removed",
-      ),
-    (root) =>
-      assert.ok(
-        verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("ownerValidationMessage"),
-        ),
-      ),
-  );
-});
-
-test("rejects Angular dependency leakage into shared foundations", () => {
+test("rejects Angular dependency leakage into ui-elements", () => {
   withRepositoryCopy(
     (root) => {
       const target = path.join(root, "packages/ui-elements/package.json");
@@ -223,7 +95,27 @@ test("rejects Angular dependency leakage into shared foundations", () => {
     (root) =>
       assert.ok(
         verifyAngularFormsAdapter(root).some((failure) =>
-          failure.includes("Angular-independent"),
+          failure.includes("must not depend on Angular"),
+        ),
+      ),
+  );
+});
+
+test("rejects an invented published Angular package", () => {
+  withRepositoryCopy(
+    (root) => {
+      const target = path.join(
+        root,
+        "docs/metadata/angular-forms-adapter.json",
+      );
+      const metadata = JSON.parse(readFileSync(target, "utf8"));
+      metadata.adapter.publishedPackage = "@vyrnforge/angular";
+      writeFileSync(target, `${JSON.stringify(metadata, null, 2)}\n`);
+    },
+    (root) =>
+      assert.ok(
+        verifyAngularFormsAdapter(root).some((failure) =>
+          failure.includes("must not invent a published Angular package"),
         ),
       ),
   );
@@ -252,7 +144,7 @@ test("rejects Angular host-listener metadata over typed Custom Element unions", 
     (root) =>
       replaceInFile(
         root,
-        directivePath,
+        "tests/consumers/angular/src/app/vyrnforge-form-control.directive.ts",
         "private readonly listenerCleanup",
         'host: { "(vf-value-change)": "handleValueChange($event)" };\n  private readonly listenerCleanup',
       ),

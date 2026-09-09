@@ -93,6 +93,11 @@
       "name": "@vyrnforge/ui-data-grid",
       "directory": "packages/ui-data-grid",
       "releaseGroup": "data-grid-alpha"
+    },
+    {
+      "name": "@vyrnforge/ui-vue",
+      "directory": "packages/ui-vue",
+      "releaseGroup": "non-grid-beta"
     }
   ],
   "dryRun": {
