@@ -10,7 +10,10 @@ export type PageOutlineProps = {
   title?: string;
 };
 
-export function PageOutline({ items, title = "On this page" }: PageOutlineProps) {
+export function PageOutline({
+  items,
+  title = "On this page",
+}: PageOutlineProps) {
   const activeId = useActiveSection(items.map((item) => item.id));
 
   return (
@@ -19,7 +22,10 @@ export function PageOutline({ items, title = "On this page" }: PageOutlineProps)
       <ul>
         {items.map((item) => (
           <li key={item.id}>
-            <a aria-current={activeId === item.id ? "location" : undefined} href={`#${item.id}`}>
+            <a
+              aria-current={activeId === item.id ? "location" : undefined}
+              href={`#${item.id}`}
+            >
               {item.label}
             </a>
           </li>

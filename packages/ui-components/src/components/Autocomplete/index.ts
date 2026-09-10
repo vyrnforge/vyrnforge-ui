@@ -3,5 +3,5 @@ export type {
   AutocompleteFilterFunction,
   AutocompleteOptionData,
   AutocompletePlacement,
-  AutocompleteProps
+  AutocompleteProps,
 } from "./Autocomplete.types";

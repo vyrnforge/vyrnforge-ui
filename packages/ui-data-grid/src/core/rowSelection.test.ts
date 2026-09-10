@@ -9,7 +9,7 @@ import {
   isRowSelected,
   resolveSelectedRows,
   selectRows,
-  toggleRowSelection
+  toggleRowSelection,
 } from "./rowSelection";
 
 type Row = {
@@ -21,7 +21,7 @@ type Row = {
 const rows: Row[] = [
   { id: 1, name: "Alpha" },
   { id: 2, name: "Beta", disabled: true },
-  { id: 3, name: "Gamma" }
+  { id: 3, name: "Gamma" },
 ];
 
 describe("rowSelection", () => {
@@ -55,7 +55,7 @@ describe("rowSelection", () => {
   it("resolves selected rows from the provided row collection", () => {
     expect(resolveSelectedRows(rows, [1, 3]).map((row) => row.name)).toEqual([
       "Alpha",
-      "Gamma"
+      "Gamma",
     ]);
   });
 
@@ -63,7 +63,7 @@ describe("rowSelection", () => {
     const selectableIds = getSelectableRowIds(
       rows,
       (row) => row.id,
-      (row) => !row.disabled
+      (row) => !row.disabled,
     );
 
     expect(selectableIds).toEqual([1, 3]);
@@ -73,10 +73,10 @@ describe("rowSelection", () => {
       indeterminate: true,
       noneSelected: false,
       selectedCount: 1,
-      totalSelectableCount: 2
+      totalSelectableCount: 2,
     });
     expect(getSelectionStateForPage([1, 3], selectableIds).allSelected).toBe(
-      true
+      true,
     );
   });
 });

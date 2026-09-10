@@ -1,13 +1,13 @@
 import type {
   BuildDataGridExportRequestParams,
-  DataGridExportRequest
+  DataGridExportRequest,
 } from "../types/export.types";
 
 const headerToString = (header: unknown) =>
   typeof header === "string" ? header : "";
 
 export function buildDataGridExportRequest<
-  RowData extends Record<string, unknown>
+  RowData extends Record<string, unknown>,
 >({
   tableId,
   columns,
@@ -20,7 +20,7 @@ export function buildDataGridExportRequest<
   pagination,
   selectedRowIds,
   scope,
-  format
+  format,
 }: BuildDataGridExportRequestParams<RowData>): DataGridExportRequest {
   return {
     tableId,
@@ -30,7 +30,7 @@ export function buildDataGridExportRequest<
       visible:
         !column.hidden &&
         column.visible !== false &&
-        columnVisibility[column.id] !== false
+        columnVisibility[column.id] !== false,
     })),
     filters,
     search,
@@ -41,6 +41,6 @@ export function buildDataGridExportRequest<
     selectedRowIds,
     scope,
     format,
-    requestedAt: new Date().toISOString()
+    requestedAt: new Date().toISOString(),
   };
 }

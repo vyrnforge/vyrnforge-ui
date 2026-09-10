@@ -3,7 +3,7 @@ import type { DataGridSort } from "../types/filter.types";
 
 const getColumnValue = <RowData extends Record<string, unknown>>(
   row: RowData,
-  column: DataGridColumnDef<RowData>
+  column: DataGridColumnDef<RowData>,
 ) => {
   if (column.accessorFn) {
     return column.accessorFn(row);
@@ -35,14 +35,14 @@ const compareValues = (left: unknown, right: unknown) => {
 
   return String(left).localeCompare(String(right), undefined, {
     numeric: true,
-    sensitivity: "base"
+    sensitivity: "base",
   });
 };
 
 export function applySorting<RowData extends Record<string, unknown>>(
   rows: RowData[],
   columns: DataGridColumnDef<RowData>[],
-  sorting: DataGridSort[]
+  sorting: DataGridSort[],
 ): RowData[] {
   if (sorting.length === 0) {
     return rows;
@@ -50,7 +50,9 @@ export function applySorting<RowData extends Record<string, unknown>>(
 
   return [...rows].sort((leftRow, rightRow) => {
     for (const sort of sorting) {
-      const column = columns.find((candidate) => candidate.id === sort.columnId);
+      const column = columns.find(
+        (candidate) => candidate.id === sort.columnId,
+      );
 
       if (!column) {
         continue;
@@ -58,7 +60,7 @@ export function applySorting<RowData extends Record<string, unknown>>(
 
       const result = compareValues(
         getColumnValue(leftRow, column),
-        getColumnValue(rightRow, column)
+        getColumnValue(rightRow, column),
       );
 
       if (result !== 0) {

@@ -4,12 +4,12 @@ CSS classes exist to support component rendering and scoped extension. App code 
 
 ## Prefixes
 
-| Prefix | Owner | Public meaning |
-| --- | --- | --- |
-| `vf-*` | `@vyrnforge/ui-core` and `@vyrnforge/ui-components` | Shared utilities and component classes. |
-| `udg-*` | `@vyrnforge/ui-data-grid` | Data-grid-specific classes. |
-| `vf-docs-*` | `apps/docs` | Docs-app-only layout and documentation presentation classes. |
-| `vf-playground-*` | `examples/basic-playground` | Playground-only demo layout and example helper classes. |
+| Prefix            | Owner                                               | Public meaning                                               |
+| ----------------- | --------------------------------------------------- | ------------------------------------------------------------ |
+| `vf-*`            | `@vyrnforge/ui-core` and `@vyrnforge/ui-components` | Shared utilities and component classes.                      |
+| `udg-*`           | `@vyrnforge/ui-data-grid`                           | Data-grid-specific classes.                                  |
+| `vf-docs-*`       | `apps/docs`                                         | Docs-app-only layout and documentation presentation classes. |
+| `vf-playground-*` | `examples/basic-playground`                         | Playground-only demo layout and example helper classes.      |
 
 ## Shared dv Classes
 

@@ -5,7 +5,11 @@ import {
   readReleaseArtifactManifest,
   releaseArtifactDirectory,
 } from "./release-artifact.mjs";
-import { getReleaseGroup, readReleaseGroups, repositoryRoot } from "./release-groups.mjs";
+import {
+  getReleaseGroup,
+  readReleaseGroups,
+  repositoryRoot,
+} from "./release-groups.mjs";
 
 export const measuredSizeMetrics = [
   "packedBytes",
@@ -38,14 +42,18 @@ export function collectReleaseSizeMeasurements({
   const releaseGroup = getReleaseGroup(releaseGroupId, { root, manifest });
   const artifact = readReleaseArtifactManifest({ root, artifactDir });
   const artifactMap = new Map(
-    (artifact.packages ?? []).map((packageInfo) => [packageInfo.name, packageInfo]),
+    (artifact.packages ?? []).map((packageInfo) => [
+      packageInfo.name,
+      packageInfo,
+    ]),
   );
 
   return releaseGroup.packages
     .filter((packageInfo) => packageInfo.policies?.sizeBudget)
     .map((packageInfo) => {
       const packed = artifactMap.get(packageInfo.name);
-      if (!packed) throw new Error(`${packageInfo.name}: release artifact is missing`);
+      if (!packed)
+        throw new Error(`${packageInfo.name}: release artifact is missing`);
       const distDirectory = path.join(root, packageInfo.directory, "dist");
       if (!existsSync(distDirectory)) {
         throw new Error(`${packageInfo.name}: built dist directory is missing`);
@@ -56,7 +64,9 @@ export function collectReleaseSizeMeasurements({
         packedBytes: packed.packedSize,
         unpackedBytes: packed.unpackedSize,
         fileCount: packed.fileCount,
-        runtimeJavaScriptBytes: sumFileBytes(files, (file) => /\.(?:cjs|mjs|js)$/u.test(file)),
+        runtimeJavaScriptBytes: sumFileBytes(files, (file) =>
+          /\.(?:cjs|mjs|js)$/u.test(file),
+        ),
         declarationBytes: sumFileBytes(files, (file) => file.endsWith(".d.ts")),
         cssBytes: sumFileBytes(files, (file) => file.endsWith(".css")),
       };
@@ -85,7 +95,9 @@ export function evaluateReleaseSizeBudgets({ releaseGroup, measurements }) {
       } else if (!Number.isInteger(limit) || limit < 0) {
         failures.push(`${packageInfo.name}: ${metric} budget is invalid`);
       } else if (actual > limit) {
-        failures.push(`${packageInfo.name}: ${metric} ${actual} exceeds ${limit}`);
+        failures.push(
+          `${packageInfo.name}: ${metric} ${actual} exceeds ${limit}`,
+        );
       }
     }
   }
@@ -99,6 +111,10 @@ export function verifyReleaseSizeBudgets({
 } = {}) {
   const manifest = readReleaseGroups({ root });
   const releaseGroup = getReleaseGroup(releaseGroupId, { root, manifest });
-  const measurements = collectReleaseSizeMeasurements({ releaseGroupId, artifactDir, root });
+  const measurements = collectReleaseSizeMeasurements({
+    releaseGroupId,
+    artifactDir,
+    root,
+  });
   return evaluateReleaseSizeBudgets({ releaseGroup, measurements });
 }

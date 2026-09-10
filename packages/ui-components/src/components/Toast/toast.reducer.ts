@@ -11,22 +11,22 @@ export type ToastAction =
   | { type: "update"; id: string; toast: Partial<ToastOptions> };
 
 export const initialToastState: ToastState = {
-  toasts: []
+  toasts: [],
 };
 
 export function toastReducer(
   state: ToastState,
-  action: ToastAction
+  action: ToastAction,
 ): ToastState {
   switch (action.type) {
     case "add": {
-      const existingIndex = state.toasts.findIndex((toast) =>
-        toast.id === action.toast.id
+      const existingIndex = state.toasts.findIndex(
+        (toast) => toast.id === action.toast.id,
       );
 
       if (existingIndex === -1) {
         return {
-          toasts: [...state.toasts, action.toast]
+          toasts: [...state.toasts, action.toast],
         };
       }
 
@@ -34,14 +34,14 @@ export function toastReducer(
         toasts: state.toasts.map((toast, index) =>
           index === existingIndex
             ? { ...toast, ...action.toast, id: toast.id }
-            : toast
-        )
+            : toast,
+        ),
       };
     }
 
     case "dismiss":
       return {
-        toasts: state.toasts.filter((toast) => toast.id !== action.id)
+        toasts: state.toasts.filter((toast) => toast.id !== action.id),
       };
 
     case "dismissAll":
@@ -52,8 +52,8 @@ export function toastReducer(
         toasts: state.toasts.map((toast) =>
           toast.id === action.id
             ? { ...toast, ...action.toast, id: toast.id, createdAt: Date.now() }
-            : toast
-        )
+            : toast,
+        ),
       };
 
     default:

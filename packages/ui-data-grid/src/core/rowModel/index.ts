@@ -8,10 +8,10 @@ export {
   getGroupLeafRows,
   normalizeGrouping,
   resolveGroupableColumns,
-  toggleGroupExpanded
+  toggleGroupExpanded,
 } from "../applyGrouping";
 export {
   getRowIdValue,
   getSelectableRowIds,
-  resolveSelectedRows
+  resolveSelectedRows,
 } from "../rowSelection";

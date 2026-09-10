@@ -3,7 +3,7 @@ import type { DataGridState, GridStateAction } from "./gridState.types";
 
 export function gridStateReducer(
   state: DataGridState,
-  action: GridStateAction
+  action: GridStateAction,
 ): DataGridState {
   switch (action.type) {
     case "merge":
@@ -32,8 +32,8 @@ export function gridStateReducer(
         search: action.search,
         pagination: {
           ...state.pagination,
-          pageIndex: 0
-        }
+          pageIndex: 0,
+        },
       };
     case "setSelectedRowIds":
       return { ...state, selectedRowIds: action.selectedRowIds };

@@ -1,11 +1,11 @@
 import type {
   DataGridThemePreset,
   DataGridThemeStyle,
-  DataGridThemeVars
+  DataGridThemeVars,
 } from "./dataGridTheme.types";
 
 export function createDataGridTheme(
-  vars: DataGridThemeVars
+  vars: DataGridThemeVars,
 ): DataGridThemeVars {
   return vars;
 }
@@ -20,13 +20,13 @@ export function mergeDataGridTheme(
 
     return {
       ...mergedTheme,
-      ...("vars" in theme ? theme.vars : theme)
+      ...("vars" in theme ? theme.vars : theme),
     };
   }, {});
 }
 
 export function toDataGridThemeStyle(
-  vars?: DataGridThemeVars
+  vars?: DataGridThemeVars,
 ): DataGridThemeStyle | undefined {
   if (!vars) {
     return undefined;

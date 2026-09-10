@@ -7,12 +7,12 @@
       "entrypoint": "node scripts/run-scoped-quality.mjs"
     },
     "main": {
-      "purpose": "Run the complete current repository validation once after merge.",
-      "entrypoint": "npm run ci"
+      "purpose": "Validate delivery-sensitive work on protected main through the canonical CI workflow.",
+      "entrypoint": ".github/workflows/ci.yml"
     },
     "nightly": {
-      "purpose": "Detect slow compatibility, browser, dependency, security, and size drift.",
-      "entrypoint": ".github/workflows/nightly.yml"
+      "purpose": "Run full quality, integration, compatibility, dependency, security, and size assurance.",
+      "entrypoint": ".github/workflows/assurance.yml"
     },
     "release": {
       "purpose": "Run release-specific checks against a successful current-main candidate.",
@@ -29,29 +29,29 @@
       "id": "repository-formatting",
       "owner": "pull-request",
       "command": "npm run format:check",
-      "reusedBy": ["main"],
-      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+      "reusedBy": ["main", "nightly"],
+      "reuseReason": "The same repository formatting contract is reused at stronger trust boundaries."
     },
     {
       "id": "repository-lint",
       "owner": "pull-request",
       "command": "npm run lint",
-      "reusedBy": ["main"],
-      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+      "reusedBy": ["main", "nightly"],
+      "reuseReason": "The same lint contract is reused at stronger trust boundaries."
     },
     {
       "id": "repository-css-lint",
       "owner": "pull-request",
       "command": "npm run lint:css",
-      "reusedBy": ["main"],
-      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+      "reusedBy": ["main", "nightly"],
+      "reuseReason": "The same CSS lint contract is reused at stronger trust boundaries."
     },
     {
       "id": "documentation-current",
       "owner": "pull-request",
       "command": "npm run verify:documentation-current",
-      "reusedBy": ["main"],
-      "reuseReason": "The post-merge trust boundary validates the exact merged tree."
+      "reusedBy": ["main", "nightly"],
+      "reuseReason": "Reader-facing documentation remains part of repository quality at every trust boundary."
     },
     {
       "id": "affected-code-validation",
@@ -66,7 +66,7 @@
     {
       "id": "scoped-security",
       "owner": "pull-request",
-      "command": ".github/workflows/_security.yml"
+      "command": ".github/workflows/ci.yml#security-checks"
     },
     {
       "id": "complete-repository-validation",
@@ -81,12 +81,12 @@
     {
       "id": "complete-compatibility-matrix",
       "owner": "nightly",
-      "command": ".github/workflows/_compatibility.yml"
+      "command": ".github/workflows/assurance.yml#compatibility"
     },
     {
       "id": "dependency-audit-and-codeql",
       "owner": "nightly",
-      "command": "nightly security drift mode"
+      "command": ".github/workflows/assurance.yml#security-drift"
     },
     {
       "id": "release-candidate-inputs",
@@ -96,7 +96,7 @@
     {
       "id": "release-package-budgets",
       "owner": "release",
-      "command": "npm run verify:beta-package-size-budgets"
+      "command": "npm run verify:release-size-budgets"
     },
     {
       "id": "release-publication-dry-run",

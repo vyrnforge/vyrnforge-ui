@@ -1,16 +1,14 @@
 import type { DataGridColumnDef } from "../types/column.types";
 import type { DataGridState } from "../types/dataGrid.types";
-export {
-  resetGridViewState
-} from "../state/gridState.merge";
+export { resetGridViewState } from "../state/gridState.merge";
 export {
   defaultPersistKeys,
-  pickPersistableGridState
+  pickPersistableGridState,
 } from "../state/gridState.selectors";
 
 const isColumnVisible = <RowData extends Record<string, unknown>>(
   column: DataGridColumnDef<RowData>,
-  visibility: DataGridState["columnVisibility"]
+  visibility: DataGridState["columnVisibility"],
 ) => {
   if (column.hideable === false) {
     return true;
@@ -25,20 +23,16 @@ const isColumnVisible = <RowData extends Record<string, unknown>>(
   return !column.hidden && column.visible !== false;
 };
 
-export function resolveVisibleColumns<
-  RowData extends Record<string, unknown>
->(
+export function resolveVisibleColumns<RowData extends Record<string, unknown>>(
   columns: DataGridColumnDef<RowData>[],
-  visibility: DataGridState["columnVisibility"]
+  visibility: DataGridState["columnVisibility"],
 ) {
   return columns.filter((column) => isColumnVisible(column, visibility));
 }
 
-export function resolveOrderedColumns<
-  RowData extends Record<string, unknown>
->(
+export function resolveOrderedColumns<RowData extends Record<string, unknown>>(
   columns: DataGridColumnDef<RowData>[],
-  columnOrder: string[]
+  columnOrder: string[],
 ) {
   if (columnOrder.length === 0) {
     return [...columns];
@@ -49,18 +43,18 @@ export function resolveOrderedColumns<
     .map((columnId) => byId.get(columnId))
     .filter((column): column is DataGridColumnDef<RowData> => Boolean(column));
   const orderedIds = new Set(orderedColumns.map((column) => column.id));
-  const remainingColumns = columns.filter((column) => !orderedIds.has(column.id));
+  const remainingColumns = columns.filter(
+    (column) => !orderedIds.has(column.id),
+  );
 
   return [...orderedColumns, ...remainingColumns];
 }
 
-export function updateColumnVisibility<
-  RowData extends Record<string, unknown>
->(
+export function updateColumnVisibility<RowData extends Record<string, unknown>>(
   columns: DataGridColumnDef<RowData>[],
   visibility: DataGridState["columnVisibility"],
   columnId: string,
-  visible: boolean
+  visible: boolean,
 ) {
   const column = columns.find((candidate) => candidate.id === columnId);
 
@@ -70,47 +64,47 @@ export function updateColumnVisibility<
 
   return {
     ...visibility,
-    [columnId]: visible
+    [columnId]: visible,
   };
 }
 
 export function showAllColumns<RowData extends Record<string, unknown>>(
   columns: DataGridColumnDef<RowData>[],
-  visibility: DataGridState["columnVisibility"]
+  visibility: DataGridState["columnVisibility"],
 ) {
   return columns.reduce<DataGridState["columnVisibility"]>(
     (nextVisibility, column) => ({
       ...nextVisibility,
-      [column.id]: true
+      [column.id]: true,
     }),
-    visibility
+    visibility,
   );
 }
 
 export function hideOptionalColumns<RowData extends Record<string, unknown>>(
   columns: DataGridColumnDef<RowData>[],
-  visibility: DataGridState["columnVisibility"]
+  visibility: DataGridState["columnVisibility"],
 ) {
   return columns.reduce<DataGridState["columnVisibility"]>(
     (nextVisibility, column) => {
       if (column.hideable === false) {
         return {
           ...nextVisibility,
-          [column.id]: true
+          [column.id]: true,
         };
       }
 
       return {
         ...nextVisibility,
-        [column.id]: false
+        [column.id]: false,
       };
     },
-    visibility
+    visibility,
   );
 }
 
 export function filterColumnMenuColumns<
-  RowData extends Record<string, unknown>
+  RowData extends Record<string, unknown>,
 >(columns: DataGridColumnDef<RowData>[], search: string) {
   const query = search.trim().toLowerCase();
 
@@ -121,7 +115,7 @@ export function filterColumnMenuColumns<
   return columns.filter(
     (column) =>
       column.id.toLowerCase().includes(query) ||
-      column.header.toLowerCase().includes(query)
+      column.header.toLowerCase().includes(query),
   );
 }
 
@@ -129,12 +123,12 @@ export function moveColumnOrder(
   allColumnIds: string[],
   currentOrder: string[],
   columnId: string,
-  direction: "up" | "down" | "first" | "last"
+  direction: "up" | "down" | "first" | "last",
 ) {
   const knownIds = new Set(allColumnIds);
   const normalizedOrder = [
     ...currentOrder.filter((candidate) => knownIds.has(candidate)),
-    ...allColumnIds.filter((candidate) => !currentOrder.includes(candidate))
+    ...allColumnIds.filter((candidate) => !currentOrder.includes(candidate)),
   ];
   const currentIndex = normalizedOrder.indexOf(columnId);
 
@@ -162,12 +156,12 @@ export function moveColumnBefore(
   currentOrder: string[],
   columnId: string,
   targetColumnId: string,
-  placement: "before" | "after" = "before"
+  placement: "before" | "after" = "before",
 ) {
   const knownIds = new Set(allColumnIds);
   const normalizedOrder = [
     ...currentOrder.filter((candidate) => knownIds.has(candidate)),
-    ...allColumnIds.filter((candidate) => !currentOrder.includes(candidate))
+    ...allColumnIds.filter((candidate) => !currentOrder.includes(candidate)),
   ];
 
   if (columnId === targetColumnId || !knownIds.has(columnId)) {
@@ -175,7 +169,7 @@ export function moveColumnBefore(
   }
 
   const nextOrder = normalizedOrder.filter(
-    (candidate) => candidate !== columnId
+    (candidate) => candidate !== columnId,
   );
   const targetIndex = nextOrder.indexOf(targetColumnId);
 
@@ -183,6 +177,10 @@ export function moveColumnBefore(
     return normalizedOrder;
   }
 
-  nextOrder.splice(placement === "after" ? targetIndex + 1 : targetIndex, 0, columnId);
+  nextOrder.splice(
+    placement === "after" ? targetIndex + 1 : targetIndex,
+    0,
+    columnId,
+  );
   return nextOrder;
 }

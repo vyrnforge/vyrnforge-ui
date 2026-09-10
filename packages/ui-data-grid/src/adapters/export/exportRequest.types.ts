@@ -3,5 +3,5 @@ export type {
   DataGridExportColumn,
   DataGridExportFormat,
   DataGridExportRequest,
-  DataGridExportScope
+  DataGridExportScope,
 } from "../../types/export.types";

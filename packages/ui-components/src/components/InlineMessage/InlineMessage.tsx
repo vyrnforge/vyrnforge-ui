@@ -13,7 +13,7 @@ export function InlineMessage({
       className={joinClassNames(
         "vf-inline-message",
         `vf-inline-message--${variant}`,
-        className
+        className,
       )}
       role={variant === "danger" ? "alert" : "status"}
       {...props}

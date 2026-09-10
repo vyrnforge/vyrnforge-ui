@@ -3,17 +3,17 @@ export { defaultDataGridState } from "./gridState.defaults";
 export {
   createGridState,
   mergeGridState,
-  resetGridViewState
+  resetGridViewState,
 } from "./gridState.merge";
 export { gridStateReducer } from "./gridState.reducer";
 export {
   defaultPersistKeys,
   pickPersistableGridState,
-  selectGridQueryState
+  selectGridQueryState,
 } from "./gridState.selectors";
 export type {
   DataGridPersistKey,
   DataGridPersistedState,
   DataGridState,
-  GridStateAction
+  GridStateAction,
 } from "./gridState.types";

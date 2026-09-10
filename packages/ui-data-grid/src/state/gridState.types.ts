@@ -1,14 +1,10 @@
 import type {
   DataGridPersistKey,
   DataGridPersistedState,
-  DataGridState
+  DataGridState,
 } from "../types/dataGrid.types";
 
-export type {
-  DataGridPersistKey,
-  DataGridPersistedState,
-  DataGridState
-};
+export type { DataGridPersistKey, DataGridPersistedState, DataGridState };
 
 export type GridStateAction =
   | { type: "merge"; state: Partial<DataGridState> }
@@ -28,5 +24,8 @@ export type GridStateAction =
   | { type: "setGrouping"; grouping: DataGridState["grouping"] }
   | { type: "setPagination"; pagination: DataGridState["pagination"] }
   | { type: "setSearch"; search: string }
-  | { type: "setSelectedRowIds"; selectedRowIds: DataGridState["selectedRowIds"] }
+  | {
+      type: "setSelectedRowIds";
+      selectedRowIds: DataGridState["selectedRowIds"];
+    }
   | { type: "setSort"; sort: DataGridState["sort"] };

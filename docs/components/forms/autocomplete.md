@@ -10,12 +10,12 @@ import { Autocomplete } from "@vyrnforge/ui-components";
 
 ## Use The Right Control
 
-| Control | Use when |
-| --- | --- |
-| `Select` | The option set is small, stable, and easy to scan. |
+| Control        | Use when                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| `Select`       | The option set is small, stable, and easy to scan.                                             |
 | `Autocomplete` | The option set is larger and typing part of a known label materially reduces selection effort. |
-| `TextInput` | The application accepts unconstrained text. |
-| `SearchInput` | The input filters an existing page or dataset rather than selecting a value. |
+| `TextInput`    | The application accepts unconstrained text.                                                    |
+| `SearchInput`  | The input filters an existing page or dataset rather than selecting a value.                   |
 
 ## State And Async Ownership
 

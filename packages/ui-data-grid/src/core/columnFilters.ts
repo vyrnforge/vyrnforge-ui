@@ -2,15 +2,18 @@ import type { DataGridFilter } from "../types/filter.types";
 
 export function upsertColumnFilter(
   filters: DataGridFilter[],
-  filter: DataGridFilter
+  filter: DataGridFilter,
 ) {
   return [
     ...filters.filter((candidate) => candidate.columnId !== filter.columnId),
-    filter
+    filter,
   ];
 }
 
-export function removeColumnFilter(filters: DataGridFilter[], columnId: string) {
+export function removeColumnFilter(
+  filters: DataGridFilter[],
+  columnId: string,
+) {
   return filters.filter((filter) => filter.columnId !== columnId);
 }
 

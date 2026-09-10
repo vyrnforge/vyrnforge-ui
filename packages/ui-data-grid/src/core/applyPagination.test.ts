@@ -6,8 +6,8 @@ describe("applyPagination", () => {
     expect(
       applyPagination([1, 2, 3, 4, 5], {
         pageIndex: 1,
-        pageSize: 2
-      })
+        pageSize: 2,
+      }),
     ).toEqual([3, 4]);
   });
 
@@ -15,8 +15,8 @@ describe("applyPagination", () => {
     expect(
       applyPagination([1, 2], {
         pageIndex: 2,
-        pageSize: 2
-      })
+        pageSize: 2,
+      }),
     ).toEqual([]);
   });
 });

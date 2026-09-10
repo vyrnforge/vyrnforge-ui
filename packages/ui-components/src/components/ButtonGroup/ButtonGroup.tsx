@@ -16,7 +16,7 @@ export function ButtonGroup({
         `vf-button-group--${orientation}`,
         `vf-button-group--${size}`,
         attached && "vf-button-group--attached",
-        className
+        className,
       )}
       role="group"
       {...props}

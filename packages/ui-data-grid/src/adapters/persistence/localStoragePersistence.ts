@@ -1,7 +1,7 @@
 import type {
   DataGridPersistenceAdapter,
   DataGridPersistedState,
-  LocalStorageGridPersistenceOptions
+  LocalStorageGridPersistenceOptions,
 } from "./persistence.types";
 
 const defaultNamespace = "udg";
@@ -26,7 +26,7 @@ const createStorageKey = (namespace: string, tableId: string) =>
   `${namespace}:${tableId}`;
 
 export function createLocalStorageGridPersistence(
-  options: LocalStorageGridPersistenceOptions = {}
+  options: LocalStorageGridPersistenceOptions = {},
 ): DataGridPersistenceAdapter {
   const namespace = options.namespace ?? defaultNamespace;
 
@@ -53,7 +53,10 @@ export function createLocalStorageGridPersistence(
       }
 
       try {
-        storage.setItem(createStorageKey(namespace, tableId), JSON.stringify(state));
+        storage.setItem(
+          createStorageKey(namespace, tableId),
+          JSON.stringify(state),
+        );
       } catch {
         // Persistence should never break the grid.
       }
@@ -70,6 +73,6 @@ export function createLocalStorageGridPersistence(
       } catch {
         // Persistence should never break the grid.
       }
-    }
+    },
   };
 }

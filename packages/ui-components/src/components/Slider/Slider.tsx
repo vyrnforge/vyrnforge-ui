@@ -10,6 +10,7 @@ import type { SliderProps } from "./Slider.types";
 
 type CanonicalSliderElement = VyrnForgeElementForTagName<"vf-slider">;
 const registerCanonicalSlider = vyrnForgeElementRegistrations["vf-slider"];
+const ignoreNativeRangeChange = () => undefined;
 
 export function Slider({
   ariaLabel,
@@ -131,6 +132,7 @@ export function Slider({
             max={rangeMax}
             min={min}
             name={name}
+            onChange={ignoreNativeRangeChange}
             required={required}
             step={step}
             type="range"

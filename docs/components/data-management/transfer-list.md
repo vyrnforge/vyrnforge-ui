@@ -20,7 +20,7 @@ import { TransferList } from "@vyrnforge/ui-components";
 <TransferList
   options={[
     { value: "iam", label: "Identity and Access Management" },
-    { value: "analytics", label: "Analytics Workspace" }
+    { value: "analytics", label: "Analytics Workspace" },
   ]}
   defaultValue={["analytics"]}
 />
@@ -67,8 +67,7 @@ Transfer actions move enabled options only.
 When `name` is provided, TransferList renders one hidden input per assigned value using repeated field names.
 
 ```html
-applicationIds=iam
-applicationIds=analytics
+applicationIds=iam applicationIds=analytics
 ```
 
 Disabled TransferList instances do not submit hidden values. Read-only instances remain submitted but cannot be changed.
