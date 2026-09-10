@@ -13,7 +13,7 @@ export function Label({
         "vf-label",
         `vf-label--${size}`,
         tone !== "default" && `vf-text--${tone}`,
-        className
+        className,
       )}
       {...props}
     />

@@ -15,7 +15,7 @@ import { ToastProvider } from "@vyrnforge/ui-components";
 
 <ToastProvider position="bottom-end" maxVisible={5}>
   <App />
-</ToastProvider>
+</ToastProvider>;
 ```
 
 Each provider owns an isolated queue. Multiple providers may exist. VyrnForge does not use Redux, Zustand, module-level global state, or persistent storage for toast state.
@@ -35,7 +35,7 @@ function SaveButton() {
       onClick={() =>
         toast.success({
           title: "Application saved",
-          description: "The configuration was updated."
+          description: "The configuration was updated.",
         })
       }
     >

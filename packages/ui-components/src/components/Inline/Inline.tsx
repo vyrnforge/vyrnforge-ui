@@ -17,7 +17,7 @@ export function Inline({
         `vf-inline--align-${align}`,
         `vf-inline--justify-${justify}`,
         wrap && "vf-inline--wrap",
-        className
+        className,
       )}
       {...props}
     />

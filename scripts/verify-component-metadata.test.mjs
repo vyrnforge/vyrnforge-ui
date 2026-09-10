@@ -10,7 +10,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(
   readFileSync(path.join(root, "docs/metadata/components.json"), "utf8"),
 );
-const button = catalog.components.find((component) => component.id === "button");
+const button = catalog.components.find(
+  (component) => component.id === "button",
+);
 
 function fixture(...components) {
   return {
@@ -31,24 +33,51 @@ function expectFailure(component, text) {
 test("rejects duplicate stable component ids", () => {
   const duplicate = { ...button, displayName: "Button alias" };
   assert(
-    verifyComponentMetadata(fixture(button, duplicate), { root }).some((failure) =>
-      failure.includes("duplicate component id"),
+    verifyComponentMetadata(fixture(button, duplicate), { root }).some(
+      (failure) => failure.includes("duplicate component id"),
     ),
   );
 });
 
 test("rejects invalid packages and missing source files", () => {
-  expectFailure({ ...button, package: "@vyrnforge/not-a-package" }, "invalid package");
-  expectFailure({ ...button, sourcePath: "packages/ui-components/src/missing.tsx" }, "sourcePath");
+  expectFailure(
+    { ...button, package: "@vyrnforge/not-a-package" },
+    "invalid package",
+  );
+  expectFailure(
+    { ...button, sourcePath: "packages/ui-components/src/missing.tsx" },
+    "sourcePath",
+  );
 });
 
 test("rejects invalid docs and playground routes", () => {
   expectFailure({ ...button, docsPath: "docs/api/missing.md" }, "docsPath");
-  expectFailure({ ...button, playgroundPath: "/components/missing" }, "playgroundPath");
+  expectFailure(
+    { ...button, playgroundPath: "/components/missing" },
+    "playgroundPath",
+  );
 });
 
 test("rejects public export, internal visibility, and deprecated lifecycle mismatches", () => {
-  expectFailure({ ...button, displayName: "MissingExport", publicExport: true }, "publicExport does not match");
-  expectFailure({ ...button, category: "internal", maturity: "internal", publicExport: true }, "internal component must not be public");
-  expectFailure({ ...button, maturity: "deprecated", deprecation: { status: "not-applicable" } }, "deprecated component requires");
+  expectFailure(
+    { ...button, displayName: "MissingExport", publicExport: true },
+    "publicExport does not match",
+  );
+  expectFailure(
+    {
+      ...button,
+      category: "internal",
+      maturity: "internal",
+      publicExport: true,
+    },
+    "internal component must not be public",
+  );
+  expectFailure(
+    {
+      ...button,
+      maturity: "deprecated",
+      deprecation: { status: "not-applicable" },
+    },
+    "deprecated component requires",
+  );
 });

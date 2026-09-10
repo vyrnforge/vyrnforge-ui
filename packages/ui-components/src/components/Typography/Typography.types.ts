@@ -1,12 +1,7 @@
 import type { HTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
 
 export type TextTone =
-  | "default"
-  | "muted"
-  | "strong"
-  | "danger"
-  | "success"
-  | "warning";
+  "default" | "muted" | "strong" | "danger" | "success" | "warning";
 
 export type HeadingSize = "sm" | "md" | "lg";
 export type TextSize = "sm" | "md" | "lg";

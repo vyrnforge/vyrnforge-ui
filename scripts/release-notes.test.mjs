@@ -26,9 +26,15 @@ test("release notes derive package roles, CSS and cross-line dependencies from m
     },
   });
 
-  assert.match(notes, /@vyrnforge\/ui-angular@1\.0\.0-beta\.1.*angular-renderer/u);
+  assert.match(
+    notes,
+    /@vyrnforge\/ui-angular@1\.0\.0-beta\.1.*angular-renderer/u,
+  );
   assert.match(notes, /Required VyrnForge dependencies/u);
   assert.match(notes, /@vyrnforge\/ui-core@1\.0\.0-beta\.1.*foundation-beta/u);
-  assert.match(notes, /No package in this release line declares a CSS payload/u);
+  assert.match(
+    notes,
+    /No package in this release line declares a CSS payload/u,
+  );
   assert.doesNotMatch(notes, /BT-8002/u);
 });

@@ -29,13 +29,17 @@ export function Skeleton({
     "--vf-skeleton-height": toCssLength(height),
     "--vf-skeleton-radius": toCssLength(radius),
     "--vf-skeleton-width": toCssLength(width),
-    ...style
+    ...style,
   };
 
   return (
     <span
       aria-hidden="true"
-      className={joinClassNames("vf-skeleton", !animated && "vf-skeleton--static", className)}
+      className={joinClassNames(
+        "vf-skeleton",
+        !animated && "vf-skeleton--static",
+        className,
+      )}
       style={skeletonStyle}
       {...props}
     />

@@ -62,7 +62,9 @@ function formatJson(content: string) {
 }
 
 function uniqueValues(records: MetadataRecord[], key: string) {
-  return Array.from(new Set(records.map((record) => toText(record[key])).filter(Boolean))).sort();
+  return Array.from(
+    new Set(records.map((record) => toText(record[key])).filter(Boolean)),
+  ).sort();
 }
 
 function statusVariant(status: string) {
@@ -89,7 +91,10 @@ function MetadataChips({ items }: { items: unknown[] }) {
   return (
     <div className="vf-docs-metadata-chips">
       {items.map((item, index) => (
-        <span className="vf-docs-metadata-chip" key={`${toText(item)}-${index}`}>
+        <span
+          className="vf-docs-metadata-chip"
+          key={`${toText(item)}-${index}`}
+        >
           {toText(item)}
         </span>
       ))}
@@ -113,7 +118,7 @@ function CodeBlock({ value }: { value: unknown }) {
 
 function DetailSection({
   children,
-  title
+  title,
 }: {
   children: ReactNode;
   title: string;
@@ -132,7 +137,7 @@ function SelectFilter({
   label,
   onChange,
   options,
-  value
+  value,
 }: {
   label: string;
   onChange: (value: string) => void;
@@ -146,7 +151,7 @@ function SelectFilter({
         onChange={(event) => onChange(event.target.value)}
         options={[
           { label: "All", value: "all" },
-          ...options.map((option) => ({ label: option, value: option }))
+          ...options.map((option) => ({ label: option, value: option })),
         ]}
         size="sm"
         value={value}
@@ -162,7 +167,7 @@ function MetadataToolbar({
   searchPlaceholder,
   total,
   value,
-  onSearch
+  onSearch,
 }: {
   children?: ReactNode;
   count: number;
@@ -201,14 +206,14 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
           packageInfo.purpose,
           packageInfo.status,
           packageInfo.cssImport,
-          packageInfo.notes
+          packageInfo.notes,
         ]
           .map(toText)
           .join(" ")
           .toLowerCase()
-          .includes(normalizedQuery)
+          .includes(normalizedQuery),
       ),
-    [normalizedQuery, packages]
+    [normalizedQuery, packages],
   );
 
   return (
@@ -229,14 +234,20 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
           <span>Purpose</span>
         </div>
         {filteredPackages.map((packageInfo) => (
-          <article className="vf-docs-metadata-table__row" key={toText(packageInfo.name)}>
+          <article
+            className="vf-docs-metadata-table__row"
+            key={toText(packageInfo.name)}
+          >
             <div>
               <strong>{toText(packageInfo.name)}</strong>
               <Text tone="muted" size="sm">
                 {toText(packageInfo.notes)}
               </Text>
             </div>
-            <Badge tone="subtle" variant={statusVariant(toText(packageInfo.status))}>
+            <Badge
+              tone="subtle"
+              variant={statusVariant(toText(packageInfo.status))}
+            >
               {toText(packageInfo.status)}
             </Badge>
             <code>{toText(packageInfo.cssImport)}</code>
@@ -245,7 +256,11 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
         ))}
       </div>
       {filteredPackages.map((packageInfo) => (
-        <Card className="vf-docs-metadata-summary" key={`${toText(packageInfo.name)}-details`} padding="md">
+        <Card
+          className="vf-docs-metadata-summary"
+          key={`${toText(packageInfo.name)}-details`}
+          padding="md"
+        >
           <Heading level={3} size="sm">
             {toText(packageInfo.name)} boundaries
           </Heading>
@@ -280,16 +295,28 @@ function PackagesMetadata({ data }: { data: MetadataRecord }) {
 }
 
 function ComponentsMetadata({ data }: { data: MetadataRecord }) {
-  const components = useMemo(() => asArray(data.components).map(asRecord), [data]);
+  const components = useMemo(
+    () => asArray(data.components).map(asRecord),
+    [data],
+  );
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [packageFilter, setPackageFilter] = useState("all");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(() => toText(components[0]?.id));
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const categoryOptions = useMemo(() => uniqueValues(components, "category"), [components]);
-  const packageOptions = useMemo(() => uniqueValues(components, "package"), [components]);
-  const statusOptions = useMemo(() => uniqueValues(components, "maturity"), [components]);
+  const categoryOptions = useMemo(
+    () => uniqueValues(components, "category"),
+    [components],
+  );
+  const packageOptions = useMemo(
+    () => uniqueValues(components, "package"),
+    [components],
+  );
+  const statusOptions = useMemo(
+    () => uniqueValues(components, "maturity"),
+    [components],
+  );
   const normalizedQuery = query.trim().toLowerCase();
 
   const filteredComponents = useMemo(
@@ -303,7 +330,7 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
             component.category,
             component.maturity,
             component.purpose,
-            component.aiUsageNotes
+            component.aiUsageNotes,
           ]
             .map(toText)
             .join(" ")
@@ -312,12 +339,15 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
 
         return (
           matchesQuery &&
-          (packageFilter === "all" || toText(component.package) === packageFilter) &&
-          (categoryFilter === "all" || toText(component.category) === categoryFilter) &&
-          (statusFilter === "all" || toText(component.maturity) === statusFilter)
+          (packageFilter === "all" ||
+            toText(component.package) === packageFilter) &&
+          (categoryFilter === "all" ||
+            toText(component.category) === categoryFilter) &&
+          (statusFilter === "all" ||
+            toText(component.maturity) === statusFilter)
         );
       }),
-    [categoryFilter, components, normalizedQuery, packageFilter, statusFilter]
+    [categoryFilter, components, normalizedQuery, packageFilter, statusFilter],
   );
 
   useEffect(() => {
@@ -326,14 +356,19 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
       return;
     }
 
-    if (!filteredComponents.some((component) => toText(component.id) === selectedId)) {
+    if (
+      !filteredComponents.some(
+        (component) => toText(component.id) === selectedId,
+      )
+    ) {
       setSelectedId(toText(filteredComponents[0].id));
     }
   }, [filteredComponents, selectedId]);
 
   const selectedComponent =
-    filteredComponents.find((component) => toText(component.id) === selectedId) ??
-    filteredComponents[0];
+    filteredComponents.find(
+      (component) => toText(component.id) === selectedId,
+    ) ?? filteredComponents[0];
 
   return (
     <div className="vf-docs-metadata">
@@ -380,7 +415,9 @@ function ComponentsMetadata({ data }: { data: MetadataRecord }) {
 
             return (
               <button
-                aria-current={id === toText(selectedComponent?.id) ? "true" : undefined}
+                aria-current={
+                  id === toText(selectedComponent?.id) ? "true" : undefined
+                }
                 className="vf-docs-metadata-table__row vf-docs-metadata-table__row--button"
                 key={id}
                 onClick={() => setSelectedId(id)}
@@ -500,7 +537,10 @@ function CssImportsMetadata({ data }: { data: MetadataRecord }) {
           <span>Notes</span>
         </div>
         {imports.map((item) => (
-          <article className="vf-docs-metadata-table__row" key={toText(item.importPath)}>
+          <article
+            className="vf-docs-metadata-table__row"
+            key={toText(item.importPath)}
+          >
             <strong>{toText(item.package)}</strong>
             <code>{toText(item.importPath)}</code>
             <MetadataChips items={asArray(item.requiredFor)} />
@@ -602,9 +642,9 @@ function AiRulesMetadata({ data }: { data: MetadataRecord }) {
           .map(toText)
           .join(" ")
           .toLowerCase()
-          .includes(normalizedQuery)
+          .includes(normalizedQuery),
       ),
-    [normalizedQuery, rules]
+    [normalizedQuery, rules],
   );
 
   return (
@@ -624,7 +664,10 @@ function AiRulesMetadata({ data }: { data: MetadataRecord }) {
           <span>Reason</span>
         </div>
         {filteredRules.map((rule) => (
-          <article className="vf-docs-metadata-table__row" key={toText(rule.id)}>
+          <article
+            className="vf-docs-metadata-table__row"
+            key={toText(rule.id)}
+          >
             <strong>{toText(rule.id)}</strong>
             <Text>{toText(rule.rule)}</Text>
             <Text tone="muted">{toText(rule.reason)}</Text>
@@ -653,11 +696,15 @@ export function MetadataPage({ route }: MetadataPageProps) {
       </InlineMessage>
       {route.id === "metadata-packages" && <PackagesMetadata data={data} />}
       {route.id === "metadata-components" && <ComponentsMetadata data={data} />}
-      {route.id === "metadata-css-imports" && <CssImportsMetadata data={data} />}
+      {route.id === "metadata-css-imports" && (
+        <CssImportsMetadata data={data} />
+      )}
       {route.id === "metadata-state-contracts" && (
         <StateContractsMetadata data={data} />
       )}
-      {route.id === "metadata-ai-usage-rules" && <AiRulesMetadata data={data} />}
+      {route.id === "metadata-ai-usage-rules" && (
+        <AiRulesMetadata data={data} />
+      )}
       <details className="vf-docs-metadata-raw">
         <summary>Raw JSON</summary>
         <pre className="vf-docs-metadata-code">

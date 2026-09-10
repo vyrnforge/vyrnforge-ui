@@ -3,5 +3,5 @@ export type {
   StackAlign,
   StackGap,
   StackJustify,
-  StackProps
+  StackProps,
 } from "./Stack.types";

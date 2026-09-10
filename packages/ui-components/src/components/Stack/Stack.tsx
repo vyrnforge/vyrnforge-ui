@@ -15,7 +15,7 @@ export function Stack({
         `vf-stack--gap-${gap}`,
         `vf-stack--align-${align}`,
         `vf-stack--justify-${justify}`,
-        className
+        className,
       )}
       {...props}
     />

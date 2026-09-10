@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "1ce7a47574e8b58c5680a1286b86a70a5efb7524",
+      "sha1": "5f514cc6d9613e08b0bd8c8a693c3b7fac7dc36d",
       "covers": [
         "component props and types",
         "callbacks",
@@ -127,6 +127,16 @@
       "task": "S13-vue-main-reconciliation",
       "reason": "The shared compatibility release matrix gained first-class Vue support and Vue 3.5 compatibility cases during S13 reconciliation. React support policy, tested React versions, public API, runtime behavior, and React compatibility cases remain unchanged; only the shared metadata blob fingerprint is intentionally recaptured.",
       "evidence": "docs/metadata/compatibility-release-matrix.json"
+    },
+    {
+      "task": "BC-1604-formatting-cleanup",
+      "reason": "The repository-wide Prettier cleanup changed formatting-only bytes within the React component implementation tree. Public entrypoints, package metadata, styles, documented API, compatibility invariants, contract tests, and runtime evidence remain unchanged; only the implementation-tree fingerprint is intentionally recaptured.",
+      "evidence": "packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts"
+    },
+    {
+      "task": "S16-react-warning-cleanup",
+      "reason": "React test-noise cleanup made controlled native inputs explicitly acknowledge React change semantics while preserving VyrnForge's existing public callback and canonical value-change ownership. Slider keeps its canonical value-change path, SearchInput continues forwarding its public callback through the input-capture bridge, and Autocomplete/TransferList hidden form controls remain current serialized values. React 18 and React 19 compatibility cases passed before this intentional implementation-tree recapture.",
+      "evidence": "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

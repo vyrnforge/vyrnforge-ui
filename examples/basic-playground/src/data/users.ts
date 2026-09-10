@@ -14,7 +14,12 @@ export type UserRecord = {
 const teams = ["Identity", "Platform", "Security", "Operations", "Finance"];
 const regions = ["APAC", "EMEA", "AMER"];
 const roles = ["Owner", "Reviewer", "Operator", "Analyst"];
-const statuses: UserRecord["status"][] = ["Active", "Pending", "Suspended", "Archived"];
+const statuses: UserRecord["status"][] = [
+  "Active",
+  "Pending",
+  "Suspended",
+  "Archived",
+];
 
 export const users: UserRecord[] = Array.from({ length: 72 }, (_, index) => {
   const team = teams[index % teams.length];
@@ -27,7 +32,7 @@ export const users: UserRecord[] = Array.from({ length: 72 }, (_, index) => {
     "Dimas Hartono",
     "Lina Arman",
     "Kenji Tan",
-    "Sara Malik"
+    "Sara Malik",
   ][index % 8];
 
   return {
@@ -42,6 +47,6 @@ export const users: UserRecord[] = Array.from({ length: 72 }, (_, index) => {
     enabled: status !== "Suspended",
     createdAt: new Date(Date.UTC(2026, index % 12, (index % 27) + 1))
       .toISOString()
-      .slice(0, 10)
+      .slice(0, 10),
   };
 });

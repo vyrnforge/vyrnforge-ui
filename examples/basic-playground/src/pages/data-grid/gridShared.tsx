@@ -2,7 +2,7 @@ import { Badge, Button, Icon, ToolbarButton } from "@vyrnforge/ui-components";
 import {
   createLocalStorageGridPersistence,
   type DataGridBulkAction,
-  type DataGridColumnDef
+  type DataGridColumnDef,
 } from "@vyrnforge/ui-data-grid";
 import type { UserRecord } from "../../data/users";
 
@@ -21,7 +21,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
         <strong>{row.name}</strong>
         <small>{row.email}</small>
       </span>
-    )
+    ),
   },
   {
     id: "role",
@@ -31,7 +31,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     sortable: true,
     filterable: true,
     groupable: true,
-    width: 150
+    width: 150,
   },
   {
     id: "team",
@@ -41,7 +41,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     sortable: true,
     filterable: true,
     groupable: true,
-    width: 150
+    width: 150,
   },
   {
     id: "status",
@@ -52,7 +52,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     groupable: true,
     dataType: "status",
     width: 130,
-    cell: (value) => <UserStatusBadge status={String(value)} />
+    cell: (value) => <UserStatusBadge status={String(value)} />,
   },
   {
     id: "region",
@@ -62,7 +62,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     sortable: true,
     filterable: true,
     groupable: true,
-    width: 130
+    width: 130,
   },
   {
     id: "score",
@@ -72,7 +72,9 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     dataType: "number",
     align: "right",
     width: 110,
-    cell: (value) => <span className="vf-playground-demo-score">{String(value)}</span>
+    cell: (value) => (
+      <span className="vf-playground-demo-score">{String(value)}</span>
+    ),
   },
   {
     id: "enabled",
@@ -83,10 +85,16 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     align: "center",
     width: 120,
     cell: (value) => (
-      <span className={value ? "vf-playground-demo-boolean vf-playground-demo-boolean-on" : "vf-playground-demo-boolean vf-playground-demo-boolean-off"}>
+      <span
+        className={
+          value
+            ? "vf-playground-demo-boolean vf-playground-demo-boolean-on"
+            : "vf-playground-demo-boolean vf-playground-demo-boolean-off"
+        }
+      >
         {value ? "Enabled" : "Paused"}
       </span>
-    )
+    ),
   },
   {
     id: "createdAt",
@@ -95,15 +103,16 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     sortable: true,
     dataType: "date",
     width: 150,
-    cell: (value) => formatDate(value)
-  }
+    cell: (value) => formatDate(value),
+  },
 ];
 
-export const resizableUserColumns: DataGridColumnDef<UserRecord>[] = userColumns.map((column) => ({
-  ...column,
-  minWidth: column.id === "name" ? 180 : 100,
-  resizable: true
-}));
+export const resizableUserColumns: DataGridColumnDef<UserRecord>[] =
+  userColumns.map((column) => ({
+    ...column,
+    minWidth: column.id === "name" ? 180 : 100,
+    resizable: true,
+  }));
 
 export const stressColumns: DataGridColumnDef<UserRecord>[] = [
   ...resizableUserColumns,
@@ -113,21 +122,22 @@ export const stressColumns: DataGridColumnDef<UserRecord>[] = [
     accessorFn: (row) => `${row.name} / ${row.email}`,
     searchable: true,
     width: 260,
-    resizable: true
+    resizable: true,
   },
   {
     id: "health",
     header: "Health",
-    accessorFn: (row) => (row.score >= 80 ? "Healthy" : row.score >= 60 ? "Watch" : "At risk"),
+    accessorFn: (row) =>
+      row.score >= 80 ? "Healthy" : row.score >= 60 ? "Watch" : "At risk",
     sortable: true,
     filterable: true,
     width: 130,
-    resizable: true
-  }
+    resizable: true,
+  },
 ];
 
 export const persistenceAdapter = createLocalStorageGridPersistence({
-  namespace: "vyrnforge-playground"
+  namespace: "vyrnforge-playground",
 });
 
 export const userBulkActions: DataGridBulkAction<UserRecord>[] = [
@@ -136,17 +146,23 @@ export const userBulkActions: DataGridBulkAction<UserRecord>[] = [
     label: "Enable",
     variant: "primary",
     onClick: ({ selectedRows }) => {
-      console.info("Enable selected users", selectedRows.map((row) => row.id));
-    }
+      console.info(
+        "Enable selected users",
+        selectedRows.map((row) => row.id),
+      );
+    },
   },
   {
     id: "archive",
     label: "Archive",
     variant: "danger",
     onClick: ({ selectedRows }) => {
-      console.info("Archive selected users", selectedRows.map((row) => row.id));
-    }
-  }
+      console.info(
+        "Archive selected users",
+        selectedRows.map((row) => row.id),
+      );
+    },
+  },
 ];
 
 export function GridNote({ children }: { children: string }) {
@@ -156,8 +172,14 @@ export function GridNote({ children }: { children: string }) {
 export function SectionActions() {
   return (
     <div className="vf-playground-inline-actions">
-      <Button leftSlot={<Icon name="Check" />} size="sm" variant="primary">Save view</Button>
-      <ToolbarButton icon={<Icon name="Reset" />} label="Reset" tooltip="Reset view" />
+      <Button leftSlot={<Icon name="Check" />} size="sm" variant="primary">
+        Save view
+      </Button>
+      <ToolbarButton
+        icon={<Icon name="Reset" />}
+        label="Reset"
+        tooltip="Reset view"
+      />
     </div>
   );
 }
@@ -183,6 +205,6 @@ function formatDate(value: unknown) {
   return new Intl.DateTimeFormat("en", {
     month: "short",
     day: "2-digit",
-    year: "numeric"
+    year: "numeric",
   }).format(new Date(value));
 }
