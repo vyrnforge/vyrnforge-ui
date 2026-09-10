@@ -6,5 +6,5 @@ export type {
   BadgeTone,
   BadgeVariant,
   StatusBadgeProps,
-  StatusBadgeStatus
+  StatusBadgeStatus,
 } from "./Badge.types";

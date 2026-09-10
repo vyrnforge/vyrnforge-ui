@@ -3,13 +3,15 @@ import { describe, expect, it } from "vitest";
 import {
   useDataGridState,
   type UseDataGridStateOptions,
-  type UseDataGridStateResult
+  type UseDataGridStateResult,
 } from "../index";
 
 function StateSnapshot(options: UseDataGridStateOptions) {
   const [state]: UseDataGridStateResult = useDataGridState(options);
 
-  return <output>{`${state.search}|${state.density}|${state.pagination.pageSize}`}</output>;
+  return (
+    <output>{`${state.search}|${state.density}|${state.pagination.pageSize}`}</output>
+  );
 }
 
 describe("public data-grid hook exports", () => {
@@ -20,10 +22,10 @@ describe("public data-grid hook exports", () => {
           defaultState={{
             search: "accounts",
             density: "compact",
-            pagination: { pageIndex: 0, pageSize: 50 }
+            pagination: { pageIndex: 0, pageSize: 50 },
           }}
-        />
-      )
+        />,
+      ),
     ).toBe("<output>accounts|compact|50</output>");
   });
 
@@ -34,11 +36,11 @@ describe("public data-grid hook exports", () => {
           state={{
             search: "controlled",
             density: "comfortable",
-            pagination: { pageIndex: 2, pageSize: 10 }
+            pagination: { pageIndex: 2, pageSize: 10 },
           }}
           defaultState={{ search: "ignored", density: "compact" }}
-        />
-      )
+        />,
+      ),
     ).toBe("<output>controlled|comfortable|10</output>");
   });
 

@@ -21,10 +21,8 @@ export type UseDataGridStateOptions = {
 export type UseDataGridStateResult = readonly [
   DataGridState,
   (
-    nextState:
-      | DataGridState
-      | ((currentState: DataGridState) => DataGridState)
-  ) => void
+    nextState: DataGridState | ((currentState: DataGridState) => DataGridState),
+  ) => void,
 ];
 
 /**
@@ -34,12 +32,15 @@ export type UseDataGridStateResult = readonly [
 export function useDataGridState({
   state,
   defaultState,
-  onStateChange
+  onStateChange,
 }: UseDataGridStateOptions): UseDataGridStateResult {
-  const initialState = useMemo(() => createGridState(defaultState), [defaultState]);
+  const initialState = useMemo(
+    () => createGridState(defaultState),
+    [defaultState],
+  );
   const controlledState = useMemo(
     () => (state ? createGridState(state) : undefined),
-    [state]
+    [state],
   );
 
   return useControlledState(controlledState, initialState, onStateChange);

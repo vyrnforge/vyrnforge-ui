@@ -4,7 +4,10 @@ import type { ToggleButtonSize } from "../ToggleButton";
 export type ToggleButtonGroupType = "single" | "multiple";
 export type ToggleButtonGroupValue = string | string[];
 
-export type ToggleButtonGroupProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange" | "value"> & {
+export type ToggleButtonGroupProps = Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "defaultValue" | "onChange" | "value"
+> & {
   type?: ToggleButtonGroupType;
   value?: ToggleButtonGroupValue;
   defaultValue?: ToggleButtonGroupValue;

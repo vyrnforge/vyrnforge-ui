@@ -8,11 +8,11 @@ export const defaultDataGridState: DataGridState = {
   expandedGroupIds: [],
   pagination: {
     pageIndex: 0,
-    pageSize: 10
+    pageSize: 10,
   },
   columnVisibility: {},
   columnOrder: [],
   columnSizing: {},
   selectedRowIds: [],
-  density: "standard"
+  density: "standard",
 };

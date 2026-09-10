@@ -4,11 +4,25 @@ import { Icon } from "../Icon";
 import { joinClassNames } from "../../utils/classNames";
 import { TransferListPanel } from "./TransferListPanel";
 import type { TransferListProps } from "./TransferList.types";
-import { enabledOptionValues, selectedEnabledValues } from "./transferList.utils";
+import {
+  enabledOptionValues,
+  selectedEnabledValues,
+} from "./transferList.utils";
 import { useTransferList } from "./useTransferList";
 
-function actionLabel(action: "all" | "selected", direction: "source" | "target", title: ReactNode) {
-  const targetName = typeof title === "string" ? title : direction === "target" ? "Assigned" : "Available";
+const ignoreHiddenInputChange = () => undefined;
+
+function actionLabel(
+  action: "all" | "selected",
+  direction: "source" | "target",
+  title: ReactNode,
+) {
+  const targetName =
+    typeof title === "string"
+      ? title
+      : direction === "target"
+        ? "Assigned"
+        : "Available";
   return `Move ${action} items to ${targetName}`;
 }
 
@@ -43,7 +57,7 @@ export function TransferList({
   targetEmptyText = "No assigned items",
   targetSearchPlaceholder = "Search assigned",
   targetTitle = "Assigned",
-  value
+  value,
 }: TransferListProps) {
   const generatedId = useId().replace(/:/g, "");
   const rootId = id ?? `vf-transfer-list-${generatedId}`;
@@ -72,7 +86,7 @@ export function TransferList({
     setVisibleSelected,
     togglePanelValue,
     visibleSourceOptions,
-    visibleTargetOptions
+    visibleTargetOptions,
   } = useTransferList({
     clearSelectionAfterMove,
     defaultValue,
@@ -80,10 +94,16 @@ export function TransferList({
     onSelectionChange,
     onValueChange,
     options,
-    value
+    value,
   });
-  const enabledSourceSelected = selectedEnabledValues(sourceSelectedValues, sourceOptions);
-  const enabledTargetSelected = selectedEnabledValues(targetSelectedValues, targetOptions);
+  const enabledSourceSelected = selectedEnabledValues(
+    sourceSelectedValues,
+    sourceOptions,
+  );
+  const enabledTargetSelected = selectedEnabledValues(
+    targetSelectedValues,
+    targetOptions,
+  );
   const enabledSourceValues = enabledOptionValues(sourceOptions);
   const enabledTargetValues = enabledOptionValues(targetOptions);
 
@@ -98,7 +118,7 @@ export function TransferList({
         disabled && "vf-transfer-list--disabled",
         readOnly && "vf-transfer-list--read-only",
         resolvedInvalid && "vf-transfer-list--invalid",
-        className
+        className,
       )}
       id={rootId}
       role="group"
@@ -202,9 +222,17 @@ export function TransferList({
         title={targetTitle}
         visibleOptions={visibleTargetOptions}
       />
-      {name && !disabled && targetValues.map((targetValue) => (
-        <input key={targetValue} name={name} type="hidden" value={targetValue} />
-      ))}
+      {name &&
+        !disabled &&
+        targetValues.map((targetValue) => (
+          <input
+            key={targetValue}
+            name={name}
+            onChange={ignoreHiddenInputChange}
+            type="hidden"
+            value={targetValue}
+          />
+        ))}
     </div>
   );
 }

@@ -14,20 +14,43 @@ export function LiveExample({
   scope,
   minPreviewHeight,
   editorHeight = 180,
-  resetKey
+  resetKey,
 }: LiveExampleProps) {
   return (
-    <Panel className="vf-playground-live-example" title={title} description={description} actions={<Badge size="sm" tone="subtle">Live</Badge>}>
+    <Panel
+      className="vf-playground-live-example"
+      title={title}
+      description={description}
+      actions={
+        <Badge size="sm" tone="subtle">
+          Live
+        </Badge>
+      }
+    >
       {imports && (
         <div className="vf-playground-live-import">
-          <Text size="sm" tone="muted">Import</Text>
-          <pre><code>{imports}</code></pre>
+          <Text size="sm" tone="muted">
+            Import
+          </Text>
+          <pre>
+            <code>{imports}</code>
+          </pre>
         </div>
       )}
-      <LiveProvider code={initialCode} key={resetKey ?? id} language="tsx" noInline={initialCode.includes("render(")} scope={scope}>
+      <LiveProvider
+        code={initialCode}
+        key={resetKey ?? id}
+        language="tsx"
+        noInline={initialCode.includes("render(")}
+        scope={scope}
+      >
         <LivePreview minHeight={minPreviewHeight} />
         <LiveError />
-        <LiveCodeEditor editorHeight={editorHeight} imports={imports} initialCode={initialCode} />
+        <LiveCodeEditor
+          editorHeight={editorHeight}
+          imports={imports}
+          initialCode={initialCode}
+        />
       </LiveProvider>
     </Panel>
   );

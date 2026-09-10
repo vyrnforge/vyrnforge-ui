@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type {
   DataGridColumnDef,
   DataGridColumnSizingState,
-  DataGridColumnVisibilityState
+  DataGridColumnVisibilityState,
 } from "./column.types";
 import type { DataGridFilter, DataGridSort } from "./filter.types";
 import type { DataGridThemeVars } from "../theme/dataGridTheme.types";
@@ -58,7 +58,7 @@ export type DataGridState = {
 export type DataGridBulkActionVariant = "default" | "primary" | "danger";
 
 export type DataGridLeafRow<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   type: "row";
   id: DataGridRowId;
@@ -68,7 +68,7 @@ export type DataGridLeafRow<
 };
 
 export type DataGridGroupRow<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   type: "group";
   id: string;
@@ -83,11 +83,11 @@ export type DataGridGroupRow<
 };
 
 export type DataGridDisplayRow<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = DataGridLeafRow<RowData> | DataGridGroupRow<RowData>;
 
 export type DataGridGroupIdContext<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   columnId: string;
   value: unknown;
@@ -98,14 +98,14 @@ export type DataGridGroupIdContext<
 };
 
 export type DataGridGroupHeaderContext<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   group: DataGridGroupRow<RowData>;
   state: DataGridState;
 };
 
 export type DataGridBulkActionContext<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   tableId: string;
   selectedRowIds: DataGridRowId[];
@@ -115,23 +115,18 @@ export type DataGridBulkActionContext<
 };
 
 export type DataGridBulkAction<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   id: string;
   label: string;
   variant?: DataGridBulkActionVariant;
   disabled?:
-    | boolean
-    | ((context: DataGridBulkActionContext<RowData>) => boolean);
-  hidden?:
-    | boolean
-    | ((context: DataGridBulkActionContext<RowData>) => boolean);
+    boolean | ((context: DataGridBulkActionContext<RowData>) => boolean);
+  hidden?: boolean | ((context: DataGridBulkActionContext<RowData>) => boolean);
   onClick: (context: DataGridBulkActionContext<RowData>) => void;
 };
 
-export type DataGridStateChangeHandler = (
-  nextState: DataGridState
-) => void;
+export type DataGridStateChangeHandler = (nextState: DataGridState) => void;
 
 export type DataGridQueryChange = Pick<
   DataGridState,
@@ -139,11 +134,7 @@ export type DataGridQueryChange = Pick<
 >;
 
 export type DataGridTheme =
-  | "light"
-  | "dark"
-  | "system"
-  | "enterprise"
-  | (string & {});
+  "light" | "dark" | "system" | "enterprise" | (string & {});
 
 export type DataGridVariant = "plain" | "card" | "bordered";
 
@@ -164,17 +155,17 @@ export type DataGridPersistedState = Partial<
 
 export type DataGridPersistenceAdapter = {
   load: (
-    tableId: string
+    tableId: string,
   ) => DataGridPersistedState | null | Promise<DataGridPersistedState | null>;
   save: (
     tableId: string,
-    state: DataGridPersistedState
+    state: DataGridPersistedState,
   ) => void | Promise<void>;
   clear?: (tableId: string) => void | Promise<void>;
 };
 
 export type UniversalDataGridProps<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   tableId: string;
   columns: DataGridColumnDef<RowData>[];
@@ -193,7 +184,7 @@ export type UniversalDataGridProps<
   defaultGrouping?: string[];
   onGroupingChange?: (grouping: string[]) => void;
   renderGroupHeader?: (
-    context: DataGridGroupHeaderContext<RowData>
+    context: DataGridGroupHeaderContext<RowData>,
   ) => ReactNode;
   getGroupId?: (context: DataGridGroupIdContext<RowData>) => string;
   defaultExpandedGroups?: DataGridDefaultExpandedGroups;

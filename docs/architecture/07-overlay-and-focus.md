@@ -33,30 +33,30 @@ Dialog, modal Drawer, and ConfirmDialog lock `document.body` scrolling through a
 
 ## Modal Versus Non-Modal Components
 
-| Component | Default behavior | Focus trap | Scroll lock |
-| --- | --- | --- | --- |
-| Popover | Non-modal anchored content | No | No |
-| Dropdown | Non-modal Popover composition | No | No |
-| Menu | Non-modal action menu | Menu-item navigation only | No |
-| Tooltip | Non-interactive description | No | No |
-| Dialog | Modal | Yes | Yes |
-| Drawer | Modal by default | Yes | Yes |
-| ConfirmDialog | Dialog composition | Yes | Yes |
+| Component     | Default behavior              | Focus trap                | Scroll lock |
+| ------------- | ----------------------------- | ------------------------- | ----------- |
+| Popover       | Non-modal anchored content    | No                        | No          |
+| Dropdown      | Non-modal Popover composition | No                        | No          |
+| Menu          | Non-modal action menu         | Menu-item navigation only | No          |
+| Tooltip       | Non-interactive description   | No                        | No          |
+| Dialog        | Modal                         | Yes                       | Yes         |
+| Drawer        | Modal by default              | Yes                       | Yes         |
+| ConfirmDialog | Dialog composition            | Yes                       | Yes         |
 
 ## Z-Index Hierarchy
 
 Shared core tokens define the normal hierarchy:
 
-| Token | Layer |
-| --- | --- |
-| `--vf-z-base` | Application content |
-| `--vf-z-sticky` | Sticky shell regions |
+| Token             | Layer                     |
+| ----------------- | ------------------------- |
+| `--vf-z-base`     | Application content       |
+| `--vf-z-sticky`   | Sticky shell regions      |
 | `--vf-z-dropdown` | Ordinary dropdown content |
-| `--vf-z-popover` | Popovers and menus |
-| `--vf-z-tooltip` | Tooltips |
-| `--vf-z-overlay` | Modal overlay surfaces |
-| `--vf-z-dialog` | Dialogs and modal drawers |
-| `--vf-z-toast` | Toast notifications |
+| `--vf-z-popover`  | Popovers and menus        |
+| `--vf-z-tooltip`  | Tooltips                  |
+| `--vf-z-overlay`  | Modal overlay surfaces    |
+| `--vf-z-dialog`   | Dialogs and modal drawers |
+| `--vf-z-toast`    | Toast notifications       |
 
 The active internal overlay stack adds a runtime ordering value so nested portal layers stay above their parent. AppShell header and sidebar remain below overlay portals.
 

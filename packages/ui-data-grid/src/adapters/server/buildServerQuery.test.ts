@@ -10,15 +10,15 @@ describe("buildDataGridServerQuery", () => {
         filters: [],
         sort: [{ columnId: "name", direction: "asc" }],
         grouping: ["status"],
-        pagination: { pageIndex: 2, pageSize: 25 }
-      })
+        pagination: { pageIndex: 2, pageSize: 25 },
+      }),
     ).toEqual({
       tableId: "users",
       search: "alpha",
       filters: [],
       sort: [{ columnId: "name", direction: "asc" }],
       grouping: ["status"],
-      pagination: { pageIndex: 2, pageSize: 25 }
+      pagination: { pageIndex: 2, pageSize: 25 },
     });
   });
 });

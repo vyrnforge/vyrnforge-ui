@@ -3,5 +3,5 @@ export type {
   AppShellHeaderPosition,
   AppShellProps,
   AppShellScrollMode,
-  AppShellSidebarPosition
+  AppShellSidebarPosition,
 } from "./AppShell.types";

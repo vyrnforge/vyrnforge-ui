@@ -15,7 +15,8 @@ function toLabel(value: string) {
 export function getComponentMaturityPresentation(
   component: MaturityPresentationInput,
 ): { label: string; variant: BadgeVariant; verificationRequired: boolean } {
-  const maturity = typeof component.maturity === "string" ? component.maturity : "unknown";
+  const maturity =
+    typeof component.maturity === "string" ? component.maturity : "unknown";
   const evidence =
     component.evidence && typeof component.evidence === "object"
       ? (component.evidence as { status?: unknown })
@@ -36,16 +37,32 @@ export function getComponentMaturityPresentation(
   }
 
   if (maturity === "stable" || maturity === "beta-stable") {
-    return { label: toLabel(maturity), variant: "success", verificationRequired: false };
+    return {
+      label: toLabel(maturity),
+      variant: "success",
+      verificationRequired: false,
+    };
   }
 
   if (maturity === "experimental" || maturity === "alpha-stable") {
-    return { label: toLabel(maturity), variant: "warning", verificationRequired: false };
+    return {
+      label: toLabel(maturity),
+      variant: "warning",
+      verificationRequired: false,
+    };
   }
 
   if (maturity === "deprecated") {
-    return { label: toLabel(maturity), variant: "danger", verificationRequired: false };
+    return {
+      label: toLabel(maturity),
+      variant: "danger",
+      verificationRequired: false,
+    };
   }
 
-  return { label: toLabel(maturity), variant: "info", verificationRequired: false };
+  return {
+    label: toLabel(maturity),
+    variant: "info",
+    verificationRequired: false,
+  };
 }

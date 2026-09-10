@@ -1,6 +1,6 @@
 import type {
   DataGridGroupingState,
-  DataGridPaginationState
+  DataGridPaginationState,
 } from "../../types/dataGrid.types";
 import type { DataGridFilter, DataGridSort } from "../../types/filter.types";
 

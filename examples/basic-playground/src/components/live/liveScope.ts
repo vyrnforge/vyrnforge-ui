@@ -47,7 +47,7 @@ import {
   Tooltip,
   TopNav,
   useToast,
-  ValidationMessage
+  ValidationMessage,
 } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 
@@ -101,7 +101,7 @@ export const liveScope = {
   TopNav,
   useToast,
   ValidationMessage,
-  UniversalDataGrid
+  UniversalDataGrid,
 };
 
 export function createLiveScope(...keys: Array<keyof typeof liveScope>) {

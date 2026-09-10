@@ -21,7 +21,7 @@ export function AutocompleteOption({
   onPointerDown,
   onPointerMove,
   option,
-  selected
+  selected,
 }: AutocompleteOptionProps) {
   return (
     <div
@@ -31,7 +31,7 @@ export function AutocompleteOption({
         "vf-autocomplete__option",
         active && "vf-autocomplete__option--active",
         selected && "vf-autocomplete__option--selected",
-        option.disabled && "vf-autocomplete__option--disabled"
+        option.disabled && "vf-autocomplete__option--disabled",
       )}
       id={id}
       onClick={onClick}

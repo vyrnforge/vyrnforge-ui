@@ -1,7 +1,13 @@
 :root {
   color: var(--vf-text, #172033);
   background: var(--vf-bg, #f5f7fb);
-  font-family: var(--vf-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-family: var(
+    --vf-font-family,
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif
+  );
 }
 
 * {
@@ -13,8 +19,7 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    linear-gradient(180deg, #f7fafc 0, #eef3f8 320px),
-    var(--vf-bg, #f5f7fb);
+    linear-gradient(180deg, #f7fafc 0, #eef3f8 320px), var(--vf-bg, #f5f7fb);
 }
 
 button,
@@ -592,7 +597,8 @@ select {
 
 .vf-playground-nav .vf-side-nav__item:disabled {
   min-height: auto;
-  padding: var(--vf-space-4, 16px) var(--vf-space-3, 12px) var(--vf-space-1, 4px);
+  padding: var(--vf-space-4, 16px) var(--vf-space-3, 12px)
+    var(--vf-space-1, 4px);
   color: var(--vf-text-muted, #64748b);
   cursor: default;
   font-size: 11px;
@@ -622,7 +628,9 @@ select {
 
 .vf-playground-section {
   min-width: 0;
-  scroll-margin-top: calc(var(--vf-app-shell-header-height, 0px) + var(--vf-space-4, 16px));
+  scroll-margin-top: calc(
+    var(--vf-app-shell-header-height, 0px) + var(--vf-space-4, 16px)
+  );
 }
 
 .vf-playground-section__title {
@@ -635,7 +643,9 @@ select {
 .vf-playground-page-outline {
   position: sticky;
   top: calc(var(--vf-app-shell-header-height, 0px) + var(--vf-space-4, 16px));
-  max-height: calc(100dvh - var(--vf-app-shell-header-height, 0px) - var(--vf-space-8, 32px));
+  max-height: calc(
+    100dvh - var(--vf-app-shell-header-height, 0px) - var(--vf-space-8, 32px)
+  );
   min-width: 0;
   overflow-y: auto;
   padding: var(--vf-space-3, 12px) 0;

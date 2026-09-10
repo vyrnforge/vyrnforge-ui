@@ -18,7 +18,7 @@ export const tickets: TicketRecord[] = [
     status: "Open",
     requester: "Nadia Santoso",
     owner: "Identity",
-    dueAt: "2026-07-10"
+    dueAt: "2026-07-10",
   },
   {
     id: "TCK-2042",
@@ -28,7 +28,7 @@ export const tickets: TicketRecord[] = [
     status: "In Progress",
     requester: "Dimas Hartono",
     owner: "Platform",
-    dueAt: "2026-07-12"
+    dueAt: "2026-07-12",
   },
   {
     id: "TCK-2043",
@@ -38,7 +38,7 @@ export const tickets: TicketRecord[] = [
     status: "Waiting",
     requester: "Sara Malik",
     owner: "Operations",
-    dueAt: "2026-07-08"
+    dueAt: "2026-07-08",
   },
   {
     id: "TCK-2044",
@@ -48,6 +48,6 @@ export const tickets: TicketRecord[] = [
     status: "Resolved",
     requester: "Raka Wijaya",
     owner: "Security",
-    dueAt: "2026-07-06"
-  }
+    dueAt: "2026-07-06",
+  },
 ];
