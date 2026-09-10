@@ -1,10 +1,10 @@
 export { createLocalStorageGridPersistence } from "./localStoragePersistence";
 export {
   defaultPersistKeys,
-  pickPersistableGridState
+  pickPersistableGridState,
 } from "./persistableState";
 export type {
   DataGridPersistenceAdapter,
   DataGridPersistedState,
-  LocalStorageGridPersistenceOptions
+  LocalStorageGridPersistenceOptions,
 } from "./persistence.types";

@@ -13,9 +13,15 @@ export function ErrorState({
   const actionContent = actions ?? retryAction ?? action;
 
   return (
-    <div className={joinClassNames("vf-error-state", className)} role="alert" {...props}>
+    <div
+      className={joinClassNames("vf-error-state", className)}
+      role="alert"
+      {...props}
+    >
       <p className="vf-error-state__title">{title}</p>
-      {description && <p className="vf-error-state__description">{description}</p>}
+      {description && (
+        <p className="vf-error-state__description">{description}</p>
+      )}
       {actionContent && <div className="vf-state-actions">{actionContent}</div>}
     </div>
   );

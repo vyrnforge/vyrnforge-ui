@@ -3,7 +3,7 @@ import type { DataGridFilter } from "../types/filter.types";
 
 const getColumnValue = <RowData extends Record<string, unknown>>(
   row: RowData,
-  column: DataGridColumnDef<RowData>
+  column: DataGridColumnDef<RowData>,
 ) => {
   if (column.accessorFn) {
     return column.accessorFn(row);
@@ -24,10 +24,14 @@ const compareComparable = (value: unknown, filterValue: unknown) => {
     return leftNumber - rightNumber;
   }
 
-  return String(value ?? "").localeCompare(String(filterValue ?? ""), undefined, {
-    numeric: true,
-    sensitivity: "base"
-  });
+  return String(value ?? "").localeCompare(
+    String(filterValue ?? ""),
+    undefined,
+    {
+      numeric: true,
+      sensitivity: "base",
+    },
+  );
 };
 
 function matchesFilter(value: unknown, filter: DataGridFilter) {
@@ -69,7 +73,7 @@ function matchesFilter(value: unknown, filter: DataGridFilter) {
 export function applyFilters<RowData extends Record<string, unknown>>(
   rows: RowData[],
   columns: DataGridColumnDef<RowData>[],
-  filters: DataGridFilter[]
+  filters: DataGridFilter[],
 ): RowData[] {
   if (filters.length === 0) {
     return rows;
@@ -77,13 +81,15 @@ export function applyFilters<RowData extends Record<string, unknown>>(
 
   return rows.filter((row) =>
     filters.every((filter) => {
-      const column = columns.find((candidate) => candidate.id === filter.columnId);
+      const column = columns.find(
+        (candidate) => candidate.id === filter.columnId,
+      );
 
       if (!column) {
         return true;
       }
 
       return matchesFilter(getColumnValue(row, column), filter);
-    })
+    }),
   );
 }

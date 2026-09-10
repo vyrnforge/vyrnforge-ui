@@ -65,13 +65,10 @@ export function resolveReleaseSelection(
       releaseGroupId,
       version: releaseGroup.version,
     }),
-    releaseName: renderIdentity(
-      releaseGroup.tagIdentity.releaseNameTemplate,
-      {
-        releaseGroupId,
-        version: releaseGroup.version,
-      },
-    ),
+    releaseName: renderIdentity(releaseGroup.tagIdentity.releaseNameTemplate, {
+      releaseGroupId,
+      version: releaseGroup.version,
+    }),
     packages: selectedPackages,
     dependencyClosure: [...dependencyClosure].filter(
       (packageName) => !selectedSet.has(packageName),

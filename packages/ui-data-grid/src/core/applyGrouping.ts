@@ -5,7 +5,7 @@ import type {
   DataGridGroupPathItem,
   DataGridGroupRow,
   DataGridLeafRow,
-  DataGridRowId
+  DataGridRowId,
 } from "../types/dataGrid.types";
 import { getRowIdValue, type DataGridRowIdGetter } from "./rowSelection";
 
@@ -15,7 +15,7 @@ type GroupBucket<RowData extends Record<string, unknown>> = {
 };
 
 export type BuildGroupedRowsParams<
-  RowData extends Record<string, unknown> = Record<string, unknown>
+  RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   rows: RowData[];
   columns: DataGridColumnDef<RowData>[];
@@ -29,7 +29,7 @@ const emptyValueLabel = "(blank)";
 
 function getColumnValue<RowData extends Record<string, unknown>>(
   row: RowData,
-  column: DataGridColumnDef<RowData>
+  column: DataGridColumnDef<RowData>,
 ) {
   if (column.groupValue) {
     return column.groupValue(row);
@@ -72,7 +72,7 @@ function serializeGroupValue(value: unknown) {
 
 function getGroupLabel<RowData extends Record<string, unknown>>(
   column: DataGridColumnDef<RowData>,
-  value: unknown
+  value: unknown,
 ) {
   if (column.groupLabel) {
     return column.groupLabel(value);
@@ -90,16 +90,17 @@ function getGroupLabel<RowData extends Record<string, unknown>>(
 }
 
 export function resolveGroupableColumns<
-  RowData extends Record<string, unknown>
+  RowData extends Record<string, unknown>,
 >(columns: DataGridColumnDef<RowData>[]) {
   return columns.filter((column) => column.groupable !== false);
 }
 
-export function normalizeGrouping<
-  RowData extends Record<string, unknown>
->(columns: DataGridColumnDef<RowData>[], grouping: string[]) {
+export function normalizeGrouping<RowData extends Record<string, unknown>>(
+  columns: DataGridColumnDef<RowData>[],
+  grouping: string[],
+) {
   const groupableIds = new Set(
-    resolveGroupableColumns(columns).map((column) => column.id)
+    resolveGroupableColumns(columns).map((column) => column.id),
   );
   const normalizedGrouping: string[] = [];
 
@@ -114,45 +115,41 @@ export function normalizeGrouping<
   return normalizedGrouping;
 }
 
-export function createGroupId<
-  RowData extends Record<string, unknown>
->({
+export function createGroupId<RowData extends Record<string, unknown>>({
   columnId,
   depth,
   parentId,
-  value
+  value,
 }: DataGridGroupIdContext<RowData>) {
   const segment = `${depth}:${columnId}:${encodeURIComponent(
-    serializeGroupValue(value)
+    serializeGroupValue(value),
   )}`;
   return parentId ? `${parentId}/${segment}` : segment;
 }
 
-export function getGroupLeafRows<
-  RowData extends Record<string, unknown>
->(displayRows: DataGridDisplayRow<RowData>[]): DataGridLeafRow<RowData>[] {
+export function getGroupLeafRows<RowData extends Record<string, unknown>>(
+  displayRows: DataGridDisplayRow<RowData>[],
+): DataGridLeafRow<RowData>[] {
   return displayRows.flatMap((displayRow) =>
     displayRow.type === "row"
       ? [displayRow]
-      : getGroupLeafRows(displayRow.children)
+      : getGroupLeafRows(displayRow.children),
   );
 }
 
-export function getGroupLeafRowIds<
-  RowData extends Record<string, unknown>
->(displayRows: DataGridDisplayRow<RowData>[]): DataGridRowId[] {
+export function getGroupLeafRowIds<RowData extends Record<string, unknown>>(
+  displayRows: DataGridDisplayRow<RowData>[],
+): DataGridRowId[] {
   return getGroupLeafRows(displayRows).map((row) => row.id);
 }
 
-export function buildGroupedRows<
-  RowData extends Record<string, unknown>
->({
+export function buildGroupedRows<RowData extends Record<string, unknown>>({
   rows,
   columns,
   grouping,
   expandedGroupIds = [],
   getRowId,
-  getGroupId
+  getGroupId,
 }: BuildGroupedRowsParams<RowData>): DataGridDisplayRow<RowData>[] {
   const normalizedGrouping = normalizeGrouping(columns, grouping);
 
@@ -162,7 +159,7 @@ export function buildGroupedRows<
       id: getRowIdValue(row, index, getRowId),
       row,
       index,
-      depth: 0
+      depth: 0,
     }));
   }
 
@@ -173,7 +170,7 @@ export function buildGroupedRows<
     levelRows: RowData[],
     depth: number,
     parentId: string | undefined,
-    path: DataGridGroupPathItem[]
+    path: DataGridGroupPathItem[],
   ): DataGridDisplayRow<RowData>[] => {
     const columnId = normalizedGrouping[depth];
     const column = columnsById.get(columnId);
@@ -186,7 +183,7 @@ export function buildGroupedRows<
           id: getRowIdValue(row, index, getRowId),
           row,
           index,
-          depth
+          depth,
         };
       });
     }
@@ -204,7 +201,7 @@ export function buildGroupedRows<
 
       buckets.set(key, {
         value,
-        rows: [row]
+        rows: [row],
       });
     });
 
@@ -213,8 +210,8 @@ export function buildGroupedRows<
         ...path,
         {
           columnId,
-          value: bucket.value
-        }
+          value: bucket.value,
+        },
       ];
       const fallbackId = createGroupId({
         columnId,
@@ -222,7 +219,7 @@ export function buildGroupedRows<
         depth,
         parentId,
         path: nextPath,
-        rows: bucket.rows
+        rows: bucket.rows,
       });
       const id =
         getGroupId?.({
@@ -231,7 +228,7 @@ export function buildGroupedRows<
           depth,
           parentId,
           path: nextPath,
-          rows: bucket.rows
+          rows: bucket.rows,
         }) ?? fallbackId;
       const children =
         depth === normalizedGrouping.length - 1
@@ -242,7 +239,7 @@ export function buildGroupedRows<
                 id: getRowIdValue(row, index, getRowId),
                 row,
                 index,
-                depth: depth + 1
+                depth: depth + 1,
               };
             })
           : buildLevel(bucket.rows, depth + 1, id, nextPath);
@@ -258,7 +255,7 @@ export function buildGroupedRows<
         rowCount: leafRows.length,
         leafRowIds: leafRows.map((row) => row.id),
         children,
-        isExpanded: expandedGroupIdSet.has(id)
+        isExpanded: expandedGroupIdSet.has(id),
       };
     });
   };
@@ -266,9 +263,9 @@ export function buildGroupedRows<
   return buildLevel(rows, 0, undefined, []);
 }
 
-export function flattenGroupedRows<
-  RowData extends Record<string, unknown>
->(displayRows: DataGridDisplayRow<RowData>[]): DataGridDisplayRow<RowData>[] {
+export function flattenGroupedRows<RowData extends Record<string, unknown>>(
+  displayRows: DataGridDisplayRow<RowData>[],
+): DataGridDisplayRow<RowData>[] {
   return displayRows.flatMap((displayRow) => {
     if (displayRow.type === "row") {
       return [displayRow];
@@ -282,20 +279,20 @@ export function flattenGroupedRows<
 
 export function toggleGroupExpanded(
   expandedGroupIds: string[],
-  groupId: string
+  groupId: string,
 ) {
   return expandedGroupIds.includes(groupId)
     ? expandedGroupIds.filter((expandedGroupId) => expandedGroupId !== groupId)
     : [...expandedGroupIds, groupId];
 }
 
-export function expandAllGroups<
-  RowData extends Record<string, unknown>
->(displayRows: DataGridDisplayRow<RowData>[]): string[] {
+export function expandAllGroups<RowData extends Record<string, unknown>>(
+  displayRows: DataGridDisplayRow<RowData>[],
+): string[] {
   return displayRows.flatMap((displayRow) =>
     displayRow.type === "group"
       ? [displayRow.id, ...expandAllGroups(displayRow.children)]
-      : []
+      : [],
   );
 }
 
@@ -305,7 +302,7 @@ export function collapseAllGroups() {
 
 export function applyGrouping<RowData>(
   rows: RowData[],
-  _grouping: string[]
+  _grouping: string[],
 ): RowData[] {
   return rows;
 }

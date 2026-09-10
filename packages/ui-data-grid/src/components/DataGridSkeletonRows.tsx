@@ -7,7 +7,7 @@ export type DataGridSkeletonRowsProps = {
 
 export function DataGridSkeletonRows({
   rowCount = 5,
-  columnCount = 1
+  columnCount = 1,
 }: DataGridSkeletonRowsProps) {
   return (
     <>

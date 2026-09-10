@@ -9,5 +9,5 @@ const docsBase = playgroundBase.endsWith("/playground/")
 export const playgroundLinks = {
   docs: import.meta.env.DEV ? "http://localhost:5174/" : docsBase,
   playground: import.meta.env.DEV ? "http://localhost:5173/" : playgroundBase,
-  repository: "https://github.com/vyrnforge/vyrnforge-ui"
+  repository: "https://github.com/vyrnforge/vyrnforge-ui",
 };

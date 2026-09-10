@@ -1,5 +1,5 @@
 export { ValidationMessage } from "./ValidationMessage";
 export type {
   ValidationMessageProps,
-  ValidationMessageTone
+  ValidationMessageTone,
 } from "./ValidationMessage.types";

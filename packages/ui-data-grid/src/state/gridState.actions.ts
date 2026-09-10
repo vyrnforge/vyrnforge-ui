@@ -20,7 +20,7 @@ export const gridStateActions = {
     return { type: "setPagination", pagination };
   },
   setColumnVisibility(
-    columnVisibility: DataGridState["columnVisibility"]
+    columnVisibility: DataGridState["columnVisibility"],
   ): GridStateAction {
     return { type: "setColumnVisibility", columnVisibility };
   },
@@ -28,7 +28,7 @@ export const gridStateActions = {
     return { type: "setColumnOrder", columnOrder };
   },
   setColumnSizing(
-    columnSizing: DataGridState["columnSizing"]
+    columnSizing: DataGridState["columnSizing"],
   ): GridStateAction {
     return { type: "setColumnSizing", columnSizing };
   },
@@ -39,11 +39,11 @@ export const gridStateActions = {
     return { type: "setExpandedGroupIds", expandedGroupIds };
   },
   setSelectedRowIds(
-    selectedRowIds: DataGridState["selectedRowIds"]
+    selectedRowIds: DataGridState["selectedRowIds"],
   ): GridStateAction {
     return { type: "setSelectedRowIds", selectedRowIds };
   },
   setDensity(density: DataGridState["density"]): GridStateAction {
     return { type: "setDensity", density };
-  }
+  },
 };

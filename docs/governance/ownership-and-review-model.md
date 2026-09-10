@@ -37,29 +37,29 @@ replace the release-specific responsibilities in
 
 ## Responsibility Matrix
 
-| Workstream | Accountable owner | Owns | Required review partner | Escalation owner |
-| --- | --- | --- | --- | --- |
-| UI Platform | UI Platform | `@vyrnforge/ui-core`, tokens, themes, density, shared CSS utilities | Architecture for public token or boundary changes | Architecture |
-| Components | Component Team | `@vyrnforge/ui-components`, reusable primitives, forms, overlays, navigation, feedback | Accessibility for interaction changes; Architecture for public API changes | Architecture |
-| Data Grid | Data Grid Team | `@vyrnforge/ui-data-grid`, grid architecture, row/column models, selection, filtering, grouping, performance | Quality Engineering for test strategy; Accessibility for interaction changes | Architecture |
-| Quality Engineering | Quality Engineering | Unit, DOM, browser, coverage, regression, and consumer-test strategy | Owning package team | Architecture for quality-gate policy |
-| Accessibility | Accessibility | Keyboard contracts, screen-reader behavior, focus management, interaction accessibility review | Owning package team | Architecture for unresolved contract decisions |
-| Documentation | Documentation | Component docs, API references, playground, AI context, and source-of-truth governance | Owning package team for technical accuracy | Architecture for canonical-document conflicts |
-| DevOps / Release | DevOps / Release | GitHub Actions, npm publishing, trusted publishing, release environments, package verification | Package owner and Documentation for release-facing changes | Architecture for release policy; repository administrator for external settings |
-| Architecture | Architecture | Package boundaries, public API decisions, ADR approval, maturity promotion, breaking-change approval | Accountable workstream owner | Repository maintainers when a decision exceeds documented policy |
+| Workstream          | Accountable owner   | Owns                                                                                                         | Required review partner                                                      | Escalation owner                                                                |
+| ------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| UI Platform         | UI Platform         | `@vyrnforge/ui-core`, tokens, themes, density, shared CSS utilities                                          | Architecture for public token or boundary changes                            | Architecture                                                                    |
+| Components          | Component Team      | `@vyrnforge/ui-components`, reusable primitives, forms, overlays, navigation, feedback                       | Accessibility for interaction changes; Architecture for public API changes   | Architecture                                                                    |
+| Data Grid           | Data Grid Team      | `@vyrnforge/ui-data-grid`, grid architecture, row/column models, selection, filtering, grouping, performance | Quality Engineering for test strategy; Accessibility for interaction changes | Architecture                                                                    |
+| Quality Engineering | Quality Engineering | Unit, DOM, browser, coverage, regression, and consumer-test strategy                                         | Owning package team                                                          | Architecture for quality-gate policy                                            |
+| Accessibility       | Accessibility       | Keyboard contracts, screen-reader behavior, focus management, interaction accessibility review               | Owning package team                                                          | Architecture for unresolved contract decisions                                  |
+| Documentation       | Documentation       | Component docs, API references, playground, AI context, and source-of-truth governance                       | Owning package team for technical accuracy                                   | Architecture for canonical-document conflicts                                   |
+| DevOps / Release    | DevOps / Release    | GitHub Actions, npm publishing, trusted publishing, release environments, package verification               | Package owner and Documentation for release-facing changes                   | Architecture for release policy; repository administrator for external settings |
+| Architecture        | Architecture        | Package boundaries, public API decisions, ADR approval, maturity promotion, breaking-change approval         | Accountable workstream owner                                                 | Repository maintainers when a decision exceeds documented policy                |
 
 ## Required Review by Change Type
 
-| Change type | Required accountable review | Additional review trigger |
-| --- | --- | --- |
-| `@vyrnforge/ui-core` tokens, themes, density, or shared utilities | UI Platform | Architecture when public token names, CSS utilities, package boundaries, or compatibility change |
-| `@vyrnforge/ui-components` component behavior or public props | Component Team | Accessibility for interactive behavior; Architecture for public API or maturity changes |
-| `@vyrnforge/ui-data-grid` rendering, state, algorithms, adapters, or performance | Data Grid Team | Quality Engineering for test strategy; Accessibility for interactive behavior; Architecture for public API changes |
-| Tests, coverage, browser tooling, or regression infrastructure | Quality Engineering | Owning package team; Accessibility when tests encode accessibility contracts |
-| Keyboard, ARIA, focus, dialogs, menus, popovers, drawers, composites, or form semantics | Accessibility | Owning package team and Quality Engineering when automated coverage changes |
-| Markdown docs, metadata, playground examples, or AI context | Documentation | Owning package team when public usage or behavior is described |
-| Package manifests, exports, packed artifacts, consumer fixture, publication, or release records | DevOps / Release | Owning package team; Architecture for public API/versioning decisions |
-| Cross-package dependency, state ownership, adapter boundary, maturity, or ADR decision | Architecture | All directly affected accountable owners |
+| Change type                                                                                     | Required accountable review | Additional review trigger                                                                                          |
+| ----------------------------------------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `@vyrnforge/ui-core` tokens, themes, density, or shared utilities                               | UI Platform                 | Architecture when public token names, CSS utilities, package boundaries, or compatibility change                   |
+| `@vyrnforge/ui-components` component behavior or public props                                   | Component Team              | Accessibility for interactive behavior; Architecture for public API or maturity changes                            |
+| `@vyrnforge/ui-data-grid` rendering, state, algorithms, adapters, or performance                | Data Grid Team              | Quality Engineering for test strategy; Accessibility for interactive behavior; Architecture for public API changes |
+| Tests, coverage, browser tooling, or regression infrastructure                                  | Quality Engineering         | Owning package team; Accessibility when tests encode accessibility contracts                                       |
+| Keyboard, ARIA, focus, dialogs, menus, popovers, drawers, composites, or form semantics         | Accessibility               | Owning package team and Quality Engineering when automated coverage changes                                        |
+| Markdown docs, metadata, playground examples, or AI context                                     | Documentation               | Owning package team when public usage or behavior is described                                                     |
+| Package manifests, exports, packed artifacts, consumer fixture, publication, or release records | DevOps / Release            | Owning package team; Architecture for public API/versioning decisions                                              |
+| Cross-package dependency, state ownership, adapter boundary, maturity, or ADR decision          | Architecture                | All directly affected accountable owners                                                                           |
 
 ## Public API Approval Rules
 

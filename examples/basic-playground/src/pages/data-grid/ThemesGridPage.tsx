@@ -8,7 +8,11 @@ export function ThemesGridPage() {
   return (
     <div className="vf-playground-grid vf-playground-grid--two">
       {themes.map((theme) => (
-        <section className="vf-playground-card vf-playground-grid-theme-card" data-theme={theme} key={theme}>
+        <section
+          className="vf-playground-card vf-playground-grid-theme-card"
+          data-theme={theme}
+          key={theme}
+        >
           <h2>{theme}</h2>
           <UniversalDataGrid
             tableId={`vf-playground-grid-theme-${theme}`}

@@ -2,7 +2,7 @@ import {
   render as testingLibraryRender,
   screen,
   within,
-  type RenderOptions
+  type RenderOptions,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
@@ -30,12 +30,12 @@ export function cleanupPortalRoot() {
 export function render(ui: ReactElement, options?: RenderOptions) {
   const result = testingLibraryRender(ui, {
     baseElement: document.body,
-    ...options
+    ...options,
   });
 
   return {
     ...result,
-    portalRoot: getPortalRoot()
+    portalRoot: getPortalRoot(),
   };
 }
 
@@ -45,7 +45,7 @@ export function createUser() {
 
 export function createUserWithFakeTimers() {
   return userEvent.setup({
-    advanceTimers: (milliseconds) => vi.advanceTimersByTime(milliseconds)
+    advanceTimers: (milliseconds) => vi.advanceTimersByTime(milliseconds),
   });
 }
 
@@ -53,6 +53,6 @@ export {
   assertNoAccessibilityViolations,
   formatAccessibilityViolations,
   runAccessibilityCheck,
-  type AccessibilityTarget
+  type AccessibilityTarget,
 } from "./accessibility";
 export { screen, within };

@@ -3,11 +3,11 @@ export {
   ClearButton,
   CloseButton,
   MoreButton,
-  RefreshButton
+  RefreshButton,
 } from "./ActionButtons";
 export type {
   ActionIconButtonProps,
   IconButtonProps,
   IconButtonSize,
-  IconButtonVariant
+  IconButtonVariant,
 } from "./IconButton.types";

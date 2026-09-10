@@ -7,7 +7,7 @@ export type DataGridErrorStateProps = {
 
 export function DataGridErrorState({
   error,
-  columnCount = 1
+  columnCount = 1,
 }: DataGridErrorStateProps) {
   if (!error) {
     return null;
