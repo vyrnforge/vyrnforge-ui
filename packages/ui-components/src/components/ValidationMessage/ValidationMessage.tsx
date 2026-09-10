@@ -14,7 +14,7 @@ export function ValidationMessage({
       className={joinClassNames(
         "vf-validation-message",
         `vf-validation-message--${normalizedTone}`,
-        className
+        className,
       )}
       role={normalizedTone === "error" ? "alert" : undefined}
       {...props}

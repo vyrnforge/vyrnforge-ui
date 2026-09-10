@@ -20,7 +20,13 @@ import "@vyrnforge/ui-components/styles/index.css";
 import "@vyrnforge/ui-data-grid/styles/index.css";
 
 import { createVyrnForgeTheme } from "@vyrnforge/ui-core";
-import { Button, TextInput, AppShell, Page, Autocomplete } from "@vyrnforge/ui-components";
+import {
+  Button,
+  TextInput,
+  AppShell,
+  Page,
+  Autocomplete,
+} from "@vyrnforge/ui-components";
 import { UniversalDataGrid, useDataGridState } from "@vyrnforge/ui-data-grid";
 ```
 

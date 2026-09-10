@@ -1,5 +1,5 @@
 export { ConfirmDialog } from "./ConfirmDialog";
 export type {
   ConfirmDialogProps,
-  ConfirmDialogVariant
+  ConfirmDialogVariant,
 } from "./ConfirmDialog.types";

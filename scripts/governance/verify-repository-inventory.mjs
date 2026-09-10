@@ -4,9 +4,18 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const committedPath = path.join(root, "docs/governance/repository-inventory.md");
-const temporaryDirectory = mkdtempSync(path.join(tmpdir(), "vyrnforge-inventory-"));
+const root = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+);
+const committedPath = path.join(
+  root,
+  "docs/governance/repository-inventory.md",
+);
+const temporaryDirectory = mkdtempSync(
+  path.join(tmpdir(), "vyrnforge-inventory-"),
+);
 const generatedPath = path.join(temporaryDirectory, "repository-inventory.md");
 
 function normalize(value) {

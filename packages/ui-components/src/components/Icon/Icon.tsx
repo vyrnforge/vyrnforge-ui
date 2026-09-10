@@ -7,7 +7,7 @@ const iconSizeMap: Record<Exclude<IconSize, number>, number> = {
   xs: 12,
   sm: 14,
   md: 16,
-  lg: 20
+  lg: 20,
 };
 
 function resolveIconSize(size: IconSize) {

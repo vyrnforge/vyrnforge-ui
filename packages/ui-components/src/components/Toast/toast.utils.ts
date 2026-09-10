@@ -13,7 +13,7 @@ export function getToastTone(toast: Pick<ToastRecord, "tone">): ToastTone {
 
 export function getToastDuration(
   toast: Pick<ToastRecord, "duration">,
-  defaultDuration: number
+  defaultDuration: number,
 ) {
   return toast.duration === undefined ? defaultDuration : toast.duration;
 }
@@ -21,7 +21,7 @@ export function getToastDuration(
 export function getVisibleToasts(
   toasts: readonly ToastRecord[],
   maxVisible: number,
-  newestOnTop: boolean
+  newestOnTop: boolean,
 ) {
   const visible = toasts.slice(0, Math.max(0, maxVisible));
 

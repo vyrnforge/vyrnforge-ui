@@ -20,7 +20,7 @@ export const assets: AssetRecord[] = [
     environment: "Production",
     region: "APAC",
     criticality: "High",
-    lastSeen: "2026-07-01"
+    lastSeen: "2026-07-01",
   },
   {
     id: "AST-1002",
@@ -31,7 +31,7 @@ export const assets: AssetRecord[] = [
     environment: "Production",
     region: "EMEA",
     criticality: "High",
-    lastSeen: "2026-07-02"
+    lastSeen: "2026-07-02",
   },
   {
     id: "AST-1003",
@@ -42,7 +42,7 @@ export const assets: AssetRecord[] = [
     environment: "Staging",
     region: "AMER",
     criticality: "Medium",
-    lastSeen: "2026-06-29"
+    lastSeen: "2026-06-29",
   },
   {
     id: "AST-1004",
@@ -53,7 +53,7 @@ export const assets: AssetRecord[] = [
     environment: "Production",
     region: "APAC",
     criticality: "Medium",
-    lastSeen: "2026-07-03"
+    lastSeen: "2026-07-03",
   },
   {
     id: "AST-1005",
@@ -64,6 +64,6 @@ export const assets: AssetRecord[] = [
     environment: "Development",
     region: "EMEA",
     criticality: "Low",
-    lastSeen: "2026-05-18"
-  }
+    lastSeen: "2026-05-18",
+  },
 ];

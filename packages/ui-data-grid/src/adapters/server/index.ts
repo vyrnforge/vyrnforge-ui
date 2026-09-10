@@ -1,5 +1,5 @@
 export { buildDataGridServerQuery } from "./buildServerQuery";
 export type {
   BuildDataGridServerQueryParams,
-  DataGridServerQuery
+  DataGridServerQuery,
 } from "./serverQuery.types";

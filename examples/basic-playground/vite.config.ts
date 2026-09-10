@@ -8,9 +8,11 @@ declare const process: {
 };
 
 export default defineConfig(({ mode }) => ({
-  base: process.env.VITE_BASE_PATH ?? (mode === "production" ? "/vyrnforge-ui/playground/" : "/"),
+  base:
+    process.env.VITE_BASE_PATH ??
+    (mode === "production" ? "/vyrnforge-ui/playground/" : "/"),
   plugins: [react()],
   server: {
-    port: 5173
-  }
+    port: 5173,
+  },
 }));

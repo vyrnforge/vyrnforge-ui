@@ -8,7 +8,11 @@ export type LiveCodeEditorProps = {
   editorHeight?: number | string;
 };
 
-export function LiveCodeEditor({ initialCode, imports, editorHeight }: LiveCodeEditorProps) {
+export function LiveCodeEditor({
+  initialCode,
+  imports,
+  editorHeight,
+}: LiveCodeEditorProps) {
   const { code, onChange } = useContext(LiveContext);
   const [copied, setCopied] = useState(false);
 
@@ -17,17 +21,36 @@ export function LiveCodeEditor({ initialCode, imports, editorHeight }: LiveCodeE
       return;
     }
 
-    await navigator.clipboard.writeText(imports ? `${imports}\n\n${code}` : code);
+    await navigator.clipboard.writeText(
+      imports ? `${imports}\n\n${code}` : code,
+    );
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
   };
 
   return (
-    <div className="vf-playground-live-editor" style={{ "--vf-playground-live-editor-height": editorHeight } as CSSProperties}>
-      <LiveEditor className="vf-playground-live-editor__surface" onChange={onChange} tabMode="indentation" />
+    <div
+      className="vf-playground-live-editor"
+      style={
+        { "--vf-playground-live-editor-height": editorHeight } as CSSProperties
+      }
+    >
+      <LiveEditor
+        className="vf-playground-live-editor__surface"
+        onChange={onChange}
+        tabMode="indentation"
+      />
       <Inline className="vf-playground-live-toolbar" justify="end">
-        <Button onClick={copy} size="sm" variant="ghost">{copied ? "Copied" : imports ? "Copy full example" : "Copy"}</Button>
-        <Button onClick={() => onChange(initialCode)} size="sm" variant="subtle">Reset</Button>
+        <Button onClick={copy} size="sm" variant="ghost">
+          {copied ? "Copied" : imports ? "Copy full example" : "Copy"}
+        </Button>
+        <Button
+          onClick={() => onChange(initialCode)}
+          size="sm"
+          variant="subtle"
+        >
+          Reset
+        </Button>
       </Inline>
     </div>
   );

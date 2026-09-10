@@ -2,5 +2,5 @@ export { ToggleButtonGroup } from "./ToggleButtonGroup";
 export type {
   ToggleButtonGroupProps,
   ToggleButtonGroupType,
-  ToggleButtonGroupValue
+  ToggleButtonGroupValue,
 } from "./ToggleButtonGroup.types";

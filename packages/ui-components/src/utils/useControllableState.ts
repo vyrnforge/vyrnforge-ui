@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 export function useControllableState<T>({
   defaultValue,
   onChange,
-  value
+  value,
 }: {
   value?: T;
   defaultValue: T;
@@ -21,7 +21,7 @@ export function useControllableState<T>({
 
       onChange?.(nextValue);
     },
-    [isControlled, onChange]
+    [isControlled, onChange],
   );
 
   return [currentValue, setValue] as const;

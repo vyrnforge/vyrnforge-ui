@@ -36,10 +36,10 @@ import "@vyrnforge/ui-components/styles/index.css";
 
 ## Props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | - | Custom class. |
-| `style` | `React.CSSProperties` | - | Instance style override. |
+| Prop        | Type                  | Default | Description              |
+| ----------- | --------------------- | ------- | ------------------------ |
+| `className` | `string`              | -       | Custom class.            |
+| `style`     | `React.CSSProperties` | -       | Instance style override. |
 
 ## Accessibility
 

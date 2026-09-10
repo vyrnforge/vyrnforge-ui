@@ -11,12 +11,12 @@ type Row = {
 const rows: Row[] = [
   { id: 1, name: "Alpha", status: "Active" },
   { id: 2, name: "Beta", status: "Disabled" },
-  { id: 3, name: "Gamma", status: "Active" }
+  { id: 3, name: "Gamma", status: "Active" },
 ];
 
 const columns: DataGridColumnDef<Row>[] = [
   { id: "name", header: "Name", accessorKey: "name" },
-  { id: "status", header: "Status", accessorKey: "status", searchable: false }
+  { id: "status", header: "Status", accessorKey: "status", searchable: false },
 ];
 
 describe("applySearch", () => {

@@ -5,7 +5,7 @@ import {
   resetColumnSize,
   resolveColumnSizing,
   resolveColumnWidth,
-  setColumnSize
+  setColumnSize,
 } from "./columnSizing";
 import type { DataGridColumnDef } from "../types/column.types";
 
@@ -23,21 +23,21 @@ const columns: DataGridColumnDef<Row>[] = [
     accessorKey: "name",
     width: 180,
     minWidth: 120,
-    maxWidth: 260
+    maxWidth: 260,
   },
   {
     id: "email",
     header: "Email",
     accessorKey: "email",
-    minWidth: 160
+    minWidth: 160,
   },
   {
     id: "locked",
     header: "Locked",
     accessorKey: "locked",
     width: 140,
-    resizable: false
-  }
+    resizable: false,
+  },
 ];
 
 describe("columnSizing", () => {
@@ -65,13 +65,13 @@ describe("columnSizing", () => {
 
   it("ignores unknown column sizing keys", () => {
     expect(resolveColumnSizing(columns, { missing: 300, name: 220 })).toEqual({
-      name: 220
+      name: 220,
     });
   });
 
   it("resets one column size", () => {
     expect(resetColumnSize({ name: 220, email: 300 }, "name")).toEqual({
-      email: 300
+      email: 300,
     });
   });
 

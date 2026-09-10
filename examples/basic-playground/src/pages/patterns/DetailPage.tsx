@@ -1,4 +1,11 @@
-import { Badge, Button, Heading, Icon, MoreButton, Text } from "@vyrnforge/ui-components";
+import {
+  Badge,
+  Button,
+  Heading,
+  Icon,
+  MoreButton,
+  Text,
+} from "@vyrnforge/ui-components";
 import { assets } from "../../data/assets";
 import { tickets } from "../../data/tickets";
 
@@ -14,11 +21,17 @@ export function DetailPage() {
             <Badge variant="info">{asset.criticality} criticality</Badge>
           </div>
           <Heading size="lg">{asset.name}</Heading>
-          <Text tone="muted">{asset.id} / {asset.type} / {asset.environment}</Text>
+          <Text tone="muted">
+            {asset.id} / {asset.type} / {asset.environment}
+          </Text>
         </div>
         <div className="vf-playground-inline-actions">
-          <Button leftSlot={<Icon name="Check" />} variant="primary">Review</Button>
-          <Button leftSlot={<Icon name="Eye" />} variant="subtle">Open audit</Button>
+          <Button leftSlot={<Icon name="Check" />} variant="primary">
+            Review
+          </Button>
+          <Button leftSlot={<Icon name="Eye" />} variant="subtle">
+            Open audit
+          </Button>
           <MoreButton />
         </div>
       </section>
@@ -27,10 +40,22 @@ export function DetailPage() {
         <article className="vf-playground-card">
           <Heading size="sm">Metadata</Heading>
           <dl className="vf-playground-key-value-grid">
-            <div><dt>Owner</dt><dd>{asset.owner}</dd></div>
-            <div><dt>Region</dt><dd>{asset.region}</dd></div>
-            <div><dt>Last seen</dt><dd>{asset.lastSeen}</dd></div>
-            <div><dt>Environment</dt><dd>{asset.environment}</dd></div>
+            <div>
+              <dt>Owner</dt>
+              <dd>{asset.owner}</dd>
+            </div>
+            <div>
+              <dt>Region</dt>
+              <dd>{asset.region}</dd>
+            </div>
+            <div>
+              <dt>Last seen</dt>
+              <dd>{asset.lastSeen}</dd>
+            </div>
+            <div>
+              <dt>Environment</dt>
+              <dd>{asset.environment}</dd>
+            </div>
           </dl>
         </article>
         <article className="vf-playground-card">
@@ -39,7 +64,9 @@ export function DetailPage() {
             {tickets.slice(0, 3).map((ticket) => (
               <div key={ticket.id}>
                 <strong>{ticket.title}</strong>
-                <span>{ticket.id} / {ticket.priority} / {ticket.status}</span>
+                <span>
+                  {ticket.id} / {ticket.priority} / {ticket.status}
+                </span>
               </div>
             ))}
           </div>

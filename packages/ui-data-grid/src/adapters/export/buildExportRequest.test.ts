@@ -7,7 +7,7 @@ describe("buildDataGridExportRequest adapter", () => {
       tableId: "users",
       columns: [
         { id: "name", header: "Name", accessorKey: "name" },
-        { id: "email", header: "Email", accessorKey: "email", hidden: true }
+        { id: "email", header: "Email", accessorKey: "email", hidden: true },
       ],
       columnVisibility: { email: true },
       filters: [],
@@ -17,18 +17,18 @@ describe("buildDataGridExportRequest adapter", () => {
       pagination: { pageIndex: 0, pageSize: 10 },
       selectedRowIds: [1],
       scope: "selected_rows",
-      format: "csv"
+      format: "csv",
     });
 
     expect(request).toMatchObject({
       tableId: "users",
       columns: [
         { id: "name", header: "Name", visible: true },
-        { id: "email", header: "Email", visible: false }
+        { id: "email", header: "Email", visible: false },
       ],
       sort: [{ columnId: "name", direction: "asc" }],
       scope: "selected_rows",
-      format: "csv"
+      format: "csv",
     });
     expect(typeof request.requestedAt).toBe("string");
   });

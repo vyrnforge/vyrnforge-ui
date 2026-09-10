@@ -8,11 +8,11 @@ VyrnForge UI is currently pre-alpha. APIs, package contents, package names, supp
 
 No public package release has been completed yet.
 
-| Version or state | Security support expectation |
-| --- | --- |
-| Current `main` branch and pre-alpha development | May receive best-effort security review and remediation when practical. |
-| Unpublished or obsolete development snapshots | Not guaranteed to receive security support. |
-| Future public package releases | Formal version support will be defined after public package releases begin. |
+| Version or state                                | Security support expectation                                                |
+| ----------------------------------------------- | --------------------------------------------------------------------------- |
+| Current `main` branch and pre-alpha development | May receive best-effort security review and remediation when practical.     |
+| Unpublished or obsolete development snapshots   | Not guaranteed to receive security support.                                 |
+| Future public package releases                  | Formal version support will be defined after public package releases begin. |
 
 This table does not define long-term support and does not imply production support.
 
