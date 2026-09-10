@@ -20,15 +20,15 @@ The system is designed around these durable rules:
 
 ## Current packages
 
-| Package | Role | Release track |
-| --- | --- | --- |
-| `@vyrnforge/ui-core` | Framework-neutral tokens, themes, typography, density, motion, layers, utilities, and shared styling foundations. | Non-grid beta |
-| `@vyrnforge/ui-behaviors` | Framework-neutral reusable component behavior, state rules, collections, navigation, overlays, forms, and reasoned events. | Non-grid beta |
-| `@vyrnforge/ui-components` | First-class React surface. | Non-grid beta |
-| `@vyrnforge/ui-elements` | First-class Native HTML / Custom Elements surface and canonical non-grid browser implementation where suitable. | Non-grid beta |
-| `@vyrnforge/ui-angular` | First-class Angular facade over canonical VyrnForge elements and contracts. | Non-grid beta |
-| `@vyrnforge/ui-vue` | First-class Vue facade over canonical VyrnForge elements and contracts. | Non-grid beta |
-| `@vyrnforge/ui-data-grid` | Optional specialized React data-management grid. | Independent alpha |
+| Package                    | Role                                                                                                                       | Release track     |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, typography, density, motion, layers, utilities, and shared styling foundations.          | Non-grid beta     |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral reusable component behavior, state rules, collections, navigation, overlays, forms, and reasoned events. | Non-grid beta     |
+| `@vyrnforge/ui-components` | First-class React surface.                                                                                                 | Non-grid beta     |
+| `@vyrnforge/ui-elements`   | First-class Native HTML / Custom Elements surface and canonical non-grid browser implementation where suitable.            | Non-grid beta     |
+| `@vyrnforge/ui-angular`    | First-class Angular facade over canonical VyrnForge elements and contracts.                                                | Non-grid beta     |
+| `@vyrnforge/ui-vue`        | First-class Vue facade over canonical VyrnForge elements and contracts.                                                    | Non-grid beta     |
+| `@vyrnforge/ui-data-grid`  | Optional specialized React data-management grid.                                                                           | Independent alpha |
 
 Exact package versions, dependency edges, public entrypoints, and release-group membership are owned by package manifests and [`../metadata/release-groups.json`](../metadata/release-groups.json).
 
@@ -65,16 +65,16 @@ Shared visual behavior is token-driven through VyrnForge CSS custom properties a
 
 Use one source for each type of truth:
 
-| Question | Canonical source |
-| --- | --- |
-| Product identity and durable scope | This document |
-| Documentation navigation | [`../README.md`](../README.md) |
-| Package dependency rules | [`../architecture/01-package-boundaries.md`](../architecture/01-package-boundaries.md) and package manifests |
-| Component catalog and maturity | [`../metadata/components.json`](../metadata/components.json) |
-| Package/release classification | [`../metadata/release-groups.json`](../metadata/release-groups.json) |
-| Current limitations | [`../quality/03-known-limitations.md`](../quality/03-known-limitations.md) |
-| Active execution, task status, dependencies, and gates | Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status** |
-| Agent repository rules | [`../../AGENTS.md`](../../AGENTS.md) |
+| Question                                               | Canonical source                                                                                             |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Product identity and durable scope                     | This document                                                                                                |
+| Documentation navigation                               | [`../README.md`](../README.md)                                                                               |
+| Package dependency rules                               | [`../architecture/01-package-boundaries.md`](../architecture/01-package-boundaries.md) and package manifests |
+| Component catalog and maturity                         | [`../metadata/components.json`](../metadata/components.json)                                                 |
+| Package/release classification                         | [`../metadata/release-groups.json`](../metadata/release-groups.json)                                         |
+| Current limitations                                    | [`../quality/03-known-limitations.md`](../quality/03-known-limitations.md)                                   |
+| Active execution, task status, dependencies, and gates | Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status**                                        |
+| Agent repository rules                                 | [`../../AGENTS.md`](../../AGENTS.md)                                                                         |
 
 Generated references and AI context must derive from canonical metadata. Historical task narratives or audit reports do not override current sources; retain them only when they have durable release, migration, regression, security, or architectural value.
 
