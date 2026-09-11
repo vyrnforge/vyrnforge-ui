@@ -8,6 +8,7 @@ export const contractTestFiles = [
   "scripts/canonical-component-contracts.test.mjs",
   "scripts/framework-generation.test.mjs",
   "scripts/detect-ci-scope.test.mjs",
+  "scripts/developer-delivery-foundation.test.mjs",
   "scripts/verify-package-boundaries.test.mjs",
   "scripts/verify-component-metadata.test.mjs",
   "scripts/verify-framework-exceptions.test.mjs",
