@@ -20,9 +20,7 @@ test("current repository satisfies the developer delivery foundation contract", 
 });
 
 test("delivery foundation rejects a missing first-class framework", () => {
-  const root = mkdtempSync(
-    path.join(os.tmpdir(), "vf-delivery-foundation-"),
-  );
+  const root = mkdtempSync(path.join(os.tmpdir(), "vf-delivery-foundation-"));
   for (const relativePath of [
     ".github/workflows",
     "docs/engineering",
