@@ -201,7 +201,9 @@ export function verifyDeveloperDeliveryFoundation({
     read(root, "examples/basic-playground/package.json"),
   );
   if (playgroundPackage.private !== true) {
-    failures.push("playground must remain a private consumer/reference surface");
+    failures.push(
+      "playground must remain a private consumer/reference surface",
+    );
   }
 
   const docsContext = read(root, "apps/docs/src/docsContext.ts");
@@ -239,10 +241,7 @@ export function verifyDeveloperDeliveryFoundation({
     failures,
   );
 
-  const generator = read(
-    root,
-    "scripts/generate-framework-api-reference.mjs",
-  );
+  const generator = read(root, "scripts/generate-framework-api-reference.mjs");
   requireMarkers(
     generator,
     "scripts/generate-framework-api-reference.mjs",
