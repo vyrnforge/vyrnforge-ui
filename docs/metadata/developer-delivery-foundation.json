@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "id": "developer-delivery-foundation",
+    "status": "in-progress",
+    "purpose": "Standardize how VyrnForge source, generated reference data, executable examples, CI evidence, deployed reference sites, and release snapshots move through one traceable lifecycle before component expansion resumes."
+  },
+  "canonicalSources": [
+    "package manifests and public entrypoints",
+    "docs/metadata/component-contracts.json",
+    "docs/metadata/components.json",
+    "docs/metadata/packages.json",
+    "docs/metadata/multi-framework.json",
+    "docs/metadata/release-groups.json",
+    "docs/metadata/design-tokens.json"
+  ],
+  "generatedKnowledge": [
+    {
+      "id": "framework-api-reference",
+      "path": "docs/generated/framework-api-reference.json",
+      "generator": "scripts/generate-framework-api-reference.mjs",
+      "status": "current"
+    },
+    {
+      "id": "consumer-knowledge",
+      "path": "docs/generated/consumer-knowledge.json",
+      "status": "current"
+    }
+  ],
+  "readerSurfaces": [
+    {
+      "id": "docs",
+      "workspace": "@vyrnforge/ui-docs",
+      "path": "apps/docs",
+      "role": "documentation and generated reference presentation",
+      "status": "current"
+    },
+    {
+      "id": "playground",
+      "workspace": "@vyrnforge/ui-data-grid-basic-playground",
+      "path": "examples/basic-playground",
+      "role": "executable examples, component/pattern exploration, and reference views",
+      "status": "migration",
+      "target": "general VyrnForge playground identity rather than data-grid-specific ownership"
+    }
+  ],
+  "frameworks": ["native-html", "react", "angular", "vue"],
+  "lifecycle": [
+    {
+      "id": "task-pr",
+      "owner": "VyrnForge CI",
+      "policy": "affected-scope validation plus ci-gate on the owning integration lane"
+    },
+    {
+      "id": "promotion-pr",
+      "owner": "VyrnForge CI",
+      "policy": "full repository validation plus ci-gate before integration lane promotion to main"
+    },
+    {
+      "id": "exact-main-delivery",
+      "owner": "VyrnForge CI",
+      "policy": "delivery-only rebuild of docs/playground/reference output bound to the exact main commit"
+    },
+    {
+      "id": "production-reference-deploy",
+      "owner": "Deploy GitHub Pages",
+      "policy": "consume and verify an immutable successful current-main delivery artifact; never rebuild source in the deployment workflow"
+    },
+    {
+      "id": "weekly-assurance",
+      "owner": "VyrnForge Weekly Assurance",
+      "policy": "full quality/integration, compatibility, security drift, CodeQL, and persistent-lane drift; never publish or deploy"
+    },
+    {
+      "id": "controlled-release",
+      "owner": "Controlled npm Release",
+      "policy": "manual current-main release using verified immutable tarballs, trusted publishing, registry verification, and release records"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "pages-site",
+      "producer": "VyrnForge CI",
+      "consumer": "Deploy GitHub Pages",
+      "lineage": "exact Git commit",
+      "mutable": false
+    },
+    {
+      "id": "npm-release",
+      "producer": "Controlled npm Release",
+      "consumer": "Controlled npm Release",
+      "lineage": "exact Git commit + successful current-main CI run + tarball digests",
+      "mutable": false
+    }
+  ],
+  "gaps": [
+    {
+      "id": "reader-api-authority",
+      "status": "open",
+      "description": "Generated framework API reference exists, but reader-facing component demo pages still contain hand-maintained API tables/examples that can drift from canonical contracts."
+    },
+    {
+      "id": "reference-portal-unification",
+      "status": "open",
+      "description": "Docs and playground are separate applications with separate context code and need one shared reference-site vocabulary and navigation/version contract."
+    },
+    {
+      "id": "cross-framework-examples",
+      "status": "open",
+      "description": "Framework usage snippets exist, but executable example ownership is not yet standardized as one canonical example registry verified across all four first-class surfaces."
+    },
+    {
+      "id": "pr-reference-preview",
+      "status": "open",
+      "description": "PRs validate docs/playground builds but do not yet emit one standardized non-privileged reference preview artifact."
+    },
+    {
+      "id": "release-reference-refresh",
+      "status": "open",
+      "description": "Versioned reference assembly discovers Git release tags during a later exact-main delivery build, so a successful release does not yet refresh the released reference snapshot immediately."
+    }
+  ],
+  "gate": {
+    "id": "G17",
+    "blocksComponentExpansion": true,
+    "requiredBeforeClose": [
+      "generated API reference is reader-facing and drift-checked",
+      "docs and playground share one version/framework/reference contract",
+      "representative examples are verified across Native HTML, React, Angular, and Vue",
+      "PR reference preview artifact is available without deployment permissions",
+      "current-main reference deployment consumes immutable artifacts only",
+      "successful release refreshes the exact tagged reference snapshot without another source commit",
+      "full delivery-foundation validation passes"
+    ]
+  }
+}
