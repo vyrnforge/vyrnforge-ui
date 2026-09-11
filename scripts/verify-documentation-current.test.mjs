@@ -193,3 +193,16 @@ test("rejects removed aggregate commands in quality guidance", () =>
         ),
       ),
   ));
+
+test("rejects restoration of deprecated hand-maintained AI mirrors", () =>
+  fixture(
+    (root) => {
+      write(root, ".ai/REPO_MAP.md", "# Duplicate repository map\n");
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("obsolete hand-maintained AI mirror must not be restored"),
+        ),
+      ),
+  ));
