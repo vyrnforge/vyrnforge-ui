@@ -20,7 +20,9 @@ test("current repository satisfies the developer delivery foundation contract", 
 });
 
 test("delivery foundation rejects a missing first-class framework", () => {
-  const root = mkdtempSync(path.join(os.tmpdir(), "vf-delivery-foundation-"));
+  const root = mkdtempSync(
+    path.join(os.tmpdir(), "vf-delivery-foundation-"),
+  );
   for (const relativePath of [
     ".github/workflows",
     "docs/engineering",
@@ -63,7 +65,10 @@ test("delivery foundation rejects a missing first-class framework", () => {
     "examples/basic-playground/src/data/referenceMetadata.ts",
   ];
   for (const relativePath of required) {
-    cpSync(path.join(repositoryRoot, relativePath), path.join(root, relativePath));
+    cpSync(
+      path.join(repositoryRoot, relativePath),
+      path.join(root, relativePath),
+    );
   }
 
   const manifestPath = path.join(
