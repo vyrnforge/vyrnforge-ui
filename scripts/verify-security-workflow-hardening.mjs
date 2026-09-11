@@ -1,12 +1,17 @@
+import { verifyDeveloperDeliveryFoundation } from "./developer-delivery-foundation.mjs";
 import { verifySecurityWorkflowContract } from "./security-workflow-hardening.mjs";
 
-const failures = verifySecurityWorkflowContract();
+const failures = [
+  ...verifySecurityWorkflowContract(),
+  ...verifyDeveloperDeliveryFoundation(),
+].sort();
+
 if (failures.length) {
-  console.error("BT-8006 security and workflow hardening verification failed:");
+  console.error("Repository workflow and delivery-foundation verification failed:");
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
-  console.log("BT-8006 security and workflow hardening contract passed.");
+  console.log("Security workflow hardening and G17 delivery-foundation contracts passed.");
 }
 
-export { verifySecurityWorkflowContract };
+export { verifyDeveloperDeliveryFoundation, verifySecurityWorkflowContract };
