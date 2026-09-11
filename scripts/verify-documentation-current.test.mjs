@@ -202,7 +202,9 @@ test("rejects restoration of deprecated hand-maintained AI mirrors", () =>
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("obsolete hand-maintained AI mirror must not be restored"),
+          failure.includes(
+            "obsolete hand-maintained AI mirror must not be restored",
+          ),
         ),
       ),
   ));
