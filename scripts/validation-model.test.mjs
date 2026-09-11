@@ -5,6 +5,7 @@ import {
   expandCommandExecutions,
   extractRootScriptDependencies,
   findCommandCycles,
+  findDuplicateCommandDefinitions,
   findDuplicateExecutions,
 } from "./validation-model.mjs";
 
@@ -38,6 +39,29 @@ test("detects duplicate execution reached through different branches", () => {
   );
   assert.equal(duplicates.length, 1);
   assert.equal(duplicates[0].name, "shared");
+});
+
+test("detects duplicate root command definitions despite whitespace", () => {
+  assert.deepEqual(
+    findDuplicateCommandDefinitions({
+      "verify:vue-consumer:runtime":
+        "node scripts/verify-consumer-foundations-runtime.mjs --fixture vue",
+      "verify:vue-model-adapter:runtime":
+        "node   scripts/verify-consumer-foundations-runtime.mjs   --fixture vue",
+      "verify:angular-consumer:runtime":
+        "node scripts/verify-consumer-foundations-runtime.mjs --fixture angular",
+    }),
+    [
+      {
+        command:
+          "node scripts/verify-consumer-foundations-runtime.mjs --fixture vue",
+        names: [
+          "verify:vue-consumer:runtime",
+          "verify:vue-model-adapter:runtime",
+        ],
+      },
+    ],
+  );
 });
 
 test("entrypoint expansion excludes unrelated command groups", () => {
