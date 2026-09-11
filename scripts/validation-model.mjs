@@ -91,6 +91,21 @@ export function findDuplicateExecutions(executions) {
     .map(([name, trails]) => ({ name, trails }));
 }
 
+export function findDuplicateCommandDefinitions(scripts) {
+  const commandOwners = new Map();
+
+  for (const [name, command] of Object.entries(scripts)) {
+    const normalizedCommand = command.trim().replace(/\s+/gu, " ");
+    const owners = commandOwners.get(normalizedCommand) ?? [];
+    owners.push(name);
+    commandOwners.set(normalizedCommand, owners);
+  }
+
+  return [...commandOwners.entries()]
+    .filter(([, names]) => names.length > 1)
+    .map(([command, names]) => ({ command, names }));
+}
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -246,6 +261,12 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
     "verify:metadata must contain the exact active metadata group",
   );
 
+  const duplicateDefinitions = findDuplicateCommandDefinitions(scripts);
+  assert(
+    duplicateDefinitions.length === 0,
+    `root scripts duplicate command definitions: ${JSON.stringify(duplicateDefinitions)}`,
+  );
+
   const cycles = findCommandCycles(graph);
   assert(
     cycles.length === 0,
@@ -272,6 +293,7 @@ export function verifyRepositoryValidationModel({ root, writeReport = true }) {
       tests: activeContractTests,
       verifiers: activeMetadataVerifiers,
     },
+    duplicateCommandDefinitions: duplicateDefinitions,
     ciExecutions,
     cycles,
     duplicateExecutions: duplicates,
