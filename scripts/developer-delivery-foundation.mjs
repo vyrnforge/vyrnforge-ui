@@ -20,7 +20,9 @@ function read(root, relativePath) {
 
 function requireFile(root, relativePath, failures) {
   if (!existsSync(path.join(root, relativePath))) {
-    failures.push(`delivery foundation required file is missing: ${relativePath}`);
+    failures.push(
+      `delivery foundation required file is missing: ${relativePath}`,
+    );
     return false;
   }
   return true;
@@ -34,7 +36,9 @@ function requireMarkers(text, relativePath, markers, failures) {
   }
 }
 
-export function verifyDeveloperDeliveryFoundation({ root = repositoryRoot } = {}) {
+export function verifyDeveloperDeliveryFoundation({
+  root = repositoryRoot,
+} = {}) {
   const failures = [];
   const requiredFiles = [
     deliveryFoundationManifestPath,
@@ -103,7 +107,9 @@ export function verifyDeveloperDeliveryFoundation({ root = repositoryRoot } = {}
     manifest.gate?.id !== "G17" ||
     manifest.gate?.blocksComponentExpansion !== true
   ) {
-    failures.push("developer delivery foundation must record G17 as blocking component expansion");
+    failures.push(
+      "developer delivery foundation must record G17 as blocking component expansion",
+    );
   }
 
   const workflowsDirectory = path.join(root, ".github/workflows");
@@ -157,7 +163,9 @@ export function verifyDeveloperDeliveryFoundation({ root = repositoryRoot } = {}
   );
   for (const forbidden of ["npm ci", "npm run ", "npm publish"]) {
     if (pages.includes(forbidden)) {
-      failures.push(`Pages deployment must consume artifacts without ${forbidden}`);
+      failures.push(
+        `Pages deployment must consume artifacts without ${forbidden}`,
+      );
     }
   }
 
@@ -181,8 +189,13 @@ export function verifyDeveloperDeliveryFoundation({ root = repositoryRoot } = {}
   }
 
   const docsPackage = JSON.parse(read(root, "apps/docs/package.json"));
-  if (docsPackage.name !== "@vyrnforge/ui-docs" || docsPackage.private !== true) {
-    failures.push("apps/docs must remain the private VyrnForge documentation application");
+  if (
+    docsPackage.name !== "@vyrnforge/ui-docs" ||
+    docsPackage.private !== true
+  ) {
+    failures.push(
+      "apps/docs must remain the private VyrnForge documentation application",
+    );
   }
   const playgroundPackage = JSON.parse(
     read(root, "examples/basic-playground/package.json"),
@@ -226,7 +239,10 @@ export function verifyDeveloperDeliveryFoundation({ root = repositoryRoot } = {}
     failures,
   );
 
-  const generator = read(root, "scripts/generate-framework-api-reference.mjs");
+  const generator = read(
+    root,
+    "scripts/generate-framework-api-reference.mjs",
+  );
   requireMarkers(
     generator,
     "scripts/generate-framework-api-reference.mjs",
