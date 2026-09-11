@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -51,7 +51,6 @@ export const documentationCurrentPaths = [
   "packages/ui-vue/README.md",
   "packages/ui-data-grid/README.md",
   ".ai/AI_CONTEXT.md",
-  ".ai/REPO_MAP.md",
   "AGENTS.md",
 ];
 
@@ -108,8 +107,14 @@ export const documentationTaskFreePaths = [
   "packages/ui-vue/README.md",
   "packages/ui-data-grid/README.md",
   ".ai/AI_CONTEXT.md",
-  ".ai/REPO_MAP.md",
   "AGENTS.md",
+];
+
+export const deprecatedAiMirrorPaths = [
+  ".ai/CODING_RULES.md",
+  ".ai/COMPONENT_MAP.json",
+  ".ai/DOC_USAGE_GUIDE.md",
+  ".ai/REPO_MAP.md",
 ];
 
 const stalePatterns = [
@@ -338,10 +343,22 @@ function verifyVersionPolicy({ root, releaseGroups, failures }) {
   }
 }
 
+function verifyDeprecatedAiMirrors({ root, failures }) {
+  for (const relativePath of deprecatedAiMirrorPaths) {
+    if (existsSync(path.join(root, relativePath))) {
+      failures.push(
+        `${relativePath}: obsolete hand-maintained AI mirror must not be restored; use AGENTS.md, canonical docs/metadata, or generated AI context instead`,
+      );
+    }
+  }
+}
+
 export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   const failures = [];
   const releaseGroups = readReleaseGroups({ root });
   const channels = buildPackageChannelMap(releaseGroups);
+
+  verifyDeprecatedAiMirrors({ root, failures });
 
   for (const relativePath of documentationCurrentPaths) {
     const content = read(root, relativePath);
