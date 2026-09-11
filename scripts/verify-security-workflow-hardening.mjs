@@ -7,11 +7,15 @@ const failures = [
 ].sort();
 
 if (failures.length) {
-  console.error("Repository workflow and delivery-foundation verification failed:");
+  console.error(
+    "Repository workflow and delivery-foundation verification failed:",
+  );
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
-  console.log("Security workflow hardening and G17 delivery-foundation contracts passed.");
+  console.log(
+    "Security workflow hardening and G17 delivery-foundation contracts passed.",
+  );
 }
 
 export { verifyDeveloperDeliveryFoundation, verifySecurityWorkflowContract };
