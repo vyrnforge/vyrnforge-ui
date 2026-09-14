@@ -22,10 +22,7 @@ function assert(condition, message) {
 }
 
 function copyDirectory(source, destination) {
-  assert(
-    existsSync(source),
-    `Reference artifact input is missing: ${source}`,
-  );
+  assert(existsSync(source), `Reference artifact input is missing: ${source}`);
   mkdirSync(destination, { recursive: true });
   cpSync(source, destination, { recursive: true });
 }
@@ -41,10 +38,7 @@ function requireFile(directory, relativePath) {
 
 function normalizeRunId(ciRunId) {
   const value = String(ciRunId ?? "").trim();
-  assert(
-    /^\d+$/u.test(value),
-    "Reference artifact CI run id must be numeric",
-  );
+  assert(/^\d+$/u.test(value), "Reference artifact CI run id must be numeric");
   return value;
 }
 
@@ -131,10 +125,7 @@ export function verifyReferenceArtifact({
     readFileSync(requireFile(directory, artifactManifestName), "utf8"),
   );
 
-  assert(
-    manifest.schemaVersion === 1,
-    "Unsupported reference artifact schema",
-  );
+  assert(manifest.schemaVersion === 1, "Unsupported reference artifact schema");
   assert(
     manifest.artifact?.kind === expectedKind,
     `Reference artifact kind must be ${expectedKind}`,
