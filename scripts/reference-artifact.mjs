@@ -1,4 +1,11 @@
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
@@ -31,7 +38,10 @@ function requireFile(directory, relativePath) {
 
 function normalizeRunId(ciRunId) {
   const value = String(ciRunId ?? "").trim();
-  assert(/^\d+$/u.test(value), "Reference artifact CI run id must be numeric");
+  assert(
+    /^\d+$/u.test(value),
+    "Reference artifact CI run id must be numeric",
+  );
   return value;
 }
 
