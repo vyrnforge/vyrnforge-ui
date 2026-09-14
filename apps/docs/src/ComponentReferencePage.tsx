@@ -118,7 +118,9 @@ type ComponentReferencePageProps = {
 };
 
 const reference = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
-const apiReference = JSON.parse(frameworkApiReferenceRaw) as FrameworkApiReference;
+const apiReference = JSON.parse(
+  frameworkApiReferenceRaw,
+) as FrameworkApiReference;
 
 const frameworkOrder = [
   { id: "react", apiId: "react", label: "React" },
@@ -144,9 +146,7 @@ function formatProperty(property: ApiProperty) {
 
 function formatEvent(event: ApiEvent) {
   const detail = event.detailFields
-    .map(
-      (field) => `${field.name}: ${field.type}${field.required ? "" : "?"}`,
-    )
+    .map((field) => `${field.name}: ${field.type}${field.required ? "" : "?"}`)
     .join(", ");
   const detailShape = detail ? ` { ${detail} }` : "";
   return [
