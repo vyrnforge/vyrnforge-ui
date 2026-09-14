@@ -101,13 +101,15 @@ type FrameworkApiSurface = {
   components: FrameworkApiComponent[];
 };
 
+type FrameworkApiId = "native" | "react" | "angular" | "vue";
+
 type FrameworkApiReference = {
   generated: {
     editable: boolean;
     generator: string;
     sources: string[];
   };
-  surfaces: Record<"native" | "react" | "angular" | "vue", FrameworkApiSurface>;
+  surfaces: Record<FrameworkApiId, FrameworkApiSurface>;
 };
 
 type ComponentReferencePageProps = {
@@ -128,6 +130,49 @@ const frameworkOrder = [
 function formatDefault(value: unknown) {
   if (value === undefined) return "—";
   return JSON.stringify(value);
+}
+
+function formatProperty(property: ApiProperty) {
+  const flags = [
+    property.required && "required",
+    property.readOnly && "readonly",
+    property.controlled && "controlled",
+  ].filter(Boolean);
+  const suffix = flags.length > 0 ? ` (${flags.join(", ")})` : "";
+  return `${property.public}: ${property.type}${suffix}; binding=${property.binding}; default=${formatDefault(property.default)}`;
+}
+
+function formatEvent(event: ApiEvent) {
+  const detail = event.detailFields
+    .map(
+      (field) =>
+        `${field.name}: ${field.type}${field.required ? "" : "?"}`,
+    )
+    .join(", ");
+  const detailShape = detail ? ` { ${detail} }` : "";
+  return [
+    `${event.public} (${event.mode}; detail=${event.detail}${detailShape}`,
+    `bubbles=${event.bubbles}; composed=${event.composed}`,
+    `cancelable=${event.cancelable})`,
+  ].join("; ");
+}
+
+function formatSlot(slot: ApiSlot) {
+  const flags = [slot.required && "required", slot.multiple && "multiple"].filter(
+    Boolean,
+  );
+  const suffix = flags.length > 0 ? `; ${flags.join("; ")}` : "";
+  return `${slot.public} (${slot.mode}; ${slot.content}${suffix})`;
+}
+
+function formatMethod(method: ApiMethod) {
+  const parameters = method.parameters
+    .map(
+      (parameter) =>
+        `${parameter.name}${parameter.required ? "" : "?"}: ${parameter.type}`,
+    )
+    .join(", ");
+  return `${method.async ? "async " : ""}${method.name}(${parameters}): ${method.returns}`;
 }
 
 function MemberList({
@@ -187,41 +232,19 @@ function FrameworkApiPanel({ component }: { component: FrameworkApiComponent }) 
       <MemberList label="Setup" values={component.setup} />
       <MemberList
         label="Properties / inputs"
-        values={component.properties.map(
-          (property) =>
-            `${property.public}: ${property.type}${property.required ? " (required)" : ""}${property.readOnly ? " (readonly)" : ""}${property.controlled ? " (controlled)" : ""}; binding=${property.binding}; default=${formatDefault(property.default)}`,
-        )}
+        values={component.properties.map(formatProperty)}
       />
       <MemberList
         label="Events / outputs / emits"
-        values={component.events.map((event) => {
-          const detail = event.detailFields
-            .map(
-              (field) =>
-                `${field.name}: ${field.type}${field.required ? "" : "?"}`,
-            )
-            .join(", ");
-          return `${event.public} (${event.mode}; detail=${event.detail}${detail ? ` { ${detail} }` : ""}; bubbles=${event.bubbles}; composed=${event.composed}; cancelable=${event.cancelable})`;
-        })}
+        values={component.events.map(formatEvent)}
       />
       <MemberList
         label="Slots / templates"
-        values={component.slots.map(
-          (slot) =>
-            `${slot.public} (${slot.mode}; ${slot.content}${slot.required ? "; required" : ""}${slot.multiple ? "; multiple" : ""})`,
-        )}
+        values={component.slots.map(formatSlot)}
       />
       <MemberList
         label="Methods"
-        values={component.methods.map((method) => {
-          const parameters = method.parameters
-            .map(
-              (parameter) =>
-                `${parameter.name}${parameter.required ? "" : "?"}: ${parameter.type}`,
-            )
-            .join(", ");
-          return `${method.async ? "async " : ""}${method.name}(${parameters}): ${method.returns}`;
-        })}
+        values={component.methods.map(formatMethod)}
       />
       <MemberList label="Accessibility" values={component.accessibility} />
       <details>
@@ -244,7 +267,7 @@ function FrameworkApiPanel({ component }: { component: FrameworkApiComponent }) 
   );
 }
 
-function apiComponent(componentId: string, apiId: "native" | "react" | "angular" | "vue") {
+function apiComponent(componentId: string, apiId: FrameworkApiId) {
   return apiReference.surfaces[apiId].components.find(
     (component) => component.id === componentId,
   );
@@ -340,8 +363,8 @@ export function ComponentReferencePage({
                       <div>
                         <Heading level={4} size="sm">
                           <a
-                            href={componentDeepLink(frameworkId, component.id)}
                             aria-label={`Permanent link to ${component.displayName} API reference`}
+                            href={componentDeepLink(frameworkId, component.id)}
                           >
                             {component.displayName}
                           </a>
