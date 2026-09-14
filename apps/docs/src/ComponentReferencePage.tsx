@@ -157,9 +157,10 @@ function formatEvent(event: ApiEvent) {
 }
 
 function formatSlot(slot: ApiSlot) {
-  const flags = [slot.required && "required", slot.multiple && "multiple"].filter(
-    Boolean,
-  );
+  const flags = [
+    slot.required && "required",
+    slot.multiple && "multiple",
+  ].filter(Boolean);
   const suffix = flags.length > 0 ? `; ${flags.join("; ")}` : "";
   return `${slot.public} (${slot.mode}; ${slot.content}${suffix})`;
 }
@@ -337,8 +338,8 @@ export function ComponentReferencePage({
           shown as missing rather than reconstructed in the docs application.
         </Text>
         <Text size="sm" tone="muted">
-          Generator: <code>{apiReference.generated.generator}</code> ·
-          sources: <code>{apiReference.generated.sources.join(", ")}</code>
+          Generator: <code>{apiReference.generated.generator}</code> · sources:{" "}
+          <code>{apiReference.generated.sources.join(", ")}</code>
         </Text>
       </Card>
 
