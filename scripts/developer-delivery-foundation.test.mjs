@@ -54,6 +54,7 @@ test("delivery foundation rejects a missing first-class framework", () => {
     "docs/generated/consumer-knowledge.json",
     "scripts/generate-framework-api-reference.mjs",
     "scripts/assemble-versioned-pages.mjs",
+    "scripts/reference-artifact.mjs",
     "scripts/verify-pages-site.mjs",
     "apps/docs/package.json",
     "apps/docs/src/docsContext.ts",

@@ -32,12 +32,13 @@ reference portal          verification
         +----------+---------+
                    v
           immutable CI artifact
-                   |
-                   v
-          production Pages deployment
-                   |
-                   v
-       versioned release snapshots
+             /             \
+            v               v
+      PR preview       production Pages
+    non-deployable       deployable
+                            |
+                            v
+                 versioned release snapshots
 ```
 
 Canonical behavior and API facts are owned by package public entrypoints and structured VyrnForge metadata/contracts. Reader applications render or execute those facts; they must not become parallel sources of truth.
@@ -56,14 +57,16 @@ The long-term reference product has three coordinated views rather than three in
 
 VyrnForge keeps four lifecycle workflows. Responsibilities are not copied into per-framework or per-package workflows.
 
-1. **Task PR -> integration lane**: affected-scope quality/integration/security selected from the real diff and dependency graph, aggregated by `ci-gate`.
+1. **Task PR -> integration lane**: affected-scope quality/integration/security selected from the real diff and dependency graph, aggregated by `ci-gate`. Reference-affecting PRs also emit an immutable, non-deployable docs/playground preview artifact.
 2. **Integration lane -> main promotion**: full repository validation at the product compatibility boundary.
-3. **Exact main delivery**: rebuild only deployable reference output and bind it to the exact commit that landed on `main`; do not rerun the promotion suite.
+3. **Exact main delivery**: rebuild only deployable reference output and bind it to the exact commit and CI run that landed on `main`; do not rerun the promotion suite.
 4. **Weekly assurance**: own expensive compatibility/security/drift checks that do not belong on every PR.
 5. **Pages deployment**: consume a verified immutable current-main artifact; never rebuild repository source and never publish packages.
 6. **Controlled release**: publish only verified retained tarballs from current `main`, verify registry/provenance/consumer behavior, create the immutable release record, then refresh the released reference snapshot for that tag.
 
-Production publication and deployment stay separate. A documentation/reference preview must never require Pages write permission, npm OIDC, tag creation, or repository write access.
+Production publication and deployment stay separate. A documentation/reference preview never receives Pages write permission, npm OIDC, tag creation, or repository write access.
+
+Both preview and production artifacts carry `reference-artifact.json`. That manifest records artifact kind, deployability, immutability, tested source commit, CI run, and the docs/playground surface paths. Production deployment additionally requires the version catalog commit to equal that manifest commit, so the deployed artifact, validated commit, and selected CI run remain one lineage.
 
 ## Generated API reference rule
 
@@ -93,7 +96,9 @@ Live editing may remain framework-specific when runtime tooling requires it. Tha
 
 One version catalog must describe the deployed reference product. `Next` is bound to the exact deployed `main` commit. Released versions are bound to immutable Git release tags. Each retained release must provide the complete reference pair required by that release source, including documentation and playground output.
 
-The current deployment workflow already follows the correct least-privilege direction: it downloads a successful current-main Pages artifact and deploys it without checkout or rebuild. The remaining release gap is that release tags are discovered only when a later site assembly runs. Closing G17 requires a successful controlled release to trigger a delivery refresh after the release tag exists, so the released reference becomes available without requiring another source commit.
+Reference-affecting pull requests produce a downloadable preview artifact from the tested PR merge commit. It uses the same docs/playground surface layout as production, but its manifest marks it non-deployable and no deployment workflow consumes its artifact name.
+
+Production Pages remains least-privilege: the deployment workflow downloads a successful current-main `pages-site-<sha>` artifact, verifies the embedded production lineage manifest and version catalog, and deploys without checkout or rebuild. The remaining release gap is that release tags are discovered only when a later site assembly runs. Closing G17 requires a successful controlled release to trigger a delivery refresh after the release tag exists, so the released reference becomes available without requiring another source commit.
 
 ## G17 exit
 

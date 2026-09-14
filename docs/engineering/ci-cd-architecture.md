@@ -9,8 +9,9 @@ VyrnForge intentionally exposes only four GitHub Actions workflows.
 
 - `.github/workflows/ci.yml` runs for pull requests to `main` or
   `integration/**`, pushes to `main`, and manual validation. It owns change
-  planning, scoped or full validation, the exact-main delivery artifact, and
-  the stable `ci-gate`. It has no write capability.
+  planning, scoped or full validation, non-deployable PR reference previews,
+  the exact-main delivery artifact, and the stable `ci-gate`. It has no write
+  capability.
 - `.github/workflows/assurance.yml` runs weekly or manually. It owns full
   quality and integration validation, the compatibility matrix, dependency
   audit, workflow lint, ShellCheck, CodeQL, and `assurance-gate`. Only its
@@ -33,9 +34,12 @@ integration lane. It does not use workflow-level path filters.
 `scripts/detect-ci-scope.mjs` selects quality, integration, browser, package,
 consumer, docs, playground, fixture, and security work from the actual change.
 
-- Task PR -> `integration/<lane>`: affected-scope validation once.
+- Task PR -> `integration/<lane>`: affected-scope validation once. When docs or
+  playground/reference work is selected, CI also emits a non-deployable
+  immutable preview artifact.
 - Integration-lane merge or synchronization: no push-triggered CI duplication.
-- Promotion or emergency hotfix PR -> `main`: full repository validation once.
+- Promotion or emergency hotfix PR -> `main`: full repository validation once,
+  including the same non-deployable reference preview boundary.
 - Push to `main`: exact-main delivery scope only. Quality and security are not
   rerun after the already-passed promotion gate.
 
@@ -56,13 +60,22 @@ affected or full typechecking according to planner output.
 
 The `integration-checks` job owns package output preparation, packed consumer
 verification, Chromium contracts, cross-framework generation smoke, repository
-inventory, documentation and playground builds, and the commit-bound Pages
-reference artifact. It prepares package output once per selected job and reuses
-it across downstream checks.
+inventory, documentation and playground builds, PR reference previews, and the
+commit-bound Pages reference artifact. It prepares package output once per
+selected job and reuses it across downstream checks.
+
+A reference-affecting pull request creates
+`reference-preview-pr-<number>-<tested-commit>`. The artifact contains the docs
+surface at `/`, the playground surface at `/playground/`, and
+`reference-artifact.json`. The manifest records `kind: preview`,
+`deployable: false`, immutability, the tested commit, and the producing CI run.
+CI keeps repository-wide read-only permissions; no preview path receives Pages
+write, npm OIDC, tag creation, or repository write access.
 
 Only a successful push CI run for current `main` creates
 `pages-site-<commit>`. Pull requests and weekly assurance never create a
-deployable Pages artifact.
+deployable Pages artifact. Production output carries the same lineage manifest
+with `kind: production` and `deployable: true`.
 
 Exact-main delivery builds the current documentation inspector and the current
 human-facing playground, then runs `scripts/assemble-versioned-pages.mjs`.
@@ -87,9 +100,10 @@ isolated worktree and builds both surfaces from that release's source:
 The current main surfaces remain at `/` and `/playground/`. The assembled site
 contains `vyrnforge-versions.json`, a machine-readable catalog bound to the
 exact main commit, plus the temporary backward-compatible `docs-versions.json`
-consumed by `apps/docs`. `scripts/verify-pages-site.mjs` requires the current
-surfaces, catalog, release lines, and every retained docs/playground pair before
-the artifact can be uploaded.
+consumed by `apps/docs`. `scripts/reference-artifact.mjs` then binds the site to
+its exact source commit and CI run. `scripts/verify-pages-site.mjs` and the
+reference-artifact verifier require the current surfaces, catalog, release
+lines, exact lineage, and every retained docs/playground pair before upload.
 
 ### Security
 
@@ -118,8 +132,10 @@ that run's head SHA equals current `main`, and downloads the matching
 `pages-site-<sha>` artifact.
 
 Before deployment, the preparation job verifies the current docs and playground,
-`vyrnforge-versions.json`, the compatibility manifest, exact-main commit
-binding, and every retained release docs/playground pair. It never checks out
+`reference-artifact.json`, `vyrnforge-versions.json`, the compatibility
+manifest, exact-main commit and CI-run binding, and every retained release
+docs/playground pair. The production manifest must be immutable and deployable,
+and its commit must match the version catalog. Deployment never checks out
 source or rebuilds the site. Only the deployment job receives `pages: write`
 and `id-token: write`.
 
