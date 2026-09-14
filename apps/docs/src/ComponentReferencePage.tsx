@@ -145,8 +145,7 @@ function formatProperty(property: ApiProperty) {
 function formatEvent(event: ApiEvent) {
   const detail = event.detailFields
     .map(
-      (field) =>
-        `${field.name}: ${field.type}${field.required ? "" : "?"}`,
+      (field) => `${field.name}: ${field.type}${field.required ? "" : "?"}`,
     )
     .join(", ");
   const detailShape = detail ? ` { ${detail} }` : "";
@@ -217,7 +216,11 @@ function ContractDetails({ contract }: { contract: ContractDetail | null }) {
   );
 }
 
-function FrameworkApiPanel({ component }: { component: FrameworkApiComponent }) {
+function FrameworkApiPanel({
+  component,
+}: {
+  component: FrameworkApiComponent;
+}) {
   return (
     <div className="vf-docs-framework-usage">
       <div className="vf-docs-framework-usage__meta">
@@ -334,8 +337,8 @@ export function ComponentReferencePage({
           shown as missing rather than reconstructed in the docs application.
         </Text>
         <Text size="sm" tone="muted">
-          Generator: <code>{apiReference.generated.generator}</code> · sources:{" "}
-          <code>{apiReference.generated.sources.join(", ")}</code>
+          Generator: <code>{apiReference.generated.generator}</code> ·
+          sources: <code>{apiReference.generated.sources.join(", ")}</code>
         </Text>
       </Card>
 
