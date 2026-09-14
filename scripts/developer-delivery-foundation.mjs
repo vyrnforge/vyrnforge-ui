@@ -55,6 +55,7 @@ export function verifyDeveloperDeliveryFoundation({
     "docs/generated/consumer-knowledge.json",
     "scripts/generate-framework-api-reference.mjs",
     "scripts/assemble-versioned-pages.mjs",
+    "scripts/reference-artifact.mjs",
     "scripts/verify-pages-site.mjs",
     "apps/docs/package.json",
     "apps/docs/src/docsContext.ts",
@@ -103,6 +104,31 @@ export function verifyDeveloperDeliveryFoundation({
     }
   }
 
+  const artifacts = new Map(
+    (manifest.artifacts ?? []).map((artifact) => [artifact.id, artifact]),
+  );
+  const previewArtifact = artifacts.get("reference-preview");
+  if (
+    previewArtifact?.mutable !== false ||
+    previewArtifact?.deployable !== false
+  ) {
+    failures.push(
+      "reference-preview artifact must be immutable and explicitly non-deployable",
+    );
+  }
+  const pagesArtifact = artifacts.get("pages-site");
+  if (pagesArtifact?.mutable !== false || pagesArtifact?.deployable !== true) {
+    failures.push(
+      "pages-site artifact must be immutable and explicitly deployable",
+    );
+  }
+  const previewGap = (manifest.gaps ?? []).find(
+    (gap) => gap.id === "pr-reference-preview",
+  );
+  if (previewGap?.status !== "closed") {
+    failures.push("PR reference preview gap must be recorded as closed");
+  }
+
   if (
     manifest.gate?.id !== "G17" ||
     manifest.gate?.blocksComponentExpansion !== true
@@ -138,8 +164,13 @@ export function verifyDeveloperDeliveryFoundation({
       "  integration-checks:",
       "  security-checks:",
       "name: ci-gate",
+      "RUN_REFERENCE_PREVIEW:",
+      "Assemble immutable reference preview",
+      "reference-preview-pr-${{ github.event.pull_request.number }}-${{ github.sha }}",
       "node scripts/assemble-versioned-pages.mjs",
+      "write-production-manifest",
       "node scripts/verify-pages-site.mjs",
+      "node scripts/reference-artifact.mjs verify --kind production",
       "pages-site-${{ github.sha }}",
     ],
     failures,
@@ -156,6 +187,9 @@ export function verifyDeveloperDeliveryFoundation({
       'workflows: ["VyrnForge CI"]',
       "gh run download",
       "pages-site-${{ steps.candidate.outputs.head-sha }}",
+      "site/reference-artifact.json",
+      "EXPECTED_CI_RUN_ID",
+      'artifact.artifact?.kind !== "production"',
       "pages: write",
       "id-token: write",
     ],
@@ -268,6 +302,21 @@ export function verifyDeveloperDeliveryFoundation({
     failures,
   );
 
+  const referenceArtifact = read(root, "scripts/reference-artifact.mjs");
+  requireMarkers(
+    referenceArtifact,
+    "scripts/reference-artifact.mjs",
+    [
+      'kind === "preview" || kind === "production"',
+      'deployable: kind === "production"',
+      "sourceCommit",
+      "ciRunId",
+      "assembleReferencePreview",
+      "verifyReferenceArtifact",
+    ],
+    failures,
+  );
+
   const documentation = read(root, deliveryFoundationDocumentationPath);
   requireMarkers(
     documentation,
@@ -276,6 +325,7 @@ export function verifyDeveloperDeliveryFoundation({
       "Generated API reference rule",
       "Example contract",
       "Version and deployment contract",
+      "reference-artifact.json",
       "G17 exit",
       "Native HTML",
       "React",
