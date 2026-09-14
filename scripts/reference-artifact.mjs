@@ -22,7 +22,10 @@ function assert(condition, message) {
 }
 
 function copyDirectory(source, destination) {
-  assert(existsSync(source), `Reference artifact input is missing: ${source}`);
+  assert(
+    existsSync(source),
+    `Reference artifact input is missing: ${source}`,
+  );
   mkdirSync(destination, { recursive: true });
   cpSync(source, destination, { recursive: true });
 }
@@ -128,7 +131,10 @@ export function verifyReferenceArtifact({
     readFileSync(requireFile(directory, artifactManifestName), "utf8"),
   );
 
-  assert(manifest.schemaVersion === 1, "Unsupported reference artifact schema");
+  assert(
+    manifest.schemaVersion === 1,
+    "Unsupported reference artifact schema",
+  );
   assert(
     manifest.artifact?.kind === expectedKind,
     `Reference artifact kind must be ${expectedKind}`,
