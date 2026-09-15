@@ -11,9 +11,14 @@ import os from "node:os";
 import path from "node:path";
 
 import {
+  deliveryFoundationManifestPath,
   repositoryRoot,
   verifyDeveloperDeliveryFoundation,
 } from "./developer-delivery-foundation.mjs";
+import {
+  verifyDeveloperDeliveryGate,
+  verifyGateManifest,
+} from "./verify-developer-delivery-gate.mjs";
 
 const required = [
   ".github/workflows/assurance.yml",
@@ -71,10 +76,7 @@ function createFoundationFixture() {
 }
 
 function mutateManifest(root, mutate) {
-  const manifestPath = path.join(
-    root,
-    "docs/metadata/developer-delivery-foundation.json",
-  );
+  const manifestPath = path.join(root, deliveryFoundationManifestPath);
   const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
   mutate(manifest);
   writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -82,6 +84,10 @@ function mutateManifest(root, mutate) {
 
 test("current repository satisfies the developer delivery foundation contract", () => {
   assert.deepEqual(verifyDeveloperDeliveryFoundation(), []);
+});
+
+test("current repository satisfies the G17 developer delivery gate contract", () => {
+  assert.deepEqual(verifyDeveloperDeliveryGate(), []);
 });
 
 test("delivery foundation rejects a missing first-class framework", () => {
@@ -113,6 +119,25 @@ test("delivery foundation rejects an open release reference refresh gap", () => 
       failure.includes(
         "release reference refresh gap must be recorded as closed",
       ),
+    ),
+  );
+});
+
+test("G17 rejects a reopened cross-framework example gap", () => {
+  const manifest = JSON.parse(
+    readFileSync(
+      path.join(repositoryRoot, deliveryFoundationManifestPath),
+      "utf8",
+    ),
+  );
+  const gap = manifest.gaps.find(
+    (candidate) => candidate.id === "cross-framework-examples",
+  );
+  gap.status = "open";
+
+  assert.ok(
+    verifyGateManifest(manifest).some((failure) =>
+      failure.includes("cross-framework-examples"),
     ),
   );
 });
