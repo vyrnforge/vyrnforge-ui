@@ -110,7 +110,9 @@ test("delivery foundation rejects an open release reference refresh gap", () => 
 
   assert.ok(
     verifyDeveloperDeliveryFoundation({ root }).some((failure) =>
-      failure.includes("release reference refresh gap must be recorded as closed"),
+      failure.includes(
+        "release reference refresh gap must be recorded as closed",
+      ),
     ),
   );
 });
