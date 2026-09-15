@@ -15,11 +15,15 @@ function readJson(root, relativePath) {
   return JSON.parse(readFileSync(path.join(root, relativePath), "utf8"));
 }
 
-export function verifyExecutableExampleContract({ root = repositoryRoot } = {}) {
+export function verifyExecutableExampleContract({
+  root = repositoryRoot,
+} = {}) {
   const failures = [];
   for (const required of [metadataPath, consumerManifestPath]) {
     if (!existsSync(path.join(root, required))) {
-      failures.push(`executable example contract required file is missing: ${required}`);
+      failures.push(
+        `executable example contract required file is missing: ${required}`,
+      );
     }
   }
   if (failures.length > 0) return failures.sort();
@@ -30,7 +34,9 @@ export function verifyExecutableExampleContract({ root = repositoryRoot } = {}) 
     failures.push("executable example contract schemaVersion must be 1");
   }
   if (contract.sourceOfTruth !== consumerManifestPath) {
-    failures.push("executable example contract must name tests/consumers/manifest.json as sourceOfTruth");
+    failures.push(
+      "executable example contract must name tests/consumers/manifest.json as sourceOfTruth",
+    );
   }
 
   const fixtures = new Map(
@@ -44,27 +50,42 @@ export function verifyExecutableExampleContract({ root = repositoryRoot } = {}) 
     }
     const fixture = fixtures.get(example.fixtureId);
     if (!fixture) {
-      failures.push(`${frameworkId}: unknown consumer fixture ${example.fixtureId}`);
+      failures.push(
+        `${frameworkId}: unknown consumer fixture ${example.fixtureId}`,
+      );
       continue;
     }
     if (fixture.directory !== example.directory) {
-      failures.push(`${frameworkId}: example directory must match consumer fixture directory`);
+      failures.push(
+        `${frameworkId}: example directory must match consumer fixture directory`,
+      );
     }
     if (fixture.contractFile !== example.contractFile) {
-      failures.push(`${frameworkId}: contractFile must match consumer fixture contractFile`);
+      failures.push(
+        `${frameworkId}: contractFile must match consumer fixture contractFile`,
+      );
     }
     const entrypoint = path.join(example.directory, example.entrypoint);
     if (!existsSync(path.join(root, entrypoint))) {
-      failures.push(`${frameworkId}: executable example entrypoint is missing: ${entrypoint}`);
+      failures.push(
+        `${frameworkId}: executable example entrypoint is missing: ${entrypoint}`,
+      );
     }
-    const fixtureContractPath = path.join(example.directory, example.contractFile);
+    const fixtureContractPath = path.join(
+      example.directory,
+      example.contractFile,
+    );
     if (!existsSync(path.join(root, fixtureContractPath))) {
-      failures.push(`${frameworkId}: fixture contract is missing: ${fixtureContractPath}`);
+      failures.push(
+        `${frameworkId}: fixture contract is missing: ${fixtureContractPath}`,
+      );
     }
     const verification = new Set(example.verification ?? []);
     for (const requiredVerification of ["typecheck", "build", "runtime"]) {
       if (!verification.has(requiredVerification)) {
-        failures.push(`${frameworkId}: missing ${requiredVerification} example verification`);
+        failures.push(
+          `${frameworkId}: missing ${requiredVerification} example verification`,
+        );
       }
     }
   }
@@ -72,7 +93,9 @@ export function verifyExecutableExampleContract({ root = repositoryRoot } = {}) 
   const declared = Object.keys(contract.frameworks ?? {}).sort();
   const expected = [...frameworkIds].sort();
   if (JSON.stringify(declared) !== JSON.stringify(expected)) {
-    failures.push("executable example contract must contain exactly the four first-class framework surfaces");
+    failures.push(
+      "executable example contract must contain exactly the four first-class framework surfaces",
+    );
   }
 
   return failures.sort();
