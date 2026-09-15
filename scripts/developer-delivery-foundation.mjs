@@ -175,7 +175,7 @@ export function verifyDeveloperDeliveryFoundation({
       "reference-preview-pr-${{ github.event.pull_request.number }}-${{ github.sha }}",
       "mode:",
       "- delivery",
-      'DISPATCH_MODE: ${{ inputs.mode }}',
+      "DISPATCH_MODE: ${{ inputs.mode }}",
       '[[ "$EVENT_NAME" == "workflow_dispatch" && "$DISPATCH_MODE" == "delivery" ]]',
       "RUN_PAGES_ARTIFACT:",
       "inputs.mode == 'delivery'",
