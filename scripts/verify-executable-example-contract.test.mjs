@@ -1,5 +1,11 @@
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -12,11 +18,20 @@ const repositoryRoot = path.resolve(
 );
 
 function fixtureRepository() {
-  const root = mkdtempSync(path.join(os.tmpdir(), "vyrnforge-example-contract-"));
-  for (const relativePath of ["docs/metadata/executable-examples.json", "tests/consumers"]) {
-    cpSync(path.join(repositoryRoot, relativePath), path.join(root, relativePath), {
-      recursive: true,
-    });
+  const root = mkdtempSync(
+    path.join(os.tmpdir(), "vyrnforge-example-contract-"),
+  );
+  for (const relativePath of [
+    "docs/metadata/executable-examples.json",
+    "tests/consumers",
+  ]) {
+    cpSync(
+      path.join(repositoryRoot, relativePath),
+      path.join(root, relativePath),
+      {
+        recursive: true,
+      },
+    );
   }
   return root;
 }
@@ -28,7 +43,10 @@ test("current repository satisfies the cross-framework executable example contra
 test("rejects a framework example that loses runtime verification", () => {
   const root = fixtureRepository();
   try {
-    const metadataPath = path.join(root, "docs/metadata/executable-examples.json");
+    const metadataPath = path.join(
+      root,
+      "docs/metadata/executable-examples.json",
+    );
     const metadata = JSON.parse(readFileSync(metadataPath, "utf8"));
     metadata.frameworks.vue.verification = ["typecheck", "build"];
     writeFileSync(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`);
