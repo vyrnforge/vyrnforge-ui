@@ -1,4 +1,5 @@
 import multiFrameworkRaw from "../../../../docs/metadata/multi-framework.json?raw";
+import referencePortalRaw from "../../../../docs/metadata/reference-portal.json?raw";
 
 export type PlaygroundFrameworkId = "native-html" | "react" | "angular" | "vue";
 
@@ -25,6 +26,17 @@ type MultiFrameworkMetadata = {
   }>;
 };
 
+type ReferencePortalMetadata = {
+  schemaVersion: number;
+  frameworks: Record<
+    PlaygroundFrameworkId,
+    {
+      label: string;
+    }
+  >;
+  versionCatalog: string;
+};
+
 type VersionCatalogEntry = {
   id: string;
   version: string;
@@ -39,18 +51,18 @@ type VersionCatalog = {
 };
 
 const multiFramework = JSON.parse(multiFrameworkRaw) as MultiFrameworkMetadata;
+const referencePortal = JSON.parse(
+  referencePortalRaw,
+) as ReferencePortalMetadata;
 
-const frameworkLabels: Record<PlaygroundFrameworkId, string> = {
-  react: "React",
-  "native-html": "Native HTML",
-  angular: "Angular",
-  vue: "Vue",
-};
+if (referencePortal.schemaVersion !== 1) {
+  throw new Error("Unsupported VyrnForge reference portal metadata.");
+}
 
 export const playgroundFrameworks: PlaygroundFramework[] =
   multiFramework.frameworks.map((framework) => ({
     ...framework,
-    label: frameworkLabels[framework.id],
+    label: referencePortal.frameworks[framework.id].label,
   }));
 
 export const defaultPlaygroundFramework: PlaygroundFrameworkId = "react";
@@ -83,7 +95,7 @@ export async function loadPlaygroundVersions(): Promise<PlaygroundVersion[]> {
     return [defaultPlaygroundVersion];
   }
 
-  const catalogUrl = `${rootPath.replace(/\/$/u, "")}/vyrnforge-versions.json`;
+  const catalogUrl = `${rootPath.replace(/\/$/u, "")}/${referencePortal.versionCatalog}`;
 
   try {
     const response = await fetch(catalogUrl, {
