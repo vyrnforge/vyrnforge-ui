@@ -125,7 +125,10 @@ test("delivery foundation rejects an open release reference refresh gap", () => 
 
 test("G17 rejects a reopened cross-framework example gap", () => {
   const manifest = JSON.parse(
-    readFileSync(path.join(repositoryRoot, deliveryFoundationManifestPath), "utf8"),
+    readFileSync(
+      path.join(repositoryRoot, deliveryFoundationManifestPath),
+      "utf8",
+    ),
   );
   const gap = manifest.gaps.find(
     (candidate) => candidate.id === "cross-framework-examples",
