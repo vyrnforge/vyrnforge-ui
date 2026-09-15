@@ -10,18 +10,22 @@ VyrnForge intentionally exposes only four GitHub Actions workflows.
 - `.github/workflows/ci.yml` runs for pull requests to `main` or
   `integration/**`, pushes to `main`, and manual validation. It owns change
   planning, scoped or full validation, non-deployable PR reference previews,
-  the exact-main delivery artifact, and the stable `ci-gate`. It has no write
-  capability.
+  the exact-main delivery artifact, and the stable `ci-gate`. Manual dispatch
+  also exposes an explicit delivery-only mode for release-bound reference
+  refresh after a Git tag exists. CI has no write capability.
 - `.github/workflows/assurance.yml` runs weekly or manually. It owns full
   quality and integration validation, the compatibility matrix, dependency
   audit, workflow lint, ShellCheck, CodeQL, and `assurance-gate`. Only its
   CodeQL job can write security events.
 - `.github/workflows/deploy-pages.yml` consumes a successful current-main CI
-  artifact and deploys it. Only its deployment job receives Pages write and
-  OIDC permissions.
+  artifact and deploys it. It accepts the normal successful main-push delivery
+  or an explicitly selected successful current-main delivery-dispatch run.
+  Only its deployment job receives Pages write and OIDC permissions.
 - `.github/workflows/release.yml` is manual from current `main`. It verifies an
   immutable release artifact, publishes exact tarballs, verifies the registry,
-  and creates the release record through narrowly scoped job permissions.
+  creates the release record through narrowly scoped job permissions, then
+  dispatches the existing CI and Pages workflows to refresh the newly tagged
+  reference snapshot.
 
 Internal validation responsibilities are jobs inside `ci.yml` and
 `assurance.yml`; they are not separate reusable workflow files. This keeps the
@@ -42,6 +46,9 @@ consumer, docs, playground, fixture, and security work from the actual change.
   including the same non-deployable reference preview boundary.
 - Push to `main`: exact-main delivery scope only. Quality and security are not
   rerun after the already-passed promotion gate.
+- Manual `mode=delivery` from `main`: the same delivery-only scope, used by the
+  controlled release after its tag exists so versioned reference assembly can
+  include that new immutable release without another source commit.
 
 The stable branch-protection check is `ci-gate`. It evaluates planner output and
 the selected `quality-checks`, `integration-checks`, and `security-checks` jobs.
@@ -72,10 +79,12 @@ surface at `/`, the playground surface at `/playground/`, and
 CI keeps repository-wide read-only permissions; no preview path receives Pages
 write, npm OIDC, tag creation, or repository write access.
 
-Only a successful push CI run for current `main` creates
-`pages-site-<commit>`. Pull requests and weekly assurance never create a
-deployable Pages artifact. Production output carries the same lineage manifest
-with `kind: production` and `deployable: true`.
+A successful exact-main delivery creates `pages-site-<commit>`. The normal
+producer is a successful push CI run for current `main`; the controlled release
+may also explicitly dispatch the same delivery-only mode after its release tag
+exists. Pull-request validation and weekly assurance never create a deployable
+Pages artifact. Production output carries the same lineage manifest with
+`kind: production` and `deployable: true`.
 
 Exact-main delivery builds the current documentation inspector and the current
 human-facing playground, then runs `scripts/assemble-versioned-pages.mjs`.
@@ -127,9 +136,11 @@ requests npm OIDC.
 
 `deploy-pages.yml` is intentionally separate from normal CI to preserve least
 privilege. Its preparation job has only Actions and repository read access. It
-accepts only a successful `VyrnForge CI` push run for current `main`, verifies
-that run's head SHA equals current `main`, and downloads the matching
-`pages-site-<sha>` artifact.
+accepts either a successful `VyrnForge CI` push run for current `main` or a
+successful explicitly selected `workflow_dispatch` delivery run for current
+`main`. In both cases it verifies that the run head SHA equals current `main`
+and downloads the matching `pages-site-<sha>` artifact. A full manual CI run
+cannot accidentally deploy because it does not create that production artifact.
 
 Before deployment, the preparation job verifies the current docs and playground,
 `reference-artifact.json`, `vyrnforge-versions.json`, the compatibility
@@ -144,7 +155,7 @@ and `id-token: write`.
 `release.yml` is the only normal npm release entrypoint and is manual. A release
 is valid only from current `main` when a successful exact-main `VyrnForge CI`
 push run exists for that commit. It does not rerun general CI or weekly
-assurance.
+assurance before package publication.
 
 The ordered responsibilities are:
 
@@ -156,11 +167,21 @@ The ordered responsibilities are:
    and a fresh consumer.
 4. `create-release-record`: create or verify the annotated tag and GitHub
    release after registry verification.
+5. `refresh-release-reference`: verify the release tag resolves to the workflow
+   commit and that the commit is still current `main`; dispatch CI in
+   delivery-only mode; wait for that exact run; require its
+   `pages-site-<sha>` artifact; dispatch `deploy-pages.yml` with that exact CI
+   run ID; and wait for deployment success.
 
-A Git release tag becomes eligible for the next exact-main retained reference
-artifact. Package publication state and reference-site availability therefore
-remain traceable to the same immutable release source without making the Pages
-deployment workflow capable of publishing packages or creating tags.
+The reference refresh intentionally happens after tag creation. Therefore the
+versioned Pages assembler sees the new release tag and produces the tagged docs
+and playground snapshot immediately, without a follow-up source commit.
+
+Permission separation remains explicit. The refresh job receives `actions:
+write` only so it can dispatch the existing CI and Pages workflows. It does not
+receive npm OIDC, repository write, `pages: write`, or Pages deployment OIDC.
+The Pages workflow remains the only holder of Pages deployment permissions, and
+CI remains read-only.
 
 No workflow stores long-lived npm or personal-access credentials.
 
