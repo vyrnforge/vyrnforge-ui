@@ -114,6 +114,30 @@ function runWorkspaceScript(packageName, script) {
   runNpm(["--ignore-scripts", "run", script, "--workspace", packageName]);
 }
 
+runNpm([
+  "exec",
+  "--",
+  "prettier",
+  "--write",
+  "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+  "examples/basic-playground/src/data/executableExampleContract.ts",
+  "scripts/verify-executable-example-contract.mjs",
+  "scripts/verify-executable-example-contract.test.mjs",
+]);
+execFileSync(
+  "git",
+  [
+    "diff",
+    "--",
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+    "examples/basic-playground/src/data/executableExampleContract.ts",
+    "scripts/verify-executable-example-contract.mjs",
+    "scripts/verify-executable-example-contract.test.mjs",
+  ],
+  { cwd: root, stdio: "inherit" },
+);
+throw new Error("Executable-example formatter diagnostic complete; restore runner.");
+
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
