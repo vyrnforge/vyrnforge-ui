@@ -19,7 +19,7 @@ import {
 import type { DocsRoute } from "./docsRegistry";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
-import { docsLinks } from "./deploymentLinks";
+import { docsLinks, getPlaygroundHref } from "./deploymentLinks";
 
 type DocsShellProps = {
   activeRoute: DocsRoute;
@@ -61,7 +61,10 @@ export function DocsShell({
           }
           actions={
             <div className="vf-docs-header__nav">
-              <a className="vf-docs-top-link" href={docsLinks.playground}>
+              <a
+                className="vf-docs-top-link"
+                href={getPlaygroundHref(framework.id)}
+              >
                 Playground
               </a>
               <a className="vf-docs-top-link" href={docsLinks.repository}>
