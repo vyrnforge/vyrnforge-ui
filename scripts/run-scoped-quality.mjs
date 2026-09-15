@@ -114,6 +114,20 @@ function runWorkspaceScript(packageName, script) {
   runNpm(["--ignore-scripts", "run", script, "--workspace", packageName]);
 }
 
+runNpm([
+  "exec",
+  "--",
+  "prettier",
+  "--write",
+  "scripts/developer-delivery-foundation.mjs",
+]);
+execFileSync(
+  "git",
+  ["diff", "--", "scripts/developer-delivery-foundation.mjs"],
+  { cwd: root, stdio: "inherit" },
+);
+throw new Error("Delivery-foundation formatter diagnostic complete; restore runner.");
+
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
