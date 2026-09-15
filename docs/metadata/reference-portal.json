@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "frameworks": {
+    "native-html": {
+      "label": "Native HTML",
+      "language": "HTML / JavaScript",
+      "guidance": "Use registered VyrnForge Custom Elements directly with shared tokens, DOM events, slots, methods, and form contracts."
+    },
+    "react": {
+      "label": "React",
+      "language": "TypeScript / JSX",
+      "guidance": "Use the React renderer while keeping behavior, tokens, accessibility, and public contracts aligned with the shared VyrnForge foundation."
+    },
+    "angular": {
+      "label": "Angular",
+      "language": "TypeScript / Templates",
+      "guidance": "Use the verified Angular consumer and adapter contracts over the shared VyrnForge element surface; do not invent framework-only behavior."
+    },
+    "vue": {
+      "label": "Vue",
+      "language": "TypeScript / SFC",
+      "guidance": "Use the verified Vue consumer and model-adapter contracts over the shared VyrnForge element surface; keep events and state semantics portable."
+    }
+  },
+  "surfaces": {
+    "docs": {
+      "label": "Docs",
+      "path": "/"
+    },
+    "playground": {
+      "label": "Playground",
+      "path": "/playground/"
+    }
+  },
+  "versionCatalog": "vyrnforge-versions.json"
+}
