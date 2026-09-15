@@ -226,7 +226,8 @@ export function ComponentDemoPage({
               ))}
             </div>
             <Text size="sm" tone="muted">
-              Example registry source: <CodeText>{executableExampleSourceOfTruth}</CodeText>
+              Example registry source:{" "}
+              <CodeText>{executableExampleSourceOfTruth}</CodeText>
             </Text>
           </Panel>
         </section>
