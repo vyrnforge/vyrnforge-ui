@@ -10,6 +10,7 @@ export const contractTestFiles = [
   "scripts/detect-ci-scope.test.mjs",
   "scripts/developer-delivery-foundation.test.mjs",
   "scripts/reference-artifact.test.mjs",
+  "scripts/verify-reference-product-architecture.test.mjs",
   "scripts/verify-executable-example-contract.test.mjs",
   "scripts/verify-package-boundaries.test.mjs",
   "scripts/verify-component-metadata.test.mjs",
