@@ -35,10 +35,14 @@ function readJson(root, relativePath) {
 }
 
 function sameMembers(actual, expected) {
-  return JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort());
+  return (
+    JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort())
+  );
 }
 
-export function verifyReferenceProductArchitecture({ root = repositoryRoot } = {}) {
+export function verifyReferenceProductArchitecture({
+  root = repositoryRoot,
+} = {}) {
   const failures = [];
 
   for (const relativePath of [referencePortalPath, documentationSystemPath]) {
@@ -52,70 +56,115 @@ export function verifyReferenceProductArchitecture({ root = repositoryRoot } = {
   const documentationSystem = read(root, documentationSystemPath);
 
   if (portal.schemaVersion !== 1) {
-    failures.push("reference portal schemaVersion must remain 1 until an explicit migration is implemented");
+    failures.push(
+      "reference portal schemaVersion must remain 1 until an explicit migration is implemented",
+    );
   }
   if (portal.product?.id !== "vyrnforge-reference") {
-    failures.push("reference portal must identify the product as vyrnforge-reference");
+    failures.push(
+      "reference portal must identify the product as vyrnforge-reference",
+    );
   }
   if (portal.product?.semanticOwnership !== "framework-neutral") {
-    failures.push("reference product semantic ownership must remain framework-neutral");
+    failures.push(
+      "reference product semantic ownership must remain framework-neutral",
+    );
   }
   if (portal.product?.implementationHost !== "react") {
-    failures.push("current reference product implementation host must be recorded as react");
+    failures.push(
+      "current reference product implementation host must be recorded as react",
+    );
   }
 
   if (!sameMembers(Object.keys(portal.frameworks ?? {}), expectedFrameworks)) {
-    failures.push(`reference portal must expose exactly ${expectedFrameworks.join(", ")}`);
+    failures.push(
+      `reference portal must expose exactly ${expectedFrameworks.join(", ")}`,
+    );
   }
   if (!sameMembers(Object.keys(portal.surfaces ?? {}), expectedSurfaces)) {
-    failures.push(`reference portal must expose exactly ${expectedSurfaces.join(", ")}`);
+    failures.push(
+      `reference portal must expose exactly ${expectedSurfaces.join(", ")}`,
+    );
   }
   if (!sameMembers(Object.keys(portal.contentOwnership ?? {}), expectedDomains)) {
-    failures.push(`reference portal must define ownership for ${expectedDomains.join(", ")}`);
+    failures.push(
+      `reference portal must define ownership for ${expectedDomains.join(", ")}`,
+    );
   }
 
   if (portal.context?.framework?.queryParameter !== "framework") {
-    failures.push("reference framework context must use the framework query parameter");
+    failures.push(
+      "reference framework context must use the framework query parameter",
+    );
   }
   if (portal.context?.framework?.preserveAcrossSurfaces !== true) {
-    failures.push("reference framework context must be preserved across surfaces");
+    failures.push(
+      "reference framework context must be preserved across surfaces",
+    );
   }
   if (portal.context?.version?.catalog !== portal.versionCatalog) {
-    failures.push("reference version context must use the canonical versionCatalog");
+    failures.push(
+      "reference version context must use the canonical versionCatalog",
+    );
   }
   if (portal.versionCatalog !== "vyrnforge-versions.json") {
     failures.push("reference portal must use vyrnforge-versions.json");
   }
 
-  if (portal.routing?.identity !== "stable-id" || portal.routing?.stableDeepLinks !== true) {
-    failures.push("reference routing must preserve stable-id deep-link semantics");
+  if (
+    portal.routing?.identity !== "stable-id" ||
+    portal.routing?.stableDeepLinks !== true
+  ) {
+    failures.push(
+      "reference routing must preserve stable-id deep-link semantics",
+    );
   }
-  const transitionalRegistries = new Set(portal.routing?.transitionalRegistries ?? []);
+  const transitionalRegistries = new Set(
+    portal.routing?.transitionalRegistries ?? [],
+  );
   for (const relativePath of [
     "apps/docs/src/docsRegistry.ts",
     "examples/basic-playground/src/app/routes.ts",
     "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
   ]) {
     if (!transitionalRegistries.has(relativePath)) {
-      failures.push(`reference routing must record transitional registry ${relativePath}`);
+      failures.push(
+        `reference routing must record transitional registry ${relativePath}`,
+      );
     }
   }
 
   if (portal.contentOwnership?.search?.ownsFacts !== false) {
     failures.push("reference search must explicitly own no canonical facts");
   }
-  if (portal.contentOwnership?.components?.mode !== "generated-facts-plus-curated-guidance") {
-    failures.push("component reference must use generated facts plus curated guidance");
+  if (
+    portal.contentOwnership?.components?.mode !==
+    "generated-facts-plus-curated-guidance"
+  ) {
+    failures.push(
+      "component reference must use generated facts plus curated guidance",
+    );
   }
-  if (portal.contentOwnership?.examples?.mode !== "registry-backed-executable") {
-    failures.push("reference examples must remain registry-backed executable examples");
+  if (
+    portal.contentOwnership?.examples?.mode !== "registry-backed-executable"
+  ) {
+    failures.push(
+      "reference examples must remain registry-backed executable examples",
+    );
   }
 
   if (portal.deployment?.assemblyContract !== "scripts/reference-artifact.mjs") {
-    failures.push("reference deployment must preserve scripts/reference-artifact.mjs as the assembly contract");
+    failures.push(
+      "reference deployment must preserve scripts/reference-artifact.mjs as the assembly contract",
+    );
   }
-  if (portal.deployment?.productionSourceBranch !== "main" || portal.deployment?.immutable !== true) {
-    failures.push("reference production deployment must remain immutable and main-bound");
+  if (
+    portal.deployment?.productionSourceBranch !== "main" ||
+    portal.deployment?.immutable !== true
+  ) {
+    failures.push(
+      "reference production deployment must remain immutable and main-bound",
+    );
   }
 
   for (const marker of [
@@ -127,14 +176,24 @@ export function verifyReferenceProductArchitecture({ root = repositoryRoot } = {
     "reference-artifact.mjs",
   ]) {
     if (!documentationSystem.includes(marker)) {
-      failures.push(`${documentationSystemPath}: missing architecture marker ${marker}`);
+      failures.push(
+        `${documentationSystemPath}: missing architecture marker ${marker}`,
+      );
     }
   }
   if (documentationSystem.includes(".ai/DOC_USAGE_GUIDE.md")) {
-    failures.push(`${documentationSystemPath}: must not link to removed .ai/DOC_USAGE_GUIDE.md`);
+    failures.push(
+      `${documentationSystemPath}: must not link to removed .ai/DOC_USAGE_GUIDE.md`,
+    );
   }
-  if (documentationSystem.includes("docsRegistry.ts` is the executable source for documentation routes")) {
-    failures.push(`${documentationSystemPath}: must not treat docsRegistry.ts as durable route authority`);
+  if (
+    documentationSystem.includes(
+      "docsRegistry.ts` is the executable source for documentation routes",
+    )
+  ) {
+    failures.push(
+      `${documentationSystemPath}: must not treat docsRegistry.ts as durable route authority`,
+    );
   }
 
   return failures.sort();
@@ -146,7 +205,9 @@ if (
 ) {
   const failures = verifyReferenceProductArchitecture();
   if (failures.length) {
-    console.error(`Reference product architecture verification failed:\n- ${failures.join("\n- ")}`);
+    console.error(
+      `Reference product architecture verification failed:\n- ${failures.join("\n- ")}`,
+    );
     process.exitCode = 1;
   } else {
     console.log("Reference product architecture verification passed.");
