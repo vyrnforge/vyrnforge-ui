@@ -1,5 +1,12 @@
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -21,7 +28,8 @@ function fixture(mutator, callback) {
     for (const relativePath of [referencePortalPath, documentationSystemPath]) {
       const source = path.join(repo, relativePath);
       const destination = path.join(root, relativePath);
-      cpSync(source, destination, { recursive: true });
+      mkdirSync(path.dirname(destination), { recursive: true });
+      cpSync(source, destination);
     }
     mutator?.(root);
     callback(verifyReferenceProductArchitecture({ root }));
@@ -93,7 +101,9 @@ test("rejects restoring docsRegistry as durable route authority", () =>
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("must not treat docsRegistry.ts as durable route authority"),
+          failure.includes(
+            "must not treat docsRegistry.ts as durable route authority",
+          ),
         ),
       ),
   ));
