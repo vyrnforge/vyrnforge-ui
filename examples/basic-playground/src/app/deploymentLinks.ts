@@ -11,3 +11,9 @@ export const playgroundLinks = {
   playground: import.meta.env.DEV ? "http://localhost:5173/" : playgroundBase,
   repository: "https://github.com/vyrnforge/vyrnforge-ui",
 };
+
+export function getDocsHref(frameworkId: string) {
+  const query = new URLSearchParams(window.location.search);
+  query.set("framework", frameworkId);
+  return `${playgroundLinks.docs}?${query.toString()}${window.location.hash}`;
+}

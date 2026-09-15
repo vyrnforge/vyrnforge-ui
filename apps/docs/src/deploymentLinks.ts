@@ -9,3 +9,9 @@ export const docsLinks = {
     : `${docsBase}playground/`,
   repository: "https://github.com/vyrnforge/vyrnforge-ui",
 };
+
+export function getPlaygroundHref(frameworkId: string) {
+  const query = new URLSearchParams(window.location.search);
+  query.set("framework", frameworkId);
+  return `${docsLinks.playground}?${query.toString()}${window.location.hash}`;
+}
