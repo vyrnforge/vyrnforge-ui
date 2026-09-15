@@ -114,13 +114,6 @@ function runWorkspaceScript(packageName, script) {
   runNpm(["--ignore-scripts", "run", script, "--workspace", packageName]);
 }
 
-runNpm(["exec", "--", "prettier", "--write", "apps/docs/src/docsContext.ts"]);
-execFileSync("git", ["diff", "--", "apps/docs/src/docsContext.ts"], {
-  cwd: root,
-  stdio: "inherit",
-});
-throw new Error("Formatter diagnostic complete; restore scoped quality runner.");
-
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
