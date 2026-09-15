@@ -237,7 +237,10 @@ export async function loadDocsVersions() {
     for (const version of entries) {
       unique.set(version.id, {
         ...version,
-        label: version.id === "next" ? nextDocsVersion.label : versionLabel(version),
+        label:
+          version.id === "next"
+            ? nextDocsVersion.label
+            : versionLabel(version),
       });
     }
     return [...unique.values()];
