@@ -1,5 +1,13 @@
 {
   "schemaVersion": 1,
+  "product": {
+    "id": "vyrnforge-reference",
+    "label": "VyrnForge Reference",
+    "purpose": "One reader-facing product for VyrnForge guidance, generated reference facts, executable examples, and versioned framework context across Docs and Playground.",
+    "implementationHost": "react",
+    "semanticOwnership": "framework-neutral",
+    "hostPolicy": "The React host is an implementation detail. Native HTML, React, Angular, and Vue remain equal reader contexts and no React-only presentation contract may become canonical VyrnForge semantics."
+  },
   "frameworks": {
     "native-html": {
       "label": "Native HTML",
@@ -25,12 +33,148 @@
   "surfaces": {
     "docs": {
       "label": "Docs",
-      "path": "/"
+      "path": "/",
+      "role": "curated guidance and generated reference presentation"
     },
     "playground": {
       "label": "Playground",
-      "path": "/playground/"
+      "path": "/playground/",
+      "role": "executable examples, interaction exploration, and reference presentation"
     }
+  },
+  "navigation": {
+    "sections": [
+      {
+        "id": "start",
+        "label": "Start",
+        "contentDomains": ["guides", "packages"]
+      },
+      {
+        "id": "components",
+        "label": "Components",
+        "contentDomains": ["components", "accessibility"]
+      },
+      {
+        "id": "foundations",
+        "label": "Foundations",
+        "contentDomains": ["tokens", "patterns"]
+      },
+      {
+        "id": "examples",
+        "label": "Examples",
+        "contentDomains": ["examples"]
+      }
+    ],
+    "sharedVocabulary": true,
+    "surfaceSpecificPresentationAllowed": true
+  },
+  "contentOwnership": {
+    "guides": {
+      "mode": "curated",
+      "canonicalSources": ["docs/**/*.md"],
+      "policy": "Human guidance owns explanation and recommendations but must link to canonical structured facts instead of repeating API truth."
+    },
+    "components": {
+      "mode": "generated-facts-plus-curated-guidance",
+      "canonicalSources": [
+        "docs/metadata/components.json",
+        "docs/metadata/component-contracts.json",
+        "docs/metadata/multi-framework.json"
+      ],
+      "generatedSources": [
+        "docs/generated/consumer-knowledge.json",
+        "docs/generated/framework-api-reference.json"
+      ],
+      "policy": "Public API facts, framework parity, accessibility contracts, and component catalog facts are generated from canonical metadata and contracts; presentation may add curated guidance without restating those facts manually."
+    },
+    "packages": {
+      "mode": "canonical-metadata-plus-manifests",
+      "canonicalSources": [
+        "docs/metadata/packages.json",
+        "docs/metadata/release-groups.json",
+        "packages/*/package.json"
+      ],
+      "policy": "Package identity, relationships, release lines, and public entrypoint facts come from package metadata, manifests, and verified public entrypoints rather than application registries."
+    },
+    "tokens": {
+      "mode": "canonical-metadata-plus-runtime-styles",
+      "canonicalSources": [
+        "docs/metadata/design-tokens.json",
+        "packages/ui-core/src/styles/tokens.css",
+        "packages/ui-core/src/styles/themes.css",
+        "packages/ui-core/src/styles/density.css"
+      ],
+      "policy": "Token reference data is derived from shared VyrnForge token contracts and runtime CSS custom properties; reference surfaces do not own theme or token values."
+    },
+    "patterns": {
+      "mode": "canonical-metadata-plus-curated-guidance",
+      "canonicalSources": ["docs/metadata/patterns.json"],
+      "policy": "Pattern identity and relationships come from canonical pattern metadata while longer workflow guidance remains curated documentation."
+    },
+    "examples": {
+      "mode": "registry-backed-executable",
+      "canonicalSources": [
+        "docs/metadata/executable-examples.json",
+        "tests/consumers/manifest.json"
+      ],
+      "policy": "Executable example identity and framework evidence are registry-backed. Surface-specific example code may be authored, but equivalent semantic examples use shared identities and verification contracts."
+    },
+    "accessibility": {
+      "mode": "contract-plus-evidence-plus-curated-guidance",
+      "canonicalSources": [
+        "docs/metadata/component-contracts.json",
+        "docs/metadata/assistive-technology-reviews.json",
+        "docs/metadata/cross-framework-accessibility-review.json"
+      ],
+      "policy": "Accessibility behavior and keyboard contracts come from shared component contracts and evidence; explanatory guidance may be curated without redefining framework-specific behavior."
+    },
+    "search": {
+      "mode": "derived-index",
+      "dependsOn": [
+        "guides",
+        "components",
+        "packages",
+        "tokens",
+        "patterns",
+        "examples",
+        "accessibility"
+      ],
+      "ownsFacts": false,
+      "policy": "Search indexes generated reference records and curated text. It never becomes an independent source for API, package, token, framework, or release facts."
+    }
+  },
+  "context": {
+    "framework": {
+      "source": "frameworks",
+      "queryParameter": "framework",
+      "default": "react",
+      "preserveAcrossSurfaces": true
+    },
+    "version": {
+      "catalog": "vyrnforge-versions.json",
+      "selection": "path",
+      "preserveFrameworkContext": true
+    }
+  },
+  "routing": {
+    "identity": "stable-id",
+    "transport": "hash",
+    "stableDeepLinks": true,
+    "preserveContext": ["framework", "version"],
+    "transitionalRegistries": [
+      "apps/docs/src/docsRegistry.ts",
+      "examples/basic-playground/src/app/routes.ts",
+      "examples/basic-playground/src/app/referenceCatalogRoutes.ts"
+    ],
+    "policy": "Route IDs are shared semantic identities. Current hand-maintained registries remain transitional runtime inputs until generated replacements are verified; they must not own component, package, token, framework, version, or API facts."
+  },
+  "deployment": {
+    "assemblyContract": "scripts/reference-artifact.mjs",
+    "artifactManifest": "reference-artifact.json",
+    "productionSourceBranch": "main",
+    "immutable": true,
+    "surfaces": ["docs", "playground"],
+    "policy": "Preview and production artifacts preserve Docs and Playground as one deployable Reference product while retaining commit and CI lineage."
   },
   "versionCatalog": "vyrnforge-versions.json"
 }
