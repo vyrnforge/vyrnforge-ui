@@ -15,11 +15,36 @@ import {
   verifyDeveloperDeliveryFoundation,
 } from "./developer-delivery-foundation.mjs";
 
-test("current repository satisfies the developer delivery foundation contract", () => {
-  assert.deepEqual(verifyDeveloperDeliveryFoundation(), []);
-});
+const required = [
+  ".github/workflows/assurance.yml",
+  ".github/workflows/ci.yml",
+  ".github/workflows/deploy-pages.yml",
+  ".github/workflows/release.yml",
+  "docs/engineering/developer-delivery-foundation.md",
+  "docs/engineering/ci-cd-architecture.md",
+  "docs/engineering/documentation-system.md",
+  "docs/governance/05-trunk-delivery.md",
+  "docs/metadata/developer-delivery-foundation.json",
+  "docs/metadata/component-contracts.json",
+  "docs/metadata/components.json",
+  "docs/metadata/packages.json",
+  "docs/metadata/multi-framework.json",
+  "docs/metadata/release-groups.json",
+  "docs/generated/framework-api-reference.json",
+  "docs/generated/consumer-knowledge.json",
+  "scripts/generate-framework-api-reference.mjs",
+  "scripts/assemble-versioned-pages.mjs",
+  "scripts/reference-artifact.mjs",
+  "scripts/verify-pages-site.mjs",
+  "apps/docs/package.json",
+  "apps/docs/src/docsContext.ts",
+  "apps/docs/src/ComponentReferencePage.tsx",
+  "examples/basic-playground/package.json",
+  "examples/basic-playground/src/app/playgroundContext.ts",
+  "examples/basic-playground/src/data/referenceMetadata.ts",
+];
 
-test("delivery foundation rejects a missing first-class framework", () => {
+function createFoundationFixture() {
   const root = mkdtempSync(path.join(os.tmpdir(), "vf-delivery-foundation-"));
   for (const relativePath of [
     ".github/workflows",
@@ -35,34 +60,6 @@ test("delivery foundation rejects a missing first-class framework", () => {
     mkdirSync(path.join(root, relativePath), { recursive: true });
   }
 
-  const required = [
-    ".github/workflows/assurance.yml",
-    ".github/workflows/ci.yml",
-    ".github/workflows/deploy-pages.yml",
-    ".github/workflows/release.yml",
-    "docs/engineering/developer-delivery-foundation.md",
-    "docs/engineering/ci-cd-architecture.md",
-    "docs/engineering/documentation-system.md",
-    "docs/governance/05-trunk-delivery.md",
-    "docs/metadata/developer-delivery-foundation.json",
-    "docs/metadata/component-contracts.json",
-    "docs/metadata/components.json",
-    "docs/metadata/packages.json",
-    "docs/metadata/multi-framework.json",
-    "docs/metadata/release-groups.json",
-    "docs/generated/framework-api-reference.json",
-    "docs/generated/consumer-knowledge.json",
-    "scripts/generate-framework-api-reference.mjs",
-    "scripts/assemble-versioned-pages.mjs",
-    "scripts/reference-artifact.mjs",
-    "scripts/verify-pages-site.mjs",
-    "apps/docs/package.json",
-    "apps/docs/src/docsContext.ts",
-    "apps/docs/src/ComponentReferencePage.tsx",
-    "examples/basic-playground/package.json",
-    "examples/basic-playground/src/app/playgroundContext.ts",
-    "examples/basic-playground/src/data/referenceMetadata.ts",
-  ];
   for (const relativePath of required) {
     cpSync(
       path.join(repositoryRoot, relativePath),
@@ -70,19 +67,52 @@ test("delivery foundation rejects a missing first-class framework", () => {
     );
   }
 
+  return root;
+}
+
+function mutateManifest(root, mutate) {
   const manifestPath = path.join(
     root,
     "docs/metadata/developer-delivery-foundation.json",
   );
   const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-  manifest.frameworks = manifest.frameworks.filter(
-    (framework) => framework !== "vue",
-  );
+  mutate(manifest);
   writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+}
+
+test("current repository satisfies the developer delivery foundation contract", () => {
+  assert.deepEqual(verifyDeveloperDeliveryFoundation(), []);
+});
+
+test("delivery foundation rejects a missing first-class framework", () => {
+  const root = createFoundationFixture();
+  mutateManifest(root, (manifest) => {
+    manifest.frameworks = manifest.frameworks.filter(
+      (framework) => framework !== "vue",
+    );
+  });
 
   assert.ok(
     verifyDeveloperDeliveryFoundation({ root }).some((failure) =>
       failure.includes("frameworks must be"),
+    ),
+  );
+});
+
+test("delivery foundation rejects an open release reference refresh gap", () => {
+  const root = createFoundationFixture();
+  mutateManifest(root, (manifest) => {
+    const gap = manifest.gaps.find(
+      (candidate) => candidate.id === "release-reference-refresh",
+    );
+    gap.status = "open";
+  });
+
+  assert.ok(
+    verifyDeveloperDeliveryFoundation({ root }).some((failure) =>
+      failure.includes(
+        "release reference refresh gap must be recorded as closed",
+      ),
     ),
   );
 });

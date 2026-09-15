@@ -62,7 +62,10 @@ jobs:
           )
           CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha')"
           test "$WORKFLOW_NAME" = "VyrnForge CI"
-          test "$RUN_EVENT" = "push"
+          if [[ "$RUN_EVENT" != "push" && "$RUN_EVENT" != "workflow_dispatch" ]]; then
+            echo "Pages deployment requires a successful main push or explicit delivery-dispatch CI run."
+            exit 1
+          fi
           test "$HEAD_BRANCH" = "main"
           test "$CONCLUSION" = "success"
           test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"
