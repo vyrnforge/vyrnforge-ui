@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "program": {
     "id": "developer-delivery-foundation",
-    "status": "in-progress",
+    "status": "complete",
     "purpose": "Standardize how VyrnForge source, generated reference data, executable examples, CI evidence, deployed reference sites, and release snapshots move through one traceable lifecycle before component expansion resumes."
   },
   "canonicalSources": [
@@ -40,8 +40,8 @@
       "workspace": "@vyrnforge/ui-data-grid-basic-playground",
       "path": "examples/basic-playground",
       "role": "executable examples, component/pattern exploration, and reference views",
-      "status": "migration",
-      "target": "general VyrnForge playground identity rather than data-grid-specific ownership"
+      "status": "current",
+      "target": "A later reference-product redesign may replace the current shell, but must preserve this delivery, version, framework, and canonical-data contract."
     }
   ],
   "frameworks": ["native-html", "react", "angular", "vue"],
@@ -59,7 +59,7 @@
     {
       "id": "exact-main-delivery",
       "owner": "VyrnForge CI",
-      "policy": "delivery-only rebuild of docs/playground/reference output bound to the exact main commit and CI run"
+      "policy": "delivery-only rebuild of docs/playground/reference output bound to the exact main commit and CI run; the same mode may be explicitly dispatched after a release tag exists"
     },
     {
       "id": "production-reference-deploy",
@@ -74,7 +74,7 @@
     {
       "id": "controlled-release",
       "owner": "Controlled npm Release",
-      "policy": "manual current-main release using verified immutable tarballs, trusted publishing, registry verification, and release records"
+      "policy": "manual current-main release using verified immutable tarballs, trusted publishing, registry verification, release records, then a release-bound delivery dispatch and Pages deployment after the tag exists"
     }
   ],
   "artifacts": [
@@ -105,18 +105,19 @@
   "gaps": [
     {
       "id": "reader-api-authority",
-      "status": "open",
-      "description": "Generated framework API reference exists, but reader-facing component demo pages still contain hand-maintained API tables/examples that can drift from canonical contracts."
+      "status": "deferred",
+      "gateBlocking": false,
+      "description": "The generated framework API reference is the canonical reader-facing API authority. Some current Playground demo pages still contain curated hand-maintained props tables; replacing those transitional presentation details is explicitly deferred to the full reference-product redesign and must not become a competing public API source."
     },
     {
       "id": "reference-portal-unification",
-      "status": "open",
-      "description": "Docs and playground are separate applications with separate context code and need one shared reference-site vocabulary and navigation/version contract."
+      "status": "closed",
+      "description": "Docs and Playground share docs/metadata/reference-portal.json, the same Native HTML/React/Angular/Vue vocabulary, vyrnforge-versions.json version catalog, deep-link context, and deployment/version model while remaining modular applications."
     },
     {
       "id": "cross-framework-examples",
-      "status": "open",
-      "description": "Framework usage snippets exist, but executable example ownership is not yet standardized as one canonical example registry verified across all four first-class surfaces."
+      "status": "closed",
+      "description": "docs/metadata/executable-examples.json binds all four first-class framework identities to the existing packed consumer fixtures in tests/consumers/manifest.json with typecheck, build, and runtime verification evidence."
     },
     {
       "id": "pr-reference-preview",
@@ -125,12 +126,13 @@
     },
     {
       "id": "release-reference-refresh",
-      "status": "open",
-      "description": "Versioned reference assembly discovers Git release tags during a later exact-main delivery build, so a successful release does not yet refresh the released reference snapshot immediately."
+      "status": "closed",
+      "description": "After registry verification creates or verifies the release tag and GitHub prerelease, the controlled release dispatches exact-main CI in delivery mode. That run assembles the tag-aware immutable Pages artifact, then the release dispatches the existing Pages workflow with the exact CI run ID so the tagged snapshot is deployed without another source commit."
     }
   ],
   "gate": {
     "id": "G17",
+    "status": "enforced",
     "blocksComponentExpansion": true,
     "requiredBeforeClose": [
       "generated API reference is reader-facing and drift-checked",
