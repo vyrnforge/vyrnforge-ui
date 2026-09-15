@@ -58,6 +58,9 @@ const referencePortal = JSON.parse(
 if (referencePortal.schemaVersion !== 1) {
   throw new Error("Unsupported VyrnForge reference portal metadata.");
 }
+if (referencePortal.versionCatalog !== "vyrnforge-versions.json") {
+  throw new Error("Unsupported VyrnForge version catalog contract.");
+}
 
 export const playgroundFrameworks: PlaygroundFramework[] =
   multiFramework.frameworks.map((framework) => ({
