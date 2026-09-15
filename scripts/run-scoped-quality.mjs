@@ -6,6 +6,12 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const npmCliPath = process.env.npm_execpath;
 
+function readBoolean(name, defaultValue = false) {
+  const value = process.env[name];
+  if (value === undefined) return defaultValue;
+  return value === "true" || value === "1";
+}
+
 function runNpm(args) {
   const command = npmCliPath
     ? process.execPath
@@ -14,32 +20,6 @@ function runNpm(args) {
       : "npm";
   const commandArgs = npmCliPath ? [npmCliPath, ...args] : args;
   execFileSync(command, commandArgs, { cwd: root, stdio: "inherit" });
-}
-
-runNpm([
-  "exec",
-  "--",
-  "prettier",
-  "--write",
-  "scripts/developer-delivery-foundation.test.mjs",
-  "scripts/verify-developer-delivery-gate.mjs",
-]);
-execFileSync(
-  "git",
-  [
-    "diff",
-    "--",
-    "scripts/developer-delivery-foundation.test.mjs",
-    "scripts/verify-developer-delivery-gate.mjs",
-  ],
-  { cwd: root, stdio: "inherit" },
-);
-throw new Error("PF-1708 formatter diagnostic complete; restore runner.");
-
-function readBoolean(name, defaultValue = false) {
-  const value = process.env[name];
-  if (value === undefined) return defaultValue;
-  return value === "true" || value === "1";
 }
 
 function workspaceManifest(packageName) {
