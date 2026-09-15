@@ -190,7 +190,7 @@ export function verifyDeveloperDeliveryGate({ root = repositoryRoot } = {}) {
 function isMainModule() {
   return Boolean(
     process.argv[1] &&
-      path.resolve(process.argv[1]) === fileURLToPath(import.meta.url),
+    path.resolve(process.argv[1]) === fileURLToPath(import.meta.url),
   );
 }
 
@@ -200,6 +200,8 @@ if (isMainModule()) {
     for (const failure of failures) console.error(`- ${failure}`);
     process.exitCode = 1;
   } else {
-    console.log("G17 developer delivery foundation repository contract passed.");
+    console.log(
+      "G17 developer delivery foundation repository contract passed.",
+    );
   }
 }
