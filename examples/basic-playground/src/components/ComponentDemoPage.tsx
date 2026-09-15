@@ -8,6 +8,10 @@ import {
 } from "@vyrnforge/ui-components";
 import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
 import { usePlaygroundFramework } from "../app/PlaygroundFrameworkContext";
+import {
+  executableExamples,
+  executableExampleSourceOfTruth,
+} from "../data/executableExampleContract";
 import { CodeBlock } from "./CodeBlock";
 import { PageOutline, type PageOutlineItem } from "./PageOutline";
 import { PropsTable, type PropsTableRow } from "./PropsTable";
@@ -126,6 +130,7 @@ export function ComponentDemoPage({
   const { frameworkId } = usePlaygroundFramework();
   const canonical = getCanonicalKnowledge(title);
   const selectedFrameworkUsage = canonical?.frameworks[frameworkId];
+  const executableExample = executableExamples[frameworkId];
   const canonicalUseWhen = canonical?.guidance.useWhen
     ? [canonical.guidance.useWhen]
     : useWhen;
@@ -141,6 +146,7 @@ export function ComponentDemoPage({
   const outlineItems: PageOutlineItem[] = [
     { id: "overview", label: "Overview" },
     { id: "import", label: "Usage" },
+    { id: "verified-example", label: "Verified example" },
     ...sections.map(({ id, label }) => ({ id, label })),
     ...(canonicalUseWhen?.length || canonicalAvoidWhen?.length
       ? [{ id: "usage-guidance", label: "Usage guidance" }]
@@ -200,6 +206,29 @@ export function ComponentDemoPage({
                 {resolvedUsageNote}
               </Text>
             )}
+          </Panel>
+        </section>
+        <section className="vf-playground-section" id="verified-example">
+          <Panel title="Verified consumer example">
+            <Text>
+              The selected framework is exercised by the packed consumer fixture
+              at <CodeText>{executableExample.directory}</CodeText>.
+            </Text>
+            <Text size="sm" tone="muted">
+              Entrypoint: <CodeText>{executableExample.entrypoint}</CodeText> ·
+              contract: <CodeText>{executableExample.contractFile}</CodeText>
+            </Text>
+            <div className="vf-playground-demo-page__badges">
+              {executableExample.verification.map((verification) => (
+                <Badge key={verification} tone="subtle" variant="success">
+                  {verification} verified
+                </Badge>
+              ))}
+            </div>
+            <Text size="sm" tone="muted">
+              Example registry source:{" "}
+              <CodeText>{executableExampleSourceOfTruth}</CodeText>
+            </Text>
           </Panel>
         </section>
         {sections.map((section) => (

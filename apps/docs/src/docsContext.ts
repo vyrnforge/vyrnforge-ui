@@ -1,5 +1,6 @@
 import releaseGroupsRaw from "../../../docs/metadata/release-groups.json?raw";
 import multiFrameworkRaw from "../../../docs/metadata/multi-framework.json?raw";
+import referencePortalRaw from "../../../docs/metadata/reference-portal.json?raw";
 
 export type DocsFrameworkId = "native-html" | "react" | "angular" | "vue";
 
@@ -47,56 +48,49 @@ type MultiFrameworkMetadata = {
   }>;
 };
 
+type ReferencePortalMetadata = {
+  schemaVersion: number;
+  frameworks: Record<
+    DocsFrameworkId,
+    {
+      label: string;
+      language: string;
+      guidance: string;
+    }
+  >;
+  versionCatalog: string;
+};
+
+type VersionCatalogEntry = {
+  id: string;
+  releaseLine: string;
+  version: string;
+  channel: string;
+  docsPath: string;
+  tag?: string;
+  legacy?: boolean;
+};
+
 type DocsVersionManifest = {
   schemaVersion: number;
-  releases: Array<{
-    id: string;
-    releaseLine: string;
-    version: string;
-    channel: string;
-    tag: string;
-    path: string;
-    legacy?: boolean;
-  }>;
+  current: VersionCatalogEntry;
+  releases: VersionCatalogEntry[];
 };
 
 const releaseGroups = JSON.parse(releaseGroupsRaw) as ReleaseGroupsMetadata;
 const multiFramework = JSON.parse(multiFrameworkRaw) as MultiFrameworkMetadata;
+const referencePortal = JSON.parse(
+  referencePortalRaw,
+) as ReferencePortalMetadata;
 
-const frameworkPresentation: Record<
-  DocsFrameworkId,
-  Pick<DocsFramework, "label" | "language" | "guidance">
-> = {
-  "native-html": {
-    label: "Native HTML",
-    language: "HTML / JavaScript",
-    guidance:
-      "Use registered VyrnForge Custom Elements directly with shared tokens, DOM events, slots, methods, and form contracts.",
-  },
-  react: {
-    label: "React",
-    language: "TypeScript / JSX",
-    guidance:
-      "Use the React renderer while keeping behavior, tokens, accessibility, and public contracts aligned with the shared VyrnForge foundation.",
-  },
-  angular: {
-    label: "Angular",
-    language: "TypeScript / Templates",
-    guidance:
-      "Use the verified Angular consumer and adapter contracts over the shared VyrnForge element surface; do not invent framework-only behavior.",
-  },
-  vue: {
-    label: "Vue",
-    language: "TypeScript / SFC",
-    guidance:
-      "Use the verified Vue consumer and model-adapter contracts over the shared VyrnForge element surface; keep events and state semantics portable.",
-  },
-};
+if (referencePortal.schemaVersion !== 1) {
+  throw new Error("Unsupported VyrnForge reference portal metadata.");
+}
 
 export const docsFrameworks: DocsFramework[] = multiFramework.frameworks.map(
   (framework) => ({
     ...framework,
-    ...frameworkPresentation[framework.id],
+    ...referencePortal.frameworks[framework.id],
   }),
 );
 
@@ -212,7 +206,7 @@ export function getRepositoryPagesRoot() {
 export async function loadDocsVersions() {
   try {
     const response = await fetch(
-      `${getRepositoryPagesRoot()}docs-versions.json`,
+      `${getRepositoryPagesRoot()}${referencePortal.versionCatalog}`,
       {
         cache: "no-store",
       },
@@ -220,17 +214,30 @@ export async function loadDocsVersions() {
     if (!response.ok) return docsVersions;
 
     const manifest = (await response.json()) as DocsVersionManifest;
-    if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.releases)) {
+    if (
+      manifest.schemaVersion !== 2 ||
+      !manifest.current?.docsPath ||
+      !Array.isArray(manifest.releases)
+    ) {
       return docsVersions;
     }
 
-    const releases = manifest.releases.map((release) => ({
-      ...release,
-      label: versionLabel(release),
+    const entries = [manifest.current, ...manifest.releases].map((entry) => ({
+      id: entry.id,
+      releaseLine: entry.releaseLine,
+      version: entry.version,
+      channel: entry.channel,
+      path: entry.docsPath,
+      tag: entry.tag,
+      legacy: entry.legacy,
     }));
     const unique = new Map<string, DocsVersion>();
-    for (const version of [nextDocsVersion, ...releases]) {
-      unique.set(version.id, version);
+    for (const version of entries) {
+      unique.set(version.id, {
+        ...version,
+        label:
+          version.id === "next" ? nextDocsVersion.label : versionLabel(version),
+      });
     }
     return [...unique.values()];
   } catch {
