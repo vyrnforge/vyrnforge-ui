@@ -230,7 +230,7 @@ export function verifyDeveloperDeliveryFoundation({
       "Resolve successful current-main CI run",
       "Dispatch exact-main reference delivery after tag creation",
       '"repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/dispatches"',
-      '"pages-site-$GITHUB_SHA"',
+      "pages-site-$GITHUB_SHA",
       "Dispatch Pages deployment for release-bound artifact",
       '"repos/$GITHUB_REPOSITORY/actions/workflows/deploy-pages.yml/dispatches"',
       "gh run watch",
@@ -247,7 +247,10 @@ export function verifyDeveloperDeliveryFoundation({
     failures.push("controlled release must include release reference refresh");
   } else {
     const refresh = release.slice(refreshStart);
-    if (refresh.includes("pages: write") || refresh.includes("id-token: write")) {
+    if (
+      refresh.includes("pages: write") ||
+      refresh.includes("id-token: write")
+    ) {
       failures.push(
         "release reference refresh must dispatch Pages without direct Pages deployment permissions",
       );
