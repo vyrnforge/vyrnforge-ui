@@ -73,10 +73,10 @@ export function verifyDeveloperDeliveryFoundation({
   }
   if (
     manifest.program?.id !== "developer-delivery-foundation" ||
-    manifest.program?.status !== "in-progress"
+    !["in-progress", "complete"].includes(manifest.program?.status)
   ) {
     failures.push(
-      "developer delivery foundation program must be recorded as in-progress",
+      "developer delivery foundation program must be recorded as in-progress or complete",
     );
   }
 
