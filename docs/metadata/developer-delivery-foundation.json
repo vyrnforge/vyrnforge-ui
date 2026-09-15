@@ -59,7 +59,7 @@
     {
       "id": "exact-main-delivery",
       "owner": "VyrnForge CI",
-      "policy": "delivery-only rebuild of docs/playground/reference output bound to the exact main commit and CI run"
+      "policy": "delivery-only rebuild of docs/playground/reference output bound to the exact main commit and CI run; the same mode may be explicitly dispatched after a release tag exists"
     },
     {
       "id": "production-reference-deploy",
@@ -74,7 +74,7 @@
     {
       "id": "controlled-release",
       "owner": "Controlled npm Release",
-      "policy": "manual current-main release using verified immutable tarballs, trusted publishing, registry verification, and release records"
+      "policy": "manual current-main release using verified immutable tarballs, trusted publishing, registry verification, release records, then a release-bound delivery dispatch and Pages deployment after the tag exists"
     }
   ],
   "artifacts": [
@@ -125,8 +125,8 @@
     },
     {
       "id": "release-reference-refresh",
-      "status": "open",
-      "description": "Versioned reference assembly discovers Git release tags during a later exact-main delivery build, so a successful release does not yet refresh the released reference snapshot immediately."
+      "status": "closed",
+      "description": "After registry verification creates or verifies the release tag and GitHub prerelease, the controlled release dispatches exact-main CI in delivery mode. That run assembles the tag-aware immutable Pages artifact, then the release dispatches the existing Pages workflow with the exact CI run ID so the tagged snapshot is deployed without another source commit."
     }
   ],
   "gate": {
