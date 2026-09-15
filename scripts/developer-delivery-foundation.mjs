@@ -128,6 +128,12 @@ export function verifyDeveloperDeliveryFoundation({
   if (previewGap?.status !== "closed") {
     failures.push("PR reference preview gap must be recorded as closed");
   }
+  const releaseRefreshGap = (manifest.gaps ?? []).find(
+    (gap) => gap.id === "release-reference-refresh",
+  );
+  if (releaseRefreshGap?.status !== "closed") {
+    failures.push("release reference refresh gap must be recorded as closed");
+  }
 
   if (
     manifest.gate?.id !== "G17" ||
@@ -167,6 +173,12 @@ export function verifyDeveloperDeliveryFoundation({
       "RUN_REFERENCE_PREVIEW:",
       "Assemble immutable reference preview",
       "reference-preview-pr-${{ github.event.pull_request.number }}-${{ github.sha }}",
+      "mode:",
+      "- delivery",
+      'DISPATCH_MODE: ${{ inputs.mode }}',
+      '[[ "$EVENT_NAME" == "workflow_dispatch" && "$DISPATCH_MODE" == "delivery" ]]',
+      "RUN_PAGES_ARTIFACT:",
+      "inputs.mode == 'delivery'",
       "node scripts/assemble-versioned-pages.mjs",
       "write-production-manifest",
       "node scripts/verify-pages-site.mjs",
@@ -185,6 +197,7 @@ export function verifyDeveloperDeliveryFoundation({
     ".github/workflows/deploy-pages.yml",
     [
       'workflows: ["VyrnForge CI"]',
+      '"$RUN_EVENT" != "push" && "$RUN_EVENT" != "workflow_dispatch"',
       "gh run download",
       "pages-site-${{ steps.candidate.outputs.head-sha }}",
       "site/reference-artifact.json",
@@ -213,13 +226,35 @@ export function verifyDeveloperDeliveryFoundation({
       "name: publish-packages",
       "name: verify-registry-release",
       "name: create-release-record",
+      "name: refresh-release-reference",
       "Resolve successful current-main CI run",
+      "Dispatch exact-main reference delivery after tag creation",
+      '"repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/dispatches"',
+      '"pages-site-$GITHUB_SHA"',
+      "Dispatch Pages deployment for release-bound artifact",
+      '"repos/$GITHUB_REPOSITORY/actions/workflows/deploy-pages.yml/dispatches"',
+      "gh run watch",
+      "actions: write",
       "id-token: write",
     ],
     failures,
   );
   if (/^\s*(push|pull_request|schedule):/mu.test(release)) {
     failures.push("controlled npm release must remain manual-only");
+  }
+  const refreshStart = release.indexOf("  refresh-release-reference:");
+  if (refreshStart < 0) {
+    failures.push("controlled release must include release reference refresh");
+  } else {
+    const refresh = release.slice(refreshStart);
+    if (refresh.includes("pages: write") || refresh.includes("id-token: write")) {
+      failures.push(
+        "release reference refresh must dispatch Pages without direct Pages deployment permissions",
+      );
+    }
+    if (refresh.includes("npm publish")) {
+      failures.push("release reference refresh must not publish npm packages");
+    }
   }
 
   const docsPackage = JSON.parse(read(root, "apps/docs/package.json"));
@@ -325,6 +360,7 @@ export function verifyDeveloperDeliveryFoundation({
       "Generated API reference rule",
       "Example contract",
       "Version and deployment contract",
+      "release-bound delivery",
       "reference-artifact.json",
       "G17 exit",
       "Native HTML",
