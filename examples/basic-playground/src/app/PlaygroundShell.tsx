@@ -8,7 +8,7 @@ import {
   TopNav,
 } from "@vyrnforge/ui-components";
 import type { PlaygroundRoute } from "./routes";
-import { playgroundLinks } from "./deploymentLinks";
+import { getDocsHref, playgroundLinks } from "./deploymentLinks";
 import {
   playgroundFrameworks,
   type PlaygroundFrameworkId,
@@ -97,6 +97,12 @@ export function PlaygroundShell({
                 value={frameworkId}
               />
               <div className="vf-playground-top-links">
+                <a
+                  className="vf-playground-top-link"
+                  href={getDocsHref(frameworkId)}
+                >
+                  Docs
+                </a>
                 <a
                   className="vf-playground-top-link"
                   href={playgroundLinks.repository}
