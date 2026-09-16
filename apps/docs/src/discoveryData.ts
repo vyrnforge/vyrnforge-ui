@@ -97,5 +97,7 @@ export function getPatternReferenceRecord(patternId: string) {
 }
 
 export function getAccessibilityReferenceRecord(componentId: string) {
-  return accessibilityReferenceRecords.find((component) => component.id === componentId);
+  return accessibilityReferenceRecords.find(
+    (component) => component.id === componentId,
+  );
 }
