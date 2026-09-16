@@ -122,25 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-const formattingTargets = [
-  "apps/docs/src/docsContext.ts",
-  "docs/reference/referenceRuntime.ts",
-  "examples/basic-playground/src/app/playgroundContext.ts",
-  "scripts/developer-delivery-foundation.mjs",
-];
-execFileSync(path.join(root, "node_modules", ".bin", "prettier"), [
-  "--write",
-  ...formattingTargets,
-], {
-  cwd: root,
-  stdio: "inherit",
-});
-execFileSync("git", ["diff", "--", ...formattingTargets], {
-  cwd: root,
-  stdio: "inherit",
-});
-process.exit(1);
-
 for (const command of [
   "format:check",
   "lint",
