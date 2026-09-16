@@ -1,7 +1,6 @@
 import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import type { DocsFrameworkId } from "./docsContext";
-import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
 import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
@@ -11,6 +10,7 @@ import { MetadataPage } from "./MetadataPage";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
 import { ReferenceSearchPage } from "./ReferenceSearchPage";
+import type { DocsRoute } from "./referenceRoutes";
 
 type DocsPageProps = {
   route: DocsRoute;
