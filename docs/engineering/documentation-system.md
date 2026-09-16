@@ -61,11 +61,11 @@ Reference content follows these ownership rules:
 | Accessibility | Shared component contracts, accessibility evidence metadata, and curated guidance                               | Shared keyboard/accessibility behavior with evidence and explanation; no framework-specific fork of the contract. |
 | Search        | Derived from generated reference records and curated text                                                       | Search owns no API, package, token, framework, version, or release facts.                                         |
 
-Generated component facts already exist in
+Generated component facts exist in
 `docs/generated/consumer-knowledge.json` and
-`docs/generated/framework-api-reference.json`. Future Reference generation
-should compose canonical sources into a shared reference model rather than
-introduce a new hand-maintained API authority.
+`docs/generated/framework-api-reference.json`. Reference generation composes
+canonical sources into a shared reference model rather than introducing a new
+hand-maintained API authority.
 
 ### Framework and version context
 
@@ -80,23 +80,22 @@ not give React stronger product semantics than Native HTML, Angular, or Vue.
 
 ### Route and deep-link ownership
 
-Stable route IDs are semantic identities. The current applications transport
-those identities through hash routes so GitHub Pages does not require
-server-side rewrite rules. Framework context is query-based and version context
-is path-based.
+Stable route IDs are semantic identities. The applications transport those
+identities through hash routes so GitHub Pages does not require server-side
+rewrite rules. Framework context is query-based and version context is
+path-based.
 
-`apps/docs/src/docsRegistry.ts`, `examples/basic-playground/src/app/routes.ts`,
-and `examples/basic-playground/src/app/referenceCatalogRoutes.ts` are
-transitional runtime registries. They remain required until generated
-replacements are proven, but they are not canonical owners for component,
-package, token, framework, version, accessibility, or API facts.
+The transitional runtime registries have been retired. Docs discovers authored
+Markdown, metadata, and generated AI-context sources directly and composes its
+generated reader entries from `docs/generated/reference-model.json`. Playground
+binds curated executable pages to generated/canonical component and example
+identities; those bindings do not own component labels, package identity,
+framework API facts, accessibility contracts, or stable component routes.
 
-The steady-state Reference architecture derives navigation and route records
-from canonical content and metadata, then lets Docs and Playground render that
-shared information model with surface-specific presentation where appropriate.
-Transitional registries should be removed only after the generated replacement
-passes routing, deep-link, framework/version-context, accessibility, and
-deployment verification.
+Derivable navigation and catalog facts therefore come from the generated
+Reference model, canonical metadata, or repository source discovery. Curated
+prose and executable demonstrations remain authored only where they add
+presentation or behavioral value that is not already a generated fact.
 
 ### Deployment ownership
 
@@ -112,7 +111,7 @@ architecture itself is intentionally revised and re-verified.
 truth for VyrnForge behavior or architecture.
 
 The application renders canonical Markdown and structured/generated metadata
-from the repository. When the application needs a new page, prefer registering
+from the repository. When the application needs a new page, prefer discovering
 or generating from an existing canonical source rather than creating a
 docs-app-only copy of the same information.
 
@@ -195,13 +194,13 @@ When changing Reference content or presentation:
    it.
 4. Keep framework/version context and stable route identities aligned across
    Docs and Playground.
-5. Update transitional route registries only when the current runtime still
-   requires them; do not treat them as the durable information model.
+5. Derive route and catalog facts from the shared Reference model, canonical
+   metadata, or repository source discovery rather than application registries.
 6. Preserve executable-example registry identities and cross-framework
    verification when example behavior changes.
-7. Remove transitional registries or duplicated facts only after their generated
-   replacement is verified.
-8. Run repository documentation/reference verification and the affected
+7. Keep curated prose and executable demos authored only where they add value
+   beyond generated facts.
+8. Run repository documentation/reference drift verification and the affected
    Docs/Playground builds.
 
 ## Related sources
