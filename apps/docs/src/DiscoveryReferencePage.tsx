@@ -1,10 +1,4 @@
-import {
-  Badge,
-  Card,
-  CodeText,
-  Heading,
-  Text,
-} from "@vyrnforge/ui-components";
+import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import type { ReferenceRecordSelection } from "./App";
 import { referenceModel } from "./docsContext";
@@ -68,7 +62,10 @@ function TokenReference({ id }: { id?: string | null }) {
           Canonical design-token explorer
         </Heading>
         <Text tone="muted">
-          Token names and category facts are read directly from canonical design-token metadata. Runtime implementation remains {designTokenSource.implementation}; typed ownership remains {designTokenSource.typedExport}.
+          Token names and category facts are read directly from canonical
+          design-token metadata. Runtime implementation remains{" "}
+          {designTokenSource.implementation}; typed ownership remains{" "}
+          {designTokenSource.typedExport}.
         </Text>
       </Card>
       <div className="vf-docs-discovery-grid">
@@ -132,7 +129,8 @@ function PatternReference({ id }: { id?: string | null }) {
             ))}
           </div>
           <Text size="sm" tone="muted">
-            Curated example route: {pattern.playgroundRoute} · example framework: {pattern.exampleFramework}
+            Curated example route: {pattern.playgroundRoute} · example
+            framework: {pattern.exampleFramework}
           </Text>
         </Card>
       </div>
@@ -146,14 +144,17 @@ function PatternReference({ id }: { id?: string | null }) {
           Reusable application patterns
         </Heading>
         <Text tone="muted">
-          Pattern guidance comes from canonical pattern metadata. The curated example documentation remains {patternDocumentation}.
+          Pattern guidance comes from canonical pattern metadata. The curated
+          example documentation remains {patternDocumentation}.
         </Text>
       </Card>
       <div className="vf-docs-discovery-grid">
         {patternReferenceRecords.map((pattern) => (
           <Card key={pattern.id} padding="lg">
             <Heading level={3} size="md">
-              <a href={recordHref("patterns", pattern.id)}>{pattern.displayName}</a>
+              <a href={recordHref("patterns", pattern.id)}>
+                {pattern.displayName}
+              </a>
             </Heading>
             <Text>{pattern.purpose}</Text>
             <Badge tone="subtle" variant="neutral">
@@ -169,11 +170,15 @@ function PatternReference({ id }: { id?: string | null }) {
 function AccessibilityReference({ id }: { id?: string | null }) {
   if (id) {
     const component = getAccessibilityReferenceRecord(id);
-    if (!component) return <MissingRecord label="Accessibility record" id={id} />;
+    if (!component)
+      return <MissingRecord label="Accessibility record" id={id} />;
 
     return (
       <div className="vf-docs-reference">
-        <ReferenceBack href="#/accessibility-reference" label="Accessibility & Keyboard" />
+        <ReferenceBack
+          href="#/accessibility-reference"
+          label="Accessibility & Keyboard"
+        />
         <Card className="vf-docs-reference__section" padding="lg">
           <Heading level={3} size="md">
             {component.displayName}
@@ -208,7 +213,9 @@ function AccessibilityReference({ id }: { id?: string | null }) {
           ) : null}
           <div className="vf-docs-discovery-links">
             <a href={componentHref(component.id)}>Full component reference</a>
-            <a href="#/accessibility-standards">Canonical accessibility standards</a>
+            <a href="#/accessibility-standards">
+              Canonical accessibility standards
+            </a>
           </div>
         </Card>
       </div>
@@ -222,11 +229,15 @@ function AccessibilityReference({ id }: { id?: string | null }) {
           Accessibility and keyboard discovery
         </Heading>
         <Text tone="muted">
-          Component records project the framework-neutral accessibility contract already used by generated component reference pages. Canonical standards and cross-framework evidence remain their owning sources.
+          Component records project the framework-neutral accessibility contract
+          already used by generated component reference pages. Canonical
+          standards and cross-framework evidence remain their owning sources.
         </Text>
         <div className="vf-docs-discovery-links">
           <a href="#/accessibility-standards">Accessibility standards</a>
-          <a href="#/metadata-cross-framework-accessibility">Cross-framework accessibility evidence</a>
+          <a href="#/metadata-cross-framework-accessibility">
+            Cross-framework accessibility evidence
+          </a>
         </div>
       </Card>
       <div className="vf-docs-discovery-grid">
@@ -277,10 +288,24 @@ export function DiscoveryReferencePage({
   referenceRecord: ReferenceRecordSelection | null;
 }) {
   if (routeId === "token-reference") {
-    return <TokenReference id={referenceRecord?.domain === "tokens" ? referenceRecord.id : null} />;
+    return (
+      <TokenReference
+        id={referenceRecord?.domain === "tokens" ? referenceRecord.id : null}
+      />
+    );
   }
   if (routeId === "pattern-reference") {
-    return <PatternReference id={referenceRecord?.domain === "patterns" ? referenceRecord.id : null} />;
+    return (
+      <PatternReference
+        id={referenceRecord?.domain === "patterns" ? referenceRecord.id : null}
+      />
+    );
   }
-  return <AccessibilityReference id={referenceRecord?.domain === "accessibility" ? referenceRecord.id : null} />;
+  return (
+    <AccessibilityReference
+      id={
+        referenceRecord?.domain === "accessibility" ? referenceRecord.id : null
+      }
+    />
+  );
 }
