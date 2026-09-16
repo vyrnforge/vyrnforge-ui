@@ -167,9 +167,7 @@ export const defaultDocsFramework = referenceModel.frameworkContext.default;
 
 export function getFramework(frameworkId: string | null | undefined) {
   const framework = getReferenceFramework(referenceModel, frameworkId);
-  return docsFrameworks.find(
-    (candidate) => candidate.id === framework.id,
-  )!;
+  return docsFrameworks.find((candidate) => candidate.id === framework.id)!;
 }
 
 export function getDocsVersion(
@@ -186,15 +184,13 @@ export function getDocsVersion(
 
 export function getCurrentDocsVersionId() {
   const configuredVersionId = import.meta.env.VITE_DOCS_VERSION_ID as
-    | string
-    | undefined;
+    string | undefined;
   return configuredVersionId ?? "next";
 }
 
 export function getRepositoryPagesRoot() {
   const configuredRoot = import.meta.env.VITE_DOCS_ROOT_PATH as
-    | string
-    | undefined;
+    string | undefined;
   if (configuredRoot) {
     return configuredRoot.endsWith("/") ? configuredRoot : `${configuredRoot}/`;
   }
