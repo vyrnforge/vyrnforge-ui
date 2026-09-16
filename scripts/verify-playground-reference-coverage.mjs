@@ -106,6 +106,7 @@ export function verifyPlaygroundReferenceCoverage({
   for (const marker of [
     "referenceComponents",
     "getReferenceRecordRoute",
+    'getReferenceRecordRoute(referenceModel, "components", id)',
     "createGeneratedComponentPage",
     "componentDemoIds.map",
   ]) {
@@ -126,6 +127,16 @@ export function verifyPlaygroundReferenceCoverage({
         `playground routes still import retired authority ${marker}`,
       );
     }
+  }
+
+  const referenceMetadataSource = read(
+    root,
+    "examples/basic-playground/src/data/referenceMetadata.ts",
+  );
+  if (!referenceMetadataSource.includes("...canonicalNativeElementEntries,")) {
+    failures.push(
+      "reference metadata projection is missing canonical native API tags",
+    );
   }
 
   const demoSource = read(
