@@ -95,9 +95,7 @@ function versionLabel(entry: VersionCatalogEntry) {
   return entry.id === "next" ? "Next" : `${entry.version} · ${entry.channel}`;
 }
 
-export function getPlaygroundFramework(
-  frameworkId: string | null | undefined,
-) {
+export function getPlaygroundFramework(frameworkId: string | null | undefined) {
   const framework = getReferenceFramework(referenceModel, frameworkId);
   return playgroundFrameworks.find(
     (candidate) => candidate.id === framework.id,
