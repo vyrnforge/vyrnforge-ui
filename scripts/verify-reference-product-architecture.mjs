@@ -170,7 +170,7 @@ export function verifyReferenceProductArchitecture({
     "reference-portal.json",
     "framework-neutral",
     "transitional runtime registries have been retired",
-    "generated Reference model",
+    "docs/generated/reference-model.json",
     "reference-artifact.mjs",
   ]) {
     if (!documentationSystem.includes(marker)) {
