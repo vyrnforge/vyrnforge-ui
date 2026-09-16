@@ -12,10 +12,7 @@ export type ReferenceFramework = {
 };
 
 export type ReferenceNavigationSectionId =
-  | "start"
-  | "components"
-  | "foundations"
-  | "examples";
+  "start" | "components" | "foundations" | "examples";
 
 export type ReferenceNavigationSection = {
   id: ReferenceNavigationSectionId;
