@@ -9,6 +9,7 @@ import {
   type ReferenceNavigationSectionId,
 } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
+import { discoveryRoutes } from "./discoveryRoutes";
 import { docsRoutes, type DocsRoute } from "./docsRegistry";
 
 type DocsNavProps = {
@@ -22,6 +23,8 @@ const groupSection: Record<string, ReferenceNavigationSectionId> = {
   Packages: "start",
   AI: "start",
   "API Reference": "components",
+  Accessibility: "components",
+  Foundations: "foundations",
   Architecture: "foundations",
   Testing: "foundations",
   Quality: "foundations",
@@ -31,8 +34,14 @@ const groupSection: Record<string, ReferenceNavigationSectionId> = {
 function routeSection(route: DocsRoute): ReferenceNavigationSectionId {
   if (route.kind === "component-reference") return "components";
   if (route.kind === "package-reference") return "start";
+  if (route.id === "token-reference" || route.id === "pattern-reference") {
+    return "foundations";
+  }
+  if (route.id === "accessibility-reference") return "components";
   return groupSection[route.group] ?? "start";
 }
+
+const referenceRoutes = [...discoveryRoutes, ...docsRoutes];
 
 export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
   const [query, setQuery] = useState("");
@@ -40,7 +49,7 @@ export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
 
   const visibleRoutes = useMemo(
     () =>
-      docsRoutes.filter((route) => {
+      referenceRoutes.filter((route) => {
         if (!normalizedQuery) return true;
 
         return [
@@ -84,9 +93,9 @@ export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
     <div className="vf-docs-nav-shell">
       <div className="vf-docs-nav-search">
         <SearchInput
-          aria-label="Search VyrnForge Reference documentation"
+          aria-label="Filter VyrnForge Reference navigation"
           onChange={(event) => setQuery(event.currentTarget.value)}
-          placeholder="Search reference…"
+          placeholder="Filter navigation…"
           size="sm"
           value={query}
         />
