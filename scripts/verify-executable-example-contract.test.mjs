@@ -24,6 +24,7 @@ function fixtureRepository() {
   for (const relativePath of [
     "docs/metadata/executable-examples.json",
     "tests/consumers",
+    "examples/basic-playground/src",
   ]) {
     cpSync(
       path.join(repositoryRoot, relativePath),
