@@ -165,10 +165,11 @@ export function ComponentDemoPage({
     : accessibility;
   const resolvedRelatedComponents = canonical
     ? canonical.guidance.relatedComponents
-        .map((id) => canonicalKnowledge.find((component) => component.id === id))
-        .filter(
-          (component): component is CanonicalComponentKnowledge =>
-            Boolean(component),
+        .map((id) =>
+          canonicalKnowledge.find((component) => component.id === id),
+        )
+        .filter((component): component is CanonicalComponentKnowledge =>
+          Boolean(component),
         )
         .map((component) => ({
           id: component.id,
@@ -178,10 +179,10 @@ export function ComponentDemoPage({
     : [];
   const hasGeneratedApi = Boolean(
     generatedApi &&
-      (generatedApi.properties.length > 0 ||
-        generatedApi.events.length > 0 ||
-        generatedApi.slots.length > 0 ||
-        generatedApi.methods.length > 0),
+    (generatedApi.properties.length > 0 ||
+      generatedApi.events.length > 0 ||
+      generatedApi.slots.length > 0 ||
+      generatedApi.methods.length > 0),
   );
   const outlineItems: PageOutlineItem[] = [
     { id: "overview", label: "Overview" },
@@ -191,7 +192,9 @@ export function ComponentDemoPage({
     ...(canonicalUseWhen?.length || canonicalAvoidWhen?.length
       ? [{ id: "usage-guidance", label: "Usage guidance" }]
       : []),
-    ...(hasGeneratedApi ? [{ id: "api-reference", label: "API reference" }] : []),
+    ...(hasGeneratedApi
+      ? [{ id: "api-reference", label: "API reference" }]
+      : []),
     ...(canonicalAccessibility?.length
       ? [{ id: "accessibility", label: "Accessibility" }]
       : []),
@@ -304,7 +307,8 @@ export function ComponentDemoPage({
               <ApiList
                 label="Events / outputs / emits"
                 values={generatedApi.events.map(
-                  (member) => `${memberName(member)} (${member.mode ?? "event"})`,
+                  (member) =>
+                    `${memberName(member)} (${member.mode ?? "event"})`,
                 )}
               />
               <ApiList
