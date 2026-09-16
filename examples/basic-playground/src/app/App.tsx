@@ -17,21 +17,15 @@ import {
   type PlaygroundFrameworkId,
   type PlaygroundVersion,
 } from "./playgroundContext";
-import {
-  referenceCatalogRoutes,
-  referenceDetailRoutes,
-} from "./referenceCatalogRoutes";
 import { routes as baseRoutes } from "./routes";
 
 const navigationRoutes: ExecutableExampleRoute[] = [
   baseRoutes[0],
-  ...referenceCatalogRoutes,
   executableExamplesCatalogRoute,
   ...baseRoutes.slice(1),
 ];
 const routes: ExecutableExampleRoute[] = [
   ...navigationRoutes,
-  ...referenceDetailRoutes,
   ...executableExampleDetailRoutes,
 ];
 
