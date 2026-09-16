@@ -11,6 +11,7 @@ import {
 import {
   docsFrameworks,
   getVersionHref,
+  referenceModel,
   releaseLineVersions,
   type DocsFramework,
   type DocsFrameworkId,
@@ -48,14 +49,15 @@ export function DocsShell({
         <TopNav
           brand={
             <div>
-              <div className="vf-docs-header__eyebrow">VyrnForge UI Docs</div>
+              <div className="vf-docs-header__eyebrow">
+                {referenceModel.product.label} · Docs
+              </div>
               <Heading level={1} size="lg" className="vf-docs-header__title">
-                Multi-framework source-of-truth reference
+                {referenceModel.product.label}
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Shared contracts stay canonical while examples, package
-                guidance, and integration notes follow the selected framework
-                surface.
+                Curated guidance and generated reference facts share one
+                framework-neutral product context across Docs and Playground.
               </Text>
             </div>
           }
@@ -65,7 +67,7 @@ export function DocsShell({
                 className="vf-docs-top-link"
                 href={getPlaygroundHref(framework.id)}
               >
-                Playground
+                Playground mode
               </a>
               <a className="vf-docs-top-link" href={docsLinks.repository}>
                 GitHub
@@ -84,12 +86,12 @@ export function DocsShell({
         <DocsNav activeRouteId={activeRoute.id} onRouteChange={onRouteChange} />
       }
       sidebarPosition="sticky"
-      sidebarWidth={260}
+      sidebarWidth={284}
     >
-      <section className="vf-docs-context" aria-label="Documentation context">
+      <section className="vf-docs-context" aria-label="Reference context">
         <div className="vf-docs-context__selectors">
           <div className="vf-docs-context__field">
-            <Label htmlFor="vf-docs-version">Documentation version</Label>
+            <Label htmlFor="vf-docs-version">Reference version</Label>
             <Select
               id="vf-docs-version"
               onChange={(event) => {
@@ -127,7 +129,7 @@ export function DocsShell({
         <div className="vf-docs-context__summary">
           <div>
             <Text size="sm" tone="muted">
-              Selected surface
+              Selected framework
             </Text>
             <Heading level={2} size="md">
               {framework.label}
@@ -135,13 +137,16 @@ export function DocsShell({
           </div>
           <div className="vf-docs-context__badges">
             <Badge variant="neutral" tone="subtle">
+              {framework.language}
+            </Badge>
+            <Badge variant="neutral" tone="subtle">
               {framework.renderer}
             </Badge>
             <Badge variant="neutral" tone="subtle">
               {framework.supportLevel}
             </Badge>
             <Badge variant="neutral" tone="subtle">
-              Docs: {docsVersion.releaseLine} · {docsVersion.version}
+              Version: {docsVersion.releaseLine} · {docsVersion.version}
             </Badge>
             {releaseLineVersions.map((releaseLine) => (
               <Badge key={releaseLine.id} variant="neutral" tone="subtle">
@@ -149,7 +154,11 @@ export function DocsShell({
               </Badge>
             ))}
           </div>
-          <Text tone="muted">{framework.guidance}</Text>
+          <Text tone="muted">
+            Framework selection changes examples and integration guidance while
+            shared contracts, accessibility behavior, and design foundations
+            remain VyrnForge-owned.
+          </Text>
         </div>
       </section>
       <DocsPage
