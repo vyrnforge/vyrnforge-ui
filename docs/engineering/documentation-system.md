@@ -40,10 +40,11 @@ accessibility, release, or executable-example contracts that supply the
 underlying facts.
 
 The current Docs and Playground applications may use React internally. React is
-an implementation host, not the semantic owner of the Reference product. Native
-HTML / Custom Elements, React, Angular, and Vue remain equal first-class reader
-contexts and must share the same VyrnForge terminology, behavior contracts,
-accessibility model, styling foundation, and API facts.
+an implementation host, not the semantic owner of the Reference product.
+Semantic ownership remains framework-neutral. Native HTML / Custom Elements,
+React, Angular, and Vue remain equal first-class reader contexts and must share
+the same VyrnForge terminology, behavior contracts, accessibility model, styling
+foundation, and API facts.
 
 ### Information model and ownership
 
