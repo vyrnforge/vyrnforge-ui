@@ -8,6 +8,7 @@ import {
   Text,
   TopNav,
 } from "@vyrnforge/ui-components";
+import type { ReferenceRecordSelection } from "./App";
 import {
   docsFrameworks,
   getVersionHref,
@@ -30,6 +31,7 @@ type DocsShellProps = {
   headerAction?: ReactNode;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
+  referenceRecord: ReferenceRecordSelection | null;
 };
 
 export function DocsShell({
@@ -40,6 +42,7 @@ export function DocsShell({
   headerAction,
   onFrameworkChange,
   onRouteChange,
+  referenceRecord,
 }: DocsShellProps) {
   return (
     <AppShell
@@ -165,6 +168,7 @@ export function DocsShell({
         frameworkId={framework.id}
         onFrameworkChange={onFrameworkChange}
         onRouteChange={onRouteChange}
+        referenceRecord={referenceRecord}
         route={activeRoute}
       />
     </AppShell>

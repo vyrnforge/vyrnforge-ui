@@ -1,4 +1,5 @@
 import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
+import type { ReferenceRecordSelection } from "./App";
 import type { DocsFrameworkId } from "./docsContext";
 import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
@@ -14,6 +15,7 @@ type DocsPageProps = {
   frameworkId: DocsFrameworkId;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
+  referenceRecord: ReferenceRecordSelection | null;
 };
 
 export function DocsPage({
@@ -21,6 +23,7 @@ export function DocsPage({
   frameworkId,
   onFrameworkChange,
   onRouteChange,
+  referenceRecord,
 }: DocsPageProps) {
   if (route.id === "overview") {
     return (
@@ -71,11 +74,18 @@ export function DocsPage({
         <AiContextIndexPage />
       ) : route.kind === "component-reference" ? (
         <ComponentReferencePage
+          componentId={
+            referenceRecord?.domain === "components" ? referenceRecord.id : null
+          }
           frameworkId={frameworkId}
           onFrameworkChange={onFrameworkChange}
         />
       ) : route.kind === "package-reference" ? (
-        <PackageReferencePage />
+        <PackageReferencePage
+          packageId={
+            referenceRecord?.domain === "packages" ? referenceRecord.id : null
+          }
+        />
       ) : route.kind === "metadata" ? (
         <MetadataPage route={route} />
       ) : route.kind === "ai" || route.kind === "json" ? (
