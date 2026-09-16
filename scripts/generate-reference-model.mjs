@@ -206,9 +206,10 @@ export function buildReferenceModel({ root = repositoryRoot } = {}) {
           id: `domain:${domain.id}`,
           kind: "domain",
           domain: domain.id,
-          label: portal.navigation.sections.find((section) =>
-            section.contentDomains.includes(domain.id),
-          )?.label ?? domain.id,
+          label:
+            portal.navigation.sections.find((section) =>
+              section.contentDomains.includes(domain.id),
+            )?.label ?? domain.id,
           routeTemplate: domain.routeTemplate,
           recordSource: domain.recordSource,
         })),
@@ -243,14 +244,14 @@ export function verifyReferenceModel({ root = repositoryRoot } = {}) {
   const outputPath = path.join(root, REFERENCE_MODEL_PATH);
   if (!existsSync(outputPath)) {
     throw new Error(
-      `${REFERENCE_MODEL_PATH} is missing; run npm run generate:reference-model.`,
+      `${REFERENCE_MODEL_PATH} is missing; run node scripts/generate-reference-model.mjs.`,
     );
   }
   const actual = readFileSync(outputPath, "utf8").replace(/\r\n?/gu, "\n");
   const expected = serializeReferenceModel(model).replace(/\r\n?/gu, "\n");
   if (actual !== expected) {
     throw new Error(
-      `${REFERENCE_MODEL_PATH} is stale; run npm run generate:reference-model.`,
+      `${REFERENCE_MODEL_PATH} is stale; run node scripts/generate-reference-model.mjs.`,
     );
   }
   return model;
