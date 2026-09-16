@@ -13,7 +13,7 @@ export const executableExamplesCatalogRoute: ExecutableExampleRoute = {
   title: "Executable Examples",
   description:
     "Registry-backed packed consumer examples for Native HTML, React, Angular, and Vue.",
-  group: "Examples",
+  group: "Overview",
   path: "/examples",
   Component: ExecutableExamplesPage,
 };
@@ -32,7 +32,7 @@ export const executableExampleDetailRoutes: ExecutableExampleRoute[] =
       label: `${framework?.label ?? example.framework} Example`,
       title: `${framework?.label ?? example.framework} Executable Example`,
       description: `Verified packed consumer source and runtime evidence for ${framework?.label ?? example.framework}.`,
-      group: "Examples",
+      group: "Overview",
       path: getReferenceRecordRoute(referenceModel, "examples", example.id),
       exampleFrameworkId: example.framework,
       Component: DetailPage,
