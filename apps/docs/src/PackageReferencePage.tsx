@@ -1,10 +1,4 @@
-import {
-  Badge,
-  Card,
-  CodeText,
-  Heading,
-  Text,
-} from "@vyrnforge/ui-components";
+import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
@@ -23,7 +17,11 @@ function packageHref(packageName: string) {
   return `#${getReferenceRecordRoute(referenceModel, "packages", packageName)}`;
 }
 
-function PackageFacts({ packageInfo }: { packageInfo: PackageReferenceRecord }) {
+function PackageFacts({
+  packageInfo,
+}: {
+  packageInfo: PackageReferenceRecord;
+}) {
   return (
     <div className="vf-docs-contract-details">
       <div className="vf-docs-contract-field">
@@ -67,7 +65,11 @@ function StringList({ label, values }: { label: string; values: string[] }) {
   );
 }
 
-function PackageIndexCard({ packageInfo }: { packageInfo: PackageReferenceRecord }) {
+function PackageIndexCard({
+  packageInfo,
+}: {
+  packageInfo: PackageReferenceRecord;
+}) {
   return (
     <Card className="vf-docs-package-card" padding="lg">
       <div className="vf-docs-package-card__header">
@@ -87,7 +89,11 @@ function PackageIndexCard({ packageInfo }: { packageInfo: PackageReferenceRecord
   );
 }
 
-function PackageDetail({ packageInfo }: { packageInfo: PackageReferenceRecord }) {
+function PackageDetail({
+  packageInfo,
+}: {
+  packageInfo: PackageReferenceRecord;
+}) {
   return (
     <div className="vf-docs-reference">
       <Card className="vf-docs-reference__section" padding="lg">
