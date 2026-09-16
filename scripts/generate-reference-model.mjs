@@ -116,7 +116,9 @@ export function buildReferenceModel({ root = repositoryRoot } = {}) {
     throw new Error("Reference portal must identify vyrnforge-reference.");
   }
   if (knowledge.schemaVersion !== 1) {
-    throw new Error("Unsupported consumer knowledge schema for Reference model.");
+    throw new Error(
+      "Unsupported consumer knowledge schema for Reference model.",
+    );
   }
   if (!frameworkApi.surfaces) {
     throw new Error("Framework API reference must expose framework surfaces.");
