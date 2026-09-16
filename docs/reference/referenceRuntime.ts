@@ -200,7 +200,10 @@ export function matchReferenceRecordRoute(
   const suffix = domain.routeTemplate.slice(markerIndex + marker.length);
   if (!pathname.startsWith(prefix) || !pathname.endsWith(suffix)) return null;
 
-  const encodedId = pathname.slice(prefix.length, pathname.length - suffix.length);
+  const encodedId = pathname.slice(
+    prefix.length,
+    pathname.length - suffix.length,
+  );
   if (!encodedId || encodedId.includes("/")) return null;
 
   try {
