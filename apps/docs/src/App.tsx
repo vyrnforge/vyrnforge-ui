@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@vyrnforge/ui-components";
+import { matchReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import {
   docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
@@ -13,8 +14,42 @@ import {
 import { getRouteById } from "./docsRegistry";
 import { DocsShell } from "./DocsShell";
 
-function getHashRoute() {
-  return window.location.hash.replace(/^#\/?/, "") || "overview";
+export type ReferenceRecordSelection = {
+  domain: "components" | "packages";
+  id: string;
+};
+
+type DocsLocation = {
+  routeId: string;
+  referenceRecord: ReferenceRecordSelection | null;
+};
+
+function getHashLocation(): DocsLocation {
+  const path = window.location.hash.replace(/^#/, "") || "/overview";
+  const componentId = matchReferenceRecordRoute(
+    referenceModel,
+    "components",
+    path,
+  );
+  if (componentId) {
+    return {
+      routeId: "component-reference",
+      referenceRecord: { domain: "components", id: componentId },
+    };
+  }
+
+  const packageId = matchReferenceRecordRoute(referenceModel, "packages", path);
+  if (packageId) {
+    return {
+      routeId: "package-reference",
+      referenceRecord: { domain: "packages", id: packageId },
+    };
+  }
+
+  return {
+    routeId: path.replace(/^\//, "") || "overview",
+    referenceRecord: null,
+  };
 }
 
 function getFrameworkFromLocation() {
@@ -25,7 +60,7 @@ function getFrameworkFromLocation() {
 }
 
 export default function App() {
-  const [activeRouteId, setActiveRouteId] = useState(getHashRoute);
+  const [docsLocation, setDocsLocation] = useState(getHashLocation);
   const [frameworkId, setFrameworkId] = useState<DocsFrameworkId>(
     getFrameworkFromLocation,
   );
@@ -34,7 +69,7 @@ export default function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    const handleHashChange = () => setActiveRouteId(getHashRoute());
+    const handleHashChange = () => setDocsLocation(getHashLocation());
 
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
@@ -51,8 +86,8 @@ export default function App() {
   }, []);
 
   const activeRoute = useMemo(
-    () => getRouteById(activeRouteId),
-    [activeRouteId],
+    () => getRouteById(docsLocation.routeId),
+    [docsLocation.routeId],
   );
   const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);
   const docsVersion = useMemo(
@@ -62,7 +97,7 @@ export default function App() {
 
   const handleRouteChange = (routeId: string) => {
     window.location.hash = `/${routeId}`;
-    setActiveRouteId(routeId);
+    setDocsLocation({ routeId, referenceRecord: null });
   };
 
   const handleFrameworkChange = (nextFrameworkId: DocsFrameworkId) => {
@@ -98,6 +133,7 @@ export default function App() {
         }
         onFrameworkChange={handleFrameworkChange}
         onRouteChange={handleRouteChange}
+        referenceRecord={docsLocation.referenceRecord}
       />
     </div>
   );
