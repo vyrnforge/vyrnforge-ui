@@ -52,7 +52,10 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
     "packageReferenceRecords",
     "component.contract?.accessibility",
   ]) {
-    assert.match(adapter, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(
+      adapter,
+      new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    );
   }
 
   const routes = read("apps/docs/src/discoveryRoutes.ts");
@@ -92,7 +95,10 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
     'recordHref("components"',
     'recordHref("packages"',
   ]) {
-    assert.match(search, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(
+      search,
+      new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    );
   }
 
   const page = read("apps/docs/src/DiscoveryReferencePage.tsx");
