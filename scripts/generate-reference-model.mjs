@@ -177,11 +177,6 @@ export function buildReferenceModel({ root = repositoryRoot } = {}) {
     navigation,
     domains,
     frameworks,
-    frameworkContext: {
-      default: portal.context.framework.default,
-      queryParameter: portal.context.framework.queryParameter,
-      preserveAcrossSurfaces: portal.context.framework.preserveAcrossSurfaces,
-    },
     versionContext: {
       catalog: portal.versionCatalog,
       selection: portal.context.version.selection,
