@@ -93,13 +93,15 @@ test("rejects hand-written playground maturity status", () =>
     (root) => {
       const file = path.join(
         root,
-        "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
+        "examples/basic-playground/src/pages/reference/GeneratedComponentPage.tsx",
       );
       const content = readFileSync(file, "utf8");
-      writeFileSync(
-        file,
-        content.replace('title="Button"', 'status="stable" title="Button"'),
+      const next = content.replace(
+        'title={component.displayName}',
+        'status="stable" title={component.displayName}',
       );
+      assert.notEqual(next, content, "fixture needs the generated component page");
+      writeFileSync(file, next);
     },
     (failures) =>
       assert(
@@ -138,20 +140,20 @@ test("rejects catalog links that drift from generated detail paths", () =>
     (root) => {
       const file = path.join(
         root,
-        "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
+        "examples/basic-playground/src/app/routes.ts",
       );
       const content = readFileSync(file, "utf8");
       const next = content.replace(
-        "`#/reference/components/${component.id}`",
-        "`#/reference/component/${component.id}`",
+        'getReferenceRecordRoute(referenceModel, "components", id)',
+        'getReferenceRecordRoute(referenceModel, "component", id)',
       );
-      assert.notEqual(next, content, "fixture needs the component detail link");
+      assert.notEqual(next, content, "fixture needs the component detail route");
       writeFileSync(file, next);
     },
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("reference catalog links are missing"),
+          failure.includes("generated component route composition is missing"),
         ),
       ),
   ));
