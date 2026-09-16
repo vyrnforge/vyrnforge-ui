@@ -40,7 +40,7 @@ type ReleaseGroupsMetadata = {
     {
       channel: string;
       version: string;
-    },
+    }
   >;
 };
 
