@@ -60,6 +60,11 @@ test("builds the committed deterministic Reference model", () => {
     model.frameworks.map((framework) => framework.id),
     ["native-html", "react", "angular", "vue"],
   );
+  assert.deepEqual(model.frameworkContext, {
+    default: "react",
+    queryParameter: "framework",
+    preserveAcrossSurfaces: true,
+  });
   assert.deepEqual(verifyReferenceModel(), model);
 });
 
