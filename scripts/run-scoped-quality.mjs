@@ -122,19 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-const rp1706FormattingTargets = [
-  "apps/docs/src/App.tsx",
-  "apps/docs/src/discoveryData.ts",
-  "apps/docs/src/DiscoveryReferencePage.tsx",
-  "apps/docs/src/ReferenceSearchPage.tsx",
-  "scripts/reference-discovery-contract.test.mjs",
-];
-runNpm(["exec", "--", "prettier", "--write", ...rp1706FormattingTargets]);
-execFileSync("git", ["diff", "--", ...rp1706FormattingTargets], {
-  cwd: root,
-  stdio: "inherit",
-});
-
 for (const command of [
   "format:check",
   "lint",

@@ -40,7 +40,11 @@ function getHashLocation(): DocsLocation {
   const path = window.location.hash.replace(/^#/, "") || "/overview";
 
   for (const recordRoute of recordRoutes) {
-    const id = matchReferenceRecordRoute(referenceModel, recordRoute.domain, path);
+    const id = matchReferenceRecordRoute(
+      referenceModel,
+      recordRoute.domain,
+      path,
+    );
     if (id) {
       return {
         routeId: recordRoute.routeId,
@@ -89,7 +93,9 @@ export default function App() {
   }, []);
 
   const activeRoute = useMemo(
-    () => getDiscoveryRouteById(docsLocation.routeId) ?? getRouteById(docsLocation.routeId),
+    () =>
+      getDiscoveryRouteById(docsLocation.routeId) ??
+      getRouteById(docsLocation.routeId),
     [docsLocation.routeId],
   );
   const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);

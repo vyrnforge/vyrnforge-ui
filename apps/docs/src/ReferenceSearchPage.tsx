@@ -47,7 +47,11 @@ function buildSearchEntries(): SearchEntry[] {
     title: entry.name,
     description: entry.purpose,
     domain: "package",
-    keywords: [entry.status, entry.releaseTrack ?? "", ...entry.publicEntryPoints],
+    keywords: [
+      entry.status,
+      entry.releaseTrack ?? "",
+      ...entry.publicEntryPoints,
+    ],
     href: recordHref("packages", entry.name),
   }));
 
@@ -98,7 +102,12 @@ function buildSearchEntries(): SearchEntry[] {
       title: `${framework?.label ?? entry.framework} executable example`,
       description: `Verified consumer fixture ${entry.id} · ${entry.entrypoint}`,
       domain: "example",
-      keywords: [entry.framework, entry.entrypoint, entry.registry, entry.consumerManifest],
+      keywords: [
+        entry.framework,
+        entry.entrypoint,
+        entry.registry,
+        entry.consumerManifest,
+      ],
       href: `${docsLinks.playground}?${query.toString()}#${getReferenceRecordRoute(referenceModel, "examples", entry.id)}`,
     };
   });
@@ -136,7 +145,8 @@ export function ReferenceSearchPage() {
           Search the VyrnForge Reference model
         </Heading>
         <Text tone="muted">
-          This is a derived index only. Results route to the canonical or generated reader that owns each fact.
+          This is a derived index only. Results route to the canonical or
+          generated reader that owns each fact.
         </Text>
         <SearchInput
           aria-label="Search VyrnForge Reference records"
@@ -168,7 +178,10 @@ export function ReferenceSearchPage() {
           <Heading level={3} size="md">
             No reference records found
           </Heading>
-          <Text tone="muted">Try a component, token name, pattern keyword, package, framework, or setup term.</Text>
+          <Text tone="muted">
+            Try a component, token name, pattern keyword, package, framework, or
+            setup term.
+          </Text>
         </Card>
       ) : null}
     </div>
