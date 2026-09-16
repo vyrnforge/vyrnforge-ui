@@ -1,8 +1,13 @@
 import releaseGroupsRaw from "../../../docs/metadata/release-groups.json?raw";
 import multiFrameworkRaw from "../../../docs/metadata/multi-framework.json?raw";
-import referencePortalRaw from "../../../docs/metadata/reference-portal.json?raw";
+import referenceModelRaw from "../../../docs/generated/reference-model.json?raw";
+import {
+  getReferenceFramework,
+  parseReferenceModel,
+  type ReferenceFrameworkId,
+} from "../../../docs/reference/referenceRuntime";
 
-export type DocsFrameworkId = "native-html" | "react" | "angular" | "vue";
+export type DocsFrameworkId = ReferenceFrameworkId;
 
 export type DocsFramework = {
   id: DocsFrameworkId;
@@ -10,7 +15,6 @@ export type DocsFramework = {
   language: string;
   renderer: string;
   supportLevel: string;
-  guidance: string;
 };
 
 export type DocsVersion = {
@@ -48,19 +52,6 @@ type MultiFrameworkMetadata = {
   }>;
 };
 
-type ReferencePortalMetadata = {
-  schemaVersion: number;
-  frameworks: Record<
-    DocsFrameworkId,
-    {
-      label: string;
-      language: string;
-      guidance: string;
-    }
-  >;
-  versionCatalog: string;
-};
-
 type VersionCatalogEntry = {
   id: string;
   releaseLine: string;
@@ -79,19 +70,27 @@ type DocsVersionManifest = {
 
 const releaseGroups = JSON.parse(releaseGroupsRaw) as ReleaseGroupsMetadata;
 const multiFramework = JSON.parse(multiFrameworkRaw) as MultiFrameworkMetadata;
-const referencePortal = JSON.parse(
-  referencePortalRaw,
-) as ReferencePortalMetadata;
 
-if (referencePortal.schemaVersion !== 1) {
-  throw new Error("Unsupported VyrnForge reference portal metadata.");
-}
+export const referenceModel = parseReferenceModel(referenceModelRaw);
 
-export const docsFrameworks: DocsFramework[] = multiFramework.frameworks.map(
-  (framework) => ({
-    ...framework,
-    ...referencePortal.frameworks[framework.id],
-  }),
+export const docsFrameworks: DocsFramework[] = referenceModel.frameworks.map(
+  (framework) => {
+    const support = multiFramework.frameworks.find(
+      (candidate) => candidate.id === framework.id,
+    );
+
+    if (!support) {
+      throw new Error(`Missing framework support metadata for ${framework.id}.`);
+    }
+
+    return {
+      id: framework.id,
+      label: framework.label,
+      language: framework.language,
+      renderer: support.renderer,
+      supportLevel: support.supportLevel,
+    };
+  },
 );
 
 export const releaseLineVersions: ReleaseLineVersion[] = Object.entries(
@@ -162,14 +161,11 @@ export const docsVersions: DocsVersion[] = [
   ...(configuredVersion ? [configuredVersion] : []),
 ];
 
-export const defaultDocsFramework: DocsFrameworkId = "react";
+export const defaultDocsFramework = referenceModel.frameworkContext.default;
 
 export function getFramework(frameworkId: string | null | undefined) {
-  return (
-    docsFrameworks.find((framework) => framework.id === frameworkId) ??
-    docsFrameworks.find((framework) => framework.id === defaultDocsFramework) ??
-    docsFrameworks[0]
-  );
+  const framework = getReferenceFramework(referenceModel, frameworkId);
+  return docsFrameworks.find((candidate) => candidate.id === framework.id)!;
 }
 
 export function getDocsVersion(
@@ -186,13 +182,15 @@ export function getDocsVersion(
 
 export function getCurrentDocsVersionId() {
   const configuredVersionId = import.meta.env.VITE_DOCS_VERSION_ID as
-    string | undefined;
+    | string
+    | undefined;
   return configuredVersionId ?? "next";
 }
 
 export function getRepositoryPagesRoot() {
   const configuredRoot = import.meta.env.VITE_DOCS_ROOT_PATH as
-    string | undefined;
+    | string
+    | undefined;
   if (configuredRoot) {
     return configuredRoot.endsWith("/") ? configuredRoot : `${configuredRoot}/`;
   }
@@ -206,7 +204,7 @@ export function getRepositoryPagesRoot() {
 export async function loadDocsVersions() {
   try {
     const response = await fetch(
-      `${getRepositoryPagesRoot()}${referencePortal.versionCatalog}`,
+      `${getRepositoryPagesRoot()}${referenceModel.versionContext.catalog}`,
       {
         cache: "no-store",
       },
@@ -252,6 +250,8 @@ export function getVersionHref(
   const root = getRepositoryPagesRoot();
   const versionPath =
     version.id === "next" ? "" : version.path.replace(/^\//, "");
-  const query = new URLSearchParams({ framework: frameworkId });
+  const query = new URLSearchParams({
+    [referenceModel.frameworkContext.queryParameter]: frameworkId,
+  });
   return `${root}${versionPath}?${query.toString()}${window.location.hash}`;
 }
