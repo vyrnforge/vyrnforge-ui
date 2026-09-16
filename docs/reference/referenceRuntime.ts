@@ -1,8 +1,4 @@
-export type ReferenceFrameworkId =
-  | "native-html"
-  | "react"
-  | "angular"
-  | "vue";
+export type ReferenceFrameworkId = "native-html" | "react" | "angular" | "vue";
 
 export type ReferenceFramework = {
   id: ReferenceFrameworkId;
@@ -103,8 +99,9 @@ export function parseReferenceModel(raw: string): ReferenceModel {
   }
 
   const defaultFramework =
-    generated.frameworks.find((framework) => framework.apiSurface === "react") ??
-    generated.frameworks[0];
+    generated.frameworks.find(
+      (framework) => framework.apiSurface === "react",
+    ) ?? generated.frameworks[0];
   const queryParameter = generated.frameworks[0]?.contextParameter;
 
   if (!defaultFramework || !queryParameter) {
