@@ -75,9 +75,7 @@ export function DocsPage({
       ) : route.kind === "component-reference" ? (
         <ComponentReferencePage
           componentId={
-            referenceRecord?.domain === "components"
-              ? referenceRecord.id
-              : null
+            referenceRecord?.domain === "components" ? referenceRecord.id : null
           }
           frameworkId={frameworkId}
           onFrameworkChange={onFrameworkChange}
