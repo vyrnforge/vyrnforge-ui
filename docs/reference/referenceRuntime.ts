@@ -134,7 +134,8 @@ export function parseReferenceModel(raw: string): ReferenceModel {
     generated.examples.length !== frameworkIds.length ||
     !frameworkIds.every((id) =>
       generated.examples.some(
-        (example) => example.framework === id && example.id && example.entrypoint,
+        (example) =>
+          example.framework === id && example.id && example.entrypoint,
       ),
     )
   ) {
@@ -203,9 +204,7 @@ export function getReferenceExample(
     (candidate) => candidate.framework === frameworkId,
   );
   if (!example) {
-    throw new Error(
-      `Missing VyrnForge Reference example for ${frameworkId}.`,
-    );
+    throw new Error(`Missing VyrnForge Reference example for ${frameworkId}.`);
   }
   return example;
 }
