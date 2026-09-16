@@ -30,6 +30,34 @@ repository facts and current evidence records.
 - `state-contracts.json` owns shared state and adapter boundaries.
 - `css-imports.json` owns CSS import order and styling ownership.
 
+## Generated Reference projection
+
+`docs/generated/reference-model.json` is the deterministic shared registry for
+VyrnForge Reference. It composes the product/navigation contract from
+`reference-portal.json` with the existing generated consumer knowledge,
+framework API reference, package/token/pattern metadata, executable-example
+registry, and packed-consumer manifest.
+
+The generated model owns no new component props, token values, package facts, or
+framework behavior. Instead, it records the authoritative source and collection
+for each content domain, normalized framework/version context, semantic example
+identities, derived search-domain records, and stable deep-link templates. This
+lets Docs and Playground converge on one render model without copying detailed
+API truth into another hand-maintained registry.
+
+Regenerate it with:
+
+```bash
+node scripts/generate-reference-model.mjs
+```
+
+Verify drift with:
+
+```bash
+node scripts/generate-reference-model.mjs --check
+npm run test:contracts
+```
+
 ## Consumer and framework evidence
 
 - `consumer-foundations.json` indexes current packed Native HTML, React,
