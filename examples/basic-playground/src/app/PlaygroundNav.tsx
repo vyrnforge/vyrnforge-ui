@@ -94,21 +94,23 @@ export function PlaygroundNav({
         ];
       }
 
-      const groupedItems = componentSubgroups.flatMap<SideNavItem>((subgroup) => {
-        const subgroupRoutes = sectionRoutes.filter(
-          (route) => route.subgroup === subgroup,
-        );
-        return subgroupRoutes.length === 0
-          ? []
-          : [
-              {
-                id: `group-${subgroup.toLowerCase().replace(/ /gu, "-")}`,
-                label: subgroup,
-                disabled: true,
-                children: subgroupRoutes.map(toNavItem),
-              },
-            ];
-      });
+      const groupedItems = componentSubgroups.flatMap<SideNavItem>(
+        (subgroup) => {
+          const subgroupRoutes = sectionRoutes.filter(
+            (route) => route.subgroup === subgroup,
+          );
+          return subgroupRoutes.length === 0
+            ? []
+            : [
+                {
+                  id: `group-${subgroup.toLowerCase().replace(/ /gu, "-")}`,
+                  label: subgroup,
+                  disabled: true,
+                  children: subgroupRoutes.map(toNavItem),
+                },
+              ];
+        },
+      );
       const advancedRoutes = sectionRoutes.filter(
         (route) => route.group === "Advanced Modules",
       );
