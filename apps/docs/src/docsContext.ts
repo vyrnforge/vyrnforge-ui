@@ -165,7 +165,9 @@ export const defaultDocsFramework = referenceModel.frameworkContext.default;
 
 export function getFramework(frameworkId: string | null | undefined) {
   const framework = getReferenceFramework(referenceModel, frameworkId);
-  return docsFrameworks.find((candidate) => candidate.id === framework.id)!;
+  return docsFrameworks.find(
+    (candidate) => candidate.id === framework.id,
+  )!;
 }
 
 export function getDocsVersion(
