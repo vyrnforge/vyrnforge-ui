@@ -122,6 +122,27 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+const formattingTargets = [
+  "apps/docs/src/ComponentReferencePage.tsx",
+  "apps/docs/src/DocsPage.tsx",
+  "apps/docs/src/PackageReferencePage.tsx",
+  "apps/docs/src/referenceData.ts",
+  "docs/reference/referenceRuntime.ts",
+  "scripts/reference-pages-contract.test.mjs",
+];
+execFileSync(path.join(root, "node_modules", ".bin", "prettier"), [
+  "--write",
+  ...formattingTargets,
+], {
+  cwd: root,
+  stdio: "inherit",
+});
+execFileSync("git", ["diff", "--", ...formattingTargets], {
+  cwd: root,
+  stdio: "inherit",
+});
+process.exit(1);
+
 for (const command of [
   "format:check",
   "lint",
