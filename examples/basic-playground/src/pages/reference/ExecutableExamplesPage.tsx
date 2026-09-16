@@ -21,14 +21,21 @@ export type ExecutableExamplesPageProps = {
   frameworkId?: ExecutableExampleFrameworkId;
 };
 
-function exampleHref(frameworkId: ExecutableExampleFrameworkId, fixtureId: string) {
+function exampleHref(
+  frameworkId: ExecutableExampleFrameworkId,
+  fixtureId: string,
+) {
   const query = new URLSearchParams(window.location.search);
   query.set(referenceModel.frameworkContext.queryParameter, frameworkId);
   const route = getReferenceRecordRoute(referenceModel, "examples", fixtureId);
   return `${window.location.pathname}?${query.toString()}#${route}`;
 }
 
-function ExampleEvidence({ frameworkId }: { frameworkId: ExecutableExampleFrameworkId }) {
+function ExampleEvidence({
+  frameworkId,
+}: {
+  frameworkId: ExecutableExampleFrameworkId;
+}) {
   const example = getExecutableExampleRecord(frameworkId);
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
@@ -39,7 +46,9 @@ function ExampleEvidence({ frameworkId }: { frameworkId: ExecutableExampleFramew
       : typeof example.fixtureContract.runtime === "string"
         ? example.fixtureContract.runtime
         : "Verified packed consumer runtime";
-  const rendererPackages = Array.isArray(example.fixtureContract.rendererPackages)
+  const rendererPackages = Array.isArray(
+    example.fixtureContract.rendererPackages,
+  )
     ? example.fixtureContract.rendererPackages.filter(
         (value): value is string => typeof value === "string",
       )
@@ -84,7 +93,8 @@ function ExampleEvidence({ frameworkId }: { frameworkId: ExecutableExampleFramew
         <Panel title="Verified fixture identity">
           <div className="vf-playground-reference-meta">
             <Text>
-              Framework: <CodeText>{framework?.label ?? example.frameworkLabel}</CodeText>
+              Framework:{" "}
+              <CodeText>{framework?.label ?? example.frameworkLabel}</CodeText>
             </Text>
             <Text>
               Runtime: <CodeText>{runtime}</CodeText>
@@ -168,7 +178,8 @@ export function ExecutableExamplesPage({
           source, fixture contract, and runtime evidence used by CI.
         </Text>
         <Text size="sm" tone="muted">
-          Canonical example registry: <CodeText>{executableExampleSourceOfTruth}</CodeText>
+          Canonical example registry:{" "}
+          <CodeText>{executableExampleSourceOfTruth}</CodeText>
         </Text>
       </Card>
 
