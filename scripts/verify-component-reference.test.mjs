@@ -100,7 +100,11 @@ test("rejects hand-written playground maturity status", () =>
         'title={component.displayName}',
         'status="stable" title={component.displayName}',
       );
-      assert.notEqual(next, content, "fixture needs the generated component page");
+      assert.notEqual(
+        next,
+        content,
+        "fixture needs the generated component page",
+      );
       writeFileSync(file, next);
     },
     (failures) =>
@@ -147,7 +151,11 @@ test("rejects catalog links that drift from generated detail paths", () =>
         'getReferenceRecordRoute(referenceModel, "components", id)',
         'getReferenceRecordRoute(referenceModel, "component", id)',
       );
-      assert.notEqual(next, content, "fixture needs the component detail route");
+      assert.notEqual(
+        next,
+        content,
+        "fixture needs the component detail route",
+      );
       writeFileSync(file, next);
     },
     (failures) =>
