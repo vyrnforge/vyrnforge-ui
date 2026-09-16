@@ -79,7 +79,9 @@ const fixtureSource = {
   "native-html": {
     path: "tests/consumers/native-html/src/main.ts",
     source: nativeHtmlSource,
-    fixtureContract: JSON.parse(nativeHtmlFixtureRaw) as ConsumerFixtureContract,
+    fixtureContract: JSON.parse(
+      nativeHtmlFixtureRaw,
+    ) as ConsumerFixtureContract,
   },
   react: {
     path: "tests/consumers/react/src/main.tsx",
