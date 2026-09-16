@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@vyrnforge/ui-components";
 import {
-  defaultDocsFramework,
   docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
   getDocsVersion,
   getFramework,
   loadDocsVersions,
+  referenceModel,
   type DocsFrameworkId,
   type DocsVersion,
 } from "./docsContext";
@@ -18,11 +18,10 @@ function getHashRoute() {
 }
 
 function getFrameworkFromLocation() {
-  return (
-    (new URLSearchParams(window.location.search).get(
-      "framework",
-    ) as DocsFrameworkId | null) ?? defaultDocsFramework
+  const framework = new URLSearchParams(window.location.search).get(
+    referenceModel.frameworkContext.queryParameter,
   );
+  return getFramework(framework).id;
 }
 
 export default function App() {
@@ -68,7 +67,7 @@ export default function App() {
 
   const handleFrameworkChange = (nextFrameworkId: DocsFrameworkId) => {
     const query = new URLSearchParams(window.location.search);
-    query.set("framework", nextFrameworkId);
+    query.set(referenceModel.frameworkContext.queryParameter, nextFrameworkId);
     window.history.replaceState(
       null,
       "",
