@@ -1,6 +1,9 @@
 import { getReferenceRecordRoute } from "../../../../docs/reference/referenceRuntime";
 import { ExecutableExamplesPage } from "../pages/reference/ExecutableExamplesPage";
-import { referenceModel, type PlaygroundFrameworkId } from "./playgroundContext";
+import {
+  referenceModel,
+  type PlaygroundFrameworkId,
+} from "./playgroundContext";
 import type { PlaygroundRoute } from "./routes";
 
 export type ExecutableExampleRoute = PlaygroundRoute & {
