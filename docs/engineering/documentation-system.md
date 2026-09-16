@@ -29,16 +29,16 @@ The current Docs and Playground applications may use React internally. React is 
 
 Reference content follows these ownership rules:
 
-| Domain | Canonical ownership | Reference behavior |
-| --- | --- | --- |
-| Guides | Current Markdown under `docs/` | Curated explanation and recommendations; link to structured facts rather than copying them. |
-| Components | `docs/metadata/components.json`, `docs/metadata/component-contracts.json`, and multi-framework metadata | Generated catalog/API facts with curated usage guidance layered on top. |
-| Packages | `docs/metadata/packages.json`, release metadata, package manifests, and verified public entrypoints | Generated package/setup facts; no application-owned package map. |
-| Tokens | `docs/metadata/design-tokens.json` and shared `ui-core` token/theme/density styles | Generated token facts and examples; reference surfaces do not own token values. |
-| Patterns | `docs/metadata/patterns.json` plus curated workflow guidance | Canonical pattern identity with authored explanation where useful. |
-| Examples | `docs/metadata/executable-examples.json`, `tests/consumers/manifest.json`, and authored example implementations | Shared semantic example identities with framework-specific executable implementations and verification. |
-| Accessibility | Shared component contracts, accessibility evidence metadata, and curated guidance | Shared keyboard/accessibility behavior with evidence and explanation; no framework-specific fork of the contract. |
-| Search | Derived from generated reference records and curated text | Search owns no API, package, token, framework, version, or release facts. |
+| Domain        | Canonical ownership                                                                                             | Reference behavior                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Guides        | Current Markdown under `docs/`                                                                                  | Curated explanation and recommendations; link to structured facts rather than copying them.                       |
+| Components    | `docs/metadata/components.json`, `docs/metadata/component-contracts.json`, and multi-framework metadata         | Generated catalog/API facts with curated usage guidance layered on top.                                           |
+| Packages      | `docs/metadata/packages.json`, release metadata, package manifests, and verified public entrypoints             | Generated package/setup facts; no application-owned package map.                                                  |
+| Tokens        | `docs/metadata/design-tokens.json` and shared `ui-core` token/theme/density styles                              | Generated token facts and examples; reference surfaces do not own token values.                                   |
+| Patterns      | `docs/metadata/patterns.json` plus curated workflow guidance                                                    | Canonical pattern identity with authored explanation where useful.                                                |
+| Examples      | `docs/metadata/executable-examples.json`, `tests/consumers/manifest.json`, and authored example implementations | Shared semantic example identities with framework-specific executable implementations and verification.           |
+| Accessibility | Shared component contracts, accessibility evidence metadata, and curated guidance                              | Shared keyboard/accessibility behavior with evidence and explanation; no framework-specific fork of the contract. |
+| Search        | Derived from generated reference records and curated text                                                       | Search owns no API, package, token, framework, version, or release facts.                                         |
 
 Generated component facts already exist in `docs/generated/consumer-knowledge.json` and `docs/generated/framework-api-reference.json`. Future Reference generation should compose canonical sources into a shared reference model rather than introduce a new hand-maintained API authority.
 
