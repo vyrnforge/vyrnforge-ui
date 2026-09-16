@@ -306,7 +306,10 @@ export function verifyDeveloperDeliveryFoundation({
   }
   for (const [relativePath, context] of [
     ["apps/docs/src/docsContext.ts", docsContext],
-    ["examples/basic-playground/src/app/playgroundContext.ts", playgroundContext],
+    [
+      "examples/basic-playground/src/app/playgroundContext.ts",
+      playgroundContext,
+    ],
   ]) {
     requireMarkers(
       context,
