@@ -62,12 +62,12 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
     "pattern-reference",
     "accessibility-reference",
   ]) {
-    assert.match(routes, new RegExp(`id: \\"${routeId}\\"`));
+    assert(routes.includes(`id: "${routeId}"`));
   }
 
   const app = read("apps/docs/src/App.tsx");
   for (const domainId of ["tokens", "patterns", "accessibility"]) {
-    assert.match(app, new RegExp(`domain: \\"${domainId}\\"`));
+    assert(app.includes(`domain: "${domainId}"`));
   }
   assert.match(app, /matchReferenceRecordRoute/);
   assert.match(app, /getDiscoveryRouteById/);
