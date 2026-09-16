@@ -72,6 +72,21 @@
   gap: var(--vf-space-2);
 }
 
+.vf-playground-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--vf-space-4);
+}
+
+.vf-playground-reference-meta {
+  display: grid;
+  gap: var(--vf-space-2);
+}
+
+.vf-playground-reference-content > * + * {
+  margin-top: var(--vf-space-4);
+}
+
 @media (max-width: 1180px) {
   .vf-playground-top-controls .vf-segmented-control {
     display: none;

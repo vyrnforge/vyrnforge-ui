@@ -1,4 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
+import {
+  executableExampleDetailRoutes,
+  executableExamplesCatalogRoute,
+  getExecutableExampleRouteForFramework,
+  type ExecutableExampleRoute,
+} from "./executableExampleRoutes";
 import { PlaygroundFrameworkProvider } from "./PlaygroundFrameworkContext";
 import { PlaygroundShell } from "./PlaygroundShell";
 import {
@@ -17,12 +23,17 @@ import {
 } from "./referenceCatalogRoutes";
 import { routes as baseRoutes } from "./routes";
 
-const navigationRoutes = [
+const navigationRoutes: ExecutableExampleRoute[] = [
   baseRoutes[0],
   ...referenceCatalogRoutes,
+  executableExamplesCatalogRoute,
   ...baseRoutes.slice(1),
 ];
-const routes = [...navigationRoutes, ...referenceDetailRoutes];
+const routes: ExecutableExampleRoute[] = [
+  ...navigationRoutes,
+  ...referenceDetailRoutes,
+  ...executableExampleDetailRoutes,
+];
 
 function normalizeHashRoute(hash: string) {
   return hash.replace(/^#\/?/, "").replace(/^\/+/, "");
@@ -79,6 +90,21 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
+  useEffect(() => {
+    if (
+      !activeRoute.exampleFrameworkId ||
+      activeRoute.exampleFrameworkId === frameworkId
+    ) {
+      return;
+    }
+
+    const matchingRoute = getExecutableExampleRouteForFramework(frameworkId);
+    if (matchingRoute?.path) {
+      window.location.hash = matchingRoute.path;
+      setActiveRouteId(matchingRoute.id);
+    }
+  }, [activeRoute.exampleFrameworkId, frameworkId]);
+
   const changeRoute = (routeId: string) => {
     if (routeId === activeRouteId) {
       return;
@@ -98,6 +124,15 @@ export default function App() {
       `${window.location.pathname}?${query.toString()}${window.location.hash}`,
     );
     setFrameworkId(nextFrameworkId);
+
+    if (activeRoute.exampleFrameworkId) {
+      const matchingRoute =
+        getExecutableExampleRouteForFramework(nextFrameworkId);
+      if (matchingRoute?.path) {
+        window.location.hash = matchingRoute.path;
+        setActiveRouteId(matchingRoute.id);
+      }
+    }
   };
 
   const changeVersion = (nextVersionId: string) => {

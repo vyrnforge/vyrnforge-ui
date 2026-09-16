@@ -29,6 +29,11 @@ const routeSection: Record<
   Internal: null,
 };
 
+function getRouteSection(route: PlaygroundRoute) {
+  if (route.id === "executable-examples") return "examples";
+  return routeSection[route.group];
+}
+
 const componentSubgroups = [
   "Actions",
   "Forms",
@@ -79,7 +84,7 @@ export function PlaygroundNav({
   const items = getReferenceNavigation(referenceModel).flatMap<SideNavItem>(
     (section) => {
       const sectionRoutes = visibleRoutes.filter(
-        (route) => routeSection[route.group] === section.id,
+        (route) => getRouteSection(route) === section.id,
       );
       if (sectionRoutes.length === 0) return [];
 
