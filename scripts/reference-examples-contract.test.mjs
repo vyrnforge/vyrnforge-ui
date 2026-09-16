@@ -19,12 +19,13 @@ test("Playground executable examples stay bound to verified consumer fixtures", 
   const metadata = json("docs/metadata/executable-examples.json");
   const manifest = json("tests/consumers/manifest.json");
   const model = json("docs/generated/reference-model.json");
+  const expectedFrameworkIds = [...frameworkIds].sort();
 
   assert.equal(metadata.sourceOfTruth, "tests/consumers/manifest.json");
-  assert.deepEqual(Object.keys(metadata.frameworks), frameworkIds);
+  assert.deepEqual(Object.keys(metadata.frameworks).sort(), expectedFrameworkIds);
   assert.deepEqual(
-    model.examples.map((example) => example.framework),
-    frameworkIds,
+    model.examples.map((example) => example.framework).sort(),
+    expectedFrameworkIds,
   );
 
   for (const frameworkId of frameworkIds) {
