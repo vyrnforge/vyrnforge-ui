@@ -149,7 +149,9 @@ const canonicalComponentById = new Map(
 const componentRoutes: PlaygroundRoute[] = componentDemoIds.map((id) => {
   const component = canonicalComponentById.get(id);
   if (!component) {
-    throw new Error(`Playground route has no canonical component record: ${id}`);
+    throw new Error(
+      `Playground route has no canonical component record: ${id}`,
+    );
   }
   if (component.package !== "@vyrnforge/ui-components") {
     throw new Error(
