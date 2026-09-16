@@ -403,9 +403,5 @@
       "search": "/search"
     }
   },
-  "transitionalRegistries": [
-    "apps/docs/src/docsRegistry.ts",
-    "examples/basic-playground/src/app/routes.ts",
-    "examples/basic-playground/src/app/referenceCatalogRoutes.ts"
-  ]
+  "transitionalRegistries": []
 }
