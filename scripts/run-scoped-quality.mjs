@@ -122,6 +122,13 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+const rp1707FormattingTarget = "scripts/verify-component-reference.test.mjs";
+runNpm(["exec", "--", "prettier", "--write", rp1707FormattingTarget]);
+execFileSync("git", ["diff", "--", rp1707FormattingTarget], {
+  cwd: root,
+  stdio: "inherit",
+});
+
 for (const command of [
   "format:check",
   "lint",
