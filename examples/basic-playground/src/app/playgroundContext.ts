@@ -56,7 +56,9 @@ export const playgroundFrameworks: PlaygroundFramework[] =
     );
 
     if (!support) {
-      throw new Error(`Missing framework support metadata for ${framework.id}.`);
+      throw new Error(
+        `Missing framework support metadata for ${framework.id}.`,
+      );
     }
 
     return {
