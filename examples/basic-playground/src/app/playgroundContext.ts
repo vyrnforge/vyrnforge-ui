@@ -97,7 +97,9 @@ export function getPlaygroundFramework(
   frameworkId: string | null | undefined,
 ) {
   const framework = getReferenceFramework(referenceModel, frameworkId);
-  return playgroundFrameworks.find((candidate) => candidate.id === framework.id)!;
+  return playgroundFrameworks.find(
+    (candidate) => candidate.id === framework.id,
+  )!;
 }
 
 export async function loadPlaygroundVersions(): Promise<PlaygroundVersion[]> {
