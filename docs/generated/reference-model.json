@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 1,
+  "product": {
+    "id": "vyrnforge-reference",
+    "label": "VyrnForge Reference",
+    "semanticOwnership": "framework-neutral",
+    "implementationHost": "react"
+  },
+  "generatedFrom": [
+    "docs/metadata/reference-portal.json",
+    "docs/generated/consumer-knowledge.json",
+    "docs/generated/framework-api-reference.json",
+    "docs/metadata/packages.json",
+    "docs/metadata/design-tokens.json",
+    "docs/metadata/patterns.json",
+    "docs/metadata/executable-examples.json",
+    "tests/consumers/manifest.json"
+  ],
+  "navigation": [
+    {
+      "id": "start",
+      "label": "Start",
+      "order": 0,
+      "contentDomains": [
+        "guides",
+        "packages"
+      ]
+    },
+    {
+      "id": "components",
+      "label": "Components",
+      "order": 1,
+      "contentDomains": [
+        "components",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "foundations",
+      "label": "Foundations",
+      "order": 2,
+      "contentDomains": [
+        "tokens",
+        "patterns"
+      ]
+    },
+    {
+      "id": "examples",
+      "label": "Examples",
+      "order": 3,
+      "contentDomains": [
+        "examples"
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "id": "guides",
+      "mode": "curated",
+      "canonicalSources": [
+        "docs/**/*.md"
+      ],
+      "generatedSources": [],
+      "ownsFacts": true,
+      "routeTemplate": "/guides/{id}",
+      "recordSource": null
+    },
+    {
+      "id": "components",
+      "mode": "generated-facts-plus-curated-guidance",
+      "canonicalSources": [
+        "docs/metadata/components.json",
+        "docs/metadata/component-contracts.json",
+        "docs/metadata/multi-framework.json"
+      ],
+      "generatedSources": [
+        "docs/generated/consumer-knowledge.json",
+        "docs/generated/framework-api-reference.json"
+      ],
+      "ownsFacts": true,
+      "routeTemplate": "/components/{id}",
+      "recordSource": {
+        "path": "docs/generated/consumer-knowledge.json",
+        "collection": "components",
+        "identityField": "id",
+        "labelField": "name"
+      }
+    },
+    {
+      "id": "packages",
+      "mode": "canonical-metadata-plus-manifests",
+      "canonicalSources": [
+        "docs/metadata/packages.json",
+        "docs/metadata/release-groups.json",
+        "packages/*/package.json"
+      ],
+      "generatedSources": [],
+      "ownsFacts": true,
+      "routeTemplate": "/packages/{id}",
+      "recordSource": {
+        "path": "docs/generated/consumer-knowledge.json",
+        "collection": "packages",
+        "identityField": "name",
+        "labelField": "name"
+      }
+    },
+    {
+      "id": "tokens",
+      "mode": "canonical-metadata-plus-runtime-styles",
+      "canonicalSources": [
+        "docs/metadata/design-tokens.json",
+        "packages/ui-core/src/styles/tokens.css",
+        "packages/ui-core/src/styles/themes.css",
+        "packages/ui-core/src/styles/density.css"
+      ],
+      "generatedSources": [],
+      "ownsFacts": true,
+      "routeTemplate": "/tokens/{id}",
+      "recordSource": {
+        "path": "docs/metadata/design-tokens.json",
+        "collection": "categories",
+        "identityField": "id",
+        "labelField": "id"
+      }
+    },
+    {
+      "id": "patterns",
+      "mode": "canonical-metadata-plus-curated-guidance",
+      "canonicalSources": [
+        "docs/metadata/patterns.json"
+      ],
+      "generatedSources": [],
+      "ownsFacts": true,
+      "routeTemplate": "/patterns/{id}",
+      "recordSource": {
+        "path": "docs/generated/consumer-knowledge.json",
+        "collection": "patterns",
+        "identityField": "id",
+        "labelField": "displayName"
+      }
+    },
+    {
+      "id": "examples",
+      "mode": "registry-backed-executable",
+      "canonicalSources": [
+        "docs/metadata/executable-examples.json",
+        "tests/consumers/manifest.json"
+      ],
+      "generatedSources": [],
+      "ownsFacts": true,
+      "routeTemplate": "/examples/{id}",
+      "recordSource": {
+        "path": "docs/metadata/executable-examples.json",
+        "collection": "frameworks",
+        "identityField": "fixtureId",
+        "labelField": "fixtureId"
+      }
+    },
+    {
+      "id": "accessibility",
+      "mode": "contract-plus-evidence-plus-curated-guidance",
+      "canonicalSources": [
+        "docs/metadata/component-contracts.json",
+        "docs/metadata/assistive-technology-reviews.json",
+        "docs/metadata/cross-framework-accessibility-review.json"
+      ],
+      "generatedSources": [],
+      "ownsFacts": true,
+      "routeTemplate": "/accessibility/{id}",
+      "recordSource": {
+        "path": "docs/generated/consumer-knowledge.json",
+        "collection": "components",
+        "identityField": "id",
+        "labelField": "name",
+        "projection": "accessibility"
+      }
+    },
+    {
+      "id": "search",
+      "mode": "derived-index",
+      "canonicalSources": [],
+      "generatedSources": [],
+      "ownsFacts": false,
+      "routeTemplate": "/search",
+      "recordSource": null
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "native-html",
+      "label": "Native HTML",
+      "language": "HTML / JavaScript",
+      "apiSurface": "native",
+      "apiSource": "docs/generated/framework-api-reference.json",
+      "exampleFixture": "native-html",
+      "exampleEntrypoint": "src/main.ts",
+      "contextParameter": "framework"
+    },
+    {
+      "id": "react",
+      "label": "React",
+      "language": "TypeScript / JSX",
+      "apiSurface": "react",
+      "apiSource": "docs/generated/framework-api-reference.json",
+      "exampleFixture": "react",
+      "exampleEntrypoint": "src/main.tsx",
+      "contextParameter": "framework"
+    },
+    {
+      "id": "angular",
+      "label": "Angular",
+      "language": "TypeScript / Templates",
+      "apiSurface": "angular",
+      "apiSource": "docs/generated/framework-api-reference.json",
+      "exampleFixture": "angular",
+      "exampleEntrypoint": "src/app/app.component.html",
+      "contextParameter": "framework"
+    },
+    {
+      "id": "vue",
+      "label": "Vue",
+      "language": "TypeScript / SFC",
+      "apiSurface": "vue",
+      "apiSource": "docs/generated/framework-api-reference.json",
+      "exampleFixture": "vue",
+      "exampleEntrypoint": "src/App.vue",
+      "contextParameter": "framework"
+    }
+  ],
+  "versionContext": {
+    "catalog": "vyrnforge-versions.json",
+    "selection": "path",
+    "preserveFrameworkContext": true
+  },
+  "apiFacts": {
+    "authority": "docs/generated/framework-api-reference.json",
+    "canonicalAuthority": "docs/metadata/component-contracts.json",
+    "surfaces": [
+      {
+        "id": "native-html",
+        "apiSurface": "native"
+      },
+      {
+        "id": "react",
+        "apiSurface": "react"
+      },
+      {
+        "id": "angular",
+        "apiSurface": "angular"
+      },
+      {
+        "id": "vue",
+        "apiSurface": "vue"
+      }
+    ]
+  },
+  "tokenData": {
+    "authority": "docs/metadata/design-tokens.json",
+    "runtimeStyles": [
+      "packages/ui-core/src/styles/tokens.css",
+      "packages/ui-core/src/styles/themes.css",
+      "packages/ui-core/src/styles/density.css"
+    ]
+  },
+  "examples": [
+    {
+      "id": "native-html",
+      "framework": "native-html",
+      "entrypoint": "src/main.ts",
+      "registry": "docs/metadata/executable-examples.json",
+      "consumerManifest": "tests/consumers/manifest.json"
+    },
+    {
+      "id": "react",
+      "framework": "react",
+      "entrypoint": "src/main.tsx",
+      "registry": "docs/metadata/executable-examples.json",
+      "consumerManifest": "tests/consumers/manifest.json"
+    },
+    {
+      "id": "angular",
+      "framework": "angular",
+      "entrypoint": "src/app/app.component.html",
+      "registry": "docs/metadata/executable-examples.json",
+      "consumerManifest": "tests/consumers/manifest.json"
+    },
+    {
+      "id": "vue",
+      "framework": "vue",
+      "entrypoint": "src/App.vue",
+      "registry": "docs/metadata/executable-examples.json",
+      "consumerManifest": "tests/consumers/manifest.json"
+    }
+  ],
+  "search": {
+    "ownsFacts": false,
+    "records": [
+      {
+        "id": "domain:guides",
+        "kind": "domain",
+        "domain": "guides",
+        "label": "Start",
+        "routeTemplate": "/guides/{id}",
+        "recordSource": null
+      },
+      {
+        "id": "domain:components",
+        "kind": "domain",
+        "domain": "components",
+        "label": "Components",
+        "routeTemplate": "/components/{id}",
+        "recordSource": {
+          "path": "docs/generated/consumer-knowledge.json",
+          "collection": "components",
+          "identityField": "id",
+          "labelField": "name"
+        }
+      },
+      {
+        "id": "domain:packages",
+        "kind": "domain",
+        "domain": "packages",
+        "label": "Start",
+        "routeTemplate": "/packages/{id}",
+        "recordSource": {
+          "path": "docs/generated/consumer-knowledge.json",
+          "collection": "packages",
+          "identityField": "name",
+          "labelField": "name"
+        }
+      },
+      {
+        "id": "domain:tokens",
+        "kind": "domain",
+        "domain": "tokens",
+        "label": "Foundations",
+        "routeTemplate": "/tokens/{id}",
+        "recordSource": {
+          "path": "docs/metadata/design-tokens.json",
+          "collection": "categories",
+          "identityField": "id",
+          "labelField": "id"
+        }
+      },
+      {
+        "id": "domain:patterns",
+        "kind": "domain",
+        "domain": "patterns",
+        "label": "Foundations",
+        "routeTemplate": "/patterns/{id}",
+        "recordSource": {
+          "path": "docs/generated/consumer-knowledge.json",
+          "collection": "patterns",
+          "identityField": "id",
+          "labelField": "displayName"
+        }
+      },
+      {
+        "id": "domain:examples",
+        "kind": "domain",
+        "domain": "examples",
+        "label": "Examples",
+        "routeTemplate": "/examples/{id}",
+        "recordSource": {
+          "path": "docs/metadata/executable-examples.json",
+          "collection": "frameworks",
+          "identityField": "fixtureId",
+          "labelField": "fixtureId"
+        }
+      },
+      {
+        "id": "domain:accessibility",
+        "kind": "domain",
+        "domain": "accessibility",
+        "label": "Components",
+        "routeTemplate": "/accessibility/{id}",
+        "recordSource": {
+          "path": "docs/generated/consumer-knowledge.json",
+          "collection": "components",
+          "identityField": "id",
+          "labelField": "name",
+          "projection": "accessibility"
+        }
+      }
+    ]
+  },
+  "deepLinks": {
+    "transport": "hash",
+    "identity": "stable-id",
+    "stable": true,
+    "preserveContext": [
+      "framework",
+      "version"
+    ],
+    "templates": {
+      "guides": "/guides/{id}",
+      "components": "/components/{id}",
+      "packages": "/packages/{id}",
+      "tokens": "/tokens/{id}",
+      "patterns": "/patterns/{id}",
+      "examples": "/examples/{id}",
+      "accessibility": "/accessibility/{id}",
+      "search": "/search"
+    }
+  },
+  "transitionalRegistries": [
+    "apps/docs/src/docsRegistry.ts",
+    "examples/basic-playground/src/app/routes.ts",
+    "examples/basic-playground/src/app/referenceCatalogRoutes.ts"
+  ]
+}
