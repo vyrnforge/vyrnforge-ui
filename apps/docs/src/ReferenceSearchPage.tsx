@@ -8,8 +8,6 @@ import {
 } from "@vyrnforge/ui-components";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
-import { docsRoutes } from "./docsRegistry";
-import { discoveryRoutes } from "./discoveryRoutes";
 import {
   accessibilityReferenceRecords,
   designTokenCategories,
@@ -18,6 +16,7 @@ import {
   patternReferenceRecords,
 } from "./discoveryData";
 import { docsLinks } from "./deploymentLinks";
+import { docsRoutes } from "./referenceRoutes";
 
 type SearchEntry = {
   id: string;
@@ -33,7 +32,7 @@ function recordHref(domain: string, id: string) {
 }
 
 function buildSearchEntries(): SearchEntry[] {
-  const routes = [...docsRoutes, ...discoveryRoutes].map((route) => ({
+  const routes = docsRoutes.map((route) => ({
     id: `guide:${route.id}`,
     title: route.title,
     description: route.description ?? route.sourcePath,
@@ -47,11 +46,7 @@ function buildSearchEntries(): SearchEntry[] {
     title: entry.name,
     description: entry.purpose,
     domain: "package",
-    keywords: [
-      entry.status,
-      entry.releaseTrack ?? "",
-      ...entry.publicEntryPoints,
-    ],
+    keywords: [entry.status, entry.releaseTrack ?? "", ...entry.publicEntryPoints],
     href: recordHref("packages", entry.name),
   }));
 
@@ -179,8 +174,8 @@ export function ReferenceSearchPage() {
             No reference records found
           </Heading>
           <Text tone="muted">
-            Try a component, token name, pattern keyword, package, framework, or
-            setup term.
+            Try a component, token name, pattern keyword, package, framework,
+            or setup term.
           </Text>
         </Card>
       ) : null}
