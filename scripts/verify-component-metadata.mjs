@@ -80,13 +80,47 @@ function rootExports(root, relativePath) {
 }
 
 function playgroundRoutes(root) {
-  const source = readFileSync(
+  const routeSource = readFileSync(
     path.join(root, "examples/basic-playground/src/app/routes.ts"),
     "utf8",
   );
-  return new Set(
-    [...source.matchAll(/\bpath:\s+"([^"]+)"/g)].map((match) => match[1]),
+  const appSource = readFileSync(
+    path.join(root, "examples/basic-playground/src/app/App.tsx"),
+    "utf8",
   );
+  const routes = new Set(
+    [...routeSource.matchAll(/\bpath:\s+"([^"]+)"/g)].map(
+      (match) => match[1],
+    ),
+  );
+
+  const componentIdsSource = routeSource.match(
+    /const componentDemoIds = \[([\s\S]*?)\] as const;/,
+  )?.[1];
+  const componentRouteIds = new Set(
+    [...(componentIdsSource?.matchAll(/"([a-z0-9]+(?:-[a-z0-9]+)*)"/g) ?? [])].map(
+      (match) => match[1],
+    ),
+  );
+  const hasCanonicalAliasResolver =
+    appSource.includes("components.json?raw") &&
+    appSource.includes("componentRouteAliases") &&
+    appSource.includes("aliasRouteId");
+
+  if (hasCanonicalAliasResolver) {
+    const canonicalCatalog = readJson(root, "docs/metadata/components.json");
+    for (const component of canonicalCatalog.components ?? []) {
+      if (
+        componentRouteIds.has(component.id) &&
+        typeof component.playgroundPath === "string" &&
+        !isUnresolved(component.playgroundPath)
+      ) {
+        routes.add(component.playgroundPath);
+      }
+    }
+  }
+
+  return routes;
 }
 
 function isUnresolved(value) {
