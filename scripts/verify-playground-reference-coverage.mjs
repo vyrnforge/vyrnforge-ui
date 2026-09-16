@@ -102,10 +102,7 @@ export function verifyPlaygroundReferenceCoverage({
     failures.push("generated component route template is not /components/{id}");
   }
 
-  const routeSource = read(
-    root,
-    "examples/basic-playground/src/app/routes.ts",
-  );
+  const routeSource = read(root, "examples/basic-playground/src/app/routes.ts");
   for (const marker of [
     "referenceComponents",
     "getReferenceRecordRoute",
@@ -113,7 +110,9 @@ export function verifyPlaygroundReferenceCoverage({
     "componentDemoIds.map",
   ]) {
     if (!routeSource.includes(marker)) {
-      failures.push(`generated component route composition is missing ${marker}`);
+      failures.push(
+        `generated component route composition is missing ${marker}`,
+      );
     }
   }
   for (const marker of [
@@ -123,7 +122,9 @@ export function verifyPlaygroundReferenceCoverage({
     "OverlayComponentPages",
   ]) {
     if (routeSource.includes(marker)) {
-      failures.push(`playground routes still import retired authority ${marker}`);
+      failures.push(
+        `playground routes still import retired authority ${marker}`,
+      );
     }
   }
 
@@ -138,11 +139,15 @@ export function verifyPlaygroundReferenceCoverage({
     "canonical.guidance.relatedComponents",
   ]) {
     if (!demoSource.includes(marker)) {
-      failures.push(`component reader is missing generated authority marker ${marker}`);
+      failures.push(
+        `component reader is missing generated authority marker ${marker}`,
+      );
     }
   }
   if (demoSource.includes("props?: PropsTableRow")) {
-    failures.push("component reader still accepts manual props-table authority");
+    failures.push(
+      "component reader still accepts manual props-table authority",
+    );
   }
 
   const appSource = read(root, "examples/basic-playground/src/app/App.tsx");
@@ -163,7 +168,9 @@ export function verifyPlaygroundReferenceCoverage({
 
   for (const relativePath of retiredReferenceFiles) {
     if (existsSync(path.join(root, relativePath))) {
-      failures.push(`retired manual reference file still exists: ${relativePath}`);
+      failures.push(
+        `retired manual reference file still exists: ${relativePath}`,
+      );
     }
   }
 
