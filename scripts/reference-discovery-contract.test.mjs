@@ -58,31 +58,36 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
     );
   }
 
-  const routes = read("apps/docs/src/discoveryRoutes.ts");
-  for (const routeId of [
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+  for (const domainId of [
     "search",
-    "token-reference",
-    "pattern-reference",
-    "accessibility-reference",
+    "tokens",
+    "patterns",
+    "accessibility",
+    "components",
+    "packages",
   ]) {
-    assert(routes.includes(`id: "${routeId}"`));
+    assert(routes.includes(`${domainId}: {`));
   }
+  assert.match(routes, /referenceModel\.domains\.flatMap/);
+  assert.match(routes, /import\.meta\.glob/);
 
   const app = read("apps/docs/src/App.tsx");
   for (const domainId of ["tokens", "patterns", "accessibility"]) {
     assert(app.includes(`domain: "${domainId}"`));
   }
   assert.match(app, /matchReferenceRecordRoute/);
-  assert.match(app, /getDiscoveryRouteById/);
+  assert.match(app, /getRouteById/);
+  assert.doesNotMatch(app, /getDiscoveryRouteById/);
 
   const nav = read("apps/docs/src/DocsNav.tsx");
-  assert.match(nav, /discoveryRoutes/);
+  assert.match(nav, /docsRoutes/);
+  assert.doesNotMatch(nav, /discoveryRoutes/);
   assert.match(nav, /Filter VyrnForge Reference navigation/);
 
   const search = read("apps/docs/src/ReferenceSearchPage.tsx");
   for (const marker of [
     "docsRoutes",
-    "discoveryRoutes",
     "discoveryPackages",
     "discoveryComponents",
     "designTokenCategories",
@@ -100,6 +105,7 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
       new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
     );
   }
+  assert.doesNotMatch(search, /discoveryRoutes/);
 
   const page = read("apps/docs/src/DiscoveryReferencePage.tsx");
   assert.match(page, /getReferenceRecordRoute/);
