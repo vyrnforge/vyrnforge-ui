@@ -22,7 +22,9 @@ test("reference detail routes and package facts stay generated and canonical", (
   const componentDomain = model.domains.find(
     (domain) => domain.id === "components",
   );
-  const packageDomain = model.domains.find((domain) => domain.id === "packages");
+  const packageDomain = model.domains.find(
+    (domain) => domain.id === "packages",
+  );
   assert.equal(componentDomain?.routeTemplate, "/components/{id}");
   assert.equal(packageDomain?.routeTemplate, "/packages/{id}");
   assert.equal(componentDomain?.recordSource?.collection, "components");
