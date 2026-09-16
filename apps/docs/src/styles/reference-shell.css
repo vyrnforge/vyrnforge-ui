@@ -1,0 +1,26 @@
+.vf-docs-nav-shell {
+  display: grid;
+  gap: var(--vf-space-3, 12px);
+  padding: var(--vf-space-3, 12px);
+}
+
+.vf-docs-nav-search {
+  min-width: 0;
+}
+
+.vf-docs-nav-search .vf-input {
+  width: 100%;
+}
+
+.vf-docs-nav-empty {
+  margin: 0;
+  padding: var(--vf-space-2, 8px);
+  color: var(--vf-text-muted, #64748b);
+  font-size: var(--vf-font-size-sm, 13px);
+}
+
+@media (max-width: 920px) {
+  .vf-docs-nav-shell {
+    padding: var(--vf-space-2, 8px);
+  }
+}

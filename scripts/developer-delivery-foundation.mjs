@@ -53,6 +53,8 @@ export function verifyDeveloperDeliveryFoundation({
     "docs/metadata/release-groups.json",
     "docs/generated/framework-api-reference.json",
     "docs/generated/consumer-knowledge.json",
+    "docs/generated/reference-model.json",
+    "docs/reference/referenceRuntime.ts",
     "scripts/generate-framework-api-reference.mjs",
     "scripts/assemble-versioned-pages.mjs",
     "scripts/reference-artifact.mjs",
@@ -283,18 +285,48 @@ export function verifyDeveloperDeliveryFoundation({
     root,
     "examples/basic-playground/src/app/playgroundContext.ts",
   );
+  const referenceModel = JSON.parse(
+    read(root, "docs/generated/reference-model.json"),
+  );
+  const referenceRuntime = read(root, "docs/reference/referenceRuntime.ts");
+  const referenceFrameworks = (referenceModel.frameworks ?? []).map(
+    (framework) => framework.id,
+  );
+  if (
+    JSON.stringify(referenceFrameworks) !== JSON.stringify(expectedFrameworks)
+  ) {
+    failures.push(
+      `generated Reference frameworks must be ${expectedFrameworks.join(", ")}`,
+    );
+  }
   for (const framework of expectedFrameworks) {
-    if (!docsContext.includes(framework)) {
-      failures.push(`docs framework context is missing ${framework}`);
+    if (!referenceRuntime.includes(`"${framework}"`)) {
+      failures.push(`shared Reference runtime is missing ${framework}`);
     }
-    if (!playgroundContext.includes(framework)) {
-      failures.push(`playground framework context is missing ${framework}`);
-    }
+  }
+  for (const [relativePath, context] of [
+    ["apps/docs/src/docsContext.ts", docsContext],
+    [
+      "examples/basic-playground/src/app/playgroundContext.ts",
+      playgroundContext,
+    ],
+  ]) {
+    requireMarkers(
+      context,
+      relativePath,
+      ["generated/reference-model.json?raw", "reference/referenceRuntime"],
+      failures,
+    );
+  }
+  if (referenceModel.versionContext?.catalog !== "vyrnforge-versions.json") {
+    failures.push(
+      "generated Reference version context must use vyrnforge-versions.json",
+    );
   }
   requireMarkers(
     playgroundContext,
     "examples/basic-playground/src/app/playgroundContext.ts",
-    ["vyrnforge-versions.json", "schemaVersion !== 2", "playgroundPath"],
+    ["schemaVersion !== 2", "playgroundPath"],
     failures,
   );
 

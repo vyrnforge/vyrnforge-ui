@@ -4,8 +4,10 @@ import { PlaygroundShell } from "./PlaygroundShell";
 import {
   defaultPlaygroundFramework,
   defaultPlaygroundVersion,
+  getPlaygroundFramework,
   loadPlaygroundVersions,
   playgroundVersionHref,
+  referenceModel,
   type PlaygroundFrameworkId,
   type PlaygroundVersion,
 } from "./playgroundContext";
@@ -37,14 +39,9 @@ function getRouteFromHash() {
 
 function getFrameworkFromLocation(): PlaygroundFrameworkId {
   const framework = new URLSearchParams(window.location.search).get(
-    "framework",
+    referenceModel.frameworkContext.queryParameter,
   );
-  return framework === "native-html" ||
-    framework === "react" ||
-    framework === "angular" ||
-    framework === "vue"
-    ? framework
-    : defaultPlaygroundFramework;
+  return getPlaygroundFramework(framework)?.id ?? defaultPlaygroundFramework;
 }
 
 export default function App() {
@@ -94,7 +91,7 @@ export default function App() {
 
   const changeFramework = (nextFrameworkId: PlaygroundFrameworkId) => {
     const query = new URLSearchParams(window.location.search);
-    query.set("framework", nextFrameworkId);
+    query.set(referenceModel.frameworkContext.queryParameter, nextFrameworkId);
     window.history.replaceState(
       null,
       "",
