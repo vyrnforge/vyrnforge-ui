@@ -28,7 +28,7 @@ export type ReferenceNavigationSection = {
   contentDomains: string[];
 };
 
-export type ReferenceModel = {
+type GeneratedReferenceModel = {
   schemaVersion: 1;
   product: {
     id: "vyrnforge-reference";
@@ -38,11 +38,6 @@ export type ReferenceModel = {
   };
   navigation: ReferenceNavigationSection[];
   frameworks: ReferenceFramework[];
-  frameworkContext: {
-    default: ReferenceFrameworkId;
-    queryParameter: string;
-    preserveAcrossSurfaces: boolean;
-  };
   versionContext: {
     catalog: string;
     selection: string;
@@ -53,6 +48,14 @@ export type ReferenceModel = {
     identity: string;
     stable: boolean;
     preserveContext: string[];
+  };
+};
+
+export type ReferenceModel = GeneratedReferenceModel & {
+  frameworkContext: {
+    default: ReferenceFrameworkId;
+    queryParameter: string;
+    preserveAcrossSurfaces: boolean;
   };
 };
 
@@ -71,39 +74,52 @@ const navigationIds: ReferenceNavigationSectionId[] = [
 ];
 
 export function parseReferenceModel(raw: string): ReferenceModel {
-  const model = JSON.parse(raw) as ReferenceModel;
+  const generated = JSON.parse(raw) as GeneratedReferenceModel;
 
   if (
-    model.schemaVersion !== 1 ||
-    model.product?.id !== "vyrnforge-reference" ||
-    model.product.semanticOwnership !== "framework-neutral"
+    generated.schemaVersion !== 1 ||
+    generated.product?.id !== "vyrnforge-reference" ||
+    generated.product.semanticOwnership !== "framework-neutral"
   ) {
     throw new Error("Unsupported VyrnForge Reference model.");
   }
 
   if (
-    model.frameworks.length !== frameworkIds.length ||
+    generated.frameworks.length !== frameworkIds.length ||
     !frameworkIds.every((id) =>
-      model.frameworks.some((framework) => framework.id === id),
+      generated.frameworks.some((framework) => framework.id === id),
     )
   ) {
     throw new Error("VyrnForge Reference requires all four framework surfaces.");
   }
 
   if (
-    model.navigation.length !== navigationIds.length ||
+    generated.navigation.length !== navigationIds.length ||
     !navigationIds.every((id) =>
-      model.navigation.some((section) => section.id === id),
+      generated.navigation.some((section) => section.id === id),
     )
   ) {
     throw new Error("VyrnForge Reference navigation is incomplete.");
   }
 
-  if (!isReferenceFrameworkId(model.frameworkContext.default)) {
-    throw new Error("VyrnForge Reference default framework is invalid.");
+  const defaultFramework =
+    generated.frameworks.find((framework) => framework.apiSurface === "react") ??
+    generated.frameworks[0];
+  const queryParameter = generated.frameworks[0]?.contextParameter;
+
+  if (!defaultFramework || !queryParameter) {
+    throw new Error("VyrnForge Reference framework context is incomplete.");
   }
 
-  return model;
+  return {
+    ...generated,
+    frameworkContext: {
+      default: defaultFramework.id,
+      queryParameter,
+      preserveAcrossSurfaces:
+        generated.deepLinks.preserveContext.includes("framework"),
+    },
+  };
 }
 
 export function isReferenceFrameworkId(
