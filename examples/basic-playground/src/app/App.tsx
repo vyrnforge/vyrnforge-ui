@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import componentMetadataRaw from "../../../../docs/metadata/components.json?raw";
 import {
   executableExampleDetailRoutes,
   executableExamplesCatalogRoute,
@@ -29,17 +30,43 @@ const routes: ExecutableExampleRoute[] = [
   ...executableExampleDetailRoutes,
 ];
 
+type ComponentRouteMetadata = {
+  components: Array<{ id: string; playgroundPath: string }>;
+};
+
 function normalizeHashRoute(hash: string) {
   return hash.replace(/^#\/?/, "").replace(/^\/+/, "");
 }
 
+const componentRouteAliases = new Map(
+  (JSON.parse(componentMetadataRaw) as ComponentRouteMetadata).components
+    .filter(
+      (component) =>
+        component.playgroundPath &&
+        ![
+          "pending",
+          "requires-verification",
+          "not-applicable",
+        ].includes(component.playgroundPath),
+    )
+    .map((component) => [
+      normalizeHashRoute(component.playgroundPath),
+      component.id,
+    ]),
+);
+
 function getRouteFromHash() {
   const hashRoute = normalizeHashRoute(window.location.hash);
-
-  return routes.find((route) => {
+  const directRoute = routes.find((route) => {
     const path = route.path?.replace(/^\/+/, "");
     return route.id === hashRoute || path === hashRoute;
   });
+  if (directRoute) return directRoute;
+
+  const aliasRouteId = componentRouteAliases.get(hashRoute);
+  return aliasRouteId
+    ? routes.find((route) => route.id === aliasRouteId)
+    : undefined;
 }
 
 function getFrameworkFromLocation(): PlaygroundFrameworkId {
