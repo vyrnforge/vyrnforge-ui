@@ -1,6 +1,6 @@
 import { Card, Heading, Text } from "@vyrnforge/ui-components";
-import type { DocsRoute } from "./docsRegistry";
 import { MarkdownView } from "./MarkdownView";
+import type { DocsRoute } from "./referenceRoutes";
 
 type AiContextPageProps = {
   route: DocsRoute;
