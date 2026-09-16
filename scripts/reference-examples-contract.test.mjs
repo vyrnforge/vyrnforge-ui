@@ -59,7 +59,10 @@ test("Playground executable examples stay bound to verified consumer fixtures", 
     "fixture.exampleFiles.includes(evidence.entrypoint)",
     "source.path !== expectedSourcePath",
   ]) {
-    assert.match(adapter, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(
+      adapter,
+      new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    );
   }
 
   const routes = read(
