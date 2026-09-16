@@ -18,10 +18,10 @@ import {
   type DocsFrameworkId,
   type DocsVersion,
 } from "./docsContext";
-import type { DocsRoute } from "./docsRegistry";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
 import { docsLinks, getPlaygroundHref } from "./deploymentLinks";
+import type { DocsRoute } from "./referenceRoutes";
 
 type DocsShellProps = {
   activeRoute: DocsRoute;
