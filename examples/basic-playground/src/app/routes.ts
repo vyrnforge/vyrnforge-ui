@@ -1,10 +1,12 @@
 import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
 import { getReferenceRecordRoute } from "../../../../docs/reference/referenceRuntime";
 import type { ComponentType } from "react";
-import { DensityPage } from "../pages/core/DensityPage";
+import { referenceComponents } from "../data/referenceMetadata";
 import { CssOverridePage } from "../pages/core/CssOverridePage";
+import { DensityPage } from "../pages/core/DensityPage";
 import { ThemeModesPage } from "../pages/core/ThemeModesPage";
 import { ThemeTokensPage } from "../pages/core/ThemeTokensPage";
+import { BasicGridPage } from "../pages/data-grid/BasicGridPage";
 import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
 import { FilteringPage } from "../pages/data-grid/FilteringPage";
 import { GridStatesPage } from "../pages/data-grid/GridStatesPage";
@@ -25,50 +27,7 @@ import { OverlayStressPage } from "../pages/patterns/OverlayStressPage";
 import { ResourceListPage } from "../pages/patterns/ResourceListPage";
 import { SettingsPage } from "../pages/patterns/SettingsPage";
 import { ComponentMatrixPage } from "../pages/quality/ComponentMatrixPage";
-import { AutocompletePage } from "../pages/reference/AutocompletePage";
-import {
-  RatingPage,
-  SliderPage,
-  ToggleButtonGroupPage,
-  ToggleButtonPage,
-} from "../pages/reference/ControlComponentPages";
-import {
-  CheckboxReferencePage,
-  DateInputPage,
-  DateTimeInputPage,
-  FieldReferencePage,
-  NumberInputPage,
-  RadioGroupPage,
-  RadioPage,
-  SelectReferencePage,
-  SwitchPage,
-  TextareaPage,
-  TextInputReferencePage,
-  ValidationMessagePage,
-} from "../pages/reference/FormComponentPages";
-import {
-  ConfirmDialogPage,
-  DialogPage,
-  DrawerPage,
-  DropdownPage,
-  MenuPage,
-  PopoverPage,
-  TooltipPage,
-} from "../pages/reference/OverlayComponentPages";
-import {
-  AppShellPage,
-  BadgePage,
-  BasicGridReferencePage,
-  ButtonGroupPage,
-  ButtonPage,
-  IconButtonPage,
-  SegmentedControlPage,
-  TabsPage,
-  ToolbarButtonPage,
-} from "../pages/reference/PriorityComponentPages";
-import { ToastPage } from "../pages/reference/ToastPage";
-import { TransferListPage } from "../pages/reference/TransferListPage";
-import { referenceComponents } from "../data/referenceMetadata";
+import { createGeneratedComponentPage } from "../pages/reference/GeneratedComponentPage";
 import { referenceModel } from "./playgroundContext";
 
 export type PlaygroundRoute = {
@@ -109,42 +68,42 @@ function patternDescription(id: string, fallback: string) {
   );
 }
 
-const componentDemoBindings: Array<[string, ComponentType]> = [
-  ["button", ButtonPage],
-  ["icon-button", IconButtonPage],
-  ["button-group", ButtonGroupPage],
-  ["toolbar-button", ToolbarButtonPage],
-  ["segmented-control", SegmentedControlPage],
-  ["toggle-button", ToggleButtonPage],
-  ["toggle-button-group", ToggleButtonGroupPage],
-  ["text-input", TextInputReferencePage],
-  ["autocomplete", AutocompletePage],
-  ["transfer-list", TransferListPage],
-  ["select", SelectReferencePage],
-  ["checkbox", CheckboxReferencePage],
-  ["field", FieldReferencePage],
-  ["validation-message", ValidationMessagePage],
-  ["radio", RadioPage],
-  ["radio-group", RadioGroupPage],
-  ["switch", SwitchPage],
-  ["number-input", NumberInputPage],
-  ["date-input", DateInputPage],
-  ["datetime-input", DateTimeInputPage],
-  ["textarea", TextareaPage],
-  ["rating", RatingPage],
-  ["slider", SliderPage],
-  ["popover", PopoverPage],
-  ["menu", MenuPage],
-  ["dropdown", DropdownPage],
-  ["tooltip", TooltipPage],
-  ["dialog", DialogPage],
-  ["drawer", DrawerPage],
-  ["confirm-dialog", ConfirmDialogPage],
-  ["badge", BadgePage],
-  ["toast", ToastPage],
-  ["app-shell", AppShellPage],
-  ["tabs", TabsPage],
-];
+const componentDemoIds = [
+  "button",
+  "icon-button",
+  "button-group",
+  "toolbar-button",
+  "segmented-control",
+  "toggle-button",
+  "toggle-button-group",
+  "text-input",
+  "autocomplete",
+  "transfer-list",
+  "select",
+  "checkbox",
+  "field",
+  "validation-message",
+  "radio",
+  "radio-group",
+  "switch",
+  "number-input",
+  "date-input",
+  "datetime-input",
+  "textarea",
+  "rating",
+  "slider",
+  "popover",
+  "menu",
+  "dropdown",
+  "tooltip",
+  "dialog",
+  "drawer",
+  "confirm-dialog",
+  "badge",
+  "toast",
+  "app-shell",
+  "tabs",
+] as const;
 
 const subgroupById: Record<string, PlaygroundRoute["subgroup"]> = {
   button: "Actions",
@@ -187,31 +146,29 @@ const canonicalComponentById = new Map(
   referenceComponents.map((component) => [component.id, component] as const),
 );
 
-const componentRoutes: PlaygroundRoute[] = componentDemoBindings.map(
-  ([id, Component]) => {
-    const component = canonicalComponentById.get(id);
-    if (!component) {
-      throw new Error(`Playground demo has no canonical component record: ${id}`);
-    }
-    if (component.package !== "@vyrnforge/ui-components") {
-      throw new Error(
-        `Playground component demo ${id} must resolve to @vyrnforge/ui-components, got ${component.package}.`,
-      );
-    }
-    return {
-      id,
-      label: component.displayName,
-      title: component.displayName,
-      description: component.purpose,
-      group: "Components",
-      subgroup: subgroupById[id],
-      gallery: true,
-      path: getReferenceRecordRoute(referenceModel, "components", id),
-      packageName: "@vyrnforge/ui-components",
-      Component,
-    };
-  },
-);
+const componentRoutes: PlaygroundRoute[] = componentDemoIds.map((id) => {
+  const component = canonicalComponentById.get(id);
+  if (!component) {
+    throw new Error(`Playground route has no canonical component record: ${id}`);
+  }
+  if (component.package !== "@vyrnforge/ui-components") {
+    throw new Error(
+      `Playground component route ${id} must resolve to @vyrnforge/ui-components, got ${component.package}.`,
+    );
+  }
+  return {
+    id,
+    label: component.displayName,
+    title: component.displayName,
+    description: component.purpose,
+    group: "Components",
+    subgroup: subgroupById[id],
+    gallery: true,
+    path: getReferenceRecordRoute(referenceModel, "components", id),
+    packageName: "@vyrnforge/ui-components",
+    Component: createGeneratedComponentPage(id),
+  };
+});
 
 const authoredRoutes: PlaygroundRoute[] = [
   {
@@ -266,7 +223,7 @@ const authoredRoutes: PlaygroundRoute[] = [
     gallery: true,
     path: "/data-grid/basic",
     packageName: "@vyrnforge/ui-data-grid",
-    Component: BasicGridReferencePage,
+    Component: BasicGridPage,
   },
   {
     id: "grid-columns",
