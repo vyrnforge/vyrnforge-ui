@@ -6,7 +6,6 @@ import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { MarkdownView } from "./MarkdownView";
-import { MetadataPage } from "./MetadataPage";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
 import { ReferenceSearchPage } from "./ReferenceSearchPage";
@@ -97,9 +96,9 @@ export function DocsPage({
             referenceRecord?.domain === "packages" ? referenceRecord.id : null
           }
         />
-      ) : route.kind === "metadata" ? (
-        <MetadataPage route={route} />
-      ) : route.kind === "ai" || route.kind === "json" ? (
+      ) : route.kind === "metadata" ||
+        route.kind === "ai" ||
+        route.kind === "json" ? (
         <AiContextPage route={route} />
       ) : (
         <MarkdownView markdown={route.content ?? ""} />
