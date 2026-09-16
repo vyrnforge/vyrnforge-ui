@@ -143,7 +143,9 @@ if (packageReferenceRecords.length !== packageMetadata.packages.length) {
 export const packageDependencyRules = packageMetadata.dependencyRules;
 
 export function getComponentReferenceRecord(componentId: string) {
-  return componentReferenceRecords.find((component) => component.id === componentId);
+  return componentReferenceRecords.find(
+    (component) => component.id === componentId,
+  );
 }
 
 export function getPackageReferenceRecord(packageName: string) {
