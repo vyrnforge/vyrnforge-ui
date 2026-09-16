@@ -5,10 +5,12 @@ import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
 import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
+import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { MarkdownView } from "./MarkdownView";
 import { MetadataPage } from "./MetadataPage";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
+import { ReferenceSearchPage } from "./ReferenceSearchPage";
 
 type DocsPageProps = {
   route: DocsRoute;
@@ -70,7 +72,16 @@ export function DocsPage({
         )}
       </div>
 
-      {route.kind === "ai-context-index" ? (
+      {route.id === "search" ? (
+        <ReferenceSearchPage />
+      ) : route.id === "token-reference" ||
+        route.id === "pattern-reference" ||
+        route.id === "accessibility-reference" ? (
+        <DiscoveryReferencePage
+          referenceRecord={referenceRecord}
+          routeId={route.id}
+        />
+      ) : route.kind === "ai-context-index" ? (
         <AiContextIndexPage />
       ) : route.kind === "component-reference" ? (
         <ComponentReferencePage

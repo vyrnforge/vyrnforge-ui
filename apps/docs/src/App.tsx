@@ -11,11 +11,12 @@ import {
   type DocsFrameworkId,
   type DocsVersion,
 } from "./docsContext";
+import { getDiscoveryRouteById } from "./discoveryRoutes";
 import { getRouteById } from "./docsRegistry";
 import { DocsShell } from "./DocsShell";
 
 export type ReferenceRecordSelection = {
-  domain: "components" | "packages";
+  domain: "components" | "packages" | "tokens" | "patterns" | "accessibility";
   id: string;
 };
 
@@ -24,26 +25,28 @@ type DocsLocation = {
   referenceRecord: ReferenceRecordSelection | null;
 };
 
+const recordRoutes: Array<{
+  domain: ReferenceRecordSelection["domain"];
+  routeId: string;
+}> = [
+  { domain: "components", routeId: "component-reference" },
+  { domain: "packages", routeId: "package-reference" },
+  { domain: "tokens", routeId: "token-reference" },
+  { domain: "patterns", routeId: "pattern-reference" },
+  { domain: "accessibility", routeId: "accessibility-reference" },
+];
+
 function getHashLocation(): DocsLocation {
   const path = window.location.hash.replace(/^#/, "") || "/overview";
-  const componentId = matchReferenceRecordRoute(
-    referenceModel,
-    "components",
-    path,
-  );
-  if (componentId) {
-    return {
-      routeId: "component-reference",
-      referenceRecord: { domain: "components", id: componentId },
-    };
-  }
 
-  const packageId = matchReferenceRecordRoute(referenceModel, "packages", path);
-  if (packageId) {
-    return {
-      routeId: "package-reference",
-      referenceRecord: { domain: "packages", id: packageId },
-    };
+  for (const recordRoute of recordRoutes) {
+    const id = matchReferenceRecordRoute(referenceModel, recordRoute.domain, path);
+    if (id) {
+      return {
+        routeId: recordRoute.routeId,
+        referenceRecord: { domain: recordRoute.domain, id },
+      };
+    }
   }
 
   return {
@@ -86,7 +89,7 @@ export default function App() {
   }, []);
 
   const activeRoute = useMemo(
-    () => getRouteById(docsLocation.routeId),
+    () => getDiscoveryRouteById(docsLocation.routeId) ?? getRouteById(docsLocation.routeId),
     [docsLocation.routeId],
   );
   const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);
