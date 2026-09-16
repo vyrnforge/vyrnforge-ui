@@ -185,16 +185,58 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
 
   const docsPage = read(root, "apps/docs/src/ComponentReferencePage.tsx");
   for (const marker of [
-    "consumer-knowledge.json",
-    'label: "React"',
-    'label: "Native HTML"',
-    'label: "Angular"',
-    'label: "Vue"',
+    "framework-api-reference.json",
+    "componentReferenceRecords",
+    "getReferenceRecordRoute",
     "AI context slice",
+    "Usage guidance",
+    "Accessibility and styling",
   ]) {
     if (!docsPage.includes(marker))
       failures.push(`consumer knowledge viewer is missing ${marker}`);
   }
+  if (docsPage.includes("component: componentId")) {
+    failures.push(
+      "component reference must use generated stable record routes instead of the retired component query parameter",
+    );
+  }
+
+  const referenceData = read(root, "apps/docs/src/referenceData.ts");
+  for (const marker of [
+    "consumer-knowledge.json?raw",
+    "metadata/packages.json?raw",
+    "packageReferenceRecords",
+    "packageMetadata.packages.length",
+  ]) {
+    if (!referenceData.includes(marker)) {
+      failures.push(`reference data adapter is missing ${marker}`);
+    }
+  }
+
+  const packagePage = read(root, "apps/docs/src/PackageReferencePage.tsx");
+  for (const marker of [
+    "packageReferenceRecords",
+    "packageDependencyRules",
+    "getReferenceRecordRoute",
+    "Public entry points",
+  ]) {
+    if (!packagePage.includes(marker)) {
+      failures.push(`package reference viewer is missing ${marker}`);
+    }
+  }
+  for (const forbidden of [
+    "const packages = [",
+    "const dependencyRules = [",
+    'name: "@vyrnforge/ui-core"',
+    'status: "Planned"',
+  ]) {
+    if (packagePage.includes(forbidden)) {
+      failures.push(
+        `package reference viewer contains duplicated package authority: ${forbidden}`,
+      );
+    }
+  }
+
   const aiPage = read(root, "apps/docs/src/AiContextIndexPage.tsx");
   for (const marker of [
     "ai-context/index.json",
