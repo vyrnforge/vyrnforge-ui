@@ -66,16 +66,24 @@ function slugFromSourcePath(path: string) {
     return `metadata-${withoutExtension.slice("docs/metadata/".length)}`;
   }
   if (withoutExtension.startsWith("docs/generated/ai-context/")) {
-    return `ai-context-${withoutExtension.slice("docs/generated/ai-context/".length).replaceAll("/", "-")}`;
+    return `ai-context-${withoutExtension
+      .slice("docs/generated/ai-context/".length)
+      .replace(/\//gu, "-")}`;
   }
 
-  const basename = withoutExtension.slice(withoutExtension.lastIndexOf("/") + 1);
+  const basename = withoutExtension.slice(
+    withoutExtension.lastIndexOf("/") + 1,
+  );
   return stripNumericPrefix(basename);
 }
 
 function groupForSourcePath(path: string) {
   if (path === "AGENTS.md") return "AI";
-  if (path === "docs/README.md" || path.startsWith("docs/governance/") || path.startsWith("docs/engineering/")) {
+  if (
+    path === "docs/README.md" ||
+    path.startsWith("docs/governance/") ||
+    path.startsWith("docs/engineering/")
+  ) {
     return "Start Here";
   }
   if (path.startsWith("docs/architecture/")) return "Architecture";
@@ -107,7 +115,7 @@ function markdownTitle(content: string, path: string) {
 function plainText(value: string) {
   return value
     .replace(/`([^`]+)`/gu, "$1")
-    .replace(/\[([^\]]+)\]\([^\)]+\)/gu, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/gu, "$1")
     .replace(/[*_>#]/gu, "")
     .replace(/\s+/gu, " ")
     .trim();
@@ -145,7 +153,8 @@ function contentRoute(
 ): DocsRoute {
   return {
     id: slugFromSourcePath(path),
-    title: kind === "markdown" ? markdownTitle(content, path) : fallbackTitle(path),
+    title:
+      kind === "markdown" ? markdownTitle(content, path) : fallbackTitle(path),
     group: groupForSourcePath(path),
     description:
       kind === "markdown"
@@ -159,10 +168,12 @@ function contentRoute(
 }
 
 const authoredGuideRoutes = Object.entries(markdownModules).map(
-  ([modulePath, content]) => contentRoute(sourcePath(modulePath), content, "markdown"),
+  ([modulePath, content]) =>
+    contentRoute(sourcePath(modulePath), content, "markdown"),
 );
 const metadataRoutes = Object.entries(metadataModules).map(
-  ([modulePath, content]) => contentRoute(sourcePath(modulePath), content, "metadata"),
+  ([modulePath, content]) =>
+    contentRoute(sourcePath(modulePath), content, "metadata"),
 );
 const aiContextRoutes = Object.entries(aiContextModules).map(
   ([modulePath, content]) => {
@@ -184,52 +195,54 @@ type GeneratedReaderPresentation = {
   kind?: DocsRouteKind;
 };
 
-const generatedReaderPresentation: Record<string, GeneratedReaderPresentation> = {
-  search: {
-    id: "search",
-    title: "Reference Search",
-    group: "Start Here",
-    description:
-      "Search VyrnForge reference records while preserving each record's owning source.",
-  },
-  packages: {
-    id: "package-reference",
-    title: "Package Reference",
-    group: "Start Here",
-    description: "Browse package responsibilities from canonical package metadata.",
-    kind: "package-reference",
-  },
-  components: {
-    id: "component-reference",
-    title: "Component Reference",
-    group: "Components",
-    description:
-      "Browse generated multi-framework component contracts and usage guidance.",
-    kind: "component-reference",
-  },
-  accessibility: {
-    id: "accessibility-reference",
-    title: "Accessibility & Keyboard",
-    group: "Accessibility",
-    description:
-      "Browse component accessibility contracts and keyboard guidance from canonical evidence.",
-  },
-  tokens: {
-    id: "token-reference",
-    title: "Design Tokens",
-    group: "Foundations",
-    description: "Explore canonical VyrnForge semantic token categories.",
-  },
-  patterns: {
-    id: "pattern-reference",
-    title: "Patterns",
-    group: "Foundations",
-    description: "Explore reusable VyrnForge composition patterns.",
-  },
-};
+const generatedReaderPresentation: Record<string, GeneratedReaderPresentation> =
+  {
+    search: {
+      id: "search",
+      title: "Reference Search",
+      group: "Start Here",
+      description:
+        "Search VyrnForge reference records while preserving each record's owning source.",
+    },
+    packages: {
+      id: "package-reference",
+      title: "Package Reference",
+      group: "Start Here",
+      description:
+        "Browse package responsibilities from canonical package metadata.",
+      kind: "package-reference",
+    },
+    components: {
+      id: "component-reference",
+      title: "Component Reference",
+      group: "Components",
+      description:
+        "Browse generated multi-framework component contracts and usage guidance.",
+      kind: "component-reference",
+    },
+    accessibility: {
+      id: "accessibility-reference",
+      title: "Accessibility & Keyboard",
+      group: "Accessibility",
+      description:
+        "Browse component accessibility contracts and keyboard guidance from canonical evidence.",
+    },
+    tokens: {
+      id: "token-reference",
+      title: "Design Tokens",
+      group: "Foundations",
+      description: "Explore canonical VyrnForge semantic token categories.",
+    },
+    patterns: {
+      id: "pattern-reference",
+      title: "Patterns",
+      group: "Foundations",
+      description: "Explore reusable VyrnForge composition patterns.",
+    },
+  };
 
-export const generatedReferenceRoutes: DocsRoute[] = referenceModel.domains.flatMap(
-  (domain) => {
+export const generatedReferenceRoutes: DocsRoute[] =
+  referenceModel.domains.flatMap((domain) => {
     const presentation = generatedReaderPresentation[domain.id];
     if (!presentation) return [];
     return [
@@ -243,8 +256,7 @@ export const generatedReferenceRoutes: DocsRoute[] = referenceModel.domains.flat
         tags: [domain.id, "reference", "generated-reader"],
       },
     ];
-  },
-);
+  });
 
 function uniqueRoutes(routes: DocsRoute[]) {
   const byId = new Map<string, DocsRoute>();
@@ -272,5 +284,9 @@ export const docsRoutes = uniqueRoutes([
 });
 
 export function getRouteById(id: string) {
-  return docsRoutes.find((route) => route.id === id) ?? docsRoutes.find((route) => route.id === "overview") ?? docsRoutes[0];
+  return (
+    docsRoutes.find((route) => route.id === id) ??
+    docsRoutes.find((route) => route.id === "overview") ??
+    docsRoutes[0]
+  );
 }
