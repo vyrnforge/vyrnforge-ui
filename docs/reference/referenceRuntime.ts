@@ -39,6 +39,14 @@ export type ReferenceDomain = {
   recordSource: ReferenceRecordSource | null;
 };
 
+export type ReferenceExample = {
+  id: string;
+  framework: ReferenceFrameworkId;
+  entrypoint: string;
+  registry: string;
+  consumerManifest: string;
+};
+
 type GeneratedReferenceModel = {
   schemaVersion: 1;
   product: {
@@ -50,6 +58,7 @@ type GeneratedReferenceModel = {
   navigation: ReferenceNavigationSection[];
   domains: ReferenceDomain[];
   frameworks: ReferenceFramework[];
+  examples: ReferenceExample[];
   versionContext: {
     catalog: string;
     selection: string;
@@ -120,6 +129,20 @@ export function parseReferenceModel(raw: string): ReferenceModel {
     throw new Error("VyrnForge Reference domains are incomplete.");
   }
 
+  if (
+    !Array.isArray(generated.examples) ||
+    generated.examples.length !== frameworkIds.length ||
+    !frameworkIds.every((id) =>
+      generated.examples.some(
+        (example) => example.framework === id && example.id && example.entrypoint,
+      ),
+    )
+  ) {
+    throw new Error(
+      "VyrnForge Reference executable example records are incomplete.",
+    );
+  }
+
   const defaultFramework =
     generated.frameworks.find(
       (framework) => framework.apiSurface === "react",
@@ -170,6 +193,21 @@ export function getReferenceDomain(model: ReferenceModel, domainId: string) {
     throw new Error(`Unknown VyrnForge Reference domain: ${domainId}.`);
   }
   return domain;
+}
+
+export function getReferenceExample(
+  model: ReferenceModel,
+  frameworkId: ReferenceFrameworkId,
+) {
+  const example = model.examples.find(
+    (candidate) => candidate.framework === frameworkId,
+  );
+  if (!example) {
+    throw new Error(
+      `Missing VyrnForge Reference example for ${frameworkId}.`,
+    );
+  }
+  return example;
 }
 
 export function getReferenceRecordRoute(
