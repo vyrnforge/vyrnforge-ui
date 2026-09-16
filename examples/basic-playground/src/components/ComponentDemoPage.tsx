@@ -12,22 +12,18 @@ import {
   executableExamples,
   executableExampleSourceOfTruth,
 } from "../data/executableExampleContract";
-import { getReferenceFrameworkComponent } from "../data/referenceMetadata";
+import {
+  getReferenceFrameworkComponent,
+  type ReferenceApiMember,
+} from "../data/referenceMetadata";
 import { CodeBlock } from "./CodeBlock";
 import { PageOutline, type PageOutlineItem } from "./PageOutline";
-import type { PropsTableRow } from "./PropsTable";
 
 export type ComponentPageSection = {
   id: string;
   label: string;
   title?: string;
   children: ReactNode;
-};
-
-export type RelatedComponentLink = {
-  id: string;
-  name: string;
-  description: string;
 };
 
 type FrameworkUsage = {
@@ -75,8 +71,6 @@ export type ComponentDemoPageProps = {
   useWhen?: string[];
   avoidWhen?: string[];
   accessibility?: string[];
-  props?: PropsTableRow[];
-  relatedComponents?: RelatedComponentLink[];
 };
 
 const consumerKnowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
@@ -132,6 +126,10 @@ function ApiList({ label, values }: { label: string; values: string[] }) {
   );
 }
 
+function memberName(member: ReferenceApiMember) {
+  return member.public ?? member.name ?? member.canonical ?? "unknown";
+}
+
 function formatDefault(value: unknown) {
   return value === undefined ? "—" : JSON.stringify(value);
 }
@@ -145,7 +143,6 @@ export function ComponentDemoPage({
   useWhen,
   avoidWhen,
   accessibility,
-  relatedComponents,
 }: ComponentDemoPageProps) {
   const { frameworkId } = usePlaygroundFramework();
   const canonical = getCanonicalKnowledge(title);
@@ -169,13 +166,16 @@ export function ComponentDemoPage({
   const resolvedRelatedComponents = canonical
     ? canonical.guidance.relatedComponents
         .map((id) => canonicalKnowledge.find((component) => component.id === id))
-        .filter((component): component is CanonicalComponentKnowledge => Boolean(component))
+        .filter(
+          (component): component is CanonicalComponentKnowledge =>
+            Boolean(component),
+        )
         .map((component) => ({
           id: component.id,
           name: component.displayName,
           description: component.purpose,
         }))
-    : (relatedComponents ?? []);
+    : [];
   const hasGeneratedApi = Boolean(
     generatedApi &&
       (generatedApi.properties.length > 0 ||
@@ -266,7 +266,8 @@ export function ComponentDemoPage({
               ))}
             </div>
             <Text size="sm" tone="muted">
-              Example registry source: <CodeText>{executableExampleSourceOfTruth}</CodeText>
+              Example registry source:{" "}
+              <CodeText>{executableExampleSourceOfTruth}</CodeText>
             </Text>
           </Panel>
         </section>
@@ -297,28 +298,29 @@ export function ComponentDemoPage({
                 label="Properties / inputs"
                 values={generatedApi.properties.map(
                   (member) =>
-                    `${member.public}: ${member.type ?? "unknown"}${member.required ? " (required)" : ""}; binding=${member.binding ?? "n/a"}; default=${formatDefault(member.default)}`,
+                    `${memberName(member)}: ${member.type ?? "unknown"}${member.required ? " (required)" : ""}; binding=${member.binding ?? "n/a"}; default=${formatDefault(member.default)}`,
                 )}
               />
               <ApiList
                 label="Events / outputs / emits"
                 values={generatedApi.events.map(
-                  (member) => `${member.public} (${member.mode ?? "event"})`,
+                  (member) => `${memberName(member)} (${member.mode ?? "event"})`,
                 )}
               />
               <ApiList
                 label="Slots / templates"
                 values={generatedApi.slots.map(
                   (member) =>
-                    `${member.public} (${member.mode ?? "slot"}; ${member.content ?? "content"})`,
+                    `${memberName(member)} (${member.mode ?? "slot"}; ${member.content ?? "content"})`,
                 )}
               />
               <ApiList
                 label="Methods"
-                values={generatedApi.methods.map((member) => member.public)}
+                values={generatedApi.methods.map(memberName)}
               />
               <Text size="sm" tone="muted">
-                API facts are generated from the shared VyrnForge framework contract and are not maintained by this demo page.
+                API facts are generated from the shared VyrnForge framework
+                contract and are not maintained by this demo page.
               </Text>
             </Panel>
           </section>
