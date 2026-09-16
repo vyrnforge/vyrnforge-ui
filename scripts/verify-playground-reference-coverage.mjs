@@ -164,8 +164,13 @@ export function verifyPlaygroundReferenceCoverage({
 
   const appSource = read(root, "examples/basic-playground/src/app/App.tsx");
   for (const marker of [
-    "const navigationRoutes = [",
-    "const routes = [...navigationRoutes, ...referenceDetailRoutes]",
+    "const navigationRoutes: ExecutableExampleRoute[] = [",
+    "...referenceCatalogRoutes,",
+    "executableExamplesCatalogRoute,",
+    "const routes: ExecutableExampleRoute[] = [",
+    "...navigationRoutes,",
+    "...referenceDetailRoutes,",
+    "...executableExampleDetailRoutes,",
     "routes={navigationRoutes}",
   ]) {
     if (!appSource.includes(marker)) {
