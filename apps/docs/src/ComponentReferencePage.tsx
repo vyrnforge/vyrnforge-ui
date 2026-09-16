@@ -123,9 +123,10 @@ function formatEvent(event: ApiEvent) {
 }
 
 function formatSlot(slot: ApiSlot) {
-  const flags = [slot.required && "required", slot.multiple && "multiple"].filter(
-    Boolean,
-  );
+  const flags = [
+    slot.required && "required",
+    slot.multiple && "multiple",
+  ].filter(Boolean);
   const suffix = flags.length > 0 ? `; ${flags.join("; ")}` : "";
   return `${slot.public} (${slot.mode}; ${slot.content}${suffix})`;
 }
@@ -182,7 +183,11 @@ function ContractDetails({ contract }: { contract: ReferenceContract | null }) {
   );
 }
 
-function FrameworkApiPanel({ component }: { component: FrameworkApiComponent }) {
+function FrameworkApiPanel({
+  component,
+}: {
+  component: FrameworkApiComponent;
+}) {
   return (
     <div className="vf-docs-framework-usage">
       <div className="vf-docs-framework-usage__meta">
@@ -259,7 +264,11 @@ function componentHref(componentId: string) {
   return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
 }
 
-function ComponentIndexCard({ component }: { component: ComponentReferenceRecord }) {
+function ComponentIndexCard({
+  component,
+}: {
+  component: ComponentReferenceRecord;
+}) {
   const maturity = getComponentMaturityPresentation(component);
   return (
     <Card className="vf-docs-reference-card" padding="md">
@@ -310,7 +319,10 @@ function ComponentDetail({
             <Text size="sm" tone="muted">
               <code>{component.package}</code>
               {component.nativeDeclaration?.tagName && (
-                <> · <code>{component.nativeDeclaration.tagName}</code></>
+                <>
+                  {" "}
+                  · <code>{component.nativeDeclaration.tagName}</code>
+                </>
               )}
             </Text>
           </div>
@@ -320,7 +332,8 @@ function ComponentDetail({
         </div>
         <Text>{component.purpose}</Text>
         <Text size="sm" tone="muted">
-          AI context slice: <code>{`ai-context/components/${component.id}.json`}</code>
+          AI context slice:{" "}
+          <code>{`ai-context/components/${component.id}.json`}</code>
         </Text>
       </Card>
 
@@ -329,7 +342,10 @@ function ComponentDetail({
           Usage guidance
         </Heading>
         <MemberList label="Use when" values={[component.guidance.useWhen]} />
-        <MemberList label="Avoid when" values={[component.guidance.avoidWhen]} />
+        <MemberList
+          label="Avoid when"
+          values={[component.guidance.avoidWhen]}
+        />
         <MemberList
           label="AI usage notes"
           values={[component.guidance.aiUsageNotes]}
@@ -384,7 +400,8 @@ function ComponentDetail({
         />
       </Card>
 
-      {(component.knownLimitations.length > 0 || relatedPatterns.length > 0) && (
+      {(component.knownLimitations.length > 0 ||
+        relatedPatterns.length > 0) && (
         <Card className="vf-docs-reference__section" padding="lg">
           <Heading level={3} size="md">
             Limitations and related patterns
