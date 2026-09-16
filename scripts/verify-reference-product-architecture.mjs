@@ -8,7 +8,8 @@ export const repositoryRoot = path.resolve(
 );
 
 export const referencePortalPath = "docs/metadata/reference-portal.json";
-export const documentationSystemPath = "docs/engineering/documentation-system.md";
+export const documentationSystemPath =
+  "docs/engineering/documentation-system.md";
 
 const expectedFrameworks = ["angular", "native-html", "react", "vue"];
 const expectedSurfaces = ["docs", "playground"];
@@ -86,7 +87,9 @@ export function verifyReferenceProductArchitecture({
       `reference portal must expose exactly ${expectedSurfaces.join(", ")}`,
     );
   }
-  if (!sameMembers(Object.keys(portal.contentOwnership ?? {}), expectedDomains)) {
+  if (
+    !sameMembers(Object.keys(portal.contentOwnership ?? {}), expectedDomains)
+  ) {
     failures.push(
       `reference portal must define ownership for ${expectedDomains.join(", ")}`,
     );
@@ -153,7 +156,9 @@ export function verifyReferenceProductArchitecture({
     );
   }
 
-  if (portal.deployment?.assemblyContract !== "scripts/reference-artifact.mjs") {
+  if (
+    portal.deployment?.assemblyContract !== "scripts/reference-artifact.mjs"
+  ) {
     failures.push(
       "reference deployment must preserve scripts/reference-artifact.mjs as the assembly contract",
     );
