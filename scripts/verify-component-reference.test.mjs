@@ -97,7 +97,7 @@ test("rejects hand-written playground maturity status", () =>
       );
       const content = readFileSync(file, "utf8");
       const next = content.replace(
-        'title={component.displayName}',
+        "title={component.displayName}",
         'status="stable" title={component.displayName}',
       );
       assert.notEqual(
