@@ -4,13 +4,40 @@ import {
   SideNav,
   type SideNavItem,
 } from "@vyrnforge/ui-components";
-import { routeGroups, type PlaygroundRoute } from "./routes";
+import {
+  getReferenceNavigation,
+  type ReferenceNavigationSectionId,
+} from "../../../../docs/reference/referenceRuntime";
+import { referenceModel } from "./playgroundContext";
+import type { PlaygroundRoute } from "./routes";
 
 export type PlaygroundNavProps = {
   activeRouteId: string;
   routes: PlaygroundRoute[];
   onRouteChange: (routeId: string) => void;
 };
+
+const routeSection: Record<
+  PlaygroundRoute["group"],
+  ReferenceNavigationSectionId | null
+> = {
+  Overview: "start",
+  Foundations: "foundations",
+  Components: "components",
+  Patterns: "foundations",
+  "Advanced Modules": "components",
+  Internal: null,
+};
+
+const componentSubgroups = [
+  "Actions",
+  "Forms",
+  "Data Management",
+  "Feedback",
+  "Layout",
+  "Navigation",
+  "Overlays",
+] as const;
 
 export function PlaygroundNav({
   activeRouteId,
@@ -49,49 +76,61 @@ export function PlaygroundNav({
     onSelect: () => onRouteChange(route.id),
   });
 
-  const items: SideNavItem[] = routeGroups.flatMap<SideNavItem>(
-    (group): SideNavItem[] => {
-      const groupRoutes = visibleRoutes.filter(
-        (route) => route.group === group,
+  const items = getReferenceNavigation(referenceModel).flatMap<SideNavItem>(
+    (section) => {
+      const sectionRoutes = visibleRoutes.filter(
+        (route) => routeSection[route.group] === section.id,
       );
+      if (sectionRoutes.length === 0) return [];
 
-      if (group === "Components") {
-        const subgroups = [
-          "Actions",
-          "Forms",
-          "Data Management",
-          "Feedback",
-          "Layout",
-          "Navigation",
-          "Overlays",
-        ] as const;
-        return subgroups.flatMap((subgroup) => {
-          const subgroupRoutes = groupRoutes.filter(
-            (route) => route.subgroup === subgroup,
-          );
-          return subgroupRoutes.length === 0
-            ? []
-            : [
-                {
-                  id: `group-${subgroup.toLowerCase()}`,
-                  label: subgroup,
-                  disabled: true,
-                  children: subgroupRoutes.map(toNavItem),
-                },
-              ];
-        });
+      if (section.id !== "components") {
+        return [
+          {
+            id: `section-${section.id}`,
+            label: section.label,
+            disabled: true,
+            children: sectionRoutes.map(toNavItem),
+          },
+        ];
       }
 
-      return groupRoutes.length === 0
-        ? []
-        : [
-            {
-              id: `group-${group.toLowerCase().replace(/ /g, "-")}`,
-              label: group,
-              disabled: true,
-              children: groupRoutes.map(toNavItem),
-            },
-          ];
+      const groupedItems = componentSubgroups.flatMap<SideNavItem>((subgroup) => {
+        const subgroupRoutes = sectionRoutes.filter(
+          (route) => route.subgroup === subgroup,
+        );
+        return subgroupRoutes.length === 0
+          ? []
+          : [
+              {
+                id: `group-${subgroup.toLowerCase().replace(/ /gu, "-")}`,
+                label: subgroup,
+                disabled: true,
+                children: subgroupRoutes.map(toNavItem),
+              },
+            ];
+      });
+      const advancedRoutes = sectionRoutes.filter(
+        (route) => route.group === "Advanced Modules",
+      );
+
+      return [
+        {
+          id: "section-components",
+          label: section.label,
+          disabled: true,
+        },
+        ...groupedItems,
+        ...(advancedRoutes.length === 0
+          ? []
+          : [
+              {
+                id: "group-advanced-modules",
+                label: "Advanced Modules",
+                disabled: true,
+                children: advancedRoutes.map(toNavItem),
+              } satisfies SideNavItem,
+            ]),
+      ];
     },
   );
 
@@ -99,15 +138,15 @@ export function PlaygroundNav({
     <div className="vf-playground-nav-shell">
       <div className="vf-playground-nav-search">
         <SearchInput
-          aria-label="Search VyrnForge reference"
-          placeholder="Search components…"
+          aria-label="Search VyrnForge Reference"
+          placeholder="Search reference…"
           size="sm"
           value={query}
           onChange={(event) => setQuery(event.currentTarget.value)}
         />
       </div>
       <SideNav
-        aria-label="Reference sections"
+        aria-label="VyrnForge Reference sections"
         className="vf-playground-nav"
         items={items}
       />
