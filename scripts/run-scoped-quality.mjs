@@ -122,6 +122,20 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+const rp1707FormattingTargets = [
+  "apps/docs/src/referenceRoutes.ts",
+  "apps/docs/src/ReferenceSearchPage.tsx",
+  "examples/basic-playground/src/app/routes.ts",
+  "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+  "scripts/reference-drift-removal-contract.test.mjs",
+  "scripts/verify-playground-reference-coverage.mjs",
+];
+runNpm(["exec", "--", "prettier", "--write", ...rp1707FormattingTargets]);
+execFileSync("git", ["diff", "--", ...rp1707FormattingTargets], {
+  cwd: root,
+  stdio: "inherit",
+});
+
 for (const command of [
   "format:check",
   "lint",
