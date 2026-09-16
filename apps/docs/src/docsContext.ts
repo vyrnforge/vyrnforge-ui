@@ -40,7 +40,7 @@ type ReleaseGroupsMetadata = {
     {
       channel: string;
       version: string;
-    }
+    },
   >;
 };
 
@@ -80,7 +80,9 @@ export const docsFrameworks: DocsFramework[] = referenceModel.frameworks.map(
     );
 
     if (!support) {
-      throw new Error(`Missing framework support metadata for ${framework.id}.`);
+      throw new Error(
+        `Missing framework support metadata for ${framework.id}.`,
+      );
     }
 
     return {
