@@ -22,7 +22,10 @@ test("Playground executable examples stay bound to verified consumer fixtures", 
   const expectedFrameworkIds = [...frameworkIds].sort();
 
   assert.equal(metadata.sourceOfTruth, "tests/consumers/manifest.json");
-  assert.deepEqual(Object.keys(metadata.frameworks).sort(), expectedFrameworkIds);
+  assert.deepEqual(
+    Object.keys(metadata.frameworks).sort(),
+    expectedFrameworkIds,
+  );
   assert.deepEqual(
     model.examples.map((example) => example.framework).sort(),
     expectedFrameworkIds,
