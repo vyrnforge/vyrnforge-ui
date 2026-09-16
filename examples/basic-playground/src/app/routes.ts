@@ -1,21 +1,37 @@
 import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
+import { getReferenceRecordRoute } from "../../../../docs/reference/referenceRuntime";
 import type { ComponentType } from "react";
-import { OverviewPage } from "../pages/overview/OverviewPage";
-import { ThemeTokensPage } from "../pages/core/ThemeTokensPage";
-import { ThemeModesPage } from "../pages/core/ThemeModesPage";
 import { DensityPage } from "../pages/core/DensityPage";
 import { CssOverridePage } from "../pages/core/CssOverridePage";
+import { ThemeModesPage } from "../pages/core/ThemeModesPage";
+import { ThemeTokensPage } from "../pages/core/ThemeTokensPage";
+import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
+import { FilteringPage } from "../pages/data-grid/FilteringPage";
+import { GridStatesPage } from "../pages/data-grid/GridStatesPage";
+import { GroupingPage } from "../pages/data-grid/GroupingPage";
+import { ResizingPage } from "../pages/data-grid/ResizingPage";
+import { SelectionPage } from "../pages/data-grid/SelectionPage";
+import { StressGridPage } from "../pages/data-grid/StressGridPage";
+import { ThemesGridPage } from "../pages/data-grid/ThemesGridPage";
+import { OverviewPage } from "../pages/overview/OverviewPage";
+import { AdminShellPage } from "../pages/patterns/AdminShellPage";
+import { AssignmentPatternsPage } from "../pages/patterns/AssignmentPatternsPage";
+import { CustomerPortalShellPage } from "../pages/patterns/CustomerPortalShellPage";
+import { DetailPage } from "../pages/patterns/DetailPage";
+import { EmptyErrorLoadingPage } from "../pages/patterns/EmptyErrorLoadingPage";
+import { FilterFormPage } from "../pages/patterns/FilterFormPage";
+import { FormPage } from "../pages/patterns/FormPage";
+import { OverlayStressPage } from "../pages/patterns/OverlayStressPage";
+import { ResourceListPage } from "../pages/patterns/ResourceListPage";
+import { SettingsPage } from "../pages/patterns/SettingsPage";
+import { ComponentMatrixPage } from "../pages/quality/ComponentMatrixPage";
+import { AutocompletePage } from "../pages/reference/AutocompletePage";
 import {
-  AppShellPage,
-  BadgePage,
-  BasicGridReferencePage,
-  ButtonGroupPage,
-  ButtonPage,
-  IconButtonPage,
-  SegmentedControlPage,
-  TabsPage,
-  ToolbarButtonPage,
-} from "../pages/reference/PriorityComponentPages";
+  RatingPage,
+  SliderPage,
+  ToggleButtonGroupPage,
+  ToggleButtonPage,
+} from "../pages/reference/ControlComponentPages";
 import {
   CheckboxReferencePage,
   DateInputPage,
@@ -30,14 +46,6 @@ import {
   TextInputReferencePage,
   ValidationMessagePage,
 } from "../pages/reference/FormComponentPages";
-import { AutocompletePage } from "../pages/reference/AutocompletePage";
-import { TransferListPage } from "../pages/reference/TransferListPage";
-import {
-  RatingPage,
-  SliderPage,
-  ToggleButtonGroupPage,
-  ToggleButtonPage,
-} from "../pages/reference/ControlComponentPages";
 import {
   ConfirmDialogPage,
   DialogPage,
@@ -47,26 +55,21 @@ import {
   PopoverPage,
   TooltipPage,
 } from "../pages/reference/OverlayComponentPages";
+import {
+  AppShellPage,
+  BadgePage,
+  BasicGridReferencePage,
+  ButtonGroupPage,
+  ButtonPage,
+  IconButtonPage,
+  SegmentedControlPage,
+  TabsPage,
+  ToolbarButtonPage,
+} from "../pages/reference/PriorityComponentPages";
 import { ToastPage } from "../pages/reference/ToastPage";
-import { ColumnsPage } from "../pages/data-grid/ColumnsPage";
-import { FilteringPage } from "../pages/data-grid/FilteringPage";
-import { SelectionPage } from "../pages/data-grid/SelectionPage";
-import { GroupingPage } from "../pages/data-grid/GroupingPage";
-import { ResizingPage } from "../pages/data-grid/ResizingPage";
-import { ThemesGridPage } from "../pages/data-grid/ThemesGridPage";
-import { GridStatesPage } from "../pages/data-grid/GridStatesPage";
-import { StressGridPage } from "../pages/data-grid/StressGridPage";
-import { ResourceListPage } from "../pages/patterns/ResourceListPage";
-import { DetailPage } from "../pages/patterns/DetailPage";
-import { SettingsPage } from "../pages/patterns/SettingsPage";
-import { FormPage } from "../pages/patterns/FormPage";
-import { EmptyErrorLoadingPage } from "../pages/patterns/EmptyErrorLoadingPage";
-import { AdminShellPage } from "../pages/patterns/AdminShellPage";
-import { CustomerPortalShellPage } from "../pages/patterns/CustomerPortalShellPage";
-import { FilterFormPage } from "../pages/patterns/FilterFormPage";
-import { OverlayStressPage } from "../pages/patterns/OverlayStressPage";
-import { AssignmentPatternsPage } from "../pages/patterns/AssignmentPatternsPage";
-import { ComponentMatrixPage } from "../pages/quality/ComponentMatrixPage";
+import { TransferListPage } from "../pages/reference/TransferListPage";
+import { referenceComponents } from "../data/referenceMetadata";
+import { referenceModel } from "./playgroundContext";
 
 export type PlaygroundRoute = {
   id: string;
@@ -106,7 +109,111 @@ function patternDescription(id: string, fallback: string) {
   );
 }
 
-export const routes: PlaygroundRoute[] = [
+const componentDemoBindings: Array<[string, ComponentType]> = [
+  ["button", ButtonPage],
+  ["icon-button", IconButtonPage],
+  ["button-group", ButtonGroupPage],
+  ["toolbar-button", ToolbarButtonPage],
+  ["segmented-control", SegmentedControlPage],
+  ["toggle-button", ToggleButtonPage],
+  ["toggle-button-group", ToggleButtonGroupPage],
+  ["text-input", TextInputReferencePage],
+  ["autocomplete", AutocompletePage],
+  ["transfer-list", TransferListPage],
+  ["select", SelectReferencePage],
+  ["checkbox", CheckboxReferencePage],
+  ["field", FieldReferencePage],
+  ["validation-message", ValidationMessagePage],
+  ["radio", RadioPage],
+  ["radio-group", RadioGroupPage],
+  ["switch", SwitchPage],
+  ["number-input", NumberInputPage],
+  ["date-input", DateInputPage],
+  ["datetime-input", DateTimeInputPage],
+  ["textarea", TextareaPage],
+  ["rating", RatingPage],
+  ["slider", SliderPage],
+  ["popover", PopoverPage],
+  ["menu", MenuPage],
+  ["dropdown", DropdownPage],
+  ["tooltip", TooltipPage],
+  ["dialog", DialogPage],
+  ["drawer", DrawerPage],
+  ["confirm-dialog", ConfirmDialogPage],
+  ["badge", BadgePage],
+  ["toast", ToastPage],
+  ["app-shell", AppShellPage],
+  ["tabs", TabsPage],
+];
+
+const subgroupById: Record<string, PlaygroundRoute["subgroup"]> = {
+  button: "Actions",
+  "icon-button": "Actions",
+  "button-group": "Actions",
+  "toolbar-button": "Actions",
+  "segmented-control": "Actions",
+  "toggle-button": "Actions",
+  "toggle-button-group": "Actions",
+  "text-input": "Forms",
+  autocomplete: "Forms",
+  select: "Forms",
+  checkbox: "Forms",
+  field: "Forms",
+  "validation-message": "Forms",
+  radio: "Forms",
+  "radio-group": "Forms",
+  switch: "Forms",
+  "number-input": "Forms",
+  "date-input": "Forms",
+  "datetime-input": "Forms",
+  textarea: "Forms",
+  rating: "Forms",
+  slider: "Forms",
+  "transfer-list": "Data Management",
+  badge: "Feedback",
+  toast: "Feedback",
+  "app-shell": "Layout",
+  tabs: "Navigation",
+  popover: "Overlays",
+  menu: "Overlays",
+  dropdown: "Overlays",
+  tooltip: "Overlays",
+  dialog: "Overlays",
+  drawer: "Overlays",
+  "confirm-dialog": "Overlays",
+};
+
+const canonicalComponentById = new Map(
+  referenceComponents.map((component) => [component.id, component] as const),
+);
+
+const componentRoutes: PlaygroundRoute[] = componentDemoBindings.map(
+  ([id, Component]) => {
+    const component = canonicalComponentById.get(id);
+    if (!component) {
+      throw new Error(`Playground demo has no canonical component record: ${id}`);
+    }
+    if (component.package !== "@vyrnforge/ui-components") {
+      throw new Error(
+        `Playground component demo ${id} must resolve to @vyrnforge/ui-components, got ${component.package}.`,
+      );
+    }
+    return {
+      id,
+      label: component.displayName,
+      title: component.displayName,
+      description: component.purpose,
+      group: "Components",
+      subgroup: subgroupById[id],
+      gallery: true,
+      path: getReferenceRecordRoute(referenceModel, "components", id),
+      packageName: "@vyrnforge/ui-components",
+      Component,
+    };
+  },
+);
+
+const authoredRoutes: PlaygroundRoute[] = [
   {
     id: "overview",
     label: "Overview",
@@ -121,7 +228,7 @@ export const routes: PlaygroundRoute[] = [
     label: "Theme Tokens",
     title: "Theme Tokens",
     description:
-      "Shared vf tokens for color, surfaces, typography, spacing, and status.",
+      "Shared VyrnForge tokens for color, surfaces, typography, spacing, and status.",
     group: "Foundations",
     Component: ThemeTokensPage,
   },
@@ -146,419 +253,9 @@ export const routes: PlaygroundRoute[] = [
     label: "CSS Overrides",
     title: "CSS Overrides",
     description:
-      "Global vf overrides, local scopes, and grid-only udg overrides.",
+      "Global VyrnForge overrides, local scopes, and grid-only overrides.",
     group: "Foundations",
     Component: CssOverridePage,
-  },
-  {
-    id: "button",
-    label: "Button",
-    title: "Button",
-    description: "Visible business actions and form commands.",
-    group: "Components",
-    subgroup: "Actions",
-    gallery: true,
-    path: "/components/actions/button",
-    packageName: "@vyrnforge/ui-components",
-    Component: ButtonPage,
-  },
-  {
-    id: "icon-button",
-    label: "IconButton",
-    title: "IconButton",
-    description: "Compact icon-only utility actions.",
-    group: "Components",
-    subgroup: "Actions",
-    gallery: true,
-    path: "/components/actions/icon-button",
-    packageName: "@vyrnforge/ui-components",
-    Component: IconButtonPage,
-  },
-  {
-    id: "button-group",
-    label: "ButtonGroup",
-    title: "ButtonGroup",
-    description: "Visually grouped related actions.",
-    group: "Components",
-    subgroup: "Actions",
-    gallery: true,
-    path: "/components/actions/button-group",
-    packageName: "@vyrnforge/ui-components",
-    Component: ButtonGroupPage,
-  },
-  {
-    id: "toolbar-button",
-    label: "ToolbarButton",
-    title: "ToolbarButton",
-    description: "Dense labelled toolbar commands.",
-    group: "Components",
-    subgroup: "Actions",
-    gallery: true,
-    path: "/components/actions/toolbar-button",
-    packageName: "@vyrnforge/ui-components",
-    Component: ToolbarButtonPage,
-  },
-  {
-    id: "segmented-control",
-    label: "SegmentedControl",
-    title: "SegmentedControl",
-    description: "Mutually exclusive view and mode selection.",
-    group: "Components",
-    subgroup: "Actions",
-    gallery: true,
-    path: "/components/actions/segmented-control",
-    packageName: "@vyrnforge/ui-components",
-    Component: SegmentedControlPage,
-  },
-  {
-    id: "toggle-button",
-    label: "ToggleButton",
-    title: "Toggle Button",
-    description: "Pressable tools, formatting controls, and view actions.",
-    group: "Components",
-    subgroup: "Actions",
-    gallery: true,
-    path: "/components/actions/toggle-button",
-    packageName: "@vyrnforge/ui-components",
-    Component: ToggleButtonPage,
-  },
-  {
-    id: "toggle-button-group",
-    label: "ToggleButtonGroup",
-    title: "Toggle Button Group",
-    description: "Joined exclusive and multi-select tool groups.",
-    group: "Components",
-    subgroup: "Actions",
-    gallery: true,
-    path: "/components/actions/toggle-button-group",
-    packageName: "@vyrnforge/ui-components",
-    Component: ToggleButtonGroupPage,
-  },
-  {
-    id: "text-input",
-    label: "TextInput",
-    title: "TextInput",
-    description: "Native short-text input.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/text-input",
-    packageName: "@vyrnforge/ui-components",
-    Component: TextInputReferencePage,
-  },
-  {
-    id: "autocomplete",
-    label: "Autocomplete",
-    title: "Autocomplete",
-    description:
-      "Searchable single-value combobox for larger known option sets.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/autocomplete",
-    packageName: "@vyrnforge/ui-components",
-    Component: AutocompletePage,
-  },
-  {
-    id: "transfer-list",
-    label: "Transfer List",
-    title: "Transfer List",
-    description: "Dual-list assignment for moderate known collections.",
-    group: "Components",
-    subgroup: "Data Management",
-    gallery: true,
-    path: "/components/data-management/transfer-list",
-    packageName: "@vyrnforge/ui-components",
-    Component: TransferListPage,
-  },
-  {
-    id: "select",
-    label: "Select",
-    title: "Select",
-    description: "Native select for compact option sets.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/select",
-    packageName: "@vyrnforge/ui-components",
-    Component: SelectReferencePage,
-  },
-  {
-    id: "checkbox",
-    label: "Checkbox",
-    title: "Checkbox",
-    description: "Native independent-choice input.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/checkbox",
-    packageName: "@vyrnforge/ui-components",
-    Component: CheckboxReferencePage,
-  },
-  {
-    id: "field",
-    label: "Field",
-    title: "Field",
-    description: "Labels, descriptions, validation, and control relationships.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/field",
-    packageName: "@vyrnforge/ui-components",
-    Component: FieldReferencePage,
-  },
-  {
-    id: "validation-message",
-    label: "ValidationMessage",
-    title: "Validation Message",
-    description: "Field-level validation and guidance messages.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/validation-message",
-    packageName: "@vyrnforge/ui-components",
-    Component: ValidationMessagePage,
-  },
-  {
-    id: "radio",
-    label: "Radio",
-    title: "Radio",
-    description: "Native individual choice control.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/radio",
-    packageName: "@vyrnforge/ui-components",
-    Component: RadioPage,
-  },
-  {
-    id: "radio-group",
-    label: "RadioGroup",
-    title: "Radio Group",
-    description: "Native fieldset-based single-choice group.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/radio-group",
-    packageName: "@vyrnforge/ui-components",
-    Component: RadioGroupPage,
-  },
-  {
-    id: "switch",
-    label: "Switch",
-    title: "Switch",
-    description: "Native checkbox-based settings control.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/switch",
-    packageName: "@vyrnforge/ui-components",
-    Component: SwitchPage,
-  },
-  {
-    id: "number-input",
-    label: "NumberInput",
-    title: "Number Input",
-    description: "Native integer and decimal input.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/number-input",
-    packageName: "@vyrnforge/ui-components",
-    Component: NumberInputPage,
-  },
-  {
-    id: "date-input",
-    label: "DateInput",
-    title: "Date Input",
-    description: "Native local date input.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/date-input",
-    packageName: "@vyrnforge/ui-components",
-    Component: DateInputPage,
-  },
-  {
-    id: "datetime-input",
-    label: "DateTimeInput",
-    title: "Date Time Input",
-    description: "Native local date and time input.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/datetime-input",
-    packageName: "@vyrnforge/ui-components",
-    Component: DateTimeInputPage,
-  },
-  {
-    id: "textarea",
-    label: "Textarea",
-    title: "Textarea",
-    description: "Native multiline text input.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/textarea",
-    packageName: "@vyrnforge/ui-components",
-    Component: TextareaPage,
-  },
-  {
-    id: "rating",
-    label: "Rating",
-    title: "Rating",
-    description: "Discrete native radio-based score selection.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/rating",
-    packageName: "@vyrnforge/ui-components",
-    Component: RatingPage,
-  },
-  {
-    id: "slider",
-    label: "Slider",
-    title: "Slider",
-    description: "Native bounded numeric range input.",
-    group: "Components",
-    subgroup: "Forms",
-    gallery: true,
-    path: "/components/forms/slider",
-    packageName: "@vyrnforge/ui-components",
-    Component: SliderPage,
-  },
-  {
-    id: "popover",
-    label: "Popover",
-    title: "Popover",
-    description: "Anchored interactive floating content.",
-    group: "Components",
-    subgroup: "Overlays",
-    gallery: true,
-    path: "/components/overlays/popover",
-    packageName: "@vyrnforge/ui-components",
-    Component: PopoverPage,
-  },
-  {
-    id: "menu",
-    label: "Menu",
-    title: "Menu",
-    description: "Keyboard-ready floating action menu.",
-    group: "Components",
-    subgroup: "Overlays",
-    gallery: true,
-    path: "/components/overlays/menu",
-    packageName: "@vyrnforge/ui-components",
-    Component: MenuPage,
-  },
-  {
-    id: "dropdown",
-    label: "Dropdown",
-    title: "Dropdown",
-    description: "Generic trigger-controlled floating content.",
-    group: "Components",
-    subgroup: "Overlays",
-    gallery: true,
-    path: "/components/overlays/dropdown",
-    packageName: "@vyrnforge/ui-components",
-    Component: DropdownPage,
-  },
-  {
-    id: "tooltip",
-    label: "Tooltip",
-    title: "Tooltip",
-    description: "Short contextual description for hover and focus.",
-    group: "Components",
-    subgroup: "Overlays",
-    gallery: true,
-    path: "/components/overlays/tooltip",
-    packageName: "@vyrnforge/ui-components",
-    Component: TooltipPage,
-  },
-  {
-    id: "dialog",
-    label: "Dialog",
-    title: "Dialog",
-    description: "Modal focus-contained workflow.",
-    group: "Components",
-    subgroup: "Overlays",
-    gallery: true,
-    path: "/components/overlays/dialog",
-    packageName: "@vyrnforge/ui-components",
-    Component: DialogPage,
-  },
-  {
-    id: "drawer",
-    label: "Drawer",
-    title: "Drawer",
-    description: "Modal edge workflow with internal scrolling.",
-    group: "Components",
-    subgroup: "Overlays",
-    gallery: true,
-    path: "/components/overlays/drawer",
-    packageName: "@vyrnforge/ui-components",
-    Component: DrawerPage,
-  },
-  {
-    id: "confirm-dialog",
-    label: "Confirm Dialog",
-    title: "Confirm Dialog",
-    description: "Reusable normal and destructive confirmation flow.",
-    group: "Components",
-    subgroup: "Overlays",
-    gallery: true,
-    path: "/components/overlays/confirm-dialog",
-    packageName: "@vyrnforge/ui-components",
-    Component: ConfirmDialogPage,
-  },
-  {
-    id: "badge",
-    label: "Badge",
-    title: "Badge",
-    description: "Compact status and metadata label.",
-    group: "Components",
-    subgroup: "Feedback",
-    gallery: true,
-    path: "/components/feedback/badge",
-    packageName: "@vyrnforge/ui-components",
-    Component: BadgePage,
-  },
-  {
-    id: "toast",
-    label: "Toast",
-    title: "Toast",
-    description:
-      "Transient operation feedback with provider-owned queue and timers.",
-    group: "Components",
-    subgroup: "Feedback",
-    gallery: true,
-    path: "/components/feedback/toast",
-    packageName: "@vyrnforge/ui-components",
-    Component: ToastPage,
-  },
-  {
-    id: "app-shell",
-    label: "AppShell",
-    title: "AppShell",
-    description: "Persistent application layout and scroll ownership.",
-    group: "Components",
-    subgroup: "Layout",
-    gallery: true,
-    path: "/components/layout/app-shell",
-    packageName: "@vyrnforge/ui-components",
-    Component: AppShellPage,
-  },
-  {
-    id: "tabs",
-    label: "Tabs",
-    title: "Tabs",
-    description: "Related content panels on one route.",
-    group: "Components",
-    subgroup: "Navigation",
-    gallery: true,
-    path: "/components/navigation/tabs",
-    packageName: "@vyrnforge/ui-components",
-    Component: TabsPage,
   },
   {
     id: "grid-basic",
@@ -701,16 +398,6 @@ export const routes: PlaygroundRoute[] = [
     Component: AssignmentPatternsPage,
   },
   {
-    id: "overlay-stress",
-    label: "Overlay Stress Test",
-    title: "Overlay Stress Test",
-    description:
-      "Nested portal, focus, dismissal, scroll, and z-index engineering exercise.",
-    group: "Internal",
-    visibility: "internal",
-    Component: OverlayStressPage,
-  },
-  {
     id: "empty-error-loading",
     label: "Empty/Error/Loading",
     title: "Empty, Error, and Loading",
@@ -744,6 +431,16 @@ export const routes: PlaygroundRoute[] = [
     Component: CustomerPortalShellPage,
   },
   {
+    id: "overlay-stress",
+    label: "Overlay Stress Test",
+    title: "Overlay Stress Test",
+    description:
+      "Nested portal, focus, dismissal, scroll, and z-index engineering exercise.",
+    group: "Internal",
+    visibility: "internal",
+    Component: OverlayStressPage,
+  },
+  {
     id: "quality-component-matrix",
     label: "Component Matrix",
     title: "Quality / Component Matrix",
@@ -753,6 +450,12 @@ export const routes: PlaygroundRoute[] = [
     visibility: "internal",
     Component: ComponentMatrixPage,
   },
+];
+
+export const routes: PlaygroundRoute[] = [
+  authoredRoutes[0],
+  ...componentRoutes,
+  ...authoredRoutes.slice(1),
 ];
 
 export const routeGroups = [
