@@ -86,7 +86,9 @@ export function parseReferenceModel(raw: string): ReferenceModel {
       generated.frameworks.some((framework) => framework.id === id),
     )
   ) {
-    throw new Error("VyrnForge Reference requires all four framework surfaces.");
+    throw new Error(
+      "VyrnForge Reference requires all four framework surfaces.",
+    );
   }
 
   if (
