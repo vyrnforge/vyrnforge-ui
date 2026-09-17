@@ -17,6 +17,7 @@ export const contractTestFiles = [
   "scripts/reference-examples-contract.test.mjs",
   "scripts/reference-discovery-contract.test.mjs",
   "scripts/reference-drift-removal-contract.test.mjs",
+  "scripts/reference-product-readiness-contract.test.mjs",
   "scripts/verify-executable-example-contract.test.mjs",
   "scripts/verify-package-boundaries.test.mjs",
   "scripts/verify-component-metadata.test.mjs",
