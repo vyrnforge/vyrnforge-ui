@@ -11,8 +11,20 @@ const metadataPath = "docs/metadata/executable-examples.json";
 const consumerManifestPath = "tests/consumers/manifest.json";
 const frameworkIds = ["native-html", "react", "angular", "vue"];
 
+function read(root, relativePath) {
+  return readFileSync(path.join(root, relativePath), "utf8");
+}
+
 function readJson(root, relativePath) {
-  return JSON.parse(readFileSync(path.join(root, relativePath), "utf8"));
+  return JSON.parse(read(root, relativePath));
+}
+
+function requireMarkers(text, relativePath, markers, failures) {
+  for (const marker of markers) {
+    if (!text.includes(marker)) {
+      failures.push(`${relativePath}: missing ${marker}`);
+    }
+  }
 }
 
 export function verifyExecutableExampleContract({
@@ -65,6 +77,11 @@ export function verifyExecutableExampleContract({
         `${frameworkId}: contractFile must match consumer fixture contractFile`,
       );
     }
+    if (!(fixture.exampleFiles ?? []).includes(example.entrypoint)) {
+      failures.push(
+        `${frameworkId}: entrypoint must be a manifest-listed consumer example file`,
+      );
+    }
     const entrypoint = path.join(example.directory, example.entrypoint);
     if (!existsSync(path.join(root, entrypoint))) {
       failures.push(
@@ -97,6 +114,76 @@ export function verifyExecutableExampleContract({
       "executable example contract must contain exactly the four first-class framework surfaces",
     );
   }
+
+  const adapterPath =
+    "examples/basic-playground/src/data/executableExampleContract.ts";
+  const routePath =
+    "examples/basic-playground/src/app/executableExampleRoutes.tsx";
+  const pagePath =
+    "examples/basic-playground/src/pages/reference/ExecutableExamplesPage.tsx";
+  const appPath = "examples/basic-playground/src/app/App.tsx";
+  const navPath = "examples/basic-playground/src/app/PlaygroundNav.tsx";
+  for (const required of [adapterPath, routePath, pagePath, appPath, navPath]) {
+    if (!existsSync(path.join(root, required))) {
+      failures.push(`executable example reader file is missing: ${required}`);
+    }
+  }
+  if (failures.length > 0) return failures.sort();
+
+  requireMarkers(
+    read(root, adapterPath),
+    adapterPath,
+    [
+      "tests/consumers/manifest.json?raw",
+      "tests/consumers/native-html/src/main.ts?raw",
+      "tests/consumers/react/src/main.tsx?raw",
+      "tests/consumers/angular/src/app/app.component.html?raw",
+      "tests/consumers/vue/src/App.vue?raw",
+      "fixture.exampleFiles.includes(evidence.entrypoint)",
+      "source.path !== expectedSourcePath",
+    ],
+    failures,
+  );
+  requireMarkers(
+    read(root, routePath),
+    routePath,
+    [
+      "referenceModel.examples.map",
+      'getReferenceRecordRoute(referenceModel, "examples"',
+      "exampleFrameworkId: example.framework",
+    ],
+    failures,
+  );
+  requireMarkers(
+    read(root, pagePath),
+    pagePath,
+    [
+      "executableExampleRecords",
+      "getExecutableExampleRecord",
+      "Executable source",
+      "Verification contract",
+      "Runtime evidence",
+      "usePlaygroundFramework",
+    ],
+    failures,
+  );
+  requireMarkers(
+    read(root, appPath),
+    appPath,
+    [
+      "executableExamplesCatalogRoute",
+      "executableExampleDetailRoutes",
+      "getExecutableExampleRouteForFramework",
+      "activeRoute.exampleFrameworkId",
+    ],
+    failures,
+  );
+  requireMarkers(
+    read(root, navPath),
+    navPath,
+    ['route.id === "executable-examples"', 'return "examples"'],
+    failures,
+  );
 
   return failures.sort();
 }
