@@ -76,10 +76,7 @@ export function DocsPage({
       </div>
 
       {route.kind === "component-reference" && componentId ? (
-        <ReferencePreview
-          componentId={componentId}
-          frameworkId={frameworkId}
-        />
+        <ReferencePreview componentId={componentId} frameworkId={frameworkId} />
       ) : null}
 
       {route.id === "search" ? (
