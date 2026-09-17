@@ -507,9 +507,7 @@
             "mode": "element",
             "type": "VyrnForgeDescriptionListElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",

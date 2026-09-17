@@ -5308,10 +5308,7 @@
       "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
       "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
       "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
-      "relatedComponents": [
-        "KeyValueList",
-        "PropertyTable"
-      ],
+      "relatedComponents": ["KeyValueList", "PropertyTable"],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",

@@ -150,7 +150,6 @@ test("loader failures use the dedicated deterministic error type", () => {
   assert.match(error.message, /Canonical component contract validation failed/);
 });
 
-
 test("DescriptionList keeps a semantic, state-free cross-framework contract", () => {
   const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
   const contract = normalized.componentById.get("description-list");
