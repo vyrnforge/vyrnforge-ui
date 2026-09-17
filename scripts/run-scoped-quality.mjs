@@ -122,14 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-const rp1708FormattingTarget =
-  "scripts/reference-product-readiness-contract.test.mjs";
-runNpm(["exec", "--", "prettier", "--write", rp1708FormattingTarget]);
-execFileSync("git", ["diff", "--", rp1708FormattingTarget], {
-  cwd: root,
-  stdio: "inherit",
-});
-
 for (const command of [
   "format:check",
   "lint",
