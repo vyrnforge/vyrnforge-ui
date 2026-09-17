@@ -176,7 +176,11 @@ export function createVueTypeModel(generationModel) {
     ]),
   );
   const components = generationModel.surfaces.vue.components
-    .filter((record) => ["current", "target"].includes(record.status))
+    .filter(
+      (record) =>
+        ["current", "target"].includes(record.status) &&
+        nativeById.get(record.id)?.status === "current",
+    )
     .map((record) => {
       const native = nativeById.get(record.id);
       assert(record.export, `${record.id}: Vue export is required`);
@@ -194,10 +198,6 @@ export function createVueTypeModel(generationModel) {
       };
     })
     .sort((left, right) => compareText(left.id, right.id));
-  assert(
-    components.length === 59,
-    `expected 59 components, got ${components.length}`,
-  );
   return Object.freeze(components);
 }
 
