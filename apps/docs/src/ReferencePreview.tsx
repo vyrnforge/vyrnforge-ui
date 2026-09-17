@@ -1,6 +1,9 @@
 import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "./docsContext";
-import { getEmbeddedPlaygroundHref } from "./deploymentLinks";
+import {
+  getEmbeddedPlaygroundHref,
+  getPlaygroundRouteHref,
+} from "./deploymentLinks";
 import { getComponentReferenceRecord } from "./referenceData";
 
 type ReferencePreviewProps = {
@@ -33,6 +36,10 @@ export function ReferencePreview({
     frameworkId,
     component.playgroundPath,
   );
+  const fullExampleHref = getPlaygroundRouteHref(
+    frameworkId,
+    component.playgroundPath,
+  );
 
   return (
     <Card className="vf-docs-preview" padding="none">
@@ -52,7 +59,7 @@ export function ReferencePreview({
         </div>
         <a
           className="vf-docs-preview__open"
-          href={previewHref.replace("embed=reference&", "")}
+          href={fullExampleHref}
           rel="noreferrer"
           target="_blank"
         >
