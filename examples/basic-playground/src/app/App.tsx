@@ -43,11 +43,9 @@ const componentRouteAliases = new Map(
     .filter(
       (component) =>
         component.playgroundPath &&
-        ![
-          "pending",
-          "requires-verification",
-          "not-applicable",
-        ].includes(component.playgroundPath),
+        !["pending", "requires-verification", "not-applicable"].includes(
+          component.playgroundPath,
+        ),
     )
     .map((component) => [
       normalizeHashRoute(component.playgroundPath),
