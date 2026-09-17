@@ -75,7 +75,9 @@ function getFrameworkFromLocation(): PlaygroundFrameworkId {
 }
 
 function isReferenceEmbed() {
-  return new URLSearchParams(window.location.search).get("embed") === "reference";
+  return (
+    new URLSearchParams(window.location.search).get("embed") === "reference"
+  );
 }
 
 export default function App() {
