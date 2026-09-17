@@ -12,6 +12,12 @@ export const docsLinks = {
   repository: "https://github.com/vyrnforge/vyrnforge-ui",
 };
 
+function normalizePlaygroundPath(playgroundPath: string) {
+  return playgroundPath.startsWith("/")
+    ? playgroundPath
+    : `/${playgroundPath}`;
+}
+
 function playgroundQuery(frameworkId: string, embedded = false) {
   const query = new URLSearchParams(window.location.search);
   query.set(referenceModel.frameworkContext.queryParameter, frameworkId);
@@ -27,12 +33,16 @@ export function getPlaygroundHref(frameworkId: string) {
   return `${docsLinks.playground}?${playgroundQuery(frameworkId).toString()}${window.location.hash}`;
 }
 
+export function getPlaygroundRouteHref(
+  frameworkId: string,
+  playgroundPath: string,
+) {
+  return `${docsLinks.playground}?${playgroundQuery(frameworkId).toString()}#${normalizePlaygroundPath(playgroundPath)}`;
+}
+
 export function getEmbeddedPlaygroundHref(
   frameworkId: string,
   playgroundPath: string,
 ) {
-  const route = playgroundPath.startsWith("/")
-    ? playgroundPath
-    : `/${playgroundPath}`;
-  return `${docsLinks.playground}?${playgroundQuery(frameworkId, true).toString()}#${route}`;
+  return `${docsLinks.playground}?${playgroundQuery(frameworkId, true).toString()}#${normalizePlaygroundPath(playgroundPath)}`;
 }
