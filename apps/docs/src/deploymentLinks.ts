@@ -1,3 +1,5 @@
+import { referenceModel } from "./docsContext";
+
 const docsBase = import.meta.env.BASE_URL.endsWith("/")
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
@@ -9,3 +11,9 @@ export const docsLinks = {
     : `${docsBase}playground/`,
   repository: "https://github.com/vyrnforge/vyrnforge-ui",
 };
+
+export function getPlaygroundHref(frameworkId: string) {
+  const query = new URLSearchParams(window.location.search);
+  query.set(referenceModel.frameworkContext.queryParameter, frameworkId);
+  return `${docsLinks.playground}?${query.toString()}${window.location.hash}`;
+}

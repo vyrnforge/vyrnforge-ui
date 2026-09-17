@@ -136,7 +136,6 @@ export function OverviewPage({
                     <Text size="sm" tone="muted">
                       {candidate.language}
                     </Text>
-                    <Text size="sm">{candidate.guidance}</Text>
                     <Inline gap="xs">
                       <Badge size="sm" variant="neutral" tone="subtle">
                         {candidate.renderer}
