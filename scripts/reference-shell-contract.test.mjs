@@ -25,7 +25,7 @@ test("Docs and Playground consume one generated Reference context", () => {
   }
 });
 
-test("both apps preserve shared framework context in location and mode links", () => {
+test("both apps preserve shared framework context in location and Reference links", () => {
   for (const relativePath of [
     "apps/docs/src/App.tsx",
     "apps/docs/src/deploymentLinks.ts",
@@ -53,8 +53,11 @@ test("both navigation surfaces use generated Reference IA and searchable VyrnFor
   }
 });
 
-test("Reference shells share product identity and explicit surface modes", () => {
+test("Reference presents one product identity with embedded executable component previews", () => {
   const docsShell = read("apps/docs/src/DocsShell.tsx");
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
+  const preview = read("apps/docs/src/ReferencePreview.tsx");
+  const playgroundApp = read("examples/basic-playground/src/app/App.tsx");
   const playgroundShell = read(
     "examples/basic-playground/src/app/PlaygroundShell.tsx",
   );
@@ -62,9 +65,16 @@ test("Reference shells share product identity and explicit surface modes", () =>
   for (const source of [docsShell, playgroundShell]) {
     assert.match(source, /referenceModel\.product\.label/u);
   }
-  assert.match(docsShell, /Playground mode/u);
-  assert.match(playgroundShell, /Playground mode/u);
-  assert.match(playgroundShell, /Docs mode/u);
+
+  assert.match(docsPage, /ReferencePreview/u);
+  assert.match(preview, /getEmbeddedPlaygroundHref/u);
+  assert.match(preview, /component\.playgroundPath/u);
+  assert.match(playgroundApp, /embed/u);
+  assert.match(playgroundApp, /reference/u);
+  assert.match(playgroundShell, /embedded/u);
+  assert.match(playgroundShell, /vf-playground-embed/u);
+  assert.doesNotMatch(docsShell, /Playground mode/u);
+  assert.doesNotMatch(playgroundShell, /Docs mode/u);
 });
 
 test("shared runtime requires four framework surfaces and four Reference sections", () => {
