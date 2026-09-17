@@ -89,18 +89,16 @@ function playgroundRoutes(root) {
     "utf8",
   );
   const routes = new Set(
-    [...routeSource.matchAll(/\bpath:\s+"([^"]+)"/g)].map(
-      (match) => match[1],
-    ),
+    [...routeSource.matchAll(/\bpath:\s+"([^"]+)"/g)].map((match) => match[1]),
   );
 
   const componentIdsSource = routeSource.match(
     /const componentDemoIds = \[([\s\S]*?)\] as const;/,
   )?.[1];
   const componentRouteIds = new Set(
-    [...(componentIdsSource?.matchAll(/"([a-z0-9]+(?:-[a-z0-9]+)*)"/g) ?? [])].map(
-      (match) => match[1],
-    ),
+    [
+      ...(componentIdsSource?.matchAll(/"([a-z0-9]+(?:-[a-z0-9]+)*)"/g) ?? []),
+    ].map((match) => match[1]),
   );
   const hasCanonicalAliasResolver =
     appSource.includes("components.json?raw") &&
