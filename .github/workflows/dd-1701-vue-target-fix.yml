@@ -40,8 +40,15 @@ jobs:
           fs.writeFileSync(path, source, 'utf8');
           NODE
           npx prettier --write scripts/vue-type-generation.mjs
-      - name: Regenerate framework artifacts
-        run: node scripts/generate-framework-artifacts.mjs
+      - name: Regenerate Vue typed catalog
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { writeFileSync } from 'node:fs';
+          import { buildVueTypedCatalogArtifact } from './scripts/vue-type-generation.mjs';
+          const artifact = buildVueTypedCatalogArtifact({ root: process.cwd() });
+          writeFileSync(artifact.path, artifact.content, 'utf8');
+          NODE
       - name: Verify targeted Vue generation
         run: |
           node scripts/verify-vue-catalog-coverage.mjs
