@@ -21,6 +21,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24.18.0
+      - name: Install dependencies
+        run: npm ci
       - name: Keep target-only contracts out of shipped Vue typed catalog
         shell: bash
         run: |
@@ -38,9 +40,10 @@ jobs:
           fs.writeFileSync(path, source, 'utf8');
           NODE
           npx prettier --write scripts/vue-type-generation.mjs
+      - name: Regenerate framework artifacts
+        run: node scripts/generate-framework-artifacts.mjs
       - name: Verify targeted Vue generation
         run: |
-          npm ci
           node scripts/verify-vue-catalog-coverage.mjs
           node scripts/verify-vue-imperative-methods.mjs
           node scripts/verify-generated-framework-artifacts.mjs
@@ -50,7 +53,7 @@ jobs:
           rm .github/workflows/dd-1701-vue-target-fix.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/vue-type-generation.mjs .github/workflows/dd-1701-vue-target-fix.yml
+          git add scripts/vue-type-generation.mjs packages/ui-vue/src/generated/typed-catalog.generated.ts .github/workflows/dd-1701-vue-target-fix.yml
           git diff --cached --check
           git commit -m "fix: exclude target-only contracts from Vue runtime types"
           git push origin HEAD:feat/dd-1701-description-list-contract
