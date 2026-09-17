@@ -53,14 +53,14 @@ export function DocsShell({
           brand={
             <div>
               <div className="vf-docs-header__eyebrow">
-                {referenceModel.product.label} · Docs
+                {referenceModel.product.label}
               </div>
               <Heading level={1} size="lg" className="vf-docs-header__title">
                 {referenceModel.product.label}
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Curated guidance and generated reference facts share one
-                framework-neutral product context across Docs and Playground.
+                Guidance, generated API facts, and executable examples share one
+                framework-neutral Reference experience.
               </Text>
             </div>
           }
@@ -70,7 +70,7 @@ export function DocsShell({
                 className="vf-docs-top-link"
                 href={getPlaygroundHref(framework.id)}
               >
-                Playground mode
+                All examples
               </a>
               <a className="vf-docs-top-link" href={docsLinks.repository}>
                 GitHub
