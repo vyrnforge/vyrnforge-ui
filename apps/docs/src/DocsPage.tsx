@@ -8,6 +8,7 @@ import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { MarkdownView } from "./MarkdownView";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
+import { ReferencePreview } from "./ReferencePreview";
 import { ReferenceSearchPage } from "./ReferenceSearchPage";
 import type { DocsRoute } from "./referenceRoutes";
 
@@ -37,6 +38,9 @@ export function DocsPage({
       </main>
     );
   }
+
+  const componentId =
+    referenceRecord?.domain === "components" ? referenceRecord.id : null;
 
   return (
     <main className="vf-docs-page">
@@ -71,6 +75,13 @@ export function DocsPage({
         )}
       </div>
 
+      {route.kind === "component-reference" && componentId ? (
+        <ReferencePreview
+          componentId={componentId}
+          frameworkId={frameworkId}
+        />
+      ) : null}
+
       {route.id === "search" ? (
         <ReferenceSearchPage />
       ) : route.id === "token-reference" ||
@@ -84,9 +95,7 @@ export function DocsPage({
         <AiContextIndexPage />
       ) : route.kind === "component-reference" ? (
         <ComponentReferencePage
-          componentId={
-            referenceRecord?.domain === "components" ? referenceRecord.id : null
-          }
+          componentId={componentId}
           frameworkId={frameworkId}
           onFrameworkChange={onFrameworkChange}
         />
