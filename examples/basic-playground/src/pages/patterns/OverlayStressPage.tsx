@@ -27,8 +27,6 @@ export function OverlayStressPage() {
         'import { ConfirmDialog, Dialog, Drawer, Menu, Popover, Tooltip } from "@vyrnforge/ui-components";'
       }
       packageName="@vyrnforge/ui-components"
-      props={[]}
-      relatedComponents={[]}
       sections={[
         {
           id: "overlay-composition",

@@ -1,3 +1,5 @@
+import { referenceModel } from "./playgroundContext";
+
 const playgroundBase = import.meta.env.BASE_URL.endsWith("/")
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
@@ -14,6 +16,6 @@ export const playgroundLinks = {
 
 export function getDocsHref(frameworkId: string) {
   const query = new URLSearchParams(window.location.search);
-  query.set("framework", frameworkId);
+  query.set(referenceModel.frameworkContext.queryParameter, frameworkId);
   return `${playgroundLinks.docs}?${query.toString()}${window.location.hash}`;
 }

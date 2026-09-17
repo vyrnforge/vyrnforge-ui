@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Badge,
   Card,
@@ -8,39 +7,17 @@ import {
   type TabItem,
 } from "@vyrnforge/ui-components";
 
-import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
+import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
-import type { DocsFrameworkId } from "./docsContext";
-
-type ContractDetail = {
-  properties: string[];
-  attributes: string[];
-  events: string[];
-  slots: string[];
-  methods: string[];
-  accessibility: string[];
-  formAssociation: string;
-};
-
-type ComponentReferenceItem = {
-  id: string;
-  displayName: string;
-  category: string;
-  maturity: string;
-  purpose: string;
-  knownLimitations: string[];
-  nativeDeclaration: {
-    name: string;
-    tagName: string;
-    description: string;
-  } | null;
-  contract: ContractDetail | null;
-};
-
-type ConsumerKnowledge = {
-  components: ComponentReferenceItem[];
-};
+import { referenceModel, type DocsFrameworkId } from "./docsContext";
+import {
+  componentReferenceRecords,
+  getComponentReferenceRecord,
+  getRelatedPatterns,
+  type ComponentReferenceRecord,
+  type ReferenceContract,
+} from "./referenceData";
 
 type ApiProperty = {
   public: string;
@@ -95,12 +72,6 @@ type FrameworkApiComponent = {
   setup: string[];
 };
 
-type FrameworkApiSurface = {
-  package: string;
-  summary: { componentCount: number };
-  components: FrameworkApiComponent[];
-};
-
 type FrameworkApiId = "native" | "react" | "angular" | "vue";
 
 type FrameworkApiReference = {
@@ -109,29 +80,28 @@ type FrameworkApiReference = {
     generator: string;
     sources: string[];
   };
-  surfaces: Record<FrameworkApiId, FrameworkApiSurface>;
+  surfaces: Record<
+    FrameworkApiId,
+    {
+      package: string;
+      summary: { componentCount: number };
+      components: FrameworkApiComponent[];
+    }
+  >;
 };
 
 type ComponentReferencePageProps = {
+  componentId?: string | null;
   frameworkId: DocsFrameworkId;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
 };
 
-const reference = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
 const apiReference = JSON.parse(
   frameworkApiReferenceRaw,
 ) as FrameworkApiReference;
 
-const frameworkOrder = [
-  { id: "react", apiId: "react", label: "React" },
-  { id: "native-html", apiId: "native", label: "Native HTML" },
-  { id: "angular", apiId: "angular", label: "Angular" },
-  { id: "vue", apiId: "vue", label: "Vue" },
-] as const;
-
 function formatDefault(value: unknown) {
-  if (value === undefined) return "—";
-  return JSON.stringify(value);
+  return value === undefined ? "—" : JSON.stringify(value);
 }
 
 function formatProperty(property: ApiProperty) {
@@ -149,11 +119,7 @@ function formatEvent(event: ApiEvent) {
     .map((field) => `${field.name}: ${field.type}${field.required ? "" : "?"}`)
     .join(", ");
   const detailShape = detail ? ` { ${detail} }` : "";
-  return [
-    `${event.public} (${event.mode}; detail=${event.detail}${detailShape}`,
-    `bubbles=${event.bubbles}; composed=${event.composed}`,
-    `cancelable=${event.cancelable})`,
-  ].join("; ");
+  return `${event.public} (${event.mode}; detail=${event.detail}${detailShape}; bubbles=${event.bubbles}; composed=${event.composed}; cancelable=${event.cancelable})`;
 }
 
 function formatSlot(slot: ApiSlot) {
@@ -190,7 +156,7 @@ function MemberList({
   );
 }
 
-function ContractDetails({ contract }: { contract: ContractDetail | null }) {
+function ContractDetails({ contract }: { contract: ReferenceContract | null }) {
   if (!contract) {
     return (
       <Text size="sm" tone="muted">
@@ -232,7 +198,6 @@ function FrameworkApiPanel({
         {component.export && <code>export {component.export}</code>}
         {component.tag && <code>{component.tag}</code>}
       </div>
-
       <MemberList label="Setup" values={component.setup} />
       <MemberList
         label="Properties / inputs"
@@ -278,11 +243,12 @@ function apiComponent(componentId: string, apiId: FrameworkApiId) {
 }
 
 function frameworkTabs(componentId: string): TabItem[] {
-  return frameworkOrder.map(({ id, apiId, label }) => {
+  return referenceModel.frameworks.map((framework) => {
+    const apiId = framework.apiSurface as FrameworkApiId;
     const component = apiComponent(componentId, apiId);
     return {
-      id,
-      label,
+      id: framework.id,
+      label: framework.label,
       content: component ? (
         <FrameworkApiPanel component={component} />
       ) : (
@@ -294,16 +260,168 @@ function frameworkTabs(componentId: string): TabItem[] {
   });
 }
 
-function componentDeepLink(frameworkId: DocsFrameworkId, componentId: string) {
-  const query = new URLSearchParams({
-    framework: frameworkId,
-    component: componentId,
-  });
-  return `?${query.toString()}#/component-reference`;
+function componentHref(componentId: string) {
+  return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
+}
+
+function ComponentIndexCard({
+  component,
+}: {
+  component: ComponentReferenceRecord;
+}) {
+  const maturity = getComponentMaturityPresentation(component);
+  return (
+    <Card className="vf-docs-reference-card" padding="md">
+      <div className="vf-docs-reference-card__header">
+        <div>
+          <Heading level={4} size="sm">
+            <a href={componentHref(component.id)}>{component.displayName}</a>
+          </Heading>
+          {component.nativeDeclaration?.tagName && (
+            <code>{component.nativeDeclaration.tagName}</code>
+          )}
+        </div>
+        <Badge size="sm" tone="subtle" variant={maturity.variant}>
+          {maturity.label}
+        </Badge>
+      </div>
+      <Text>{component.purpose}</Text>
+      <Text size="sm" tone="muted">
+        {component.package}
+      </Text>
+    </Card>
+  );
+}
+
+function ComponentDetail({
+  component,
+  frameworkId,
+  onFrameworkChange,
+}: {
+  component: ComponentReferenceRecord;
+  frameworkId: DocsFrameworkId;
+  onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
+}) {
+  const maturity = getComponentMaturityPresentation(component);
+  const relatedPatterns = getRelatedPatterns(component.id);
+
+  return (
+    <div className="vf-docs-reference">
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Text size="sm">
+          <a href="#/component-reference">← Component reference</a>
+        </Text>
+        <div className="vf-docs-reference-card__header">
+          <div>
+            <Heading level={3} size="md">
+              {component.displayName}
+            </Heading>
+            <Text size="sm" tone="muted">
+              <code>{component.package}</code>
+              {component.nativeDeclaration?.tagName && (
+                <>
+                  {" "}
+                  · <code>{component.nativeDeclaration.tagName}</code>
+                </>
+              )}
+            </Text>
+          </div>
+          <Badge size="sm" tone="subtle" variant={maturity.variant}>
+            {maturity.label}
+          </Badge>
+        </div>
+        <Text>{component.purpose}</Text>
+        <Text size="sm" tone="muted">
+          AI context slice:{" "}
+          <code>{`ai-context/components/${component.id}.json`}</code>
+        </Text>
+      </Card>
+
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Usage guidance
+        </Heading>
+        <MemberList label="Use when" values={[component.guidance.useWhen]} />
+        <MemberList
+          label="Avoid when"
+          values={[component.guidance.avoidWhen]}
+        />
+        <MemberList
+          label="AI usage notes"
+          values={[component.guidance.aiUsageNotes]}
+        />
+        <MemberList
+          label="Related components"
+          values={component.guidance.relatedComponents}
+        />
+      </Card>
+
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Framework API
+        </Heading>
+        <Text tone="muted">
+          Public API facts below come directly from the generated framework API
+          reference. Selecting a tab updates the shared Reference framework
+          context.
+        </Text>
+        <Tabs
+          aria-label={`${component.displayName} framework API`}
+          className="vf-docs-framework-tabs"
+          items={frameworkTabs(component.id)}
+          onValueChange={(value) => onFrameworkChange(value as DocsFrameworkId)}
+          size="sm"
+          value={frameworkId}
+        />
+      </Card>
+
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Framework-neutral contract
+        </Heading>
+        <ContractDetails contract={component.contract} />
+      </Card>
+
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Accessibility and styling
+        </Heading>
+        <MemberList
+          label="Accessibility guidance"
+          values={[
+            component.accessibilityNotes,
+            ...(component.contract?.accessibility ?? []),
+          ].filter(Boolean)}
+        />
+        <MemberList label="Public classes" values={component.styling.classes} />
+        <MemberList
+          label="CSS variables"
+          values={component.styling.variables}
+        />
+      </Card>
+
+      {(component.knownLimitations.length > 0 ||
+        relatedPatterns.length > 0) && (
+        <Card className="vf-docs-reference__section" padding="lg">
+          <Heading level={3} size="md">
+            Limitations and related patterns
+          </Heading>
+          <MemberList
+            label="Known limitations"
+            values={component.knownLimitations}
+          />
+          <MemberList
+            label="Patterns using this component"
+            values={relatedPatterns.map((pattern) => pattern.displayName)}
+          />
+        </Card>
+      )}
+    </div>
+  );
 }
 
 const componentAreas = Object.entries(
-  reference.components.reduce<Record<string, ComponentReferenceItem[]>>(
+  componentReferenceRecords.reduce<Record<string, ComponentReferenceRecord[]>>(
     (areas, component) => {
       (areas[component.category] ??= []).push(component);
       return areas;
@@ -313,29 +431,46 @@ const componentAreas = Object.entries(
 ).sort(([left], [right]) => left.localeCompare(right));
 
 export function ComponentReferencePage({
+  componentId,
   frameworkId,
   onFrameworkChange,
 }: ComponentReferencePageProps) {
-  useEffect(() => {
-    const selectedComponent = new URLSearchParams(window.location.search).get(
-      "component",
+  if (componentId) {
+    const component = getComponentReferenceRecord(componentId);
+    if (!component) {
+      return (
+        <Card className="vf-docs-reference__section" padding="lg">
+          <Heading level={3} size="md">
+            Component not found
+          </Heading>
+          <Text tone="muted">
+            No generated component record exists for <code>{componentId}</code>.
+          </Text>
+          <Text>
+            <a href="#/component-reference">Return to component reference</a>
+          </Text>
+        </Card>
+      );
+    }
+    return (
+      <ComponentDetail
+        component={component}
+        frameworkId={frameworkId}
+        onFrameworkChange={onFrameworkChange}
+      />
     );
-    if (!selectedComponent) return;
-    document
-      .getElementById(`api-${selectedComponent}`)
-      ?.scrollIntoView({ block: "start" });
-  }, []);
+  }
 
   return (
     <div className="vf-docs-reference">
       <Card className="vf-docs-reference__section" padding="lg">
         <Heading level={3} size="md">
-          Generated API reference
+          Generated component reference
         </Heading>
         <Text tone="muted">
-          This viewer reads the generated framework API model directly. API
-          facts come from canonical component contracts; missing contracts are
-          shown as missing rather than reconstructed in the docs application.
+          Choose a component for a stable detail route. API facts remain
+          generated from canonical contracts while guidance stays sourced from
+          canonical component metadata.
         </Text>
         <Text size="sm" tone="muted">
           Generator: <code>{apiReference.generated.generator}</code> · sources:{" "}
@@ -349,71 +484,13 @@ export function ComponentReferencePage({
             {area}
           </Heading>
           <div className="vf-docs-reference__grid">
-            {components
+            {[...components]
               .sort((left, right) =>
                 left.displayName.localeCompare(right.displayName),
               )
-              .map((component) => {
-                const maturity = getComponentMaturityPresentation(component);
-
-                return (
-                  <Card
-                    className="vf-docs-reference-card"
-                    id={`api-${component.id}`}
-                    key={component.id}
-                    padding="md"
-                  >
-                    <div className="vf-docs-reference-card__header">
-                      <div>
-                        <Heading level={4} size="sm">
-                          <a
-                            aria-label={`Permanent link to ${component.displayName} API reference`}
-                            href={componentDeepLink(frameworkId, component.id)}
-                          >
-                            {component.displayName}
-                          </a>
-                        </Heading>
-                        {component.nativeDeclaration?.tagName && (
-                          <code>{component.nativeDeclaration.tagName}</code>
-                        )}
-                      </div>
-                      <Badge size="sm" tone="subtle" variant={maturity.variant}>
-                        {maturity.label}
-                      </Badge>
-                    </div>
-
-                    <Text>{component.purpose}</Text>
-                    <Text size="sm" tone="muted">
-                      AI context slice:{" "}
-                      <code>{`ai-context/components/${component.id}.json`}</code>
-                    </Text>
-
-                    <Tabs
-                      aria-label={`${component.displayName} framework API`}
-                      className="vf-docs-framework-tabs"
-                      items={frameworkTabs(component.id)}
-                      onValueChange={(value) =>
-                        onFrameworkChange(value as DocsFrameworkId)
-                      }
-                      size="sm"
-                      value={frameworkId}
-                    />
-
-                    <div className="vf-docs-contract-section">
-                      <Heading level={5} size="sm">
-                        Framework-neutral contract
-                      </Heading>
-                      <ContractDetails contract={component.contract} />
-                    </div>
-
-                    {component.knownLimitations.length > 0 && (
-                      <Text tone="muted" size="sm">
-                        {component.knownLimitations.join(" ")}
-                      </Text>
-                    )}
-                  </Card>
-                );
-              })}
+              .map((component) => (
+                <ComponentIndexCard component={component} key={component.id} />
+              ))}
           </div>
         </Card>
       ))}

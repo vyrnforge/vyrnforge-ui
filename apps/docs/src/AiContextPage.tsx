@@ -1,6 +1,6 @@
 import { Card, Heading, Text } from "@vyrnforge/ui-components";
-import type { DocsRoute } from "./docsRegistry";
 import { MarkdownView } from "./MarkdownView";
+import type { DocsRoute } from "./referenceRoutes";
 
 type AiContextPageProps = {
   route: DocsRoute;
@@ -15,15 +15,17 @@ function formatJson(content: string) {
 }
 
 export function AiContextPage({ route }: AiContextPageProps) {
-  if (route.kind === "json") {
+  if (route.kind === "json" || route.kind === "metadata") {
     return (
       <Card className="vf-docs-reference" padding="lg">
         <Heading level={3} size="md">
-          Machine-readable component metadata
+          Canonical machine-readable source
         </Heading>
         <Text tone="muted">
-          This JSON is intended for tools and AI agents. Human-facing component
-          guidance remains in the markdown docs and reference page.
+          This reader displays the owning JSON source directly. Generated
+          Reference pages provide human-facing component, package, token,
+          pattern, accessibility, and framework projections without duplicating
+          these facts here.
         </Text>
         <pre className="vf-docs-markdown__code vf-docs-json">
           <code>{formatJson(route.content ?? "")}</code>
