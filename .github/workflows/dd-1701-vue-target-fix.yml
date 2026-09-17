@@ -23,7 +23,7 @@ jobs:
           node-version: 24.18.0
       - name: Install dependencies
         run: npm ci
-      - name: Keep target-only contracts out of shipped Vue typed catalog
+      - name: Keep target-only native contracts out of shipped Vue typed catalog
         shell: bash
         run: |
           node <<'NODE'
@@ -31,7 +31,7 @@ jobs:
           const path = 'scripts/vue-type-generation.mjs';
           let source = fs.readFileSync(path, 'utf8');
           const oldBlock = `  const components = generationModel.surfaces.vue.components\n    .filter((record) => ["current", "target"].includes(record.status))`;
-          const newBlock = `  const components = generationModel.surfaces.vue.components\n    .filter((record) => record.status === "current")`;
+          const newBlock = `  const components = generationModel.surfaces.vue.components\n    .filter(\n      (record) =>\n        ["current", "target"].includes(record.status) &&\n        nativeById.get(record.id)?.status === "current",\n    )`;
           if (!source.includes(oldBlock)) throw new Error('Vue status filter insertion point not found');
           source = source.replace(oldBlock, newBlock);
           const oldAssert = `  assert(\n    components.length === 59,\n    \`expected 59 components, got \${components.length}\`,\n  );\n`;
@@ -62,5 +62,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scripts/vue-type-generation.mjs packages/ui-vue/src/generated/typed-catalog.generated.ts .github/workflows/dd-1701-vue-target-fix.yml
           git diff --cached --check
-          git commit -m "fix: exclude target-only contracts from Vue runtime types"
+          git commit -m "fix: align Vue typed catalog with native runtime availability"
           git push origin HEAD:feat/dd-1701-description-list-contract
