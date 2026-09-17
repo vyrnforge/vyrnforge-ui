@@ -13,9 +13,7 @@ export const docsLinks = {
 };
 
 function normalizePlaygroundPath(playgroundPath: string) {
-  return playgroundPath.startsWith("/")
-    ? playgroundPath
-    : `/${playgroundPath}`;
+  return playgroundPath.startsWith("/") ? playgroundPath : `/${playgroundPath}`;
 }
 
 function playgroundQuery(frameworkId: string, embedded = false) {
@@ -30,19 +28,26 @@ function playgroundQuery(frameworkId: string, embedded = false) {
 }
 
 export function getPlaygroundHref(frameworkId: string) {
-  return `${docsLinks.playground}?${playgroundQuery(frameworkId).toString()}${window.location.hash}`;
+  return `${docsLinks.playground}?${playgroundQuery(
+    frameworkId,
+  ).toString()}${window.location.hash}`;
 }
 
 export function getPlaygroundRouteHref(
   frameworkId: string,
   playgroundPath: string,
 ) {
-  return `${docsLinks.playground}?${playgroundQuery(frameworkId).toString()}#${normalizePlaygroundPath(playgroundPath)}`;
+  return `${docsLinks.playground}?${playgroundQuery(
+    frameworkId,
+  ).toString()}#${normalizePlaygroundPath(playgroundPath)}`;
 }
 
 export function getEmbeddedPlaygroundHref(
   frameworkId: string,
   playgroundPath: string,
 ) {
-  return `${docsLinks.playground}?${playgroundQuery(frameworkId, true).toString()}#${normalizePlaygroundPath(playgroundPath)}`;
+  return `${docsLinks.playground}?${playgroundQuery(
+    frameworkId,
+    true,
+  ).toString()}#${normalizePlaygroundPath(playgroundPath)}`;
 }
