@@ -161,12 +161,8 @@
     "transport": "hash",
     "stableDeepLinks": true,
     "preserveContext": ["framework", "version"],
-    "transitionalRegistries": [
-      "apps/docs/src/docsRegistry.ts",
-      "examples/basic-playground/src/app/routes.ts",
-      "examples/basic-playground/src/app/referenceCatalogRoutes.ts"
-    ],
-    "policy": "Route IDs are shared semantic identities. Current hand-maintained registries remain transitional runtime inputs until generated replacements are verified; they must not own component, package, token, framework, version, or API facts."
+    "transitionalRegistries": [],
+    "policy": "Derivable route and catalog facts come from the generated Reference model, canonical metadata, or source discovery. Surface files may bind authored page implementations, but they do not own component, package, token, framework, version, or API facts."
   },
   "deployment": {
     "assemblyContract": "scripts/reference-artifact.mjs",

@@ -1,16 +1,15 @@
 import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import type { DocsFrameworkId } from "./docsContext";
-import type { DocsRoute } from "./docsRegistry";
 import { AiContextPage } from "./AiContextPage";
 import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { MarkdownView } from "./MarkdownView";
-import { MetadataPage } from "./MetadataPage";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
 import { ReferenceSearchPage } from "./ReferenceSearchPage";
+import type { DocsRoute } from "./referenceRoutes";
 
 type DocsPageProps = {
   route: DocsRoute;
@@ -97,9 +96,9 @@ export function DocsPage({
             referenceRecord?.domain === "packages" ? referenceRecord.id : null
           }
         />
-      ) : route.kind === "metadata" ? (
-        <MetadataPage route={route} />
-      ) : route.kind === "ai" || route.kind === "json" ? (
+      ) : route.kind === "metadata" ||
+        route.kind === "ai" ||
+        route.kind === "json" ? (
         <AiContextPage route={route} />
       ) : (
         <MarkdownView markdown={route.content ?? ""} />

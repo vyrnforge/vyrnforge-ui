@@ -9,8 +9,7 @@ import {
   type ReferenceNavigationSectionId,
 } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
-import { discoveryRoutes } from "./discoveryRoutes";
-import { docsRoutes, type DocsRoute } from "./docsRegistry";
+import { docsRoutes, type DocsRoute } from "./referenceRoutes";
 
 type DocsNavProps = {
   activeRouteId: string;
@@ -23,6 +22,7 @@ const groupSection: Record<string, ReferenceNavigationSectionId> = {
   Packages: "start",
   AI: "start",
   "API Reference": "components",
+  Components: "components",
   Accessibility: "components",
   Foundations: "foundations",
   Architecture: "foundations",
@@ -41,15 +41,13 @@ function routeSection(route: DocsRoute): ReferenceNavigationSectionId {
   return groupSection[route.group] ?? "start";
 }
 
-const referenceRoutes = [...discoveryRoutes, ...docsRoutes];
-
 export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
 
   const visibleRoutes = useMemo(
     () =>
-      referenceRoutes.filter((route) => {
+      docsRoutes.filter((route) => {
         if (!normalizedQuery) return true;
 
         return [

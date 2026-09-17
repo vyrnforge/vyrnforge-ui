@@ -11,9 +11,8 @@ import {
   type DocsFrameworkId,
   type DocsVersion,
 } from "./docsContext";
-import { getDiscoveryRouteById } from "./discoveryRoutes";
-import { getRouteById } from "./docsRegistry";
 import { DocsShell } from "./DocsShell";
+import { getRouteById } from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
   domain: "components" | "packages" | "tokens" | "patterns" | "accessibility";
@@ -93,9 +92,7 @@ export default function App() {
   }, []);
 
   const activeRoute = useMemo(
-    () =>
-      getDiscoveryRouteById(docsLocation.routeId) ??
-      getRouteById(docsLocation.routeId),
+    () => getRouteById(docsLocation.routeId),
     [docsLocation.routeId],
   );
   const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);

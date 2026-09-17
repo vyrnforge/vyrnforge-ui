@@ -122,19 +122,12 @@ export function verifyReferenceProductArchitecture({
       "reference routing must preserve stable-id deep-link semantics",
     );
   }
-  const transitionalRegistries = new Set(
-    portal.routing?.transitionalRegistries ?? [],
-  );
-  for (const relativePath of [
-    "apps/docs/src/docsRegistry.ts",
-    "examples/basic-playground/src/app/routes.ts",
-    "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
-  ]) {
-    if (!transitionalRegistries.has(relativePath)) {
-      failures.push(
-        `reference routing must record transitional registry ${relativePath}`,
-      );
-    }
+  if (!Array.isArray(portal.routing?.transitionalRegistries)) {
+    failures.push("reference routing must declare transitionalRegistries");
+  } else if (portal.routing.transitionalRegistries.length !== 0) {
+    failures.push(
+      "reference routing must not retain transitional runtime registries after migration",
+    );
   }
 
   if (portal.contentOwnership?.search?.ownsFacts !== false) {
@@ -176,8 +169,8 @@ export function verifyReferenceProductArchitecture({
     "VyrnForge Reference",
     "reference-portal.json",
     "framework-neutral",
-    "transitional runtime registries",
-    "generated replacement",
+    "transitional runtime registries have been retired",
+    "docs/generated/reference-model.json",
     "reference-artifact.mjs",
   ]) {
     if (!documentationSystem.includes(marker)) {
