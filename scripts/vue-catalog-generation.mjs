@@ -60,7 +60,11 @@ export function createVueCatalogModel(generationModel) {
     ]),
   );
   const components = vue
-    .filter((record) => ["current", "target"].includes(record.status))
+    .filter(
+      (record) =>
+        ["current", "target"].includes(record.status) &&
+        nativeById.get(record.id)?.status === "current",
+    )
     .map((record) => {
       const native = nativeById.get(record.id);
       assert(record.export, `${record.id}: Vue mapping requires an export`);
@@ -91,9 +95,12 @@ export function createVueCatalogModel(generationModel) {
     })
     .sort((left, right) => compareText(left.id, right.id));
 
+  const currentNativeCount = generationModel.surfaces.native.components.filter(
+    (record) => record.status === "current",
+  ).length;
   assert(
-    components.length === 59,
-    `expected 59 supported non-grid contracts, received ${components.length}`,
+    components.length === currentNativeCount,
+    `expected ${currentNativeCount} current native-backed Vue contracts, received ${components.length}`,
   );
   assert(
     components.filter((entry) => entry.model).length === 29,
