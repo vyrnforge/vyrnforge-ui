@@ -149,3 +149,28 @@ test("loader failures use the dedicated deterministic error type", () => {
   assert.deepEqual(error.failures, [...error.failures].sort());
   assert.match(error.message, /Canonical component contract validation failed/);
 });
+
+test("DescriptionList keeps a semantic, state-free cross-framework contract", () => {
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+  const contract = normalized.componentById.get("description-list");
+
+  assert.ok(contract);
+  assert.equal(contract.category, "data-display");
+  assert.deepEqual(contract.properties, []);
+  assert.deepEqual(contract.attributes, []);
+  assert.deepEqual(contract.events, []);
+  assert.deepEqual(contract.methods, []);
+  assert.equal(contract.form.association, "none");
+  assert.equal(contract.model.kind, "none");
+  assert.deepEqual(contract.slots, [
+    { name: "default", required: true, multiple: true, content: "element" },
+  ]);
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("native description-list semantics"),
+    ),
+  );
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "target");
+  }
+});
