@@ -1,0 +1,65 @@
+name: DD-1701 verifier fix
+
+on:
+  push:
+    branches:
+      - feat/dd-1701-description-list-contract
+    paths:
+      - .github/workflows/dd-1701-verifier-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: feat/dd-1701-description-list-contract
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24.18.0
+      - name: Install dependencies
+        run: npm ci
+      - name: Allow coherent target-state canonical contracts
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const verifierPath = 'scripts/verify-multi-framework-architecture.mjs';
+          const testPath = 'scripts/verify-multi-framework-architecture.test.mjs';
+
+          let verifier = fs.readFileSync(verifierPath, 'utf8');
+          const oldBlock = `    const react = mappings.react;\n    if (\n      react?.package !== "@vyrnforge/ui-components" ||\n      !["current", "migration"].includes(react?.status) ||\n      typeof react?.export !== "string" ||\n      react.export.length === 0\n    ) {\n      addFailure(\n        failures,\n        \`\${contract.id} has an invalid React framework mapping\`,\n      );\n    }\n\n    const native = mappings.native;\n    if (\n      native?.package !== "@vyrnforge/ui-elements" ||\n      native?.status !== "current" ||\n      !/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(native?.tag ?? "")\n    ) {\n      addFailure(\n        failures,\n        \`\${contract.id} has an invalid current native renderer\`,\n      );\n    }`;
+          const newBlock = `    const targetContract = ["native", "react", "angular", "vue"].every(\n      (framework) => mappings[framework]?.status === "target",\n    );\n\n    const react = mappings.react;\n    const validReactStatus = targetContract\n      ? react?.status === "target"\n      : ["current", "migration"].includes(react?.status);\n    if (\n      react?.package !== "@vyrnforge/ui-components" ||\n      !validReactStatus ||\n      typeof react?.export !== "string" ||\n      react.export.length === 0\n    ) {\n      addFailure(\n        failures,\n        \`\${contract.id} has an invalid React framework mapping\`,\n      );\n    }\n\n    const native = mappings.native;\n    const validNativeStatus = targetContract\n      ? native?.status === "target"\n      : native?.status === "current";\n    if (\n      native?.package !== "@vyrnforge/ui-elements" ||\n      !validNativeStatus ||\n      !/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(native?.tag ?? "")\n    ) {\n      addFailure(\n        failures,\n        \`\${contract.id} has an invalid native framework mapping\`,\n      );\n    }`;
+          if (!verifier.includes(oldBlock)) {
+            throw new Error('expected multi-framework mapping verifier block not found');
+          }
+          verifier = verifier.replace(oldBlock, newBlock);
+          fs.writeFileSync(verifierPath, verifier, 'utf8');
+
+          let tests = fs.readFileSync(testPath, 'utf8');
+          const insertion = `\n\ntest("allows a canonical contract whose four renderer mappings are all target", () => {\n  assert.deepEqual(verifyMultiFrameworkArchitecture(), []);\n});\n\ntest("rejects a mixed target/current renderer state", () => {\n  withRepositoryFixture(\n    (root) => {\n      mutateJson(root, "docs/metadata/component-contracts.json", (value) => {\n        const descriptionList = value.componentContracts.find(\n          (contract) => contract.id === "description-list",\n        );\n        descriptionList.frameworkMappings.react.status = "current";\n      });\n    },\n    (root) => {\n      const failures = verifyMultiFrameworkArchitecture({ root });\n      assert(\n        failures.some((failure) =>\n          failure.includes("description-list has an invalid native framework mapping"),\n        ),\n      );\n    },\n  );\n});\n`;
+          if (!tests.includes('rejects a mixed target/current renderer state')) {
+            tests += insertion;
+            fs.writeFileSync(testPath, tests, 'utf8');
+          }
+          NODE
+      - name: Format and validate verifier fix
+        run: |
+          npx prettier --write scripts/verify-multi-framework-architecture.mjs scripts/verify-multi-framework-architecture.test.mjs
+          node --test scripts/verify-multi-framework-architecture.test.mjs scripts/canonical-component-contracts.test.mjs
+          node scripts/verify-multi-framework-architecture.mjs
+      - name: Commit verifier fix
+        shell: bash
+        run: |
+          rm .github/workflows/dd-1701-verifier-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/verify-multi-framework-architecture.mjs scripts/verify-multi-framework-architecture.test.mjs .github/workflows/dd-1701-verifier-fix.yml
+          git diff --cached --check
+          git commit -m "fix: support target canonical renderer mappings"
+          git push origin HEAD:feat/dd-1701-description-list-contract
