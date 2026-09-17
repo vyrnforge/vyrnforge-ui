@@ -27,7 +27,7 @@ test("G18 Reference product has one generated model and equal framework surfaces
     expectedFrameworks,
   );
   assert.equal(portal.routing.transitionalRegistries.length, 0);
-  assert.equal(model.routing.transitionalRegistries.length, 0);
+  assert(model.generatedFrom.includes("docs/metadata/reference-portal.json"));
 
   for (const contextPath of [
     "apps/docs/src/docsContext.ts",
@@ -125,7 +125,7 @@ test("G18 CI and Pages delivery require runtime evidence and exact-main artifact
     "Build playground for Pages",
     "Bind production reference artifact lineage",
     "Verify versioned Pages reference",
-    'name: pages-site-${{ github.sha }}',
+    "name: pages-site-${{ github.sha }}",
   ]) {
     assert(
       ci.includes(marker),
@@ -134,11 +134,11 @@ test("G18 CI and Pages delivery require runtime evidence and exact-main artifact
   }
 
   for (const marker of [
-    'branches:\n      - main',
+    "branches:\n      - main",
     'CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq \'.sha\')"',
     'test "$HEAD_BRANCH" = "main"',
     'test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"',
-    'pages-site-${{ steps.candidate.outputs.head-sha }}',
+    "pages-site-${{ steps.candidate.outputs.head-sha }}",
     "Reference artifact commit does not match selected current-main commit.",
     "Reference artifact CI run does not match selected current-main run.",
   ]) {
