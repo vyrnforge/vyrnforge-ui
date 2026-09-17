@@ -57,13 +57,8 @@ jobs:
             form: {
               association: 'none',
               disabledProperty: null,
-              validity: {
-                supported: false,
-                methods: [],
-              },
-              reset: {
-                supported: false,
-              },
+              validity: { supported: false, methods: [] },
+              reset: { supported: false },
             },
             model: {
               kind: 'none',
@@ -90,22 +85,9 @@ jobs:
                 tag: 'vf-description-list',
                 properties: [],
                 events: [],
-                slots: [
-                  {
-                    canonical: 'default',
-                    public: 'default',
-                    mode: 'slot',
-                  },
-                ],
-                model: {
-                  mode: 'none',
-                  property: null,
-                  event: null,
-                },
-                ref: {
-                  mode: 'element',
-                  type: 'VyrnForgeDescriptionListElement',
-                },
+                slots: [{ canonical: 'default', public: 'default', mode: 'slot' }],
+                model: { mode: 'none', property: null, event: null },
+                ref: { mode: 'element', type: 'VyrnForgeDescriptionListElement' },
                 setup: ['register custom element'],
               },
               react: {
@@ -114,22 +96,9 @@ jobs:
                 export: 'DescriptionList',
                 properties: [],
                 events: [],
-                slots: [
-                  {
-                    canonical: 'default',
-                    public: 'children',
-                    mode: 'children',
-                  },
-                ],
-                model: {
-                  mode: 'none',
-                  property: null,
-                  event: null,
-                },
-                ref: {
-                  mode: 'forwarded-ref',
-                  type: 'DescriptionListRef',
-                },
+                slots: [{ canonical: 'default', public: 'children', mode: 'children' }],
+                model: { mode: 'none', property: null, event: null },
+                ref: { mode: 'forwarded-ref', type: 'DescriptionListRef' },
               },
               angular: {
                 package: '@vyrnforge/ui-angular',
@@ -137,22 +106,9 @@ jobs:
                 export: 'VfDescriptionList',
                 properties: [],
                 events: [],
-                slots: [
-                  {
-                    canonical: 'default',
-                    public: 'default',
-                    mode: 'content-projection',
-                  },
-                ],
-                model: {
-                  mode: 'none',
-                  property: null,
-                  event: null,
-                },
-                ref: {
-                  mode: 'view-child',
-                  type: 'VfDescriptionList',
-                },
+                slots: [{ canonical: 'default', public: 'default', mode: 'content-projection' }],
+                model: { mode: 'none', property: null, event: null },
+                ref: { mode: 'view-child', type: 'VfDescriptionList' },
               },
               vue: {
                 package: '@vyrnforge/ui-vue',
@@ -160,22 +116,9 @@ jobs:
                 export: 'VfDescriptionList',
                 properties: [],
                 events: [],
-                slots: [
-                  {
-                    canonical: 'default',
-                    public: 'default',
-                    mode: 'slot',
-                  },
-                ],
-                model: {
-                  mode: 'none',
-                  property: null,
-                  event: null,
-                },
-                ref: {
-                  mode: 'template-ref',
-                  type: 'VfDescriptionListExposed',
-                },
+                slots: [{ canonical: 'default', public: 'default', mode: 'slot' }],
+                model: { mode: 'none', property: null, event: null },
+                ref: { mode: 'template-ref', type: 'VfDescriptionListExposed' },
               },
             },
           };
@@ -203,33 +146,31 @@ jobs:
             owner: 'Component Team',
             sourcePath: 'not-applicable',
             publicExport: false,
-            since: 'pending',
-            docsPath: 'docs/architecture/09-component-contracts-and-events.md',
+            since: 'not-applicable',
+            docsPath: 'docs/api/ui-components-api.md',
             playgroundPath: 'not-applicable',
             evidence: {
               maturityEvidenceKey: 'description-list',
-              status: 'pending',
+              status: 'requires-verification',
             },
             accessibility: {
-              documentationPath: 'docs/architecture/09-component-contracts-and-events.md',
+              documentationPath: 'docs/api/ui-components-api.md',
               keyboardDocumentation: 'not-applicable',
             },
             knownLimitations: [
               'Renderer implementations remain deferred to the framework-specific DescriptionList tasks.',
             ],
-            deprecation: {
-              status: 'not-applicable',
-            },
-            purpose: 'Present term-and-description facts while preserving semantic description-list relationships.',
+            deprecation: { status: 'not-applicable' },
+            purpose: 'Read-only term-and-description facts with semantic description-list relationships.',
             useWhen: 'Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.',
             avoidWhen: 'Avoid for tabular comparisons that require row and column relationships or for interactive form fields.',
-            relatedComponents: [],
+            relatedComponents: ['KeyValueList', 'PropertyTable'],
             cssClasses: [],
             cssVariables: [],
-            importExample: 'pending',
-            basicUsageExample: 'pending',
+            importExample: 'Planned; no import yet.',
+            basicUsageExample: 'Planned.',
             accessibilityNotes: 'Preserve native description-list term and description relationships; do not replace them with generic grouping roles.',
-            aiUsageNotes: 'Use DescriptionList for non-tabular term/value facts and preserve semantic term/description structure; do not invent a stateful data API.',
+            aiUsageNotes: 'Use semantic dl/dt/dd markup until a renderer exists; when DescriptionList is available, preserve the same term/description structure and do not invent a stateful data API.',
             frameworkParity: {
               betaScope: 'excluded',
               react: {
@@ -263,17 +204,14 @@ jobs:
           };
 
           let metadataSource = fs.readFileSync(metadataPath, 'utf8');
-          if (metadataSource.includes('"id": "description-list"')) {
-            throw new Error('description-list component metadata already exists');
+          const startMarker = '    {\n      "id": "description-list",';
+          const endMarker = '    {\n      "id": "key-value-list",';
+          const start = metadataSource.indexOf(startMarker);
+          const end = metadataSource.indexOf(endMarker, start + startMarker.length);
+          if (start < 0 || end < 0) {
+            throw new Error('existing planned DescriptionList metadata block not found');
           }
-          const metadataNeedle = '  "components": [\n';
-          if (!metadataSource.includes(metadataNeedle)) {
-            throw new Error('canonical components insertion point not found');
-          }
-          metadataSource = metadataSource.replace(
-            metadataNeedle,
-            `${metadataNeedle}${indentObject(component)},\n`,
-          );
+          metadataSource = `${metadataSource.slice(0, start)}${indentObject(component)},\n${metadataSource.slice(end)}`;
           fs.writeFileSync(metadataPath, metadataSource, 'utf8');
 
           let testSource = fs.readFileSync(testPath, 'utf8');
