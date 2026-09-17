@@ -17,7 +17,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "planned",
       "availability": "planned",
-      "purpose": "Read-only term/value data display.",
+      "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
       "context": "ai-context/components/description-list.json"
     },
     {
