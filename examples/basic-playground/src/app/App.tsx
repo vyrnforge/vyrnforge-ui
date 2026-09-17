@@ -74,6 +74,12 @@ function getFrameworkFromLocation(): PlaygroundFrameworkId {
   return getPlaygroundFramework(framework)?.id ?? defaultPlaygroundFramework;
 }
 
+function isReferenceEmbed() {
+  return (
+    new URLSearchParams(window.location.search).get("embed") === "reference"
+  );
+}
+
 export default function App() {
   const [activeRouteId, setActiveRouteId] = useState(() => {
     return getRouteFromHash()?.id ?? routes[0].id;
@@ -86,6 +92,7 @@ export default function App() {
   const [versions, setVersions] = useState<PlaygroundVersion[]>([
     defaultPlaygroundVersion,
   ]);
+  const embedded = isReferenceEmbed();
   const versionId = defaultPlaygroundVersion.id;
   const activeRoute = useMemo(
     () => routes.find((route) => route.id === activeRouteId) ?? routes[0],
@@ -174,6 +181,7 @@ export default function App() {
         activeRoute={activeRoute}
         activeRouteId={activeRoute.id}
         density={density}
+        embedded={embedded}
         frameworkId={frameworkId}
         routes={navigationRoutes}
         versionId={versionId}
