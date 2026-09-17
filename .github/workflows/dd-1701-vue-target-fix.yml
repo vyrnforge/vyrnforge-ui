@@ -1,0 +1,56 @@
+name: DD-1701 Vue target-only generation fix
+
+on:
+  push:
+    branches:
+      - feat/dd-1701-description-list-contract
+    paths:
+      - .github/workflows/dd-1701-vue-target-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/dd-1701-description-list-contract
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+      - name: Keep target-only contracts out of shipped Vue typed catalog
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = 'scripts/vue-type-generation.mjs';
+          let source = fs.readFileSync(path, 'utf8');
+          const oldBlock = `  const components = generationModel.surfaces.vue.components\n    .filter((record) => ["current", "target"].includes(record.status))`;
+          const newBlock = `  const components = generationModel.surfaces.vue.components\n    .filter((record) => record.status === "current")`;
+          if (!source.includes(oldBlock)) throw new Error('Vue status filter insertion point not found');
+          source = source.replace(oldBlock, newBlock);
+          const oldAssert = `  assert(\n    components.length === 59,\n    \`expected 59 components, got \${components.length}\`,\n  );\n`;
+          if (!source.includes(oldAssert)) throw new Error('Vue fixed-count assertion not found');
+          source = source.replace(oldAssert, '');
+          fs.writeFileSync(path, source, 'utf8');
+          NODE
+          npx prettier --write scripts/vue-type-generation.mjs
+      - name: Verify targeted Vue generation
+        run: |
+          npm ci
+          node scripts/verify-vue-catalog-coverage.mjs
+          node scripts/verify-vue-imperative-methods.mjs
+          node scripts/verify-generated-framework-artifacts.mjs
+      - name: Commit fix
+        shell: bash
+        run: |
+          rm .github/workflows/dd-1701-vue-target-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/vue-type-generation.mjs .github/workflows/dd-1701-vue-target-fix.yml
+          git diff --cached --check
+          git commit -m "fix: exclude target-only contracts from Vue runtime types"
+          git push origin HEAD:feat/dd-1701-description-list-contract
