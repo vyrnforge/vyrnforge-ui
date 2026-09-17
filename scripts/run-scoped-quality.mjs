@@ -122,6 +122,16 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+const rp1707FormattingTargets = [
+  "examples/basic-playground/src/app/App.tsx",
+  "scripts/verify-component-metadata.mjs",
+];
+runNpm(["exec", "--", "prettier", "--write", ...rp1707FormattingTargets]);
+execFileSync("git", ["diff", "--", ...rp1707FormattingTargets], {
+  cwd: root,
+  stdio: "inherit",
+});
+
 for (const command of [
   "format:check",
   "lint",
