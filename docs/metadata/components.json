@@ -5299,20 +5299,55 @@
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
-      "knownLimitations": ["Do not import until implemented."],
+      "knownLimitations": [
+        "Renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+      ],
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Read-only term/value data display.",
-      "useWhen": "Use later for resource details.",
-      "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["KeyValueList", "PropertyTable"],
+      "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
+      "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
+      "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
+      "relatedComponents": [
+        "KeyValueList",
+        "PropertyTable"
+      ],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
       "basicUsageExample": "Planned.",
-      "accessibilityNotes": "Use semantic description list markup.",
-      "aiUsageNotes": "Use native dl markup until implemented."
+      "accessibilityNotes": "Preserve native description-list term and description relationships; do not replace them with generic grouping roles.",
+      "aiUsageNotes": "Use semantic dl/dt/dd markup until a renderer exists; when DescriptionList is available, preserve the same term/description structure and do not invent a stateful data API.",
+      "frameworkParity": {
+        "betaScope": "excluded",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "DescriptionList",
+          "status": "target"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "not-applicable",
+          "componentController": "not-applicable"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "target",
+          "strategy": "direct-element",
+          "target": "vf-description-list",
+          "evidence": "pending"
+        },
+        "angular": {
+          "status": "target",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "pending"
+        },
+        "vue": {
+          "status": "target",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "pending"
+        }
+      }
     },
     {
       "id": "key-value-list",

@@ -85,6 +85,48 @@
         "reviewMilestone": "G14 React convergence"
       },
       {
+        "id": "MFD-EX-REACT-LAYOUT-NATIVE-HOST",
+        "framework": "react",
+        "scope": [
+          "card",
+          "inline",
+          "stack"
+        ],
+        "exceptionClass": "migration-compatibility",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/Card/Card.tsx",
+          "packages/ui-components/src/components/Inline/Inline.tsx",
+          "packages/ui-components/src/components/Stack/Stack.tsx",
+          "packages/ui-elements/src/components/display.ts"
+        ],
+        "reviewMilestone": "S16 baseline hardening"
+      },
+      {
+        "id": "MFD-EX-REACT-LAYOUT-RICH-COMPOSITION",
+        "framework": "react",
+        "scope": [
+          "app-shell",
+          "page",
+          "page-header",
+          "page-toolbar",
+          "panel",
+          "section"
+        ],
+        "exceptionClass": "composition",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/AppShell/AppShell.tsx",
+          "packages/ui-components/src/components/Page/Page.tsx",
+          "packages/ui-components/src/components/PageHeader/PageHeader.tsx",
+          "packages/ui-components/src/components/PageToolbar/PageToolbar.tsx",
+          "packages/ui-components/src/components/Panel/Panel.tsx",
+          "packages/ui-components/src/components/Section/Section.tsx",
+          "packages/ui-elements/src/components/display.ts"
+        ],
+        "reviewMilestone": "S16 baseline hardening"
+      },
+      {
         "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",
         "framework": "react",
         "scope": [
@@ -107,6 +149,32 @@
           "packages/ui-elements/src/components/values.ts"
         ],
         "reviewMilestone": "G14 React convergence"
+      },
+      {
+        "id": "MFD-EX-REACT-OVERLAY-COMPOSITION",
+        "framework": "react",
+        "scope": [
+          "confirm-dialog",
+          "dialog",
+          "drawer",
+          "popover",
+          "toast",
+          "tooltip"
+        ],
+        "exceptionClass": "composition",
+        "state": "active",
+        "sourcePaths": [
+          "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
+          "packages/ui-components/src/components/Dialog/Dialog.tsx",
+          "packages/ui-components/src/components/Drawer/Drawer.tsx",
+          "packages/ui-components/src/components/Popover/Popover.tsx",
+          "packages/ui-components/src/components/Toast/Toast.tsx",
+          "packages/ui-components/src/components/Tooltip/Tooltip.tsx",
+          "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx",
+          "packages/ui-elements/src/components/feedback.ts",
+          "packages/ui-elements/src/components/overlays.ts"
+        ],
+        "reviewMilestone": "S16 baseline hardening"
       },
       {
         "id": "MFD-EX-REACT-RADIO-GROUP-FOCUS",
@@ -223,9 +291,9 @@
     "native": {
       "package": "@vyrnforge/ui-elements",
       "summary": {
-        "componentCount": 59,
+        "componentCount": 60,
         "current": 59,
-        "target": 0,
+        "target": 1,
         "migration": 0,
         "exception": 0
       },
@@ -3052,6 +3120,65 @@
             "accessible label",
             "disabled/required/invalid states",
             "ElementInternals form participation"
+          ],
+          "setup": [
+            "register custom element"
+          ],
+          "adapter": {
+            "kind": "canonical-native",
+            "canonicalRenderer": "@vyrnforge/ui-elements"
+          }
+        },
+        {
+          "id": "description-list",
+          "category": "data-display",
+          "package": "@vyrnforge/ui-elements",
+          "status": "target",
+          "export": null,
+          "tag": "vf-description-list",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot",
+              "required": true,
+              "multiple": true,
+              "content": "element"
+            }
+          ],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeDescriptionListElement"
+            },
+            "framework": {
+              "mode": "element",
+              "type": "VyrnForgeDescriptionListElement"
+            }
+          },
+          "accessibility": [
+            "preserves native description-list semantics for term and description relationships",
+            "projected content must retain semantic term and description structure rather than generic grouping roles"
           ],
           "setup": [
             "register custom element"
@@ -11292,9 +11419,9 @@
     "react": {
       "package": "@vyrnforge/ui-components",
       "summary": {
-        "componentCount": 59,
+        "componentCount": 60,
         "current": 0,
-        "target": 0,
+        "target": 1,
         "migration": 59,
         "exception": 0,
         "controlled": 29
@@ -14323,6 +14450,74 @@
               "canonicalChangeEvent": "vf-value-change",
               "publicProperty": "value",
               "publicEvent": "onValueChange"
+            },
+            "refMode": "forwarded-ref"
+          }
+        },
+        {
+          "id": "description-list",
+          "category": "data-display",
+          "package": "@vyrnforge/ui-components",
+          "status": "target",
+          "export": "DescriptionList",
+          "tag": null,
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "children",
+              "mode": "children",
+              "required": true,
+              "multiple": true,
+              "content": "element"
+            }
+          ],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeDescriptionListElement"
+            },
+            "framework": {
+              "mode": "forwarded-ref",
+              "type": "DescriptionListRef"
+            }
+          },
+          "accessibility": [
+            "preserves native description-list semantics for term and description relationships",
+            "projected content must retain semantic term and description structure rather than generic grouping roles"
+          ],
+          "setup": [],
+          "adapter": {
+            "kind": "react-facade",
+            "canonicalRenderer": "@vyrnforge/ui-elements",
+            "model": {
+              "enabled": false,
+              "mode": "none",
+              "canonicalKind": "none",
+              "canonicalProperty": null,
+              "canonicalDefaultProperty": null,
+              "canonicalChangeEvent": null,
+              "publicProperty": null,
+              "publicEvent": null
             },
             "refMode": "forwarded-ref"
           }
@@ -23288,9 +23483,9 @@
     "angular": {
       "package": "@vyrnforge/ui-angular",
       "summary": {
-        "componentCount": 59,
+        "componentCount": 60,
         "current": 0,
-        "target": 59,
+        "target": 60,
         "migration": 0,
         "exception": 0,
         "forms": 15
@@ -26361,6 +26556,69 @@
                   "value"
                 ]
               }
+            },
+            "refMode": "view-child"
+          }
+        },
+        {
+          "id": "description-list",
+          "category": "data-display",
+          "package": "@vyrnforge/ui-angular",
+          "status": "target",
+          "export": "VfDescriptionList",
+          "tag": null,
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "content-projection",
+              "required": true,
+              "multiple": true,
+              "content": "element"
+            }
+          ],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeDescriptionListElement"
+            },
+            "framework": {
+              "mode": "view-child",
+              "type": "VfDescriptionList"
+            }
+          },
+          "accessibility": [
+            "preserves native description-list semantics for term and description relationships",
+            "projected content must retain semantic term and description structure rather than generic grouping roles"
+          ],
+          "setup": [],
+          "adapter": {
+            "kind": "angular-facade",
+            "canonicalRenderer": "@vyrnforge/ui-elements",
+            "selector": "vf-description-list",
+            "forms": {
+              "enabled": false,
+              "mode": "none"
             },
             "refMode": "view-child"
           }
@@ -35409,9 +35667,9 @@
     "vue": {
       "package": "@vyrnforge/ui-vue",
       "summary": {
-        "componentCount": 59,
+        "componentCount": 60,
         "current": 0,
-        "target": 59,
+        "target": 60,
         "migration": 0,
         "exception": 0,
         "vModel": 29
@@ -38386,6 +38644,68 @@
               "canonicalChangeEvent": "vf-value-change",
               "publicProperty": "modelValue",
               "publicEvent": "update:modelValue"
+            },
+            "refMode": "template-ref"
+          }
+        },
+        {
+          "id": "description-list",
+          "category": "data-display",
+          "package": "@vyrnforge/ui-vue",
+          "status": "target",
+          "export": "VfDescriptionList",
+          "tag": null,
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot",
+              "required": true,
+              "multiple": true,
+              "content": "element"
+            }
+          ],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeDescriptionListElement"
+            },
+            "framework": {
+              "mode": "template-ref",
+              "type": "VfDescriptionListExposed"
+            }
+          },
+          "accessibility": [
+            "preserves native description-list semantics for term and description relationships",
+            "projected content must retain semantic term and description structure rather than generic grouping roles"
+          ],
+          "setup": [],
+          "adapter": {
+            "kind": "vue-facade",
+            "canonicalRenderer": "@vyrnforge/ui-elements",
+            "vModel": {
+              "enabled": false,
+              "mode": "none"
             },
             "refMode": "template-ref"
           }
