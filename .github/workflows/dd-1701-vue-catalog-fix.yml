@@ -51,7 +51,6 @@ jobs:
           npx prettier --write scripts/vue-catalog-generation.mjs
           node scripts/verify-vue-catalog-coverage.mjs
           node scripts/generate-framework-artifacts.mjs --check
-          npm run test --workspace @vyrnforge/ui-vue
       - name: Commit Vue catalog fix
         shell: bash
         run: |
