@@ -137,7 +137,9 @@ test("component preview pairs executable behavior with generated framework consu
   assert.match(referenceStyles, /\.vf-docs-preview__code/u);
 });
 
-test("Reference search indexes generated framework API members with router-safe deep links", () => {
+test(
+  "Reference search indexes generated framework API members with router-safe deep links",
+  () => {
   const app = read("apps/docs/src/App.tsx");
   const search = read("apps/docs/src/ReferenceSearchPage.tsx");
 
@@ -160,4 +162,5 @@ test("Reference search indexes generated framework API members with router-safe 
     app,
     /getReferenceRecordRoute\([\s\S]*"components"[\s\S]*selection\.id/u,
   );
-});
+  },
+);
