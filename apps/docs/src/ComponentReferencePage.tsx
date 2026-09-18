@@ -245,7 +245,10 @@ function FrameworkApiPanel({
                   return (
                     <tr id={anchor} key={property.public}>
                       <th scope="row">
-                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={`#${anchor}`}
+                        >
                           <code>{property.public}</code>
                         </a>
                       </th>
@@ -301,7 +304,10 @@ function FrameworkApiPanel({
                   return (
                     <tr id={anchor} key={event.public}>
                       <th scope="row">
-                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={`#${anchor}`}
+                        >
                           <code>{event.public}</code>
                         </a>
                       </th>
@@ -349,7 +355,10 @@ function FrameworkApiPanel({
                   return (
                     <tr id={anchor} key={slot.public}>
                       <th scope="row">
-                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={`#${anchor}`}
+                        >
                           <code>{slot.public}</code>
                         </a>
                       </th>
@@ -391,7 +400,10 @@ function FrameworkApiPanel({
                   return (
                     <tr id={anchor} key={method.name}>
                       <th scope="row">
-                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={`#${anchor}`}
+                        >
                           <code>
                             {method.async ? "async " : ""}
                             {method.name}()
@@ -423,7 +435,10 @@ function FrameworkApiPanel({
         <Heading level={4} size="sm" id="api-accessibility-heading">
           Accessibility
         </Heading>
-        <MemberList label="Generated guidance" values={component.accessibility} />
+        <MemberList
+          label="Generated guidance"
+          values={component.accessibility}
+        />
       </section>
 
       <details className="vf-docs-api-advanced">
@@ -516,7 +531,10 @@ function ComponentOutline({ showLimitations }: { showLimitations: boolean }) {
   ];
 
   return (
-    <aside className="vf-docs-reference-outline" aria-label="On this component page">
+    <aside
+      className="vf-docs-reference-outline"
+      aria-label="On this component page"
+    >
       <Text size="sm" tone="muted">
         On this page
       </Text>
@@ -667,7 +685,10 @@ function ComponentDetail({
               ...(component.contract?.accessibility ?? []),
             ].filter(Boolean)}
           />
-          <MemberList label="Public classes" values={component.styling.classes} />
+          <MemberList
+            label="Public classes"
+            values={component.styling.classes}
+          />
           <MemberList
             label="CSS variables"
             values={component.styling.variables}
