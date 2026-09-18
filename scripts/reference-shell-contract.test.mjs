@@ -117,13 +117,15 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.match(docsStyles, /tbody tr:target/u);
 });
 
-
 test("component preview pairs executable behavior with generated framework consumption code", () => {
   const preview = read("apps/docs/src/ReferencePreview.tsx");
   const referenceData = read("apps/docs/src/referenceData.ts");
   const referenceStyles = read("apps/docs/src/styles/reference-shell.css");
 
-  assert.match(referenceData, /frameworks: Record<ReferenceFrameworkId, ReferenceFrameworkUsage>/u);
+  assert.match(
+    referenceData,
+    /frameworks: Record<ReferenceFrameworkId, ReferenceFrameworkUsage>/u,
+  );
   assert.match(preview, /component\.frameworks\[frameworkId\]/u);
   assert.match(preview, /FrameworkCode/u);
   assert.match(preview, /usage\.setup/u);
