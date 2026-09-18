@@ -487,7 +487,7 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "target",
+          "status": "current",
           "tag": "vf-description-list",
           "properties": [],
           "events": [],

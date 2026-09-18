@@ -12,6 +12,7 @@ import {
   VyrnForgeCodeTextElement,
   VyrnForgeDateInputElement,
   VyrnForgeDateTimeInputElement,
+  VyrnForgeDescriptionListElement,
   VyrnForgeDialogElement,
   VyrnForgeDrawerElement,
   VyrnForgeEmptyStateElement,
@@ -163,6 +164,10 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
     Object.freeze({
       tagName: "vf-date-input",
       constructor: VyrnForgeDateInputElement,
+    }),
+    Object.freeze({
+      tagName: "vf-description-list",
+      constructor: VyrnForgeDescriptionListElement,
     }),
     Object.freeze({
       tagName: "vf-datetime-input",

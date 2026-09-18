@@ -5300,7 +5300,7 @@
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "Renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+        "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
       ],
       "deprecation": {
         "status": "not-applicable"
@@ -5309,11 +5309,11 @@
       "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
       "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
       "relatedComponents": ["KeyValueList", "PropertyTable"],
-      "cssClasses": [],
+      "cssClasses": ["vf-description-list"],
       "cssVariables": [],
-      "importExample": "Planned; no import yet.",
-      "basicUsageExample": "Planned.",
-      "accessibilityNotes": "Preserve native description-list term and description relationships; do not replace them with generic grouping roles.",
+      "importExample": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+      "basicUsageExample": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>",
+      "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
       "aiUsageNotes": "Use semantic dl/dt/dd markup until a renderer exists; when DescriptionList is available, preserve the same term/description structure and do not invent a stateful data API.",
       "frameworkParity": {
         "betaScope": "excluded",
@@ -5329,10 +5329,10 @@
         },
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "target",
+          "status": "current",
           "strategy": "direct-element",
           "target": "vf-description-list",
-          "evidence": "pending"
+          "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
           "status": "target",
