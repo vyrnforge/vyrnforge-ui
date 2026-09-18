@@ -1482,18 +1482,20 @@
       "guidance": {
         "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
         "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
-        "aiUsageNotes": "Use semantic dl/dt/dd markup until a renderer exists; when DescriptionList is available, preserve the same term/description structure and do not invent a stateful data API.",
+        "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
         "relatedComponents": [
           "KeyValueList",
           "PropertyTable"
         ]
       },
-      "accessibilityNotes": "Preserve native description-list term and description relationships; do not replace them with generic grouping roles.",
+      "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
       "knownLimitations": [
-        "Renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+        "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
       ],
       "styling": {
-        "classes": [],
+        "classes": [
+          "vf-description-list"
+        ],
         "variables": []
       },
       "docsPath": "docs/api/ui-components-api.md",
@@ -1501,21 +1503,25 @@
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "customElementsManifest": null
+        "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
-      "nativeDeclaration": null,
+      "nativeDeclaration": {
+        "name": "VyrnForgeDescriptionListElement",
+        "tagName": "vf-description-list",
+        "description": "DescriptionList browser-native renderer. Read-only term-and-description facts with semantic description-list relationships."
+      },
       "frameworks": {
         "react": {
           "label": "React",
           "status": "target",
           "package": "@vyrnforge/ui-components",
-          "setup": "Planned; no import yet.",
-          "example": "Planned.",
+          "setup": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+          "example": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>",
           "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
         },
         "native-html": {
           "label": "Native HTML",
-          "status": "target",
+          "status": "current",
           "package": "@vyrnforge/ui-elements",
           "setup": "import \"@vyrnforge/ui-elements/register\";",
           "example": "<vf-description-list></vf-description-list>",
