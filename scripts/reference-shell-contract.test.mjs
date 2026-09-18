@@ -87,3 +87,32 @@ test("shared runtime requires four framework surfaces and four Reference section
   }
   assert.match(runtime, /preserveContext\.includes\("framework"\)/u);
 });
+
+test("component Reference exposes structured, linkable member API navigation", () => {
+  const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
+  const docsStyles = read("apps/docs/src/styles/docs.css");
+
+  for (const sectionId of [
+    "component-overview",
+    "component-usage",
+    "component-framework-api",
+    "component-contract",
+    "component-accessibility-styling",
+    "api-properties",
+    "api-events",
+    "api-slots",
+    "api-methods",
+  ]) {
+    assert.match(componentReference, new RegExp(`"${sectionId}"`, "u"));
+  }
+
+  assert.match(componentReference, /memberAnchor\("property"/u);
+  assert.match(componentReference, /memberAnchor\("event"/u);
+  assert.match(componentReference, /memberAnchor\("slot"/u);
+  assert.match(componentReference, /memberAnchor\("method"/u);
+  assert.match(componentReference, /<table className="vf-docs-api-table">/u);
+  assert.match(componentReference, /aria-label="On this component page"/u);
+  assert.match(docsStyles, /\.vf-docs-reference-outline/u);
+  assert.match(docsStyles, /\.vf-docs-api-table/u);
+  assert.match(docsStyles, /tbody tr:target/u);
+});
