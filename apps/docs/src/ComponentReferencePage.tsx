@@ -643,8 +643,8 @@ function ComponentDetail({
             Framework API
           </Heading>
           <Text tone="muted">
-            Public API facts below come directly from the generated framework API
-            reference. Member rows have stable anchors for deep links, while
+            Public API facts below come directly from the generated framework
+            API reference. Member rows have stable anchors for deep links, while
             selecting a tab updates the shared Reference framework context.
           </Text>
           <Tabs
