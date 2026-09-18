@@ -28,11 +28,7 @@ function hasSnippet(value: string) {
   return Boolean(value && !unresolvedPaths.has(value));
 }
 
-function FrameworkCode({
-  usage,
-}: {
-  usage: ReferenceFrameworkUsage;
-}) {
+function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
   const hasSetup = hasSnippet(usage.setup);
   const hasExample = hasSnippet(usage.example);
 
