@@ -4,7 +4,10 @@ import {
   getEmbeddedPlaygroundHref,
   getPlaygroundRouteHref,
 } from "./deploymentLinks";
-import { getComponentReferenceRecord } from "./referenceData";
+import {
+  getComponentReferenceRecord,
+  type ReferenceFrameworkUsage,
+} from "./referenceData";
 
 type ReferencePreviewProps = {
   componentId: string | null;
@@ -19,6 +22,75 @@ const unresolvedPaths = new Set([
 
 function hasExecutablePath(path: string | null): path is string {
   return Boolean(path && !unresolvedPaths.has(path));
+}
+
+function hasSnippet(value: string) {
+  return Boolean(value && !unresolvedPaths.has(value));
+}
+
+function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
+  const hasSetup = hasSnippet(usage.setup);
+  const hasExample = hasSnippet(usage.example);
+
+  return (
+    <section
+      aria-labelledby="vf-docs-preview-code-heading"
+      className="vf-docs-preview__code-panel"
+    >
+      <div className="vf-docs-preview__code-heading">
+        <div>
+          <Text size="sm" tone="muted">
+            Selected framework
+          </Text>
+          <Heading id="vf-docs-preview-code-heading" level={4} size="sm">
+            {usage.label} consumption
+          </Heading>
+        </div>
+        <Badge size="sm" tone="subtle">
+          {usage.status}
+        </Badge>
+      </div>
+
+      {usage.package && (
+        <Text size="sm" tone="muted">
+          Package: <code>{usage.package}</code>
+        </Text>
+      )}
+
+      {hasSetup && (
+        <div className="vf-docs-preview__snippet">
+          <Text size="sm" tone="muted">
+            Setup
+          </Text>
+          <pre className="vf-docs-preview__code">
+            <code>{usage.setup}</code>
+          </pre>
+        </div>
+      )}
+
+      {hasExample && (
+        <div className="vf-docs-preview__snippet">
+          <Text size="sm" tone="muted">
+            Example
+          </Text>
+          <pre className="vf-docs-preview__code">
+            <code>{usage.example}</code>
+          </pre>
+        </div>
+      )}
+
+      {!hasSetup && !hasExample && (
+        <Text size="sm" tone="muted">
+          No generated consumption snippet is available for this component on
+          the selected framework surface.
+        </Text>
+      )}
+
+      <Text size="sm" tone="muted">
+        {usage.note}
+      </Text>
+    </section>
+  );
 }
 
 export function ReferencePreview({
@@ -40,6 +112,7 @@ export function ReferencePreview({
     frameworkId,
     component.playgroundPath,
   );
+  const frameworkUsage = component.frameworks[frameworkId];
 
   return (
     <Card className="vf-docs-preview" padding="none">
@@ -66,19 +139,23 @@ export function ReferencePreview({
           Open full example
         </a>
       </div>
-      <div className="vf-docs-preview__stage">
-        <iframe
-          className="vf-docs-preview__frame"
-          key={previewHref}
-          loading="lazy"
-          src={previewHref}
-          title={`${component.displayName} executable preview`}
-        />
+      <div className="vf-docs-preview__body">
+        <div className="vf-docs-preview__stage">
+          <iframe
+            className="vf-docs-preview__frame"
+            key={previewHref}
+            loading="lazy"
+            src={previewHref}
+            title={`${component.displayName} executable preview`}
+          />
+        </div>
+        <FrameworkCode usage={frameworkUsage} />
       </div>
       <div className="vf-docs-preview__footer">
         <Text size="sm" tone="muted">
-          This preview reuses the canonical Playground route and selected
-          framework context; it does not maintain a second demo implementation.
+          The executable stage reuses the canonical Playground route. The
+          adjacent setup and example come from the generated selected-framework
+          consumption record; neither creates a second demo or API authority.
         </Text>
       </div>
     </Card>
