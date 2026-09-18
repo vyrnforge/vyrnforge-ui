@@ -88,7 +88,6 @@ test("shared runtime requires four framework surfaces and four Reference section
   assert.match(runtime, /preserveContext\.includes\("framework"\)/u);
 });
 
-
 test("component Reference exposes structured, linkable member API navigation", () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const docsStyles = read("apps/docs/src/styles/docs.css");
