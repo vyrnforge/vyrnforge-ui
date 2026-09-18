@@ -110,9 +110,12 @@ test("rejects missing consumer fixture examples", () => {
   );
 });
 
-test("allows a canonical contract whose renderer mappings are staged current/target", () => {
-  assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
-});
+test(
+  "allows a canonical contract whose renderer mappings are staged current/target",
+  () => {
+    assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
+  },
+);
 
 test("rejects an unsupported renderer status during staged rollout", () => {
   withRepositoryFixture(
@@ -128,7 +131,9 @@ test("rejects an unsupported renderer status during staged rollout", () => {
       const failures = verifyMultiFrameworkArchitecture({ root });
       assert(
         failures.some((failure) =>
-          failure.includes("description-list has an invalid React framework mapping"),
+          failure.includes(
+            "description-list has an invalid React framework mapping",
+          ),
         ),
       );
     },
