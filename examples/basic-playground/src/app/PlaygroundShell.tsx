@@ -21,6 +21,7 @@ export type PlaygroundShellProps = {
   activeRoute: PlaygroundRoute;
   activeRouteId: string;
   density: string;
+  embedded?: boolean;
   frameworkId: PlaygroundFrameworkId;
   routes: PlaygroundRoute[];
   versionId: string;
@@ -39,6 +40,7 @@ export function PlaygroundShell({
   activeRouteId,
   children,
   density,
+  embedded = false,
   frameworkId,
   theme,
   versionId,
@@ -55,6 +57,18 @@ export function PlaygroundShell({
   );
   const selectedVersion = versions.find((version) => version.id === versionId);
 
+  if (embedded) {
+    return (
+      <div
+        className="vf-playground-embed"
+        data-density={density}
+        data-theme={theme}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
     <AppShell
       fullHeight
@@ -67,7 +81,7 @@ export function PlaygroundShell({
               </span>
               <span className="vf-playground-brand__copy">
                 <strong>{referenceModel.product.label}</strong>
-                <span>Playground mode</span>
+                <span>Executable examples</span>
               </span>
             </div>
           }
@@ -102,7 +116,7 @@ export function PlaygroundShell({
                   className="vf-playground-top-link"
                   href={getDocsHref(frameworkId)}
                 >
-                  Docs mode
+                  Reference
                 </a>
                 <a
                   className="vf-playground-top-link"
