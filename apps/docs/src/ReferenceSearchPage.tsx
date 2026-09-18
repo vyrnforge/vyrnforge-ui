@@ -61,7 +61,7 @@ function memberHref(componentId: string, frameworkId: string, member: string) {
   const query = new URLSearchParams({
     [referenceModel.frameworkContext.queryParameter]: frameworkId,
   });
-  const route = getReferenceRecordRoute(referenceModel, "components", componentId);
+  const route = getReferenceRecordRoute(\n    referenceModel,\n    "components",\n    componentId,\n  );
   return `?${query.toString()}#${route}?member=${encodeURIComponent(member)}`;
 }
 
