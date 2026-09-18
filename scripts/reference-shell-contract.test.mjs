@@ -137,27 +137,24 @@ test("component preview pairs executable behavior with generated framework consu
   assert.match(referenceStyles, /\.vf-docs-preview__code/u);
 });
 
-test(
-  "Reference search indexes generated framework API members with router-safe deep links",
-  () => {
-    const app = read("apps/docs/src/App.tsx");
-    const search = read("apps/docs/src/ReferenceSearchPage.tsx");
+test("Reference search indexes API members with safe deep links", () => {
+  const app = read("apps/docs/src/App.tsx");
+  const search = read("apps/docs/src/ReferenceSearchPage.tsx");
 
-    assert.match(search, /generated\/framework-api-reference\.json\?raw/u);
-    assert.match(search, /buildApiMemberEntries/u);
-    assert.match(search, /memberAnchor\("property"/u);
-    assert.match(search, /memberAnchor\("event"/u);
-    assert.match(search, /memberAnchor\("slot"/u);
-    assert.match(search, /memberAnchor\("method"/u);
-    assert.match(search, /\?member=\$\{encodeURIComponent\(member\)\}/u);
-    assert.match(search, /referenceModel\.frameworkContext\.queryParameter/u);
+  assert.match(search, /generated\/framework-api-reference\.json\?raw/u);
+  assert.match(search, /buildApiMemberEntries/u);
+  assert.match(search, /memberAnchor\("property"/u);
+  assert.match(search, /memberAnchor\("event"/u);
+  assert.match(search, /memberAnchor\("slot"/u);
+  assert.match(search, /memberAnchor\("method"/u);
+  assert.match(search, /\?member=\$\{encodeURIComponent\(member\)\}/u);
+  assert.match(search, /referenceModel\.frameworkContext\.queryParameter/u);
 
-    assert.match(app, /new URLSearchParams\(query\)\.get\("member"\)/u);
-    assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
-    assert.match(app, /a\[href\^="#api-"\]/u);
-    assert.match(
-      app,
-      /getReferenceRecordRoute\([\s\S]*"components"[\s\S]*selection\.id/u,
-    );
-  },
-);
+  assert.match(app, /new URLSearchParams\(query\)\.get\("member"\)/u);
+  assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
+  assert.match(app, /a\[href\^="#api-"\]/u);
+  assert.match(
+    app,
+    /getReferenceRecordRoute\([\s\S]*"components"[\s\S]*selection\.id/u,
+  );
+});
