@@ -116,3 +116,21 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.match(docsStyles, /\.vf-docs-api-table/u);
   assert.match(docsStyles, /tbody tr:target/u);
 });
+
+
+test("component preview pairs executable behavior with generated framework consumption code", () => {
+  const preview = read("apps/docs/src/ReferencePreview.tsx");
+  const referenceData = read("apps/docs/src/referenceData.ts");
+  const referenceStyles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.match(referenceData, /frameworks: Record<ReferenceFrameworkId, ReferenceFrameworkUsage>/u);
+  assert.match(preview, /component\.frameworks\[frameworkId\]/u);
+  assert.match(preview, /FrameworkCode/u);
+  assert.match(preview, /usage\.setup/u);
+  assert.match(preview, /usage\.example/u);
+  assert.match(preview, /Selected framework/u);
+  assert.match(preview, /generated selected-framework/u);
+  assert.match(referenceStyles, /\.vf-docs-preview__body/u);
+  assert.match(referenceStyles, /\.vf-docs-preview__code-panel/u);
+  assert.match(referenceStyles, /\.vf-docs-preview__code/u);
+});
