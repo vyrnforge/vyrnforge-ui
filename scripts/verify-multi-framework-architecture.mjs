@@ -476,14 +476,20 @@ function verifyComponentContracts(failures, contracts) {
     if (contract.representative === true) representativeIds.add(contract.id);
     const mappings = contract.frameworkMappings ?? {};
 
-    const targetContract = ["native", "react", "angular", "vue"].every(
-      (framework) => mappings[framework]?.status === "target",
+    const mappingStatuses = ["native", "react", "angular", "vue"].map(
+      (framework) => mappings[framework]?.status,
+    );
+    const targetContract = mappingStatuses.every((status) => status === "target");
+    const stagedContract = mappingStatuses.every((status) =>
+      ["current", "target"].includes(status),
     );
 
     const react = mappings.react;
     const validReactStatus = targetContract
       ? react?.status === "target"
-      : ["current", "migration"].includes(react?.status);
+      : stagedContract
+        ? ["current", "target"].includes(react?.status)
+        : ["current", "migration"].includes(react?.status);
     if (
       react?.package !== "@vyrnforge/ui-components" ||
       !validReactStatus ||
@@ -499,7 +505,9 @@ function verifyComponentContracts(failures, contracts) {
     const native = mappings.native;
     const validNativeStatus = targetContract
       ? native?.status === "target"
-      : native?.status === "current";
+      : stagedContract
+        ? ["current", "target"].includes(native?.status)
+        : native?.status === "current";
     if (
       native?.package !== "@vyrnforge/ui-elements" ||
       !validNativeStatus ||
