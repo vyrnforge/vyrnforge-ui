@@ -18,11 +18,7 @@ export type ReferenceContract = {
   formAssociation: string;
 };
 
-export type ReferenceFrameworkId =
-  | "native-html"
-  | "react"
-  | "angular"
-  | "vue";
+export type ReferenceFrameworkId = "native-html" | "react" | "angular" | "vue";
 
 export type ReferenceFrameworkUsage = {
   label: string;
