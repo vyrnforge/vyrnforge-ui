@@ -140,7 +140,7 @@ Editor and analyzer tooling can consume the package field and public export:
 ```
 
 The manifest follows Custom Elements Manifest schema `1.0.0` and is
-generated from the deterministic 58-tag registry. Registration remains
+generated from the deterministic 59-tag registry. Registration remains
 explicit; declaration imports do not define elements globally at runtime.
 
 ## DescriptionList
