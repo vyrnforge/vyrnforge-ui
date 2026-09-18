@@ -44,9 +44,7 @@ type SearchApiReference = {
   surfaces: Record<string, { components: SearchApiComponent[] }>;
 };
 
-const apiReference = JSON.parse(
-  frameworkApiReferenceRaw,
-) as SearchApiReference;
+const apiReference = JSON.parse(frameworkApiReferenceRaw) as SearchApiReference;
 
 function recordHref(domain: string, id: string) {
   return `#${getReferenceRecordRoute(referenceModel, domain, id)}`;
@@ -59,19 +57,11 @@ function memberAnchor(kind: string, name: string) {
     .replace(/^-|-$/gu, "")}`;
 }
 
-function memberHref(
-  componentId: string,
-  frameworkId: string,
-  member: string,
-) {
+function memberHref(componentId: string, frameworkId: string, member: string) {
   const query = new URLSearchParams({
     [referenceModel.frameworkContext.queryParameter]: frameworkId,
   });
-  const route = getReferenceRecordRoute(
-    referenceModel,
-    "components",
-    componentId,
-  );
+  const route = getReferenceRecordRoute(referenceModel, "components", componentId);
   return `?${query.toString()}#${route}?member=${encodeURIComponent(member)}`;
 }
 
