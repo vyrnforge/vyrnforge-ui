@@ -5716,7 +5716,7 @@
       "importExample": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
       "basicUsageExample": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>",
       "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
-      "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across future framework adapters and do not invent a stateful data API.",
+      "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
       "frameworkParity": {
         "betaScope": "excluded",
         "react": {
