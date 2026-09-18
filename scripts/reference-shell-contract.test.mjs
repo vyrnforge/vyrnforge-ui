@@ -153,10 +153,7 @@ test(
     assert.match(search, /referenceModel\.frameworkContext\.queryParameter/u);
 
     assert.match(app, /new URLSearchParams\(query\)\.get\("member"\)/u);
-    assert.match(
-      app,
-      /document\.getElementById\(member\)\?\.scrollIntoView/u,
-    );
+    assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
     assert.match(app, /a\[href\^="#api-"\]/u);
     assert.match(
       app,
