@@ -148,13 +148,13 @@ test("Reference search indexes generated framework API members with router-safe 
   assert.match(search, /memberAnchor\("slot"/u);
   assert.match(search, /memberAnchor\("method"/u);
   assert.match(search, /\?member=\$\{encodeURIComponent\(member\)\}/u);
-  assert.match(
-    search,
-    /referenceModel\.frameworkContext\.queryParameter/u,
-  );
+  assert.match(search, /referenceModel\.frameworkContext\.queryParameter/u);
 
   assert.match(app, /new URLSearchParams\(query\)\.get\("member"\)/u);
-  assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
+  assert.match(
+    app,
+    /document\.getElementById\(member\)\?\.scrollIntoView/u,
+  );
   assert.match(app, /a\[href\^="#api-"\]/u);
   assert.match(
     app,
