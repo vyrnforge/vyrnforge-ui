@@ -106,10 +106,10 @@ test("component Reference exposes structured, linkable member API navigation", (
     assert.match(componentReference, new RegExp(`"${sectionId}"`, "u"));
   }
 
-  assert.match(componentReference, /memberAnchor("property"/u);
-  assert.match(componentReference, /memberAnchor("event"/u);
-  assert.match(componentReference, /memberAnchor("slot"/u);
-  assert.match(componentReference, /memberAnchor("method"/u);
+  assert.match(componentReference, /memberAnchor\("property"/u);
+  assert.match(componentReference, /memberAnchor\("event"/u);
+  assert.match(componentReference, /memberAnchor\("slot"/u);
+  assert.match(componentReference, /memberAnchor\("method"/u);
   assert.match(componentReference, /<table className="vf-docs-api-table">/u);
   assert.match(componentReference, /aria-label="On this component page"/u);
   assert.match(docsStyles, /\.vf-docs-reference-outline/u);
