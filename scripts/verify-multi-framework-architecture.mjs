@@ -479,7 +479,9 @@ function verifyComponentContracts(failures, contracts) {
     const mappingStatuses = ["native", "react", "angular", "vue"].map(
       (framework) => mappings[framework]?.status,
     );
-    const targetContract = mappingStatuses.every((status) => status === "target");
+    const targetContract = mappingStatuses.every(
+      (status) => status === "target",
+    );
     const stagedContract = mappingStatuses.every((status) =>
       ["current", "target"].includes(status),
     );
