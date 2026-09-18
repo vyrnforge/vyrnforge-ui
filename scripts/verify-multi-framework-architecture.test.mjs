@@ -110,12 +110,9 @@ test("rejects missing consumer fixture examples", () => {
   );
 });
 
-test(
-  "allows a canonical contract whose renderer mappings are staged current/target",
-  () => {
-    assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
-  },
-);
+test("allows staged current/target renderer mappings", () => {
+  assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
+});
 
 test("rejects an unsupported renderer status during staged rollout", () => {
   withRepositoryFixture(
