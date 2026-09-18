@@ -104,41 +104,42 @@ function formatDefault(value: unknown) {
   return value === undefined ? "—" : JSON.stringify(value);
 }
 
-function formatProperty(property: ApiProperty) {
-  const flags = [
+function memberAnchor(kind: string, name: string) {
+  return `api-${kind}-${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gu, "-")
+    .replace(/^-|-$/gu, "")}`;
+}
+
+function propertyFlags(property: ApiProperty) {
+  return [
     property.required && "required",
     property.readOnly && "readonly",
     property.controlled && "controlled",
-  ].filter(Boolean);
-  const suffix = flags.length > 0 ? ` (${flags.join(", ")})` : "";
-  return `${property.public}: ${property.type}${suffix}; binding=${property.binding}; default=${formatDefault(property.default)}`;
+  ].filter(Boolean) as string[];
 }
 
-function formatEvent(event: ApiEvent) {
-  const detail = event.detailFields
-    .map((field) => `${field.name}: ${field.type}${field.required ? "" : "?"}`)
-    .join(", ");
-  const detailShape = detail ? ` { ${detail} }` : "";
-  return `${event.public} (${event.mode}; detail=${event.detail}${detailShape}; bubbles=${event.bubbles}; composed=${event.composed}; cancelable=${event.cancelable})`;
+function eventDelivery(event: ApiEvent) {
+  return [
+    event.bubbles && "bubbles",
+    event.composed && "composed",
+    event.cancelable && "cancelable",
+  ].filter(Boolean) as string[];
 }
 
-function formatSlot(slot: ApiSlot) {
-  const flags = [
-    slot.required && "required",
-    slot.multiple && "multiple",
-  ].filter(Boolean);
-  const suffix = flags.length > 0 ? `; ${flags.join("; ")}` : "";
-  return `${slot.public} (${slot.mode}; ${slot.content}${suffix})`;
+function slotFlags(slot: ApiSlot) {
+  return [slot.required && "required", slot.multiple && "multiple"].filter(
+    Boolean,
+  ) as string[];
 }
 
-function formatMethod(method: ApiMethod) {
-  const parameters = method.parameters
+function methodParameters(method: ApiMethod) {
+  return method.parameters
     .map(
       (parameter) =>
         `${parameter.name}${parameter.required ? "" : "?"}: ${parameter.type}`,
     )
     .join(", ");
-  return `${method.async ? "async " : ""}${method.name}(${parameters}): ${method.returns}`;
 }
 
 function MemberList({
@@ -183,6 +184,14 @@ function ContractDetails({ contract }: { contract: ReferenceContract | null }) {
   );
 }
 
+function EmptyApiMembers() {
+  return (
+    <Text size="sm" tone="muted">
+      None on this framework surface.
+    </Text>
+  );
+}
+
 function FrameworkApiPanel({
   component,
 }: {
@@ -198,25 +207,226 @@ function FrameworkApiPanel({
         {component.export && <code>export {component.export}</code>}
         {component.tag && <code>{component.tag}</code>}
       </div>
-      <MemberList label="Setup" values={component.setup} />
-      <MemberList
-        label="Properties / inputs"
-        values={component.properties.map(formatProperty)}
-      />
-      <MemberList
-        label="Events / outputs / emits"
-        values={component.events.map(formatEvent)}
-      />
-      <MemberList
-        label="Slots / templates"
-        values={component.slots.map(formatSlot)}
-      />
-      <MemberList
-        label="Methods"
-        values={component.methods.map(formatMethod)}
-      />
-      <MemberList label="Accessibility" values={component.accessibility} />
-      <details>
+
+      <section
+        aria-labelledby="api-setup-heading"
+        className="vf-docs-api-section"
+        id="api-setup"
+      >
+        <Heading level={4} size="sm" id="api-setup-heading">
+          Setup
+        </Heading>
+        <MemberList label="Imports / registration" values={component.setup} />
+      </section>
+
+      <section
+        aria-labelledby="api-properties-heading"
+        className="vf-docs-api-section"
+        id="api-properties"
+      >
+        <Heading level={4} size="sm" id="api-properties-heading">
+          Properties / inputs
+        </Heading>
+        {component.properties.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Binding</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Default</th>
+                  <th scope="col">Flags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.properties.map((property) => {
+                  const anchor = memberAnchor("property", property.public);
+                  return (
+                    <tr id={anchor} key={property.public}>
+                      <th scope="row">
+                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                          <code>{property.public}</code>
+                        </a>
+                      </th>
+                      <td>
+                        <code>{property.binding}</code>
+                      </td>
+                      <td>
+                        <code>{property.type}</code>
+                      </td>
+                      <td>
+                        <code>{formatDefault(property.default)}</code>
+                      </td>
+                      <td>{propertyFlags(property).join(", ") || "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-events-heading"
+        className="vf-docs-api-section"
+        id="api-events"
+      >
+        <Heading level={4} size="sm" id="api-events-heading">
+          Events / outputs / emits
+        </Heading>
+        {component.events.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Mode</th>
+                  <th scope="col">Detail</th>
+                  <th scope="col">Delivery</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.events.map((event) => {
+                  const anchor = memberAnchor("event", event.public);
+                  const detailFields = event.detailFields
+                    .map(
+                      (field) =>
+                        `${field.name}${field.required ? "" : "?"}: ${field.type}`,
+                    )
+                    .join(", ");
+                  return (
+                    <tr id={anchor} key={event.public}>
+                      <th scope="row">
+                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                          <code>{event.public}</code>
+                        </a>
+                      </th>
+                      <td>{event.mode}</td>
+                      <td>
+                        <code>
+                          {event.detail}
+                          {detailFields ? ` { ${detailFields} }` : ""}
+                        </code>
+                      </td>
+                      <td>{eventDelivery(event).join(", ") || "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-slots-heading"
+        className="vf-docs-api-section"
+        id="api-slots"
+      >
+        <Heading level={4} size="sm" id="api-slots-heading">
+          Slots / templates
+        </Heading>
+        {component.slots.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Mode</th>
+                  <th scope="col">Content</th>
+                  <th scope="col">Flags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.slots.map((slot) => {
+                  const anchor = memberAnchor("slot", slot.public);
+                  return (
+                    <tr id={anchor} key={slot.public}>
+                      <th scope="row">
+                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                          <code>{slot.public}</code>
+                        </a>
+                      </th>
+                      <td>{slot.mode}</td>
+                      <td>{slot.content}</td>
+                      <td>{slotFlags(slot).join(", ") || "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-methods-heading"
+        className="vf-docs-api-section"
+        id="api-methods"
+      >
+        <Heading level={4} size="sm" id="api-methods-heading">
+          Methods
+        </Heading>
+        {component.methods.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Method</th>
+                  <th scope="col">Parameters</th>
+                  <th scope="col">Returns</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.methods.map((method) => {
+                  const anchor = memberAnchor("method", method.name);
+                  return (
+                    <tr id={anchor} key={method.name}>
+                      <th scope="row">
+                        <a className="vf-docs-api-member-link" href={`#${anchor}`}>
+                          <code>
+                            {method.async ? "async " : ""}
+                            {method.name}()
+                          </code>
+                        </a>
+                      </th>
+                      <td>
+                        <code>{methodParameters(method) || "—"}</code>
+                      </td>
+                      <td>
+                        <code>{method.returns}</code>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-accessibility-heading"
+        className="vf-docs-api-section"
+        id="api-accessibility"
+      >
+        <Heading level={4} size="sm" id="api-accessibility-heading">
+          Accessibility
+        </Heading>
+        <MemberList label="Generated guidance" values={component.accessibility} />
+      </section>
+
+      <details className="vf-docs-api-advanced">
         <summary>Model, form, and ref contracts</summary>
         <pre className="vf-docs-reference-code">
           <code>
@@ -293,6 +503,45 @@ function ComponentIndexCard({
   );
 }
 
+function ComponentOutline({ showLimitations }: { showLimitations: boolean }) {
+  const sections = [
+    ["component-overview", "Overview"],
+    ["component-usage", "Usage guidance"],
+    ["component-framework-api", "Framework API"],
+    ["component-contract", "Framework-neutral contract"],
+    ["component-accessibility-styling", "Accessibility and styling"],
+    ...(showLimitations
+      ? [["component-limitations", "Limitations and related patterns"]]
+      : []),
+  ];
+
+  return (
+    <aside className="vf-docs-reference-outline" aria-label="On this component page">
+      <Text size="sm" tone="muted">
+        On this page
+      </Text>
+      <nav>
+        <ul>
+          {sections.map(([id, label]) => (
+            <li key={id}>
+              <a href={`#${id}`}>{label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className="vf-docs-reference-outline__api">
+        <Text size="sm" tone="muted">
+          Framework API
+        </Text>
+        <a href="#api-properties">Properties</a>
+        <a href="#api-events">Events</a>
+        <a href="#api-slots">Slots</a>
+        <a href="#api-methods">Methods</a>
+      </div>
+    </aside>
+  );
+}
+
 function ComponentDetail({
   component,
   frameworkId,
@@ -304,118 +553,148 @@ function ComponentDetail({
 }) {
   const maturity = getComponentMaturityPresentation(component);
   const relatedPatterns = getRelatedPatterns(component.id);
+  const showLimitations =
+    component.knownLimitations.length > 0 || relatedPatterns.length > 0;
 
   return (
-    <div className="vf-docs-reference">
-      <Card className="vf-docs-reference__section" padding="lg">
-        <Text size="sm">
-          <a href="#/component-reference">← Component reference</a>
-        </Text>
-        <div className="vf-docs-reference-card__header">
-          <div>
-            <Heading level={3} size="md">
-              {component.displayName}
-            </Heading>
-            <Text size="sm" tone="muted">
-              <code>{component.package}</code>
-              {component.nativeDeclaration?.tagName && (
-                <>
-                  {" "}
-                  · <code>{component.nativeDeclaration.tagName}</code>
-                </>
-              )}
-            </Text>
+    <div className="vf-docs-reference-layout">
+      <div className="vf-docs-reference">
+        <Card
+          className="vf-docs-reference__section"
+          id="component-overview"
+          padding="lg"
+        >
+          <Text size="sm">
+            <a href="#/component-reference">← Component reference</a>
+          </Text>
+          <div className="vf-docs-reference-card__header">
+            <div>
+              <Heading level={3} size="md">
+                {component.displayName}
+              </Heading>
+              <Text size="sm" tone="muted">
+                <code>{component.package}</code>
+                {component.nativeDeclaration?.tagName && (
+                  <>
+                    {" "}
+                    · <code>{component.nativeDeclaration.tagName}</code>
+                  </>
+                )}
+              </Text>
+            </div>
+            <Badge size="sm" tone="subtle" variant={maturity.variant}>
+              {maturity.label}
+            </Badge>
           </div>
-          <Badge size="sm" tone="subtle" variant={maturity.variant}>
-            {maturity.label}
-          </Badge>
-        </div>
-        <Text>{component.purpose}</Text>
-        <Text size="sm" tone="muted">
-          AI context slice:{" "}
-          <code>{`ai-context/components/${component.id}.json`}</code>
-        </Text>
-      </Card>
+          <Text>{component.purpose}</Text>
+          <Text size="sm" tone="muted">
+            AI context slice:{" "}
+            <code>{`ai-context/components/${component.id}.json`}</code>
+          </Text>
+        </Card>
 
-      <Card className="vf-docs-reference__section" padding="lg">
-        <Heading level={3} size="md">
-          Usage guidance
-        </Heading>
-        <MemberList label="Use when" values={[component.guidance.useWhen]} />
-        <MemberList
-          label="Avoid when"
-          values={[component.guidance.avoidWhen]}
-        />
-        <MemberList
-          label="AI usage notes"
-          values={[component.guidance.aiUsageNotes]}
-        />
-        <MemberList
-          label="Related components"
-          values={component.guidance.relatedComponents}
-        />
-      </Card>
-
-      <Card className="vf-docs-reference__section" padding="lg">
-        <Heading level={3} size="md">
-          Framework API
-        </Heading>
-        <Text tone="muted">
-          Public API facts below come directly from the generated framework API
-          reference. Selecting a tab updates the shared Reference framework
-          context.
-        </Text>
-        <Tabs
-          aria-label={`${component.displayName} framework API`}
-          className="vf-docs-framework-tabs"
-          items={frameworkTabs(component.id)}
-          onValueChange={(value) => onFrameworkChange(value as DocsFrameworkId)}
-          size="sm"
-          value={frameworkId}
-        />
-      </Card>
-
-      <Card className="vf-docs-reference__section" padding="lg">
-        <Heading level={3} size="md">
-          Framework-neutral contract
-        </Heading>
-        <ContractDetails contract={component.contract} />
-      </Card>
-
-      <Card className="vf-docs-reference__section" padding="lg">
-        <Heading level={3} size="md">
-          Accessibility and styling
-        </Heading>
-        <MemberList
-          label="Accessibility guidance"
-          values={[
-            component.accessibilityNotes,
-            ...(component.contract?.accessibility ?? []),
-          ].filter(Boolean)}
-        />
-        <MemberList label="Public classes" values={component.styling.classes} />
-        <MemberList
-          label="CSS variables"
-          values={component.styling.variables}
-        />
-      </Card>
-
-      {(component.knownLimitations.length > 0 ||
-        relatedPatterns.length > 0) && (
-        <Card className="vf-docs-reference__section" padding="lg">
+        <Card
+          className="vf-docs-reference__section"
+          id="component-usage"
+          padding="lg"
+        >
           <Heading level={3} size="md">
-            Limitations and related patterns
+            Usage guidance
           </Heading>
+          <MemberList label="Use when" values={[component.guidance.useWhen]} />
           <MemberList
-            label="Known limitations"
-            values={component.knownLimitations}
+            label="Avoid when"
+            values={[component.guidance.avoidWhen]}
           />
           <MemberList
-            label="Patterns using this component"
-            values={relatedPatterns.map((pattern) => pattern.displayName)}
+            label="AI usage notes"
+            values={[component.guidance.aiUsageNotes]}
+          />
+          <MemberList
+            label="Related components"
+            values={component.guidance.relatedComponents}
           />
         </Card>
-      )}
+
+        <Card
+          className="vf-docs-reference__section"
+          id="component-framework-api"
+          padding="lg"
+        >
+          <Heading level={3} size="md">
+            Framework API
+          </Heading>
+          <Text tone="muted">
+            Public API facts below come directly from the generated framework API
+            reference. Member rows have stable anchors for deep links, while
+            selecting a tab updates the shared Reference framework context.
+          </Text>
+          <Tabs
+            aria-label={`${component.displayName} framework API`}
+            className="vf-docs-framework-tabs"
+            items={frameworkTabs(component.id)}
+            onValueChange={(value) =>
+              onFrameworkChange(value as DocsFrameworkId)
+            }
+            size="sm"
+            value={frameworkId}
+          />
+        </Card>
+
+        <Card
+          className="vf-docs-reference__section"
+          id="component-contract"
+          padding="lg"
+        >
+          <Heading level={3} size="md">
+            Framework-neutral contract
+          </Heading>
+          <ContractDetails contract={component.contract} />
+        </Card>
+
+        <Card
+          className="vf-docs-reference__section"
+          id="component-accessibility-styling"
+          padding="lg"
+        >
+          <Heading level={3} size="md">
+            Accessibility and styling
+          </Heading>
+          <MemberList
+            label="Accessibility guidance"
+            values={[
+              component.accessibilityNotes,
+              ...(component.contract?.accessibility ?? []),
+            ].filter(Boolean)}
+          />
+          <MemberList label="Public classes" values={component.styling.classes} />
+          <MemberList
+            label="CSS variables"
+            values={component.styling.variables}
+          />
+        </Card>
+
+        {showLimitations && (
+          <Card
+            className="vf-docs-reference__section"
+            id="component-limitations"
+            padding="lg"
+          >
+            <Heading level={3} size="md">
+              Limitations and related patterns
+            </Heading>
+            <MemberList
+              label="Known limitations"
+              values={component.knownLimitations}
+            />
+            <MemberList
+              label="Patterns using this component"
+              values={relatedPatterns.map((pattern) => pattern.displayName)}
+            />
+          </Card>
+        )}
+      </div>
+      <ComponentOutline showLimitations={showLimitations} />
     </div>
   );
 }
