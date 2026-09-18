@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "program": {
+    "id": "developer-delivery-foundation",
+    "status": "complete",
+    "purpose": "Standardize how VyrnForge source, generated reference data, executable examples, CI evidence, deployed reference sites, and release snapshots move through one traceable lifecycle before component expansion resumes."
+  },
+  "canonicalSources": [
+    "package manifests and public entrypoints",
+    "docs/metadata/component-contracts.json",
+    "docs/metadata/components.json",
+    "docs/metadata/packages.json",
+    "docs/metadata/multi-framework.json",
+    "docs/metadata/release-groups.json",
+    "docs/metadata/design-tokens.json"
+  ],
+  "generatedKnowledge": [
+    {
+      "id": "framework-api-reference",
+      "path": "docs/generated/framework-api-reference.json",
+      "generator": "scripts/generate-framework-api-reference.mjs",
+      "status": "current"
+    },
+    {
+      "id": "consumer-knowledge",
+      "path": "docs/generated/consumer-knowledge.json",
+      "status": "current"
+    }
+  ],
+  "readerSurfaces": [
+    {
+      "id": "docs",
+      "workspace": "@vyrnforge/ui-docs",
+      "path": "apps/docs",
+      "role": "documentation and generated reference presentation",
+      "status": "current"
+    },
+    {
+      "id": "playground",
+      "workspace": "@vyrnforge/ui-data-grid-basic-playground",
+      "path": "examples/basic-playground",
+      "role": "executable examples, component/pattern exploration, and reference views",
+      "status": "current",
+      "target": "A later reference-product redesign may replace the current shell, but must preserve this delivery, version, framework, and canonical-data contract."
+    }
+  ],
+  "frameworks": ["native-html", "react", "angular", "vue"],
+  "lifecycle": [
+    {
+      "id": "task-pr",
+      "owner": "VyrnForge CI",
+      "policy": "affected-scope validation plus ci-gate on the owning integration lane; reference-affecting PRs also emit a non-deployable immutable preview artifact"
+    },
+    {
+      "id": "promotion-pr",
+      "owner": "VyrnForge CI",
+      "policy": "full repository validation plus ci-gate before integration lane promotion to main"
+    },
+    {
+      "id": "exact-main-delivery",
+      "owner": "VyrnForge CI",
+      "policy": "delivery-only rebuild of docs/playground/reference output bound to the exact main commit and CI run; the same mode may be explicitly dispatched after a release tag exists"
+    },
+    {
+      "id": "production-reference-deploy",
+      "owner": "Deploy GitHub Pages",
+      "policy": "consume and verify an immutable successful current-main delivery artifact; never rebuild source in the deployment workflow"
+    },
+    {
+      "id": "weekly-assurance",
+      "owner": "VyrnForge Weekly Assurance",
+      "policy": "full quality/integration, compatibility, security drift, CodeQL, and persistent-lane drift; never publish or deploy"
+    },
+    {
+      "id": "controlled-release",
+      "owner": "Controlled npm Release",
+      "policy": "manual current-main release using verified immutable tarballs, trusted publishing, registry verification, release records, then a release-bound delivery dispatch and Pages deployment after the tag exists"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "reference-preview",
+      "producer": "VyrnForge CI",
+      "consumer": "PR reviewers and developers",
+      "lineage": "tested pull-request commit + CI run",
+      "mutable": false,
+      "deployable": false
+    },
+    {
+      "id": "pages-site",
+      "producer": "VyrnForge CI",
+      "consumer": "Deploy GitHub Pages",
+      "lineage": "exact Git commit + CI run",
+      "mutable": false,
+      "deployable": true
+    },
+    {
+      "id": "npm-release",
+      "producer": "Controlled npm Release",
+      "consumer": "Controlled npm Release",
+      "lineage": "exact Git commit + successful current-main CI run + tarball digests",
+      "mutable": false
+    }
+  ],
+  "gaps": [
+    {
+      "id": "reader-api-authority",
+      "status": "deferred",
+      "gateBlocking": false,
+      "description": "The generated framework API reference is the canonical reader-facing API authority. Some current Playground demo pages still contain curated hand-maintained props tables; replacing those transitional presentation details is explicitly deferred to the full reference-product redesign and must not become a competing public API source."
+    },
+    {
+      "id": "reference-portal-unification",
+      "status": "closed",
+      "description": "Docs and Playground share docs/metadata/reference-portal.json, the same Native HTML/React/Angular/Vue vocabulary, vyrnforge-versions.json version catalog, deep-link context, and deployment/version model while remaining modular applications."
+    },
+    {
+      "id": "cross-framework-examples",
+      "status": "closed",
+      "description": "docs/metadata/executable-examples.json binds all four first-class framework identities to the existing packed consumer fixtures in tests/consumers/manifest.json with typecheck, build, and runtime verification evidence."
+    },
+    {
+      "id": "pr-reference-preview",
+      "status": "closed",
+      "description": "Reference-affecting PRs emit an immutable non-deployable docs/playground preview artifact bound to the tested commit and CI run; preview jobs retain read-only workflow permissions."
+    },
+    {
+      "id": "release-reference-refresh",
+      "status": "closed",
+      "description": "After registry verification creates or verifies the release tag and GitHub prerelease, the controlled release dispatches exact-main CI in delivery mode. That run assembles the tag-aware immutable Pages artifact, then the release dispatches the existing Pages workflow with the exact CI run ID so the tagged snapshot is deployed without another source commit."
+    }
+  ],
+  "gate": {
+    "id": "G17",
+    "status": "enforced",
+    "blocksComponentExpansion": true,
+    "requiredBeforeClose": [
+      "generated API reference is reader-facing and drift-checked",
+      "docs and playground share one version/framework/reference contract",
+      "representative examples are verified across Native HTML, React, Angular, and Vue",
+      "PR reference preview artifact is available without deployment permissions",
+      "current-main reference deployment consumes immutable artifacts only",
+      "successful release refreshes the exact tagged reference snapshot without another source commit",
+      "full delivery-foundation validation passes"
+    ]
+  }
+}

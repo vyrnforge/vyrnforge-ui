@@ -19,7 +19,6 @@ export function BasicGridPage() {
       description="A specialized data-management grid with local search, sorting, pagination, and persisted view preferences."
       importCode={importCode}
       packageName="@vyrnforge/ui-data-grid"
-      relatedComponents={[]}
       sections={[
         {
           id: "basic-usage",
