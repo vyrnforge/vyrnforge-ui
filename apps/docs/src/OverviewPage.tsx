@@ -63,8 +63,8 @@ export function OverviewPage({
             </Heading>
           </div>
           <Text size="lg" tone="muted" className="vf-docs-overview__lede">
-            Shared components, design tokens, behavior, and accessibility for
-            Native HTML, React, Angular, and Vue.
+            Shared components, design tokens, behavior, and accessibility for Native
+            HTML, React, Angular, and Vue.
           </Text>
           <Inline gap="sm" className="vf-docs-overview__actions">
             <Button onClick={() => onRouteChange("getting-started")}>
@@ -90,8 +90,8 @@ export function OverviewPage({
               Choose your framework
             </Heading>
             <Text tone="muted">
-              The integration syntax changes. The VyrnForge design system and
-              behavior model do not.
+              The integration syntax changes. The VyrnForge design system and behavior
+              model do not.
             </Text>
           </div>
           <div className="vf-docs-overview__framework-grid">
@@ -144,8 +144,8 @@ export function OverviewPage({
               Find what you need
             </Heading>
             <Text tone="muted">
-              Start with the common paths. Internal project machinery stays out
-              of the way.
+              Start with the common paths. Internal project machinery stays out of the
+              way.
             </Text>
           </div>
           <div className="vf-docs-overview__discovery-grid">
