@@ -47,12 +47,27 @@ test("Reference transitional authorities remain retired", () => {
   }
 });
 
-test("Docs routes are source-derived", () => {
+test("Docs routes expose an explicit public information architecture", () => {
   const source = read("apps/docs/src/referenceRoutes.ts");
-  assert.match(source, /import\.meta\.glob/u);
+
+  assert.match(source, /const publicGuides: PublicGuide\[\] = \[/u);
   assert.match(source, /referenceModel\.domains\.flatMap/u);
   assert.match(source, /uniqueRoutes/u);
-  assert.doesNotMatch(source, /export const docsRoutes: DocsRoute\[\] = \[/u);
+
+  assert.doesNotMatch(source, /import\.meta\.glob/u);
+  assert.doesNotMatch(source, /docs\/metadata\/\*\.json/u);
+  assert.doesNotMatch(source, /generated\/ai-context/u);
+  assert.doesNotMatch(source, /AGENTS\.md\?raw/u);
+
+  for (const group of [
+    "Getting Started",
+    "Components",
+    "Foundations",
+    "Guides",
+    "API",
+  ]) {
+    assert.match(source, new RegExp(`"${group}"`, "u"));
+  }
 });
 
 test("Playground component facts are generated", () => {
