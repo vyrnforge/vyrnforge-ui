@@ -15,7 +15,7 @@ import {
   componentReferenceRecords,
   getComponentReferenceRecord,
   getRelatedPatterns,
-  type ComponentReferenceRecord
+  type ComponentReferenceRecord,
 } from "./referenceData";
 
 type ApiProperty = {
