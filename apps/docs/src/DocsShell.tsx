@@ -108,10 +108,7 @@ export function DocsShell({
       headerPosition="sticky"
       scrollMode="content"
       sidebar={
-        <DocsNav
-          activeRouteId={activeRoute.id}
-          onRouteChange={onRouteChange}
-        />
+        <DocsNav activeRouteId={activeRoute.id} onRouteChange={onRouteChange} />
       }
       sidebarPosition="sticky"
       sidebarWidth={248}
