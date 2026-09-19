@@ -303,7 +303,9 @@ function verifyPrimaryStructure({ root, failures }) {
     "## Internal engineering docs",
   ]) {
     if (!docsIndex.includes(heading)) {
-      failures.push(\n        `docs/README.md: missing public documentation section ${heading}`,\n      );
+      failures.push(
+        `docs/README.md: missing public documentation section ${heading}`,
+      );
     }
   }
   for (const link of [
@@ -323,7 +325,9 @@ function verifyPrimaryStructure({ root, failures }) {
     "@vyrnforge/ui-vue",
   ]) {
     if (!docsIndex.includes(packageName)) {
-      failures.push(\n        `docs/README.md: missing first-class surface package ${packageName}`,\n      );
+      failures.push(
+        `docs/README.md: missing first-class surface package ${packageName}`,
+      );
     }
   }
 }
