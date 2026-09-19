@@ -6,7 +6,6 @@ import {
   SearchInput,
   Text,
 } from "@vyrnforge/ui-components";
-import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
 import {
@@ -28,149 +27,8 @@ type SearchEntry = {
   href: string;
 };
 
-type SearchApiComponent = {
-  id: string;
-  properties: Array<{ public: string; binding: string; type: string }>;
-  events: Array<{ public: string; mode: string; detail: string }>;
-  slots: Array<{ public: string; mode: string; content: string }>;
-  methods: Array<{
-    name: string;
-    returns: string;
-    parameters: Array<{ name: string; type: string }>;
-  }>;
-};
-
-type SearchApiReference = {
-  surfaces: Record<string, { components: SearchApiComponent[] }>;
-};
-
-const apiReference = JSON.parse(frameworkApiReferenceRaw) as SearchApiReference;
-
 function recordHref(domain: string, id: string) {
   return `#${getReferenceRecordRoute(referenceModel, domain, id)}`;
-}
-
-function memberAnchor(kind: string, name: string) {
-  return `api-${kind}-${name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/gu, "-")
-    .replace(/^-|-$/gu, "")}`;
-}
-
-function memberHref(componentId: string, frameworkId: string, member: string) {
-  const query = new URLSearchParams({
-    [referenceModel.frameworkContext.queryParameter]: frameworkId,
-  });
-  const route = getReferenceRecordRoute(
-    referenceModel,
-    "components",
-    componentId,
-  );
-  return `?${query.toString()}#${route}?member=${encodeURIComponent(member)}`;
-}
-
-function buildApiMemberEntries(): SearchEntry[] {
-  const entries: SearchEntry[] = [];
-
-  for (const framework of referenceModel.frameworks) {
-    const surface = apiReference.surfaces[framework.apiSurface];
-    if (!surface) continue;
-
-    for (const component of surface.components) {
-      const componentRecord = discoveryComponents.find(
-        (candidate) => candidate.id === component.id,
-      );
-      const componentName = componentRecord?.displayName ?? component.id;
-      const baseKeywords = [
-        component.id,
-        componentName,
-        framework.id,
-        framework.label,
-      ];
-
-      for (const property of component.properties) {
-        const anchor = memberAnchor("property", property.public);
-        entries.push({
-          id: `api:${framework.id}:${component.id}:property:${property.public}`,
-          title: `${componentName}.${property.public}`,
-          description: `${framework.label} property / input · ${property.type}`,
-          domain: `${framework.label} property`,
-          keywords: [
-            ...baseKeywords,
-            "property",
-            "input",
-            property.public,
-            property.binding,
-            property.type,
-          ],
-          href: memberHref(component.id, framework.id, anchor),
-        });
-      }
-
-      for (const event of component.events) {
-        const anchor = memberAnchor("event", event.public);
-        entries.push({
-          id: `api:${framework.id}:${component.id}:event:${event.public}`,
-          title: `${componentName}.${event.public}`,
-          description: `${framework.label} event / output / emit · ${event.detail}`,
-          domain: `${framework.label} event`,
-          keywords: [
-            ...baseKeywords,
-            "event",
-            "output",
-            "emit",
-            event.public,
-            event.mode,
-            event.detail,
-          ],
-          href: memberHref(component.id, framework.id, anchor),
-        });
-      }
-
-      for (const slot of component.slots) {
-        const anchor = memberAnchor("slot", slot.public);
-        entries.push({
-          id: `api:${framework.id}:${component.id}:slot:${slot.public}`,
-          title: `${componentName}.${slot.public}`,
-          description: `${framework.label} slot / template · ${slot.content}`,
-          domain: `${framework.label} slot`,
-          keywords: [
-            ...baseKeywords,
-            "slot",
-            "template",
-            slot.public,
-            slot.mode,
-            slot.content,
-          ],
-          href: memberHref(component.id, framework.id, anchor),
-        });
-      }
-
-      for (const method of component.methods) {
-        const anchor = memberAnchor("method", method.name);
-        const parameters = method.parameters.flatMap((parameter) => [
-          parameter.name,
-          parameter.type,
-        ]);
-        entries.push({
-          id: `api:${framework.id}:${component.id}:method:${method.name}`,
-          title: `${componentName}.${method.name}()`,
-          description: `${framework.label} method · returns ${method.returns}`,
-          domain: `${framework.label} method`,
-          keywords: [
-            ...baseKeywords,
-            "method",
-            method.name,
-            method.returns,
-            ...parameters,
-          ],
-          href: memberHref(component.id, framework.id, anchor),
-        });
-      }
-    }
-  }
-
-  return entries;
 }
 
 function buildSearchEntries(): SearchEntry[] {
@@ -257,7 +115,6 @@ function buildSearchEntries(): SearchEntry[] {
     ...routes,
     ...packages,
     ...components,
-    ...buildApiMemberEntries(),
     ...tokens,
     ...patterns,
     ...accessibility,
@@ -288,13 +145,12 @@ export function ReferenceSearchPage() {
         </Heading>
         <Text tone="muted">
           This is a derived index only. Results route to the canonical or
-          generated reader that owns each fact, including framework API members
-          with stable component-member deep links.
+          generated reader that owns each fact.
         </Text>
         <SearchInput
           aria-label="Search VyrnForge Reference records"
           onChange={(event) => setQuery(event.currentTarget.value)}
-          placeholder="Search components, properties, events, slots, methods, tokens, patterns, examples…"
+          placeholder="Search setup, packages, components, tokens, patterns, accessibility, examples…"
           value={query}
         />
       </Card>
@@ -322,8 +178,8 @@ export function ReferenceSearchPage() {
             No reference records found
           </Heading>
           <Text tone="muted">
-            Try a component, API member, token name, pattern keyword, package,
-            framework, or setup term.
+            Try a component, token name, pattern keyword, package, framework, or
+            setup term.
           </Text>
         </Card>
       ) : null}
