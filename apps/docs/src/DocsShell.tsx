@@ -12,7 +12,6 @@ import type { ReferenceRecordSelection } from "./App";
 import {
   docsFrameworks,
   getVersionHref,
-  referenceModel,
   type DocsFramework,
   type DocsFrameworkId,
   type DocsVersion,
@@ -52,11 +51,11 @@ export function DocsShell({
           brand={
             <div className="vf-docs-header__brand">
               <Heading level={1} size="lg" className="vf-docs-header__title">
-                {referenceModel.product.label}
+                VyrnForge
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                API, behavior, accessibility, tokens, and executable examples
-                from VyrnForge sources of truth.
+                Components, foundations, guides, and API for every supported web
+                surface.
               </Text>
             </div>
           }
@@ -66,7 +65,7 @@ export function DocsShell({
                 className="vf-docs-top-link"
                 href={getPlaygroundHref(framework.id)}
               >
-                All examples
+                Examples
               </a>
               <a className="vf-docs-top-link" href={docsLinks.repository}>
                 GitHub
@@ -85,9 +84,9 @@ export function DocsShell({
         <DocsNav activeRouteId={activeRoute.id} onRouteChange={onRouteChange} />
       }
       sidebarPosition="sticky"
-      sidebarWidth={284}
+      sidebarWidth={264}
     >
-      <section className="vf-docs-context" aria-label="Reference context">
+      <section className="vf-docs-context" aria-label="Documentation context">
         <div className="vf-docs-context__selectors">
           <div className="vf-docs-context__field">
             <Label htmlFor="vf-docs-version">Version</Label>
@@ -117,7 +116,7 @@ export function DocsShell({
                 onFrameworkChange(event.currentTarget.value as DocsFrameworkId)
               }
               options={docsFrameworks.map((candidate) => ({
-                label: `${candidate.label} · ${candidate.language}`,
+                label: candidate.label,
                 value: candidate.id,
               }))}
               size="sm"
@@ -125,17 +124,9 @@ export function DocsShell({
             />
           </div>
         </div>
-        <div className="vf-docs-context__meta" aria-label="Selected context">
-          <Badge variant="neutral" tone="subtle">
-            {framework.language}
-          </Badge>
-          <Badge variant="neutral" tone="subtle">
-            {framework.renderer}
-          </Badge>
-          <Text size="sm" tone="muted">
-            {docsVersion.releaseLine} · {docsVersion.version}
-          </Text>
-        </div>
+        <Text size="sm" tone="muted" className="vf-docs-context__meta">
+          {docsVersion.version} · {framework.label}
+        </Text>
       </section>
       <DocsPage
         frameworkId={framework.id}
