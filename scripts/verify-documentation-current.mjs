@@ -296,19 +296,34 @@ function verifyPrimaryStructure({ root, failures }) {
 
   const docsIndex = read(root, "docs/README.md");
   for (const heading of [
-    "## Use VyrnForge",
-    "## Build VyrnForge",
-    "## Maintain VyrnForge",
-    "## Execution and planning",
-    "## Historical evidence",
+    "## Start here",
+    "## Framework surfaces",
+    "## Data grid",
+    "## Customize VyrnForge",
+    "## Internal engineering docs",
   ]) {
     if (!docsIndex.includes(heading)) {
-      failures.push(`docs/README.md: missing audience section ${heading}`);
+      failures.push(`docs/README.md: missing public documentation section ${heading}`);
     }
   }
-  for (const link of ["api/import-and-setup.md", "../CONTRIBUTING.md"]) {
+  for (const link of [
+    "api/import-and-setup.md",
+    "architecture/03-theming-and-styling.md",
+    "architecture/05-accessibility-standards.md",
+    "release/multi-framework-migration-and-limitations.md",
+  ]) {
     if (!docsIndex.includes(link)) {
-      failures.push(`docs/README.md: missing one-click link ${link}`);
+      failures.push(`docs/README.md: missing public documentation link ${link}`);
+    }
+  }
+  for (const packageName of [
+    "@vyrnforge/ui-components",
+    "@vyrnforge/ui-elements",
+    "@vyrnforge/ui-angular",
+    "@vyrnforge/ui-vue",
+  ]) {
+    if (!docsIndex.includes(packageName)) {
+      failures.push(`docs/README.md: missing first-class surface package ${packageName}`);
     }
   }
 }
