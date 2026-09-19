@@ -71,7 +71,7 @@ test("public Docs navigation is curated while Playground may use generated disco
   assert.match(playgroundNav, /SideNav/u);
 });
 
-test("Reference presents one product identity with embedded executable component previews", () => {
+test("Docs uses a simple product identity while component previews stay executable", () => {
   const docsShell = read("apps/docs/src/DocsShell.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const preview = read("apps/docs/src/ReferencePreview.tsx");
@@ -80,9 +80,9 @@ test("Reference presents one product identity with embedded executable component
     "examples/basic-playground/src/app/PlaygroundShell.tsx",
   );
 
-  for (const source of [docsShell, playgroundShell]) {
-    assert.match(source, /referenceModel\.product\.label/u);
-  }
+  assert.match(docsShell, />\s*VyrnForge\s*</u);
+  assert.doesNotMatch(docsShell, /referenceModel\.product\.label/u);
+  assert.match(playgroundShell, /referenceModel\.product\.label/u);
 
   assert.match(docsPage, /ReferencePreview/u);
   assert.match(preview, /getEmbeddedPlaygroundHref/u);
