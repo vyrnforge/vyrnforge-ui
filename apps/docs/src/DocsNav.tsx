@@ -29,13 +29,10 @@ export function DocsNav({ activeRouteId, onRouteChange }: DocsNavProps) {
     () =>
       publicDocsSections.flatMap<SideNavItem>((section) => {
         const routes = section.routeIds
-          .map((routeId) =>
-            docsRoutes.find((route) => route.id === routeId),
-          )
+          .map((routeId) => docsRoutes.find((route) => route.id === routeId))
           .filter((route): route is DocsRoute => Boolean(route))
           .filter(
-            (route) =>
-              !normalizedQuery || matchesQuery(route, normalizedQuery),
+            (route) => !normalizedQuery || matchesQuery(route, normalizedQuery),
           );
 
         return routes.length === 0
