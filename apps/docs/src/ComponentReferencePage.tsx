@@ -409,8 +409,6 @@ function FrameworkApiPanel({
         </Heading>
         <MemberList label="Guidance" values={component.accessibility} />
       </section>
-
-
     </div>
   );
 }
