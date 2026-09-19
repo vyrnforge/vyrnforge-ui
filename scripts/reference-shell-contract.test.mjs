@@ -40,17 +40,25 @@ test("both apps preserve shared framework context in location and Reference link
   }
 });
 
-test("both navigation surfaces use generated Reference IA and searchable VyrnForge primitives", () => {
-  for (const relativePath of [
-    "apps/docs/src/DocsNav.tsx",
+test("Docs navigation stays small and product-facing while Playground keeps generated example IA", () => {
+  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  assert.match(docsNav, /docsRoutes/u);
+  assert.match(docsNav, /SearchInput/u);
+  assert.match(docsNav, /SideNav/u);
+  assert.match(docsNav, /VyrnForge documentation/u);
+  assert.doesNotMatch(docsNav, /getReferenceNavigation/u);
+  assert.doesNotMatch(docsNav, /Metadata/u);
+  assert.doesNotMatch(docsNav, /Quality/u);
+  assert.doesNotMatch(docsNav, /Testing/u);
+  assert.doesNotMatch(docsNav, /AI/u);
+
+  const playgroundNav = read(
     "examples/basic-playground/src/app/PlaygroundNav.tsx",
-  ]) {
-    const source = read(relativePath);
-    assert.match(source, /getReferenceNavigation/u);
-    assert.match(source, /SearchInput/u);
-    assert.match(source, /SideNav/u);
-    assert.match(source, /VyrnForge Reference sections/u);
-  }
+  );
+  assert.match(playgroundNav, /getReferenceNavigation/u);
+  assert.match(playgroundNav, /SearchInput/u);
+  assert.match(playgroundNav, /SideNav/u);
+  assert.match(playgroundNav, /VyrnForge Reference sections/u);
 });
 
 test("Reference presents one product identity with embedded executable component previews", () => {
