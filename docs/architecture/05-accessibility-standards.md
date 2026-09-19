@@ -17,13 +17,11 @@ Interactive components should provide:
 
 ## Common component behavior
 
-| Component type    | Expected behavior                                                                 |
-| ----------------- | --------------------------------------------------------------------------------- |
-| Icon-only control | Accessible name such as `aria-label`                                               |
-| Menu              | Arrow-key navigation, Enter/Space activation, Escape dismissal                      |
-| Dialog / Drawer   | Dialog semantics, modal state where applicable, focus management, Escape dismissal |
-| Tooltip           | Keyboard-focus and pointer access                                                   |
-| Data grid         | Keyboard navigation, labeled controls, visible focus, accessible selection/grouping |
+- Icon-only controls need an accessible name such as `aria-label`.
+- Menus need arrow-key navigation, Enter/Space activation, and Escape dismissal.
+- Dialogs and drawers need dialog semantics, focus management, and Escape dismissal.
+- Tooltips need keyboard-focus as well as pointer access.
+- Data grids need keyboard navigation, labeled controls, visible focus, and accessible selection/grouping.
 
 The generated **Components** reference contains component-specific accessibility and keyboard details.
 
