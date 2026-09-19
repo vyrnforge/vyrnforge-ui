@@ -4,12 +4,10 @@ VyrnForge uses package-owned CSS and CSS custom properties. The same styling fou
 
 ## What to customize
 
-| Scope                       | Prefix    | Use for                                                        |
-| --------------------------- | --------- | -------------------------------------------------------------- |
-| Shared VyrnForge tokens     | `--vf-*`  | color, typography, spacing, density, focus, motion, layers     |
-| VyrnForge component classes | `vf-*`    | component structure and states                                 |
-| Data-grid tokens            | `--udg-*` | grid-specific layout and behavior                               |
-| Data-grid classes           | `udg-*`   | grid structure and interaction                                  |
+- `--vf-*`: shared color, typography, spacing, density, focus, motion, and layer roles.
+- `vf-*`: VyrnForge component classes and states.
+- `--udg-*`: grid-specific layout and behavior tokens.
+- `udg-*`: data-grid structure and interaction classes.
 
 Use `--vf-*` for reusable application-wide decisions. Use `--udg-*` only when the decision is specific to the grid.
 
