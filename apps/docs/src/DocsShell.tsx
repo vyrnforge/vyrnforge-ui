@@ -54,8 +54,8 @@ export function DocsShell({
                 VyrnForge
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Components, foundations, guides, and API for every supported
-                web surface.
+                Components, foundations, guides, and API for every supported web
+                surface.
               </Text>
             </div>
           }
@@ -97,7 +97,9 @@ export function DocsShell({
                   (candidate) => candidate.id === event.currentTarget.value,
                 );
                 if (version && version.id !== docsVersion.id) {
-                  window.location.assign(getVersionHref(version, framework.id));
+                  window.location.assign(
+                    getVersionHref(version, framework.id),
+                  );
                 }
               }}
               options={docsVersions.map((version) => ({
