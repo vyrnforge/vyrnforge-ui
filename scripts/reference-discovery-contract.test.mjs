@@ -81,7 +81,6 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.match(nav, /VyrnForge documentation/);
   assert.match(nav, /Filter docs/u);
 
-
   const page = read("apps/docs/src/DiscoveryReferencePage.tsx");
   assert.match(page, /getReferenceRecordRoute/);
   assert.match(page, /Canonical design-token explorer/);
