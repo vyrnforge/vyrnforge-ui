@@ -45,13 +45,7 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.equal(model.examples.length, 4);
 
   const adapter = read("apps/docs/src/discoveryData.ts");
-  for (const marker of [
-    "design-tokens.json?raw",
-    "patterns.json?raw",
-    "componentReferenceRecords",
-    "packageReferenceRecords",
-    "component.contract?.accessibility",
-  ]) {
+  for (const marker of ["design-tokens.json?raw", "patterns.json?raw"]) {
     assert.match(
       adapter,
       new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
@@ -73,9 +67,10 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.doesNotMatch(routes, /import\.meta\.glob/u);
 
   const app = read("apps/docs/src/App.tsx");
-  for (const domainId of ["tokens", "patterns", "accessibility"]) {
+  for (const domainId of ["tokens", "patterns"]) {
     assert(app.includes(`domain: "${domainId}"`));
   }
+  assert.doesNotMatch(app, /domain: "accessibility"/u);
   assert.match(app, /matchReferenceRecordRoute/);
   assert.match(app, /getRouteById/);
   assert.doesNotMatch(app, /getDiscoveryRouteById/);
@@ -86,33 +81,11 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.match(nav, /VyrnForge documentation/);
   assert.match(nav, /Filter docs/u);
 
-  const search = read("apps/docs/src/ReferenceSearchPage.tsx");
-  for (const marker of [
-    "docsRoutes",
-    "discoveryPackages",
-    "discoveryComponents",
-    "designTokenCategories",
-    "patternReferenceRecords",
-    "accessibilityReferenceRecords",
-    "referenceModel.examples",
-    'recordHref("tokens"',
-    'recordHref("patterns"',
-    'recordHref("accessibility"',
-    'recordHref("components"',
-    'recordHref("packages"',
-  ]) {
-    assert.match(
-      search,
-      new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-    );
-  }
-  assert.doesNotMatch(search, /discoveryRoutes/);
 
   const page = read("apps/docs/src/DiscoveryReferencePage.tsx");
   assert.match(page, /getReferenceRecordRoute/);
   assert.match(page, /Canonical design-token explorer/);
   assert.match(page, /Reusable application patterns/);
-  assert.match(page, /Accessibility and keyboard discovery/);
-  assert.match(page, /Canonical accessibility standards/);
-  assert.match(page, /Full component reference/);
+  assert.doesNotMatch(page, /Accessibility and keyboard discovery/u);
+  assert.doesNotMatch(page, /accessibilityReferenceRecords/u);
 });
