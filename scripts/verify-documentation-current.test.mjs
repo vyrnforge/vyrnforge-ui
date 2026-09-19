@@ -132,7 +132,9 @@ test("rejects a missing public documentation section", () =>
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes(\n            "missing public documentation section ## Start here",\n          ),
+          failure.includes(
+            "missing public documentation section ## Start here",
+          ),
         ),
       ),
   ));
