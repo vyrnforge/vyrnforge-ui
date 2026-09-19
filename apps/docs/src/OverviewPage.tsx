@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Heading,
-  Inline,
-  Stack,
-  Text,
-} from "@vyrnforge/ui-components";
+import { Button, Heading, Inline, Stack, Text } from "@vyrnforge/ui-components";
 import {
   docsFrameworks,
   getFramework,
@@ -19,27 +11,21 @@ type OverviewPageProps = {
   onRouteChange: (routeId: string) => void;
 };
 
-const discoveryLinks = [
+const startLinks = [
   {
     routeId: "getting-started",
-    title: "Getting Started",
-    description: "Install VyrnForge and choose your framework.",
+    title: "Install and start",
+    description: "Choose your framework and add VyrnForge to an application.",
   },
   {
     routeId: "component-reference",
-    title: "Components",
-    description: "Browse components, usage, API, and accessibility.",
+    title: "Browse components",
+    description: "See usage, API, accessibility, and framework examples.",
   },
   {
     routeId: "theming",
-    title: "Theming & Styling",
-    description: "Customize shared tokens, themes, density, and CSS.",
-  },
-  {
-    routeId: "accessibility",
-    title: "Accessibility",
-    description:
-      "Build with the shared keyboard, focus, and semantic baseline.",
+    title: "Customize the UI",
+    description: "Use shared tokens, themes, density, and CSS.",
   },
 ] as const;
 
@@ -58,15 +44,15 @@ export function OverviewPage({
       >
         <Stack gap="lg">
           <div>
-            <div className="vf-docs-overview__eyebrow">VyrnForge UI</div>
             <Heading id="vf-overview-title" level={2} size="lg">
-              Build with one UI foundation.
+              One UI foundation. Four framework surfaces.
             </Heading>
+            <Text className="vf-docs-overview__lede" size="lg" tone="muted">
+              Build consistent web applications with shared components, tokens,
+              behavior, and accessibility across Native HTML, React, Angular,
+              and Vue.
+            </Text>
           </div>
-          <Text size="lg" tone="muted" className="vf-docs-overview__lede">
-            Shared components, design tokens, behavior, and accessibility for
-            Native HTML, React, Angular, and Vue.
-          </Text>
           <Inline gap="sm" className="vf-docs-overview__actions">
             <Button onClick={() => onRouteChange("getting-started")}>
               Get started
@@ -75,7 +61,7 @@ export function OverviewPage({
               variant="subtle"
               onClick={() => onRouteChange("component-reference")}
             >
-              Browse components
+              Components
             </Button>
           </Inline>
         </Stack>
@@ -83,91 +69,58 @@ export function OverviewPage({
 
       <section
         className="vf-docs-overview__section"
-        aria-labelledby="vf-surface-title"
+        aria-labelledby="vf-framework-title"
       >
-        <Stack gap="md">
+        <Stack gap="sm">
           <div>
-            <Heading id="vf-surface-title" level={2} size="lg">
-              Choose your framework
+            <Heading id="vf-framework-title" level={2} size="md">
+              Framework
             </Heading>
             <Text tone="muted">
-              The integration syntax changes. The VyrnForge design system and
-              behavior model do not.
+              Switch syntax without switching the VyrnForge design system.
             </Text>
           </div>
-          <div className="vf-docs-overview__framework-grid">
+          <Inline gap="sm" className="vf-docs-overview__frameworks">
             {docsFrameworks.map((candidate) => {
               const selected = candidate.id === framework.id;
               return (
-                <Card
-                  className="vf-docs-overview__framework-card"
+                <Button
                   key={candidate.id}
-                  padding="md"
-                  variant={selected ? "elevated" : "bordered"}
+                  size="sm"
+                  variant={selected ? "primary" : "ghost"}
+                  onClick={() => onFrameworkChange(candidate.id)}
+                  aria-pressed={selected}
                 >
-                  <Stack gap="sm">
-                    <Inline gap="sm" justify="between" align="center">
-                      <Heading level={3} size="md">
-                        {candidate.label}
-                      </Heading>
-                      {selected ? (
-                        <Badge variant="info" tone="subtle">
-                          Selected
-                        </Badge>
-                      ) : null}
-                    </Inline>
-                    <Text size="sm" tone="muted">
-                      {candidate.language}
-                    </Text>
-                    <Button
-                      fullWidth
-                      size="sm"
-                      variant={selected ? "subtle" : "ghost"}
-                      onClick={() => onFrameworkChange(candidate.id)}
-                    >
-                      {selected ? "Selected" : `Use ${candidate.label}`}
-                    </Button>
-                  </Stack>
-                </Card>
+                  {candidate.label}
+                </Button>
               );
             })}
-          </div>
+          </Inline>
         </Stack>
       </section>
 
       <section
         className="vf-docs-overview__section"
-        aria-labelledby="vf-discover-title"
+        aria-labelledby="vf-start-title"
       >
-        <Stack gap="md">
-          <div>
-            <Heading id="vf-discover-title" level={2} size="lg">
-              Find what you need
-            </Heading>
-            <Text tone="muted">
-              Start with the common paths. Internal project machinery stays out
-              of the way.
-            </Text>
-          </div>
-          <div className="vf-docs-overview__discovery-grid">
-            {discoveryLinks.map((item) => (
-              <Card key={item.routeId} padding="md" variant="bordered">
-                <Stack gap="sm">
-                  <Heading level={3} size="md">
-                    {item.title}
-                  </Heading>
-                  <Text size="sm" tone="muted">
-                    {item.description}
-                  </Text>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => onRouteChange(item.routeId)}
-                  >
-                    Open {item.title}
-                  </Button>
-                </Stack>
-              </Card>
+        <Stack gap="sm">
+          <Heading id="vf-start-title" level={2} size="md">
+            Start here
+          </Heading>
+          <div className="vf-docs-overview__start-list">
+            {startLinks.map((item) => (
+              <button
+                className="vf-docs-overview__start-link"
+                key={item.routeId}
+                type="button"
+                onClick={() => onRouteChange(item.routeId)}
+              >
+                <span>
+                  <strong>{item.title}</strong>
+                  <small>{item.description}</small>
+                </span>
+                <span aria-hidden="true">→</span>
+              </button>
             ))}
           </div>
         </Stack>

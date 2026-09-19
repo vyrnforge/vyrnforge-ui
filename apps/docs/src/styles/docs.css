@@ -50,12 +50,12 @@ body {
 }
 
 .vf-docs-shell .vf-top-nav {
-  align-items: flex-start;
-  padding: 24px 32px;
+  align-items: center;
+  padding: 12px 20px;
 }
 
 .vf-docs-shell .vf-app-shell__content {
-  padding: 22px 28px 48px;
+  padding: 20px 24px 48px;
 }
 
 .vf-docs-header__eyebrow,
@@ -68,13 +68,11 @@ body {
   text-transform: uppercase;
 }
 
-.vf-docs-header__title {
-  margin: 4px 0 8px;
-}
-
-.vf-docs-header__description {
-  max-width: 760px;
-  margin: 0;
+.vf-docs-header__brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--vf-space-2, 8px);
+  white-space: nowrap;
 }
 
 .vf-docs-header__actions,
@@ -92,6 +90,11 @@ body {
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.vf-docs-header__nav .vf-select {
+  width: auto;
+  min-width: 132px;
 }
 
 .vf-docs-top-link {
@@ -682,11 +685,19 @@ body {
 
 @media (max-width: 920px) {
   .vf-docs-shell .vf-top-nav {
-    padding: 20px 18px;
+    padding: 10px 12px;
   }
 
   .vf-docs-shell .vf-app-shell__content {
-    padding: 18px;
+    padding: 16px;
+  }
+
+  .vf-docs-header__nav {
+    justify-content: flex-start;
+  }
+
+  .vf-docs-header__nav .vf-select {
+    min-width: 120px;
   }
 
   .vf-docs-nav {
