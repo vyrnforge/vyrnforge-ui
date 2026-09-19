@@ -225,7 +225,9 @@ export const docsRoutes = uniqueRoutes([
   if (left.id === "overview") return -1;
   if (right.id === "overview") return 1;
 
-  const leftGroup = groupOrder.indexOf(left.group as (typeof groupOrder)[number]);
+  const leftGroup = groupOrder.indexOf(
+    left.group as (typeof groupOrder)[number],
+  );
   const rightGroup = groupOrder.indexOf(
     right.group as (typeof groupOrder)[number],
   );
