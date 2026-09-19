@@ -49,9 +49,7 @@ export function DocsPage({
         <ReferencePreview componentId={componentId} frameworkId={frameworkId} />
       ) : null}
 
-      {route.id === "token-reference" ||
-      route.id === "pattern-reference" ||
-      route.id === "accessibility-reference" ? (
+      {route.id === "token-reference" || route.id === "pattern-reference" ? (
         <DiscoveryReferencePage
           referenceRecord={referenceRecord}
           routeId={route.id}
