@@ -15,15 +15,7 @@ Use `--vf-*` for reusable application-wide decisions. Use `--udg-*` only when th
 
 VyrnForge themes expose the same semantic roles. Components should not require framework-specific or theme-specific forks.
 
-A host can select a theme with a normal attribute:
-
-```html
-<div data-theme="dark">
-  ...
-</div>
-```
-
-TypeScript theme presets are also available from `@vyrnforge/ui-core`.
+A host can select a theme with a normal `data-theme` attribute. TypeScript theme presets are also available from `@vyrnforge/ui-core`.
 
 ## Density
 
