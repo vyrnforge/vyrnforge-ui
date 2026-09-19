@@ -40,10 +40,10 @@ function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
       <div className="vf-docs-preview__code-heading">
         <div>
           <Text size="sm" tone="muted">
-            Selected framework
+            {usage.label}
           </Text>
           <Heading id="vf-docs-preview-code-heading" level={4} size="sm">
-            {usage.label} consumption
+            Example code
           </Heading>
         </div>
         <Badge size="sm" tone="subtle">
@@ -81,8 +81,8 @@ function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
 
       {!hasSetup && !hasExample && (
         <Text size="sm" tone="muted">
-          No generated consumption snippet is available for this component on
-          the selected framework surface.
+          No example code is available for this component on the selected
+          framework.
         </Text>
       )}
 
@@ -123,7 +123,7 @@ export function ReferencePreview({
               Live
             </Badge>
             <Text size="sm" tone="muted">
-              Executable reference
+              Preview
             </Text>
           </div>
           <Heading level={3} size="md">
@@ -151,13 +151,7 @@ export function ReferencePreview({
         </div>
         <FrameworkCode usage={frameworkUsage} />
       </div>
-      <div className="vf-docs-preview__footer">
-        <Text size="sm" tone="muted">
-          The executable stage reuses the canonical Playground route. The
-          adjacent setup and example come from the generated selected-framework
-          consumption record; neither creates a second demo or API authority.
-        </Text>
-      </div>
+
     </Card>
   );
 }
