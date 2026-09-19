@@ -47,7 +47,6 @@ type PatternMetadata = {
   patterns: PatternReferenceRecord[];
 };
 
-
 const designTokens = JSON.parse(designTokensRaw) as DesignTokenMetadata;
 const patterns = JSON.parse(patternsRaw) as PatternMetadata;
 
@@ -63,7 +62,6 @@ export const designTokenSource = designTokens.sourceOfTruth;
 export const patternReferenceRecords = patterns.patterns;
 export const patternDocumentation = patterns.sourceOfTruth.documentation;
 
-
 export function getDesignTokenCategory(categoryId: string) {
   return designTokenCategories.find((category) => category.id === categoryId);
 }
@@ -71,4 +69,3 @@ export function getDesignTokenCategory(categoryId: string) {
 export function getPatternReferenceRecord(patternId: string) {
   return patternReferenceRecords.find((pattern) => pattern.id === patternId);
 }
-
