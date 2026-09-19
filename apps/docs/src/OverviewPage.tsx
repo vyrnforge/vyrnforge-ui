@@ -53,7 +53,11 @@ export function OverviewPage({
             <Heading id="vf-overview-title" level={2} size="lg">
               One UI foundation. Four framework surfaces.
             </Heading>
-            <Text size="lg" tone="muted" className="vf-docs-overview__lede">
+            <Text
+              className="vf-docs-overview__lede"
+              size="lg"
+              tone="muted"
+            >
               Build consistent web applications with shared components, tokens,
               behavior, and accessibility across Native HTML, React, Angular,
               and Vue.
