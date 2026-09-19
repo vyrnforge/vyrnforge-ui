@@ -40,17 +40,29 @@ test("both apps preserve shared framework context in location and Reference link
   }
 });
 
-test("both navigation surfaces use generated Reference IA and searchable VyrnForge primitives", () => {
-  for (const relativePath of [
-    "apps/docs/src/DocsNav.tsx",
+test("public Docs navigation is curated while Playground may use generated discovery", () => {
+  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
+  const playgroundNav = read(
     "examples/basic-playground/src/app/PlaygroundNav.tsx",
-  ]) {
-    const source = read(relativePath);
-    assert.match(source, /getReferenceNavigation/u);
-    assert.match(source, /SearchInput/u);
-    assert.match(source, /SideNav/u);
-    assert.match(source, /VyrnForge Reference sections/u);
+  );
+
+  assert.match(docsNav, /publicDocsSections/u);
+  assert.match(docsNav, /SearchInput/u);
+  assert.match(docsNav, /SideNav/u);
+  assert.match(docsNav, /VyrnForge documentation/u);
+  assert.doesNotMatch(docsNav, /getReferenceNavigation/u);
+
+  for (const section of ["Start", "Components", "Foundations", "Guides", "API"]) {
+    assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
   }
+  assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
+  assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
+  assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
+
+  assert.match(playgroundNav, /getReferenceNavigation/u);
+  assert.match(playgroundNav, /SearchInput/u);
+  assert.match(playgroundNav, /SideNav/u);
 });
 
 test("Reference presents one product identity with embedded executable component previews", () => {
