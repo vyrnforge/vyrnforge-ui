@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "prettier --write src/referenceRoutes.ts && printf \"\\n---PRETTIER_REFERENCE_ROUTES---\\n\" && cat src/referenceRoutes.ts && printf \"\\n---END_PRETTIER_REFERENCE_ROUTES---\\n\" && tsc -b && vite build",
     "lint": "eslint . --config ../../eslint.config.mjs",
     "lint:fix": "eslint . --config ../../eslint.config.mjs --fix",
     "typecheck": "npm run build --workspace @vyrnforge/ui-core && npm run build --workspace @vyrnforge/ui-components && tsc --noEmit",
