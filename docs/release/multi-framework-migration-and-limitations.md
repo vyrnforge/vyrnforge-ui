@@ -19,12 +19,12 @@ A prerelease channel describes distribution maturity. Component maturity is stil
 
 ## Choose the surface for your application
 
-| Application | Package |
-| --- | --- |
-| React | `@vyrnforge/ui-components` |
-| Native HTML / Custom Elements | `@vyrnforge/ui-elements` |
-| Angular | `@vyrnforge/ui-angular` |
-| Vue | `@vyrnforge/ui-vue` |
+| Application                   | Package                      |
+| ----------------------------- | ---------------------------- |
+| React                         | `@vyrnforge/ui-components` |
+| Native HTML / Custom Elements | `@vyrnforge/ui-elements`   |
+| Angular                       | `@vyrnforge/ui-angular`    |
+| Vue                           | `@vyrnforge/ui-vue`        |
 
 All four non-grid surfaces share the same VyrnForge design tokens, accessibility expectations, and canonical component contracts.
 
