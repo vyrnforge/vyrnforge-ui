@@ -55,8 +55,7 @@ export function DocsShell({
                 {referenceModel.product.label}
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                API, behavior, accessibility, tokens, and executable examples
-                from VyrnForge sources of truth.
+                Components, theming, accessibility, examples, and API guidance for Native HTML, React, Angular, and Vue.
               </Text>
             </div>
           }
@@ -87,7 +86,7 @@ export function DocsShell({
       sidebarPosition="sticky"
       sidebarWidth={284}
     >
-      <section className="vf-docs-context" aria-label="Reference context">
+      <section className="vf-docs-context" aria-label="Documentation context">
         <div className="vf-docs-context__selectors">
           <div className="vf-docs-context__field">
             <Label htmlFor="vf-docs-version">Version</Label>
