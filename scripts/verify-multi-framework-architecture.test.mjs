@@ -110,18 +110,18 @@ test("rejects missing consumer fixture examples", () => {
   );
 });
 
-test("allows a canonical contract whose four renderer mappings are all target", () => {
+test("allows staged current/target renderer mappings", () => {
   assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
 });
 
-test("rejects a mixed target/current renderer state", () => {
+test("rejects an unsupported renderer status during staged rollout", () => {
   withRepositoryFixture(
     (root) => {
       mutateJson(root, "docs/metadata/component-contracts.json", (value) => {
         const descriptionList = value.componentContracts.find(
           (contract) => contract.id === "description-list",
         );
-        descriptionList.frameworkMappings.react.status = "current";
+        descriptionList.frameworkMappings.react.status = "planned";
       });
     },
     (root) => {
@@ -129,7 +129,7 @@ test("rejects a mixed target/current renderer state", () => {
       assert(
         failures.some((failure) =>
           failure.includes(
-            "description-list has an invalid native framework mapping",
+            "description-list has an invalid React framework mapping",
           ),
         ),
       );

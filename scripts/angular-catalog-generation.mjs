@@ -8,7 +8,7 @@ import { createFrameworkGenerationModel } from "./framework-generation.mjs";
 export const ANGULAR_CATALOG_ARTIFACT_PATH =
   "packages/ui-angular/src/generated/catalog.generated.ts";
 export const ANGULAR_CATALOG_TASK = "MFD-1204";
-export const ANGULAR_CATALOG_EXPECTED_SIZE = 59;
+export const ANGULAR_CATALOG_EXPECTED_SIZE = 60;
 
 const SPECIALIZED = new Map([
   ["button", { exportName: "VfButton", path: "./vf-button.generated.js" }],
