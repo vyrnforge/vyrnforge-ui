@@ -1,140 +1,68 @@
-# Theming And Styling Architecture
+# Theming & Styling
 
-## Styling model
+VyrnForge uses package-owned CSS and CSS custom properties. The same styling foundation is shared across Native HTML, React, Angular, and Vue.
 
-VyrnForge uses package-owned CSS and CSS custom properties. It does not require
-CSS-in-JS, Tailwind, MUI, Radix, or another styling framework.
+## What to customize
 
-## Theme layers
+| Scope | Prefix | Use for |
+| --- | --- | --- |
+| Shared VyrnForge tokens | `--vf-*` | color, typography, spacing, density, focus, motion, layers |
+| VyrnForge component classes | `vf-*` | component structure and states |
+| Data-grid tokens | `--udg-*` | grid-specific layout and behavior |
+| Data-grid classes | `udg-*` | grid structure and interaction |
 
-| Layer                             | Prefix              | Owner                      | Purpose                                                                  |
-| --------------------------------- | ------------------- | -------------------------- | ------------------------------------------------------------------------ |
-| Primitive and semantic foundation | `--vf-*`            | `@vyrnforge/ui-core`       | surfaces, text, interaction, status, density, typography, motion, layers |
-| Component classes                 | `vf-*`              | `@vyrnforge/ui-components` | reusable component structure and visuals                                 |
-| Grid variables                    | `--udg-*`           | `@vyrnforge/ui-data-grid`  | grid-only layout and behavior                                            |
-| Grid classes                      | `udg-*`             | `@vyrnforge/ui-data-grid`  | grid structure and interactions                                          |
-| Application classes               | approved app prefix | consuming app              | product-specific presentation                                            |
+Use `--vf-*` for reusable application-wide decisions. Use `--udg-*` only when the decision is specific to the grid.
 
-The complete semantic contract lives in
-`08-semantic-token-contract.md` and
-`../metadata/design-tokens.json`.
+## Themes
 
-## Import order
+VyrnForge themes expose the same semantic roles. Components should not require framework-specific or theme-specific forks.
 
-```tsx
-import "@vyrnforge/ui-core/styles/index.css";
-import "@vyrnforge/ui-components/styles/index.css";
-import "@vyrnforge/ui-data-grid/styles/index.css";
-```
-
-## Decision ownership
-
-Use a shared `--vf-*` token when a decision represents a reusable role across
-components or products.
-
-Keep a decision component-local only when it describes:
-
-- measured geometry
-- dynamic positioning
-- private composition
-- a value supplied by the consuming application
-
-Use `--udg-*` only when the role is specific to grid behavior. Grid variables
-should map shared color, focus, typography, density, motion, and layer roles to
-canonical `--vf-*` tokens.
-
-## TSX versus CSS
-
-Component TSX owns:
-
-- structure
-- behavior
-- accessibility
-- state classes
-- measured runtime positions
-- dynamic CSS variables when CSS cannot know the value
-
-CSS owns:
-
-- surfaces and text hierarchy
-- borders, radius, and shadows
-- hover, active, selected, disabled, and focus states
-- status presentation
-- density and typography
-- motion and reduced-motion fallbacks
-- layering
-- theme variants
-
-Static visual decisions do not belong in TSX.
-
-## Theme roles
-
-Light, dark, enterprise, and system themes expose the same semantic roles.
-Components must not require theme-specific overrides.
-
-Applications may apply a complete TypeScript preset:
-
-```tsx
-import {
-  toVyrnForgeThemeStyle,
-  vyrnForgeEnterpriseTheme,
-} from "@vyrnforge/ui-core";
-
-<div style={toVyrnForgeThemeStyle(vyrnForgeEnterpriseTheme)} />;
-```
-
-or use CSS selectors:
+A host can select a theme with a normal attribute:
 
 ```html
-<div data-theme="dark"></div>
+<div data-theme="dark">
+  ...
+</div>
 ```
+
+TypeScript theme presets are also available from `@vyrnforge/ui-core`.
 
 ## Density
 
-Canonical density selectors are `compact`, `balanced`, and `spacious`.
-`standard` remains a compatibility alias of `balanced`; `comfortable` remains
-an alias of `spacious`.
+The canonical density values are:
 
-Density controls reusable active tokens rather than requiring components to
-invent local heights or padding.
+- `compact`
+- `balanced`
+- `spacious`
 
-## Customization hierarchy
+Compatibility aliases may exist for older applications, but new code should use the canonical values.
 
-1. Use built-in theme, density, and component variants.
-2. Override scoped canonical `--vf-*` semantic roles.
-3. Override `--udg-*` only for grid-specific needs.
-4. Use `className` for structural extension.
-5. Use `style` only for instance-level or measured values.
+## Override order
+
+Prefer customization in this order:
+
+1. built-in component variants, theme, and density;
+2. scoped `--vf-*` semantic token overrides;
+3. `--udg-*` overrides for grid-only needs;
+4. `className` or equivalent framework class hooks for structural extension;
+5. inline style only for instance-specific or measured values.
 
 ## Example
 
 ```css
 .my-product {
   --vf-interactive-primary: #003b71;
-  --vf-interactive-primary-hover: #002f5b;
   --vf-focus-color: #005ea8;
   --vf-radius-md: 10px;
 }
 
 .my-product .udg {
   --udg-row-height: 42px;
-  --udg-header-bg: var(--vf-surface-canvas);
 }
 ```
 
-Historical tokens such as `--vf-primary` remain compatibility sources during
-S3. New work should use canonical semantic roles.
+## Framework consistency
 
-## Multi-framework styling policy
+Angular and Vue adapters must not invent framework-specific token systems. Native elements use Light DOM by default so theme, typography, density, and application overrides inherit normally.
 
-The same `--vf-*` semantic roles and `vf-*` class ownership apply to React and
-native Custom Element renderers. Framework adapters must not create parallel
-Angular- or Vue-specific token systems.
-
-Native elements use Light DOM by default so theme, density, typography, and
-application overrides inherit predictably. Shadow DOM requires an explicit
-component-level exception and a documented public styling surface.
-
-Planned `@vyrnforge/ui-elements` CSS loads after `ui-core` and must consume the
-same semantic roles. It must not copy theme palettes into renderer-local
-variables.
+For exact token names, use the **Design Tokens** reference in the documentation site.
