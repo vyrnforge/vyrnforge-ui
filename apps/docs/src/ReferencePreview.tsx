@@ -151,7 +151,6 @@ export function ReferencePreview({
         </div>
         <FrameworkCode usage={frameworkUsage} />
       </div>
-
     </Card>
   );
 }
