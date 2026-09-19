@@ -12,12 +12,12 @@ VyrnForge is a reusable UI foundation for web applications. Native HTML / Custom
 
 ## Framework surfaces
 
-| Surface | Package | Use it when |
-| --- | --- | --- |
-| React | `@vyrnforge/ui-components` | Building a React application |
-| Native HTML | `@vyrnforge/ui-elements` | Using Custom Elements or a framework-neutral boundary |
-| Angular | `@vyrnforge/ui-angular` | Building an Angular application |
-| Vue | `@vyrnforge/ui-vue` | Building a Vue application |
+| Surface     | Package                      | Use it when                                           |
+| ----------- | ---------------------------- | ----------------------------------------------------- |
+| React       | `@vyrnforge/ui-components` | Building a React application                          |
+| Native HTML | `@vyrnforge/ui-elements`   | Using Custom Elements or a framework-neutral boundary |
+| Angular     | `@vyrnforge/ui-angular`    | Building an Angular application                       |
+| Vue         | `@vyrnforge/ui-vue`        | Building a Vue application                            |
 
 The non-grid surfaces share VyrnForge foundations rather than becoming separate component libraries.
 
