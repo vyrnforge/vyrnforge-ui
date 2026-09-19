@@ -1,8 +1,6 @@
-import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
+import { Badge, PageHeader } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import type { DocsFrameworkId } from "./docsContext";
-import { AiContextPage } from "./AiContextPage";
-import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { MarkdownView } from "./MarkdownView";
@@ -61,18 +59,9 @@ export function DocsPage({
             </div>
           }
           description={route.description}
-          eyebrow={route.sourcePath}
+          eyebrow={route.group}
           title={route.title}
         />
-        {route.aiPurpose && (
-          <InlineMessage
-            className="vf-docs-ai-purpose"
-            title="AI purpose"
-            variant="info"
-          >
-            {route.aiPurpose}
-          </InlineMessage>
-        )}
       </div>
 
       {route.kind === "component-reference" && componentId ? (
@@ -88,8 +77,6 @@ export function DocsPage({
           referenceRecord={referenceRecord}
           routeId={route.id}
         />
-      ) : route.kind === "ai-context-index" ? (
-        <AiContextIndexPage />
       ) : route.kind === "component-reference" ? (
         <ComponentReferencePage
           componentId={componentId}
@@ -102,10 +89,6 @@ export function DocsPage({
             referenceRecord?.domain === "packages" ? referenceRecord.id : null
           }
         />
-      ) : route.kind === "metadata" ||
-        route.kind === "ai" ||
-        route.kind === "json" ? (
-        <AiContextPage route={route} />
       ) : (
         <MarkdownView markdown={route.content ?? ""} />
       )}
