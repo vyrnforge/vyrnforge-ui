@@ -7,9 +7,7 @@ import migrationRaw from "../../../docs/release/deprecation-and-migration-policy
 import versioningRaw from "../../../docs/release/versioning-policy.md?raw";
 
 export type DocsRouteKind =
-  | "markdown"
-  | "component-reference"
-  | "package-reference";
+  "markdown" | "component-reference" | "package-reference";
 
 export type DocsRoute = {
   id: string;
