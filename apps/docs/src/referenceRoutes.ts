@@ -7,10 +7,7 @@ import migrationRaw from "../../../docs/release/multi-framework-migration-and-li
 import { referenceModel } from "./docsContext";
 import { slugFromSourcePath } from "./referenceRouteId";
 
-export type DocsRouteKind =
-  | "markdown"
-  | "component-reference"
-  | "package-reference";
+export type DocsRouteKind = "markdown" | "component-reference" | "package-reference";
 
 export type DocsRoute = {
   id: string;
