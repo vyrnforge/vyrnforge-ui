@@ -3,8 +3,7 @@ import themingRaw from "../../../docs/architecture/03-theming-and-styling.md?raw
 import dataGridRaw from "../../../docs/packages/ui-data-grid.md?raw";
 import setupRaw from "../../../docs/api/import-and-setup.md?raw";
 import overviewRaw from "../../../docs/README.md?raw";
-import migrationRaw from "../../../docs/release/deprecation-and-migration-policy.md?raw";
-import versioningRaw from "../../../docs/release/versioning-policy.md?raw";
+import migrationRaw from "../../../docs/release/multi-framework-migration-and-limitations.md?raw";
 
 export type DocsRouteKind =
   "markdown" | "component-reference" | "package-reference";
@@ -87,24 +86,14 @@ const publicGuides: PublicGuide[] = [
     tags: ["data", "grid", "react"],
   },
   {
-    id: "migration",
-    title: "Migration",
+    id: "releases",
+    title: "Releases & Migration",
     group: "Guides",
     description:
-      "Plan public API changes, deprecations, compatibility work, and migrations.",
-    sourcePath: "docs/release/deprecation-and-migration-policy.md",
+      "Understand release channels, framework support, limitations, and upgrade guidance.",
+    sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
     content: migrationRaw,
-    tags: ["migration", "deprecation", "compatibility"],
-  },
-  {
-    id: "versioning",
-    title: "Versioning",
-    group: "API",
-    description:
-      "Understand VyrnForge release lines, prerelease channels, and version policy.",
-    sourcePath: "docs/release/versioning-policy.md",
-    content: versioningRaw,
-    tags: ["versioning", "release"],
+    tags: ["release", "migration", "compatibility"],
   },
 ];
 
@@ -175,12 +164,12 @@ export const publicDocsSections: PublicDocsSection[] = [
   {
     id: "guides",
     label: "Guides",
-    routeIds: ["pattern-reference", "data-grid", "migration"],
+    routeIds: ["pattern-reference", "data-grid", "releases"],
   },
   {
     id: "api",
     label: "API",
-    routeIds: ["package-reference", "versioning"],
+    routeIds: ["package-reference"],
   },
 ];
 
