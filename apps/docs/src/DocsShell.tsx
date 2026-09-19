@@ -55,7 +55,8 @@ export function DocsShell({
                 {referenceModel.product.label}
               </Heading>
               <Text tone="muted" className="vf-docs-header__description">
-                Components, theming, accessibility, examples, and API guidance for Native HTML, React, Angular, and Vue.
+                Components, theming, accessibility, examples, and API guidance
+                for Native HTML, React, Angular, and Vue.
               </Text>
             </div>
           }
