@@ -53,7 +53,13 @@ test("public Docs navigation is curated while Playground may use generated disco
   assert.match(docsNav, /VyrnForge documentation/u);
   assert.doesNotMatch(docsNav, /getReferenceNavigation/u);
 
-  for (const section of ["Start", "Components", "Foundations", "Guides", "API"]) {
+  for (const section of [
+    "Start",
+    "Components",
+    "Foundations",
+    "Guides",
+    "API",
+  ]) {
     assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
   }
   assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
