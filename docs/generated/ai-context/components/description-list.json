@@ -10,33 +10,35 @@
   "guidance": {
     "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
     "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
-    "aiUsageNotes": "Use semantic dl/dt/dd markup until a renderer exists; when DescriptionList is available, preserve the same term/description structure and do not invent a stateful data API.",
+    "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
     "relatedComponents": [
       "KeyValueList",
       "PropertyTable"
     ]
   },
   "accessibility": [
-    "Preserve native description-list term and description relationships; do not replace them with generic grouping roles.",
+    "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
     "preserves native description-list semantics for term and description relationships",
     "projected content must retain semantic term and description structure rather than generic grouping roles"
   ],
   "knownLimitations": [
-    "Renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+    "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-description-list"
+    ],
     "variables": []
   },
   "frameworks": {
     "react": {
       "status": "target",
       "package": "@vyrnforge/ui-components",
-      "setup": "Planned; no import yet.",
-      "example": "Planned."
+      "setup": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+      "example": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>"
     },
     "native-html": {
-      "status": "target",
+      "status": "current",
       "package": "@vyrnforge/ui-elements",
       "setup": "import \"@vyrnforge/ui-elements/register\";",
       "example": "<vf-description-list></vf-description-list>"
@@ -70,6 +72,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "customElementsManifest": null
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

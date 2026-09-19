@@ -47,6 +47,7 @@ export interface VyrnForgeHTMLElementTagNameMap {
   "vf-search-input": VyrnForgeElementInstance<"VyrnForgeSearchInputElement">;
   "vf-number-input": VyrnForgeElementInstance<"VyrnForgeNumberInputElement">;
   "vf-date-input": VyrnForgeElementInstance<"VyrnForgeDateInputElement">;
+  "vf-description-list": VyrnForgeElementInstance<"VyrnForgeDescriptionListElement">;
   "vf-datetime-input": VyrnForgeElementInstance<"VyrnForgeDateTimeInputElement">;
   "vf-checkbox": VyrnForgeElementInstance<"VyrnForgeCheckboxElement">;
   "vf-radio": VyrnForgeElementInstance<"VyrnForgeRadioElement">;
