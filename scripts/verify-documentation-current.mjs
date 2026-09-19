@@ -315,7 +315,9 @@ function verifyPrimaryStructure({ root, failures }) {
     "release/multi-framework-migration-and-limitations.md",
   ]) {
     if (!docsIndex.includes(link)) {
-      failures.push(`docs/README.md: missing public documentation link ${link}`);
+      failures.push(
+        `docs/README.md: missing public documentation link ${link}`,
+      );
     }
   }
   for (const packageName of [
