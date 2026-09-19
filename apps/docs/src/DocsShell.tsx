@@ -97,9 +97,7 @@ export function DocsShell({
                   (candidate) => candidate.id === event.currentTarget.value,
                 );
                 if (version && version.id !== docsVersion.id) {
-                  window.location.assign(
-                    getVersionHref(version, framework.id),
-                  );
+                  window.location.assign(getVersionHref(version, framework.id));
                 }
               }}
               options={docsVersions.map((version) => ({
