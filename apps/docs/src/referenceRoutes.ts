@@ -9,12 +9,8 @@ import { slugFromSourcePath } from "./referenceRouteId";
 
 export type DocsRouteKind =
   | "markdown"
-  | "ai"
-  | "json"
-  | "metadata"
   | "component-reference"
-  | "package-reference"
-  | "ai-context-index";
+  | "package-reference";
 
 export type DocsRoute = {
   id: string;
@@ -22,7 +18,6 @@ export type DocsRoute = {
   group: string;
   description?: string;
   sourcePath: string;
-  aiPurpose?: string;
   tags?: string[];
   canonical?: boolean;
   kind?: DocsRouteKind;
