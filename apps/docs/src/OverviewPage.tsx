@@ -22,40 +22,40 @@ type OverviewPageProps = {
 
 const discoveryLinks = [
   {
+    routeId: "import-and-setup",
+    title: "Get started",
+    description:
+      "Install VyrnForge, load the shared styles, and choose the framework surface for your application.",
+  },
+  {
     routeId: "component-reference",
     title: "Components",
     description:
-      "Browse generated multi-framework usage alongside framework-neutral contracts.",
-  },
-  {
-    routeId: "package-reference",
-    title: "Packages",
-    description:
-      "Understand package responsibilities without exposing internal topology as the consumer model.",
+      "Browse components with framework usage, behavior, accessibility, and API details.",
   },
   {
     routeId: "theming-and-styling",
-    title: "Theming & tokens",
+    title: "Theming",
     description:
-      "Use shared semantic tokens, density, typography, surfaces, states, and theme contracts.",
+      "Customize VyrnForge with the shared token and CSS foundation instead of framework-specific styling systems.",
   },
   {
     routeId: "accessibility-standards",
     title: "Accessibility",
     description:
-      "Review the keyboard, focus, semantic, and assistive-technology baseline shared across surfaces.",
+      "Understand shared semantic, keyboard, focus, and assistive-technology expectations.",
   },
   {
-    routeId: "multi-framework-decision",
-    title: "Architecture",
+    routeId: "package-reference",
+    title: "Packages",
     description:
-      "See how canonical contracts and renderer boundaries support all four first-class web surfaces.",
+      "Choose the public VyrnForge packages and entry points that fit your application.",
   },
   {
-    routeId: "multi-framework-program-gates",
-    title: "Support evidence",
+    routeId: "multi-framework-migration-and-limitations",
+    title: "Framework support",
     description:
-      "Check active program gates before interpreting framework support as release-ready distribution.",
+      "See current Native HTML, React, Angular, and Vue support and known limitations.",
   },
 ] as const;
 
@@ -76,23 +76,23 @@ export function OverviewPage({
           <div>
             <div className="vf-docs-overview__eyebrow">VyrnForge UI</div>
             <Heading id="vf-overview-title" level={2} size="lg">
-              One UI foundation. Four first-class web surfaces.
+              Build consistent application UI across frameworks.
             </Heading>
           </div>
           <Text size="lg" tone="muted" className="vf-docs-overview__lede">
-            Build enterprise web applications with shared design tokens,
-            behavior contracts, accessibility rules, component semantics, and
-            release evidence across Native HTML, React, Angular, and Vue.
+            VyrnForge provides shared components, design tokens, behavior
+            contracts, accessibility rules, and styling foundations for Native
+            HTML, React, Angular, and Vue.
           </Text>
           <Inline gap="sm" className="vf-docs-overview__actions">
-            <Button onClick={() => onRouteChange("component-reference")}>
-              Explore components
+            <Button onClick={() => onRouteChange("import-and-setup")}>
+              Get started
             </Button>
             <Button
               variant="subtle"
-              onClick={() => onRouteChange("multi-framework-decision")}
+              onClick={() => onRouteChange("component-reference")}
             >
-              Read architecture
+              Browse components
             </Button>
           </Inline>
         </Stack>
@@ -105,11 +105,11 @@ export function OverviewPage({
         <Stack gap="md">
           <div>
             <Heading id="vf-surface-title" level={2} size="lg">
-              Choose your surface
+              Choose your framework
             </Heading>
             <Text tone="muted">
-              The framework changes the integration syntax, not the VyrnForge
-              design system or behavior model.
+              The integration syntax changes. The VyrnForge design system,
+              semantics, and behavior contracts stay shared.
             </Text>
           </div>
           <div className="vf-docs-overview__framework-grid">
@@ -150,9 +150,7 @@ export function OverviewPage({
                       variant={selected ? "subtle" : "ghost"}
                       onClick={() => onFrameworkChange(candidate.id)}
                     >
-                      {selected
-                        ? "Using this surface"
-                        : `Use ${candidate.label}`}
+                      {selected ? "Selected" : `Use ${candidate.label}`}
                     </Button>
                   </Stack>
                 </Card>
@@ -169,11 +167,12 @@ export function OverviewPage({
         <Stack gap="md">
           <div>
             <Heading id="vf-discover-title" level={2} size="lg">
-              Explore the foundation
+              Documentation
             </Heading>
             <Text tone="muted">
-              Start from reusable VyrnForge capabilities before creating custom
-              application UI.
+              Start with the common tasks. Internal governance, build evidence,
+              and generated machine context are intentionally kept out of the
+              reader navigation.
             </Text>
           </div>
           <div className="vf-docs-overview__discovery-grid">
@@ -208,12 +207,11 @@ export function OverviewPage({
           <Stack gap="md">
             <div>
               <Heading id="vf-release-title" level={2} size="lg">
-                Release lines stay explicit
+                Version information
               </Heading>
               <Text tone="muted">
-                VyrnForge does not pretend every package shares one global
-                version. Documentation and release context are derived from
-                canonical release metadata.
+                Package release lines can move independently. Use the version
+                selector and package reference when upgrading.
               </Text>
             </div>
             <Inline gap="sm" className="vf-docs-overview__release-lines">
