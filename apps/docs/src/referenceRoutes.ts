@@ -141,7 +141,8 @@ const generatedReaderPresentation: Record<string, GeneratedReaderPresentation> =
       id: "search",
       title: "Search",
       group: "Getting Started",
-      description: "Search VyrnForge components, packages, tokens, and guidance.",
+      description:
+        "Search VyrnForge components, packages, tokens, and guidance.",
     },
     packages: {
       id: "package-reference",
