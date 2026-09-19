@@ -1,10 +1,4 @@
-import {
-  Button,
-  Heading,
-  Inline,
-  Stack,
-  Text,
-} from "@vyrnforge/ui-components";
+import { Button, Heading, Inline, Stack, Text } from "@vyrnforge/ui-components";
 import {
   docsFrameworks,
   getFramework,
@@ -53,11 +47,7 @@ export function OverviewPage({
             <Heading id="vf-overview-title" level={2} size="lg">
               One UI foundation. Four framework surfaces.
             </Heading>
-            <Text
-              className="vf-docs-overview__lede"
-              size="lg"
-              tone="muted"
-            >
+            <Text className="vf-docs-overview__lede" size="lg" tone="muted">
               Build consistent web applications with shared components, tokens,
               behavior, and accessibility across Native HTML, React, Angular,
               and Vue.
