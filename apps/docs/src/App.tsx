@@ -15,7 +15,7 @@ import { DocsShell } from "./DocsShell";
 import { getRouteById } from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
-  domain: "components" | "packages" | "tokens" | "patterns" | "accessibility";
+  domain: "components" | "packages" | "tokens" | "patterns";
   id: string;
 };
 
@@ -32,7 +32,6 @@ const recordRoutes: Array<{
   { domain: "packages", routeId: "package-reference" },
   { domain: "tokens", routeId: "token-reference" },
   { domain: "patterns", routeId: "pattern-reference" },
-  { domain: "accessibility", routeId: "accessibility-reference" },
 ];
 
 function getHashLocation(): DocsLocation {

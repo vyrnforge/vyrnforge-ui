@@ -20,7 +20,7 @@ export type DocsRoute = {
 };
 
 export type PublicDocsSection = {
-  id: "start" | "components" | "foundations" | "guides" | "api";
+  id: "start" | "components" | "foundations" | "guides" | "reference";
   label: string;
   routeIds: string[];
 };
@@ -88,7 +88,7 @@ const publicGuides: PublicGuide[] = [
   {
     id: "releases",
     title: "Releases & Migration",
-    group: "Guides",
+    group: "Reference",
     description:
       "Understand release channels, framework support, limitations, and upgrade guidance.",
     sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
@@ -127,21 +127,12 @@ const generatedRoutes: DocsRoute[] = [
   {
     id: "package-reference",
     title: "Packages",
-    group: "API",
+    group: "Reference",
     description:
       "Understand package responsibilities, public entrypoints, and release tracks.",
     sourcePath: "docs/metadata/packages.json",
     tags: ["packages", "api"],
     kind: "package-reference",
-  },
-  {
-    id: "accessibility-reference",
-    title: "Component Accessibility",
-    group: "Foundations",
-    description:
-      "Browse component-specific accessibility and keyboard contracts.",
-    sourcePath: "docs/metadata/component-contracts.json",
-    tags: ["accessibility", "components"],
   },
 ];
 
@@ -164,12 +155,12 @@ export const publicDocsSections: PublicDocsSection[] = [
   {
     id: "guides",
     label: "Guides",
-    routeIds: ["pattern-reference", "data-grid", "releases"],
+    routeIds: ["pattern-reference", "data-grid"],
   },
   {
-    id: "api",
-    label: "API",
-    routeIds: ["package-reference"],
+    id: "reference",
+    label: "Reference",
+    routeIds: ["package-reference", "releases"],
   },
 ];
 
