@@ -5,15 +5,12 @@ import {
   type SideNavItem,
 } from "@vyrnforge/ui-components";
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
-import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import {
   componentApiMemberAnchor,
+  componentReferenceTargetHref,
   type ComponentApiMemberKind,
 } from "./componentApiMember";
-import {
-  referenceModel,
-  type DocsFrameworkId,
-} from "./docsContext";
+import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import { componentReferenceRecords } from "./referenceData";
 import {
   docsRoutes,
@@ -65,23 +62,6 @@ function matchesQuery(route: DocsRoute, query: string) {
     .some((value) => value!.toLowerCase().includes(query));
 }
 
-function apiMemberHref(
-  componentId: string,
-  frameworkId: DocsFrameworkId,
-  member: string,
-) {
-  const query = new URLSearchParams({
-    [referenceModel.frameworkContext.queryParameter]: frameworkId,
-    member,
-  });
-  const route = getReferenceRecordRoute(
-    referenceModel,
-    "components",
-    componentId,
-  );
-  return `?${query.toString()}#${route}`;
-}
-
 function apiMemberEntry(
   componentId: string,
   frameworkId: DocsFrameworkId,
@@ -105,7 +85,11 @@ function apiMemberEntry(
       name,
       ...keywords,
     ].map((keyword) => keyword.toLowerCase()),
-    href: apiMemberHref(componentId, frameworkId, member),
+    href: componentReferenceTargetHref(
+      componentId,
+      frameworkId,
+      member,
+    ),
   };
 }
 
