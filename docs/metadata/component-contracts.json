@@ -25170,8 +25170,8 @@
   "catalogCoverage": {
     "componentMetadata": "docs/metadata/components.json",
     "coverageRule": "Every public beta-included non-grid @vyrnforge/ui-components record is either contract-complete or covered by an active narrow framework exception.",
-    "scopedComponentCount": 67,
-    "contractCompleteCount": 59,
+    "scopedComponentCount": 68,
+    "contractCompleteCount": 60,
     "exceptionRequiredCount": 8,
     "needsContractDataCount": 0,
     "exceptionRegistry": "docs/metadata/framework-exceptions.json",
