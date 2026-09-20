@@ -18,6 +18,17 @@ export type ReferenceContract = {
   formAssociation: string;
 };
 
+export type ReferenceFrameworkId = "native-html" | "react" | "angular" | "vue";
+
+export type ReferenceFrameworkUsage = {
+  label: string;
+  status: string;
+  package: string | null;
+  setup: string;
+  example: string;
+  note: string;
+};
+
 export type ComponentReferenceRecord = {
   id: string;
   displayName: string;
@@ -41,6 +52,7 @@ export type ComponentReferenceRecord = {
     description: string;
   } | null;
   contract: ReferenceContract | null;
+  frameworks: Record<ReferenceFrameworkId, ReferenceFrameworkUsage>;
 };
 
 type GeneratedPackageRecord = {

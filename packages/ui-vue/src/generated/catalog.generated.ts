@@ -102,6 +102,7 @@ export const VfCodeText = createVyrnForgeVueFacade("VfCodeText", "vf-code-text",
 export const VfConfirmDialog = createVyrnForgeVueFacade("VfConfirmDialog", "vf-confirm-dialog", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"}, ["cancel","confirm"]);
 export const VfDateInput = createVyrnForgeVueFacade("VfDateInput", "vf-date-input", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, ["focus","select","checkValidity","reportValidity","setCustomValidity"]);
 export const VfDateTimeInput = createVyrnForgeVueFacade("VfDateTimeInput", "vf-datetime-input", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, ["focus","select","checkValidity","reportValidity","setCustomValidity"]);
+export const VfDescriptionList = createVyrnForgeVueFacade("VfDescriptionList", "vf-description-list", undefined, []);
 export { VfDialog };
 export const VfDrawer = createVyrnForgeVueFacade("VfDrawer", "vf-drawer", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"}, ["show","close","focus"]);
 export const VfDropdown = createVyrnForgeVueFacade("VfDropdown", "vf-popover", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"}, []);
@@ -163,6 +164,7 @@ export const vyrnForgeVueGeneratedComponents = Object.freeze([
   VfConfirmDialog,
   VfDateInput,
   VfDateTimeInput,
+  VfDescriptionList,
   VfDialog,
   VfDrawer,
   VfDropdown,

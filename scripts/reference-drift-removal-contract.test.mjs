@@ -9,6 +9,11 @@ const retired = [
   "apps/docs/src/docsRegistry.ts",
   "apps/docs/src/discoveryRoutes.ts",
   "apps/docs/src/MetadataPage.tsx",
+  "apps/docs/src/AiContextIndexPage.tsx",
+  "apps/docs/src/styles/docs-context.css",
+  "apps/docs/src/referenceRouteId.ts",
+  "scripts/reference-route-id.test.mjs",
+  "apps/docs/src/ReferenceSearchPage.tsx",
   "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
   "examples/basic-playground/src/components/PropsTable.tsx",
   "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
@@ -47,12 +52,18 @@ test("Reference transitional authorities remain retired", () => {
   }
 });
 
-test("Docs routes are source-derived", () => {
+test("Docs routes are curated without duplicating generated public facts", () => {
   const source = read("apps/docs/src/referenceRoutes.ts");
-  assert.match(source, /import\.meta\.glob/u);
-  assert.match(source, /referenceModel\.domains\.flatMap/u);
+  assert.match(source, /publicDocsSections/u);
   assert.match(source, /uniqueRoutes/u);
-  assert.doesNotMatch(source, /export const docsRoutes: DocsRoute\[\] = \[/u);
+  assert.match(source, /component-reference/u);
+  assert.match(source, /token-reference/u);
+  assert.match(source, /pattern-reference/u);
+  assert.match(source, /package-reference/u);
+  assert.doesNotMatch(source, /accessibility-reference/u);
+  assert.doesNotMatch(source, /import\.meta\.glob/u);
+  assert.doesNotMatch(source, /generated\/ai-context/u);
+  assert.doesNotMatch(source, /referenceModel\.domains\.flatMap/u);
 });
 
 test("Playground component facts are generated", () => {

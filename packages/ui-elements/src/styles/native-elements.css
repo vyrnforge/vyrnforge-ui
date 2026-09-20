@@ -49,7 +49,8 @@
   vf-field,
   vf-tabs,
   vf-breadcrumbs,
-  vf-side-nav
+  vf-side-nav,
+  vf-description-list
 ) {
   display: block;
 }
