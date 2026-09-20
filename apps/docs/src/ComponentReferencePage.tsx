@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Badge,
   Card,
@@ -8,39 +7,20 @@ import {
   type TabItem,
 } from "@vyrnforge/ui-components";
 
-import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
+import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
+import {
+  componentApiMemberAnchor,
+  componentReferenceTargetHref,
+} from "./componentApiMember";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
-import type { DocsFrameworkId } from "./docsContext";
-
-type ContractDetail = {
-  properties: string[];
-  attributes: string[];
-  events: string[];
-  slots: string[];
-  methods: string[];
-  accessibility: string[];
-  formAssociation: string;
-};
-
-type ComponentReferenceItem = {
-  id: string;
-  displayName: string;
-  category: string;
-  maturity: string;
-  purpose: string;
-  knownLimitations: string[];
-  nativeDeclaration: {
-    name: string;
-    tagName: string;
-    description: string;
-  } | null;
-  contract: ContractDetail | null;
-};
-
-type ConsumerKnowledge = {
-  components: ComponentReferenceItem[];
-};
+import { referenceModel, type DocsFrameworkId } from "./docsContext";
+import {
+  componentReferenceRecords,
+  getComponentReferenceRecord,
+  getRelatedPatterns,
+  type ComponentReferenceRecord,
+} from "./referenceData";
 
 type ApiProperty = {
   public: string;
@@ -95,12 +75,6 @@ type FrameworkApiComponent = {
   setup: string[];
 };
 
-type FrameworkApiSurface = {
-  package: string;
-  summary: { componentCount: number };
-  components: FrameworkApiComponent[];
-};
-
 type FrameworkApiId = "native" | "react" | "angular" | "vue";
 
 type FrameworkApiReference = {
@@ -109,70 +83,59 @@ type FrameworkApiReference = {
     generator: string;
     sources: string[];
   };
-  surfaces: Record<FrameworkApiId, FrameworkApiSurface>;
+  surfaces: Record<
+    FrameworkApiId,
+    {
+      package: string;
+      summary: { componentCount: number };
+      components: FrameworkApiComponent[];
+    }
+  >;
 };
 
 type ComponentReferencePageProps = {
+  componentId?: string | null;
   frameworkId: DocsFrameworkId;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
 };
 
-const reference = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
 const apiReference = JSON.parse(
   frameworkApiReferenceRaw,
 ) as FrameworkApiReference;
 
-const frameworkOrder = [
-  { id: "react", apiId: "react", label: "React" },
-  { id: "native-html", apiId: "native", label: "Native HTML" },
-  { id: "angular", apiId: "angular", label: "Angular" },
-  { id: "vue", apiId: "vue", label: "Vue" },
-] as const;
-
 function formatDefault(value: unknown) {
-  if (value === undefined) return "—";
-  return JSON.stringify(value);
+  return value === undefined ? "—" : JSON.stringify(value);
 }
 
-function formatProperty(property: ApiProperty) {
-  const flags = [
+function propertyFlags(property: ApiProperty) {
+  return [
     property.required && "required",
     property.readOnly && "readonly",
     property.controlled && "controlled",
-  ].filter(Boolean);
-  const suffix = flags.length > 0 ? ` (${flags.join(", ")})` : "";
-  return `${property.public}: ${property.type}${suffix}; binding=${property.binding}; default=${formatDefault(property.default)}`;
+  ].filter(Boolean) as string[];
 }
 
-function formatEvent(event: ApiEvent) {
-  const detail = event.detailFields
-    .map((field) => `${field.name}: ${field.type}${field.required ? "" : "?"}`)
-    .join(", ");
-  const detailShape = detail ? ` { ${detail} }` : "";
+function eventDelivery(event: ApiEvent) {
   return [
-    `${event.public} (${event.mode}; detail=${event.detail}${detailShape}`,
-    `bubbles=${event.bubbles}; composed=${event.composed}`,
-    `cancelable=${event.cancelable})`,
-  ].join("; ");
+    event.bubbles && "bubbles",
+    event.composed && "composed",
+    event.cancelable && "cancelable",
+  ].filter(Boolean) as string[];
 }
 
-function formatSlot(slot: ApiSlot) {
-  const flags = [
-    slot.required && "required",
-    slot.multiple && "multiple",
-  ].filter(Boolean);
-  const suffix = flags.length > 0 ? `; ${flags.join("; ")}` : "";
-  return `${slot.public} (${slot.mode}; ${slot.content}${suffix})`;
+function slotFlags(slot: ApiSlot) {
+  return [slot.required && "required", slot.multiple && "multiple"].filter(
+    Boolean,
+  ) as string[];
 }
 
-function formatMethod(method: ApiMethod) {
-  const parameters = method.parameters
+function methodParameters(method: ApiMethod) {
+  return method.parameters
     .map(
       (parameter) =>
         `${parameter.name}${parameter.required ? "" : "?"}: ${parameter.type}`,
     )
     .join(", ");
-  return `${method.async ? "async " : ""}${method.name}(${parameters}): ${method.returns}`;
 }
 
 function MemberList({
@@ -190,37 +153,20 @@ function MemberList({
   );
 }
 
-function ContractDetails({ contract }: { contract: ContractDetail | null }) {
-  if (!contract) {
-    return (
-      <Text size="sm" tone="muted">
-        Detailed framework-neutral contract fields are not yet present in the
-        canonical component-contract catalog. This generated viewer does not
-        invent them.
-      </Text>
-    );
-  }
-
+function EmptyApiMembers() {
   return (
-    <div className="vf-docs-contract-details">
-      <MemberList label="Canonical properties" values={contract.properties} />
-      <MemberList label="HTML attributes" values={contract.attributes} />
-      <MemberList label="Canonical events" values={contract.events} />
-      <MemberList label="Canonical slots" values={contract.slots} />
-      <MemberList label="Canonical methods" values={contract.methods} />
-      <MemberList label="Accessibility" values={contract.accessibility} />
-      <div className="vf-docs-contract-field">
-        <strong>Form association</strong>
-        <span>{contract.formAssociation}</span>
-      </div>
-    </div>
+    <Text size="sm" tone="muted">
+      None on this framework surface.
+    </Text>
   );
 }
 
 function FrameworkApiPanel({
   component,
+  frameworkId,
 }: {
   component: FrameworkApiComponent;
+  frameworkId: DocsFrameworkId;
 }) {
   return (
     <div className="vf-docs-framework-usage">
@@ -233,40 +179,260 @@ function FrameworkApiPanel({
         {component.tag && <code>{component.tag}</code>}
       </div>
 
-      <MemberList label="Setup" values={component.setup} />
-      <MemberList
-        label="Properties / inputs"
-        values={component.properties.map(formatProperty)}
-      />
-      <MemberList
-        label="Events / outputs / emits"
-        values={component.events.map(formatEvent)}
-      />
-      <MemberList
-        label="Slots / templates"
-        values={component.slots.map(formatSlot)}
-      />
-      <MemberList
-        label="Methods"
-        values={component.methods.map(formatMethod)}
-      />
-      <MemberList label="Accessibility" values={component.accessibility} />
-      <details>
-        <summary>Model, form, and ref contracts</summary>
-        <pre className="vf-docs-reference-code">
-          <code>
-            {JSON.stringify(
-              {
-                model: component.model,
-                form: component.form,
-                ref: component.ref,
-              },
-              null,
-              2,
-            )}
-          </code>
-        </pre>
-      </details>
+      <section
+        aria-labelledby="api-setup-heading"
+        className="vf-docs-api-section"
+        id="api-setup"
+      >
+        <Heading level={4} size="sm" id="api-setup-heading">
+          Setup
+        </Heading>
+        <MemberList label="Imports / registration" values={component.setup} />
+      </section>
+
+      <section
+        aria-labelledby="api-properties-heading"
+        className="vf-docs-api-section"
+        id="api-properties"
+      >
+        <Heading level={4} size="sm" id="api-properties-heading">
+          Properties / inputs
+        </Heading>
+        {component.properties.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Binding</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Default</th>
+                  <th scope="col">Flags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.properties.map((property) => {
+                  const anchor = componentApiMemberAnchor(
+                    "property",
+                    property.public,
+                  );
+                  return (
+                    <tr id={anchor} key={property.public}>
+                      <th scope="row">
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
+                        >
+                          <code>{property.public}</code>
+                        </a>
+                      </th>
+                      <td>
+                        <code>{property.binding}</code>
+                      </td>
+                      <td>
+                        <code>{property.type}</code>
+                      </td>
+                      <td>
+                        <code>{formatDefault(property.default)}</code>
+                      </td>
+                      <td>{propertyFlags(property).join(", ") || "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-events-heading"
+        className="vf-docs-api-section"
+        id="api-events"
+      >
+        <Heading level={4} size="sm" id="api-events-heading">
+          Events / outputs / emits
+        </Heading>
+        {component.events.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Mode</th>
+                  <th scope="col">Detail</th>
+                  <th scope="col">Delivery</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.events.map((event) => {
+                  const anchor = componentApiMemberAnchor(
+                    "event",
+                    event.public,
+                  );
+                  const detailFields = event.detailFields
+                    .map(
+                      (field) =>
+                        `${field.name}${field.required ? "" : "?"}: ${field.type}`,
+                    )
+                    .join(", ");
+                  return (
+                    <tr id={anchor} key={event.public}>
+                      <th scope="row">
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
+                        >
+                          <code>{event.public}</code>
+                        </a>
+                      </th>
+                      <td>{event.mode}</td>
+                      <td>
+                        <code>
+                          {event.detail}
+                          {detailFields ? ` { ${detailFields} }` : ""}
+                        </code>
+                      </td>
+                      <td>{eventDelivery(event).join(", ") || "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-slots-heading"
+        className="vf-docs-api-section"
+        id="api-slots"
+      >
+        <Heading level={4} size="sm" id="api-slots-heading">
+          Slots / templates
+        </Heading>
+        {component.slots.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Mode</th>
+                  <th scope="col">Content</th>
+                  <th scope="col">Flags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.slots.map((slot) => {
+                  const anchor = componentApiMemberAnchor("slot", slot.public);
+                  return (
+                    <tr id={anchor} key={slot.public}>
+                      <th scope="row">
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
+                        >
+                          <code>{slot.public}</code>
+                        </a>
+                      </th>
+                      <td>{slot.mode}</td>
+                      <td>{slot.content}</td>
+                      <td>{slotFlags(slot).join(", ") || "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-methods-heading"
+        className="vf-docs-api-section"
+        id="api-methods"
+      >
+        <Heading level={4} size="sm" id="api-methods-heading">
+          Methods
+        </Heading>
+        {component.methods.length > 0 ? (
+          <div className="vf-docs-api-table-scroll">
+            <table className="vf-docs-api-table">
+              <thead>
+                <tr>
+                  <th scope="col">Method</th>
+                  <th scope="col">Parameters</th>
+                  <th scope="col">Returns</th>
+                </tr>
+              </thead>
+              <tbody>
+                {component.methods.map((method) => {
+                  const anchor = componentApiMemberAnchor(
+                    "method",
+                    method.name,
+                  );
+                  return (
+                    <tr id={anchor} key={method.name}>
+                      <th scope="row">
+                        <a
+                          className="vf-docs-api-member-link"
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
+                        >
+                          <code>
+                            {method.async ? "async " : ""}
+                            {method.name}()
+                          </code>
+                        </a>
+                      </th>
+                      <td>
+                        <code>{methodParameters(method) || "—"}</code>
+                      </td>
+                      <td>
+                        <code>{method.returns}</code>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <EmptyApiMembers />
+        )}
+      </section>
+
+      <section
+        aria-labelledby="api-accessibility-heading"
+        className="vf-docs-api-section"
+        id="api-accessibility"
+      >
+        <Heading level={4} size="sm" id="api-accessibility-heading">
+          Accessibility
+        </Heading>
+        <MemberList label="Guidance" values={component.accessibility} />
+      </section>
     </div>
   );
 }
@@ -278,32 +444,291 @@ function apiComponent(componentId: string, apiId: FrameworkApiId) {
 }
 
 function frameworkTabs(componentId: string): TabItem[] {
-  return frameworkOrder.map(({ id, apiId, label }) => {
+  return referenceModel.frameworks.map((framework) => {
+    const apiId = framework.apiSurface as FrameworkApiId;
     const component = apiComponent(componentId, apiId);
     return {
-      id,
-      label,
+      id: framework.id,
+      label: framework.label,
       content: component ? (
-        <FrameworkApiPanel component={component} />
+        <FrameworkApiPanel component={component} frameworkId={framework.id} />
       ) : (
         <Text size="sm" tone="muted">
-          No generated API record exists for this surface.
+          This component is not available on this framework surface.
         </Text>
       ),
     };
   });
 }
 
-function componentDeepLink(frameworkId: DocsFrameworkId, componentId: string) {
-  const query = new URLSearchParams({
-    framework: frameworkId,
-    component: componentId,
-  });
-  return `?${query.toString()}#/component-reference`;
+function componentHref(componentId: string) {
+  return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
+}
+
+function ComponentIndexCard({
+  component,
+}: {
+  component: ComponentReferenceRecord;
+}) {
+  const maturity = getComponentMaturityPresentation(component);
+  return (
+    <Card className="vf-docs-reference-card" padding="md">
+      <div className="vf-docs-reference-card__header">
+        <div>
+          <Heading level={4} size="sm">
+            <a href={componentHref(component.id)}>{component.displayName}</a>
+          </Heading>
+          {component.nativeDeclaration?.tagName && (
+            <code>{component.nativeDeclaration.tagName}</code>
+          )}
+        </div>
+        <Badge size="sm" tone="subtle" variant={maturity.variant}>
+          {maturity.label}
+        </Badge>
+      </div>
+      <Text>{component.purpose}</Text>
+      <Text size="sm" tone="muted">
+        {component.package}
+      </Text>
+    </Card>
+  );
+}
+
+function ComponentOutline({
+  componentId,
+  frameworkId,
+  showLimitations,
+}: {
+  componentId: string;
+  frameworkId: DocsFrameworkId;
+  showLimitations: boolean;
+}) {
+  const sections = [
+    ["component-overview", "Overview"],
+    ["component-usage", "Usage"],
+    ["component-framework-api", "API"],
+    ["component-accessibility-styling", "Accessibility & styling"],
+    ...(showLimitations
+      ? [["component-limitations", "Limitations and related patterns"]]
+      : []),
+  ];
+
+  return (
+    <aside
+      className="vf-docs-reference-outline"
+      aria-label="On this component page"
+    >
+      <Text size="sm" tone="muted">
+        On this page
+      </Text>
+      <nav>
+        <ul>
+          {sections.map(([id, label]) => (
+            <li key={id}>
+              <a
+                href={componentReferenceTargetHref(
+                  componentId,
+                  frameworkId,
+                  id,
+                )}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className="vf-docs-reference-outline__api">
+        <Text size="sm" tone="muted">
+          API
+        </Text>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-properties",
+          )}
+        >
+          Properties
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-events",
+          )}
+        >
+          Events
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-slots",
+          )}
+        >
+          Slots
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-methods",
+          )}
+        >
+          Methods
+        </a>
+      </div>
+    </aside>
+  );
+}
+
+function ComponentDetail({
+  component,
+  frameworkId,
+  onFrameworkChange,
+}: {
+  component: ComponentReferenceRecord;
+  frameworkId: DocsFrameworkId;
+  onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
+}) {
+  const maturity = getComponentMaturityPresentation(component);
+  const relatedPatterns = getRelatedPatterns(component.id);
+  const showLimitations =
+    component.knownLimitations.length > 0 || relatedPatterns.length > 0;
+
+  return (
+    <div className="vf-docs-reference-layout">
+      <div className="vf-docs-reference">
+        <Card
+          className="vf-docs-reference__section"
+          id="component-overview"
+          padding="lg"
+        >
+          <Text size="sm">
+            <a href="#/component-reference">← Component reference</a>
+          </Text>
+          <div className="vf-docs-reference-card__header">
+            <div>
+              <Heading level={3} size="md">
+                {component.displayName}
+              </Heading>
+              <Text size="sm" tone="muted">
+                <code>{component.package}</code>
+                {component.nativeDeclaration?.tagName && (
+                  <>
+                    {" "}
+                    · <code>{component.nativeDeclaration.tagName}</code>
+                  </>
+                )}
+              </Text>
+            </div>
+            <Badge size="sm" tone="subtle" variant={maturity.variant}>
+              {maturity.label}
+            </Badge>
+          </div>
+          <Text>{component.purpose}</Text>
+        </Card>
+
+        <Card
+          className="vf-docs-reference__section"
+          id="component-usage"
+          padding="lg"
+        >
+          <Heading level={3} size="md">
+            Usage
+          </Heading>
+          <MemberList label="Use when" values={[component.guidance.useWhen]} />
+          <MemberList
+            label="Avoid when"
+            values={[component.guidance.avoidWhen]}
+          />
+          <MemberList
+            label="Related components"
+            values={component.guidance.relatedComponents}
+          />
+        </Card>
+
+        <Card
+          className="vf-docs-reference__section"
+          id="component-framework-api"
+          padding="lg"
+        >
+          <Heading level={3} size="md">
+            API
+          </Heading>
+          <Text tone="muted">
+            Select a framework to see its public setup, properties, events,
+            slots, and methods.
+          </Text>
+          <Tabs
+            aria-label={`${component.displayName} framework API`}
+            className="vf-docs-framework-tabs"
+            items={frameworkTabs(component.id)}
+            onValueChange={(value) =>
+              onFrameworkChange(value as DocsFrameworkId)
+            }
+            size="sm"
+            value={frameworkId}
+          />
+        </Card>
+
+        <Card
+          className="vf-docs-reference__section"
+          id="component-accessibility-styling"
+          padding="lg"
+        >
+          <Heading level={3} size="md">
+            Accessibility & styling
+          </Heading>
+          <MemberList
+            label="Accessibility guidance"
+            values={[
+              component.accessibilityNotes,
+              ...(component.contract?.accessibility ?? []),
+            ].filter(Boolean)}
+          />
+          <MemberList
+            label="Public classes"
+            values={component.styling.classes}
+          />
+          <MemberList
+            label="CSS variables"
+            values={component.styling.variables}
+          />
+        </Card>
+
+        {showLimitations && (
+          <Card
+            className="vf-docs-reference__section"
+            id="component-limitations"
+            padding="lg"
+          >
+            <Heading level={3} size="md">
+              Limitations and related patterns
+            </Heading>
+            <MemberList
+              label="Known limitations"
+              values={component.knownLimitations}
+            />
+            <MemberList
+              label="Patterns using this component"
+              values={relatedPatterns.map((pattern) => pattern.displayName)}
+            />
+          </Card>
+        )}
+      </div>
+      <ComponentOutline
+        componentId={component.id}
+        frameworkId={frameworkId}
+        showLimitations={showLimitations}
+      />
+    </div>
+  );
 }
 
 const componentAreas = Object.entries(
-  reference.components.reduce<Record<string, ComponentReferenceItem[]>>(
+  componentReferenceRecords.reduce<Record<string, ComponentReferenceRecord[]>>(
     (areas, component) => {
       (areas[component.category] ??= []).push(component);
       return areas;
@@ -313,33 +738,45 @@ const componentAreas = Object.entries(
 ).sort(([left], [right]) => left.localeCompare(right));
 
 export function ComponentReferencePage({
+  componentId,
   frameworkId,
   onFrameworkChange,
 }: ComponentReferencePageProps) {
-  useEffect(() => {
-    const selectedComponent = new URLSearchParams(window.location.search).get(
-      "component",
+  if (componentId) {
+    const component = getComponentReferenceRecord(componentId);
+    if (!component) {
+      return (
+        <Card className="vf-docs-reference__section" padding="lg">
+          <Heading level={3} size="md">
+            Component not found
+          </Heading>
+          <Text tone="muted">
+            No component exists for <code>{componentId}</code>.
+          </Text>
+          <Text>
+            <a href="#/component-reference">Return to component reference</a>
+          </Text>
+        </Card>
+      );
+    }
+    return (
+      <ComponentDetail
+        component={component}
+        frameworkId={frameworkId}
+        onFrameworkChange={onFrameworkChange}
+      />
     );
-    if (!selectedComponent) return;
-    document
-      .getElementById(`api-${selectedComponent}`)
-      ?.scrollIntoView({ block: "start" });
-  }, []);
+  }
 
   return (
     <div className="vf-docs-reference">
       <Card className="vf-docs-reference__section" padding="lg">
         <Heading level={3} size="md">
-          Generated API reference
+          Components
         </Heading>
         <Text tone="muted">
-          This viewer reads the generated framework API model directly. API
-          facts come from canonical component contracts; missing contracts are
-          shown as missing rather than reconstructed in the docs application.
-        </Text>
-        <Text size="sm" tone="muted">
-          Generator: <code>{apiReference.generated.generator}</code> · sources:{" "}
-          <code>{apiReference.generated.sources.join(", ")}</code>
+          Choose a component to see usage, framework examples, API,
+          accessibility, styling, and known limitations.
         </Text>
       </Card>
 
@@ -349,71 +786,13 @@ export function ComponentReferencePage({
             {area}
           </Heading>
           <div className="vf-docs-reference__grid">
-            {components
+            {[...components]
               .sort((left, right) =>
                 left.displayName.localeCompare(right.displayName),
               )
-              .map((component) => {
-                const maturity = getComponentMaturityPresentation(component);
-
-                return (
-                  <Card
-                    className="vf-docs-reference-card"
-                    id={`api-${component.id}`}
-                    key={component.id}
-                    padding="md"
-                  >
-                    <div className="vf-docs-reference-card__header">
-                      <div>
-                        <Heading level={4} size="sm">
-                          <a
-                            aria-label={`Permanent link to ${component.displayName} API reference`}
-                            href={componentDeepLink(frameworkId, component.id)}
-                          >
-                            {component.displayName}
-                          </a>
-                        </Heading>
-                        {component.nativeDeclaration?.tagName && (
-                          <code>{component.nativeDeclaration.tagName}</code>
-                        )}
-                      </div>
-                      <Badge size="sm" tone="subtle" variant={maturity.variant}>
-                        {maturity.label}
-                      </Badge>
-                    </div>
-
-                    <Text>{component.purpose}</Text>
-                    <Text size="sm" tone="muted">
-                      AI context slice:{" "}
-                      <code>{`ai-context/components/${component.id}.json`}</code>
-                    </Text>
-
-                    <Tabs
-                      aria-label={`${component.displayName} framework API`}
-                      className="vf-docs-framework-tabs"
-                      items={frameworkTabs(component.id)}
-                      onValueChange={(value) =>
-                        onFrameworkChange(value as DocsFrameworkId)
-                      }
-                      size="sm"
-                      value={frameworkId}
-                    />
-
-                    <div className="vf-docs-contract-section">
-                      <Heading level={5} size="sm">
-                        Framework-neutral contract
-                      </Heading>
-                      <ContractDetails contract={component.contract} />
-                    </div>
-
-                    {component.knownLimitations.length > 0 && (
-                      <Text tone="muted" size="sm">
-                        {component.knownLimitations.join(" ")}
-                      </Text>
-                    )}
-                  </Card>
-                );
-              })}
+              .map((component) => (
+                <ComponentIndexCard component={component} key={component.id} />
+              ))}
           </div>
         </Card>
       ))}

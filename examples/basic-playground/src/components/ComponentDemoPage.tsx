@@ -12,21 +12,18 @@ import {
   executableExamples,
   executableExampleSourceOfTruth,
 } from "../data/executableExampleContract";
+import {
+  getReferenceFrameworkComponent,
+  type ReferenceApiMember,
+} from "../data/referenceMetadata";
 import { CodeBlock } from "./CodeBlock";
 import { PageOutline, type PageOutlineItem } from "./PageOutline";
-import { PropsTable, type PropsTableRow } from "./PropsTable";
 
 export type ComponentPageSection = {
   id: string;
   label: string;
   title?: string;
   children: ReactNode;
-};
-
-export type RelatedComponentLink = {
-  id: string;
-  name: string;
-  description: string;
 };
 
 type FrameworkUsage = {
@@ -74,8 +71,6 @@ export type ComponentDemoPageProps = {
   useWhen?: string[];
   avoidWhen?: string[];
   accessibility?: string[];
-  props?: PropsTableRow[];
-  relatedComponents?: RelatedComponentLink[];
 };
 
 const consumerKnowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
@@ -115,6 +110,30 @@ function GuidanceList({ title, items }: { title: string; items?: string[] }) {
   );
 }
 
+function ApiList({ label, values }: { label: string; values: string[] }) {
+  if (values.length === 0) return null;
+  return (
+    <div className="vf-playground-guidance-list">
+      <h3>{label}</h3>
+      <ul>
+        {values.map((value) => (
+          <li key={value}>
+            <CodeText>{value}</CodeText>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function memberName(member: ReferenceApiMember) {
+  return member.public ?? member.name ?? member.canonical ?? "unknown";
+}
+
+function formatDefault(value: unknown) {
+  return value === undefined ? "—" : JSON.stringify(value);
+}
+
 export function ComponentDemoPage({
   title,
   description,
@@ -124,13 +143,14 @@ export function ComponentDemoPage({
   useWhen,
   avoidWhen,
   accessibility,
-  props,
-  relatedComponents,
 }: ComponentDemoPageProps) {
   const { frameworkId } = usePlaygroundFramework();
   const canonical = getCanonicalKnowledge(title);
   const selectedFrameworkUsage = canonical?.frameworks[frameworkId];
   const executableExample = executableExamples[frameworkId];
+  const generatedApi = canonical
+    ? getReferenceFrameworkComponent(frameworkId, canonical.id)
+    : undefined;
   const canonicalUseWhen = canonical?.guidance.useWhen
     ? [canonical.guidance.useWhen]
     : useWhen;
@@ -143,6 +163,27 @@ export function ComponentDemoPage({
         ...(canonical.contract?.accessibility ?? []),
       ]
     : accessibility;
+  const resolvedRelatedComponents = canonical
+    ? canonical.guidance.relatedComponents
+        .map((id) =>
+          canonicalKnowledge.find((component) => component.id === id),
+        )
+        .filter((component): component is CanonicalComponentKnowledge =>
+          Boolean(component),
+        )
+        .map((component) => ({
+          id: component.id,
+          name: component.displayName,
+          description: component.purpose,
+        }))
+    : [];
+  const hasGeneratedApi = Boolean(
+    generatedApi &&
+    (generatedApi.properties.length > 0 ||
+      generatedApi.events.length > 0 ||
+      generatedApi.slots.length > 0 ||
+      generatedApi.methods.length > 0),
+  );
   const outlineItems: PageOutlineItem[] = [
     { id: "overview", label: "Overview" },
     { id: "import", label: "Usage" },
@@ -151,11 +192,13 @@ export function ComponentDemoPage({
     ...(canonicalUseWhen?.length || canonicalAvoidWhen?.length
       ? [{ id: "usage-guidance", label: "Usage guidance" }]
       : []),
-    ...(props?.length ? [{ id: "api-reference", label: "API reference" }] : []),
+    ...(hasGeneratedApi
+      ? [{ id: "api-reference", label: "API reference" }]
+      : []),
     ...(canonicalAccessibility?.length
       ? [{ id: "accessibility", label: "Accessibility" }]
       : []),
-    ...(relatedComponents?.length
+    ...(resolvedRelatedComponents.length
       ? [{ id: "related-components", label: "Related components" }]
       : []),
   ];
@@ -251,10 +294,38 @@ export function ComponentDemoPage({
             </Panel>
           </section>
         )}
-        {props && props.length > 0 && (
+        {generatedApi && hasGeneratedApi && (
           <section className="vf-playground-section" id="api-reference">
-            <Panel title="API reference">
-              <PropsTable rows={props} />
+            <Panel title="Generated API reference">
+              <ApiList
+                label="Properties / inputs"
+                values={generatedApi.properties.map(
+                  (member) =>
+                    `${memberName(member)}: ${member.type ?? "unknown"}${member.required ? " (required)" : ""}; binding=${member.binding ?? "n/a"}; default=${formatDefault(member.default)}`,
+                )}
+              />
+              <ApiList
+                label="Events / outputs / emits"
+                values={generatedApi.events.map(
+                  (member) =>
+                    `${memberName(member)} (${member.mode ?? "event"})`,
+                )}
+              />
+              <ApiList
+                label="Slots / templates"
+                values={generatedApi.slots.map(
+                  (member) =>
+                    `${memberName(member)} (${member.mode ?? "slot"}; ${member.content ?? "content"})`,
+                )}
+              />
+              <ApiList
+                label="Methods"
+                values={generatedApi.methods.map(memberName)}
+              />
+              <Text size="sm" tone="muted">
+                API facts are generated from the shared VyrnForge framework
+                contract and are not maintained by this demo page.
+              </Text>
             </Panel>
           </section>
         )}
@@ -268,11 +339,11 @@ export function ComponentDemoPage({
             </Panel>
           </section>
         )}
-        {relatedComponents && relatedComponents.length > 0 && (
+        {resolvedRelatedComponents.length > 0 && (
           <section className="vf-playground-section" id="related-components">
             <Panel title="Related components">
               <ul className="vf-playground-related-links">
-                {relatedComponents.map((component) => (
+                {resolvedRelatedComponents.map((component) => (
                   <li key={component.id}>
                     <a href={`#${component.id}`}>
                       <CodeText>{component.name}</CodeText>

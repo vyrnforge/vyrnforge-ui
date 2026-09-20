@@ -12,6 +12,7 @@
     "Tabs",
     "TextInput",
     "Dialog",
+    "DescriptionList",
     "onValueChange",
     "data-consumer-ready"
   ],

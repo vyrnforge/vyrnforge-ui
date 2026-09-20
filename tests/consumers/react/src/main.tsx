@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import {
   Button,
+  DescriptionList,
   Dialog,
   Tabs,
   TextInput,
@@ -78,6 +79,13 @@ function App() {
             ?.setAttribute("data-generated-tabs-value", value);
         }}
       />
+
+      <DescriptionList aria-label="Account details">
+        <dt>Status</dt>
+        <dd>Active</dd>
+        <dt>Owner</dt>
+        <dd>Operations</dd>
+      </DescriptionList>
 
       <TextInput
         ref={ownerRef}

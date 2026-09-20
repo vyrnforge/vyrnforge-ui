@@ -119,12 +119,11 @@ export function verifyDeveloperDeliveryGate({ root = repositoryRoot } = {}) {
     "apps/docs/src/ComponentReferencePage.tsx",
     [
       "docs/generated/framework-api-reference.json?raw",
-      "Generated API reference",
-      'label: "Native HTML"',
-      'label: "React"',
-      'label: "Angular"',
-      'label: "Vue"',
-      "API context slice".replace("API", "AI"),
+      "componentReferenceRecords",
+      "referenceModel.frameworks",
+      "getReferenceRecordRoute",
+      "component-framework-api",
+      "component-accessibility-styling",
     ],
     failures,
   );

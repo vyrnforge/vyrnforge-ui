@@ -72,6 +72,46 @@
   gap: var(--vf-space-2);
 }
 
+.vf-playground-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--vf-space-4);
+}
+
+.vf-playground-reference-meta {
+  display: grid;
+  gap: var(--vf-space-2);
+}
+
+.vf-playground-reference-content > * + * {
+  margin-top: var(--vf-space-4);
+}
+
+.vf-playground-embed {
+  min-height: 100vh;
+  padding: var(--vf-space-4);
+  background: var(--vf-surface);
+}
+
+.vf-playground-embed .vf-playground-reference-layout {
+  display: block;
+}
+
+.vf-playground-embed .vf-playground-page-outline,
+.vf-playground-embed #overview,
+.vf-playground-embed #import,
+.vf-playground-embed #verified-example,
+.vf-playground-embed #usage-guidance,
+.vf-playground-embed #api-reference,
+.vf-playground-embed #accessibility,
+.vf-playground-embed #related-components {
+  display: none;
+}
+
+.vf-playground-embed .vf-playground-reference-content > * + * {
+  margin-top: var(--vf-space-3);
+}
+
 @media (max-width: 1180px) {
   .vf-playground-top-controls .vf-segmented-control {
     display: none;
@@ -82,5 +122,9 @@
   .vf-playground-top-controls .vf-select:first-child,
   .vf-playground-top-links {
     display: none;
+  }
+
+  .vf-playground-embed {
+    padding: var(--vf-space-3);
   }
 }

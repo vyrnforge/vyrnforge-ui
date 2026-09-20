@@ -1635,6 +1635,46 @@ export class VfDateTimeInput implements OnDestroy {
   }
 }
 
+export type VfDescriptionListElement = VyrnForgeElementForTagName<"vf-description-list">;
+
+export interface VfDescriptionListInputs {
+
+}
+
+export interface VfDescriptionListOutputs {
+
+}
+
+export const VfDescriptionListSlotNames = Object.freeze(["default"] as const);
+export type VfDescriptionListSlotName = (typeof VfDescriptionListSlotNames)[number];
+
+export function composeVfDescriptionListSlot(
+  element: HTMLElement,
+  slot: VfDescriptionListSlotName,
+): HTMLElement {
+  if (slot === "default") element.removeAttribute("slot");
+  else element.setAttribute("slot", slot);
+  return element;
+}
+
+@Directive({
+  selector: "vf-description-list[vfGeneratedDescriptionList]",
+  standalone: true,
+  exportAs: "vfDescriptionList",
+})
+export class VfDescriptionList implements OnDestroy {
+  get nativeElement(): VfDescriptionListElement {
+    return this.element.nativeElement;
+  }
+
+  constructor(private readonly element: ElementRef<VfDescriptionListElement>) {
+    this.element.nativeElement.dataset["vfGeneratedDescriptionList"] = "angular";
+  }
+
+  ngOnDestroy(): void {
+  }
+}
+
 export type VfDrawerElement = VyrnForgeElementForTagName<"vf-drawer">;
 
 export interface VfDrawerInputs {
@@ -6260,6 +6300,7 @@ export const vyrnForgeAngularGeneratedDirectives = Object.freeze([
   VfConfirmDialog,
   VfDateInput,
   VfDateTimeInput,
+  VfDescriptionList,
   VfDialog,
   VfDrawer,
   VfDropdown,
@@ -6322,6 +6363,7 @@ export const vyrnForgeAngularCatalog = Object.freeze([
   Object.freeze({ id: "confirm-dialog", tag: "vf-confirm-dialog", selector: "vf-confirm-dialog[vfGeneratedConfirmDialog]", directive: VfConfirmDialog, slots: VfConfirmDialogSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "date-input", tag: "vf-date-input", selector: "vf-date-input[vfGeneratedDateInput]", directive: VfDateInput, slots: VfDateInputSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
   Object.freeze({ id: "datetime-input", tag: "vf-datetime-input", selector: "vf-datetime-input[vfGeneratedDateTimeInput]", directive: VfDateTimeInput, slots: VfDateTimeInputSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
+  Object.freeze({ id: "description-list", tag: "vf-description-list", selector: "vf-description-list[vfGeneratedDescriptionList]", directive: VfDescriptionList, slots: VfDescriptionListSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "dialog", tag: "vf-dialog", selector: "vf-dialog[vfGeneratedDialog]", directive: VfDialog, slots: VfDialogSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "drawer", tag: "vf-drawer", selector: "vf-drawer[vfGeneratedDrawer]", directive: VfDrawer, slots: VfDrawerSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "dropdown", tag: "vf-popover", selector: "vf-popover[vfGeneratedDropdown]", directive: VfDropdown, slots: VfDropdownSlotNames, hostBoundInputs: Object.freeze([]) }),
