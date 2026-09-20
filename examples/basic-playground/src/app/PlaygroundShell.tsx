@@ -11,6 +11,7 @@ import type { PlaygroundRoute } from "./routes";
 import { getDocsHref, playgroundLinks } from "./deploymentLinks";
 import {
   playgroundFrameworks,
+  referenceModel,
   type PlaygroundFrameworkId,
   type PlaygroundVersion,
 } from "./playgroundContext";
@@ -20,6 +21,7 @@ export type PlaygroundShellProps = {
   activeRoute: PlaygroundRoute;
   activeRouteId: string;
   density: string;
+  embedded?: boolean;
   frameworkId: PlaygroundFrameworkId;
   routes: PlaygroundRoute[];
   versionId: string;
@@ -38,6 +40,7 @@ export function PlaygroundShell({
   activeRouteId,
   children,
   density,
+  embedded = false,
   frameworkId,
   theme,
   versionId,
@@ -54,6 +57,18 @@ export function PlaygroundShell({
   );
   const selectedVersion = versions.find((version) => version.id === versionId);
 
+  if (embedded) {
+    return (
+      <div
+        className="vf-playground-embed"
+        data-density={density}
+        data-theme={theme}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
     <AppShell
       fullHeight
@@ -65,15 +80,15 @@ export function PlaygroundShell({
                 V
               </span>
               <span className="vf-playground-brand__copy">
-                <strong>VyrnForge</strong>
-                <span>UI Reference</span>
+                <strong>{referenceModel.product.label}</strong>
+                <span>Executable examples</span>
               </span>
             </div>
           }
           actions={
             <div className="vf-playground-top-controls">
               <Select
-                aria-label="VyrnForge reference version"
+                aria-label="VyrnForge Reference version"
                 onChange={(event) => onVersionChange(event.currentTarget.value)}
                 options={versions.map((version) => ({
                   label: version.label,
@@ -83,14 +98,14 @@ export function PlaygroundShell({
                 value={versionId}
               />
               <Select
-                aria-label="Framework"
+                aria-label="Framework / language"
                 onChange={(event) =>
                   onFrameworkChange(
                     event.currentTarget.value as PlaygroundFrameworkId,
                   )
                 }
                 options={playgroundFrameworks.map((framework) => ({
-                  label: framework.label,
+                  label: `${framework.label} · ${framework.language}`,
                   value: framework.id,
                 }))}
                 size="sm"
@@ -101,7 +116,7 @@ export function PlaygroundShell({
                   className="vf-playground-top-link"
                   href={getDocsHref(frameworkId)}
                 >
-                  Docs
+                  Reference
                 </a>
                 <a
                   className="vf-playground-top-link"
@@ -163,6 +178,9 @@ export function PlaygroundShell({
             <Badge tone="subtle">
               {selectedFramework?.label ?? frameworkId}
             </Badge>
+            {selectedFramework ? (
+              <Badge tone="subtle">{selectedFramework.language}</Badge>
+            ) : null}
             <Badge tone="subtle">{selectedVersion?.label ?? versionId}</Badge>
           </div>
         }

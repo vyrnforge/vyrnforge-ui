@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,6 +9,19 @@ const repositoryRoot = path.resolve(
 
 const frameworkIds = ["native-html", "react", "angular", "vue"];
 const apiSurfaceIds = ["native", "react", "angular", "vue"];
+const retiredReferenceFiles = [
+  "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
+  "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
+  "examples/basic-playground/src/pages/reference/FormComponentPages.tsx",
+  "examples/basic-playground/src/pages/reference/ControlComponentPages.tsx",
+  "examples/basic-playground/src/pages/reference/OverlayComponentPages.tsx",
+  "examples/basic-playground/src/pages/reference/AutocompletePage.tsx",
+  "examples/basic-playground/src/pages/reference/TransferListPage.tsx",
+  "examples/basic-playground/src/pages/reference/ToastPage.tsx",
+  "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
+  "examples/basic-playground/src/pages/reference/MetadataDetailPages.tsx",
+  "examples/basic-playground/src/components/PropsTable.tsx",
+];
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -32,16 +45,12 @@ export function verifyPlaygroundReferenceCoverage({
   root = repositoryRoot,
 } = {}) {
   const failures = [];
+  const model = json(root, "docs/generated/reference-model.json");
   const knowledge = json(root, "docs/generated/consumer-knowledge.json");
   const contracts = json(root, "docs/metadata/component-contracts.json");
   const frameworkApi = json(
     root,
     "docs/generated/framework-api-reference.json",
-  );
-  const nativeCore = json(root, "docs/metadata/native-core-elements.json");
-  const nativeAdvanced = json(
-    root,
-    "docs/metadata/native-advanced-elements.json",
   );
 
   const components = knowledge.components ?? [];
@@ -86,106 +95,93 @@ export function verifyPlaygroundReferenceCoverage({
     }
   }
 
-  const phaseTags = [
-    ...(nativeCore.registration?.tags ?? []),
-    ...(nativeAdvanced.registration?.addedTags ?? []),
-  ];
-  for (const tag of duplicates(phaseTags)) {
-    failures.push(`native element phase metadata has duplicate tag: ${tag}`);
+  const componentDomain = model.domains?.find(
+    (domain) => domain.id === "components",
+  );
+  if (componentDomain?.routeTemplate !== "/components/{id}") {
+    failures.push("generated component route template is not /components/{id}");
   }
 
-  const canonicalNativeTags = [
-    ...new Set(
-      (frameworkApi.surfaces?.native?.components ?? [])
-        .filter((component) => component.status === "current" && component.tag)
-        .map((component) => component.tag),
-    ),
-  ];
-  const referenceElementTags = [
-    ...new Set([...phaseTags, ...canonicalNativeTags]),
-  ];
-
-  const componentPaths = componentIds.map(
-    (id) => `/reference/components/${id}`,
-  );
-  const elementPaths = referenceElementTags.map(
-    (tag) => `/reference/elements/${tag}`,
-  );
-  for (const referencePath of duplicates([
-    ...componentPaths,
-    ...elementPaths,
-  ])) {
-    failures.push(`generated reference path is not unique: ${referencePath}`);
+  const routeSource = read(root, "examples/basic-playground/src/app/routes.ts");
+  for (const marker of [
+    "referenceComponents",
+    "getReferenceRecordRoute",
+    'getReferenceRecordRoute(referenceModel, "components", id)',
+    "createGeneratedComponentPage",
+    "componentDemoIds.map",
+  ]) {
+    if (!routeSource.includes(marker)) {
+      failures.push(
+        `generated component route composition is missing ${marker}`,
+      );
+    }
+  }
+  for (const marker of [
+    "PriorityComponentPages",
+    "FormComponentPages",
+    "ControlComponentPages",
+    "OverlayComponentPages",
+  ]) {
+    if (routeSource.includes(marker)) {
+      failures.push(
+        `playground routes still import retired authority ${marker}`,
+      );
+    }
   }
 
-  const metadataSource = read(
+  const referenceMetadataSource = read(
     root,
     "examples/basic-playground/src/data/referenceMetadata.ts",
   );
-  for (const marker of [
-    "phaseElementEntries",
-    "phaseElementTags",
-    "canonicalNativeElementEntries",
-    "...canonicalNativeElementEntries",
-  ]) {
-    if (!metadataSource.includes(marker)) {
-      failures.push(`reference metadata projection is missing ${marker}`);
-    }
+  if (!referenceMetadataSource.includes("...canonicalNativeElementEntries,")) {
+    failures.push(
+      "reference metadata projection is missing canonical native API tags",
+    );
   }
 
-  const routeSource = read(
+  const demoSource = read(
     root,
-    "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
   );
   for (const marker of [
-    "referenceComponents.map",
-    "referenceElements.map",
-    "referenceDetailRoutes",
-    "`/reference/components/${component.id}`",
-    "`/reference/elements/${element.tag}`",
+    "getReferenceFrameworkComponent",
+    "Generated API reference",
+    "API facts are generated",
+    "canonical.guidance.relatedComponents",
   ]) {
-    if (!routeSource.includes(marker)) {
-      failures.push(`generated reference routes are missing ${marker}`);
+    if (!demoSource.includes(marker)) {
+      failures.push(
+        `component reader is missing generated authority marker ${marker}`,
+      );
     }
   }
-
-  const catalogSource = read(
-    root,
-    "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
-  );
-  for (const marker of [
-    "`#/reference/components/${component.id}`",
-    "`#/reference/elements/${element.tag}`",
-  ]) {
-    if (!catalogSource.includes(marker)) {
-      failures.push(`reference catalog links are missing ${marker}`);
-    }
+  if (demoSource.includes("props?: PropsTableRow")) {
+    failures.push(
+      "component reader still accepts manual props-table authority",
+    );
   }
 
   const appSource = read(root, "examples/basic-playground/src/app/App.tsx");
   for (const marker of [
-    "const navigationRoutes = [",
-    "const routes = [...navigationRoutes, ...referenceDetailRoutes]",
+    "executableExamplesCatalogRoute",
+    "...executableExampleDetailRoutes",
     "routes={navigationRoutes}",
   ]) {
     if (!appSource.includes(marker)) {
       failures.push(`playground route separation is missing ${marker}`);
     }
   }
+  for (const marker of ["referenceCatalogRoutes", "referenceDetailRoutes"]) {
+    if (appSource.includes(marker)) {
+      failures.push(`playground app still consumes retired ${marker}`);
+    }
+  }
 
-  const detailSource = read(
-    root,
-    "examples/basic-playground/src/pages/reference/MetadataDetailPages.tsx",
-  );
-  for (const marker of [
-    "getReferenceFrameworkComponent",
-    "usePlaygroundFramework",
-    "findDemoRoute",
-    "createComponentReferenceDetailPage",
-    "createElementReferenceDetailPage",
-  ]) {
-    if (!detailSource.includes(marker)) {
-      failures.push(`reference detail renderer is missing ${marker}`);
+  for (const relativePath of retiredReferenceFiles) {
+    if (existsSync(path.join(root, relativePath))) {
+      failures.push(
+        `retired manual reference file still exists: ${relativePath}`,
+      );
     }
   }
 

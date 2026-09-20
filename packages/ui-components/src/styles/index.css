@@ -32,6 +32,7 @@
 @import "./feedback/toast.css";
 @import "./feedback/skeleton.css";
 @import "./layout/card.css";
+@import "./layout/description-list.css";
 @import "./layout/panel.css";
 @import "./layout/stack.css";
 @import "./layout/inline.css";

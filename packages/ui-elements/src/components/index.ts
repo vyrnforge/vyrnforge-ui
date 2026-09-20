@@ -37,6 +37,7 @@ export {
   type VyrnForgeLayoutJustify,
   type VyrnForgeTextTone,
 } from "./display";
+export { VyrnForgeDescriptionListElement } from "./description-list";
 export {
   VyrnForgeFieldElement,
   VyrnForgeValidationMessageElement,

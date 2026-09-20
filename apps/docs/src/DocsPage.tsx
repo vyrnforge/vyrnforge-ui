@@ -1,19 +1,20 @@
-import { Badge, InlineMessage, PageHeader } from "@vyrnforge/ui-components";
+import { PageHeader } from "@vyrnforge/ui-components";
+import type { ReferenceRecordSelection } from "./App";
 import type { DocsFrameworkId } from "./docsContext";
-import type { DocsRoute } from "./docsRegistry";
-import { AiContextPage } from "./AiContextPage";
-import { AiContextIndexPage } from "./AiContextIndexPage";
 import { ComponentReferencePage } from "./ComponentReferencePage";
+import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { MarkdownView } from "./MarkdownView";
-import { MetadataPage } from "./MetadataPage";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
+import { ReferencePreview } from "./ReferencePreview";
+import type { DocsRoute } from "./referenceRoutes";
 
 type DocsPageProps = {
   route: DocsRoute;
   frameworkId: DocsFrameworkId;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
+  referenceRecord: ReferenceRecordSelection | null;
 };
 
 export function DocsPage({
@@ -21,6 +22,7 @@ export function DocsPage({
   frameworkId,
   onFrameworkChange,
   onRouteChange,
+  referenceRecord,
 }: DocsPageProps) {
   if (route.id === "overview") {
     return (
@@ -34,52 +36,36 @@ export function DocsPage({
     );
   }
 
+  const componentId =
+    referenceRecord?.domain === "components" ? referenceRecord.id : null;
+
   return (
     <main className="vf-docs-page">
       <div className="vf-docs-page__intro">
-        <PageHeader
-          actions={
-            <div className="vf-docs-page__badges">
-              {route.canonical && (
-                <Badge variant="success" tone="subtle">
-                  Canonical
-                </Badge>
-              )}
-              {route.tags?.map((tag) => (
-                <Badge key={tag} size="sm" tone="subtle">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          }
-          description={route.description}
-          eyebrow={route.sourcePath}
-          title={route.title}
-        />
-        {route.aiPurpose && (
-          <InlineMessage
-            className="vf-docs-ai-purpose"
-            title="AI purpose"
-            variant="info"
-          >
-            {route.aiPurpose}
-          </InlineMessage>
-        )}
+        <PageHeader description={route.description} title={route.title} />
       </div>
 
-      {route.kind === "ai-context-index" ? (
-        <AiContextIndexPage />
+      {route.kind === "component-reference" && componentId ? (
+        <ReferencePreview componentId={componentId} frameworkId={frameworkId} />
+      ) : null}
+
+      {route.id === "token-reference" || route.id === "pattern-reference" ? (
+        <DiscoveryReferencePage
+          referenceRecord={referenceRecord}
+          routeId={route.id}
+        />
       ) : route.kind === "component-reference" ? (
         <ComponentReferencePage
+          componentId={componentId}
           frameworkId={frameworkId}
           onFrameworkChange={onFrameworkChange}
         />
       ) : route.kind === "package-reference" ? (
-        <PackageReferencePage />
-      ) : route.kind === "metadata" ? (
-        <MetadataPage route={route} />
-      ) : route.kind === "ai" || route.kind === "json" ? (
-        <AiContextPage route={route} />
+        <PackageReferencePage
+          packageId={
+            referenceRecord?.domain === "packages" ? referenceRecord.id : null
+          }
+        />
       ) : (
         <MarkdownView markdown={route.content ?? ""} />
       )}
