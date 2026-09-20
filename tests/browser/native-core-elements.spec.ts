@@ -10,6 +10,7 @@ const nativeCoreTags = [
   "vf-text",
   "vf-heading",
   "vf-caption",
+  "vf-description-list",
   "vf-label",
   "vf-code-text",
   "vf-badge",
@@ -62,6 +63,16 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
       nativeCoreTags,
     );
     expect(registered).toEqual(nativeCoreTags.map(() => true));
+  });
+
+  test("preserves native description-list semantics", async ({ page }) => {
+    const list = page.locator(
+      'vf-description-list[data-vf-fixture-region="native-core-description-list"]',
+    );
+    await expect(list.locator("> dl")).toHaveCount(1);
+    await expect(list.locator("> dl > dt")).toHaveText("Status");
+    await expect(list.locator("> dl > dd")).toHaveText("Active");
+    await expect(list).toHaveAttribute("data-vf-element", "");
   });
 
   test("renders shared display styles and dispatches canonical actions", async ({

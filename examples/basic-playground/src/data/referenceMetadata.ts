@@ -52,8 +52,9 @@ export type ReferenceComponent = {
 };
 
 export type ReferenceApiMember = {
-  canonical: string;
-  public: string;
+  canonical?: string;
+  public?: string;
+  name?: string;
   type?: string;
   required?: boolean;
   default?: unknown;
