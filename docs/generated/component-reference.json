@@ -9,7 +9,7 @@
     "packages/ui-elements/custom-elements.json"
   ],
   "scope": {
-    "componentCount": 67,
+    "componentCount": 68,
     "frameworkTabs": [
       "react",
       "native-html",
@@ -1074,6 +1074,99 @@
         "methods": [],
         "accessibility": [
           "layout-only semantics; child accessibility remains intact"
+        ],
+        "formAssociation": "none"
+      }
+    },
+    {
+      "id": "description-list",
+      "displayName": "DescriptionList",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
+      "guidance": {
+        "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
+        "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
+        "aiUsageNotes": "Use semantic dt/dd children on React DescriptionList or the equivalent default content projection/slot on Angular and Vue. Preserve the shared description-list relationship and do not invent a stateful key/value API.",
+        "relatedComponents": [
+          "KeyValueList",
+          "PropertyTable"
+        ]
+      },
+      "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
+      "knownLimitations": [
+        "Content must preserve semantic dt/dd relationships; DescriptionList does not provide a stateful key/value data model."
+      ],
+      "styling": {
+        "classes": [
+          "vf-description-list"
+        ],
+        "variables": []
+      },
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": null,
+      "source": {
+        "componentMetadata": "docs/metadata/components.json",
+        "contractMetadata": "docs/metadata/component-contracts.json",
+        "customElementsManifest": "packages/ui-elements/custom-elements.json"
+      },
+      "nativeDeclaration": {
+        "name": "VyrnForgeDescriptionListElement",
+        "tagName": "vf-description-list",
+        "description": "DescriptionList browser-native renderer. Read-only term-and-description facts with semantic description-list relationships."
+      },
+      "frameworks": {
+        "react": {
+          "label": "React",
+          "status": "current",
+          "package": "@vyrnforge/ui-components",
+          "setup": "import { DescriptionList } from '@vyrnforge/ui-components';",
+          "example": "<DescriptionList><dt>Status</dt><dd>Active</dd></DescriptionList>",
+          "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
+        },
+        "native-html": {
+          "label": "Native HTML",
+          "status": "current",
+          "package": "@vyrnforge/ui-elements",
+          "setup": "import \"@vyrnforge/ui-elements/register\";",
+          "example": "<vf-description-list></vf-description-list>",
+          "note": "Native HTML consumes @vyrnforge/ui-elements directly through canonical vf-* Custom Elements and events."
+        },
+        "angular": {
+          "label": "Angular",
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+          "example": "<vf-description-list></vf-description-list>",
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
+        },
+        "vue": {
+          "label": "Vue",
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-vue",
+          "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+          "example": "<VfDescriptionList></VfDescriptionList>",
+          "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
+        }
+      },
+      "contract": {
+        "properties": [],
+        "attributes": [],
+        "events": [],
+        "slots": [
+          {
+            "name": "default",
+            "required": true,
+            "multiple": true,
+            "content": "element"
+          }
+        ],
+        "methods": [],
+        "accessibility": [
+          "preserves native description-list semantics for term and description relationships",
+          "projected content must retain semantic term and description structure rather than generic grouping roles"
         ],
         "formAssociation": "none"
       }
