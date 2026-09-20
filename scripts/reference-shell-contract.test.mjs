@@ -58,14 +58,13 @@ test("public Docs navigation is curated while Playground may use generated disco
     "Components",
     "Foundations",
     "Guides",
-    "Reference",
+    "API",
   ]) {
     assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
   }
   assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
   assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
   assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
-  assert.doesNotMatch(docsRoutes, /accessibility-reference/u);
 
   assert.match(playgroundNav, /getReferenceNavigation/u);
   assert.match(playgroundNav, /SearchInput/u);
@@ -115,7 +114,6 @@ test("component Reference exposes structured, linkable member API navigation", (
     "component-overview",
     "component-usage",
     "component-framework-api",
-    "component-contract",
     "component-accessibility-styling",
     "api-properties",
     "api-events",
@@ -125,6 +123,10 @@ test("component Reference exposes structured, linkable member API navigation", (
     assert.match(componentReference, new RegExp(`"${sectionId}"`, "u"));
   }
 
+  assert.doesNotMatch(componentReference, /AI context slice/u);
+  assert.doesNotMatch(componentReference, /AI usage notes/u);
+  assert.doesNotMatch(componentReference, /Framework-neutral contract/u);
+  assert.doesNotMatch(componentReference, /Model, form, and ref contracts/u);
   assert.match(componentReference, /memberAnchor\("property"/u);
   assert.match(componentReference, /memberAnchor\("event"/u);
   assert.match(componentReference, /memberAnchor\("slot"/u);
@@ -149,8 +151,9 @@ test("component preview pairs executable behavior with generated framework consu
   assert.match(preview, /FrameworkCode/u);
   assert.match(preview, /usage\.setup/u);
   assert.match(preview, /usage\.example/u);
-  assert.match(preview, /Selected framework/u);
-  assert.match(preview, /generated selected-framework/u);
+  assert.match(preview, /Example code/u);
+  assert.doesNotMatch(preview, /Executable reference/u);
+  assert.doesNotMatch(preview, /generated selected-framework/u);
   assert.match(referenceStyles, /\.vf-docs-preview__body/u);
   assert.match(referenceStyles, /\.vf-docs-preview__code-panel/u);
   assert.match(referenceStyles, /\.vf-docs-preview__code/u);
