@@ -128,10 +128,11 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.doesNotMatch(componentReference, /AI usage notes/u);
   assert.doesNotMatch(componentReference, /Framework-neutral contract/u);
   assert.doesNotMatch(componentReference, /Model, form, and ref contracts/u);
-  assert.match(componentReference, /memberAnchor\("property"/u);
-  assert.match(componentReference, /memberAnchor\("event"/u);
-  assert.match(componentReference, /memberAnchor\("slot"/u);
-  assert.match(componentReference, /memberAnchor\("method"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\("property"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\("event"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\("slot"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\("method"/u);
+  assert.match(componentReference, /componentReferenceTargetHref/u);
   assert.match(componentReference, /<table className="vf-docs-api-table">/u);
   assert.match(componentReference, /aria-label="On this component page"/u);
   assert.match(docsStyles, /\.vf-docs-reference-outline/u);
@@ -166,7 +167,6 @@ test("component preview pairs executable behavior with generated framework consu
   assert.doesNotMatch(referenceStyles, /\.vf-docs-discovery-row__heading/u);
 });
 
-
 test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
   const app = read("apps/docs/src/App.tsx");
   const docsNav = read("apps/docs/src/DocsNav.tsx");
@@ -184,10 +184,16 @@ test("Docs filter discovers selected-framework API members without restoring a s
 
   assert.match(memberTarget, /componentApiMemberAnchor/u);
   assert.match(memberTarget, /componentReferenceTargetHref/u);
-  assert.match(memberTarget, /referenceModel\.frameworkContext\.queryParameter/u);
+  assert.match(
+    memberTarget,
+    /referenceModel\.frameworkContext\.queryParameter/u,
+  );
   assert.match(memberTarget, /getReferenceRecordRoute/u);
 
-  assert.match(app, /new URLSearchParams\(window\.location\.search\)\.get\("member"\)/u);
+  assert.match(
+    app,
+    /new URLSearchParams\(window\.location\.search\)\.get\("member"\)/u,
+  );
   assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
   assert.match(app, /query\.delete\("member"\)/u);
 
