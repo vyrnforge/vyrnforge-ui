@@ -64,7 +64,5 @@
     "public @vyrnforge/ui-vue package consumption",
     "generated DescriptionList default-slot composition with native dl/dt/dd semantics"
   ],
-  "deferred": [
-    "data-grid multi-framework work"
-  ]
+  "deferred": ["data-grid multi-framework work"]
 }
