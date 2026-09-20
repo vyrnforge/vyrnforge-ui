@@ -441,6 +441,146 @@
   },
   "componentContracts": [
     {
+      "id": "description-list",
+      "category": "data-display",
+      "properties": [],
+      "attributes": [],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "required": true,
+          "multiple": true,
+          "content": "element"
+        }
+      ],
+      "methods": [],
+      "form": {
+        "association": "none",
+        "disabledProperty": null,
+        "validity": {
+          "supported": false,
+          "methods": []
+        },
+        "reset": {
+          "supported": false
+        }
+      },
+      "model": {
+        "kind": "none",
+        "controlled": false,
+        "stateProperty": null,
+        "defaultProperty": null,
+        "changeEvent": null,
+        "disabledProperty": null,
+        "touchedSemantics": "none"
+      },
+      "ref": {
+        "exposure": "element",
+        "methods": [],
+        "elementType": "VyrnForgeDescriptionListElement"
+      },
+      "accessibility": [
+        "preserves native description-list semantics for term and description relationships",
+        "projected content must retain semantic term and description structure rather than generic grouping roles"
+      ],
+      "frameworkMappings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "current",
+          "tag": "vf-description-list",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "element",
+            "type": "VyrnForgeDescriptionListElement"
+          },
+          "setup": ["register custom element"]
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "status": "target",
+          "export": "DescriptionList",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "children",
+              "mode": "children"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "forwarded-ref",
+            "type": "DescriptionListRef"
+          }
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "status": "target",
+          "export": "VfDescriptionList",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "content-projection"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "view-child",
+            "type": "VfDescriptionList"
+          }
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "status": "target",
+          "export": "VfDescriptionList",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "template-ref",
+            "type": "VfDescriptionListExposed"
+          }
+        }
+      }
+    },
+    {
       "id": "card",
       "category": "composite",
       "properties": [

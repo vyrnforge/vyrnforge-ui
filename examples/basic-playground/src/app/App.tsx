@@ -1,50 +1,83 @@
 import { useEffect, useMemo, useState } from "react";
+import componentMetadataRaw from "../../../../docs/metadata/components.json?raw";
+import {
+  executableExampleDetailRoutes,
+  executableExamplesCatalogRoute,
+  getExecutableExampleRouteForFramework,
+  type ExecutableExampleRoute,
+} from "./executableExampleRoutes";
 import { PlaygroundFrameworkProvider } from "./PlaygroundFrameworkContext";
 import { PlaygroundShell } from "./PlaygroundShell";
 import {
   defaultPlaygroundFramework,
   defaultPlaygroundVersion,
+  getPlaygroundFramework,
   loadPlaygroundVersions,
   playgroundVersionHref,
+  referenceModel,
   type PlaygroundFrameworkId,
   type PlaygroundVersion,
 } from "./playgroundContext";
-import {
-  referenceCatalogRoutes,
-  referenceDetailRoutes,
-} from "./referenceCatalogRoutes";
 import { routes as baseRoutes } from "./routes";
 
-const navigationRoutes = [
+const navigationRoutes: ExecutableExampleRoute[] = [
   baseRoutes[0],
-  ...referenceCatalogRoutes,
+  executableExamplesCatalogRoute,
   ...baseRoutes.slice(1),
 ];
-const routes = [...navigationRoutes, ...referenceDetailRoutes];
+const routes: ExecutableExampleRoute[] = [
+  ...navigationRoutes,
+  ...executableExampleDetailRoutes,
+];
+
+type ComponentRouteMetadata = {
+  components: Array<{ id: string; playgroundPath: string }>;
+};
 
 function normalizeHashRoute(hash: string) {
   return hash.replace(/^#\/?/, "").replace(/^\/+/, "");
 }
 
+const componentRouteAliases = new Map(
+  (JSON.parse(componentMetadataRaw) as ComponentRouteMetadata).components
+    .filter(
+      (component) =>
+        component.playgroundPath &&
+        !["pending", "requires-verification", "not-applicable"].includes(
+          component.playgroundPath,
+        ),
+    )
+    .map((component) => [
+      normalizeHashRoute(component.playgroundPath),
+      component.id,
+    ]),
+);
+
 function getRouteFromHash() {
   const hashRoute = normalizeHashRoute(window.location.hash);
-
-  return routes.find((route) => {
+  const directRoute = routes.find((route) => {
     const path = route.path?.replace(/^\/+/, "");
     return route.id === hashRoute || path === hashRoute;
   });
+  if (directRoute) return directRoute;
+
+  const aliasRouteId = componentRouteAliases.get(hashRoute);
+  return aliasRouteId
+    ? routes.find((route) => route.id === aliasRouteId)
+    : undefined;
 }
 
 function getFrameworkFromLocation(): PlaygroundFrameworkId {
   const framework = new URLSearchParams(window.location.search).get(
-    "framework",
+    referenceModel.frameworkContext.queryParameter,
   );
-  return framework === "native-html" ||
-    framework === "react" ||
-    framework === "angular" ||
-    framework === "vue"
-    ? framework
-    : defaultPlaygroundFramework;
+  return getPlaygroundFramework(framework)?.id ?? defaultPlaygroundFramework;
+}
+
+function isReferenceEmbed() {
+  return (
+    new URLSearchParams(window.location.search).get("embed") === "reference"
+  );
 }
 
 export default function App() {
@@ -59,6 +92,7 @@ export default function App() {
   const [versions, setVersions] = useState<PlaygroundVersion[]>([
     defaultPlaygroundVersion,
   ]);
+  const embedded = isReferenceEmbed();
   const versionId = defaultPlaygroundVersion.id;
   const activeRoute = useMemo(
     () => routes.find((route) => route.id === activeRouteId) ?? routes[0],
@@ -82,6 +116,21 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
+  useEffect(() => {
+    if (
+      !activeRoute.exampleFrameworkId ||
+      activeRoute.exampleFrameworkId === frameworkId
+    ) {
+      return;
+    }
+
+    const matchingRoute = getExecutableExampleRouteForFramework(frameworkId);
+    if (matchingRoute?.path) {
+      window.location.hash = matchingRoute.path;
+      setActiveRouteId(matchingRoute.id);
+    }
+  }, [activeRoute.exampleFrameworkId, frameworkId]);
+
   const changeRoute = (routeId: string) => {
     if (routeId === activeRouteId) {
       return;
@@ -94,13 +143,22 @@ export default function App() {
 
   const changeFramework = (nextFrameworkId: PlaygroundFrameworkId) => {
     const query = new URLSearchParams(window.location.search);
-    query.set("framework", nextFrameworkId);
+    query.set(referenceModel.frameworkContext.queryParameter, nextFrameworkId);
     window.history.replaceState(
       null,
       "",
       `${window.location.pathname}?${query.toString()}${window.location.hash}`,
     );
     setFrameworkId(nextFrameworkId);
+
+    if (activeRoute.exampleFrameworkId) {
+      const matchingRoute =
+        getExecutableExampleRouteForFramework(nextFrameworkId);
+      if (matchingRoute?.path) {
+        window.location.hash = matchingRoute.path;
+        setActiveRouteId(matchingRoute.id);
+      }
+    }
   };
 
   const changeVersion = (nextVersionId: string) => {
@@ -123,6 +181,7 @@ export default function App() {
         activeRoute={activeRoute}
         activeRouteId={activeRoute.id}
         density={density}
+        embedded={embedded}
         frameworkId={frameworkId}
         routes={navigationRoutes}
         versionId={versionId}
