@@ -128,10 +128,10 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.doesNotMatch(componentReference, /AI usage notes/u);
   assert.doesNotMatch(componentReference, /Framework-neutral contract/u);
   assert.doesNotMatch(componentReference, /Model, form, and ref contracts/u);
-  assert.match(componentReference, /componentApiMemberAnchor\("property"/u);
-  assert.match(componentReference, /componentApiMemberAnchor\("event"/u);
-  assert.match(componentReference, /componentApiMemberAnchor\("slot"/u);
-  assert.match(componentReference, /componentApiMemberAnchor\("method"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"property"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"event"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"slot"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"method"/u);
   assert.match(componentReference, /componentReferenceTargetHref/u);
   assert.match(componentReference, /<table className="vf-docs-api-table">/u);
   assert.match(componentReference, /aria-label="On this component page"/u);
