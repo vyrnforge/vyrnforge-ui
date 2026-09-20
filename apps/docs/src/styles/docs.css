@@ -814,14 +814,6 @@ body {
   text-decoration: underline;
 }
 
-.vf-docs-api-advanced {
-  margin-top: var(--vf-space-5, 20px);
-}
-
-.vf-docs-api-advanced summary {
-  cursor: pointer;
-  font-weight: 700;
-}
 
 .vf-docs-framework-tabs {
   margin-top: 14px;
