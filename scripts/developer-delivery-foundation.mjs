@@ -64,6 +64,7 @@ export function verifyDeveloperDeliveryFoundation({
     "apps/docs/src/ComponentReferencePage.tsx",
     "examples/basic-playground/package.json",
     "examples/basic-playground/src/app/playgroundContext.ts",
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
     "examples/basic-playground/src/data/referenceMetadata.ts",
   ];
   for (const file of requiredFiles) requireFile(root, file, failures);
@@ -123,6 +124,12 @@ export function verifyDeveloperDeliveryFoundation({
     failures.push(
       "pages-site artifact must be immutable and explicitly deployable",
     );
+  }
+  const readerApiAuthorityGap = (manifest.gaps ?? []).find(
+    (gap) => gap.id === "reader-api-authority",
+  );
+  if (readerApiAuthorityGap?.status !== "closed") {
+    failures.push("reader API authority gap must be recorded as closed");
   }
   const previewGap = (manifest.gaps ?? []).find(
     (gap) => gap.id === "pr-reference-preview",
@@ -329,6 +336,29 @@ export function verifyDeveloperDeliveryFoundation({
     ["schemaVersion !== 2", "playgroundPath"],
     failures,
   );
+
+  const componentDemoPage = read(
+    root,
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+  );
+  requireMarkers(
+    componentDemoPage,
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+    [
+      "getReferenceFrameworkComponent",
+      "Generated API reference",
+      "API facts are generated from the shared VyrnForge framework contract",
+    ],
+    failures,
+  );
+  if (
+    componentDemoPage.includes("PropsTable") ||
+    componentDemoPage.includes("props?: PropsTableRow")
+  ) {
+    failures.push(
+      "Playground component readers must not restore hand-maintained props-table API authority",
+    );
+  }
 
   const referenceMetadata = read(
     root,
