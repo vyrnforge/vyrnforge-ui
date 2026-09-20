@@ -14458,7 +14458,7 @@
           "id": "description-list",
           "category": "data-display",
           "package": "@vyrnforge/ui-components",
-          "status": "target",
+          "status": "migration",
           "export": "DescriptionList",
           "tag": null,
           "properties": [],
