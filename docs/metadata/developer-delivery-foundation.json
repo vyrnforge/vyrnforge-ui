@@ -105,9 +105,8 @@
   "gaps": [
     {
       "id": "reader-api-authority",
-      "status": "deferred",
-      "gateBlocking": false,
-      "description": "The generated framework API reference is the canonical reader-facing API authority. Some current Playground demo pages still contain curated hand-maintained props tables; replacing those transitional presentation details is explicitly deferred to the full reference-product redesign and must not become a competing public API source."
+      "status": "closed",
+      "description": "The generated framework API reference is the canonical reader-facing API authority. Playground component readers consume generated framework API facts through referenceMetadata and no longer maintain a competing props-table API source."
     },
     {
       "id": "reference-portal-unification",
