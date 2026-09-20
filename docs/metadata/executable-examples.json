@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": "tests/consumers/manifest.json",
+  "purpose": "Bind reader-facing framework examples to the existing packed consumer fixtures that are typechecked, built, and runtime-verified by VyrnForge CI.",
+  "frameworks": {
+    "react": {
+      "fixtureId": "react",
+      "directory": "tests/consumers/react",
+      "entrypoint": "src/main.tsx",
+      "contractFile": "fixture.json",
+      "verification": ["typecheck", "build", "runtime"]
+    },
+    "native-html": {
+      "fixtureId": "native-html",
+      "directory": "tests/consumers/native-html",
+      "entrypoint": "src/main.ts",
+      "contractFile": "fixture.json",
+      "verification": ["typecheck", "build", "runtime"]
+    },
+    "angular": {
+      "fixtureId": "angular",
+      "directory": "tests/consumers/angular",
+      "entrypoint": "src/app/app.component.html",
+      "contractFile": "fixture.json",
+      "verification": ["typecheck", "build", "runtime"]
+    },
+    "vue": {
+      "fixtureId": "vue",
+      "directory": "tests/consumers/vue",
+      "entrypoint": "src/App.vue",
+      "contractFile": "fixture.json",
+      "verification": ["typecheck", "build", "runtime"]
+    }
+  }
+}

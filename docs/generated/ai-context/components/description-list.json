@@ -6,48 +6,72 @@
   "category": "data-display",
   "maturity": "planned",
   "availability": "planned",
-  "purpose": "Read-only term/value data display.",
+  "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
   "guidance": {
-    "useWhen": "Use later for resource details.",
-    "avoidWhen": "Do not import until implemented.",
-    "aiUsageNotes": "Use native dl markup until implemented.",
+    "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
+    "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
+    "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
     "relatedComponents": [
       "KeyValueList",
       "PropertyTable"
     ]
   },
   "accessibility": [
-    "Use semantic description list markup."
+    "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
+    "preserves native description-list semantics for term and description relationships",
+    "projected content must retain semantic term and description structure rather than generic grouping roles"
   ],
   "knownLimitations": [
-    "Do not import until implemented."
+    "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-description-list"
+    ],
     "variables": []
   },
   "frameworks": {
     "react": {
-      "status": "not-supported",
-      "package": "@vyrnforge/ui-components"
+      "status": "target",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+      "example": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>"
     },
     "native-html": {
-      "status": "not-supported",
-      "package": null
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-description-list></vf-description-list>"
     },
     "angular": {
-      "status": "not-supported",
-      "package": null
+      "status": "target",
+      "package": "@vyrnforge/ui-angular",
+      "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+      "example": "<vf-description-list></vf-description-list>"
     },
     "vue": {
-      "status": "not-supported",
-      "package": null
+      "status": "target",
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfDescriptionList></VfDescriptionList>"
     }
   },
-  "contract": null,
+  "contract": {
+    "properties": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "preserves native description-list semantics for term and description relationships",
+      "projected content must retain semantic term and description structure rather than generic grouping roles"
+    ],
+    "formAssociation": "none"
+  },
   "source": {
     "componentMetadata": "docs/metadata/components.json",
-    "contractMetadata": null,
-    "customElementsManifest": null
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

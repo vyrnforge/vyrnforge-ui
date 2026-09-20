@@ -1,10 +1,17 @@
 import multiFrameworkRaw from "../../../../docs/metadata/multi-framework.json?raw";
+import referenceModelRaw from "../../../../docs/generated/reference-model.json?raw";
+import {
+  getReferenceFramework,
+  parseReferenceModel,
+  type ReferenceFrameworkId,
+} from "../../../../docs/reference/referenceRuntime";
 
-export type PlaygroundFrameworkId = "native-html" | "react" | "angular" | "vue";
+export type PlaygroundFrameworkId = ReferenceFrameworkId;
 
 export type PlaygroundFramework = {
   id: PlaygroundFrameworkId;
   label: string;
+  language: string;
   renderer: string;
   supportLevel: string;
 };
@@ -40,20 +47,31 @@ type VersionCatalog = {
 
 const multiFramework = JSON.parse(multiFrameworkRaw) as MultiFrameworkMetadata;
 
-const frameworkLabels: Record<PlaygroundFrameworkId, string> = {
-  react: "React",
-  "native-html": "Native HTML",
-  angular: "Angular",
-  vue: "Vue",
-};
+export const referenceModel = parseReferenceModel(referenceModelRaw);
 
 export const playgroundFrameworks: PlaygroundFramework[] =
-  multiFramework.frameworks.map((framework) => ({
-    ...framework,
-    label: frameworkLabels[framework.id],
-  }));
+  referenceModel.frameworks.map((framework) => {
+    const support = multiFramework.frameworks.find(
+      (candidate) => candidate.id === framework.id,
+    );
 
-export const defaultPlaygroundFramework: PlaygroundFrameworkId = "react";
+    if (!support) {
+      throw new Error(
+        `Missing framework support metadata for ${framework.id}.`,
+      );
+    }
+
+    return {
+      id: framework.id,
+      label: framework.label,
+      language: framework.language,
+      renderer: support.renderer,
+      supportLevel: support.supportLevel,
+    };
+  });
+
+export const defaultPlaygroundFramework =
+  referenceModel.frameworkContext.default;
 
 const configuredVersionId =
   import.meta.env.VITE_PLAYGROUND_VERSION_ID || "next";
@@ -77,13 +95,20 @@ function versionLabel(entry: VersionCatalogEntry) {
   return entry.id === "next" ? "Next" : `${entry.version} · ${entry.channel}`;
 }
 
+export function getPlaygroundFramework(frameworkId: string | null | undefined) {
+  const framework = getReferenceFramework(referenceModel, frameworkId);
+  return playgroundFrameworks.find(
+    (candidate) => candidate.id === framework.id,
+  )!;
+}
+
 export async function loadPlaygroundVersions(): Promise<PlaygroundVersion[]> {
   const rootPath = import.meta.env.VITE_PLAYGROUND_ROOT_PATH;
   if (!rootPath) {
     return [defaultPlaygroundVersion];
   }
 
-  const catalogUrl = `${rootPath.replace(/\/$/u, "")}/vyrnforge-versions.json`;
+  const catalogUrl = `${rootPath.replace(/\/$/u, "")}/${referenceModel.versionContext.catalog}`;
 
   try {
     const response = await fetch(catalogUrl, {
