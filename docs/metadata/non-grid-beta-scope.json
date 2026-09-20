@@ -779,9 +779,9 @@
       },
       "native": {
         "package": "@vyrnforge/ui-elements",
-        "status": "current",
         "strategy": "direct-element",
         "target": "vf-description-list",
+        "status": "current",
         "evidence": "docs/metadata/native-element-foundations.json"
       },
       "angular": {
