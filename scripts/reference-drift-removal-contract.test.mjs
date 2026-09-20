@@ -10,6 +10,7 @@ const retired = [
   "apps/docs/src/discoveryRoutes.ts",
   "apps/docs/src/MetadataPage.tsx",
   "apps/docs/src/AiContextIndexPage.tsx",
+  "apps/docs/src/styles/docs-context.css",
   "apps/docs/src/referenceRouteId.ts",
   "scripts/reference-route-id.test.mjs",
   "apps/docs/src/ReferenceSearchPage.tsx",
