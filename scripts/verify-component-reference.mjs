@@ -188,12 +188,25 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     "framework-api-reference.json",
     "componentReferenceRecords",
     "getReferenceRecordRoute",
-    "AI context slice",
-    "Usage guidance",
-    "Accessibility and styling",
+    "component-usage",
+    "component-framework-api",
+    "component-accessibility-styling",
+    "Accessibility guidance",
   ]) {
     if (!docsPage.includes(marker))
       failures.push(`consumer knowledge viewer is missing ${marker}`);
+  }
+  for (const retiredReaderMarker of [
+    "AI context slice",
+    "AI usage notes",
+    "Framework-neutral contract",
+    "Model, form, and ref contracts",
+  ]) {
+    if (docsPage.includes(retiredReaderMarker)) {
+      failures.push(
+        `consumer knowledge viewer still exposes internal reader chrome: ${retiredReaderMarker}`,
+      );
+    }
   }
   if (docsPage.includes("component: componentId")) {
     failures.push(
