@@ -143,6 +143,7 @@ test("component preview pairs executable behavior with generated framework consu
   const preview = read("apps/docs/src/ReferencePreview.tsx");
   const referenceData = read("apps/docs/src/referenceData.ts");
   const referenceStyles = read("apps/docs/src/styles/reference-shell.css");
+  const docsStyles = read("apps/docs/src/styles/docs.css");
 
   assert.match(
     referenceData,
