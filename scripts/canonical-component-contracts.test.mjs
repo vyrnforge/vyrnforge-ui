@@ -176,7 +176,6 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
   }
 });
 
-
 test("Progress keeps a semantic, state-free cross-framework contract", () => {
   const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
   const contract = normalized.componentById.get("progress");
