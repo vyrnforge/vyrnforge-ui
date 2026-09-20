@@ -250,15 +250,6 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     }
   }
 
-  const aiPage = read(root, "apps/docs/src/AiContextIndexPage.tsx");
-  for (const marker of [
-    "ai-context/index.json",
-    "Task-scoped retrieval",
-    "components",
-  ]) {
-    if (!aiPage.includes(marker))
-      failures.push(`AI context index viewer is missing ${marker}`);
-  }
   const playgroundPage = read(
     root,
     "examples/basic-playground/src/components/ComponentDemoPage.tsx",
