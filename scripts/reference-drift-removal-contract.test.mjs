@@ -9,6 +9,7 @@ const retired = [
   "apps/docs/src/docsRegistry.ts",
   "apps/docs/src/discoveryRoutes.ts",
   "apps/docs/src/MetadataPage.tsx",
+  "apps/docs/src/ReferenceSearchPage.tsx",
   "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
   "examples/basic-playground/src/components/PropsTable.tsx",
   "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
@@ -55,6 +56,7 @@ test("Docs routes are curated without duplicating generated public facts", () =>
   assert.match(source, /token-reference/u);
   assert.match(source, /pattern-reference/u);
   assert.match(source, /package-reference/u);
+  assert.doesNotMatch(source, /accessibility-reference/u);
   assert.doesNotMatch(source, /import\.meta\.glob/u);
   assert.doesNotMatch(source, /generated\/ai-context/u);
   assert.doesNotMatch(source, /referenceModel\.domains\.flatMap/u);
