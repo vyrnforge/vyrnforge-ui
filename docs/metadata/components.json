@@ -5300,7 +5300,7 @@
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        Content must preserve semantic dt/dd relationships; DescriptionList does not provide a stateful key/value data model.
+        "Content must preserve semantic dt/dd relationships; DescriptionList does not provide a stateful key/value data model."
       ],
       "deprecation": {
         "status": "not-applicable"
