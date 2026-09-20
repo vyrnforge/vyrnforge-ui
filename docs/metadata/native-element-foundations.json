@@ -59,6 +59,7 @@
     "tests/consumers/native-html/architecture-probe.ts",
     "tests/consumers/native-html/fixture.json",
     "packages/ui-elements/src/components/parity.ts",
+    "packages/ui-elements/src/components/description-list.ts",
     "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
     "apps/regression-fixtures/src/nativeParityElements.tsx",
     "tests/browser/native-advanced-elements.spec.ts",
@@ -209,7 +210,7 @@
     "documentation": "docs/architecture/10-custom-elements-and-form-association.md"
   },
   "nativeParity": {
-    "registeredPublicTags": 58,
+    "registeredPublicTags": 59,
     "browserEvidence": "tests/browser/native-parity.spec.ts",
     "fixture": "apps/regression-fixtures/src/nativeParityElements.tsx",
     "publicReactRecords": 67,

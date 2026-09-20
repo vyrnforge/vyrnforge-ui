@@ -305,6 +305,17 @@
         },
         {
           "kind": "class",
+          "name": "VyrnForgeDescriptionListElement",
+          "description": "DescriptionList browser-native renderer. Read-only term-and-description facts with semantic description-list relationships.",
+          "tagName": "vf-description-list",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
           "name": "VyrnForgeDateTimeInputElement",
           "description": "DateTimeInput browser-native renderer. Native input type='datetime-local' control aligned with VyrnForge input styling.",
           "tagName": "vf-datetime-input",
@@ -666,7 +677,7 @@
       "packageRootSideEffects": false
     },
     "domMode": "light-dom",
-    "registeredTagCount": 58,
+    "registeredTagCount": 59,
     "eventVocabulary": [
       "vf-action",
       "vf-cancel",
@@ -689,8 +700,8 @@
         "exceptions": "docs/metadata/framework-exceptions.json",
         "descriptions": "docs/metadata/components.json"
       },
-      "canonicalTagCount": 57,
-      "canonicalMappedRegistrationCount": 57,
+      "canonicalTagCount": 58,
+      "canonicalMappedRegistrationCount": 58,
       "exceptionBackedRegistrationCount": 1
     },
     "typeDeclarations": {
