@@ -1476,13 +1476,13 @@
       "displayName": "DescriptionList",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
       "guidance": {
         "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
         "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
-        "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
+        "aiUsageNotes": "Use semantic dt/dd children on React DescriptionList or the equivalent default content projection/slot on Angular and Vue. Preserve the shared description-list relationship and do not invent a stateful key/value API.",
         "relatedComponents": [
           "KeyValueList",
           "PropertyTable"
@@ -1490,7 +1490,7 @@
       },
       "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+        "Content must preserve semantic dt/dd relationships; DescriptionList does not provide a stateful key/value data model."
       ],
       "styling": {
         "classes": [
@@ -1513,10 +1513,10 @@
       "frameworks": {
         "react": {
           "label": "React",
-          "status": "target",
+          "status": "current",
           "package": "@vyrnforge/ui-components",
-          "setup": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-          "example": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>",
+          "setup": "import { DescriptionList } from '@vyrnforge/ui-components';",
+          "example": "<DescriptionList><dt>Status</dt><dd>Active</dd></DescriptionList>",
           "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
         },
         "native-html": {
@@ -1529,7 +1529,7 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "target",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-angular",
           "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-description-list></vf-description-list>",
@@ -1537,7 +1537,7 @@
         },
         "vue": {
           "label": "Vue",
-          "status": "target",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-vue",
           "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
           "example": "<VfDescriptionList></VfDescriptionList>",
