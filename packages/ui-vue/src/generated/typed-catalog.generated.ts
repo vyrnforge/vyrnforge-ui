@@ -29,6 +29,7 @@ import {
   VfConfirmDialog as VfConfirmDialogRuntime,
   VfDateInput as VfDateInputRuntime,
   VfDateTimeInput as VfDateTimeInputRuntime,
+  VfDescriptionList as VfDescriptionListRuntime,
   VfDialog as VfDialogRuntime,
   VfDrawer as VfDrawerRuntime,
   VfDropdown as VfDropdownRuntime,
@@ -479,6 +480,24 @@ export interface VfDateTimeInputRef {
 }
 
 export const VfDateTimeInput = VfDateTimeInputRuntime as unknown as VyrnForgeVueComponentType<VfDateTimeInputProps, VfDateTimeInputEmits, VfDateTimeInputSlots, VfDateTimeInputRef>;
+
+export interface VfDescriptionListProps {
+
+}
+
+export interface VfDescriptionListEmits {
+  (event: never): void;
+}
+
+export interface VfDescriptionListSlots {
+  readonly default?: () => VNode[];
+}
+
+export interface VfDescriptionListRef {
+  readonly element: VyrnForgeElementForTagName<"vf-description-list"> | null;
+}
+
+export const VfDescriptionList = VfDescriptionListRuntime as unknown as VyrnForgeVueComponentType<VfDescriptionListProps, VfDescriptionListEmits, VfDescriptionListSlots, VfDescriptionListRef>;
 
 export interface VfDialogProps {
   readonly open?: VyrnForgeElementForTagName<"vf-dialog">["open"];
