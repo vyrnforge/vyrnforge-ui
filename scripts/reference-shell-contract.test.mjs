@@ -58,13 +58,14 @@ test("public Docs navigation is curated while Playground may use generated disco
     "Components",
     "Foundations",
     "Guides",
-    "API",
+    "Reference",
   ]) {
     assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
   }
   assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
   assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
   assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
+  assert.doesNotMatch(docsRoutes, /accessibility-reference/u);
 
   assert.match(playgroundNav, /getReferenceNavigation/u);
   assert.match(playgroundNav, /SearchInput/u);
