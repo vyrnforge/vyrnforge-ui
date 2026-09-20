@@ -133,9 +133,7 @@ onMounted(async () => {
   if (ownerNode.value !== owner.value) {
     throw new Error("Vue did not assign the text-input value property.");
   }
-  const descriptionList = document.querySelector(
-    "vf-description-list",
-  );
+  const descriptionList = document.querySelector("vf-description-list");
   if (
     !descriptionList?.querySelector(".vf-description-list__list > dt") ||
     !descriptionList.querySelector(".vf-description-list__list > dd")
