@@ -46,7 +46,8 @@
     "named Light DOM composition",
     "ElementInternals form submission",
     "Chromium interaction evidence",
-    "shared token CSS without data-grid tokens"
+    "shared token CSS without data-grid tokens",
+    "generated DescriptionList content projection with native dl/dt/dd semantics"
   ],
   "requiredCommands": [
     "npm run test:angular-consumer",
@@ -54,7 +55,9 @@
     "npm run verify:angular-consumer:runtime",
     "npm run quality"
   ],
-  "deferred": ["data-grid multi-framework work"],
+  "deferred": [
+    "data-grid multi-framework work"
+  ],
   "unresolvedBlockers": [],
   "sources": [
     "https://angular.dev/reference/versions",
