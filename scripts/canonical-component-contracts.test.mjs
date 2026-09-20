@@ -171,7 +171,8 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
     ),
   );
   assert.equal(contract.frameworkMappings.native.status, "current");
-  for (const framework of ["react", "angular", "vue"]) {
+  assert.equal(contract.frameworkMappings.react.status, "migration");
+  for (const framework of ["angular", "vue"]) {
     assert.equal(contract.frameworkMappings[framework].status, "target");
   }
 });
