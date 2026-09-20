@@ -347,7 +347,8 @@ export function verifyDeveloperDeliveryFoundation({
     [
       "getReferenceFrameworkComponent",
       "Generated API reference",
-      "API facts are generated from the shared VyrnForge framework contract",
+      "API facts are generated from the shared VyrnForge framework",
+      "contract and are not maintained by this demo page.",
     ],
     failures,
   );
