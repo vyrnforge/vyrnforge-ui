@@ -9,6 +9,7 @@ const retired = [
   "apps/docs/src/docsRegistry.ts",
   "apps/docs/src/discoveryRoutes.ts",
   "apps/docs/src/MetadataPage.tsx",
+  "apps/docs/src/AiContextIndexPage.tsx",
   "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
   "examples/basic-playground/src/components/PropsTable.tsx",
   "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
