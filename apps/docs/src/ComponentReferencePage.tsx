@@ -9,6 +9,7 @@ import {
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
+import { componentApiMemberAnchor } from "./componentApiMember";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import {
@@ -103,12 +104,6 @@ function formatDefault(value: unknown) {
   return value === undefined ? "—" : JSON.stringify(value);
 }
 
-function memberAnchor(kind: string, name: string) {
-  return `api-${kind}-${name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/gu, "-")
-    .replace(/^-|-$/gu, "")}`;
-}
 
 function propertyFlags(property: ApiProperty) {
   return [
@@ -213,7 +208,7 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.properties.map((property) => {
-                  const anchor = memberAnchor("property", property.public);
+                  const anchor = componentApiMemberAnchor("property", property.public);
                   return (
                     <tr id={anchor} key={property.public}>
                       <th scope="row">
@@ -266,7 +261,7 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.events.map((event) => {
-                  const anchor = memberAnchor("event", event.public);
+                  const anchor = componentApiMemberAnchor("event", event.public);
                   const detailFields = event.detailFields
                     .map(
                       (field) =>
@@ -323,7 +318,7 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.slots.map((slot) => {
-                  const anchor = memberAnchor("slot", slot.public);
+                  const anchor = componentApiMemberAnchor("slot", slot.public);
                   return (
                     <tr id={anchor} key={slot.public}>
                       <th scope="row">
@@ -368,7 +363,7 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.methods.map((method) => {
-                  const anchor = memberAnchor("method", method.name);
+                  const anchor = componentApiMemberAnchor("method", method.name);
                   return (
                     <tr id={anchor} key={method.name}>
                       <th scope="row">
