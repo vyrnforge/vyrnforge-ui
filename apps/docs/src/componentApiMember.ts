@@ -1,11 +1,7 @@
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 
-export type ComponentApiMemberKind =
-  | "property"
-  | "event"
-  | "slot"
-  | "method";
+export type ComponentApiMemberKind = "property" | "event" | "slot" | "method";
 
 export function componentApiMemberAnchor(
   kind: ComponentApiMemberKind,
