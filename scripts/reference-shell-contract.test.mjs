@@ -128,10 +128,11 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.doesNotMatch(componentReference, /AI usage notes/u);
   assert.doesNotMatch(componentReference, /Framework-neutral contract/u);
   assert.doesNotMatch(componentReference, /Model, form, and ref contracts/u);
-  assert.match(componentReference, /memberAnchor\("property"/u);
-  assert.match(componentReference, /memberAnchor\("event"/u);
-  assert.match(componentReference, /memberAnchor\("slot"/u);
-  assert.match(componentReference, /memberAnchor\("method"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"property"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"event"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"slot"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"method"/u);
+  assert.match(componentReference, /componentReferenceTargetHref/u);
   assert.match(componentReference, /<table className="vf-docs-api-table">/u);
   assert.match(componentReference, /aria-label="On this component page"/u);
   assert.match(docsStyles, /\.vf-docs-reference-outline/u);
@@ -164,4 +165,38 @@ test("component preview pairs executable behavior with generated framework consu
   assert.doesNotMatch(docsStyles, /\.vf-docs-metadata/u);
   assert.doesNotMatch(docsStyles, /\.vf-docs-ai-purpose/u);
   assert.doesNotMatch(referenceStyles, /\.vf-docs-discovery-row__heading/u);
+});
+
+test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
+  const app = read("apps/docs/src/App.tsx");
+  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const docsShell = read("apps/docs/src/DocsShell.tsx");
+  const memberTarget = read("apps/docs/src/componentApiMember.ts");
+  const retired = read("scripts/reference-drift-removal-contract.test.mjs");
+
+  assert.match(docsNav, /generated\/framework-api-reference\.json\?raw/u);
+  assert.match(docsNav, /buildApiMemberEntries/u);
+  assert.match(docsNav, /section\.id === "components"/u);
+  assert.match(docsNav, /\.slice\(0, 30\)/u);
+  assert.match(docsNav, /componentReferenceTargetHref/u);
+  assert.match(docsNav, /frameworkId/u);
+  assert.match(docsShell, /frameworkId=\{framework\.id\}/u);
+
+  assert.match(memberTarget, /componentApiMemberAnchor/u);
+  assert.match(memberTarget, /componentReferenceTargetHref/u);
+  assert.match(
+    memberTarget,
+    /referenceModel\.frameworkContext\.queryParameter/u,
+  );
+  assert.match(memberTarget, /getReferenceRecordRoute/u);
+
+  assert.match(
+    app,
+    /new URLSearchParams\(window\.location\.search\)\.get\("member"\)/u,
+  );
+  assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
+  assert.match(app, /query\.delete\("member"\)/u);
+
+  assert.match(retired, /ReferenceSearchPage\.tsx/u);
+  assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });

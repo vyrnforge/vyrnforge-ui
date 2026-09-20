@@ -9,6 +9,10 @@ import {
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
+import {
+  componentApiMemberAnchor,
+  componentReferenceTargetHref,
+} from "./componentApiMember";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import {
@@ -103,13 +107,6 @@ function formatDefault(value: unknown) {
   return value === undefined ? "—" : JSON.stringify(value);
 }
 
-function memberAnchor(kind: string, name: string) {
-  return `api-${kind}-${name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/gu, "-")
-    .replace(/^-|-$/gu, "")}`;
-}
-
 function propertyFlags(property: ApiProperty) {
   return [
     property.required && "required",
@@ -166,8 +163,10 @@ function EmptyApiMembers() {
 
 function FrameworkApiPanel({
   component,
+  frameworkId,
 }: {
   component: FrameworkApiComponent;
+  frameworkId: DocsFrameworkId;
 }) {
   return (
     <div className="vf-docs-framework-usage">
@@ -213,13 +212,20 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.properties.map((property) => {
-                  const anchor = memberAnchor("property", property.public);
+                  const anchor = componentApiMemberAnchor(
+                    "property",
+                    property.public,
+                  );
                   return (
                     <tr id={anchor} key={property.public}>
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>{property.public}</code>
                         </a>
@@ -266,7 +272,10 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.events.map((event) => {
-                  const anchor = memberAnchor("event", event.public);
+                  const anchor = componentApiMemberAnchor(
+                    "event",
+                    event.public,
+                  );
                   const detailFields = event.detailFields
                     .map(
                       (field) =>
@@ -278,7 +287,11 @@ function FrameworkApiPanel({
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>{event.public}</code>
                         </a>
@@ -323,13 +336,17 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.slots.map((slot) => {
-                  const anchor = memberAnchor("slot", slot.public);
+                  const anchor = componentApiMemberAnchor("slot", slot.public);
                   return (
                     <tr id={anchor} key={slot.public}>
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>{slot.public}</code>
                         </a>
@@ -368,13 +385,20 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.methods.map((method) => {
-                  const anchor = memberAnchor("method", method.name);
+                  const anchor = componentApiMemberAnchor(
+                    "method",
+                    method.name,
+                  );
                   return (
                     <tr id={anchor} key={method.name}>
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>
                             {method.async ? "async " : ""}
@@ -427,7 +451,7 @@ function frameworkTabs(componentId: string): TabItem[] {
       id: framework.id,
       label: framework.label,
       content: component ? (
-        <FrameworkApiPanel component={component} />
+        <FrameworkApiPanel component={component} frameworkId={framework.id} />
       ) : (
         <Text size="sm" tone="muted">
           This component is not available on this framework surface.
@@ -470,7 +494,15 @@ function ComponentIndexCard({
   );
 }
 
-function ComponentOutline({ showLimitations }: { showLimitations: boolean }) {
+function ComponentOutline({
+  componentId,
+  frameworkId,
+  showLimitations,
+}: {
+  componentId: string;
+  frameworkId: DocsFrameworkId;
+  showLimitations: boolean;
+}) {
   const sections = [
     ["component-overview", "Overview"],
     ["component-usage", "Usage"],
@@ -493,7 +525,15 @@ function ComponentOutline({ showLimitations }: { showLimitations: boolean }) {
         <ul>
           {sections.map(([id, label]) => (
             <li key={id}>
-              <a href={`#${id}`}>{label}</a>
+              <a
+                href={componentReferenceTargetHref(
+                  componentId,
+                  frameworkId,
+                  id,
+                )}
+              >
+                {label}
+              </a>
             </li>
           ))}
         </ul>
@@ -502,10 +542,42 @@ function ComponentOutline({ showLimitations }: { showLimitations: boolean }) {
         <Text size="sm" tone="muted">
           API
         </Text>
-        <a href="#api-properties">Properties</a>
-        <a href="#api-events">Events</a>
-        <a href="#api-slots">Slots</a>
-        <a href="#api-methods">Methods</a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-properties",
+          )}
+        >
+          Properties
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-events",
+          )}
+        >
+          Events
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-slots",
+          )}
+        >
+          Slots
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-methods",
+          )}
+        >
+          Methods
+        </a>
       </div>
     </aside>
   );
@@ -646,7 +718,11 @@ function ComponentDetail({
           </Card>
         )}
       </div>
-      <ComponentOutline showLimitations={showLimitations} />
+      <ComponentOutline
+        componentId={component.id}
+        frameworkId={frameworkId}
+        showLimitations={showLimitations}
+      />
     </div>
   );
 }
