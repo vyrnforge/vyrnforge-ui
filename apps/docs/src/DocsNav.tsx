@@ -85,11 +85,7 @@ function apiMemberEntry(
       name,
       ...keywords,
     ].map((keyword) => keyword.toLowerCase()),
-    href: componentReferenceTargetHref(
-      componentId,
-      frameworkId,
-      member,
-    ),
+    href: componentReferenceTargetHref(componentId, frameworkId, member),
   };
 }
 
@@ -220,12 +216,7 @@ export function DocsNav({
               },
             ];
       }),
-    [
-      activeRouteId,
-      apiMembers,
-      normalizedQuery,
-      onRouteChange,
-    ],
+    [activeRouteId, apiMembers, normalizedQuery, onRouteChange],
   );
 
   return (
