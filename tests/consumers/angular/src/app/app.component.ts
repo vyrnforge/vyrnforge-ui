@@ -193,7 +193,7 @@ export class AppComponent implements AfterViewInit {
       }
 
       const descriptionList = document.querySelector(
-        'vf-description-list[data-angular-description-list]',
+        "vf-description-list[data-angular-description-list]",
       );
       if (
         !descriptionList?.querySelector(".vf-description-list__list > dt") ||
