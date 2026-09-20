@@ -170,6 +170,11 @@ export { Skeleton } from "./components/Skeleton";
 export type { SkeletonProps } from "./components/Skeleton";
 export { Card } from "./components/Card";
 export type { CardPadding, CardProps, CardVariant } from "./components/Card";
+export { DescriptionList } from "./components/DescriptionList";
+export type {
+  DescriptionListProps,
+  DescriptionListRef,
+} from "./components/DescriptionList";
 export { Panel } from "./components/Panel";
 export type { PanelProps } from "./components/Panel";
 export { Stack } from "./components/Stack";
