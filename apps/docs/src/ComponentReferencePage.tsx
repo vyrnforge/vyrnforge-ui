@@ -107,7 +107,6 @@ function formatDefault(value: unknown) {
   return value === undefined ? "—" : JSON.stringify(value);
 }
 
-
 function propertyFlags(property: ApiProperty) {
   return [
     property.required && "required",
@@ -213,7 +212,10 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.properties.map((property) => {
-                  const anchor = componentApiMemberAnchor("property", property.public);
+                  const anchor = componentApiMemberAnchor(
+                    "property",
+                    property.public,
+                  );
                   return (
                     <tr id={anchor} key={property.public}>
                       <th scope="row">
@@ -270,7 +272,10 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.events.map((event) => {
-                  const anchor = componentApiMemberAnchor("event", event.public);
+                  const anchor = componentApiMemberAnchor(
+                    "event",
+                    event.public,
+                  );
                   const detailFields = event.detailFields
                     .map(
                       (field) =>
@@ -380,7 +385,10 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.methods.map((method) => {
-                  const anchor = componentApiMemberAnchor("method", method.name);
+                  const anchor = componentApiMemberAnchor(
+                    "method",
+                    method.name,
+                  );
                   return (
                     <tr id={anchor} key={method.name}>
                       <th scope="row">
@@ -443,10 +451,7 @@ function frameworkTabs(componentId: string): TabItem[] {
       id: framework.id,
       label: framework.label,
       content: component ? (
-        <FrameworkApiPanel
-          component={component}
-          frameworkId={framework.id}
-        />
+        <FrameworkApiPanel component={component} frameworkId={framework.id} />
       ) : (
         <Text size="sm" tone="muted">
           This component is not available on this framework surface.
