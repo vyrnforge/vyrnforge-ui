@@ -12,6 +12,7 @@ import {
   ConfirmDialog,
   DateInput,
   DateTimeInput,
+  DescriptionList,
   Dialog,
   Drawer,
   EmptyState,
@@ -234,6 +235,23 @@ describe("@vyrnforge/ui-components primitives", () => {
     expect(number.props.onChange).toBe(onNumberChange);
     expect(date.props.onChange).toBe(onDateChange);
     expect(dateTime.props.onChange).toBe(onDateTimeChange);
+  });
+
+  it("renders DescriptionList with native term and description semantics", () => {
+    const markup = renderToStaticMarkup(
+      <DescriptionList aria-label="Account details">
+        <dt>Status</dt>
+        <dd>Active</dd>
+        <dt>Owner</dt>
+        <dd>Operations</dd>
+      </DescriptionList>,
+    );
+
+    expect(markup).toContain("<dl");
+    expect(markup).toContain("<dt>Status</dt>");
+    expect(markup).toContain("<dd>Active</dd>");
+    expect(markup).toContain("vf-description-list");
+    expect(markup).toContain("vf-description-list__list");
   });
 
   it("renders Badge variant classes", () => {
