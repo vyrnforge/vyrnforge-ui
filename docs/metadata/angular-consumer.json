@@ -43,11 +43,10 @@
     "generated @vyrnforge/ui-angular facade bindings",
     "object-valued property binding without attribute serialization",
     "canonical vf-action interoperability",
-    "named Light DOM composition",
+    "generated DescriptionList content projection with native dl/dt/dd semantics",
     "ElementInternals form submission",
     "Chromium interaction evidence",
-    "shared token CSS without data-grid tokens",
-    "generated DescriptionList content projection with native dl/dt/dd semantics"
+    "shared token CSS without data-grid tokens"
   ],
   "requiredCommands": [
     "npm run test:angular-consumer",
@@ -55,9 +54,7 @@
     "npm run verify:angular-consumer:runtime",
     "npm run quality"
   ],
-  "deferred": [
-    "data-grid multi-framework work"
-  ],
+  "deferred": ["data-grid multi-framework work"],
   "unresolvedBlockers": [],
   "sources": [
     "https://angular.dev/reference/versions",
