@@ -3005,7 +3005,7 @@
         "decision": "excluded",
         "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
       },
-        {
+      {
         "id": "key-value-list",
         "displayName": "KeyValueList",
         "package": "@vyrnforge/ui-components",
