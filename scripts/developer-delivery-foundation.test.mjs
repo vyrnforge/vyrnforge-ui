@@ -48,6 +48,7 @@ const required = [
   "apps/docs/src/ComponentReferencePage.tsx",
   "examples/basic-playground/package.json",
   "examples/basic-playground/src/app/playgroundContext.ts",
+  "examples/basic-playground/src/components/ComponentDemoPage.tsx",
   "examples/basic-playground/src/data/referenceMetadata.ts",
 ];
 
@@ -104,6 +105,22 @@ test("delivery foundation rejects a missing first-class framework", () => {
   assert.ok(
     verifyDeveloperDeliveryFoundation({ root }).some((failure) =>
       failure.includes("frameworks must be"),
+    ),
+  );
+});
+
+test("delivery foundation rejects a reopened reader API authority gap", () => {
+  const root = createFoundationFixture();
+  mutateManifest(root, (manifest) => {
+    const gap = manifest.gaps.find(
+      (candidate) => candidate.id === "reader-api-authority",
+    );
+    gap.status = "open";
+  });
+
+  assert.ok(
+    verifyDeveloperDeliveryFoundation({ root }).some((failure) =>
+      failure.includes("reader API authority gap must be recorded as closed"),
     ),
   );
 });
