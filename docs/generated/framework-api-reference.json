@@ -292,8 +292,8 @@
       "package": "@vyrnforge/ui-elements",
       "summary": {
         "componentCount": 60,
-        "current": 59,
-        "target": 1,
+        "current": 60,
+        "target": 0,
         "migration": 0,
         "exception": 0
       },
@@ -3133,7 +3133,7 @@
           "id": "description-list",
           "category": "data-display",
           "package": "@vyrnforge/ui-elements",
-          "status": "target",
+          "status": "current",
           "export": null,
           "tag": "vf-description-list",
           "properties": [],

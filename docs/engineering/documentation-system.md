@@ -97,6 +97,35 @@ Reference model, canonical metadata, or repository source discovery. Curated
 prose and executable demonstrations remain authored only where they add
 presentation or behavioral value that is not already a generated fact.
 
+### Executable preview contract
+
+The primary reader experience should present guidance, generated API facts, and
+executable UI behavior together instead of forcing readers to choose between a
+"Docs mode" and a separate "Playground mode" for the same component.
+
+Component reference pages may embed an executable presentation when canonical
+component metadata provides a verified `playgroundPath`. The embedded view must
+reuse that canonical route and shared framework/version context; it must not
+introduce a second demo registry or a docs-only copy of example behavior.
+
+The standalone Playground remains a maintained execution and verification
+surface for deep links, focused example exploration, CI, browser evidence, and
+packed-consumer integration. It is not a competing source of documentation
+truth or a separate component catalog.
+
+Preview transport is intentionally replaceable. The current Reference host may
+embed the maintained Playground route in an isolated presentation context, while
+future delivery may bind the same semantic component/example identity to
+versioned framework-specific preview bundles. Changing iframe, worker, module,
+or bundle transport must not change canonical component IDs, example IDs,
+framework context, generated API ownership, or route identity.
+
+A preview must not overstate framework evidence. Shared UI rendering may be
+shown with the selected framework context, but claims that a specific framework
+runtime executed must come from its executable-example or packed-consumer
+evidence. Native HTML, React, Angular, and Vue remain equal semantic surfaces
+whether their preview transport is shared or framework-specific.
+
 ### Deployment ownership
 
 `scripts/reference-artifact.mjs` owns the shared immutable Reference artifact

@@ -1,14 +1,12 @@
-import agentsRaw from "../../../AGENTS.md?raw";
-import { referenceModel } from "./docsContext";
+import accessibilityRaw from "../../../docs/architecture/05-accessibility-standards.md?raw";
+import themingRaw from "../../../docs/architecture/03-theming-and-styling.md?raw";
+import dataGridRaw from "../../../docs/packages/ui-data-grid.md?raw";
+import setupRaw from "../../../docs/api/import-and-setup.md?raw";
+import overviewRaw from "../../../docs/README.md?raw";
+import migrationRaw from "../../../docs/release/multi-framework-migration-and-limitations.md?raw";
 
 export type DocsRouteKind =
-  | "markdown"
-  | "ai"
-  | "json"
-  | "metadata"
-  | "component-reference"
-  | "package-reference"
-  | "ai-context-index";
+  "markdown" | "component-reference" | "package-reference";
 
 export type DocsRoute = {
   id: string;
@@ -16,247 +14,162 @@ export type DocsRoute = {
   group: string;
   description?: string;
   sourcePath: string;
-  aiPurpose?: string;
   tags?: string[];
-  canonical?: boolean;
   kind?: DocsRouteKind;
   content?: string;
 };
 
-type RawModules = Record<string, string>;
+export type PublicDocsSection = {
+  id: "start" | "components" | "foundations" | "guides" | "reference";
+  label: string;
+  routeIds: string[];
+};
 
-const markdownModules = import.meta.glob("../../../docs/**/*.md", {
-  eager: true,
-  import: "default",
-  query: "?raw",
-}) as RawModules;
-const metadataModules = import.meta.glob("../../../docs/metadata/*.json", {
-  eager: true,
-  import: "default",
-  query: "?raw",
-}) as RawModules;
-const aiContextModules = import.meta.glob(
-  "../../../docs/generated/ai-context/**/*.json",
-  {
-    eager: true,
-    import: "default",
-    query: "?raw",
-  },
-) as RawModules;
-
-function sourcePath(modulePath: string) {
-  return modulePath.replace(/^\.\.\/\.\.\/\.\.\//u, "");
-}
-
-function stripNumericPrefix(value: string) {
-  return value.replace(/^\d+-/u, "").replace(/^adr-\d+-/u, "");
-}
-
-function slugFromSourcePath(path: string) {
-  if (path === "docs/README.md") return "overview";
-  if (path === "docs/api/README.md") return "api-overview";
-  if (path === "docs/release/README.md") return "release-docs";
-  if (path === "docs/generated/ai-context/index.json") {
-    return "ai-consumer-context";
-  }
-  if (path === "AGENTS.md") return "agent-rules";
-
-  const withoutExtension = path.replace(/\.(?:md|json)$/u, "");
-  if (withoutExtension.startsWith("docs/metadata/")) {
-    return `metadata-${withoutExtension.slice("docs/metadata/".length)}`;
-  }
-  if (withoutExtension.startsWith("docs/generated/ai-context/")) {
-    return `ai-context-${withoutExtension
-      .slice("docs/generated/ai-context/".length)
-      .replace(/\//gu, "-")}`;
-  }
-
-  const basename = withoutExtension.slice(
-    withoutExtension.lastIndexOf("/") + 1,
-  );
-  return stripNumericPrefix(basename);
-}
-
-function groupForSourcePath(path: string) {
-  if (path === "AGENTS.md") return "AI";
-  if (
-    path === "docs/README.md" ||
-    path.startsWith("docs/governance/") ||
-    path.startsWith("docs/engineering/")
-  ) {
-    return "Start Here";
-  }
-  if (path.startsWith("docs/architecture/")) return "Architecture";
-  if (path.startsWith("docs/testing/")) return "Testing";
-  if (path.startsWith("docs/quality/")) return "Quality";
-  if (path.startsWith("docs/release/")) return "Release";
-  if (path.startsWith("docs/packages/")) return "Packages";
-  if (path.startsWith("docs/api/")) return "API Reference";
-  if (path.startsWith("docs/metadata/")) return "Metadata";
-  if (path.startsWith("docs/generated/ai-context/")) return "AI";
-  return "Start Here";
-}
-
-function fallbackTitle(path: string) {
-  const id = slugFromSourcePath(path).replace(/^(?:metadata|ai-context)-/u, "");
-  const title = id
-    .split("-")
-    .filter(Boolean)
-    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
-    .join(" ");
-  return path.startsWith("docs/metadata/") ? `Metadata / ${title}` : title;
-}
-
-function markdownTitle(content: string, path: string) {
-  const heading = content.match(/^#\s+(.+)$/mu)?.[1]?.trim();
-  return heading || fallbackTitle(path);
-}
-
-function plainText(value: string) {
-  return value
-    .replace(/`([^`]+)`/gu, "$1")
-    .replace(/\[([^\]]+)\]\([^)]+\)/gu, "$1")
-    .replace(/[*_>#]/gu, "")
-    .replace(/\s+/gu, " ")
-    .trim();
-}
-
-function markdownDescription(content: string) {
-  const paragraphs = content
-    .split(/\n\s*\n/gu)
-    .map((paragraph) => paragraph.trim())
-    .filter(
-      (paragraph) =>
-        paragraph &&
-        !paragraph.startsWith("#") &&
-        !paragraph.startsWith("```") &&
-        !paragraph.startsWith("|") &&
-        !paragraph.startsWith("- "),
-    );
-  return plainText(paragraphs[0] ?? "Canonical VyrnForge guidance.");
-}
-
-function tagsForSourcePath(path: string) {
-  return path
-    .replace(/^docs\//u, "")
-    .replace(/\.(?:md|json)$/u, "")
-    .split(/[/-]/u)
-    .map((tag) => tag.trim().toLowerCase())
-    .filter((tag) => tag && !/^\d+$/u.test(tag) && tag !== "readme")
-    .slice(0, 8);
-}
-
-function contentRoute(
-  path: string,
-  content: string,
-  kind: DocsRouteKind,
-): DocsRoute {
-  return {
-    id: slugFromSourcePath(path),
-    title:
-      kind === "markdown" ? markdownTitle(content, path) : fallbackTitle(path),
-    group: groupForSourcePath(path),
-    description:
-      kind === "markdown"
-        ? markdownDescription(content)
-        : "Machine-readable VyrnForge source owned outside the Reference application.",
-    sourcePath: path,
-    tags: tagsForSourcePath(path),
-    kind,
-    content,
-  };
-}
-
-const authoredGuideRoutes = Object.entries(markdownModules).map(
-  ([modulePath, content]) =>
-    contentRoute(sourcePath(modulePath), content, "markdown"),
-);
-const metadataRoutes = Object.entries(metadataModules).map(
-  ([modulePath, content]) =>
-    contentRoute(sourcePath(modulePath), content, "metadata"),
-);
-const aiContextRoutes = Object.entries(aiContextModules).map(
-  ([modulePath, content]) => {
-    const path = sourcePath(modulePath);
-    return contentRoute(
-      path,
-      content,
-      path.endsWith("/index.json") ? "ai-context-index" : "json",
-    );
-  },
-);
-const agentRoute = contentRoute("AGENTS.md", agentsRaw, "ai");
-
-type GeneratedReaderPresentation = {
+type PublicGuide = {
   id: string;
   title: string;
   group: string;
   description: string;
-  kind?: DocsRouteKind;
+  sourcePath: string;
+  content: string;
+  tags: string[];
 };
 
-const generatedReaderPresentation: Record<string, GeneratedReaderPresentation> =
+const publicGuides: PublicGuide[] = [
   {
-    search: {
-      id: "search",
-      title: "Reference Search",
-      group: "Start Here",
-      description:
-        "Search VyrnForge reference records while preserving each record's owning source.",
-    },
-    packages: {
-      id: "package-reference",
-      title: "Package Reference",
-      group: "Start Here",
-      description:
-        "Browse package responsibilities from canonical package metadata.",
-      kind: "package-reference",
-    },
-    components: {
-      id: "component-reference",
-      title: "Component Reference",
-      group: "Components",
-      description:
-        "Browse generated multi-framework component contracts and usage guidance.",
-      kind: "component-reference",
-    },
-    accessibility: {
-      id: "accessibility-reference",
-      title: "Accessibility & Keyboard",
-      group: "Accessibility",
-      description:
-        "Browse component accessibility contracts and keyboard guidance from canonical evidence.",
-    },
-    tokens: {
-      id: "token-reference",
-      title: "Design Tokens",
-      group: "Foundations",
-      description: "Explore canonical VyrnForge semantic token categories.",
-    },
-    patterns: {
-      id: "pattern-reference",
-      title: "Patterns",
-      group: "Foundations",
-      description: "Explore reusable VyrnForge composition patterns.",
-    },
-  };
+    id: "overview",
+    title: "Overview",
+    group: "Start",
+    description: "What VyrnForge is and how to navigate the documentation.",
+    sourcePath: "docs/README.md",
+    content: overviewRaw,
+    tags: ["overview", "start"],
+  },
+  {
+    id: "getting-started",
+    title: "Getting Started",
+    group: "Start",
+    description:
+      "Install VyrnForge and choose the Native HTML, React, Angular, or Vue surface.",
+    sourcePath: "docs/api/import-and-setup.md",
+    content: setupRaw,
+    tags: ["install", "setup", "frameworks"],
+  },
+  {
+    id: "theming",
+    title: "Theming & Styling",
+    group: "Foundations",
+    description:
+      "Customize VyrnForge with shared semantic tokens, themes, density, and CSS.",
+    sourcePath: "docs/architecture/03-theming-and-styling.md",
+    content: themingRaw,
+    tags: ["theming", "tokens", "css"],
+  },
+  {
+    id: "accessibility",
+    title: "Accessibility",
+    group: "Foundations",
+    description:
+      "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
+    sourcePath: "docs/architecture/05-accessibility-standards.md",
+    content: accessibilityRaw,
+    tags: ["accessibility", "keyboard", "focus"],
+  },
+  {
+    id: "data-grid",
+    title: "Data Grid",
+    group: "Guides",
+    description:
+      "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
+    sourcePath: "docs/packages/ui-data-grid.md",
+    content: dataGridRaw,
+    tags: ["data", "grid", "react"],
+  },
+  {
+    id: "releases",
+    title: "Releases & Migration",
+    group: "Reference",
+    description:
+      "Understand release channels, framework support, limitations, and upgrade guidance.",
+    sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
+    content: migrationRaw,
+    tags: ["release", "migration", "compatibility"],
+  },
+];
 
-export const generatedReferenceRoutes: DocsRoute[] =
-  referenceModel.domains.flatMap((domain) => {
-    const presentation = generatedReaderPresentation[domain.id];
-    if (!presentation) return [];
-    return [
-      {
-        ...presentation,
-        sourcePath:
-          domain.recordSource?.path ??
-          domain.generatedSources[0] ??
-          domain.canonicalSources[0] ??
-          "docs/generated/reference-model.json",
-        tags: [domain.id, "reference", "generated-reader"],
-      },
-    ];
-  });
+const generatedRoutes: DocsRoute[] = [
+  {
+    id: "component-reference",
+    title: "Components",
+    group: "Components",
+    description:
+      "Browse component usage, framework variants, API, accessibility, and styling.",
+    sourcePath: "docs/generated/consumer-knowledge.json",
+    tags: ["components", "api"],
+    kind: "component-reference",
+  },
+  {
+    id: "token-reference",
+    title: "Design Tokens",
+    group: "Foundations",
+    description: "Browse shared VyrnForge token categories and styling roles.",
+    sourcePath: "docs/metadata/design-tokens.json",
+    tags: ["tokens", "design-system"],
+  },
+  {
+    id: "pattern-reference",
+    title: "Patterns",
+    group: "Guides",
+    description: "Browse reusable VyrnForge composition patterns.",
+    sourcePath: "docs/metadata/patterns.json",
+    tags: ["patterns", "composition"],
+  },
+  {
+    id: "package-reference",
+    title: "Packages",
+    group: "Reference",
+    description:
+      "Understand package responsibilities, public entrypoints, and release tracks.",
+    sourcePath: "docs/metadata/packages.json",
+    tags: ["packages", "api"],
+    kind: "package-reference",
+  },
+];
+
+export const publicDocsSections: PublicDocsSection[] = [
+  {
+    id: "start",
+    label: "Start",
+    routeIds: ["overview", "getting-started"],
+  },
+  {
+    id: "components",
+    label: "Components",
+    routeIds: ["component-reference"],
+  },
+  {
+    id: "foundations",
+    label: "Foundations",
+    routeIds: ["theming", "token-reference", "accessibility"],
+  },
+  {
+    id: "guides",
+    label: "Guides",
+    routeIds: ["pattern-reference", "data-grid"],
+  },
+  {
+    id: "reference",
+    label: "Reference",
+    routeIds: ["package-reference", "releases"],
+  },
+];
+
+function guideRoute(guide: PublicGuide): DocsRoute {
+  return {
+    ...guide,
+    kind: "markdown",
+  };
+}
 
 function uniqueRoutes(routes: DocsRoute[]) {
   const byId = new Map<string, DocsRoute>();
@@ -270,18 +183,9 @@ function uniqueRoutes(routes: DocsRoute[]) {
 }
 
 export const docsRoutes = uniqueRoutes([
-  ...generatedReferenceRoutes,
-  ...authoredGuideRoutes,
-  ...metadataRoutes,
-  ...aiContextRoutes,
-  agentRoute,
-]).sort((left, right) => {
-  if (left.id === "overview") return -1;
-  if (right.id === "overview") return 1;
-  return `${left.group}:${left.sourcePath}`.localeCompare(
-    `${right.group}:${right.sourcePath}`,
-  );
-});
+  ...publicGuides.map(guideRoute),
+  ...generatedRoutes,
+]);
 
 export function getRouteById(id: string) {
   return (
