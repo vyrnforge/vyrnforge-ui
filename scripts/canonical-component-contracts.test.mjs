@@ -175,3 +175,36 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
     assert.equal(contract.frameworkMappings[framework].status, "target");
   }
 });
+
+test("Progress keeps a semantic, state-free cross-framework contract", () => {
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+  const contract = normalized.componentById.get("progress");
+
+  assert.ok(contract);
+  assert.equal(contract.category, "feedback");
+  assert.deepEqual(
+    contract.properties.map((property) => property.name),
+    ["max", "value"],
+  );
+  assert.equal(
+    contract.properties.find((property) => property.name === "max")?.default,
+    1,
+  );
+  assert.equal(
+    contract.properties.find((property) => property.name === "value")?.default,
+    null,
+  );
+  assert.deepEqual(contract.events, []);
+  assert.deepEqual(contract.slots, []);
+  assert.deepEqual(contract.methods, []);
+  assert.equal(contract.form.association, "none");
+  assert.equal(contract.model.kind, "none");
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("determinate and indeterminate"),
+    ),
+  );
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "target");
+  }
+});
