@@ -12,20 +12,13 @@
     "version": "0.2.0-beta.2",
     "manifest": "packages/ui-components/package.json",
     "publicEntry": "packages/ui-components/src/index.ts",
-    "cssEntrypoints": [
-      "./style.css",
-      "./index.css",
-      "./styles/index.css"
-    ],
+    "cssEntrypoints": ["./style.css", "./index.css", "./styles/index.css"],
     "peerDependencies": {
       "react": ">=18 <20",
       "react-dom": ">=18 <20"
     }
   },
-  "testedReactVersions": [
-    "18.3.1",
-    "19.2.7"
-  ],
+  "testedReactVersions": ["18.3.1", "19.2.7"],
   "fingerprints": [
     {
       "path": "packages/ui-components/package.json",
@@ -42,10 +35,7 @@
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
       "sha1": "25b0d5f9d370d3419ee97d2a0ae82408481c741b",
-      "covers": [
-        "public value exports",
-        "public type exports"
-      ]
+      "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
@@ -63,25 +53,19 @@
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
       "sha1": "260258671169f01ca2950ffd569b61c8cdf4aa5f",
-      "covers": [
-        "React renderer CSS implementation"
-      ]
+      "covers": ["React renderer CSS implementation"]
     },
     {
       "path": "docs/api/ui-components-api.md",
       "kind": "blob",
       "sha1": "09510da23a9559834e8ccaaba63a7280df2a6cbc",
-      "covers": [
-        "documented React public API and usage contracts"
-      ]
+      "covers": ["documented React public API and usage contracts"]
     },
     {
       "path": "docs/packages/ui-components.md",
       "kind": "blob",
       "sha1": "665d895f70a4358a28d31aaac7c21e5d6197d8b5",
-      "covers": [
-        "React package ownership and public consumption contract"
-      ]
+      "covers": ["React package ownership and public consumption contract"]
     },
     {
       "path": "docs/metadata/react-behavior-adoption.json",
@@ -97,10 +81,7 @@
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
       "sha1": "f95919a980e055452eebb197e7e5f00c7546e37a",
-      "covers": [
-        "tested React versions",
-        "packed consumer compatibility cases"
-      ]
+      "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
   "runtimeEvidence": [
