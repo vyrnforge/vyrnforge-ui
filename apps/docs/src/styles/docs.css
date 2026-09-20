@@ -176,7 +176,6 @@ body {
   box-shadow: var(--vf-shadow-sm, 0 1px 2px rgba(15, 23, 42, 0.06));
 }
 
-
 .vf-docs-markdown,
 .vf-docs-reference {
   padding: 20px;
@@ -349,13 +348,10 @@ body {
   display: inline-flex;
 }
 
-
-
 .vf-docs-reference p,
 .vf-docs-reference .vf-text {
   line-height: 1.5;
 }
-
 
 @media (max-width: 1080px) {
   .vf-docs-reference-layout {
@@ -501,7 +497,6 @@ body {
 .vf-docs-api-member-link:focus-visible {
   text-decoration: underline;
 }
-
 
 .vf-docs-framework-tabs {
   margin-top: 14px;
