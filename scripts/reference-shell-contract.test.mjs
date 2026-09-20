@@ -160,4 +160,7 @@ test("component preview pairs executable behavior with generated framework consu
   assert.match(referenceStyles, /\.vf-docs-preview__code/u);
   assert.doesNotMatch(referenceStyles, /\.vf-docs-preview__footer/u);
   assert.doesNotMatch(docsStyles, /\.vf-docs-api-advanced/u);
+  assert.doesNotMatch(docsStyles, /\.vf-docs-metadata/u);
+  assert.doesNotMatch(docsStyles, /\.vf-docs-ai-purpose/u);
+  assert.doesNotMatch(referenceStyles, /\.vf-docs-discovery-row__heading/u);
 });
