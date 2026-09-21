@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { Button, DescriptionList, Dialog, Field, TextInput } from "../../index";
+import {
+  Button,
+  DescriptionList,
+  Dialog,
+  Field,
+  Progress,
+  TextInput,
+} from "../../index";
 import {
   assertNoAccessibilityViolations,
   render,
@@ -57,6 +64,17 @@ describe("@vyrnforge/ui-components accessibility", () => {
           <dt>Owner</dt>
           <dd>Operations</dd>
         </DescriptionList>
+      </main>,
+    );
+
+    await assertNoAccessibilityViolations(container);
+  });
+
+  it("scans determinate and indeterminate progress", async () => {
+    const { container } = render(
+      <main>
+        <Progress aria-label="Upload progress" max={100} value={40} />
+        <Progress aria-label="Preparing export" />
       </main>,
     );
 
