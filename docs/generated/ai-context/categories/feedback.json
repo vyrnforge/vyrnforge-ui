@@ -62,7 +62,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "planned",
       "availability": "planned",
-      "purpose": "Progress indicator.",
+      "purpose": "Determinate or indeterminate progress indicator.",
       "context": "ai-context/components/progress.json"
     },
     {

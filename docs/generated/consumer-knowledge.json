@@ -2942,67 +2942,122 @@
       "category": "feedback",
       "maturity": "planned",
       "availability": "planned",
-      "purpose": "Progress indicator.",
+      "purpose": "Determinate or indeterminate progress indicator.",
       "guidance": {
-        "useWhen": "Use later for determinate or indeterminate progress.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Use LoadingState until Progress exists.",
+        "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
+        "avoidWhen": "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead.",
+        "aiUsageNotes": "Use the Native HTML Progress renderer when targeting @vyrnforge/ui-elements. Keep value and max as presentation inputs and do not invent completion events or a stateful controller.",
         "relatedComponents": [
           "LoadingState",
           "Skeleton"
         ]
       },
-      "accessibilityNotes": "Progress needs accessible value text where determinate.",
+      "accessibilityNotes": "Preserve native progress semantics: determinate progress exposes the current value and maximum, while omitting value represents indeterminate progress. Provide an accessible name when surrounding context does not.",
       "knownLimitations": [
-        "Do not import until implemented."
+        "React, Angular, and Vue renderer implementations remain deferred to their framework-specific Progress tasks."
       ],
       "styling": {
-        "classes": [],
+        "classes": [
+          "vf-progress"
+        ],
         "variables": []
       },
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
-        "customElementsManifest": null
+        "contractMetadata": "docs/metadata/component-contracts.json",
+        "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
-      "nativeDeclaration": null,
+      "nativeDeclaration": {
+        "name": "VyrnForgeProgressElement",
+        "tagName": "vf-progress",
+        "description": "Progress browser-native renderer. Determinate or indeterminate progress indicator."
+      },
       "frameworks": {
         "react": {
           "label": "React",
-          "status": "not-supported",
+          "status": "target",
           "package": "@vyrnforge/ui-components",
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "setup": "import { VyrnForgeProgressElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+          "example": "<vf-progress max=\"100\" value=\"40\" aria-label=\"Upload progress\"></vf-progress>",
+          "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
         },
         "native-html": {
           "label": "Native HTML",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "current",
+          "package": "@vyrnforge/ui-elements",
+          "setup": "import \"@vyrnforge/ui-elements/register\";",
+          "example": "<vf-progress></vf-progress>",
+          "note": "Native HTML consumes @vyrnforge/ui-elements directly through canonical vf-* Custom Elements and events."
         },
         "angular": {
           "label": "Angular",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "target",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+          "example": "<vf-progress></vf-progress>",
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "target",
+          "package": "@vyrnforge/ui-vue",
+          "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+          "example": "<VfProgress></VfProgress>",
+          "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": {
+        "properties": [
+          {
+            "name": "max",
+            "type": {
+              "kind": "number"
+            },
+            "required": false,
+            "mutable": true,
+            "default": 1,
+            "description": "Upper bound for determinate progress."
+          },
+          {
+            "name": "value",
+            "type": {
+              "kind": "number",
+              "nullable": true
+            },
+            "required": false,
+            "mutable": true,
+            "default": null,
+            "description": "Current determinate value; null represents indeterminate progress."
+          }
+        ],
+        "attributes": [
+          {
+            "name": "max",
+            "property": "max",
+            "valueKind": "number",
+            "reflection": "two-way",
+            "removal": "restore-default"
+          },
+          {
+            "name": "value",
+            "property": "value",
+            "valueKind": "number",
+            "reflection": "two-way",
+            "removal": "set-null"
+          }
+        ],
+        "events": [],
+        "slots": [],
+        "methods": [],
+        "accessibility": [
+          "preserves native progressbar semantics for determinate and indeterminate states",
+          "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+          "progress must have an accessible name when surrounding context does not provide one"
+        ],
+        "formAssociation": "none"
+      }
     },
     {
       "id": "skeleton",
