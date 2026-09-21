@@ -802,7 +802,9 @@
         "key": "description-list",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for tabular comparisons that require row and column relationships or for interactive form fields."]
+      "knownLimitations": [
+        "Avoid for tabular comparisons that require row and column relationships or for interactive form fields."
+      ]
     },
     {
       "id": "dialog",
@@ -1744,7 +1746,9 @@
         "key": "progress",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."]
+      "knownLimitations": [
+        "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."
+      ]
     },
     {
       "id": "radio",
