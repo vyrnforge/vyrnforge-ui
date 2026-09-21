@@ -1,4 +1,9 @@
-import { Button, DescriptionList, TextInput } from "@vyrnforge/ui-components";
+import {
+  Button,
+  DescriptionList,
+  Progress,
+  TextInput,
+} from "@vyrnforge/ui-components";
 import "@vyrnforge/ui-components/styles/index.css";
 
 export function ReactConsumerContract() {
@@ -9,6 +14,7 @@ export function ReactConsumerContract() {
         <dt>Status</dt>
         <dd>Active</dd>
       </DescriptionList>
+      <Progress aria-label="Upload progress" max={100} value={40} />
       <TextInput aria-label="Owner" defaultValue="Operations" />
     </>
   );
