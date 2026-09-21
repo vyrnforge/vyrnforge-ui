@@ -34,13 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "25b0d5f9d370d3419ee97d2a0ae82408481c741b",
+      "sha1": "f1a0fcb320039341899fdb4325ab47485c987c90",
       "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "6588b9785689d07ccd0def23ca8dc20e7d84799d",
+      "sha1": "35f9c409be1dee7af98d34455fe7d43e8ce21a10",
       "covers": [
         "component props and types",
         "callbacks",
@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "260258671169f01ca2950ffd569b61c8cdf4aa5f",
+      "sha1": "d43dca3ecb2f223da7256f125f6d710f49e4edea",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -70,7 +70,7 @@
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "edba9b91ca5a076a5ab6389e00830afbdc91eb25",
+      "sha1": "b05c95acba7bef37bef0e5c38f2e607b2036e853",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -141,6 +141,11 @@
     {
       "task": "description-list-react-renderer",
       "reason": "DescriptionList adds the planned stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves native dl/dt/dd relationships, introduces no stateful model or callback contract, reuses VyrnForge token-driven layout styling, and is covered by React semantic, accessibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "progress-react-renderer",
+      "reason": "Progress adds the planned stateless React renderer as a public @vyrnforge/ui-components export. It preserves native progress semantics for determinate and indeterminate states, introduces no controller or callback contract, uses VyrnForge token-driven feedback styling, and is covered by React semantic, accessibility, compatibility, and packed-consumer evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
   ],
