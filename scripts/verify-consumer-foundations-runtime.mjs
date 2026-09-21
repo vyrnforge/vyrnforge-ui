@@ -303,8 +303,8 @@ function verifyInstalledPackages(fixtureDirectory, tarballs) {
         "@vyrnforge/ui-elements installed package is missing manifest export",
       );
       assert(
-        manifest.vyrnforge?.registeredTagCount === 59,
-        "installed custom-elements.json must contain the 59-tag contract",
+        manifest.vyrnforge?.registeredTagCount === 60,
+        "installed custom-elements.json must contain the 60-tag contract",
       );
       assert(
         fixtureRequire.resolve(
