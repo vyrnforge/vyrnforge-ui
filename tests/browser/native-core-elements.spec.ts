@@ -85,9 +85,13 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     await expect(progress).toHaveAttribute("aria-valuemax", "100");
     await expect(progress).toHaveAttribute("aria-valuenow", "40");
     await expect(progress.locator("> .vf-progress__bar")).toHaveCount(1);
-    await expect(
-      progress.locator("> .vf-progress__bar > .vf-progress__value"),
-    ).toHaveCSS("width", "40%");
+    const progressValue = progress.locator(
+      "> .vf-progress__bar > .vf-progress__value",
+    );
+    await expect(progressValue).toHaveAttribute(
+      "style",
+      /--vf-progress-value:\s*40%/,
+    );
     await expect(progress).toHaveAttribute("data-vf-element", "");
   });
 
