@@ -5470,55 +5470,22 @@
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
-      "knownLimitations": ["Do not import until implemented."],
+      "knownLimitations": [
+        "Contract defined; public framework implementations are not yet available."
+      ],
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Chronological event display.",
-      "useWhen": "Use later for audit/activity history.",
-      "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["ActivityLog"],
+      "purpose": "Read-only chronological sequence that preserves ordered event and timestamp semantics.",
+      "useWhen": "Use for histories, milestones, audit sequences, or other content where chronological order is meaningful.",
+      "avoidWhen": "Avoid for unordered feeds, application-specific activity state models, or interactive workflow engines.",
+      "relatedComponents": ["Badge", "Text"],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "Planned; no import yet.",
-      "basicUsageExample": "Planned.",
-      "accessibilityNotes": "Event order and timestamps should be clear.",
-      "aiUsageNotes": "Use semantic lists until implemented."
-    },
-    {
-      "id": "activity-log",
-      "displayName": "ActivityLog",
-      "package": "@vyrnforge/ui-components",
-      "category": "data-display",
-      "maturity": "planned",
-      "owner": "Component Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
-      "docsPath": "docs/api/ui-components-api.md",
-      "playgroundPath": "not-applicable",
-      "evidence": {
-        "maturityEvidenceKey": "activity-log",
-        "status": "requires-verification"
-      },
-      "accessibility": {
-        "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "not-applicable"
-      },
-      "knownLimitations": ["Do not import until implemented."],
-      "deprecation": {
-        "status": "not-applicable"
-      },
-      "purpose": "Operational activity feed.",
-      "useWhen": "Use later for recent changes and user activity.",
-      "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["Timeline"],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "Planned; no import yet.",
-      "basicUsageExample": "Planned.",
-      "accessibilityNotes": "Activity entries need clear actor/action/time text.",
-      "aiUsageNotes": "Use plain list composition until implemented."
+      "importExample": "Planned; no public import yet.",
+      "basicUsageExample": "Planned; compose one semantic ordered list as the timeline content.",
+      "accessibilityNotes": "Keep one native ordered list as the semantic authority; each event remains a list item and visible timestamps should use semantic time elements when a machine-readable datetime is available.",
+      "aiUsageNotes": "Treat Timeline as a state-free chronological composition primitive. Application-specific actor/action/status formatting belongs in patterns such as Activity Log, not in Timeline state or persistence."
     },
     {
       "id": "advanced-filter-drawer",
