@@ -13,6 +13,7 @@
     "TextInput",
     "Dialog",
     "DescriptionList",
+    "Progress",
     "onValueChange",
     "data-consumer-ready"
   ],

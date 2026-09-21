@@ -168,6 +168,8 @@ export type {
 } from "./components/LoadingState";
 export { Skeleton } from "./components/Skeleton";
 export type { SkeletonProps } from "./components/Skeleton";
+export { Progress } from "./components/Progress";
+export type { ProgressProps, ProgressRef } from "./components/Progress";
 export { Card } from "./components/Card";
 export type { CardPadding, CardProps, CardVariant } from "./components/Card";
 export { DescriptionList } from "./components/DescriptionList";
