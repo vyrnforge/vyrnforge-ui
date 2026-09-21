@@ -35,7 +35,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "planned",
       "availability": "planned",
-      "purpose": "Structured read-only property table.",
+      "purpose": "Read-only tabular property comparison using native table semantics.",
       "context": "ai-context/components/property-table.json"
     },
     {
