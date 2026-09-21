@@ -15,8 +15,9 @@ import { DocsShell } from "./DocsShell";
 import { getRouteById } from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
-  domain: "components" | "packages" | "tokens" | "patterns" | "accessibility";
+  domain: "components" | "packages" | "tokens" | "patterns";
   id: string;
+  member: string | null;
 };
 
 type DocsLocation = {
@@ -32,11 +33,11 @@ const recordRoutes: Array<{
   { domain: "packages", routeId: "package-reference" },
   { domain: "tokens", routeId: "token-reference" },
   { domain: "patterns", routeId: "pattern-reference" },
-  { domain: "accessibility", routeId: "accessibility-reference" },
 ];
 
 function getHashLocation(): DocsLocation {
   const path = window.location.hash.replace(/^#/, "") || "/overview";
+  const member = new URLSearchParams(window.location.search).get("member");
 
   for (const recordRoute of recordRoutes) {
     const id = matchReferenceRecordRoute(
@@ -47,7 +48,11 @@ function getHashLocation(): DocsLocation {
     if (id) {
       return {
         routeId: recordRoute.routeId,
-        referenceRecord: { domain: recordRoute.domain, id },
+        referenceRecord: {
+          domain: recordRoute.domain,
+          id,
+          member: recordRoute.domain === "components" ? member : null,
+        },
       };
     }
   }
@@ -82,6 +87,16 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const member = docsLocation.referenceRecord?.member;
+    if (!member) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(member)?.scrollIntoView({ block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [docsLocation]);
+
+  useEffect(() => {
     let active = true;
     void loadDocsVersions().then((versions) => {
       if (active) setDocsVersions(versions);
@@ -102,6 +117,14 @@ export default function App() {
   );
 
   const handleRouteChange = (routeId: string) => {
+    const query = new URLSearchParams(window.location.search);
+    query.delete("member");
+    const search = query.toString();
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`,
+    );
     window.location.hash = `/${routeId}`;
     setDocsLocation({ routeId, referenceRecord: null });
   };

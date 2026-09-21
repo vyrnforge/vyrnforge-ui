@@ -5264,20 +5264,52 @@
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
-      "knownLimitations": ["Do not import until implemented."],
+      "knownLimitations": [
+        "Renderer implementations remain deferred to the framework-specific Progress tasks."
+      ],
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Progress indicator.",
-      "useWhen": "Use later for determinate or indeterminate progress.",
-      "avoidWhen": "Do not import until implemented.",
+      "purpose": "Determinate or indeterminate progress indicator.",
+      "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
+      "avoidWhen": "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead.",
       "relatedComponents": ["LoadingState", "Skeleton"],
       "cssClasses": [],
       "cssVariables": [],
       "importExample": "Planned; no import yet.",
       "basicUsageExample": "Planned.",
-      "accessibilityNotes": "Progress needs accessible value text where determinate.",
-      "aiUsageNotes": "Use LoadingState until Progress exists."
+      "accessibilityNotes": "Preserve native progress semantics: determinate progress exposes the current value and maximum, while omitting value represents indeterminate progress. Provide an accessible name when surrounding context does not.",
+      "aiUsageNotes": "Use native progress markup until a VyrnForge renderer exists. Do not invent completion events or a stateful controller; value and max are presentation inputs.",
+      "frameworkParity": {
+        "betaScope": "excluded",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Progress",
+          "status": "target"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "not-applicable",
+          "componentController": "not-applicable"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "target",
+          "strategy": "direct-element",
+          "target": "vf-progress",
+          "evidence": "pending"
+        },
+        "angular": {
+          "status": "target",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "pending"
+        },
+        "vue": {
+          "status": "target",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "pending"
+        }
+      }
     },
     {
       "id": "description-list",

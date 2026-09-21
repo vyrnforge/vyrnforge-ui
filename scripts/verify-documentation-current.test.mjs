@@ -116,7 +116,7 @@ test("rejects historical task identifiers in current guidance", () =>
       ),
   ));
 
-test("rejects a missing documentation audience section", () =>
+test("rejects a missing public documentation section", () =>
   fixture(
     (root) => {
       const relativePath = "docs/README.md";
@@ -124,7 +124,7 @@ test("rejects a missing documentation audience section", () =>
         root,
         relativePath,
         read(root, relativePath).replace(
-          "## Use VyrnForge",
+          "## Start here",
           "## Consumer documentation",
         ),
       );
@@ -132,7 +132,9 @@ test("rejects a missing documentation audience section", () =>
     (failures) =>
       assert(
         failures.some((failure) =>
-          failure.includes("missing audience section ## Use VyrnForge"),
+          failure.includes(
+            "missing public documentation section ## Start here",
+          ),
         ),
       ),
   ));

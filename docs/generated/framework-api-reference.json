@@ -291,8 +291,8 @@
     "native": {
       "package": "@vyrnforge/ui-elements",
       "summary": {
-        "componentCount": 60,
-        "current": 59,
+        "componentCount": 61,
+        "current": 60,
         "target": 1,
         "migration": 0,
         "exception": 0
@@ -8162,6 +8162,87 @@
           }
         },
         {
+          "id": "progress",
+          "category": "feedback",
+          "package": "@vyrnforge/ui-elements",
+          "status": "target",
+          "export": null,
+          "tag": "vf-progress",
+          "properties": [
+            {
+              "canonical": "max",
+              "public": "max",
+              "binding": "property",
+              "type": "number",
+              "typeContract": {
+                "kind": "number"
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": 1
+            },
+            {
+              "canonical": "value",
+              "public": "value",
+              "binding": "property",
+              "type": "number",
+              "typeContract": {
+                "kind": "number",
+                "nullable": true
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": null
+            }
+          ],
+          "events": [],
+          "slots": [],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeProgressElement"
+            },
+            "framework": {
+              "mode": "element",
+              "type": "VyrnForgeProgressElement"
+            }
+          },
+          "accessibility": [
+            "preserves native progressbar semantics for determinate and indeterminate states",
+            "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+            "progress must have an accessible name when surrounding context does not provide one"
+          ],
+          "setup": [
+            "register custom element"
+          ],
+          "adapter": {
+            "kind": "canonical-native",
+            "canonicalRenderer": "@vyrnforge/ui-elements"
+          }
+        },
+        {
           "id": "skeleton",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
@@ -11419,9 +11500,9 @@
     "react": {
       "package": "@vyrnforge/ui-components",
       "summary": {
-        "componentCount": 60,
+        "componentCount": 61,
         "current": 0,
-        "target": 1,
+        "target": 2,
         "migration": 59,
         "exception": 0,
         "controlled": 29
@@ -19954,6 +20035,96 @@
           }
         },
         {
+          "id": "progress",
+          "category": "feedback",
+          "package": "@vyrnforge/ui-components",
+          "status": "target",
+          "export": "Progress",
+          "tag": null,
+          "properties": [
+            {
+              "canonical": "max",
+              "public": "max",
+              "binding": "prop",
+              "type": "number",
+              "typeContract": {
+                "kind": "number"
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": 1
+            },
+            {
+              "canonical": "value",
+              "public": "value",
+              "binding": "prop",
+              "type": "number",
+              "typeContract": {
+                "kind": "number",
+                "nullable": true
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": null
+            }
+          ],
+          "events": [],
+          "slots": [],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeProgressElement"
+            },
+            "framework": {
+              "mode": "forwarded-ref",
+              "type": "ProgressRef"
+            }
+          },
+          "accessibility": [
+            "preserves native progressbar semantics for determinate and indeterminate states",
+            "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+            "progress must have an accessible name when surrounding context does not provide one"
+          ],
+          "setup": [],
+          "adapter": {
+            "kind": "react-facade",
+            "canonicalRenderer": "@vyrnforge/ui-elements",
+            "model": {
+              "enabled": false,
+              "mode": "none",
+              "canonicalKind": "none",
+              "canonicalProperty": null,
+              "canonicalDefaultProperty": null,
+              "canonicalChangeEvent": null,
+              "publicProperty": null,
+              "publicEvent": null
+            },
+            "refMode": "forwarded-ref"
+          }
+        },
+        {
           "id": "skeleton",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
@@ -23483,9 +23654,9 @@
     "angular": {
       "package": "@vyrnforge/ui-angular",
       "summary": {
-        "componentCount": 60,
+        "componentCount": 61,
         "current": 0,
-        "target": 60,
+        "target": 61,
         "migration": 0,
         "exception": 0,
         "forms": 15
@@ -32078,6 +32249,91 @@
           }
         },
         {
+          "id": "progress",
+          "category": "feedback",
+          "package": "@vyrnforge/ui-angular",
+          "status": "target",
+          "export": "VfProgress",
+          "tag": null,
+          "properties": [
+            {
+              "canonical": "max",
+              "public": "max",
+              "binding": "input",
+              "type": "number",
+              "typeContract": {
+                "kind": "number"
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": 1
+            },
+            {
+              "canonical": "value",
+              "public": "value",
+              "binding": "input",
+              "type": "number",
+              "typeContract": {
+                "kind": "number",
+                "nullable": true
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": null
+            }
+          ],
+          "events": [],
+          "slots": [],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeProgressElement"
+            },
+            "framework": {
+              "mode": "view-child",
+              "type": "VfProgress"
+            }
+          },
+          "accessibility": [
+            "preserves native progressbar semantics for determinate and indeterminate states",
+            "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+            "progress must have an accessible name when surrounding context does not provide one"
+          ],
+          "setup": [],
+          "adapter": {
+            "kind": "angular-facade",
+            "canonicalRenderer": "@vyrnforge/ui-elements",
+            "selector": "vf-progress",
+            "forms": {
+              "enabled": false,
+              "mode": "none"
+            },
+            "refMode": "view-child"
+          }
+        },
+        {
           "id": "skeleton",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
@@ -35667,9 +35923,9 @@
     "vue": {
       "package": "@vyrnforge/ui-vue",
       "summary": {
-        "componentCount": 60,
+        "componentCount": 61,
         "current": 0,
-        "target": 60,
+        "target": 61,
         "migration": 0,
         "exception": 0,
         "vModel": 29
@@ -44047,6 +44303,90 @@
               "canonicalChangeEvent": "vf-value-change",
               "publicProperty": "modelValue",
               "publicEvent": "update:modelValue"
+            },
+            "refMode": "template-ref"
+          }
+        },
+        {
+          "id": "progress",
+          "category": "feedback",
+          "package": "@vyrnforge/ui-vue",
+          "status": "target",
+          "export": "VfProgress",
+          "tag": null,
+          "properties": [
+            {
+              "canonical": "max",
+              "public": "max",
+              "binding": "prop",
+              "type": "number",
+              "typeContract": {
+                "kind": "number"
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": 1
+            },
+            {
+              "canonical": "value",
+              "public": "value",
+              "binding": "prop",
+              "type": "number",
+              "typeContract": {
+                "kind": "number",
+                "nullable": true
+              },
+              "required": false,
+              "mutable": true,
+              "readOnly": false,
+              "controlled": false,
+              "default": null
+            }
+          ],
+          "events": [],
+          "slots": [],
+          "methods": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "form": {
+            "association": "none",
+            "disabledProperty": null,
+            "validity": {
+              "supported": false,
+              "methods": []
+            },
+            "reset": {
+              "supported": false
+            }
+          },
+          "ref": {
+            "canonical": {
+              "exposure": "element",
+              "methods": [],
+              "elementType": "VyrnForgeProgressElement"
+            },
+            "framework": {
+              "mode": "template-ref",
+              "type": "VfProgressExposed"
+            }
+          },
+          "accessibility": [
+            "preserves native progressbar semantics for determinate and indeterminate states",
+            "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+            "progress must have an accessible name when surrounding context does not provide one"
+          ],
+          "setup": [],
+          "adapter": {
+            "kind": "vue-facade",
+            "canonicalRenderer": "@vyrnforge/ui-elements",
+            "vModel": {
+              "enabled": false,
+              "mode": "none"
             },
             "refMode": "template-ref"
           }
