@@ -5,6 +5,7 @@ import {
   Button,
   DescriptionList,
   Dialog,
+  Progress,
   Tabs,
   TextInput,
   type TabItem,
@@ -86,6 +87,13 @@ function App() {
         <dt>Owner</dt>
         <dd>Operations</dd>
       </DescriptionList>
+
+      <Progress
+        aria-label="React upload progress"
+        data-react-progress
+        max={100}
+        value={40}
+      />
 
       <TextInput
         ref={ownerRef}
