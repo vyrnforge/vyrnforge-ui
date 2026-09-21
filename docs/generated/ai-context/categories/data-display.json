@@ -39,15 +39,6 @@
       "context": "ai-context/components/property-table.json"
     },
     {
-      "id": "resource-list",
-      "name": "ResourceList",
-      "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "List of resource summary items.",
-      "context": "ai-context/components/resource-list.json"
-    },
-    {
       "id": "timeline",
       "name": "Timeline",
       "package": "@vyrnforge/ui-components",
