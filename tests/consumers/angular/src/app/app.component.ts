@@ -10,6 +10,7 @@ import {
   VfButton,
   VfDialog,
   VfPageHeader,
+  VfProgress,
   VfTabs,
   VfTextInput,
   type GeneratedDialogDismissDetail,
@@ -21,6 +22,7 @@ import { VyrnForgeFormControlDirective } from "@vyrnforge/ui-angular/forms";
 
 type AutocompleteElement = VyrnForgeElementForTagName<"vf-autocomplete">;
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
+type ProgressElement = VyrnForgeElementForTagName<"vf-progress">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
@@ -39,6 +41,7 @@ type VyrnForgeValidationError = {
     VfButton,
     VfDialog,
     VfPageHeader,
+    VfProgress,
     VfTabs,
     VfTextInput,
     VyrnForgeFormControlDirective,
@@ -169,6 +172,38 @@ export class AppComponent implements AfterViewInit {
         );
       }
 
+      const determinateProgress = document.querySelector<ProgressElement>(
+        "#angular-progress-determinate",
+      );
+      const indeterminateProgress = document.querySelector<ProgressElement>(
+        "#angular-progress-indeterminate",
+      );
+      if (!determinateProgress || !indeterminateProgress) {
+        throw new Error(
+          "Angular did not render the generated Progress facades.",
+        );
+      }
+      if (
+        determinateProgress.max !== 100 ||
+        determinateProgress.value !== 40 ||
+        determinateProgress.getAttribute("role") !== "progressbar" ||
+        determinateProgress.getAttribute("aria-valuemax") !== "100" ||
+        determinateProgress.getAttribute("aria-valuenow") !== "40"
+      ) {
+        throw new Error(
+          "Generated Angular Progress did not preserve determinate semantics.",
+        );
+      }
+      if (
+        indeterminateProgress.max !== 100 ||
+        indeterminateProgress.value !== null ||
+        indeterminateProgress.hasAttribute("aria-valuenow")
+      ) {
+        throw new Error(
+          "Generated Angular Progress did not preserve indeterminate semantics.",
+        );
+      }
+
       const requiredAutocompleteSlots = [
         "label",
         "description",
@@ -236,6 +271,7 @@ export class AppComponent implements AfterViewInit {
           "Angular Button click() did not emit canonical action.",
         );
       }
+      root.setAttribute("data-progress", "verified");
       root.setAttribute("data-composition", "verified");
       root.setAttribute("data-imperative-apis", "verified");
       root.setAttribute("data-consumer-property", "verified");
