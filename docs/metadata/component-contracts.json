@@ -723,6 +723,148 @@
       }
     },
     {
+      "id": "timeline",
+      "category": "data-display",
+      "properties": [],
+      "attributes": [],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "required": true,
+          "multiple": false,
+          "content": "element"
+        }
+      ],
+      "methods": [],
+      "form": {
+        "association": "none",
+        "disabledProperty": null,
+        "validity": {
+          "supported": false,
+          "methods": []
+        },
+        "reset": {
+          "supported": false
+        }
+      },
+      "model": {
+        "kind": "none",
+        "controlled": false,
+        "stateProperty": null,
+        "defaultProperty": null,
+        "changeEvent": null,
+        "disabledProperty": null,
+        "touchedSemantics": "none"
+      },
+      "ref": {
+        "exposure": "element",
+        "methods": [],
+        "elementType": "VyrnForgeTimelineElement"
+      },
+      "accessibility": [
+        "requires exactly one native ordered list as projected content so chronological sequence remains browser list semantics",
+        "each timeline event remains a native list item and event order must match the meaningful chronological reading order",
+        "visible timestamps should use native time elements with machine-readable datetime values when the timestamp is known",
+        "decorative markers and connectors must not replace or duplicate the accessible event text"
+      ],
+      "frameworkMappings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "target",
+          "tag": "vf-timeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "element",
+            "type": "VyrnForgeTimelineElement"
+          },
+          "setup": ["register custom element"]
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "status": "target",
+          "export": "Timeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "children",
+              "mode": "children"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "forwarded-ref",
+            "type": "TimelineRef"
+          }
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "status": "target",
+          "export": "VfTimeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "content-projection"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "view-child",
+            "type": "VfTimeline"
+          }
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "status": "target",
+          "export": "VfTimeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "template-ref",
+            "type": "VfTimelineExposed"
+          }
+        }
+      }
+    },
+    {
       "id": "card",
       "category": "composite",
       "properties": [
