@@ -4,6 +4,7 @@ import { nextTick, onMounted, ref } from "vue";
 import {
   VfButton as VyrnForgeButton,
   VfCheckbox as VyrnForgeCheckbox,
+  VfDescriptionList as VyrnForgeDescriptionList,
   VfDialog as VyrnForgeDialog,
   VfProgress as VyrnForgeProgress,
   VfTabs as VyrnForgeTabs,
@@ -168,6 +169,18 @@ onMounted(async () => {
     );
   }
 
+  const descriptionList = document.querySelector(
+    "vf-description-list#vue-description-list",
+  );
+  if (
+    !descriptionList?.querySelector(".vf-description-list__list > dt") ||
+    !descriptionList.querySelector(".vf-description-list__list > dd")
+  ) {
+    throw new Error(
+      "Vue DescriptionList did not preserve native term/description semantics.",
+    );
+  }
+
   consumerRoot.value?.setAttribute("data-progress", "verified");
   consumerRoot.value?.setAttribute("data-consumer-property", "verified");
   consumerRoot.value?.setAttribute("data-consumer-ready", "true");
@@ -258,6 +271,19 @@ onMounted(async () => {
         aria-label="Vue preparing export"
         :max="100"
       />
+    </section>
+
+    <section
+      class="vf-consumer-vue-section"
+      aria-labelledby="description-list-title"
+    >
+      <h2 id="description-list-title">Generated Vue DescriptionList</h2>
+      <VyrnForgeDescriptionList id="vue-description-list">
+        <dt>Status</dt>
+        <dd>Active</dd>
+        <dt>Owner</dt>
+        <dd>Operations</dd>
+      </VyrnForgeDescriptionList>
     </section>
 
     <section class="vf-consumer-vue-section" aria-labelledby="native-title">
