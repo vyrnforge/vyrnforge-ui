@@ -10,7 +10,7 @@
   "guidance": {
     "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
     "avoidWhen": "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead.",
-    "aiUsageNotes": "Use native progress markup until a VyrnForge renderer exists. Do not invent completion events or a stateful controller; value and max are presentation inputs.",
+    "aiUsageNotes": "Use the Native HTML Progress renderer when targeting @vyrnforge/ui-elements. Keep value and max as presentation inputs and do not invent completion events or a stateful controller.",
     "relatedComponents": [
       "LoadingState",
       "Skeleton"
@@ -23,21 +23,23 @@
     "progress must have an accessible name when surrounding context does not provide one"
   ],
   "knownLimitations": [
-    "Renderer implementations remain deferred to the framework-specific Progress tasks."
+    "React, Angular, and Vue renderer implementations remain deferred to their framework-specific Progress tasks."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-progress"
+    ],
     "variables": []
   },
   "frameworks": {
     "react": {
       "status": "target",
       "package": "@vyrnforge/ui-components",
-      "setup": "Planned; no import yet.",
-      "example": "Planned."
+      "setup": "import { VyrnForgeProgressElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+      "example": "<vf-progress max=\"100\" value=\"40\" aria-label=\"Upload progress\"></vf-progress>"
     },
     "native-html": {
-      "status": "target",
+      "status": "current",
       "package": "@vyrnforge/ui-elements",
       "setup": "import \"@vyrnforge/ui-elements/register\";",
       "example": "<vf-progress></vf-progress>"
@@ -83,6 +85,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "customElementsManifest": null
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

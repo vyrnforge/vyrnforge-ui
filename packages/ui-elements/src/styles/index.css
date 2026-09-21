@@ -6,6 +6,7 @@
 @import "./feedback/badge.css";
 @import "./feedback/empty-state.css";
 @import "./feedback/loading-state.css";
+@import "./feedback/progress.css";
 @import "./feedback/skeleton.css";
 @import "./layout/card.css";
 @import "./layout/description-list.css";

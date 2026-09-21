@@ -51,6 +51,7 @@ import {
   VfPageToolbar as VfPageToolbarRuntime,
   VfPanel as VfPanelRuntime,
   VfPopover as VfPopoverRuntime,
+  VfProgress as VfProgressRuntime,
   VfRadio as VfRadioRuntime,
   VfRadioGroup as VfRadioGroupRuntime,
   VfRating as VfRatingRuntime,
@@ -1017,6 +1018,25 @@ export interface VfPopoverRef {
 }
 
 export const VfPopover = VfPopoverRuntime as unknown as VyrnForgeVueComponentType<VfPopoverProps, VfPopoverEmits, VfPopoverSlots, VfPopoverRef>;
+
+export interface VfProgressProps {
+  readonly max?: VyrnForgeElementForTagName<"vf-progress">["max"];
+  readonly value?: VyrnForgeElementForTagName<"vf-progress">["value"];
+}
+
+export interface VfProgressEmits {
+  (event: never): void;
+}
+
+export interface VfProgressSlots {
+
+}
+
+export interface VfProgressRef {
+  readonly element: VyrnForgeElementForTagName<"vf-progress"> | null;
+}
+
+export const VfProgress = VfProgressRuntime as unknown as VyrnForgeVueComponentType<VfProgressProps, VfProgressEmits, VfProgressSlots, VfProgressRef>;
 
 export interface VfRadioProps {
   readonly name?: VyrnForgeElementForTagName<"vf-radio">["name"];
