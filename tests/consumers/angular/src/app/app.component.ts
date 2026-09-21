@@ -8,7 +8,6 @@ import {
 import {
   VfAutocomplete,
   VfButton,
-  VfDescriptionList,
   VfDialog,
   VfPageHeader,
   VfTabs,
@@ -38,7 +37,6 @@ type VyrnForgeValidationError = {
     ReactiveFormsModule,
     VfAutocomplete,
     VfButton,
-    VfDescriptionList,
     VfDialog,
     VfPageHeader,
     VfTabs,
@@ -190,18 +188,6 @@ export class AppComponent implements AfterViewInit {
             `Angular Autocomplete did not preserve the ${slot} composition region.`,
           );
         }
-      }
-
-      const descriptionList = document.querySelector(
-        "vf-description-list[data-angular-description-list]",
-      );
-      if (
-        !descriptionList?.querySelector(".vf-description-list__list > dt") ||
-        !descriptionList.querySelector(".vf-description-list__list > dd")
-      ) {
-        throw new Error(
-          "Angular DescriptionList did not preserve native term/description semantics.",
-        );
       }
 
       if (

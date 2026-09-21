@@ -3,7 +3,9 @@ import { createRoot } from "react-dom/client";
 
 import {
   Button,
+  DescriptionList,
   Dialog,
+  Progress,
   Tabs,
   TextInput,
   type TabItem,
@@ -77,6 +79,20 @@ function App() {
             .querySelector("[data-react-consumer]")
             ?.setAttribute("data-generated-tabs-value", value);
         }}
+      />
+
+      <DescriptionList aria-label="Account details">
+        <dt>Status</dt>
+        <dd>Active</dd>
+        <dt>Owner</dt>
+        <dd>Operations</dd>
+      </DescriptionList>
+
+      <Progress
+        aria-label="React upload progress"
+        data-react-progress
+        max={100}
+        value={40}
       />
 
       <TextInput

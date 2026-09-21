@@ -6,6 +6,7 @@ import {
   VyrnForgeDescriptionListElement,
   VyrnForgeFieldElement,
   VyrnForgeHeadingElement,
+  VyrnForgeProgressElement,
   VyrnForgeRatingElement,
   VyrnForgeSegmentedControlElement,
   VyrnForgeSelectElement,
@@ -57,6 +58,14 @@ export function NativeCoreElementsFixture() {
     description.textContent = "Active";
     descriptionList.append(term, description);
     descriptionList.dataset.vfFixtureRegion = "native-core-description-list";
+
+    const progress = document.createElement("vf-progress") as ElementInstance<
+      typeof VyrnForgeProgressElement
+    >;
+    progress.max = 100;
+    progress.value = 40;
+    progress.setAttribute("aria-label", "Upload progress");
+    progress.dataset.vfFixtureRegion = "native-core-progress";
 
     const card = document.createElement("vf-card");
     card.setAttribute("variant", "outlined");
@@ -238,6 +247,7 @@ export function NativeCoreElementsFixture() {
     root.append(
       heading,
       descriptionList,
+      progress,
       card,
       action,
       actionOutput,

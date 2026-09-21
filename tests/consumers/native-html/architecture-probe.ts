@@ -7,9 +7,9 @@ import {
 
 export const registeredNativeTagCount = vyrnForgeElementDefinitions.length;
 
-if (registeredNativeTagCount !== 59) {
+if (registeredNativeTagCount !== 60) {
   throw new Error(
-    `Expected the 59-tag native catalog (58 GMF3 + DescriptionList), received ${registeredNativeTagCount}.`,
+    `Expected the 60-tag native catalog (58 GMF3 + DescriptionList + Progress), received ${registeredNativeTagCount}.`,
   );
 }
 
