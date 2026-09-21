@@ -36,14 +36,9 @@ export function buildFrameworkApiReference({ root = repositoryRoot } = {}) {
       publicIds.has(component.id),
     ),
   };
-  const reference = createFrameworkApiReference(publicContracts, {
+  return createFrameworkApiReference(publicContracts, {
     exceptionPolicy: createFrameworkExceptionReference(exceptions),
   });
-  reference.generated.sources = [
-    COMPONENT_CATALOG_PATH,
-    ...reference.generated.sources,
-  ];
-  return reference;
 }
 
 export function serializeFrameworkApiReference(reference) {
