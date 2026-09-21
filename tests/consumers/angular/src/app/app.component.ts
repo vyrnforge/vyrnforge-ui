@@ -8,6 +8,7 @@ import {
 import {
   VfAutocomplete,
   VfButton,
+  VfDescriptionList,
   VfDialog,
   VfPageHeader,
   VfProgress,
@@ -39,6 +40,7 @@ type VyrnForgeValidationError = {
     ReactiveFormsModule,
     VfAutocomplete,
     VfButton,
+    VfDescriptionList,
     VfDialog,
     VfPageHeader,
     VfProgress,
@@ -201,6 +203,18 @@ export class AppComponent implements AfterViewInit {
       ) {
         throw new Error(
           "Generated Angular Progress did not preserve indeterminate semantics.",
+        );
+      }
+
+      const descriptionList = document.querySelector(
+        "vf-description-list[data-angular-description-list]",
+      );
+      if (
+        !descriptionList?.querySelector(".vf-description-list__list > dt") ||
+        !descriptionList.querySelector(".vf-description-list__list > dd")
+      ) {
+        throw new Error(
+          "Angular DescriptionList did not preserve native term/description semantics.",
         );
       }
 
