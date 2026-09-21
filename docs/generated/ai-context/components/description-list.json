@@ -4,8 +4,8 @@
   "name": "DescriptionList",
   "package": "@vyrnforge/ui-components",
   "category": "data-display",
-  "maturity": "planned",
-  "availability": "planned",
+  "maturity": "experimental",
+  "availability": "available",
   "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
   "guidance": {
     "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
@@ -22,7 +22,7 @@
     "projected content must retain semantic term and description structure rather than generic grouping roles"
   ],
   "knownLimitations": [
-    "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+    "Avoid for tabular comparisons that require row and column relationships or for interactive form fields."
   ],
   "styling": {
     "classes": [
@@ -32,10 +32,10 @@
   },
   "frameworks": {
     "react": {
-      "status": "target",
+      "status": "current",
       "package": "@vyrnforge/ui-components",
-      "setup": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-      "example": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>"
+      "setup": "import { DescriptionList } from '@vyrnforge/ui-components';",
+      "example": "<DescriptionList><dt>Status</dt><dd>Active</dd></DescriptionList>"
     },
     "native-html": {
       "status": "current",
@@ -44,13 +44,13 @@
       "example": "<vf-description-list></vf-description-list>"
     },
     "angular": {
-      "status": "target",
+      "status": "verified-consumer",
       "package": "@vyrnforge/ui-angular",
       "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
       "example": "<vf-description-list></vf-description-list>"
     },
     "vue": {
-      "status": "target",
+      "status": "verified-consumer",
       "package": "@vyrnforge/ui-vue",
       "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
       "example": "<VfDescriptionList></VfDescriptionList>"
