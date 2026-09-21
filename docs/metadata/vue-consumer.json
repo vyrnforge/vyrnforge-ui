@@ -61,7 +61,8 @@
     "strict vue-tsc template and script type checking",
     "Vite production application build",
     "Chromium property, event, slot, model, and native-form interaction evidence",
-    "public @vyrnforge/ui-vue package consumption"
+    "public @vyrnforge/ui-vue package consumption",
+    "generated Progress facade property binding with determinate and indeterminate runtime semantics"
   ],
   "deferred": ["data-grid multi-framework work"]
 }
