@@ -33,6 +33,7 @@ import {
   VyrnForgePageToolbarElement,
   VyrnForgePanelElement,
   VyrnForgePopoverElement,
+  VyrnForgeProgressElement,
   VyrnForgeRadioElement,
   VyrnForgeRadioGroupElement,
   VyrnForgeRatingElement,
@@ -128,6 +129,10 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
     Object.freeze({
       tagName: "vf-skeleton",
       constructor: VyrnForgeSkeletonElement,
+    }),
+    Object.freeze({
+      tagName: "vf-progress",
+      constructor: VyrnForgeProgressElement,
     }),
     Object.freeze({
       tagName: "vf-button",

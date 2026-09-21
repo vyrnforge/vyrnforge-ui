@@ -34,13 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "9b24696736a323e290e21beb766587839f4fb20e",
+      "sha1": "f1a0fcb320039341899fdb4325ab47485c987c90",
       "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "5f514cc6d9613e08b0bd8c8a693c3b7fac7dc36d",
+      "sha1": "35f9c409be1dee7af98d34455fe7d43e8ce21a10",
       "covers": [
         "component props and types",
         "callbacks",
@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "88c772ee240b05535b98aade2b7501f3e85c330f",
+      "sha1": "d43dca3ecb2f223da7256f125f6d710f49e4edea",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -70,7 +70,7 @@
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "9e50d32d04295b0e2d6d2bd2f63561757c2be898",
+      "sha1": "b05c95acba7bef37bef0e5c38f2e607b2036e853",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -137,6 +137,16 @@
       "task": "S16-react-warning-cleanup",
       "reason": "React test-noise cleanup made controlled native inputs explicitly acknowledge React change semantics while preserving VyrnForge's existing public callback and canonical value-change ownership. Slider keeps its canonical value-change path, SearchInput continues forwarding its public callback through the input-capture bridge, and Autocomplete/TransferList hidden form controls remain current serialized values. React 18 and React 19 compatibility cases passed before this intentional implementation-tree recapture.",
       "evidence": "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx"
+    },
+    {
+      "task": "description-list-react-renderer",
+      "reason": "DescriptionList adds the planned stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves native dl/dt/dd relationships, introduces no stateful model or callback contract, reuses VyrnForge token-driven layout styling, and is covered by React semantic, accessibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "progress-react-renderer",
+      "reason": "Progress adds the planned stateless React renderer as a public @vyrnforge/ui-components export. It preserves native progress semantics for determinate and indeterminate states, introduces no controller or callback contract, uses VyrnForge token-driven feedback styling, and is covered by React semantic, accessibility, compatibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

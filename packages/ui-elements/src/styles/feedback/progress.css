@@ -1,0 +1,30 @@
+vf-progress.vf-progress {
+  display: block;
+  width: 100%;
+}
+
+vf-progress .vf-progress__bar {
+  display: block;
+  width: 100%;
+  height: var(--vf-space-2);
+  border: 0;
+  border-radius: var(--vf-radius-md);
+  overflow: hidden;
+  accent-color: currentColor;
+  background: var(--vf-surface-muted);
+}
+
+vf-progress .vf-progress__bar::-webkit-progress-bar {
+  border-radius: inherit;
+  background: var(--vf-surface-muted);
+}
+
+vf-progress .vf-progress__bar::-webkit-progress-value {
+  border-radius: inherit;
+  background: currentColor;
+}
+
+vf-progress .vf-progress__bar::-moz-progress-bar {
+  border-radius: inherit;
+  background: currentColor;
+}
