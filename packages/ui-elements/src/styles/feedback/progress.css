@@ -7,24 +7,31 @@ vf-progress .vf-progress__bar {
   display: block;
   width: 100%;
   height: var(--vf-space-2);
-  border: 0;
   border-radius: var(--vf-radius-md);
   overflow: hidden;
-  accent-color: currentColor;
   background: var(--vf-surface-muted);
 }
 
-vf-progress .vf-progress__bar::-webkit-progress-bar {
-  border-radius: inherit;
-  background: var(--vf-surface-muted);
-}
-
-vf-progress .vf-progress__bar::-webkit-progress-value {
+vf-progress .vf-progress__value {
+  display: block;
+  width: var(--vf-progress-value, 0%);
+  height: 100%;
   border-radius: inherit;
   background: currentColor;
 }
 
-vf-progress .vf-progress__bar::-moz-progress-bar {
-  border-radius: inherit;
-  background: currentColor;
+vf-progress[data-state="indeterminate"] .vf-progress__value {
+  width: 40%;
+  animation: vf-progress-indeterminate var(--vf-motion-duration-deliberate)
+    ease-in-out infinite alternate;
+}
+
+@keyframes vf-progress-indeterminate {
+  from {
+    transform: translateX(-25%);
+  }
+
+  to {
+    transform: translateX(175%);
+  }
 }
