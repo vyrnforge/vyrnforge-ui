@@ -121,6 +121,23 @@
     </vf-autocomplete>
   </section>
 
+  <section class="vf-consumer-angular-section" aria-labelledby="progress-title">
+    <h2 id="progress-title">Generated Angular Progress</h2>
+    <vf-progress
+      id="angular-progress-determinate"
+      vfGeneratedProgress
+      aria-label="Angular upload progress"
+      [max]="100"
+      [value]="40"
+    ></vf-progress>
+    <vf-progress
+      id="angular-progress-indeterminate"
+      vfGeneratedProgress
+      aria-label="Angular preparing export"
+      [max]="100"
+    ></vf-progress>
+  </section>
+
   <section class="vf-consumer-angular-section" aria-labelledby="native-title">
     <h2 id="native-title">Native ElementInternals form</h2>
     <form
