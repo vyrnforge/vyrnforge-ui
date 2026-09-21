@@ -8,7 +8,8 @@ export class VyrnForgeProgressElement extends VyrnForgeDomElement {
       value: { reflect: true, type: "number" },
     });
 
-  #progress: HTMLProgressElement | null = null;
+  #track: HTMLDivElement | null = null;
+  #valueBar: HTMLDivElement | null = null;
 
   get max(): number {
     return this.getPropertyValue("max", 1);
@@ -39,8 +40,8 @@ export class VyrnForgeProgressElement extends VyrnForgeDomElement {
   }
 
   protected override update(): void {
-    const progress = this.ensureProgress();
-    if (!progress) return;
+    const visual = this.ensureVisual();
+    if (!visual) return;
 
     const max = this.max > 0 ? this.max : 1;
     const value =
@@ -52,25 +53,38 @@ export class VyrnForgeProgressElement extends VyrnForgeDomElement {
     this.setAttribute("aria-valuemax", String(max));
     if (value === null) {
       this.removeAttribute("aria-valuenow");
-      progress.removeAttribute("value");
+      this.setAttribute("data-state", "indeterminate");
+      visual.valueBar.style.removeProperty("--vf-progress-value");
     } else {
       this.setAttribute("aria-valuenow", String(value));
-      progress.value = value;
+      this.setAttribute("data-state", "determinate");
+      visual.valueBar.style.setProperty(
+        "--vf-progress-value",
+        `${(value / max) * 100}%`,
+      );
     }
-    progress.max = max;
     this.setAttribute("data-vf-element", "");
   }
 
-  private ensureProgress(): HTMLProgressElement | null {
-    if (this.#progress?.isConnected) return this.#progress;
+  private ensureVisual(): {
+    track: HTMLDivElement;
+    valueBar: HTMLDivElement;
+  } | null {
+    if (this.#track?.isConnected && this.#valueBar?.isConnected) {
+      return { track: this.#track, valueBar: this.#valueBar };
+    }
     const document = this.resolveDocument();
     if (!document) return null;
-    const progress = document.createElement("progress");
-    progress.className = "vf-progress__bar";
-    progress.setAttribute("aria-hidden", "true");
-    progress.tabIndex = -1;
-    this.replaceChildren(progress);
-    this.#progress = progress;
-    return progress;
+    const track = document.createElement("div");
+    track.className = "vf-progress__bar";
+    track.setAttribute("aria-hidden", "true");
+    const valueBar = document.createElement("div");
+    valueBar.className = "vf-progress__value";
+    valueBar.setAttribute("aria-hidden", "true");
+    track.append(valueBar);
+    this.replaceChildren(track);
+    this.#track = track;
+    this.#valueBar = valueBar;
+    return { track, valueBar };
   }
 }
