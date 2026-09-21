@@ -78,12 +78,12 @@
     "gridRule": "All @vyrnforge/ui-data-grid public exports remain on the independent React alpha track and are deferred from this beta release group."
   },
   "summary": {
-    "catalogEntries": 97,
+    "catalogEntries": 96,
     "publicNonGridComponents": 69,
     "includedComponents": 69,
     "deferredNonGridComponents": 0,
     "publicGridComponentsDeferred": 10,
-    "plannedNonPublicComponentsExcluded": 5,
+    "plannedNonPublicComponentsExcluded": 4,
     "internalNonPublicComponentsExcluded": 1,
     "nativeCustomElementTags": 60,
     "categoryCounts": {
@@ -3060,16 +3060,6 @@
       {
         "id": "property-table",
         "displayName": "PropertyTable",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "resource-list",
-        "displayName": "ResourceList",
         "package": "@vyrnforge/ui-components",
         "category": "data-display",
         "maturity": "planned",
