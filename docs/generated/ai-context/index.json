@@ -239,13 +239,6 @@
       "context": "ai-context/components/description-list.json"
     },
     {
-      "id": "key-value-list",
-      "name": "KeyValueList",
-      "category": "data-display",
-      "availability": "planned",
-      "context": "ai-context/components/key-value-list.json"
-    },
-    {
       "id": "property-table",
       "name": "PropertyTable",
       "category": "data-display",
