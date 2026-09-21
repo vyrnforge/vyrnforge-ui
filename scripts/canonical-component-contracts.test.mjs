@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { createCoverageReport } from "./report-non-grid-contract-coverage.mjs";
 import {
   CANONICAL_COMPONENT_CONTRACT_PATH,
   CANONICAL_COMPONENT_CONTRACT_SCHEMA_PATH,
@@ -174,6 +175,40 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
   for (const framework of ["react", "angular", "vue"]) {
     assert.equal(contract.frameworkMappings[framework].status, "target");
   }
+});
+
+test("PropertyTable defines a planned, semantic, state-free table contract", () => {
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+  const contract = normalized.componentById.get("property-table");
+
+  assert.ok(contract);
+  assert.equal(contract.category, "data-display");
+  assert.deepEqual(contract.properties, []);
+  assert.deepEqual(contract.attributes, []);
+  assert.deepEqual(contract.events, []);
+  assert.deepEqual(contract.methods, []);
+  assert.equal(contract.form.association, "none");
+  assert.equal(contract.model.kind, "none");
+  assert.deepEqual(contract.slots, [
+    { name: "default", required: true, multiple: false, content: "element" },
+  ]);
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("one native table element"),
+    ),
+  );
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "target");
+  }
+});
+
+test("planned canonical contracts do not become unknown G10 contracts", () => {
+  const report = createCoverageReport();
+
+  assert.equal(report.unknownContractIds.includes("property-table"), false);
+  assert.equal(report.contractComplete.includes("property-table"), false);
+  assert.equal(report.needsContractData.includes("property-table"), false);
+  assert.equal(report.totals.scoped, 69);
 });
 
 test("Progress keeps a semantic, state-free cross-framework contract", () => {
