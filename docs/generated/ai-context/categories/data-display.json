@@ -15,8 +15,8 @@
       "id": "description-list",
       "name": "DescriptionList",
       "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
       "context": "ai-context/components/description-list.json"
     },

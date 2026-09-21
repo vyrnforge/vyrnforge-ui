@@ -9,7 +9,7 @@
     "packages/ui-elements/custom-elements.json"
   ],
   "scope": {
-    "componentCount": 67,
+    "componentCount": 69,
     "frameworkTabs": [
       "react",
       "native-html",
@@ -1079,6 +1079,99 @@
       }
     },
     {
+      "id": "description-list",
+      "displayName": "DescriptionList",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
+      "guidance": {
+        "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
+        "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
+        "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
+        "relatedComponents": [
+          "KeyValueList",
+          "PropertyTable"
+        ]
+      },
+      "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
+      "knownLimitations": [
+        "Avoid for tabular comparisons that require row and column relationships or for interactive form fields."
+      ],
+      "styling": {
+        "classes": [
+          "vf-description-list"
+        ],
+        "variables": []
+      },
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": null,
+      "source": {
+        "componentMetadata": "docs/metadata/components.json",
+        "contractMetadata": "docs/metadata/component-contracts.json",
+        "customElementsManifest": "packages/ui-elements/custom-elements.json"
+      },
+      "nativeDeclaration": {
+        "name": "VyrnForgeDescriptionListElement",
+        "tagName": "vf-description-list",
+        "description": "DescriptionList browser-native renderer. Read-only term-and-description facts with semantic description-list relationships."
+      },
+      "frameworks": {
+        "react": {
+          "label": "React",
+          "status": "current",
+          "package": "@vyrnforge/ui-components",
+          "setup": "import { DescriptionList } from '@vyrnforge/ui-components';",
+          "example": "<DescriptionList><dt>Status</dt><dd>Active</dd></DescriptionList>",
+          "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
+        },
+        "native-html": {
+          "label": "Native HTML",
+          "status": "current",
+          "package": "@vyrnforge/ui-elements",
+          "setup": "import \"@vyrnforge/ui-elements/register\";",
+          "example": "<vf-description-list></vf-description-list>",
+          "note": "Native HTML consumes @vyrnforge/ui-elements directly through canonical vf-* Custom Elements and events."
+        },
+        "angular": {
+          "label": "Angular",
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+          "example": "<vf-description-list></vf-description-list>",
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
+        },
+        "vue": {
+          "label": "Vue",
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-vue",
+          "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+          "example": "<VfDescriptionList></VfDescriptionList>",
+          "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
+        }
+      },
+      "contract": {
+        "properties": [],
+        "attributes": [],
+        "events": [],
+        "slots": [
+          {
+            "name": "default",
+            "required": true,
+            "multiple": true,
+            "content": "element"
+          }
+        ],
+        "methods": [],
+        "accessibility": [
+          "preserves native description-list semantics for term and description relationships",
+          "projected content must retain semantic term and description structure rather than generic grouping roles"
+        ],
+        "formAssociation": "none"
+      }
+    },
+    {
       "id": "transfer-list",
       "displayName": "TransferList",
       "package": "@vyrnforge/ui-components",
@@ -2093,6 +2186,130 @@
         "methods": [],
         "accessibility": [
           "status role"
+        ],
+        "formAssociation": "none"
+      }
+    },
+    {
+      "id": "progress",
+      "displayName": "Progress",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Determinate or indeterminate progress indicator.",
+      "guidance": {
+        "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
+        "avoidWhen": "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead.",
+        "aiUsageNotes": "Use the Native HTML Progress renderer when targeting @vyrnforge/ui-elements. Keep value and max as presentation inputs and do not invent completion events or a stateful controller.",
+        "relatedComponents": [
+          "LoadingState",
+          "Skeleton"
+        ]
+      },
+      "accessibilityNotes": "Preserve native progress semantics: determinate progress exposes the current value and maximum, while omitting value represents indeterminate progress. Provide an accessible name when surrounding context does not.",
+      "knownLimitations": [
+        "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."
+      ],
+      "styling": {
+        "classes": [
+          "vf-progress"
+        ],
+        "variables": []
+      },
+      "docsPath": "docs/api/ui-components-api.md",
+      "playgroundPath": null,
+      "source": {
+        "componentMetadata": "docs/metadata/components.json",
+        "contractMetadata": "docs/metadata/component-contracts.json",
+        "customElementsManifest": "packages/ui-elements/custom-elements.json"
+      },
+      "nativeDeclaration": {
+        "name": "VyrnForgeProgressElement",
+        "tagName": "vf-progress",
+        "description": "Progress browser-native renderer. Determinate or indeterminate progress indicator."
+      },
+      "frameworks": {
+        "react": {
+          "label": "React",
+          "status": "current",
+          "package": "@vyrnforge/ui-components",
+          "setup": "import { Progress } from '@vyrnforge/ui-components';",
+          "example": "<Progress max={100} value={40} aria-label='Upload progress' />",
+          "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
+        },
+        "native-html": {
+          "label": "Native HTML",
+          "status": "current",
+          "package": "@vyrnforge/ui-elements",
+          "setup": "import \"@vyrnforge/ui-elements/register\";",
+          "example": "<vf-progress></vf-progress>",
+          "note": "Native HTML consumes @vyrnforge/ui-elements directly through canonical vf-* Custom Elements and events."
+        },
+        "angular": {
+          "label": "Angular",
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+          "example": "<vf-progress></vf-progress>",
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
+        },
+        "vue": {
+          "label": "Vue",
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-vue",
+          "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+          "example": "<VfProgress></VfProgress>",
+          "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
+        }
+      },
+      "contract": {
+        "properties": [
+          {
+            "name": "max",
+            "type": {
+              "kind": "number"
+            },
+            "required": false,
+            "mutable": true,
+            "default": 1,
+            "description": "Upper bound for determinate progress."
+          },
+          {
+            "name": "value",
+            "type": {
+              "kind": "number",
+              "nullable": true
+            },
+            "required": false,
+            "mutable": true,
+            "default": null,
+            "description": "Current determinate value; null represents indeterminate progress."
+          }
+        ],
+        "attributes": [
+          {
+            "name": "max",
+            "property": "max",
+            "valueKind": "number",
+            "reflection": "two-way",
+            "removal": "restore-default"
+          },
+          {
+            "name": "value",
+            "property": "value",
+            "valueKind": "number",
+            "reflection": "two-way",
+            "removal": "set-null"
+          }
+        ],
+        "events": [],
+        "slots": [],
+        "methods": [],
+        "accessibility": [
+          "preserves native progressbar semantics for determinate and indeterminate states",
+          "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+          "progress must have an accessible name when surrounding context does not provide one"
         ],
         "formAssociation": "none"
       }

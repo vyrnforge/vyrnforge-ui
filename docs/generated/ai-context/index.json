@@ -235,7 +235,7 @@
       "id": "description-list",
       "name": "DescriptionList",
       "category": "data-display",
-      "availability": "planned",
+      "availability": "available",
       "context": "ai-context/components/description-list.json"
     },
     {
@@ -326,7 +326,7 @@
       "id": "progress",
       "name": "Progress",
       "category": "feedback",
-      "availability": "planned",
+      "availability": "available",
       "context": "ai-context/components/progress.json"
     },
     {

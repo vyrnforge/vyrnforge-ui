@@ -5249,23 +5249,23 @@
       "displayName": "Progress",
       "package": "@vyrnforge/ui-components",
       "category": "feedback",
-      "maturity": "planned",
+      "maturity": "experimental",
       "owner": "Component Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
+      "sourcePath": "packages/ui-components/src/components/Progress/Progress.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "progress",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to their framework-specific Progress tasks."
+        "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."
       ],
       "deprecation": {
         "status": "not-applicable"
@@ -5276,20 +5276,20 @@
       "relatedComponents": ["LoadingState", "Skeleton"],
       "cssClasses": ["vf-progress"],
       "cssVariables": [],
-      "importExample": "import { VyrnForgeProgressElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-      "basicUsageExample": "<vf-progress max=\"100\" value=\"40\" aria-label=\"Upload progress\"></vf-progress>",
+      "importExample": "import { Progress } from '@vyrnforge/ui-components';",
+      "basicUsageExample": "<Progress max={100} value={40} aria-label='Upload progress' />",
       "accessibilityNotes": "Preserve native progress semantics: determinate progress exposes the current value and maximum, while omitting value represents indeterminate progress. Provide an accessible name when surrounding context does not.",
       "aiUsageNotes": "Use the Native HTML Progress renderer when targeting @vyrnforge/ui-elements. Keep value and max as presentation inputs and do not invent completion events or a stateful controller.",
       "frameworkParity": {
-        "betaScope": "excluded",
+        "betaScope": "included",
         "react": {
           "package": "@vyrnforge/ui-components",
           "export": "Progress",
-          "status": "target"
+          "status": "current"
         },
         "behaviors": {
           "package": "@vyrnforge/ui-behaviors",
-          "status": "not-applicable",
+          "status": "foundation-current",
           "componentController": "not-applicable"
         },
         "native": {
@@ -5300,14 +5300,14 @@
           "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
-          "status": "target",
+          "status": "verified-consumer",
           "consumes": "@vyrnforge/ui-elements",
-          "evidence": "pending"
+          "evidence": "docs/metadata/angular-consumer.json"
         },
         "vue": {
-          "status": "target",
+          "status": "verified-consumer",
           "consumes": "@vyrnforge/ui-elements",
-          "evidence": "pending"
+          "evidence": "docs/metadata/vue-consumer.json"
         }
       }
     },
@@ -5316,23 +5316,23 @@
       "displayName": "DescriptionList",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
-      "maturity": "planned",
+      "maturity": "experimental",
       "owner": "Component Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
+      "sourcePath": "packages/ui-components/src/components/DescriptionList/DescriptionList.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "description-list",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+        "Avoid for tabular comparisons that require row and column relationships or for interactive form fields."
       ],
       "deprecation": {
         "status": "not-applicable"
@@ -5343,20 +5343,20 @@
       "relatedComponents": ["KeyValueList", "PropertyTable"],
       "cssClasses": ["vf-description-list"],
       "cssVariables": [],
-      "importExample": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-      "basicUsageExample": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>",
+      "importExample": "import { DescriptionList } from '@vyrnforge/ui-components';",
+      "basicUsageExample": "<DescriptionList><dt>Status</dt><dd>Active</dd></DescriptionList>",
       "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
       "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
       "frameworkParity": {
-        "betaScope": "excluded",
+        "betaScope": "included",
         "react": {
           "package": "@vyrnforge/ui-components",
           "export": "DescriptionList",
-          "status": "target"
+          "status": "current"
         },
         "behaviors": {
           "package": "@vyrnforge/ui-behaviors",
-          "status": "not-applicable",
+          "status": "foundation-current",
           "componentController": "not-applicable"
         },
         "native": {
@@ -5367,14 +5367,14 @@
           "evidence": "docs/metadata/native-element-foundations.json"
         },
         "angular": {
-          "status": "target",
+          "status": "verified-consumer",
           "consumes": "@vyrnforge/ui-elements",
-          "evidence": "pending"
+          "evidence": "docs/metadata/angular-consumer.json"
         },
         "vue": {
-          "status": "target",
+          "status": "verified-consumer",
           "consumes": "@vyrnforge/ui-elements",
-          "evidence": "pending"
+          "evidence": "docs/metadata/vue-consumer.json"
         }
       }
     },
