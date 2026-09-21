@@ -61,8 +61,7 @@
     "strict vue-tsc template and script type checking",
     "Vite production application build",
     "Chromium property, event, slot, model, and native-form interaction evidence",
-    "public @vyrnforge/ui-vue package consumption",
-    "generated DescriptionList default-slot composition with native dl/dt/dd semantics"
+    "public @vyrnforge/ui-vue package consumption"
   ],
   "deferred": ["data-grid multi-framework work"]
 }

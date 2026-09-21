@@ -6,48 +6,85 @@
   "category": "feedback",
   "maturity": "planned",
   "availability": "planned",
-  "purpose": "Progress indicator.",
+  "purpose": "Determinate or indeterminate progress indicator.",
   "guidance": {
-    "useWhen": "Use later for determinate or indeterminate progress.",
-    "avoidWhen": "Do not import until implemented.",
-    "aiUsageNotes": "Use LoadingState until Progress exists.",
+    "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
+    "avoidWhen": "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead.",
+    "aiUsageNotes": "Use the Native HTML Progress renderer when targeting @vyrnforge/ui-elements. Keep value and max as presentation inputs and do not invent completion events or a stateful controller.",
     "relatedComponents": [
       "LoadingState",
       "Skeleton"
     ]
   },
   "accessibility": [
-    "Progress needs accessible value text where determinate."
+    "Preserve native progress semantics: determinate progress exposes the current value and maximum, while omitting value represents indeterminate progress. Provide an accessible name when surrounding context does not.",
+    "preserves native progressbar semantics for determinate and indeterminate states",
+    "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+    "progress must have an accessible name when surrounding context does not provide one"
   ],
   "knownLimitations": [
-    "Do not import until implemented."
+    "React, Angular, and Vue renderer implementations remain deferred to their framework-specific Progress tasks."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-progress"
+    ],
     "variables": []
   },
   "frameworks": {
     "react": {
-      "status": "not-supported",
-      "package": "@vyrnforge/ui-components"
+      "status": "target",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { VyrnForgeProgressElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+      "example": "<vf-progress max=\"100\" value=\"40\" aria-label=\"Upload progress\"></vf-progress>"
     },
     "native-html": {
-      "status": "not-supported",
-      "package": null
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-progress></vf-progress>"
     },
     "angular": {
-      "status": "not-supported",
-      "package": null
+      "status": "target",
+      "package": "@vyrnforge/ui-angular",
+      "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+      "example": "<vf-progress></vf-progress>"
     },
     "vue": {
-      "status": "not-supported",
-      "package": null
+      "status": "target",
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfProgress></VfProgress>"
     }
   },
-  "contract": null,
+  "contract": {
+    "properties": [
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": 1
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "required": false,
+        "default": null
+      }
+    ],
+    "events": [],
+    "slots": [],
+    "methods": [],
+    "accessibility": [
+      "preserves native progressbar semantics for determinate and indeterminate states",
+      "determinate progress exposes the current value and maximum while a null value represents indeterminate progress",
+      "progress must have an accessible name when surrounding context does not provide one"
+    ],
+    "formAssociation": "none"
+  },
   "source": {
     "componentMetadata": "docs/metadata/components.json",
-    "contractMetadata": null,
-    "customElementsManifest": null
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

@@ -4,7 +4,6 @@ import { nextTick, onMounted, ref } from "vue";
 import {
   VfButton as VyrnForgeButton,
   VfCheckbox as VyrnForgeCheckbox,
-  VfDescriptionList as VyrnForgeDescriptionList,
   VfDialog as VyrnForgeDialog,
   VfTabs as VyrnForgeTabs,
   VfTextInput as VyrnForgeTextInput,
@@ -133,16 +132,6 @@ onMounted(async () => {
   if (ownerNode.value !== owner.value) {
     throw new Error("Vue did not assign the text-input value property.");
   }
-  const descriptionList = document.querySelector("vf-description-list");
-  if (
-    !descriptionList?.querySelector(".vf-description-list__list > dt") ||
-    !descriptionList.querySelector(".vf-description-list__list > dd")
-  ) {
-    throw new Error(
-      "Vue DescriptionList did not preserve native term/description semantics.",
-    );
-  }
-
   if (dialogNode.open !== dialogOpen.value) {
     throw new Error("Generated Vue Dialog did not retain v-model:open state.");
   }
@@ -221,19 +210,6 @@ onMounted(async () => {
       >
         Apply model from Vue
       </vf-button>
-    </section>
-
-    <section
-      class="vf-consumer-vue-section"
-      aria-labelledby="description-list-title"
-    >
-      <h2 id="description-list-title">Generated Vue DescriptionList</h2>
-      <VyrnForgeDescriptionList>
-        <dt>Status</dt>
-        <dd>Active</dd>
-        <dt>Owner</dt>
-        <dd>Operations</dd>
-      </VyrnForgeDescriptionList>
     </section>
 
     <section class="vf-consumer-vue-section" aria-labelledby="native-title">

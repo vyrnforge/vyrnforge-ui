@@ -424,7 +424,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
 
   const nativeParity = metadata.nativeParity ?? {};
   if (
-    nativeParity.registeredPublicTags !== 59 ||
+    nativeParity.registeredPublicTags !== 60 ||
     nativeParity.browserEvidence !== "tests/browser/native-parity.spec.ts" ||
     nativeParity.fixture !==
       "apps/regression-fixtures/src/nativeParityElements.tsx" ||
@@ -456,6 +456,6 @@ if (
 ) {
   assertNativeElementFoundations();
   console.log(
-    "Native element foundations passed: EL-6001 through EL-6018 and the 59-tag native renderer catalog (58 canonical + 1 post-GMF3 extension) are complete.",
+    "Native element foundations passed: EL-6001 through EL-6018 and the 60-tag native renderer catalog (59 canonical + 1 post-GMF3 extension) are complete.",
   );
 }
