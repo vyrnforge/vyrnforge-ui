@@ -42,6 +42,7 @@
     "package-owned provideVyrnForge setup without CUSTOM_ELEMENTS_SCHEMA",
     "generated @vyrnforge/ui-angular facade bindings",
     "generated Progress facade property binding with determinate and indeterminate runtime semantics",
+    "generated Progress facade property binding with determinate and indeterminate runtime semantics",
     "object-valued property binding without attribute serialization",
     "canonical vf-action interoperability",
     "named Light DOM composition",
