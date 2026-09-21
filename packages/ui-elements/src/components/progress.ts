@@ -68,7 +68,6 @@ export class VyrnForgeProgressElement extends VyrnForgeDomElement {
     const progress = document.createElement("progress");
     progress.className = "vf-progress__bar";
     progress.setAttribute("aria-hidden", "true");
-    progress.tabIndex = -1;
     this.replaceChildren(progress);
     this.#progress = progress;
     return progress;
