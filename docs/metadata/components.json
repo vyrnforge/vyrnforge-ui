@@ -5449,41 +5449,6 @@
       "aiUsageNotes": "Do not use UniversalDataGrid for simple property display."
     },
     {
-      "id": "resource-list",
-      "displayName": "ResourceList",
-      "package": "@vyrnforge/ui-components",
-      "category": "data-display",
-      "maturity": "planned",
-      "owner": "Component Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
-      "docsPath": "docs/api/ui-components-api.md",
-      "playgroundPath": "not-applicable",
-      "evidence": {
-        "maturityEvidenceKey": "resource-list",
-        "status": "requires-verification"
-      },
-      "accessibility": {
-        "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "not-applicable"
-      },
-      "knownLimitations": ["Do not import until implemented."],
-      "deprecation": {
-        "status": "not-applicable"
-      },
-      "purpose": "List of resource summary items.",
-      "useWhen": "Use later for non-tabular resource lists.",
-      "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["Card", "UniversalDataGrid"],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "Planned; no import yet.",
-      "basicUsageExample": "Planned.",
-      "accessibilityNotes": "List items need clear headings/actions.",
-      "aiUsageNotes": "Use list markup or Card items until implemented."
-    },
-    {
       "id": "timeline",
       "displayName": "Timeline",
       "package": "@vyrnforge/ui-components",
