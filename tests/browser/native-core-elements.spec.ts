@@ -84,8 +84,11 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     await expect(progress).toHaveAttribute("aria-valuemin", "0");
     await expect(progress).toHaveAttribute("aria-valuemax", "100");
     await expect(progress).toHaveAttribute("aria-valuenow", "40");
-    await expect(progress.locator("> progress")).toHaveAttribute("max", "100");
-    await expect(progress.locator("> progress")).toHaveAttribute("value", "40");
+    const nativeBar = progress.locator("> progress");
+    await expect(nativeBar).toHaveAttribute("aria-hidden", "true");
+    expect(await nativeBar.getAttribute("tabindex")).toBeNull();
+    await expect(nativeBar).toHaveAttribute("max", "100");
+    await expect(nativeBar).toHaveAttribute("value", "40");
     await expect(progress).toHaveAttribute("data-vf-element", "");
   });
 
