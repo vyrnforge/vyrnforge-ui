@@ -3666,7 +3666,7 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "target",
+          "status": "current",
           "tag": "vf-progress",
           "properties": [
             {

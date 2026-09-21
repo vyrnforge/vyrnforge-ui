@@ -206,6 +206,17 @@
         },
         {
           "kind": "class",
+          "name": "VyrnForgeProgressElement",
+          "description": "Progress browser-native renderer. Determinate or indeterminate progress indicator.",
+          "tagName": "vf-progress",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
           "name": "VyrnForgeButtonElement",
           "description": "Button browser-native renderer. Text action control for primary, secondary, subtle, danger, and ghost actions.",
           "tagName": "vf-button",
@@ -677,7 +688,7 @@
       "packageRootSideEffects": false
     },
     "domMode": "light-dom",
-    "registeredTagCount": 59,
+    "registeredTagCount": 60,
     "eventVocabulary": [
       "vf-action",
       "vf-cancel",
@@ -700,8 +711,8 @@
         "exceptions": "docs/metadata/framework-exceptions.json",
         "descriptions": "docs/metadata/components.json"
       },
-      "canonicalTagCount": 58,
-      "canonicalMappedRegistrationCount": 58,
+      "canonicalTagCount": 59,
+      "canonicalMappedRegistrationCount": 59,
       "exceptionBackedRegistrationCount": 1
     },
     "typeDeclarations": {
