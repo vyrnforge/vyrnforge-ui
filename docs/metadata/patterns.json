@@ -32,6 +32,24 @@
       ]
     },
     {
+      "id": "activity-log",
+      "displayName": "Activity Log",
+      "category": "data-display",
+      "purpose": "Chronological activity composition for actor, action, time, optional status, and contextual metadata using Timeline and existing VyrnForge primitives.",
+      "useWhen": "Use for application-owned audit or recent-activity views where actor/action/time content is composed over the shared Timeline foundation.",
+      "avoidWhen": "Do not put persistence, authorization, activity schemas, business state, or workflow execution into the pattern; use Timeline directly when actor/action conventions are unnecessary.",
+      "components": ["timeline", "badge", "text"],
+      "exampleFramework": "react",
+      "frameworkNeutral": true,
+      "aiKeywords": [
+        "activity log",
+        "audit log",
+        "recent activity",
+        "actor action time",
+        "history"
+      ]
+    },
+    {
       "id": "detail",
       "displayName": "Detail Page",
       "category": "application-layout",
