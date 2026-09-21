@@ -6,6 +6,7 @@ import {
   VfCheckbox as VyrnForgeCheckbox,
   VfDialog as VyrnForgeDialog,
   VfProgress as VyrnForgeProgress,
+  VfProgress as VyrnForgeProgress,
   VfTabs as VyrnForgeTabs,
   VfTextInput as VyrnForgeTextInput,
   type GeneratedDialogDismissDetail,
@@ -18,6 +19,7 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
+type ProgressElement = VyrnForgeElementForTagName<"vf-progress">;
 type ProgressElement = VyrnForgeElementForTagName<"vf-progress">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
@@ -169,6 +171,37 @@ onMounted(async () => {
   }
 
   consumerRoot.value?.setAttribute("data-progress", "verified");
+  const determinateProgress = document.querySelector<ProgressElement>(
+    "#vue-progress-determinate",
+  );
+  const indeterminateProgress = document.querySelector<ProgressElement>(
+    "#vue-progress-indeterminate",
+  );
+  if (!determinateProgress || !indeterminateProgress) {
+    throw new Error("Vue did not render the generated Progress facades.");
+  }
+  if (
+    determinateProgress.max !== 100 ||
+    determinateProgress.value !== 40 ||
+    determinateProgress.getAttribute("role") !== "progressbar" ||
+    determinateProgress.getAttribute("aria-valuemax") !== "100" ||
+    determinateProgress.getAttribute("aria-valuenow") !== "40"
+  ) {
+    throw new Error(
+      "Generated Vue Progress did not preserve determinate semantics.",
+    );
+  }
+  if (
+    indeterminateProgress.max !== 100 ||
+    indeterminateProgress.value !== null ||
+    indeterminateProgress.hasAttribute("aria-valuenow")
+  ) {
+    throw new Error(
+      "Generated Vue Progress did not preserve indeterminate semantics.",
+    );
+  }
+
+  consumerRoot.value?.setAttribute("data-progress", "verified");
   consumerRoot.value?.setAttribute("data-consumer-property", "verified");
   consumerRoot.value?.setAttribute("data-consumer-ready", "true");
 });
@@ -243,6 +276,21 @@ onMounted(async () => {
       >
         Apply model from Vue
       </vf-button>
+    </section>
+
+    <section class="vf-consumer-vue-section" aria-labelledby="progress-title">
+      <h2 id="progress-title">Generated Vue Progress</h2>
+      <VyrnForgeProgress
+        id="vue-progress-determinate"
+        aria-label="Vue upload progress"
+        :max="100"
+        :value="40"
+      />
+      <VyrnForgeProgress
+        id="vue-progress-indeterminate"
+        aria-label="Vue preparing export"
+        :max="100"
+      />
     </section>
 
     <section class="vf-consumer-vue-section" aria-labelledby="progress-title">
