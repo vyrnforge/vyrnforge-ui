@@ -253,13 +253,6 @@
       "context": "ai-context/components/property-table.json"
     },
     {
-      "id": "resource-list",
-      "name": "ResourceList",
-      "category": "data-display",
-      "availability": "planned",
-      "context": "ai-context/components/resource-list.json"
-    },
-    {
       "id": "timeline",
       "name": "Timeline",
       "category": "data-display",
