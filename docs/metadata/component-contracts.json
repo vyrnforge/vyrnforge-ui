@@ -426,23 +426,10 @@
     }
   ],
   "formAssociation": {
-    "modes": [
-      "none",
-      "value",
-      "submitter"
-    ],
-    "requiredProperties": [
-      "name",
-      "disabled"
-    ],
-    "valueModeProperties": [
-      "value",
-      "required"
-    ],
-    "requiredMethods": [
-      "checkValidity",
-      "reportValidity"
-    ],
+    "modes": ["none", "value", "submitter"],
+    "requiredProperties": ["name", "disabled"],
+    "valueModeProperties": ["value", "required"],
+    "requiredMethods": ["checkValidity", "reportValidity"],
     "requiredCallbacks": [
       "formAssociatedCallback",
       "formDisabledCallback",
@@ -520,9 +507,7 @@
             "mode": "element",
             "type": "VyrnForgeDescriptionListElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -708,9 +693,7 @@
             "mode": "element",
             "type": "VyrnForgeCardElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -972,9 +955,7 @@
             "mode": "element",
             "type": "VyrnForgeInlineElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -1186,9 +1167,7 @@
         "methods": [],
         "elementType": "VyrnForgePageElement"
       },
-      "accessibility": [
-        "main landmark semantics"
-      ],
+      "accessibility": ["main landmark semantics"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -1223,9 +1202,7 @@
             "mode": "element",
             "type": "VyrnForgePageElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -1497,9 +1474,7 @@
             "mode": "element",
             "type": "VyrnForgePageHeaderElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -1762,10 +1737,7 @@
         "methods": [],
         "elementType": "VyrnForgePageToolbarElement"
       },
-      "accessibility": [
-        "toolbar role",
-        "accessible toolbar label"
-      ],
+      "accessibility": ["toolbar role", "accessible toolbar label"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -1810,9 +1782,7 @@
             "mode": "element",
             "type": "VyrnForgePageToolbarElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -1988,9 +1958,7 @@
         "methods": [],
         "elementType": "VyrnForgePanelElement"
       },
-      "accessibility": [
-        "region semantics"
-      ],
+      "accessibility": ["region semantics"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -2014,9 +1982,7 @@
             "mode": "element",
             "type": "VyrnForgePanelElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -2129,9 +2095,7 @@
         "methods": [],
         "elementType": "VyrnForgeSectionElement"
       },
-      "accessibility": [
-        "region semantics"
-      ],
+      "accessibility": ["region semantics"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -2155,9 +2119,7 @@
             "mode": "element",
             "type": "VyrnForgeSectionElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -2365,9 +2327,7 @@
             "mode": "element",
             "type": "VyrnForgeStackElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -2563,9 +2523,7 @@
         "methods": [],
         "elementType": "VyrnForgeInlineMessageElement"
       },
-      "accessibility": [
-        "status or alert role follows severity"
-      ],
+      "accessibility": ["status or alert role follows severity"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -2600,9 +2558,7 @@
             "mode": "element",
             "type": "VyrnForgeInlineMessageElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -2801,9 +2757,7 @@
         "methods": [],
         "elementType": "VyrnForgeBadgeElement"
       },
-      "accessibility": [
-        "text remains available to assistive technology"
-      ],
+      "accessibility": ["text remains available to assistive technology"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -2843,9 +2797,7 @@
             "mode": "element",
             "type": "VyrnForgeBadgeElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -3006,9 +2958,7 @@
         "methods": [],
         "elementType": "VyrnForgeEmptyStateElement"
       },
-      "accessibility": [
-        "status role"
-      ],
+      "accessibility": ["status role"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -3032,9 +2982,7 @@
             "mode": "element",
             "type": "VyrnForgeEmptyStateElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -3166,9 +3114,7 @@
         "methods": [],
         "elementType": "VyrnForgeErrorStateElement"
       },
-      "accessibility": [
-        "alert role for error state"
-      ],
+      "accessibility": ["alert role for error state"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -3198,9 +3144,7 @@
             "mode": "element",
             "type": "VyrnForgeErrorStateElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -3366,9 +3310,7 @@
         "methods": [],
         "elementType": "VyrnForgeInlineMessageElement"
       },
-      "accessibility": [
-        "status or alert role follows severity"
-      ],
+      "accessibility": ["status or alert role follows severity"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -3403,9 +3345,7 @@
             "mode": "element",
             "type": "VyrnForgeInlineMessageElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -3551,9 +3491,7 @@
         "methods": [],
         "elementType": "VyrnForgeLoadingStateElement"
       },
-      "accessibility": [
-        "status role"
-      ],
+      "accessibility": ["status role"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -3577,9 +3515,7 @@
             "mode": "element",
             "type": "VyrnForgeLoadingStateElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -3755,9 +3691,7 @@
             "mode": "element",
             "type": "VyrnForgeProgressElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -3944,9 +3878,7 @@
         "methods": [],
         "elementType": "VyrnForgeSkeletonElement"
       },
-      "accessibility": [
-        "decorative skeleton is aria-hidden"
-      ],
+      "accessibility": ["decorative skeleton is aria-hidden"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -3985,9 +3917,7 @@
             "mode": "element",
             "type": "VyrnForgeSkeletonElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -4311,9 +4241,7 @@
             "mode": "element",
             "type": "VyrnForgeToastElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -4755,18 +4683,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -4882,9 +4805,7 @@
             "mode": "element",
             "type": "VyrnForgeTextInputElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -5419,18 +5340,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -5546,9 +5462,7 @@
             "mode": "element",
             "type": "VyrnForgeTextareaElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -6083,18 +5997,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -6210,9 +6119,7 @@
             "mode": "element",
             "type": "VyrnForgeSearchInputElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -6747,18 +6654,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -6874,9 +6776,7 @@
             "mode": "element",
             "type": "VyrnForgeDateInputElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -7411,18 +7311,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -7538,9 +7433,7 @@
             "mode": "element",
             "type": "VyrnForgeDateTimeInputElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -8154,18 +8047,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -8301,9 +8189,7 @@
             "mode": "element",
             "type": "VyrnForgeNumberInputElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -8893,18 +8779,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "checked"
-          ]
+          "restores": ["checked"]
         }
       },
       "model": {
@@ -9025,9 +8906,7 @@
             "mode": "element",
             "type": "VyrnForgeCheckboxElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -9559,18 +9438,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "checked"
-          ]
+          "restores": ["checked"]
         }
       },
       "model": {
@@ -9686,9 +9560,7 @@
             "mode": "element",
             "type": "VyrnForgeRadioElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -10205,18 +10077,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "checked"
-          ]
+          "restores": ["checked"]
         }
       },
       "model": {
@@ -10332,9 +10199,7 @@
             "mode": "element",
             "type": "VyrnForgeSwitchElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -10825,18 +10690,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -10941,9 +10801,7 @@
             "mode": "element",
             "type": "VyrnForgeSelectElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -11373,9 +11231,7 @@
             "mode": "element",
             "type": "VyrnForgeRadioGroupElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -11776,18 +11632,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -11897,9 +11748,7 @@
             "mode": "element",
             "type": "VyrnForgeSliderElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -12368,18 +12217,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -12393,11 +12237,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "checkValidity",
-          "reportValidity",
-          "setCustomValidity"
-        ],
+        "methods": ["checkValidity", "reportValidity", "setCustomValidity"],
         "elementType": "VyrnForgeRatingElement"
       },
       "accessibility": [
@@ -12483,9 +12323,7 @@
             "mode": "element",
             "type": "VyrnForgeRatingElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -13116,18 +12954,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -13318,9 +13151,7 @@
             "mode": "element",
             "type": "VyrnForgeAutocompleteElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -14054,18 +13885,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -14180,9 +14006,7 @@
             "mode": "element",
             "type": "VyrnForgeMultiSelectElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -14707,18 +14531,13 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": [
-            "value"
-          ]
+          "restores": ["value"]
         }
       },
       "model": {
@@ -14732,11 +14551,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "checkValidity",
-          "reportValidity",
-          "setCustomValidity"
-        ],
+        "methods": ["checkValidity", "reportValidity", "setCustomValidity"],
         "elementType": "VyrnForgeTransferListElement"
       },
       "accessibility": [
@@ -14843,9 +14658,7 @@
             "mode": "element",
             "type": "VyrnForgeTransferListElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -15420,9 +15233,7 @@
             "mode": "element",
             "type": "VyrnForgeFieldElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -15725,9 +15536,7 @@
             "mode": "element",
             "type": "VyrnForgeValidationMessageElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -15945,9 +15754,7 @@
             "mode": "element",
             "type": "VyrnForgeBreadcrumbsElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -16231,9 +16038,7 @@
             "mode": "element",
             "type": "VyrnForgeSideNavElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -16623,9 +16428,7 @@
             "mode": "element",
             "type": "VyrnForgeTabsElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -17137,9 +16940,7 @@
             "mode": "element",
             "type": "VyrnForgeAppShellElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -17495,9 +17296,7 @@
             "mode": "element",
             "type": "VyrnForgeTopNavElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -17855,11 +17654,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "show",
-          "close",
-          "focus"
-        ],
+        "methods": ["show", "close", "focus"],
         "elementType": "VyrnForgeDialogElement"
       },
       "accessibility": [
@@ -17967,9 +17762,7 @@
             "mode": "element",
             "type": "VyrnForgeDialogElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -18536,11 +18329,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "show",
-          "close",
-          "focus"
-        ],
+        "methods": ["show", "close", "focus"],
         "elementType": "VyrnForgeDrawerElement"
       },
       "accessibility": [
@@ -18652,9 +18441,7 @@
             "mode": "element",
             "type": "VyrnForgeDrawerElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -19214,11 +19001,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "show",
-          "close",
-          "toggle"
-        ],
+        "methods": ["show", "close", "toggle"],
         "elementType": "VyrnForgePopoverElement"
       },
       "accessibility": [
@@ -19307,9 +19090,7 @@
             "mode": "element",
             "type": "VyrnForgePopoverElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -19719,9 +19500,7 @@
             "mode": "element",
             "type": "VyrnForgePopoverElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -20063,9 +19842,7 @@
             "mode": "element",
             "type": "VyrnForgeMenuElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -20466,9 +20243,7 @@
             "mode": "element",
             "type": "VyrnForgeTooltipElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -20859,10 +20634,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "cancel",
-          "confirm"
-        ],
+        "methods": ["cancel", "confirm"],
         "elementType": "VyrnForgeConfirmDialogElement"
       },
       "accessibility": [
@@ -20947,9 +20719,7 @@
             "mode": "element",
             "type": "VyrnForgeConfirmDialogElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -21407,10 +21177,7 @@
         "disabledProperty": "disabled",
         "validity": {
           "supported": true,
-          "methods": [
-            "checkValidity",
-            "reportValidity"
-          ],
+          "methods": ["checkValidity", "reportValidity"],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
@@ -21428,10 +21195,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "focus",
-          "click"
-        ],
+        "methods": ["focus", "click"],
         "elementType": "VyrnForgeButtonElement"
       },
       "accessibility": [
@@ -21526,9 +21290,7 @@
             "mode": "element",
             "type": "VyrnForgeButtonElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -21882,10 +21644,7 @@
         "methods": [],
         "elementType": "VyrnForgeButtonGroupElement"
       },
-      "accessibility": [
-        "group role",
-        "aria-orientation"
-      ],
+      "accessibility": ["group role", "aria-orientation"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -21925,9 +21684,7 @@
             "mode": "element",
             "type": "VyrnForgeButtonGroupElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -22107,9 +21864,7 @@
         "methods": [],
         "elementType": "VyrnForgeCaptionElement"
       },
-      "accessibility": [
-        "text content remains semantic"
-      ],
+      "accessibility": ["text content remains semantic"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -22139,9 +21894,7 @@
             "mode": "element",
             "type": "VyrnForgeCaptionElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -22291,9 +22044,7 @@
         "methods": [],
         "elementType": "VyrnForgeCodeTextElement"
       },
-      "accessibility": [
-        "code text remains readable by assistive technology"
-      ],
+      "accessibility": ["code text remains readable by assistive technology"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -22323,9 +22074,7 @@
             "mode": "element",
             "type": "VyrnForgeCodeTextElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -22508,10 +22257,7 @@
         "methods": [],
         "elementType": "VyrnForgeHeadingElement"
       },
-      "accessibility": [
-        "heading role",
-        "aria-level tracks level"
-      ],
+      "accessibility": ["heading role", "aria-level tracks level"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -22551,9 +22297,7 @@
             "mode": "element",
             "type": "VyrnForgeHeadingElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -22817,9 +22561,7 @@
             "mode": "element",
             "type": "VyrnForgeIconElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -23105,9 +22847,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "focus"
-        ],
+        "methods": ["focus"],
         "elementType": "VyrnForgeIconButtonElement"
       },
       "accessibility": [
@@ -23180,9 +22920,7 @@
             "mode": "element",
             "type": "VyrnForgeIconButtonElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -23476,10 +23214,7 @@
         "methods": [],
         "elementType": "VyrnForgeLabelElement"
       },
-      "accessibility": [
-        "click-to-focus label proxy",
-        "visible label text"
-      ],
+      "accessibility": ["click-to-focus label proxy", "visible label text"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -23519,9 +23254,7 @@
             "mode": "element",
             "type": "VyrnForgeLabelElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -23802,9 +23535,7 @@
             "mode": "element",
             "type": "VyrnForgeSegmentedControlElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -24034,9 +23765,7 @@
         "methods": [],
         "elementType": "VyrnForgeTextElement"
       },
-      "accessibility": [
-        "text content remains semantic"
-      ],
+      "accessibility": ["text content remains semantic"],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
@@ -24071,9 +23800,7 @@
             "mode": "element",
             "type": "VyrnForgeTextElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -24378,9 +24105,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "focus"
-        ],
+        "methods": ["focus"],
         "elementType": "VyrnForgeToggleButtonElement"
       },
       "accessibility": [
@@ -24465,9 +24190,7 @@
             "mode": "element",
             "type": "VyrnForgeToggleButtonElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -24892,9 +24615,7 @@
             "mode": "element",
             "type": "VyrnForgeToggleButtonGroupElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -25281,9 +25002,7 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": [
-          "focus"
-        ],
+        "methods": ["focus"],
         "elementType": "VyrnForgeToolbarButtonElement"
       },
       "accessibility": [
@@ -25373,9 +25092,7 @@
             "mode": "element",
             "type": "VyrnForgeToolbarButtonElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
