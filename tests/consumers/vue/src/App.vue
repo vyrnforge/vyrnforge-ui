@@ -6,6 +6,7 @@ import {
   VfCheckbox as VyrnForgeCheckbox,
   VfDescriptionList as VyrnForgeDescriptionList,
   VfDialog as VyrnForgeDialog,
+  VfProgress as VyrnForgeProgress,
   VfTabs as VyrnForgeTabs,
   VfTextInput as VyrnForgeTextInput,
   type GeneratedDialogDismissDetail,
@@ -18,6 +19,7 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
+type ProgressElement = VyrnForgeElementForTagName<"vf-progress">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
@@ -133,7 +135,43 @@ onMounted(async () => {
   if (ownerNode.value !== owner.value) {
     throw new Error("Vue did not assign the text-input value property.");
   }
-  const descriptionList = document.querySelector("vf-description-list");
+  if (dialogNode.open !== dialogOpen.value) {
+    throw new Error("Generated Vue Dialog did not retain v-model:open state.");
+  }
+
+  const determinateProgress = document.querySelector<ProgressElement>(
+    "#vue-progress-determinate",
+  );
+  const indeterminateProgress = document.querySelector<ProgressElement>(
+    "#vue-progress-indeterminate",
+  );
+  if (!determinateProgress || !indeterminateProgress) {
+    throw new Error("Vue did not render the generated Progress facades.");
+  }
+  if (
+    determinateProgress.max !== 100 ||
+    determinateProgress.value !== 40 ||
+    determinateProgress.getAttribute("role") !== "progressbar" ||
+    determinateProgress.getAttribute("aria-valuemax") !== "100" ||
+    determinateProgress.getAttribute("aria-valuenow") !== "40"
+  ) {
+    throw new Error(
+      "Generated Vue Progress did not preserve determinate semantics.",
+    );
+  }
+  if (
+    indeterminateProgress.max !== 100 ||
+    indeterminateProgress.value !== null ||
+    indeterminateProgress.hasAttribute("aria-valuenow")
+  ) {
+    throw new Error(
+      "Generated Vue Progress did not preserve indeterminate semantics.",
+    );
+  }
+
+  const descriptionList = document.querySelector(
+    "vf-description-list[data-vue-description-list]",
+  );
   if (
     !descriptionList?.querySelector(".vf-description-list__list > dt") ||
     !descriptionList.querySelector(".vf-description-list__list > dd")
@@ -143,10 +181,7 @@ onMounted(async () => {
     );
   }
 
-  if (dialogNode.open !== dialogOpen.value) {
-    throw new Error("Generated Vue Dialog did not retain v-model:open state.");
-  }
-
+  consumerRoot.value?.setAttribute("data-progress", "verified");
   consumerRoot.value?.setAttribute("data-consumer-property", "verified");
   consumerRoot.value?.setAttribute("data-consumer-ready", "true");
 });
@@ -223,12 +258,27 @@ onMounted(async () => {
       </vf-button>
     </section>
 
+    <section class="vf-consumer-vue-section" aria-labelledby="progress-title">
+      <h2 id="progress-title">Generated Vue Progress</h2>
+      <VyrnForgeProgress
+        id="vue-progress-determinate"
+        aria-label="Vue upload progress"
+        :max="100"
+        :value="40"
+      />
+      <VyrnForgeProgress
+        id="vue-progress-indeterminate"
+        aria-label="Vue preparing export"
+        :max="100"
+      />
+    </section>
+
     <section
       class="vf-consumer-vue-section"
       aria-labelledby="description-list-title"
     >
       <h2 id="description-list-title">Generated Vue DescriptionList</h2>
-      <VyrnForgeDescriptionList>
+      <VyrnForgeDescriptionList data-vue-description-list>
         <dt>Status</dt>
         <dd>Active</dd>
         <dt>Owner</dt>
