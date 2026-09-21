@@ -170,7 +170,7 @@ onMounted(async () => {
   }
 
   const descriptionList = document.querySelector(
-    "vf-description-list[data-vue-description-list]",
+    "vf-description-list#vue-description-list",
   );
   if (
     !descriptionList?.querySelector(".vf-description-list__list > dt") ||
@@ -278,7 +278,7 @@ onMounted(async () => {
       aria-labelledby="description-list-title"
     >
       <h2 id="description-list-title">Generated Vue DescriptionList</h2>
-      <VyrnForgeDescriptionList data-vue-description-list>
+      <VyrnForgeDescriptionList id="vue-description-list">
         <dt>Status</dt>
         <dd>Active</dd>
         <dt>Owner</dt>
