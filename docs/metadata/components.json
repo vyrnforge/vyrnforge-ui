@@ -5433,20 +5433,22 @@
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
-      "knownLimitations": ["Do not import until implemented."],
+      "knownLimitations": [
+        "Contract defined; public framework implementations are not yet available."
+      ],
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Structured read-only property table.",
-      "useWhen": "Use later for comparable resource properties.",
-      "avoidWhen": "Do not import until implemented.",
+      "purpose": "Read-only tabular property comparison using native table semantics.",
+      "useWhen": "Use when readers must compare properties across rows or columns and those relationships are genuinely tabular.",
+      "avoidWhen": "Use DescriptionList for term-and-description facts; use UniversalDataGrid when sorting, filtering, resizing, selection, grouping, or grid state is required.",
       "relatedComponents": ["DescriptionList", "UniversalDataGrid"],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "Planned; no import yet.",
-      "basicUsageExample": "Planned.",
-      "accessibilityNotes": "Use table semantics only for tabular data.",
-      "aiUsageNotes": "Do not use UniversalDataGrid for simple property display."
+      "importExample": "Planned; no public import yet.",
+      "basicUsageExample": "Planned; compose one semantic table as the component content.",
+      "accessibilityNotes": "Keep one native table as the semantic authority; preserve caption, th, scope, and header/cell relationships and do not replace them with grid roles.",
+      "aiUsageNotes": "Treat PropertyTable as a state-free semantic wrapper around one real table, not as a data-grid or application-specific property model."
     },
     {
       "id": "timeline",

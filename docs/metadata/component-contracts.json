@@ -581,6 +581,148 @@
       }
     },
     {
+      "id": "property-table",
+      "category": "data-display",
+      "properties": [],
+      "attributes": [],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "required": true,
+          "multiple": false,
+          "content": "element"
+        }
+      ],
+      "methods": [],
+      "form": {
+        "association": "none",
+        "disabledProperty": null,
+        "validity": {
+          "supported": false,
+          "methods": []
+        },
+        "reset": {
+          "supported": false
+        }
+      },
+      "model": {
+        "kind": "none",
+        "controlled": false,
+        "stateProperty": null,
+        "defaultProperty": null,
+        "changeEvent": null,
+        "disabledProperty": null,
+        "touchedSemantics": "none"
+      },
+      "ref": {
+        "exposure": "element",
+        "methods": [],
+        "elementType": "VyrnForgePropertyTableElement"
+      },
+      "accessibility": [
+        "requires exactly one native table element as projected content so table, row, column, header, and cell relationships remain browser semantics",
+        "the table should provide a caption or another accessible name when surrounding context does not already identify its purpose",
+        "header cells must use native th semantics with scope or explicit header associations appropriate to the table structure",
+        "responsive presentation may scroll or wrap but must not replace table semantics with generic or ARIA grid roles"
+      ],
+      "frameworkMappings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "target",
+          "tag": "vf-property-table",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "element",
+            "type": "VyrnForgePropertyTableElement"
+          },
+          "setup": ["register custom element"]
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "status": "target",
+          "export": "PropertyTable",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "children",
+              "mode": "children"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "forwarded-ref",
+            "type": "PropertyTableRef"
+          }
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "status": "target",
+          "export": "VfPropertyTable",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "content-projection"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "view-child",
+            "type": "VfPropertyTable"
+          }
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "status": "target",
+          "export": "VfPropertyTable",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "template-ref",
+            "type": "VfPropertyTableExposed"
+          }
+        }
+      }
+    },
+    {
       "id": "card",
       "category": "composite",
       "properties": [
