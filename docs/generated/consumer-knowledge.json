@@ -116,6 +116,28 @@
       ]
     },
     {
+      "id": "activity-log",
+      "displayName": "Activity Log",
+      "category": "data-management",
+      "purpose": "Framework-neutral activity-history composition for actor, action, time, and optional status or context over the shared Timeline contract.",
+      "useWhen": "Use for audit and operational history where application-owned activity records need consistent chronological presentation.",
+      "avoidWhen": "Avoid introducing a second activity state model inside VyrnForge; persistence, filtering, loading, actor schemas, and business-specific actions remain application-owned.",
+      "components": [
+        "timeline",
+        "badge"
+      ],
+      "playgroundRoute": null,
+      "exampleFramework": null,
+      "frameworkNeutral": true,
+      "aiKeywords": [
+        "activity log",
+        "audit history",
+        "actor action time",
+        "change history",
+        "event history"
+      ]
+    },
+    {
       "id": "detail",
       "displayName": "Detail Page",
       "category": "application-layout",
@@ -1404,74 +1426,6 @@
       }
     },
     {
-      "id": "activity-log",
-      "displayName": "ActivityLog",
-      "package": "@vyrnforge/ui-components",
-      "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Operational activity feed.",
-      "guidance": {
-        "useWhen": "Use later for recent changes and user activity.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Use plain list composition until implemented.",
-        "relatedComponents": [
-          "Timeline"
-        ]
-      },
-      "accessibilityNotes": "Activity entries need clear actor/action/time text.",
-      "knownLimitations": [
-        "Do not import until implemented."
-      ],
-      "styling": {
-        "classes": [],
-        "variables": []
-      },
-      "docsPath": "docs/api/ui-components-api.md",
-      "playgroundPath": null,
-      "source": {
-        "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
-        "customElementsManifest": null
-      },
-      "nativeDeclaration": null,
-      "frameworks": {
-        "react": {
-          "label": "React",
-          "status": "not-supported",
-          "package": "@vyrnforge/ui-components",
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "native-html": {
-          "label": "Native HTML",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "angular": {
-          "label": "Angular",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "vue": {
-          "label": "Vue",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        }
-      },
-      "contract": null
-    },
-    {
       "id": "description-list",
       "displayName": "DescriptionList",
       "package": "@vyrnforge/ui-components",
@@ -1659,18 +1613,18 @@
       "category": "data-display",
       "maturity": "planned",
       "availability": "planned",
-      "purpose": "Chronological event display.",
+      "purpose": "Ordered chronological event presentation using native list and time semantics.",
       "guidance": {
-        "useWhen": "Use later for audit/activity history.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Use semantic lists until implemented.",
+        "useWhen": "Use for read-only chronological histories where event order and timestamps are meaningful and entry content remains application-owned.",
+        "avoidWhen": "Avoid for interactive feeds, application notification state, or unordered status collections; keep persistence and activity schemas in the consuming application.",
+        "aiUsageNotes": "Treat Timeline as a state-free semantic ordered-list wrapper. Entry data, actors, actions, persistence, loading, and filtering remain application-owned; use the Activity Log pattern for actor/action/time histories.",
         "relatedComponents": [
-          "ActivityLog"
+          "Badge"
         ]
       },
-      "accessibilityNotes": "Event order and timestamps should be clear.",
+      "accessibilityNotes": "Preserve ordered-list semantics and source order; each entry must remain a native list item and timestamps should use readable text with a machine-readable time value when available.",
       "knownLimitations": [
-        "Do not import until implemented."
+        "Contract defined; public framework implementations are not yet available."
       ],
       "styling": {
         "classes": [],
@@ -1680,7 +1634,7 @@
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
+        "contractMetadata": "docs/metadata/component-contracts.json",
         "customElementsManifest": null
       },
       "nativeDeclaration": null,
@@ -1718,7 +1672,27 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": {
+        "properties": [],
+        "attributes": [],
+        "events": [],
+        "slots": [
+          {
+            "name": "default",
+            "required": true,
+            "multiple": true,
+            "content": "element"
+          }
+        ],
+        "methods": [],
+        "accessibility": [
+          "owns one native ordered-list container so chronological order remains explicit browser list semantics",
+          "projected timeline entries must become native list items and preserve source order without visual reordering that changes chronological meaning",
+          "timestamps must have understandable visible text and should use native time semantics with a machine-readable datetime value when available",
+          "the component is read-only presentation and must not introduce feed, listbox, grid, selection, or live-region semantics unless a separate interactive contract requires them"
+        ],
+        "formAssociation": "none"
+      }
     },
     {
       "id": "transfer-list",
