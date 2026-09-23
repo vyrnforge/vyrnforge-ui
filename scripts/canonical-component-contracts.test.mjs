@@ -211,9 +211,7 @@ test("planned canonical contracts do not become unknown G10 contracts", () => {
   assert.equal(report.totals.scoped, 69);
 });
 
-test(
-  "Timeline defines a planned, semantic, state-free chronological contract",
-  () => {
+test("Timeline defines a planned, semantic, state-free chronological contract", () => {
     const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
     const contract = normalized.componentById.get("timeline");
 
@@ -241,12 +239,9 @@ test(
     for (const framework of ["native", "react", "angular", "vue"]) {
       assert.equal(contract.frameworkMappings[framework].status, "target");
     }
-  },
-);
+});
 
-test(
-  "ActivityLog is a framework-neutral pattern rather than a component contract",
-  () => {
+test("ActivityLog is a framework-neutral pattern rather than a component contract", () => {
     const catalog = readJson("docs/metadata/components.json");
     const patterns = readJson("docs/metadata/patterns.json");
     const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
@@ -264,8 +259,7 @@ test(
     assert.equal(pattern.frameworkNeutral, true);
     assert.deepEqual(pattern.components, ["timeline", "badge"]);
     assert.match(pattern.purpose, /actor, action, time/);
-  },
-);
+});
 
 test("Progress keeps a semantic, state-free cross-framework contract", () => {
   const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
