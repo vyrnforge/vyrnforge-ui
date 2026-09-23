@@ -1087,9 +1087,9 @@
       "availability": "available",
       "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
       "guidance": {
-        "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
+        "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values, including compact-density metadata.",
         "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
-        "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
+        "aiUsageNotes": "Use semantic dl/dt/dd content across every framework surface. DescriptionList inherits VyrnForge density through shared tokens, so use compact density for dense key/value metadata instead of creating a separate KeyValueList API.",
         "relatedComponents": [
           "KeyValueList",
           "PropertyTable"
