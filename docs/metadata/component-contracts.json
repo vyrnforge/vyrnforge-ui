@@ -723,6 +723,148 @@
       }
     },
     {
+      "id": "timeline",
+      "category": "data-display",
+      "properties": [],
+      "attributes": [],
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "required": true,
+          "multiple": true,
+          "content": "element"
+        }
+      ],
+      "methods": [],
+      "form": {
+        "association": "none",
+        "disabledProperty": null,
+        "validity": {
+          "supported": false,
+          "methods": []
+        },
+        "reset": {
+          "supported": false
+        }
+      },
+      "model": {
+        "kind": "none",
+        "controlled": false,
+        "stateProperty": null,
+        "defaultProperty": null,
+        "changeEvent": null,
+        "disabledProperty": null,
+        "touchedSemantics": "none"
+      },
+      "ref": {
+        "exposure": "element",
+        "methods": [],
+        "elementType": "VyrnForgeTimelineElement"
+      },
+      "accessibility": [
+        "owns one native ordered-list container so chronological order remains explicit browser list semantics",
+        "projected timeline entries must become native list items and preserve source order without visual reordering that changes chronological meaning",
+        "timestamps must have understandable visible text and should use native time semantics with a machine-readable datetime value when available",
+        "the component is read-only presentation and must not introduce feed, listbox, grid, selection, or live-region semantics unless a separate interactive contract requires them"
+      ],
+      "frameworkMappings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "target",
+          "tag": "vf-timeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "element",
+            "type": "VyrnForgeTimelineElement"
+          },
+          "setup": ["register custom element"]
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "status": "target",
+          "export": "Timeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "children",
+              "mode": "children"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "forwarded-ref",
+            "type": "TimelineRef"
+          }
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "status": "target",
+          "export": "VfTimeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "content-projection"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "view-child",
+            "type": "VfTimeline"
+          }
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "status": "target",
+          "export": "VfTimeline",
+          "properties": [],
+          "events": [],
+          "slots": [
+            {
+              "canonical": "default",
+              "public": "default",
+              "mode": "slot"
+            }
+          ],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "template-ref",
+            "type": "VfTimelineExposed"
+          }
+        }
+      }
+    },
+    {
       "id": "card",
       "category": "composite",
       "properties": [

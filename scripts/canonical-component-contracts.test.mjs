@@ -211,6 +211,56 @@ test("planned canonical contracts do not become unknown G10 contracts", () => {
   assert.equal(report.totals.scoped, 69);
 });
 
+test("Timeline defines a planned, semantic, state-free chronological contract", () => {
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+  const contract = normalized.componentById.get("timeline");
+
+  assert.ok(contract);
+  assert.equal(contract.category, "data-display");
+  assert.deepEqual(contract.properties, []);
+  assert.deepEqual(contract.attributes, []);
+  assert.deepEqual(contract.events, []);
+  assert.deepEqual(contract.methods, []);
+  assert.equal(contract.form.association, "none");
+  assert.equal(contract.model.kind, "none");
+  assert.deepEqual(contract.slots, [
+    { name: "default", required: true, multiple: true, content: "element" },
+  ]);
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("native ordered-list container"),
+    ),
+  );
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("native time semantics"),
+    ),
+  );
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "target");
+  }
+});
+
+test("ActivityLog is a framework-neutral pattern rather than a component contract", () => {
+  const catalog = readJson("docs/metadata/components.json");
+  const patterns = readJson("docs/metadata/patterns.json");
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+
+  assert.equal(
+    catalog.components.some((component) => component.id === "activity-log"),
+    false,
+  );
+  assert.equal(normalized.componentById.has("activity-log"), false);
+
+  const pattern = patterns.patterns.find(
+    (entry) => entry.id === "activity-log",
+  );
+  assert.ok(pattern);
+  assert.equal(pattern.frameworkNeutral, true);
+  assert.deepEqual(pattern.components, ["timeline", "badge"]);
+  assert.match(pattern.purpose, /actor, action, time/);
+});
+
 test("Progress keeps a semantic, state-free cross-framework contract", () => {
   const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
   const contract = normalized.componentById.get("progress");
