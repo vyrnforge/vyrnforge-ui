@@ -1484,7 +1484,6 @@
         "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
         "aiUsageNotes": "Use semantic dl/dt/dd content across every framework surface. DescriptionList inherits VyrnForge density through shared tokens, so use compact density for dense key/value metadata instead of creating a separate KeyValueList API.",
         "relatedComponents": [
-          "KeyValueList",
           "PropertyTable"
         ]
       },
