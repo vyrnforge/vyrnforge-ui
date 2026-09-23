@@ -119,6 +119,12 @@
       "context": "ai-context/patterns/resource-list.json"
     },
     {
+      "id": "activity-log",
+      "name": "Activity Log",
+      "category": "data-management",
+      "context": "ai-context/patterns/activity-log.json"
+    },
+    {
       "id": "detail",
       "name": "Detail Page",
       "category": "application-layout",
@@ -223,13 +229,6 @@
       "category": "composite",
       "availability": "available",
       "context": "ai-context/components/stack.json"
-    },
-    {
-      "id": "activity-log",
-      "name": "ActivityLog",
-      "category": "data-display",
-      "availability": "planned",
-      "context": "ai-context/components/activity-log.json"
     },
     {
       "id": "description-list",
