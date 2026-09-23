@@ -78,12 +78,12 @@
     "gridRule": "All @vyrnforge/ui-data-grid public exports remain on the independent React alpha track and are deferred from this beta release group."
   },
   "summary": {
-    "catalogEntries": 96,
+    "catalogEntries": 95,
     "publicNonGridComponents": 69,
     "includedComponents": 69,
     "deferredNonGridComponents": 0,
     "publicGridComponentsDeferred": 10,
-    "plannedNonPublicComponentsExcluded": 4,
+    "plannedNonPublicComponentsExcluded": 3,
     "internalNonPublicComponentsExcluded": 1,
     "nativeCustomElementTags": 60,
     "categoryCounts": {
@@ -3040,16 +3040,6 @@
       {
         "id": "activity-log",
         "displayName": "ActivityLog",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "key-value-list",
-        "displayName": "KeyValueList",
         "package": "@vyrnforge/ui-components",
         "category": "data-display",
         "maturity": "planned",

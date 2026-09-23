@@ -5338,15 +5338,15 @@
         "status": "not-applicable"
       },
       "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
-      "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
+      "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values, including compact-density metadata.",
       "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
-      "relatedComponents": ["KeyValueList", "PropertyTable"],
+      "relatedComponents": ["PropertyTable"],
       "cssClasses": ["vf-description-list"],
       "cssVariables": [],
       "importExample": "import { DescriptionList } from '@vyrnforge/ui-components';",
       "basicUsageExample": "<DescriptionList><dt>Status</dt><dd>Active</dd></DescriptionList>",
       "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
-      "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
+      "aiUsageNotes": "Use semantic dl/dt/dd content across every framework surface. DescriptionList inherits VyrnForge density through shared tokens, so use compact density for dense key/value metadata instead of creating a separate KeyValueList API.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -5377,41 +5377,6 @@
           "evidence": "docs/metadata/vue-consumer.json"
         }
       }
-    },
-    {
-      "id": "key-value-list",
-      "displayName": "KeyValueList",
-      "package": "@vyrnforge/ui-components",
-      "category": "data-display",
-      "maturity": "planned",
-      "owner": "Component Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
-      "docsPath": "docs/api/ui-components-api.md",
-      "playgroundPath": "not-applicable",
-      "evidence": {
-        "maturityEvidenceKey": "key-value-list",
-        "status": "requires-verification"
-      },
-      "accessibility": {
-        "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "not-applicable"
-      },
-      "knownLimitations": ["Do not import until implemented."],
-      "deprecation": {
-        "status": "not-applicable"
-      },
-      "purpose": "Compact key/value metadata list.",
-      "useWhen": "Use later for dense metadata.",
-      "avoidWhen": "Do not import until implemented.",
-      "relatedComponents": ["DescriptionList", "PropertyTable"],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "Planned; no import yet.",
-      "basicUsageExample": "Planned.",
-      "accessibilityNotes": "Labels and values should remain clear at compact density.",
-      "aiUsageNotes": "Use simple semantic markup until implemented."
     },
     {
       "id": "property-table",
