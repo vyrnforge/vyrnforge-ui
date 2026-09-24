@@ -141,8 +141,8 @@ export const VfSwitch = createVyrnForgeVueFacade("VfSwitch", "vf-switch", {"kind
 export { VfTabs };
 export const VfText = createVyrnForgeVueFacade("VfText", "vf-text", undefined, []);
 export { VfTextInput };
-export const VfTimeline = createVyrnForgeVueFacade("VfTimeline", "vf-timeline", undefined, []);
 export const VfTextarea = createVyrnForgeVueFacade("VfTextarea", "vf-textarea", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, ["focus","select","checkValidity","reportValidity","setCustomValidity"]);
+export const VfTimeline = createVyrnForgeVueFacade("VfTimeline", "vf-timeline", undefined, []);
 export const VfToast = createVyrnForgeVueFacade("VfToast", "vf-toast", undefined, []);
 export const VfToggleButton = createVyrnForgeVueFacade("VfToggleButton", "vf-toggle-button", {"kind":"pressed","canonicalProperty":"pressed","canonicalChangeEvent":"vf-pressed-change","publicProperty":"pressed","publicEvent":"update:pressed","detailField":"pressed"}, ["focus"]);
 export const VfToggleButtonGroup = createVyrnForgeVueFacade("VfToggleButtonGroup", "vf-toggle-button-group", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, []);
@@ -206,8 +206,8 @@ export const vyrnForgeVueGeneratedComponents = Object.freeze([
   VfTabs,
   VfText,
   VfTextInput,
-  VfTimeline,
   VfTextarea,
+  VfTimeline,
   VfToast,
   VfToggleButton,
   VfToggleButtonGroup,
