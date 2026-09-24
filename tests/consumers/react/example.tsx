@@ -18,7 +18,12 @@ export function ReactConsumerContract() {
       <PropertyTable>
         <table>
           <caption>Deployment properties</caption>
-          <tbody><tr><th scope="row">Region</th><td>us-east-1</td></tr></tbody>
+          <tbody>
+            <tr>
+              <th scope="row">Region</th>
+              <td>us-east-1</td>
+            </tr>
+          </tbody>
         </table>
       </PropertyTable>
       <Progress aria-label="Upload progress" max={100} value={40} />
