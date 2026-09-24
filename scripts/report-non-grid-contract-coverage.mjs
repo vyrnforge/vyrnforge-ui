@@ -62,6 +62,9 @@ export function createCoverageReport() {
 
   const scopedIds = scopedComponentIds(catalog);
   const scopedSet = new Set(scopedIds);
+  const catalogSet = new Set(
+    (catalog.components ?? []).map((component) => component.id),
+  );
   const contractRecords = new Map();
   const duplicateContractIds = [];
 
@@ -96,7 +99,7 @@ export function createCoverageReport() {
   }
 
   const unknownContractIds = [...contractRecords.keys()]
-    .filter((id) => !scopedSet.has(id))
+    .filter((id) => !catalogSet.has(id))
     .sort();
 
   return {

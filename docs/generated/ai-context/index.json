@@ -119,6 +119,12 @@
       "context": "ai-context/patterns/resource-list.json"
     },
     {
+      "id": "activity-log",
+      "name": "Activity Log",
+      "category": "data-management",
+      "context": "ai-context/patterns/activity-log.json"
+    },
+    {
       "id": "detail",
       "name": "Detail Page",
       "category": "application-layout",
@@ -225,25 +231,11 @@
       "context": "ai-context/components/stack.json"
     },
     {
-      "id": "activity-log",
-      "name": "ActivityLog",
-      "category": "data-display",
-      "availability": "planned",
-      "context": "ai-context/components/activity-log.json"
-    },
-    {
       "id": "description-list",
       "name": "DescriptionList",
       "category": "data-display",
-      "availability": "planned",
+      "availability": "available",
       "context": "ai-context/components/description-list.json"
-    },
-    {
-      "id": "key-value-list",
-      "name": "KeyValueList",
-      "category": "data-display",
-      "availability": "planned",
-      "context": "ai-context/components/key-value-list.json"
     },
     {
       "id": "property-table",
@@ -251,13 +243,6 @@
       "category": "data-display",
       "availability": "planned",
       "context": "ai-context/components/property-table.json"
-    },
-    {
-      "id": "resource-list",
-      "name": "ResourceList",
-      "category": "data-display",
-      "availability": "planned",
-      "context": "ai-context/components/resource-list.json"
     },
     {
       "id": "timeline",
@@ -326,7 +311,7 @@
       "id": "progress",
       "name": "Progress",
       "category": "feedback",
-      "availability": "planned",
+      "availability": "available",
       "context": "ai-context/components/progress.json"
     },
     {

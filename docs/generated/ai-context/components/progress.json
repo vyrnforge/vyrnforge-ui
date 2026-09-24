@@ -4,13 +4,13 @@
   "name": "Progress",
   "package": "@vyrnforge/ui-components",
   "category": "feedback",
-  "maturity": "planned",
-  "availability": "planned",
+  "maturity": "experimental",
+  "availability": "available",
   "purpose": "Determinate or indeterminate progress indicator.",
   "guidance": {
     "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
     "avoidWhen": "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead.",
-    "aiUsageNotes": "Use native progress markup until a VyrnForge renderer exists. Do not invent completion events or a stateful controller; value and max are presentation inputs.",
+    "aiUsageNotes": "Use the Native HTML Progress renderer when targeting @vyrnforge/ui-elements. Keep value and max as presentation inputs and do not invent completion events or a stateful controller.",
     "relatedComponents": [
       "LoadingState",
       "Skeleton"
@@ -23,33 +23,35 @@
     "progress must have an accessible name when surrounding context does not provide one"
   ],
   "knownLimitations": [
-    "Renderer implementations remain deferred to the framework-specific Progress tasks."
+    "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-progress"
+    ],
     "variables": []
   },
   "frameworks": {
     "react": {
-      "status": "target",
+      "status": "current",
       "package": "@vyrnforge/ui-components",
-      "setup": "Planned; no import yet.",
-      "example": "Planned."
+      "setup": "import { Progress } from '@vyrnforge/ui-components';",
+      "example": "<Progress max={100} value={40} aria-label='Upload progress' />"
     },
     "native-html": {
-      "status": "target",
+      "status": "current",
       "package": "@vyrnforge/ui-elements",
       "setup": "import \"@vyrnforge/ui-elements/register\";",
       "example": "<vf-progress></vf-progress>"
     },
     "angular": {
-      "status": "target",
+      "status": "verified-consumer",
       "package": "@vyrnforge/ui-angular",
       "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
       "example": "<vf-progress></vf-progress>"
     },
     "vue": {
-      "status": "target",
+      "status": "verified-consumer",
       "package": "@vyrnforge/ui-vue",
       "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
       "example": "<VfProgress></VfProgress>"
@@ -83,6 +85,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "customElementsManifest": null
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }
