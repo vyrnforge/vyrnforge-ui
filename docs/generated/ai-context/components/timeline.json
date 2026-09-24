@@ -23,10 +23,12 @@
     "the component is read-only presentation and must not introduce feed, listbox, grid, selection, or live-region semantics unless a separate interactive contract requires them"
   ],
   "knownLimitations": [
-    "Contract defined; public framework implementations are not yet available."
+    "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-timeline"
+    ],
     "variables": []
   },
   "frameworks": {

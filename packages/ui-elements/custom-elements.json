@@ -327,6 +327,17 @@
         },
         {
           "kind": "class",
+          "name": "VyrnForgeTimelineElement",
+          "description": "VyrnForge vf-timeline browser-native renderer.",
+          "tagName": "vf-timeline",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global"
+          }
+        },
+        {
+          "kind": "class",
           "name": "VyrnForgeDateTimeInputElement",
           "description": "DateTimeInput browser-native renderer. Native input type='datetime-local' control aligned with VyrnForge input styling.",
           "tagName": "vf-datetime-input",
@@ -688,7 +699,7 @@
       "packageRootSideEffects": false
     },
     "domMode": "light-dom",
-    "registeredTagCount": 60,
+    "registeredTagCount": 61,
     "eventVocabulary": [
       "vf-action",
       "vf-cancel",
@@ -711,8 +722,8 @@
         "exceptions": "docs/metadata/framework-exceptions.json",
         "descriptions": "docs/metadata/components.json"
       },
-      "canonicalTagCount": 59,
-      "canonicalMappedRegistrationCount": 59,
+      "canonicalTagCount": 60,
+      "canonicalMappedRegistrationCount": 60,
       "exceptionBackedRegistrationCount": 1
     },
     "typeDeclarations": {
