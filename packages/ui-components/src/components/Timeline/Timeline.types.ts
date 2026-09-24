@@ -1,7 +1,19 @@
-import type { HTMLAttributes, ReactElement } from "react";
+import type {
+  HTMLAttributes,
+  LiHTMLAttributes,
+  ReactElement,
+} from "react";
 
 export type TimelineRef = HTMLOListElement;
 
-export type TimelineProps = Omit<HTMLAttributes<HTMLOListElement>, "children"> & {
-  children: ReactElement<HTMLAttributes<HTMLLIElement>, "li"> | readonly ReactElement<HTMLAttributes<HTMLLIElement>, "li">[];
+export type TimelineEntry = ReactElement<
+  LiHTMLAttributes<HTMLLIElement>,
+  "li"
+>;
+
+export type TimelineProps = Omit<
+  HTMLAttributes<HTMLOListElement>,
+  "children"
+> & {
+  children: TimelineEntry | readonly TimelineEntry[];
 };

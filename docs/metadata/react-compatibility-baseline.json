@@ -12,20 +12,13 @@
     "version": "0.2.0-beta.2",
     "manifest": "packages/ui-components/package.json",
     "publicEntry": "packages/ui-components/src/index.ts",
-    "cssEntrypoints": [
-      "./style.css",
-      "./index.css",
-      "./styles/index.css"
-    ],
+    "cssEntrypoints": ["./style.css", "./index.css", "./styles/index.css"],
     "peerDependencies": {
       "react": ">=18 <20",
       "react-dom": ">=18 <20"
     }
   },
-  "testedReactVersions": [
-    "18.3.1",
-    "19.2.7"
-  ],
+  "testedReactVersions": ["18.3.1", "19.2.7"],
   "fingerprints": [
     {
       "path": "packages/ui-components/package.json",
@@ -41,16 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "802edc14057909d8386257be591cc81bea112efb",
-      "covers": [
-        "public value exports",
-        "public type exports"
-      ]
+      "sha1": "f1a0fcb320039341899fdb4325ab47485c987c90",
+      "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "c37147263f5cc5270a249fe3a1999779fd1c205d",
+      "sha1": "35f9c409be1dee7af98d34455fe7d43e8ce21a10",
       "covers": [
         "component props and types",
         "callbacks",
@@ -62,31 +52,25 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "e32faea3eb073c8a576e74b09d6d58e5756bd9bf",
-      "covers": [
-        "React renderer CSS implementation"
-      ]
+      "sha1": "a7963611716c2494fd390e42e58a95433817caa0",
+      "covers": ["React renderer CSS implementation"]
     },
     {
       "path": "docs/api/ui-components-api.md",
       "kind": "blob",
       "sha1": "09510da23a9559834e8ccaaba63a7280df2a6cbc",
-      "covers": [
-        "documented React public API and usage contracts"
-      ]
+      "covers": ["documented React public API and usage contracts"]
     },
     {
       "path": "docs/packages/ui-components.md",
       "kind": "blob",
       "sha1": "665d895f70a4358a28d31aaac7c21e5d6197d8b5",
-      "covers": [
-        "React package ownership and public consumption contract"
-      ]
+      "covers": ["React package ownership and public consumption contract"]
     },
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "b75c6082b445b62b2290c2ac753b07c3112a93ff",
+      "sha1": "b05c95acba7bef37bef0e5c38f2e607b2036e853",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -97,10 +81,7 @@
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
       "sha1": "f95919a980e055452eebb197e7e5f00c7546e37a",
-      "covers": [
-        "tested React versions",
-        "packed consumer compatibility cases"
-      ]
+      "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
   "runtimeEvidence": [
@@ -171,14 +152,12 @@
       "task": "data-display-description-list-density-rationalization",
       "reason": "DescriptionList replaces legacy fixed spacing aliases with the shared VyrnForge component-gap density contract while preserving the existing semantic dl/dt/dd renderer, public React API, CSS class surface, responsive structure, and mirrored Native HTML styling. Compact and spacious presentation now flow through the same framework-neutral density tokens without adding a React-only prop or behavior.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
-    }
-  ],
-  "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract.",
-  "history": [
+    },
     {
       "task": "#575",
-      "reason": "Timeline adds the accepted stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves the canonical native semantic contract, introduces no application state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
+      "reason": "Timeline adds the accepted stateless chronological React renderer as a public @vyrnforge/ui-components export. The implementation preserves native ordered-list and list-item semantics, introduces no activity state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
-  ]
+  ],
+  "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
 }

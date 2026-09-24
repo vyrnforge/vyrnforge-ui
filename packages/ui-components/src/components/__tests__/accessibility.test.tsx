@@ -75,8 +75,12 @@ describe("@vyrnforge/ui-components accessibility", () => {
     const { container } = render(
       <main>
         <Timeline aria-label="Deployment history">
-          <li><time dateTime="2026-09-24T01:00:00Z">01:00</time> Created</li>
-          <li><time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed</li>
+          <li>
+            <time dateTime="2026-09-24T01:00:00Z">01:00</time> Created
+          </li>
+          <li>
+            <time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed
+          </li>
         </Timeline>
       </main>,
     );
