@@ -5464,6 +5464,46 @@ export class VfTextarea implements OnDestroy {
   }
 }
 
+export type VfTimelineElement = VyrnForgeElementForTagName<"vf-timeline">;
+
+export interface VfTimelineInputs {
+
+}
+
+export interface VfTimelineOutputs {
+
+}
+
+export const VfTimelineSlotNames = Object.freeze(["default"] as const);
+export type VfTimelineSlotName = (typeof VfTimelineSlotNames)[number];
+
+export function composeVfTimelineSlot(
+  element: HTMLElement,
+  slot: VfTimelineSlotName,
+): HTMLElement {
+  if (slot === "default") element.removeAttribute("slot");
+  else element.setAttribute("slot", slot);
+  return element;
+}
+
+@Directive({
+  selector: "vf-timeline[vfGeneratedTimeline]",
+  standalone: true,
+  exportAs: "vfTimeline",
+})
+export class VfTimeline implements OnDestroy {
+  get nativeElement(): VfTimelineElement {
+    return this.element.nativeElement;
+  }
+
+  constructor(private readonly element: ElementRef<VfTimelineElement>) {
+    this.element.nativeElement.dataset["vfGeneratedTimeline"] = "angular";
+  }
+
+  ngOnDestroy(): void {
+  }
+}
+
 export type VfToastElement = VyrnForgeElementForTagName<"vf-toast">;
 
 export interface VfToastInputs {
@@ -6434,6 +6474,7 @@ export const vyrnForgeAngularGeneratedDirectives = Object.freeze([
   VfText,
   VfTextInput,
   VfTextarea,
+  VfTimeline,
   VfToast,
   VfToggleButton,
   VfToggleButtonGroup,
@@ -6499,6 +6540,7 @@ export const vyrnForgeAngularCatalog = Object.freeze([
   Object.freeze({ id: "text", tag: "vf-text", selector: "vf-text[vfGeneratedText]", directive: VfText, slots: VfTextSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "text-input", tag: "vf-text-input", selector: "vf-text-input[vfGeneratedTextInput]", directive: VfTextInput, slots: VfTextInputSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
   Object.freeze({ id: "textarea", tag: "vf-textarea", selector: "vf-textarea[vfGeneratedTextarea]", directive: VfTextarea, slots: VfTextareaSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
+  Object.freeze({ id: "timeline", tag: "vf-timeline", selector: "vf-timeline[vfGeneratedTimeline]", directive: VfTimeline, slots: VfTimelineSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "toast", tag: "vf-toast", selector: "vf-toast[vfGeneratedToast]", directive: VfToast, slots: VfToastSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "toggle-button", tag: "vf-toggle-button", selector: "vf-toggle-button[vfGeneratedToggleButton]", directive: VfToggleButton, slots: VfToggleButtonSlotNames, hostBoundInputs: Object.freeze(["action"]) }),
   Object.freeze({ id: "toggle-button-group", tag: "vf-toggle-button-group", selector: "vf-toggle-button-group[vfGeneratedToggleButtonGroup]", directive: VfToggleButtonGroup, slots: VfToggleButtonGroupSlotNames, hostBoundInputs: Object.freeze([]) }),
