@@ -1,8 +1,4 @@
-import type {
-  HTMLAttributes,
-  ReactElement,
-  TableHTMLAttributes,
-} from "react";
+import type { HTMLAttributes, ReactElement, TableHTMLAttributes } from "react";
 
 export type PropertyTableRef = HTMLDivElement;
 
