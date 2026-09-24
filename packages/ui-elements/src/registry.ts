@@ -34,6 +34,7 @@ import {
   VyrnForgePanelElement,
   VyrnForgePopoverElement,
   VyrnForgeProgressElement,
+  VyrnForgeTimelineElement,
   VyrnForgeRadioElement,
   VyrnForgeRadioGroupElement,
   VyrnForgeRatingElement,
@@ -173,6 +174,10 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
     Object.freeze({
       tagName: "vf-description-list",
       constructor: VyrnForgeDescriptionListElement,
+    }),
+    Object.freeze({
+      tagName: "vf-timeline",
+      constructor: VyrnForgeTimelineElement,
     }),
     Object.freeze({
       tagName: "vf-datetime-input",
