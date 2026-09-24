@@ -5436,7 +5436,7 @@
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "Contract defined; public framework implementations are not yet available."
+        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
       ],
       "deprecation": {
         "status": "not-applicable"
@@ -5445,10 +5445,10 @@
       "useWhen": "Use for read-only chronological histories where event order and timestamps are meaningful and entry content remains application-owned.",
       "avoidWhen": "Avoid for interactive feeds, application notification state, or unordered status collections; keep persistence and activity schemas in the consuming application.",
       "relatedComponents": ["Badge"],
-      "cssClasses": [],
+      "cssClasses": ["vf-timeline"],
       "cssVariables": [],
-      "importExample": "Planned; no public import yet.",
-      "basicUsageExample": "Planned; compose chronological entries with semantic time content.",
+      "importExample": "import { VyrnForgeTimelineElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+      "basicUsageExample": "<vf-timeline><li><time datetime=\"2026-09-24T01:00:00Z\">01:00</time> Created</li></vf-timeline>",
       "accessibilityNotes": "Preserve ordered-list semantics and source order; each entry must remain a native list item and timestamps should use readable text with a machine-readable time value when available.",
       "aiUsageNotes": "Treat Timeline as a state-free semantic ordered-list wrapper. Entry data, actors, actions, persistence, loading, and filtering remain application-owned; use the Activity Log pattern for actor/action/time histories."
     },

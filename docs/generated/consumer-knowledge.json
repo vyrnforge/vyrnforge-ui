@@ -1624,10 +1624,10 @@
       },
       "accessibilityNotes": "Preserve ordered-list semantics and source order; each entry must remain a native list item and timestamps should use readable text with a machine-readable time value when available.",
       "knownLimitations": [
-        "Contract defined; public framework implementations are not yet available."
+        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
       ],
       "styling": {
-        "classes": [],
+        "classes": ["vf-timeline"],
         "variables": []
       },
       "docsPath": "docs/api/ui-components-api.md",
