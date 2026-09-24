@@ -51,7 +51,8 @@
   vf-tabs,
   vf-breadcrumbs,
   vf-side-nav,
-  vf-description-list
+  vf-description-list,
+  vf-property-table
 ) {
   display: block;
 }

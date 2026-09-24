@@ -116,6 +116,28 @@
       ]
     },
     {
+      "id": "activity-log",
+      "displayName": "Activity Log",
+      "category": "data-management",
+      "purpose": "Framework-neutral activity-history composition for actor, action, time, and optional status or context over the shared Timeline contract.",
+      "useWhen": "Use for audit and operational history where application-owned activity records need consistent chronological presentation.",
+      "avoidWhen": "Avoid introducing a second activity state model inside VyrnForge; persistence, filtering, loading, actor schemas, and business-specific actions remain application-owned.",
+      "components": [
+        "timeline",
+        "badge"
+      ],
+      "playgroundRoute": null,
+      "exampleFramework": null,
+      "frameworkNeutral": true,
+      "aiKeywords": [
+        "activity log",
+        "audit history",
+        "actor action time",
+        "change history",
+        "event history"
+      ]
+    },
+    {
       "id": "detail",
       "displayName": "Detail Page",
       "category": "application-layout",
@@ -1404,93 +1426,24 @@
       }
     },
     {
-      "id": "activity-log",
-      "displayName": "ActivityLog",
-      "package": "@vyrnforge/ui-components",
-      "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Operational activity feed.",
-      "guidance": {
-        "useWhen": "Use later for recent changes and user activity.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Use plain list composition until implemented.",
-        "relatedComponents": [
-          "Timeline"
-        ]
-      },
-      "accessibilityNotes": "Activity entries need clear actor/action/time text.",
-      "knownLimitations": [
-        "Do not import until implemented."
-      ],
-      "styling": {
-        "classes": [],
-        "variables": []
-      },
-      "docsPath": "docs/api/ui-components-api.md",
-      "playgroundPath": null,
-      "source": {
-        "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
-        "customElementsManifest": null
-      },
-      "nativeDeclaration": null,
-      "frameworks": {
-        "react": {
-          "label": "React",
-          "status": "not-supported",
-          "package": "@vyrnforge/ui-components",
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "native-html": {
-          "label": "Native HTML",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "angular": {
-          "label": "Angular",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "vue": {
-          "label": "Vue",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        }
-      },
-      "contract": null
-    },
-    {
       "id": "description-list",
       "displayName": "DescriptionList",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
       "guidance": {
-        "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values.",
+        "useWhen": "Use for labeled facts, attributes, metadata, or key/value details where terms describe one or more values, including compact-density metadata.",
         "avoidWhen": "Avoid for tabular comparisons that require row and column relationships or for interactive form fields.",
-        "aiUsageNotes": "Use the Native HTML renderer with semantic dl/dt/dd content when targeting @vyrnforge/ui-elements; preserve the same term/description structure across framework adapters and do not invent a stateful data API.",
+        "aiUsageNotes": "Use semantic dl/dt/dd content across every framework surface. DescriptionList inherits VyrnForge density through shared tokens, so use compact density for dense key/value metadata instead of creating a separate KeyValueList API.",
         "relatedComponents": [
-          "KeyValueList",
           "PropertyTable"
         ]
       },
       "accessibilityNotes": "Preserve native dl/dt/dd relationships; the renderer provides a native dl container and does not replace term/description semantics with generic grouping roles.",
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to the framework-specific DescriptionList tasks."
+        "Avoid for tabular comparisons that require row and column relationships or for interactive form fields."
       ],
       "styling": {
         "classes": [
@@ -1513,10 +1466,10 @@
       "frameworks": {
         "react": {
           "label": "React",
-          "status": "target",
+          "status": "current",
           "package": "@vyrnforge/ui-components",
-          "setup": "import { VyrnForgeDescriptionListElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-          "example": "<vf-description-list><dt>Status</dt><dd>Active</dd></vf-description-list>",
+          "setup": "import { DescriptionList } from '@vyrnforge/ui-components';",
+          "example": "<DescriptionList><dt>Status</dt><dd>Active</dd></DescriptionList>",
           "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
         },
         "native-html": {
@@ -1529,7 +1482,7 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "target",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-angular",
           "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-description-list></vf-description-list>",
@@ -1537,7 +1490,7 @@
         },
         "vue": {
           "label": "Vue",
-          "status": "target",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-vue",
           "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
           "example": "<VfDescriptionList></VfDescriptionList>",
@@ -1565,104 +1518,35 @@
       }
     },
     {
-      "id": "key-value-list",
-      "displayName": "KeyValueList",
-      "package": "@vyrnforge/ui-components",
-      "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Compact key/value metadata list.",
-      "guidance": {
-        "useWhen": "Use later for dense metadata.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Use simple semantic markup until implemented.",
-        "relatedComponents": [
-          "DescriptionList",
-          "PropertyTable"
-        ]
-      },
-      "accessibilityNotes": "Labels and values should remain clear at compact density.",
-      "knownLimitations": [
-        "Do not import until implemented."
-      ],
-      "styling": {
-        "classes": [],
-        "variables": []
-      },
-      "docsPath": "docs/api/ui-components-api.md",
-      "playgroundPath": null,
-      "source": {
-        "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
-        "customElementsManifest": null
-      },
-      "nativeDeclaration": null,
-      "frameworks": {
-        "react": {
-          "label": "React",
-          "status": "not-supported",
-          "package": "@vyrnforge/ui-components",
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "native-html": {
-          "label": "Native HTML",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "angular": {
-          "label": "Angular",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "vue": {
-          "label": "Vue",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        }
-      },
-      "contract": null
-    },
-    {
       "id": "property-table",
       "displayName": "PropertyTable",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
       "maturity": "planned",
       "availability": "planned",
-      "purpose": "Structured read-only property table.",
+      "purpose": "Read-only tabular property comparison using native table semantics.",
       "guidance": {
-        "useWhen": "Use later for comparable resource properties.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Do not use UniversalDataGrid for simple property display.",
+        "useWhen": "Use when readers must compare properties across rows or columns and those relationships are genuinely tabular.",
+        "avoidWhen": "Use DescriptionList for term-and-description facts; use UniversalDataGrid when sorting, filtering, resizing, selection, grouping, or grid state is required.",
+        "aiUsageNotes": "Treat PropertyTable as a state-free semantic wrapper around one real table, not as a data-grid or application-specific property model.",
         "relatedComponents": [
           "DescriptionList",
           "UniversalDataGrid"
         ]
       },
-      "accessibilityNotes": "Use table semantics only for tabular data.",
+      "accessibilityNotes": "Keep one native table as the semantic authority; preserve caption, th, scope, and header/cell relationships and do not replace them with grid roles.",
       "knownLimitations": [
-        "Do not import until implemented."
+        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
       ],
       "styling": {
-        "classes": [],
+        "classes": ["vf-property-table"],
         "variables": []
       },
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
+        "contractMetadata": "docs/metadata/component-contracts.json",
         "customElementsManifest": null
       },
       "nativeDeclaration": null,
@@ -1700,76 +1584,27 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
-    },
-    {
-      "id": "resource-list",
-      "displayName": "ResourceList",
-      "package": "@vyrnforge/ui-components",
-      "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "List of resource summary items.",
-      "guidance": {
-        "useWhen": "Use later for non-tabular resource lists.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Use list markup or Card items until implemented.",
-        "relatedComponents": [
-          "Card",
-          "UniversalDataGrid"
-        ]
-      },
-      "accessibilityNotes": "List items need clear headings/actions.",
-      "knownLimitations": [
-        "Do not import until implemented."
-      ],
-      "styling": {
-        "classes": [],
-        "variables": []
-      },
-      "docsPath": "docs/api/ui-components-api.md",
-      "playgroundPath": null,
-      "source": {
-        "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
-        "customElementsManifest": null
-      },
-      "nativeDeclaration": null,
-      "frameworks": {
-        "react": {
-          "label": "React",
-          "status": "not-supported",
-          "package": "@vyrnforge/ui-components",
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "native-html": {
-          "label": "Native HTML",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "angular": {
-          "label": "Angular",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        },
-        "vue": {
-          "label": "Vue",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
-        }
-      },
-      "contract": null
+      "contract": {
+        "properties": [],
+        "attributes": [],
+        "events": [],
+        "slots": [
+          {
+            "name": "default",
+            "required": true,
+            "multiple": false,
+            "content": "element"
+          }
+        ],
+        "methods": [],
+        "accessibility": [
+          "requires exactly one native table element as projected content so table, row, column, header, and cell relationships remain browser semantics",
+          "the table should provide a caption or another accessible name when surrounding context does not already identify its purpose",
+          "header cells must use native th semantics with scope or explicit header associations appropriate to the table structure",
+          "responsive presentation may scroll or wrap but must not replace table semantics with generic or ARIA grid roles"
+        ],
+        "formAssociation": "none"
+      }
     },
     {
       "id": "timeline",
@@ -1778,18 +1613,18 @@
       "category": "data-display",
       "maturity": "planned",
       "availability": "planned",
-      "purpose": "Chronological event display.",
+      "purpose": "Ordered chronological event presentation using native list and time semantics.",
       "guidance": {
-        "useWhen": "Use later for audit/activity history.",
-        "avoidWhen": "Do not import until implemented.",
-        "aiUsageNotes": "Use semantic lists until implemented.",
+        "useWhen": "Use for read-only chronological histories where event order and timestamps are meaningful and entry content remains application-owned.",
+        "avoidWhen": "Avoid for interactive feeds, application notification state, or unordered status collections; keep persistence and activity schemas in the consuming application.",
+        "aiUsageNotes": "Treat Timeline as a state-free semantic ordered-list wrapper. Entry data, actors, actions, persistence, loading, and filtering remain application-owned; use the Activity Log pattern for actor/action/time histories.",
         "relatedComponents": [
-          "ActivityLog"
+          "Badge"
         ]
       },
-      "accessibilityNotes": "Event order and timestamps should be clear.",
+      "accessibilityNotes": "Preserve ordered-list semantics and source order; each entry must remain a native list item and timestamps should use readable text with a machine-readable time value when available.",
       "knownLimitations": [
-        "Do not import until implemented."
+        "Contract defined; public framework implementations are not yet available."
       ],
       "styling": {
         "classes": [],
@@ -1799,7 +1634,7 @@
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
-        "contractMetadata": null,
+        "contractMetadata": "docs/metadata/component-contracts.json",
         "customElementsManifest": null
       },
       "nativeDeclaration": null,
@@ -1837,7 +1672,27 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": {
+        "properties": [],
+        "attributes": [],
+        "events": [],
+        "slots": [
+          {
+            "name": "default",
+            "required": true,
+            "multiple": true,
+            "content": "element"
+          }
+        ],
+        "methods": [],
+        "accessibility": [
+          "owns one native ordered-list container so chronological order remains explicit browser list semantics",
+          "projected timeline entries must become native list items and preserve source order without visual reordering that changes chronological meaning",
+          "timestamps must have understandable visible text and should use native time semantics with a machine-readable datetime value when available",
+          "the component is read-only presentation and must not introduce feed, listbox, grid, selection, or live-region semantics unless a separate interactive contract requires them"
+        ],
+        "formAssociation": "none"
+      }
     },
     {
       "id": "transfer-list",
@@ -2940,8 +2795,8 @@
       "displayName": "Progress",
       "package": "@vyrnforge/ui-components",
       "category": "feedback",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Determinate or indeterminate progress indicator.",
       "guidance": {
         "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
@@ -2954,7 +2809,7 @@
       },
       "accessibilityNotes": "Preserve native progress semantics: determinate progress exposes the current value and maximum, while omitting value represents indeterminate progress. Provide an accessible name when surrounding context does not.",
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to their framework-specific Progress tasks."
+        "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."
       ],
       "styling": {
         "classes": [
@@ -2977,10 +2832,10 @@
       "frameworks": {
         "react": {
           "label": "React",
-          "status": "target",
+          "status": "current",
           "package": "@vyrnforge/ui-components",
-          "setup": "import { VyrnForgeProgressElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-          "example": "<vf-progress max=\"100\" value=\"40\" aria-label=\"Upload progress\"></vf-progress>",
+          "setup": "import { Progress } from '@vyrnforge/ui-components';",
+          "example": "<Progress max={100} value={40} aria-label='Upload progress' />",
           "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
         },
         "native-html": {
@@ -2993,7 +2848,7 @@
         },
         "angular": {
           "label": "Angular",
-          "status": "target",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-angular",
           "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
           "example": "<vf-progress></vf-progress>",
@@ -3001,7 +2856,7 @@
         },
         "vue": {
           "label": "Vue",
-          "status": "target",
+          "status": "verified-consumer",
           "package": "@vyrnforge/ui-vue",
           "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
           "example": "<VfProgress></VfProgress>",

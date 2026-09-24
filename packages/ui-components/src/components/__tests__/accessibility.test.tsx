@@ -5,6 +5,8 @@ import {
   Dialog,
   Field,
   Progress,
+  PropertyTable,
+  Timeline,
   TextInput,
 } from "../../index";
 import {
@@ -64,6 +66,49 @@ describe("@vyrnforge/ui-components accessibility", () => {
           <dt>Owner</dt>
           <dd>Operations</dd>
         </DescriptionList>
+      </main>,
+    );
+
+    await assertNoAccessibilityViolations(container);
+  });
+
+  it("scans a semantic property table", async () => {
+    const { container } = render(
+      <main>
+        <PropertyTable>
+          <table>
+            <caption>Deployment properties</caption>
+            <thead>
+              <tr>
+                <th scope="col">Property</th>
+                <th scope="col">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Region</th>
+                <td>us-east-1</td>
+              </tr>
+            </tbody>
+          </table>
+        </PropertyTable>
+      </main>,
+    );
+
+    await assertNoAccessibilityViolations(container);
+  });
+
+  it("scans a semantic timeline", async () => {
+    const { container } = render(
+      <main>
+        <Timeline aria-label="Deployment history">
+          <li>
+            <time dateTime="2026-09-24T01:00:00Z">01:00</time> Created
+          </li>
+          <li>
+            <time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed
+          </li>
+        </Timeline>
       </main>,
     );
 

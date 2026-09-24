@@ -48,6 +48,7 @@ export function verifyPlaygroundReferenceCoverage({
   const model = json(root, "docs/generated/reference-model.json");
   const knowledge = json(root, "docs/generated/consumer-knowledge.json");
   const contracts = json(root, "docs/metadata/component-contracts.json");
+  const catalog = json(root, "docs/metadata/components.json");
   const frameworkApi = json(
     root,
     "docs/generated/framework-api-reference.json",
@@ -69,9 +70,14 @@ export function verifyPlaygroundReferenceCoverage({
     }
   }
 
-  const canonicalIds = (contracts.componentContracts ?? []).map(
-    (component) => component.id,
+  const publicCatalogIds = new Set(
+    (catalog.components ?? [])
+      .filter((component) => component.publicExport === true)
+      .map((component) => component.id),
   );
+  const canonicalIds = (contracts.componentContracts ?? [])
+    .filter((component) => publicCatalogIds.has(component.id))
+    .map((component) => component.id);
   for (const id of duplicates(canonicalIds)) {
     failures.push(`canonical component contracts have duplicate id: ${id}`);
   }
