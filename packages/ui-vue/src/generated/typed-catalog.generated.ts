@@ -69,6 +69,7 @@ import {
   VfText as VfTextRuntime,
   VfTextInput as VfTextInputRuntime,
   VfTextarea as VfTextareaRuntime,
+  VfTimeline as VfTimelineRuntime,
   VfToast as VfToastRuntime,
   VfToggleButton as VfToggleButtonRuntime,
   VfToggleButtonGroup as VfToggleButtonGroupRuntime,
@@ -1525,6 +1526,24 @@ export interface VfTextareaRef {
 }
 
 export const VfTextarea = VfTextareaRuntime as unknown as VyrnForgeVueComponentType<VfTextareaProps, VfTextareaEmits, VfTextareaSlots, VfTextareaRef>;
+
+export interface VfTimelineProps {
+
+}
+
+export interface VfTimelineEmits {
+  (event: never): void;
+}
+
+export interface VfTimelineSlots {
+  readonly default?: () => VNode[];
+}
+
+export interface VfTimelineRef {
+  readonly element: VyrnForgeElementForTagName<"vf-timeline"> | null;
+}
+
+export const VfTimeline = VfTimelineRuntime as unknown as VyrnForgeVueComponentType<VfTimelineProps, VfTimelineEmits, VfTimelineSlots, VfTimelineRef>;
 
 export interface VfToastProps {
   readonly actionLabel?: VyrnForgeElementForTagName<"vf-toast">["actionLabel"];

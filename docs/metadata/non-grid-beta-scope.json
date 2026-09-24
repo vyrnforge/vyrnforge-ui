@@ -85,7 +85,7 @@
     "publicGridComponentsDeferred": 10,
     "plannedNonPublicComponentsExcluded": 2,
     "internalNonPublicComponentsExcluded": 1,
-    "nativeCustomElementTags": 61,
+    "nativeCustomElementTags": 62,
     "categoryCounts": {
       "composite": 8,
       "data-display": 2,

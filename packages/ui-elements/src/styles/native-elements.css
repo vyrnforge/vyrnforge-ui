@@ -52,7 +52,8 @@
   vf-breadcrumbs,
   vf-side-nav,
   vf-description-list,
-  vf-property-table
+  vf-property-table,
+  vf-timeline
 ) {
   display: block;
 }
