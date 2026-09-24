@@ -26,6 +26,8 @@ import {
   PageHeader,
   Popover,
   Progress,
+  PropertyTable,
+  Timeline,
   Radio,
   RadioGroup,
   Rating,
@@ -253,6 +255,52 @@ describe("@vyrnforge/ui-components primitives", () => {
     expect(markup).toContain("<dd>Active</dd>");
     expect(markup).toContain("vf-description-list");
     expect(markup).toContain("vf-description-list__list");
+  });
+
+  it("renders PropertyTable around one semantic native table", () => {
+    const markup = renderToStaticMarkup(
+      <PropertyTable aria-label="Deployment properties">
+        <table>
+          <caption>Deployment properties</caption>
+          <thead>
+            <tr>
+              <th scope="col">Property</th>
+              <th scope="col">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Region</th>
+              <td>us-east-1</td>
+            </tr>
+          </tbody>
+        </table>
+      </PropertyTable>,
+    );
+
+    expect(markup).toContain('class="vf-property-table"');
+    expect(markup).toContain("<table>");
+    expect(markup).toContain("<caption>Deployment properties</caption>");
+    expect(markup).toContain('scope="col"');
+    expect(markup).not.toContain('role="grid"');
+  });
+
+  it("renders Timeline with ordered-list chronology and native time content", () => {
+    const markup = renderToStaticMarkup(
+      <Timeline aria-label="Deployment history">
+        <li>
+          <time dateTime="2026-09-24T01:00:00Z">01:00</time> Created
+        </li>
+        <li>
+          <time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed
+        </li>
+      </Timeline>,
+    );
+
+    expect(markup).toContain("<ol");
+    expect(markup).toContain("vf-timeline");
+    expect(markup).toContain("<time");
+    expect(markup.indexOf("Created")).toBeLessThan(markup.indexOf("Deployed"));
   });
 
   it("renders determinate and indeterminate Progress with native semantics", () => {
