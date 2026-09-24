@@ -180,7 +180,9 @@ onMounted(async () => {
     !propertyTable.querySelector('table > tbody th[scope="row"]') ||
     !propertyTable.querySelector("table > tbody td")
   ) {
-    throw new Error("Vue PropertyTable did not preserve native table semantics.");
+    throw new Error(
+      "Vue PropertyTable did not preserve native table semantics.",
+    );
   }
 
   const timeline = document.querySelector("vf-timeline#vue-timeline");
@@ -196,7 +198,9 @@ onMounted(async () => {
       'time[datetime="2026-09-24T09:00:00Z"]',
     )
   ) {
-    throw new Error("Vue Timeline did not preserve ordered list/time semantics.");
+    throw new Error(
+      "Vue Timeline did not preserve ordered list/time semantics.",
+    );
   }
 
   const descriptionList = document.querySelector(
