@@ -34,13 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "f1a0fcb320039341899fdb4325ab47485c987c90",
+      "sha1": "802edc14057909d8386257be591cc81bea112efb",
       "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "35f9c409be1dee7af98d34455fe7d43e8ce21a10",
+      "sha1": "373b5e4f1b9ecb6a116d02967074f566a054643e",
       "covers": [
         "component props and types",
         "callbacks",
@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "a7963611716c2494fd390e42e58a95433817caa0",
+      "sha1": "783b173b6a4b721acef057b6e766b3a8960ff677",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -70,7 +70,7 @@
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "b05c95acba7bef37bef0e5c38f2e607b2036e853",
+      "sha1": "df0613ac09060c5c045d016d444082b2daf44f3a",
       "covers": [
         "behavior ownership",
         "public value export audit",
