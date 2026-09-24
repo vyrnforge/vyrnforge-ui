@@ -61,6 +61,7 @@
     "packages/ui-elements/src/components/parity.ts",
     "packages/ui-elements/src/components/description-list.ts",
     "packages/ui-elements/src/components/progress.ts",
+    "packages/ui-elements/src/components/property-table.ts",
     "apps/regression-fixtures/src/nativeAdvancedElements.tsx",
     "apps/regression-fixtures/src/nativeParityElements.tsx",
     "tests/browser/native-advanced-elements.spec.ts",
@@ -211,11 +212,11 @@
     "documentation": "docs/architecture/10-custom-elements-and-form-association.md"
   },
   "nativeParity": {
-    "registeredPublicTags": 60,
+    "registeredPublicTags": 61,
     "browserEvidence": "tests/browser/native-parity.spec.ts",
     "fixture": "apps/regression-fixtures/src/nativeParityElements.tsx",
     "publicReactRecords": 67,
-    "directElements": 58,
+    "directElements": 59,
     "rendererMappings": 8,
     "rendererCompositions": 1,
     "rendererServices": 1
