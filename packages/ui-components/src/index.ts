@@ -178,7 +178,10 @@ export type {
   DescriptionListProps,
   DescriptionListRef,
 } from "./components/DescriptionList";
-export type { PropertyTableProps, PropertyTableRef } from "./components/PropertyTable";
+export type {
+  PropertyTableProps,
+  PropertyTableRef,
+} from "./components/PropertyTable";
 export { Panel } from "./components/Panel";
 export type { PanelProps } from "./components/Panel";
 export { Stack } from "./components/Stack";
