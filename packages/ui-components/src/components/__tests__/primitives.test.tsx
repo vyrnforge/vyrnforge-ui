@@ -26,6 +26,7 @@ import {
   PageHeader,
   Popover,
   Progress,
+  Timeline,
   Radio,
   RadioGroup,
   Rating,
@@ -253,6 +254,21 @@ describe("@vyrnforge/ui-components primitives", () => {
     expect(markup).toContain("<dd>Active</dd>");
     expect(markup).toContain("vf-description-list");
     expect(markup).toContain("vf-description-list__list");
+  });
+
+  it("renders Timeline with ordered-list chronology and native time content", () => {
+    const markup = renderToStaticMarkup(
+      <Timeline aria-label="Deployment history">
+        <li><time dateTime="2026-09-24T01:00:00Z">01:00</time> Created</li>
+        <li><time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed</li>
+      </Timeline>,
+    );
+
+    expect(markup).toContain("<ol");
+    expect(markup).toContain("vf-timeline");
+    expect(markup).toContain("vf-timeline__item");
+    expect(markup).toContain("<time");
+    expect(markup.indexOf("Created")).toBeLessThan(markup.indexOf("Deployed"));
   });
 
   it("renders determinate and indeterminate Progress with native semantics", () => {

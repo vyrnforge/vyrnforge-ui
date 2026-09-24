@@ -6,6 +6,7 @@ import {
   DescriptionList,
   Dialog,
   Progress,
+  Timeline,
   Tabs,
   TextInput,
   type TabItem,
@@ -87,6 +88,11 @@ function App() {
         <dt>Owner</dt>
         <dd>Operations</dd>
       </DescriptionList>
+
+      <Timeline aria-label="Deployment history" data-react-timeline>
+        <li><time dateTime="2026-09-24T01:00:00Z">01:00</time> Created</li>
+        <li><time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed</li>
+      </Timeline>
 
       <Progress
         aria-label="React upload progress"

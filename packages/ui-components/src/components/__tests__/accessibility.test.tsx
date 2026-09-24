@@ -5,6 +5,7 @@ import {
   Dialog,
   Field,
   Progress,
+  Timeline,
   TextInput,
 } from "../../index";
 import {
@@ -64,6 +65,19 @@ describe("@vyrnforge/ui-components accessibility", () => {
           <dt>Owner</dt>
           <dd>Operations</dd>
         </DescriptionList>
+      </main>,
+    );
+
+    await assertNoAccessibilityViolations(container);
+  });
+
+  it("scans a semantic timeline", async () => {
+    const { container } = render(
+      <main>
+        <Timeline aria-label="Deployment history">
+          <li><time dateTime="2026-09-24T01:00:00Z">01:00</time> Created</li>
+          <li><time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed</li>
+        </Timeline>
       </main>,
     );
 

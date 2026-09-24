@@ -173,10 +173,12 @@ export type { ProgressProps, ProgressRef } from "./components/Progress";
 export { Card } from "./components/Card";
 export type { CardPadding, CardProps, CardVariant } from "./components/Card";
 export { DescriptionList } from "./components/DescriptionList";
+export { Timeline } from "./components/Timeline";
 export type {
   DescriptionListProps,
   DescriptionListRef,
 } from "./components/DescriptionList";
+export type { TimelineProps, TimelineRef } from "./components/Timeline";
 export { Panel } from "./components/Panel";
 export type { PanelProps } from "./components/Panel";
 export { Stack } from "./components/Stack";

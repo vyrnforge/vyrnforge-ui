@@ -2,9 +2,15 @@
   "id": "react",
   "supportClaim": "packed-react-public-package-runtime-verified",
   "task": "MFD-1417",
-  "rendererPackages": ["@vyrnforge/ui-components"],
+  "rendererPackages": [
+    "@vyrnforge/ui-components"
+  ],
   "runtime": "react-18-19-first-class-package",
-  "commands": ["npm run typecheck", "npm run build", "npm run preview"],
+  "commands": [
+    "npm run typecheck",
+    "npm run build",
+    "npm run preview"
+  ],
   "requiredPatterns": [
     "@vyrnforge/ui-components",
     "@vyrnforge/ui-components/styles/index.css",
