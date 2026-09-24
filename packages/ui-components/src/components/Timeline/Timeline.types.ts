@@ -1,8 +1,4 @@
-import type {
-  HTMLAttributes,
-  LiHTMLAttributes,
-  ReactElement,
-} from "react";
+import type { HTMLAttributes, LiHTMLAttributes, ReactElement } from "react";
 
 export type TimelineRef = HTMLOListElement;
 
