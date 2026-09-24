@@ -1,6 +1,9 @@
 import { forwardRef } from "react";
 import { joinClassNames } from "../../utils/classNames";
-import type { PropertyTableProps, PropertyTableRef } from "./PropertyTable.types";
+import type {
+  PropertyTableProps,
+  PropertyTableRef,
+} from "./PropertyTable.types";
 
 export const PropertyTable = forwardRef<PropertyTableRef, PropertyTableProps>(
   function PropertyTable({ className, children, ...props }, ref) {
