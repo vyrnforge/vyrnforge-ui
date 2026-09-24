@@ -6,6 +6,7 @@ import {
   DescriptionList,
   Dialog,
   Progress,
+  PropertyTable,
   Tabs,
   TextInput,
   type TabItem,
@@ -87,6 +88,18 @@ function App() {
         <dt>Owner</dt>
         <dd>Operations</dd>
       </DescriptionList>
+
+      <PropertyTable data-react-property-table>
+        <table>
+          <caption>Deployment properties</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Region</th>
+              <td>us-east-1</td>
+            </tr>
+          </tbody>
+        </table>
+      </PropertyTable>
 
       <Progress
         aria-label="React upload progress"

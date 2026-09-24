@@ -34,13 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "f1a0fcb320039341899fdb4325ab47485c987c90",
+      "sha1": "e9252650f97b69e9dc9a0ae8028e0bcd30304439",
       "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "35f9c409be1dee7af98d34455fe7d43e8ce21a10",
+      "sha1": "2424d7660736a42d82afc223acd50009d2338cc8",
       "covers": [
         "component props and types",
         "callbacks",
@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "a7963611716c2494fd390e42e58a95433817caa0",
+      "sha1": "2b9bd8010c604e58de99c07a921cd969837afdfc",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -70,7 +70,7 @@
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "b05c95acba7bef37bef0e5c38f2e607b2036e853",
+      "sha1": "2e41ca0b716f636623655e834b311f5c8b277d7c",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -151,6 +151,11 @@
     {
       "task": "data-display-description-list-density-rationalization",
       "reason": "DescriptionList replaces legacy fixed spacing aliases with the shared VyrnForge component-gap density contract while preserving the existing semantic dl/dt/dd renderer, public React API, CSS class surface, responsive structure, and mirrored Native HTML styling. Compact and spacious presentation now flow through the same framework-neutral density tokens without adding a React-only prop or behavior.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#573",
+      "reason": "PropertyTable adds the accepted stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves one native table as the semantic authority, introduces no application state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
   ],
