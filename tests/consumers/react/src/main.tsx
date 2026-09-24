@@ -93,7 +93,10 @@ function App() {
         <table>
           <caption>Deployment properties</caption>
           <tbody>
-            <tr><th scope="row">Region</th><td>us-east-1</td></tr>
+            <tr>
+              <th scope="row">Region</th>
+              <td>us-east-1</td>
+            </tr>
           </tbody>
         </table>
       </PropertyTable>
