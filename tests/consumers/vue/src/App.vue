@@ -7,7 +7,9 @@ import {
   VfDescriptionList as VyrnForgeDescriptionList,
   VfDialog as VyrnForgeDialog,
   VfProgress as VyrnForgeProgress,
+  VfPropertyTable as VyrnForgePropertyTable,
   VfTabs as VyrnForgeTabs,
+  VfTimeline as VyrnForgeTimeline,
   VfTextInput as VyrnForgeTextInput,
   type GeneratedDialogDismissDetail,
 } from "@vyrnforge/ui-vue";
@@ -169,6 +171,38 @@ onMounted(async () => {
     );
   }
 
+  const propertyTable = document.querySelector(
+    "vf-property-table#vue-property-table",
+  );
+  if (
+    !propertyTable?.querySelector("table > caption") ||
+    !propertyTable.querySelector("table > thead th[scope=\"col\"]") ||
+    !propertyTable.querySelector("table > tbody th[scope=\"row\"]") ||
+    !propertyTable.querySelector("table > tbody td")
+  ) {
+    throw new Error(
+      "Vue PropertyTable did not preserve native table semantics.",
+    );
+  }
+
+  const timeline = document.querySelector("vf-timeline#vue-timeline");
+  const timelineItems = timeline?.querySelectorAll(
+    ":scope > ol.vf-timeline__list > li.vf-timeline__item",
+  );
+  if (
+    timelineItems?.length !== 2 ||
+    !timelineItems[0]?.querySelector(
+      'time[datetime="2026-09-24T08:00:00Z"]',
+    ) ||
+    !timelineItems[1]?.querySelector(
+      'time[datetime="2026-09-24T09:00:00Z"]',
+    )
+  ) {
+    throw new Error(
+      "Vue Timeline did not preserve ordered list/time semantics.",
+    );
+  }
+
   const descriptionList = document.querySelector(
     "vf-description-list#vue-description-list",
   );
@@ -182,6 +216,8 @@ onMounted(async () => {
   }
 
   consumerRoot.value?.setAttribute("data-progress", "verified");
+  consumerRoot.value?.setAttribute("data-property-table", "verified");
+  consumerRoot.value?.setAttribute("data-timeline", "verified");
   consumerRoot.value?.setAttribute("data-consumer-property", "verified");
   consumerRoot.value?.setAttribute("data-consumer-ready", "true");
 });
@@ -271,6 +307,47 @@ onMounted(async () => {
         aria-label="Vue preparing export"
         :max="100"
       />
+    </section>
+
+    <section
+      class="vf-consumer-vue-section"
+      aria-labelledby="property-table-title"
+    >
+      <h2 id="property-table-title">Generated Vue PropertyTable</h2>
+      <VyrnForgePropertyTable id="vue-property-table">
+        <table>
+          <caption>Vue service properties</caption>
+          <thead>
+            <tr>
+              <th scope="col">Property</th>
+              <th scope="col">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Owner</th>
+              <td>Operations</td>
+            </tr>
+          </tbody>
+        </table>
+      </VyrnForgePropertyTable>
+    </section>
+
+    <section
+      class="vf-consumer-vue-section"
+      aria-labelledby="timeline-title"
+    >
+      <h2 id="timeline-title">Generated Vue Timeline</h2>
+      <VyrnForgeTimeline id="vue-timeline">
+        <li>
+          <time datetime="2026-09-24T08:00:00Z">08:00 UTC</time>
+          Created
+        </li>
+        <li>
+          <time datetime="2026-09-24T09:00:00Z">09:00 UTC</time>
+          Reviewed
+        </li>
+      </VyrnForgeTimeline>
     </section>
 
     <section
