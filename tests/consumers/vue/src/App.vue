@@ -98,6 +98,7 @@ function handleSubmit(event: Event): void {
   consumerRoot.value?.setAttribute("data-consumer-form", "submitted");
 }
 
+// prettier-ignore
 onMounted(async () => {
   await nextTick();
 
