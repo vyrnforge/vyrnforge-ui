@@ -1536,10 +1536,10 @@
       },
       "accessibilityNotes": "Keep one native table as the semantic authority; preserve caption, th, scope, and header/cell relationships and do not replace them with grid roles.",
       "knownLimitations": [
-        "Contract defined; public framework implementations are not yet available."
+        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
       ],
       "styling": {
-        "classes": [],
+        "classes": ["vf-property-table"],
         "variables": []
       },
       "docsPath": "docs/api/ui-components-api.md",

@@ -24,10 +24,12 @@
     "responsive presentation may scroll or wrap but must not replace table semantics with generic or ARIA grid roles"
   ],
   "knownLimitations": [
-    "Contract defined; public framework implementations are not yet available."
+    "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-property-table"
+    ],
     "variables": []
   },
   "frameworks": {
