@@ -91,9 +91,9 @@ describe("VyrnForge element registration", () => {
   });
 
   it("registers the frozen native public catalog and per-element entry points", () => {
-    expect(vyrnForgeElementDefinitions).toHaveLength(61);
+    expect(vyrnForgeElementDefinitions).toHaveLength(62);
     expect(Object.isFrozen(vyrnForgeElementDefinitions)).toBe(true);
-    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(61);
+    expect(Object.keys(vyrnForgeElementRegistrations)).toHaveLength(62);
 
     const registry = createRegistry();
     const registered = registerVyrnForgeElements(registry);
