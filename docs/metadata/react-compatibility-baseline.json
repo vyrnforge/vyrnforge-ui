@@ -34,13 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "e9252650f97b69e9dc9a0ae8028e0bcd30304439",
+      "sha1": "7a650c126f51169cf91141848bb28878942aa98f",
       "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "2424d7660736a42d82afc223acd50009d2338cc8",
+      "sha1": "b8efa1b568635cd6d37b127579fdf00424a00453",
       "covers": [
         "component props and types",
         "callbacks",
@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "2b9bd8010c604e58de99c07a921cd969837afdfc",
+      "sha1": "4a052e9b0350944b813bd0d27806d5fb7f458544",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -70,7 +70,7 @@
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "2e41ca0b716f636623655e834b311f5c8b277d7c",
+      "sha1": "7633403d0f3222434d9b9fee4047ffabb918669b",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -156,6 +156,11 @@
     {
       "task": "#573",
       "reason": "PropertyTable adds the accepted stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves one native table as the semantic authority, introduces no application state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#575",
+      "reason": "Timeline adds the accepted stateless chronological React renderer as a public @vyrnforge/ui-components export. The implementation preserves native ordered-list and list-item semantics, introduces no activity state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
   ],
