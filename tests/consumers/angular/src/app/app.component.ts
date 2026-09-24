@@ -215,13 +215,11 @@ export class AppComponent implements AfterViewInit {
       );
       if (
         !propertyTable?.querySelector("table > caption") ||
-        !propertyTable.querySelector("table > thead th[scope=\"col\"]") ||
-        !propertyTable.querySelector("table > tbody th[scope=\"row\"]") ||
+        !propertyTable.querySelector('table > thead th[scope="col"]') ||
+        !propertyTable.querySelector('table > tbody th[scope="row"]') ||
         !propertyTable.querySelector("table > tbody td")
       ) {
-        throw new Error(
-          "Angular PropertyTable did not preserve native table semantics.",
-        );
+        throw new Error("Angular PropertyTable did not preserve native table semantics.");
       }
 
       const timeline = document.querySelector(
@@ -239,9 +237,7 @@ export class AppComponent implements AfterViewInit {
           'time[datetime="2026-09-24T09:00:00Z"]',
         )
       ) {
-        throw new Error(
-          "Angular Timeline did not preserve ordered list/time semantics.",
-        );
+        throw new Error("Angular Timeline did not preserve ordered list/time semantics.");
       }
 
       const descriptionList = document.querySelector(
