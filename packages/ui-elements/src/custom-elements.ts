@@ -38,6 +38,7 @@ export interface VyrnForgeHTMLElementTagNameMap {
   "vf-error-state": VyrnForgeElementInstance<"VyrnForgeErrorStateElement">;
   "vf-inline-message": VyrnForgeElementInstance<"VyrnForgeInlineMessageElement">;
   "vf-skeleton": VyrnForgeElementInstance<"VyrnForgeSkeletonElement">;
+  "vf-progress": VyrnForgeElementInstance<"VyrnForgeProgressElement">;
   "vf-button": VyrnForgeElementInstance<"VyrnForgeButtonElement">;
   "vf-icon-button": VyrnForgeElementInstance<"VyrnForgeIconButtonElement">;
   "vf-button-group": VyrnForgeElementInstance<"VyrnForgeButtonGroupElement">;

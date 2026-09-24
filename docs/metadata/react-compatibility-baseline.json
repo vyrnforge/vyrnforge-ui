@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "d43dca3ecb2f223da7256f125f6d710f49e4edea",
+      "sha1": "a7963611716c2494fd390e42e58a95433817caa0",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -146,6 +146,11 @@
     {
       "task": "progress-react-renderer",
       "reason": "Progress adds the planned stateless React renderer as a public @vyrnforge/ui-components export. It preserves native progress semantics for determinate and indeterminate states, introduces no controller or callback contract, uses VyrnForge token-driven feedback styling, and is covered by React semantic, accessibility, compatibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "data-display-description-list-density-rationalization",
+      "reason": "DescriptionList replaces legacy fixed spacing aliases with the shared VyrnForge component-gap density contract while preserving the existing semantic dl/dt/dd renderer, public React API, CSS class surface, responsive structure, and mirrored Native HTML styling. Compact and spacious presentation now flow through the same framework-neutral density tokens without adding a React-only prop or behavior.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
   ],

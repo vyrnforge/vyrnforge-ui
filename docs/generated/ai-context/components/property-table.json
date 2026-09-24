@@ -6,21 +6,25 @@
   "category": "data-display",
   "maturity": "planned",
   "availability": "planned",
-  "purpose": "Structured read-only property table.",
+  "purpose": "Read-only tabular property comparison using native table semantics.",
   "guidance": {
-    "useWhen": "Use later for comparable resource properties.",
-    "avoidWhen": "Do not import until implemented.",
-    "aiUsageNotes": "Do not use UniversalDataGrid for simple property display.",
+    "useWhen": "Use when readers must compare properties across rows or columns and those relationships are genuinely tabular.",
+    "avoidWhen": "Use DescriptionList for term-and-description facts; use UniversalDataGrid when sorting, filtering, resizing, selection, grouping, or grid state is required.",
+    "aiUsageNotes": "Treat PropertyTable as a state-free semantic wrapper around one real table, not as a data-grid or application-specific property model.",
     "relatedComponents": [
       "DescriptionList",
       "UniversalDataGrid"
     ]
   },
   "accessibility": [
-    "Use table semantics only for tabular data."
+    "Keep one native table as the semantic authority; preserve caption, th, scope, and header/cell relationships and do not replace them with grid roles.",
+    "requires exactly one native table element as projected content so table, row, column, header, and cell relationships remain browser semantics",
+    "the table should provide a caption or another accessible name when surrounding context does not already identify its purpose",
+    "header cells must use native th semantics with scope or explicit header associations appropriate to the table structure",
+    "responsive presentation may scroll or wrap but must not replace table semantics with generic or ARIA grid roles"
   ],
   "knownLimitations": [
-    "Do not import until implemented."
+    "Contract defined; public framework implementations are not yet available."
   ],
   "styling": {
     "classes": [],
@@ -44,10 +48,24 @@
       "package": null
     }
   },
-  "contract": null,
+  "contract": {
+    "properties": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "requires exactly one native table element as projected content so table, row, column, header, and cell relationships remain browser semantics",
+      "the table should provide a caption or another accessible name when surrounding context does not already identify its purpose",
+      "header cells must use native th semantics with scope or explicit header associations appropriate to the table structure",
+      "responsive presentation may scroll or wrap but must not replace table semantics with generic or ARIA grid roles"
+    ],
+    "formAssociation": "none"
+  },
   "source": {
     "componentMetadata": "docs/metadata/components.json",
-    "contractMetadata": null,
+    "contractMetadata": "docs/metadata/component-contracts.json",
     "customElementsManifest": null
   }
 }
