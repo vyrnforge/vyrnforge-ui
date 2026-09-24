@@ -309,6 +309,7 @@ onMounted(async () => {
       />
     </section>
 
+    <!-- prettier-ignore -->
     <section
       class="vf-consumer-vue-section"
       aria-labelledby="property-table-title"
@@ -333,6 +334,7 @@ onMounted(async () => {
       </VyrnForgePropertyTable>
     </section>
 
+    <!-- prettier-ignore -->
     <section
       class="vf-consumer-vue-section"
       aria-labelledby="timeline-title"
