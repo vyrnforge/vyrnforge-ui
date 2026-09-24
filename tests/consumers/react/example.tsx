@@ -2,6 +2,7 @@ import {
   Button,
   DescriptionList,
   Progress,
+  PropertyTable,
   TextInput,
 } from "@vyrnforge/ui-components";
 import "@vyrnforge/ui-components/styles/index.css";
@@ -14,6 +15,12 @@ export function ReactConsumerContract() {
         <dt>Status</dt>
         <dd>Active</dd>
       </DescriptionList>
+      <PropertyTable>
+        <table>
+          <caption>Deployment properties</caption>
+          <tbody><tr><th scope="row">Region</th><td>us-east-1</td></tr></tbody>
+        </table>
+      </PropertyTable>
       <Progress aria-label="Upload progress" max={100} value={40} />
       <TextInput aria-label="Owner" defaultValue="Operations" />
     </>

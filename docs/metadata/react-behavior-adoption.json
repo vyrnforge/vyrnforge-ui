@@ -65,6 +65,7 @@
     "Skeleton",
     "Card",
     "DescriptionList",
+    "PropertyTable",
     "Progress",
     "Panel",
     "Stack",
@@ -172,6 +173,7 @@
         "Skeleton",
         "Card",
         "DescriptionList",
+        "PropertyTable",
         "Progress",
         "Panel",
         "Stack",
@@ -189,91 +191,137 @@
   "adoptionEvidence": [
     {
       "source": "packages/ui-components/src/components/Button/Button.tsx",
-      "markers": ["resolveActionState"]
+      "markers": [
+        "resolveActionState"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/IconButton/IconButton.tsx",
-      "markers": ["resolveActionState", "action.ariaBusy", "action.disabled"]
+      "markers": [
+        "resolveActionState",
+        "action.ariaBusy",
+        "action.disabled"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/ToggleButton/ToggleButton.tsx",
-      "markers": ["useToggleBehavior"]
+      "markers": [
+        "useToggleBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/ToggleButtonGroup/ToggleButtonGroup.tsx",
-      "markers": ["useToggleGroupBehavior"]
+      "markers": [
+        "useToggleGroupBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/SegmentedControl/SegmentedControl.tsx",
-      "markers": ["useChoiceBehavior"]
+      "markers": [
+        "useChoiceBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Checkbox/Checkbox.tsx",
-      "markers": ["resolveToggleInputState"]
+      "markers": [
+        "resolveToggleInputState"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
-      "markers": ["useChoiceBehavior"]
+      "markers": [
+        "useChoiceBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Switch/Switch.tsx",
-      "markers": ["resolveToggleInputState"]
+      "markers": [
+        "resolveToggleInputState"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Rating/Rating.tsx",
-      "markers": ["useNumericBehavior"]
+      "markers": [
+        "useNumericBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Slider/Slider.tsx",
-      "markers": ["useNumericBehavior"]
+      "markers": [
+        "useNumericBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Autocomplete/useAutocomplete.ts",
-      "markers": ["createAutocompleteController"]
+      "markers": [
+        "createAutocompleteController"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
-      "markers": ["useMultiSelectBehavior"]
+      "markers": [
+        "useMultiSelectBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/TransferList/useTransferList.ts",
-      "markers": ["createTransferListController"]
+      "markers": [
+        "createTransferListController"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/SideNav/SideNav.tsx",
-      "markers": ["useNavigationBehavior"]
+      "markers": [
+        "useNavigationBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Tabs/Tabs.tsx",
-      "markers": ["useTabsBehavior"]
+      "markers": [
+        "useTabsBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Popover/Popover.tsx",
-      "markers": ["usePopoverBehavior"]
+      "markers": [
+        "usePopoverBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Menu/Menu.tsx",
-      "markers": ["useNavigationBehavior"]
+      "markers": [
+        "useNavigationBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Tooltip/Tooltip.tsx",
-      "markers": ["useTooltipBehavior"]
+      "markers": [
+        "useTooltipBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Dialog/Dialog.tsx",
-      "markers": ["useDialogBehavior"]
+      "markers": [
+        "useDialogBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Drawer/Drawer.tsx",
-      "markers": ["useDrawerBehavior"]
+      "markers": [
+        "useDrawerBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
-      "markers": ["useConfirmDialogBehavior"]
+      "markers": [
+        "useConfirmDialogBehavior"
+      ]
     },
     {
       "source": "packages/ui-components/src/components/Toast/ToastProvider.tsx",
-      "markers": ["useToastBehavior"]
+      "markers": [
+        "useToastBehavior"
+      ]
     }
   ],
   "rendererOwnedResponsibilities": [

@@ -26,6 +26,7 @@ import {
   PageHeader,
   Popover,
   Progress,
+  PropertyTable,
   Radio,
   RadioGroup,
   Rating,
@@ -253,6 +254,24 @@ describe("@vyrnforge/ui-components primitives", () => {
     expect(markup).toContain("<dd>Active</dd>");
     expect(markup).toContain("vf-description-list");
     expect(markup).toContain("vf-description-list__list");
+  });
+
+  it("renders PropertyTable around one semantic native table", () => {
+    const markup = renderToStaticMarkup(
+      <PropertyTable aria-label="Deployment properties">
+        <table>
+          <caption>Deployment properties</caption>
+          <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
+          <tbody><tr><th scope="row">Region</th><td>us-east-1</td></tr></tbody>
+        </table>
+      </PropertyTable>,
+    );
+
+    expect(markup).toContain('class="vf-property-table"');
+    expect(markup).toContain("<table>");
+    expect(markup).toContain("<caption>Deployment properties</caption>");
+    expect(markup).toContain('scope="col"');
+    expect(markup).not.toContain('role="grid"');
   });
 
   it("renders determinate and indeterminate Progress with native semantics", () => {
