@@ -18,7 +18,11 @@
       "disconnectedCallback",
       "attributeChangedCallback"
     ],
-    "attributeTypes": ["boolean", "number", "string"],
+    "attributeTypes": [
+      "boolean",
+      "number",
+      "string"
+    ],
     "propertyFeatures": [
       "pre-definition-upgrade",
       "primitive-attribute-parsing",
@@ -69,7 +73,8 @@
     "packages/ui-elements/src/styles/feedback/alert.css",
     "packages/ui-elements/src/styles/feedback/skeleton.css",
     "packages/ui-elements/src/styles/navigation/top-nav.css",
-    "packages/ui-elements/src/styles/overlays/dropdown.css"
+    "packages/ui-elements/src/styles/overlays/dropdown.css",
+    "packages/ui-elements/src/components/property-table.ts"
   ],
   "documents": [
     "packages/ui-elements/README.md",
@@ -116,7 +121,10 @@
     "class": "VyrnForgeFormAssociatedElement",
     "implementation": "ElementInternals",
     "formAssociated": true,
-    "modes": ["value", "submitter"],
+    "modes": [
+      "value",
+      "submitter"
+    ],
     "properties": [
       "name",
       "disabled",
@@ -127,7 +135,11 @@
       "validationMessage",
       "willValidate"
     ],
-    "methods": ["checkValidity", "reportValidity", "setCustomValidity"],
+    "methods": [
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
     "callbacks": [
       "formAssociatedCallback",
       "formDisabledCallback",
@@ -196,8 +208,15 @@
         "vf-toggle-button-group",
         "vf-segmented-control"
       ],
-      "field-validation": ["vf-field", "vf-validation-message"],
-      "navigation": ["vf-tabs", "vf-breadcrumbs", "vf-side-nav"]
+      "field-validation": [
+        "vf-field",
+        "vf-validation-message"
+      ],
+      "navigation": [
+        "vf-tabs",
+        "vf-breadcrumbs",
+        "vf-side-nav"
+      ]
     },
     "browserEvidence": "tests/browser/native-core-elements.spec.ts",
     "fixture": "apps/regression-fixtures/src/nativeCoreElements.tsx",
@@ -211,11 +230,11 @@
     "documentation": "docs/architecture/10-custom-elements-and-form-association.md"
   },
   "nativeParity": {
-    "registeredPublicTags": 60,
+    "registeredPublicTags": 61,
     "browserEvidence": "tests/browser/native-parity.spec.ts",
     "fixture": "apps/regression-fixtures/src/nativeParityElements.tsx",
     "publicReactRecords": 67,
-    "directElements": 58,
+    "directElements": 59,
     "rendererMappings": 8,
     "rendererCompositions": 1,
     "rendererServices": 1
