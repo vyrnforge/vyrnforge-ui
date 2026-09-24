@@ -77,8 +77,18 @@ describe("@vyrnforge/ui-components accessibility", () => {
         <PropertyTable>
           <table>
             <caption>Deployment properties</caption>
-            <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
-            <tbody><tr><th scope="row">Region</th><td>us-east-1</td></tr></tbody>
+            <thead>
+              <tr>
+                <th scope="col">Property</th>
+                <th scope="col">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Region</th>
+                <td>us-east-1</td>
+              </tr>
+            </tbody>
           </table>
         </PropertyTable>
       </main>,
