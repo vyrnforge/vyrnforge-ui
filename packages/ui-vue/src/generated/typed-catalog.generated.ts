@@ -52,6 +52,7 @@ import {
   VfPanel as VfPanelRuntime,
   VfPopover as VfPopoverRuntime,
   VfProgress as VfProgressRuntime,
+  VfPropertyTable as VfPropertyTableRuntime,
   VfRadio as VfRadioRuntime,
   VfRadioGroup as VfRadioGroupRuntime,
   VfRating as VfRatingRuntime,
@@ -1037,6 +1038,24 @@ export interface VfProgressRef {
 }
 
 export const VfProgress = VfProgressRuntime as unknown as VyrnForgeVueComponentType<VfProgressProps, VfProgressEmits, VfProgressSlots, VfProgressRef>;
+
+export interface VfPropertyTableProps {
+
+}
+
+export interface VfPropertyTableEmits {
+  (event: never): void;
+}
+
+export interface VfPropertyTableSlots {
+  readonly default?: () => VNode[];
+}
+
+export interface VfPropertyTableRef {
+  readonly element: VyrnForgeElementForTagName<"vf-property-table"> | null;
+}
+
+export const VfPropertyTable = VfPropertyTableRuntime as unknown as VyrnForgeVueComponentType<VfPropertyTableProps, VfPropertyTableEmits, VfPropertyTableSlots, VfPropertyTableRef>;
 
 export interface VfRadioProps {
   readonly name?: VyrnForgeElementForTagName<"vf-radio">["name"];

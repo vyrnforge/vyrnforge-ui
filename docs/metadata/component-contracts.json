@@ -629,7 +629,7 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "target",
+          "status": "current",
           "tag": "vf-property-table",
           "properties": [],
           "events": [],
