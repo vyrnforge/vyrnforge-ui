@@ -266,8 +266,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   const registryTags = [
     ...(registrySource?.matchAll(/tagName:\s*"(vf-[a-z0-9-]+)"/g) ?? []),
   ].map((match) => match[1]);
-  if (registryTags.length !== 59 || new Set(registryTags).size !== 59) {
-    failures.push("native registry must contain 59 unique public tags");
+  if (registryTags.length !== 60 || new Set(registryTags).size !== 60) {
+    failures.push("native registry must contain 60 unique public tags");
   }
 
   const componentMetadata = readJson(root, "docs/metadata/components.json");
@@ -424,7 +424,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
 
   const nativeParity = metadata.nativeParity ?? {};
   if (
-    nativeParity.registeredPublicTags !== 60 ||
+    nativeParity.registeredPublicTags !== 61 ||
     nativeParity.browserEvidence !== "tests/browser/native-parity.spec.ts" ||
     nativeParity.fixture !==
       "apps/regression-fixtures/src/nativeParityElements.tsx" ||
