@@ -5399,7 +5399,7 @@
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "Contract defined; public framework implementations are not yet available."
+        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
       ],
       "deprecation": {
         "status": "not-applicable"
@@ -5408,10 +5408,10 @@
       "useWhen": "Use when readers must compare properties across rows or columns and those relationships are genuinely tabular.",
       "avoidWhen": "Use DescriptionList for term-and-description facts; use UniversalDataGrid when sorting, filtering, resizing, selection, grouping, or grid state is required.",
       "relatedComponents": ["DescriptionList", "UniversalDataGrid"],
-      "cssClasses": [],
+      "cssClasses": ["vf-property-table"],
       "cssVariables": [],
-      "importExample": "Planned; no public import yet.",
-      "basicUsageExample": "Planned; compose one semantic table as the component content.",
+      "importExample": "import { VyrnForgePropertyTableElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
+      "basicUsageExample": "<vf-property-table><table><caption>Deployment properties</caption><tbody><tr><th scope=\"row\">Region</th><td>us-east-1</td></tr></tbody></table></vf-property-table>",
       "accessibilityNotes": "Keep one native table as the semantic authority; preserve caption, th, scope, and header/cell relationships and do not replace them with grid roles.",
       "aiUsageNotes": "Treat PropertyTable as a state-free semantic wrapper around one real table, not as a data-grid or application-specific property model."
     },

@@ -3560,6 +3560,46 @@ export class VfProgress implements OnDestroy {
   }
 }
 
+export type VfPropertyTableElement = VyrnForgeElementForTagName<"vf-property-table">;
+
+export interface VfPropertyTableInputs {
+
+}
+
+export interface VfPropertyTableOutputs {
+
+}
+
+export const VfPropertyTableSlotNames = Object.freeze(["default"] as const);
+export type VfPropertyTableSlotName = (typeof VfPropertyTableSlotNames)[number];
+
+export function composeVfPropertyTableSlot(
+  element: HTMLElement,
+  slot: VfPropertyTableSlotName,
+): HTMLElement {
+  if (slot === "default") element.removeAttribute("slot");
+  else element.setAttribute("slot", slot);
+  return element;
+}
+
+@Directive({
+  selector: "vf-property-table[vfGeneratedPropertyTable]",
+  standalone: true,
+  exportAs: "vfPropertyTable",
+})
+export class VfPropertyTable implements OnDestroy {
+  get nativeElement(): VfPropertyTableElement {
+    return this.element.nativeElement;
+  }
+
+  constructor(private readonly element: ElementRef<VfPropertyTableElement>) {
+    this.element.nativeElement.dataset["vfGeneratedPropertyTable"] = "angular";
+  }
+
+  ngOnDestroy(): void {
+  }
+}
+
 export type VfRadioElement = VyrnForgeElementForTagName<"vf-radio">;
 
 export interface VfRadioInputs {
@@ -6377,6 +6417,7 @@ export const vyrnForgeAngularGeneratedDirectives = Object.freeze([
   VfPanel,
   VfPopover,
   VfProgress,
+  VfPropertyTable,
   VfRadio,
   VfRadioGroup,
   VfRating,
@@ -6441,6 +6482,7 @@ export const vyrnForgeAngularCatalog = Object.freeze([
   Object.freeze({ id: "panel", tag: "vf-panel", selector: "vf-panel[vfGeneratedPanel]", directive: VfPanel, slots: VfPanelSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "popover", tag: "vf-popover", selector: "vf-popover[vfGeneratedPopover]", directive: VfPopover, slots: VfPopoverSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "progress", tag: "vf-progress", selector: "vf-progress[vfGeneratedProgress]", directive: VfProgress, slots: VfProgressSlotNames, hostBoundInputs: Object.freeze([]) }),
+  Object.freeze({ id: "property-table", tag: "vf-property-table", selector: "vf-property-table[vfGeneratedPropertyTable]", directive: VfPropertyTable, slots: VfPropertyTableSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "radio", tag: "vf-radio", selector: "vf-radio[vfGeneratedRadio]", directive: VfRadio, slots: VfRadioSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
   Object.freeze({ id: "radio-group", tag: "vf-radio-group", selector: "vf-radio-group[vfGeneratedRadioGroup]", directive: VfRadioGroup, slots: VfRadioGroupSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "rating", tag: "vf-rating", selector: "vf-rating[vfGeneratedRating]", directive: VfRating, slots: VfRatingSlotNames, hostBoundInputs: Object.freeze([]) }),

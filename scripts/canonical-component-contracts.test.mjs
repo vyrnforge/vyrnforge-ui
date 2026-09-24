@@ -197,7 +197,8 @@ test("PropertyTable defines a planned, semantic, state-free table contract", () 
       rule.includes("one native table element"),
     ),
   );
-  for (const framework of ["native", "react", "angular", "vue"]) {
+  assert.equal(contract.frameworkMappings.native.status, "current");
+  for (const framework of ["react", "angular", "vue"]) {
     assert.equal(contract.frameworkMappings[framework].status, "target");
   }
 });

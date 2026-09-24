@@ -38,6 +38,7 @@ export {
   type VyrnForgeTextTone,
 } from "./display";
 export { VyrnForgeDescriptionListElement } from "./description-list";
+export { VyrnForgePropertyTableElement } from "./property-table";
 export { VyrnForgeProgressElement } from "./progress";
 export {
   VyrnForgeFieldElement,
