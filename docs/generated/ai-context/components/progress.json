@@ -4,8 +4,8 @@
   "name": "Progress",
   "package": "@vyrnforge/ui-components",
   "category": "feedback",
-  "maturity": "planned",
-  "availability": "planned",
+  "maturity": "experimental",
+  "availability": "available",
   "purpose": "Determinate or indeterminate progress indicator.",
   "guidance": {
     "useWhen": "Use for work with a meaningful completion state, using a value for determinate progress or omitting it for indeterminate progress.",
@@ -23,7 +23,7 @@
     "progress must have an accessible name when surrounding context does not provide one"
   ],
   "knownLimitations": [
-    "React, Angular, and Vue renderer implementations remain deferred to their framework-specific Progress tasks."
+    "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."
   ],
   "styling": {
     "classes": [
@@ -33,10 +33,10 @@
   },
   "frameworks": {
     "react": {
-      "status": "target",
+      "status": "current",
       "package": "@vyrnforge/ui-components",
-      "setup": "import { VyrnForgeProgressElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-      "example": "<vf-progress max=\"100\" value=\"40\" aria-label=\"Upload progress\"></vf-progress>"
+      "setup": "import { Progress } from '@vyrnforge/ui-components';",
+      "example": "<Progress max={100} value={40} aria-label='Upload progress' />"
     },
     "native-html": {
       "status": "current",
@@ -45,13 +45,13 @@
       "example": "<vf-progress></vf-progress>"
     },
     "angular": {
-      "status": "target",
+      "status": "verified-consumer",
       "package": "@vyrnforge/ui-angular",
       "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
       "example": "<vf-progress></vf-progress>"
     },
     "vue": {
-      "status": "target",
+      "status": "verified-consumer",
       "package": "@vyrnforge/ui-vue",
       "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
       "example": "<VfProgress></VfProgress>"
