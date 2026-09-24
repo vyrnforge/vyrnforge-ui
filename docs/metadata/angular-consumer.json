@@ -46,6 +46,8 @@
     "canonical vf-action interoperability",
     "named Light DOM composition",
     "generated DescriptionList content projection with native dl/dt/dd semantics",
+    "generated PropertyTable content projection with native table/caption/header/cell semantics",
+    "generated Timeline content projection with native ordered-list/list-item/time semantics",
     "ElementInternals form submission",
     "Chromium interaction evidence",
     "shared token CSS without data-grid tokens"
