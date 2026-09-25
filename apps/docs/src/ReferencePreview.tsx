@@ -1,9 +1,16 @@
-import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
-import type { DocsFrameworkId } from "./docsContext";
 import {
-  getEmbeddedPlaygroundHref,
-  getPlaygroundRouteHref,
-} from "./deploymentLinks";
+  Badge,
+  Button,
+  Card,
+  Checkbox,
+  Heading,
+  Select,
+  Switch,
+  Tabs,
+  Text,
+  TextInput,
+} from "@vyrnforge/ui-components";
+import type { DocsFrameworkId } from "./docsContext";
 import {
   getComponentReferenceRecord,
   type ReferenceFrameworkUsage,
@@ -14,18 +21,63 @@ type ReferencePreviewProps = {
   frameworkId: DocsFrameworkId;
 };
 
-const unresolvedPaths = new Set([
-  "pending",
-  "requires-verification",
-  "not-applicable",
-]);
-
-function hasExecutablePath(path: string | null): path is string {
-  return Boolean(path && !unresolvedPaths.has(path));
+function hasSnippet(value: string) {
+  return Boolean(
+    value &&
+      value !== "pending" &&
+      value !== "requires-verification" &&
+      value !== "not-applicable",
+  );
 }
 
-function hasSnippet(value: string) {
-  return Boolean(value && !unresolvedPaths.has(value));
+function LiveSample({ componentId }: { componentId: string }) {
+  switch (componentId) {
+    case "button":
+      return <Button variant="primary">Primary action</Button>;
+    case "badge":
+      return <Badge variant="success">Active</Badge>;
+    case "text-input":
+      return (
+        <TextInput
+          aria-label="Example text input"
+          defaultValue="VyrnForge"
+        />
+      );
+    case "checkbox":
+      return <Checkbox label="Enable notifications" />;
+    case "switch":
+      return <Switch label="Enable feature" />;
+    case "select":
+      return (
+        <Select
+          aria-label="Example select"
+          defaultValue="standard"
+          options={[
+            { label: "Compact", value: "compact" },
+            { label: "Standard", value: "standard" },
+            { label: "Comfortable", value: "comfortable" },
+          ]}
+        />
+      );
+    case "tabs":
+      return (
+        <Tabs
+          defaultValue="overview"
+          items={[
+            { id: "overview", label: "Overview", content: <Text>Overview content</Text> },
+            { id: "details", label: "Details", content: <Text>Details content</Text> },
+          ]}
+        />
+      );
+    default:
+      return (
+        <Text tone="muted">
+          The selected component uses the canonical framework example and API
+          below. Interactive samples are added only when they can be rendered
+          without inventing required application state.
+        </Text>
+      );
+  }
 }
 
 function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
@@ -43,7 +95,7 @@ function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
             {usage.label}
           </Text>
           <Heading id="vf-docs-preview-code-heading" level={4} size="sm">
-            Example code
+            Framework code
           </Heading>
         </div>
         <Badge size="sm" tone="subtle">
@@ -51,13 +103,13 @@ function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
         </Badge>
       </div>
 
-      {usage.package && (
+      {usage.package ? (
         <Text size="sm" tone="muted">
           Package: <code>{usage.package}</code>
         </Text>
-      )}
+      ) : null}
 
-      {hasSetup && (
+      {hasSetup ? (
         <div className="vf-docs-preview__snippet">
           <Text size="sm" tone="muted">
             Setup
@@ -66,9 +118,9 @@ function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
             <code>{usage.setup}</code>
           </pre>
         </div>
-      )}
+      ) : null}
 
-      {hasExample && (
+      {hasExample ? (
         <div className="vf-docs-preview__snippet">
           <Text size="sm" tone="muted">
             Example
@@ -77,14 +129,13 @@ function FrameworkCode({ usage }: { usage: ReferenceFrameworkUsage }) {
             <code>{usage.example}</code>
           </pre>
         </div>
-      )}
+      ) : null}
 
-      {!hasSetup && !hasExample && (
+      {!hasSetup && !hasExample ? (
         <Text size="sm" tone="muted">
-          No example code is available for this component on the selected
-          framework.
+          No generated example code is available for this framework surface.
         </Text>
-      )}
+      ) : null}
 
       <Text size="sm" tone="muted">
         {usage.note}
@@ -100,18 +151,8 @@ export function ReferencePreview({
   if (!componentId) return null;
 
   const component = getComponentReferenceRecord(componentId);
-  if (!component || !hasExecutablePath(component.playgroundPath)) {
-    return null;
-  }
+  if (!component) return null;
 
-  const previewHref = getEmbeddedPlaygroundHref(
-    frameworkId,
-    component.playgroundPath,
-  );
-  const fullExampleHref = getPlaygroundRouteHref(
-    frameworkId,
-    component.playgroundPath,
-  );
   const frameworkUsage = component.frameworks[frameworkId];
 
   return (
@@ -120,34 +161,22 @@ export function ReferencePreview({
         <div>
           <div className="vf-docs-preview__eyebrow">
             <Badge size="sm" tone="subtle" variant="success">
-              Live
+              Live in Docs
             </Badge>
             <Text size="sm" tone="muted">
-              Preview
+              React demonstration + selected framework source
             </Text>
           </div>
           <Heading level={3} size="md">
-            {component.displayName} preview
+            {component.displayName} example
           </Heading>
         </div>
-        <a
-          className="vf-docs-preview__open"
-          href={fullExampleHref}
-          rel="noreferrer"
-          target="_blank"
-        >
-          Open full example
-        </a>
       </div>
       <div className="vf-docs-preview__body">
         <div className="vf-docs-preview__stage">
-          <iframe
-            className="vf-docs-preview__frame"
-            key={previewHref}
-            loading="lazy"
-            src={previewHref}
-            title={`${component.displayName} executable preview`}
-          />
+          <div className="vf-docs-example-live-stage">
+            <LiveSample componentId={component.id} />
+          </div>
         </div>
         <FrameworkCode usage={frameworkUsage} />
       </div>
