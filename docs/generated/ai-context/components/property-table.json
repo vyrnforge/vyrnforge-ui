@@ -4,8 +4,8 @@
   "name": "PropertyTable",
   "package": "@vyrnforge/ui-components",
   "category": "data-display",
-  "maturity": "planned",
-  "availability": "planned",
+  "maturity": "experimental",
+  "availability": "available",
   "purpose": "Read-only tabular property comparison using native table semantics.",
   "guidance": {
     "useWhen": "Use when readers must compare properties across rows or columns and those relationships are genuinely tabular.",
@@ -24,7 +24,7 @@
     "responsive presentation may scroll or wrap but must not replace table semantics with generic or ARIA grid roles"
   ],
   "knownLimitations": [
-    "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
+    "Avoid for interactive data-grid behavior such as sorting, filtering, resizing, selection, grouping, or persisted grid state; use UniversalDataGrid instead."
   ],
   "styling": {
     "classes": [
@@ -34,20 +34,28 @@
   },
   "frameworks": {
     "react": {
-      "status": "not-supported",
-      "package": "@vyrnforge/ui-components"
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { PropertyTable } from '@vyrnforge/ui-components';",
+      "example": "<PropertyTable><table><caption>Deployment properties</caption><tbody><tr><th scope=\"row\">Region</th><td>us-east-1</td></tr></tbody></table></PropertyTable>"
     },
     "native-html": {
-      "status": "not-supported",
-      "package": null
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-property-table></vf-property-table>"
     },
     "angular": {
-      "status": "not-supported",
-      "package": null
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-angular",
+      "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+      "example": "<vf-property-table></vf-property-table>"
     },
     "vue": {
-      "status": "not-supported",
-      "package": null
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfPropertyTable></VfPropertyTable>"
     }
   },
   "contract": {
@@ -68,6 +76,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "customElementsManifest": null
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }
