@@ -30,6 +30,7 @@ const retired = [
 function read(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
+
 function json(relativePath) {
   return JSON.parse(read(relativePath));
 }
@@ -44,11 +45,7 @@ test("Reference transitional authorities remain retired", () => {
     [],
   );
   for (const relativePath of retired) {
-    assert.equal(
-      existsSync(path.join(root, relativePath)),
-      false,
-      relativePath,
-    );
+    assert.equal(existsSync(path.join(root, relativePath)), false, relativePath);
   }
 });
 
@@ -60,34 +57,29 @@ test("Docs routes are curated without duplicating generated public facts", () =>
   assert.match(source, /token-reference/u);
   assert.match(source, /pattern-reference/u);
   assert.match(source, /package-reference/u);
+  assert.match(source, /framework-examples/u);
+  assert.match(source, /grid-basic/u);
   assert.doesNotMatch(source, /accessibility-reference/u);
   assert.doesNotMatch(source, /import\.meta\.glob/u);
   assert.doesNotMatch(source, /generated\/ai-context/u);
   assert.doesNotMatch(source, /referenceModel\.domains\.flatMap/u);
 });
 
-test("Playground component facts are generated", () => {
-  const routes = read("examples/basic-playground/src/app/routes.ts");
-  assert.match(routes, /referenceComponents/u);
-  assert.match(routes, /getReferenceRecordRoute/u);
-  assert.match(routes, /createGeneratedComponentPage/u);
-  assert.doesNotMatch(routes, /PriorityComponentPages/u);
-
-  const reader = read(
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-  );
-  assert.match(reader, /getReferenceFrameworkComponent/u);
-  assert.match(reader, /Generated API reference/u);
-  assert.match(reader, /canonical\.guidance\.relatedComponents/u);
-  assert.doesNotMatch(reader, /PropsTableRow/u);
-  assert.doesNotMatch(reader, /props\?:/u);
-  assert.doesNotMatch(reader, /relatedComponents\?:/u);
+test("public example content is owned by Docs", () => {
+  const page = read("apps/docs/src/UnifiedExamplePage.tsx");
+  const patterns = read("apps/docs/src/examples/PatternExamples.tsx");
+  const frameworkExamples = read("apps/docs/src/FrameworkExamplesPage.tsx");
+  assert.match(page, /DocumentationPage/u);
+  assert.match(page, /ThemeModesPage/u);
+  assert.match(page, /BasicGridPage/u);
+  assert.match(patterns, /ResourceListPage/u);
+  assert.match(patterns, /SettingsPage/u);
+  assert.match(frameworkExamples, /executableExampleRecords/u);
 });
 
-test("Playground keeps verified examples without duplicate catalog wiring", () => {
-  const app = read("examples/basic-playground/src/app/App.tsx");
-  assert.match(app, /executableExamplesCatalogRoute/u);
-  assert.match(app, /executableExampleDetailRoutes/u);
-  assert.doesNotMatch(app, /referenceCatalogRoutes/u);
-  assert.doesNotMatch(app, /referenceDetailRoutes/u);
+test("Docs component readers do not depend on Playground execution", () => {
+  const preview = read("apps/docs/src/ReferencePreview.tsx");
+  assert.doesNotMatch(preview, /iframe|playgroundPath|getPlayground/u);
+  assert.match(preview, /LiveSample/u);
+  assert.match(preview, /FrameworkCode/u);
 });
