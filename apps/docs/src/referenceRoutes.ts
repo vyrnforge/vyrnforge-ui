@@ -140,7 +140,7 @@ const generatedRoutes: DocsRoute[] = [
     title,
     group: "Foundations",
     description: `Interactive ${title.toLowerCase()} examples rendered directly inside Docs.`,
-    sourcePath: `apps/docs/src/examples/foundations/${title.replaceAll(" ", "")}Example.tsx`,
+    sourcePath: `apps/docs/src/examples/foundations/${title.split(" ").join("")}Example.tsx`,
     tags: ["foundations", "examples"],
     kind: "unified-example" as const,
     exampleId: id,
