@@ -157,8 +157,8 @@ function PatternReference({ id }: { id?: string | null }) {
                   ))}
                 </div>
                 <Text size="sm" tone="muted">
-                  Canonical pattern metadata remains the source of truth; example
-                  state is local to this documentation example.
+                  Canonical pattern metadata remains the source of truth;
+                  example state is local to this documentation example.
                 </Text>
               </>
             ),

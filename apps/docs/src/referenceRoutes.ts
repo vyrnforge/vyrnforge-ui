@@ -25,13 +25,7 @@ export type DocsRoute = {
 };
 
 export type PublicDocsSection = {
-  id:
-    | "start"
-    | "components"
-    | "foundations"
-    | "guides"
-    | "data"
-    | "reference";
+  id: "start" | "components" | "foundations" | "guides" | "data" | "reference";
   label: string;
   routeIds: string[];
 };
@@ -155,7 +149,8 @@ const generatedRoutes: DocsRoute[] = [
     id: "pattern-reference",
     title: "Patterns",
     group: "Guides",
-    description: "Browse reusable VyrnForge composition patterns with live Docs examples.",
+    description:
+      "Browse reusable VyrnForge composition patterns with live Docs examples.",
     sourcePath: "docs/metadata/patterns.json",
     tags: ["patterns", "composition", "examples"],
   },
