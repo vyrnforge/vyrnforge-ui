@@ -66,28 +66,22 @@ test("Docs routes are curated without duplicating generated public facts", () =>
   assert.doesNotMatch(source, /referenceModel\.domains\.flatMap/u);
 });
 
-test("Playground component facts are generated", () => {
-  const routes = read("examples/basic-playground/src/app/routes.ts");
-  assert.match(routes, /referenceComponents/u);
-  assert.match(routes, /getReferenceRecordRoute/u);
-  assert.match(routes, /createGeneratedComponentPage/u);
-  assert.doesNotMatch(routes, /PriorityComponentPages/u);
+test("Docs owns generated component facts after Playground retirement", () => {
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+  assert.match(routes, /component-reference/u);
+  assert.match(routes, /kind: "example"/u);
+  assert.match(routes, /kind: "executable-examples"/u);
 
-  const reader = read(
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-  );
-  assert.match(reader, /getReferenceFrameworkComponent/u);
-  assert.match(reader, /Generated API reference/u);
-  assert.match(reader, /canonical\.guidance\.relatedComponents/u);
-  assert.doesNotMatch(reader, /PropsTableRow/u);
-  assert.doesNotMatch(reader, /props\?:/u);
-  assert.doesNotMatch(reader, /relatedComponents\?:/u);
+  const reader = read("apps/docs/src/ComponentReferencePage.tsx");
+  assert.match(reader, /frameworkApiReferenceRaw/u);
+  assert.match(reader, /componentReferenceRecords/u);
+  assert.match(reader, /FrameworkApiPanel/u);
 });
 
-test("Playground keeps verified examples without duplicate catalog wiring", () => {
-  const app = read("examples/basic-playground/src/app/App.tsx");
-  assert.match(app, /executableExamplesCatalogRoute/u);
-  assert.match(app, /executableExampleDetailRoutes/u);
-  assert.doesNotMatch(app, /referenceCatalogRoutes/u);
-  assert.doesNotMatch(app, /referenceDetailRoutes/u);
+test("Docs keeps verified examples without duplicate Playground wiring", () => {
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
+  const examples = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
+  assert.match(docsPage, /ExecutableExamplesPage/u);
+  assert.match(examples, /getExecutableExampleRecord/u);
+  assert.equal(existsSync(path.join(root, "examples/basic-playground")), false);
 });

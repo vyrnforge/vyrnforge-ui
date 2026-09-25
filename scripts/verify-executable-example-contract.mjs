@@ -116,14 +116,11 @@ export function verifyExecutableExampleContract({
   }
 
   const adapterPath =
-    "examples/basic-playground/src/data/executableExampleContract.ts";
-  const routePath =
-    "examples/basic-playground/src/app/executableExampleRoutes.tsx";
-  const pagePath =
-    "examples/basic-playground/src/pages/reference/ExecutableExamplesPage.tsx";
-  const appPath = "examples/basic-playground/src/app/App.tsx";
-  const navPath = "examples/basic-playground/src/app/PlaygroundNav.tsx";
-  for (const required of [adapterPath, routePath, pagePath, appPath, navPath]) {
+    "apps/docs/src/examples/data/executableExampleContract.ts";
+  const routePath = "apps/docs/src/referenceRoutes.ts";
+  const pagePath = "apps/docs/src/examples/ExecutableExamplesPage.tsx";
+  const docsPagePath = "apps/docs/src/DocsPage.tsx";
+  for (const required of [adapterPath, routePath, pagePath, docsPagePath]) {
     if (!existsSync(path.join(root, required))) {
       failures.push(`executable example reader file is missing: ${required}`);
     }
@@ -148,9 +145,9 @@ export function verifyExecutableExampleContract({
     read(root, routePath),
     routePath,
     [
-      "referenceModel.examples.map",
-      'getReferenceRecordRoute(referenceModel, "examples"',
-      "exampleFrameworkId: example.framework",
+      'id: "executable-examples"',
+      'kind: "executable-examples"',
+      'sourcePath: "tests/consumers/manifest.json"',
     ],
     failures,
   );
@@ -158,30 +155,16 @@ export function verifyExecutableExampleContract({
     read(root, pagePath),
     pagePath,
     [
-      "executableExampleRecords",
       "getExecutableExampleRecord",
       "Executable source",
-      "Verification contract",
-      "Runtime evidence",
-      "usePlaygroundFramework",
+      "Verified against packed VyrnForge packages",
     ],
     failures,
   );
   requireMarkers(
-    read(root, appPath),
-    appPath,
-    [
-      "executableExamplesCatalogRoute",
-      "executableExampleDetailRoutes",
-      "getExecutableExampleRouteForFramework",
-      "activeRoute.exampleFrameworkId",
-    ],
-    failures,
-  );
-  requireMarkers(
-    read(root, navPath),
-    navPath,
-    ['route.id === "executable-examples"', 'return "examples"'],
+    read(root, docsPagePath),
+    docsPagePath,
+    ["ExecutableExamplesPage", 'route.kind === "executable-examples"'],
     failures,
   );
 

@@ -76,7 +76,6 @@ export function writeReferenceArtifactManifest({
     },
     surfaces: {
       docsPath: "/",
-      playgroundPath: "/playground/",
     },
   };
 
@@ -97,10 +96,6 @@ export function assembleReferencePreview({
   rmSync(outputDirectory, { recursive: true, force: true });
   mkdirSync(outputDirectory, { recursive: true });
   copyDirectory(path.join(root, "apps/docs/dist"), outputDirectory);
-  copyDirectory(
-    path.join(root, "examples/basic-playground/dist"),
-    path.join(outputDirectory, "playground"),
-  );
   writeFileSync(path.join(outputDirectory, ".nojekyll"), "");
   writeReferenceArtifactManifest({
     directory: outputDirectory,
@@ -119,7 +114,6 @@ export function verifyReferenceArtifact({
   expectedCiRunId,
 }) {
   requireFile(directory, "index.html");
-  requireFile(directory, "playground/index.html");
   requireFile(directory, ".nojekyll");
   const manifest = JSON.parse(
     readFileSync(requireFile(directory, artifactManifestName), "utf8"),
@@ -147,9 +141,8 @@ export function verifyReferenceArtifact({
     "Reference artifact CI run id does not match expected run",
   );
   assert(
-    manifest.surfaces?.docsPath === "/" &&
-      manifest.surfaces?.playgroundPath === "/playground/",
-    "Reference artifact surface paths are invalid",
+    manifest.surfaces?.docsPath === "/",
+    "Reference artifact docs path is invalid",
   );
 
   if (expectedKind === "production") {

@@ -22,7 +22,6 @@ test("package runtime changes derive affected workspaces from the dependency gra
     "packages",
     "consumer",
     "docs",
-    "playground",
     "fixtures",
     "browser",
     "integration",
@@ -38,14 +37,14 @@ test("package runtime changes derive affected workspaces from the dependency gra
 test("package tests select only their own workspace quality", () => {
   const plan = planCiScope(["packages/ui-data-grid/src/grid.test.tsx"]);
   expectEnabled(plan, ["quality"]);
-  expectDisabled(plan, ["packages", "consumer", "docs", "playground", "full"]);
+  expectDisabled(plan, ["packages", "consumer", "docs", "full"]);
   assert.deepEqual(plan.affected_packages, ["@vyrnforge/ui-data-grid"]);
 });
 
 test("package README changes verify the published payload and consumer", () => {
   const plan = planCiScope(["packages/ui-components/README.md"]);
   expectEnabled(plan, ["packages", "consumer", "integration"]);
-  expectDisabled(plan, ["quality", "docs", "playground", "full"]);
+  expectDisabled(plan, ["quality", "docs", "full"]);
   assert.deepEqual(plan.affected_packages, ["@vyrnforge/ui-components"]);
 });
 
@@ -65,40 +64,14 @@ test("package configuration changes include metadata validation", () => {
 test("canonical docs-only changes build docs without package runtime checks", () => {
   const plan = planCiScope(["docs/release/publication-procedure.md"]);
   expectEnabled(plan, ["docs", "docs_only", "integration"]);
-  expectDisabled(plan, [
-    "quality",
-    "packages",
-    "consumer",
-    "playground",
-    "full",
-    "security",
-  ]);
+  expectDisabled(plan, ["quality", "packages", "consumer", "full", "security"]);
   assert.deepEqual(plan.affected_packages, []);
 });
 
 test("metadata changes verify metadata and build docs", () => {
   const plan = planCiScope(["docs/metadata/components.json"]);
   expectEnabled(plan, ["quality", "metadata", "docs", "integration"]);
-  expectDisabled(plan, [
-    "packages",
-    "consumer",
-    "playground",
-    "full",
-    "docs_only",
-  ]);
-});
-
-test("playground changes build the playground without full fallback", () => {
-  const plan = planCiScope(["examples/basic-playground/src/App.tsx"]);
-  expectEnabled(plan, ["playground", "integration"]);
-  expectDisabled(plan, [
-    "quality",
-    "packages",
-    "consumer",
-    "docs",
-    "browser",
-    "full",
-  ]);
+  expectDisabled(plan, ["packages", "consumer", "full", "docs_only"]);
 });
 
 test("consumer fixture changes select the packed-consumer gate", () => {
@@ -108,7 +81,7 @@ test("consumer fixture changes select the packed-consumer gate", () => {
   ]) {
     const plan = planCiScope([file]);
     expectEnabled(plan, ["consumer", "integration"]);
-    expectDisabled(plan, ["quality", "packages", "docs", "playground", "full"]);
+    expectDisabled(plan, ["quality", "packages", "docs", "full"]);
   }
 });
 
@@ -121,13 +94,7 @@ test("multi-framework fixture changes run architecture, consumer, and docs check
     "docs",
     "integration",
   ]);
-  expectDisabled(plan, [
-    "packages",
-    "playground",
-    "browser",
-    "full",
-    "docs_only",
-  ]);
+  expectDisabled(plan, ["packages", "browser", "full", "docs_only"]);
 });
 
 test("repository template changes run quality contract verification", () => {
@@ -143,7 +110,6 @@ test("repository template changes run quality contract verification", () => {
       "packages",
       "consumer",
       "docs",
-      "playground",
       "browser",
       "full",
       "docs_only",
@@ -164,7 +130,6 @@ test("root manifests and workflows force full validation", () => {
       "packages",
       "consumer",
       "docs",
-      "playground",
       "fixtures",
       "browser",
       "full",
@@ -220,7 +185,7 @@ test("dependency manifests select security validation", () => {
 
 test("exact-main delivery uses only deployable application scope", () => {
   const plan = planDeliveryScope();
-  expectEnabled(plan, ["integration", "docs", "playground", "delivery"]);
+  expectEnabled(plan, ["integration", "docs", "delivery"]);
   expectDisabled(plan, [
     "quality",
     "security",

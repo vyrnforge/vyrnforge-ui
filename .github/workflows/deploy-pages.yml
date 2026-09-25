@@ -89,7 +89,6 @@ jobs:
           EXPECTED_CI_RUN_ID: ${{ steps.candidate.outputs.run-id }}
         run: |
           test -f site/index.html
-          test -f site/playground/index.html
           test -f site/.nojekyll
           test -f site/reference-artifact.json
           test -f site/vyrnforge-versions.json
@@ -118,8 +117,7 @@ jobs:
           }
           for (const release of catalog.releases) {
             const docs = path.join("site", release.docsPath.replace(/^\/+|\/+$/g, ""), "index.html");
-            const playground = path.join("site", release.playgroundPath.replace(/^\/+|\/+$/g, ""), "index.html");
-            if (!existsSync(docs) || !existsSync(playground)) {
+            if (!existsSync(docs)) {
               throw new Error(`Incomplete retained release ${release.id}.`);
             }
           }

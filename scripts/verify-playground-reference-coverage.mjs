@@ -6,22 +6,8 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-
 const frameworkIds = ["native-html", "react", "angular", "vue"];
 const apiSurfaceIds = ["native", "react", "angular", "vue"];
-const retiredReferenceFiles = [
-  "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
-  "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/FormComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/ControlComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/OverlayComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/AutocompletePage.tsx",
-  "examples/basic-playground/src/pages/reference/TransferListPage.tsx",
-  "examples/basic-playground/src/pages/reference/ToastPage.tsx",
-  "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
-  "examples/basic-playground/src/pages/reference/MetadataDetailPages.tsx",
-  "examples/basic-playground/src/components/PropsTable.tsx",
-];
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -108,87 +94,49 @@ export function verifyPlaygroundReferenceCoverage({
     failures.push("generated component route template is not /components/{id}");
   }
 
-  const routeSource = read(root, "examples/basic-playground/src/app/routes.ts");
+  const docsRoutes = read(root, "apps/docs/src/referenceRoutes.ts");
   for (const marker of [
-    "referenceComponents",
-    "getReferenceRecordRoute",
-    'getReferenceRecordRoute(referenceModel, "components", id)',
-    "createGeneratedComponentPage",
-    "componentDemoIds.map",
+    'kind: "example"',
+    'kind: "executable-examples"',
+    'label: "Foundations"',
+    'label: "Patterns"',
+    'label: "Data & Grid"',
   ]) {
-    if (!routeSource.includes(marker)) {
-      failures.push(
-        `generated component route composition is missing ${marker}`,
-      );
-    }
-  }
-  for (const marker of [
-    "PriorityComponentPages",
-    "FormComponentPages",
-    "ControlComponentPages",
-    "OverlayComponentPages",
-  ]) {
-    if (routeSource.includes(marker)) {
-      failures.push(
-        `playground routes still import retired authority ${marker}`,
-      );
+    if (!docsRoutes.includes(marker)) {
+      failures.push(`unified Docs routes are missing ${marker}`);
     }
   }
 
-  const referenceMetadataSource = read(
+  const migratedExamples = read(
     root,
-    "examples/basic-playground/src/data/referenceMetadata.ts",
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
   );
-  if (!referenceMetadataSource.includes("...canonicalNativeElementEntries,")) {
+  for (const marker of [
+    "ThemeModesPage",
+    "DensityPage",
+    "BasicGridPage",
+    "SettingsPage",
+    "vf-docs-example-stage",
+  ]) {
+    if (!migratedExamples.includes(marker)) {
+      failures.push(`migrated Docs examples are missing ${marker}`);
+    }
+  }
+
+  const executableExamples = read(
+    root,
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
+  );
+  if (!executableExamples.includes("getExecutableExampleRecord")) {
     failures.push(
-      "reference metadata projection is missing canonical native API tags",
+      "Docs executable examples are not backed by the packed-consumer contract",
     );
   }
 
-  const demoSource = read(
-    root,
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-  );
-  for (const marker of [
-    "getReferenceFrameworkComponent",
-    "Generated API reference",
-    "API facts are generated",
-    "canonical.guidance.relatedComponents",
-  ]) {
-    if (!demoSource.includes(marker)) {
-      failures.push(
-        `component reader is missing generated authority marker ${marker}`,
-      );
-    }
-  }
-  if (demoSource.includes("props?: PropsTableRow")) {
+  if (existsSync(path.join(root, "examples/basic-playground"))) {
     failures.push(
-      "component reader still accepts manual props-table authority",
+      "standalone public Playground package still exists after Docs migration",
     );
-  }
-
-  const appSource = read(root, "examples/basic-playground/src/app/App.tsx");
-  for (const marker of [
-    "executableExamplesCatalogRoute",
-    "...executableExampleDetailRoutes",
-    "routes={navigationRoutes}",
-  ]) {
-    if (!appSource.includes(marker)) {
-      failures.push(`playground route separation is missing ${marker}`);
-    }
-  }
-  for (const marker of ["referenceCatalogRoutes", "referenceDetailRoutes"]) {
-    if (appSource.includes(marker)) {
-      failures.push(`playground app still consumes retired ${marker}`);
-    }
-  }
-
-  for (const relativePath of retiredReferenceFiles) {
-    if (existsSync(path.join(root, relativePath))) {
-      failures.push(
-        `retired manual reference file still exists: ${relativePath}`,
-      );
-    }
   }
 
   return failures.sort();
@@ -197,10 +145,10 @@ export function verifyPlaygroundReferenceCoverage({
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const failures = verifyPlaygroundReferenceCoverage();
   if (failures.length > 0) {
-    console.error("Playground reference coverage verification failed:");
+    console.error("Unified Docs reference coverage verification failed:");
     for (const failure of failures) console.error(`- ${failure}`);
     process.exitCode = 1;
   } else {
-    console.log("Playground reference coverage verification passed.");
+    console.log("Unified Docs reference coverage verification passed.");
   }
 }

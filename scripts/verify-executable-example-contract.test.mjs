@@ -24,7 +24,7 @@ function fixtureRepository() {
   for (const relativePath of [
     "docs/metadata/executable-examples.json",
     "tests/consumers",
-    "examples/basic-playground/src",
+    "apps/docs/src",
   ]) {
     cpSync(
       path.join(repositoryRoot, relativePath),
@@ -37,7 +37,7 @@ function fixtureRepository() {
   return root;
 }
 
-test("current repository satisfies the cross-framework executable example contract", () => {
+test("current repository satisfies the unified Docs executable example contract", () => {
   assert.deepEqual(verifyExecutableExampleContract(), []);
 });
 
