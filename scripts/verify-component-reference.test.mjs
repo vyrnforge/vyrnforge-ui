@@ -35,9 +35,12 @@ function fixture(mutator, callback) {
   }
 }
 
-test("accepts the generated consumer knowledge and unified Docs surface", () => {
-  fixture(null, (failures) => assert.deepEqual(failures, []));
-});
+test(
+  "accepts the generated consumer knowledge and unified Docs surface",
+  () => {
+    fixture(null, (failures) => assert.deepEqual(failures, []));
+  },
+);
 
 test("rejects stale generated consumer knowledge", () => {
   fixture(
@@ -92,8 +95,10 @@ test("rejects generated Angular status drift", () => {
   );
 });
 
-test("rejects Docs component links that drift from generated detail paths", () => {
-  fixture(
+test(
+  "rejects Docs component links that drift from generated detail paths",
+  () => {
+    fixture(
     (root) => {
       const file = path.join(root, "apps/docs/src/ComponentReferencePage.tsx");
       const content = readFileSync(file, "utf8");
@@ -104,11 +109,12 @@ test("rejects Docs component links that drift from generated detail paths", () =
       assert.notEqual(next, content, "fixture needs the component detail route");
       writeFileSync(file, next);
     },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("generated component route composition is missing"),
+      (failures) =>
+        assert(
+          failures.some((failure) =>
+            failure.includes("generated component route composition is missing"),
+          ),
         ),
-      ),
-  );
-});
+    );
+  },
+);
