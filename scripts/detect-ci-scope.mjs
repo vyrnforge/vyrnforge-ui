@@ -155,7 +155,6 @@ export function planDeliveryScope() {
   const scope = createScope();
   scope.integration = true;
   scope.docs = true;
-  scope.playground = true;
   scope.delivery = true;
 
   return {
