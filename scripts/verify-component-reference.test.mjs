@@ -99,16 +99,23 @@ test(
   "rejects Docs component links that drift from generated detail paths",
   () => {
     fixture(
-    (root) => {
-      const file = path.join(root, "apps/docs/src/ComponentReferencePage.tsx");
-      const content = readFileSync(file, "utf8");
-      const next = content.replace(
-        'getReferenceRecordRoute(referenceModel, "components", componentId)',
-        'getReferenceRecordRoute(referenceModel, "component", componentId)',
-      );
-      assert.notEqual(next, content, "fixture needs the component detail route");
-      writeFileSync(file, next);
-    },
+      (root) => {
+        const file = path.join(
+          root,
+          "apps/docs/src/ComponentReferencePage.tsx",
+        );
+        const content = readFileSync(file, "utf8");
+        const next = content.replace(
+          'getReferenceRecordRoute(referenceModel, "components", componentId)',
+          'getReferenceRecordRoute(referenceModel, "component", componentId)',
+        );
+        assert.notEqual(
+          next,
+          content,
+          "fixture needs the component detail route",
+        );
+        writeFileSync(file, next);
+      },
       (failures) =>
         assert(
           failures.some((failure) =>
