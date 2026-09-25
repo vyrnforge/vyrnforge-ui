@@ -3,57 +3,30 @@
   "category": "data-display",
   "components": [
     {
-      "id": "activity-log",
-      "name": "ActivityLog",
-      "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Operational activity feed.",
-      "context": "ai-context/components/activity-log.json"
-    },
-    {
       "id": "description-list",
       "name": "DescriptionList",
       "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Read-only term-and-description facts with semantic description-list relationships.",
       "context": "ai-context/components/description-list.json"
-    },
-    {
-      "id": "key-value-list",
-      "name": "KeyValueList",
-      "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Compact key/value metadata list.",
-      "context": "ai-context/components/key-value-list.json"
     },
     {
       "id": "property-table",
       "name": "PropertyTable",
       "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Structured read-only property table.",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Read-only tabular property comparison using native table semantics.",
       "context": "ai-context/components/property-table.json"
-    },
-    {
-      "id": "resource-list",
-      "name": "ResourceList",
-      "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "List of resource summary items.",
-      "context": "ai-context/components/resource-list.json"
     },
     {
       "id": "timeline",
       "name": "Timeline",
       "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Chronological event display.",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Ordered chronological event presentation using native list and time semantics.",
       "context": "ai-context/components/timeline.json"
     },
     {

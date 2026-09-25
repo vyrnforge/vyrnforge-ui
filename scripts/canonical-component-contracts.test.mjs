@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { createCoverageReport } from "./report-non-grid-contract-coverage.mjs";
 import {
   CANONICAL_COMPONENT_CONTRACT_PATH,
   CANONICAL_COMPONENT_CONTRACT_SCHEMA_PATH,
@@ -168,6 +169,126 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
   assert.ok(
     contract.accessibility.some((rule) =>
       rule.includes("native description-list semantics"),
+    ),
+  );
+  assert.equal(contract.frameworkMappings.native.status, "current");
+  for (const framework of ["react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "target");
+  }
+});
+
+test("PropertyTable keeps a semantic, state-free cross-framework contract", () => {
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+  const contract = normalized.componentById.get("property-table");
+
+  assert.ok(contract);
+  assert.equal(contract.category, "data-display");
+  assert.deepEqual(contract.properties, []);
+  assert.deepEqual(contract.attributes, []);
+  assert.deepEqual(contract.events, []);
+  assert.deepEqual(contract.methods, []);
+  assert.equal(contract.form.association, "none");
+  assert.equal(contract.model.kind, "none");
+  assert.deepEqual(contract.slots, [
+    { name: "default", required: true, multiple: false, content: "element" },
+  ]);
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("one native table element"),
+    ),
+  );
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "current");
+  }
+});
+
+test("promoted semantic contracts are complete in G10 coverage", () => {
+  const report = createCoverageReport();
+
+  for (const id of ["property-table", "timeline"]) {
+    assert.equal(report.unknownContractIds.includes(id), false);
+    assert.equal(report.contractComplete.includes(id), true);
+    assert.equal(report.needsContractData.includes(id), false);
+  }
+  assert.equal(report.totals.scoped, 71);
+});
+
+test("Timeline keeps a semantic, state-free chronological contract", () => {
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+  const contract = normalized.componentById.get("timeline");
+
+  assert.ok(contract);
+  assert.equal(contract.category, "data-display");
+  assert.deepEqual(contract.properties, []);
+  assert.deepEqual(contract.attributes, []);
+  assert.deepEqual(contract.events, []);
+  assert.deepEqual(contract.methods, []);
+  assert.equal(contract.form.association, "none");
+  assert.equal(contract.model.kind, "none");
+  assert.deepEqual(contract.slots, [
+    { name: "default", required: true, multiple: true, content: "element" },
+  ]);
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("native ordered-list container"),
+    ),
+  );
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("native time semantics"),
+    ),
+  );
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "current");
+  }
+});
+
+test("ActivityLog is a framework-neutral pattern rather than a component contract", () => {
+  const catalog = readJson("docs/metadata/components.json");
+  const patterns = readJson("docs/metadata/patterns.json");
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+
+  assert.equal(
+    catalog.components.some((component) => component.id === "activity-log"),
+    false,
+  );
+  assert.equal(normalized.componentById.has("activity-log"), false);
+
+  const pattern = patterns.patterns.find(
+    (entry) => entry.id === "activity-log",
+  );
+  assert.ok(pattern);
+  assert.equal(pattern.frameworkNeutral, true);
+  assert.deepEqual(pattern.components, ["timeline", "badge"]);
+  assert.match(pattern.purpose, /actor, action, time/);
+});
+
+test("Progress keeps a semantic, state-free cross-framework contract", () => {
+  const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
+  const contract = normalized.componentById.get("progress");
+
+  assert.ok(contract);
+  assert.equal(contract.category, "feedback");
+  assert.deepEqual(
+    contract.properties.map((property) => property.name),
+    ["max", "value"],
+  );
+  assert.equal(
+    contract.properties.find((property) => property.name === "max")?.default,
+    1,
+  );
+  assert.equal(
+    contract.properties.find((property) => property.name === "value")?.default,
+    null,
+  );
+  assert.deepEqual(contract.events, []);
+  assert.deepEqual(contract.slots, []);
+  assert.deepEqual(contract.methods, []);
+  assert.equal(contract.form.association, "none");
+  assert.equal(contract.model.kind, "none");
+  assert.ok(
+    contract.accessibility.some((rule) =>
+      rule.includes("determinate and indeterminate"),
     ),
   );
   assert.equal(contract.frameworkMappings.native.status, "current");

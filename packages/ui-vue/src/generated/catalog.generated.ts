@@ -124,6 +124,8 @@ export const VfPageHeader = createVyrnForgeVueFacade("VfPageHeader", "vf-page-he
 export const VfPageToolbar = createVyrnForgeVueFacade("VfPageToolbar", "vf-page-toolbar", undefined, []);
 export const VfPanel = createVyrnForgeVueFacade("VfPanel", "vf-panel", undefined, []);
 export const VfPopover = createVyrnForgeVueFacade("VfPopover", "vf-popover", {"kind":"open","canonicalProperty":"open","canonicalChangeEvent":"vf-open-change","publicProperty":"open","publicEvent":"update:open","detailField":"open"}, ["show","close","toggle"]);
+export const VfProgress = createVyrnForgeVueFacade("VfProgress", "vf-progress", undefined, []);
+export const VfPropertyTable = createVyrnForgeVueFacade("VfPropertyTable", "vf-property-table", undefined, []);
 export const VfRadio = createVyrnForgeVueFacade("VfRadio", "vf-radio", {"kind":"checked","canonicalProperty":"checked","canonicalChangeEvent":"vf-checked-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"checked"}, ["focus","checkValidity","reportValidity","setCustomValidity"]);
 export const VfRadioGroup = createVyrnForgeVueFacade("VfRadioGroup", "vf-radio-group", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, []);
 export const VfRating = createVyrnForgeVueFacade("VfRating", "vf-rating", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, ["checkValidity","reportValidity","setCustomValidity"]);
@@ -140,6 +142,7 @@ export { VfTabs };
 export const VfText = createVyrnForgeVueFacade("VfText", "vf-text", undefined, []);
 export { VfTextInput };
 export const VfTextarea = createVyrnForgeVueFacade("VfTextarea", "vf-textarea", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, ["focus","select","checkValidity","reportValidity","setCustomValidity"]);
+export const VfTimeline = createVyrnForgeVueFacade("VfTimeline", "vf-timeline", undefined, []);
 export const VfToast = createVyrnForgeVueFacade("VfToast", "vf-toast", undefined, []);
 export const VfToggleButton = createVyrnForgeVueFacade("VfToggleButton", "vf-toggle-button", {"kind":"pressed","canonicalProperty":"pressed","canonicalChangeEvent":"vf-pressed-change","publicProperty":"pressed","publicEvent":"update:pressed","detailField":"pressed"}, ["focus"]);
 export const VfToggleButtonGroup = createVyrnForgeVueFacade("VfToggleButtonGroup", "vf-toggle-button-group", {"kind":"value","canonicalProperty":"value","canonicalChangeEvent":"vf-value-change","publicProperty":"modelValue","publicEvent":"update:modelValue","detailField":"value"}, []);
@@ -186,6 +189,8 @@ export const vyrnForgeVueGeneratedComponents = Object.freeze([
   VfPageToolbar,
   VfPanel,
   VfPopover,
+  VfProgress,
+  VfPropertyTable,
   VfRadio,
   VfRadioGroup,
   VfRating,
@@ -202,6 +207,7 @@ export const vyrnForgeVueGeneratedComponents = Object.freeze([
   VfText,
   VfTextInput,
   VfTextarea,
+  VfTimeline,
   VfToast,
   VfToggleButton,
   VfToggleButtonGroup,

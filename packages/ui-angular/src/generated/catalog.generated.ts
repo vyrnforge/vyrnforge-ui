@@ -3506,6 +3506,100 @@ export class VfPopover implements OnDestroy {
   }
 }
 
+export type VfProgressElement = VyrnForgeElementForTagName<"vf-progress">;
+
+export interface VfProgressInputs {
+  "max"?: VfProgressElement["max"];
+  "value"?: VfProgressElement["value"];
+}
+
+export interface VfProgressOutputs {
+
+}
+
+export const VfProgressSlotNames = Object.freeze([] as const);
+export type VfProgressSlotName = (typeof VfProgressSlotNames)[number];
+
+export function composeVfProgressSlot(
+  element: HTMLElement,
+  slot: VfProgressSlotName,
+): HTMLElement {
+  element.setAttribute("slot", slot);
+  return element;
+}
+
+@Directive({
+  selector: "vf-progress[vfGeneratedProgress]",
+  standalone: true,
+  exportAs: "vfProgress",
+})
+export class VfProgress implements OnDestroy {
+  get nativeElement(): VfProgressElement {
+    return this.element.nativeElement;
+  }
+
+  @Input("max")
+  set maxInput(value: VfProgressElement["max"] | undefined) {
+    if (value !== undefined) {
+      this.element.nativeElement["max"] = value;
+    }
+  }
+
+  @Input("value")
+  set valueInput(value: VfProgressElement["value"] | undefined) {
+    if (value !== undefined) {
+      this.element.nativeElement["value"] = value;
+    }
+  }
+
+  constructor(private readonly element: ElementRef<VfProgressElement>) {
+    this.element.nativeElement.dataset["vfGeneratedProgress"] = "angular";
+  }
+
+  ngOnDestroy(): void {
+  }
+}
+
+export type VfPropertyTableElement = VyrnForgeElementForTagName<"vf-property-table">;
+
+export interface VfPropertyTableInputs {
+
+}
+
+export interface VfPropertyTableOutputs {
+
+}
+
+export const VfPropertyTableSlotNames = Object.freeze(["default"] as const);
+export type VfPropertyTableSlotName = (typeof VfPropertyTableSlotNames)[number];
+
+export function composeVfPropertyTableSlot(
+  element: HTMLElement,
+  slot: VfPropertyTableSlotName,
+): HTMLElement {
+  if (slot === "default") element.removeAttribute("slot");
+  else element.setAttribute("slot", slot);
+  return element;
+}
+
+@Directive({
+  selector: "vf-property-table[vfGeneratedPropertyTable]",
+  standalone: true,
+  exportAs: "vfPropertyTable",
+})
+export class VfPropertyTable implements OnDestroy {
+  get nativeElement(): VfPropertyTableElement {
+    return this.element.nativeElement;
+  }
+
+  constructor(private readonly element: ElementRef<VfPropertyTableElement>) {
+    this.element.nativeElement.dataset["vfGeneratedPropertyTable"] = "angular";
+  }
+
+  ngOnDestroy(): void {
+  }
+}
+
 export type VfRadioElement = VyrnForgeElementForTagName<"vf-radio">;
 
 export interface VfRadioInputs {
@@ -5370,6 +5464,46 @@ export class VfTextarea implements OnDestroy {
   }
 }
 
+export type VfTimelineElement = VyrnForgeElementForTagName<"vf-timeline">;
+
+export interface VfTimelineInputs {
+
+}
+
+export interface VfTimelineOutputs {
+
+}
+
+export const VfTimelineSlotNames = Object.freeze(["default"] as const);
+export type VfTimelineSlotName = (typeof VfTimelineSlotNames)[number];
+
+export function composeVfTimelineSlot(
+  element: HTMLElement,
+  slot: VfTimelineSlotName,
+): HTMLElement {
+  if (slot === "default") element.removeAttribute("slot");
+  else element.setAttribute("slot", slot);
+  return element;
+}
+
+@Directive({
+  selector: "vf-timeline[vfGeneratedTimeline]",
+  standalone: true,
+  exportAs: "vfTimeline",
+})
+export class VfTimeline implements OnDestroy {
+  get nativeElement(): VfTimelineElement {
+    return this.element.nativeElement;
+  }
+
+  constructor(private readonly element: ElementRef<VfTimelineElement>) {
+    this.element.nativeElement.dataset["vfGeneratedTimeline"] = "angular";
+  }
+
+  ngOnDestroy(): void {
+  }
+}
+
 export type VfToastElement = VyrnForgeElementForTagName<"vf-toast">;
 
 export interface VfToastInputs {
@@ -6322,6 +6456,8 @@ export const vyrnForgeAngularGeneratedDirectives = Object.freeze([
   VfPageToolbar,
   VfPanel,
   VfPopover,
+  VfProgress,
+  VfPropertyTable,
   VfRadio,
   VfRadioGroup,
   VfRating,
@@ -6338,6 +6474,7 @@ export const vyrnForgeAngularGeneratedDirectives = Object.freeze([
   VfText,
   VfTextInput,
   VfTextarea,
+  VfTimeline,
   VfToast,
   VfToggleButton,
   VfToggleButtonGroup,
@@ -6385,6 +6522,8 @@ export const vyrnForgeAngularCatalog = Object.freeze([
   Object.freeze({ id: "page-toolbar", tag: "vf-page-toolbar", selector: "vf-page-toolbar[vfGeneratedPageToolbar]", directive: VfPageToolbar, slots: VfPageToolbarSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "panel", tag: "vf-panel", selector: "vf-panel[vfGeneratedPanel]", directive: VfPanel, slots: VfPanelSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "popover", tag: "vf-popover", selector: "vf-popover[vfGeneratedPopover]", directive: VfPopover, slots: VfPopoverSlotNames, hostBoundInputs: Object.freeze([]) }),
+  Object.freeze({ id: "progress", tag: "vf-progress", selector: "vf-progress[vfGeneratedProgress]", directive: VfProgress, slots: VfProgressSlotNames, hostBoundInputs: Object.freeze([]) }),
+  Object.freeze({ id: "property-table", tag: "vf-property-table", selector: "vf-property-table[vfGeneratedPropertyTable]", directive: VfPropertyTable, slots: VfPropertyTableSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "radio", tag: "vf-radio", selector: "vf-radio[vfGeneratedRadio]", directive: VfRadio, slots: VfRadioSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
   Object.freeze({ id: "radio-group", tag: "vf-radio-group", selector: "vf-radio-group[vfGeneratedRadioGroup]", directive: VfRadioGroup, slots: VfRadioGroupSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "rating", tag: "vf-rating", selector: "vf-rating[vfGeneratedRating]", directive: VfRating, slots: VfRatingSlotNames, hostBoundInputs: Object.freeze([]) }),
@@ -6401,6 +6540,7 @@ export const vyrnForgeAngularCatalog = Object.freeze([
   Object.freeze({ id: "text", tag: "vf-text", selector: "vf-text[vfGeneratedText]", directive: VfText, slots: VfTextSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "text-input", tag: "vf-text-input", selector: "vf-text-input[vfGeneratedTextInput]", directive: VfTextInput, slots: VfTextInputSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
   Object.freeze({ id: "textarea", tag: "vf-textarea", selector: "vf-textarea[vfGeneratedTextarea]", directive: VfTextarea, slots: VfTextareaSlotNames, hostBoundInputs: Object.freeze(["invalid"]) }),
+  Object.freeze({ id: "timeline", tag: "vf-timeline", selector: "vf-timeline[vfGeneratedTimeline]", directive: VfTimeline, slots: VfTimelineSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "toast", tag: "vf-toast", selector: "vf-toast[vfGeneratedToast]", directive: VfToast, slots: VfToastSlotNames, hostBoundInputs: Object.freeze([]) }),
   Object.freeze({ id: "toggle-button", tag: "vf-toggle-button", selector: "vf-toggle-button[vfGeneratedToggleButton]", directive: VfToggleButton, slots: VfToggleButtonSlotNames, hostBoundInputs: Object.freeze(["action"]) }),
   Object.freeze({ id: "toggle-button-group", tag: "vf-toggle-button-group", selector: "vf-toggle-button-group[vfGeneratedToggleButtonGroup]", directive: VfToggleButtonGroup, slots: VfToggleButtonGroupSlotNames, hostBoundInputs: Object.freeze([]) }),

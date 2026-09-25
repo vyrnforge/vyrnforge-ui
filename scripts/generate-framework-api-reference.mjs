@@ -14,6 +14,7 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const checkOnly = process.argv.includes("--check");
+const COMPONENT_CATALOG_PATH = "docs/metadata/components.json";
 
 export const FRAMEWORK_API_REFERENCE_PATH =
   "docs/generated/framework-api-reference.json";
@@ -21,7 +22,21 @@ export const FRAMEWORK_API_REFERENCE_PATH =
 export function buildFrameworkApiReference({ root = repositoryRoot } = {}) {
   const contracts = loadCanonicalComponentContracts({ root });
   const exceptions = loadFrameworkExceptions({ root });
-  return createFrameworkApiReference(contracts, {
+  const catalog = JSON.parse(
+    readFileSync(path.join(root, COMPONENT_CATALOG_PATH), "utf8"),
+  );
+  const publicIds = new Set(
+    (catalog.components ?? [])
+      .filter((component) => component.publicExport === true)
+      .map((component) => component.id),
+  );
+  const publicContracts = {
+    ...contracts,
+    components: contracts.components.filter((component) =>
+      publicIds.has(component.id),
+    ),
+  };
+  return createFrameworkApiReference(publicContracts, {
     exceptionPolicy: createFrameworkExceptionReference(exceptions),
   });
 }

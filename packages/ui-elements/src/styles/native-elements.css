@@ -41,6 +41,7 @@
   vf-section,
   vf-empty-state,
   vf-loading-state,
+  vf-progress,
   vf-error-state,
   vf-button-group,
   vf-radio-group,
@@ -50,7 +51,9 @@
   vf-tabs,
   vf-breadcrumbs,
   vf-side-nav,
-  vf-description-list
+  vf-description-list,
+  vf-property-table,
+  vf-timeline
 ) {
   display: block;
 }

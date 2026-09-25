@@ -168,13 +168,22 @@ export type {
 } from "./components/LoadingState";
 export { Skeleton } from "./components/Skeleton";
 export type { SkeletonProps } from "./components/Skeleton";
+export { Progress } from "./components/Progress";
+export type { ProgressProps, ProgressRef } from "./components/Progress";
 export { Card } from "./components/Card";
 export type { CardPadding, CardProps, CardVariant } from "./components/Card";
 export { DescriptionList } from "./components/DescriptionList";
+export { PropertyTable } from "./components/PropertyTable";
+export { Timeline } from "./components/Timeline";
 export type {
   DescriptionListProps,
   DescriptionListRef,
 } from "./components/DescriptionList";
+export type {
+  PropertyTableProps,
+  PropertyTableRef,
+} from "./components/PropertyTable";
+export type { TimelineProps, TimelineRef } from "./components/Timeline";
 export { Panel } from "./components/Panel";
 export type { PanelProps } from "./components/Panel";
 export { Stack } from "./components/Stack";

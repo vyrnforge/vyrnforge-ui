@@ -34,13 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "25b0d5f9d370d3419ee97d2a0ae82408481c741b",
+      "sha1": "7a650c126f51169cf91141848bb28878942aa98f",
       "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "6588b9785689d07ccd0def23ca8dc20e7d84799d",
+      "sha1": "b8efa1b568635cd6d37b127579fdf00424a00453",
       "covers": [
         "component props and types",
         "callbacks",
@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "260258671169f01ca2950ffd569b61c8cdf4aa5f",
+      "sha1": "4a052e9b0350944b813bd0d27806d5fb7f458544",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -70,7 +70,7 @@
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "edba9b91ca5a076a5ab6389e00830afbdc91eb25",
+      "sha1": "7633403d0f3222434d9b9fee4047ffabb918669b",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -141,6 +141,26 @@
     {
       "task": "description-list-react-renderer",
       "reason": "DescriptionList adds the planned stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves native dl/dt/dd relationships, introduces no stateful model or callback contract, reuses VyrnForge token-driven layout styling, and is covered by React semantic, accessibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "progress-react-renderer",
+      "reason": "Progress adds the planned stateless React renderer as a public @vyrnforge/ui-components export. It preserves native progress semantics for determinate and indeterminate states, introduces no controller or callback contract, uses VyrnForge token-driven feedback styling, and is covered by React semantic, accessibility, compatibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "data-display-description-list-density-rationalization",
+      "reason": "DescriptionList replaces legacy fixed spacing aliases with the shared VyrnForge component-gap density contract while preserving the existing semantic dl/dt/dd renderer, public React API, CSS class surface, responsive structure, and mirrored Native HTML styling. Compact and spacious presentation now flow through the same framework-neutral density tokens without adding a React-only prop or behavior.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#573",
+      "reason": "PropertyTable adds the accepted stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves one native table as the semantic authority, introduces no application state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#575",
+      "reason": "Timeline adds the accepted stateless chronological React renderer as a public @vyrnforge/ui-components export. The implementation preserves native ordered-list and list-item semantics, introduces no activity state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
   ],
