@@ -121,6 +121,79 @@
     </vf-autocomplete>
   </section>
 
+  <section class="vf-consumer-angular-section" aria-labelledby="progress-title">
+    <h2 id="progress-title">Generated Angular Progress</h2>
+    <vf-progress
+      id="angular-progress-determinate"
+      vfGeneratedProgress
+      aria-label="Angular upload progress"
+      [max]="100"
+      [value]="40"
+    ></vf-progress>
+    <vf-progress
+      id="angular-progress-indeterminate"
+      vfGeneratedProgress
+      aria-label="Angular preparing export"
+      [max]="100"
+    ></vf-progress>
+  </section>
+
+  <!-- prettier-ignore -->
+  <section
+    class="vf-consumer-angular-section"
+    aria-labelledby="property-table-title"
+  >
+    <h2 id="property-table-title">Generated Angular PropertyTable</h2>
+    <vf-property-table
+      vfGeneratedPropertyTable
+      data-angular-property-table
+    >
+      <table>
+        <caption>Angular service properties</caption>
+        <thead>
+          <tr>
+            <th scope="col">Property</th>
+            <th scope="col">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Owner</th>
+            <td>Operations</td>
+          </tr>
+        </tbody>
+      </table>
+    </vf-property-table>
+  </section>
+
+  <!-- prettier-ignore -->
+  <section
+    class="vf-consumer-angular-section"
+    aria-labelledby="timeline-title"
+  >
+    <h2 id="timeline-title">Generated Angular Timeline</h2>
+    <vf-timeline vfGeneratedTimeline data-angular-timeline>
+      <li><time datetime="2026-09-24T08:00:00Z">08:00 UTC</time> Created</li>
+      <li><time datetime="2026-09-24T09:00:00Z">09:00 UTC</time> Reviewed</li>
+    </vf-timeline>
+  </section>
+
+  <section
+    class="vf-consumer-angular-section"
+    aria-labelledby="description-list-title"
+  >
+    <h2 id="description-list-title">Generated Angular DescriptionList</h2>
+    <vf-description-list
+      vfGeneratedDescriptionList
+      data-angular-description-list
+    >
+      <dt>Status</dt>
+      <dd>Active</dd>
+      <dt>Owner</dt>
+      <dd>Operations</dd>
+    </vf-description-list>
+  </section>
+
   <section class="vf-consumer-angular-section" aria-labelledby="native-title">
     <h2 id="native-title">Native ElementInternals form</h2>
     <form

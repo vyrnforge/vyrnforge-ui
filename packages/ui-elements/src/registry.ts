@@ -12,6 +12,7 @@ import {
   VyrnForgeCodeTextElement,
   VyrnForgeDateInputElement,
   VyrnForgeDateTimeInputElement,
+  VyrnForgeDescriptionListElement,
   VyrnForgeDialogElement,
   VyrnForgeDrawerElement,
   VyrnForgeEmptyStateElement,
@@ -32,6 +33,9 @@ import {
   VyrnForgePageToolbarElement,
   VyrnForgePanelElement,
   VyrnForgePopoverElement,
+  VyrnForgeProgressElement,
+  VyrnForgePropertyTableElement,
+  VyrnForgeTimelineElement,
   VyrnForgeRadioElement,
   VyrnForgeRadioGroupElement,
   VyrnForgeRatingElement,
@@ -129,6 +133,10 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
       constructor: VyrnForgeSkeletonElement,
     }),
     Object.freeze({
+      tagName: "vf-progress",
+      constructor: VyrnForgeProgressElement,
+    }),
+    Object.freeze({
       tagName: "vf-button",
       constructor: VyrnForgeButtonElement,
     }),
@@ -163,6 +171,18 @@ export const vyrnForgeElementDefinitions: readonly VyrnForgeElementDefinition[] 
     Object.freeze({
       tagName: "vf-date-input",
       constructor: VyrnForgeDateInputElement,
+    }),
+    Object.freeze({
+      tagName: "vf-description-list",
+      constructor: VyrnForgeDescriptionListElement,
+    }),
+    Object.freeze({
+      tagName: "vf-property-table",
+      constructor: VyrnForgePropertyTableElement,
+    }),
+    Object.freeze({
+      tagName: "vf-timeline",
+      constructor: VyrnForgeTimelineElement,
     }),
     Object.freeze({
       tagName: "vf-datetime-input",

@@ -9,6 +9,10 @@ import {
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
+import {
+  componentApiMemberAnchor,
+  componentReferenceTargetHref,
+} from "./componentApiMember";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import {
@@ -16,7 +20,6 @@ import {
   getComponentReferenceRecord,
   getRelatedPatterns,
   type ComponentReferenceRecord,
-  type ReferenceContract,
 } from "./referenceData";
 
 type ApiProperty = {
@@ -104,13 +107,6 @@ function formatDefault(value: unknown) {
   return value === undefined ? "—" : JSON.stringify(value);
 }
 
-function memberAnchor(kind: string, name: string) {
-  return `api-${kind}-${name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/gu, "-")
-    .replace(/^-|-$/gu, "")}`;
-}
-
 function propertyFlags(property: ApiProperty) {
   return [
     property.required && "required",
@@ -157,33 +153,6 @@ function MemberList({
   );
 }
 
-function ContractDetails({ contract }: { contract: ReferenceContract | null }) {
-  if (!contract) {
-    return (
-      <Text size="sm" tone="muted">
-        Detailed framework-neutral contract fields are not yet present in the
-        canonical component-contract catalog. This generated viewer does not
-        invent them.
-      </Text>
-    );
-  }
-
-  return (
-    <div className="vf-docs-contract-details">
-      <MemberList label="Canonical properties" values={contract.properties} />
-      <MemberList label="HTML attributes" values={contract.attributes} />
-      <MemberList label="Canonical events" values={contract.events} />
-      <MemberList label="Canonical slots" values={contract.slots} />
-      <MemberList label="Canonical methods" values={contract.methods} />
-      <MemberList label="Accessibility" values={contract.accessibility} />
-      <div className="vf-docs-contract-field">
-        <strong>Form association</strong>
-        <span>{contract.formAssociation}</span>
-      </div>
-    </div>
-  );
-}
-
 function EmptyApiMembers() {
   return (
     <Text size="sm" tone="muted">
@@ -194,8 +163,10 @@ function EmptyApiMembers() {
 
 function FrameworkApiPanel({
   component,
+  frameworkId,
 }: {
   component: FrameworkApiComponent;
+  frameworkId: DocsFrameworkId;
 }) {
   return (
     <div className="vf-docs-framework-usage">
@@ -241,13 +212,20 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.properties.map((property) => {
-                  const anchor = memberAnchor("property", property.public);
+                  const anchor = componentApiMemberAnchor(
+                    "property",
+                    property.public,
+                  );
                   return (
                     <tr id={anchor} key={property.public}>
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>{property.public}</code>
                         </a>
@@ -294,7 +272,10 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.events.map((event) => {
-                  const anchor = memberAnchor("event", event.public);
+                  const anchor = componentApiMemberAnchor(
+                    "event",
+                    event.public,
+                  );
                   const detailFields = event.detailFields
                     .map(
                       (field) =>
@@ -306,7 +287,11 @@ function FrameworkApiPanel({
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>{event.public}</code>
                         </a>
@@ -351,13 +336,17 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.slots.map((slot) => {
-                  const anchor = memberAnchor("slot", slot.public);
+                  const anchor = componentApiMemberAnchor("slot", slot.public);
                   return (
                     <tr id={anchor} key={slot.public}>
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>{slot.public}</code>
                         </a>
@@ -396,13 +385,20 @@ function FrameworkApiPanel({
               </thead>
               <tbody>
                 {component.methods.map((method) => {
-                  const anchor = memberAnchor("method", method.name);
+                  const anchor = componentApiMemberAnchor(
+                    "method",
+                    method.name,
+                  );
                   return (
                     <tr id={anchor} key={method.name}>
                       <th scope="row">
                         <a
                           className="vf-docs-api-member-link"
-                          href={`#${anchor}`}
+                          href={componentReferenceTargetHref(
+                            component.id,
+                            frameworkId,
+                            anchor,
+                          )}
                         >
                           <code>
                             {method.async ? "async " : ""}
@@ -435,28 +431,8 @@ function FrameworkApiPanel({
         <Heading level={4} size="sm" id="api-accessibility-heading">
           Accessibility
         </Heading>
-        <MemberList
-          label="Generated guidance"
-          values={component.accessibility}
-        />
+        <MemberList label="Guidance" values={component.accessibility} />
       </section>
-
-      <details className="vf-docs-api-advanced">
-        <summary>Model, form, and ref contracts</summary>
-        <pre className="vf-docs-reference-code">
-          <code>
-            {JSON.stringify(
-              {
-                model: component.model,
-                form: component.form,
-                ref: component.ref,
-              },
-              null,
-              2,
-            )}
-          </code>
-        </pre>
-      </details>
     </div>
   );
 }
@@ -475,10 +451,10 @@ function frameworkTabs(componentId: string): TabItem[] {
       id: framework.id,
       label: framework.label,
       content: component ? (
-        <FrameworkApiPanel component={component} />
+        <FrameworkApiPanel component={component} frameworkId={framework.id} />
       ) : (
         <Text size="sm" tone="muted">
-          No generated API record exists for this surface.
+          This component is not available on this framework surface.
         </Text>
       ),
     };
@@ -518,13 +494,20 @@ function ComponentIndexCard({
   );
 }
 
-function ComponentOutline({ showLimitations }: { showLimitations: boolean }) {
+function ComponentOutline({
+  componentId,
+  frameworkId,
+  showLimitations,
+}: {
+  componentId: string;
+  frameworkId: DocsFrameworkId;
+  showLimitations: boolean;
+}) {
   const sections = [
     ["component-overview", "Overview"],
-    ["component-usage", "Usage guidance"],
-    ["component-framework-api", "Framework API"],
-    ["component-contract", "Framework-neutral contract"],
-    ["component-accessibility-styling", "Accessibility and styling"],
+    ["component-usage", "Usage"],
+    ["component-framework-api", "API"],
+    ["component-accessibility-styling", "Accessibility & styling"],
     ...(showLimitations
       ? [["component-limitations", "Limitations and related patterns"]]
       : []),
@@ -542,19 +525,59 @@ function ComponentOutline({ showLimitations }: { showLimitations: boolean }) {
         <ul>
           {sections.map(([id, label]) => (
             <li key={id}>
-              <a href={`#${id}`}>{label}</a>
+              <a
+                href={componentReferenceTargetHref(
+                  componentId,
+                  frameworkId,
+                  id,
+                )}
+              >
+                {label}
+              </a>
             </li>
           ))}
         </ul>
       </nav>
       <div className="vf-docs-reference-outline__api">
         <Text size="sm" tone="muted">
-          Framework API
+          API
         </Text>
-        <a href="#api-properties">Properties</a>
-        <a href="#api-events">Events</a>
-        <a href="#api-slots">Slots</a>
-        <a href="#api-methods">Methods</a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-properties",
+          )}
+        >
+          Properties
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-events",
+          )}
+        >
+          Events
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-slots",
+          )}
+        >
+          Slots
+        </a>
+        <a
+          href={componentReferenceTargetHref(
+            componentId,
+            frameworkId,
+            "api-methods",
+          )}
+        >
+          Methods
+        </a>
       </div>
     </aside>
   );
@@ -605,10 +628,6 @@ function ComponentDetail({
             </Badge>
           </div>
           <Text>{component.purpose}</Text>
-          <Text size="sm" tone="muted">
-            AI context slice:{" "}
-            <code>{`ai-context/components/${component.id}.json`}</code>
-          </Text>
         </Card>
 
         <Card
@@ -617,16 +636,12 @@ function ComponentDetail({
           padding="lg"
         >
           <Heading level={3} size="md">
-            Usage guidance
+            Usage
           </Heading>
           <MemberList label="Use when" values={[component.guidance.useWhen]} />
           <MemberList
             label="Avoid when"
             values={[component.guidance.avoidWhen]}
-          />
-          <MemberList
-            label="AI usage notes"
-            values={[component.guidance.aiUsageNotes]}
           />
           <MemberList
             label="Related components"
@@ -640,12 +655,11 @@ function ComponentDetail({
           padding="lg"
         >
           <Heading level={3} size="md">
-            Framework API
+            API
           </Heading>
           <Text tone="muted">
-            Public API facts below come directly from the generated framework
-            API reference. Member rows have stable anchors for deep links, while
-            selecting a tab updates the shared Reference framework context.
+            Select a framework to see its public setup, properties, events,
+            slots, and methods.
           </Text>
           <Tabs
             aria-label={`${component.displayName} framework API`}
@@ -661,22 +675,11 @@ function ComponentDetail({
 
         <Card
           className="vf-docs-reference__section"
-          id="component-contract"
-          padding="lg"
-        >
-          <Heading level={3} size="md">
-            Framework-neutral contract
-          </Heading>
-          <ContractDetails contract={component.contract} />
-        </Card>
-
-        <Card
-          className="vf-docs-reference__section"
           id="component-accessibility-styling"
           padding="lg"
         >
           <Heading level={3} size="md">
-            Accessibility and styling
+            Accessibility & styling
           </Heading>
           <MemberList
             label="Accessibility guidance"
@@ -715,7 +718,11 @@ function ComponentDetail({
           </Card>
         )}
       </div>
-      <ComponentOutline showLimitations={showLimitations} />
+      <ComponentOutline
+        componentId={component.id}
+        frameworkId={frameworkId}
+        showLimitations={showLimitations}
+      />
     </div>
   );
 }
@@ -744,7 +751,7 @@ export function ComponentReferencePage({
             Component not found
           </Heading>
           <Text tone="muted">
-            No generated component record exists for <code>{componentId}</code>.
+            No component exists for <code>{componentId}</code>.
           </Text>
           <Text>
             <a href="#/component-reference">Return to component reference</a>
@@ -765,16 +772,11 @@ export function ComponentReferencePage({
     <div className="vf-docs-reference">
       <Card className="vf-docs-reference__section" padding="lg">
         <Heading level={3} size="md">
-          Generated component reference
+          Components
         </Heading>
         <Text tone="muted">
-          Choose a component for a stable detail route. API facts remain
-          generated from canonical contracts while guidance stays sourced from
-          canonical component metadata.
-        </Text>
-        <Text size="sm" tone="muted">
-          Generator: <code>{apiReference.generated.generator}</code> · sources:{" "}
-          <code>{apiReference.generated.sources.join(", ")}</code>
+          Choose a component to see usage, framework examples, API,
+          accessibility, styling, and known limitations.
         </Text>
       </Card>
 

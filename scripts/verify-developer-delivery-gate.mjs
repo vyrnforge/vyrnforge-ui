@@ -122,8 +122,8 @@ export function verifyDeveloperDeliveryGate({ root = repositoryRoot } = {}) {
       "componentReferenceRecords",
       "referenceModel.frameworks",
       "getReferenceRecordRoute",
-      "Framework API",
-      "AI context slice",
+      "component-framework-api",
+      "component-accessibility-styling",
     ],
     failures,
   );

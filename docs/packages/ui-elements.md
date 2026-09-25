@@ -66,3 +66,7 @@ Editor tooling can consume:
 
 `@vyrnforge/ui-elements` is part of the synchronized non-grid `beta` release
 group.
+
+### DescriptionList
+
+The native surface exposes `vf-description-list` for read-only labeled facts and metadata. Use native `dt` and `dd` children; the element provides the semantic `dl` container and token-driven layout. It is intentionally stateless and does not introduce a parallel data model.

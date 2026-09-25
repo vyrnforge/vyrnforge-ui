@@ -12,6 +12,10 @@
     "Tabs",
     "TextInput",
     "Dialog",
+    "DescriptionList",
+    "PropertyTable",
+    "Timeline",
+    "Progress",
     "onValueChange",
     "data-consumer-ready"
   ],

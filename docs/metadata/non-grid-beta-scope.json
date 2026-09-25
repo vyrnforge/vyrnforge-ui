@@ -78,28 +78,28 @@
     "gridRule": "All @vyrnforge/ui-data-grid public exports remain on the independent React alpha track and are deferred from this beta release group."
   },
   "summary": {
-    "catalogEntries": 97,
-    "publicNonGridComponents": 67,
-    "includedComponents": 67,
+    "catalogEntries": 94,
+    "publicNonGridComponents": 71,
+    "includedComponents": 71,
     "deferredNonGridComponents": 0,
     "publicGridComponentsDeferred": 10,
-    "plannedNonPublicComponentsExcluded": 7,
+    "plannedNonPublicComponentsExcluded": 0,
     "internalNonPublicComponentsExcluded": 1,
-    "nativeCustomElementTags": 58,
+    "nativeCustomElementTags": 62,
     "categoryCounts": {
       "composite": 8,
-      "data-display": 1,
-      "feedback": 9,
+      "data-display": 4,
+      "feedback": 10,
       "form-control": 17,
       "navigation": 5,
       "overlay": 7,
       "primitive": 20
     },
     "maturityCounts": {
-      "experimental": 67
+      "experimental": 71
     },
     "nativeStrategyCounts": {
-      "direct-element": 57,
+      "direct-element": 61,
       "renderer-composition": 1,
       "renderer-mapping": 8,
       "renderer-service": 1
@@ -763,6 +763,48 @@
         "status": "requires-verification"
       },
       "knownLimitations": ["Avoid for timezone-heavy scheduling workflows."]
+    },
+    {
+      "id": "description-list",
+      "displayName": "DescriptionList",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "DescriptionList",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-description-list",
+        "status": "current",
+        "evidence": "docs/metadata/native-element-foundations.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/angular-consumer.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/vue-consumer.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "description-list",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for tabular comparisons that require row and column relationships or for interactive form fields."
+      ]
     },
     {
       "id": "dialog",
@@ -1667,6 +1709,90 @@
       "knownLimitations": ["Avoid for complex forms; use Dialog or Drawer."]
     },
     {
+      "id": "progress",
+      "displayName": "Progress",
+      "package": "@vyrnforge/ui-components",
+      "category": "feedback",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Progress",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-progress",
+        "status": "current",
+        "evidence": "docs/metadata/native-element-foundations.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/angular-consumer.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/vue-consumer.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "progress",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for generic loading placeholders without meaningful progress; use LoadingState or Skeleton instead."
+      ]
+    },
+    {
+      "id": "property-table",
+      "displayName": "PropertyTable",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "PropertyTable",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-property-table",
+        "status": "current",
+        "evidence": "docs/metadata/native-element-foundations.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/angular-consumer.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/vue-consumer.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "property-table",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for interactive data-grid behavior such as sorting, filtering, resizing, selection, grouping, or persisted grid state; use UniversalDataGrid instead."
+      ]
+    },
+    {
       "id": "radio",
       "displayName": "Radio",
       "package": "@vyrnforge/ui-components",
@@ -2397,6 +2523,48 @@
       "knownLimitations": ["Avoid for short single-line values."]
     },
     {
+      "id": "timeline",
+      "displayName": "Timeline",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Timeline",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-timeline",
+        "status": "current",
+        "evidence": "docs/metadata/native-element-foundations.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/angular-consumer.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/vue-consumer.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "timeline",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Read-only presentation only; persistence, loading, filtering, actor/action schemas, selection, and live-feed behavior remain application-owned."
+      ]
+    },
+    {
       "id": "toast",
       "displayName": "Toast",
       "package": "@vyrnforge/ui-components",
@@ -2952,78 +3120,7 @@
         "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
       }
     ],
-    "plannedNonPublicComponents": [
-      {
-        "id": "activity-log",
-        "displayName": "ActivityLog",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "description-list",
-        "displayName": "DescriptionList",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "key-value-list",
-        "displayName": "KeyValueList",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "progress",
-        "displayName": "Progress",
-        "package": "@vyrnforge/ui-components",
-        "category": "feedback",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "property-table",
-        "displayName": "PropertyTable",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "resource-list",
-        "displayName": "ResourceList",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "timeline",
-        "displayName": "Timeline",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      }
-    ],
+    "plannedNonPublicComponents": [],
     "internalNonPublicComponents": [
       {
         "id": "toast-viewport",

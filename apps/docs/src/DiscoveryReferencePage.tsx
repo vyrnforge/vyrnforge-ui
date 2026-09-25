@@ -3,10 +3,8 @@ import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntim
 import type { ReferenceRecordSelection } from "./App";
 import { referenceModel } from "./docsContext";
 import {
-  accessibilityReferenceRecords,
   designTokenCategories,
   designTokenSource,
-  getAccessibilityReferenceRecord,
   getDesignTokenCategory,
   getPatternReferenceRecord,
   patternDocumentation,
@@ -167,98 +165,6 @@ function PatternReference({ id }: { id?: string | null }) {
   );
 }
 
-function AccessibilityReference({ id }: { id?: string | null }) {
-  if (id) {
-    const component = getAccessibilityReferenceRecord(id);
-    if (!component)
-      return <MissingRecord label="Accessibility record" id={id} />;
-
-    return (
-      <div className="vf-docs-reference">
-        <ReferenceBack
-          href="#/accessibility-reference"
-          label="Accessibility & Keyboard"
-        />
-        <Card className="vf-docs-reference__section" padding="lg">
-          <Heading level={3} size="md">
-            {component.displayName}
-          </Heading>
-          <Text>{component.notes}</Text>
-          <Text size="sm" tone="muted">
-            Package: {component.package}
-          </Text>
-          <Heading level={4} size="sm">
-            Accessibility contract
-          </Heading>
-          {component.contract.length > 0 ? (
-            <ul>
-              {component.contract.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          ) : (
-            <Text tone="muted">No component-specific contract entries.</Text>
-          )}
-          {component.knownLimitations.length > 0 ? (
-            <>
-              <Heading level={4} size="sm">
-                Known limitations
-              </Heading>
-              <ul>
-                {component.knownLimitations.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </>
-          ) : null}
-          <div className="vf-docs-discovery-links">
-            <a href={componentHref(component.id)}>Full component reference</a>
-            <a href="#/accessibility-standards">
-              Canonical accessibility standards
-            </a>
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="vf-docs-reference">
-      <Card className="vf-docs-reference__section" padding="lg">
-        <Heading level={3} size="md">
-          Accessibility and keyboard discovery
-        </Heading>
-        <Text tone="muted">
-          Component records project the framework-neutral accessibility contract
-          already used by generated component reference pages. Canonical
-          standards and cross-framework evidence remain their owning sources.
-        </Text>
-        <div className="vf-docs-discovery-links">
-          <a href="#/accessibility-standards">Accessibility standards</a>
-          <a href="#/metadata-cross-framework-accessibility">
-            Cross-framework accessibility evidence
-          </a>
-        </div>
-      </Card>
-      <div className="vf-docs-discovery-grid">
-        {accessibilityReferenceRecords.map((component) => (
-          <Card key={component.id} padding="lg">
-            <Heading level={3} size="md">
-              <a href={recordHref("accessibility", component.id)}>
-                {component.displayName}
-              </a>
-            </Heading>
-            <Text>{component.notes}</Text>
-            <Badge tone="subtle" variant="neutral">
-              {component.contract.length} contract entries
-            </Badge>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function ReferenceBack({ href, label }: { href: string; label: string }) {
   return (
     <Card className="vf-docs-reference__section" padding="lg">
@@ -284,7 +190,7 @@ export function DiscoveryReferencePage({
   routeId,
   referenceRecord,
 }: {
-  routeId: string;
+  routeId: "token-reference" | "pattern-reference";
   referenceRecord: ReferenceRecordSelection | null;
 }) {
   if (routeId === "token-reference") {
@@ -294,18 +200,10 @@ export function DiscoveryReferencePage({
       />
     );
   }
-  if (routeId === "pattern-reference") {
-    return (
-      <PatternReference
-        id={referenceRecord?.domain === "patterns" ? referenceRecord.id : null}
-      />
-    );
-  }
+
   return (
-    <AccessibilityReference
-      id={
-        referenceRecord?.domain === "accessibility" ? referenceRecord.id : null
-      }
+    <PatternReference
+      id={referenceRecord?.domain === "patterns" ? referenceRecord.id : null}
     />
   );
 }

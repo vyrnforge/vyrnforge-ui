@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@vyrnforge/ui-components";
-import {
-  getReferenceRecordRoute,
-  matchReferenceRecordRoute,
-} from "../../../docs/reference/referenceRuntime";
+import { matchReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import {
   docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
@@ -18,7 +15,7 @@ import { DocsShell } from "./DocsShell";
 import { getRouteById } from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
-  domain: "components" | "packages" | "tokens" | "patterns" | "accessibility";
+  domain: "components" | "packages" | "tokens" | "patterns";
   id: string;
   member: string | null;
 };
@@ -36,13 +33,11 @@ const recordRoutes: Array<{
   { domain: "packages", routeId: "package-reference" },
   { domain: "tokens", routeId: "token-reference" },
   { domain: "patterns", routeId: "pattern-reference" },
-  { domain: "accessibility", routeId: "accessibility-reference" },
 ];
 
 function getHashLocation(): DocsLocation {
-  const raw = window.location.hash.replace(/^#/, "") || "/overview";
-  const [path, query = ""] = raw.split("?", 2);
-  const member = new URLSearchParams(query).get("member");
+  const path = window.location.hash.replace(/^#/, "") || "/overview";
+  const member = new URLSearchParams(window.location.search).get("member");
 
   for (const recordRoute of recordRoutes) {
     const id = matchReferenceRecordRoute(
@@ -102,32 +97,6 @@ export default function App() {
   }, [docsLocation]);
 
   useEffect(() => {
-    const selection = docsLocation.referenceRecord;
-    if (selection?.domain !== "components") return;
-
-    const handleMemberLink = (event: MouseEvent) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      const link = target.closest<HTMLAnchorElement>('a[href^="#api-"]');
-      if (!link) return;
-
-      const member = link.getAttribute("href")?.slice(1);
-      if (!member) return;
-
-      event.preventDefault();
-      const route = getReferenceRecordRoute(
-        referenceModel,
-        "components",
-        selection.id,
-      );
-      window.location.hash = `${route}?member=${encodeURIComponent(member)}`;
-    };
-
-    document.addEventListener("click", handleMemberLink);
-    return () => document.removeEventListener("click", handleMemberLink);
-  }, [docsLocation.referenceRecord]);
-
-  useEffect(() => {
     let active = true;
     void loadDocsVersions().then((versions) => {
       if (active) setDocsVersions(versions);
@@ -148,6 +117,14 @@ export default function App() {
   );
 
   const handleRouteChange = (routeId: string) => {
+    const query = new URLSearchParams(window.location.search);
+    query.delete("member");
+    const search = query.toString();
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`,
+    );
     window.location.hash = `/${routeId}`;
     setDocsLocation({ routeId, referenceRecord: null });
   };

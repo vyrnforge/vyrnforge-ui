@@ -40,20 +40,39 @@ test("both apps preserve shared framework context in location and Reference link
   }
 });
 
-test("both navigation surfaces use generated Reference IA and searchable VyrnForge primitives", () => {
-  for (const relativePath of [
-    "apps/docs/src/DocsNav.tsx",
+test("public Docs navigation is curated while Playground may use generated discovery", () => {
+  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
+  const playgroundNav = read(
     "examples/basic-playground/src/app/PlaygroundNav.tsx",
+  );
+
+  assert.match(docsNav, /publicDocsSections/u);
+  assert.match(docsNav, /SearchInput/u);
+  assert.match(docsNav, /SideNav/u);
+  assert.match(docsNav, /VyrnForge documentation/u);
+  assert.doesNotMatch(docsNav, /getReferenceNavigation/u);
+
+  for (const section of [
+    "Start",
+    "Components",
+    "Foundations",
+    "Guides",
+    "Reference",
   ]) {
-    const source = read(relativePath);
-    assert.match(source, /getReferenceNavigation/u);
-    assert.match(source, /SearchInput/u);
-    assert.match(source, /SideNav/u);
-    assert.match(source, /VyrnForge Reference sections/u);
+    assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
   }
+  assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
+  assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
+  assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
+  assert.doesNotMatch(docsRoutes, /accessibility-reference/u);
+
+  assert.match(playgroundNav, /getReferenceNavigation/u);
+  assert.match(playgroundNav, /SearchInput/u);
+  assert.match(playgroundNav, /SideNav/u);
 });
 
-test("Reference presents one product identity with embedded executable component previews", () => {
+test("Docs uses a simple product identity while component previews stay executable", () => {
   const docsShell = read("apps/docs/src/DocsShell.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const preview = read("apps/docs/src/ReferencePreview.tsx");
@@ -62,9 +81,9 @@ test("Reference presents one product identity with embedded executable component
     "examples/basic-playground/src/app/PlaygroundShell.tsx",
   );
 
-  for (const source of [docsShell, playgroundShell]) {
-    assert.match(source, /referenceModel\.product\.label/u);
-  }
+  assert.match(docsShell, />\s*VyrnForge\s*</u);
+  assert.doesNotMatch(docsShell, /referenceModel\.product\.label/u);
+  assert.match(playgroundShell, /referenceModel\.product\.label/u);
 
   assert.match(docsPage, /ReferencePreview/u);
   assert.match(preview, /getEmbeddedPlaygroundHref/u);
@@ -96,7 +115,6 @@ test("component Reference exposes structured, linkable member API navigation", (
     "component-overview",
     "component-usage",
     "component-framework-api",
-    "component-contract",
     "component-accessibility-styling",
     "api-properties",
     "api-events",
@@ -106,10 +124,15 @@ test("component Reference exposes structured, linkable member API navigation", (
     assert.match(componentReference, new RegExp(`"${sectionId}"`, "u"));
   }
 
-  assert.match(componentReference, /memberAnchor\("property"/u);
-  assert.match(componentReference, /memberAnchor\("event"/u);
-  assert.match(componentReference, /memberAnchor\("slot"/u);
-  assert.match(componentReference, /memberAnchor\("method"/u);
+  assert.doesNotMatch(componentReference, /AI context slice/u);
+  assert.doesNotMatch(componentReference, /AI usage notes/u);
+  assert.doesNotMatch(componentReference, /Framework-neutral contract/u);
+  assert.doesNotMatch(componentReference, /Model, form, and ref contracts/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"property"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"event"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"slot"/u);
+  assert.match(componentReference, /componentApiMemberAnchor\(\s*"method"/u);
+  assert.match(componentReference, /componentReferenceTargetHref/u);
   assert.match(componentReference, /<table className="vf-docs-api-table">/u);
   assert.match(componentReference, /aria-label="On this component page"/u);
   assert.match(docsStyles, /\.vf-docs-reference-outline/u);
@@ -121,6 +144,7 @@ test("component preview pairs executable behavior with generated framework consu
   const preview = read("apps/docs/src/ReferencePreview.tsx");
   const referenceData = read("apps/docs/src/referenceData.ts");
   const referenceStyles = read("apps/docs/src/styles/reference-shell.css");
+  const docsStyles = read("apps/docs/src/styles/docs.css");
 
   assert.match(
     referenceData,
@@ -130,31 +154,49 @@ test("component preview pairs executable behavior with generated framework consu
   assert.match(preview, /FrameworkCode/u);
   assert.match(preview, /usage\.setup/u);
   assert.match(preview, /usage\.example/u);
-  assert.match(preview, /Selected framework/u);
-  assert.match(preview, /generated selected-framework/u);
+  assert.match(preview, /Example code/u);
+  assert.doesNotMatch(preview, /Executable reference/u);
+  assert.doesNotMatch(preview, /generated selected-framework/u);
   assert.match(referenceStyles, /\.vf-docs-preview__body/u);
   assert.match(referenceStyles, /\.vf-docs-preview__code-panel/u);
   assert.match(referenceStyles, /\.vf-docs-preview__code/u);
+  assert.doesNotMatch(referenceStyles, /\.vf-docs-preview__footer/u);
+  assert.doesNotMatch(docsStyles, /\.vf-docs-api-advanced/u);
+  assert.doesNotMatch(docsStyles, /\.vf-docs-metadata/u);
+  assert.doesNotMatch(docsStyles, /\.vf-docs-ai-purpose/u);
+  assert.doesNotMatch(referenceStyles, /\.vf-docs-discovery-row__heading/u);
 });
 
-test("Reference search indexes API members with safe deep links", () => {
+test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
   const app = read("apps/docs/src/App.tsx");
-  const search = read("apps/docs/src/ReferenceSearchPage.tsx");
+  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const docsShell = read("apps/docs/src/DocsShell.tsx");
+  const memberTarget = read("apps/docs/src/componentApiMember.ts");
+  const retired = read("scripts/reference-drift-removal-contract.test.mjs");
 
-  assert.match(search, /generated\/framework-api-reference\.json\?raw/u);
-  assert.match(search, /buildApiMemberEntries/u);
-  assert.match(search, /memberAnchor\("property"/u);
-  assert.match(search, /memberAnchor\("event"/u);
-  assert.match(search, /memberAnchor\("slot"/u);
-  assert.match(search, /memberAnchor\("method"/u);
-  assert.match(search, /\?member=\$\{encodeURIComponent\(member\)\}/u);
-  assert.match(search, /referenceModel\.frameworkContext\.queryParameter/u);
+  assert.match(docsNav, /generated\/framework-api-reference\.json\?raw/u);
+  assert.match(docsNav, /buildApiMemberEntries/u);
+  assert.match(docsNav, /section\.id === "components"/u);
+  assert.match(docsNav, /\.slice\(0, 30\)/u);
+  assert.match(docsNav, /componentReferenceTargetHref/u);
+  assert.match(docsNav, /frameworkId/u);
+  assert.match(docsShell, /frameworkId=\{framework\.id\}/u);
 
-  assert.match(app, /new URLSearchParams\(query\)\.get\("member"\)/u);
-  assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
-  assert.match(app, /a\[href\^="#api-"\]/u);
+  assert.match(memberTarget, /componentApiMemberAnchor/u);
+  assert.match(memberTarget, /componentReferenceTargetHref/u);
+  assert.match(
+    memberTarget,
+    /referenceModel\.frameworkContext\.queryParameter/u,
+  );
+  assert.match(memberTarget, /getReferenceRecordRoute/u);
+
   assert.match(
     app,
-    /getReferenceRecordRoute\([\s\S]*"components"[\s\S]*selection\.id/u,
+    /new URLSearchParams\(window\.location\.search\)\.get\("member"\)/u,
   );
+  assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
+  assert.match(app, /query\.delete\("member"\)/u);
+
+  assert.match(retired, /ReferenceSearchPage\.tsx/u);
+  assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });
