@@ -6,7 +6,11 @@ import overviewRaw from "../../../docs/README.md?raw";
 import migrationRaw from "../../../docs/release/multi-framework-migration-and-limitations.md?raw";
 
 export type DocsRouteKind =
-  "markdown" | "component-reference" | "package-reference";
+  | "markdown"
+  | "component-reference"
+  | "package-reference"
+  | "example"
+  | "executable-examples";
 
 export type DocsRoute = {
   id: string;
@@ -17,43 +21,63 @@ export type DocsRoute = {
   tags?: string[];
   kind?: DocsRouteKind;
   content?: string;
+  exampleId?: string;
 };
 
 export type PublicDocsSection = {
-  id: "start" | "components" | "foundations" | "guides" | "reference";
+  id:
+    | "start"
+    | "components"
+    | "foundations"
+    | "patterns"
+    | "data-grid"
+    | "api"
+    | "releases";
   label: string;
   routeIds: string[];
 };
 
-type PublicGuide = {
-  id: string;
-  title: string;
-  group: string;
-  description: string;
-  sourcePath: string;
-  content: string;
-  tags: string[];
-};
-
-const publicGuides: PublicGuide[] = [
+const docs: DocsRoute[] = [
   {
     id: "overview",
     title: "Overview",
-    group: "Start",
+    group: "Getting Started",
     description: "What VyrnForge is and how to navigate the documentation.",
     sourcePath: "docs/README.md",
     content: overviewRaw,
     tags: ["overview", "start"],
+    kind: "markdown",
   },
   {
     id: "getting-started",
     title: "Getting Started",
-    group: "Start",
+    group: "Getting Started",
     description:
       "Install VyrnForge and choose the Native HTML, React, Angular, or Vue surface.",
     sourcePath: "docs/api/import-and-setup.md",
     content: setupRaw,
     tags: ["install", "setup", "frameworks"],
+    kind: "markdown",
+  },
+  {
+    id: "executable-examples",
+    title: "Framework Examples",
+    group: "Getting Started",
+    description:
+      "Inspect the verified packed-consumer example for the selected framework.",
+    sourcePath: "tests/consumers/manifest.json",
+    tags: ["examples", "native", "react", "angular", "vue"],
+    kind: "executable-examples",
+  },
+  {
+    id: "component-reference",
+    title: "Components",
+    group: "Components",
+    description:
+      "Browse component usage, framework variants, API, accessibility, styling, and related guidance.",
+    sourcePath: "docs/generated/consumer-knowledge.json",
+    tags: ["components", "api"],
+    kind: "component-reference",
   },
   {
     id: "theming",
@@ -64,49 +88,7 @@ const publicGuides: PublicGuide[] = [
     sourcePath: "docs/architecture/03-theming-and-styling.md",
     content: themingRaw,
     tags: ["theming", "tokens", "css"],
-  },
-  {
-    id: "accessibility",
-    title: "Accessibility",
-    group: "Foundations",
-    description:
-      "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
-    sourcePath: "docs/architecture/05-accessibility-standards.md",
-    content: accessibilityRaw,
-    tags: ["accessibility", "keyboard", "focus"],
-  },
-  {
-    id: "data-grid",
-    title: "Data Grid",
-    group: "Guides",
-    description:
-      "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
-    sourcePath: "docs/packages/ui-data-grid.md",
-    content: dataGridRaw,
-    tags: ["data", "grid", "react"],
-  },
-  {
-    id: "releases",
-    title: "Releases & Migration",
-    group: "Reference",
-    description:
-      "Understand release channels, framework support, limitations, and upgrade guidance.",
-    sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
-    content: migrationRaw,
-    tags: ["release", "migration", "compatibility"],
-  },
-];
-
-const generatedRoutes: DocsRoute[] = [
-  {
-    id: "component-reference",
-    title: "Components",
-    group: "Components",
-    description:
-      "Browse component usage, framework variants, API, accessibility, and styling.",
-    sourcePath: "docs/generated/consumer-knowledge.json",
-    tags: ["components", "api"],
-    kind: "component-reference",
+    kind: "markdown",
   },
   {
     id: "token-reference",
@@ -117,30 +99,163 @@ const generatedRoutes: DocsRoute[] = [
     tags: ["tokens", "design-system"],
   },
   {
+    id: "theme-modes",
+    title: "Theme Modes",
+    group: "Foundations",
+    description:
+      "Interactive light, dark, enterprise, and system theme behavior.",
+    sourcePath: "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
+    kind: "example",
+    exampleId: "theme-modes",
+  },
+  {
+    id: "density",
+    title: "Density",
+    group: "Foundations",
+    description:
+      "Interactive compact, standard, and comfortable density examples.",
+    sourcePath: "apps/docs/src/examples/pages/core/DensityPage.tsx",
+    kind: "example",
+    exampleId: "density",
+  },
+  {
+    id: "css-overrides",
+    title: "CSS Overrides",
+    group: "Foundations",
+    description:
+      "Global VyrnForge overrides, local scopes, and grid-specific overrides.",
+    sourcePath: "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
+    kind: "example",
+    exampleId: "css-overrides",
+  },
+  {
+    id: "accessibility",
+    title: "Accessibility",
+    group: "Foundations",
+    description:
+      "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
+    sourcePath: "docs/architecture/05-accessibility-standards.md",
+    content: accessibilityRaw,
+    tags: ["accessibility", "keyboard", "focus"],
+    kind: "markdown",
+  },
+  {
     id: "pattern-reference",
-    title: "Patterns",
-    group: "Guides",
+    title: "Pattern Catalog",
+    group: "Patterns",
     description: "Browse reusable VyrnForge composition patterns.",
     sourcePath: "docs/metadata/patterns.json",
     tags: ["patterns", "composition"],
   },
+  ...[
+    [
+      "pattern-resource-list",
+      "Resource List",
+      "Compact resource lists with metadata and actions.",
+    ],
+    ["pattern-detail", "Detail Page", "Entity detail composition."],
+    ["pattern-settings", "Settings", "Sectioned settings composition."],
+    ["pattern-form", "Form", "General application form composition."],
+    ["pattern-filter-form", "Filter Form", "Operational filter composition."],
+    ["pattern-assignments", "Assignment Patterns", "Bounded assignment flows."],
+    [
+      "pattern-feedback-states",
+      "Empty, Error & Loading",
+      "Route-level feedback states.",
+    ],
+    ["pattern-admin-shell", "Admin Shell", "Admin workspace composition."],
+    [
+      "pattern-customer-portal",
+      "Customer Portal Shell",
+      "Customer portal composition.",
+    ],
+  ].map(([id, title, description]) => ({
+    id,
+    title,
+    group: "Patterns",
+    description,
+    sourcePath: "apps/docs/src/examples/pages/patterns",
+    kind: "example" as const,
+    exampleId: id,
+  })),
+  {
+    id: "data-grid",
+    title: "Data Grid Guide",
+    group: "Data & Grid",
+    description:
+      "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
+    sourcePath: "docs/packages/ui-data-grid.md",
+    content: dataGridRaw,
+    tags: ["data", "grid", "react"],
+    kind: "markdown",
+  },
+  ...[
+    [
+      "grid-basic",
+      "Basic Grid",
+      "Rows, columns, search, sort, and pagination.",
+    ],
+    [
+      "grid-columns",
+      "Column Management",
+      "Visibility, order, density, and reset behavior.",
+    ],
+    ["grid-filtering", "Filtering", "Search and filter state examples."],
+    [
+      "grid-selection",
+      "Selection",
+      "Selectable rows, disabled rows, and bulk actions.",
+    ],
+    ["grid-grouping", "Grouping", "Client-side grouping examples."],
+    [
+      "grid-resizing",
+      "Column Resizing",
+      "Resizable columns and horizontal overflow.",
+    ],
+    ["grid-themes", "Grid Themes", "Theme and shared-token alignment."],
+    ["grid-states", "Grid States", "Empty, error, and loading states."],
+    [
+      "grid-stress",
+      "Stress Grid",
+      "Many rows and columns without virtualization.",
+    ],
+  ].map(([id, title, description]) => ({
+    id,
+    title,
+    group: "Data & Grid",
+    description,
+    sourcePath: "apps/docs/src/examples/pages/data-grid",
+    kind: "example" as const,
+    exampleId: id,
+  })),
   {
     id: "package-reference",
-    title: "Packages",
-    group: "Reference",
+    title: "Packages & API",
+    group: "API / Packages",
     description:
       "Understand package responsibilities, public entrypoints, and release tracks.",
     sourcePath: "docs/metadata/packages.json",
     tags: ["packages", "api"],
     kind: "package-reference",
   },
+  {
+    id: "releases",
+    title: "Releases & Migration",
+    group: "Releases / Migration",
+    description:
+      "Understand release channels, framework support, limitations, and upgrade guidance.",
+    sourcePath: "docs/release/multi-framework-migration-and-limitations.md",
+    content: migrationRaw,
+    tags: ["release", "migration", "compatibility"],
+    kind: "markdown",
+  },
 ];
 
 export const publicDocsSections: PublicDocsSection[] = [
   {
     id: "start",
-    label: "Start",
-    routeIds: ["overview", "getting-started"],
+    label: "Getting Started",
+    routeIds: ["overview", "getting-started", "executable-examples"],
   },
   {
     id: "components",
@@ -150,26 +265,40 @@ export const publicDocsSections: PublicDocsSection[] = [
   {
     id: "foundations",
     label: "Foundations",
-    routeIds: ["theming", "token-reference", "accessibility"],
+    routeIds: [
+      "theming",
+      "token-reference",
+      "theme-modes",
+      "density",
+      "css-overrides",
+      "accessibility",
+    ],
   },
   {
-    id: "guides",
-    label: "Guides",
-    routeIds: ["pattern-reference", "data-grid"],
+    id: "patterns",
+    label: "Patterns",
+    routeIds: docs
+      .filter((route) => route.group === "Patterns")
+      .map((route) => route.id),
   },
   {
-    id: "reference",
-    label: "Reference",
-    routeIds: ["package-reference", "releases"],
+    id: "data-grid",
+    label: "Data & Grid",
+    routeIds: docs
+      .filter((route) => route.group === "Data & Grid")
+      .map((route) => route.id),
+  },
+  {
+    id: "api",
+    label: "API / Packages",
+    routeIds: ["package-reference"],
+  },
+  {
+    id: "releases",
+    label: "Releases / Migration",
+    routeIds: ["releases"],
   },
 ];
-
-function guideRoute(guide: PublicGuide): DocsRoute {
-  return {
-    ...guide,
-    kind: "markdown",
-  };
-}
 
 function uniqueRoutes(routes: DocsRoute[]) {
   const byId = new Map<string, DocsRoute>();
@@ -182,10 +311,7 @@ function uniqueRoutes(routes: DocsRoute[]) {
   return [...byId.values()];
 }
 
-export const docsRoutes = uniqueRoutes([
-  ...publicGuides.map(guideRoute),
-  ...generatedRoutes,
-]);
+export const docsRoutes = uniqueRoutes(docs);
 
 export function getRouteById(id: string) {
   return (
