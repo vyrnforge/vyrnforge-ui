@@ -1522,8 +1522,8 @@
       "displayName": "PropertyTable",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Read-only tabular property comparison using native table semantics.",
       "guidance": {
         "useWhen": "Use when readers must compare properties across rows or columns and those relationships are genuinely tabular.",
@@ -1536,10 +1536,12 @@
       },
       "accessibilityNotes": "Keep one native table as the semantic authority; preserve caption, th, scope, and header/cell relationships and do not replace them with grid roles.",
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
+        "Avoid for interactive data-grid behavior such as sorting, filtering, resizing, selection, grouping, or persisted grid state; use UniversalDataGrid instead."
       ],
       "styling": {
-        "classes": ["vf-property-table"],
+        "classes": [
+          "vf-property-table"
+        ],
         "variables": []
       },
       "docsPath": "docs/api/ui-components-api.md",
@@ -1547,41 +1549,45 @@
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "customElementsManifest": null
+        "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
-      "nativeDeclaration": null,
+      "nativeDeclaration": {
+        "name": "VyrnForgePropertyTableElement",
+        "tagName": "vf-property-table",
+        "description": "PropertyTable browser-native renderer. Read-only tabular property comparison using native table semantics."
+      },
       "frameworks": {
         "react": {
           "label": "React",
-          "status": "not-supported",
+          "status": "current",
           "package": "@vyrnforge/ui-components",
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "setup": "import { PropertyTable } from '@vyrnforge/ui-components';",
+          "example": "<PropertyTable><table><caption>Deployment properties</caption><tbody><tr><th scope=\"row\">Region</th><td>us-east-1</td></tr></tbody></table></PropertyTable>",
+          "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
         },
         "native-html": {
           "label": "Native HTML",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "current",
+          "package": "@vyrnforge/ui-elements",
+          "setup": "import \"@vyrnforge/ui-elements/register\";",
+          "example": "<vf-property-table></vf-property-table>",
+          "note": "Native HTML consumes @vyrnforge/ui-elements directly through canonical vf-* Custom Elements and events."
         },
         "angular": {
           "label": "Angular",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+          "example": "<vf-property-table></vf-property-table>",
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-vue",
+          "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+          "example": "<VfPropertyTable></VfPropertyTable>",
+          "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
       "contract": {
@@ -1611,8 +1617,8 @@
       "displayName": "Timeline",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Ordered chronological event presentation using native list and time semantics.",
       "guidance": {
         "useWhen": "Use for read-only chronological histories where event order and timestamps are meaningful and entry content remains application-owned.",
@@ -1624,10 +1630,12 @@
       },
       "accessibilityNotes": "Preserve ordered-list semantics and source order; each entry must remain a native list item and timestamps should use readable text with a machine-readable time value when available.",
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
+        "Read-only presentation only; persistence, loading, filtering, actor/action schemas, selection, and live-feed behavior remain application-owned."
       ],
       "styling": {
-        "classes": ["vf-timeline"],
+        "classes": [
+          "vf-timeline"
+        ],
         "variables": []
       },
       "docsPath": "docs/api/ui-components-api.md",
@@ -1635,41 +1643,45 @@
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "customElementsManifest": null
+        "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
-      "nativeDeclaration": null,
+      "nativeDeclaration": {
+        "name": "VyrnForgeTimelineElement",
+        "tagName": "vf-timeline",
+        "description": "Timeline browser-native renderer. Ordered chronological event presentation using native list and time semantics."
+      },
       "frameworks": {
         "react": {
           "label": "React",
-          "status": "not-supported",
+          "status": "current",
           "package": "@vyrnforge/ui-components",
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "setup": "import { Timeline } from '@vyrnforge/ui-components';",
+          "example": "<Timeline><li><time dateTime=\"2026-09-24T01:00:00Z\">01:00</time> Created</li></Timeline>",
+          "note": "React uses the first-class @vyrnforge/ui-components renderer when the component belongs to the shared non-grid surface; specialized React-only modules retain their own package status."
         },
         "native-html": {
           "label": "Native HTML",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "current",
+          "package": "@vyrnforge/ui-elements",
+          "setup": "import \"@vyrnforge/ui-elements/register\";",
+          "example": "<vf-timeline></vf-timeline>",
+          "note": "Native HTML consumes @vyrnforge/ui-elements directly through canonical vf-* Custom Elements and events."
         },
         "angular": {
           "label": "Angular",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-angular",
+          "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+          "example": "<vf-timeline></vf-timeline>",
+          "note": "Angular uses the first-class @vyrnforge/ui-angular facade over the canonical Custom Element implementation; generated bindings, package-owned setup, Forms integration, accessibility, and vf-* contracts remain aligned with shared VyrnForge foundations."
         },
         "vue": {
           "label": "Vue",
-          "status": "not-supported",
-          "package": null,
-          "setup": "",
-          "example": "",
-          "note": "No current public consumption path is declared for this component on this framework surface."
+          "status": "verified-consumer",
+          "package": "@vyrnforge/ui-vue",
+          "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+          "example": "<VfTimeline></VfTimeline>",
+          "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
       "contract": {

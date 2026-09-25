@@ -15,8 +15,8 @@
       "id": "property-table",
       "name": "PropertyTable",
       "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Read-only tabular property comparison using native table semantics.",
       "context": "ai-context/components/property-table.json"
     },
@@ -24,8 +24,8 @@
       "id": "timeline",
       "name": "Timeline",
       "package": "@vyrnforge/ui-components",
-      "maturity": "planned",
-      "availability": "planned",
+      "maturity": "experimental",
+      "availability": "available",
       "purpose": "Ordered chronological event presentation using native list and time semantics.",
       "context": "ai-context/components/timeline.json"
     },

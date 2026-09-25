@@ -177,7 +177,7 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
   }
 });
 
-test("PropertyTable defines a planned, semantic, state-free table contract", () => {
+test("PropertyTable keeps a semantic, state-free cross-framework contract", () => {
   const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
   const contract = normalized.componentById.get("property-table");
 
@@ -197,22 +197,23 @@ test("PropertyTable defines a planned, semantic, state-free table contract", () 
       rule.includes("one native table element"),
     ),
   );
-  assert.equal(contract.frameworkMappings.native.status, "current");
-  for (const framework of ["react", "angular", "vue"]) {
-    assert.equal(contract.frameworkMappings[framework].status, "target");
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "current");
   }
 });
 
-test("planned canonical contracts do not become unknown G10 contracts", () => {
+test("promoted semantic contracts are complete in G10 coverage", () => {
   const report = createCoverageReport();
 
-  assert.equal(report.unknownContractIds.includes("property-table"), false);
-  assert.equal(report.contractComplete.includes("property-table"), false);
-  assert.equal(report.needsContractData.includes("property-table"), false);
-  assert.equal(report.totals.scoped, 69);
+  for (const id of ["property-table", "timeline"]) {
+    assert.equal(report.unknownContractIds.includes(id), false);
+    assert.equal(report.contractComplete.includes(id), true);
+    assert.equal(report.needsContractData.includes(id), false);
+  }
+  assert.equal(report.totals.scoped, 71);
 });
 
-test("Timeline defines a planned, semantic, state-free chronological contract", () => {
+test("Timeline keeps a semantic, state-free chronological contract", () => {
   const normalized = normalizeCanonicalComponentContracts(canonicalDocument);
   const contract = normalized.componentById.get("timeline");
 
@@ -237,9 +238,8 @@ test("Timeline defines a planned, semantic, state-free chronological contract", 
       rule.includes("native time semantics"),
     ),
   );
-  assert.equal(contract.frameworkMappings.native.status, "current");
-  for (const framework of ["react", "angular", "vue"]) {
-    assert.equal(contract.frameworkMappings[framework].status, "target");
+  for (const framework of ["native", "react", "angular", "vue"]) {
+    assert.equal(contract.frameworkMappings[framework].status, "current");
   }
 });
 

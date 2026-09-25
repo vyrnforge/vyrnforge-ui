@@ -653,7 +653,7 @@
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "target",
+          "status": "current",
           "export": "PropertyTable",
           "properties": [],
           "events": [],
@@ -676,7 +676,7 @@
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
+          "status": "current",
           "export": "VfPropertyTable",
           "properties": [],
           "events": [],
@@ -699,7 +699,7 @@
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
+          "status": "current",
           "export": "VfPropertyTable",
           "properties": [],
           "events": [],
@@ -795,7 +795,7 @@
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "target",
+          "status": "current",
           "export": "Timeline",
           "properties": [],
           "events": [],
@@ -818,7 +818,7 @@
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
+          "status": "current",
           "export": "VfTimeline",
           "properties": [],
           "events": [],
@@ -841,7 +841,7 @@
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
+          "status": "current",
           "export": "VfTimeline",
           "properties": [],
           "events": [],
@@ -25645,8 +25645,8 @@
   "catalogCoverage": {
     "componentMetadata": "docs/metadata/components.json",
     "coverageRule": "Every public beta-included non-grid @vyrnforge/ui-components record is either contract-complete or covered by an active narrow framework exception.",
-    "scopedComponentCount": 69,
-    "contractCompleteCount": 61,
+    "scopedComponentCount": 71,
+    "contractCompleteCount": 63,
     "exceptionRequiredCount": 8,
     "needsContractDataCount": 0,
     "exceptionRegistry": "docs/metadata/framework-exceptions.json",
