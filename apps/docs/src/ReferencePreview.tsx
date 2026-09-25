@@ -24,9 +24,9 @@ type ReferencePreviewProps = {
 function hasSnippet(value: string) {
   return Boolean(
     value &&
-      value !== "pending" &&
-      value !== "requires-verification" &&
-      value !== "not-applicable",
+    value !== "pending" &&
+    value !== "requires-verification" &&
+    value !== "not-applicable",
   );
 }
 
@@ -38,10 +38,7 @@ function LiveSample({ componentId }: { componentId: string }) {
       return <Badge variant="success">Active</Badge>;
     case "text-input":
       return (
-        <TextInput
-          aria-label="Example text input"
-          defaultValue="VyrnForge"
-        />
+        <TextInput aria-label="Example text input" defaultValue="VyrnForge" />
       );
     case "checkbox":
       return <Checkbox label="Enable notifications" />;
@@ -64,8 +61,16 @@ function LiveSample({ componentId }: { componentId: string }) {
         <Tabs
           defaultValue="overview"
           items={[
-            { id: "overview", label: "Overview", content: <Text>Overview content</Text> },
-            { id: "details", label: "Details", content: <Text>Details content</Text> },
+            {
+              id: "overview",
+              label: "Overview",
+              content: <Text>Overview content</Text>,
+            },
+            {
+              id: "details",
+              label: "Details",
+              content: <Text>Details content</Text>,
+            },
           ]}
         />
       );

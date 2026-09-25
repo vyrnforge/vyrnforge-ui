@@ -12,15 +12,20 @@ export function FrameworkExamplesPage({
 }: {
   frameworkId: DocsFrameworkId;
 }) {
-  const selected = executableExampleRecords.find(
-    (example) => example.frameworkId === frameworkId,
-  ) ?? executableExampleRecords[0];
+  const selected =
+    executableExampleRecords.find(
+      (example) => example.frameworkId === frameworkId,
+    ) ?? executableExampleRecords[0];
 
   return (
     <DocumentationPage
       description="Verified packed-consumer examples for Native HTML, React, Angular, and Vue. These sources are the same fixture-backed examples validated by CI."
       eyebrow="Getting Started"
-      status={<Badge tone="subtle" variant="success">CI verified</Badge>}
+      status={
+        <Badge tone="subtle" variant="success">
+          CI verified
+        </Badge>
+      }
       title="Framework Examples"
       sections={[
         {

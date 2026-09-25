@@ -51,10 +51,7 @@ export function DocumentationPage({
           </Card>
         ))}
       </div>
-      <aside
-        aria-label="On this page"
-        className="vf-docs-reference-outline"
-      >
+      <aside aria-label="On this page" className="vf-docs-reference-outline">
         <Text size="sm" tone="muted">
           On this page
         </Text>
