@@ -10,7 +10,7 @@ const repositoryRoot = path.resolve(
 );
 
 function stripCodeFences(content) {
-  return content.replace(/\`\`\`[\\s\\S]*?\`\`\`/gu, "");
+  return content.replace(/```[\s\S]*?```/gu, "");
 }
 
 function normalizeDestination(raw) {
