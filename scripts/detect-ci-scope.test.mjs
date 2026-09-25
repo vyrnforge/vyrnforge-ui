@@ -126,7 +126,7 @@ test("repository template changes run quality contract verification", () => {
       "packages",
       "consumer",
       "docs",
-        "browser",
+      "browser",
       "full",
       "docs_only",
     ]);
@@ -146,7 +146,7 @@ test("root manifests and workflows force full validation", () => {
       "packages",
       "consumer",
       "docs",
-        "fixtures",
+      "fixtures",
       "browser",
       "full",
       "integration",
