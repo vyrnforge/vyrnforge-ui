@@ -58,6 +58,8 @@
     "verify:toolchain": "node scripts/verify-toolchain.mjs",
     "verify:repository-inventory": "node scripts/governance/verify-repository-inventory.mjs",
     "verify:documentation-current": "node scripts/verify-documentation-current.mjs",
+    "verify:public-doc-links": "node scripts/verify-public-doc-links.mjs",
+    "verify:docs-quality": "npm run verify:documentation-current && npm run verify:public-doc-links && npm run verify:component-reference && node --test scripts/reference-shell-contract.test.mjs scripts/reference-discovery-contract.test.mjs scripts/reference-drift-removal-contract.test.mjs scripts/verify-public-doc-links.test.mjs",
     "fixtures:serve": "npm run build:packages && npm run dev --workspace @vyrnforge/ui-regression-fixtures -- --host 127.0.0.1 --port 4173 --strictPort",
     "test:browser": "playwright test",
     "test:browser:headed": "playwright test --headed",
