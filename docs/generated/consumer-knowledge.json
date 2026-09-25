@@ -1554,7 +1554,7 @@
       "nativeDeclaration": {
         "name": "VyrnForgePropertyTableElement",
         "tagName": "vf-property-table",
-        "description": "VyrnForge vf-property-table browser-native renderer."
+        "description": "PropertyTable browser-native renderer. Read-only tabular property comparison using native table semantics."
       },
       "frameworks": {
         "react": {
@@ -1648,7 +1648,7 @@
       "nativeDeclaration": {
         "name": "VyrnForgeTimelineElement",
         "tagName": "vf-timeline",
-        "description": "VyrnForge vf-timeline browser-native renderer."
+        "description": "Timeline browser-native renderer. Ordered chronological event presentation using native list and time semantics."
       },
       "frameworks": {
         "react": {
