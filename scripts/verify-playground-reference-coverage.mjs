@@ -2,16 +2,21 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repositoryRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
 const frameworkIds = ["native-html", "react", "angular", "vue"];
 const apiSurfaceIds = ["native", "react", "angular", "vue"];
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
+
 function json(root, relativePath) {
   return JSON.parse(read(root, relativePath));
 }
+
 function duplicates(values) {
   const seen = new Set();
   const repeated = new Set();
@@ -22,13 +27,18 @@ function duplicates(values) {
   return [...repeated].sort();
 }
 
-export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}) {
+export function verifyPlaygroundReferenceCoverage({
+  root = repositoryRoot,
+} = {}) {
   const failures = [];
   const model = json(root, "docs/generated/reference-model.json");
   const knowledge = json(root, "docs/generated/consumer-knowledge.json");
   const contracts = json(root, "docs/metadata/component-contracts.json");
   const catalog = json(root, "docs/metadata/components.json");
-  const frameworkApi = json(root, "docs/generated/framework-api-reference.json");
+  const frameworkApi = json(
+    root,
+    "docs/generated/framework-api-reference.json",
+  );
 
   const components = knowledge.components ?? [];
   const componentIds = components.map((component) => component.id);
@@ -39,7 +49,9 @@ export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}
   for (const component of components) {
     for (const frameworkId of frameworkIds) {
       if (!component.frameworks?.[frameworkId]) {
-        failures.push(`${component.id}: reference detail usage is missing ${frameworkId}`);
+        failures.push(
+          `${component.id}: reference detail usage is missing ${frameworkId}`,
+        );
       }
     }
   }
@@ -57,19 +69,27 @@ export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}
   }
   for (const componentId of canonicalIds) {
     if (!componentIdSet.has(componentId)) {
-      failures.push(`${componentId}: canonical component is missing consumer knowledge`);
+      failures.push(
+        `${componentId}: canonical component is missing consumer knowledge`,
+      );
     }
     for (const surfaceId of apiSurfaceIds) {
       const apiIds = new Set(
-        (frameworkApi.surfaces?.[surfaceId]?.components ?? []).map((component) => component.id),
+        (frameworkApi.surfaces?.[surfaceId]?.components ?? []).map(
+          (component) => component.id,
+        ),
       );
       if (!apiIds.has(componentId)) {
-        failures.push(`${componentId}: canonical component is missing ${surfaceId} generated API coverage`);
+        failures.push(
+          `${componentId}: canonical component is missing ${surfaceId} generated API coverage`,
+        );
       }
     }
   }
 
-  const componentDomain = model.domains?.find((domain) => domain.id === "components");
+  const componentDomain = model.domains?.find(
+    (domain) => domain.id === "components",
+  );
   if (componentDomain?.routeTemplate !== "/components/{id}") {
     failures.push("generated component route template is not /components/{id}");
   }
@@ -82,10 +102,15 @@ export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}
     'label: "Patterns"',
     'label: "Data & Grid"',
   ]) {
-    if (!docsRoutes.includes(marker)) failures.push(`unified Docs routes are missing ${marker}`);
+    if (!docsRoutes.includes(marker)) {
+      failures.push(`unified Docs routes are missing ${marker}`);
+    }
   }
 
-  const migratedExamples = read(root, "apps/docs/src/examples/MigratedExamplePage.tsx");
+  const migratedExamples = read(
+    root,
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
+  );
   for (const marker of [
     "ThemeModesPage",
     "DensityPage",
@@ -93,17 +118,27 @@ export function verifyPlaygroundReferenceCoverage({ root = repositoryRoot } = {}
     "SettingsPage",
     "vf-docs-example-stage",
   ]) {
-    if (!migratedExamples.includes(marker)) failures.push(`migrated Docs examples are missing ${marker}`);
+    if (!migratedExamples.includes(marker)) {
+      failures.push(`migrated Docs examples are missing ${marker}`);
+    }
   }
 
-  const executableExamples = read(root, "apps/docs/src/examples/ExecutableExamplesPage.tsx");
+  const executableExamples = read(
+    root,
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
+  );
   if (!executableExamples.includes("getExecutableExampleRecord")) {
-    failures.push("Docs executable examples are not backed by the packed-consumer contract");
+    failures.push(
+      "Docs executable examples are not backed by the packed-consumer contract",
+    );
   }
 
   if (existsSync(path.join(root, "examples/basic-playground"))) {
-    failures.push("standalone public Playground package still exists after Docs migration");
+    failures.push(
+      "standalone public Playground package still exists after Docs migration",
+    );
   }
+
   return failures.sort();
 }
 

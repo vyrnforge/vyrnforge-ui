@@ -77,12 +77,7 @@ test("canonical docs-only changes build docs without package runtime checks", ()
 test("metadata changes verify metadata and build docs", () => {
   const plan = planCiScope(["docs/metadata/components.json"]);
   expectEnabled(plan, ["quality", "metadata", "docs", "integration"]);
-  expectDisabled(plan, [
-    "packages",
-    "consumer",
-    "full",
-    "docs_only",
-  ]);
+  expectDisabled(plan, ["packages", "consumer", "full", "docs_only"]);
 });
 
 test("consumer fixture changes select the packed-consumer gate", () => {
@@ -105,12 +100,7 @@ test("multi-framework fixture changes run architecture, consumer, and docs check
     "docs",
     "integration",
   ]);
-  expectDisabled(plan, [
-    "packages",
-    "browser",
-    "full",
-    "docs_only",
-  ]);
+  expectDisabled(plan, ["packages", "browser", "full", "docs_only"]);
 });
 
 test("repository template changes run quality contract verification", () => {

@@ -349,10 +349,7 @@ export function planCiScope(files, { forceFull = false } = {}) {
 
 function finalize(scope, selectedPackages, changedFiles, reasons) {
   scope.integration =
-    scope.packages ||
-    scope.consumer ||
-    scope.docs ||
-    scope.browser;
+    scope.packages || scope.consumer || scope.docs || scope.browser;
 
   scope.security =
     scope.full ||
