@@ -23,7 +23,8 @@ function fixture(files, callback) {
 test("accepts valid local documentation links", () =>
   fixture(
     {
-      "docs/README.md": "[Setup](api/setup.md)\n[Section](#start)\n[Web](https://example.com)\n",
+      "docs/README.md":
+        "[Setup](api/setup.md)\n[Section](#start)\n[Web](https://example.com)\n",
       "docs/api/setup.md": "# Setup\n",
     },
     (root) =>
