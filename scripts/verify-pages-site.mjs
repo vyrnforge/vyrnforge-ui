@@ -28,7 +28,6 @@ function relativeSitePath(urlPath) {
 }
 
 requireFile("index.html");
-requireFile("playground/index.html");
 requireFile(".nojekyll");
 
 const catalog = readJson("vyrnforge-versions.json");
