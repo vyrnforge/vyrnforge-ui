@@ -13,7 +13,6 @@ export const scopeKeys = [
   "packages",
   "consumer",
   "docs",
-  "playground",
   "fixtures",
   "browser",
   "full",
@@ -130,7 +129,6 @@ function markRuntimeImpact(scope, selectedPackages, packageName) {
   scope.packages = true;
   scope.consumer = true;
   scope.docs = true;
-  scope.playground = true;
   scope.fixtures = true;
   scope.browser = true;
 
@@ -157,7 +155,6 @@ export function planDeliveryScope() {
   const scope = createScope();
   scope.integration = true;
   scope.docs = true;
-  scope.playground = true;
   scope.delivery = true;
 
   return {
@@ -281,8 +278,7 @@ export function planCiScope(files, { forceFull = false } = {}) {
     }
 
     if (file.startsWith("examples/")) {
-      scope.playground = true;
-      reasons.add("example or playground application");
+          reasons.add("example or playground application");
       continue;
     }
 
@@ -361,7 +357,6 @@ function finalize(scope, selectedPackages, changedFiles, reasons) {
     scope.packages ||
     scope.consumer ||
     scope.docs ||
-    scope.playground ||
     scope.browser;
 
   scope.security =
@@ -381,7 +376,6 @@ function finalize(scope, selectedPackages, changedFiles, reasons) {
     !scope.quality &&
     !scope.packages &&
     !scope.consumer &&
-    !scope.playground &&
     !scope.fixtures;
 
   const affectedPackages = [...selectedPackages].sort();

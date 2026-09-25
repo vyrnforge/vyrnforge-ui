@@ -250,44 +250,6 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     }
   }
 
-  const playgroundPage = read(
-    root,
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-  );
-  for (const marker of [
-    "consumer-knowledge.json",
-    "canonicalKnowledge",
-    "usePlaygroundFramework",
-    "selectedFrameworkUsage",
-    'title="Usage"',
-  ]) {
-    if (!playgroundPage.includes(marker))
-      failures.push(`playground component reference is missing ${marker}`);
-  }
-  for (const file of filesRecursively(
-    root,
-    "examples/basic-playground/src/pages/reference",
-  ).filter((entry) => entry.endsWith(".tsx"))) {
-    if (
-      /\bstatus="(?:stable|beta-stable|alpha-stable|experimental|planned|deprecated)"/.test(
-        read(root, file),
-      )
-    ) {
-      failures.push(
-        `${file}: component maturity must come from generated consumer knowledge, not a hand-written status prop`,
-      );
-    }
-  }
-  const routes = read(root, "examples/basic-playground/src/app/routes.ts");
-  for (const marker of [
-    'visibility?: "public" | "internal"',
-    'group: "Internal"',
-    'group: "Advanced Modules"',
-    "consumer-knowledge.json",
-  ]) {
-    if (!routes.includes(marker))
-      failures.push(`playground routes are missing ${marker}`);
-  }
   const rolloutResidueFiles = [
     "docs/metadata/component-reference-program.json",
     "docs/testing/generated-component-reference.md",

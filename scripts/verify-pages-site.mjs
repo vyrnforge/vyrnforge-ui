@@ -28,7 +28,6 @@ function relativeSitePath(urlPath) {
 }
 
 requireFile("index.html");
-requireFile("playground/index.html");
 requireFile(".nojekyll");
 
 const catalog = readJson("vyrnforge-versions.json");
@@ -67,14 +66,7 @@ for (const release of catalog.releases) {
   );
   assert(release.tag, `Release ${release.version} must identify its Git tag.`);
   assert(release.docsPath, `Release ${release.version} must expose docsPath.`);
-  assert(
-    release.playgroundPath,
-    `Release ${release.version} must expose playgroundPath.`,
-  );
   requireFile(path.join(relativeSitePath(release.docsPath), "index.html"));
-  requireFile(
-    path.join(relativeSitePath(release.playgroundPath), "index.html"),
-  );
 }
 
 const legacyReleaseIds = new Set(
