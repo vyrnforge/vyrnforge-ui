@@ -23,7 +23,9 @@
     },
     "status": "scope-frozen",
     "targetVersion": "0.2.0-beta.2",
-    "unlocks": ["BT-8002"],
+    "unlocks": [
+      "BT-8002"
+    ],
     "scopeOnly": true,
     "releaseStatus": "not-release-ready"
   },
@@ -52,7 +54,9 @@
         "@vyrnforge/ui-angular",
         "@vyrnforge/ui-vue"
       ],
-      "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
+      "dataGridAlpha": [
+        "@vyrnforge/ui-data-grid"
+      ]
     },
     "firstClassRenderers": {
       "react": "@vyrnforge/ui-components",
@@ -79,16 +83,16 @@
   },
   "summary": {
     "catalogEntries": 94,
-    "publicNonGridComponents": 69,
-    "includedComponents": 69,
+    "publicNonGridComponents": 71,
+    "includedComponents": 71,
     "deferredNonGridComponents": 0,
     "publicGridComponentsDeferred": 10,
-    "plannedNonPublicComponentsExcluded": 2,
+    "plannedNonPublicComponentsExcluded": 0,
     "internalNonPublicComponentsExcluded": 1,
     "nativeCustomElementTags": 62,
     "categoryCounts": {
       "composite": 8,
-      "data-display": 2,
+      "data-display": 4,
       "feedback": 10,
       "form-control": 17,
       "navigation": 5,
@@ -96,10 +100,10 @@
       "primitive": 20
     },
     "maturityCounts": {
-      "experimental": 69
+      "experimental": 71
     },
     "nativeStrategyCounts": {
-      "direct-element": 59,
+      "direct-element": 61,
       "renderer-composition": 1,
       "renderer-mapping": 8,
       "renderer-service": 1
@@ -144,7 +148,9 @@
         "key": "alert",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for tiny metadata; use Badge or Caption."]
+      "knownLimitations": [
+        "Avoid for tiny metadata; use Badge or Caption."
+      ]
     },
     {
       "id": "app-shell",
@@ -310,7 +316,9 @@
         "key": "breadcrumbs",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for linear step progress or unrelated tabs."]
+      "knownLimitations": [
+        "Avoid for linear step progress or unrelated tabs."
+      ]
     },
     {
       "id": "button",
@@ -392,7 +400,9 @@
         "key": "button-group",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for unrelated actions."]
+      "knownLimitations": [
+        "Avoid for unrelated actions."
+      ]
     },
     {
       "id": "caption",
@@ -558,7 +568,9 @@
         "key": "clear-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "close-button",
@@ -598,7 +610,9 @@
         "key": "close-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "code-text",
@@ -680,7 +694,9 @@
         "key": "confirm-dialog",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for routine low-risk actions."]
+      "knownLimitations": [
+        "Avoid for routine low-risk actions."
+      ]
     },
     {
       "id": "date-input",
@@ -762,7 +778,9 @@
         "key": "datetime-input",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for timezone-heavy scheduling workflows."]
+      "knownLimitations": [
+        "Avoid for timezone-heavy scheduling workflows."
+      ]
     },
     {
       "id": "description-list",
@@ -844,7 +862,9 @@
         "key": "dialog",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for large workflows; use Drawer or a page."]
+      "knownLimitations": [
+        "Avoid for large workflows; use Drawer or a page."
+      ]
     },
     {
       "id": "drawer",
@@ -926,7 +946,9 @@
         "key": "dropdown",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for native form select choices; use Select."]
+      "knownLimitations": [
+        "Avoid for native form select choices; use Select."
+      ]
     },
     {
       "id": "empty-state",
@@ -966,7 +988,9 @@
         "key": "empty-state",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for loading or error states."]
+      "knownLimitations": [
+        "Avoid for loading or error states."
+      ]
     },
     {
       "id": "error-state",
@@ -1132,7 +1156,9 @@
         "key": "icon",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid adding external icon libraries by default."]
+      "knownLimitations": [
+        "Avoid adding external icon libraries by default."
+      ]
     },
     {
       "id": "icon-button",
@@ -1214,7 +1240,9 @@
         "key": "inline",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for vertical layout; use Stack."]
+      "knownLimitations": [
+        "Avoid for vertical layout; use Stack."
+      ]
     },
     {
       "id": "inline-message",
@@ -1296,7 +1324,9 @@
         "key": "label",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid as general body text."]
+      "knownLimitations": [
+        "Avoid as general body text."
+      ]
     },
     {
       "id": "loading-state",
@@ -1378,7 +1408,9 @@
         "key": "menu",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for navigation trees or complex forms."]
+      "knownLimitations": [
+        "Avoid for navigation trees or complex forms."
+      ]
     },
     {
       "id": "more-button",
@@ -1418,7 +1450,9 @@
         "key": "more-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "multi-select",
@@ -1500,7 +1534,9 @@
         "key": "number-input",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for formatted currency or masked values."]
+      "knownLimitations": [
+        "Avoid for formatted currency or masked values."
+      ]
     },
     {
       "id": "page",
@@ -1666,7 +1702,9 @@
         "key": "panel",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for tiny inline content."]
+      "knownLimitations": [
+        "Avoid for tiny inline content."
+      ]
     },
     {
       "id": "popover",
@@ -1706,7 +1744,9 @@
         "key": "popover",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for complex forms; use Dialog or Drawer."]
+      "knownLimitations": [
+        "Avoid for complex forms; use Dialog or Drawer."
+      ]
     },
     {
       "id": "progress",
@@ -1751,6 +1791,48 @@
       ]
     },
     {
+      "id": "property-table",
+      "displayName": "PropertyTable",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "PropertyTable",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-property-table",
+        "status": "current",
+        "evidence": "docs/metadata/native-element-foundations.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/angular-consumer.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/vue-consumer.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "property-table",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Avoid for interactive data-grid behavior such as sorting, filtering, resizing, selection, grouping, or persisted grid state; use UniversalDataGrid instead."
+      ]
+    },
+    {
       "id": "radio",
       "displayName": "Radio",
       "package": "@vyrnforge/ui-components",
@@ -1788,7 +1870,9 @@
         "key": "radio",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for binary settings; use Checkbox or Switch."]
+      "knownLimitations": [
+        "Avoid for binary settings; use Checkbox or Switch."
+      ]
     },
     {
       "id": "radio-group",
@@ -1828,7 +1912,9 @@
         "key": "radio-group",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for long option lists; use Select instead."]
+      "knownLimitations": [
+        "Avoid for long option lists; use Select instead."
+      ]
     },
     {
       "id": "rating",
@@ -1868,7 +1954,9 @@
         "key": "rating",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for continuous bounded ranges; use Slider."]
+      "knownLimitations": [
+        "Avoid for continuous bounded ranges; use Slider."
+      ]
     },
     {
       "id": "refresh-button",
@@ -1908,7 +1996,9 @@
         "key": "refresh-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "search-input",
@@ -1948,7 +2038,9 @@
         "key": "search-input",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for general text entry."]
+      "knownLimitations": [
+        "Avoid for general text entry."
+      ]
     },
     {
       "id": "section",
@@ -2030,7 +2122,9 @@
         "key": "segmented-control",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for large option sets; use Select instead."]
+      "knownLimitations": [
+        "Avoid for large option sets; use Select instead."
+      ]
     },
     {
       "id": "select",
@@ -2070,7 +2164,9 @@
         "key": "select",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for multi-select until MultiSelect exists."]
+      "knownLimitations": [
+        "Avoid for multi-select until MultiSelect exists."
+      ]
     },
     {
       "id": "side-nav",
@@ -2152,7 +2248,9 @@
         "key": "skeleton",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid when a text loading label is clearer."]
+      "knownLimitations": [
+        "Avoid when a text loading label is clearer."
+      ]
     },
     {
       "id": "slider",
@@ -2234,7 +2332,9 @@
         "key": "stack",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for horizontal layouts; use Inline."]
+      "knownLimitations": [
+        "Avoid for horizontal layouts; use Inline."
+      ]
     },
     {
       "id": "status-badge",
@@ -2274,7 +2374,9 @@
         "key": "status-badge",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid when the content is not a status."]
+      "knownLimitations": [
+        "Avoid when the content is not a status."
+      ]
     },
     {
       "id": "switch",
@@ -2398,7 +2500,9 @@
         "key": "text",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for headings; use Heading."]
+      "knownLimitations": [
+        "Avoid for headings; use Heading."
+      ]
     },
     {
       "id": "text-input",
@@ -2438,7 +2542,9 @@
         "key": "text-input",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for long multi-line input; use Textarea."]
+      "knownLimitations": [
+        "Avoid for long multi-line input; use Textarea."
+      ]
     },
     {
       "id": "textarea",
@@ -2478,7 +2584,51 @@
         "key": "textarea",
         "status": "requires-verification"
       },
-      "knownLimitations": ["Avoid for short single-line values."]
+      "knownLimitations": [
+        "Avoid for short single-line values."
+      ]
+    },
+    {
+      "id": "timeline",
+      "displayName": "Timeline",
+      "package": "@vyrnforge/ui-components",
+      "category": "data-display",
+      "maturity": "experimental",
+      "decision": "included",
+      "decisionRationale": "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
+      "react": {
+        "package": "@vyrnforge/ui-components",
+        "export": "Timeline",
+        "status": "current"
+      },
+      "native": {
+        "package": "@vyrnforge/ui-elements",
+        "strategy": "direct-element",
+        "target": "vf-timeline",
+        "status": "current",
+        "evidence": "docs/metadata/native-element-foundations.json"
+      },
+      "angular": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/angular-consumer.json"
+      },
+      "vue": {
+        "status": "verified-consumer",
+        "consumes": "@vyrnforge/ui-elements",
+        "evidence": "docs/metadata/vue-consumer.json"
+      },
+      "documentation": {
+        "path": "docs/api/ui-components-api.md",
+        "playgroundPath": "not-applicable"
+      },
+      "maturityEvidence": {
+        "key": "timeline",
+        "status": "pending"
+      },
+      "knownLimitations": [
+        "Read-only presentation only; persistence, loading, filtering, actor/action schemas, selection, and live-feed behavior remain application-owned."
+      ]
     },
     {
       "id": "toast",
@@ -2560,7 +2710,9 @@
         "key": "toast-action",
         "status": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "toast-provider",
@@ -2600,7 +2752,9 @@
         "key": "toast-provider",
         "status": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "toggle-button",
@@ -2724,7 +2878,9 @@
         "key": "toolbar-button",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for standalone page-level primary actions."]
+      "knownLimitations": [
+        "Avoid for standalone page-level primary actions."
+      ]
     },
     {
       "id": "tooltip",
@@ -2764,7 +2920,9 @@
         "key": "tooltip",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for required instructions."]
+      "knownLimitations": [
+        "Avoid for required instructions."
+      ]
     },
     {
       "id": "top-nav",
@@ -2888,7 +3046,9 @@
         "key": "use-toast",
         "status": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "validation-message",
@@ -3036,28 +3196,7 @@
         "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
       }
     ],
-    "plannedNonPublicComponents": [
-      {
-        "id": "property-table",
-        "displayName": "PropertyTable",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      },
-      {
-        "id": "timeline",
-        "displayName": "Timeline",
-        "package": "@vyrnforge/ui-components",
-        "category": "data-display",
-        "maturity": "planned",
-        "publicExport": false,
-        "decision": "excluded",
-        "reason": "Planned and not exported from the package root; no beta public-contract claim is made."
-      }
-    ],
+    "plannedNonPublicComponents": [],
     "internalNonPublicComponents": [
       {
         "id": "toast-viewport",
