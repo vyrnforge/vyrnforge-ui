@@ -14,6 +14,7 @@ const retired = [
   "apps/docs/src/referenceRouteId.ts",
   "scripts/reference-route-id.test.mjs",
   "apps/docs/src/ReferenceSearchPage.tsx",
+  "examples/basic-playground",
   "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
   "examples/basic-playground/src/components/PropsTable.tsx",
   "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
@@ -66,28 +67,17 @@ test("Docs routes are curated without duplicating generated public facts", () =>
   assert.doesNotMatch(source, /referenceModel\.domains\.flatMap/u);
 });
 
-test("Playground component facts are generated", () => {
-  const routes = read("examples/basic-playground/src/app/routes.ts");
-  assert.match(routes, /referenceComponents/u);
-  assert.match(routes, /getReferenceRecordRoute/u);
-  assert.match(routes, /createGeneratedComponentPage/u);
-  assert.doesNotMatch(routes, /PriorityComponentPages/u);
+test("Docs owns migrated public examples without duplicate Playground wiring", () => {
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
+  const migrated = read("apps/docs/src/examples/MigratedExamplePage.tsx");
+  const executable = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
 
-  const reader = read(
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-  );
-  assert.match(reader, /getReferenceFrameworkComponent/u);
-  assert.match(reader, /Generated API reference/u);
-  assert.match(reader, /canonical\.guidance\.relatedComponents/u);
-  assert.doesNotMatch(reader, /PropsTableRow/u);
-  assert.doesNotMatch(reader, /props\?:/u);
-  assert.doesNotMatch(reader, /relatedComponents\?:/u);
-});
-
-test("Playground keeps verified examples without duplicate catalog wiring", () => {
-  const app = read("examples/basic-playground/src/app/App.tsx");
-  assert.match(app, /executableExamplesCatalogRoute/u);
-  assert.match(app, /executableExampleDetailRoutes/u);
-  assert.doesNotMatch(app, /referenceCatalogRoutes/u);
-  assert.doesNotMatch(app, /referenceDetailRoutes/u);
+  assert.match(routes, /kind: "example"/u);
+  assert.match(routes, /kind: "executable-examples"/u);
+  assert.match(docsPage, /MigratedExamplePage/u);
+  assert.match(docsPage, /ExecutableExamplesPage/u);
+  assert.match(migrated, /vf-docs-example-stage/u);
+  assert.match(executable, /getExecutableExampleRecord/u);
+  assert.doesNotMatch(docsPage, /ReferencePreview/u);
 });
