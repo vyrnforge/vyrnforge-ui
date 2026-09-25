@@ -82,12 +82,7 @@ test("shared runtime requires four framework surfaces and four Reference section
   for (const frameworkId of ["native-html", "react", "angular", "vue"]) {
     assert.match(runtime, new RegExp(`"${frameworkId}"`, "u"));
   }
-  for (const sectionId of [
-    "start",
-    "components",
-    "foundations",
-    "examples",
-  ]) {
+  for (const sectionId of ["start", "components", "foundations", "examples"]) {
     assert.match(runtime, new RegExp(`"${sectionId}"`, "u"));
   }
   assert.match(runtime, /preserveContext\.includes\("framework"\)/u);
