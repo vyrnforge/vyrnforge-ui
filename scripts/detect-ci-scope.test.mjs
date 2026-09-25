@@ -64,13 +64,7 @@ test("package configuration changes include metadata validation", () => {
 test("canonical docs-only changes build docs without package runtime checks", () => {
   const plan = planCiScope(["docs/release/publication-procedure.md"]);
   expectEnabled(plan, ["docs", "docs_only", "integration"]);
-  expectDisabled(plan, [
-    "quality",
-    "packages",
-    "consumer",
-    "full",
-    "security",
-  ]);
+  expectDisabled(plan, ["quality", "packages", "consumer", "full", "security"]);
   assert.deepEqual(plan.affected_packages, []);
 });
 
