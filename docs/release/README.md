@@ -34,7 +34,6 @@ second beta-specific budget manifest.
 | [multi-framework-migration-and-limitations.md](multi-framework-migration-and-limitations.md) | Framework selection, integration boundaries, guarantees, and limitations.            |
 | [release-readiness-checklist.md](release-readiness-checklist.md)                             | Reusable prerelease/stable release readiness checklist.                              |
 | [external-consumer-verification.md](external-consumer-verification.md)                       | Packed package consumer verification.                                                |
-| [beta-package-artifact-verification.md](beta-package-artifact-verification.md)               | Tarball payload and entrypoint verification.                                         |
 | [security-workflow-hardening.md](security-workflow-hardening.md)                             | Release/security workflow boundaries.                                                |
 | [trusted-publishing-provenance.md](trusted-publishing-provenance.md)                         | Trusted publishing, provenance, and external evidence.                               |
 
