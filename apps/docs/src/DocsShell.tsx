@@ -16,7 +16,7 @@ import {
 } from "./docsContext";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
-import { docsLinks, getPlaygroundHref } from "./deploymentLinks";
+import { docsLinks } from "./deploymentLinks";
 import type { DocsRoute } from "./referenceRoutes";
 
 type DocsShellProps = {
@@ -91,12 +91,6 @@ export function DocsShell({
                 size="sm"
                 value={framework.id}
               />
-              <a
-                className="vf-docs-top-link"
-                href={getPlaygroundHref(framework.id)}
-              >
-                Examples
-              </a>
               <a className="vf-docs-top-link" href={docsLinks.repository}>
                 GitHub
               </a>

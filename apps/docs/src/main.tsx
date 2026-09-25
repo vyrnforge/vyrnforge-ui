@@ -6,6 +6,7 @@ import App from "./App";
 import "./styles/docs.css";
 import "./styles/docs-overview.css";
 import "./styles/reference-shell.css";
+import "./styles/examples.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>

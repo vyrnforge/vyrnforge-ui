@@ -6,7 +6,11 @@ import overviewRaw from "../../../docs/README.md?raw";
 import migrationRaw from "../../../docs/release/multi-framework-migration-and-limitations.md?raw";
 
 export type DocsRouteKind =
-  "markdown" | "component-reference" | "package-reference";
+  | "markdown"
+  | "component-reference"
+  | "package-reference"
+  | "unified-example"
+  | "framework-examples";
 
 export type DocsRoute = {
   id: string;
@@ -17,10 +21,11 @@ export type DocsRoute = {
   tags?: string[];
   kind?: DocsRouteKind;
   content?: string;
+  exampleId?: string;
 };
 
 export type PublicDocsSection = {
-  id: "start" | "components" | "foundations" | "guides" | "reference";
+  id: "start" | "components" | "foundations" | "guides" | "data" | "reference";
   label: string;
   routeIds: string[];
 };
@@ -77,8 +82,8 @@ const publicGuides: PublicGuide[] = [
   },
   {
     id: "data-grid",
-    title: "Data Grid",
-    group: "Guides",
+    title: "Data Grid Guide",
+    group: "Data & Grid",
     description:
       "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
     sourcePath: "docs/packages/ui-data-grid.md",
@@ -99,13 +104,23 @@ const publicGuides: PublicGuide[] = [
 
 const generatedRoutes: DocsRoute[] = [
   {
+    id: "framework-examples",
+    title: "Framework Examples",
+    group: "Start",
+    description:
+      "Inspect CI-verified Native HTML, React, Angular, and Vue packed-consumer examples.",
+    sourcePath: "docs/metadata/executable-examples.json",
+    tags: ["examples", "native", "react", "angular", "vue"],
+    kind: "framework-examples",
+  },
+  {
     id: "component-reference",
     title: "Components",
     group: "Components",
     description:
-      "Browse component usage, framework variants, API, accessibility, and styling.",
+      "Browse component usage, framework variants, API, accessibility, styling, and live examples.",
     sourcePath: "docs/generated/consumer-knowledge.json",
-    tags: ["components", "api"],
+    tags: ["components", "api", "examples"],
     kind: "component-reference",
   },
   {
@@ -116,14 +131,48 @@ const generatedRoutes: DocsRoute[] = [
     sourcePath: "docs/metadata/design-tokens.json",
     tags: ["tokens", "design-system"],
   },
+  ...[
+    ["theme-modes", "Theme Modes"],
+    ["density", "Density"],
+    ["css-overrides", "CSS Overrides"],
+  ].map(([id, title]) => ({
+    id,
+    title,
+    group: "Foundations",
+    description: `Interactive ${title.toLowerCase()} examples rendered directly inside Docs.`,
+    sourcePath: `apps/docs/src/examples/foundations/${title.split(" ").join("")}Example.tsx`,
+    tags: ["foundations", "examples"],
+    kind: "unified-example" as const,
+    exampleId: id,
+  })),
   {
     id: "pattern-reference",
     title: "Patterns",
     group: "Guides",
-    description: "Browse reusable VyrnForge composition patterns.",
+    description:
+      "Browse reusable VyrnForge composition patterns with live Docs examples.",
     sourcePath: "docs/metadata/patterns.json",
-    tags: ["patterns", "composition"],
+    tags: ["patterns", "composition", "examples"],
   },
+  ...[
+    ["grid-basic", "Basic Grid"],
+    ["grid-columns", "Columns"],
+    ["grid-filtering", "Filtering"],
+    ["grid-grouping", "Grouping"],
+    ["grid-resizing", "Resizing"],
+    ["grid-selection", "Selection"],
+    ["grid-states", "States"],
+    ["grid-themes", "Themes"],
+  ].map(([id, title]) => ({
+    id,
+    title,
+    group: "Data & Grid",
+    description: `Interactive ${title.toLowerCase()} example for UniversalDataGrid.`,
+    sourcePath: "apps/docs/src/examples/data-grid/",
+    tags: ["data", "grid", "examples"],
+    kind: "unified-example" as const,
+    exampleId: id,
+  })),
   {
     id: "package-reference",
     title: "Packages",
@@ -140,7 +189,7 @@ export const publicDocsSections: PublicDocsSection[] = [
   {
     id: "start",
     label: "Start",
-    routeIds: ["overview", "getting-started"],
+    routeIds: ["overview", "getting-started", "framework-examples"],
   },
   {
     id: "components",
@@ -150,25 +199,44 @@ export const publicDocsSections: PublicDocsSection[] = [
   {
     id: "foundations",
     label: "Foundations",
-    routeIds: ["theming", "token-reference", "accessibility"],
+    routeIds: [
+      "theming",
+      "token-reference",
+      "theme-modes",
+      "density",
+      "css-overrides",
+      "accessibility",
+    ],
   },
   {
     id: "guides",
-    label: "Guides",
-    routeIds: ["pattern-reference", "data-grid"],
+    label: "Guides & Patterns",
+    routeIds: ["pattern-reference"],
+  },
+  {
+    id: "data",
+    label: "Data & Grid",
+    routeIds: [
+      "data-grid",
+      "grid-basic",
+      "grid-columns",
+      "grid-filtering",
+      "grid-grouping",
+      "grid-resizing",
+      "grid-selection",
+      "grid-states",
+      "grid-themes",
+    ],
   },
   {
     id: "reference",
-    label: "Reference",
+    label: "API & Releases",
     routeIds: ["package-reference", "releases"],
   },
 ];
 
 function guideRoute(guide: PublicGuide): DocsRoute {
-  return {
-    ...guide,
-    kind: "markdown",
-  };
+  return { ...guide, kind: "markdown" };
 }
 
 function uniqueRoutes(routes: DocsRoute[]) {

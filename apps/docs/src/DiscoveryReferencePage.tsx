@@ -1,6 +1,7 @@
 import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import type { ReferenceRecordSelection } from "./App";
+import { DocumentationPage } from "./DocumentationPage";
 import { referenceModel } from "./docsContext";
 import {
   designTokenCategories,
@@ -10,6 +11,7 @@ import {
   patternDocumentation,
   patternReferenceRecords,
 } from "./discoveryData";
+import { getPatternExample } from "./examples/PatternExamples";
 
 function recordHref(domain: string, id: string) {
   return `#${getReferenceRecordRoute(referenceModel, domain, id)}`;
@@ -40,6 +42,13 @@ function TokenReference({ id }: { id?: string | null }) {
               <div className="vf-docs-discovery-row" key={token.name}>
                 <CodeText>{token.name}</CodeText>
                 <Text size="sm">{token.purpose}</Text>
+                {token.themeScoped ? (
+                  <span
+                    aria-hidden="true"
+                    className="vf-docs-token-swatch"
+                    style={{ background: `var(${token.name})` }}
+                  />
+                ) : null}
                 {token.themeScoped ? (
                   <Badge size="sm" tone="subtle" variant="info">
                     Theme scoped
@@ -87,51 +96,75 @@ function PatternReference({ id }: { id?: string | null }) {
   if (id) {
     const pattern = getPatternReferenceRecord(id);
     if (!pattern) return <MissingRecord label="Pattern" id={id} />;
+    const example = getPatternExample(pattern.id);
 
     return (
-      <div className="vf-docs-reference">
-        <ReferenceBack href="#/pattern-reference" label="Patterns" />
-        <Card className="vf-docs-reference__section" padding="lg">
-          <Heading level={3} size="md">
-            {pattern.displayName}
-          </Heading>
-          <Text>{pattern.purpose}</Text>
-          <div className="vf-docs-contract-details">
-            <div className="vf-docs-contract-field">
-              <strong>Use when</strong>
-              <span>{pattern.useWhen}</span>
-            </div>
-            <div className="vf-docs-contract-field">
-              <strong>Avoid when</strong>
-              <span>{pattern.avoidWhen}</span>
-            </div>
-            <div className="vf-docs-contract-field">
-              <strong>Category</strong>
-              <span>{pattern.category}</span>
-            </div>
-            <div className="vf-docs-contract-field">
-              <strong>Framework neutral</strong>
-              <span>{pattern.frameworkNeutral ? "Yes" : "No"}</span>
-            </div>
-          </div>
-        </Card>
-        <Card className="vf-docs-reference__section" padding="lg">
-          <Heading level={3} size="md">
-            Reusable VyrnForge building blocks
-          </Heading>
-          <div className="vf-docs-discovery-links">
-            {pattern.components.map((componentId) => (
-              <a href={componentHref(componentId)} key={componentId}>
-                {componentId}
-              </a>
-            ))}
-          </div>
-          <Text size="sm" tone="muted">
-            Curated example route: {pattern.playgroundRoute} · example
-            framework: {pattern.exampleFramework}
-          </Text>
-        </Card>
-      </div>
+      <DocumentationPage
+        description={pattern.purpose}
+        eyebrow="Pattern"
+        status={
+          <Badge tone="subtle" variant={example ? "success" : "neutral"}>
+            {example ? "Live example" : "Guidance"}
+          </Badge>
+        }
+        title={pattern.displayName}
+        sections={[
+          {
+            id: "guidance",
+            title: "Usage guidance",
+            content: (
+              <div className="vf-docs-contract-details">
+                <div className="vf-docs-contract-field">
+                  <strong>Use when</strong>
+                  <span>{pattern.useWhen}</span>
+                </div>
+                <div className="vf-docs-contract-field">
+                  <strong>Avoid when</strong>
+                  <span>{pattern.avoidWhen}</span>
+                </div>
+                <div className="vf-docs-contract-field">
+                  <strong>Category</strong>
+                  <span>{pattern.category}</span>
+                </div>
+                <div className="vf-docs-contract-field">
+                  <strong>Framework neutral</strong>
+                  <span>{pattern.frameworkNeutral ? "Yes" : "No"}</span>
+                </div>
+              </div>
+            ),
+          },
+          ...(example
+            ? [
+                {
+                  id: "example",
+                  title: "Interactive example",
+                  description:
+                    "This example is rendered directly inside the Docs application from the migrated Playground content.",
+                  content: example,
+                },
+              ]
+            : []),
+          {
+            id: "building-blocks",
+            title: "Reusable VyrnForge building blocks",
+            content: (
+              <>
+                <div className="vf-docs-discovery-links">
+                  {pattern.components.map((componentId) => (
+                    <a href={componentHref(componentId)} key={componentId}>
+                      {componentId}
+                    </a>
+                  ))}
+                </div>
+                <Text size="sm" tone="muted">
+                  Canonical pattern metadata remains the source of truth;
+                  example state is local to this documentation example.
+                </Text>
+              </>
+            ),
+          },
+        ]}
+      />
     );
   }
 

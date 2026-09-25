@@ -168,3 +168,29 @@
     min-height: 24rem;
   }
 }
+
+.vf-docs-example-canvas {
+  display: grid;
+  gap: var(--vf-space-4, 16px);
+  margin-top: var(--vf-space-4, 16px);
+}
+
+.vf-docs-example-live-stage {
+  display: grid;
+  min-height: 14rem;
+  place-items: center;
+  padding: var(--vf-space-6, 24px);
+}
+
+.vf-docs-preview__stage {
+  display: grid;
+  align-items: stretch;
+}
+
+.vf-docs-token-swatch {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--vf-border, #e2e8f0);
+  border-radius: var(--vf-radius-md, 6px);
+}

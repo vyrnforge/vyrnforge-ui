@@ -3,11 +3,16 @@ import type { ReferenceRecordSelection } from "./App";
 import type { DocsFrameworkId } from "./docsContext";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
+import { FrameworkExamplesPage } from "./FrameworkExamplesPage";
 import { MarkdownView } from "./MarkdownView";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
 import { ReferencePreview } from "./ReferencePreview";
 import type { DocsRoute } from "./referenceRoutes";
+import {
+  UnifiedExamplePage,
+  type UnifiedExampleId,
+} from "./UnifiedExamplePage";
 
 type DocsPageProps = {
   route: DocsRoute;
@@ -32,6 +37,22 @@ export function DocsPage({
           onFrameworkChange={onFrameworkChange}
           onRouteChange={onRouteChange}
         />
+      </main>
+    );
+  }
+
+  if (route.kind === "unified-example" && route.exampleId) {
+    return (
+      <main className="vf-docs-page">
+        <UnifiedExamplePage exampleId={route.exampleId as UnifiedExampleId} />
+      </main>
+    );
+  }
+
+  if (route.kind === "framework-examples") {
+    return (
+      <main className="vf-docs-page">
+        <FrameworkExamplesPage frameworkId={frameworkId} />
       </main>
     );
   }

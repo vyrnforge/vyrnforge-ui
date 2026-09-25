@@ -508,6 +508,7 @@ function ComponentOutline({
     ["component-usage", "Usage"],
     ["component-framework-api", "API"],
     ["component-accessibility-styling", "Accessibility & styling"],
+    ["component-source-evidence", "Source & evidence"],
     ...(showLimitations
       ? [["component-limitations", "Limitations and related patterns"]]
       : []),
@@ -695,6 +696,27 @@ function ComponentDetail({
           <MemberList
             label="CSS variables"
             values={component.styling.variables}
+          />
+        </Card>
+
+        <Card
+          className="vf-docs-reference__section"
+          id="component-source-evidence"
+          padding="lg"
+        >
+          <Heading level={3} size="md">
+            Source & evidence
+          </Heading>
+          <MemberList
+            label="Documentation source"
+            values={[component.docsPath ?? "Generated consumer knowledge"]}
+          />
+          <MemberList label="Package" values={[component.package]} />
+          <MemberList
+            label="Framework surfaces"
+            values={Object.entries(component.frameworks).map(
+              ([framework, usage]) => `${framework}: ${usage.status}`,
+            )}
           />
         </Card>
 

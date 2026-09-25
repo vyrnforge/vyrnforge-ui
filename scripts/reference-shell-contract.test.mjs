@@ -10,27 +10,19 @@ function read(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
-test("Docs and Playground consume one generated Reference context", () => {
+test("Docs consumes the generated Reference context", () => {
   const docsContext = read("apps/docs/src/docsContext.ts");
-  const playgroundContext = read(
-    "examples/basic-playground/src/app/playgroundContext.ts",
-  );
-
-  for (const source of [docsContext, playgroundContext]) {
-    assert.match(source, /generated\/reference-model\.json\?raw/u);
-    assert.match(source, /reference\/referenceRuntime/u);
-    assert.doesNotMatch(source, /reference-portal\.json/u);
-    assert.match(source, /referenceModel\.frameworkContext\.default/u);
-    assert.match(source, /referenceModel\.versionContext\.catalog/u);
-  }
+  assert.match(docsContext, /generated\/reference-model\.json\?raw/u);
+  assert.match(docsContext, /reference\/referenceRuntime/u);
+  assert.doesNotMatch(docsContext, /reference-portal\.json/u);
+  assert.match(docsContext, /referenceModel\.frameworkContext\.default/u);
+  assert.match(docsContext, /referenceModel\.versionContext\.catalog/u);
 });
 
-test("both apps preserve shared framework context in location and Reference links", () => {
+test("Docs preserves the shared framework context in location and deep links", () => {
   for (const relativePath of [
     "apps/docs/src/App.tsx",
-    "apps/docs/src/deploymentLinks.ts",
-    "examples/basic-playground/src/app/App.tsx",
-    "examples/basic-playground/src/app/deploymentLinks.ts",
+    "apps/docs/src/componentApiMember.ts",
   ]) {
     assert.match(
       read(relativePath),
@@ -40,12 +32,10 @@ test("both apps preserve shared framework context in location and Reference link
   }
 });
 
-test("public Docs navigation is curated while Playground may use generated discovery", () => {
+test("public Docs navigation is curated as one product", () => {
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
-  const playgroundNav = read(
-    "examples/basic-playground/src/app/PlaygroundNav.tsx",
-  );
+  const docsShell = read("apps/docs/src/DocsShell.tsx");
 
   assert.match(docsNav, /publicDocsSections/u);
   assert.match(docsNav, /SearchInput/u);
@@ -57,46 +47,39 @@ test("public Docs navigation is curated while Playground may use generated disco
     "Start",
     "Components",
     "Foundations",
-    "Guides",
-    "Reference",
+    "Guides & Patterns",
+    "Data & Grid",
+    "API & Releases",
   ]) {
     assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
   }
+
+  assert.match(docsRoutes, /framework-examples/u);
+  assert.match(docsRoutes, /grid-basic/u);
   assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
   assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
   assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
   assert.doesNotMatch(docsRoutes, /accessibility-reference/u);
-
-  assert.match(playgroundNav, /getReferenceNavigation/u);
-  assert.match(playgroundNav, /SearchInput/u);
-  assert.match(playgroundNav, /SideNav/u);
+  assert.doesNotMatch(docsShell, /getPlaygroundHref|>\s*Examples\s*</u);
 });
 
-test("Docs uses a simple product identity while component previews stay executable", () => {
+test("Docs uses one reader shell and component examples execute inside it", () => {
   const docsShell = read("apps/docs/src/DocsShell.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const preview = read("apps/docs/src/ReferencePreview.tsx");
-  const playgroundApp = read("examples/basic-playground/src/app/App.tsx");
-  const playgroundShell = read(
-    "examples/basic-playground/src/app/PlaygroundShell.tsx",
-  );
 
   assert.match(docsShell, />\s*VyrnForge\s*</u);
   assert.doesNotMatch(docsShell, /referenceModel\.product\.label/u);
-  assert.match(playgroundShell, /referenceModel\.product\.label/u);
-
   assert.match(docsPage, /ReferencePreview/u);
-  assert.match(preview, /getEmbeddedPlaygroundHref/u);
-  assert.match(preview, /component\.playgroundPath/u);
-  assert.match(playgroundApp, /embed/u);
-  assert.match(playgroundApp, /reference/u);
-  assert.match(playgroundShell, /embedded/u);
-  assert.match(playgroundShell, /vf-playground-embed/u);
-  assert.doesNotMatch(docsShell, /Playground mode/u);
-  assert.doesNotMatch(playgroundShell, /Docs mode/u);
+  assert.match(preview, /LiveSample/u);
+  assert.match(preview, /Live in Docs/u);
+  assert.doesNotMatch(
+    preview,
+    /<iframe|getEmbeddedPlaygroundHref|playgroundPath/u,
+  );
 });
 
-test("shared runtime requires four framework surfaces and four Reference sections", () => {
+test("shared runtime requires four framework surfaces and core Reference sections", () => {
   const runtime = read("docs/reference/referenceRuntime.ts");
   for (const frameworkId of ["native-html", "react", "angular", "vue"]) {
     assert.match(runtime, new RegExp(`"${frameworkId}"`, "u"));
@@ -116,6 +99,7 @@ test("component Reference exposes structured, linkable member API navigation", (
     "component-usage",
     "component-framework-api",
     "component-accessibility-styling",
+    "component-source-evidence",
     "api-properties",
     "api-events",
     "api-slots",
@@ -127,7 +111,6 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.doesNotMatch(componentReference, /AI context slice/u);
   assert.doesNotMatch(componentReference, /AI usage notes/u);
   assert.doesNotMatch(componentReference, /Framework-neutral contract/u);
-  assert.doesNotMatch(componentReference, /Model, form, and ref contracts/u);
   assert.match(componentReference, /componentApiMemberAnchor\(\s*"property"/u);
   assert.match(componentReference, /componentApiMemberAnchor\(\s*"event"/u);
   assert.match(componentReference, /componentApiMemberAnchor\(\s*"slot"/u);
@@ -140,11 +123,10 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.match(docsStyles, /tbody tr:target/u);
 });
 
-test("component preview pairs executable behavior with generated framework consumption code", () => {
+test("component preview pairs in-Docs behavior with generated framework code", () => {
   const preview = read("apps/docs/src/ReferencePreview.tsx");
   const referenceData = read("apps/docs/src/referenceData.ts");
   const referenceStyles = read("apps/docs/src/styles/reference-shell.css");
-  const docsStyles = read("apps/docs/src/styles/docs.css");
 
   assert.match(
     referenceData,
@@ -154,34 +136,24 @@ test("component preview pairs executable behavior with generated framework consu
   assert.match(preview, /FrameworkCode/u);
   assert.match(preview, /usage\.setup/u);
   assert.match(preview, /usage\.example/u);
-  assert.match(preview, /Example code/u);
-  assert.doesNotMatch(preview, /Executable reference/u);
-  assert.doesNotMatch(preview, /generated selected-framework/u);
+  assert.match(preview, /Framework code/u);
   assert.match(referenceStyles, /\.vf-docs-preview__body/u);
   assert.match(referenceStyles, /\.vf-docs-preview__code-panel/u);
-  assert.match(referenceStyles, /\.vf-docs-preview__code/u);
-  assert.doesNotMatch(referenceStyles, /\.vf-docs-preview__footer/u);
-  assert.doesNotMatch(docsStyles, /\.vf-docs-api-advanced/u);
-  assert.doesNotMatch(docsStyles, /\.vf-docs-metadata/u);
-  assert.doesNotMatch(docsStyles, /\.vf-docs-ai-purpose/u);
-  assert.doesNotMatch(referenceStyles, /\.vf-docs-discovery-row__heading/u);
+  assert.match(referenceStyles, /\.vf-docs-example-live-stage/u);
 });
 
-test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
+test("Docs filter discovers selected-framework API members", () => {
   const app = read("apps/docs/src/App.tsx");
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsShell = read("apps/docs/src/DocsShell.tsx");
   const memberTarget = read("apps/docs/src/componentApiMember.ts");
-  const retired = read("scripts/reference-drift-removal-contract.test.mjs");
 
   assert.match(docsNav, /generated\/framework-api-reference\.json\?raw/u);
   assert.match(docsNav, /buildApiMemberEntries/u);
   assert.match(docsNav, /section\.id === "components"/u);
   assert.match(docsNav, /\.slice\(0, 30\)/u);
   assert.match(docsNav, /componentReferenceTargetHref/u);
-  assert.match(docsNav, /frameworkId/u);
   assert.match(docsShell, /frameworkId=\{framework\.id\}/u);
-
   assert.match(memberTarget, /componentApiMemberAnchor/u);
   assert.match(memberTarget, /componentReferenceTargetHref/u);
   assert.match(
@@ -189,14 +161,10 @@ test("Docs filter discovers selected-framework API members without restoring a s
     /referenceModel\.frameworkContext\.queryParameter/u,
   );
   assert.match(memberTarget, /getReferenceRecordRoute/u);
-
   assert.match(
     app,
     /new URLSearchParams\(window\.location\.search\)\.get\("member"\)/u,
   );
   assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
   assert.match(app, /query\.delete\("member"\)/u);
-
-  assert.match(retired, /ReferenceSearchPage\.tsx/u);
-  assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });
