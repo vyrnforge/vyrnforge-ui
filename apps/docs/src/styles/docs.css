@@ -556,3 +556,11 @@ body {
   color: var(--vf-text-muted, #64748b);
   overflow-wrap: anywhere;
 }
+
+.vf-docs-example-stage {
+  display: grid;
+  gap: var(--vf-space-4, 16px);
+  min-width: 0;
+  margin-top: var(--vf-space-4, 16px);
+}
+.vf-docs-example-stage > * { min-width: 0; }
