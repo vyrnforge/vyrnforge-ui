@@ -10,16 +10,21 @@ function read(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
-test("Docs consumes the generated Reference context as the single public reader", () => {
+test(
+  "Docs consumes the generated Reference context as the single public reader",
+  () => {
   const docsContext = read("apps/docs/src/docsContext.ts");
   assert.match(docsContext, /generated\/reference-model\.json\?raw/u);
   assert.match(docsContext, /reference\/referenceRuntime/u);
   assert.doesNotMatch(docsContext, /reference-portal\.json/u);
   assert.match(docsContext, /referenceModel\.frameworkContext\.default/u);
   assert.match(docsContext, /referenceModel\.versionContext\.catalog/u);
-});
+  },
+);
 
-test("Docs preserves shared framework context in location and deep links", () => {
+test(
+  "Docs preserves shared framework context in location and deep links",
+  () => {
   for (const relativePath of [
     "apps/docs/src/App.tsx",
     "apps/docs/src/componentApiMember.ts",
@@ -30,9 +35,12 @@ test("Docs preserves shared framework context in location and deep links", () =>
       `${relativePath} must use the shared framework query contract`,
     );
   }
-});
+  },
+);
 
-test("public Docs navigation owns the complete reader-facing information architecture", () => {
+test(
+  "public Docs navigation owns the complete reader-facing information architecture",
+  () => {
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
   assert.match(docsNav, /publicDocsSections/u);
@@ -56,14 +64,20 @@ test("public Docs navigation owns the complete reader-facing information archite
   assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
   assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
   assert.doesNotMatch(docsRoutes, /accessibility-reference/u);
+  },
+);
 
-});
-
-test("Docs is the single reader-facing product and renders examples in-process", () => {
+test(
+  "Docs is the single reader-facing product and renders examples in-process",
+  () => {
   const docsShell = read("apps/docs/src/DocsShell.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
-  const migratedExamples = read("apps/docs/src/examples/MigratedExamplePage.tsx");
-  const executableExamples = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
+  const migratedExamples = read(
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
+  );
+  const executableExamples = read(
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
+  );
 
   assert.match(docsShell, />\s*VyrnForge\s*</u);
   assert.doesNotMatch(docsShell, /referenceModel\.product\.label/u);
@@ -72,9 +86,12 @@ test("Docs is the single reader-facing product and renders examples in-process",
   assert.doesNotMatch(docsPage, /ReferencePreview/u);
   assert.match(migratedExamples, /vf-docs-example-stage/u);
   assert.match(executableExamples, /getExecutableExampleRecord/u);
-});
+  },
+);
 
-test("shared runtime requires four framework surfaces and four Reference sections", () => {
+test(
+  "shared runtime requires four framework surfaces and four Reference sections",
+  () => {
   const runtime = read("docs/reference/referenceRuntime.ts");
   for (const frameworkId of ["native-html", "react", "angular", "vue"]) {
     assert.match(runtime, new RegExp(`"${frameworkId}"`, "u"));
@@ -83,9 +100,12 @@ test("shared runtime requires four framework surfaces and four Reference section
     assert.match(runtime, new RegExp(`"${sectionId}"`, "u"));
   }
   assert.match(runtime, /preserveContext\.includes\("framework"\)/u);
-});
+  },
+);
 
-test("component Reference exposes structured, linkable member API navigation", () => {
+test(
+  "component Reference exposes structured, linkable member API navigation",
+  () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const docsStyles = read("apps/docs/src/styles/docs.css");
 
@@ -116,9 +136,12 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.match(docsStyles, /\.vf-docs-reference-outline/u);
   assert.match(docsStyles, /\.vf-docs-api-table/u);
   assert.match(docsStyles, /tbody tr:target/u);
-});
+  },
+);
 
-test("component pages keep generated framework API while examples are native Docs routes", () => {
+test(
+  "component pages keep generated framework API while examples are native Docs routes",
+  () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const routes = read("apps/docs/src/referenceRoutes.ts");
@@ -131,9 +154,12 @@ test("component pages keep generated framework API while examples are native Doc
   assert.match(routes, /kind: "executable-examples"/u);
   assert.match(docsStyles, /\.vf-docs-example-stage/u);
   assert.doesNotMatch(docsStyles, /\.vf-docs-api-advanced/u);
-});
+  },
+);
 
-test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
+test(
+  "Docs filter discovers selected-framework API members without restoring a standalone search page",
+  () => {
   const app = read("apps/docs/src/App.tsx");
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsShell = read("apps/docs/src/DocsShell.tsx");
@@ -165,4 +191,5 @@ test("Docs filter discovers selected-framework API members without restoring a s
 
   assert.match(retired, /ReferenceSearchPage\.tsx/u);
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
-});
+  },
+);
