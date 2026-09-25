@@ -35,10 +35,11 @@ function fixture(mutator, callback) {
   }
 }
 
-test("accepts the generated consumer knowledge and unified Docs surface", () =>
-  fixture(null, (failures) => assert.deepEqual(failures, [])));
+test("accepts the generated consumer knowledge and unified Docs surface", () => {
+  fixture(null, (failures) => assert.deepEqual(failures, []));
+});
 
-test("rejects stale generated consumer knowledge", () =>
+test("rejects stale generated consumer knowledge", () => {
   fixture(
     (root) => {
       const file = path.join(root, "docs/generated/consumer-knowledge.json");
@@ -52,9 +53,10 @@ test("rejects stale generated consumer knowledge", () =>
           failure.includes("consumer knowledge is stale"),
         ),
       ),
-  ));
+  );
+});
 
-test("rejects a missing component context slice", () =>
+test("rejects a missing component context slice", () => {
   fixture(
     (root) =>
       unlinkSync(
@@ -66,9 +68,10 @@ test("rejects a missing component context slice", () =>
           failure.includes("button AI component context is missing"),
         ),
       ),
-  ));
+  );
+});
 
-test("rejects generated Angular status drift", () =>
+test("rejects generated Angular status drift", () => {
   fixture(
     (root) => {
       const file = path.join(root, "docs/generated/component-reference.json");
@@ -86,9 +89,10 @@ test("rejects generated Angular status drift", () =>
           failure.includes("component reference is stale"),
         ),
       ),
-  ));
+  );
+});
 
-test("rejects Docs component links that drift from generated detail paths", () =>
+test("rejects Docs component links that drift from generated detail paths", () => {
   fixture(
     (root) => {
       const file = path.join(root, "apps/docs/src/ComponentReferencePage.tsx");
@@ -106,4 +110,5 @@ test("rejects Docs component links that drift from generated detail paths", () =
           failure.includes("generated component route composition is missing"),
         ),
       ),
-  ));
+  );
+});
