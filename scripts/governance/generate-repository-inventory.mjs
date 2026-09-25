@@ -144,7 +144,7 @@ const outputLines = [
       ],
       ["CI/CD architecture", "`docs/engineering/ci-cd-architecture.md`"],
       ["Documentation system", "`docs/engineering/documentation-system.md`"],
-      ["Docs application route registry", "`apps/docs/src/docsRegistry.ts`"],
+      ["Docs application route registry", "`apps/docs/src/referenceRoutes.ts`"],
       ["AI operational rules", "`AGENTS.md`"],
       ["Generated AI consumer context", "`docs/generated/ai-context/`"],
     ],
