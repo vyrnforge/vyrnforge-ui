@@ -12,12 +12,8 @@ import { SelectionPage } from "./pages/data-grid/SelectionPage";
 import { StressGridPage } from "./pages/data-grid/StressGridPage";
 import { ThemesGridPage } from "./pages/data-grid/ThemesGridPage";
 import { AdminShellPage } from "./pages/patterns/AdminShellPage";
-import {
-  AssignmentPatternsPage,
-} from "./pages/patterns/AssignmentPatternsPage";
-import {
-  CustomerPortalShellPage,
-} from "./pages/patterns/CustomerPortalShellPage";
+import { AssignmentPatternsPage } from "./pages/patterns/AssignmentPatternsPage";
+import { CustomerPortalShellPage } from "./pages/patterns/CustomerPortalShellPage";
 import { DetailPage } from "./pages/patterns/DetailPage";
 import { EmptyErrorLoadingPage } from "./pages/patterns/EmptyErrorLoadingPage";
 import { FilterFormPage } from "./pages/patterns/FilterFormPage";
@@ -53,9 +49,7 @@ export function MigratedExamplePage({ exampleId }: { exampleId: string }) {
   const Example = examples[exampleId as keyof typeof examples];
 
   if (!Example) {
-    return (
-      <Text tone="muted">This documentation example is unavailable.</Text>
-    );
+    return <Text tone="muted">This documentation example is unavailable.</Text>;
   }
 
   return (
