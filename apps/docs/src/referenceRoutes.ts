@@ -102,7 +102,8 @@ const docs: DocsRoute[] = [
     id: "theme-modes",
     title: "Theme Modes",
     group: "Foundations",
-    description: "Interactive light, dark, enterprise, and system theme behavior.",
+    description:
+      "Interactive light, dark, enterprise, and system theme behavior.",
     sourcePath: "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
     kind: "example",
     exampleId: "theme-modes",
@@ -111,7 +112,8 @@ const docs: DocsRoute[] = [
     id: "density",
     title: "Density",
     group: "Foundations",
-    description: "Interactive compact, standard, and comfortable density examples.",
+    description:
+      "Interactive compact, standard, and comfortable density examples.",
     sourcePath: "apps/docs/src/examples/pages/core/DensityPage.tsx",
     kind: "example",
     exampleId: "density",
@@ -146,15 +148,27 @@ const docs: DocsRoute[] = [
     tags: ["patterns", "composition"],
   },
   ...[
-    ["pattern-resource-list", "Resource List", "Compact resource lists with metadata and actions."],
+    [
+      "pattern-resource-list",
+      "Resource List",
+      "Compact resource lists with metadata and actions.",
+    ],
     ["pattern-detail", "Detail Page", "Entity detail composition."],
     ["pattern-settings", "Settings", "Sectioned settings composition."],
     ["pattern-form", "Form", "General application form composition."],
     ["pattern-filter-form", "Filter Form", "Operational filter composition."],
     ["pattern-assignments", "Assignment Patterns", "Bounded assignment flows."],
-    ["pattern-feedback-states", "Empty, Error & Loading", "Route-level feedback states."],
+    [
+      "pattern-feedback-states",
+      "Empty, Error & Loading",
+      "Route-level feedback states.",
+    ],
     ["pattern-admin-shell", "Admin Shell", "Admin workspace composition."],
-    ["pattern-customer-portal", "Customer Portal Shell", "Customer portal composition."],
+    [
+      "pattern-customer-portal",
+      "Customer Portal Shell",
+      "Customer portal composition.",
+    ],
   ].map(([id, title, description]) => ({
     id,
     title,
@@ -176,15 +190,35 @@ const docs: DocsRoute[] = [
     kind: "markdown",
   },
   ...[
-    ["grid-basic", "Basic Grid", "Rows, columns, search, sort, and pagination."],
-    ["grid-columns", "Column Management", "Visibility, order, density, and reset behavior."],
+    [
+      "grid-basic",
+      "Basic Grid",
+      "Rows, columns, search, sort, and pagination.",
+    ],
+    [
+      "grid-columns",
+      "Column Management",
+      "Visibility, order, density, and reset behavior.",
+    ],
     ["grid-filtering", "Filtering", "Search and filter state examples."],
-    ["grid-selection", "Selection", "Selectable rows, disabled rows, and bulk actions."],
+    [
+      "grid-selection",
+      "Selection",
+      "Selectable rows, disabled rows, and bulk actions.",
+    ],
     ["grid-grouping", "Grouping", "Client-side grouping examples."],
-    ["grid-resizing", "Column Resizing", "Resizable columns and horizontal overflow."],
+    [
+      "grid-resizing",
+      "Column Resizing",
+      "Resizable columns and horizontal overflow.",
+    ],
     ["grid-themes", "Grid Themes", "Theme and shared-token alignment."],
     ["grid-states", "Grid States", "Empty, error, and loading states."],
-    ["grid-stress", "Stress Grid", "Many rows and columns without virtualization."],
+    [
+      "grid-stress",
+      "Stress Grid",
+      "Many rows and columns without virtualization.",
+    ],
   ].map(([id, title, description]) => ({
     id,
     title,
@@ -243,12 +277,16 @@ export const publicDocsSections: PublicDocsSection[] = [
   {
     id: "patterns",
     label: "Patterns",
-    routeIds: docs.filter((route) => route.group === "Patterns").map((route) => route.id),
+    routeIds: docs
+      .filter((route) => route.group === "Patterns")
+      .map((route) => route.id),
   },
   {
     id: "data-grid",
     label: "Data & Grid",
-    routeIds: docs.filter((route) => route.group === "Data & Grid").map((route) => route.id),
+    routeIds: docs
+      .filter((route) => route.group === "Data & Grid")
+      .map((route) => route.id),
   },
   {
     id: "api",
