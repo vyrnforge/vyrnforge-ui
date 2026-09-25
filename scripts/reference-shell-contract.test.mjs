@@ -96,7 +96,12 @@ test(
     for (const frameworkId of ["native-html", "react", "angular", "vue"]) {
       assert.match(runtime, new RegExp(`"${frameworkId}"`, "u"));
     }
-    for (const sectionId of ["start", "components", "foundations", "examples"]) {
+    for (const sectionId of [
+      "start",
+      "components",
+      "foundations",
+      "examples",
+    ]) {
       assert.match(runtime, new RegExp(`"${sectionId}"`, "u"));
     }
     assert.match(runtime, /preserveContext\.includes\("framework"\)/u);
@@ -126,7 +131,10 @@ test(
     assert.doesNotMatch(componentReference, /AI usage notes/u);
     assert.doesNotMatch(componentReference, /Framework-neutral contract/u);
     assert.doesNotMatch(componentReference, /Model, form, and ref contracts/u);
-    assert.match(componentReference, /componentApiMemberAnchor\(\s*"property"/u);
+    assert.match(
+      componentReference,
+      /componentApiMemberAnchor\(\s*"property"/u,
+    );
     assert.match(componentReference, /componentApiMemberAnchor\(\s*"event"/u);
     assert.match(componentReference, /componentApiMemberAnchor\(\s*"slot"/u);
     assert.match(componentReference, /componentApiMemberAnchor\(\s*"method"/u);
