@@ -40,11 +40,15 @@ test("unified Docs exposes foundations, framework examples, patterns, and grid e
 
 test("stress and quality harnesses are not migrated into public Docs", () => {
   assert.equal(
-    existsSync(path.join(root, "apps/docs/src/examples/patterns/OverlayStressPage.tsx")),
+    existsSync(
+      path.join(root, "apps/docs/src/examples/patterns/OverlayStressPage.tsx"),
+    ),
     false,
   );
   assert.equal(
-    existsSync(path.join(root, "apps/docs/src/examples/quality/ComponentMatrixPage.tsx")),
+    existsSync(
+      path.join(root, "apps/docs/src/examples/quality/ComponentMatrixPage.tsx"),
+    ),
     false,
   );
 });

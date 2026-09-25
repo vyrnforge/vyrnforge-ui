@@ -22,7 +22,7 @@
     "fixtures:test:prepared": "npm run test --workspace @vyrnforge/ui-regression-fixtures",
     "fixtures:verify": "npm run build:packages && npm run fixtures:test:prepared && npm run fixtures:build:prepared",
     "format": "prettier --write .",
-    "format:check": "prettier --write . && git diff -- apps/docs/src/DiscoveryReferencePage.tsx apps/docs/src/DocumentationPage.tsx apps/docs/src/FrameworkExamplesPage.tsx apps/docs/src/ReferencePreview.tsx apps/docs/src/referenceRoutes.ts apps/docs/src/UnifiedExamplePage.tsx scripts/reference-drift-removal-contract.test.mjs scripts/reference-shell-contract.test.mjs scripts/unified-docs-contract.test.mjs && exit 1",
+    "format:check": "prettier --check .",
     "inventory:repository": "node scripts/governance/generate-repository-inventory.mjs",
     "check": "npm run format:check && npm run lint && npm run lint:css && npm run verify:canonical-contracts && npm run verify:documentation-current && npm run verify:metadata && npm run verify:design-tokens && npm run verify:token-adoption && npm run verify:visual-regression && npm run verify:component-maturity && npm run verify:maturity-closure && npm run verify:assistive-technology && npm run verify:repository-inventory && npm run verify:package-boundaries && npm run verify:workflows && npm run verify:templates && npm run verify:validation-model && npm run typecheck && npm run verify:generated-framework-artifacts",
     "ci": "npm run check && npm run test:contracts && npm run test:coverage && npm run build:packages && npm run fixtures:test:prepared && npm run fixtures:build:prepared && npm run test:browser && npm run verify:packages && npm run verify:consumer && npm run verify:consumer-foundations:runtime && npm run build:applications",

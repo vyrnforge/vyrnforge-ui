@@ -73,7 +73,10 @@ test("Docs uses one reader shell and component examples execute inside it", () =
   assert.match(docsPage, /ReferencePreview/u);
   assert.match(preview, /LiveSample/u);
   assert.match(preview, /Live in Docs/u);
-  assert.doesNotMatch(preview, /<iframe|getEmbeddedPlaygroundHref|playgroundPath/u);
+  assert.doesNotMatch(
+    preview,
+    /<iframe|getEmbeddedPlaygroundHref|playgroundPath/u,
+  );
 });
 
 test("shared runtime requires four framework surfaces and core Reference sections", () => {
@@ -153,7 +156,10 @@ test("Docs filter discovers selected-framework API members", () => {
   assert.match(docsShell, /frameworkId=\{framework\.id\}/u);
   assert.match(memberTarget, /componentApiMemberAnchor/u);
   assert.match(memberTarget, /componentReferenceTargetHref/u);
-  assert.match(memberTarget, /referenceModel\.frameworkContext\.queryParameter/u);
+  assert.match(
+    memberTarget,
+    /referenceModel\.frameworkContext\.queryParameter/u,
+  );
   assert.match(memberTarget, /getReferenceRecordRoute/u);
   assert.match(
     app,

@@ -45,7 +45,11 @@ test("Reference transitional authorities remain retired", () => {
     [],
   );
   for (const relativePath of retired) {
-    assert.equal(existsSync(path.join(root, relativePath)), false, relativePath);
+    assert.equal(
+      existsSync(path.join(root, relativePath)),
+      false,
+      relativePath,
+    );
   }
 });
 
