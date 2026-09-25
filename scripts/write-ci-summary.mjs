@@ -26,6 +26,11 @@ function responsibilityPlan(plan) {
       command: "node scripts/run-scoped-quality.mjs",
     },
     {
+      id: "docs",
+      selected: plan.docs === true,
+      command: "npm run verify:docs-quality",
+    },
+    {
       id: "integration",
       selected: plan.integration === true,
       command: "selected integration/build commands",
@@ -90,6 +95,11 @@ const checks = [
     id: "quality",
     required: plan.quality === true,
     result: process.env.QUALITY_RESULT,
+  },
+  {
+    id: "docs",
+    required: plan.docs === true,
+    result: process.env.DOCS_RESULT,
   },
   {
     id: "integration",
