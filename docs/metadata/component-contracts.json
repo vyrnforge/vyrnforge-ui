@@ -676,7 +676,7 @@
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "verified-consumer",
+          "status": "current",
           "export": "VfPropertyTable",
           "properties": [],
           "events": [],
@@ -699,7 +699,7 @@
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "verified-consumer",
+          "status": "current",
           "export": "VfPropertyTable",
           "properties": [],
           "events": [],
@@ -818,7 +818,7 @@
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "verified-consumer",
+          "status": "current",
           "export": "VfTimeline",
           "properties": [],
           "events": [],
@@ -841,7 +841,7 @@
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "verified-consumer",
+          "status": "current",
           "export": "VfTimeline",
           "properties": [],
           "events": [],
