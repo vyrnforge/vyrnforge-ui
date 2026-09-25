@@ -12,8 +12,12 @@ import { SelectionPage } from "./pages/data-grid/SelectionPage";
 import { StressGridPage } from "./pages/data-grid/StressGridPage";
 import { ThemesGridPage } from "./pages/data-grid/ThemesGridPage";
 import { AdminShellPage } from "./pages/patterns/AdminShellPage";
-import {\n  AssignmentPatternsPage,\n} from "./pages/patterns/AssignmentPatternsPage";
-import {\n  CustomerPortalShellPage,\n} from "./pages/patterns/CustomerPortalShellPage";
+import {
+  AssignmentPatternsPage,
+} from "./pages/patterns/AssignmentPatternsPage";
+import {
+  CustomerPortalShellPage,
+} from "./pages/patterns/CustomerPortalShellPage";
 import { DetailPage } from "./pages/patterns/DetailPage";
 import { EmptyErrorLoadingPage } from "./pages/patterns/EmptyErrorLoadingPage";
 import { FilterFormPage } from "./pages/patterns/FilterFormPage";
