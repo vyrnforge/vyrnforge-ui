@@ -3,10 +3,11 @@ import type { ReferenceRecordSelection } from "./App";
 import type { DocsFrameworkId } from "./docsContext";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
+import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
+import { MigratedExamplePage } from "./examples/MigratedExamplePage";
 import { MarkdownView } from "./MarkdownView";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
-import { ReferencePreview } from "./ReferencePreview";
 import type { DocsRoute } from "./referenceRoutes";
 
 type DocsPageProps = {
@@ -45,11 +46,11 @@ export function DocsPage({
         <PageHeader description={route.description} title={route.title} />
       </div>
 
-      {route.kind === "component-reference" && componentId ? (
-        <ReferencePreview componentId={componentId} frameworkId={frameworkId} />
-      ) : null}
-
-      {route.id === "token-reference" || route.id === "pattern-reference" ? (
+      {route.kind === "example" && route.exampleId ? (
+        <MigratedExamplePage exampleId={route.exampleId} />
+      ) : route.kind === "executable-examples" ? (
+        <ExecutableExamplesPage frameworkId={frameworkId} />
+      ) : route.id === "token-reference" || route.id === "pattern-reference" ? (
         <DiscoveryReferencePage
           referenceRecord={referenceRecord}
           routeId={route.id}
