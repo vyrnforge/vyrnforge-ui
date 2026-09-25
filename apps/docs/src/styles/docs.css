@@ -563,4 +563,6 @@ body {
   min-width: 0;
   margin-top: var(--vf-space-4, 16px);
 }
-.vf-docs-example-stage > * { min-width: 0; }
+.vf-docs-example-stage > * {
+  min-width: 0;
+}
