@@ -208,10 +208,6 @@ for (const release of releases) {
 rmSync(siteDirectory, { recursive: true, force: true });
 mkdirSync(siteDirectory, { recursive: true });
 copyDirectory(path.join(repositoryRoot, "apps/docs/dist"), siteDirectory);
-copyDirectory(
-  path.join(repositoryRoot, "examples/basic-playground/dist"),
-  path.join(siteDirectory, "playground"),
-);
 for (const release of releases) {
   copyDirectory(
     path.join(snapshotsDirectory, `v${release.version}`),
@@ -234,7 +230,6 @@ const current = {
   sourceChannel: primaryRelease.channel,
   path: "/",
   docsPath: "/",
-  playgroundPath: "/playground/",
   commit: currentCommit,
 };
 const releaseLines = releaseLineEntries.map(([id, releaseLine]) => ({
