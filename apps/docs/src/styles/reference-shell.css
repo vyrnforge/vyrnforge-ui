@@ -186,3 +186,11 @@
   display: grid;
   align-items: stretch;
 }
+
+.vf-docs-token-swatch {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--vf-border, #e2e8f0);
+  border-radius: var(--vf-radius-md, 6px);
+}

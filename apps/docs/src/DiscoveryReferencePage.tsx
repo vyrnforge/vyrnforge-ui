@@ -43,6 +43,13 @@ function TokenReference({ id }: { id?: string | null }) {
                 <CodeText>{token.name}</CodeText>
                 <Text size="sm">{token.purpose}</Text>
                 {token.themeScoped ? (
+                  <span
+                    aria-hidden="true"
+                    className="vf-docs-token-swatch"
+                    style={{ background: `var(${token.name})` }}
+                  />
+                ) : null}
+                {token.themeScoped ? (
                   <Badge size="sm" tone="subtle" variant="info">
                     Theme scoped
                   </Badge>
