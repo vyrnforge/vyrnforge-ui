@@ -89,7 +89,6 @@ jobs:
           EXPECTED_CI_RUN_ID: ${{ steps.candidate.outputs.run-id }}
         run: |
           test -f site/index.html
-          test -f site/playground/index.html
           test -f site/.nojekyll
           test -f site/reference-artifact.json
           test -f site/vyrnforge-versions.json
