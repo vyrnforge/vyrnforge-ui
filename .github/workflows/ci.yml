@@ -114,6 +114,27 @@ jobs:
       - name: Run repository and affected-workspace quality checks
         run: node scripts/run-scoped-quality.mjs
 
+  docs-checks:
+    name: docs
+    needs: plan
+    if: needs.plan.outputs.docs == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require("./package.json").packageManager.split("@").pop()')"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run focused documentation quality gate
+        run: npm run verify:docs-quality
+
   integration-checks:
     name: integration
     needs: plan
@@ -417,6 +438,7 @@ jobs:
     needs:
       - plan
       - quality-checks
+      - docs-checks
       - integration-checks
       - react-compatibility-plan
       - react-compatibility
@@ -442,6 +464,7 @@ jobs:
           PLAN_JSON: ${{ needs.plan.outputs.plan_json }}
           PLAN_RESULT: ${{ needs.plan.result }}
           QUALITY_RESULT: ${{ needs.quality-checks.result }}
+          DOCS_RESULT: ${{ needs.docs-checks.result }}
           INTEGRATION_RESULT: ${{ needs.integration-checks.result }}
           SECURITY_RESULT: ${{ needs.security-checks.result }}
           REACT_COMPATIBILITY_REQUIRED: ${{ github.event_name == 'pull_request' && (github.event.pull_request.base.ref == 'integration/react' || (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'integration/react')) }}
