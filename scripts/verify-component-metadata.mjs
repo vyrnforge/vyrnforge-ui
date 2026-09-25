@@ -79,48 +79,6 @@ function rootExports(root, relativePath) {
   return exports;
 }
 
-function playgroundRoutes(root) {
-  const routeSource = readFileSync(
-    path.join(root, "examples/basic-playground/src/app/routes.ts"),
-    "utf8",
-  );
-  const appSource = readFileSync(
-    path.join(root, "examples/basic-playground/src/app/App.tsx"),
-    "utf8",
-  );
-  const routes = new Set(
-    [...routeSource.matchAll(/\bpath:\s+"([^"]+)"/g)].map((match) => match[1]),
-  );
-
-  const componentIdsSource = routeSource.match(
-    /const componentDemoIds = \[([\s\S]*?)\] as const;/,
-  )?.[1];
-  const componentRouteIds = new Set(
-    [
-      ...(componentIdsSource?.matchAll(/"([a-z0-9]+(?:-[a-z0-9]+)*)"/g) ?? []),
-    ].map((match) => match[1]),
-  );
-  const hasCanonicalAliasResolver =
-    appSource.includes("components.json?raw") &&
-    appSource.includes("componentRouteAliases") &&
-    appSource.includes("aliasRouteId");
-
-  if (hasCanonicalAliasResolver) {
-    const canonicalCatalog = readJson(root, "docs/metadata/components.json");
-    for (const component of canonicalCatalog.components ?? []) {
-      if (
-        componentRouteIds.has(component.id) &&
-        typeof component.playgroundPath === "string" &&
-        !isUnresolved(component.playgroundPath)
-      ) {
-        routes.add(component.playgroundPath);
-      }
-    }
-  }
-
-  return routes;
-}
-
 function isUnresolved(value) {
   return typeof value === "string" && unresolvedValues.has(value);
 }
@@ -155,7 +113,6 @@ export function verifyComponentMetadata(
 
   const componentIds = new Set();
   const canonicalNames = new Set();
-  const routes = playgroundRoutes(root);
   const exportsByPackage = new Map(
     Object.entries(packageEntryFiles).map(([packageName, entryFile]) => [
       packageName,
@@ -237,12 +194,13 @@ export function verifyComponentMetadata(
     if (
       typeof component.playgroundPath !== "string" ||
       (!isUnresolved(component.playgroundPath) &&
-        !routes.has(component.playgroundPath))
+        (!component.playgroundPath.startsWith("/components/") ||
+          !component.playgroundPath.endsWith(`/${component.id}`)))
     )
       addFailure(
         failures,
         component,
-        "playgroundPath must be a registered route or an allowed unresolved value",
+        "playgroundPath must remain a component-scoped legacy example path or an allowed unresolved value",
       );
     if (!Array.isArray(component.knownLimitations))
       addFailure(failures, component, "knownLimitations must be an array");

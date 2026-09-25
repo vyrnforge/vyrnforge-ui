@@ -213,6 +213,13 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
       "component reference must use generated stable record routes instead of the retired component query parameter",
     );
   }
+  if (
+    !docsPage.includes(
+      'getReferenceRecordRoute(referenceModel, "components", componentId)',
+    )
+  ) {
+    failures.push("generated component route composition is missing");
+  }
 
   const referenceData = read(root, "apps/docs/src/referenceData.ts");
   for (const marker of [

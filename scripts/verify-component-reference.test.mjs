@@ -23,7 +23,7 @@ function fixture(mutator, callback) {
     path.join(tmpdir(), "vyrnforge-consumer-knowledge-"),
   );
   try {
-    for (const entry of ["apps", "docs", "examples", "packages", "scripts"]) {
+    for (const entry of ["apps", "docs", "packages", "scripts"]) {
       cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
         recursive: true,
       });
@@ -35,7 +35,7 @@ function fixture(mutator, callback) {
   }
 }
 
-test("accepts the generated consumer knowledge and task-scoped AI context", () =>
+test("accepts the generated consumer knowledge and unified Docs surface", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
 
 test("rejects stale generated consumer knowledge", () =>
@@ -88,74 +88,16 @@ test("rejects generated Angular status drift", () =>
       ),
   ));
 
-test("rejects hand-written playground maturity status", () =>
+test("rejects Docs component links that drift from generated detail paths", () =>
   fixture(
     (root) => {
-      const file = path.join(
-        root,
-        "examples/basic-playground/src/pages/reference/GeneratedComponentPage.tsx",
-      );
+      const file = path.join(root, "apps/docs/src/ComponentReferencePage.tsx");
       const content = readFileSync(file, "utf8");
       const next = content.replace(
-        "title={component.displayName}",
-        'status="stable" title={component.displayName}',
+        'getReferenceRecordRoute(referenceModel, "components", componentId)',
+        'getReferenceRecordRoute(referenceModel, "component", componentId)',
       );
-      assert.notEqual(
-        next,
-        content,
-        "fixture needs the generated component page",
-      );
-      writeFileSync(file, next);
-    },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("hand-written status prop"),
-        ),
-      ),
-  ));
-
-test("rejects canonical native API tags dropped from the reference projection", () =>
-  fixture(
-    (root) => {
-      const file = path.join(
-        root,
-        "examples/basic-playground/src/data/referenceMetadata.ts",
-      );
-      const content = readFileSync(file, "utf8");
-      const next = content.replace("...canonicalNativeElementEntries,", "");
-      assert.notEqual(
-        next,
-        content,
-        "fixture needs the canonical native element projection",
-      );
-      writeFileSync(file, next);
-    },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("reference metadata projection is missing"),
-        ),
-      ),
-  ));
-
-test("rejects catalog links that drift from generated detail paths", () =>
-  fixture(
-    (root) => {
-      const file = path.join(
-        root,
-        "examples/basic-playground/src/app/routes.ts",
-      );
-      const content = readFileSync(file, "utf8");
-      const next = content.replace(
-        'getReferenceRecordRoute(referenceModel, "components", id)',
-        'getReferenceRecordRoute(referenceModel, "component", id)',
-      );
-      assert.notEqual(
-        next,
-        content,
-        "fixture needs the component detail route",
-      );
+      assert.notEqual(next, content, "fixture needs the component detail route");
       writeFileSync(file, next);
     },
     (failures) =>
