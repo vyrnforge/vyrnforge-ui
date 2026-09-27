@@ -124,7 +124,7 @@ test("G18 CI and Pages deliver the single Docs product from exact main", () => {
 
   for (const marker of [
     "branches:\n      - main",
-    'CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq \'\.sha\')"',
+    'CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq \'.sha\')"',
     'test "$HEAD_BRANCH" = "main"',
     'test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"',
     "pages-site-${{ steps.candidate.outputs.head-sha }}",
