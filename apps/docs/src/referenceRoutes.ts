@@ -99,6 +99,16 @@ const docs: DocsRoute[] = [
     tags: ["tokens", "design-system"],
   },
   {
+    id: "theme-tokens",
+    title: "Theme Tokens",
+    group: "Foundations",
+    description:
+      "Interactive token catalog with canonical categories, values, and theme-scoped swatches.",
+    sourcePath: "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
+    kind: "example",
+    exampleId: "theme-tokens",
+  },
+  {
     id: "theme-modes",
     title: "Theme Modes",
     group: "Foundations",
@@ -268,6 +278,7 @@ export const publicDocsSections: PublicDocsSection[] = [
     routeIds: [
       "theming",
       "token-reference",
+      "theme-tokens",
       "theme-modes",
       "density",
       "css-overrides",
