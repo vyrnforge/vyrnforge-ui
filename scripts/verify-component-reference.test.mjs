@@ -19,14 +19,12 @@ const repositoryRoot = path.resolve(
 );
 
 function fixture(mutator, callback) {
-  const root = mkdtempSync(
-    path.join(tmpdir(), "vyrnforge-consumer-knowledge-"),
-  );
+  const root = mkdtempSync(path.join(tmpdir(), "vf-consumer-knowledge-"));
   try {
-    for (const entry of ["apps", "docs", "examples", "packages", "scripts"]) {
-      cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
-        recursive: true,
-      });
+    for (const entry of ["apps", "docs", "packages", "scripts"]) {
+      const source = path.join(repositoryRoot, entry);
+      const target = path.join(root, entry);
+      cpSync(source, target, { recursive: true });
     }
     mutator?.(root);
     callback(verifyComponentReference({ root }));
@@ -35,10 +33,17 @@ function fixture(mutator, callback) {
   }
 }
 
-test("accepts the generated consumer knowledge and task-scoped AI context", () =>
-  fixture(null, (failures) => assert.deepEqual(failures, [])));
+function hasFailure(failures, message) {
+  return failures.some((failure) => failure.includes(message));
+}
 
-test("rejects stale generated consumer knowledge", () =>
+test("accepts unified Docs reference", () => {
+  fixture(null, (failures) => {
+    assert.deepEqual(failures, []);
+  });
+});
+
+test("rejects stale consumer knowledge", () => {
   fixture(
     (root) => {
       const file = path.join(root, "docs/generated/consumer-knowledge.json");
@@ -46,29 +51,28 @@ test("rejects stale generated consumer knowledge", () =>
       value.components.pop();
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("consumer knowledge is stale"),
-        ),
-      ),
-  ));
+    (failures) => {
+      assert(hasFailure(failures, "consumer knowledge is stale"));
+    },
+  );
+});
 
-test("rejects a missing component context slice", () =>
+test("rejects a missing component context slice", () => {
   fixture(
-    (root) =>
-      unlinkSync(
-        path.join(root, "docs/generated/ai-context/components/button.json"),
-      ),
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("button AI component context is missing"),
-        ),
-      ),
-  ));
+    (root) => {
+      const file = path.join(
+        root,
+        "docs/generated/ai-context/components/button.json",
+      );
+      unlinkSync(file);
+    },
+    (failures) => {
+      assert(hasFailure(failures, "button AI component context is missing"));
+    },
+  );
+});
 
-test("rejects generated Angular status drift", () =>
+test("rejects generated Angular status drift", () => {
   fixture(
     (root) => {
       const file = path.join(root, "docs/generated/component-reference.json");
@@ -80,88 +84,27 @@ test("rejects generated Angular status drift", () =>
       component.frameworks.angular.status = "first-class";
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("component reference is stale"),
-        ),
-      ),
-  ));
+    (failures) => {
+      assert(hasFailure(failures, "component reference is stale"));
+    },
+  );
+});
 
-test("rejects hand-written playground maturity status", () =>
+test("rejects drifted Docs component links", () => {
   fixture(
     (root) => {
-      const file = path.join(
-        root,
-        "examples/basic-playground/src/pages/reference/GeneratedComponentPage.tsx",
+      const file = path.join(root, "apps/docs/src/ComponentReferencePage.tsx");
+      const source = readFileSync(file, "utf8");
+      const next = source.replace(
+        'getReferenceRecordRoute(referenceModel, "components", componentId)',
+        'getReferenceRecordRoute(referenceModel, "component", componentId)',
       );
-      const content = readFileSync(file, "utf8");
-      const next = content.replace(
-        "title={component.displayName}",
-        'status="stable" title={component.displayName}',
-      );
-      assert.notEqual(
-        next,
-        content,
-        "fixture needs the generated component page",
-      );
+      assert.notEqual(next, source, "fixture needs the component detail route");
       writeFileSync(file, next);
     },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("hand-written status prop"),
-        ),
-      ),
-  ));
-
-test("rejects canonical native API tags dropped from the reference projection", () =>
-  fixture(
-    (root) => {
-      const file = path.join(
-        root,
-        "examples/basic-playground/src/data/referenceMetadata.ts",
-      );
-      const content = readFileSync(file, "utf8");
-      const next = content.replace("...canonicalNativeElementEntries,", "");
-      assert.notEqual(
-        next,
-        content,
-        "fixture needs the canonical native element projection",
-      );
-      writeFileSync(file, next);
+    (failures) => {
+      const message = "generated component route composition is missing";
+      assert(hasFailure(failures, message));
     },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("reference metadata projection is missing"),
-        ),
-      ),
-  ));
-
-test("rejects catalog links that drift from generated detail paths", () =>
-  fixture(
-    (root) => {
-      const file = path.join(
-        root,
-        "examples/basic-playground/src/app/routes.ts",
-      );
-      const content = readFileSync(file, "utf8");
-      const next = content.replace(
-        'getReferenceRecordRoute(referenceModel, "components", id)',
-        'getReferenceRecordRoute(referenceModel, "component", id)',
-      );
-      assert.notEqual(
-        next,
-        content,
-        "fixture needs the component detail route",
-      );
-      writeFileSync(file, next);
-    },
-    (failures) =>
-      assert(
-        failures.some((failure) =>
-          failure.includes("generated component route composition is missing"),
-        ),
-      ),
-  ));
+  );
+});
