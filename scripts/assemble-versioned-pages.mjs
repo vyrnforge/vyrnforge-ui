@@ -161,34 +161,8 @@ function buildReleasedReference(release) {
       },
       stdio: "inherit",
     });
-    execFileSync(
-      "npm",
-      [
-        "run",
-        "build",
-        "--workspace",
-        "@vyrnforge/ui-data-grid-basic-playground",
-      ],
-      {
-        cwd: worktree,
-        env: {
-          ...process.env,
-          VITE_BASE_PATH: `/vyrnforge-ui/versions/v${release.version}/playground/`,
-          VITE_PLAYGROUND_ROOT_PATH: "/vyrnforge-ui/",
-          VITE_PLAYGROUND_VERSION_ID: release.id,
-          VITE_PLAYGROUND_RELEASE_LINE: release.releaseLine,
-          VITE_PLAYGROUND_RELEASE_VERSION: release.version,
-          VITE_PLAYGROUND_RELEASE_CHANNEL: release.channel,
-        },
-        stdio: "inherit",
-      },
-    );
 
     copyDirectory(path.join(worktree, "apps/docs/dist"), snapshot);
-    copyDirectory(
-      path.join(worktree, "examples/basic-playground/dist"),
-      path.join(snapshot, "playground"),
-    );
   } finally {
     run("git", ["worktree", "remove", "--force", worktree]);
   }
@@ -208,10 +182,6 @@ for (const release of releases) {
 rmSync(siteDirectory, { recursive: true, force: true });
 mkdirSync(siteDirectory, { recursive: true });
 copyDirectory(path.join(repositoryRoot, "apps/docs/dist"), siteDirectory);
-copyDirectory(
-  path.join(repositoryRoot, "examples/basic-playground/dist"),
-  path.join(siteDirectory, "playground"),
-);
 for (const release of releases) {
   copyDirectory(
     path.join(snapshotsDirectory, `v${release.version}`),
@@ -234,7 +204,6 @@ const current = {
   sourceChannel: primaryRelease.channel,
   path: "/",
   docsPath: "/",
-  playgroundPath: "/playground/",
   commit: currentCommit,
 };
 const releaseLines = releaseLineEntries.map(([id, releaseLine]) => ({
