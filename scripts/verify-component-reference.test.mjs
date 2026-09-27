@@ -19,20 +19,22 @@ const repositoryRoot = path.resolve(
 );
 
 function fixture(mutator, callback) {
-  const root = mkdtempSync(
-    path.join(tmpdir(), "vyrnforge-consumer-knowledge-"),
-  );
+  const root = mkdtempSync(path.join(tmpdir(), "vf-consumer-knowledge-"));
   try {
     for (const entry of ["apps", "docs", "packages", "scripts"]) {
-      cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
-        recursive: true,
-      });
+      const source = path.join(repositoryRoot, entry);
+      const target = path.join(root, entry);
+      cpSync(source, target, { recursive: true });
     }
     mutator?.(root);
     callback(verifyComponentReference({ root }));
   } finally {
     rmSync(root, { force: true, recursive: true });
   }
+}
+
+function hasFailure(failures, message) {
+  return failures.some((failure) => failure.includes(message));
 }
 
 test("accepts unified Docs reference", () => {
@@ -50,11 +52,7 @@ test("rejects stale consumer knowledge", () => {
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) => {
-      assert(
-        failures.some((failure) =>
-          failure.includes("consumer knowledge is stale"),
-        ),
-      );
+      assert(hasFailure(failures, "consumer knowledge is stale"));
     },
   );
 });
@@ -69,11 +67,7 @@ test("rejects a missing component context slice", () => {
       unlinkSync(file);
     },
     (failures) => {
-      assert(
-        failures.some((failure) =>
-          failure.includes("button AI component context is missing"),
-        ),
-      );
+      assert(hasFailure(failures, "button AI component context is missing"));
     },
   );
 });
@@ -91,11 +85,7 @@ test("rejects generated Angular status drift", () => {
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
     (failures) => {
-      assert(
-        failures.some((failure) =>
-          failure.includes("component reference is stale"),
-        ),
-      );
+      assert(hasFailure(failures, "component reference is stale"));
     },
   );
 });
@@ -103,10 +93,7 @@ test("rejects generated Angular status drift", () => {
 test("rejects drifted Docs component links", () => {
   fixture(
     (root) => {
-      const file = path.join(
-        root,
-        "apps/docs/src/ComponentReferencePage.tsx",
-      );
+      const file = path.join(root, "apps/docs/src/ComponentReferencePage.tsx");
       const source = readFileSync(file, "utf8");
       const next = source.replace(
         'getReferenceRecordRoute(referenceModel, "components", componentId)',
@@ -116,11 +103,8 @@ test("rejects drifted Docs component links", () => {
       writeFileSync(file, next);
     },
     (failures) => {
-      assert(
-        failures.some((failure) =>
-          failure.includes("generated component route composition is missing"),
-        ),
-      );
+      const message = "generated component route composition is missing";
+      assert(hasFailure(failures, message));
     },
   );
 });
