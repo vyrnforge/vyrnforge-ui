@@ -36,12 +36,7 @@
       "status": "current"
     }
   ],
-  "frameworks": [
-    "native-html",
-    "react",
-    "angular",
-    "vue"
-  ],
+  "frameworks": ["native-html", "react", "angular", "vue"],
   "lifecycle": [
     {
       "id": "task-pr",
