@@ -3,7 +3,7 @@
   "product": {
     "id": "vyrnforge-reference",
     "label": "VyrnForge Reference",
-    "purpose": "One reader-facing product for VyrnForge guidance, generated reference facts, executable examples, and versioned framework context across Docs and Playground.",
+    "purpose": "One reader-facing VyrnForge documentation product for guidance, generated reference facts, executable examples, patterns, Data & Grid content, and versioned framework context.",
     "implementationHost": "react",
     "semanticOwnership": "framework-neutral",
     "hostPolicy": "The React host is an implementation detail. Native HTML, React, Angular, and Vue remain equal reader contexts and no React-only presentation contract may become canonical VyrnForge semantics."
@@ -34,12 +34,7 @@
     "docs": {
       "label": "Docs",
       "path": "/",
-      "role": "curated guidance and generated reference presentation"
-    },
-    "playground": {
-      "label": "Playground",
-      "path": "/playground/",
-      "role": "executable examples, interaction exploration, and reference presentation"
+      "role": "curated guidance, generated reference presentation, interactive examples, patterns, and Data & Grid documentation"
     }
   },
   "navigation": {
@@ -47,31 +42,44 @@
       {
         "id": "start",
         "label": "Start",
-        "contentDomains": ["guides", "packages"]
+        "contentDomains": [
+          "guides",
+          "packages"
+        ]
       },
       {
         "id": "components",
         "label": "Components",
-        "contentDomains": ["components", "accessibility"]
+        "contentDomains": [
+          "components",
+          "accessibility"
+        ]
       },
       {
         "id": "foundations",
         "label": "Foundations",
-        "contentDomains": ["tokens", "patterns"]
+        "contentDomains": [
+          "tokens",
+          "patterns"
+        ]
       },
       {
         "id": "examples",
         "label": "Examples",
-        "contentDomains": ["examples"]
+        "contentDomains": [
+          "examples"
+        ]
       }
     ],
     "sharedVocabulary": true,
-    "surfaceSpecificPresentationAllowed": true
+    "surfaceSpecificPresentationAllowed": false
   },
   "contentOwnership": {
     "guides": {
       "mode": "curated",
-      "canonicalSources": ["docs/**/*.md"],
+      "canonicalSources": [
+        "docs/**/*.md"
+      ],
       "policy": "Human guidance owns explanation and recommendations but must link to canonical structured facts instead of repeating API truth."
     },
     "components": {
@@ -108,7 +116,9 @@
     },
     "patterns": {
       "mode": "canonical-metadata-plus-curated-guidance",
-      "canonicalSources": ["docs/metadata/patterns.json"],
+      "canonicalSources": [
+        "docs/metadata/patterns.json"
+      ],
       "policy": "Pattern identity and relationships come from canonical pattern metadata while longer workflow guidance remains curated documentation."
     },
     "examples": {
@@ -160,7 +170,10 @@
     "identity": "stable-id",
     "transport": "hash",
     "stableDeepLinks": true,
-    "preserveContext": ["framework", "version"],
+    "preserveContext": [
+      "framework",
+      "version"
+    ],
     "transitionalRegistries": [],
     "policy": "Derivable route and catalog facts come from the generated Reference model, canonical metadata, or source discovery. Surface files may bind authored page implementations, but they do not own component, package, token, framework, version, or API facts."
   },
@@ -169,8 +182,10 @@
     "artifactManifest": "reference-artifact.json",
     "productionSourceBranch": "main",
     "immutable": true,
-    "surfaces": ["docs", "playground"],
-    "policy": "Preview and production artifacts preserve Docs and Playground as one deployable Reference product while retaining commit and CI lineage."
+    "surfaces": [
+      "docs"
+    ],
+    "policy": "Preview and production artifacts deploy the single Docs product while retaining exact commit and CI lineage."
   },
   "versionCatalog": "vyrnforge-versions.json"
 }
