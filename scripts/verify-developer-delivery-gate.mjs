@@ -151,7 +151,7 @@ export function verifyDeveloperDeliveryGate({ root = repositoryRoot } = {}) {
   requireMarkers(
     migratedExamplePage,
     "apps/docs/src/examples/MigratedExamplePage.tsx",
-    ["exampleId", "exampleComponents"],
+    ["exampleId", "const examples =", "Interactive example"],
     failures,
   );
 
