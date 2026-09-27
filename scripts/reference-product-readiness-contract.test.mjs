@@ -29,17 +29,12 @@ test("G18 Reference product has one generated model and equal framework surfaces
   assert.equal(portal.routing.transitionalRegistries.length, 0);
   assert(model.generatedFrom.includes("docs/metadata/reference-portal.json"));
 
-  for (const contextPath of [
-    "apps/docs/src/docsContext.ts",
-    "examples/basic-playground/src/app/playgroundContext.ts",
-  ]) {
-    const context = read(contextPath);
-    assert.match(context, /generated\/reference-model\.json\?raw/u);
-    assert.match(context, /reference\/referenceRuntime/u);
-  }
+  const context = read("apps/docs/src/docsContext.ts");
+  assert.match(context, /generated\/reference-model\.json\?raw/u);
+  assert.match(context, /reference\/referenceRuntime/u);
 });
 
-test("G18 discovery, context, deep links, and executable examples remain generated or canonical", () => {
+test("G18 discovery, context, deep links, and examples stay canonical", () => {
   const portal = json("docs/metadata/reference-portal.json");
   const model = json("docs/generated/reference-model.json");
   const expectedDomains = [
@@ -70,33 +65,26 @@ test("G18 discovery, context, deep links, and executable examples remain generat
   );
 
   const docsApp = read("apps/docs/src/App.tsx");
-  const playgroundApp = read("examples/basic-playground/src/app/App.tsx");
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
   assert.match(docsApp, /matchReferenceRecordRoute/u);
   assert.match(docsApp, /getRouteById/u);
-  assert.match(playgroundApp, /componentRouteAliases/u);
-  assert.match(playgroundApp, /getExecutableExampleRouteForFramework/u);
+  assert.match(routes, /id: "executable-examples"/u);
+  assert.match(routes, /kind: "example"/u);
+  assert.match(docsPage, /MigratedExamplePage/u);
+  assert.match(docsPage, /ExecutableExamplesPage/u);
 });
 
-test("G18 Reference shells retain responsive, keyboard, and accessibility foundations", () => {
+test("G18 Docs shell retains responsive and accessible navigation foundations", () => {
   const docsShell = read("apps/docs/src/DocsShell.tsx");
   const docsNav = read("apps/docs/src/DocsNav.tsx");
-  const playgroundShell = read(
-    "examples/basic-playground/src/app/PlaygroundShell.tsx",
-  );
-  const playgroundNav = read(
-    "examples/basic-playground/src/app/PlaygroundNav.tsx",
-  );
   const responsiveStyles = read("apps/docs/src/styles/reference-shell.css");
   const portal = json("docs/metadata/reference-portal.json");
 
-  for (const shell of [docsShell, playgroundShell]) {
-    assert.match(shell, /AppShell/u);
-    assert.match(shell, /TopNav/u);
-  }
-  for (const nav of [docsNav, playgroundNav]) {
-    assert.match(nav, /SearchInput/u);
-    assert.match(nav, /SideNav/u);
-  }
+  assert.match(docsShell, /AppShell/u);
+  assert.match(docsShell, /TopNav/u);
+  assert.match(docsNav, /SearchInput/u);
+  assert.match(docsNav, /SideNav/u);
   assert.match(responsiveStyles, /@media \(max-width: 920px\)/u);
   assert.match(responsiveStyles, /grid-template-columns: 1fr/u);
   assert.equal(
@@ -110,7 +98,7 @@ test("G18 Reference shells retain responsive, keyboard, and accessibility founda
   );
 });
 
-test("G18 CI and Pages delivery require runtime evidence and exact-main artifact lineage", () => {
+test("G18 CI and Pages deliver the single Docs product from exact main", () => {
   const ci = read(".github/workflows/ci.yml");
   const pages = read(".github/workflows/deploy-pages.yml");
 
@@ -119,10 +107,8 @@ test("G18 CI and Pages delivery require runtime evidence and exact-main artifact
     "Run packed four-surface generation smoke",
     "cross-framework-matrix/accessibility-report.json",
     "Build documentation application for reference preview",
-    "Build playground for reference preview",
     "Assemble immutable reference preview",
     "Build documentation application for Pages",
-    "Build playground for Pages",
     "Bind production reference artifact lineage",
     "Verify versioned Pages reference",
     "name: pages-site-${{ github.sha }}",
@@ -132,10 +118,13 @@ test("G18 CI and Pages delivery require runtime evidence and exact-main artifact
       `CI must retain Reference readiness responsibility: ${marker}`,
     );
   }
+  assert.equal(ci.includes("Build playground for reference preview"), false);
+  assert.equal(ci.includes("Build playground for Pages"), false);
+  assert.equal(ci.includes("@vyrnforge/ui-data-grid-basic-playground"), false);
 
   for (const marker of [
     "branches:\n      - main",
-    'CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq \'.sha\')"',
+    'CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq \'\.sha\')"',
     'test "$HEAD_BRANCH" = "main"',
     'test "$HEAD_SHA" = "$CURRENT_MAIN_SHA"',
     "pages-site-${{ steps.candidate.outputs.head-sha }}",
@@ -147,4 +136,5 @@ test("G18 CI and Pages delivery require runtime evidence and exact-main artifact
       `Pages delivery must retain exact-main lineage guard: ${marker}`,
     );
   }
+  assert.equal(pages.includes("site/playground/index.html"), false);
 });
