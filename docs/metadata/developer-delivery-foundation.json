@@ -32,19 +32,16 @@
       "id": "docs",
       "workspace": "@vyrnforge/ui-docs",
       "path": "apps/docs",
-      "role": "documentation and generated reference presentation",
+      "role": "documentation, generated reference presentation, interactive examples, patterns, and Data & Grid guidance",
       "status": "current"
-    },
-    {
-      "id": "playground",
-      "workspace": "@vyrnforge/ui-data-grid-basic-playground",
-      "path": "examples/basic-playground",
-      "role": "executable examples, component/pattern exploration, and reference views",
-      "status": "current",
-      "target": "A later reference-product redesign may replace the current shell, but must preserve this delivery, version, framework, and canonical-data contract."
     }
   ],
-  "frameworks": ["native-html", "react", "angular", "vue"],
+  "frameworks": [
+    "native-html",
+    "react",
+    "angular",
+    "vue"
+  ],
   "lifecycle": [
     {
       "id": "task-pr",
@@ -59,7 +56,7 @@
     {
       "id": "exact-main-delivery",
       "owner": "VyrnForge CI",
-      "policy": "delivery-only rebuild of docs/playground/reference output bound to the exact main commit and CI run; the same mode may be explicitly dispatched after a release tag exists"
+      "policy": "delivery-only rebuild of the single Docs/reference output bound to the exact main commit and CI run; the same mode may be explicitly dispatched after a release tag exists"
     },
     {
       "id": "production-reference-deploy",
@@ -106,12 +103,12 @@
     {
       "id": "reader-api-authority",
       "status": "closed",
-      "description": "The generated framework API reference is the canonical reader-facing API authority. Playground component readers consume generated framework API facts through referenceMetadata and no longer maintain a competing props-table API source."
+      "description": "The generated framework API reference is the canonical reader-facing API authority. The unified Docs component reader consumes generated framework API facts and does not maintain a competing props-table API source."
     },
     {
       "id": "reference-portal-unification",
       "status": "closed",
-      "description": "Docs and Playground share docs/metadata/reference-portal.json, the same Native HTML/React/Angular/Vue vocabulary, vyrnforge-versions.json version catalog, deep-link context, and deployment/version model while remaining modular applications."
+      "description": "VyrnForge ships one Docs reader surface with shared Native HTML/React/Angular/Vue vocabulary, framework and version context, stable deep links, generated reference facts, and integrated executable examples."
     },
     {
       "id": "cross-framework-examples",
@@ -121,7 +118,7 @@
     {
       "id": "pr-reference-preview",
       "status": "closed",
-      "description": "Reference-affecting PRs emit an immutable non-deployable docs/playground preview artifact bound to the tested commit and CI run; preview jobs retain read-only workflow permissions."
+      "description": "Reference-affecting PRs emit one immutable non-deployable Docs preview artifact bound to the tested commit and CI run; preview jobs retain read-only workflow permissions."
     },
     {
       "id": "release-reference-refresh",
@@ -135,7 +132,7 @@
     "blocksComponentExpansion": true,
     "requiredBeforeClose": [
       "generated API reference is reader-facing and drift-checked",
-      "docs and playground share one version/framework/reference contract",
+      "Docs owns one version/framework/reference contract",
       "representative examples are verified across Native HTML, React, Angular, and Vue",
       "PR reference preview artifact is available without deployment permissions",
       "current-main reference deployment consumes immutable artifacts only",
