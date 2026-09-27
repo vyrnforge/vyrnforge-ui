@@ -2,7 +2,7 @@
 title: VyrnForge UI Controlled Implementation Rules
 status: Stable
 owner: Documentation
-last_reviewed: 2026-07-20
+last_reviewed: 2026-09-27
 canonical: true
 ---
 
@@ -10,31 +10,48 @@ canonical: true
 
 ## Purpose
 
-VyrnForge UI improvement work is performed through controlled tasks,
-dependency gates, and evidence-based review—not opportunistic changes. This
-guide is the operational checklist for contributors and AI coding agents
-before, during, and after every controlled task. It summarizes the workflow;
-the linked documents remain the canonical policies.
+VyrnForge work is performed through controlled tasks, dependency gates, and
+evidence-based review rather than opportunistic changes. This document owns the
+durable task-execution checklist for contributors and coding agents.
 
-## Branching model
+It does **not** own current branch topology, package inventory, component
+maturity, release classification, or active task status. Those facts belong to
+their canonical sources listed below.
 
-- `main` remains protected and release-oriented.
-- `improvement/controlled-hardening` is the integration branch for the current
-  improvement program.
-- Each controlled task uses its own task branch and merges into
-  `improvement/controlled-hardening`, never directly into `main`.
-- Use a dedicated worktree for each parallel task. Do not implement a task in
-  the base worktree.
+## Canonical execution sources
 
-Examples: `task/VF-1001-eslint-foundation`,
-`task/VF-2002-dialog-browser-tests`, and `task/VF-4002-grid-controller`.
+Before starting a task, use the source that owns the fact being checked:
+
+| Question | Canonical source |
+| --- | --- |
+| Product identity, durable scope, and source-authority map | [Project Source Of Truth](01-project-source-of-truth.md) |
+| Branch topology, task-branch targets, lane synchronization, promotion, and CI lifecycle | [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md) |
+| Package dependency rules | [Package Boundaries](../architecture/01-package-boundaries.md) and package manifests |
+| Component catalog and maturity | [Component metadata](../metadata/components.json) |
+| Package and release classification | [Release-group metadata](../metadata/release-groups.json) |
+| Metadata ownership and regeneration | [Metadata README](../metadata/README.md) and [Metadata Maintenance](04-metadata-maintenance.md) |
+| Active execution, task status, dependencies, and gates | Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status** |
+| Repository instructions for coding agents | [AGENTS.md](../../AGENTS.md) |
+
+Do not copy changing facts from these sources into this checklist. Link to the
+owner instead.
 
 ## Pre-task checks
 
-Before implementation, confirm the working directory, active branch, and clean
-tree; update remote references; verify predecessor tasks are merged; and record
-the permitted files, explicit out-of-scope areas, accountable owner, reviewer,
-acceptance criteria, and required evidence in the change manifest.
+Before implementation:
+
+1. confirm the repository, current branch, and clean working tree;
+2. update remote references;
+3. read the tracker item and verify its predecessors and gates;
+4. identify the owning integration lane from
+   [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md);
+5. record permitted files, explicit out-of-scope areas, accountable owner,
+   reviewer, acceptance criteria, and required evidence in the change manifest;
+6. inspect existing VyrnForge components, primitives, behaviors, contracts,
+   metadata, generators, tokens, utilities, and patterns before introducing a
+   new abstraction.
+
+Typical local checks are:
 
 ```bash
 git rev-parse --show-toplevel
@@ -43,19 +60,24 @@ git status --short
 git fetch origin
 ```
 
-Use the [Change Manifest and Dependency Policy](change-manifest-and-dependency-policy.md)
-for dependency state, owner, review, scope, and evidence requirements.
+Use the
+[Change Manifest and Dependency Policy](change-manifest-and-dependency-policy.md)
+for dependency state, ownership, scope, review, and evidence requirements.
 
 ## Parallel-work rules
 
-- Independent tasks may run in parallel.
-- Do not run tasks concurrently when they modify the same core files.
-- Grid architecture work has stricter parallelism limits because its state,
-  adapter, and rendering contracts are tightly coupled.
-- Documentation, tests, and configuration may run separately only when file
-  ownership does not overlap.
-- Merge in predecessor order; rebase or otherwise update task branches after
-  prerequisite pull requests merge.
+- Independent framework or package tasks may run in parallel after their real
+  shared prerequisites and tracker gates are satisfied.
+- Do not serialize React, Angular, and Vue merely because they are different
+  framework surfaces.
+- Do not run tasks concurrently when they modify the same core files or depend
+  on an unpromoted shared contract.
+- Implement reusable cross-framework foundations once in the appropriate shared
+  layer before duplicating behavior in framework packages.
+- Documentation, tests, configuration, and framework work may proceed
+  independently only when their ownership and file scopes do not conflict.
+- When a prerequisite is promoted, synchronize the owning integration lane as
+  required by the delivery governance before continuing dependent work.
 
 ## Scope-control rules
 
@@ -66,85 +88,112 @@ for dependency state, owner, review, scope, and evidence requirements.
 - Do not change CSS prefix or token contracts without ADR and task approval.
 - Do not promote component maturity without the required evidence.
 - Do not silently skip validation or commit generated or local artifacts.
+- Keep reusable library concerns separate from consuming-application business
+  logic.
 
-## VyrnForge architecture boundaries
+## Architecture boundaries
 
-Follow [Package Boundaries](../architecture/01-package-boundaries.md) and
+Follow the current
+[Project Source Of Truth](01-project-source-of-truth.md),
+[Package Boundaries](../architecture/01-package-boundaries.md), and
 [State and Adapter Ownership](../architecture/02-state-and-adapter-ownership.md).
 
-| Package                    | Responsibility                                    | Allowed dependencies                 |
-| -------------------------- | ------------------------------------------------- | ------------------------------------ |
-| `@vyrnforge/ui-core`       | tokens, themes, density, shared utilities         | none of the other VyrnForge packages |
-| `@vyrnforge/ui-components` | reusable UI primitives and application components | `ui-core`                            |
-| `@vyrnforge/ui-data-grid`  | enterprise data-management grid capabilities      | `ui-core`, `ui-components`           |
+Do not maintain a package inventory in this checklist. Package topology and
+release classification change independently and are owned by the sources above.
 
-VyrnForge packages remain store-agnostic. Consuming applications may use Redux,
-but VyrnForge cannot require it. Do not add MUI, Tailwind, Radix, TanStack,
-Redux, Zustand, or other large runtime dependencies without explicit approval.
-Prefer reusing or extending VyrnForge before creating one-off application
-components.
+Durable boundaries remain:
+
+- shared tokens, styles, contracts, schemas, metadata, generators, and reusable
+  framework-independent logic stay shared where practical;
+- framework packages adapt shared VyrnForge foundations rather than becoming
+  independent component libraries;
+- VyrnForge packages remain application-store agnostic;
+- consuming applications may use their preferred state-management tools, but
+  VyrnForge must not require an application state library;
+- large UI frameworks, styling systems, and similar foundational dependencies
+  require explicit approval;
+- prefer extending an existing VyrnForge foundation over creating a one-off
+  application component.
 
 ## CSS and token rules
 
-Follow [ADR-003: CSS Prefix Policy](../architecture/adr-003-css-prefix-policy.md).
-Shared contracts use `--vf-*` variables and `vf-*` classes. Data-grid-specific
-internals alone may use `--udg-*` variables and `udg-*` classes. Do not
-introduce legacy `dv-*` terminology. Documented CSS variables are
-consumer-facing contracts; a broad migration requires a dedicated task.
+Follow [ADR-003: CSS Prefix Policy](../architecture/adr-003-css-prefix-policy.md)
+and the current token metadata. Shared contracts use VyrnForge-owned token and
+class conventions; do not introduce legacy terminology or duplicate token
+systems. Documented CSS custom properties are consumer-facing contracts, so
+broad migrations require a dedicated task and compatibility review.
 
 ## Implementation rules
 
 - Preserve public behavior unless the task explicitly approves a change.
-- Prefer small, reviewable commits and native-first, dependency-minimal work.
-- Preserve accessibility and keyboard behavior.
+- Prefer small, reviewable, dependency-minimal changes.
+- Preserve accessibility, keyboard, focus, internationalization, responsive,
+  SSR/server-safe, compatibility, and performance requirements where applicable.
 - Add tests proportionate to component complexity; never weaken tests merely to
   make a change pass.
+- Prefer public-entrypoint and packed-package verification for consumer-facing
+  changes.
 - Keep documentation aligned with actual behavior and record limitations
-  honestly.
+  accurately.
+- When CI fails, inspect and fix the cause rather than only explaining it.
 
 ## Review checklist
 
-- [ ] Changed files match the approved task scope and predecessors are complete.
-- [ ] Public API and package-boundary impacts are reviewed.
-- [ ] Required tests, accessibility, theme/density, and applicable performance
-      review pass.
-- [ ] Documentation is current and acceptance evidence is attached.
-- [ ] No unrelated changes are included and the change manifest is complete.
+- [ ] Changed files match the approved task scope and required predecessors are complete.
+- [ ] Shared foundations were reused or extended before introducing new abstractions.
+- [ ] Cross-framework impact and any explicit framework exception were reviewed.
+- [ ] Public API, package-boundary, compatibility, and migration impacts were reviewed.
+- [ ] Required tests, accessibility, theme/density, SSR, browser, and performance evidence pass where applicable.
+- [ ] Documentation and canonical metadata are current.
+- [ ] Acceptance evidence is attached and no unrelated changes are included.
+- [ ] The change manifest is complete.
 
-Apply the [Ownership and Review Model](ownership-and-review-model.md) and the
+Apply the [Ownership and Review Model](ownership-and-review-model.md) and
 [Component Maturity Model](component-maturity-model.md) for required roles and
 evidence.
 
 ## Merge and post-merge procedure
 
-Target `improvement/controlled-hardening`. Required checks must pass; squash
-merge is preferred unless history requires otherwise. Delete completed task
-branches and worktrees, synchronize the integration branch, and update the
-sprint workbook or task status. Do not mark the sprint quality gate passed
-until every required task and its evidence are complete.
+Use the branch target, synchronization path, validation boundary, and promotion
+procedure defined by
+[Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md). This
+checklist intentionally does not duplicate branch names or merge topology.
+
+After merge:
+
+- remove completed short-lived task branches/worktrees as appropriate;
+- synchronize affected integration lanes when required;
+- update the live tracker and gate evidence when the task changes execution
+  state;
+- update canonical metadata or generated evidence when the task changes the
+  facts those sources own;
+- do not mark a task, maturity state, release state, or gate complete until its
+  acceptance criteria and required evidence pass.
 
 ## Exceptions and waivers
 
-Use the [Change Manifest and Dependency Policy](change-manifest-and-dependency-policy.md).
+Use the
+[Change Manifest and Dependency Policy](change-manifest-and-dependency-policy.md).
 Every waiver must be explicit, record its risk and approver, and create a
 follow-up task where required. A waiver cannot silently redefine component
-maturity or release readiness.
+maturity, release readiness, architecture ownership, or gate status.
 
-## AI coding-agent instructions
+## Coding-agent instructions
 
-> Verify the worktree and branch before editing. Read the canonical governance
-> documents. Modify only permitted files and avoid unrelated improvements.
-> Report changed files and commands run. Do not commit automatically unless
-> explicitly asked. Distinguish facts from assumptions, and stop when scope is
-> ambiguous.
+> Verify repository and branch state before editing. Read the canonical
+> governance and tracker sources for the task. Modify only permitted files and
+> avoid unrelated improvements. Report changed files and validation performed.
+> Do not commit automatically unless explicitly authorized. Distinguish facts
+> from assumptions, and stop when scope is ambiguous.
 
-## Source-of-truth index
+## Related canonical documents
 
+- [Project Source Of Truth](01-project-source-of-truth.md)
+- [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md)
 - [Repository Inventory](repository-inventory.md)
-- [Repository Hygiene](repository-hygiene.md)
 - [Ownership and Review Model](ownership-and-review-model.md)
 - [Component Maturity Model](component-maturity-model.md)
 - [Change Manifest and Dependency Policy](change-manifest-and-dependency-policy.md)
-- [ADR-003: CSS Prefix Policy](../architecture/adr-003-css-prefix-policy.md)
+- [Metadata Maintenance](04-metadata-maintenance.md)
 - [Package Boundaries](../architecture/01-package-boundaries.md)
 - [State and Adapter Ownership](../architecture/02-state-and-adapter-ownership.md)
