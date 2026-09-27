@@ -199,7 +199,6 @@ for (const marker of [
   "npm run verify:repository-inventory",
   "node scripts/assemble-versioned-pages.mjs",
   "node scripts/verify-pages-site.mjs",
-  "VITE_PLAYGROUND_VERSION_ID: next",
   "pages-site-${{ github.sha }}",
   "actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0",
   "ACTIONLINT_VERSION: 1.7.12",
@@ -220,6 +219,10 @@ assert(
   "ci.yml exact-main delivery must fetch history and tags for retained reference snapshots",
 );
 assert(!ci.includes("npm publish"), "ci.yml must never publish packages");
+assert(
+  !ci.includes("VITE_PLAYGROUND_"),
+  "ci.yml must not restore standalone Playground delivery variables",
+);
 
 const assurance = read(".github/workflows/assurance.yml");
 for (const marker of [
@@ -294,18 +297,18 @@ for (const marker of [
   'gh run download "${{ steps.candidate.outputs.run-id }}"',
   '--name "pages-site-${{ steps.candidate.outputs.head-sha }}"',
   "test -f site/index.html",
-  "test -f site/playground/index.html",
   "test -f site/.nojekyll",
   "test -f site/vyrnforge-versions.json",
   "test -f site/docs-versions.json",
   "catalog.current?.commit",
-  "release.playgroundPath",
   "pages: write",
   "id-token: write",
 ]) {
   assert(pages.includes(marker), `deploy-pages.yml must include ${marker}`);
 }
 for (const forbidden of [
+  "site/playground/index.html",
+  "release.playgroundPath",
   "actions/checkout@",
   "actions/setup-node@",
   "actions/download-artifact@",
