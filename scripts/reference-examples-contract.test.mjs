@@ -15,7 +15,7 @@ function json(relativePath) {
   return JSON.parse(read(relativePath));
 }
 
-test("Playground executable examples stay bound to verified consumer fixtures", () => {
+test("Docs executable examples stay bound to verified consumer fixtures", () => {
   const metadata = json("docs/metadata/executable-examples.json");
   const manifest = json("tests/consumers/manifest.json");
   const model = json("docs/generated/reference-model.json");
@@ -47,12 +47,12 @@ test("Playground executable examples stay bound to verified consumer fixtures", 
   }
 
   const runtime = read("docs/reference/referenceRuntime.ts");
-  assert.match(runtime, /ReferenceExample/);
-  assert.match(runtime, /getReferenceExample/);
-  assert.match(runtime, /executable example records are incomplete/);
+  assert.match(runtime, /ReferenceExample/u);
+  assert.match(runtime, /getReferenceExample/u);
+  assert.match(runtime, /executable example records are incomplete/u);
 
   const adapter = read(
-    "examples/basic-playground/src/data/executableExampleContract.ts",
+    "apps/docs/src/examples/data/executableExampleContract.ts",
   );
   for (const marker of [
     "tests/consumers/manifest.json?raw",
@@ -69,34 +69,22 @@ test("Playground executable examples stay bound to verified consumer fixtures", 
     );
   }
 
-  const routes = read(
-    "examples/basic-playground/src/app/executableExampleRoutes.tsx",
-  );
-  assert.match(routes, /referenceModel\.examples\.map/);
-  assert.match(routes, /getReferenceRecordRoute\(referenceModel, "examples"/);
-  assert.match(routes, /exampleFrameworkId: example\.framework/);
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+  assert.match(routes, /id: "executable-examples"/u);
+  assert.match(routes, /sourcePath: "tests\/consumers\/manifest\.json"/u);
+  assert.match(routes, /kind: "executable-examples"/u);
 
-  const app = read("examples/basic-playground/src/app/App.tsx");
-  assert.match(app, /executableExamplesCatalogRoute/);
-  assert.match(app, /executableExampleDetailRoutes/);
-  assert.match(app, /getExecutableExampleRouteForFramework/);
-  assert.match(app, /activeRoute\.exampleFrameworkId/);
-
-  const nav = read("examples/basic-playground/src/app/PlaygroundNav.tsx");
-  assert.match(nav, /route\.id === "executable-examples"/);
-  assert.match(nav, /return "examples"/);
-
-  const page = read(
-    "examples/basic-playground/src/pages/reference/ExecutableExamplesPage.tsx",
-  );
+  const page = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
   for (const marker of [
-    "executableExampleRecords",
     "getExecutableExampleRecord",
+    "executable consumer",
     "Executable source",
-    "Verification contract",
-    "Runtime evidence",
-    "usePlaygroundFramework",
+    "packed VyrnForge packages",
   ]) {
     assert.match(page, new RegExp(marker));
   }
+
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
+  assert.match(docsPage, /ExecutableExamplesPage/u);
+  assert.match(docsPage, /route\.kind === "executable-examples"/u);
 });
