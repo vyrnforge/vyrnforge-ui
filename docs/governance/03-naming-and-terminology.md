@@ -30,18 +30,16 @@ The precise compatibility and ownership rules for CSS prefixes are defined by
 
 ## Terms
 
-| Term | Meaning |
-| --- | --- |
-| Native HTML / Custom Elements | First-class VyrnForge browser surface and canonical non-grid browser implementation where suitable. |
-| Framework surface | An idiomatic Native HTML / Custom Elements, React, Angular, or Vue consumer surface over shared VyrnForge foundations. |
-| Store-agnostic | VyrnForge does not require an application state-management library. |
-| Controlled state | Consuming application owns relevant UI state through the surface's public inputs/events. |
-| Uncontrolled state | The component owns supported local view state internally. |
-| Adapter | Explicit integration boundary between shared VyrnForge foundations and a framework, platform, persistence, server, export, or other external concern. |
-| View state | Reusable UI state such as filters, sort, pagination, density, or column setup. |
-| Business state | Application-owned state such as authentication, API data, permissions, tenant context, or product workflows. |
-| Integration lane | Persistent protected engineering branch for an architectural ownership area; not an alternate release trunk. |
-| Pattern | Reusable composition of VyrnForge capabilities; not automatically a distinct component or state model. |
+- **Native HTML / Custom Elements**: First-class VyrnForge browser surface and canonical non-grid browser implementation where suitable.
+- **Framework surface**: An idiomatic Native HTML / Custom Elements, React, Angular, or Vue consumer surface over shared VyrnForge foundations.
+- **Store-agnostic**: VyrnForge does not require an application state-management library.
+- **Controlled state**: Consuming application owns relevant UI state through the surface's public inputs/events.
+- **Uncontrolled state**: The component owns supported local view state internally.
+- **Adapter**: Explicit integration boundary between shared VyrnForge foundations and a framework, platform, persistence, server, export, or other external concern.
+- **View state**: Reusable UI state such as filters, sort, pagination, density, or column setup.
+- **Business state**: Application-owned state such as authentication, API data, permissions, tenant context, or product workflows.
+- **Integration lane**: Persistent protected engineering branch for an architectural ownership area; not an alternate release trunk.
+- **Pattern**: Reusable composition of VyrnForge capabilities; not automatically a distinct component or state model.
 
 ## Avoid terms
 
