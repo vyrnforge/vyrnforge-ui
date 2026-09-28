@@ -122,7 +122,7 @@ const outputLines = [
     packageRecords.map(({ directory, manifest }) => [
       `\`${manifest.name}\``,
       `\`packages/${directory}/\``,
-      `\`docs/packages/${directory}.md\``,
+      `\`packages/${directory}/README.md\``,
     ]),
   ),
   "",

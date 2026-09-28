@@ -1,57 +1,76 @@
 # Public Vs Internal API
 
-This document defines what consuming apps may rely on.
+This document defines what consuming applications may rely on. It does not own
+the package inventory, component maturity records, or release classification.
 
 ## Public API
 
-Public API includes:
+A VyrnForge API is public when it is exposed through a documented public package
+entrypoint or documented consumer-facing contract and is not explicitly marked
+internal.
 
-- package entry exports from `@vyrnforge/ui-core`
-- package entry exports from `@vyrnforge/ui-components`
-- package entry exports from `@vyrnforge/ui-data-grid`
-- documented React components
-- documented component props and exported types
-- documented CSS variables
-- documented CSS import paths
-- documented data-grid state contracts
-- the experimental `useDataGridState` hook from `@vyrnforge/ui-data-grid`
-- documented persistence, server-query, and export-request adapter contracts
-- documented metadata JSON files under `docs/metadata/`
+Public API includes, as applicable:
 
-If an API is exported but not documented yet, treat it as available but verify package docs and metadata before using it in new product code.
+- documented package-root and public subpath exports from the current VyrnForge
+  packages;
+- Native HTML / Custom Element, React, Angular, and Vue public component/facade
+  contracts;
+- documented component properties/inputs, events/outputs, methods, slots,
+  composition rules, refs, and exported types;
+- documented CSS entrypoints, custom properties, and classes;
+- documented framework-neutral behavior/controller contracts;
+- documented data-grid state, persistence, server-query, and export-request
+  contracts;
+- documented structured metadata intended for repository tooling or consumers.
+
+Current package identity and public entrypoints are owned by
+[`../metadata/packages.json`](../metadata/packages.json), package manifests, and
+verified package artifacts. Component maturity is owned by
+[`../metadata/components.json`](../metadata/components.json). Do not infer
+public support from an internal source path merely because it is reachable in
+the repository.
+
+If an export exists but its public status is unclear, verify the package
+manifest/exports, package guidance, canonical metadata, and generated reference
+before adopting it as an application contract.
 
 ## Internal API
 
 Internal API includes:
 
-- private helper files
-- non-exported hooks
-- grid coordination hooks such as column resize/reorder, generic controlled
-  state, and debounced value handling
-- `ToastViewport`, which `ToastProvider` renders internally
-- non-exported utilities
-- implementation details inside `src/components`, `src/core`, `src/hooks`, and `src/adapters`
-- internal class names not documented in `css-class-reference.md`
-- test utilities
-- generated build output
-- docs-app-only classes such as `vf-docs-*`
+- private helper files and non-exported hooks/controllers;
+- package-internal source paths not declared as public entrypoints;
+- renderer coordination and implementation details that are not part of a
+  documented contract;
+- internal class names not documented in
+  [CSS Class Reference](css-class-reference.md);
+- test utilities and fixture-only adapters;
+- generated build output that is not an explicit published artifact;
+- docs-application-only implementation such as `vf-docs-*` classes.
 
 Internal APIs may change without a compatibility guarantee.
 
-## Maturity
+## Maturity and release state
 
-Public component maturity is recorded in `docs/metadata/components.json`:
-`planned`, `experimental`, `alpha-stable`, `beta-stable`, `stable`, or
-`deprecated`. Internal records in that catalog are not supported package-root
-imports.
-`stable` and `experimental` items may be imported from package roots; `planned`
-items are not implemented public APIs. Evidence for a higher-maturity claim is
-recorded in `docs/metadata/components.json` and checked with
-`npm run verify:component-maturity`.
+Public component maturity is recorded in
+[`../metadata/components.json`](../metadata/components.json). Package/release
+classification is recorded in release metadata and package manifests. Public
+API status, component maturity, and release channel are related but distinct:
+an exported experimental component is not made stable by being package-root
+accessible, and a package release channel does not promote every component
+inside it.
 
-## Agent Rules
+Use the canonical maturity values and evidence from component metadata rather
+than maintaining a second list here.
 
-- Before using a VyrnForge component, check API docs and metadata.
-- Do not import from deep internal package paths unless explicitly asked.
-- Do not use undocumented internal APIs as app contracts.
-- If a needed API is missing, document the gap and add it in a dedicated implementation task.
+## Consumer rules
+
+- Import from documented public package entrypoints, not package-internal
+  `src/*` paths.
+- Check canonical component/API metadata before relying on a VyrnForge contract.
+- Keep application business logic, state management, backend integration,
+  routing, authorization, and persistence outside VyrnForge contracts.
+- Do not treat generated/reference views as independent API authorities; they
+  must derive from canonical metadata and implementation.
+- If a needed API is missing, record the gap and implement it through a
+  dedicated VyrnForge task rather than depending on an internal path.

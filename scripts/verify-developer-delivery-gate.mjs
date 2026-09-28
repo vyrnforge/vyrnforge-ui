@@ -23,7 +23,8 @@ const requiredFiles = [
   "scripts/generate-framework-api-reference.mjs",
   "scripts/verify-executable-example-contract.mjs",
   "apps/docs/src/ComponentReferencePage.tsx",
-  "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+  "apps/docs/src/examples/MigratedExamplePage.tsx",
+  "apps/docs/src/examples/ExecutableExamplesPage.tsx",
 ];
 
 function read(root, relativePath) {
@@ -85,7 +86,7 @@ export function verifyGateManifest(manifest) {
   const requiredBeforeClose = new Set(manifest.gate?.requiredBeforeClose ?? []);
   for (const requirement of [
     "generated API reference is reader-facing and drift-checked",
-    "docs and playground share one version/framework/reference contract",
+    "Docs owns one version/framework/reference contract",
     "representative examples are verified across Native HTML, React, Angular, and Vue",
     "PR reference preview artifact is available without deployment permissions",
     "current-main reference deployment consumes immutable artifacts only",
@@ -128,18 +129,29 @@ export function verifyDeveloperDeliveryGate({ root = repositoryRoot } = {}) {
     failures,
   );
 
-  const playgroundReference = read(
+  const executableExamplesPage = read(
     root,
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
   );
   requireMarkers(
-    playgroundReference,
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+    executableExamplesPage,
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
     [
-      "executableExamples[frameworkId]",
-      "Verified consumer example",
-      "executableExampleSourceOfTruth",
+      "getExecutableExampleRecord",
+      "packed VyrnForge packages",
+      "Executable source",
     ],
+    failures,
+  );
+
+  const migratedExamplePage = read(
+    root,
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
+  );
+  requireMarkers(
+    migratedExamplePage,
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
+    ["exampleId", "const examples =", "Interactive example"],
     failures,
   );
 
