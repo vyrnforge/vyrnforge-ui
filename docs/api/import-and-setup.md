@@ -72,7 +72,7 @@ bootstrapApplication(AppComponent, {
 ```
 
 Use `@vyrnforge/ui-angular/forms` only when Angular Forms integration is needed.
-See [Angular package guidance](../packages/ui-angular.md) for the supported peer
+See [Angular package guidance](../../packages/ui-angular/README.md) for the supported peer
 and Forms contract.
 
 ## Vue
@@ -92,7 +92,7 @@ createApp(App).use(VyrnForgeVue).mount("#app");
 ```
 
 Then use the public `Vf*` components, generated `v-model` mappings, slots,
-emits, and typed refs. See [Vue package guidance](../packages/ui-vue.md) for the
+emits, and typed refs. See [Vue package guidance](../../packages/ui-vue/README.md) for the
 current peer and facade contract.
 
 ## Data grid
