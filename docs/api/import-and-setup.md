@@ -12,7 +12,7 @@ version appropriate to the current published release.
 ## React
 
 ```bash
-npm install @vyrnforge/ui-components
+npm install @vyrnforge/ui-components@beta
 ```
 
 ```tsx
@@ -29,7 +29,7 @@ not `src` paths.
 ## Native HTML / Custom Elements
 
 ```bash
-npm install @vyrnforge/ui-elements
+npm install @vyrnforge/ui-elements@beta
 ```
 
 Register once at the browser boundary:
@@ -56,7 +56,7 @@ attributes.
 ## Angular
 
 ```bash
-npm install @vyrnforge/ui-angular
+npm install @vyrnforge/ui-angular@beta
 ```
 
 Register VyrnForge once:
@@ -78,7 +78,7 @@ and Forms contract.
 ## Vue
 
 ```bash
-npm install @vyrnforge/ui-vue vue
+npm install @vyrnforge/ui-vue@beta vue
 ```
 
 Install the plugin once:
@@ -100,7 +100,7 @@ current peer and facade contract.
 The optional specialized data grid currently uses the React surface:
 
 ```bash
-npm install @vyrnforge/ui-components @vyrnforge/ui-data-grid
+npm install @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
 ```
 
 ```tsx
