@@ -3,7 +3,7 @@
   "product": {
     "id": "vyrnforge-reference",
     "label": "VyrnForge Reference",
-    "purpose": "One reader-facing product for VyrnForge guidance, generated reference facts, executable examples, and versioned framework context across Docs and Playground.",
+    "purpose": "One reader-facing VyrnForge documentation product for guidance, generated reference facts, executable examples, patterns, Data & Grid content, and versioned framework context.",
     "implementationHost": "react",
     "semanticOwnership": "framework-neutral",
     "hostPolicy": "The React host is an implementation detail. Native HTML, React, Angular, and Vue remain equal reader contexts and no React-only presentation contract may become canonical VyrnForge semantics."
@@ -34,12 +34,7 @@
     "docs": {
       "label": "Docs",
       "path": "/",
-      "role": "curated guidance and generated reference presentation"
-    },
-    "playground": {
-      "label": "Playground",
-      "path": "/playground/",
-      "role": "executable examples, interaction exploration, and reference presentation"
+      "role": "curated guidance, generated reference presentation, interactive examples, patterns, and Data & Grid documentation"
     }
   },
   "navigation": {
@@ -66,7 +61,7 @@
       }
     ],
     "sharedVocabulary": true,
-    "surfaceSpecificPresentationAllowed": true
+    "surfaceSpecificPresentationAllowed": false
   },
   "contentOwnership": {
     "guides": {
@@ -169,8 +164,8 @@
     "artifactManifest": "reference-artifact.json",
     "productionSourceBranch": "main",
     "immutable": true,
-    "surfaces": ["docs", "playground"],
-    "policy": "Preview and production artifacts preserve Docs and Playground as one deployable Reference product while retaining commit and CI lineage."
+    "surfaces": ["docs"],
+    "policy": "Preview and production artifacts deploy the single Docs product while retaining exact commit and CI lineage."
   },
   "versionCatalog": "vyrnforge-versions.json"
 }

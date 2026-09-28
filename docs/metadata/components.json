@@ -5383,23 +5383,23 @@
       "displayName": "PropertyTable",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
-      "maturity": "planned",
+      "maturity": "experimental",
       "owner": "Component Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
+      "sourcePath": "packages/ui-components/src/components/PropertyTable/PropertyTable.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "property-table",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
+        "Avoid for interactive data-grid behavior such as sorting, filtering, resizing, selection, grouping, or persisted grid state; use UniversalDataGrid instead."
       ],
       "deprecation": {
         "status": "not-applicable"
@@ -5410,33 +5410,63 @@
       "relatedComponents": ["DescriptionList", "UniversalDataGrid"],
       "cssClasses": ["vf-property-table"],
       "cssVariables": [],
-      "importExample": "import { VyrnForgePropertyTableElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-      "basicUsageExample": "<vf-property-table><table><caption>Deployment properties</caption><tbody><tr><th scope=\"row\">Region</th><td>us-east-1</td></tr></tbody></table></vf-property-table>",
+      "importExample": "import { PropertyTable } from '@vyrnforge/ui-components';",
+      "basicUsageExample": "<PropertyTable><table><caption>Deployment properties</caption><tbody><tr><th scope=\"row\">Region</th><td>us-east-1</td></tr></tbody></table></PropertyTable>",
       "accessibilityNotes": "Keep one native table as the semantic authority; preserve caption, th, scope, and header/cell relationships and do not replace them with grid roles.",
-      "aiUsageNotes": "Treat PropertyTable as a state-free semantic wrapper around one real table, not as a data-grid or application-specific property model."
+      "aiUsageNotes": "Treat PropertyTable as a state-free semantic wrapper around one real table, not as a data-grid or application-specific property model.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "PropertyTable",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "not-applicable"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "current",
+          "strategy": "direct-element",
+          "target": "vf-property-table",
+          "evidence": "docs/metadata/native-element-foundations.json"
+        },
+        "angular": {
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/angular-consumer.json"
+        },
+        "vue": {
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/vue-consumer.json"
+        }
+      }
     },
     {
       "id": "timeline",
       "displayName": "Timeline",
       "package": "@vyrnforge/ui-components",
       "category": "data-display",
-      "maturity": "planned",
+      "maturity": "experimental",
       "owner": "Component Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
+      "sourcePath": "packages/ui-components/src/components/Timeline/Timeline.tsx",
+      "publicExport": true,
+      "since": "requires-verification",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "timeline",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
         "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
+        "Read-only presentation only; persistence, loading, filtering, actor/action schemas, selection, and live-feed behavior remain application-owned."
       ],
       "deprecation": {
         "status": "not-applicable"
@@ -5447,10 +5477,40 @@
       "relatedComponents": ["Badge"],
       "cssClasses": ["vf-timeline"],
       "cssVariables": [],
-      "importExample": "import { VyrnForgeTimelineElement, registerVyrnForgeElements } from \"@vyrnforge/ui-elements\";",
-      "basicUsageExample": "<vf-timeline><li><time datetime=\"2026-09-24T01:00:00Z\">01:00</time> Created</li></vf-timeline>",
+      "importExample": "import { Timeline } from '@vyrnforge/ui-components';",
+      "basicUsageExample": "<Timeline><li><time dateTime=\"2026-09-24T01:00:00Z\">01:00</time> Created</li></Timeline>",
       "accessibilityNotes": "Preserve ordered-list semantics and source order; each entry must remain a native list item and timestamps should use readable text with a machine-readable time value when available.",
-      "aiUsageNotes": "Treat Timeline as a state-free semantic ordered-list wrapper. Entry data, actors, actions, persistence, loading, and filtering remain application-owned; use the Activity Log pattern for actor/action/time histories."
+      "aiUsageNotes": "Treat Timeline as a state-free semantic ordered-list wrapper. Entry data, actors, actions, persistence, loading, and filtering remain application-owned; use the Activity Log pattern for actor/action/time histories.",
+      "frameworkParity": {
+        "betaScope": "included",
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "export": "Timeline",
+          "status": "current"
+        },
+        "behaviors": {
+          "package": "@vyrnforge/ui-behaviors",
+          "status": "foundation-current",
+          "componentController": "not-applicable"
+        },
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "status": "current",
+          "strategy": "direct-element",
+          "target": "vf-timeline",
+          "evidence": "docs/metadata/native-element-foundations.json"
+        },
+        "angular": {
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/angular-consumer.json"
+        },
+        "vue": {
+          "status": "verified-consumer",
+          "consumes": "@vyrnforge/ui-elements",
+          "evidence": "docs/metadata/vue-consumer.json"
+        }
+      }
     },
     {
       "id": "advanced-filter-drawer",

@@ -4,7 +4,7 @@ First-class Vue facade package for VyrnForge.
 
 `@vyrnforge/ui-vue` is a thin Vue adapter over the canonical native implementation in `@vyrnforge/ui-elements`. It owns Vue-facing component definitions, typing, `v-model` mappings, slots, refs, events, and setup helpers while rendering, accessibility behavior, forms, styling, and shared state semantics remain in VyrnForge's framework-agnostic/native foundations.
 
-The supported Vue peer range is `>=3.5 <4`. Vue is not bundled into the package.
+The supported Vue peer range is `>=3.4 <4`. Vue is not bundled into the package.
 
 ## Install
 
@@ -63,7 +63,7 @@ Use Vue-facing emits and `v-model` for normal facade integration. Canonical `vf-
 - Native form association and validity remain implemented by the custom elements through `ElementInternals`.
 - Importing the package is server-safe; browser element registration is deferred when browser globals are unavailable.
 
-See [`docs/packages/ui-vue.md`](../../docs/packages/ui-vue.md) for the complete setup, model, event, slot, typed-ref, form, SSR, raw-element escape-hatch, and migration contract.
+This README is the package-owned setup and usage guide. Generated per-component framework API details live in [`../../docs/generated/component-reference.json`](../../docs/generated/component-reference.json), while cross-framework migration and limitations live in [`../../docs/release/multi-framework-migration-and-limitations.md`](../../docs/release/multi-framework-migration-and-limitations.md).
 
 ## Migration from fixture-local adapters
 

@@ -1,9 +1,9 @@
-import consumerKnowledgeRaw from "../../../../docs/generated/consumer-knowledge.json?raw";
-import frameworkApiReferenceRaw from "../../../../docs/generated/framework-api-reference.json?raw";
-import designTokensRaw from "../../../../docs/metadata/design-tokens.json?raw";
-import nativeAdvancedElementsRaw from "../../../../docs/metadata/native-advanced-elements.json?raw";
-import nativeCoreElementsRaw from "../../../../docs/metadata/native-core-elements.json?raw";
-import releaseGroupsRaw from "../../../../docs/metadata/release-groups.json?raw";
+import consumerKnowledgeRaw from "../../../../../docs/generated/consumer-knowledge.json?raw";
+import frameworkApiReferenceRaw from "../../../../../docs/generated/framework-api-reference.json?raw";
+import designTokensRaw from "../../../../../docs/metadata/design-tokens.json?raw";
+import nativeAdvancedElementsRaw from "../../../../../docs/metadata/native-advanced-elements.json?raw";
+import nativeCoreElementsRaw from "../../../../../docs/metadata/native-core-elements.json?raw";
+import releaseGroupsRaw from "../../../../../docs/metadata/release-groups.json?raw";
 
 export type ReferenceFrameworkId = "native" | "react" | "angular" | "vue";
 export type ReferencePlaygroundFrameworkId =
