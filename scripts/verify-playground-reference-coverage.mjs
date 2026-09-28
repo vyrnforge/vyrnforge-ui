@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -6,7 +6,6 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-
 const frameworkIds = ["native-html", "react", "angular", "vue"];
 const apiSurfaceIds = ["native", "react", "angular", "vue"];
 
@@ -32,16 +31,13 @@ export function verifyPlaygroundReferenceCoverage({
   root = repositoryRoot,
 } = {}) {
   const failures = [];
+  const model = json(root, "docs/generated/reference-model.json");
   const knowledge = json(root, "docs/generated/consumer-knowledge.json");
   const contracts = json(root, "docs/metadata/component-contracts.json");
+  const catalog = json(root, "docs/metadata/components.json");
   const frameworkApi = json(
     root,
     "docs/generated/framework-api-reference.json",
-  );
-  const nativeCore = json(root, "docs/metadata/native-core-elements.json");
-  const nativeAdvanced = json(
-    root,
-    "docs/metadata/native-advanced-elements.json",
   );
 
   const components = knowledge.components ?? [];
@@ -60,9 +56,14 @@ export function verifyPlaygroundReferenceCoverage({
     }
   }
 
-  const canonicalIds = (contracts.componentContracts ?? []).map(
-    (component) => component.id,
+  const publicCatalogIds = new Set(
+    (catalog.components ?? [])
+      .filter((component) => component.publicExport === true)
+      .map((component) => component.id),
   );
+  const canonicalIds = (contracts.componentContracts ?? [])
+    .filter((component) => publicCatalogIds.has(component.id))
+    .map((component) => component.id);
   for (const id of duplicates(canonicalIds)) {
     failures.push(`canonical component contracts have duplicate id: ${id}`);
   }
@@ -86,107 +87,56 @@ export function verifyPlaygroundReferenceCoverage({
     }
   }
 
-  const phaseTags = [
-    ...(nativeCore.registration?.tags ?? []),
-    ...(nativeAdvanced.registration?.addedTags ?? []),
-  ];
-  for (const tag of duplicates(phaseTags)) {
-    failures.push(`native element phase metadata has duplicate tag: ${tag}`);
+  const componentDomain = model.domains?.find(
+    (domain) => domain.id === "components",
+  );
+  if (componentDomain?.routeTemplate !== "/components/{id}") {
+    failures.push("generated component route template is not /components/{id}");
   }
 
-  const canonicalNativeTags = [
-    ...new Set(
-      (frameworkApi.surfaces?.native?.components ?? [])
-        .filter((component) => component.status === "current" && component.tag)
-        .map((component) => component.tag),
-    ),
-  ];
-  const referenceElementTags = [
-    ...new Set([...phaseTags, ...canonicalNativeTags]),
-  ];
-
-  const componentPaths = componentIds.map(
-    (id) => `/reference/components/${id}`,
-  );
-  const elementPaths = referenceElementTags.map(
-    (tag) => `/reference/elements/${tag}`,
-  );
-  for (const referencePath of duplicates([
-    ...componentPaths,
-    ...elementPaths,
-  ])) {
-    failures.push(`generated reference path is not unique: ${referencePath}`);
+  const docsRoutes = read(root, "apps/docs/src/referenceRoutes.ts");
+  for (const marker of [
+    'kind: "example"',
+    'kind: "executable-examples"',
+    'label: "Foundations"',
+    'label: "Patterns"',
+    'label: "Data & Grid"',
+  ]) {
+    if (!docsRoutes.includes(marker)) {
+      failures.push(`unified Docs routes are missing ${marker}`);
+    }
   }
 
-  const metadataSource = read(
+  const migratedExamples = read(
     root,
-    "examples/basic-playground/src/data/referenceMetadata.ts",
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
   );
   for (const marker of [
-    "phaseElementEntries",
-    "phaseElementTags",
-    "canonicalNativeElementEntries",
-    "...canonicalNativeElementEntries",
+    "ThemeModesPage",
+    "DensityPage",
+    "BasicGridPage",
+    "SettingsPage",
+    "vf-docs-example-stage",
   ]) {
-    if (!metadataSource.includes(marker)) {
-      failures.push(`reference metadata projection is missing ${marker}`);
+    if (!migratedExamples.includes(marker)) {
+      failures.push(`migrated Docs examples are missing ${marker}`);
     }
   }
 
-  const routeSource = read(
+  const executableExamples = read(
     root,
-    "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
   );
-  for (const marker of [
-    "referenceComponents.map",
-    "referenceElements.map",
-    "referenceDetailRoutes",
-    "`/reference/components/${component.id}`",
-    "`/reference/elements/${element.tag}`",
-  ]) {
-    if (!routeSource.includes(marker)) {
-      failures.push(`generated reference routes are missing ${marker}`);
-    }
+  if (!executableExamples.includes("getExecutableExampleRecord")) {
+    failures.push(
+      "Docs executable examples are not backed by the packed-consumer contract",
+    );
   }
 
-  const catalogSource = read(
-    root,
-    "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
-  );
-  for (const marker of [
-    "`#/reference/components/${component.id}`",
-    "`#/reference/elements/${element.tag}`",
-  ]) {
-    if (!catalogSource.includes(marker)) {
-      failures.push(`reference catalog links are missing ${marker}`);
-    }
-  }
-
-  const appSource = read(root, "examples/basic-playground/src/app/App.tsx");
-  for (const marker of [
-    "const navigationRoutes = [",
-    "const routes = [...navigationRoutes, ...referenceDetailRoutes]",
-    "routes={navigationRoutes}",
-  ]) {
-    if (!appSource.includes(marker)) {
-      failures.push(`playground route separation is missing ${marker}`);
-    }
-  }
-
-  const detailSource = read(
-    root,
-    "examples/basic-playground/src/pages/reference/MetadataDetailPages.tsx",
-  );
-  for (const marker of [
-    "getReferenceFrameworkComponent",
-    "usePlaygroundFramework",
-    "findDemoRoute",
-    "createComponentReferenceDetailPage",
-    "createElementReferenceDetailPage",
-  ]) {
-    if (!detailSource.includes(marker)) {
-      failures.push(`reference detail renderer is missing ${marker}`);
-    }
+  if (existsSync(path.join(root, "examples/basic-playground"))) {
+    failures.push(
+      "standalone public Playground package still exists after Docs migration",
+    );
   }
 
   return failures.sort();
@@ -195,10 +145,10 @@ export function verifyPlaygroundReferenceCoverage({
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const failures = verifyPlaygroundReferenceCoverage();
   if (failures.length > 0) {
-    console.error("Playground reference coverage verification failed:");
+    console.error("Unified Docs reference coverage verification failed:");
     for (const failure of failures) console.error(`- ${failure}`);
     process.exitCode = 1;
   } else {
-    console.log("Playground reference coverage verification passed.");
+    console.log("Unified Docs reference coverage verification passed.");
   }
 }

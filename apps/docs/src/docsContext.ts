@@ -1,7 +1,13 @@
 import releaseGroupsRaw from "../../../docs/metadata/release-groups.json?raw";
 import multiFrameworkRaw from "../../../docs/metadata/multi-framework.json?raw";
+import referenceModelRaw from "../../../docs/generated/reference-model.json?raw";
+import {
+  getReferenceFramework,
+  parseReferenceModel,
+  type ReferenceFrameworkId,
+} from "../../../docs/reference/referenceRuntime";
 
-export type DocsFrameworkId = "native-html" | "react" | "angular" | "vue";
+export type DocsFrameworkId = ReferenceFrameworkId;
 
 export type DocsFramework = {
   id: DocsFrameworkId;
@@ -9,7 +15,6 @@ export type DocsFramework = {
   language: string;
   renderer: string;
   supportLevel: string;
-  guidance: string;
 };
 
 export type DocsVersion = {
@@ -47,57 +52,47 @@ type MultiFrameworkMetadata = {
   }>;
 };
 
+type VersionCatalogEntry = {
+  id: string;
+  releaseLine: string;
+  version: string;
+  channel: string;
+  docsPath: string;
+  tag?: string;
+  legacy?: boolean;
+};
+
 type DocsVersionManifest = {
   schemaVersion: number;
-  releases: Array<{
-    id: string;
-    releaseLine: string;
-    version: string;
-    channel: string;
-    tag: string;
-    path: string;
-    legacy?: boolean;
-  }>;
+  current: VersionCatalogEntry;
+  releases: VersionCatalogEntry[];
 };
 
 const releaseGroups = JSON.parse(releaseGroupsRaw) as ReleaseGroupsMetadata;
 const multiFramework = JSON.parse(multiFrameworkRaw) as MultiFrameworkMetadata;
 
-const frameworkPresentation: Record<
-  DocsFrameworkId,
-  Pick<DocsFramework, "label" | "language" | "guidance">
-> = {
-  "native-html": {
-    label: "Native HTML",
-    language: "HTML / JavaScript",
-    guidance:
-      "Use registered VyrnForge Custom Elements directly with shared tokens, DOM events, slots, methods, and form contracts.",
-  },
-  react: {
-    label: "React",
-    language: "TypeScript / JSX",
-    guidance:
-      "Use the React renderer while keeping behavior, tokens, accessibility, and public contracts aligned with the shared VyrnForge foundation.",
-  },
-  angular: {
-    label: "Angular",
-    language: "TypeScript / Templates",
-    guidance:
-      "Use the verified Angular consumer and adapter contracts over the shared VyrnForge element surface; do not invent framework-only behavior.",
-  },
-  vue: {
-    label: "Vue",
-    language: "TypeScript / SFC",
-    guidance:
-      "Use the verified Vue consumer and model-adapter contracts over the shared VyrnForge element surface; keep events and state semantics portable.",
-  },
-};
+export const referenceModel = parseReferenceModel(referenceModelRaw);
 
-export const docsFrameworks: DocsFramework[] = multiFramework.frameworks.map(
-  (framework) => ({
-    ...framework,
-    ...frameworkPresentation[framework.id],
-  }),
+export const docsFrameworks: DocsFramework[] = referenceModel.frameworks.map(
+  (framework) => {
+    const support = multiFramework.frameworks.find(
+      (candidate) => candidate.id === framework.id,
+    );
+
+    if (!support) {
+      throw new Error(
+        `Missing framework support metadata for ${framework.id}.`,
+      );
+    }
+
+    return {
+      id: framework.id,
+      label: framework.label,
+      language: framework.language,
+      renderer: support.renderer,
+      supportLevel: support.supportLevel,
+    };
+  },
 );
 
 export const releaseLineVersions: ReleaseLineVersion[] = Object.entries(
@@ -168,14 +163,11 @@ export const docsVersions: DocsVersion[] = [
   ...(configuredVersion ? [configuredVersion] : []),
 ];
 
-export const defaultDocsFramework: DocsFrameworkId = "react";
+export const defaultDocsFramework = referenceModel.frameworkContext.default;
 
 export function getFramework(frameworkId: string | null | undefined) {
-  return (
-    docsFrameworks.find((framework) => framework.id === frameworkId) ??
-    docsFrameworks.find((framework) => framework.id === defaultDocsFramework) ??
-    docsFrameworks[0]
-  );
+  const framework = getReferenceFramework(referenceModel, frameworkId);
+  return docsFrameworks.find((candidate) => candidate.id === framework.id)!;
 }
 
 export function getDocsVersion(
@@ -212,7 +204,7 @@ export function getRepositoryPagesRoot() {
 export async function loadDocsVersions() {
   try {
     const response = await fetch(
-      `${getRepositoryPagesRoot()}docs-versions.json`,
+      `${getRepositoryPagesRoot()}${referenceModel.versionContext.catalog}`,
       {
         cache: "no-store",
       },
@@ -220,17 +212,30 @@ export async function loadDocsVersions() {
     if (!response.ok) return docsVersions;
 
     const manifest = (await response.json()) as DocsVersionManifest;
-    if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.releases)) {
+    if (
+      manifest.schemaVersion !== 2 ||
+      !manifest.current?.docsPath ||
+      !Array.isArray(manifest.releases)
+    ) {
       return docsVersions;
     }
 
-    const releases = manifest.releases.map((release) => ({
-      ...release,
-      label: versionLabel(release),
+    const entries = [manifest.current, ...manifest.releases].map((entry) => ({
+      id: entry.id,
+      releaseLine: entry.releaseLine,
+      version: entry.version,
+      channel: entry.channel,
+      path: entry.docsPath,
+      tag: entry.tag,
+      legacy: entry.legacy,
     }));
     const unique = new Map<string, DocsVersion>();
-    for (const version of [nextDocsVersion, ...releases]) {
-      unique.set(version.id, version);
+    for (const version of entries) {
+      unique.set(version.id, {
+        ...version,
+        label:
+          version.id === "next" ? nextDocsVersion.label : versionLabel(version),
+      });
     }
     return [...unique.values()];
   } catch {
@@ -245,6 +250,8 @@ export function getVersionHref(
   const root = getRepositoryPagesRoot();
   const versionPath =
     version.id === "next" ? "" : version.path.replace(/^\//, "");
-  const query = new URLSearchParams({ framework: frameworkId });
+  const query = new URLSearchParams({
+    [referenceModel.frameworkContext.queryParameter]: frameworkId,
+  });
   return `${root}${versionPath}?${query.toString()}${window.location.hash}`;
 }

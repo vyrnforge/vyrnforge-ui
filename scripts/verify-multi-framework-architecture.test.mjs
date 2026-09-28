@@ -109,3 +109,30 @@ test("rejects missing consumer fixture examples", () => {
     },
   );
 });
+
+test("allows staged current/target renderer mappings", () => {
+  assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
+});
+
+test("rejects an unsupported renderer status during staged rollout", () => {
+  withRepositoryFixture(
+    (root) => {
+      mutateJson(root, "docs/metadata/component-contracts.json", (value) => {
+        const descriptionList = value.componentContracts.find(
+          (contract) => contract.id === "description-list",
+        );
+        descriptionList.frameworkMappings.react.status = "planned";
+      });
+    },
+    (root) => {
+      const failures = verifyMultiFrameworkArchitecture({ root });
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "description-list has an invalid React framework mapping",
+          ),
+        ),
+      );
+    },
+  );
+});

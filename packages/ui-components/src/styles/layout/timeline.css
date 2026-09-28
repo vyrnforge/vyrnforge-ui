@@ -1,0 +1,34 @@
+.vf-timeline__list {
+  display: grid;
+  gap: var(--vf-component-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vf-timeline__list > li {
+  position: relative;
+  min-width: 0;
+  padding-inline-start: calc(var(--vf-space-4) + var(--vf-space-2));
+}
+
+.vf-timeline__list > li::before {
+  position: absolute;
+  inset-block-start: 0.6em;
+  inset-inline-start: 0;
+  width: var(--vf-space-2);
+  height: var(--vf-space-2);
+  border-radius: 50%;
+  background: var(--vf-border-default);
+  content: "";
+}
+
+.vf-timeline__list > li:not(:last-child)::after {
+  position: absolute;
+  inset-block-start: calc(0.6em + var(--vf-space-2));
+  inset-block-end: calc(-1 * var(--vf-component-gap));
+  inset-inline-start: calc(var(--vf-space-2) / 2);
+  width: 1px;
+  background: var(--vf-border-default);
+  content: "";
+}

@@ -8,9 +8,13 @@ import {
 import {
   VfAutocomplete,
   VfButton,
+  VfDescriptionList,
   VfDialog,
   VfPageHeader,
+  VfProgress,
+  VfPropertyTable,
   VfTabs,
+  VfTimeline,
   VfTextInput,
   type GeneratedDialogDismissDetail,
   type VyrnForgeActionDetail,
@@ -21,6 +25,7 @@ import { VyrnForgeFormControlDirective } from "@vyrnforge/ui-angular/forms";
 
 type AutocompleteElement = VyrnForgeElementForTagName<"vf-autocomplete">;
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
+type ProgressElement = VyrnForgeElementForTagName<"vf-progress">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
@@ -37,9 +42,13 @@ type VyrnForgeValidationError = {
     ReactiveFormsModule,
     VfAutocomplete,
     VfButton,
+    VfDescriptionList,
     VfDialog,
     VfPageHeader,
+    VfProgress,
+    VfPropertyTable,
     VfTabs,
+    VfTimeline,
     VfTextInput,
     VyrnForgeFormControlDirective,
   ],
@@ -169,6 +178,84 @@ export class AppComponent implements AfterViewInit {
         );
       }
 
+      const determinateProgress = document.querySelector<ProgressElement>(
+        "#angular-progress-determinate",
+      );
+      const indeterminateProgress = document.querySelector<ProgressElement>(
+        "#angular-progress-indeterminate",
+      );
+      if (!determinateProgress || !indeterminateProgress) {
+        throw new Error(
+          "Angular did not render the generated Progress facades.",
+        );
+      }
+      if (
+        determinateProgress.max !== 100 ||
+        determinateProgress.value !== 40 ||
+        determinateProgress.getAttribute("role") !== "progressbar" ||
+        determinateProgress.getAttribute("aria-valuemax") !== "100" ||
+        determinateProgress.getAttribute("aria-valuenow") !== "40"
+      ) {
+        throw new Error(
+          "Generated Angular Progress did not preserve determinate semantics.",
+        );
+      }
+      if (
+        indeterminateProgress.max !== 100 ||
+        indeterminateProgress.value !== null ||
+        indeterminateProgress.hasAttribute("aria-valuenow")
+      ) {
+        throw new Error(
+          "Generated Angular Progress did not preserve indeterminate semantics.",
+        );
+      }
+
+      const propertyTable = document.querySelector(
+        "vf-property-table[data-angular-property-table]",
+      );
+      if (
+        !propertyTable?.querySelector("table > caption") ||
+        !propertyTable.querySelector('table > thead th[scope="col"]') ||
+        !propertyTable.querySelector('table > tbody th[scope="row"]') ||
+        !propertyTable.querySelector("table > tbody td")
+      ) {
+        throw new Error(
+          "Angular PropertyTable did not preserve native table semantics.",
+        );
+      }
+
+      const timeline = document.querySelector(
+        "vf-timeline[data-angular-timeline]",
+      );
+      const timelineItems = timeline?.querySelectorAll(
+        ":scope > ol.vf-timeline__list > li.vf-timeline__item",
+      );
+      if (
+        timelineItems?.length !== 2 ||
+        !timelineItems[0]?.querySelector(
+          'time[datetime="2026-09-24T08:00:00Z"]',
+        ) ||
+        !timelineItems[1]?.querySelector(
+          'time[datetime="2026-09-24T09:00:00Z"]',
+        )
+      ) {
+        throw new Error(
+          "Angular Timeline did not preserve ordered list/time semantics.",
+        );
+      }
+
+      const descriptionList = document.querySelector(
+        "vf-description-list[data-angular-description-list]",
+      );
+      if (
+        !descriptionList?.querySelector(".vf-description-list__list > dt") ||
+        !descriptionList.querySelector(".vf-description-list__list > dd")
+      ) {
+        throw new Error(
+          "Angular DescriptionList did not preserve native term/description semantics.",
+        );
+      }
+
       const requiredAutocompleteSlots = [
         "label",
         "description",
@@ -236,6 +323,9 @@ export class AppComponent implements AfterViewInit {
           "Angular Button click() did not emit canonical action.",
         );
       }
+      root.setAttribute("data-progress", "verified");
+      root.setAttribute("data-property-table", "verified");
+      root.setAttribute("data-timeline", "verified");
       root.setAttribute("data-composition", "verified");
       root.setAttribute("data-imperative-apis", "verified");
       root.setAttribute("data-consumer-property", "verified");

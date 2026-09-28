@@ -7,6 +7,11 @@ repository facts and current evidence records.
 
 ## Core metadata
 
+- `reference-portal.json` owns the reader-facing VyrnForge Reference product
+  identity, shared framework/surface vocabulary, information-model ownership,
+  navigation sections, framework/version context, stable route semantics, and
+  deployment contract references. It does not replace component, package,
+  token, pattern, accessibility, release, or example sources of truth.
 - `packages.json` owns package relationships, public entry points, and release
   group membership.
 - `multi-framework.json` owns current package topology, framework support,
@@ -24,6 +29,34 @@ repository facts and current evidence records.
   shared contracts and generation.
 - `state-contracts.json` owns shared state and adapter boundaries.
 - `css-imports.json` owns CSS import order and styling ownership.
+
+## Generated Reference projection
+
+`docs/generated/reference-model.json` is the deterministic shared registry for
+VyrnForge Reference. It composes the product/navigation contract from
+`reference-portal.json` with the existing generated consumer knowledge,
+framework API reference, package/token/pattern metadata, executable-example
+registry, and packed-consumer manifest.
+
+The generated model owns no new component props, token values, package facts, or
+framework behavior. Instead, it records the authoritative source and collection
+for each content domain, normalized framework/version context, semantic example
+identities, derived search-domain records, and stable deep-link templates. This
+lets Docs and Playground converge on one render model without copying detailed
+API truth into another hand-maintained registry.
+
+Regenerate it with:
+
+```bash
+node scripts/generate-reference-model.mjs
+```
+
+Verify drift with:
+
+```bash
+node scripts/generate-reference-model.mjs --check
+npm run test:contracts
+```
 
 ## Consumer and framework evidence
 
@@ -94,6 +127,7 @@ The primary human-readable sources are:
 - `docs/architecture/09-component-contracts-and-events.md`
 - `docs/architecture/10-custom-elements-and-form-association.md`
 - `docs/testing/multi-framework-consumer-fixtures.md`
+- `docs/engineering/documentation-system.md`
 
 ## Maintenance
 

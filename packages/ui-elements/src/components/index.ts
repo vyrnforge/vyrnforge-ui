@@ -37,6 +37,10 @@ export {
   type VyrnForgeLayoutJustify,
   type VyrnForgeTextTone,
 } from "./display";
+export { VyrnForgeDescriptionListElement } from "./description-list";
+export { VyrnForgePropertyTableElement } from "./property-table";
+export { VyrnForgeTimelineElement } from "./timeline";
+export { VyrnForgeProgressElement } from "./progress";
 export {
   VyrnForgeFieldElement,
   VyrnForgeValidationMessageElement,

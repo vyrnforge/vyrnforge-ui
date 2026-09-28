@@ -185,63 +185,78 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
 
   const docsPage = read(root, "apps/docs/src/ComponentReferencePage.tsx");
   for (const marker of [
-    "consumer-knowledge.json",
-    'label: "React"',
-    'label: "Native HTML"',
-    'label: "Angular"',
-    'label: "Vue"',
-    "AI context slice",
+    "framework-api-reference.json",
+    "componentReferenceRecords",
+    "getReferenceRecordRoute",
+    "component-usage",
+    "component-framework-api",
+    "component-accessibility-styling",
+    "Accessibility guidance",
   ]) {
     if (!docsPage.includes(marker))
       failures.push(`consumer knowledge viewer is missing ${marker}`);
   }
-  const aiPage = read(root, "apps/docs/src/AiContextIndexPage.tsx");
-  for (const marker of [
-    "ai-context/index.json",
-    "Task-scoped retrieval",
-    "components",
+  for (const retiredReaderMarker of [
+    "AI context slice",
+    "AI usage notes",
+    "Framework-neutral contract",
+    "Model, form, and ref contracts",
   ]) {
-    if (!aiPage.includes(marker))
-      failures.push(`AI context index viewer is missing ${marker}`);
-  }
-  const playgroundPage = read(
-    root,
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-  );
-  for (const marker of [
-    "consumer-knowledge.json",
-    "canonicalKnowledge",
-    "usePlaygroundFramework",
-    "selectedFrameworkUsage",
-    'title="Usage"',
-  ]) {
-    if (!playgroundPage.includes(marker))
-      failures.push(`playground component reference is missing ${marker}`);
-  }
-  for (const file of filesRecursively(
-    root,
-    "examples/basic-playground/src/pages/reference",
-  ).filter((entry) => entry.endsWith(".tsx"))) {
-    if (
-      /\bstatus="(?:stable|beta-stable|alpha-stable|experimental|planned|deprecated)"/.test(
-        read(root, file),
-      )
-    ) {
+    if (docsPage.includes(retiredReaderMarker)) {
       failures.push(
-        `${file}: component maturity must come from generated consumer knowledge, not a hand-written status prop`,
+        `consumer knowledge viewer still exposes internal reader chrome: ${retiredReaderMarker}`,
       );
     }
   }
-  const routes = read(root, "examples/basic-playground/src/app/routes.ts");
-  for (const marker of [
-    'visibility?: "public" | "internal"',
-    'group: "Internal"',
-    'group: "Advanced Modules"',
-    "consumer-knowledge.json",
-  ]) {
-    if (!routes.includes(marker))
-      failures.push(`playground routes are missing ${marker}`);
+  if (docsPage.includes("component: componentId")) {
+    failures.push(
+      "component reference must use generated stable record routes instead of the retired component query parameter",
+    );
   }
+  if (
+    !docsPage.includes(
+      'getReferenceRecordRoute(referenceModel, "components", componentId)',
+    )
+  ) {
+    failures.push("generated component route composition is missing");
+  }
+
+  const referenceData = read(root, "apps/docs/src/referenceData.ts");
+  for (const marker of [
+    "consumer-knowledge.json?raw",
+    "metadata/packages.json?raw",
+    "packageReferenceRecords",
+    "packageMetadata.packages.length",
+  ]) {
+    if (!referenceData.includes(marker)) {
+      failures.push(`reference data adapter is missing ${marker}`);
+    }
+  }
+
+  const packagePage = read(root, "apps/docs/src/PackageReferencePage.tsx");
+  for (const marker of [
+    "packageReferenceRecords",
+    "packageDependencyRules",
+    "getReferenceRecordRoute",
+    "Public entry points",
+  ]) {
+    if (!packagePage.includes(marker)) {
+      failures.push(`package reference viewer is missing ${marker}`);
+    }
+  }
+  for (const forbidden of [
+    "const packages = [",
+    "const dependencyRules = [",
+    'name: "@vyrnforge/ui-core"',
+    'status: "Planned"',
+  ]) {
+    if (packagePage.includes(forbidden)) {
+      failures.push(
+        `package reference viewer contains duplicated package authority: ${forbidden}`,
+      );
+    }
+  }
+
   const rolloutResidueFiles = [
     "docs/metadata/component-reference-program.json",
     "docs/testing/generated-component-reference.md",

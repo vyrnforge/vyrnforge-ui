@@ -29,6 +29,7 @@ import {
   VfConfirmDialog as VfConfirmDialogRuntime,
   VfDateInput as VfDateInputRuntime,
   VfDateTimeInput as VfDateTimeInputRuntime,
+  VfDescriptionList as VfDescriptionListRuntime,
   VfDialog as VfDialogRuntime,
   VfDrawer as VfDrawerRuntime,
   VfDropdown as VfDropdownRuntime,
@@ -50,6 +51,8 @@ import {
   VfPageToolbar as VfPageToolbarRuntime,
   VfPanel as VfPanelRuntime,
   VfPopover as VfPopoverRuntime,
+  VfProgress as VfProgressRuntime,
+  VfPropertyTable as VfPropertyTableRuntime,
   VfRadio as VfRadioRuntime,
   VfRadioGroup as VfRadioGroupRuntime,
   VfRating as VfRatingRuntime,
@@ -66,6 +69,7 @@ import {
   VfText as VfTextRuntime,
   VfTextInput as VfTextInputRuntime,
   VfTextarea as VfTextareaRuntime,
+  VfTimeline as VfTimelineRuntime,
   VfToast as VfToastRuntime,
   VfToggleButton as VfToggleButtonRuntime,
   VfToggleButtonGroup as VfToggleButtonGroupRuntime,
@@ -479,6 +483,24 @@ export interface VfDateTimeInputRef {
 }
 
 export const VfDateTimeInput = VfDateTimeInputRuntime as unknown as VyrnForgeVueComponentType<VfDateTimeInputProps, VfDateTimeInputEmits, VfDateTimeInputSlots, VfDateTimeInputRef>;
+
+export interface VfDescriptionListProps {
+
+}
+
+export interface VfDescriptionListEmits {
+  (event: never): void;
+}
+
+export interface VfDescriptionListSlots {
+  readonly default?: () => VNode[];
+}
+
+export interface VfDescriptionListRef {
+  readonly element: VyrnForgeElementForTagName<"vf-description-list"> | null;
+}
+
+export const VfDescriptionList = VfDescriptionListRuntime as unknown as VyrnForgeVueComponentType<VfDescriptionListProps, VfDescriptionListEmits, VfDescriptionListSlots, VfDescriptionListRef>;
 
 export interface VfDialogProps {
   readonly open?: VyrnForgeElementForTagName<"vf-dialog">["open"];
@@ -999,6 +1021,43 @@ export interface VfPopoverRef {
 
 export const VfPopover = VfPopoverRuntime as unknown as VyrnForgeVueComponentType<VfPopoverProps, VfPopoverEmits, VfPopoverSlots, VfPopoverRef>;
 
+export interface VfProgressProps {
+  readonly max?: VyrnForgeElementForTagName<"vf-progress">["max"];
+  readonly value?: VyrnForgeElementForTagName<"vf-progress">["value"];
+}
+
+export interface VfProgressEmits {
+  (event: never): void;
+}
+
+export interface VfProgressSlots {
+
+}
+
+export interface VfProgressRef {
+  readonly element: VyrnForgeElementForTagName<"vf-progress"> | null;
+}
+
+export const VfProgress = VfProgressRuntime as unknown as VyrnForgeVueComponentType<VfProgressProps, VfProgressEmits, VfProgressSlots, VfProgressRef>;
+
+export interface VfPropertyTableProps {
+
+}
+
+export interface VfPropertyTableEmits {
+  (event: never): void;
+}
+
+export interface VfPropertyTableSlots {
+  readonly default?: () => VNode[];
+}
+
+export interface VfPropertyTableRef {
+  readonly element: VyrnForgeElementForTagName<"vf-property-table"> | null;
+}
+
+export const VfPropertyTable = VfPropertyTableRuntime as unknown as VyrnForgeVueComponentType<VfPropertyTableProps, VfPropertyTableEmits, VfPropertyTableSlots, VfPropertyTableRef>;
+
 export interface VfRadioProps {
   readonly name?: VyrnForgeElementForTagName<"vf-radio">["name"];
   readonly disabled?: VyrnForgeElementForTagName<"vf-radio">["disabled"];
@@ -1467,6 +1526,24 @@ export interface VfTextareaRef {
 }
 
 export const VfTextarea = VfTextareaRuntime as unknown as VyrnForgeVueComponentType<VfTextareaProps, VfTextareaEmits, VfTextareaSlots, VfTextareaRef>;
+
+export interface VfTimelineProps {
+
+}
+
+export interface VfTimelineEmits {
+  (event: never): void;
+}
+
+export interface VfTimelineSlots {
+  readonly default?: () => VNode[];
+}
+
+export interface VfTimelineRef {
+  readonly element: VyrnForgeElementForTagName<"vf-timeline"> | null;
+}
+
+export const VfTimeline = VfTimelineRuntime as unknown as VyrnForgeVueComponentType<VfTimelineProps, VfTimelineEmits, VfTimelineSlots, VfTimelineRef>;
 
 export interface VfToastProps {
   readonly actionLabel?: VyrnForgeElementForTagName<"vf-toast">["actionLabel"];

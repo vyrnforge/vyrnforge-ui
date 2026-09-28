@@ -70,8 +70,15 @@ For each scoped component id:
 4. if such an exception exists, classify `exception-required`;
 5. otherwise classify `needs-contract-data`.
 
-Unknown contract ids or exception scopes that do not refer to a scoped catalog
-component are verifier failures. Duplicate component ids are verifier failures.
+Canonical contract records may be authored before a catalog component becomes
+public so shared semantics can be resolved before framework fan-out. Such
+contract-first records are valid when their id exists in the canonical component
+catalog; they do not enter G10 coverage totals until the component enters the
+public beta-included scope.
+
+Contract ids that do not refer to any canonical catalog component, and exception
+scopes that do not refer to a scoped catalog component, are verifier failures.
+Duplicate component ids are verifier failures.
 A component may not be both contract-complete and exception-required unless the
 exception scope is narrower than the whole component and explicitly identifies
 that narrower surface.

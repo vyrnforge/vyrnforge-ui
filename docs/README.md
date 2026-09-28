@@ -1,56 +1,32 @@
-# VyrnForge UI Documentation
+# VyrnForge UI
 
-Use this index to find the canonical source for a topic. Do not create a second source of truth when an existing document or generated artifact already owns it.
+VyrnForge is a reusable UI foundation for web applications. Native HTML / Custom Elements, React, Angular, and Vue are first-class surfaces over the same design system, behavior contracts, accessibility model, styling foundation, and component semantics.
 
-## Use VyrnForge
+## Start here
 
-- [Install and setup](api/import-and-setup.md)
-- [Public API reference](api/README.md)
-- [Generated component reference](generated/component-reference.json)
-- [Known limitations](quality/03-known-limitations.md)
-- [Theming and styling](architecture/03-theming-and-styling.md)
-- [CSS tokens](api/css-token-reference.md) and [public CSS classes](api/css-class-reference.md)
-- [Multi-framework migration and limitations](release/multi-framework-migration-and-limitations.md)
-- Framework packages: [Angular](packages/ui-angular.md), [Vue](packages/ui-vue.md), [React/components](packages/ui-components.md), and [Native/Custom Elements](packages/ui-elements.md)
-- Specialized package: [Data Grid](packages/ui-data-grid.md)
+1. [Install VyrnForge](api/import-and-setup.md) for your framework.
+2. Browse the generated component reference for component usage and API.
+3. Use [Theming and Styling](architecture/03-theming-and-styling.md) for tokens, themes, density, and CSS customization.
+4. Use [Accessibility](architecture/05-accessibility-standards.md) for keyboard, focus, labeling, and semantic expectations.
+5. Use [Releases and Migration](release/multi-framework-migration-and-limitations.md) when upgrading or choosing between framework surfaces.
 
-## Build VyrnForge
+## Framework surfaces
 
-Start with [CONTRIBUTING.md](../CONTRIBUTING.md), then use the source that owns the area you are changing.
+- React: `@vyrnforge/ui-components`
+- Native HTML / Custom Elements: `@vyrnforge/ui-elements`
+- Angular: `@vyrnforge/ui-angular`
+- Vue: `@vyrnforge/ui-vue`
 
-- [Project scope](governance/01-project-source-of-truth.md)
-- [System overview](architecture/00-system-overview.md)
-- [Package boundaries](architecture/01-package-boundaries.md)
-- [State and adapter ownership](architecture/02-state-and-adapter-ownership.md)
-- [Accessibility standards](architecture/05-accessibility-standards.md)
-- [Semantic token contract](architecture/08-semantic-token-contract.md)
-- [Component contracts and events](architecture/09-component-contracts-and-events.md)
-- [Custom Elements and form association](architecture/10-custom-elements-and-form-association.md)
-- [Browser testing](testing/browser-testing.md) and [visual regression](testing/visual-regression.md)
+The non-grid surfaces share VyrnForge foundations rather than becoming separate component libraries.
 
-Current component maturity and catalog facts are owned by [`metadata/components.json`](metadata/components.json). Generated framework/component views must derive from canonical metadata rather than repeat those facts by hand.
+## Data grid
 
-## Maintain VyrnForge
+`@vyrnforge/ui-data-grid` is a specialized React package on its own alpha release track. It is part of VyrnForge, but it does not define the whole library and does not imply Angular, Vue, or Native grid renderers.
 
-- [Documentation governance](governance/00-documentation-governance.md) and [document lifecycle](governance/02-document-lifecycle.md)
-- [Trunk and integration-lane delivery](governance/05-trunk-delivery.md)
-- [CI/CD architecture](engineering/ci-cd-architecture.md)
-- [Quality gates](quality/00-quality-gates.md)
-- [Release documentation](release/README.md) and [publication procedure](release/publication-procedure.md)
-- [Repository inventory](governance/repository-inventory.md)
-- [AGENTS.md](../AGENTS.md) for repository coding-agent rules
+## Customize VyrnForge
 
-## Execution and planning
+Prefer shared VyrnForge tokens and public extension points before creating application-specific replacements. Keep product business logic, routing, permissions, backend access, and application state in the consuming application.
 
-The live Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status** owns active sprint execution, task status, dependencies, acceptance criteria, sequencing, validation requirements, and gate status. GitHub does not maintain a competing sprint tracker.
+## Internal engineering docs
 
-## Machine-readable sources
-
-- Package metadata: [`metadata/packages.json`](metadata/packages.json)
-- Component catalog and maturity: [`metadata/components.json`](metadata/components.json)
-- Generated component/framework reference: [`generated/component-reference.json`](generated/component-reference.json)
-- Generated AI context: [`generated/ai-context/index.json`](generated/ai-context/index.json)
-
-## Historical evidence
-
-Historical task narratives and reproducible audit reports are not current documentation. Keep them only when they retain explicit release, migration, regression, security, or architectural value; otherwise Git history is the recovery path.
+Architecture decisions, governance, testing, CI/CD, release controls, metadata, and generated evidence remain in the repository for maintainers. They are intentionally not part of the normal public documentation navigation.

@@ -79,16 +79,6 @@ function rootExports(root, relativePath) {
   return exports;
 }
 
-function playgroundRoutes(root) {
-  const source = readFileSync(
-    path.join(root, "examples/basic-playground/src/app/routes.ts"),
-    "utf8",
-  );
-  return new Set(
-    [...source.matchAll(/\bpath:\s+"([^"]+)"/g)].map((match) => match[1]),
-  );
-}
-
 function isUnresolved(value) {
   return typeof value === "string" && unresolvedValues.has(value);
 }
@@ -123,7 +113,6 @@ export function verifyComponentMetadata(
 
   const componentIds = new Set();
   const canonicalNames = new Set();
-  const routes = playgroundRoutes(root);
   const exportsByPackage = new Map(
     Object.entries(packageEntryFiles).map(([packageName, entryFile]) => [
       packageName,
@@ -205,12 +194,13 @@ export function verifyComponentMetadata(
     if (
       typeof component.playgroundPath !== "string" ||
       (!isUnresolved(component.playgroundPath) &&
-        !routes.has(component.playgroundPath))
+        (!component.playgroundPath.startsWith("/components/") ||
+          !component.playgroundPath.endsWith(`/${component.id}`)))
     )
       addFailure(
         failures,
         component,
-        "playgroundPath must be a registered route or an allowed unresolved value",
+        "playgroundPath must remain a component-scoped legacy example path or an allowed unresolved value",
       );
     if (!Array.isArray(component.knownLimitations))
       addFailure(failures, component, "knownLimitations must be an array");

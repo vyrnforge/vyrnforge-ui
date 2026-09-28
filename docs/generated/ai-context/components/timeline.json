@@ -4,49 +4,77 @@
   "name": "Timeline",
   "package": "@vyrnforge/ui-components",
   "category": "data-display",
-  "maturity": "planned",
-  "availability": "planned",
-  "purpose": "Chronological event display.",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Ordered chronological event presentation using native list and time semantics.",
   "guidance": {
-    "useWhen": "Use later for audit/activity history.",
-    "avoidWhen": "Do not import until implemented.",
-    "aiUsageNotes": "Use semantic lists until implemented.",
+    "useWhen": "Use for read-only chronological histories where event order and timestamps are meaningful and entry content remains application-owned.",
+    "avoidWhen": "Avoid for interactive feeds, application notification state, or unordered status collections; keep persistence and activity schemas in the consuming application.",
+    "aiUsageNotes": "Treat Timeline as a state-free semantic ordered-list wrapper. Entry data, actors, actions, persistence, loading, and filtering remain application-owned; use the Activity Log pattern for actor/action/time histories.",
     "relatedComponents": [
-      "ActivityLog"
+      "Badge"
     ]
   },
   "accessibility": [
-    "Event order and timestamps should be clear."
+    "Preserve ordered-list semantics and source order; each entry must remain a native list item and timestamps should use readable text with a machine-readable time value when available.",
+    "owns one native ordered-list container so chronological order remains explicit browser list semantics",
+    "projected timeline entries must become native list items and preserve source order without visual reordering that changes chronological meaning",
+    "timestamps must have understandable visible text and should use native time semantics with a machine-readable datetime value when available",
+    "the component is read-only presentation and must not introduce feed, listbox, grid, selection, or live-region semantics unless a separate interactive contract requires them"
   ],
   "knownLimitations": [
-    "Do not import until implemented."
+    "Read-only presentation only; persistence, loading, filtering, actor/action schemas, selection, and live-feed behavior remain application-owned."
   ],
   "styling": {
-    "classes": [],
+    "classes": [
+      "vf-timeline"
+    ],
     "variables": []
   },
   "frameworks": {
     "react": {
-      "status": "not-supported",
-      "package": "@vyrnforge/ui-components"
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Timeline } from '@vyrnforge/ui-components';",
+      "example": "<Timeline><li><time dateTime=\"2026-09-24T01:00:00Z\">01:00</time> Created</li></Timeline>"
     },
     "native-html": {
-      "status": "not-supported",
-      "package": null
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-timeline></vf-timeline>"
     },
     "angular": {
-      "status": "not-supported",
-      "package": null
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-angular",
+      "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+      "example": "<vf-timeline></vf-timeline>"
     },
     "vue": {
-      "status": "not-supported",
-      "package": null
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfTimeline></VfTimeline>"
     }
   },
-  "contract": null,
+  "contract": {
+    "properties": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "methods": [],
+    "accessibility": [
+      "owns one native ordered-list container so chronological order remains explicit browser list semantics",
+      "projected timeline entries must become native list items and preserve source order without visual reordering that changes chronological meaning",
+      "timestamps must have understandable visible text and should use native time semantics with a machine-readable datetime value when available",
+      "the component is read-only presentation and must not introduce feed, listbox, grid, selection, or live-region semantics unless a separate interactive contract requires them"
+    ],
+    "formAssociation": "none"
+  },
   "source": {
     "componentMetadata": "docs/metadata/components.json",
-    "contractMetadata": null,
-    "customElementsManifest": null
+    "contractMetadata": "docs/metadata/component-contracts.json",
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

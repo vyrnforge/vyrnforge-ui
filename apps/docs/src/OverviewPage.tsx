@@ -1,16 +1,7 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Heading,
-  Inline,
-  Stack,
-  Text,
-} from "@vyrnforge/ui-components";
+import { Button, Heading, Inline, Stack, Text } from "@vyrnforge/ui-components";
 import {
   docsFrameworks,
   getFramework,
-  releaseLineVersions,
   type DocsFrameworkId,
 } from "./docsContext";
 
@@ -20,42 +11,21 @@ type OverviewPageProps = {
   onRouteChange: (routeId: string) => void;
 };
 
-const discoveryLinks = [
+const startLinks = [
+  {
+    routeId: "getting-started",
+    title: "Install and start",
+    description: "Choose your framework and add VyrnForge to an application.",
+  },
   {
     routeId: "component-reference",
-    title: "Components",
-    description:
-      "Browse generated multi-framework usage alongside framework-neutral contracts.",
+    title: "Browse components",
+    description: "See usage, API, accessibility, and framework examples.",
   },
   {
-    routeId: "package-reference",
-    title: "Packages",
-    description:
-      "Understand package responsibilities without exposing internal topology as the consumer model.",
-  },
-  {
-    routeId: "theming-and-styling",
-    title: "Theming & tokens",
-    description:
-      "Use shared semantic tokens, density, typography, surfaces, states, and theme contracts.",
-  },
-  {
-    routeId: "accessibility-standards",
-    title: "Accessibility",
-    description:
-      "Review the keyboard, focus, semantic, and assistive-technology baseline shared across surfaces.",
-  },
-  {
-    routeId: "multi-framework-decision",
-    title: "Architecture",
-    description:
-      "See how canonical contracts and renderer boundaries support all four first-class web surfaces.",
-  },
-  {
-    routeId: "multi-framework-program-gates",
-    title: "Support evidence",
-    description:
-      "Check active program gates before interpreting framework support as release-ready distribution.",
+    routeId: "theming",
+    title: "Customize the UI",
+    description: "Use shared tokens, themes, density, and CSS.",
   },
 ] as const;
 
@@ -74,25 +44,24 @@ export function OverviewPage({
       >
         <Stack gap="lg">
           <div>
-            <div className="vf-docs-overview__eyebrow">VyrnForge UI</div>
             <Heading id="vf-overview-title" level={2} size="lg">
-              One UI foundation. Four first-class web surfaces.
+              One UI foundation. Four framework surfaces.
             </Heading>
+            <Text className="vf-docs-overview__lede" size="lg" tone="muted">
+              Build consistent web applications with shared components, tokens,
+              behavior, and accessibility across Native HTML, React, Angular,
+              and Vue.
+            </Text>
           </div>
-          <Text size="lg" tone="muted" className="vf-docs-overview__lede">
-            Build enterprise web applications with shared design tokens,
-            behavior contracts, accessibility rules, component semantics, and
-            release evidence across Native HTML, React, Angular, and Vue.
-          </Text>
           <Inline gap="sm" className="vf-docs-overview__actions">
-            <Button onClick={() => onRouteChange("component-reference")}>
-              Explore components
+            <Button onClick={() => onRouteChange("getting-started")}>
+              Get started
             </Button>
             <Button
               variant="subtle"
-              onClick={() => onRouteChange("multi-framework-decision")}
+              onClick={() => onRouteChange("component-reference")}
             >
-              Read architecture
+              Components
             </Button>
           </Inline>
         </Stack>
@@ -100,133 +69,61 @@ export function OverviewPage({
 
       <section
         className="vf-docs-overview__section"
-        aria-labelledby="vf-surface-title"
+        aria-labelledby="vf-framework-title"
       >
-        <Stack gap="md">
+        <Stack gap="sm">
           <div>
-            <Heading id="vf-surface-title" level={2} size="lg">
-              Choose your surface
+            <Heading id="vf-framework-title" level={2} size="md">
+              Framework
             </Heading>
             <Text tone="muted">
-              The framework changes the integration syntax, not the VyrnForge
-              design system or behavior model.
+              Switch syntax without switching the VyrnForge design system.
             </Text>
           </div>
-          <div className="vf-docs-overview__framework-grid">
+          <Inline gap="sm" className="vf-docs-overview__frameworks">
             {docsFrameworks.map((candidate) => {
               const selected = candidate.id === framework.id;
               return (
-                <Card
-                  className="vf-docs-overview__framework-card"
+                <Button
                   key={candidate.id}
-                  padding="md"
-                  variant={selected ? "elevated" : "bordered"}
+                  size="sm"
+                  variant={selected ? "primary" : "ghost"}
+                  onClick={() => onFrameworkChange(candidate.id)}
+                  aria-pressed={selected}
                 >
-                  <Stack gap="sm">
-                    <Inline gap="sm" justify="between" align="center">
-                      <Heading level={3} size="md">
-                        {candidate.label}
-                      </Heading>
-                      {selected ? (
-                        <Badge variant="info" tone="subtle">
-                          Selected
-                        </Badge>
-                      ) : null}
-                    </Inline>
-                    <Text size="sm" tone="muted">
-                      {candidate.language}
-                    </Text>
-                    <Text size="sm">{candidate.guidance}</Text>
-                    <Inline gap="xs">
-                      <Badge size="sm" variant="neutral" tone="subtle">
-                        {candidate.renderer}
-                      </Badge>
-                      <Badge size="sm" variant="neutral" tone="subtle">
-                        {candidate.supportLevel}
-                      </Badge>
-                    </Inline>
-                    <Button
-                      fullWidth
-                      size="sm"
-                      variant={selected ? "subtle" : "ghost"}
-                      onClick={() => onFrameworkChange(candidate.id)}
-                    >
-                      {selected
-                        ? "Using this surface"
-                        : `Use ${candidate.label}`}
-                    </Button>
-                  </Stack>
-                </Card>
+                  {candidate.label}
+                </Button>
               );
             })}
-          </div>
+          </Inline>
         </Stack>
       </section>
 
       <section
         className="vf-docs-overview__section"
-        aria-labelledby="vf-discover-title"
+        aria-labelledby="vf-start-title"
       >
-        <Stack gap="md">
-          <div>
-            <Heading id="vf-discover-title" level={2} size="lg">
-              Explore the foundation
-            </Heading>
-            <Text tone="muted">
-              Start from reusable VyrnForge capabilities before creating custom
-              application UI.
-            </Text>
-          </div>
-          <div className="vf-docs-overview__discovery-grid">
-            {discoveryLinks.map((item) => (
-              <Card key={item.routeId} padding="md" variant="bordered">
-                <Stack gap="sm">
-                  <Heading level={3} size="md">
-                    {item.title}
-                  </Heading>
-                  <Text size="sm" tone="muted">
-                    {item.description}
-                  </Text>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => onRouteChange(item.routeId)}
-                  >
-                    Open {item.title}
-                  </Button>
-                </Stack>
-              </Card>
+        <Stack gap="sm">
+          <Heading id="vf-start-title" level={2} size="md">
+            Start here
+          </Heading>
+          <div className="vf-docs-overview__start-list">
+            {startLinks.map((item) => (
+              <button
+                className="vf-docs-overview__start-link"
+                key={item.routeId}
+                type="button"
+                onClick={() => onRouteChange(item.routeId)}
+              >
+                <span>
+                  <strong>{item.title}</strong>
+                  <small>{item.description}</small>
+                </span>
+                <span aria-hidden="true">→</span>
+              </button>
             ))}
           </div>
         </Stack>
-      </section>
-
-      <section
-        className="vf-docs-overview__section"
-        aria-labelledby="vf-release-title"
-      >
-        <Card padding="md" variant="bordered">
-          <Stack gap="md">
-            <div>
-              <Heading id="vf-release-title" level={2} size="lg">
-                Release lines stay explicit
-              </Heading>
-              <Text tone="muted">
-                VyrnForge does not pretend every package shares one global
-                version. Documentation and release context are derived from
-                canonical release metadata.
-              </Text>
-            </div>
-            <Inline gap="sm" className="vf-docs-overview__release-lines">
-              {releaseLineVersions.map((releaseLine) => (
-                <Badge key={releaseLine.id} variant="neutral" tone="subtle">
-                  {releaseLine.id} · {releaseLine.version} ·{" "}
-                  {releaseLine.channel}
-                </Badge>
-              ))}
-            </Inline>
-          </Stack>
-        </Card>
       </section>
     </div>
   );

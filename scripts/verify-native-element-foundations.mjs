@@ -266,8 +266,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   const registryTags = [
     ...(registrySource?.matchAll(/tagName:\s*"(vf-[a-z0-9-]+)"/g) ?? []),
   ].map((match) => match[1]);
-  if (registryTags.length !== 58 || new Set(registryTags).size !== 58) {
-    failures.push("native registry must contain 58 unique public tags");
+  if (registryTags.length !== 61 || new Set(registryTags).size !== 61) {
+    failures.push("native registry must contain 61 unique public tags");
   }
 
   const componentMetadata = readJson(root, "docs/metadata/components.json");
@@ -424,7 +424,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
 
   const nativeParity = metadata.nativeParity ?? {};
   if (
-    nativeParity.registeredPublicTags !== 58 ||
+    nativeParity.registeredPublicTags !== 62 ||
     nativeParity.browserEvidence !== "tests/browser/native-parity.spec.ts" ||
     nativeParity.fixture !==
       "apps/regression-fixtures/src/nativeParityElements.tsx" ||
@@ -456,6 +456,6 @@ if (
 ) {
   assertNativeElementFoundations();
   console.log(
-    "Native element foundations passed: EL-6001 through EL-6018 and the 58-tag GMF3 native renderer contracts are complete.",
+    "Native element foundations passed: EL-6001 through EL-6018 and the 60-tag native renderer catalog (59 canonical + 1 post-GMF3 extension) are complete.",
   );
 }

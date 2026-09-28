@@ -23,7 +23,7 @@
     {
       "path": "packages/ui-components/package.json",
       "kind": "blob",
-      "sha1": "9164ec370fe4de812162f6a06fdc03fa2a03903d",
+      "sha1": "b2967ecca241b1df8f8b1b590a0fdad6089fdf28",
       "covers": [
         "package exports",
         "CSS entrypoints",
@@ -34,13 +34,13 @@
     {
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
-      "sha1": "9b24696736a323e290e21beb766587839f4fb20e",
+      "sha1": "7a650c126f51169cf91141848bb28878942aa98f",
       "covers": ["public value exports", "public type exports"]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "5f514cc6d9613e08b0bd8c8a693c3b7fac7dc36d",
+      "sha1": "b8efa1b568635cd6d37b127579fdf00424a00453",
       "covers": [
         "component props and types",
         "callbacks",
@@ -52,7 +52,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "88c772ee240b05535b98aade2b7501f3e85c330f",
+      "sha1": "4a052e9b0350944b813bd0d27806d5fb7f458544",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -62,15 +62,15 @@
       "covers": ["documented React public API and usage contracts"]
     },
     {
-      "path": "docs/packages/ui-components.md",
+      "path": "packages/ui-components/README.md",
       "kind": "blob",
-      "sha1": "665d895f70a4358a28d31aaac7c21e5d6197d8b5",
+      "sha1": "343954f6e44a0522317db12100ca11db12daf92b",
       "covers": ["React package ownership and public consumption contract"]
     },
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "9e50d32d04295b0e2d6d2bd2f63561757c2be898",
+      "sha1": "7633403d0f3222434d9b9fee4047ffabb918669b",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -137,6 +137,41 @@
       "task": "S16-react-warning-cleanup",
       "reason": "React test-noise cleanup made controlled native inputs explicitly acknowledge React change semantics while preserving VyrnForge's existing public callback and canonical value-change ownership. Slider keeps its canonical value-change path, SearchInput continues forwarding its public callback through the input-capture bridge, and Autocomplete/TransferList hidden form controls remain current serialized values. React 18 and React 19 compatibility cases passed before this intentional implementation-tree recapture.",
       "evidence": "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx"
+    },
+    {
+      "task": "description-list-react-renderer",
+      "reason": "DescriptionList adds the planned stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves native dl/dt/dd relationships, introduces no stateful model or callback contract, reuses VyrnForge token-driven layout styling, and is covered by React semantic, accessibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "progress-react-renderer",
+      "reason": "Progress adds the planned stateless React renderer as a public @vyrnforge/ui-components export. It preserves native progress semantics for determinate and indeterminate states, introduces no controller or callback contract, uses VyrnForge token-driven feedback styling, and is covered by React semantic, accessibility, compatibility, and packed-consumer evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "data-display-description-list-density-rationalization",
+      "reason": "DescriptionList replaces legacy fixed spacing aliases with the shared VyrnForge component-gap density contract while preserving the existing semantic dl/dt/dd renderer, public React API, CSS class surface, responsive structure, and mirrored Native HTML styling. Compact and spacious presentation now flow through the same framework-neutral density tokens without adding a React-only prop or behavior.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#573",
+      "reason": "PropertyTable adds the accepted stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves one native table as the semantic authority, introduces no application state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#575",
+      "reason": "Timeline adds the accepted stateless chronological React renderer as a public @vyrnforge/ui-components export. The implementation preserves native ordered-list and list-item semantics, introduces no activity state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
+      "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#617",
+      "reason": "Package-specific setup and usage ownership moved from the duplicate docs/packages/ui-components.md guide to the package-local packages/ui-components/README.md. The React public API, runtime behavior, CSS contracts, compatibility matrix, and package manifest are unchanged; only the documentation ownership fingerprint is intentionally recaptured.",
+      "evidence": "packages/ui-components/README.md"
+    },
+    {
+      "task": "#605",
+      "reason": "Development-only React test and accessibility tooling pins changed in packages/ui-components/package.json. Public exports, CSS entrypoints, React peer ranges, runtime dependencies, component behavior, and compatibility policy remain unchanged; only the package-manifest fingerprint is intentionally recaptured.",
+      "evidence": "packages/ui-components/package.json"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

@@ -392,3 +392,142 @@ jobs:
             echo "- Retry rule: an existing tag is accepted only when it resolves to this workflow commit"
             echo "- Permission separation: repository write access only; no npm OIDC permission"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  refresh-release-reference:
+    name: refresh-release-reference
+    needs: [create-release-record, verify-release]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      actions: write
+      contents: read
+    env:
+      RELEASE_GIT_TAG: ${{ needs.verify-release.outputs.git-tag }}
+      RELEASE_VERSION: ${{ needs.verify-release.outputs.release-version }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Checkout released current-main commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify release tag and current-main boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin --tags --force
+          test "$(git rev-parse "$RELEASE_GIT_TAG^{commit}")" = "$GITHUB_SHA"
+          CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha')"
+          test "$CURRENT_MAIN_SHA" = "$GITHUB_SHA"
+
+      - name: Dispatch exact-main reference delivery after tag creation
+        id: delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          STARTED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          printf '%s\n' '{"ref":"main","inputs":{"mode":"delivery"}}' |
+            gh api --method POST \
+              "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/dispatches" \
+              --input -
+
+          CI_RUN_ID=""
+          for _ in $(seq 1 60); do
+            MATCHES="$(
+              gh api \
+                "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?branch=main&event=workflow_dispatch&per_page=20" \
+                --jq ".workflow_runs[] | select(.head_sha == \"$GITHUB_SHA\" and .created_at >= \"$STARTED_AT\") | .id"
+            )"
+            COUNT="$(printf '%s\n' "$MATCHES" | sed '/^$/d' | wc -l | tr -d ' ')"
+            if [[ "$COUNT" -gt 1 ]]; then
+              echo "Ambiguous current-main delivery dispatch: more than one matching CI run was created."
+              exit 1
+            fi
+            if [[ "$COUNT" -eq 1 ]]; then
+              CI_RUN_ID="$(printf '%s\n' "$MATCHES" | sed -n '1p')"
+              break
+            fi
+            sleep 2
+          done
+
+          if [[ ! "$CI_RUN_ID" =~ ^[0-9]+$ ]]; then
+            echo "Unable to resolve the release-bound delivery CI run."
+            exit 1
+          fi
+
+          echo "ci-run-id=$CI_RUN_ID" >> "$GITHUB_OUTPUT"
+          gh run watch "$CI_RUN_ID" --repo "$GITHUB_REPOSITORY" --exit-status
+
+      - name: Verify tagged reference artifact exists
+        shell: bash
+        env:
+          CI_RUN_ID: ${{ steps.delivery.outputs.ci-run-id }}
+        run: |
+          set -euo pipefail
+          CURRENT_MAIN_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha')"
+          test "$CURRENT_MAIN_SHA" = "$GITHUB_SHA"
+          ARTIFACT_ID="$(
+            gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN_ID/artifacts" \
+              --jq ".artifacts[] | select(.name == \"pages-site-$GITHUB_SHA\" and .expired == false) | .id" |
+              sed -n '1p'
+          )"
+          if [[ ! "$ARTIFACT_ID" =~ ^[0-9]+$ ]]; then
+            echo "Release-bound delivery did not produce pages-site-$GITHUB_SHA."
+            exit 1
+          fi
+
+      - name: Dispatch Pages deployment for release-bound artifact
+        id: pages
+        shell: bash
+        env:
+          CI_RUN_ID: ${{ steps.delivery.outputs.ci-run-id }}
+        run: |
+          set -euo pipefail
+          STARTED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          printf '{"ref":"main","inputs":{"ci-run-id":"%s"}}\n' "$CI_RUN_ID" |
+            gh api --method POST \
+              "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-pages.yml/dispatches" \
+              --input -
+
+          PAGES_RUN_ID=""
+          for _ in $(seq 1 60); do
+            MATCHES="$(
+              gh api \
+                "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-pages.yml/runs?branch=main&event=workflow_dispatch&per_page=20" \
+                --jq ".workflow_runs[] | select(.head_sha == \"$GITHUB_SHA\" and .created_at >= \"$STARTED_AT\") | .id"
+            )"
+            COUNT="$(printf '%s\n' "$MATCHES" | sed '/^$/d' | wc -l | tr -d ' ')"
+            if [[ "$COUNT" -gt 1 ]]; then
+              echo "Ambiguous release-bound Pages dispatch: more than one matching deployment run was created."
+              exit 1
+            fi
+            if [[ "$COUNT" -eq 1 ]]; then
+              PAGES_RUN_ID="$(printf '%s\n' "$MATCHES" | sed -n '1p')"
+              break
+            fi
+            sleep 2
+          done
+
+          if [[ ! "$PAGES_RUN_ID" =~ ^[0-9]+$ ]]; then
+            echo "Unable to resolve the release-bound Pages deployment run."
+            exit 1
+          fi
+
+          echo "pages-run-id=$PAGES_RUN_ID" >> "$GITHUB_OUTPUT"
+          gh run watch "$PAGES_RUN_ID" --repo "$GITHUB_REPOSITORY" --exit-status
+
+      - name: Write release reference refresh summary
+        shell: bash
+        run: |
+          {
+            echo "## Release-bound reference refresh"
+            echo
+            echo "- Release tag: \`$RELEASE_GIT_TAG\`"
+            echo "- Released version: \`$RELEASE_VERSION\`"
+            echo "- Source/current-main commit: \`$GITHUB_SHA\`"
+            echo "- Delivery CI run: \`${{ steps.delivery.outputs.ci-run-id }}\`"
+            echo "- Pages deployment run: \`${{ steps.pages.outputs.pages-run-id }}\`"
+            echo "- Reference policy: the release tag existed before site assembly, so the retained release snapshot is available without another source commit"
+            echo "- Permission separation: this job may dispatch workflows but cannot publish npm packages, create tags, or deploy Pages directly"
+          } >> "$GITHUB_STEP_SUMMARY"

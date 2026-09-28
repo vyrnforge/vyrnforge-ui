@@ -1,113 +1,194 @@
 import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 
-const packages = [
-  {
-    name: "@vyrnforge/ui-core",
-    role: "Framework-neutral foundation",
-    status: "Current",
-    owns: [
-      "semantic tokens",
-      "themes and density",
-      "typography and motion",
-      "layers and utilities",
-    ],
-    notes:
-      "Lowest-level package. It must not depend on a renderer, behavior package, or grid package.",
-  },
-  {
-    name: "@vyrnforge/ui-behaviors",
-    role: "Shared behavior layer",
-    status: "Planned",
-    owns: [
-      "controller state transitions",
-      "collections and selection",
-      "keyboard decisions",
-      "validation and event reasons",
-    ],
-    notes:
-      "Created in S5. It may depend on ui-core only and must remain framework- and DOM-neutral.",
-  },
-  {
-    name: "@vyrnforge/ui-components",
-    role: "First-class React renderer",
-    status: "Current",
-    owns: [
-      "React components and hooks",
-      "React props and callbacks",
-      "React DOM adapters",
-      "shared component CSS",
-    ],
-    notes:
-      "Keeps its current package name through beta and consumes shared behaviors after S5.",
-  },
-  {
-    name: "@vyrnforge/ui-elements",
-    role: "Native Custom Element renderer",
-    status: "Planned",
-    owns: [
-      "vf-* Custom Elements",
-      "property and attribute reflection",
-      "canonical DOM events",
-      "form association and registration",
-    ],
-    notes:
-      "Created after shared behavior parity. Light DOM is the default and framework runtimes are forbidden.",
-  },
-  {
-    name: "@vyrnforge/ui-data-grid",
-    role: "Specialized React data grid",
-    status: "Deferred alpha",
-    owns: [
-      "UniversalDataGrid",
-      "grid state and adapters",
-      "grid-specific behavior",
-      "udg-* styles",
-    ],
-    notes:
-      "Remains independently versioned and outside the non-grid beta critical path.",
-  },
-];
+import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
+import { referenceModel } from "./docsContext";
+import {
+  getPackageReferenceRecord,
+  packageDependencyRules,
+  packageReferenceRecords,
+  type PackageReferenceRecord,
+} from "./referenceData";
 
-const dependencyRules = [
-  "ui-behaviors -> ui-core",
-  "ui-components -> ui-core + ui-behaviors",
-  "ui-elements -> ui-core + ui-behaviors",
-  "ui-data-grid -> ui-core + ui-components",
-  "never ui-core -> another VyrnForge package",
-  "never ui-behaviors -> a renderer or framework runtime",
-  "never ui-components <-> ui-elements",
-  "never shared non-grid packages -> ui-data-grid",
-];
+type PackageReferencePageProps = {
+  packageId?: string | null;
+};
 
-export function PackageReferencePage() {
+function packageHref(packageName: string) {
+  return `#${getReferenceRecordRoute(referenceModel, "packages", packageName)}`;
+}
+
+function PackageFacts({
+  packageInfo,
+}: {
+  packageInfo: PackageReferenceRecord;
+}) {
+  return (
+    <div className="vf-docs-contract-details">
+      <div className="vf-docs-contract-field">
+        <strong>Runtime</strong>
+        <span>{packageInfo.runtime ?? "Not specified"}</span>
+      </div>
+      <div className="vf-docs-contract-field">
+        <strong>Release track</strong>
+        <span>{packageInfo.releaseTrack ?? "Not specified"}</span>
+      </div>
+      <div className="vf-docs-contract-field">
+        <strong>CSS import</strong>
+        <span>{packageInfo.cssImport ?? "Not applicable"}</span>
+      </div>
+      <div className="vf-docs-contract-field">
+        <strong>API documentation</strong>
+        <span>{packageInfo.apiDoc}</span>
+      </div>
+    </div>
+  );
+}
+
+function StringList({ label, values }: { label: string; values: string[] }) {
+  return (
+    <div>
+      <Heading level={4} size="sm">
+        {label}
+      </Heading>
+      {values.length > 0 ? (
+        <ul>
+          {values.map((value) => (
+            <li key={value}>{value}</li>
+          ))}
+        </ul>
+      ) : (
+        <Text size="sm" tone="muted">
+          None
+        </Text>
+      )}
+    </div>
+  );
+}
+
+function PackageIndexCard({
+  packageInfo,
+}: {
+  packageInfo: PackageReferenceRecord;
+}) {
+  return (
+    <Card className="vf-docs-package-card" padding="lg">
+      <div className="vf-docs-package-card__header">
+        <Heading level={3} size="md">
+          <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
+        </Heading>
+        <Badge
+          tone="subtle"
+          variant={packageInfo.status === "current" ? "success" : "info"}
+        >
+          {packageInfo.status}
+        </Badge>
+      </div>
+      <Text>{packageInfo.purpose}</Text>
+      <PackageFacts packageInfo={packageInfo} />
+    </Card>
+  );
+}
+
+function PackageDetail({
+  packageInfo,
+}: {
+  packageInfo: PackageReferenceRecord;
+}) {
   return (
     <div className="vf-docs-reference">
-      <div className="vf-docs-package-grid">
-        {packages.map((packageInfo) => (
-          <Card
-            className="vf-docs-package-card"
-            key={packageInfo.name}
-            padding="lg"
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Text size="sm">
+          <a href="#/package-reference">← Package reference</a>
+        </Text>
+        <div className="vf-docs-package-card__header">
+          <Heading level={3} size="md">
+            {packageInfo.name}
+          </Heading>
+          <Badge
+            tone="subtle"
+            variant={packageInfo.status === "current" ? "success" : "info"}
           >
-            <div className="vf-docs-package-card__header">
-              <Heading level={3} size="md">
-                {packageInfo.name}
-              </Heading>
-              <Badge
-                tone="subtle"
-                variant={packageInfo.status === "Current" ? "success" : "info"}
-              >
-                {packageInfo.status}
-              </Badge>
-            </div>
-            <Text className="vf-text-strong">{packageInfo.role}</Text>
-            <ul>
-              {packageInfo.owns.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-            <Text tone="muted">{packageInfo.notes}</Text>
-          </Card>
+            {packageInfo.status}
+          </Badge>
+        </div>
+        <Text>{packageInfo.purpose}</Text>
+        <Text tone="muted">{packageInfo.notes}</Text>
+        <PackageFacts packageInfo={packageInfo} />
+      </Card>
+
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Ownership boundaries
+        </Heading>
+        <StringList label="Owns" values={packageInfo.owns} />
+        <StringList label="Does not own" values={packageInfo.doesNotOwn} />
+      </Card>
+
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Dependencies
+        </Heading>
+        <StringList label="Depends on" values={packageInfo.dependsOn} />
+        <StringList
+          label="Must not depend on"
+          values={packageInfo.mustNotDependOn}
+        />
+      </Card>
+
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Public entry points
+        </Heading>
+        <div className="vf-docs-dependency-list">
+          {packageInfo.publicEntryPoints.map((entryPoint) => (
+            <CodeText className="vf-docs-dependency-item" key={entryPoint}>
+              {entryPoint}
+            </CodeText>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
+  if (packageId) {
+    const packageInfo = getPackageReferenceRecord(packageId);
+    if (!packageInfo) {
+      return (
+        <Card className="vf-docs-reference__section" padding="lg">
+          <Heading level={3} size="md">
+            Package not found
+          </Heading>
+          <Text tone="muted">
+            No generated package record exists for <code>{packageId}</code>.
+          </Text>
+          <Text>
+            <a href="#/package-reference">Return to package reference</a>
+          </Text>
+        </Card>
+      );
+    }
+    return <PackageDetail packageInfo={packageInfo} />;
+  }
+
+  return (
+    <div className="vf-docs-reference">
+      <Card className="vf-docs-reference__section" padding="lg">
+        <Heading level={3} size="md">
+          Generated package reference
+        </Heading>
+        <Text tone="muted">
+          Package identity and summary records come from generated consumer
+          knowledge. Ownership, dependency, entry-point, and limitation facts
+          remain canonical in package metadata and are joined here without a
+          second hand-maintained package catalog.
+        </Text>
+      </Card>
+
+      <div className="vf-docs-package-grid">
+        {packageReferenceRecords.map((packageInfo) => (
+          <PackageIndexCard key={packageInfo.name} packageInfo={packageInfo} />
         ))}
       </div>
 
@@ -116,7 +197,7 @@ export function PackageReferencePage() {
           Dependency direction
         </Heading>
         <div className="vf-docs-dependency-list">
-          {dependencyRules.map((rule) => (
+          {packageDependencyRules.map((rule) => (
             <CodeText className="vf-docs-dependency-item" key={rule}>
               {rule}
             </CodeText>
