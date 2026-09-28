@@ -1,6 +1,6 @@
 import accessibilityRaw from "../../../docs/architecture/05-accessibility-standards.md?raw";
 import themingRaw from "../../../docs/architecture/03-theming-and-styling.md?raw";
-import dataGridRaw from "../../../docs/packages/ui-data-grid.md?raw";
+import dataGridRaw from "../../../packages/ui-data-grid/README.md?raw";
 import setupRaw from "../../../docs/api/import-and-setup.md?raw";
 import overviewRaw from "../../../docs/README.md?raw";
 import migrationRaw from "../../../docs/release/multi-framework-migration-and-limitations.md?raw";
@@ -194,7 +194,7 @@ const docs: DocsRoute[] = [
     group: "Data & Grid",
     description:
       "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
-    sourcePath: "docs/packages/ui-data-grid.md",
+    sourcePath: "packages/ui-data-grid/README.md",
     content: dataGridRaw,
     tags: ["data", "grid", "react"],
     kind: "markdown",
