@@ -20,12 +20,10 @@ and package manifests rather than maintaining a partial package list here.
 
 ## CSS prefixes
 
-| Prefix    | Owner                    | Usage                        |
-| --------- | ------------------------ | ---------------------------- |
-| `--vf-*`  | VyrnForge shared styling | shared design-token contract |
-| `vf-*`    | VyrnForge UI surfaces   | shared component classes     |
-| `--udg-*` | data-grid internals      | grid-specific variables      |
-| `udg-*`   | data-grid internals      | grid-specific classes        |
+- `--vf-*`: VyrnForge shared design-token custom properties.
+- `vf-*`: VyrnForge shared component classes.
+- `--udg-*`: data-grid-specific custom properties.
+- `udg-*`: data-grid-specific classes.
 
 The precise compatibility and ownership rules for CSS prefixes are defined by
 [ADR-003: CSS Prefix Policy](../architecture/adr-003-css-prefix-policy.md).
