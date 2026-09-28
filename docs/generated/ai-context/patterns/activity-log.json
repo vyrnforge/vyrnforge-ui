@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "activity-log",
+  "displayName": "Activity Log",
+  "category": "data-management",
+  "purpose": "Framework-neutral activity-history composition for actor, action, time, and optional status or context over the shared Timeline contract.",
+  "useWhen": "Use for audit and operational history where application-owned activity records need consistent chronological presentation.",
+  "avoidWhen": "Avoid introducing a second activity state model inside VyrnForge; persistence, filtering, loading, actor schemas, and business-specific actions remain application-owned.",
+  "components": [
+    "timeline",
+    "badge"
+  ],
+  "playgroundRoute": null,
+  "exampleFramework": null,
+  "frameworkNeutral": true,
+  "aiKeywords": [
+    "activity log",
+    "audit history",
+    "actor action time",
+    "change history",
+    "event history"
+  ],
+  "componentContexts": [
+    "ai-context/components/timeline.json",
+    "ai-context/components/badge.json"
+  ]
+}

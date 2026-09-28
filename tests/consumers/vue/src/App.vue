@@ -4,8 +4,12 @@ import { nextTick, onMounted, ref } from "vue";
 import {
   VfButton as VyrnForgeButton,
   VfCheckbox as VyrnForgeCheckbox,
+  VfDescriptionList as VyrnForgeDescriptionList,
   VfDialog as VyrnForgeDialog,
+  VfProgress as VyrnForgeProgress,
+  VfPropertyTable as VyrnForgePropertyTable,
   VfTabs as VyrnForgeTabs,
+  VfTimeline as VyrnForgeTimeline,
   VfTextInput as VyrnForgeTextInput,
   type GeneratedDialogDismissDetail,
 } from "@vyrnforge/ui-vue";
@@ -17,6 +21,7 @@ import type {
 } from "@vyrnforge/ui-elements";
 
 type DialogElement = VyrnForgeElementForTagName<"vf-dialog">;
+type ProgressElement = VyrnForgeElementForTagName<"vf-progress">;
 type TabsElement = VyrnForgeElementForTagName<"vf-tabs">;
 type TextInputElement = VyrnForgeElementForTagName<"vf-text-input">;
 
@@ -93,6 +98,7 @@ function handleSubmit(event: Event): void {
   consumerRoot.value?.setAttribute("data-consumer-form", "submitted");
 }
 
+// prettier-ignore
 onMounted(async () => {
   await nextTick();
 
@@ -136,6 +142,83 @@ onMounted(async () => {
     throw new Error("Generated Vue Dialog did not retain v-model:open state.");
   }
 
+  const determinateProgress = document.querySelector<ProgressElement>(
+    "#vue-progress-determinate",
+  );
+  const indeterminateProgress = document.querySelector<ProgressElement>(
+    "#vue-progress-indeterminate",
+  );
+  if (!determinateProgress || !indeterminateProgress) {
+    throw new Error("Vue did not render the generated Progress facades.");
+  }
+  if (
+    determinateProgress.max !== 100 ||
+    determinateProgress.value !== 40 ||
+    determinateProgress.getAttribute("role") !== "progressbar" ||
+    determinateProgress.getAttribute("aria-valuemax") !== "100" ||
+    determinateProgress.getAttribute("aria-valuenow") !== "40"
+  ) {
+    throw new Error(
+      "Generated Vue Progress did not preserve determinate semantics.",
+    );
+  }
+  if (
+    indeterminateProgress.max !== 100 ||
+    indeterminateProgress.value !== null ||
+    indeterminateProgress.hasAttribute("aria-valuenow")
+  ) {
+    throw new Error(
+      "Generated Vue Progress did not preserve indeterminate semantics.",
+    );
+  }
+
+  const propertyTable = document.querySelector(
+    "vf-property-table#vue-property-table",
+  );
+  if (
+    !propertyTable?.querySelector("table > caption") ||
+    !propertyTable.querySelector('table > thead th[scope="col"]') ||
+    !propertyTable.querySelector('table > tbody th[scope="row"]') ||
+    !propertyTable.querySelector("table > tbody td")
+  ) {
+    throw new Error(
+      "Vue PropertyTable did not preserve native table semantics.",
+    );
+  }
+
+  const timeline = document.querySelector("vf-timeline#vue-timeline");
+  const timelineItems = timeline?.querySelectorAll(
+    ":scope > ol.vf-timeline__list > li.vf-timeline__item",
+  );
+  if (
+    timelineItems?.length !== 2 ||
+    !timelineItems[0]?.querySelector(
+      'time[datetime="2026-09-24T08:00:00Z"]',
+    ) ||
+    !timelineItems[1]?.querySelector(
+      'time[datetime="2026-09-24T09:00:00Z"]',
+    )
+  ) {
+    throw new Error(
+      "Vue Timeline did not preserve ordered list/time semantics.",
+    );
+  }
+
+  const descriptionList = document.querySelector(
+    "vf-description-list#vue-description-list",
+  );
+  if (
+    !descriptionList?.querySelector(".vf-description-list__list > dt") ||
+    !descriptionList.querySelector(".vf-description-list__list > dd")
+  ) {
+    throw new Error(
+      "Vue DescriptionList did not preserve native term/description semantics.",
+    );
+  }
+
+  consumerRoot.value?.setAttribute("data-progress", "verified");
+  consumerRoot.value?.setAttribute("data-property-table", "verified");
+  consumerRoot.value?.setAttribute("data-timeline", "verified");
   consumerRoot.value?.setAttribute("data-consumer-property", "verified");
   consumerRoot.value?.setAttribute("data-consumer-ready", "true");
 });
@@ -210,6 +293,77 @@ onMounted(async () => {
       >
         Apply model from Vue
       </vf-button>
+    </section>
+
+    <section class="vf-consumer-vue-section" aria-labelledby="progress-title">
+      <h2 id="progress-title">Generated Vue Progress</h2>
+      <VyrnForgeProgress
+        id="vue-progress-determinate"
+        aria-label="Vue upload progress"
+        :max="100"
+        :value="40"
+      />
+      <VyrnForgeProgress
+        id="vue-progress-indeterminate"
+        aria-label="Vue preparing export"
+        :max="100"
+      />
+    </section>
+
+    <!-- prettier-ignore -->
+    <section
+      class="vf-consumer-vue-section"
+      aria-labelledby="property-table-title"
+    >
+      <h2 id="property-table-title">Generated Vue PropertyTable</h2>
+      <VyrnForgePropertyTable id="vue-property-table">
+        <table>
+          <caption>Vue service properties</caption>
+          <thead>
+            <tr>
+              <th scope="col">Property</th>
+              <th scope="col">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Owner</th>
+              <td>Operations</td>
+            </tr>
+          </tbody>
+        </table>
+      </VyrnForgePropertyTable>
+    </section>
+
+    <!-- prettier-ignore -->
+    <section
+      class="vf-consumer-vue-section"
+      aria-labelledby="timeline-title"
+    >
+      <h2 id="timeline-title">Generated Vue Timeline</h2>
+      <VyrnForgeTimeline id="vue-timeline">
+        <li>
+          <time datetime="2026-09-24T08:00:00Z">08:00 UTC</time>
+          Created
+        </li>
+        <li>
+          <time datetime="2026-09-24T09:00:00Z">09:00 UTC</time>
+          Reviewed
+        </li>
+      </VyrnForgeTimeline>
+    </section>
+
+    <section
+      class="vf-consumer-vue-section"
+      aria-labelledby="description-list-title"
+    >
+      <h2 id="description-list-title">Generated Vue DescriptionList</h2>
+      <VyrnForgeDescriptionList id="vue-description-list">
+        <dt>Status</dt>
+        <dd>Active</dd>
+        <dt>Owner</dt>
+        <dd>Operations</dd>
+      </VyrnForgeDescriptionList>
     </section>
 
     <section class="vf-consumer-vue-section" aria-labelledby="native-title">

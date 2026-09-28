@@ -1,7 +1,8 @@
 .vf-description-list__list {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: var(--vf-space-sm) var(--vf-space-lg);
+  row-gap: var(--vf-component-gap);
+  column-gap: var(--vf-space-4);
   margin: 0;
 }
 
@@ -18,10 +19,11 @@
 @media (width <= 40rem) {
   .vf-description-list__list {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--vf-space-xs) 0;
+    row-gap: calc(var(--vf-component-gap) / 2);
+    column-gap: 0;
   }
 
   .vf-description-list__list > dd + dt {
-    margin-top: var(--vf-space-sm);
+    margin-top: var(--vf-component-gap);
   }
 }

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-VyrnForge treats the developer delivery system as part of the product. Before the next component expansion cycle, canonical source, generated API reference data, executable examples, CI evidence, deployed documentation/playground output, and released reference snapshots must participate in one traceable lifecycle.
+VyrnForge treats the developer delivery system as part of the product. Before the next component expansion cycle, canonical source, generated API reference data, executable examples, CI evidence, the deployed Docs product, and released reference snapshots must participate in one traceable lifecycle.
 
 The machine-readable program contract is `docs/metadata/developer-delivery-foundation.json`. This document explains the durable architecture; it does not duplicate the current task tracker.
 
@@ -26,7 +26,7 @@ generated knowledge
 reference portal          verification
   documentation            drift/currentness
   API reference            package/entrypoint checks
-  playground/examples      four-surface consumers
+  integrated examples      four-surface consumers
   patterns                  browser/accessibility evidence
         |                    |
         +----------+---------+
@@ -49,15 +49,15 @@ The long-term reference product has three coordinated views rather than three in
 
 - **Guides** explain installation, architecture, accessibility, theming, migration, and usage decisions.
 - **Generated API reference** presents package/component/framework contracts in a Javadoc-like form with stable deep links, framework switching, version context, setup, public members, accessibility obligations, and limitations.
-- **Playground/examples** execute representative behavior and patterns and prove that documented usage remains viable.
+- **Integrated examples** execute representative behavior and patterns inside Docs and prove that documented usage remains viable.
 
-`apps/docs` remains a presentation application. `examples/basic-playground` remains an executable consumer surface while its data-grid-specific workspace identity is migrated toward the general VyrnForge reference role it already serves. Neither application owns component API truth.
+`apps/docs` is the single reader-facing presentation application. Foundations, component examples, patterns, Data & Grid examples, and verified four-framework examples render inside that application. Packed consumer fixtures and regression applications remain verification surfaces, not competing documentation products. Docs does not own component API truth.
 
 ## CI and delivery lifecycle
 
 VyrnForge keeps four lifecycle workflows. Responsibilities are not copied into per-framework or per-package workflows.
 
-1. **Task PR -> integration lane**: affected-scope quality/integration/security selected from the real diff and dependency graph, aggregated by `ci-gate`. Reference-affecting PRs also emit an immutable, non-deployable docs/playground preview artifact.
+1. **Task PR -> integration lane**: affected-scope quality/integration/security selected from the real diff and dependency graph, aggregated by `ci-gate`. Reference-affecting PRs also emit one immutable, non-deployable Docs preview artifact.
 2. **Integration lane -> main promotion**: full repository validation at the product compatibility boundary.
 3. **Exact main delivery**: rebuild only deployable reference output and bind it to the exact commit and CI run that landed on `main`; do not rerun the promotion suite. The same delivery-only mode may be explicitly dispatched after a release tag exists.
 4. **Weekly assurance**: own expensive compatibility/security/drift checks that do not belong on every PR.
@@ -66,7 +66,7 @@ VyrnForge keeps four lifecycle workflows. Responsibilities are not copied into p
 
 Production publication and deployment stay separate. A documentation/reference preview never receives Pages write permission, npm OIDC, tag creation, or repository write access.
 
-Both preview and production artifacts carry `reference-artifact.json`. That manifest records artifact kind, deployability, immutability, tested source commit, CI run, and the docs/playground surface paths. Production deployment additionally requires the version catalog commit to equal that manifest commit, so the deployed artifact, validated commit, and selected CI run remain one lineage.
+Both preview and production artifacts carry `reference-artifact.json`. That manifest records artifact kind, deployability, immutability, tested source commit, CI run, and the Docs surface path. Production deployment additionally requires the version catalog commit to equal that manifest commit, so the deployed artifact, validated commit, and selected CI run remain one lineage.
 
 ## Generated API reference rule
 
@@ -94,15 +94,15 @@ Live editing may remain framework-specific when runtime tooling requires it. Tha
 
 ## Version and deployment contract
 
-One version catalog must describe the deployed reference product. `Next` is bound to the exact deployed `main` commit. Released versions are bound to immutable Git release tags. Each retained release must provide the complete reference pair required by that release source, including documentation and playground output.
+One version catalog must describe the deployed reference product. `Next` is bound to the exact deployed `main` commit. Released versions are bound to immutable Git release tags. Each retained release must provide its immutable documentation snapshot from the corresponding release source.
 
-Reference-affecting pull requests produce a downloadable preview artifact from the tested PR merge commit. It uses the same docs/playground surface layout as production, but its manifest marks it non-deployable and no deployment workflow consumes its artifact name.
+Reference-affecting pull requests produce a downloadable preview artifact from the tested PR merge commit. It uses the same single-Docs surface layout as production, but its manifest marks it non-deployable and no deployment workflow consumes its artifact name.
 
 Production Pages remains least-privilege: the deployment workflow downloads a successful current-main `pages-site-<sha>` artifact, verifies the embedded production lineage manifest and version catalog, and deploys without checkout or rebuild.
 
 A controlled release closes the release/reference timing gap after the release tag and GitHub prerelease exist. Its final `refresh-release-reference` job verifies the tag still resolves to the workflow commit and that the commit is still current `main`, then dispatches `VyrnForge CI` in delivery mode. That release-bound delivery fetches tags, rebuilds the exact-main reference artifact, and therefore includes the newly created immutable release snapshot in `vyrnforge-versions.json`. The release job waits for that CI run, verifies the expected `pages-site-<sha>` artifact exists, then dispatches the existing Pages workflow with that exact CI run ID and waits for deployment success.
 
-The release workflow itself does not rebuild Docs/Playground, deploy Pages directly, or gain Pages/OIDC deployment permission. It only receives narrowly scoped Actions write permission in the final refresh job so it can dispatch the existing delivery and deployment workflows. This preserves one artifact lineage and makes the tagged reference available without another source commit.
+The release workflow itself does not rebuild Docs, deploy Pages directly, or gain Pages/OIDC deployment permission. It only receives narrowly scoped Actions write permission in the final refresh job so it can dispatch the existing delivery and deployment workflows. This preserves one artifact lineage and makes the tagged reference available without another source commit.
 
 ## G17 exit
 

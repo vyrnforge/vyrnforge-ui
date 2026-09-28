@@ -233,7 +233,7 @@ function verifyInstalledPackage(packageInfo) {
       `${packageInfo.name}: custom-elements.json is missing from files`,
     );
     assert(
-      manifest.vyrnforge?.registeredTagCount === 59,
+      manifest.vyrnforge?.registeredTagCount === 62,
       `${packageInfo.name}: installed Custom Elements Manifest count mismatch`,
     );
     assert(

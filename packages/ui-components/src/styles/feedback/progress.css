@@ -1,0 +1,25 @@
+.vf-progress {
+  display: block;
+  width: 100%;
+  height: var(--vf-space-2);
+  border: 0;
+  border-radius: var(--vf-radius-md);
+  overflow: hidden;
+  accent-color: currentColor;
+  background: var(--vf-surface-muted);
+}
+
+.vf-progress::-webkit-progress-bar {
+  border-radius: inherit;
+  background: var(--vf-surface-muted);
+}
+
+.vf-progress::-webkit-progress-value {
+  border-radius: inherit;
+  background: currentColor;
+}
+
+.vf-progress::-moz-progress-bar {
+  border-radius: inherit;
+  background: currentColor;
+}

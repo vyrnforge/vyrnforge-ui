@@ -62,10 +62,10 @@ export function verifyDeveloperDeliveryFoundation({
     "apps/docs/package.json",
     "apps/docs/src/docsContext.ts",
     "apps/docs/src/ComponentReferencePage.tsx",
-    "examples/basic-playground/package.json",
-    "examples/basic-playground/src/app/playgroundContext.ts",
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-    "examples/basic-playground/src/data/referenceMetadata.ts",
+    "apps/docs/src/referenceRoutes.ts",
+    "apps/docs/src/referenceData.ts",
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
   ];
   for (const file of requiredFiles) requireFile(root, file, failures);
   if (failures.length) return failures.sort();
@@ -278,20 +278,7 @@ export function verifyDeveloperDeliveryFoundation({
       "apps/docs must remain the private VyrnForge documentation application",
     );
   }
-  const playgroundPackage = JSON.parse(
-    read(root, "examples/basic-playground/package.json"),
-  );
-  if (playgroundPackage.private !== true) {
-    failures.push(
-      "playground must remain a private consumer/reference surface",
-    );
-  }
-
   const docsContext = read(root, "apps/docs/src/docsContext.ts");
-  const playgroundContext = read(
-    root,
-    "examples/basic-playground/src/app/playgroundContext.ts",
-  );
   const referenceModel = JSON.parse(
     read(root, "docs/generated/reference-model.json"),
   );
@@ -311,67 +298,42 @@ export function verifyDeveloperDeliveryFoundation({
       failures.push(`shared Reference runtime is missing ${framework}`);
     }
   }
-  for (const [relativePath, context] of [
-    ["apps/docs/src/docsContext.ts", docsContext],
-    [
-      "examples/basic-playground/src/app/playgroundContext.ts",
-      playgroundContext,
-    ],
-  ]) {
-    requireMarkers(
-      context,
-      relativePath,
-      ["generated/reference-model.json?raw", "reference/referenceRuntime"],
-      failures,
-    );
-  }
+  requireMarkers(
+    docsContext,
+    "apps/docs/src/docsContext.ts",
+    ["generated/reference-model.json?raw", "reference/referenceRuntime"],
+    failures,
+  );
   if (referenceModel.versionContext?.catalog !== "vyrnforge-versions.json") {
     failures.push(
       "generated Reference version context must use vyrnforge-versions.json",
     );
   }
-  requireMarkers(
-    playgroundContext,
-    "examples/basic-playground/src/app/playgroundContext.ts",
-    ["schemaVersion !== 2", "playgroundPath"],
-    failures,
-  );
-
-  const componentDemoPage = read(
+  const componentReferencePage = read(
     root,
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+    "apps/docs/src/ComponentReferencePage.tsx",
   );
   requireMarkers(
-    componentDemoPage,
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+    componentReferencePage,
+    "apps/docs/src/ComponentReferencePage.tsx",
     [
-      "getReferenceFrameworkComponent",
-      "Generated API reference",
-      "API facts are generated from the shared VyrnForge framework",
-      "contract and are not maintained by this demo page.",
+      "frameworkApiReferenceRaw",
+      "FrameworkApiPanel",
+      "componentReferenceRecords",
+      "Accessibility guidance",
     ],
     failures,
   );
-  if (
-    componentDemoPage.includes("PropsTable") ||
-    componentDemoPage.includes("props?: PropsTableRow")
-  ) {
-    failures.push(
-      "Playground component readers must not restore hand-maintained props-table API authority",
-    );
-  }
 
-  const referenceMetadata = read(
-    root,
-    "examples/basic-playground/src/data/referenceMetadata.ts",
-  );
+  const referenceMetadata = read(root, "apps/docs/src/referenceData.ts");
   requireMarkers(
     referenceMetadata,
-    "examples/basic-playground/src/data/referenceMetadata.ts",
+    "apps/docs/src/referenceData.ts",
     [
       "docs/generated/consumer-knowledge.json?raw",
-      "docs/generated/framework-api-reference.json?raw",
-      "referenceFrameworkSurfaces",
+      "docs/metadata/packages.json?raw",
+      "componentReferenceRecords",
+      "packageReferenceRecords",
     ],
     failures,
   );
@@ -397,7 +359,6 @@ export function verifyDeveloperDeliveryFoundation({
       "refs/tags",
       "vyrnforge-versions.json",
       "docs-versions.json",
-      "playgroundPath",
       "currentCommit",
     ],
     failures,
