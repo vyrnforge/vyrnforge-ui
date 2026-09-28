@@ -82,8 +82,6 @@ jobs:
         run: npm run verify:repository-inventory
       - name: Build documentation application
         run: npm run build --workspace @vyrnforge/ui-docs
-      - name: Build playground
-        run: npm run build --workspace @vyrnforge/ui-data-grid-basic-playground
       - name: Upload generic release artifact reports
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
