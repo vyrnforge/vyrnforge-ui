@@ -76,9 +76,7 @@
       ],
       "cssImport": "not-applicable",
       "apiDoc": "docs/api/ui-behaviors-api.md",
-      "dependsOn": [
-        "@vyrnforge/ui-core"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-elements",
@@ -97,9 +95,7 @@
       ],
       "status": "current",
       "releaseTrack": "non-grid-beta",
-      "publicEntryPoints": [
-        "@vyrnforge/ui-behaviors"
-      ],
+      "publicEntryPoints": ["@vyrnforge/ui-behaviors"],
       "notes": "Framework-neutral behavior foundations are current and remain renderer-independent."
     },
     {
@@ -168,10 +164,7 @@
       ],
       "cssImport": "@vyrnforge/ui-elements/styles/index.css",
       "apiDoc": "docs/api/ui-elements-api.md",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-behaviors"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-angular",
@@ -217,9 +210,7 @@
       ],
       "cssImport": "not-applicable",
       "apiDoc": "packages/ui-angular/README.md",
-      "dependsOn": [
-        "@vyrnforge/ui-elements"
-      ],
+      "dependsOn": ["@vyrnforge/ui-elements"],
       "mustNotDependOn": [
         "@vyrnforge/ui-components",
         "@vyrnforge/ui-vue",
@@ -262,9 +253,7 @@
       ],
       "cssImport": "not-applicable",
       "apiDoc": "packages/ui-vue/README.md",
-      "dependsOn": [
-        "@vyrnforge/ui-elements"
-      ],
+      "dependsOn": ["@vyrnforge/ui-elements"],
       "mustNotDependOn": [
         "@vyrnforge/ui-core",
         "@vyrnforge/ui-behaviors",
@@ -281,9 +270,7 @@
         "Tailwind"
       ],
       "status": "current",
-      "publicEntryPoints": [
-        "@vyrnforge/ui-vue"
-      ],
+      "publicEntryPoints": ["@vyrnforge/ui-vue"],
       "notes": "First-class Vue facade over @vyrnforge/ui-elements. Vue remains a peer dependency, canonical rendering and behavior stay shared, and the package participates in the synchronized non-grid beta release line.",
       "releaseTrack": "non-grid-beta"
     },
@@ -306,17 +293,8 @@
       ],
       "cssImport": "@vyrnforge/ui-data-grid/styles/index.css",
       "apiDoc": "docs/api/ui-data-grid-api.md",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-components"
-      ],
-      "mustNotDependOn": [
-        "Redux",
-        "TanStack",
-        "MUI",
-        "Radix",
-        "Tailwind"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
+      "mustNotDependOn": ["Redux", "TanStack", "MUI", "Radix", "Tailwind"],
       "status": "react-alpha-deferred",
       "publicEntryPoints": [
         "@vyrnforge/ui-data-grid",
@@ -349,8 +327,6 @@
       "@vyrnforge/ui-angular",
       "@vyrnforge/ui-vue"
     ],
-    "dataGridAlpha": [
-      "@vyrnforge/ui-data-grid"
-    ]
+    "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
   }
 }
