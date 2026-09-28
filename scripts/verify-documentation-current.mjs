@@ -18,13 +18,7 @@ export const documentationCurrentPaths = [
   "docs/api/ui-components-api.md",
   "docs/api/ui-data-grid-api.md",
   "docs/api/ui-elements-api.md",
-  "docs/packages/ui-core.md",
-  "docs/packages/ui-behaviors.md",
-  "docs/packages/ui-components.md",
-  "docs/packages/ui-elements.md",
-  "docs/packages/ui-angular.md",
-  "docs/packages/ui-vue.md",
-  "docs/packages/ui-data-grid.md",
+  "docs/packages/README.md",
   "docs/governance/00-documentation-governance.md",
   "docs/governance/01-project-source-of-truth.md",
   "docs/governance/04-metadata-maintenance.md",
@@ -59,8 +53,6 @@ export const documentationInstallGuidancePaths = [
   "docs/api/import-and-setup.md",
   "docs/api/ui-components-api.md",
   "docs/api/ui-elements-api.md",
-  "docs/packages/ui-angular.md",
-  "docs/packages/ui-vue.md",
   "docs/release/multi-framework-migration-and-limitations.md",
   "packages/ui-core/README.md",
   "packages/ui-behaviors/README.md",
@@ -80,13 +72,6 @@ export const documentationTaskFreePaths = [
   "docs/api/ui-components-api.md",
   "docs/api/ui-data-grid-api.md",
   "docs/api/ui-elements-api.md",
-  "docs/packages/ui-core.md",
-  "docs/packages/ui-behaviors.md",
-  "docs/packages/ui-components.md",
-  "docs/packages/ui-elements.md",
-  "docs/packages/ui-angular.md",
-  "docs/packages/ui-vue.md",
-  "docs/packages/ui-data-grid.md",
   "docs/governance/01-project-source-of-truth.md",
   "docs/architecture/00-system-overview.md",
   "docs/architecture/01-package-boundaries.md",
@@ -167,10 +152,6 @@ const frameworkFirstInstallContracts = [
   {
     path: "packages/ui-elements/README.md",
     required: ["npm install @vyrnforge/ui-elements@beta"],
-  },
-  {
-    path: "docs/packages/ui-angular.md",
-    required: ["npm install @vyrnforge/ui-angular@beta"],
   },
 ];
 
@@ -253,8 +234,6 @@ function verifyFrameworkFirstInstallation({ root, failures }) {
     "docs/api/import-and-setup.md",
     "packages/ui-components/README.md",
     "packages/ui-elements/README.md",
-    "docs/packages/ui-angular.md",
-    "docs/packages/ui-vue.md",
   ]) {
     const content = read(root, relativePath);
     for (const obsolete of obsoleteFoundationFirstInstalls) {
