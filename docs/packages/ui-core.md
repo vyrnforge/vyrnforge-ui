@@ -7,25 +7,30 @@
 It provides:
 
 - primitive and semantic design tokens;
-- light, dark, enterprise, and system themes;
-- compact, balanced, and spacious density contracts;
+- themes and theme contracts;
+- density contracts;
 - typography roles;
 - motion and reduced-motion behavior;
 - deterministic layer levels;
 - shared utility classes;
 - typed token and theme helper contracts.
 
-It does not own React components, Custom Element renderers, behavior
-controllers, grid behavior, application state, adapters, or business workflows.
+It does not own framework renderers, component behavior controllers, data-grid
+behavior, application state, adapters, or business workflows.
 
 ## Multi-framework role
 
-Both the React and native element renderers consume the same token and CSS
-contract. `ui-core` must not depend on React, React DOM, Vue, Angular,
-`ui-behaviors`, `ui-components`, `ui-elements`, or `ui-data-grid`.
+All first-class VyrnForge surfaces consume the same token and styling
+foundation. `ui-core` remains framework-neutral and must not depend on a
+framework renderer or application-state runtime.
 
 The package may expose framework-neutral TypeScript values and functions. It
 must not execute browser-global behavior at module import time.
+
+Exact package dependency edges are owned by
+[`../metadata/packages.json`](../metadata/packages.json), package manifests, and
+[Package Boundaries](../architecture/01-package-boundaries.md); do not maintain a
+second dependency matrix here.
 
 ## Ownership
 
@@ -36,7 +41,7 @@ must not execute browser-global behavior at module import time.
 - typography, motion, focus, status, and layer roles.
 
 The machine-readable token source is
-`docs/metadata/design-tokens.json`.
+[`../metadata/design-tokens.json`](../metadata/design-tokens.json).
 
 ## Import
 
@@ -44,27 +49,18 @@ The machine-readable token source is
 import "@vyrnforge/ui-core/styles/index.css";
 ```
 
-Import core styles before renderer or grid styles.
+Import core styles before renderer or grid styles when the consuming surface
+requires explicit stylesheet management.
 
-## Density names
+## Release and compatibility
 
-Canonical:
-
-- `compact`
-- `balanced`
-- `spacious`
-
-Compatibility:
-
-- `standard` -> `balanced`
-- `comfortable` -> `spacious`
-
-## Release direction
-
-`@vyrnforge/ui-core` is part of the coordinated non-grid beta release group.
+Release-group membership, versions, and compatibility classification are owned
+by canonical release metadata and package manifests. This package guide
+intentionally does not duplicate the current release channel.
 
 See:
 
-- `../architecture/08-semantic-token-contract.md`
-- `../architecture/adr-004-multi-framework-web-support.md`
-- `../metadata/multi-framework.json`
+- [Semantic Token Contract](../architecture/08-semantic-token-contract.md)
+- [Multi-Framework Web Support](../architecture/adr-004-multi-framework-web-support.md)
+- [Package metadata](../metadata/packages.json)
+- [Release documentation](../release/README.md)
