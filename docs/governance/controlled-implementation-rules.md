@@ -22,16 +22,22 @@ their canonical sources listed below.
 
 Before starting a task, use the source that owns the fact being checked:
 
-| Question | Canonical source |
-| --- | --- |
-| Product identity, durable scope, and source-authority map | [Project Source Of Truth](01-project-source-of-truth.md) |
-| Branch topology, task-branch targets, lane synchronization, promotion, and CI lifecycle | [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md) |
-| Package dependency rules | [Package Boundaries](../architecture/01-package-boundaries.md) and package manifests |
-| Component catalog and maturity | [Component metadata](../metadata/components.json) |
-| Package and release classification | [Release-group metadata](../metadata/release-groups.json) |
-| Metadata ownership and regeneration | [Metadata README](../metadata/README.md) and [Metadata Maintenance](04-metadata-maintenance.md) |
-| Active execution, task status, dependencies, and gates | Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status** |
-| Repository instructions for coding agents | [AGENTS.md](../../AGENTS.md) |
+- **Product identity, durable scope, and source-authority map**:
+  [Project Source Of Truth](01-project-source-of-truth.md).
+- **Branch topology, task-branch targets, lane synchronization, promotion, and CI lifecycle**:
+  [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md).
+- **Package dependency rules**:
+  [Package Boundaries](../architecture/01-package-boundaries.md) and package manifests.
+- **Component catalog and maturity**:
+  [Component metadata](../metadata/components.json).
+- **Package and release classification**:
+  [Release-group metadata](../metadata/release-groups.json).
+- **Metadata ownership and regeneration**:
+  [Metadata README](../metadata/README.md) and
+  [Metadata Maintenance](04-metadata-maintenance.md).
+- **Active execution, task status, dependencies, and gates**: Google Drive
+  spreadsheet **VyrnForge Progress Tracker — Live Status**.
+- **Repository instructions for coding agents**: [AGENTS.md](../../AGENTS.md).
 
 Do not copy changing facts from these sources into this checklist. Link to the
 owner instead.
