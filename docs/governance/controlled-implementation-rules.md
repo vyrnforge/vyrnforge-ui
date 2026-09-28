@@ -139,18 +139,14 @@ broad migrations require a dedicated task and compatibility review.
 
 ## Review checklist
 
-- [ ] Changed files match the approved task scope and required predecessors are
-      complete.
-- [ ] Shared foundations were reused or extended before introducing new
-      abstractions.
-- [ ] Cross-framework impact and any explicit framework exception were reviewed.
-- [ ] Public API, package-boundary, compatibility, and migration impacts were
-      reviewed.
-- [ ] Required tests, accessibility, theme/density, SSR, browser, and performance
-      evidence pass where applicable.
+- [ ] Scope and predecessors verified.
+- [ ] Shared foundations reused or extended first.
+- [ ] Cross-framework impact and exceptions reviewed.
+- [ ] Public API, package, compatibility, and migration impact reviewed.
+- [ ] Required quality and performance evidence passes.
 - [ ] Documentation and canonical metadata are current.
-- [ ] Acceptance evidence is attached and no unrelated changes are included.
-- [ ] The change manifest is complete.
+- [ ] Acceptance evidence is attached.
+- [ ] Change manifest is complete.
 
 Apply the [Ownership and Review Model](ownership-and-review-model.md) and
 [Component Maturity Model](component-maturity-model.md) for required roles and
