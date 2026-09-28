@@ -52,8 +52,9 @@ function lockedVersion(lockfile, packageName) {
   const suffix = `/node_modules/${packageName}`;
   const nestedVersions = new Set(
     Object.entries(packages)
-      .filter(([relativePath, entry]) =>
-        relativePath.endsWith(suffix) && Boolean(entry?.version),
+      .filter(
+        ([relativePath, entry]) =>
+          relativePath.endsWith(suffix) && Boolean(entry?.version),
       )
       .map(([, entry]) => entry.version),
   );
