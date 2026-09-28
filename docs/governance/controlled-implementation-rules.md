@@ -139,11 +139,15 @@ broad migrations require a dedicated task and compatibility review.
 
 ## Review checklist
 
-- [ ] Changed files match the approved task scope and required predecessors are complete.
-- [ ] Shared foundations were reused or extended before introducing new abstractions.
+- [ ] Changed files match the approved task scope and required predecessors are
+      complete.
+- [ ] Shared foundations were reused or extended before introducing new
+      abstractions.
 - [ ] Cross-framework impact and any explicit framework exception were reviewed.
-- [ ] Public API, package-boundary, compatibility, and migration impacts were reviewed.
-- [ ] Required tests, accessibility, theme/density, SSR, browser, and performance evidence pass where applicable.
+- [ ] Public API, package-boundary, compatibility, and migration impacts were
+      reviewed.
+- [ ] Required tests, accessibility, theme/density, SSR, browser, and performance
+      evidence pass where applicable.
 - [ ] Documentation and canonical metadata are current.
 - [ ] Acceptance evidence is attached and no unrelated changes are included.
 - [ ] The change manifest is complete.
