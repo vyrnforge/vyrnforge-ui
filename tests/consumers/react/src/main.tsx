@@ -5,6 +5,9 @@ import {
   Button,
   DescriptionList,
   Dialog,
+  Progress,
+  PropertyTable,
+  Timeline,
   Tabs,
   TextInput,
   type TabItem,
@@ -86,6 +89,34 @@ function App() {
         <dt>Owner</dt>
         <dd>Operations</dd>
       </DescriptionList>
+
+      <PropertyTable data-react-property-table>
+        <table>
+          <caption>Deployment properties</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Region</th>
+              <td>us-east-1</td>
+            </tr>
+          </tbody>
+        </table>
+      </PropertyTable>
+
+      <Timeline aria-label="Deployment history" data-react-timeline>
+        <li>
+          <time dateTime="2026-09-24T01:00:00Z">01:00</time> Created
+        </li>
+        <li>
+          <time dateTime="2026-09-24T02:00:00Z">02:00</time> Deployed
+        </li>
+      </Timeline>
+
+      <Progress
+        aria-label="React upload progress"
+        data-react-progress
+        max={100}
+        value={40}
+      />
 
       <TextInput
         ref={ownerRef}

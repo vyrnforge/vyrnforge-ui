@@ -22,6 +22,7 @@ const nativeCoreTags = [
   "vf-section",
   "vf-empty-state",
   "vf-loading-state",
+  "vf-progress",
   "vf-error-state",
   "vf-button",
   "vf-icon-button",
@@ -73,6 +74,25 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     await expect(list.locator("> dl > dt")).toHaveText("Status");
     await expect(list.locator("> dl > dd")).toHaveText("Active");
     await expect(list).toHaveAttribute("data-vf-element", "");
+  });
+
+  test("preserves native progress semantics", async ({ page }) => {
+    const progress = page.locator(
+      'vf-progress[data-vf-fixture-region="native-core-progress"]',
+    );
+    await expect(progress).toHaveAttribute("role", "progressbar");
+    await expect(progress).toHaveAttribute("aria-valuemin", "0");
+    await expect(progress).toHaveAttribute("aria-valuemax", "100");
+    await expect(progress).toHaveAttribute("aria-valuenow", "40");
+    await expect(progress.locator("> .vf-progress__bar")).toHaveCount(1);
+    const progressValue = progress.locator(
+      "> .vf-progress__bar > .vf-progress__value",
+    );
+    await expect(progressValue).toHaveAttribute(
+      "style",
+      /--vf-progress-value:\s*40%/,
+    );
+    await expect(progress).toHaveAttribute("data-vf-element", "");
   });
 
   test("renders shared display styles and dispatches canonical actions", async ({
