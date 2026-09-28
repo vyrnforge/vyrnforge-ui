@@ -12,7 +12,7 @@ Generated directives provide canonical selectors, typed input/output contracts, 
 
 Angular Forms integration is available from the dedicated `@vyrnforge/ui-angular/forms` entrypoint. `VyrnForgeFormControlDirective` is a generic `ControlValueAccessor` and validator bridge for the supported form-associated VyrnForge controls. It delegates value, checked, disabled, touched, and validity behavior to the canonical Custom Elements rather than duplicating control behavior in Angular.
 
-The package is a publishable first-class artifact in the canonical non-grid beta release group. Consumer-facing setup, Forms, events, composition, typed-reference, SSR, migration, limitation, and escape-hatch guidance lives in [`../../docs/packages/ui-angular.md`](../../docs/packages/ui-angular.md); generated per-component framework API details live in [`../../docs/generated/component-reference.json`](../../docs/generated/component-reference.json).
+The package is a publishable first-class artifact in the canonical non-grid beta release group. This README owns Angular package setup, Forms, events, composition, typed-reference, SSR, migration, limitation, and escape-hatch guidance. Generated per-component framework API details live in [`../../docs/generated/component-reference.json`](../../docs/generated/component-reference.json).
 
 ## Application setup
 
@@ -60,8 +60,8 @@ Form values use five explicit model categories: string values, checked booleans,
 
 The currently validated consumer line is Angular 22. The package declares:
 
-- `@angular/core >=22 <23` as a required peer;
-- `@angular/forms >=22 <23` as an optional peer, isolated behind `@vyrnforge/ui-angular/forms` so applications that do not use Forms do not need to install it;
+- `@angular/core >=21 <23` as a required peer;
+- `@angular/forms >=21 <23` as an optional peer, isolated behind `@vyrnforge/ui-angular/forms` so applications that do not use Forms do not need to install it;
 - `rxjs ^6.5.3 || ^7.4.0` as the Angular-compatible peer range;
 - `tslib ^2.8.1` as a direct package dependency for emitted library helpers.
 

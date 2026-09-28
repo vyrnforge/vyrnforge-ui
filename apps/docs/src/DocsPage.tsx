@@ -47,7 +47,10 @@ export function DocsPage({
       </div>
 
       {route.kind === "example" && route.exampleId ? (
-        <MigratedExamplePage exampleId={route.exampleId} />
+        <MigratedExamplePage
+          exampleId={route.exampleId}
+          sourcePath={route.sourcePath}
+        />
       ) : route.kind === "executable-examples" ? (
         <ExecutableExamplesPage frameworkId={frameworkId} />
       ) : route.id === "token-reference" || route.id === "pattern-reference" ? (
