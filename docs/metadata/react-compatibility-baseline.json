@@ -23,7 +23,7 @@
     {
       "path": "packages/ui-components/package.json",
       "kind": "blob",
-      "sha1": "9164ec370fe4de812162f6a06fdc03fa2a03903d",
+      "sha1": "b2967ecca241b1df8f8b1b590a0fdad6089fdf28",
       "covers": [
         "package exports",
         "CSS entrypoints",
@@ -62,9 +62,9 @@
       "covers": ["documented React public API and usage contracts"]
     },
     {
-      "path": "docs/packages/ui-components.md",
+      "path": "packages/ui-components/README.md",
       "kind": "blob",
-      "sha1": "665d895f70a4358a28d31aaac7c21e5d6197d8b5",
+      "sha1": "343954f6e44a0522317db12100ca11db12daf92b",
       "covers": ["React package ownership and public consumption contract"]
     },
     {
@@ -162,6 +162,16 @@
       "task": "#575",
       "reason": "Timeline adds the accepted stateless chronological React renderer as a public @vyrnforge/ui-components export. The implementation preserves native ordered-list and list-item semantics, introduces no activity state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
+    },
+    {
+      "task": "#617",
+      "reason": "Package-specific setup and usage ownership moved from the duplicate docs/packages/ui-components.md guide to the package-local packages/ui-components/README.md. The React public API, runtime behavior, CSS contracts, compatibility matrix, and package manifest are unchanged; only the documentation ownership fingerprint is intentionally recaptured.",
+      "evidence": "packages/ui-components/README.md"
+    },
+    {
+      "task": "#605",
+      "reason": "Development-only React test and accessibility tooling pins changed in packages/ui-components/package.json. Public exports, CSS entrypoints, React peer ranges, runtime dependencies, component behavior, and compatibility policy remain unchanged; only the package-manifest fingerprint is intentionally recaptured.",
+      "evidence": "packages/ui-components/package.json"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

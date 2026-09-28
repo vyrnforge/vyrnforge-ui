@@ -101,7 +101,7 @@ test("rejects hardcoded prerelease versions in primary guidance", () =>
 test("rejects historical task identifiers in current guidance", () =>
   fixture(
     (root) => {
-      const relativePath = "docs/packages/ui-elements.md";
+      const relativePath = "packages/ui-elements/README.md";
       write(
         root,
         relativePath,

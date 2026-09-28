@@ -12,7 +12,7 @@ export const documentationSystemPath =
   "docs/engineering/documentation-system.md";
 
 const expectedFrameworks = ["angular", "native-html", "react", "vue"];
-const expectedSurfaces = ["docs", "playground"];
+const expectedSurfaces = ["docs"];
 const expectedDomains = [
   "accessibility",
   "components",

@@ -1,0 +1,26 @@
+.vf-property-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.vf-property-table > table {
+  width: 100%;
+  border-collapse: collapse;
+  color: inherit;
+  font: inherit;
+}
+
+.vf-property-table > table :where(th, td) {
+  padding-block: calc(var(--vf-component-gap) / 2);
+  padding-inline: var(--vf-space-4);
+  text-align: start;
+  vertical-align: top;
+}
+
+.vf-property-table > table :where(th, td):first-child {
+  padding-inline-start: 0;
+}
+
+.vf-property-table > table :where(th, td):last-child {
+  padding-inline-end: 0;
+}

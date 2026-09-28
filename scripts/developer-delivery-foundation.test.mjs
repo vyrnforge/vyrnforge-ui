@@ -46,10 +46,10 @@ const required = [
   "apps/docs/package.json",
   "apps/docs/src/docsContext.ts",
   "apps/docs/src/ComponentReferencePage.tsx",
-  "examples/basic-playground/package.json",
-  "examples/basic-playground/src/app/playgroundContext.ts",
-  "examples/basic-playground/src/components/ComponentDemoPage.tsx",
-  "examples/basic-playground/src/data/referenceMetadata.ts",
+  "apps/docs/src/referenceRoutes.ts",
+  "apps/docs/src/referenceData.ts",
+  "apps/docs/src/examples/MigratedExamplePage.tsx",
+  "apps/docs/src/examples/ExecutableExamplesPage.tsx",
 ];
 
 function createFoundationFixture() {
@@ -62,9 +62,7 @@ function createFoundationFixture() {
     "docs/generated",
     "docs/reference",
     "scripts",
-    "apps/docs/src",
-    "examples/basic-playground/src/app",
-    "examples/basic-playground/src/data",
+    "apps/docs/src/examples",
   ]) {
     mkdirSync(path.join(root, relativePath), { recursive: true });
   }

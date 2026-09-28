@@ -36,10 +36,10 @@ GitHub Actions workflow inventory aligned with real lifecycle entrypoints.
 `ci.yml` always runs for pull requests targeting `main` or a persistent
 integration lane. It does not use workflow-level path filters.
 `scripts/detect-ci-scope.mjs` selects quality, integration, browser, package,
-consumer, docs, playground, fixture, and security work from the actual change.
+consumer, docs, fixture, and security work from the actual change.
 
 - Task PR -> `integration/<lane>`: affected-scope validation once. When docs or
-  playground/reference work is selected, CI also emits a non-deployable
+  reference work is selected, CI also emits a non-deployable
   immutable preview artifact.
 - Integration-lane merge or synchronization: no push-triggered CI duplication.
 - Promotion or emergency hotfix PR -> `main`: full repository validation once,
@@ -67,14 +67,12 @@ affected or full typechecking according to planner output.
 
 The `integration-checks` job owns package output preparation, packed consumer
 verification, Chromium contracts, cross-framework generation smoke, repository
-inventory, documentation and playground builds, PR reference previews, and the
+inventory, the documentation build, PR reference previews, and the
 commit-bound Pages reference artifact. It prepares package output once per
 selected job and reuses it across downstream checks.
 
 A reference-affecting pull request creates
-`reference-preview-pr-<number>-<tested-commit>`. The artifact contains the docs
-surface at `/`, the playground surface at `/playground/`, and
-`reference-artifact.json`. The manifest records `kind: preview`,
+`reference-preview-pr-<number>-<tested-commit>`. The artifact contains the Docs surface at `/` and `reference-artifact.json`. The manifest records `kind: preview`,
 `deployable: false`, immutability, the tested commit, and the producing CI run.
 CI keeps repository-wide read-only permissions; no preview path receives Pages
 write, npm OIDC, tag creation, or repository write access.
@@ -86,8 +84,8 @@ exists. Pull-request validation and weekly assurance never create a deployable
 Pages artifact. Production output carries the same lineage manifest with
 `kind: production` and `deployable: true`.
 
-Exact-main delivery builds the current documentation inspector and the current
-human-facing playground, then runs `scripts/assemble-versioned-pages.mjs`.
+Exact-main delivery builds the single current Docs application, then runs
+`scripts/assemble-versioned-pages.mjs`.
 That assembler uses two distinct sources of truth:
 
 - `docs/metadata/release-groups.json` describes current source release lines,
@@ -101,18 +99,16 @@ while the reference-site version selector is based on `Next` plus retained
 SemVer release snapshots.
 
 For every retained release tag, exact-main delivery checks out the tag in an
-isolated worktree and builds both surfaces from that release's source:
+isolated worktree and builds the release documentation from that release's
+source at `/versions/v<version>/`.
 
-- `/versions/v<version>/` contains the release documentation inspector.
-- `/versions/v<version>/playground/` contains the release playground.
-
-The current main surfaces remain at `/` and `/playground/`. The assembled site
+The current main Docs surface remains at `/`. The assembled site
 contains `vyrnforge-versions.json`, a machine-readable catalog bound to the
 exact main commit, plus the temporary backward-compatible `docs-versions.json`
 consumed by `apps/docs`. `scripts/reference-artifact.mjs` then binds the site to
 its exact source commit and CI run. `scripts/verify-pages-site.mjs` and the
-reference-artifact verifier require the current surfaces, catalog, release
-lines, exact lineage, and every retained docs/playground pair before upload.
+reference-artifact verifier require the current Docs surface, catalog, release
+lines, exact lineage, and every retained release documentation snapshot before upload.
 
 ### Security
 
@@ -142,10 +138,10 @@ successful explicitly selected `workflow_dispatch` delivery run for current
 and downloads the matching `pages-site-<sha>` artifact. A full manual CI run
 cannot accidentally deploy because it does not create that production artifact.
 
-Before deployment, the preparation job verifies the current docs and playground,
+Before deployment, the preparation job verifies the current Docs site,
 `reference-artifact.json`, `vyrnforge-versions.json`, the compatibility
 manifest, exact-main commit and CI-run binding, and every retained release
-docs/playground pair. The production manifest must be immutable and deployable,
+documentation snapshot. The production manifest must be immutable and deployable,
 and its commit must match the version catalog. Deployment never checks out
 source or rebuilds the site. Only the deployment job receives `pages: write`
 and `id-token: write`.
@@ -174,8 +170,8 @@ The ordered responsibilities are:
    run ID; and wait for deployment success.
 
 The reference refresh intentionally happens after tag creation. Therefore the
-versioned Pages assembler sees the new release tag and produces the tagged docs
-and playground snapshot immediately, without a follow-up source commit.
+versioned Pages assembler sees the new release tag and produces the tagged Docs
+snapshot immediately, without a follow-up source commit.
 
 Permission separation remains explicit. The refresh job receives `actions:
 write` only so it can dispatch the existing CI and Pages workflows. It does not
