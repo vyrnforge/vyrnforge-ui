@@ -29,8 +29,7 @@ state, or public API facts.
 
 ## VyrnForge Reference product
 
-Docs and Playground are two presentation surfaces of one reader-facing product:
-**VyrnForge Reference**.
+`apps/docs` is the single presentation surface of the reader-facing **VyrnForge Reference** product.
 
 `docs/metadata/reference-portal.json` owns the shared Reference product
 identity, framework and surface vocabulary, navigation sections, content-domain
@@ -39,8 +38,8 @@ It does not replace the canonical component, package, token, pattern,
 accessibility, release, or executable-example contracts that supply the
 underlying facts.
 
-The current Docs and Playground applications may use React internally. React is
-an implementation host, not the semantic owner of the Reference product.
+The Docs application may use React internally. React is an implementation host,
+not the semantic owner of the Reference product.
 Semantic ownership remains framework-neutral. Native HTML / Custom Elements,
 React, Angular, and Vue remain equal first-class reader contexts and must share
 the same VyrnForge terminology, behavior contracts, accessibility model, styling
@@ -72,8 +71,8 @@ hand-maintained API authority.
 Framework context uses the shared framework IDs declared by
 `reference-portal.json` and the `framework` query parameter. Version context
 uses the canonical `vyrnforge-versions.json` catalog and versioned paths.
-Navigation between Docs and Playground must preserve the selected framework and
-version whenever the target version supports that surface.
+Navigation inside Docs preserves the selected framework and version context across
+reader-facing routes.
 
 The default framework may be React for convenience, but default selection does
 not give React stronger product semantics than Native HTML, Angular, or Vue.
@@ -86,11 +85,11 @@ rewrite rules. Framework context is query-based and version context is
 path-based.
 
 The transitional runtime registries have been retired. Docs discovers authored
-Markdown, metadata, and generated AI-context sources directly and composes its
-generated reader entries from `docs/generated/reference-model.json`. Playground
-binds curated executable pages to generated/canonical component and example
-identities; those bindings do not own component labels, package identity,
-framework API facts, accessibility contracts, or stable component routes.
+Markdown, metadata, and generated sources directly, composes generated reader
+entries from `docs/generated/reference-model.json`, and binds curated executable
+pages to canonical component and example identities. Those bindings do not own
+component labels, package identity, framework API facts, accessibility contracts,
+or stable component routes.
 
 Derivable navigation and catalog facts therefore come from the generated
 Reference model, canonical metadata, or repository source discovery. Curated
@@ -99,38 +98,25 @@ presentation or behavioral value that is not already a generated fact.
 
 ### Executable preview contract
 
-The primary reader experience should present guidance, generated API facts, and
-executable UI behavior together instead of forcing readers to choose between a
-"Docs mode" and a separate "Playground mode" for the same component.
+The primary reader experience presents guidance, generated API facts, and
+interactive UI behavior in one Docs application. Readers should not choose
+between a Docs mode and a separate Playground product.
 
-Component reference pages may embed an executable presentation when canonical
-component metadata provides a verified `playgroundPath`. The embedded view must
-reuse that canonical route and shared framework/version context; it must not
-introduce a second demo registry or a docs-only copy of example behavior.
+Foundations, patterns, Data & Grid demonstrations, and framework examples use
+curated Docs routes backed by canonical metadata and verified consumer fixtures.
+Component/API facts remain generated from shared VyrnForge contracts. Interactive
+examples may use authored presentation code, but they must not become a second
+API registry or overstate framework runtime evidence.
 
-The standalone Playground remains a maintained execution and verification
-surface for deep links, focused example exploration, CI, browser evidence, and
-packed-consumer integration. It is not a competing source of documentation
-truth or a separate component catalog.
-
-Preview transport is intentionally replaceable. The current Reference host may
-embed the maintained Playground route in an isolated presentation context, while
-future delivery may bind the same semantic component/example identity to
-versioned framework-specific preview bundles. Changing iframe, worker, module,
-or bundle transport must not change canonical component IDs, example IDs,
-framework context, generated API ownership, or route identity.
-
-A preview must not overstate framework evidence. Shared UI rendering may be
-shown with the selected framework context, but claims that a specific framework
-runtime executed must come from its executable-example or packed-consumer
-evidence. Native HTML, React, Angular, and Vue remain equal semantic surfaces
-whether their preview transport is shared or framework-specific.
+Native HTML, React, Angular, and Vue remain equal semantic contexts. Claims that
+a framework runtime executed must come from executable-example or packed-consumer
+evidence.
 
 ### Deployment ownership
 
 `scripts/reference-artifact.mjs` owns the shared immutable Reference artifact
-contract. Preview and production artifacts contain both Docs and Playground,
-preserve commit/CI lineage, and use `main` as the production source.
+contract. Preview and production artifacts contain the single Docs product, preserve
+commit/CI lineage, and use `main` as the production source.
 Presentation changes must preserve this delivery contract unless the deployment
 architecture itself is intentionally revised and re-verified.
 
@@ -222,7 +208,7 @@ When changing Reference content or presentation:
 3. Update or regenerate structured metadata when the canonical contract requires
    it.
 4. Keep framework/version context and stable route identities aligned across
-   Docs and Playground.
+   all reader-facing Docs routes.
 5. Derive route and catalog facts from the shared Reference model, canonical
    metadata, or repository source discovery rather than application registries.
 6. Preserve executable-example registry identities and cross-framework
@@ -230,7 +216,7 @@ When changing Reference content or presentation:
 7. Keep curated prose and executable demos authored only where they add value
    beyond generated facts.
 8. Run repository documentation/reference drift verification and the affected
-   Docs/Playground builds.
+   Docs build.
 
 ## Related sources
 

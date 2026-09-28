@@ -45,9 +45,29 @@ function runNpm(args, options = {}) {
 }
 
 function lockedVersion(lockfile, packageName) {
-  const version = lockfile.packages?.[`node_modules/${packageName}`]?.version;
-  if (!version) throw new Error(`package-lock.json is missing ${packageName}`);
-  return version;
+  const packages = lockfile.packages ?? {};
+  const rootVersion = packages[`node_modules/${packageName}`]?.version;
+  if (rootVersion) return rootVersion;
+
+  const suffix = `/node_modules/${packageName}`;
+  const nestedVersions = new Set(
+    Object.entries(packages)
+      .filter(
+        ([relativePath, entry]) =>
+          relativePath.endsWith(suffix) && Boolean(entry?.version),
+      )
+      .map(([, entry]) => entry.version),
+  );
+
+  if (nestedVersions.size === 1) {
+    return [...nestedVersions][0];
+  }
+  if (nestedVersions.size > 1) {
+    throw new Error(
+      `package-lock.json has multiple versions for ${packageName}: ${[...nestedVersions].join(", ")}`,
+    );
+  }
+  throw new Error(`package-lock.json is missing ${packageName}`);
 }
 
 function sourcePackageJson(packageInfo) {

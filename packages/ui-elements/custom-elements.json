@@ -328,7 +328,7 @@
         {
           "kind": "class",
           "name": "VyrnForgePropertyTableElement",
-          "description": "VyrnForge vf-property-table browser-native renderer.",
+          "description": "PropertyTable browser-native renderer. Read-only tabular property comparison using native table semantics.",
           "tagName": "vf-property-table",
           "customElement": true,
           "superclass": {
@@ -339,7 +339,7 @@
         {
           "kind": "class",
           "name": "VyrnForgeTimelineElement",
-          "description": "VyrnForge vf-timeline browser-native renderer.",
+          "description": "Timeline browser-native renderer. Ordered chronological event presentation using native list and time semantics.",
           "tagName": "vf-timeline",
           "customElement": true,
           "superclass": {

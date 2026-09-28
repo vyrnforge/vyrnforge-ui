@@ -51,7 +51,6 @@ themselves.
 
 Canonical documentation:
 
-- `docs/packages/ui-elements.md`
 - `docs/api/ui-elements-api.md`
 - `docs/generated/component-reference.json`
 - `docs/architecture/10-custom-elements-and-form-association.md`

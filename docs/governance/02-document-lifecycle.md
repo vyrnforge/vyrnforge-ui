@@ -64,27 +64,33 @@ A stable document must:
 
 ## When docs conflict
 
-Conflict resolution order:
+Resolve conflicts by the owner of the fact rather than by whichever document was
+edited most recently:
 
-1. `docs/governance/01-project-source-of-truth.md`
-2. accepted architecture decisions and current `docs/architecture/*` contracts
-3. canonical current package/API/release metadata and manifests for implemented state
-4. `docs/roadmap/00-master-roadmap.md` for program execution and future work
-5. package README files and component-level guidance
-6. active proposals or task documents
-7. archived and historical evidence
+1. [Project Source Of Truth](01-project-source-of-truth.md) owns product identity,
+   durable scope, and the source-authority map.
+2. Accepted architecture decisions and current `docs/architecture/*` contracts
+   own architecture decisions and technical boundaries.
+3. Canonical package/API/release metadata and manifests own current implemented
+   package, API, maturity, and release facts.
+4. The Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status** owns
+   active execution, task status, dependencies, sequencing, and gates.
+5. Package and component guidance may explain usage but cannot override the
+   canonical owners above.
+6. Active proposals may describe future targets only when clearly marked as
+   proposed and must not be presented as implemented state.
+7. Archived and historical evidence never overrides current guidance.
 
-Future-target architecture and current implemented state must remain explicitly distinguished when both are documented.
-
-Archived documents never override active docs.
+Future-target architecture and current implemented state must remain explicitly
+distinguished when both are documented.
 
 ## Before removal or relocation
 
 Before deleting, archiving, or moving documentation:
 
-1. Check repository references and the documentation application registry.
+1. Check repository references and the documentation application's source discovery/bindings.
 2. Confirm the material is not a canonical owner or required evidence source.
-3. Update active links and route/source mappings first.
+3. Update active links and source mappings first.
 4. Run documentation verification and the affected documentation build.
 
 See [Documentation System](../engineering/documentation-system.md) for the repository-wide documentation layers and ownership model.

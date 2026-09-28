@@ -252,7 +252,7 @@
         "data grid rendering"
       ],
       "cssImport": "not-applicable",
-      "apiDoc": "docs/packages/ui-vue.md",
+      "apiDoc": "packages/ui-vue/README.md",
       "dependsOn": ["@vyrnforge/ui-elements"],
       "mustNotDependOn": [
         "@vyrnforge/ui-core",
