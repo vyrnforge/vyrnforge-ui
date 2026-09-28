@@ -1,3 +1,7 @@
+import { createRequire } from "node:module";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+
 const domGlobals = [
   "window",
   "document",
@@ -10,14 +14,18 @@ for (const name of domGlobals) {
   Reflect.deleteProperty(globalThis, name);
 }
 
-// Angular libraries are distributed in partial compilation mode. Load the
-// compiler so a bare Node probe can evaluate the package without requiring a
-// browser bootstrap; the assertions below still guarantee VyrnForge itself
-// does not create browser globals or register Custom Elements eagerly.
-await import("@angular/compiler");
+// Resolve every package through the clean consumer fixture rather than the
+// repository workspace. Angular libraries are distributed in partial
+// compilation mode, so load the fixture's compiler before evaluating the
+// packed VyrnForge facade.
+const fixtureRequire = createRequire(path.join(process.cwd(), "package.json"));
+const importFromFixture = async (specifier) =>
+  import(pathToFileURL(fixtureRequire.resolve(specifier)).href);
 
-const angularPackage = await import("@vyrnforge/ui-angular");
-await import("@vyrnforge/ui-angular/forms");
+await importFromFixture("@angular/compiler");
+
+const angularPackage = await importFromFixture("@vyrnforge/ui-angular");
+await importFromFixture("@vyrnforge/ui-angular/forms");
 
 for (const name of domGlobals) {
   if (globalThis[name] !== undefined) {

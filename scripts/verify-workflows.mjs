@@ -199,7 +199,6 @@ for (const marker of [
   "npm run verify:repository-inventory",
   "node scripts/assemble-versioned-pages.mjs",
   "node scripts/verify-pages-site.mjs",
-  "VITE_PLAYGROUND_VERSION_ID: next",
   "pages-site-${{ github.sha }}",
   "actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0",
   "ACTIONLINT_VERSION: 1.7.12",
@@ -220,6 +219,10 @@ assert(
   "ci.yml exact-main delivery must fetch history and tags for retained reference snapshots",
 );
 assert(!ci.includes("npm publish"), "ci.yml must never publish packages");
+assert(
+  !ci.includes("VITE_PLAYGROUND_"),
+  "ci.yml must not restore standalone Playground delivery variables",
+);
 
 const assurance = read(".github/workflows/assurance.yml");
 for (const marker of [
@@ -241,8 +244,8 @@ for (const marker of [
   "npm run verify:compatibility-release-case",
   "npm audit --omit=dev --audit-level=high",
   "name: codeql-analysis",
-  "github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9",
-  "github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9",
+  "github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2",
+  "github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2",
   "name: assurance-gate",
 ]) {
   assert(assurance.includes(marker), `assurance.yml must include ${marker}`);
@@ -294,18 +297,18 @@ for (const marker of [
   'gh run download "${{ steps.candidate.outputs.run-id }}"',
   '--name "pages-site-${{ steps.candidate.outputs.head-sha }}"',
   "test -f site/index.html",
-  "test -f site/playground/index.html",
   "test -f site/.nojekyll",
   "test -f site/vyrnforge-versions.json",
   "test -f site/docs-versions.json",
   "catalog.current?.commit",
-  "release.playgroundPath",
   "pages: write",
   "id-token: write",
 ]) {
   assert(pages.includes(marker), `deploy-pages.yml must include ${marker}`);
 }
 for (const forbidden of [
+  "site/playground/index.html",
+  "release.playgroundPath",
   "actions/checkout@",
   "actions/setup-node@",
   "actions/download-artifact@",

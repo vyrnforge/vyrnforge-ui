@@ -4,8 +4,8 @@
   "name": "Timeline",
   "package": "@vyrnforge/ui-components",
   "category": "data-display",
-  "maturity": "planned",
-  "availability": "planned",
+  "maturity": "experimental",
+  "availability": "available",
   "purpose": "Ordered chronological event presentation using native list and time semantics.",
   "guidance": {
     "useWhen": "Use for read-only chronological histories where event order and timestamps are meaningful and entry content remains application-owned.",
@@ -23,7 +23,7 @@
     "the component is read-only presentation and must not introduce feed, listbox, grid, selection, or live-region semantics unless a separate interactive contract requires them"
   ],
   "knownLimitations": [
-    "React, Angular, and Vue renderer implementations remain deferred to their framework tasks."
+    "Read-only presentation only; persistence, loading, filtering, actor/action schemas, selection, and live-feed behavior remain application-owned."
   ],
   "styling": {
     "classes": [
@@ -33,20 +33,28 @@
   },
   "frameworks": {
     "react": {
-      "status": "not-supported",
-      "package": "@vyrnforge/ui-components"
+      "status": "current",
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { Timeline } from '@vyrnforge/ui-components';",
+      "example": "<Timeline><li><time dateTime=\"2026-09-24T01:00:00Z\">01:00</time> Created</li></Timeline>"
     },
     "native-html": {
-      "status": "not-supported",
-      "package": null
+      "status": "current",
+      "package": "@vyrnforge/ui-elements",
+      "setup": "import \"@vyrnforge/ui-elements/register\";",
+      "example": "<vf-timeline></vf-timeline>"
     },
     "angular": {
-      "status": "not-supported",
-      "package": null
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-angular",
+      "setup": "import { provideVyrnForge } from \"@vyrnforge/ui-angular\";\n// add provideVyrnForge() to bootstrapApplication providers",
+      "example": "<vf-timeline></vf-timeline>"
     },
     "vue": {
-      "status": "not-supported",
-      "package": null
+      "status": "verified-consumer",
+      "package": "@vyrnforge/ui-vue",
+      "setup": "import { VyrnForgeVue } from \"@vyrnforge/ui-vue\";\napp.use(VyrnForgeVue);",
+      "example": "<VfTimeline></VfTimeline>"
     }
   },
   "contract": {
@@ -67,6 +75,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "customElementsManifest": null
+    "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

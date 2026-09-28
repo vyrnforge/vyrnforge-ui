@@ -12,7 +12,9 @@ import {
   VfDialog,
   VfPageHeader,
   VfProgress,
+  VfPropertyTable,
   VfTabs,
+  VfTimeline,
   VfTextInput,
   type GeneratedDialogDismissDetail,
   type VyrnForgeActionDetail,
@@ -44,7 +46,9 @@ type VyrnForgeValidationError = {
     VfDialog,
     VfPageHeader,
     VfProgress,
+    VfPropertyTable,
     VfTabs,
+    VfTimeline,
     VfTextInput,
     VyrnForgeFormControlDirective,
   ],
@@ -206,6 +210,40 @@ export class AppComponent implements AfterViewInit {
         );
       }
 
+      const propertyTable = document.querySelector(
+        "vf-property-table[data-angular-property-table]",
+      );
+      if (
+        !propertyTable?.querySelector("table > caption") ||
+        !propertyTable.querySelector('table > thead th[scope="col"]') ||
+        !propertyTable.querySelector('table > tbody th[scope="row"]') ||
+        !propertyTable.querySelector("table > tbody td")
+      ) {
+        throw new Error(
+          "Angular PropertyTable did not preserve native table semantics.",
+        );
+      }
+
+      const timeline = document.querySelector(
+        "vf-timeline[data-angular-timeline]",
+      );
+      const timelineItems = timeline?.querySelectorAll(
+        ":scope > ol.vf-timeline__list > li.vf-timeline__item",
+      );
+      if (
+        timelineItems?.length !== 2 ||
+        !timelineItems[0]?.querySelector(
+          'time[datetime="2026-09-24T08:00:00Z"]',
+        ) ||
+        !timelineItems[1]?.querySelector(
+          'time[datetime="2026-09-24T09:00:00Z"]',
+        )
+      ) {
+        throw new Error(
+          "Angular Timeline did not preserve ordered list/time semantics.",
+        );
+      }
+
       const descriptionList = document.querySelector(
         "vf-description-list[data-angular-description-list]",
       );
@@ -286,6 +324,8 @@ export class AppComponent implements AfterViewInit {
         );
       }
       root.setAttribute("data-progress", "verified");
+      root.setAttribute("data-property-table", "verified");
+      root.setAttribute("data-timeline", "verified");
       root.setAttribute("data-composition", "verified");
       root.setAttribute("data-imperative-apis", "verified");
       root.setAttribute("data-consumer-property", "verified");

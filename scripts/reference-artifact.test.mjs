@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -10,12 +10,7 @@ import {
 } from "./reference-artifact.mjs";
 
 function createSurface(directory) {
-  mkdirSync(path.join(directory, "playground"), { recursive: true });
   writeFileSync(path.join(directory, "index.html"), "<html></html>");
-  writeFileSync(
-    path.join(directory, "playground", "index.html"),
-    "<html></html>",
-  );
   writeFileSync(path.join(directory, ".nojekyll"), "");
 }
 

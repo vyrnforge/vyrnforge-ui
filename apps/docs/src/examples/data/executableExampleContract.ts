@@ -1,13 +1,13 @@
-import executableExamplesRaw from "../../../../docs/metadata/executable-examples.json?raw";
-import consumerManifestRaw from "../../../../tests/consumers/manifest.json?raw";
-import angularFixtureRaw from "../../../../tests/consumers/angular/fixture.json?raw";
-import angularSource from "../../../../tests/consumers/angular/src/app/app.component.html?raw";
-import nativeHtmlFixtureRaw from "../../../../tests/consumers/native-html/fixture.json?raw";
-import nativeHtmlSource from "../../../../tests/consumers/native-html/src/main.ts?raw";
-import reactFixtureRaw from "../../../../tests/consumers/react/fixture.json?raw";
-import reactSource from "../../../../tests/consumers/react/src/main.tsx?raw";
-import vueFixtureRaw from "../../../../tests/consumers/vue/fixture.json?raw";
-import vueSource from "../../../../tests/consumers/vue/src/App.vue?raw";
+import executableExamplesRaw from "../../../../../docs/metadata/executable-examples.json?raw";
+import consumerManifestRaw from "../../../../../tests/consumers/manifest.json?raw";
+import angularFixtureRaw from "../../../../../tests/consumers/angular/fixture.json?raw";
+import angularSource from "../../../../../tests/consumers/angular/src/app/app.component.html?raw";
+import nativeHtmlFixtureRaw from "../../../../../tests/consumers/native-html/fixture.json?raw";
+import nativeHtmlSource from "../../../../../tests/consumers/native-html/src/main.ts?raw";
+import reactFixtureRaw from "../../../../../tests/consumers/react/fixture.json?raw";
+import reactSource from "../../../../../tests/consumers/react/src/main.tsx?raw";
+import vueFixtureRaw from "../../../../../tests/consumers/vue/fixture.json?raw";
+import vueSource from "../../../../../tests/consumers/vue/src/App.vue?raw";
 
 export type ExecutableExampleFrameworkId =
   "native-html" | "react" | "angular" | "vue";
