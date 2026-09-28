@@ -31,7 +31,6 @@ CSS.
 
 Canonical documentation:
 
-- `docs/packages/ui-behaviors.md`
 - `docs/api/ui-behaviors-api.md`
 - `docs/architecture/02-state-and-adapter-ownership.md`
 
