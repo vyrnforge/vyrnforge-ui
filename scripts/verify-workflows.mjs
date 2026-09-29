@@ -190,7 +190,6 @@ for (const marker of [
 }
 for (const marker of [
   "node scripts/run-scoped-quality.mjs",
-  "npm run verify:release-registry-preflight",
   "npm run prepare:release-artifact",
   "npm run verify:release-artifact",
   "npm run verify:trusted-publishing-dry-run",
@@ -233,6 +232,7 @@ for (const marker of [
   "workflow_dispatch:",
   "name: full-quality",
   "name: full-integration",
+  "npm run verify:release-registry-preflight",
   "npm run prepare:release-artifact",
   "npm run verify:release-artifact",
   "npm run verify:trusted-publishing-dry-run",
