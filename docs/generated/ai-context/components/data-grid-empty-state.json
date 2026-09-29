@@ -48,14 +48,5 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": null
-  },
-  "useWhen": "Use when the grid has no data or when active search/filter criteria produce no matching rows.",
-  "avoidWhen": "Avoid for loading and error conditions.",
-  "relatedComponents": [],
-  "cssClasses": [],
-  "cssVariables": [],
-  "importExample": "import { DataGridEmptyState } from \"@vyrnforge/ui-data-grid\";",
-  "basicUsageExample": "<DataGridEmptyState columnCount={3} hasQuery />",
-  "accessibilityNotes": "Renders the shared EmptyState inside a table row; title and description distinguish no-data from no-match states through hasQuery.",
-  "aiUsageNotes": "Set hasQuery when the empty result is caused by search or filtering; keep loading and error states separate."
+  }
 }
