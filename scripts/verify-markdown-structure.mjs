@@ -58,6 +58,15 @@ export function verifyMarkdownStructure({
     const content = maskCodeFences(readFileSync(absolutePath, "utf8"));
     const lines = content.split(/\r?\n/u);
 
+    const h1Lines = lines
+      .map((line, index) => ({ line, number: index + 1 }))
+      .filter(({ line }) => /^#\s+\S/u.test(line));
+    if (h1Lines.length !== 1) {
+      failures.push(
+        `${relativePath}: expected exactly one H1 document title; found ${h1Lines.length}`,
+      );
+    }
+
     const headingLines = new Map();
     const headingAncestors = [];
     for (let index = 0; index < lines.length; index += 1) {
