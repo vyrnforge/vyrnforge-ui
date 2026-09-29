@@ -2410,7 +2410,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Avoid duplicating label and validation layout manually."
@@ -2482,7 +2482,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Avoid for page-level blocking messages; use InlineMessage or ErrorState."
@@ -4345,7 +4345,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-data-grid-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Avoid for row data, fetching, auth, permissions, business workflows, or internal resize/reorder coordination."
@@ -4419,7 +4419,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Avoid for small inline layouts or when an app-specific router shell already owns all regions."
@@ -4771,7 +4771,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Avoid when the application needs a fully custom marketing or public-site header."
@@ -6685,7 +6685,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-data-grid-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Presentation container only; filter state belongs to DataGridState/controlled integrations, and the compact header does not provide an inline filter popover."
@@ -6722,7 +6722,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-data-grid-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Loading placeholder rows only; they are aria-hidden and do not represent grid data or status content."
@@ -6759,7 +6759,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-data-grid-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Use for no-data or no-match states; do not use it for loading or load errors."
@@ -6796,7 +6796,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-data-grid-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
         "Use for grid load errors; it renders nothing when no error is present and is not an empty/loading state."
