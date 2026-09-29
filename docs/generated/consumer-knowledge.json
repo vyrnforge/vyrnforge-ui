@@ -8723,7 +8723,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Use for no-data or no-match states; do not use it for loading or load errors."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -8787,7 +8789,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Use for grid load errors; it renders nothing when no error is present and is not an empty/loading state."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -8851,7 +8855,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Presentation container only; filter state belongs to DataGridState/controlled integrations, and the compact header does not provide an inline filter popover."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -8915,7 +8921,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Display-row pagination only in this phase; generated group headers count as rows on the current page."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -8979,7 +8987,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Global search scans searchable columns in the current grid; server fetching remains application-owned through query contracts."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -9043,7 +9053,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Loading placeholder rows only; they are aria-hidden and do not represent grid data or status content."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -12525,7 +12537,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -12593,7 +12607,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -13440,7 +13456,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -13508,7 +13526,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -13869,7 +13889,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -13933,7 +13955,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -14711,7 +14735,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ],
       "styling": {
         "classes": [],
         "variables": []
