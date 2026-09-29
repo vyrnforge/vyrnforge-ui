@@ -6,15 +6,19 @@
   "category": "grid-feature",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "Controlled, debounced search input for data-grid query state.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when the grid needs a global search control whose value and change handling are owned by the consuming grid state.",
+    "avoidWhen": "Avoid treating it as a server-fetching layer; remote query execution remains application-owned.",
+    "aiUsageNotes": "Keep search state controlled and separate remote fetching/query orchestration from this presentation control.",
     "relatedComponents": []
   },
-  "accessibility": [],
-  "knownLimitations": [],
+  "accessibility": [
+    "Uses SearchInput and sets its aria-label from the placeholder; the default placeholder and accessible name are \"Search\"."
+  ],
+  "knownLimitations": [
+    "Global search scans searchable columns in the current grid; server fetching remains application-owned through query contracts."
+  ],
   "styling": {
     "classes": [],
     "variables": []
@@ -22,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "react-alpha-deferred",
-      "package": "@vyrnforge/ui-data-grid"
+      "package": "@vyrnforge/ui-data-grid",
+      "setup": "import { DataGridSearch } from \"@vyrnforge/ui-data-grid\";",
+      "example": "<DataGridSearch value={search} onChange={setSearch} />"
     },
     "native-html": {
       "status": "not-supported",

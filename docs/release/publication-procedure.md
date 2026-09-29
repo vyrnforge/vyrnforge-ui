@@ -31,6 +31,7 @@ Do not include real npm tokens in repository files, workflows, docs, or examples
 - A successful `VyrnForge CI` push run exists for the exact current-main release commit; release consumes that CI evidence rather than rerunning the general validation suite.
 - Package tarballs are reviewed before publication.
 - npm organization access and package visibility are confirmed.
+- `npm run verify:release-registry-preflight -- --release-group <group> --version <version> --dist-tag <tag>` confirms candidate versions are absent and any cross-release dependencies already exist in the public registry; this check does not publish.
 
 ## Package order
 
@@ -40,8 +41,10 @@ For `non-grid-beta`, publish in dependency order:
 
 1. `@vyrnforge/ui-core`
 2. `@vyrnforge/ui-behaviors`
-3. `@vyrnforge/ui-components`
-4. `@vyrnforge/ui-elements`
+3. `@vyrnforge/ui-elements`
+4. `@vyrnforge/ui-components`
+5. `@vyrnforge/ui-angular`
+6. `@vyrnforge/ui-vue`
 
 For `data-grid-alpha`, publish only `@vyrnforge/ui-data-grid`. Its exact
 `ui-core` and `ui-components` beta dependencies must already exist in the

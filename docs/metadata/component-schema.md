@@ -13,6 +13,8 @@ Each `components` record has a stable kebab-case `id`, `displayName`, VyrnForge
 `since`, `docsPath`, `playgroundPath`, `evidence`, `knownLimitations`, and
 `deprecation`. It also records accessibility and keyboard documentation status.
 
+`accessibility.keyboardDocumentation` is a status field. Use `complete` only when the component's keyboard/focus behavior is explicitly documented and the applicable component-specific manual assistive-technology scenario is complete with passing results in its required environments. Keep `requires-verification` when that evidence is incomplete, and use `not-applicable` only when a component has no keyboard contract to document.
+
 Use `pending`, `requires-verification`, or `not-applicable` when a repository
 fact is not yet verified or does not apply. A canonical Experimental evidence
 record may remain `pending`; recording owner and location evidence closes the

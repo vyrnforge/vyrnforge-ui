@@ -35,7 +35,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for the familiar Clear utility.",
       "context": "ai-context/components/clear-button.json"
     },
     {
@@ -44,7 +44,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for the familiar Close utility.",
       "context": "ai-context/components/close-button.json"
     },
     {
@@ -98,7 +98,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for opening or invoking familiar More actions.",
       "context": "ai-context/components/more-button.json"
     },
     {
@@ -107,7 +107,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for the familiar Refresh utility.",
       "context": "ai-context/components/refresh-button.json"
     },
     {
@@ -134,7 +134,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Compact follow-up action rendered within transient toast feedback.",
       "context": "ai-context/components/toast-action.json"
     },
     {
@@ -143,7 +143,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "React context and viewport provider that owns visible toast state, auto-dismiss timers, and pause/resume behavior.",
       "context": "ai-context/components/toast-provider.json"
     },
     {
@@ -179,7 +179,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "React hook for accessing the ToastController supplied by ToastProvider.",
       "context": "ai-context/components/use-toast.json"
     }
   ]
