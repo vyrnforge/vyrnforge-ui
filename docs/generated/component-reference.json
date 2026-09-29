@@ -11282,15 +11282,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only Clear action is conventional and the default Clear label accurately describes the action.",
-      "avoidWhen": "Avoid for labelled business actions or when Clear does not precisely describe the result.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { ClearButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<ClearButton />",
-      "aiUsageNotes": "Use only for the familiar Clear utility action; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "close-button",
@@ -11360,15 +11352,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only Close action is conventional and the default Close label accurately describes the action.",
-      "avoidWhen": "Avoid for labelled business actions or when Close does not precisely describe the result.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { CloseButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<CloseButton />",
-      "aiUsageNotes": "Use only for the familiar Close utility action; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "code-text",
@@ -12217,15 +12201,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only \"More actions\" affordance conventionally represents access to additional actions.",
-      "avoidWhen": "Avoid for labelled business actions or when the control does not expose additional actions.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { MoreButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<MoreButton />",
-      "aiUsageNotes": "Use only for the familiar More actions utility; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "refresh-button",
@@ -12295,15 +12271,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only Refresh action is conventional and the default Refresh label accurately describes the action.",
-      "avoidWhen": "Avoid for labelled business actions or when Refresh does not precisely describe the result.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { RefreshButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<RefreshButton />",
-      "aiUsageNotes": "Use only for the familiar Refresh utility action; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "segmented-control",
@@ -12662,15 +12630,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when a toast needs one concise follow-up action such as an optional recovery or navigation action.",
-      "avoidWhen": "Avoid for required validation, persistent alerts, destructive confirmation, or primary business actions.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { ToastAction } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<ToastAction altText=\"Undo\">Undo</ToastAction>",
-      "aiUsageNotes": "Use inside transient toast feedback only; do not substitute it for persistent or required application controls."
+      "contract": null
     },
     {
       "id": "toast-provider",
@@ -12740,15 +12700,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use around a React subtree that needs the useToast controller and VyrnForge toast viewport.",
-      "avoidWhen": "Avoid as a replacement for persistent alerts, required validation, destructive confirmation, or notification history.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { ToastProvider } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<ToastProvider>{children}</ToastProvider>",
-      "aiUsageNotes": "Wrap any React subtree that calls useToast; keep toast feedback transient and application business state outside the provider."
+      "contract": null
     },
     {
       "id": "toggle-button",
@@ -13524,15 +13476,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use inside a ToastProvider subtree to enqueue, update, or dismiss transient toast feedback.",
-      "avoidWhen": "Do not call outside ToastProvider; the hook throws when no provider is present, and it is not a persistent-message API.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { useToast } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "const toast = useToast();",
-      "aiUsageNotes": "Call only within ToastProvider; use the returned controller for toast/success/error/warning/info/update/dismiss operations."
+      "contract": null
     }
   ]
 }
