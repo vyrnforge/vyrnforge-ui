@@ -8,12 +8,14 @@
   "availability": "available",
   "purpose": "Compact follow-up action rendered within transient toast feedback.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when a toast needs one concise follow-up action such as an optional recovery or navigation action.",
+    "avoidWhen": "Avoid for required validation, persistent alerts, destructive confirmation, or primary business actions.",
+    "aiUsageNotes": "Use inside transient toast feedback only; do not substitute it for persistent or required application controls.",
     "relatedComponents": []
   },
-  "accessibility": [],
+  "accessibility": [
+    "altText is required and is passed to the underlying button as its aria-label."
+  ],
   "knownLimitations": [
     "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
   ],
@@ -24,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "current",
-      "package": "@vyrnforge/ui-components"
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ToastAction } from \"@vyrnforge/ui-components\";",
+      "example": "<ToastAction altText=\"Undo\">Undo</ToastAction>"
     },
     "native-html": {
       "status": "current",
