@@ -54,14 +54,5 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
-  },
-  "useWhen": "Use when an icon-only Close action is conventional and the default Close label accurately describes the action.",
-  "avoidWhen": "Avoid for labelled business actions or when Close does not precisely describe the result.",
-  "relatedComponents": [],
-  "cssClasses": [],
-  "cssVariables": [],
-  "importExample": "import { CloseButton } from \"@vyrnforge/ui-components\";",
-  "basicUsageExample": "<CloseButton />",
-  "accessibilityNotes": "Defaults aria-label and tooltip to \"Close\"; callers may override aria-label when the context requires a more specific accessible name.",
-  "aiUsageNotes": "Use only for the familiar Close utility action; prefer Button or IconButton for other actions."
+  }
 }
