@@ -8,17 +8,30 @@ import {
 import {
   Autocomplete,
   Badge,
+  Breadcrumbs,
   Button,
+  Checkbox,
+  ConfirmDialog,
+  DateInput,
+  DateTimeInput,
   Dialog,
   Drawer,
+  Dropdown,
   Field,
   Menu,
   MultiSelect,
+  NumberInput,
   Popover,
+  Radio,
+  RadioGroup,
   Rating,
+  SearchInput,
   Select,
+  SideNav,
   Slider,
+  Switch,
   Tabs,
+  Textarea,
   TextInput,
   ToastAction,
   ToastProvider,
@@ -28,6 +41,10 @@ import {
   useToast,
 } from "@vyrnforge/ui-components";
 import {
+  DataGridColumnMenu,
+  DataGridPagination,
+  DataGridSearch,
+  DataGridToolbar,
   UniversalDataGrid,
   type DataGridColumnDef,
 } from "@vyrnforge/ui-data-grid";
@@ -1056,6 +1073,163 @@ function DataGridLoadingFixture({
   );
 }
 
+function NativeTextEntryKeyboardFixture() {
+  const [search, setSearch] = useState("");
+
+  return (
+    <div>
+      <SearchInput
+        aria-label="Search records"
+        placeholder="Search records"
+        value={search}
+        onChange={(event) => setSearch(event.currentTarget.value)}
+      />
+      <Textarea aria-label="Review notes" defaultValue="Existing review note" />
+      <NumberInput
+        aria-label="Retry limit"
+        defaultValue={3}
+        min={0}
+        max={10}
+        mode="integer"
+      />
+      <DateInput aria-label="Start date" defaultValue="2026-09-29" />
+      <DateTimeInput
+        aria-label="Scheduled time"
+        defaultValue="2026-09-29T17:00"
+      />
+    </div>
+  );
+}
+
+function NativeChoiceControlsKeyboardFixture() {
+  return (
+    <div>
+      <label>
+        Region
+        <Select
+          defaultValue="west"
+          options={[
+            { value: "west", label: "West" },
+            { value: "central", label: "Central" },
+            { value: "east", label: "East", disabled: true },
+          ]}
+        />
+      </label>
+      <Checkbox label="Include archived records" />
+      <div>
+        <Radio
+          label="Primary option"
+          name="standalone-choice"
+          value="primary"
+        />
+        <Radio
+          disabled
+          name="standalone-choice"
+          value="disabled"
+          label="Disabled option"
+        />
+      </div>
+      <RadioGroup
+        defaultValue="monthly"
+        label="Billing cycle"
+        name="billing-cycle"
+        options={[
+          { value: "monthly", label: "Monthly" },
+          { value: "quarterly", label: "Quarterly" },
+          { value: "annual", label: "Annual", disabled: true },
+        ]}
+      />
+      <Switch label="Enable notifications" />
+    </div>
+  );
+}
+
+function NavigationOverlayKeyboardFixture() {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [selected, setSelected] = useState("overview");
+
+  return (
+    <div>
+      <SideNav
+        activeId={selected}
+        aria-label="Fixture navigation"
+        items={[
+          { id: "overview", label: "Overview" },
+          { id: "activity", label: "Activity" },
+          { id: "disabled", label: "Disabled", disabled: true },
+        ]}
+        onSelect={(item) => setSelected(item.id)}
+      />
+      <Breadcrumbs
+        aria-label="Fixture breadcrumb"
+        items={[
+          { id: "home", label: "Home", onClick: () => undefined },
+          { id: "records", label: "Records", onClick: () => undefined },
+          { id: "current", label: "Current record", current: true },
+        ]}
+      />
+      <Dropdown trigger={<Button>Open dropdown</Button>}>
+        <Button>Dropdown action</Button>
+      </Dropdown>
+      <Button onClick={() => setConfirmOpen(true)}>Open confirmation</Button>
+      <ConfirmDialog
+        description="Confirm the fixture action."
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => setConfirmOpen(false)}
+        onOpenChange={setConfirmOpen}
+        open={confirmOpen}
+        title="Confirm action?"
+      />
+    </div>
+  );
+}
+
+function DataGridAuxiliaryKeyboardFixture() {
+  const [search, setSearch] = useState("");
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  return (
+    <div>
+      <DataGridToolbar>
+        <Button>Refresh rows</Button>
+        <Button>Export rows</Button>
+      </DataGridToolbar>
+      <DataGridColumnMenu
+        columnOrder={fixtureColumns.map((column) => column.id)}
+        columnVisibility={{}}
+        columns={fixtureColumns}
+        density="standard"
+        onColumnOrderChange={() => undefined}
+        onColumnVisibilityChange={() => undefined}
+        onDensityChange={() => undefined}
+        onHideOptionalColumns={() => undefined}
+        onMoveColumn={() => undefined}
+        onResetColumnOrder={() => undefined}
+        onResetColumnSize={() => undefined}
+        onResetColumnSizes={() => undefined}
+        onResetColumns={() => undefined}
+        onResetView={() => undefined}
+        onShowAllColumns={() => undefined}
+      />
+      <DataGridSearch
+        debounceMs={0}
+        placeholder="Search fixture rows"
+        value={search}
+        onChange={setSearch}
+      />
+      <DataGridPagination
+        pagination={pagination}
+        pageSizeOptions={[10, 25]}
+        totalRows={38}
+        onChange={setPagination}
+      />
+    </div>
+  );
+}
+
 function FixtureContent({
   density,
   fixture,
@@ -1104,6 +1278,14 @@ function FixtureContent({
       return <TabsToggleFixture />;
     case "toast-lifecycle":
       return <ToastFixture />;
+    case "native-text-entry-keyboard":
+      return <NativeTextEntryKeyboardFixture />;
+    case "native-choice-controls-keyboard":
+      return <NativeChoiceControlsKeyboardFixture />;
+    case "navigation-overlay-keyboard":
+      return <NavigationOverlayKeyboardFixture />;
+    case "data-grid-auxiliary-keyboard":
+      return <DataGridAuxiliaryKeyboardFixture />;
     case "visual-components":
       return <VisualComponentsFixture />;
     case "data-grid-keyboard":

@@ -354,6 +354,81 @@
       "status": "pending",
       "rationale": "VF-2014 defines the repeatable manual contract; a named reviewer must execute and record this scenario on Windows before beta promotion.",
       "results": []
+    },
+    {
+      "id": "AT-011",
+      "title": "Native text, search, number, date, and multiline input behavior",
+      "componentIds": [
+        "search-input",
+        "textarea",
+        "number-input",
+        "date-input",
+        "datetime-input"
+      ],
+      "fixtureIds": ["native-text-entry-keyboard"],
+      "contracts": [
+        "SearchInput exposes its accessible name and native search text-entry behavior without intercepting ordinary editing shortcuts.",
+        "Textarea exposes its accessible name and native multiline editing behavior, including Tab focus movement rather than application-defined roving focus.",
+        "NumberInput preserves native spinbutton navigation while its integer or decimal typing filter does not block documented navigation, editing, or modifier shortcuts.",
+        "DateInput and DateTimeInput expose their accessible names, values, constraints, and browser-native date or date-time keyboard interaction without custom focus handling."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "These five public controls require a named reviewer to execute the component-specific fixture in both required Windows/NVDA environments before keyboardDocumentation can be complete.",
+      "results": []
+    },
+    {
+      "id": "AT-012",
+      "title": "Native selection and toggle control behavior",
+      "componentIds": ["select", "checkbox", "radio", "radio-group", "switch"],
+      "fixtureIds": ["native-choice-controls-keyboard"],
+      "contracts": [
+        "Select exposes its label, current option, disabled options, and browser-native keyboard selection behavior.",
+        "Checkbox exposes its label, checked and disabled state, and Space activation without introducing custom arrow navigation.",
+        "Radio and RadioGroup expose group naming, checked and disabled states, and native single-choice keyboard movement and activation.",
+        "Switch exposes switch role, accessible name, checked state, disabled state when applicable, and Space activation through its checkbox-backed native control."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "These five public controls require a named reviewer to execute the component-specific fixture in both required Windows/NVDA environments before keyboardDocumentation can be complete.",
+      "results": []
+    },
+    {
+      "id": "AT-013",
+      "title": "Navigation and composed overlay behavior",
+      "componentIds": ["dropdown", "confirm-dialog", "side-nav", "breadcrumbs"],
+      "fixtureIds": ["navigation-overlay-keyboard"],
+      "contracts": [
+        "Dropdown preserves Popover trigger expanded state, keyboard reachability of composed content, Escape dismissal, and non-stranding focus behavior.",
+        "ConfirmDialog preserves Dialog modal naming, focus containment, Escape policy, explicit confirm/cancel activation, and focus restoration.",
+        "SideNav exposes its navigation landmark and current page while ArrowUp, ArrowDown, Home, and End move roving focus across enabled visible items.",
+        "Breadcrumbs exposes its labelled navigation landmark and current page while links and button-backed crumbs keep their native Tab and activation behavior."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "These four public components require a named reviewer to execute the component-specific fixture in both required Windows/NVDA environments before keyboardDocumentation can be complete.",
+      "results": []
+    },
+    {
+      "id": "AT-014",
+      "title": "Data grid auxiliary control behavior",
+      "componentIds": [
+        "data-grid-toolbar",
+        "data-grid-column-menu",
+        "data-grid-search",
+        "data-grid-pagination"
+      ],
+      "fixtureIds": ["data-grid-auxiliary-keyboard"],
+      "contracts": [
+        "DataGridToolbar exposes its toolbar role while contained actions remain reachable and operable using their documented component keyboard contracts.",
+        "DataGridColumnMenu exposes the Columns trigger state, labelled settings dialog, searchable columns, density choice, visibility toggles, and keyboard-reachable move/reset actions without requiring pointer drag.",
+        "DataGridSearch exposes its accessible search name and native text-entry behavior while debounced state changes do not create focus or announcement churn.",
+        "DataGridPagination exposes the Pagination region, Rows per page selection, current range/page text, and correctly disabled previous/next actions with native keyboard activation."
+      ],
+      "environmentIds": ["windows-nvda-chrome", "windows-nvda-firefox"],
+      "status": "pending",
+      "rationale": "These four public grid auxiliary controls require a named reviewer to execute the component-specific fixture in both required Windows/NVDA environments before keyboardDocumentation can be complete.",
+      "results": []
     }
   ]
 }

@@ -56,3 +56,26 @@ CF-7010 stores its four-consumer Windows + Chrome + NVDA review in
 validated by `scripts/verify-cross-framework-accessibility.mjs`; it does not
 replace or complete the broader component scenario catalog in
 `assistive-technology-reviews.json`.
+
+## Current manual execution queue
+
+The canonical scenario definitions live in
+`docs/metadata/assistive-technology-reviews.json`. The current unresolved
+keyboard-documentation queue is executable through these scenarios:
+
+- AT-010: `UniversalDataGrid` using `data-grid-keyboard`;
+- AT-011: `SearchInput`, `Textarea`, `NumberInput`, `DateInput`, and
+  `DateTimeInput` using `native-text-entry-keyboard`;
+- AT-012: `Select`, `Checkbox`, `Radio`, `RadioGroup`, and `Switch`
+  using `native-choice-controls-keyboard`;
+- AT-013: `Dropdown`, `ConfirmDialog`, `SideNav`, and `Breadcrumbs`
+  using `navigation-overlay-keyboard`;
+- AT-014: `DataGridToolbar`, `DataGridColumnMenu`, `DataGridSearch`, and
+  `DataGridPagination` using `data-grid-auxiliary-keyboard`.
+
+Run every pending scenario in each environment declared by the canonical
+metadata. Record observed announcements and focus/keyboard behavior rather than
+copying the contract text. A scenario remains pending when any declared
+environment has not been reviewed. Do not change
+`keyboardDocumentation=complete` until the canonical scenario is complete and
+all required manual results are passing.
