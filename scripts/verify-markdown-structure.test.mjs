@@ -57,10 +57,7 @@ Text.
 
 test("rejects malformed table column counts", () =>
   fixture(
-    `| Component | Props |
-| --- | --- |
-| Message | \`tone="error" | "warning"\` |
-`,
+    `# Example\n\n| Component | Props |\n| --- | --- |\n| Message | \`tone="error" | "warning"\` |\n`,
     (root, relativePath) => {
       const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
       assert.equal(failures.length, 1);
@@ -70,11 +67,7 @@ test("rejects malformed table column counts", () =>
 
 test("rejects duplicate first-column table entries", () =>
   fixture(
-    `| Component | Purpose |
-| --- | --- |
-| Button | Action |
-| Button | Duplicate |
-`,
+    `# Example\n\n| Component | Purpose |\n| --- | --- |\n| Button | Action |\n| Button | Duplicate |\n`,
     (root, relativePath) => {
       const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
       assert.equal(failures.length, 1);
@@ -84,11 +77,7 @@ test("rejects duplicate first-column table entries", () =>
 
 test("rejects orphaned pipe-row blocks", () =>
   fixture(
-    `Paragraph.
-
-| EmptyState | Empty content |
-| ErrorState | Error content |
-`,
+    `# Example\n\nParagraph.\n\n| EmptyState | Empty content |\n| ErrorState | Error content |\n`,
     (root, relativePath) => {
       const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
       assert.equal(failures.length, 1);
@@ -98,11 +87,7 @@ test("rejects orphaned pipe-row blocks", () =>
 
 test("ignores table-like content inside fenced code blocks", () =>
   fixture(
-    `\`\`\`text
-| not | a | table |
-| still | example | text |
-\`\`\`
-`,
+    `# Example\n\n\`\`\`text\n| not | a | table |\n| still | example | text |\n\`\`\`\n`,
     (root, relativePath) =>
       assert.deepEqual(
         verifyMarkdownStructure({ root, paths: [relativePath] }),
