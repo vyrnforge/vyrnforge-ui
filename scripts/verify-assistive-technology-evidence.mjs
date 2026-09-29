@@ -395,7 +395,9 @@ export function verifyKeyboardDocumentationScenarioCoverage(
         (scenario) =>
           scenario.status === "complete" &&
           (scenario.results ?? []).length > 0 &&
-          (scenario.results ?? []).every((result) => result.outcome === "passed"),
+          (scenario.results ?? []).every(
+            (result) => result.outcome === "passed",
+          ),
       );
 
       if (!hasPassingCompletedScenario) {
