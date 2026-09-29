@@ -8,12 +8,14 @@
   "availability": "available",
   "purpose": "React context and viewport provider that owns visible toast state, auto-dismiss timers, and pause/resume behavior.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use around a React subtree that needs the useToast controller and VyrnForge toast viewport.",
+    "avoidWhen": "Avoid as a replacement for persistent alerts, required validation, destructive confirmation, or notification history.",
+    "aiUsageNotes": "Wrap any React subtree that calls useToast; keep toast feedback transient and application business state outside the provider.",
     "relatedComponents": []
   },
-  "accessibility": [],
+  "accessibility": [
+    "The viewport label is configurable; pause-on-focus and pause-on-hover default to true, while individual Toast records own their live-region roles."
+  ],
   "knownLimitations": [
     "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
   ],
@@ -24,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "current",
-      "package": "@vyrnforge/ui-components"
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { ToastProvider } from \"@vyrnforge/ui-components\";",
+      "example": "<ToastProvider>{children}</ToastProvider>"
     },
     "native-html": {
       "status": "current",
