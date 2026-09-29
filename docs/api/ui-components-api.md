@@ -69,6 +69,25 @@ import "@vyrnforge/ui-components/styles/index.css";
 
 TextInput renders a native `<input type="text">`; standard text-entry keyboard behavior remains browser-native. Provide an associated label through `Field` or ARIA.
 
+### Keyboard and focus contracts for native and composed controls
+
+These contracts describe the existing public behavior that the remaining manual AT scenarios verify; they do not replace browser- and assistive-technology review.
+
+- `SearchInput` renders a native `<input type="search">`. Text entry, selection, editing shortcuts, Tab focus movement, and browser search-field behavior remain native; VyrnForge does not add roving focus.
+- `Textarea` renders a native `<textarea>`. Multiline editing and selection remain native, and Tab moves focus according to the document order.
+- `NumberInput` renders a native `<input type="number">`. Arrow/navigation keys, Tab, Enter, Escape, and modifier shortcuts are preserved; integer/decimal filtering only rejects typed or pasted text that violates the configured numeric mode.
+- `DateInput` and `DateTimeInput` render native `date` and `datetime-local` inputs. VyrnForge adds no custom picker or focus model; keyboard interaction follows the browser-native control.
+- `Select` renders a native `<select>` for single and multiple selection. Focus, option movement, opening/closing behavior, and activation remain browser-native.
+- `Checkbox` uses a native checkbox. Space toggles the value when enabled; Tab participates in normal document focus order.
+- `Radio` uses a native radio input. Related radios use native single-choice keyboard behavior; use `RadioGroup` for a labelled `fieldset`/`legend` group.
+- `RadioGroup` does not replace native radio focus or arrow-key selection. Disabled options remain unavailable and group naming comes from the fieldset/legend structure.
+- `Switch` is a checkbox-backed control with `role="switch"` and `aria-checked`. Native checkbox focus and Space activation are preserved.
+- `SideNav` uses one roving Tab stop among visible enabled items. ArrowDown/ArrowUp move to the next/previous item, Home/End move to the first/last item, and native link/button activation remains unchanged.
+- `Breadcrumbs` keeps links and button-backed crumbs in normal Tab order and uses their native activation behavior. The current item is not made artificially focusable.
+- `Dropdown` composes `Popover`; it preserves trigger focus/expanded-state behavior, keyboard reachability of supplied content, Escape dismissal, and trigger-focus restoration on close.
+- `ConfirmDialog` composes `Dialog`; it inherits modal focus containment and restoration, uses native buttons for confirm/cancel, and disables Escape/overlay dismissal while loading.
+
+
 ## Choice Guidance
 
 - `Switch`: persistent enabled/disabled setting.
