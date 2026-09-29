@@ -6187,16 +6187,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Icon-only convenience action for the familiar Clear utility.",
+      "useWhen": "Use when an icon-only Clear action is conventional and the default Clear label accurately describes the action.",
+      "avoidWhen": "Avoid for labelled business actions or when Clear does not precisely describe the result.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification",
+      "importExample": "import { ClearButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<ClearButton />",
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"Clear\"; callers may override aria-label when the context requires a more specific accessible name.",
+      "aiUsageNotes": "Use only for the familiar Clear utility action; prefer Button or IconButton for other actions.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -6254,16 +6254,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Icon-only convenience action for the familiar Close utility.",
+      "useWhen": "Use when an icon-only Close action is conventional and the default Close label accurately describes the action.",
+      "avoidWhen": "Avoid for labelled business actions or when Close does not precisely describe the result.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification",
+      "importExample": "import { CloseButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<CloseButton />",
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"Close\"; callers may override aria-label when the context requires a more specific accessible name.",
+      "aiUsageNotes": "Use only for the familiar Close utility action; prefer Button or IconButton for other actions.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -6321,16 +6321,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Icon-only convenience action for opening or invoking familiar More actions.",
+      "useWhen": "Use when an icon-only \"More actions\" affordance conventionally represents access to additional actions.",
+      "avoidWhen": "Avoid for labelled business actions or when the control does not expose additional actions.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification",
+      "importExample": "import { MoreButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<MoreButton />",
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"More actions\"; callers may override aria-label when the context requires a more specific accessible name.",
+      "aiUsageNotes": "Use only for the familiar More actions utility; prefer Button or IconButton for other actions.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -6388,16 +6388,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Icon-only convenience action for the familiar Refresh utility.",
+      "useWhen": "Use when an icon-only Refresh action is conventional and the default Refresh label accurately describes the action.",
+      "avoidWhen": "Avoid for labelled business actions or when Refresh does not precisely describe the result.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification",
+      "importExample": "import { RefreshButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<RefreshButton />",
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"Refresh\"; callers may override aria-label when the context requires a more specific accessible name.",
+      "aiUsageNotes": "Use only for the familiar Refresh utility action; prefer Button or IconButton for other actions.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -6455,16 +6455,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Compact follow-up action rendered within transient toast feedback.",
+      "useWhen": "Use when a toast needs one concise follow-up action such as an optional recovery or navigation action.",
+      "avoidWhen": "Avoid for required validation, persistent alerts, destructive confirmation, or primary business actions.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification",
+      "importExample": "import { ToastAction } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<ToastAction altText=\"Undo\">Undo</ToastAction>",
+      "accessibilityNotes": "altText is required and is passed to the underlying button as its aria-label.",
+      "aiUsageNotes": "Use inside transient toast feedback only; do not substitute it for persistent or required application controls.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -6522,16 +6522,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "React context and viewport provider that owns visible toast state, auto-dismiss timers, and pause/resume behavior.",
+      "useWhen": "Use around a React subtree that needs the useToast controller and VyrnForge toast viewport.",
+      "avoidWhen": "Avoid as a replacement for persistent alerts, required validation, destructive confirmation, or notification history.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification",
+      "importExample": "import { ToastProvider } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<ToastProvider>{children}</ToastProvider>",
+      "accessibilityNotes": "The viewport label is configurable; pause-on-focus and pause-on-hover default to true, while individual Toast records own their live-region roles.",
+      "aiUsageNotes": "Wrap any React subtree that calls useToast; keep toast feedback transient and application business state outside the provider.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -6589,16 +6589,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "React hook for accessing the ToastController supplied by ToastProvider.",
+      "useWhen": "Use inside a ToastProvider subtree to enqueue, update, or dismiss transient toast feedback.",
+      "avoidWhen": "Do not call outside ToastProvider; the hook throws when no provider is present, and it is not a persistent-message API.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification",
+      "importExample": "import { useToast } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "const toast = useToast();",
+      "accessibilityNotes": "The hook renders no DOM; accessibility semantics are provided by the ToastProvider viewport and rendered Toast records.",
+      "aiUsageNotes": "Call only within ToastProvider; use the returned controller for toast/success/error/warning/info/update/dismiss operations.",
       "frameworkParity": {
         "betaScope": "included",
         "react": {
@@ -6656,16 +6656,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Controlled, debounced search input for data-grid query state.",
+      "useWhen": "Use when the grid needs a global search control whose value and change handling are owned by the consuming grid state.",
+      "avoidWhen": "Avoid treating it as a server-fetching layer; remote query execution remains application-owned.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "importExample": "import { DataGridSearch } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridSearch value={search} onChange={setSearch} />",
+      "accessibilityNotes": "Uses SearchInput and sets its aria-label from the placeholder; the default placeholder and accessible name are \"Search\".",
+      "aiUsageNotes": "Keep search state controlled and separate remote fetching/query orchestration from this presentation control."
     },
     {
       "id": "data-grid-filter-bar",
@@ -6693,16 +6693,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Presentation container for composing data-grid filter controls.",
+      "useWhen": "Use to group filter UI within a grid surface while filter state is owned by DataGridState or another controlled integration.",
+      "avoidWhen": "Avoid expecting it to own filter state, query semantics, or an inline filter popover.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "importExample": "import { DataGridFilterBar } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridFilterBar>{children}</DataGridFilterBar>",
+      "accessibilityNotes": "The component adds only a div container; child filter controls remain responsible for their own accessible labels, roles, and keyboard behavior.",
+      "aiUsageNotes": "Treat as layout/presentation only; keep filter state and business query behavior in shared grid state or the consuming application."
     },
     {
       "id": "data-grid-skeleton-rows",
@@ -6730,16 +6730,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Table-row loading placeholders for a data-grid body.",
+      "useWhen": "Use while grid rows are loading and row-shaped visual placeholders are appropriate.",
+      "avoidWhen": "Avoid representing real data, empty states, errors, or status content with skeleton rows.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "importExample": "import { DataGridSkeletonRows } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridSkeletonRows rowCount={5} columnCount={3} />",
+      "accessibilityNotes": "Every generated skeleton row is aria-hidden so loading placeholders are excluded from the accessibility tree.",
+      "aiUsageNotes": "Use only as transient loading visuals; do not treat skeleton rows as data or status records."
     },
     {
       "id": "data-grid-empty-state",
@@ -6767,16 +6767,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Table-row empty state for no-data and no-match grid outcomes.",
+      "useWhen": "Use when the grid has no data or when active search/filter criteria produce no matching rows.",
+      "avoidWhen": "Avoid for loading and error conditions.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "importExample": "import { DataGridEmptyState } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridEmptyState columnCount={3} hasQuery />",
+      "accessibilityNotes": "Renders the shared EmptyState inside a table row; title and description distinguish no-data from no-match states through hasQuery.",
+      "aiUsageNotes": "Set hasQuery when the empty result is caused by search or filtering; keep loading and error states separate."
     },
     {
       "id": "data-grid-error-state",
@@ -6804,16 +6804,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Table-row error state for data-grid load failures.",
+      "useWhen": "Use when the grid has a string or Error value representing a load failure.",
+      "avoidWhen": "Avoid for empty or loading states; the component renders nothing when error is absent.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "importExample": "import { DataGridErrorState } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridErrorState error={error} columnCount={3} />",
+      "accessibilityNotes": "The containing table cell uses role=\"alert\" and wraps the shared ErrorState.",
+      "aiUsageNotes": "Pass only actual grid-load errors; do not use the component for no-data or loading conditions."
     },
     {
       "id": "data-grid-pagination",
@@ -6841,16 +6841,16 @@
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
-      "useWhen": "requires-verification",
-      "avoidWhen": "requires-verification",
+      "purpose": "Controlled grid pagination control for page size and previous/next display-row navigation.",
+      "useWhen": "Use when DataGridPaginationState, total row count, and updates are controlled by the consuming grid integration.",
+      "avoidWhen": "Avoid assuming cursor-based or server pagination semantics; this control operates on the supplied display-row pagination state.",
       "relatedComponents": [],
       "cssClasses": [],
       "cssVariables": [],
-      "importExample": "requires-verification",
-      "basicUsageExample": "requires-verification",
-      "accessibilityNotes": "requires-verification",
-      "aiUsageNotes": "requires-verification"
+      "importExample": "import { DataGridPagination } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridPagination pagination={pagination} totalRows={totalRows} onChange={setPagination} />",
+      "accessibilityNotes": "The container is labelled \"Pagination\"; page-size selection has a visible \"Rows per page\" label and previous/next buttons have explicit aria-labels.",
+      "aiUsageNotes": "Keep pagination controlled and supply totalRows; remember that current display-row pagination counts generated group headers as rows."
     },
     {
       "id": "toast-viewport",
