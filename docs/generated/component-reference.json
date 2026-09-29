@@ -11229,7 +11229,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -11297,7 +11299,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -12144,7 +12148,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -12212,7 +12218,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -12573,7 +12581,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -12637,7 +12647,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ],
       "styling": {
         "classes": [],
         "variables": []
@@ -13415,7 +13427,9 @@
         "relatedComponents": []
       },
       "accessibilityNotes": null,
-      "knownLimitations": [],
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ],
       "styling": {
         "classes": [],
         "variables": []
