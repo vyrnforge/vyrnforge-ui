@@ -380,6 +380,29 @@ function verifyPackageReadmeOwnership({ root, failures }) {
   }
 }
 
+export function getReaderFacingMarkdownPaths({ root = repositoryRoot } = {}) {
+  const routesSource = read(root, "apps/docs/src/referenceRoutes.ts");
+  const paths = [];
+
+  for (const block of routesSource.split(/\n  \},\n/gu)) {
+    if (!block.includes('kind: "markdown"')) continue;
+    const match = block.match(/sourcePath:\s*"([^"]+\.md)"/u);
+    if (match) paths.push(match[1]);
+  }
+
+  return [...new Set(paths)].sort();
+}
+
+function verifyReaderFacingMarkdownCoverage({ root, failures }) {
+  for (const relativePath of getReaderFacingMarkdownPaths({ root })) {
+    if (!documentationCurrentPaths.includes(relativePath)) {
+      failures.push(
+        `${relativePath}: reader-facing Markdown route must be included in documentationCurrentPaths for currency and link verification`,
+      );
+    }
+  }
+}
+
 function verifyRetiredReferenceAuthorityMentions({ root, failures }) {
   for (const relativePath of documentationCurrentPaths) {
     const content = read(root, relativePath);
@@ -401,6 +424,7 @@ export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   verifyDeprecatedAiMirrors({ root, failures });
   verifyRetiredReferenceAuthorityMentions({ root, failures });
   verifyPackageReadmeOwnership({ root, failures });
+  verifyReaderFacingMarkdownCoverage({ root, failures });
 
   for (const relativePath of documentationCurrentPaths) {
     const content = read(root, relativePath);
