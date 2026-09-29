@@ -8,12 +8,14 @@
   "availability": "available",
   "purpose": "Controlled grid pagination control for page size and previous/next display-row navigation.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when DataGridPaginationState, total row count, and updates are controlled by the consuming grid integration.",
+    "avoidWhen": "Avoid assuming cursor-based or server pagination semantics; this control operates on the supplied display-row pagination state.",
+    "aiUsageNotes": "Keep pagination controlled and supply totalRows; remember that current display-row pagination counts generated group headers as rows.",
     "relatedComponents": []
   },
-  "accessibility": [],
+  "accessibility": [
+    "The container is labelled \"Pagination\"; page-size selection has a visible \"Rows per page\" label and previous/next buttons have explicit aria-labels."
+  ],
   "knownLimitations": [
     "Display-row pagination only in this phase; generated group headers count as rows on the current page."
   ],
@@ -24,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "react-alpha-deferred",
-      "package": "@vyrnforge/ui-data-grid"
+      "package": "@vyrnforge/ui-data-grid",
+      "setup": "import { DataGridPagination } from \"@vyrnforge/ui-data-grid\";",
+      "example": "<DataGridPagination pagination={pagination} totalRows={totalRows} onChange={setPagination} />"
     },
     "native-html": {
       "status": "not-supported",
