@@ -35,7 +35,7 @@
       "package": "@vyrnforge/ui-data-grid",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Table-row empty state for no-data and no-match grid outcomes.",
       "context": "ai-context/components/data-grid-empty-state.json"
     },
     {
@@ -44,7 +44,7 @@
       "package": "@vyrnforge/ui-data-grid",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Table-row error state for data-grid load failures.",
       "context": "ai-context/components/data-grid-error-state.json"
     },
     {
@@ -53,7 +53,7 @@
       "package": "@vyrnforge/ui-data-grid",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Presentation container for composing data-grid filter controls.",
       "context": "ai-context/components/data-grid-filter-bar.json"
     },
     {
@@ -62,7 +62,7 @@
       "package": "@vyrnforge/ui-data-grid",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Controlled grid pagination control for page size and previous/next display-row navigation.",
       "context": "ai-context/components/data-grid-pagination.json"
     },
     {
@@ -71,7 +71,7 @@
       "package": "@vyrnforge/ui-data-grid",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Controlled, debounced search input for data-grid query state.",
       "context": "ai-context/components/data-grid-search.json"
     },
     {
@@ -80,7 +80,7 @@
       "package": "@vyrnforge/ui-data-grid",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Table-row loading placeholders for a data-grid body.",
       "context": "ai-context/components/data-grid-skeleton-rows.json"
     },
     {
