@@ -369,6 +369,48 @@ export function verifyAssistiveTechnologyEvidence(
   return failures.sort();
 }
 
+export function verifyKeyboardDocumentationScenarioCoverage(
+  componentCatalog,
+  evidence,
+) {
+  const failures = [];
+  const scenarios = evidence?.scenarios ?? [];
+
+  for (const component of componentCatalog?.components ?? []) {
+    if (component.publicExport !== true) continue;
+
+    const status = component.accessibility?.keyboardDocumentation;
+    const componentScenarios = scenarios.filter((scenario) =>
+      (scenario.componentIds ?? []).includes(component.id),
+    );
+
+    if (status === "requires-verification" && componentScenarios.length === 0) {
+      failures.push(
+        `${component.id}: keyboardDocumentation requires-verification needs a canonical assistive-technology scenario`,
+      );
+    }
+
+    if (status === "complete") {
+      const hasPassingCompletedScenario = componentScenarios.some(
+        (scenario) =>
+          scenario.status === "complete" &&
+          (scenario.results ?? []).length > 0 &&
+          (scenario.results ?? []).every(
+            (result) => result.outcome === "passed",
+          ),
+      );
+
+      if (!hasPassingCompletedScenario) {
+        failures.push(
+          `${component.id}: keyboardDocumentation complete needs a completed canonical scenario with passing manual results`,
+        );
+      }
+    }
+  }
+
+  return failures.sort();
+}
+
 export function verifyRepositoryAssistiveTechnologyEvidence({
   root = repositoryRoot,
   requireComplete = false,
@@ -548,6 +590,10 @@ export function verifyRepositoryAssistiveTechnologyEvidence({
       }
     }
   }
+
+  failures.push(
+    ...verifyKeyboardDocumentationScenarioCoverage(componentCatalog, evidence),
+  );
 
   failures.push(
     ...verifyAssistiveTechnologyEvidence(evidence, {
