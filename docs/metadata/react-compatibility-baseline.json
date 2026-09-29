@@ -58,7 +58,7 @@
     {
       "path": "docs/api/ui-components-api.md",
       "kind": "blob",
-      "sha1": "8d5b2a8b951ff0a9741009f4e4d14f593e9f1d21",
+      "sha1": "60a23297c92d1e490006d9152029065dfd464deb",
       "covers": ["documented React public API and usage contracts"]
     },
     {
