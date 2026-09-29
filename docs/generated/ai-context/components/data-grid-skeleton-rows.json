@@ -14,7 +14,9 @@
     "relatedComponents": []
   },
   "accessibility": [],
-  "knownLimitations": [],
+  "knownLimitations": [
+    "Loading placeholder rows only; they are aria-hidden and do not represent grid data or status content."
+  ],
   "styling": {
     "classes": [],
     "variables": []
