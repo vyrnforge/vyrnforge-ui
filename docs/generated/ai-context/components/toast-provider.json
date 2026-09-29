@@ -54,14 +54,5 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
-  },
-  "useWhen": "Use around a React subtree that needs the useToast controller and VyrnForge toast viewport.",
-  "avoidWhen": "Avoid as a replacement for persistent alerts, required validation, destructive confirmation, or notification history.",
-  "relatedComponents": [],
-  "cssClasses": [],
-  "cssVariables": [],
-  "importExample": "import { ToastProvider } from \"@vyrnforge/ui-components\";",
-  "basicUsageExample": "<ToastProvider>{children}</ToastProvider>",
-  "accessibilityNotes": "The viewport label is configurable; pause-on-focus and pause-on-hover default to true, while individual Toast records own their live-region roles.",
-  "aiUsageNotes": "Wrap any React subtree that calls useToast; keep toast feedback transient and application business state outside the provider."
+  }
 }
