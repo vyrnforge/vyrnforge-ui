@@ -8772,15 +8772,7 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null,
-      "useWhen": "Use when the grid has no data or when active search/filter criteria produce no matching rows.",
-      "avoidWhen": "Avoid for loading and error conditions.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { DataGridEmptyState } from \"@vyrnforge/ui-data-grid\";",
-      "basicUsageExample": "<DataGridEmptyState columnCount={3} hasQuery />",
-      "aiUsageNotes": "Set hasQuery when the empty result is caused by search or filtering; keep loading and error states separate."
+      "contract": null
     },
     {
       "id": "data-grid-error-state",
@@ -8846,15 +8838,7 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null,
-      "useWhen": "Use when the grid has a string or Error value representing a load failure.",
-      "avoidWhen": "Avoid for empty or loading states; the component renders nothing when error is absent.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { DataGridErrorState } from \"@vyrnforge/ui-data-grid\";",
-      "basicUsageExample": "<DataGridErrorState error={error} columnCount={3} />",
-      "aiUsageNotes": "Pass only actual grid-load errors; do not use the component for no-data or loading conditions."
+      "contract": null
     },
     {
       "id": "data-grid-filter-bar",
@@ -8920,15 +8904,7 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null,
-      "useWhen": "Use to group filter UI within a grid surface while filter state is owned by DataGridState or another controlled integration.",
-      "avoidWhen": "Avoid expecting it to own filter state, query semantics, or an inline filter popover.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { DataGridFilterBar } from \"@vyrnforge/ui-data-grid\";",
-      "basicUsageExample": "<DataGridFilterBar>{children}</DataGridFilterBar>",
-      "aiUsageNotes": "Treat as layout/presentation only; keep filter state and business query behavior in shared grid state or the consuming application."
+      "contract": null
     },
     {
       "id": "data-grid-pagination",
@@ -8994,15 +8970,7 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null,
-      "useWhen": "Use when DataGridPaginationState, total row count, and updates are controlled by the consuming grid integration.",
-      "avoidWhen": "Avoid assuming cursor-based or server pagination semantics; this control operates on the supplied display-row pagination state.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { DataGridPagination } from \"@vyrnforge/ui-data-grid\";",
-      "basicUsageExample": "<DataGridPagination pagination={pagination} totalRows={totalRows} onChange={setPagination} />",
-      "aiUsageNotes": "Keep pagination controlled and supply totalRows; remember that current display-row pagination counts generated group headers as rows."
+      "contract": null
     },
     {
       "id": "data-grid-search",
@@ -9068,15 +9036,7 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null,
-      "useWhen": "Use when the grid needs a global search control whose value and change handling are owned by the consuming grid state.",
-      "avoidWhen": "Avoid treating it as a server-fetching layer; remote query execution remains application-owned.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { DataGridSearch } from \"@vyrnforge/ui-data-grid\";",
-      "basicUsageExample": "<DataGridSearch value={search} onChange={setSearch} />",
-      "aiUsageNotes": "Keep search state controlled and separate remote fetching/query orchestration from this presentation control."
+      "contract": null
     },
     {
       "id": "data-grid-skeleton-rows",
@@ -9142,15 +9102,7 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null,
-      "useWhen": "Use while grid rows are loading and row-shaped visual placeholders are appropriate.",
-      "avoidWhen": "Avoid representing real data, empty states, errors, or status content with skeleton rows.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { DataGridSkeletonRows } from \"@vyrnforge/ui-data-grid\";",
-      "basicUsageExample": "<DataGridSkeletonRows rowCount={5} columnCount={3} />",
-      "aiUsageNotes": "Use only as transient loading visuals; do not treat skeleton rows as data or status records."
+      "contract": null
     },
     {
       "id": "data-grid-toolbar",
@@ -12638,15 +12590,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only Clear action is conventional and the default Clear label accurately describes the action.",
-      "avoidWhen": "Avoid for labelled business actions or when Clear does not precisely describe the result.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { ClearButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<ClearButton />",
-      "aiUsageNotes": "Use only for the familiar Clear utility action; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "close-button",
@@ -12716,15 +12660,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only Close action is conventional and the default Close label accurately describes the action.",
-      "avoidWhen": "Avoid for labelled business actions or when Close does not precisely describe the result.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { CloseButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<CloseButton />",
-      "aiUsageNotes": "Use only for the familiar Close utility action; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "code-text",
@@ -13573,15 +13509,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only \"More actions\" affordance conventionally represents access to additional actions.",
-      "avoidWhen": "Avoid for labelled business actions or when the control does not expose additional actions.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { MoreButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<MoreButton />",
-      "aiUsageNotes": "Use only for the familiar More actions utility; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "refresh-button",
@@ -13651,15 +13579,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when an icon-only Refresh action is conventional and the default Refresh label accurately describes the action.",
-      "avoidWhen": "Avoid for labelled business actions or when Refresh does not precisely describe the result.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { RefreshButton } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<RefreshButton />",
-      "aiUsageNotes": "Use only for the familiar Refresh utility action; prefer Button or IconButton for other actions."
+      "contract": null
     },
     {
       "id": "segmented-control",
@@ -14018,15 +13938,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use when a toast needs one concise follow-up action such as an optional recovery or navigation action.",
-      "avoidWhen": "Avoid for required validation, persistent alerts, destructive confirmation, or primary business actions.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { ToastAction } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<ToastAction altText=\"Undo\">Undo</ToastAction>",
-      "aiUsageNotes": "Use inside transient toast feedback only; do not substitute it for persistent or required application controls."
+      "contract": null
     },
     {
       "id": "toast-provider",
@@ -14096,15 +14008,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use around a React subtree that needs the useToast controller and VyrnForge toast viewport.",
-      "avoidWhen": "Avoid as a replacement for persistent alerts, required validation, destructive confirmation, or notification history.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { ToastProvider } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "<ToastProvider>{children}</ToastProvider>",
-      "aiUsageNotes": "Wrap any React subtree that calls useToast; keep toast feedback transient and application business state outside the provider."
+      "contract": null
     },
     {
       "id": "toggle-button",
@@ -14880,15 +14784,7 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null,
-      "useWhen": "Use inside a ToastProvider subtree to enqueue, update, or dismiss transient toast feedback.",
-      "avoidWhen": "Do not call outside ToastProvider; the hook throws when no provider is present, and it is not a persistent-message API.",
-      "relatedComponents": [],
-      "cssClasses": [],
-      "cssVariables": [],
-      "importExample": "import { useToast } from \"@vyrnforge/ui-components\";",
-      "basicUsageExample": "const toast = useToast();",
-      "aiUsageNotes": "Call only within ToastProvider; use the returned controller for toast/success/error/warning/info/update/dismiss operations."
+      "contract": null
     }
   ]
 }
