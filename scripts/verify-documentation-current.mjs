@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { getReleaseLineEntries, readReleaseGroups } from "./release-groups.mjs";
+import { retiredReferencePaths } from "./reference-retired-paths.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -21,10 +22,13 @@ export const documentationCurrentPaths = [
   "docs/packages/README.md",
   "docs/governance/00-documentation-governance.md",
   "docs/governance/01-project-source-of-truth.md",
+  "docs/engineering/documentation-system.md",
   "docs/governance/04-metadata-maintenance.md",
   "docs/architecture/00-system-overview.md",
   "docs/architecture/01-package-boundaries.md",
   "docs/architecture/02-state-and-adapter-ownership.md",
+  "docs/architecture/03-theming-and-styling.md",
+  "docs/architecture/05-accessibility-standards.md",
   "docs/architecture/08-semantic-token-contract.md",
   "docs/architecture/adr-004-multi-framework-web-support.md",
   "docs/architecture/09-component-contracts-and-events.md",
@@ -353,12 +357,50 @@ function verifyDeprecatedAiMirrors({ root, failures }) {
   }
 }
 
+function verifyPackageReadmeOwnership({ root, failures }) {
+  const relativePath = "packages/ui-components/README.md";
+  const content = read(root, relativePath);
+
+  if (/^## Components$/mu.test(content)) {
+    failures.push(
+      `${relativePath}: package README must not maintain an exhaustive component catalog; use canonical component metadata and generated reference`,
+    );
+  }
+
+  for (const marker of [
+    "docs/generated/component-reference.json",
+    "docs/metadata/components.json",
+    "docs/api/ui-components-api.md",
+  ]) {
+    if (!content.includes(marker)) {
+      failures.push(
+        `${relativePath}: public-surface guidance must link canonical source ${marker}`,
+      );
+    }
+  }
+}
+
+function verifyRetiredReferenceAuthorityMentions({ root, failures }) {
+  for (const relativePath of documentationCurrentPaths) {
+    const content = read(root, relativePath);
+    for (const retiredPath of retiredReferencePaths) {
+      if (content.includes(retiredPath)) {
+        failures.push(
+          `${relativePath}: current guidance references retired Reference authority ${retiredPath}`,
+        );
+      }
+    }
+  }
+}
+
 export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   const failures = [];
   const releaseGroups = readReleaseGroups({ root });
   const channels = buildPackageChannelMap(releaseGroups);
 
   verifyDeprecatedAiMirrors({ root, failures });
+  verifyRetiredReferenceAuthorityMentions({ root, failures });
+  verifyPackageReadmeOwnership({ root, failures });
 
   for (const relativePath of documentationCurrentPaths) {
     const content = read(root, relativePath);
