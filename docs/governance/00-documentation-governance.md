@@ -94,10 +94,11 @@ they must not become a second architecture manual or component catalog.
 `npm run verify:documentation-current` checks primary guidance for stale release
 channels, obsolete project-state language, and reader-entrypoint structure.
 
-`npm run verify:markdown-structure` checks current reader-facing Markdown for
-duplicate headings, malformed tables, duplicate first-column table entries, and
-orphaned table rows. `npm run verify:public-doc-links` checks local documentation
-links. `npm run verify:docs-quality` composes those checks with generated
+`npm run verify:markdown-structure` automatically discovers active Markdown
+across root guidance, `.ai/`, `docs/`, and package READMEs, then checks duplicate
+headings, malformed tables, duplicate first-column table entries, and orphaned
+table rows. `npm run verify:public-doc-links` uses the same discovery set for
+local documentation links. `npm run verify:docs-quality` composes those checks with generated
 component-reference and Reference-product drift contracts.
 
 Documentation changes must also preserve the docs build because `apps/docs`
