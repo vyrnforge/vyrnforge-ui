@@ -384,7 +384,7 @@ export function getReaderFacingMarkdownPaths({ root = repositoryRoot } = {}) {
   const routesSource = read(root, "apps/docs/src/referenceRoutes.ts");
   const paths = [];
 
-  for (const block of routesSource.split(/\n  \},\n/gu)) {
+  for (const block of routesSource.split(/\n {2}\},\n/gu)) {
     if (!block.includes('kind: "markdown"')) continue;
     const match = block.match(/sourcePath:\s*"([^"]+\.md)"/u);
     if (match) paths.push(match[1]);
