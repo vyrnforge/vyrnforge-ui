@@ -355,6 +355,29 @@ function verifyDeprecatedAiMirrors({ root, failures }) {
   }
 }
 
+function verifyPackageReadmeOwnership({ root, failures }) {
+  const relativePath = "packages/ui-components/README.md";
+  const content = read(root, relativePath);
+
+  if (/^## Components$/mu.test(content)) {
+    failures.push(
+      `${relativePath}: package README must not maintain an exhaustive component catalog; use canonical component metadata and generated reference`,
+    );
+  }
+
+  for (const marker of [
+    "docs/generated/component-reference.json",
+    "docs/metadata/components.json",
+    "docs/api/ui-components-api.md",
+  ]) {
+    if (!content.includes(marker)) {
+      failures.push(
+        `${relativePath}: public-surface guidance must link canonical source ${marker}`,
+      );
+    }
+  }
+}
+
 function verifyRetiredReferenceAuthorityMentions({ root, failures }) {
   for (const relativePath of documentationCurrentPaths) {
     const content = read(root, relativePath);
@@ -375,6 +398,7 @@ export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
 
   verifyDeprecatedAiMirrors({ root, failures });
   verifyRetiredReferenceAuthorityMentions({ root, failures });
+  verifyPackageReadmeOwnership({ root, failures });
 
   for (const relativePath of documentationCurrentPaths) {
     const content = read(root, relativePath);
