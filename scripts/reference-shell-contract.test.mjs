@@ -4,6 +4,8 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
+import { retiredReferencePaths } from "./reference-retired-paths.mjs";
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function read(relativePath) {
@@ -141,7 +143,6 @@ test("Docs filter discovers selected-framework API members without restoring a s
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsShell = read("apps/docs/src/DocsShell.tsx");
   const memberTarget = read("apps/docs/src/componentApiMember.ts");
-  const retired = read("scripts/reference-drift-removal-contract.test.mjs");
 
   assert.match(docsNav, /generated\/framework-api-reference\.json\?raw/u);
   assert.match(docsNav, /buildApiMemberEntries/u);
@@ -166,6 +167,8 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
   assert.match(app, /query\.delete\("member"\)/u);
 
-  assert.match(retired, /ReferenceSearchPage\.tsx/u);
+  assert(
+    retiredReferencePaths.includes("apps/docs/src/ReferenceSearchPage.tsx"),
+  );
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });

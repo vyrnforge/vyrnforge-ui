@@ -169,7 +169,9 @@ export function verifyReferenceProductArchitecture({
     "VyrnForge Reference",
     "reference-portal.json",
     "framework-neutral",
+    "content-domain navigation taxonomy",
     "transitional runtime registries have been retired",
+    "apps/docs/src/referenceRoutes.ts",
     "docs/generated/reference-model.json",
     "reference-artifact.mjs",
   ]) {

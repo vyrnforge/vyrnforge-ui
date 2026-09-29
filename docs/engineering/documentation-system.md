@@ -32,8 +32,9 @@ state, or public API facts.
 `apps/docs` is the single presentation surface of the reader-facing **VyrnForge Reference** product.
 
 `docs/metadata/reference-portal.json` owns the shared Reference product
-identity, framework and surface vocabulary, navigation sections, content-domain
-ownership, framework/version context, deep-link rules, and deployment semantics.
+identity, framework and surface vocabulary, content-domain navigation taxonomy,
+content-domain ownership, framework/version context, deep-link rules, and
+deployment semantics.
 It does not replace the canonical component, package, token, pattern,
 accessibility, release, or executable-example contracts that supply the
 underlying facts.
@@ -87,7 +88,9 @@ path-based.
 The transitional runtime registries have been retired. Docs discovers authored
 Markdown, metadata, and generated sources directly, composes generated reader
 entries from `docs/generated/reference-model.json`, and binds curated executable
-pages to canonical component and example identities. Those bindings do not own
+pages to canonical component and example identities. The generated model owns
+the domain taxonomy and stable identities; `apps/docs/src/referenceRoutes.ts`
+owns only the curated reader-facing page grouping and authored-page bindings. Those bindings do not own
 component labels, package identity, framework API facts, accessibility contracts,
 or stable component routes.
 

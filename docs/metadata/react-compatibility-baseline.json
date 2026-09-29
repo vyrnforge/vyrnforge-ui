@@ -64,7 +64,7 @@
     {
       "path": "packages/ui-components/README.md",
       "kind": "blob",
-      "sha1": "343954f6e44a0522317db12100ca11db12daf92b",
+      "sha1": "74488982a2c520273476d780d5dad788013c1156",
       "covers": ["React package ownership and public consumption contract"]
     },
     {
@@ -182,6 +182,11 @@
       "task": "#633",
       "reason": "Post-G20 accessibility evidence closure adds explicit keyboard and focus documentation for the remaining SearchInput, native choice/input, SideNav, Breadcrumbs, Dropdown, and ConfirmDialog surfaces. Runtime implementation, React props/callbacks/refs, exports, CSS contracts, and compatibility policy are unchanged; only the reviewed API documentation fingerprint is intentionally recaptured.",
       "evidence": "docs/metadata/assistive-technology-reviews.json"
+    },
+    {
+      "task": "#647",
+      "reason": "React package documentation ownership was clarified by removing a hand-maintained exhaustive component/maturity catalog and linking the canonical generated component reference, component metadata, and React public API guidance instead. Public exports, props, callbacks, refs, runtime behavior, CSS contracts, package setup, and compatibility policy are unchanged; only the reviewed package-README fingerprint is intentionally recaptured.",
+      "evidence": "scripts/verify-documentation-current.mjs"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

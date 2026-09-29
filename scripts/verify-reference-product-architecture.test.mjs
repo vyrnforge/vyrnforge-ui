@@ -107,3 +107,25 @@ test("rejects restoring docsRegistry as durable route authority", () =>
         ),
       ),
   ));
+
+test("requires the domain-taxonomy versus curated-route ownership distinction", () =>
+  fixture(
+    (root) => {
+      const file = path.join(root, documentationSystemPath);
+      writeFileSync(
+        file,
+        readFileSync(file, "utf8").replace(
+          "content-domain navigation taxonomy",
+          "navigation sections",
+        ),
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "missing architecture marker content-domain navigation taxonomy",
+          ),
+        ),
+      ),
+  ));
