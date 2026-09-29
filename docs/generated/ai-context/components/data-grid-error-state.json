@@ -8,12 +8,14 @@
   "availability": "available",
   "purpose": "Table-row error state for data-grid load failures.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when the grid has a string or Error value representing a load failure.",
+    "avoidWhen": "Avoid for empty or loading states; the component renders nothing when error is absent.",
+    "aiUsageNotes": "Pass only actual grid-load errors; do not use the component for no-data or loading conditions.",
     "relatedComponents": []
   },
-  "accessibility": [],
+  "accessibility": [
+    "The containing table cell uses role=\"alert\" and wraps the shared ErrorState."
+  ],
   "knownLimitations": [
     "Use for grid load errors; it renders nothing when no error is present and is not an empty/loading state."
   ],
@@ -24,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "react-alpha-deferred",
-      "package": "@vyrnforge/ui-data-grid"
+      "package": "@vyrnforge/ui-data-grid",
+      "setup": "import { DataGridErrorState } from \"@vyrnforge/ui-data-grid\";",
+      "example": "<DataGridErrorState error={error} columnCount={3} />"
     },
     "native-html": {
       "status": "not-supported",
