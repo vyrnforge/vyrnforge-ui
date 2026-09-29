@@ -5797,7 +5797,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Progress/Progress.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.2.0-beta.2",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -5864,7 +5864,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/DescriptionList/DescriptionList.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.2.0-beta.2",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -5931,7 +5931,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/PropertyTable/PropertyTable.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.2.0-beta.2",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -5998,7 +5998,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Timeline/Timeline.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.2.0-beta.2",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
