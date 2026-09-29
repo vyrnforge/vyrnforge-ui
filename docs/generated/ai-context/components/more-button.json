@@ -54,14 +54,5 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
-  },
-  "useWhen": "Use when an icon-only \"More actions\" affordance conventionally represents access to additional actions.",
-  "avoidWhen": "Avoid for labelled business actions or when the control does not expose additional actions.",
-  "relatedComponents": [],
-  "cssClasses": [],
-  "cssVariables": [],
-  "importExample": "import { MoreButton } from \"@vyrnforge/ui-components\";",
-  "basicUsageExample": "<MoreButton />",
-  "accessibilityNotes": "Defaults aria-label and tooltip to \"More actions\"; callers may override aria-label when the context requires a more specific accessible name.",
-  "aiUsageNotes": "Use only for the familiar More actions utility; prefer Button or IconButton for other actions."
+  }
 }
