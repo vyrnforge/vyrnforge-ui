@@ -4,9 +4,9 @@
   "status": "pending",
   "reviewer": null,
   "reviewedAt": null,
-  "workflowRun": null,
-  "dryRunArtifact": null,
+  "workflowRun": "https://github.com/vyrnforge/vyrnforge-ui/actions/runs/36519648949",
+  "dryRunArtifact": "release-artifact-assurance / artifact 11012308264",
   "packagePublisherSettings": [],
   "environmentProtection": null,
-  "notes": "Populate only with redacted, reviewed references. Never store credentials, tokens, session data, or raw authentication responses."
+  "notes": "Repository-controlled evidence recorded from Weekly Assurance #36519648949 on main cae555a9bf0199134b95b58f7562444a5331b6b6: retained release-artifact-assurance artifact 11012308264 includes the exact-tarball credential-free dry-run evidence. External npm trusted-publisher captures and GitHub npm-release environment protection remain pending under issue #631. Never store credentials, tokens, session data, or raw authentication responses."
 }

@@ -6,15 +6,19 @@
   "category": "primitive",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "Icon-only convenience action for the familiar Refresh utility.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when an icon-only Refresh action is conventional and the default Refresh label accurately describes the action.",
+    "avoidWhen": "Avoid for labelled business actions or when Refresh does not precisely describe the result.",
+    "aiUsageNotes": "Use only for the familiar Refresh utility action; prefer Button or IconButton for other actions.",
     "relatedComponents": []
   },
-  "accessibility": [],
-  "knownLimitations": [],
+  "accessibility": [
+    "Defaults aria-label and tooltip to \"Refresh\"; callers may override aria-label when the context requires a more specific accessible name."
+  ],
+  "knownLimitations": [
+    "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+  ],
   "styling": {
     "classes": [],
     "variables": []
@@ -22,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "current",
-      "package": "@vyrnforge/ui-components"
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { RefreshButton } from \"@vyrnforge/ui-components\";",
+      "example": "<RefreshButton />"
     },
     "native-html": {
       "status": "current",

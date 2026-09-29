@@ -6,15 +6,19 @@
   "category": "grid-feature",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "Presentation container for composing data-grid filter controls.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use to group filter UI within a grid surface while filter state is owned by DataGridState or another controlled integration.",
+    "avoidWhen": "Avoid expecting it to own filter state, query semantics, or an inline filter popover.",
+    "aiUsageNotes": "Treat as layout/presentation only; keep filter state and business query behavior in shared grid state or the consuming application.",
     "relatedComponents": []
   },
-  "accessibility": [],
-  "knownLimitations": [],
+  "accessibility": [
+    "The component adds only a div container; child filter controls remain responsible for their own accessible labels, roles, and keyboard behavior."
+  ],
+  "knownLimitations": [
+    "Presentation container only; filter state belongs to DataGridState/controlled integrations, and the compact header does not provide an inline filter popover."
+  ],
   "styling": {
     "classes": [],
     "variables": []
@@ -22,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "react-alpha-deferred",
-      "package": "@vyrnforge/ui-data-grid"
+      "package": "@vyrnforge/ui-data-grid",
+      "setup": "import { DataGridFilterBar } from \"@vyrnforge/ui-data-grid\";",
+      "example": "<DataGridFilterBar>{children}</DataGridFilterBar>"
     },
     "native-html": {
       "status": "not-supported",

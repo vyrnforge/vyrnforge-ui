@@ -4,7 +4,10 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { verifyAssistiveTechnologyEvidence } from "./verify-assistive-technology-evidence.mjs";
+import {
+  verifyAssistiveTechnologyEvidence,
+  verifyKeyboardDocumentationScenarioCoverage,
+} from "./verify-assistive-technology-evidence.mjs";
 
 const componentIds = new Set(["dialog"]);
 const fixtureInventory = new Map([
@@ -257,5 +260,61 @@ test("pending scenarios outside the selected release do not block it", () => {
       requiredScenarioIds: new Set(),
     }),
     [],
+  );
+});
+
+test("requires-verification keyboard metadata must have a canonical AT scenario", () => {
+  const catalog = {
+    components: [
+      {
+        id: "dialog",
+        publicExport: true,
+        accessibility: { keyboardDocumentation: "requires-verification" },
+      },
+    ],
+  };
+
+  assert.deepEqual(
+    verifyKeyboardDocumentationScenarioCoverage(catalog, {
+      scenarios: [],
+    }),
+    [
+      "dialog: keyboardDocumentation requires-verification needs a canonical assistive-technology scenario",
+    ],
+  );
+});
+
+test("complete keyboard metadata requires completed passing manual evidence", () => {
+  const catalog = {
+    components: [
+      {
+        id: "dialog",
+        publicExport: true,
+        accessibility: { keyboardDocumentation: "complete" },
+      },
+    ],
+  };
+  const evidence = {
+    scenarios: [
+      {
+        id: "AT-001",
+        componentIds: ["dialog"],
+        status: "complete",
+        results: [{ outcome: "passed" }],
+      },
+    ],
+  };
+
+  assert.deepEqual(
+    verifyKeyboardDocumentationScenarioCoverage(catalog, evidence),
+    [],
+  );
+
+  evidence.scenarios[0].results[0].outcome = "failed";
+  assert.deepEqual(
+    verifyKeyboardDocumentationScenarioCoverage(catalog, evidence),
+    [
+      "dialog: keyboardDocumentation complete needs a completed canonical scenario with passing manual results",
+    ],
   );
 });
