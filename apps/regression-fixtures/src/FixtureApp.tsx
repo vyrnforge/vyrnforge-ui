@@ -1117,7 +1117,11 @@ function NativeChoiceControlsKeyboardFixture() {
       </label>
       <Checkbox label="Include archived records" />
       <div>
-        <Radio name="standalone-choice" value="primary" label="Primary option" />
+        <Radio
+          label="Primary option"
+          name="standalone-choice"
+          value="primary"
+        />
         <Radio
           disabled
           name="standalone-choice"
