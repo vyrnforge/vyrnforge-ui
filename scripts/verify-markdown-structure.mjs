@@ -29,10 +29,7 @@ function isPipeRow(line) {
 
 function isSeparatorRow(line) {
   const cells = splitTableRow(line);
-  return (
-    cells.length > 0 &&
-    cells.every((cell) => /^:?-{3,}:?$/u.test(cell))
-  );
+  return cells.length > 0 && cells.every((cell) => /^:?-{3,}:?$/u.test(cell));
 }
 
 function normalizedHeading(title) {
