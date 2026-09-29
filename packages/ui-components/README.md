@@ -49,25 +49,22 @@ package CSS.
 `@vyrnforge/ui-components` owns reusable UI primitives only. It does not own app
 business state, backend data, grid behavior, or a global store.
 
-## Components
+## Public surface
 
-- Actions: `Button`, `IconButton`, `ToolbarButton`, `ButtonGroup`, `SegmentedControl`, `ToggleButton`, `ToggleButtonGroup`
-- Icons: `Icon`, `CloseButton`, `ClearButton`, `RefreshButton`, `MoreButton`
-- Typography: `Heading`, `Text`, `Label`, `Caption`, `CodeText`
-- Feedback: `Badge`, `StatusBadge`, `ToastProvider`, `ToastAction`, `useToast`, `EmptyState`, `ErrorState`, `LoadingState`, `Skeleton`, `InlineMessage`, `Alert`
-- Forms: `Field`, `TextInput`, `SearchInput`, `Select`, `Autocomplete`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `NumberInput`, `DateInput`, `DateTimeInput`, `Rating`, `Slider`, `MultiSelect`, `Textarea`, `ValidationMessage`
-- Data management: `TransferList`
-- Layout: `Card`, `Panel`, `Stack`, `Inline`, `Section`, `AppShell`, `Page`, `PageHeader`, `PageToolbar`
-- Navigation: `SideNav`, `TopNav`, `Breadcrumbs`, `Tabs`
-- Overlays: `Popover`, `Menu`, `Dropdown`, `Tooltip`, `Dialog`, `Drawer`, `ConfirmDialog`
+This README owns React package setup, package-level usage, styling, accessibility,
+and integration guidance. It does **not** own an exhaustive component catalog or
+per-component maturity labels.
 
-## Maturity
+Use the generated VyrnForge component reference for the current public component
+inventory, framework API details, accessibility facts, limitations, and maturity:
 
-`docs/metadata/components.json` is the canonical component metadata and maturity index. The
-action aliases `CloseButton`, `ClearButton`, `RefreshButton`, and `MoreButton`
-are stable convenience wrappers. `Toast`, `ToastProvider`, `ToastAction`, and
-`useToast` are experimental. `ToastProvider` owns its internal viewport; do
-not import `ToastViewport` as an application API.
+- [Generated component reference](../../docs/generated/component-reference.json)
+- [Canonical component metadata](../../docs/metadata/components.json)
+- [React public API guidance](../../docs/api/ui-components-api.md)
+
+Those sources are generated from or checked against the shared VyrnForge
+contracts so new components and maturity changes do not require a second
+hand-maintained list in this package README.
 
 ## Examples
 
