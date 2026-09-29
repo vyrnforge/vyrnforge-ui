@@ -4,28 +4,9 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
+import { retiredReferencePaths } from "./reference-retired-paths.mjs";
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const retired = [
-  "apps/docs/src/docsRegistry.ts",
-  "apps/docs/src/discoveryRoutes.ts",
-  "apps/docs/src/MetadataPage.tsx",
-  "apps/docs/src/AiContextIndexPage.tsx",
-  "apps/docs/src/styles/docs-context.css",
-  "apps/docs/src/referenceRouteId.ts",
-  "scripts/reference-route-id.test.mjs",
-  "apps/docs/src/ReferenceSearchPage.tsx",
-  "examples/basic-playground/src/app/referenceCatalogRoutes.ts",
-  "examples/basic-playground/src/components/PropsTable.tsx",
-  "examples/basic-playground/src/pages/reference/PriorityComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/FormComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/ControlComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/OverlayComponentPages.tsx",
-  "examples/basic-playground/src/pages/reference/AutocompletePage.tsx",
-  "examples/basic-playground/src/pages/reference/TransferListPage.tsx",
-  "examples/basic-playground/src/pages/reference/ToastPage.tsx",
-  "examples/basic-playground/src/pages/reference/MetadataCatalogPages.tsx",
-  "examples/basic-playground/src/pages/reference/MetadataDetailPages.tsx",
-];
 
 function read(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -43,7 +24,7 @@ test("Reference transitional authorities remain retired", () => {
     json("docs/generated/reference-model.json").transitionalRegistries,
     [],
   );
-  for (const relativePath of retired) {
+  for (const relativePath of retiredReferencePaths) {
     assert.equal(
       existsSync(path.join(root, relativePath)),
       false,
