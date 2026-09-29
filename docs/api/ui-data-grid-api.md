@@ -195,6 +195,22 @@ The table header remains sticky inside the grid scroll container. When selection
 is enabled, the selection column is also sticky on the inline-start edge. Focused
 body cells scroll into the nearest visible horizontal and vertical position.
 
+### Auxiliary grid control keyboard and focus contracts
+
+- `DataGridToolbar` exposes a toolbar role but does not invent a second
+  roving-focus model; contained VyrnForge controls keep their own documented
+  keyboard behavior and remain reachable through normal Tab order.
+- `DataGridColumnMenu` uses a native button-backed Columns trigger, a labelled
+  settings dialog, native/searchable controls, and explicit keyboard-reachable
+  column move/reset actions. Pointer drag is an additional ordering path, not
+  the only path.
+- `DataGridSearch` composes `SearchInput`; native search text entry and focus
+  behavior are preserved while debounce only controls when the value callback
+  is emitted.
+- `DataGridPagination` keeps the Rows per page native select and Previous/Next
+  native buttons in normal Tab order. Disabled page actions remain disabled,
+  and page/range text does not move focus.
+
 ## Selection And Bulk Actions
 
 Public selection helpers include:

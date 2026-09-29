@@ -6,15 +6,19 @@
   "category": "grid-feature",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "Table-row empty state for no-data and no-match grid outcomes.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when the grid has no data or when active search/filter criteria produce no matching rows.",
+    "avoidWhen": "Avoid for loading and error conditions.",
+    "aiUsageNotes": "Set hasQuery when the empty result is caused by search or filtering; keep loading and error states separate.",
     "relatedComponents": []
   },
-  "accessibility": [],
-  "knownLimitations": [],
+  "accessibility": [
+    "Renders the shared EmptyState inside a table row; title and description distinguish no-data from no-match states through hasQuery."
+  ],
+  "knownLimitations": [
+    "Use for no-data or no-match states; do not use it for loading or load errors."
+  ],
   "styling": {
     "classes": [],
     "variables": []
@@ -22,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "react-alpha-deferred",
-      "package": "@vyrnforge/ui-data-grid"
+      "package": "@vyrnforge/ui-data-grid",
+      "setup": "import { DataGridEmptyState } from \"@vyrnforge/ui-data-grid\";",
+      "example": "<DataGridEmptyState columnCount={3} hasQuery />"
     },
     "native-html": {
       "status": "not-supported",
