@@ -6,7 +6,7 @@
   "category": "primitive",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "React hook for accessing the ToastController supplied by ToastProvider.",
   "guidance": {
     "useWhen": null,
     "avoidWhen": null,
@@ -47,5 +47,14 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": null
-  }
+  },
+  "useWhen": "Use inside a ToastProvider subtree to enqueue, update, or dismiss transient toast feedback.",
+  "avoidWhen": "Do not call outside ToastProvider; the hook throws when no provider is present, and it is not a persistent-message API.",
+  "relatedComponents": [],
+  "cssClasses": [],
+  "cssVariables": [],
+  "importExample": "import { useToast } from \"@vyrnforge/ui-components\";",
+  "basicUsageExample": "const toast = useToast();",
+  "accessibilityNotes": "The hook renders no DOM; accessibility semantics are provided by the ToastProvider viewport and rendered Toast records.",
+  "aiUsageNotes": "Call only within ToastProvider; use the returned controller for toast/success/error/warning/info/update/dismiss operations."
 }
