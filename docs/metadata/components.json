@@ -6636,7 +6636,7 @@
         "documentationPath": "docs/api/ui-data-grid-api.md",
         "keyboardDocumentation": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"],
+      "knownLimitations": ["Global search scans searchable columns in the current grid; server fetching remains application-owned through query contracts."],
       "deprecation": {
         "status": "not-applicable"
       },
@@ -6671,7 +6671,7 @@
         "documentationPath": "docs/api/ui-data-grid-api.md",
         "keyboardDocumentation": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"],
+      "knownLimitations": ["Presentation container only; filter state belongs to DataGridState/controlled integrations, and the compact header does not provide an inline filter popover."],
       "deprecation": {
         "status": "not-applicable"
       },
@@ -6706,7 +6706,7 @@
         "documentationPath": "docs/api/ui-data-grid-api.md",
         "keyboardDocumentation": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"],
+      "knownLimitations": ["Loading placeholder rows only; they are aria-hidden and do not represent grid data or status content."],
       "deprecation": {
         "status": "not-applicable"
       },
@@ -6741,7 +6741,7 @@
         "documentationPath": "docs/api/ui-data-grid-api.md",
         "keyboardDocumentation": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"],
+      "knownLimitations": ["Use for no-data or no-match states; do not use it for loading or load errors."],
       "deprecation": {
         "status": "not-applicable"
       },
@@ -6776,7 +6776,7 @@
         "documentationPath": "docs/api/ui-data-grid-api.md",
         "keyboardDocumentation": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"],
+      "knownLimitations": ["Use for grid load errors; it renders nothing when no error is present and is not an empty/loading state."],
       "deprecation": {
         "status": "not-applicable"
       },
@@ -6811,7 +6811,7 @@
         "documentationPath": "docs/api/ui-data-grid-api.md",
         "keyboardDocumentation": "requires-verification"
       },
-      "knownLimitations": ["requires-verification"],
+      "knownLimitations": ["Display-row pagination only in this phase; generated group headers count as rows on the current page."],
       "deprecation": {
         "status": "not-applicable"
       },
