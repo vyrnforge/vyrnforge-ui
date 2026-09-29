@@ -106,6 +106,7 @@
     "generate:beta-scope": "node scripts/generate-beta-scope.mjs",
     "verify:beta-scope": "node scripts/verify-beta-scope.mjs",
     "verify:release-groups": "node scripts/verify-release-groups.mjs",
+    "verify:release-registry-preflight": "node scripts/verify-release-candidate.mjs",
     "verify:trusted-publishing-provenance": "node scripts/verify-trusted-publishing-provenance.mjs",
     "verify:trusted-publishing-dry-run": "node scripts/verify-trusted-publishing-dry-run.mjs",
     "verify:release-dry-run": "node scripts/verify-release-dry-run.mjs",
