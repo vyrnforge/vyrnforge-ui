@@ -6,7 +6,7 @@
   "category": "grid-feature",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "Presentation container for composing data-grid filter controls.",
   "guidance": {
     "useWhen": null,
     "avoidWhen": null,
@@ -44,5 +44,14 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": null
-  }
+  },
+  "useWhen": "Use to group filter UI within a grid surface while filter state is owned by DataGridState or another controlled integration.",
+  "avoidWhen": "Avoid expecting it to own filter state, query semantics, or an inline filter popover.",
+  "relatedComponents": [],
+  "cssClasses": [],
+  "cssVariables": [],
+  "importExample": "import { DataGridFilterBar } from \"@vyrnforge/ui-data-grid\";",
+  "basicUsageExample": "<DataGridFilterBar>{children}</DataGridFilterBar>",
+  "accessibilityNotes": "The component adds only a div container; child filter controls remain responsible for their own accessible labels, roles, and keyboard behavior.",
+  "aiUsageNotes": "Treat as layout/presentation only; keep filter state and business query behavior in shared grid state or the consuming application."
 }
