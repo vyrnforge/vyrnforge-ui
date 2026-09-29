@@ -166,3 +166,26 @@ Feature B.
         [],
       ),
   ));
+
+
+test("rejects missing or multiple H1 document titles", () => {
+  fixture(
+    `## Missing title\n`,
+    (root, relativePath) => {
+      const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
+      assert(failures.some((failure) =>
+        failure.includes("expected exactly one H1 document title; found 0"),
+      ));
+    },
+  );
+
+  fixture(
+    `# First\n\n# Second\n`,
+    (root, relativePath) => {
+      const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
+      assert(failures.some((failure) =>
+        failure.includes("expected exactly one H1 document title; found 2"),
+      ));
+    },
+  );
+});
