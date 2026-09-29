@@ -58,7 +58,7 @@
     {
       "path": "docs/api/ui-components-api.md",
       "kind": "blob",
-      "sha1": "09510da23a9559834e8ccaaba63a7280df2a6cbc",
+      "sha1": "7cc22a1a5a4d546fbcbe6f85a36b7e3681ae82ca",
       "covers": ["documented React public API and usage contracts"]
     },
     {
@@ -172,6 +172,11 @@
       "task": "#605",
       "reason": "Development-only React test and accessibility tooling pins changed in packages/ui-components/package.json. Public exports, CSS entrypoints, React peer ranges, runtime dependencies, component behavior, and compatibility policy remain unchanged; only the package-manifest fingerprint is intentionally recaptured.",
       "evidence": "packages/ui-components/package.json"
+    },
+    {
+      "task": "#639",
+      "reason": "TextInput keyboard documentation now explicitly states the existing browser-native keyboard behavior of its underlying native input element. The React public API, runtime implementation, callback/ref behavior, CSS surface, and compatibility policy are unchanged; only the reviewed API documentation fingerprint is intentionally recaptured.",
+      "evidence": "docs/metadata/assistive-technology-reviews.json"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

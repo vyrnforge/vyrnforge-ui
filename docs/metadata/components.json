@@ -2549,7 +2549,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": ["Avoid for long multi-line input; use Textarea."],
       "deprecation": {
