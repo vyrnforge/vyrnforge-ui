@@ -14,7 +14,9 @@
     "relatedComponents": []
   },
   "accessibility": [],
-  "knownLimitations": [],
+  "knownLimitations": [
+    "Use for grid load errors; it renders nothing when no error is present and is not an empty/loading state."
+  ],
   "styling": {
     "classes": [],
     "variables": []
