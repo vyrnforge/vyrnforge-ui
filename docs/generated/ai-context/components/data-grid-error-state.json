@@ -48,14 +48,5 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": null
-  },
-  "useWhen": "Use when the grid has a string or Error value representing a load failure.",
-  "avoidWhen": "Avoid for empty or loading states; the component renders nothing when error is absent.",
-  "relatedComponents": [],
-  "cssClasses": [],
-  "cssVariables": [],
-  "importExample": "import { DataGridErrorState } from \"@vyrnforge/ui-data-grid\";",
-  "basicUsageExample": "<DataGridErrorState error={error} columnCount={3} />",
-  "accessibilityNotes": "The containing table cell uses role=\"alert\" and wraps the shared ErrorState.",
-  "aiUsageNotes": "Pass only actual grid-load errors; do not use the component for no-data or loading conditions."
+  }
 }
