@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
+import { discoverDocumentationMarkdownPaths } from "./documentation-paths.mjs";
 import { verifyMarkdownStructure } from "./verify-markdown-structure.mjs";
 
 function fixture(content, callback) {
@@ -108,3 +109,36 @@ test("ignores table-like content inside fenced code blocks", () =>
         [],
       ),
   ));
+
+
+test("discovers root, AI, docs, and package README Markdown sources", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-doc-discovery-"));
+  try {
+    const files = [
+      "README.md",
+      "CONTRIBUTING.md",
+      ".ai/AI_CONTEXT.md",
+      "docs/README.md",
+      "docs/architecture/system.md",
+      "packages/ui-core/README.md",
+      "packages/ui-core/NOTES.txt",
+      "apps/docs/README.md"
+    ];
+    for (const relativePath of files) {
+      const file = path.join(root, relativePath);
+      mkdirSync(path.dirname(file), { recursive: true });
+      writeFileSync(file, relativePath.endsWith(".md") ? "# Doc\n" : "text\n");
+    }
+
+    assert.deepEqual(discoverDocumentationMarkdownPaths({ root }), [
+      ".ai/AI_CONTEXT.md",
+      "CONTRIBUTING.md",
+      "README.md",
+      "docs/README.md",
+      "docs/architecture/system.md",
+      "packages/ui-core/README.md"
+    ]);
+  } finally {
+    rmSync(root, { force: true, recursive: true });
+  }
+});
