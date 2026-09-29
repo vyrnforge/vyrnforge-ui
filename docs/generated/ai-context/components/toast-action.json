@@ -6,7 +6,7 @@
   "category": "primitive",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "Compact follow-up action rendered within transient toast feedback.",
   "guidance": {
     "useWhen": null,
     "avoidWhen": null,
@@ -50,5 +50,14 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": null
-  }
+  },
+  "useWhen": "Use when a toast needs one concise follow-up action such as an optional recovery or navigation action.",
+  "avoidWhen": "Avoid for required validation, persistent alerts, destructive confirmation, or primary business actions.",
+  "relatedComponents": [],
+  "cssClasses": [],
+  "cssVariables": [],
+  "importExample": "import { ToastAction } from \"@vyrnforge/ui-components\";",
+  "basicUsageExample": "<ToastAction altText=\"Undo\">Undo</ToastAction>",
+  "accessibilityNotes": "altText is required and is passed to the underlying button as its aria-label.",
+  "aiUsageNotes": "Use inside transient toast feedback only; do not substitute it for persistent or required application controls."
 }
