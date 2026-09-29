@@ -6,7 +6,7 @@
   "category": "grid-feature",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+  "purpose": "Table-row loading placeholders for a data-grid body.",
   "guidance": {
     "useWhen": null,
     "avoidWhen": null,
@@ -44,5 +44,14 @@
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
     "customElementsManifest": null
-  }
+  },
+  "useWhen": "Use while grid rows are loading and row-shaped visual placeholders are appropriate.",
+  "avoidWhen": "Avoid representing real data, empty states, errors, or status content with skeleton rows.",
+  "relatedComponents": [],
+  "cssClasses": [],
+  "cssVariables": [],
+  "importExample": "import { DataGridSkeletonRows } from \"@vyrnforge/ui-data-grid\";",
+  "basicUsageExample": "<DataGridSkeletonRows rowCount={5} columnCount={3} />",
+  "accessibilityNotes": "Every generated skeleton row is aria-hidden so loading placeholders are excluded from the accessibility tree.",
+  "aiUsageNotes": "Use only as transient loading visuals; do not treat skeleton rows as data or status records."
 }
