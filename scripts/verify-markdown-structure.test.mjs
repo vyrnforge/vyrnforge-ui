@@ -142,3 +142,27 @@ test("discovers root, AI, docs, and package README Markdown sources", () => {
     rmSync(root, { force: true, recursive: true });
   }
 });
+
+
+test("allows repeated subheadings under different parent sections", () =>
+  fixture(
+    `# Changelog
+
+## 1.1.0
+
+### Added
+
+Feature A.
+
+## 1.0.0
+
+### Added
+
+Feature B.
+`,
+    (root, relativePath) =>
+      assert.deepEqual(
+        verifyMarkdownStructure({ root, paths: [relativePath] }),
+        [],
+      ),
+  ));
