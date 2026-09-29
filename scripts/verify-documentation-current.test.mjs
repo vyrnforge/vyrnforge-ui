@@ -210,3 +210,43 @@ test("rejects restoration of deprecated hand-maintained AI mirrors", () =>
         ),
       ),
   ));
+
+test("rejects retired Reference authorities in current guidance", () =>
+  fixture(
+    (root) => {
+      const relativePath = "docs/governance/00-documentation-governance.md";
+      write(
+        root,
+        relativePath,
+        `${read(root, relativePath)}\nLegacy route owner: apps/docs/src/docsRegistry.ts\n`,
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "current guidance references retired Reference authority apps/docs/src/docsRegistry.ts",
+          ),
+        ),
+      ),
+  ));
+
+test("rejects a duplicate package-owned component catalog", () =>
+  fixture(
+    (root) => {
+      const relativePath = "packages/ui-components/README.md";
+      write(
+        root,
+        relativePath,
+        `${read(root, relativePath)}\n## Components\n- Button\n`,
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "package README must not maintain an exhaustive component catalog",
+          ),
+        ),
+      ),
+  ));
