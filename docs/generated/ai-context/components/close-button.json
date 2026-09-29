@@ -8,12 +8,14 @@
   "availability": "available",
   "purpose": "Icon-only convenience action for the familiar Close utility.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when an icon-only Close action is conventional and the default Close label accurately describes the action.",
+    "avoidWhen": "Avoid for labelled business actions or when Close does not precisely describe the result.",
+    "aiUsageNotes": "Use only for the familiar Close utility action; prefer Button or IconButton for other actions.",
     "relatedComponents": []
   },
-  "accessibility": [],
+  "accessibility": [
+    "Defaults aria-label and tooltip to \"Close\"; callers may override aria-label when the context requires a more specific accessible name."
+  ],
   "knownLimitations": [
     "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
   ],
@@ -24,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "current",
-      "package": "@vyrnforge/ui-components"
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { CloseButton } from \"@vyrnforge/ui-components\";",
+      "example": "<CloseButton />"
     },
     "native-html": {
       "status": "current",
