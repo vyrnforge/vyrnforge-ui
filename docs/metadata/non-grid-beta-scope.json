@@ -23,7 +23,9 @@
     },
     "status": "scope-frozen",
     "targetVersion": "0.2.0-beta.2",
-    "unlocks": ["BT-8002"],
+    "unlocks": [
+      "BT-8002"
+    ],
     "scopeOnly": true,
     "releaseStatus": "not-release-ready"
   },
@@ -52,7 +54,9 @@
         "@vyrnforge/ui-angular",
         "@vyrnforge/ui-vue"
       ],
-      "dataGridAlpha": ["@vyrnforge/ui-data-grid"]
+      "dataGridAlpha": [
+        "@vyrnforge/ui-data-grid"
+      ]
     },
     "firstClassRenderers": {
       "react": "@vyrnforge/ui-components",
@@ -144,7 +148,9 @@
         "key": "alert",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for tiny metadata; use Badge or Caption."]
+      "knownLimitations": [
+        "Avoid for tiny metadata; use Badge or Caption."
+      ]
     },
     {
       "id": "app-shell",
@@ -182,7 +188,7 @@
       },
       "maturityEvidence": {
         "key": "app-shell",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for small inline layouts or when an app-specific router shell already owns all regions."
@@ -224,7 +230,7 @@
       },
       "maturityEvidence": {
         "key": "autocomplete",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values."
@@ -308,9 +314,11 @@
       },
       "maturityEvidence": {
         "key": "breadcrumbs",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for linear step progress or unrelated tabs."]
+      "knownLimitations": [
+        "Avoid for linear step progress or unrelated tabs."
+      ]
     },
     {
       "id": "button",
@@ -390,9 +398,11 @@
       },
       "maturityEvidence": {
         "key": "button-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for unrelated actions."]
+      "knownLimitations": [
+        "Avoid for unrelated actions."
+      ]
     },
     {
       "id": "caption",
@@ -514,7 +524,7 @@
       },
       "maturityEvidence": {
         "key": "checkbox",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for mutually exclusive sets; use Radio when available."
@@ -558,7 +568,9 @@
         "key": "clear-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "close-button",
@@ -598,7 +610,9 @@
         "key": "close-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "code-text",
@@ -680,7 +694,9 @@
         "key": "confirm-dialog",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for routine low-risk actions."]
+      "knownLimitations": [
+        "Avoid for routine low-risk actions."
+      ]
     },
     {
       "id": "date-input",
@@ -718,7 +734,7 @@
       },
       "maturityEvidence": {
         "key": "date-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid when complex calendar range picking is required."
@@ -760,9 +776,11 @@
       },
       "maturityEvidence": {
         "key": "datetime-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for timezone-heavy scheduling workflows."]
+      "knownLimitations": [
+        "Avoid for timezone-heavy scheduling workflows."
+      ]
     },
     {
       "id": "description-list",
@@ -844,7 +862,9 @@
         "key": "dialog",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for large workflows; use Drawer or a page."]
+      "knownLimitations": [
+        "Avoid for large workflows; use Drawer or a page."
+      ]
     },
     {
       "id": "drawer",
@@ -926,7 +946,9 @@
         "key": "dropdown",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for native form select choices; use Select."]
+      "knownLimitations": [
+        "Avoid for native form select choices; use Select."
+      ]
     },
     {
       "id": "empty-state",
@@ -966,7 +988,9 @@
         "key": "empty-state",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for loading or error states."]
+      "knownLimitations": [
+        "Avoid for loading or error states."
+      ]
     },
     {
       "id": "error-state",
@@ -1046,7 +1070,7 @@
       },
       "maturityEvidence": {
         "key": "field",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid duplicating label and validation layout manually."
@@ -1132,7 +1156,9 @@
         "key": "icon",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid adding external icon libraries by default."]
+      "knownLimitations": [
+        "Avoid adding external icon libraries by default."
+      ]
     },
     {
       "id": "icon-button",
@@ -1214,7 +1240,9 @@
         "key": "inline",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for vertical layout; use Stack."]
+      "knownLimitations": [
+        "Avoid for vertical layout; use Stack."
+      ]
     },
     {
       "id": "inline-message",
@@ -1296,7 +1324,9 @@
         "key": "label",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid as general body text."]
+      "knownLimitations": [
+        "Avoid as general body text."
+      ]
     },
     {
       "id": "loading-state",
@@ -1378,7 +1408,9 @@
         "key": "menu",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for navigation trees or complex forms."]
+      "knownLimitations": [
+        "Avoid for navigation trees or complex forms."
+      ]
     },
     {
       "id": "more-button",
@@ -1418,7 +1450,9 @@
         "key": "more-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "multi-select",
@@ -1456,7 +1490,7 @@
       },
       "maturityEvidence": {
         "key": "multi-select",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for async, virtualized, creatable, or very large option sets."
@@ -1498,9 +1532,11 @@
       },
       "maturityEvidence": {
         "key": "number-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for formatted currency or masked values."]
+      "knownLimitations": [
+        "Avoid for formatted currency or masked values."
+      ]
     },
     {
       "id": "page",
@@ -1538,7 +1574,7 @@
       },
       "maturityEvidence": {
         "key": "page",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive."
@@ -1580,7 +1616,7 @@
       },
       "maturityEvidence": {
         "key": "page-header",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for small panel headings; use Panel or Section title props instead."
@@ -1622,7 +1658,7 @@
       },
       "maturityEvidence": {
         "key": "page-toolbar",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for primary page actions that belong in PageHeader actions."
@@ -1666,7 +1702,9 @@
         "key": "panel",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for tiny inline content."]
+      "knownLimitations": [
+        "Avoid for tiny inline content."
+      ]
     },
     {
       "id": "popover",
@@ -1706,7 +1744,9 @@
         "key": "popover",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for complex forms; use Dialog or Drawer."]
+      "knownLimitations": [
+        "Avoid for complex forms; use Dialog or Drawer."
+      ]
     },
     {
       "id": "progress",
@@ -1828,9 +1868,11 @@
       },
       "maturityEvidence": {
         "key": "radio",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for binary settings; use Checkbox or Switch."]
+      "knownLimitations": [
+        "Avoid for binary settings; use Checkbox or Switch."
+      ]
     },
     {
       "id": "radio-group",
@@ -1868,9 +1910,11 @@
       },
       "maturityEvidence": {
         "key": "radio-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for long option lists; use Select instead."]
+      "knownLimitations": [
+        "Avoid for long option lists; use Select instead."
+      ]
     },
     {
       "id": "rating",
@@ -1908,9 +1952,11 @@
       },
       "maturityEvidence": {
         "key": "rating",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for continuous bounded ranges; use Slider."]
+      "knownLimitations": [
+        "Avoid for continuous bounded ranges; use Slider."
+      ]
     },
     {
       "id": "refresh-button",
@@ -1950,7 +1996,9 @@
         "key": "refresh-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "search-input",
@@ -1988,9 +2036,11 @@
       },
       "maturityEvidence": {
         "key": "search-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for general text entry."]
+      "knownLimitations": [
+        "Avoid for general text entry."
+      ]
     },
     {
       "id": "section",
@@ -2072,7 +2122,9 @@
         "key": "segmented-control",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for large option sets; use Select instead."]
+      "knownLimitations": [
+        "Avoid for large option sets; use Select instead."
+      ]
     },
     {
       "id": "select",
@@ -2110,9 +2162,11 @@
       },
       "maturityEvidence": {
         "key": "select",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for multi-select until MultiSelect exists."]
+      "knownLimitations": [
+        "Avoid for multi-select until MultiSelect exists."
+      ]
     },
     {
       "id": "side-nav",
@@ -2150,7 +2204,7 @@
       },
       "maturityEvidence": {
         "key": "side-nav",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for complex tree navigation or data-grid column menus."
@@ -2194,7 +2248,9 @@
         "key": "skeleton",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid when a text loading label is clearer."]
+      "knownLimitations": [
+        "Avoid when a text loading label is clearer."
+      ]
     },
     {
       "id": "slider",
@@ -2232,7 +2288,7 @@
       },
       "maturityEvidence": {
         "key": "slider",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for formatted or direct numeric entry; use NumberInput."
@@ -2276,7 +2332,9 @@
         "key": "stack",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for horizontal layouts; use Inline."]
+      "knownLimitations": [
+        "Avoid for horizontal layouts; use Inline."
+      ]
     },
     {
       "id": "status-badge",
@@ -2316,7 +2374,9 @@
         "key": "status-badge",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid when the content is not a status."]
+      "knownLimitations": [
+        "Avoid when the content is not a status."
+      ]
     },
     {
       "id": "switch",
@@ -2354,7 +2414,7 @@
       },
       "maturityEvidence": {
         "key": "switch",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for multi-step confirmation or non-immediate choices."
@@ -2396,7 +2456,7 @@
       },
       "maturityEvidence": {
         "key": "tabs",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for simple view modes; use SegmentedControl instead."
@@ -2440,7 +2500,9 @@
         "key": "text",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for headings; use Heading."]
+      "knownLimitations": [
+        "Avoid for headings; use Heading."
+      ]
     },
     {
       "id": "text-input",
@@ -2478,9 +2540,11 @@
       },
       "maturityEvidence": {
         "key": "text-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for long multi-line input; use Textarea."]
+      "knownLimitations": [
+        "Avoid for long multi-line input; use Textarea."
+      ]
     },
     {
       "id": "textarea",
@@ -2518,9 +2582,11 @@
       },
       "maturityEvidence": {
         "key": "textarea",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["Avoid for short single-line values."]
+      "knownLimitations": [
+        "Avoid for short single-line values."
+      ]
     },
     {
       "id": "timeline",
@@ -2600,7 +2666,7 @@
       },
       "maturityEvidence": {
         "key": "toast",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history."
@@ -2642,9 +2708,11 @@
       },
       "maturityEvidence": {
         "key": "toast-action",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "toast-provider",
@@ -2682,9 +2750,11 @@
       },
       "maturityEvidence": {
         "key": "toast-provider",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "toggle-button",
@@ -2722,7 +2792,7 @@
       },
       "maturityEvidence": {
         "key": "toggle-button",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for persistent settings; use Switch. Avoid navigation links."
@@ -2764,7 +2834,7 @@
       },
       "maturityEvidence": {
         "key": "toggle-button-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for long form choice labels or descriptions; use RadioGroup."
@@ -2808,7 +2878,9 @@
         "key": "toolbar-button",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for standalone page-level primary actions."]
+      "knownLimitations": [
+        "Avoid for standalone page-level primary actions."
+      ]
     },
     {
       "id": "tooltip",
@@ -2848,7 +2920,9 @@
         "key": "tooltip",
         "status": "pending"
       },
-      "knownLimitations": ["Avoid for required instructions."]
+      "knownLimitations": [
+        "Avoid for required instructions."
+      ]
     },
     {
       "id": "top-nav",
@@ -2886,7 +2960,7 @@
       },
       "maturityEvidence": {
         "key": "top-nav",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid when the application needs a fully custom marketing or public-site header."
@@ -2928,7 +3002,7 @@
       },
       "maturityEvidence": {
         "key": "transfer-list",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for thousands of items, server pagination, complex IAM permission inheritance, hierarchical resources, approval/audit workflows, or data-grid use cases."
@@ -2970,9 +3044,11 @@
       },
       "maturityEvidence": {
         "key": "use-toast",
-        "status": "requires-verification"
+        "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "requires-verification"
+      ]
     },
     {
       "id": "validation-message",
@@ -3010,7 +3086,7 @@
       },
       "maturityEvidence": {
         "key": "validation-message",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for page-level blocking messages; use InlineMessage or ErrorState."
