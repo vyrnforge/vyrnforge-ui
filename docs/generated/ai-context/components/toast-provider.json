@@ -14,7 +14,9 @@
     "relatedComponents": []
   },
   "accessibility": [],
-  "knownLimitations": [],
+  "knownLimitations": [
+    "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+  ],
   "styling": {
     "classes": [],
     "variables": []
