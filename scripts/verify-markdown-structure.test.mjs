@@ -57,7 +57,12 @@ Text.
 
 test("rejects malformed table column counts", () =>
   fixture(
-    `# Example\n\n| Component | Props |\n| --- | --- |\n| Message | \`tone="error" | "warning"\` |\n`,
+    `# Example
+
+| Component | Props |
+| --- | --- |
+| Message | \`tone="error" | "warning"\` |
+`,
     (root, relativePath) => {
       const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
       assert.equal(failures.length, 1);
@@ -67,7 +72,13 @@ test("rejects malformed table column counts", () =>
 
 test("rejects duplicate first-column table entries", () =>
   fixture(
-    `# Example\n\n| Component | Purpose |\n| --- | --- |\n| Button | Action |\n| Button | Duplicate |\n`,
+    `# Example
+
+| Component | Purpose |
+| --- | --- |
+| Button | Action |
+| Button | Duplicate |
+`,
     (root, relativePath) => {
       const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
       assert.equal(failures.length, 1);
@@ -77,7 +88,13 @@ test("rejects duplicate first-column table entries", () =>
 
 test("rejects orphaned pipe-row blocks", () =>
   fixture(
-    `# Example\n\nParagraph.\n\n| EmptyState | Empty content |\n| ErrorState | Error content |\n`,
+    `# Example
+
+Paragraph.
+
+| EmptyState | Empty content |
+| ErrorState | Error content |
+`,
     (root, relativePath) => {
       const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
       assert.equal(failures.length, 1);
@@ -87,14 +104,19 @@ test("rejects orphaned pipe-row blocks", () =>
 
 test("ignores table-like content inside fenced code blocks", () =>
   fixture(
-    `# Example\n\n\`\`\`text\n| not | a | table |\n| still | example | text |\n\`\`\`\n`,
+    `# Example
+
+\`\`\`text
+| not | a | table |
+| still | example | text |
+\`\`\`
+`,
     (root, relativePath) =>
       assert.deepEqual(
         verifyMarkdownStructure({ root, paths: [relativePath] }),
         [],
       ),
   ));
-
 
 test("discovers root, AI, docs, and package README Markdown sources", () => {
   const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-doc-discovery-"));
@@ -107,7 +129,7 @@ test("discovers root, AI, docs, and package README Markdown sources", () => {
       "docs/architecture/system.md",
       "packages/ui-core/README.md",
       "packages/ui-core/NOTES.txt",
-      "apps/docs/README.md"
+      "apps/docs/README.md",
     ];
     for (const relativePath of files) {
       const file = path.join(root, relativePath);
@@ -121,13 +143,12 @@ test("discovers root, AI, docs, and package README Markdown sources", () => {
       "README.md",
       "docs/README.md",
       "docs/architecture/system.md",
-      "packages/ui-core/README.md"
+      "packages/ui-core/README.md",
     ]);
   } finally {
     rmSync(root, { force: true, recursive: true });
   }
 });
-
 
 test("allows repeated subheadings under different parent sections", () =>
   fixture(
@@ -152,25 +173,26 @@ Feature B.
       ),
   ));
 
-
 test("rejects missing or multiple H1 document titles", () => {
-  fixture(
-    `## Missing title\n`,
-    (root, relativePath) => {
-      const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
-      assert(failures.some((failure) =>
+  fixture(`## Missing title
+`, (root, relativePath) => {
+    const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
+    assert(
+      failures.some((failure) =>
         failure.includes("expected exactly one H1 document title; found 0"),
-      ));
-    },
-  );
+      ),
+    );
+  });
 
-  fixture(
-    `# First\n\n# Second\n`,
-    (root, relativePath) => {
-      const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
-      assert(failures.some((failure) =>
+  fixture(`# First
+
+# Second
+`, (root, relativePath) => {
+    const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
+    assert(
+      failures.some((failure) =>
         failure.includes("expected exactly one H1 document title; found 2"),
-      ));
-    },
-  );
+      ),
+    );
+  });
 });
