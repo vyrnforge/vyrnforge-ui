@@ -182,7 +182,7 @@
       },
       "maturityEvidence": {
         "key": "app-shell",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for small inline layouts or when an app-specific router shell already owns all regions."
@@ -224,7 +224,7 @@
       },
       "maturityEvidence": {
         "key": "autocomplete",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values."
@@ -308,7 +308,7 @@
       },
       "maturityEvidence": {
         "key": "breadcrumbs",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for linear step progress or unrelated tabs."]
     },
@@ -390,7 +390,7 @@
       },
       "maturityEvidence": {
         "key": "button-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for unrelated actions."]
     },
@@ -514,7 +514,7 @@
       },
       "maturityEvidence": {
         "key": "checkbox",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for mutually exclusive sets; use Radio when available."
@@ -718,7 +718,7 @@
       },
       "maturityEvidence": {
         "key": "date-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid when complex calendar range picking is required."
@@ -760,7 +760,7 @@
       },
       "maturityEvidence": {
         "key": "datetime-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for timezone-heavy scheduling workflows."]
     },
@@ -1046,7 +1046,7 @@
       },
       "maturityEvidence": {
         "key": "field",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid duplicating label and validation layout manually."
@@ -1456,7 +1456,7 @@
       },
       "maturityEvidence": {
         "key": "multi-select",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for async, virtualized, creatable, or very large option sets."
@@ -1498,7 +1498,7 @@
       },
       "maturityEvidence": {
         "key": "number-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for formatted currency or masked values."]
     },
@@ -1538,7 +1538,7 @@
       },
       "maturityEvidence": {
         "key": "page",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive."
@@ -1580,7 +1580,7 @@
       },
       "maturityEvidence": {
         "key": "page-header",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for small panel headings; use Panel or Section title props instead."
@@ -1622,7 +1622,7 @@
       },
       "maturityEvidence": {
         "key": "page-toolbar",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for primary page actions that belong in PageHeader actions."
@@ -1828,7 +1828,7 @@
       },
       "maturityEvidence": {
         "key": "radio",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for binary settings; use Checkbox or Switch."]
     },
@@ -1868,7 +1868,7 @@
       },
       "maturityEvidence": {
         "key": "radio-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for long option lists; use Select instead."]
     },
@@ -1908,7 +1908,7 @@
       },
       "maturityEvidence": {
         "key": "rating",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for continuous bounded ranges; use Slider."]
     },
@@ -1988,7 +1988,7 @@
       },
       "maturityEvidence": {
         "key": "search-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for general text entry."]
     },
@@ -2110,7 +2110,7 @@
       },
       "maturityEvidence": {
         "key": "select",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for multi-select until MultiSelect exists."]
     },
@@ -2150,7 +2150,7 @@
       },
       "maturityEvidence": {
         "key": "side-nav",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for complex tree navigation or data-grid column menus."
@@ -2232,7 +2232,7 @@
       },
       "maturityEvidence": {
         "key": "slider",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for formatted or direct numeric entry; use NumberInput."
@@ -2354,7 +2354,7 @@
       },
       "maturityEvidence": {
         "key": "switch",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for multi-step confirmation or non-immediate choices."
@@ -2396,7 +2396,7 @@
       },
       "maturityEvidence": {
         "key": "tabs",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for simple view modes; use SegmentedControl instead."
@@ -2478,7 +2478,7 @@
       },
       "maturityEvidence": {
         "key": "text-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for long multi-line input; use Textarea."]
     },
@@ -2518,7 +2518,7 @@
       },
       "maturityEvidence": {
         "key": "textarea",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["Avoid for short single-line values."]
     },
@@ -2600,7 +2600,7 @@
       },
       "maturityEvidence": {
         "key": "toast",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history."
@@ -2642,7 +2642,7 @@
       },
       "maturityEvidence": {
         "key": "toast-action",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["requires-verification"]
     },
@@ -2682,7 +2682,7 @@
       },
       "maturityEvidence": {
         "key": "toast-provider",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["requires-verification"]
     },
@@ -2722,7 +2722,7 @@
       },
       "maturityEvidence": {
         "key": "toggle-button",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for persistent settings; use Switch. Avoid navigation links."
@@ -2764,7 +2764,7 @@
       },
       "maturityEvidence": {
         "key": "toggle-button-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for long form choice labels or descriptions; use RadioGroup."
@@ -2886,7 +2886,7 @@
       },
       "maturityEvidence": {
         "key": "top-nav",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid when the application needs a fully custom marketing or public-site header."
@@ -2928,7 +2928,7 @@
       },
       "maturityEvidence": {
         "key": "transfer-list",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for thousands of items, server pagination, complex IAM permission inheritance, hierarchical resources, approval/audit workflows, or data-grid use cases."
@@ -2970,7 +2970,7 @@
       },
       "maturityEvidence": {
         "key": "use-toast",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": ["requires-verification"]
     },
@@ -3010,7 +3010,7 @@
       },
       "maturityEvidence": {
         "key": "validation-message",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "knownLimitations": [
         "Avoid for page-level blocking messages; use InlineMessage or ErrorState."

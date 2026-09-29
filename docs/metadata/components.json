@@ -849,6 +849,550 @@
           "status": "complete",
           "reference": "docs/api/ui-data-grid-api.md"
         }
+      },
+      "button-group": {
+        "maturityState": "experimental",
+        "category": "primitive",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/ButtonGroup/ButtonGroup.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "toggle-button": {
+        "maturityState": "experimental",
+        "category": "primitive",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/ToggleButton/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "toggle-button-group": {
+        "maturityState": "experimental",
+        "category": "primitive",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/ToggleButtonGroup/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "field": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Field/Field.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "validation-message": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/ValidationMessage/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "text-input": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/TextInput/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "search-input": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/SearchInput/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "select": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Select/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "checkbox": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Checkbox/Checkbox.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "textarea": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Textarea/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "use-data-grid-state": {
+        "maturityState": "experimental",
+        "category": "grid-feature",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-data-grid/src/hooks/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-data-grid-api.md"
+        }
+      },
+      "app-shell": {
+        "maturityState": "experimental",
+        "category": "navigation",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/AppShell/AppShell.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "page": {
+        "maturityState": "experimental",
+        "category": "composite",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Page/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "page-header": {
+        "maturityState": "experimental",
+        "category": "composite",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/PageHeader/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "page-toolbar": {
+        "maturityState": "experimental",
+        "category": "composite",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/PageToolbar/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "side-nav": {
+        "maturityState": "experimental",
+        "category": "navigation",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/SideNav/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "top-nav": {
+        "maturityState": "experimental",
+        "category": "navigation",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/TopNav/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "breadcrumbs": {
+        "maturityState": "experimental",
+        "category": "navigation",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "tabs": {
+        "maturityState": "experimental",
+        "category": "navigation",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Tabs/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "radio": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Radio/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "radio-group": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/RadioGroup/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "switch": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Switch/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "number-input": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/NumberInput/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "date-input": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/DateInput/DateInput.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "datetime-input": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/DateTimeInput/DateTimeInput.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "rating": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Rating/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "slider": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Slider/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "multi-select": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/MultiSelect/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "autocomplete": {
+        "maturityState": "experimental",
+        "category": "form-control",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "transfer-list": {
+        "maturityState": "experimental",
+        "category": "data-display",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/TransferList/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "toast": {
+        "maturityState": "experimental",
+        "category": "feedback",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Toast/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "toast-action": {
+        "maturityState": "experimental",
+        "category": "primitive",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Toast/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "toast-provider": {
+        "maturityState": "experimental",
+        "category": "primitive",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Toast/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
+      },
+      "use-toast": {
+        "maturityState": "experimental",
+        "category": "primitive",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-components/src/components/Toast/index.ts"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-components-api.md"
+        }
       }
     }
   },
@@ -983,7 +1527,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Button/Button.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/button",
       "evidence": {
@@ -1050,7 +1594,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/IconButton/IconButton.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/icon-button",
       "evidence": {
@@ -1117,7 +1661,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/ToolbarButton/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/toolbar-button",
       "evidence": {
@@ -1182,12 +1726,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/ButtonGroup/ButtonGroup.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/button-group",
       "evidence": {
         "maturityEvidenceKey": "button-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -1247,7 +1791,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/SegmentedControl/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/segmented-control",
       "evidence": {
@@ -1312,12 +1856,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/ToggleButton/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/toggle-button",
       "evidence": {
         "maturityEvidenceKey": "toggle-button",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -1385,12 +1929,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/ToggleButtonGroup/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/toggle-button-group",
       "evidence": {
         "maturityEvidenceKey": "toggle-button-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -1461,7 +2005,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Icon/Icon.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -1526,7 +2070,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Typography/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -1591,7 +2135,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Typography/Heading.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -1658,7 +2202,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Typography/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -1723,7 +2267,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Typography/Caption.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -1790,7 +2334,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Typography/CodeText.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -1857,12 +2401,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Field/Field.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/field",
       "evidence": {
         "maturityEvidenceKey": "field",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -1929,12 +2473,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/ValidationMessage/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/validation-message",
       "evidence": {
         "maturityEvidenceKey": "validation-message",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -1996,12 +2540,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/TextInput/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/text-input",
       "evidence": {
         "maturityEvidenceKey": "text-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -2061,12 +2605,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/SearchInput/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "search-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -2126,12 +2670,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Select/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/select",
       "evidence": {
         "maturityEvidenceKey": "select",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -2191,12 +2735,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Checkbox/Checkbox.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/checkbox",
       "evidence": {
         "maturityEvidenceKey": "checkbox",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -2258,12 +2802,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Textarea/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/textarea",
       "evidence": {
         "maturityEvidenceKey": "textarea",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -2323,7 +2867,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Badge/Badge.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/feedback/badge",
       "evidence": {
@@ -2390,7 +2934,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Badge/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2455,7 +2999,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/InlineMessage/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2522,7 +3066,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/InlineMessage/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2587,7 +3131,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/EmptyState/EmptyState.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2652,7 +3196,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/ErrorState/ErrorState.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2719,7 +3263,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/LoadingState/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2786,7 +3330,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Skeleton/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2851,7 +3395,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Card/Card.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2918,7 +3462,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Panel/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -2983,7 +3527,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Stack/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -3048,7 +3592,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Inline/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -3113,7 +3657,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Section/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -3180,7 +3724,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Popover/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/popover",
       "evidence": {
@@ -3245,7 +3789,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Menu/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/menu",
       "evidence": {
@@ -3310,7 +3854,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Dropdown/Dropdown.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/dropdown",
       "evidence": {
@@ -3375,7 +3919,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Tooltip/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/tooltip",
       "evidence": {
@@ -3440,7 +3984,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Dialog/Dialog.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/dialog",
       "evidence": {
@@ -3505,7 +4049,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Drawer/Drawer.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/drawer",
       "evidence": {
@@ -3572,7 +4116,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/confirm-dialog",
       "evidence": {
@@ -3637,7 +4181,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/UniversalDataGrid.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -3683,7 +4227,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridToolbar.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -3720,7 +4264,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridColumnMenu.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -3792,12 +4336,12 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/hooks/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "use-data-grid-state",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-data-grid-api.md",
@@ -3866,12 +4410,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/AppShell/AppShell.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/layout/app-shell",
       "evidence": {
         "maturityEvidenceKey": "app-shell",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -3950,12 +4494,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Page/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "page",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4017,12 +4561,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/PageHeader/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "page-header",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4084,12 +4628,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/PageToolbar/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "page-toolbar",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4151,12 +4695,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/SideNav/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "side-nav",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4218,12 +4762,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/TopNav/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "top-nav",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4285,12 +4829,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "breadcrumbs",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4350,12 +4894,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Tabs/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/navigation/tabs",
       "evidence": {
         "maturityEvidenceKey": "tabs",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4417,12 +4961,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Radio/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/radio",
       "evidence": {
         "maturityEvidenceKey": "radio",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4484,12 +5028,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/RadioGroup/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/radio-group",
       "evidence": {
         "maturityEvidenceKey": "radio-group",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4549,12 +5093,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Switch/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/switch",
       "evidence": {
         "maturityEvidenceKey": "switch",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4616,12 +5160,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/NumberInput/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/number-input",
       "evidence": {
         "maturityEvidenceKey": "number-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4681,12 +5225,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/DateInput/DateInput.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/date-input",
       "evidence": {
         "maturityEvidenceKey": "date-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4748,12 +5292,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/DateTimeInput/DateTimeInput.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/datetime-input",
       "evidence": {
         "maturityEvidenceKey": "datetime-input",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4813,12 +5357,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Rating/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/rating",
       "evidence": {
         "maturityEvidenceKey": "rating",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4878,12 +5422,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Slider/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/slider",
       "evidence": {
         "maturityEvidenceKey": "slider",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -4945,12 +5489,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/MultiSelect/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "multi-select",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -5013,12 +5557,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/autocomplete",
       "evidence": {
         "maturityEvidenceKey": "autocomplete",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -5093,12 +5637,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/TransferList/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/data-management/transfer-list",
       "evidence": {
         "maturityEvidenceKey": "transfer-list",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -5173,12 +5717,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/feedback/toast",
       "evidence": {
         "maturityEvidenceKey": "toast",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -5626,7 +6170,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -5691,7 +6235,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -5756,7 +6300,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -5821,7 +6365,7 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/IconButton/ActionButtons.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -5886,12 +6430,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "toast-action",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -5951,12 +6495,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "toast-provider",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -6016,12 +6560,12 @@
       "owner": "Component Team",
       "sourcePath": "packages/ui-components/src/components/Toast/index.ts",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "use-toast",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
@@ -6081,7 +6625,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridSearch.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -6116,7 +6660,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridFilterBar.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -6151,7 +6695,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridSkeletonRows.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -6186,7 +6730,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridEmptyState.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -6221,7 +6765,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridErrorState.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
@@ -6256,7 +6800,7 @@
       "owner": "Data Grid Team",
       "sourcePath": "packages/ui-data-grid/src/components/DataGridPagination.tsx",
       "publicExport": true,
-      "since": "requires-verification",
+      "since": "0.1.0-alpha.1",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
