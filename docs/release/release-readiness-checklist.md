@@ -8,7 +8,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] Version is selected.
 - [ ] npm tag is selected: `alpha`, `beta`, candidate tag, or `latest` only for approved stable releases.
 - [ ] `npm run verify:release-groups` passes against `docs/metadata/release-groups.json`.
-- [ ] Package versions remain synchronized within the approved release group; `0.2.0-beta.1` excludes the independent `0.1.0-alpha.2` data-grid release.
+- [ ] Package versions remain synchronized within the approved release group; `non-grid-beta@0.2.0-beta.2` contains six synchronized packages and excludes the independent `data-grid-alpha@0.1.0-alpha.2` release.
 - [ ] VyrnForge Source License 1.0 metadata and package-local LICENSE files are verified.
 
 ## Mandatory blockers
@@ -18,6 +18,7 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] A successful `VyrnForge CI` push run exists for the exact current-main release commit.
 - [ ] The successful current-main CI run includes the repository quality gate for the release commit.
 - [ ] Release verification resolves and records that exact successful CI run.
+- [ ] `npm run verify:release-registry-preflight -- --release-group <group> --version <version> --dist-tag <tag>` passes without publication.
 - [ ] The release-artifact manifest records the exact source commit, CI run ID, package order, version, and dist-tag.
 - [ ] The selected release dependency closure is built once in `verify-release`.
 - [ ] Exact release `.tgz` files pass release-artifact digest, payload, and consumer verification.
@@ -46,7 +47,6 @@ Use this checklist for alpha, beta, and stable releases. Not every recommended c
 - [ ] React, native HTML, Angular, and Vue consumer fixtures pass when required by GMF4.
 - [ ] Real application validation is complete.
 - [ ] Documentation build passes.
-- [ ] Playground build passes.
 - [ ] GitHub Pages build or deployment status is checked.
 - [ ] Accessibility review is complete for changed components.
 - [ ] Light, dark, enterprise, compact, standard, and comfortable modes are reviewed where relevant.

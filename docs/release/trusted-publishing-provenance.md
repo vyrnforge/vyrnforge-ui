@@ -21,9 +21,10 @@ The controlled release workflow must keep publication isolated in the
 - read-only registry verification of attestation metadata and
   `npm audit signatures` before a release record is created.
 
-Candidate verification and release-record creation must not receive npm OIDC. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run. The publish job uses `actions: read` only to retrieve the retained artifact from the same workflow run.
-The release-record job may receive `contents: write` only after the registry
-verification job passes.
+Candidate verification and release-record creation must not receive npm OIDC.
+The publish job uses `actions: read` only to retrieve the retained artifact from
+the same workflow run. The release-record job may receive `contents: write` only
+after the registry verification job passes.
 
 ## npm trusted-publisher settings
 
@@ -45,6 +46,8 @@ The required package set is:
 - `@vyrnforge/ui-behaviors`
 - `@vyrnforge/ui-components`
 - `@vyrnforge/ui-elements`
+- `@vyrnforge/ui-angular`
+- `@vyrnforge/ui-vue`
 - `@vyrnforge/ui-data-grid`
 
 The workflow filename is only `release.yml`, not the full
@@ -64,6 +67,22 @@ The GitHub `npm-release` environment must have:
 BT-8008 owns the wider repository ruleset, CODEOWNERS, required-check, and
 branch-protection closure. BT-8007 records only the environment controls needed
 for trusted publication.
+
+## Non-publishing registry preflight
+
+Before artifact creation, run:
+
+```bash
+npm run verify:release-registry-preflight -- \
+  --release-group non-grid-beta \
+  --version 0.2.0-beta.2 \
+  --dist-tag beta
+```
+
+This reuses the release candidate verifier to prove that every selected candidate
+version is still absent from the public npm registry and that any dependency
+outside the selected release group already exists at the exact required version.
+It is read-only, requests no OIDC, and performs no publication.
 
 ## Credential-free dry run
 

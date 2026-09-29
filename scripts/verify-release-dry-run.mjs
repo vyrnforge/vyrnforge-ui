@@ -68,6 +68,8 @@ for (const releaseLine of plan) {
     releaseLine.distTag,
   ];
 
+  runNode("scripts/verify-release-candidate.mjs", selectionArgs);
+
   runNode("scripts/prepare-release-artifact.mjs", [
     ...selectionArgs,
     "--source-commit",
