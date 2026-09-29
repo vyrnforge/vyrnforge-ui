@@ -57,7 +57,6 @@ validated by `scripts/verify-cross-framework-accessibility.mjs`; it does not
 replace or complete the broader component scenario catalog in
 `assistive-technology-reviews.json`.
 
-
 ## Current manual execution queue
 
 The canonical scenario definitions live in
