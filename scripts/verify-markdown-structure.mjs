@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { documentationCurrentPaths } from "./verify-documentation-current.mjs";
+import { discoverDocumentationMarkdownPaths } from "./documentation-paths.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -44,7 +44,7 @@ function normalizedHeading(title) {
 
 export function verifyMarkdownStructure({
   root = repositoryRoot,
-  paths = documentationCurrentPaths.filter((entry) => entry.endsWith(".md")),
+  paths = discoverDocumentationMarkdownPaths({ root }),
 } = {}) {
   const failures = [];
 
