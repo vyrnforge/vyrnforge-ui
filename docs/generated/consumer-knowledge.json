@@ -8715,14 +8715,14 @@
       "category": "grid-feature",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Table-row empty state for no-data and no-match grid outcomes.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "Renders the shared EmptyState inside a table row; title and description distinguish no-data from no-match states through hasQuery.",
       "knownLimitations": [
         "Use for no-data or no-match states; do not use it for loading or load errors."
       ],
@@ -8772,7 +8772,15 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when the grid has no data or when active search/filter criteria produce no matching rows.",
+      "avoidWhen": "Avoid for loading and error conditions.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { DataGridEmptyState } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridEmptyState columnCount={3} hasQuery />",
+      "aiUsageNotes": "Set hasQuery when the empty result is caused by search or filtering; keep loading and error states separate."
     },
     {
       "id": "data-grid-error-state",
@@ -8781,14 +8789,14 @@
       "category": "grid-feature",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Table-row error state for data-grid load failures.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "The containing table cell uses role=\"alert\" and wraps the shared ErrorState.",
       "knownLimitations": [
         "Use for grid load errors; it renders nothing when no error is present and is not an empty/loading state."
       ],
@@ -8838,7 +8846,15 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when the grid has a string or Error value representing a load failure.",
+      "avoidWhen": "Avoid for empty or loading states; the component renders nothing when error is absent.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { DataGridErrorState } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridErrorState error={error} columnCount={3} />",
+      "aiUsageNotes": "Pass only actual grid-load errors; do not use the component for no-data or loading conditions."
     },
     {
       "id": "data-grid-filter-bar",
@@ -8847,14 +8863,14 @@
       "category": "grid-feature",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Presentation container for composing data-grid filter controls.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "The component adds only a div container; child filter controls remain responsible for their own accessible labels, roles, and keyboard behavior.",
       "knownLimitations": [
         "Presentation container only; filter state belongs to DataGridState/controlled integrations, and the compact header does not provide an inline filter popover."
       ],
@@ -8904,7 +8920,15 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use to group filter UI within a grid surface while filter state is owned by DataGridState or another controlled integration.",
+      "avoidWhen": "Avoid expecting it to own filter state, query semantics, or an inline filter popover.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { DataGridFilterBar } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridFilterBar>{children}</DataGridFilterBar>",
+      "aiUsageNotes": "Treat as layout/presentation only; keep filter state and business query behavior in shared grid state or the consuming application."
     },
     {
       "id": "data-grid-pagination",
@@ -8913,14 +8937,14 @@
       "category": "grid-feature",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Controlled grid pagination control for page size and previous/next display-row navigation.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "The container is labelled \"Pagination\"; page-size selection has a visible \"Rows per page\" label and previous/next buttons have explicit aria-labels.",
       "knownLimitations": [
         "Display-row pagination only in this phase; generated group headers count as rows on the current page."
       ],
@@ -8970,7 +8994,15 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when DataGridPaginationState, total row count, and updates are controlled by the consuming grid integration.",
+      "avoidWhen": "Avoid assuming cursor-based or server pagination semantics; this control operates on the supplied display-row pagination state.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { DataGridPagination } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridPagination pagination={pagination} totalRows={totalRows} onChange={setPagination} />",
+      "aiUsageNotes": "Keep pagination controlled and supply totalRows; remember that current display-row pagination counts generated group headers as rows."
     },
     {
       "id": "data-grid-search",
@@ -8979,14 +9011,14 @@
       "category": "grid-feature",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Controlled, debounced search input for data-grid query state.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "Uses SearchInput and sets its aria-label from the placeholder; the default placeholder and accessible name are \"Search\".",
       "knownLimitations": [
         "Global search scans searchable columns in the current grid; server fetching remains application-owned through query contracts."
       ],
@@ -9036,7 +9068,15 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when the grid needs a global search control whose value and change handling are owned by the consuming grid state.",
+      "avoidWhen": "Avoid treating it as a server-fetching layer; remote query execution remains application-owned.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { DataGridSearch } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridSearch value={search} onChange={setSearch} />",
+      "aiUsageNotes": "Keep search state controlled and separate remote fetching/query orchestration from this presentation control."
     },
     {
       "id": "data-grid-skeleton-rows",
@@ -9045,14 +9085,14 @@
       "category": "grid-feature",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Table-row loading placeholders for a data-grid body.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "Every generated skeleton row is aria-hidden so loading placeholders are excluded from the accessibility tree.",
       "knownLimitations": [
         "Loading placeholder rows only; they are aria-hidden and do not represent grid data or status content."
       ],
@@ -9102,7 +9142,15 @@
           "note": "No current public consumption path is declared for this component on this framework surface."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use while grid rows are loading and row-shaped visual placeholders are appropriate.",
+      "avoidWhen": "Avoid representing real data, empty states, errors, or status content with skeleton rows.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { DataGridSkeletonRows } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridSkeletonRows rowCount={5} columnCount={3} />",
+      "aiUsageNotes": "Use only as transient loading visuals; do not treat skeleton rows as data or status records."
     },
     {
       "id": "data-grid-toolbar",
@@ -12529,14 +12577,14 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for the familiar Clear utility.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"Clear\"; callers may override aria-label when the context requires a more specific accessible name.",
       "knownLimitations": [
         "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
       ],
@@ -12590,7 +12638,15 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when an icon-only Clear action is conventional and the default Clear label accurately describes the action.",
+      "avoidWhen": "Avoid for labelled business actions or when Clear does not precisely describe the result.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { ClearButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<ClearButton />",
+      "aiUsageNotes": "Use only for the familiar Clear utility action; prefer Button or IconButton for other actions."
     },
     {
       "id": "close-button",
@@ -12599,14 +12655,14 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for the familiar Close utility.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"Close\"; callers may override aria-label when the context requires a more specific accessible name.",
       "knownLimitations": [
         "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
       ],
@@ -12660,7 +12716,15 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when an icon-only Close action is conventional and the default Close label accurately describes the action.",
+      "avoidWhen": "Avoid for labelled business actions or when Close does not precisely describe the result.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { CloseButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<CloseButton />",
+      "aiUsageNotes": "Use only for the familiar Close utility action; prefer Button or IconButton for other actions."
     },
     {
       "id": "code-text",
@@ -13448,14 +13512,14 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for opening or invoking familiar More actions.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"More actions\"; callers may override aria-label when the context requires a more specific accessible name.",
       "knownLimitations": [
         "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
       ],
@@ -13509,7 +13573,15 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when an icon-only \"More actions\" affordance conventionally represents access to additional actions.",
+      "avoidWhen": "Avoid for labelled business actions or when the control does not expose additional actions.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { MoreButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<MoreButton />",
+      "aiUsageNotes": "Use only for the familiar More actions utility; prefer Button or IconButton for other actions."
     },
     {
       "id": "refresh-button",
@@ -13518,14 +13590,14 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Icon-only convenience action for the familiar Refresh utility.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "Defaults aria-label and tooltip to \"Refresh\"; callers may override aria-label when the context requires a more specific accessible name.",
       "knownLimitations": [
         "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
       ],
@@ -13579,7 +13651,15 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when an icon-only Refresh action is conventional and the default Refresh label accurately describes the action.",
+      "avoidWhen": "Avoid for labelled business actions or when Refresh does not precisely describe the result.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { RefreshButton } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<RefreshButton />",
+      "aiUsageNotes": "Use only for the familiar Refresh utility action; prefer Button or IconButton for other actions."
     },
     {
       "id": "segmented-control",
@@ -13881,14 +13961,14 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "Compact follow-up action rendered within transient toast feedback.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "altText is required and is passed to the underlying button as its aria-label.",
       "knownLimitations": [
         "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
       ],
@@ -13938,7 +14018,15 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use when a toast needs one concise follow-up action such as an optional recovery or navigation action.",
+      "avoidWhen": "Avoid for required validation, persistent alerts, destructive confirmation, or primary business actions.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { ToastAction } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<ToastAction altText=\"Undo\">Undo</ToastAction>",
+      "aiUsageNotes": "Use inside transient toast feedback only; do not substitute it for persistent or required application controls."
     },
     {
       "id": "toast-provider",
@@ -13947,14 +14035,14 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "React context and viewport provider that owns visible toast state, auto-dismiss timers, and pause/resume behavior.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "The viewport label is configurable; pause-on-focus and pause-on-hover default to true, while individual Toast records own their live-region roles.",
       "knownLimitations": [
         "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
       ],
@@ -14008,7 +14096,15 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use around a React subtree that needs the useToast controller and VyrnForge toast viewport.",
+      "avoidWhen": "Avoid as a replacement for persistent alerts, required validation, destructive confirmation, or notification history.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { ToastProvider } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "<ToastProvider>{children}</ToastProvider>",
+      "aiUsageNotes": "Wrap any React subtree that calls useToast; keep toast feedback transient and application business state outside the provider."
     },
     {
       "id": "toggle-button",
@@ -14727,14 +14823,14 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Migrated public export metadata; detailed usage guidance requires verification.",
+      "purpose": "React hook for accessing the ToastController supplied by ToastProvider.",
       "guidance": {
         "useWhen": null,
         "avoidWhen": null,
         "aiUsageNotes": null,
         "relatedComponents": []
       },
-      "accessibilityNotes": null,
+      "accessibilityNotes": "The hook renders no DOM; accessibility semantics are provided by the ToastProvider viewport and rendered Toast records.",
       "knownLimitations": [
         "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
       ],
@@ -14784,7 +14880,15 @@
           "note": "Vue uses the first-class @vyrnforge/ui-vue facade over the canonical Custom Element renderer; rendering, behavior, accessibility, and vf-* event contracts remain shared with @vyrnforge/ui-elements."
         }
       },
-      "contract": null
+      "contract": null,
+      "useWhen": "Use inside a ToastProvider subtree to enqueue, update, or dismiss transient toast feedback.",
+      "avoidWhen": "Do not call outside ToastProvider; the hook throws when no provider is present, and it is not a persistent-message API.",
+      "relatedComponents": [],
+      "cssClasses": [],
+      "cssVariables": [],
+      "importExample": "import { useToast } from \"@vyrnforge/ui-components\";",
+      "basicUsageExample": "const toast = useToast();",
+      "aiUsageNotes": "Call only within ToastProvider; use the returned controller for toast/success/error/warning/info/update/dismiss operations."
     }
   ]
 }
