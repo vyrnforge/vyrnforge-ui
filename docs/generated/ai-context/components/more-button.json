@@ -8,12 +8,14 @@
   "availability": "available",
   "purpose": "Icon-only convenience action for opening or invoking familiar More actions.",
   "guidance": {
-    "useWhen": null,
-    "avoidWhen": null,
-    "aiUsageNotes": null,
+    "useWhen": "Use when an icon-only \"More actions\" affordance conventionally represents access to additional actions.",
+    "avoidWhen": "Avoid for labelled business actions or when the control does not expose additional actions.",
+    "aiUsageNotes": "Use only for the familiar More actions utility; prefer Button or IconButton for other actions.",
     "relatedComponents": []
   },
-  "accessibility": [],
+  "accessibility": [
+    "Defaults aria-label and tooltip to \"More actions\"; callers may override aria-label when the context requires a more specific accessible name."
+  ],
   "knownLimitations": [
     "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
   ],
@@ -24,7 +26,9 @@
   "frameworks": {
     "react": {
       "status": "current",
-      "package": "@vyrnforge/ui-components"
+      "package": "@vyrnforge/ui-components",
+      "setup": "import { MoreButton } from \"@vyrnforge/ui-components\";",
+      "example": "<MoreButton />"
     },
     "native-html": {
       "status": "current",
