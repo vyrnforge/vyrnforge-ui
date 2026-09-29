@@ -77,8 +77,11 @@ artifact.
 
 When code already owns a current inventory or mapping, documentation explains the
 durable contract and links to the implementation rather than copying the
-inventory into Markdown. Documentation routes and source mappings are owned by
-`apps/docs/src/docsRegistry.ts`.
+inventory into Markdown. Generated Reference domain facts and stable identities
+come from canonical metadata and `docs/generated/reference-model.json`.
+`apps/docs/src/referenceRoutes.ts` may curate reader-facing page membership and
+bind authored examples, but it must not become an API, package, token,
+framework, version, component, or release source of truth.
 
 ### Human and machine-readable sources must agree
 
