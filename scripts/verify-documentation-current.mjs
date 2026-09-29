@@ -27,6 +27,8 @@ export const documentationCurrentPaths = [
   "docs/architecture/00-system-overview.md",
   "docs/architecture/01-package-boundaries.md",
   "docs/architecture/02-state-and-adapter-ownership.md",
+  "docs/architecture/03-theming-and-styling.md",
+  "docs/architecture/05-accessibility-standards.md",
   "docs/architecture/08-semantic-token-contract.md",
   "docs/architecture/adr-004-multi-framework-web-support.md",
   "docs/architecture/09-component-contracts-and-events.md",
