@@ -3733,7 +3733,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": ["Avoid for complex forms; use Dialog or Drawer."],
       "deprecation": {
@@ -3798,7 +3798,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": ["Avoid for navigation trees or complex forms."],
       "deprecation": {
@@ -3928,7 +3928,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": ["Avoid for required instructions."],
       "deprecation": {
@@ -3993,7 +3993,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": ["Avoid for large workflows; use Drawer or a page."],
       "deprecation": {
@@ -4058,7 +4058,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": [
         "Avoid for tiny contextual actions; use Popover or Menu."
@@ -4903,7 +4903,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": [
         "Avoid for simple view modes; use SegmentedControl instead."
@@ -5366,7 +5366,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": ["Avoid for continuous bounded ranges; use Slider."],
       "deprecation": {
@@ -5431,7 +5431,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": [
         "Avoid for formatted or direct numeric entry; use NumberInput."
@@ -5498,7 +5498,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": [
         "Avoid for async, virtualized, creatable, or very large option sets."
@@ -5566,7 +5566,7 @@
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-components-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "complete"
       },
       "knownLimitations": [
         "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values."
