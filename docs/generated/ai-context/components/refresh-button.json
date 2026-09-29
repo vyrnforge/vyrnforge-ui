@@ -14,7 +14,9 @@
     "relatedComponents": []
   },
   "accessibility": [],
-  "knownLimitations": [],
+  "knownLimitations": [
+    "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+  ],
   "styling": {
     "classes": [],
     "variables": []

@@ -14,7 +14,9 @@
     "relatedComponents": []
   },
   "accessibility": [],
-  "knownLimitations": [],
+  "knownLimitations": [
+    "Presentation container only; filter state belongs to DataGridState/controlled integrations, and the compact header does not provide an inline filter popover."
+  ],
   "styling": {
     "classes": [],
     "variables": []

@@ -558,7 +558,9 @@
         "key": "clear-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ]
     },
     {
       "id": "close-button",
@@ -598,7 +600,9 @@
         "key": "close-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ]
     },
     {
       "id": "code-text",
@@ -1418,7 +1422,9 @@
         "key": "more-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ]
     },
     {
       "id": "multi-select",
@@ -1950,7 +1956,9 @@
         "key": "refresh-button",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "Avoid as a substitute for labelled business actions; use only for the matching familiar utility action."
+      ]
     },
     {
       "id": "search-input",
@@ -2644,7 +2652,9 @@
         "key": "toast-action",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ]
     },
     {
       "id": "toast-provider",
@@ -2684,7 +2694,9 @@
         "key": "toast-provider",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ]
     },
     {
       "id": "toggle-button",
@@ -2972,7 +2984,9 @@
         "key": "use-toast",
         "status": "pending"
       },
-      "knownLimitations": ["requires-verification"]
+      "knownLimitations": [
+        "Avoid required validation, persistent alerts, destructive confirmation, and notification history."
+      ]
     },
     {
       "id": "validation-message",

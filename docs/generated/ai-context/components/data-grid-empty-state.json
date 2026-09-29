@@ -14,7 +14,9 @@
     "relatedComponents": []
   },
   "accessibility": [],
-  "knownLimitations": [],
+  "knownLimitations": [
+    "Use for no-data or no-match states; do not use it for loading or load errors."
+  ],
   "styling": {
     "classes": [],
     "variables": []
