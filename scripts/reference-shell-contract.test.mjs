@@ -167,6 +167,8 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
   assert.match(app, /query\.delete\("member"\)/u);
 
-  assert(retiredReferencePaths.includes("apps/docs/src/ReferenceSearchPage.tsx"));
+  assert(
+    retiredReferencePaths.includes("apps/docs/src/ReferenceSearchPage.tsx"),
+  );
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });
