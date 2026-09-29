@@ -59,19 +59,29 @@ export function verifyMarkdownStructure({
     const lines = content.split(/\r?\n/u);
 
     const headingLines = new Map();
+    const headingAncestors = [];
     for (let index = 0; index < lines.length; index += 1) {
       const match = lines[index].match(/^(#{1,6})\s+(.+?)\s*$/u);
       if (!match) continue;
 
-      const key = `${match[1].length}:${normalizedHeading(match[2])}`;
+      const level = match[1].length;
+      const title = normalizedHeading(match[2]);
+      const ancestorPath = headingAncestors
+        .slice(0, level - 1)
+        .filter(Boolean)
+        .join(" > ");
+      const key = `${level}:${ancestorPath}:${title}`;
       const firstLine = headingLines.get(key);
       if (firstLine) {
         failures.push(
-          `${relativePath}:${index + 1}: duplicate heading "${match[2].trim()}"; first declared on line ${firstLine}`,
+          `${relativePath}:${index + 1}: duplicate heading "${match[2].trim()}" within the same parent section; first declared on line ${firstLine}`,
         );
       } else {
         headingLines.set(key, index + 1);
       }
+
+      headingAncestors.length = level - 1;
+      headingAncestors[level - 1] = title;
     }
 
     for (let index = 0; index < lines.length; ) {
