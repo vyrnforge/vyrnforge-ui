@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { verifyNativeSurfaceCompleteness } from "./native-surface-completeness.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -373,7 +374,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     failures,
     read(root, "tests/browser/native-parity.spec.ts"),
     "tests/browser/native-parity.spec.ts",
-    ["deterministic 58-tag catalog", "native toast service mappings"],
+    ["deterministic 62-tag catalog", "native toast service mappings"],
   );
 
   const coreMetadata = readJson(
@@ -414,7 +415,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     multiFrameworkFoundation.status !== "complete" ||
     multiFrameworkFoundation.metadata !==
       "docs/metadata/native-element-foundations.json" ||
-    multiFrameworkFoundation.registeredPublicTags !== 58 ||
+    multiFrameworkFoundation.registeredPublicTags !== 62 ||
     multiFrameworkFoundation.foundationStage !== "native-parity-current"
   ) {
     failures.push(
@@ -438,6 +439,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     failures.push("nativeParity metadata must match current renderer evidence");
   }
 
+  failures.push(...verifyNativeSurfaceCompleteness(root));
+
   return [...new Set(failures)].sort();
 }
 
@@ -456,6 +459,6 @@ if (
 ) {
   assertNativeElementFoundations();
   console.log(
-    "Native element foundations passed: EL-6001 through EL-6018 and the 60-tag native renderer catalog (59 canonical + 1 post-GMF3 extension) are complete.",
+    "Native element foundations passed: the current 62-tag first-class Native surface is contract-mapped or explicitly exception-backed.",
   );
 }

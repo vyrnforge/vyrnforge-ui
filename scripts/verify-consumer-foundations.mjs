@@ -226,8 +226,8 @@ function verifyPackageContract(root, failures, metadata) {
   }
 
   if (
-    metadata.declarationContract?.globalTagMap?.registeredTags !== 58 ||
-    metadata.declarationContract?.customElementsManifest?.registeredTags !== 58
+    metadata.declarationContract?.globalTagMap?.registeredTags !== 62 ||
+    metadata.declarationContract?.customElementsManifest?.registeredTags !== 62
   ) {
     addFailure(failures, "consumer foundation declaration counts must be 58");
   }

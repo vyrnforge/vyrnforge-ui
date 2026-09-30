@@ -80,7 +80,7 @@
     "globalTagMap": {
       "export": "VyrnForgeHTMLElementTagNameMap",
       "global": "HTMLElementTagNameMap",
-      "registeredTags": 58,
+      "registeredTags": 62,
       "source": "packages/ui-elements/src/custom-elements.ts"
     },
     "typedEvents": {
@@ -92,7 +92,7 @@
       "packageField": "customElements",
       "export": "@vyrnforge/ui-elements/custom-elements.json",
       "schemaVersion": "1.0.0",
-      "registeredTags": 58,
+      "registeredTags": 62,
       "source": "packages/ui-elements/custom-elements.json",
       "generator": "scripts/generate-ui-elements-manifest.mjs"
     }

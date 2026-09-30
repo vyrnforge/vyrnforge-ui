@@ -184,7 +184,7 @@
     "status": "complete",
     "metadata": "docs/metadata/native-element-foundations.json",
     "nativeCoreMetadata": "docs/metadata/native-core-elements.json",
-    "registeredPublicTags": 58,
+    "registeredPublicTags": 62,
     "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
     "foundationStage": "canonical-native-current"
   },
