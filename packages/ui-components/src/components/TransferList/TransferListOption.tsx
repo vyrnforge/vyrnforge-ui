@@ -59,7 +59,12 @@ export function TransferListOption({
         type="checkbox"
         value={option.value}
       />
-      <span className={adoptedItemRegionClassName("transfer-list", "option")}>
+      <span
+        className={adoptedItemRegionClassName(
+          "transfer-list",
+          "option",
+        )}
+      >
         {renderOption ? (
           <>
             {renderOption(option, { panel, selected, active, disabled })}
@@ -71,7 +76,12 @@ export function TransferListOption({
           </>
         ) : (
           <>
-            <span className={adoptedItemRegionClassName("transfer-list", "label")}>
+            <span
+              className={adoptedItemRegionClassName(
+                "transfer-list",
+                "label",
+              )}
+            >
               {option.label}
             </span>
             {option.description && (
