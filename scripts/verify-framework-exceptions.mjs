@@ -86,30 +86,23 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
     );
   }
 
-  const liveReact = live.filter(({ framework }) => framework === "react");
-  const byId = new Map(liveReact.map((entry) => [entry.id, entry]));
-  for (const requiredId of [
-    "MFD-EX-REACT-TOAST-PROVIDER",
-    "MFD-EX-REACT-USE-TOAST",
-    "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
-  ]) {
+  const closed = registry.exceptions.filter(({ state }) => state === "closed");
+  assert.equal(
+    closed.length,
+    registry.exceptions.length,
+    "SC-2108 expects every original exception to be closed only after capability evidence is recorded",
+  );
+  for (const entry of closed) {
+    assert.equal(
+      entry.reviewMilestone,
+      "S21 SC-2108 reconciliation",
+      entry.id + " must record the S21 reconciliation milestone",
+    );
     assert.ok(
-      byId.has(requiredId),
-      requiredId + " must remain a live exception",
+      entry.evidence.some((item) => /SC-210[2-7]/.test(item)),
+      entry.id + " must cite delivered S21 capability evidence",
     );
   }
-  assert.deepEqual(
-    scopesOf(byId.get("MFD-EX-REACT-OVERLAY-COMPOSITION")).sort(),
-    ["confirm-dialog", "dialog", "drawer", "popover", "toast", "tooltip"],
-  );
-  assert.deepEqual(
-    scopesOf(byId.get("MFD-EX-REACT-LAYOUT-NATIVE-HOST")).sort(),
-    ["card", "inline", "stack"],
-  );
-  assert.deepEqual(
-    scopesOf(byId.get("MFD-EX-REACT-LAYOUT-RICH-COMPOSITION")).sort(),
-    ["app-shell", "page", "page-header", "page-toolbar", "panel", "section"],
-  );
 
   const reactSourceRoot = path.join(
     repositoryRoot,
