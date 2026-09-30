@@ -6,6 +6,7 @@ import {
   type ReactElement,
 } from "react";
 import { useNavigationBehavior } from "../../internal/behaviors";
+import { adoptedItemRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type { SideNavItem, SideNavProps } from "./SideNav.types";
 
@@ -102,10 +103,20 @@ export function SideNav({
     };
     const content = (
       <>
-        {item.icon && <span className="vf-side-nav__icon">{item.icon}</span>}
-        {!collapsed && <span className="vf-side-nav__label">{item.label}</span>}
+        {item.icon && (
+          <span className={adoptedItemRegionClassName("side-nav", "icon")}>
+            {item.icon}
+          </span>
+        )}
+        {!collapsed && (
+          <span className={adoptedItemRegionClassName("side-nav", "label")}>
+            {item.label}
+          </span>
+        )}
         {!collapsed && item.badge && (
-          <span className="vf-side-nav__badge">{item.badge}</span>
+          <span className={adoptedItemRegionClassName("side-nav", "badge")}>
+            {item.badge}
+          </span>
         )}
       </>
     );
@@ -150,7 +161,7 @@ export function SideNav({
           </button>
         )}
         {!collapsed && item.children && item.children.length > 0 && (
-          <ul className="vf-side-nav__children">
+          <ul className={adoptedItemRegionClassName("side-nav", "children")}>
             {item.children.map((child) => renderItem(child, 2))}
           </ul>
         )}

@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useControllableState } from "../../hooks";
 import { useNavigationBehavior } from "../../internal/behaviors";
+import { adoptedItemRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import { Popover } from "../Popover";
 import type { MenuItem, MenuProps } from "./Menu.types";
@@ -141,15 +142,21 @@ export function Menu({
             type="button"
           >
             <span className="vf-menu-item__main">
-              <span className="vf-menu-item__label">{item.label}</span>
+              <span className={adoptedItemRegionClassName("menu", "label")}>
+                {item.label}
+              </span>
               {item.description && (
-                <span className="vf-menu-item__description">
+                <span
+                  className={adoptedItemRegionClassName("menu", "description")}
+                >
                   {item.description}
                 </span>
               )}
             </span>
             {item.shortcut && (
-              <span className="vf-menu-item__shortcut">{item.shortcut}</span>
+              <span className={adoptedItemRegionClassName("menu", "shortcut")}>
+                {item.shortcut}
+              </span>
             )}
           </button>
         ))}

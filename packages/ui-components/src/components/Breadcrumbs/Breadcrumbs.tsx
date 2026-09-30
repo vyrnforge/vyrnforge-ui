@@ -1,3 +1,4 @@
+import { adoptedItemRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type { BreadcrumbItem, BreadcrumbsProps } from "./Breadcrumbs.types";
 
@@ -49,7 +50,13 @@ export function Breadcrumbs({
           return (
             <li className="vf-breadcrumbs__item" key={itemKey(item, index)}>
               {index > 0 && (
-                <span aria-hidden="true" className="vf-breadcrumbs__separator">
+                <span
+                  aria-hidden="true"
+                  className={adoptedItemRegionClassName(
+                    "breadcrumbs",
+                    "separator",
+                  )}
+                >
                   {separator}
                 </span>
               )}

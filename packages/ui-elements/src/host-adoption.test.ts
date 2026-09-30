@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  findVyrnForgeItemRegion,
   findVyrnForgeNamedRegion,
   resolveVyrnForgeHostAdoption,
   resolveVyrnForgeHostClasses,
   resolveVyrnForgeHostTag,
   vyrnForgeHostAdoptionContracts,
+  vyrnForgeItemCompositionContracts,
 } from "./host-adoption";
 
 describe("host adoption contracts", () => {
@@ -88,9 +90,39 @@ describe("host adoption contracts", () => {
     });
   });
 
+  it("describes rich navigation and collection item regions without framework nodes", () => {
+    expect(vyrnForgeItemCompositionContracts.tabs).toMatchObject({
+      identityProperty: "id",
+      capabilities: ["roving-focus", "selection"],
+    });
+    expect(
+      findVyrnForgeItemRegion(
+        vyrnForgeItemCompositionContracts["side-nav"],
+        "children",
+      ),
+    ).toMatchObject({ multiplicity: "multiple" });
+    expect(
+      vyrnForgeItemCompositionContracts["multi-select"].capabilities,
+    ).toEqual([
+      "filter",
+      "multiple-selection",
+      "repeated-form-value",
+      "roving-focus",
+    ]);
+    expect(
+      findVyrnForgeItemRegion(
+        vyrnForgeItemCompositionContracts["transfer-list"],
+        "option",
+      ),
+    ).toMatchObject({ className: "vf-transfer-list__option-content" });
+  });
+
   it("does not encode framework node or template types", () => {
-    expect(JSON.stringify(vyrnForgeHostAdoptionContracts)).not.toMatch(
-      /ReactNode|TemplateRef|VNode/,
-    );
+    expect(
+      JSON.stringify({
+        host: vyrnForgeHostAdoptionContracts,
+        item: vyrnForgeItemCompositionContracts,
+      }),
+    ).not.toMatch(/ReactNode|TemplateRef|VNode/);
   });
 });

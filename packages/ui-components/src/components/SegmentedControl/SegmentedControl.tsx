@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useChoiceBehavior } from "../../internal/behaviors";
+import { adoptedItemRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type { SegmentedControlProps } from "./SegmentedControl.types";
 
@@ -53,9 +54,23 @@ export function SegmentedControl({
             type="button"
           >
             {option.icon && (
-              <span className="vf-segmented-control__icon">{option.icon}</span>
+              <span
+                className={adoptedItemRegionClassName(
+                  "segmented-control",
+                  "icon",
+                )}
+              >
+                {option.icon}
+              </span>
             )}
-            <span className="vf-segmented-control__label">{option.label}</span>
+            <span
+              className={adoptedItemRegionClassName(
+                "segmented-control",
+                "label",
+              )}
+            >
+              {option.label}
+            </span>
           </button>
         );
       })}

@@ -84,3 +84,11 @@ React native-host adapters consume those descriptors while continuing to render 
 Named regions standardize meaning and styling identity, not one mandatory DOM wrapper tag. A surface may preserve an existing semantic wrapper when changing that wrapper would alter a public DOM or accessibility contract.
 
 This adoption model is the reusable foundation for SC-2104 and a prerequisite for richer collection and overlay adoption in SC-2106 and SC-2107.
+
+## Rich item composition adoption
+
+SC-2106 extends the same framework-neutral adoption model to navigation and collection items. `@vyrnforge/ui-elements` publishes item-composition descriptors that record stable item identity/value/disabled fields, named rich regions, and behavioral capabilities such as hierarchy, filtering, selection, roving focus, multiple selection, and repeated form values.
+
+The descriptors intentionally do not carry framework content values. React keeps ReactNode values in its adapter, Angular may project DOM or templates, Vue may map regions to slots, and Native HTML may supply or construct DOM nodes. Each surface resolves the same canonical region names and classes without moving ReactNode, TemplateRef, VNode, or application state into the shared contract.
+
+For Tabs, Breadcrumbs, SideNav, SegmentedControl, Menu, MultiSelect, and TransferList, adapter adoption must preserve the existing public DOM, accessibility, keyboard/focus, filtering, callback, and form-submission contracts. Shared item-region metadata is therefore an adoption seam, not permission to replace consumer-owned rich content with strings.

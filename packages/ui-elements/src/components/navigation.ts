@@ -5,9 +5,24 @@ import {
   type TabsController,
 } from "@vyrnforge/ui-behaviors";
 import type { VyrnForgePropertyDeclarations } from "../base/VyrnForgeElement";
+import {
+  findVyrnForgeItemRegion,
+  vyrnForgeItemCompositionContracts,
+  type VyrnForgeItemCompositionId,
+} from "../host-adoption";
 import { VyrnForgeDomElement } from "./dom";
 
 let tabsSequence = 0;
+
+function itemRegionClass(id: VyrnForgeItemCompositionId, name: string): string {
+  const region = findVyrnForgeItemRegion(
+    vyrnForgeItemCompositionContracts[id],
+    name,
+  );
+  if (!region)
+    throw new Error(`Unknown ${id} item composition region ${name}.`);
+  return region.className;
+}
 
 export interface VyrnForgeTabItem {
   readonly badge?: string;
@@ -116,12 +131,12 @@ export class VyrnForgeTabsElement extends VyrnForgeDomElement {
       tab.setAttribute("aria-controls", `${this.#id}-panel-${item.id}`);
       tab.tabIndex = selected ? 0 : -1;
       const label = document.createElement("span");
-      label.className = "vf-tabs__label";
+      label.className = itemRegionClass("tabs", "label");
       label.textContent = item.label;
       tab.append(label);
       if (item.badge) {
         const badge = document.createElement("span");
-        badge.className = "vf-tabs__badge";
+        badge.className = itemRegionClass("tabs", "badge");
         badge.textContent = item.badge;
         tab.append(badge);
       }
@@ -129,7 +144,7 @@ export class VyrnForgeTabsElement extends VyrnForgeDomElement {
     }
 
     const panel = document.createElement("div");
-    panel.className = "vf-tabs__panel";
+    panel.className = itemRegionClass("tabs", "content");
     panel.id = `${this.#id}-panel-${this.value}`;
     panel.setAttribute("role", "tabpanel");
     panel.setAttribute("aria-labelledby", `${this.#id}-tab-${this.value}`);
@@ -276,7 +291,7 @@ export class VyrnForgeBreadcrumbsElement extends VyrnForgeDomElement {
       entry.className = "vf-breadcrumbs__item";
       if (index > 0) {
         const separator = document.createElement("span");
-        separator.className = "vf-breadcrumbs__separator";
+        separator.className = itemRegionClass("breadcrumbs", "separator");
         separator.setAttribute("aria-hidden", "true");
         separator.textContent = this.separator;
         entry.append(separator);
@@ -443,7 +458,7 @@ export class VyrnForgeSideNavElement extends VyrnForgeDomElement {
     entry.append(control);
     if (!this.collapsed && item.children?.length) {
       const children = document.createElement("ul");
-      children.className = "vf-side-nav__children";
+      children.className = itemRegionClass("side-nav", "children");
       for (const child of item.children)
         children.append(this.renderItem(document, child, 2, selected));
       entry.append(children);
