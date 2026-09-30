@@ -218,8 +218,10 @@ When changing Reference content or presentation:
    verification when example behavior changes.
 7. Keep curated prose and executable demos authored only where they add value
    beyond generated facts.
-8. Run repository documentation/reference drift verification and the affected
-   Docs build.
+8. Run `npm run verify:docs-quality` so documentation currentness, Markdown
+   structure, local links, generated component reference, and Reference-product
+   drift checks all pass.
+9. Run the affected Docs build.
 
 ## Related sources
 
