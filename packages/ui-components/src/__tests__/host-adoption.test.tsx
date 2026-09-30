@@ -147,7 +147,10 @@ describe("shared native-host adoption", () => {
           ]}
         />
         <Breadcrumbs
-          items={[{ id: "home", label: <strong>Home</strong>, current: true }]}
+          items={[
+            { id: "home", label: <strong>Home</strong> },
+            { id: "docs", label: <strong>Docs</strong>, current: true },
+          ]}
           separator={<span>→</span>}
         />
         <SideNav
