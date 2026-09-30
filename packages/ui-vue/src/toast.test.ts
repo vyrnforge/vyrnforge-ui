@@ -1,4 +1,4 @@
-import { createApp, defineComponent, h } from "vue";
+import { createApp } from "vue";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -27,24 +27,14 @@ describe("Vue toast service adapter", () => {
     service.destroy();
   });
 
-  it("resolves the service through Vue injection", () => {
+  it("resolves the service through Vue injection without a DOM", () => {
     const service = createVyrnForgeVueToastService();
-    let resolved: unknown;
-    const app = createApp(
-      defineComponent({
-        setup() {
-          resolved = useVyrnForgeToast();
-          return () => h("div");
-        },
-      }),
-    );
+    const app = createApp({});
     app.provide(vyrnForgeToastKey, service);
 
-    const element = document.createElement("div");
-    app.mount(element);
+    const resolved = app.runWithContext(() => useVyrnForgeToast());
     expect(resolved).toBe(service);
 
-    app.unmount();
     service.destroy();
   });
 });
