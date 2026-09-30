@@ -3,6 +3,7 @@ import { joinClassNames } from "../../utils/classNames";
 import type { AutocompleteOptionData } from "./Autocomplete.types";
 
 type AutocompleteOptionProps = {
+  "data-vf-region"?: string;
   id: string;
   option: AutocompleteOptionData;
   active: boolean;
@@ -16,6 +17,7 @@ type AutocompleteOptionProps = {
 export function AutocompleteOption({
   active,
   children,
+  "data-vf-region": dataVfRegion,
   id,
   onClick,
   onPointerDown,
@@ -33,6 +35,7 @@ export function AutocompleteOption({
         selected && "vf-autocomplete__option--selected",
         option.disabled && "vf-autocomplete__option--disabled",
       )}
+      data-vf-region={dataVfRegion}
       id={id}
       onClick={onClick}
       onPointerDown={onPointerDown}
