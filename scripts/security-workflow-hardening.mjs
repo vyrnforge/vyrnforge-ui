@@ -183,7 +183,8 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   for (const marker of [
     "CodeQL",
     "dependency-review",
-    "actionlint 1.7.12",
+    "actionlint",
+    "1.7.12",
     "ShellCheck",
     "ci-gate",
     "assurance-gate",
