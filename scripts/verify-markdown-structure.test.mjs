@@ -8,7 +8,7 @@ import { discoverDocumentationMarkdownPaths } from "./documentation-paths.mjs";
 import { verifyMarkdownStructure } from "./verify-markdown-structure.mjs";
 
 function fixture(content, callback) {
-  const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-markdown-structure-"));
+  const root = mkdtempSync(\n    path.join(tmpdir(), "vyrnforge-markdown-structure-"),\n  );
   try {
     const relativePath = "docs/example.md";
     const file = path.join(root, relativePath);
@@ -98,7 +98,7 @@ Paragraph.
     (root, relativePath) => {
       const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
       assert.equal(failures.length, 1);
-      assert.match(failures[0], /pipe-row block is not a valid Markdown table/u);
+      assert.match(\n        failures[0],\n        /pipe-row block is not a valid Markdown table/u,\n      );
     },
   ));
 
@@ -174,25 +174,31 @@ Feature B.
   ));
 
 test("rejects missing or multiple H1 document titles", () => {
-  fixture(`## Missing title
-`, (root, relativePath) => {
-    const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
-    assert(
-      failures.some((failure) =>
-        failure.includes("expected exactly one H1 document title; found 0"),
-      ),
-    );
-  });
+  fixture(
+    `## Missing title
+`,
+    (root, relativePath) => {
+      const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
+      assert(
+        failures.some((failure) =>
+          failure.includes("expected exactly one H1 document title; found 0"),
+        ),
+      );
+    },
+  );
 
-  fixture(`# First
+  fixture(
+    `# First
 
 # Second
-`, (root, relativePath) => {
-    const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
-    assert(
-      failures.some((failure) =>
-        failure.includes("expected exactly one H1 document title; found 2"),
-      ),
-    );
-  });
+`,
+    (root, relativePath) => {
+      const failures = verifyMarkdownStructure({ root, paths: [relativePath] });
+      assert(
+        failures.some((failure) =>
+          failure.includes("expected exactly one H1 document title; found 2"),
+        ),
+      );
+    },
+  );
 });
