@@ -225,7 +225,10 @@ export function Autocomplete({
       ref={rootRef}
       style={style}
     >
-      <div className={adoptedOverlayRegionClassName("autocomplete", "control")} ref={setControlElement}>
+      <div
+        className={adoptedOverlayRegionClassName("autocomplete", "control")}
+        ref={setControlElement}
+      >
         <AutocompleteInput
           activeDescendantId={
             isOpen && activeOption
@@ -308,7 +311,10 @@ export function Autocomplete({
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[rootRef]}
-            className={adoptedOverlayRegionClassName("autocomplete", "layer")}
+            className={adoptedOverlayRegionClassName(
+              "autocomplete",
+              "layer",
+            )}
             dismissOnOutsideFocus
             onDismiss={() => closeList(true)}
             onEscapeKeyDown={(event) => {
@@ -346,7 +352,10 @@ export function Autocomplete({
                       selected={selected}
                     >
                       <div
-                        className={adoptedOverlayRegionClassName("autocomplete", "option")}
+                        className={adoptedOverlayRegionClassName(
+                          "autocomplete",
+                          "option",
+                        )}
                         ref={active ? activeOptionRef : undefined}
                       >
                         {renderOption ? (
@@ -357,11 +366,17 @@ export function Autocomplete({
                           })
                         ) : (
                           <>
-                            <span className={adoptedOverlayRegionClassName("autocomplete", "label")}>
+                            <span className={adoptedOverlayRegionClassName(
+                                "autocomplete",
+                                "label",
+                              )}>
                               {option.label}
                             </span>
                             {option.description && (
-                              <span className={adoptedOverlayRegionClassName("autocomplete", "description")}>
+                              <span className={adoptedOverlayRegionClassName(
+                                  "autocomplete",
+                                  "description",
+                                )}>
                                 {option.description}
                               </span>
                             )}
@@ -377,7 +392,10 @@ export function Autocomplete({
               ) : (
                 <div
                   aria-live="polite"
-                  className={adoptedOverlayRegionClassName("autocomplete", "status")}
+                  className={adoptedOverlayRegionClassName(
+                    "autocomplete",
+                    "status",
+                  )}
                   role="status"
                 >
                   {loading ? loadingText : noOptionsText}
