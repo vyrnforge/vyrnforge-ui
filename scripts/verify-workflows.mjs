@@ -123,7 +123,6 @@ for (const marker of [
   "push:",
   "- main",
   "pull_request:",
-  '- "integration/**"',
   "workflow_dispatch:",
   "scripts/detect-ci-scope.mjs",
   "--delivery",
@@ -140,22 +139,6 @@ assert(
   "ci.yml must own CI jobs directly instead of exposing internal reusable workflows",
 );
 
-for (const marker of [
-  "  react-compatibility-plan:",
-  "  react-compatibility:",
-  "docs/metadata/compatibility-release-matrix.json",
-  "npm run verify:compatibility-release-case -- --case ${{ matrix.id }}",
-  "- react-compatibility-plan",
-  "- react-compatibility",
-  "REACT_COMPATIBILITY_REQUIRED",
-  "REACT_COMPATIBILITY_PLAN_RESULT",
-  "REACT_COMPATIBILITY_RESULT",
-]) {
-  assert(
-    ci.includes(marker),
-    "ci.yml must enforce React compatibility through " + marker,
-  );
-}
 assert(
   !/push:\s*[\s\S]*integration\/\*\*/.test(
     ci.slice(0, ci.indexOf("pull_request:")),

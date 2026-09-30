@@ -1,16 +1,8 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceOfTruth": {
     "canonical": true,
-    "task": "BT-8006",
     "documentation": "docs/release/security-workflow-hardening.md"
-  },
-  "task": {
-    "id": "BT-8006",
-    "title": "Complete security and workflow hardening",
-    "status": "done",
-    "dependsOn": ["BT-8003"],
-    "unlocksAfterMerge": ["BT-8007", "BT-8008"]
   },
   "controls": {
     "dependencyReview": {
@@ -44,6 +36,7 @@
   },
   "protectedGate": {
     "workflow": ".github/workflows/ci.yml",
+    "branch": "main",
     "requiredCheck": "ci-gate",
     "requiredJobs": ["quality-checks", "integration-checks", "security-checks"],
     "continueOnErrorForbidden": true,
@@ -58,7 +51,6 @@
   },
   "verification": {
     "command": "npm run verify:security-workflow-hardening",
-    "testCommand": "npm run test:security-workflow-hardening",
     "workflows": [".github/workflows/ci.yml", ".github/workflows/assurance.yml"]
   },
   "releaseReadiness": "not-ready"

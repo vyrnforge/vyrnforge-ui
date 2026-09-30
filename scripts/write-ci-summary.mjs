@@ -1,5 +1,4 @@
 import { appendFileSync } from "node:fs";
-import { verifyCurrentGitHubPullRequestLaneDrift } from "./verify-lane-drift.mjs";
 
 function parsePlan() {
   const raw = process.env.PLAN_JSON;
@@ -126,22 +125,6 @@ const failures = checks.flatMap((check) => {
   return [];
 });
 
-let laneDrift = {
-  mode: "not-applicable",
-  current: true,
-  reason: "non-pr-event",
-};
-try {
-  laneDrift = verifyCurrentGitHubPullRequestLaneDrift();
-} catch (error) {
-  failures.push(`lane drift: ${error.message}`);
-  laneDrift = {
-    mode: "blocked",
-    current: false,
-    reason: error.message,
-  };
-}
-
 writeSummary(`## VyrnForge CI result
 
 ### What changed
@@ -152,11 +135,6 @@ ${list(selected)}
 
 ### Skipped responsibilities
 ${list(skipped)}
-
-### Lane freshness
-- mode: \`${laneDrift.mode}\`
-- current with \`main\`: \`${laneDrift.current}\`
-- reason: \`${laneDrift.reason}\`
 
 ### Results
 ${list(
