@@ -13,7 +13,7 @@ test.describe("EL-6018 GMF3 native non-grid parity", () => {
     await openFixture(page, browserFixtureIds.nativeParityElements);
   });
 
-  test("registers the deterministic 58-tag catalog and completion elements", async ({
+  test("registers the deterministic 62-tag catalog and completion elements", async ({
     page,
   }) => {
     const result = await page.evaluate(() => {
