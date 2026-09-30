@@ -15,10 +15,8 @@ export const assuranceWorkflowPath = ".github/workflows/assurance.yml";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8").replaceAll(
-    "\r
-",
-    "
-",
+    "\\r\\n",
+    "\\n",
   );
 }
 
