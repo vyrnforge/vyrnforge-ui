@@ -103,10 +103,20 @@ export function SideNav({
     };
     const content = (
       <>
-        {item.icon && <span className={adoptedItemRegionClassName("side-nav", "icon")}>{item.icon}</span>}
-        {!collapsed && <span className={adoptedItemRegionClassName("side-nav", "label")}>{item.label}</span>}
+        {item.icon && (
+          <span className={adoptedItemRegionClassName("side-nav", "icon")}>
+            {item.icon}
+          </span>
+        )}
+        {!collapsed && (
+          <span className={adoptedItemRegionClassName("side-nav", "label")}>
+            {item.label}
+          </span>
+        )}
         {!collapsed && item.badge && (
-          <span className={adoptedItemRegionClassName("side-nav", "badge")}>{item.badge}</span>
+          <span className={adoptedItemRegionClassName("side-nav", "badge")}>
+            {item.badge}
+          </span>
         )}
       </>
     );
