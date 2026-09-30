@@ -1,8 +1,6 @@
 # Canonical Composition Mapping Contract
 
-- Task: MFD-1007
-- Status: Accepted target contract
-- Depends on: MFD-1005
+- Status: Accepted contract
 - Machine-readable source: `docs/metadata/component-contracts.json`
 
 ## Purpose
@@ -54,7 +52,7 @@ The following representative classes must be expressible without implementation-
 - collection: item/template regions with explicit multiplicity and template semantics;
 - overlay: Dialog trigger, header, content, actions, footer.
 
-These classes establish the mapping patterns that MFD-1010 applies across the non-grid catalog.
+These classes establish the mapping patterns applied across the non-grid catalog.
 
 ## Accessibility and ownership
 
@@ -62,7 +60,7 @@ Composition mapping may change syntax but must preserve canonical semantic relat
 
 ## Unsupported mappings
 
-If a framework cannot preserve a canonical region through the declared generic mapping modes, the component/framework pair must use the MFD-1009 exception mechanism. The exception records the technical reason, evidence, ownership, and exit criteria.
+If a framework cannot preserve a canonical region through the declared generic mapping modes, the component/framework pair must use the framework-exception registry under [ADR-008](adr-008-framework-exception-policy.md). The exception records the technical reason, evidence, ownership, and exit criteria.
 
 ## Acceptance mapping
 
@@ -83,11 +81,11 @@ React native-host adapters consume those descriptors while continuing to render 
 
 Named regions standardize meaning and styling identity, not one mandatory DOM wrapper tag. A surface may preserve an existing semantic wrapper when changing that wrapper would alter a public DOM or accessibility contract.
 
-This adoption model is the reusable foundation for SC-2104 and a prerequisite for richer collection and overlay adoption in SC-2106 and SC-2107.
+This adoption model is the reusable foundation for semantic native-host, richer collection, and overlay adoption.
 
 ## Rich item composition adoption
 
-SC-2106 extends the same framework-neutral adoption model to navigation and collection items. `@vyrnforge/ui-elements` publishes item-composition descriptors that record stable item identity/value/disabled fields, named rich regions, and behavioral capabilities such as hierarchy, filtering, selection, roving focus, multiple selection, and repeated form values.
+The same framework-neutral adoption model extends to navigation and collection items. `@vyrnforge/ui-elements` publishes item-composition descriptors that record stable item identity/value/disabled fields, named rich regions, and behavioral capabilities such as hierarchy, filtering, selection, roving focus, multiple selection, and repeated form values.
 
 The descriptors intentionally do not carry framework content values. React keeps ReactNode values in its adapter, Angular may project DOM or templates, Vue may map regions to slots, and Native HTML may supply or construct DOM nodes. Each surface resolves the same canonical region names and classes without moving ReactNode, TemplateRef, VNode, or application state into the shared contract.
 
@@ -95,8 +93,8 @@ For Tabs, Breadcrumbs, SideNav, SegmentedControl, Menu, MultiSelect, and Transfe
 
 ## Overlay and advanced Autocomplete adoption
 
-SC-2107 extends shared composition metadata to Dialog, Drawer, Popover, Tooltip, Toast, ConfirmDialog, and Autocomplete. The shared overlay contract records canonical rich regions and reusable capabilities such as controlled lifecycle, portals, anchored placement, focus containment/restoration, dismissal, service lifecycle, async confirmation, custom filtering, custom option rendering, and roving focus.
+Shared composition metadata also covers Dialog, Drawer, Popover, Tooltip, Toast, ConfirmDialog, and Autocomplete. The shared overlay contract records canonical rich regions and reusable capabilities such as controlled lifecycle, portals, anchored placement, focus containment/restoration, dismissal, service lifecycle, async confirmation, custom filtering, custom option rendering, and roving focus.
 
 The contract deliberately carries no ReactNode, Angular template, Vue VNode, or application state. Framework adapters continue to own their idiomatic rich values while consuming the shared lifecycle, positioning, focus, toast, confirmation, Autocomplete, and composition contracts. Autocomplete's value, input, and open channels remain independently controllable, and its custom filter/render extension points remain adapter-owned.
 
-Adoption must preserve existing public DOM, accessibility, portal/trigger relationships, focus restoration/containment, dismissal reasons, anchored placement, callbacks, form submission, rich loading/empty states, and custom option rendering. Exception retirement remains a separate SC-2108 governance decision after cross-surface evidence is reconciled.
+Adoption must preserve existing public DOM, accessibility, portal/trigger relationships, focus restoration/containment, dismissal reasons, anchored placement, callbacks, form submission, rich loading/empty states, and custom option rendering. Exception retirement remains a separate framework-exception lifecycle decision after cross-surface evidence is reconciled.
