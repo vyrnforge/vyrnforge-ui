@@ -6,6 +6,7 @@ import {
   Portal,
   useScrollLock,
 } from "../../internal/overlay";
+import { adoptedOverlayRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import { CloseButton } from "../IconButton";
 import type { DrawerProps } from "./Drawer.types";
@@ -75,7 +76,7 @@ export function Drawer({
                 role="dialog"
                 tabIndex={-1}
               >
-                <div className="vf-drawer__header">
+                <div className={adoptedOverlayRegionClassName("drawer", "header")}>
                   <div className="vf-drawer__heading">
                     {title && (
                       <h2 className="vf-drawer__title" id={titleId}>
@@ -94,8 +95,12 @@ export function Drawer({
                     onClick={() => behavior.dismiss("close-button")}
                   />
                 </div>
-                {children && <div className="vf-drawer__body">{children}</div>}
-                {footer && <div className="vf-drawer__footer">{footer}</div>}
+                {children && <div className={adoptedOverlayRegionClassName("drawer", "body")}>
+                    {children}
+                  </div>}
+                {footer && <div className={adoptedOverlayRegionClassName("drawer", "footer")}>
+                    {footer}
+                  </div>}
               </div>
             </FocusScope>
           </DismissableLayer>
