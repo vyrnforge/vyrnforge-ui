@@ -85,7 +85,6 @@ Named regions standardize meaning and styling identity, not one mandatory DOM wr
 
 This adoption model is the reusable foundation for SC-2104 and a prerequisite for richer collection and overlay adoption in SC-2106 and SC-2107.
 
-
 ## Rich item composition adoption
 
 SC-2106 extends the same framework-neutral adoption model to navigation and collection items. `@vyrnforge/ui-elements` publishes item-composition descriptors that record stable item identity/value/disabled fields, named rich regions, and behavioral capabilities such as hierarchy, filtering, selection, roving focus, multiple selection, and repeated form values.
