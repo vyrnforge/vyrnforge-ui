@@ -33,7 +33,9 @@ export interface VyrnForgeResolvedHostAdoption {
 function freezeRegions(
   regions: readonly VyrnForgeNamedRegionContract[] | undefined,
 ): readonly VyrnForgeNamedRegionContract[] {
-  return Object.freeze([...(regions ?? [])].map((region) => Object.freeze(region)));
+  return Object.freeze(
+    [...(regions ?? [])].map((region) => Object.freeze(region)),
+  );
 }
 
 function contract(
@@ -201,9 +203,17 @@ const contracts = {
       },
     ],
     regions: [
-      { name: "header", className: "vf-app-shell__header", semanticTag: "header" },
+      {
+        name: "header",
+        className: "vf-app-shell__header",
+        semanticTag: "header",
+      },
       { name: "body", className: "vf-app-shell__body", semanticTag: "div" },
-      { name: "sidebar", className: "vf-app-shell__sidebar", semanticTag: "aside" },
+      {
+        name: "sidebar",
+        className: "vf-app-shell__sidebar",
+        semanticTag: "aside",
+      },
       {
         name: "sidebar-scroll",
         className: "vf-app-shell__sidebar-scroll",
@@ -211,7 +221,11 @@ const contracts = {
       },
       { name: "main", className: "vf-app-shell__main", semanticTag: "div" },
       { name: "content", className: "vf-app-shell__content", semanticTag: "div" },
-      { name: "footer", className: "vf-app-shell__footer", semanticTag: "footer" },
+      {
+        name: "footer",
+        className: "vf-app-shell__footer",
+        semanticTag: "footer",
+      },
     ],
   }),
   page: contract({
@@ -264,7 +278,11 @@ const contracts = {
         className: "vf-page-header__metadata",
         semanticTag: "div",
       },
-      { name: "actions", className: "vf-page-header__actions", semanticTag: "div" },
+      {
+        name: "actions",
+        className: "vf-page-header__actions",
+        semanticTag: "div",
+      },
     ],
   }),
   "page-toolbar": contract({
