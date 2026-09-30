@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Define equivalent verification obligations for every first-class VyrnForge web surface without requiring identical framework tooling.",
+  "supportLevel": "first-class",
+  "requiredCategories": [
+    "lint",
+    "typecheck",
+    "build",
+    "test",
+    "coverage",
+    "packedConsumer",
+    "browser",
+    "accessibility",
+    "ssrServerSafe"
+  ],
+  "sharedEvidence": {
+    "browser": "docs/metadata/cross-framework-browser-matrix.json",
+    "accessibility": "docs/metadata/cross-framework-accessibility-review.json",
+    "ssrServerSafe": "docs/metadata/ssr-bundler-compatibility.json",
+    "packedConsumers": "docs/metadata/consumer-foundations.json"
+  },
+  "surfaces": [
+    {
+      "id": "react",
+      "package": "@vyrnforge/ui-components",
+      "packageDirectory": "packages/ui-components",
+      "fixture": "tests/consumers/react",
+      "coverage": {
+        "mode": "instrumented",
+        "script": "test:coverage",
+        "rationale": "React runtime behavior has direct Vitest/V8 instrumentation in the React package."
+      }
+    },
+    {
+      "id": "native-html",
+      "package": "@vyrnforge/ui-elements",
+      "packageDirectory": "packages/ui-elements",
+      "fixture": "tests/consumers/native-html",
+      "coverage": {
+        "mode": "instrumented",
+        "script": "test:coverage",
+        "rationale": "The Custom Element runtime has direct Vitest/V8 instrumentation in the ui-elements package."
+      }
+    },
+    {
+      "id": "angular",
+      "package": "@vyrnforge/ui-angular",
+      "packageDirectory": "packages/ui-angular",
+      "fixture": "tests/consumers/angular",
+      "coverage": {
+        "mode": "equivalent",
+        "rationale": "Angular's thin generated facade is verified through Angular compilation, package tests, catalog/peer-policy checks, packed consumer runtime, shared browser/accessibility scenarios, and SSR/bundler evidence instead of duplicating line-coverage instrumentation.",
+        "evidence": [
+          "scripts/verify-angular-catalog-coverage.mjs",
+          "scripts/verify-angular-peer-policy.mjs",
+          "docs/metadata/angular-support-evidence.json"
+        ]
+      }
+    },
+    {
+      "id": "vue",
+      "package": "@vyrnforge/ui-vue",
+      "packageDirectory": "packages/ui-vue",
+      "fixture": "tests/consumers/vue",
+      "coverage": {
+        "mode": "equivalent",
+        "rationale": "Vue's thin generated facade is verified through package tests, type/SFC/model/SSR checks, packed consumer runtime, shared browser/accessibility scenarios, and SSR/bundler evidence instead of duplicating line-coverage instrumentation.",
+        "evidence": [
+          "scripts/verify-vue-catalog-coverage.mjs",
+          "scripts/verify-vue-model-matrix.mjs",
+          "scripts/verify-vue-ssr.mjs"
+        ]
+      }
+    }
+  ],
+  "benchmarkingPolicy": "Performance benchmarking is workload-driven and is not a generic first-class-surface verification obligation."
+}
