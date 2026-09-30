@@ -1,3 +1,4 @@
+import { adoptedOverlayRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import { Icon } from "../Icon";
 import { IconButton } from "../IconButton";
@@ -55,13 +56,13 @@ export function Toast({
       <span aria-hidden="true" className="vf-toast__icon">
         <Icon name={toneIconMap[resolvedTone]} />
       </span>
-      <span className="vf-toast__content">
-        {title && <strong className="vf-toast__title">{title}</strong>}
+      <span className={adoptedOverlayRegionClassName("toast", "content")}>
+        {title && <strong className={adoptedOverlayRegionClassName("toast", "title")}>{title}</strong>}
         {description && (
-          <span className="vf-toast__description">{description}</span>
+          <span className={adoptedOverlayRegionClassName("toast", "description")}>{description}</span>
         )}
       </span>
-      {action && <span className="vf-toast__action">{action}</span>}
+      {action && <span className={adoptedOverlayRegionClassName("toast", "action")}>{action}</span>}
       {dismissible && (
         <IconButton
           aria-label="Dismiss notification"
