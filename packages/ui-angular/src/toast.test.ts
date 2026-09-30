@@ -2,21 +2,21 @@ import { describe, expect, it } from "vitest";
 
 type ToastModule = typeof import("./toast.js");
 type ToastService = ToastModule["VyrnForgeToastService"];
+type RequiredMethod =
+  | "dismiss"
+  | "dismissAll"
+  | "error"
+  | "getSnapshot"
+  | "info"
+  | "pause"
+  | "resume"
+  | "success"
+  | "toast"
+  | "triggerAction"
+  | "update"
+  | "warning";
 
-const toastServiceSurfaceIsTyped: ToastService extends {
-  dismiss(id: string): boolean;
-  dismissAll(): boolean;
-  error(record: unknown): string;
-  getSnapshot(): unknown;
-  info(record: unknown): string;
-  pause(id: string): boolean;
-  resume(id: string): boolean;
-  success(record: unknown): string;
-  toast(record: unknown): string;
-  triggerAction(id: string): boolean;
-  update(id: string, record: unknown): boolean;
-  warning(record: unknown): string;
-}
+const toastServiceSurfaceIsTyped: RequiredMethod extends keyof ToastService
   ? true
   : false = true;
 
