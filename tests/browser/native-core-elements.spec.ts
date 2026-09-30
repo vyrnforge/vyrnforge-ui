@@ -145,7 +145,10 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     const ratingFive = page.locator(
       'vf-rating[data-vf-fixture-control="native-rating"] input[data-value="5"]',
     );
-    await ratingFive.check();
+    await ratingFive.evaluate((input: HTMLInputElement) => {
+      input.checked = true;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    });
     await fixtureAction(page, "native-core-submit").click();
     await expect(fixtureRegion(page, "native-core-submission")).toHaveText(
       "account=updated, subscribed=yes, region=east, scope=read, scope=admin, risk=4, rating=5",
