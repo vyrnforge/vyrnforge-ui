@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   AppShell,
   Caption,
+  Breadcrumbs,
   Card,
   CodeText,
   Heading,
@@ -14,7 +15,10 @@ import {
   PageToolbar,
   Panel,
   Section,
+  SegmentedControl,
+  SideNav,
   Stack,
+  Tabs,
   Text,
 } from "../index";
 
@@ -127,5 +131,55 @@ describe("shared native-host adoption", () => {
       '<div class="vf-page-toolbar vf-page-toolbar--standard"',
     );
     expect(markup).toContain('class="vf-page-toolbar__right"');
+  });
+
+  it("preserves rich navigation item composition through shared regions", () => {
+    const markup = renderToStaticMarkup(
+      <>
+        <Tabs
+          items={[
+            {
+              id: "overview",
+              label: <strong>Overview</strong>,
+              badge: <em>3</em>,
+              content: <article>Overview content</article>,
+            },
+          ]}
+        />
+        <Breadcrumbs
+          items={[{ id: "home", label: <strong>Home</strong>, current: true }]}
+          separator={<span>→</span>}
+        />
+        <SideNav
+          items={[
+            {
+              id: "docs",
+              label: <strong>Docs</strong>,
+              icon: <span>Icon</span>,
+              badge: <span>New</span>,
+              children: [{ id: "api", label: <em>API</em> }],
+            },
+          ]}
+        />
+        <SegmentedControl
+          aria-label="View"
+          onChange={() => undefined}
+          options={[
+            { value: "grid", label: <strong>Grid</strong>, icon: <span>G</span> },
+          ]}
+          value="grid"
+        />
+      </>,
+    );
+
+    expect(markup).toContain('class="vf-tabs__label"');
+    expect(markup).toContain('class="vf-tabs__badge"');
+    expect(markup).toContain('class="vf-tabs__panel"');
+    expect(markup).toContain('class="vf-breadcrumbs__separator"');
+    expect(markup).toContain('class="vf-side-nav__icon"');
+    expect(markup).toContain('class="vf-side-nav__children"');
+    expect(markup).toContain('class="vf-segmented-control__icon"');
+    expect(markup).toContain("<strong>Overview</strong>");
+    expect(markup).toContain("<em>API</em>");
   });
 });
