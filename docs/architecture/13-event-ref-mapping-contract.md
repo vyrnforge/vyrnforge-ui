@@ -1,8 +1,6 @@
 # Canonical Event And Ref Mapping Contract
 
-- Task: MFD-1008
-- Status: Accepted target contract
-- Depends on: MFD-1005
+- Status: Accepted contract
 - Machine-readable source: `docs/metadata/component-contracts.json`
 
 ## Purpose
@@ -66,7 +64,7 @@ A framework facade must:
 
 ## Exceptional mappings
 
-Any event or ref mapping that cannot use the generic schema modes must be registered through MFD-1009 with framework, component scope, technical reason, tests/evidence, owner, and exit criteria.
+Any event or ref mapping that cannot use the generic schema modes must be registered in the framework-exception registry under [ADR-008](adr-008-framework-exception-policy.md) with framework, component scope, technical reason, tests/evidence, owner, and exit criteria.
 
 ## Acceptance mapping
 
