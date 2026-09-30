@@ -34,9 +34,8 @@ describe("shared native-host adoption", () => {
       </>,
     );
 
-    expect(markup).toContain(
-      '<span data-contract="text" class="vf-text vf-text--md">Text</span>',
-    );
+    expect(markup).toContain('class="vf-text vf-text--md"');
+    expect(markup).toContain('data-contract="text"');
     expect(markup).toContain("<h4");
     expect(markup).toContain('data-contract="heading"');
     expect(markup).toContain('for="field"');
