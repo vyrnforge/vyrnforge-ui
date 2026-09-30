@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "9a5a837af8dc6db18af29633004fc11e21f4e4b5",
+      "sha1": "019b50f626fd4f0a8e59e6a77a5227ad258e52a3",
       "covers": [
         "component props and types",
         "callbacks",
@@ -192,6 +192,11 @@
       "task": "PA-2005",
       "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
       "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
+    },
+    {
+      "task": "SC-2107",
+      "reason": "React Autocomplete now consumes the shared framework-neutral overlay composition contract for trigger, option, loading, and empty regions while retaining independent controlled value/input/open channels, ReactNode states, custom filtering/rendering, portal placement, keyboard behavior, and form semantics. Overlay components continue using the shared lifecycle, positioning, focus, toast, and confirmation controllers.",
+      "evidence": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx; tests/browser/autocomplete.spec.ts"
     },
     {
       "task": "SC-2106",

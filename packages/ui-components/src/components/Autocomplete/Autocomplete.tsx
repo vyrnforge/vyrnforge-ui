@@ -12,6 +12,7 @@ import {
   Portal,
   useAnchoredPosition,
 } from "../../internal/overlay";
+import { adoptedOverlayRegion } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import { Icon } from "../Icon";
 import { IconButton } from "../IconButton";
@@ -224,7 +225,11 @@ export function Autocomplete({
       ref={rootRef}
       style={style}
     >
-      <div className="vf-autocomplete__control" ref={setControlElement}>
+      <div
+        className="vf-autocomplete__control"
+        data-vf-region={adoptedOverlayRegion("autocomplete", "trigger")}
+        ref={setControlElement}
+      >
         <AutocompleteInput
           activeDescendantId={
             isOpen && activeOption
@@ -332,6 +337,10 @@ export function Autocomplete({
                   return (
                     <AutocompleteOption
                       active={active}
+                      data-vf-region={adoptedOverlayRegion(
+                        "autocomplete",
+                        "option",
+                      )}
                       id={optionId(listboxId, option)}
                       key={option.value}
                       onClick={() => selectOption(option)}
@@ -377,6 +386,10 @@ export function Autocomplete({
                 <div
                   aria-live="polite"
                   className="vf-autocomplete__status"
+                  data-vf-region={adoptedOverlayRegion(
+                    "autocomplete",
+                    loading ? "loading" : "empty",
+                  )}
                   role="status"
                 >
                   {loading ? loadingText : noOptionsText}

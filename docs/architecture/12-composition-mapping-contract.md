@@ -92,3 +92,11 @@ SC-2106 extends the same framework-neutral adoption model to navigation and coll
 The descriptors intentionally do not carry framework content values. React keeps ReactNode values in its adapter, Angular may project DOM or templates, Vue may map regions to slots, and Native HTML may supply or construct DOM nodes. Each surface resolves the same canonical region names and classes without moving ReactNode, TemplateRef, VNode, or application state into the shared contract.
 
 For Tabs, Breadcrumbs, SideNav, SegmentedControl, Menu, MultiSelect, and TransferList, adapter adoption must preserve the existing public DOM, accessibility, keyboard/focus, filtering, callback, and form-submission contracts. Shared item-region metadata is therefore an adoption seam, not permission to replace consumer-owned rich content with strings.
+
+## Overlay and advanced Autocomplete adoption
+
+SC-2107 extends shared composition metadata to Dialog, Drawer, Popover, Tooltip, Toast, ConfirmDialog, and Autocomplete. The shared overlay contract records canonical rich regions and reusable capabilities such as controlled lifecycle, portals, anchored placement, focus containment/restoration, dismissal, service lifecycle, async confirmation, custom filtering, custom option rendering, and roving focus.
+
+The contract deliberately carries no ReactNode, Angular template, Vue VNode, or application state. Framework adapters continue to own their idiomatic rich values while consuming the shared lifecycle, positioning, focus, toast, confirmation, Autocomplete, and composition contracts. Autocomplete's value, input, and open channels remain independently controllable, and its custom filter/render extension points remain adapter-owned.
+
+Adoption must preserve existing public DOM, accessibility, portal/trigger relationships, focus restoration/containment, dismissal reasons, anchored placement, callbacks, form submission, rich loading/empty states, and custom option rendering. Exception retirement remains a separate SC-2108 governance decision after cross-surface evidence is reconciled.

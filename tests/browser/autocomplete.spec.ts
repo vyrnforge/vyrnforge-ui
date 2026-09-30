@@ -26,6 +26,10 @@ test.describe("VF-2006 Autocomplete browser contract", () => {
     const operator = page.getByRole("option", { name: /Operator/ });
     const viewer = page.getByRole("option", { name: /Viewer/ });
     await expect(listbox).toBeVisible();
+    await expect(
+      page.locator('[data-vf-region="trigger"]').first(),
+    ).toBeVisible();
+    await expect(admin).toHaveAttribute("data-vf-region", "option");
     await expect(operator).toHaveAttribute("aria-disabled", "true");
     const adminId = await admin.getAttribute("id");
     expect(adminId).toBeTruthy();
