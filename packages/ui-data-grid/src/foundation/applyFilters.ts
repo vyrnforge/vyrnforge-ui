@@ -1,7 +1,4 @@
-import type {
-  DataGridFilter,
-  DataGridFoundationColumnDef,
-} from "./types";
+import type { DataGridFilter, DataGridFoundationColumnDef } from "./types";
 
 const getColumnValue = <RowData extends Record<string, unknown>>(
   row: RowData,
