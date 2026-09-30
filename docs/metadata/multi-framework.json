@@ -29,7 +29,9 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "framework-neutral",
-      "dependsOn": ["@vyrnforge/ui-core"],
+      "dependsOn": [
+        "@vyrnforge/ui-core"
+      ],
       "owns": [
         "controlled and uncontrolled state transitions",
         "collection models",
@@ -46,7 +48,10 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "custom-elements",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-behaviors"
+      ],
       "owns": [
         "canonical native Custom Element renderers",
         "property and attribute reflection",
@@ -75,7 +80,9 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "angular",
-      "dependsOn": ["@vyrnforge/ui-elements"],
+      "dependsOn": [
+        "@vyrnforge/ui-elements"
+      ],
       "owns": [
         "Angular generated facade bindings",
         "Angular package setup and registration",
@@ -91,7 +98,9 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "vue",
-      "dependsOn": ["@vyrnforge/ui-elements"],
+      "dependsOn": [
+        "@vyrnforge/ui-elements"
+      ],
       "owns": [
         "Vue component facades",
         "v-model translations",
@@ -108,7 +117,10 @@
       "status": "react-alpha-deferred",
       "betaIncluded": false,
       "runtime": "react",
-      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
+      "dependsOn": [
+        "@vyrnforge/ui-core",
+        "@vyrnforge/ui-components"
+      ],
       "notes": "Grid implementation, decomposition, performance work, and multi-framework rendering remain outside the non-grid beta critical path."
     }
   ],
@@ -184,7 +196,7 @@
     "status": "complete",
     "metadata": "docs/metadata/native-element-foundations.json",
     "nativeCoreMetadata": "docs/metadata/native-core-elements.json",
-    "registeredPublicTags": 58,
+    "registeredPublicTags": 62,
     "nativeAdvancedMetadata": "docs/metadata/native-advanced-elements.json",
     "foundationStage": "canonical-native-current"
   },
