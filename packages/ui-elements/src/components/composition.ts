@@ -1,4 +1,10 @@
 import type { VyrnForgePropertyDeclarations } from "../base/VyrnForgeElement";
+import {
+  findVyrnForgeNamedRegion,
+  resolveVyrnForgeHostClasses,
+  vyrnForgeHostAdoptionContracts,
+  type VyrnForgeHostAdoptionId,
+} from "../host-adoption";
 import { VyrnForgeDomElement } from "./dom";
 
 export type VyrnForgeAppShellScrollMode = "page" | "content" | "split";
@@ -6,6 +12,15 @@ export type VyrnForgeAppShellHeaderPosition = "static" | "sticky" | "fixed";
 export type VyrnForgeAppShellSidebarPosition = "static" | "sticky" | "fixed";
 export type VyrnForgePageToolbarDensity =
   "compact" | "standard" | "comfortable";
+
+function regionClass(id: VyrnForgeHostAdoptionId, name: string): string {
+  const region = findVyrnForgeNamedRegion(
+    vyrnForgeHostAdoptionContracts[id],
+    name,
+  );
+  if (!region) throw new Error(`Unknown ${id} adoption region ${name}.`);
+  return region.className;
+}
 
 function assignedSlot(node: Node): string {
   return node instanceof Element ? (node.getAttribute("slot") ?? "") : "";
@@ -148,17 +163,21 @@ export class VyrnForgeAppShellElement extends VyrnForgeDomElement {
       if (node instanceof Element) node.removeAttribute("slot");
     }
 
-    this.applyManagedClasses([
-      "vf-app-shell",
-      headerNodes.length > 0 && "vf-app-shell--with-header",
-      sidebarNodes.length > 0 && "vf-app-shell--with-sidebar",
-      footerNodes.length > 0 && "vf-app-shell--with-footer",
-      this.fullHeight && "vf-app-shell--full-height",
-      `vf-app-shell--scroll-${this.scrollMode}`,
-      `vf-app-shell--header-${this.headerPosition}`,
-      `vf-app-shell--sidebar-${this.sidebarPosition}`,
-      this.sidebarCollapsed && "vf-app-shell--sidebar-collapsed",
-    ]);
+    this.applyManagedClasses(
+      resolveVyrnForgeHostClasses(
+        vyrnForgeHostAdoptionContracts["app-shell"],
+        {
+          fullHeight: this.fullHeight,
+          hasFooter: footerNodes.length > 0,
+          hasHeader: headerNodes.length > 0,
+          hasSidebar: sidebarNodes.length > 0,
+          headerPosition: this.headerPosition,
+          scrollMode: this.scrollMode,
+          sidebarCollapsed: this.sidebarCollapsed,
+          sidebarPosition: this.sidebarPosition,
+        },
+      ),
+    );
     this.style.setProperty("--vf-app-shell-header-height", this.headerHeight);
     this.style.setProperty("--vf-app-shell-sidebar-width", this.sidebarWidth);
     this.style.setProperty(
@@ -170,34 +189,34 @@ export class VyrnForgeAppShellElement extends VyrnForgeDomElement {
     const output: Node[] = [];
     if (headerNodes.length > 0) {
       const header = document.createElement("header");
-      header.className = "vf-app-shell__header";
+      header.className = regionClass("app-shell", "header");
       header.dataset.vfAppShellInternal = "";
       header.append(...headerNodes);
       output.push(header);
     }
     const body = document.createElement("div");
-    body.className = "vf-app-shell__body";
+    body.className = regionClass("app-shell", "body");
     body.dataset.vfAppShellInternal = "";
     if (sidebarNodes.length > 0) {
       const sidebar = document.createElement("aside");
-      sidebar.className = "vf-app-shell__sidebar";
+      sidebar.className = regionClass("app-shell", "sidebar");
       const scroll = document.createElement("div");
-      scroll.className = "vf-app-shell__sidebar-scroll";
+      scroll.className = regionClass("app-shell", "sidebar-scroll");
       scroll.append(...sidebarNodes);
       sidebar.append(scroll);
       body.append(sidebar);
     }
     const main = document.createElement("main");
-    main.className = "vf-app-shell__main";
+    main.className = regionClass("app-shell", "main");
     const content = document.createElement("div");
-    content.className = "vf-app-shell__content";
+    content.className = regionClass("app-shell", "content");
     content.append(...contentNodes);
     main.append(content);
     body.append(main);
     output.push(body);
     if (footerNodes.length > 0) {
       const footer = document.createElement("footer");
-      footer.className = "vf-app-shell__footer";
+      footer.className = regionClass("app-shell", "footer");
       footer.dataset.vfAppShellInternal = "";
       footer.append(...footerNodes);
       output.push(footer);
@@ -247,55 +266,55 @@ export class VyrnForgePageHeaderElement extends VyrnForgeDomElement {
     for (const node of nodes) {
       if (node instanceof Element) node.removeAttribute("slot");
     }
-    this.applyManagedClasses(["vf-page-header"]);
+    this.applyManagedClasses(\n      resolveVyrnForgeHostClasses(vyrnForgeHostAdoptionContracts["page-header"]),\n    );
     const output: Node[] = [];
     if (breadcrumbs.length > 0) {
       const region = document.createElement("div");
-      region.className = "vf-page-header__breadcrumbs";
+      region.className = regionClass("page-header", "breadcrumbs");
       region.dataset.vfPageHeaderInternal = "";
       region.append(...breadcrumbs);
       output.push(region);
     }
     const row = document.createElement("div");
-    row.className = "vf-page-header__row";
+    row.className = regionClass("page-header", "row");
     row.dataset.vfPageHeaderInternal = "";
     const main = document.createElement("div");
-    main.className = "vf-page-header__main";
+    main.className = regionClass("page-header", "main");
     if (this.eyebrow) {
       const eyebrow = document.createElement("div");
-      eyebrow.className = "vf-page-header__eyebrow";
+      eyebrow.className = regionClass("page-header", "eyebrow");
       eyebrow.textContent = this.eyebrow;
       main.append(eyebrow);
     }
     const titleRow = document.createElement("div");
-    titleRow.className = "vf-page-header__title-row";
+    titleRow.className = regionClass("page-header", "title-row");
     const title = document.createElement("h1");
-    title.className = "vf-page-header__title";
+    title.className = regionClass("page-header", "title");
     title.textContent = this.title;
     titleRow.append(title);
     if (status.length > 0) {
       const region = document.createElement("div");
-      region.className = "vf-page-header__status";
+      region.className = regionClass("page-header", "status");
       region.append(...status);
       titleRow.append(region);
     }
     main.append(titleRow);
     if (this.description) {
       const description = document.createElement("div");
-      description.className = "vf-page-header__description";
+      description.className = regionClass("page-header", "description");
       description.textContent = this.description;
       main.append(description);
     }
     if (metadata.length > 0) {
       const region = document.createElement("div");
-      region.className = "vf-page-header__metadata";
+      region.className = regionClass("page-header", "metadata");
       region.append(...metadata);
       main.append(region);
     }
     row.append(main);
     if (actions.length > 0) {
       const region = document.createElement("div");
-      region.className = "vf-page-header__actions";
+      region.className = regionClass("page-header", "actions");
       region.append(...actions);
       row.append(region);
     }
@@ -341,21 +360,22 @@ export class VyrnForgePageToolbarElement extends VyrnForgeDomElement {
     for (const node of nodes) {
       if (node instanceof Element) node.removeAttribute("slot");
     }
-    this.applyManagedClasses([
-      "vf-page-toolbar",
-      `vf-page-toolbar--${this.density}`,
-      this.sticky && "vf-page-toolbar--sticky",
-    ]);
+    this.applyManagedClasses(
+      resolveVyrnForgeHostClasses(
+        vyrnForgeHostAdoptionContracts["page-toolbar"],
+        { density: this.density, sticky: this.sticky },
+      ),
+    );
     this.setAttribute("role", "toolbar");
     this.setAttribute("aria-label", this.label);
     const left = document.createElement("div");
-    left.className = "vf-page-toolbar__left";
+    left.className = regionClass("page-toolbar", "left");
     left.dataset.vfPageToolbarInternal = "";
     left.append(...leftNodes);
     const output: Node[] = [left];
     if (rightNodes.length > 0) {
       const right = document.createElement("div");
-      right.className = "vf-page-toolbar__right";
+      right.className = regionClass("page-toolbar", "right");
       right.dataset.vfPageToolbarInternal = "";
       right.append(...rightNodes);
       output.push(right);
