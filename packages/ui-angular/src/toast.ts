@@ -34,10 +34,7 @@ export class VyrnForgeToastService implements OnDestroy {
     return this.#service.info(record);
   }
 
-  update(
-    id: string,
-    record: Partial<VyrnForgeToastServiceRecord>,
-  ): boolean {
+  update(id: string, record: Partial<VyrnForgeToastServiceRecord>): boolean {
     return this.#service.update(id, record);
   }
 
