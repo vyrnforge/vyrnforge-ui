@@ -102,12 +102,10 @@ export function createVyrnForgeToastService(
     toast,
     success: (record: VyrnForgeToastShortcutRecord) =>
       shortcut("success", record),
-    error: (record: VyrnForgeToastShortcutRecord) =>
-      shortcut("error", record),
+    error: (record: VyrnForgeToastShortcutRecord) => shortcut("error", record),
     warning: (record: VyrnForgeToastShortcutRecord) =>
       shortcut("warning", record),
-    info: (record: VyrnForgeToastShortcutRecord) =>
-      shortcut("info", record),
+    info: (record: VyrnForgeToastShortcutRecord) => shortcut("info", record),
     update(id: string, record: Partial<VyrnForgeToastServiceRecord>) {
       const current = behavior
         .getSnapshot()
