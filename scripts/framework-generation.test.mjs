@@ -310,10 +310,7 @@ test("Button representative slice preserves equivalent canonical semantics acros
   const button = createFrameworkButtonSliceModel(generationModel);
 
   assert.equal(button.component, "button");
-  assert.equal(
-    button.sharedBrowserImplementation,
-    "@vyrnforge/ui-elements",
-  );
+  assert.equal(button.sharedBrowserImplementation, "@vyrnforge/ui-elements");
   assert.deepEqual(Object.keys(button.surfaces), [...FRAMEWORK_SURFACES]);
 
   const native = button.surfaces.native;
