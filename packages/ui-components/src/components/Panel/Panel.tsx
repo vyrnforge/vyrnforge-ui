@@ -1,5 +1,10 @@
-import { joinClassNames } from "../../utils/classNames";
+import {
+  adoptedRegionClassName,
+  resolveAdoptedHostClassName,
+} from "../../internal/hostAdoption";
 import type { PanelProps } from "./Panel.types";
+
+const region = (name: string) => adoptedRegionClassName("panel", name);
 
 export function Panel({
   actions,
@@ -10,19 +15,22 @@ export function Panel({
   ...props
 }: PanelProps) {
   return (
-    <section className={joinClassNames("vf-panel", className)} {...props}>
+    <section
+      className={resolveAdoptedHostClassName("panel", {}, className)}
+      {...props}
+    >
       {(title || description || actions) && (
-        <div className="vf-panel__header">
-          <div className="vf-panel__heading">
-            {title && <h2 className="vf-panel__title">{title}</h2>}
+        <div className={region("header")}>
+          <div className={region("heading")}>
+            {title && <h2 className={region("title")}>{title}</h2>}
             {description && (
-              <p className="vf-panel__description">{description}</p>
+              <p className={region("description")}>{description}</p>
             )}
           </div>
-          {actions && <div className="vf-panel__actions">{actions}</div>}
+          {actions && <div className={region("actions")}>{actions}</div>}
         </div>
       )}
-      {children && <div className="vf-panel__body">{children}</div>}
+      {children && <div className={region("body")}>{children}</div>}
     </section>
   );
 }
