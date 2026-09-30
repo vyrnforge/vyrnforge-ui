@@ -146,6 +146,90 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     );
   });
 
+
+  test("supports shared focus and multi-value form semantics", async ({ page }) => {
+    await page.evaluate(() => {
+      const form = document.createElement("form");
+      form.id = "sc-2105-form";
+
+      const select = document.createElement("vf-select") as HTMLElement & {
+        multiple: boolean;
+        name: string;
+        options: readonly { label: string; value: string }[];
+        value: readonly string[];
+      };
+      select.id = "sc-2105-select";
+      select.name = "region";
+      select.multiple = true;
+      select.options = [
+        { label: "East", value: "east" },
+        { label: "West", value: "west" },
+        { label: "North", value: "north" },
+      ];
+      select.value = ["east", "west"];
+      form.append(select);
+
+      const group = document.createElement("vf-radio-group");
+      group.id = "sc-2105-radio-group";
+      const first = document.createElement("vf-radio") as HTMLElement & {
+        checked: boolean;
+        disabled: boolean;
+        value: string;
+      };
+      first.value = "first";
+      first.disabled = true;
+      const second = document.createElement("vf-radio") as HTMLElement & {
+        checked: boolean;
+        value: string;
+      };
+      second.value = "second";
+      second.checked = true;
+      group.append(first, second);
+
+      document.body.append(form, group);
+    });
+
+    const select = page.locator("#sc-2105-select select");
+    await expect(select).toHaveAttribute("multiple", "");
+    await expect(select.locator("option:checked")).toHaveCount(2);
+
+    const submitted = await page.evaluate(() =>
+      new FormData(
+        document.querySelector<HTMLFormElement>("#sc-2105-form")!,
+      ).getAll("region"),
+    );
+    expect(submitted).toEqual(["east", "west"]);
+
+    await select.selectOption(["north"]);
+    const currentValue = await page.evaluate(
+      () =>
+        (
+          document.querySelector("#sc-2105-select") as HTMLElement & {
+            value: readonly string[];
+          }
+        ).value,
+    );
+    expect(currentValue).toEqual(["north"]);
+
+    await page.evaluate(() =>
+      document.querySelector<HTMLFormElement>("#sc-2105-form")!.reset(),
+    );
+    const resetValue = await page.evaluate(
+      () =>
+        (
+          document.querySelector("#sc-2105-select") as HTMLElement & {
+            value: readonly string[];
+          }
+        ).value,
+    );
+    expect(resetValue).toEqual(["east", "west"]);
+
+    await page.locator("#sc-2105-radio-group").focus();
+    await expect(
+      page.locator("#sc-2105-radio-group vf-radio").nth(1).locator("input"),
+    ).toBeFocused();
+  });
+
   test("keeps field relationships and composite navigation keyboard behavior", async ({
     page,
   }) => {
