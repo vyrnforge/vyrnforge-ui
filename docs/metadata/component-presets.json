@@ -87,18 +87,41 @@
         }
       ],
       "baseDefaults": { "variant": "ghost" },
-      "semanticDefaults": {
-        "accessibleName": "Clear",
-        "tooltip": "Clear",
-        "icon": "Close"
-      },
+      "semanticDefaults": { "accessibleName": "Clear", "tooltip": "Clear", "icon": "Close" },
       "transforms": [],
-      "content": { "mode": "none", "sourceOrder": [] },
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
       "surfaceBindings": {
-        "native": { "package": "@vyrnforge/ui-elements", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "react": { "package": "@vyrnforge/ui-components", "supportLevel": "first-class", "mode": "named-export", "target": "icon-button", "publicName": "ClearButton" },
-        "angular": { "package": "@vyrnforge/ui-angular", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "vue": { "package": "@vyrnforge/ui-vue", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null }
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "ClearButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
       }
     },
     {
@@ -115,18 +138,41 @@
         }
       ],
       "baseDefaults": { "variant": "ghost" },
-      "semanticDefaults": {
-        "accessibleName": "Close",
-        "tooltip": "Close",
-        "icon": "Close"
-      },
+      "semanticDefaults": { "accessibleName": "Close", "tooltip": "Close", "icon": "Close" },
       "transforms": [],
-      "content": { "mode": "none", "sourceOrder": [] },
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
       "surfaceBindings": {
-        "native": { "package": "@vyrnforge/ui-elements", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "react": { "package": "@vyrnforge/ui-components", "supportLevel": "first-class", "mode": "named-export", "target": "icon-button", "publicName": "CloseButton" },
-        "angular": { "package": "@vyrnforge/ui-angular", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "vue": { "package": "@vyrnforge/ui-vue", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null }
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "CloseButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
       }
     },
     {
@@ -149,12 +195,39 @@
         "icon": "MoreHorizontal"
       },
       "transforms": [],
-      "content": { "mode": "none", "sourceOrder": [] },
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
       "surfaceBindings": {
-        "native": { "package": "@vyrnforge/ui-elements", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "react": { "package": "@vyrnforge/ui-components", "supportLevel": "first-class", "mode": "named-export", "target": "icon-button", "publicName": "MoreButton" },
-        "angular": { "package": "@vyrnforge/ui-angular", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "vue": { "package": "@vyrnforge/ui-vue", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null }
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "MoreButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
       }
     },
     {
@@ -171,18 +244,41 @@
         }
       ],
       "baseDefaults": { "variant": "subtle" },
-      "semanticDefaults": {
-        "accessibleName": "Refresh",
-        "tooltip": "Refresh",
-        "icon": "Refresh"
-      },
+      "semanticDefaults": { "accessibleName": "Refresh", "tooltip": "Refresh", "icon": "Refresh" },
       "transforms": [],
-      "content": { "mode": "none", "sourceOrder": [] },
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
       "surfaceBindings": {
-        "native": { "package": "@vyrnforge/ui-elements", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "react": { "package": "@vyrnforge/ui-components", "supportLevel": "first-class", "mode": "named-export", "target": "icon-button", "publicName": "RefreshButton" },
-        "angular": { "package": "@vyrnforge/ui-angular", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null },
-        "vue": { "package": "@vyrnforge/ui-vue", "supportLevel": "first-class", "mode": "base-component", "target": "icon-button", "publicName": null }
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "RefreshButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
       }
     },
     {
@@ -199,23 +295,42 @@
         },
         { "name": "disabled", "type": "boolean", "required": false }
       ],
-      "baseDefaults": {
-        "size": "sm",
-        "variant": "subtle"
-      },
-      "semanticDefaults": {
-        "accessibleNameInput": "altText"
-      },
+      "baseDefaults": { "size": "sm", "variant": "subtle" },
+      "semanticDefaults": { "accessibleNameInput": "altText" },
       "transforms": [],
       "content": {
         "mode": "default-region",
         "sourceOrder": ["default"]
       },
       "surfaceBindings": {
-        "native": { "package": "@vyrnforge/ui-elements", "supportLevel": "first-class", "mode": "composition-helper", "target": "button", "publicName": null },
-        "react": { "package": "@vyrnforge/ui-components", "supportLevel": "first-class", "mode": "named-export", "target": "button", "publicName": "ToastAction" },
-        "angular": { "package": "@vyrnforge/ui-angular", "supportLevel": "first-class", "mode": "composition-helper", "target": "button", "publicName": null },
-        "vue": { "package": "@vyrnforge/ui-vue", "supportLevel": "first-class", "mode": "composition-helper", "target": "button", "publicName": null }
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "composition-helper",
+          "target": "button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "button",
+          "publicName": "ToastAction"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "composition-helper",
+          "target": "button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "composition-helper",
+          "target": "button",
+          "publicName": null
+        }
       }
     }
   ]
