@@ -1,11 +1,17 @@
-import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
-import type { VyrnForgeElementRegistry } from "@vyrnforge/ui-elements";
+import {
+  createVyrnForgeToastService,
+  registerVyrnForgeElements,
+  type VyrnForgeElementRegistry,
+  type VyrnForgeToastService,
+} from "@vyrnforge/ui-elements";
 import type { App } from "vue";
 
 import { vyrnForgeVueGeneratedComponents } from "./generated/catalog.generated";
+import { vyrnForgeToastKey } from "./toast";
 
 export interface VyrnForgeVueOptions {
   readonly elementRegistry?: VyrnForgeElementRegistry;
+  readonly toastService?: VyrnForgeToastService;
 }
 
 export interface VyrnForgeVuePlugin {
@@ -34,6 +40,14 @@ export function installVyrnForgeVue<TApp>(
 ): TApp {
   const vueApp = asVueApp(app);
   registerVyrnForgeElements(options.elementRegistry);
+  const toastService =
+    options.toastService ?? createVyrnForgeToastService();
+  vueApp.provide(vyrnForgeToastKey, toastService);
+
+  const appWithUnmount = vueApp as App & {
+    onUnmount?: (callback: () => void) => void;
+  };
+  appWithUnmount.onUnmount?.(() => toastService.destroy());
 
   for (const component of vyrnForgeVueComponents) {
     const name = (component as { name?: string }).name;
