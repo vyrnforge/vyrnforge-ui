@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -11,20 +12,6 @@ function readJson(relativePath) {
   return JSON.parse(
     readFileSync(path.join(repositoryRoot, relativePath), "utf8"),
   );
-}
-
-function scopedComponentIds(catalog) {
-  return (catalog.components ?? [])
-    .filter(
-      (component) =>
-        component.publicExport === true &&
-        component.package === "@vyrnforge/ui-components" &&
-        component.frameworkParity?.betaScope === "included" &&
-        component.category !== "data-grid" &&
-        component.category !== "grid-feature",
-    )
-    .map((component) => component.id)
-    .sort();
 }
 
 function isCompleteContract(contract) {
@@ -60,7 +47,7 @@ export function createCoverageReport() {
   const contracts = readJson("docs/metadata/component-contracts.json");
   const exceptions = readJson("docs/metadata/framework-exceptions.json");
 
-  const scopedIds = scopedComponentIds(catalog);
+  const scopedIds = getPublicNonGridBetaComponentIds(catalog);
   const scopedSet = new Set(scopedIds);
   const catalogSet = new Set(
     (catalog.components ?? []).map((component) => component.id),
@@ -104,7 +91,7 @@ export function createCoverageReport() {
 
   return {
     schemaVersion: 1,
-    scope: "public beta-included non-grid @vyrnforge/ui-components records",
+    scope: "public beta-included non-grid VyrnForge component records",
     totals: {
       scoped: scopedIds.length,
       contractComplete: contractComplete.length,
