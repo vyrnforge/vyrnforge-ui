@@ -14,6 +14,7 @@ export const activeMetadataVerifiers = [
   "verify:security-workflow-hardening",
   "verify:trusted-publishing-provenance",
   "verify:multi-framework",
+  "verify:first-class-surfaces",
   "verify:consumer-foundations",
   "verify:component-reference",
 ];

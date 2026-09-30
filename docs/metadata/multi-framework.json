@@ -152,7 +152,8 @@
     "defaultBrowserImplementation": "@vyrnforge/ui-elements",
     "facadePolicy": "generated-or-generic-canonical-backed",
     "exceptionPolicy": "docs/architecture/adr-008-framework-exception-policy.md",
-    "supportRule": "First-class support status is independent from whether a surface owns a dedicated renderer or adapts the canonical native implementation."
+    "supportRule": "First-class support status is independent from whether a surface owns a dedicated renderer or adapts the canonical native implementation.",
+    "verificationPolicy": "docs/metadata/first-class-surface-verification.json"
   },
   "styling": {
     "defaultDomMode": "light-dom",
