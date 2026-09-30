@@ -52,7 +52,7 @@ manual assembly steps for ordinary framework component consumption.
 package**. The package name is compatibility history; it does not make React the
 canonical VyrnForge component system. VyrnForge does
 not add `@vyrnforge/ui-react` merely for naming symmetry. React implementation
-may reuse the canonical native/DOM implementation under ADR-005 without changing
+may reuse the shared browser/DOM implementation under ADR-005 without changing
 this public package identity.
 
 A future package rename requires a separate compatibility and migration decision.
@@ -71,7 +71,7 @@ inputs/outputs, content projection, element references, imperative method
 proxies, and optional Angular Forms integration.
 
 Angular runtime dependencies and peers stay isolated to the Angular package and
-consumer. Shared foundations and the canonical renderer do not acquire Angular
+consumer. Shared foundations and the shared browser implementation do not acquire Angular
 runtime dependencies.
 
 Direct `@vyrnforge/ui-elements` use remains a lower-level interoperability path,
@@ -84,7 +84,7 @@ props/emits, slots, refs, `v-model` translation, plugin registration, and
 Vue-specific typing.
 
 Vue remains supplied by the consumer as a framework peer. Shared foundations and
-the canonical renderer do not acquire Vue runtime dependencies.
+the shared browser implementation do not acquire Vue runtime dependencies.
 
 Direct `@vyrnforge/ui-elements` use remains a lower-level interoperability path,
 but the Vue package is the normal first-class Vue path.

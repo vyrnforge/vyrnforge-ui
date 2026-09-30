@@ -77,7 +77,7 @@ export function createVueCatalogModel(generationModel) {
         `${record.id}: unexpected Vue package`,
       );
       assert(
-        record.adapter.canonicalRenderer === "@vyrnforge/ui-elements",
+        record.adapter.sharedBrowserImplementation === "@vyrnforge/ui-elements",
         `${record.id}: Vue facade must delegate rendering to ui-elements`,
       );
       assert(

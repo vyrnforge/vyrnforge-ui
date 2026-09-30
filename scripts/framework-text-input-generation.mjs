@@ -10,7 +10,7 @@ export const FRAMEWORK_TEXT_INPUT_ARTIFACT_PATHS = Object.freeze({
 });
 
 const TASK_ID = "MFD-1113";
-const CANONICAL_RENDERER = "@vyrnforge/ui-elements";
+const SHARED_BROWSER_IMPLEMENTATION = "@vyrnforge/ui-elements";
 const REQUIRED_PROPERTIES = Object.freeze([
   "name",
   "value",
@@ -58,8 +58,9 @@ function assertRecord(record, framework) {
     `${framework}: expected text-input record`,
   );
   assert(
-    record.adapter.canonicalRenderer === CANONICAL_RENDERER,
-    `${framework}: TextInput must keep ${CANONICAL_RENDERER} as canonical renderer`,
+    record.adapter.sharedBrowserImplementation ===
+      SHARED_BROWSER_IMPLEMENTATION,
+    `${framework}: TextInput must keep ${SHARED_BROWSER_IMPLEMENTATION} as shared browser implementation`,
   );
   if (framework === "native") {
     assert(
@@ -129,7 +130,7 @@ export function createFrameworkTextInputSliceModel(generationModel) {
     schemaVersion: 1,
     task: TASK_ID,
     component: FRAMEWORK_TEXT_INPUT_COMPONENT_ID,
-    canonicalRenderer: CANONICAL_RENDERER,
+    sharedBrowserImplementation: SHARED_BROWSER_IMPLEMENTATION,
     surfaces,
   });
 }

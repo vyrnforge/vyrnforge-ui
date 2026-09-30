@@ -78,7 +78,10 @@ test("React adapter plans preserve canonical facade ownership", () => {
   assert.equal(react.package, "@vyrnforge/ui-components");
   for (const record of react.components) {
     assert.equal(record.adapter.kind, "react-facade");
-    assert.equal(record.adapter.canonicalRenderer, "@vyrnforge/ui-elements");
+    assert.equal(
+      record.adapter.sharedBrowserImplementation,
+      "@vyrnforge/ui-elements",
+    );
     assert.notEqual(record.package, "@vyrnforge/ui-angular");
     assert.notEqual(record.package, "@vyrnforge/ui-vue");
   }
@@ -307,7 +310,7 @@ test("Button representative slice preserves equivalent canonical semantics acros
   const button = createFrameworkButtonSliceModel(generationModel);
 
   assert.equal(button.component, "button");
-  assert.equal(button.canonicalRenderer, "@vyrnforge/ui-elements");
+  assert.equal(button.sharedBrowserImplementation, "@vyrnforge/ui-elements");
   assert.deepEqual(Object.keys(button.surfaces), [...FRAMEWORK_SURFACES]);
 
   const native = button.surfaces.native;
@@ -323,7 +326,10 @@ test("Button representative slice preserves equivalent canonical semantics acros
     if (framework === "native") {
       assert.equal(surface.tag, "vf-button");
     }
-    assert.equal(surface.adapter.canonicalRenderer, "@vyrnforge/ui-elements");
+    assert.equal(
+      surface.adapter.sharedBrowserImplementation,
+      "@vyrnforge/ui-elements",
+    );
     assert.deepEqual(
       surface.properties.map((property) => property.canonical).sort(),
       canonicalProperties,

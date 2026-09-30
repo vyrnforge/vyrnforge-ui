@@ -94,7 +94,7 @@ function normalizeGeneratedComponent(record, nativeRecord, canonicalRecord) {
     `${record.id}: unexpected Angular package ${String(record.package)}`,
   );
   assert(
-    record.adapter.canonicalRenderer === "@vyrnforge/ui-elements",
+    record.adapter.sharedBrowserImplementation === "@vyrnforge/ui-elements",
     `${record.id}: Angular facade must delegate rendering to ui-elements`,
   );
 

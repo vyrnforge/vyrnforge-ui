@@ -237,7 +237,7 @@ export function createReactAdapterPlan(component, eventByName) {
     ...createBaseRecord(component, "react", eventByName),
     adapter: {
       kind: "react-facade",
-      canonicalRenderer: "@vyrnforge/ui-elements",
+      sharedBrowserImplementation: "@vyrnforge/ui-elements",
       model: createReactModelMetadata(component, mapping),
       refMode: mapping.ref.mode,
     },
@@ -298,7 +298,7 @@ export function createAngularBindingPlan(component, eventByName) {
     ...createBaseRecord(component, "angular", eventByName),
     adapter: {
       kind: "angular-facade",
-      canonicalRenderer: "@vyrnforge/ui-elements",
+      sharedBrowserImplementation: "@vyrnforge/ui-elements",
       selector: mapping.tag ?? component.frameworkMappings.native?.tag ?? null,
       forms: createAngularFormsMetadata(component),
       refMode: mapping.ref.mode,
@@ -346,7 +346,7 @@ export function createVueComponentPlan(component, eventByName) {
     ...createBaseRecord(component, "vue", eventByName),
     adapter: {
       kind: "vue-facade",
-      canonicalRenderer: "@vyrnforge/ui-elements",
+      sharedBrowserImplementation: "@vyrnforge/ui-elements",
       vModel: createVueModelMetadata(component),
       refMode: mapping.ref.mode,
     },
@@ -357,8 +357,8 @@ export function createNativeReferencePlan(component, eventByName) {
   return {
     ...createBaseRecord(component, "native", eventByName),
     adapter: {
-      kind: "canonical-native",
-      canonicalRenderer: "@vyrnforge/ui-elements",
+      kind: "native-custom-element-surface",
+      sharedBrowserImplementation: "@vyrnforge/ui-elements",
     },
   };
 }
@@ -374,7 +374,7 @@ export function deriveCanonicalNativeTags(contracts) {
     );
     if (!tag.startsWith("vf-")) {
       throw new FrameworkGenerationError(
-        `${component.id}: invalid canonical native tag ${tag}`,
+        `${component.id}: invalid Native custom-element tag ${tag}`,
       );
     }
     tags.add(tag);
