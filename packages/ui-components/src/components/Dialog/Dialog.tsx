@@ -6,6 +6,7 @@ import {
   Portal,
   useScrollLock,
 } from "../../internal/overlay";
+import { adoptedOverlayRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import { CloseButton } from "../IconButton";
 import type { DialogProps } from "./Dialog.types";
@@ -70,7 +71,7 @@ export function Dialog({
                 role="dialog"
                 tabIndex={-1}
               >
-                <div className="vf-dialog__header">
+                <div className={adoptedOverlayRegionClassName("dialog", "header")}>
                   <div className="vf-dialog__heading">
                     {title && (
                       <h2 className="vf-dialog__title" id={titleId}>
@@ -89,8 +90,12 @@ export function Dialog({
                     onClick={() => behavior.dismiss("close-button")}
                   />
                 </div>
-                {children && <div className="vf-dialog__body">{children}</div>}
-                {footer && <div className="vf-dialog__footer">{footer}</div>}
+                {children && <div className={adoptedOverlayRegionClassName("dialog", "body")}>
+                    {children}
+                  </div>}
+                {footer && <div className={adoptedOverlayRegionClassName("dialog", "footer")}>
+                    {footer}
+                  </div>}
               </div>
             </FocusScope>
           </DismissableLayer>
