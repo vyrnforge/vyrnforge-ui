@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { adoptedItemRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type {
   TransferListOptionData,
@@ -58,7 +59,7 @@ export function TransferListOption({
         type="checkbox"
         value={option.value}
       />
-      <span className="vf-transfer-list__option-content">
+      <span className={adoptedItemRegionClassName("transfer-list", "option")}>
         {renderOption ? (
           <>
             {renderOption(option, { panel, selected, active, disabled })}
@@ -70,12 +71,12 @@ export function TransferListOption({
           </>
         ) : (
           <>
-            <span className="vf-transfer-list__option-label">
+            <span className={adoptedItemRegionClassName("transfer-list", "label")}>
               {option.label}
             </span>
             {option.description && (
               <span
-                className="vf-transfer-list__option-description"
+                className={adoptedItemRegionClassName("transfer-list", "description")}
                 id={describedById}
               >
                 {option.description}
