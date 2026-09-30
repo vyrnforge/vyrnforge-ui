@@ -1,6 +1,7 @@
 import { act, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
+  Autocomplete,
   Button,
   ConfirmDialog,
   Dialog,
@@ -145,5 +146,29 @@ describe("React overlay and feedback adapters preserve shared behavior parity", 
 
     fireEvent.click(screen.getByRole("button", { name: "Dismiss toast" }));
     expect(screen.queryByText("Updated notification")).not.toBeInTheDocument();
+  });
+
+  it("preserves rich overlay and advanced autocomplete composition", () => {
+    const portal = document.createElement("div");
+    document.body.append(portal);
+
+    render(
+      <Autocomplete
+        defaultOpen
+        loading
+        loadingText={<strong>Loading choices</strong>}
+        noOptionsText={<em>No matches</em>}
+        options={[{ value: "one", label: "One" }]}
+        portalContainer={portal}
+        renderOption={(option) => <strong>{option.label}</strong>}
+      />,
+    );
+
+    expect(portal.querySelector(".vf-autocomplete__layer")).not.toBeNull();
+    expect(portal.querySelector(".vf-autocomplete__option-main strong")).toHaveTextContent(
+      "One",
+    );
+
+    portal.remove();
   });
 });
