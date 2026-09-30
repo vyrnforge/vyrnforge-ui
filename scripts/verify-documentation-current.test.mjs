@@ -37,6 +37,7 @@ function fixture(mutator, callback) {
   try {
     const paths = [
       ...documentationCurrentPaths,
+      "apps/docs/src/referenceRoutes.ts",
       "docs/metadata/release-groups.json",
     ];
     for (const relativePath of new Set(paths)) {
@@ -246,6 +247,29 @@ test("rejects a duplicate package-owned component catalog", () =>
         failures.some((failure) =>
           failure.includes(
             "package README must not maintain an exhaustive component catalog",
+          ),
+        ),
+      ),
+  ));
+
+test("rejects reader-facing Markdown routes omitted from docs verification", () =>
+  fixture(
+    (root) => {
+      const relativePath = "apps/docs/src/referenceRoutes.ts";
+      write(
+        root,
+        relativePath,
+        read(root, relativePath).replace(
+          'sourcePath: "docs/architecture/03-theming-and-styling.md",',
+          'sourcePath: "docs/architecture/unverified-public-page.md",',
+        ),
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "docs/architecture/unverified-public-page.md: reader-facing Markdown route must be included in documentationCurrentPaths",
           ),
         ),
       ),
