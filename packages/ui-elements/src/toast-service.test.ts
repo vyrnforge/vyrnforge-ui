@@ -34,7 +34,7 @@ describe("VyrnForge browser toast service", () => {
     service.destroy();
   });
 
-  it("covers neutral/default ids, shortcuts, updates, bulk dismissal, and scheduler lifecycle", () => {
+  it(\n    "covers neutral/default ids, shortcuts, updates, bulk dismissal, and scheduler lifecycle",\n    () => {
     const service = createVyrnForgeToastService({ defaultDuration: null });
 
     const neutralId = service.toast({
