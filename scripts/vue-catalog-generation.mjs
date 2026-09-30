@@ -62,8 +62,8 @@ export function createVueCatalogModel(generationModel) {
   const components = vue
     .filter(
       (record) =>
-        ["current", "target"].includes(record.status) &&
-        nativeById.get(record.id)?.status === "current",
+        ["current", "target"].includes(record.implementationState) &&
+        nativeById.get(record.id)?.implementationState === "current",
     )
     .map((record) => {
       const native = nativeById.get(record.id);
@@ -96,7 +96,7 @@ export function createVueCatalogModel(generationModel) {
     .sort((left, right) => compareText(left.id, right.id));
 
   const currentNativeCount = generationModel.surfaces.native.components.filter(
-    (record) => record.status === "current",
+    (record) => record.implementationState === "current",
   ).length;
   assert(
     components.length === currentNativeCount,
