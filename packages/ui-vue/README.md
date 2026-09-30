@@ -1,8 +1,8 @@
 # @vyrnforge/ui-vue
 
-First-class Vue facade package for VyrnForge.
+First-class Vue integration package for VyrnForge UI.
 
-`@vyrnforge/ui-vue` is a thin Vue adapter over the canonical native implementation in `@vyrnforge/ui-elements`. It owns Vue-facing component definitions, typing, `v-model` mappings, slots, refs, events, and setup helpers while rendering, accessibility behavior, forms, styling, and shared state semantics remain in VyrnForge's framework-agnostic/native foundations.
+`@vyrnforge/ui-vue` is a thin Vue adapter over the shared browser implementation in `@vyrnforge/ui-elements`. It owns Vue-facing component definitions, typing, `v-model` mappings, slots, refs, events, and setup helpers while reusable rendering behavior, accessibility behavior, forms, styling, and shared state semantics remain in VyrnForge's framework-independent foundations.
 
 The supported Vue peer range is `>=3.4 <4`. Vue is not bundled into the package.
 
