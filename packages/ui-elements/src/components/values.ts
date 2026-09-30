@@ -249,7 +249,9 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
   }
 
   override focus(options?: FocusOptions): void {
-    const radios = [...this.querySelectorAll<HTMLInputElement>("input[type=radio]")];
+    const radios = [
+      ...this.querySelectorAll<HTMLInputElement>("input[type=radio]"),
+    ];
     const target = radios.find((radio) => radio.checked) ?? radios[0];
     target?.focus(options);
   }
