@@ -104,7 +104,10 @@ export function verifyFirstClassSurfaceVerification({
   );
 
   if (policy.supportLevel !== "first-class") {
-    addFailure(failures, "verification policy supportLevel must be first-class");
+    addFailure(
+      failures,
+      "verification policy supportLevel must be first-class",
+    );
   }
   if (surfaces.size !== expectedSurfaces.length) {
     addFailure(
