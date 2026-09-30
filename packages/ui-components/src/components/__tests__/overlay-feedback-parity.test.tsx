@@ -165,9 +165,9 @@ describe("React overlay and feedback adapters preserve shared behavior parity", 
     );
 
     expect(portal.querySelector(".vf-autocomplete__layer")).not.toBeNull();
-    expect(portal.querySelector(".vf-autocomplete__option-main strong")).toHaveTextContent(
-      "One",
-    );
+    expect(
+      portal.querySelector(".vf-autocomplete__option-main strong"),
+    ).toHaveTextContent("One");
 
     portal.remove();
   });
