@@ -165,7 +165,8 @@ export function verifyFirstClassSurfaceVerification({
           `${surfaceId} package is missing ${scriptName} verification`,
         );
       }
-      const rootScript = rootPackage.scripts?.[rootScriptByObligation[scriptName]];
+      const rootScript =
+        rootPackage.scripts?.[rootScriptByObligation[scriptName]];
       if (
         typeof rootScript !== "string" ||
         !rootScript.includes(`--workspace ${surface.package}`)
@@ -179,7 +180,9 @@ export function verifyFirstClassSurfaceVerification({
 
     const coverage = surface.coverage ?? {};
     if (coverage.mode === "instrumented") {
-      if (typeof packageJson.scripts?.[coverage.script] !== "string") {
+      if (
+        typeof packageJson.scripts?.[coverage.script] !== "string"
+      ) {
         addFailure(
           failures,
           `${surfaceId} instrumented coverage script ${String(coverage.script)} is missing`,
