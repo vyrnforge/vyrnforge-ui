@@ -46,7 +46,9 @@ function contract(
     allowedTags: Object.freeze([...value.allowedTags]),
     defaults: value.defaults ? Object.freeze({ ...value.defaults }) : undefined,
     modifiers: value.modifiers
-      ? Object.freeze(value.modifiers.map((modifier) => Object.freeze(modifier)))
+      ? Object.freeze(
+          value.modifiers.map((modifier) => Object.freeze(modifier)),
+        )
       : undefined,
     regions: freezeRegions(value.regions),
   });
@@ -220,7 +222,11 @@ const contracts = {
         semanticTag: "div",
       },
       { name: "main", className: "vf-app-shell__main", semanticTag: "div" },
-      { name: "content", className: "vf-app-shell__content", semanticTag: "div" },
+      {
+        name: "content",
+        className: "vf-app-shell__content",
+        semanticTag: "div",
+      },
       {
         name: "footer",
         className: "vf-app-shell__footer",
@@ -267,7 +273,11 @@ const contracts = {
         semanticTag: "div",
       },
       { name: "title", className: "vf-page-header__title", semanticTag: "h1" },
-      { name: "status", className: "vf-page-header__status", semanticTag: "div" },
+      {
+        name: "status",
+        className: "vf-page-header__status",
+        semanticTag: "div",
+      },
       {
         name: "description",
         className: "vf-page-header__description",
@@ -297,7 +307,11 @@ const contracts = {
     ],
     regions: [
       { name: "left", className: "vf-page-toolbar__left", semanticTag: "div" },
-      { name: "right", className: "vf-page-toolbar__right", semanticTag: "div" },
+      {
+        name: "right",
+        className: "vf-page-toolbar__right",
+        semanticTag: "div",
+      },
     ],
   }),
 } as const;
