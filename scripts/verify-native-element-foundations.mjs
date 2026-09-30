@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { verifyNativeSurfaceCompleteness } from "./native-surface-completeness.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -437,6 +438,8 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
   ) {
     failures.push("nativeParity metadata must match current renderer evidence");
   }
+
+  failures.push(...verifyNativeSurfaceCompleteness(root));
 
   return [...new Set(failures)].sort();
 }
