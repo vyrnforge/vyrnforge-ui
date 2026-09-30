@@ -77,8 +77,8 @@ test("rejects a regressed Angular component support claim", () =>
   fixture(
     (root) => {
       mutateJson(root, "docs/metadata/components.json", (value) => {
-        const component = value.components.find(
-          (entry) => isPublicNonGridBetaComponent(entry),
+        const component = value.components.find((entry) =>
+          isPublicNonGridBetaComponent(entry),
         );
         component.frameworkParity.angular.status = "planned-gmf4";
       });
@@ -98,8 +98,8 @@ test("rejects a missing canonical component document", () =>
   fixture(
     (root) => {
       mutateJson(root, "docs/metadata/components.json", (value) => {
-        const component = value.components.find(
-          (entry) => isPublicNonGridBetaComponent(entry),
+        const component = value.components.find((entry) =>
+          isPublicNonGridBetaComponent(entry),
         );
         component.docsPath = "docs/api/does-not-exist.md";
       });
