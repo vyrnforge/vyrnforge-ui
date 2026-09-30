@@ -307,36 +307,32 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
     this.setAttribute("aria-label", this.label);
     const document = this.resolveDocument();
     if (!document) return;
-    const nodes = this.#service
-      .getSnapshot()
-      .visibleRecords.map((record) => {
-        const toast = document.createElement(
-          "vf-toast",
-        ) as VyrnForgeToastElement;
-        toast.toastId = record.id;
-        toast.title = record.payload.title ?? "";
-        toast.description = record.payload.description ?? "";
-        toast.tone = record.payload.tone;
-        toast.actionLabel = record.payload.actionLabel ?? "";
-        toast.dismissible = record.dismissible;
-        toast.addEventListener("vf-dismiss", () =>
-          this.dismiss(record.id, "close-button"),
-        );
-        toast.addEventListener("vf-action", () => {
-          this.#service.triggerAction(record.id);
-          this.dispatchTypedEvent("vf-action", {
-            action: "toast-action",
-            id: record.id,
-          });
+    const nodes = this.#service.getSnapshot().visibleRecords.map((record) => {
+      const toast = document.createElement("vf-toast") as VyrnForgeToastElement;
+      toast.toastId = record.id;
+      toast.title = record.payload.title ?? "";
+      toast.description = record.payload.description ?? "";
+      toast.tone = record.payload.tone;
+      toast.actionLabel = record.payload.actionLabel ?? "";
+      toast.dismissible = record.dismissible;
+      toast.addEventListener("vf-dismiss", () =>
+        this.dismiss(record.id, "close-button"),
+      );
+      toast.addEventListener("vf-action", () => {
+        this.#service.triggerAction(record.id);
+        this.dispatchTypedEvent("vf-action", {
+          action: "toast-action",
+          id: record.id,
         });
-        toast.addEventListener("mouseenter", () => {
-          this.#service.pause(record.id, "hover");
-        });
-        toast.addEventListener("mouseleave", () => {
-          this.#service.resume(record.id, "hover");
-        });
-        return toast;
       });
+      toast.addEventListener("mouseenter", () => {
+        this.#service.pause(record.id, "hover");
+      });
+      toast.addEventListener("mouseleave", () => {
+        this.#service.resume(record.id, "hover");
+      });
+      return toast;
+    });
     this.replaceChildren(...nodes);
     this.hidden = nodes.length === 0;
     this.setAttribute("data-vf-element", "");
