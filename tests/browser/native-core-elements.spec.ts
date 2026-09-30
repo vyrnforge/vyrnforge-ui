@@ -137,7 +137,7 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
 
     await page
       .locator(
-        'vf-rating[data-vf-fixture-control="native-rating"] button[data-value="5"]',
+        'vf-rating[data-vf-fixture-control="native-rating"] input[data-value="5"]',
       )
       .click();
     await fixtureAction(page, "native-core-submit").click();
