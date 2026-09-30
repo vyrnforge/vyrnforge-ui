@@ -129,6 +129,13 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     );
     await select.selectOption("east");
 
+    const multiSelect = page.locator(
+      'vf-select[data-vf-fixture-control="native-multi-select"] select',
+    );
+    await expect(multiSelect).toHaveAttribute("multiple", "");
+    await expect(multiSelect.locator("option:checked")).toHaveCount(2);
+    await multiSelect.selectOption(["read", "admin"]);
+
     const slider = page.locator(
       'vf-slider[data-vf-fixture-control="native-slider"] input',
     );
@@ -141,7 +148,7 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     await ratingFive.check();
     await fixtureAction(page, "native-core-submit").click();
     await expect(fixtureRegion(page, "native-core-submission")).toHaveText(
-      "account=updated, subscribed=yes, region=east, risk=4, rating=5",
+      "account=updated, subscribed=yes, region=east, scope=read, scope=admin, risk=4, rating=5",
     );
   });
 
@@ -230,6 +237,14 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     await expect(
       page.locator("#sc-2105-radio-group vf-radio").nth(1).locator("input"),
     ).toBeFocused();
+  });
+
+  test("delegates radio-group focus to its checked radio", async ({ page }) => {
+    const segmented = page.locator(
+      'vf-segmented-control[data-vf-fixture-control="native-segmented"]',
+    );
+    await segmented.evaluate((node) => (node as HTMLElement).focus());
+    await expect(segmented.getByRole("radio", { name: "Summary" })).toBeFocused();
   });
 
   test("keeps field relationships and composite navigation keyboard behavior", async ({
