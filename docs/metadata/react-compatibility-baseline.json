@@ -12,13 +12,20 @@
     "version": "0.2.0-beta.2",
     "manifest": "packages/ui-components/package.json",
     "publicEntry": "packages/ui-components/src/index.ts",
-    "cssEntrypoints": ["./style.css", "./index.css", "./styles/index.css"],
+    "cssEntrypoints": [
+      "./style.css",
+      "./index.css",
+      "./styles/index.css"
+    ],
     "peerDependencies": {
       "react": ">=18 <20",
       "react-dom": ">=18 <20"
     }
   },
-  "testedReactVersions": ["18.3.1", "19.2.7"],
+  "testedReactVersions": [
+    "18.3.1",
+    "19.2.7"
+  ],
   "fingerprints": [
     {
       "path": "packages/ui-components/package.json",
@@ -35,12 +42,15 @@
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
       "sha1": "7a650c126f51169cf91141848bb28878942aa98f",
-      "covers": ["public value exports", "public type exports"]
+      "covers": [
+        "public value exports",
+        "public type exports"
+      ]
     },
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "b8efa1b568635cd6d37b127579fdf00424a00453",
+      "sha1": "63369afca7399b08d611fb729f1f9c29969b1da3",
       "covers": [
         "component props and types",
         "callbacks",
@@ -53,19 +63,25 @@
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
       "sha1": "4a052e9b0350944b813bd0d27806d5fb7f458544",
-      "covers": ["React renderer CSS implementation"]
+      "covers": [
+        "React renderer CSS implementation"
+      ]
     },
     {
       "path": "docs/api/ui-components-api.md",
       "kind": "blob",
       "sha1": "f9f30e2a8c84ff2db6789e0efa0bc0aa9719cc3b",
-      "covers": ["documented React public API and usage contracts"]
+      "covers": [
+        "documented React public API and usage contracts"
+      ]
     },
     {
       "path": "packages/ui-components/README.md",
       "kind": "blob",
       "sha1": "0f8277e4a6bddfa0a35dc3367001b6e529de2f91",
-      "covers": ["React package ownership and public consumption contract"]
+      "covers": [
+        "React package ownership and public consumption contract"
+      ]
     },
     {
       "path": "docs/metadata/react-behavior-adoption.json",
@@ -81,7 +97,10 @@
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
       "sha1": "f95919a980e055452eebb197e7e5f00c7546e37a",
-      "covers": ["tested React versions", "packed consumer compatibility cases"]
+      "covers": [
+        "tested React versions",
+        "packed consumer compatibility cases"
+      ]
     }
   ],
   "runtimeEvidence": [
@@ -192,6 +211,11 @@
       "task": "PA-2005",
       "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
       "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
+    },
+    {
+      "task": "SC-2103",
+      "reason": "React Toast keeps its existing provider/hook API and renderer composition while delegating lifecycle state, timers, pause/resume, dismissal, and action orchestration to the shared VyrnForge toast service. Existing React toast browser/parity coverage and the shared service tests protect the compatibility surface during this implementation-tree recapture.",
+      "evidence": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx; packages/ui-behaviors/src/toast-service.test.ts; packages/ui-elements/src/toast-service.test.ts"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
