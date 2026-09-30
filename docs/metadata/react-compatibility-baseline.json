@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "e1e22da83d8c9b236722f065367c535032523cb0",
+      "sha1": "62f50c122e2a1b737ebde79a0758e6178fbbf8b0",
       "covers": [
         "component props and types",
         "callbacks",
@@ -189,14 +189,19 @@
       "evidence": "scripts/verify-documentation-current.mjs"
     },
     {
-      "task": "SC-2104",
-      "reason": "React Text, Caption, and CodeText adopt the shared framework-neutral host-adoption contract while preserving their documented tags, classes, props, refs, rendering behavior, and first-class React surface. The implementation-tree fingerprint is intentionally recaptured with host-adoption parity tests.",
-      "evidence": "packages/ui-components/src/__tests__/host-adoption.test.tsx"
-    },
-    {
       "task": "PA-2005",
       "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
       "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
+    },
+    {
+      "task": "SC-2104",
+      "reason": "React Text, Caption, CodeText, layout, and rich-region surfaces adopt the shared framework-neutral host-adoption contract while preserving documented tags, classes, props, refs, rendering behavior, and the first-class React surface. The combined SC-2103 + SC-2104 implementation-tree fingerprint is intentionally recaptured with host-adoption parity evidence.",
+      "evidence": "packages/ui-components/src/__tests__/host-adoption.test.tsx"
+    },
+    {
+      "task": "SC-2103",
+      "reason": "React Toast keeps its existing provider/hook API and renderer composition while delegating lifecycle state, timers, pause/resume, dismissal, and action orchestration to the shared VyrnForge toast service. Existing React toast browser/parity coverage and the shared service tests protect the compatibility surface during this implementation-tree recapture.",
+      "evidence": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx; packages/ui-behaviors/src/toast-service.test.ts; packages/ui-elements/src/toast-service.test.ts"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
