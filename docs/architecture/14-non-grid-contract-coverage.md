@@ -8,6 +8,13 @@
 
 ## Purpose
 
+> **Historical program note:** this S11 inventory used the then-established
+> React package export catalog as its bounded migration scope. That package
+> filter is not the VyrnForge product model and must not be interpreted as React
+> owning canonical component semantics. Current product scope is defined by the
+> framework-neutral catalog/contracts and the equal Native/React/Angular/Vue
+> surface model in Project Source of Truth.
+
 S11 generation must not discover public component semantics by reading React,
 Angular, Vue, or Custom Element implementation source. Before generation begins,
 every supported public non-grid component therefore needs an explicit coverage

@@ -1,6 +1,6 @@
 # Package Boundaries
 
-This document is the canonical human-readable package-ownership and dependency-direction contract. Package manifests and repository boundary verification are authoritative for concrete dependency edges; metadata and generated inventory must agree with them.
+This document is the canonical human-readable contract for the repository's **current implementation package boundaries and dependency directions**. Package ownership is not product ownership: VyrnForge's canonical component semantics remain framework-neutral, and Native, React, Angular, and Vue are equal first-class product surfaces. Package manifests and repository boundary verification are authoritative for concrete dependency edges; metadata and generated inventory must agree with them.
 
 ## Current dependency graph
 
@@ -27,7 +27,7 @@ ui-components
   +--> ui-data-grid
 ```
 
-The `ui-components -> ui-elements` dependency is part of React convergence toward the canonical browser implementation. It does not make the React public API a raw Custom Element API and does not lower React's first-class support status.
+The `ui-components -> ui-elements` dependency is implementation reuse. It does not make Native the higher-ranked product surface, does not make React secondary, and does not turn the React public API into a raw Custom Element API.
 
 ## `@vyrnforge/ui-core`
 
@@ -49,7 +49,7 @@ Must not own framework runtime objects, DOM execution, CSS rendering, applicatio
 
 ## `@vyrnforge/ui-elements`
 
-Owns the canonical default browser implementation and first-class Native HTML surface: `vf-*` Custom Elements, registration, property/attribute reflection, typed DOM events, Light DOM rendering, form association, package styling, and native DOM adapters.
+Owns the current reusable browser-native implementation and first-class Native HTML surface: `vf-*` Custom Elements, registration, property/attribute reflection, typed DOM events, Light DOM rendering, form association, package styling, and native DOM adapters.
 
 Allowed VyrnForge dependencies:
 
@@ -68,7 +68,7 @@ Allowed VyrnForge dependencies:
 - `@vyrnforge/ui-behaviors`
 - `@vyrnforge/ui-elements`
 
-The native dependency supports canonical-backed React convergence. React-specific code remains responsible for idiomatic React API compatibility and any explicit framework exceptions. The package must not become an independent source of canonical component semantics merely because a narrow React-specific implementation remains necessary.
+The native dependency supports shared browser-implementation reuse. React-specific code remains responsible for idiomatic React API compatibility and any explicit framework exceptions. The package must not become an independent source of canonical component semantics merely because a narrow React-specific implementation remains necessary.
 
 Must not depend on `@vyrnforge/ui-angular`, `@vyrnforge/ui-vue`, `@vyrnforge/ui-data-grid`, a required application store, or a large third-party UI runtime.
 
@@ -96,14 +96,14 @@ Vue remains a peer supplied by the consuming application. The package must not d
 
 ## `@vyrnforge/ui-data-grid`
 
-Owns the specialized React data grid, grid state/contracts, grid algorithms, adapters, and `udg-*` styling.
+Owns the currently shipped React-alpha Data Grid implementation, grid state/contracts, grid algorithms, adapters, and `udg-*` styling. Data Grid is an optional advanced VyrnForge module, not a peer framework surface.
 
 Allowed VyrnForge dependencies:
 
 - `@vyrnforge/ui-core`
 - `@vyrnforge/ui-components`
 
-The grid remains independently versioned on its React alpha track and is outside the non-grid framework convergence claim.
+The current grid package remains independently versioned on its React alpha track. This is a current implementation/release limitation, not the target product hierarchy; future multi-surface grid work requires an explicit advanced-module architecture change.
 
 ## Dependency-direction rules
 
@@ -123,7 +123,7 @@ Framework facade packages must not depend on one another. Shared non-grid founda
 
 Package ownership does not create separate component models. Canonical component contracts and metadata define product semantics shared across all first-class surfaces. Packages own implementation and framework translation responsibilities only.
 
-The native implementation is the default browser implementation strategy. That is distinct from public support status: React, Native HTML, Angular, and Vue are equal first-class product surfaces even though Angular and Vue are facades over `ui-elements` and React increasingly reuses the canonical implementation.
+React, Native HTML, Angular, and Vue are equal first-class product surfaces. The repository currently reuses the Native/Custom Element package as a shared browser implementation for other surfaces where practical. That implementation strategy is distinct from product support status and may evolve without changing the equal-surface model.
 
 ## Framework exception boundary
 
