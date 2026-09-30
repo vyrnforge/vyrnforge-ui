@@ -76,9 +76,7 @@ export function Drawer({
                 role="dialog"
                 tabIndex={-1}
               >
-                <div
-                  className={adoptedOverlayRegionClassName("drawer", "header")}
-                >
+                <div className={adoptedOverlayRegionClassName("drawer", "header")}>
                   <div className="vf-drawer__heading">
                     {title && (
                       <h2 className="vf-drawer__title" id={titleId}>
@@ -98,12 +96,16 @@ export function Drawer({
                   />
                 </div>
                 {children && (
-                  <div className={adoptedOverlayRegionClassName("drawer", "body")}>
+                  <div
+                    className={adoptedOverlayRegionClassName("drawer", "body")}
+                  >
                     {children}
                   </div>
                 )}
                 {footer && (
-                  <div className={adoptedOverlayRegionClassName("drawer", "footer")}>
+                  <div
+                    className={adoptedOverlayRegionClassName("drawer", "footer")}
+                  >
                     {footer}
                   </div>
                 )}
