@@ -38,11 +38,7 @@
     "workflow": ".github/workflows/ci.yml",
     "branch": "main",
     "requiredCheck": "ci-gate",
-    "requiredJobs": [
-      "quality-checks",
-      "integration-checks",
-      "security-checks"
-    ],
+    "requiredJobs": ["quality-checks", "integration-checks", "security-checks"],
     "continueOnErrorForbidden": true,
     "unexpectedSkipsFail": true
   },
@@ -55,10 +51,7 @@
   },
   "verification": {
     "command": "npm run verify:security-workflow-hardening",
-    "workflows": [
-      ".github/workflows/ci.yml",
-      ".github/workflows/assurance.yml"
-    ]
+    "workflows": [".github/workflows/ci.yml", ".github/workflows/assurance.yml"]
   },
   "releaseReadiness": "not-ready"
 }
