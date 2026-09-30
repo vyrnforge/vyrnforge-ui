@@ -93,8 +93,8 @@ function assertButtonRecord(record, framework) {
     assert(record.tag === "vf-button", "native: Button must target vf-button");
   }
   assert(
-    record.adapter.canonicalRenderer === "@vyrnforge/ui-elements",
-    `${framework}: Button must keep @vyrnforge/ui-elements as canonical renderer`,
+    record.adapter.sharedBrowserImplementation === "@vyrnforge/ui-elements",
+    `${framework}: Button must keep @vyrnforge/ui-elements as shared browser implementation`,
   );
   assert(
     record.properties.length > 0,
@@ -184,7 +184,7 @@ export function createFrameworkButtonSliceModel(generationModel) {
     schemaVersion: 1,
     task: "MFD-1112",
     component: FRAMEWORK_BUTTON_COMPONENT_ID,
-    canonicalRenderer: "@vyrnforge/ui-elements",
+    sharedBrowserImplementation: "@vyrnforge/ui-elements",
     surfaces,
   };
 }
