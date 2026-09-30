@@ -19,6 +19,7 @@ import {
   Portal,
   useAnchoredPosition,
 } from "../../internal/overlay";
+import { adoptedOverlayRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type { TooltipProps } from "./Tooltip.types";
 
@@ -148,7 +149,7 @@ export function Tooltip({
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[{ current: triggerElement }]}
-            className="vf-tooltip__content"
+            className={adoptedOverlayRegionClassName("tooltip", "content")}
             dismissOnEscape={false}
             dismissOnOutsidePointer={false}
             enabled={behavior.isOpen}
