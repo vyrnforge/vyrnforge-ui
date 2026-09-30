@@ -135,11 +135,10 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     await slider.fill("4");
     await slider.dispatchEvent("change");
 
-    await page
-      .locator(
-        'vf-rating[data-vf-fixture-control="native-rating"] input[data-value="5"]',
-      )
-      .click();
+    const ratingFive = page.locator(
+      'vf-rating[data-vf-fixture-control="native-rating"] input[data-value="5"]',
+    );
+    await page.locator("label.vf-rating__item").filter({ has: ratingFive }).click();
     await fixtureAction(page, "native-core-submit").click();
     await expect(fixtureRegion(page, "native-core-submission")).toHaveText(
       "account=updated, subscribed=yes, region=east, risk=4, rating=5",
@@ -225,7 +224,9 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     );
     expect(resetValue).toEqual(["east", "west"]);
 
-    await page.locator("#sc-2105-radio-group").focus();
+    await page.evaluate(() =>
+      (document.querySelector("#sc-2105-radio-group") as HTMLElement).focus(),
+    );
     await expect(
       page.locator("#sc-2105-radio-group vf-radio").nth(1).locator("input"),
     ).toBeFocused();
