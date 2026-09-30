@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
-
-export type DataGridColumnVisibilityState = Record<string, boolean>;
-
-export type DataGridColumnSizingState = Record<string, number>;
+import type { DataGridFoundationColumnDef } from "../foundation/types";
+export type {
+  DataGridColumnSizingState,
+  DataGridColumnVisibilityState,
+} from "../foundation/types";
 
 export type DataGridColumnDataType =
   | "string"
@@ -38,11 +39,8 @@ export type DataGridAggregationDef<
 
 export type DataGridColumnDef<
   RowData extends Record<string, unknown> = Record<string, unknown>,
-> = {
-  id: string;
+> = DataGridFoundationColumnDef<RowData> & {
   header: string;
-  accessorKey?: keyof RowData;
-  accessorFn?: (row: RowData) => unknown;
   cell?: (value: unknown, row: RowData, index: number) => ReactNode;
   groupable?: boolean;
   groupLabel?: (value: unknown) => ReactNode;
@@ -53,7 +51,6 @@ export type DataGridColumnDef<
   maxWidth?: number;
   resizable?: boolean;
   sortable?: boolean;
-  searchable?: boolean;
   filterable?: boolean;
   hideable?: boolean;
   hidden?: boolean;

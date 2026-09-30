@@ -341,6 +341,35 @@ export function verifyPackageBoundaries({ root = repositoryRoot } = {}) {
     }
   }
 
+  const gridNeutralZones = [
+    "packages/ui-data-grid/src/foundation",
+    "packages/ui-data-grid/src/state",
+  ].map((directory) => path.join(root, directory));
+  for (const neutralDirectory of gridNeutralZones) {
+    for (const sourceFile of collectSourceFiles(neutralDirectory)) {
+      const source = readFileSync(sourceFile, "utf8");
+      const sourceFilePath = relativePath(root, sourceFile);
+      for (const specifier of extractImportSpecifiers(
+        source,
+        path.extname(sourceFile),
+      )) {
+        if (
+          matchesPackageSpecifier(specifier, [
+            "react",
+            "react-dom",
+            "vue",
+            "@angular/",
+            "@vyrnforge/ui-components",
+          ])
+        ) {
+          failures.push(
+            `${sourceFilePath}: Data Grid neutral foundation must not import framework runtime or React distribution ${specifier}`,
+          );
+        }
+      }
+    }
+  }
+
   return failures;
 }
 

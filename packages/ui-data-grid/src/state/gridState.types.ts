@@ -2,7 +2,7 @@ import type {
   DataGridPersistKey,
   DataGridPersistedState,
   DataGridState,
-} from "../types/dataGrid.types";
+} from "../foundation/types";
 
 export type { DataGridPersistKey, DataGridPersistedState, DataGridState };
 
