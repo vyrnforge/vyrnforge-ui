@@ -458,6 +458,10 @@ export default VfTabs;
 }
 
 export function buildFrameworkTabsArtifacts(model) {
+  assert(
+    model.component === FRAMEWORK_TABS_COMPONENT_ID,
+    "Tabs artifacts require the canonical tabs slice model",
+  );
   return Object.freeze([
     Object.freeze({
       path: FRAMEWORK_TABS_ARTIFACT_PATHS.native,
