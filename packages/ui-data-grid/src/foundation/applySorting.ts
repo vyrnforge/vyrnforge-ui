@@ -1,7 +1,4 @@
-import type {
-  DataGridFoundationColumnDef,
-  DataGridSort,
-} from "./types";
+import type { DataGridFoundationColumnDef, DataGridSort } from "./types";
 
 const getColumnValue = <RowData extends Record<string, unknown>>(
   row: RowData,
