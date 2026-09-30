@@ -1,9 +1,7 @@
 # ADR-009: React Canonical-Renderer Convergence Strategy
 
-- Status: Accepted target migration strategy
-- Task: MFD-1012
-- Depends on: MFD-1002, MFD-1008, MFD-1009
-- Target sprint: S14
+- Status: Accepted migration strategy
+- Related: [ADR-005](adr-005-canonical-web-implementation.md), [ADR-006](adr-006-framework-package-strategy.md), [ADR-008](adr-008-framework-exception-policy.md)
 - Public package: `@vyrnforge/ui-components`
 
 ## Context
@@ -80,10 +78,11 @@ required for the batch.
 
 ### 2. Canonical contract parity
 
-The React facade must map the schema-v2 canonical properties, events, slots,
-model/form semantics, refs, methods, and accessibility obligations according to
-MFD-1006 through MFD-1008. React-specific behavior must not be rediscovered from
-implementation source.
+The React facade must map the current canonical properties, events, composition
+regions, model/form semantics, refs, methods, and accessibility obligations
+defined by the shared component contracts and the model/form, composition, and
+event/ref mapping contracts. React-specific behavior must not be rediscovered
+from implementation source.
 
 ### 3. Accessibility and focus parity
 
@@ -104,8 +103,9 @@ React-only branch.
 ### 5. Performance budget
 
 The batch must compare relevant render/update cost and package impact against
-the current React baseline. A regression outside the approved S14 budget blocks
-cutover unless an explicit performance exception is approved.
+the current React baseline. A regression outside the approved component or
+module performance budget blocks cutover unless an explicit performance
+exception is approved.
 
 Performance evidence must be measured; architectural preference is not evidence.
 
@@ -129,8 +129,9 @@ implementation without changing the public package/API contract. Rollback may
 be a source-level implementation switch or another deliberately designed
 mechanism, but it must not require consumers to change imports.
 
-Rollback evidence is retained until the batch has passed the S14 stabilization
-window and G14 requirements.
+Rollback evidence is retained until the batch has passed its defined
+stabilization window and the current required repository, packed-consumer, and
+release-readiness gates.
 
 ## Migration states
 
@@ -166,21 +167,21 @@ If a documented React DOM/CSS contract cannot be preserved through the
 canonical implementation, treat that as migration compatibility evidence and
 resolve it explicitly rather than forking silently.
 
-## Sequence guidance for S14
+## Sequence guidance
 
 Start with low-risk components whose canonical contracts and composition are
 simple, then move to stateful controls, forms, navigation/composites, and
 finally overlays or components with complex focus/SSR behavior. Exact batches
-must be selected from repository evidence at S14 execution time rather than
-hard-coded in this S10 ADR.
+must be selected from current repository evidence rather than hard-coded into
+this ADR.
 
-## G14 relationship
+## Completion criteria
 
-MFD-1014 defines G14 evidence categories. React convergence is not complete
-merely because every component has a facade. G14 requires the packed React
-surface to prove public API compatibility, canonical behavior/accessibility,
-SSR/bundler safety, measured performance, documented exceptions, and rollback
-coverage across the migrated catalog.
+React convergence is not complete merely because every component has a facade.
+The packed React surface must prove public API compatibility, canonical
+behavior/accessibility, SSR/bundler safety, relevant measured performance,
+documented exceptions, and rollback or stabilization evidence across the
+migrated catalog.
 
 ## Rejected approaches
 
@@ -199,9 +200,9 @@ requires dedicated renderers to be evidence-backed exceptions.
 Rejected by ADR-006. Implementation convergence does not rename
 `@vyrnforge/ui-components`.
 
-## Acceptance mapping
+## Acceptance criteria
 
-MFD-1012 requires a React convergence migration strategy. This ADR defines an
-incremental, reversible batch model with explicit public API, canonical parity,
-accessibility, SSR/hydration, performance, packed-package, exception, and
-rollback gates while preserving the existing React package identity.
+This ADR defines the current incremental, reversible convergence model with
+explicit public API, canonical parity, accessibility, SSR/hydration,
+performance, packed-package, exception, and rollback gates while preserving the
+existing React package identity.
