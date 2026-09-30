@@ -1,6 +1,11 @@
-import { joinClassNames } from "../../utils/classNames";
+import {
+  adoptedRegionClassName,
+  resolveAdoptedHostClassName,
+} from "../../internal/hostAdoption";
 import { PageHeader } from "../PageHeader";
 import type { PageProps } from "./Page.types";
+
+const region = (name: string) => adoptedRegionClassName("page", name);
 
 export function Page({
   actions,
@@ -19,10 +24,9 @@ export function Page({
 
   return (
     <main
-      className={joinClassNames(
-        "vf-page",
-        `vf-page--max-${maxWidth}`,
-        `vf-page--${density}`,
+      className={resolveAdoptedHostClassName(
+        "page",
+        { density, maxWidth },
         className,
       )}
       {...props}
@@ -36,8 +40,8 @@ export function Page({
           title={title}
         />
       )}
-      {toolbar && <div className="vf-page__toolbar">{toolbar}</div>}
-      {children && <div className="vf-page__body">{children}</div>}
+      {toolbar && <div className={region("toolbar")}>{toolbar}</div>}
+      {children && <div className={region("body")}>{children}</div>}
     </main>
   );
 }
