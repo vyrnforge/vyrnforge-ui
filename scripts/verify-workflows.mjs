@@ -139,7 +139,6 @@ assert(
   "ci.yml must own CI jobs directly instead of exposing internal reusable workflows",
 );
 
-
 assert(
   !/push:\s*[\s\S]*integration\/\*\*/.test(
     ci.slice(0, ci.indexOf("pull_request:")),
