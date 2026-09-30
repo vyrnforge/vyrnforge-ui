@@ -138,7 +138,10 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     const ratingFive = page.locator(
       'vf-rating[data-vf-fixture-control="native-rating"] input[data-value="5"]',
     );
-    await page.locator("label.vf-rating__item").filter({ has: ratingFive }).click();
+    await page
+      .locator("label.vf-rating__item")
+      .filter({ has: ratingFive })
+      .click();
     await fixtureAction(page, "native-core-submit").click();
     await expect(fixtureRegion(page, "native-core-submission")).toHaveText(
       "account=updated, subscribed=yes, region=east, risk=4, rating=5",
