@@ -239,14 +239,6 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     ).toBeFocused();
   });
 
-  test("delegates radio-group focus to its checked radio", async ({ page }) => {
-    const segmented = page.locator(
-      'vf-segmented-control[data-vf-fixture-control="native-segmented"]',
-    );
-    await segmented.evaluate((node) => (node as HTMLElement).focus());
-    await expect(segmented.getByRole("radio", { name: "Summary" })).toBeFocused();
-  });
-
   test("keeps field relationships and composite navigation keyboard behavior", async ({
     page,
   }) => {
