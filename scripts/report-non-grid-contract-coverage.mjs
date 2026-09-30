@@ -120,7 +120,10 @@ if (
 ) {
   const report = createCoverageReport();
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-  if (process.argv.includes("--require-contract-ready") && !report.contractReady) {
+  if (
+    process.argv.includes("--require-contract-ready") &&
+    !report.contractReady
+  ) {
     process.exitCode = 1;
   }
 }
