@@ -72,7 +72,7 @@
         "@vyrnforge/ui-behaviors",
         "@vyrnforge/ui-elements"
       ],
-      "foundationStage": "first-class-react-current"
+      "foundationStage": "first-class-react-converged"
     },
     {
       "name": "@vyrnforge/ui-angular",
@@ -162,7 +162,7 @@
   "architecture": {
     "canonicalComponentModel": "docs/metadata/component-contracts.json",
     "defaultBrowserImplementation": "@vyrnforge/ui-elements",
-    "facadePolicy": "shared-implementation-where-practical-with-idiomatic-surface-apis-and-explicit-exceptions",
+    "facadePolicy": "generated-or-generic-canonical-backed",
     "exceptionPolicy": "docs/architecture/adr-008-framework-exception-policy.md",
     "supportRule": "Native HTML, React, Angular, and Vue are equal first-class product surfaces. Internal renderer/package reuse does not establish support rank."
   },
