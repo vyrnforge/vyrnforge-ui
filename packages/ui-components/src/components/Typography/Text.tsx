@@ -16,11 +16,7 @@ export function Text({
 
   return (
     <Component
-      className={resolveAdoptedHostClassName(
-        "text",
-        { size, tone },
-        className,
-      )}
+      className={resolveAdoptedHostClassName("text", { size, tone }, className)}
       {...props}
     />
   );
