@@ -29,12 +29,13 @@ A component is in MFD-1010 scope when all of the following are true in
 `docs/metadata/components.json`:
 
 1. `publicExport` is `true`;
-2. the package is `@vyrnforge/ui-components`;
-3. `frameworkParity.betaScope` is `included`;
-4. the component is not a data-grid or grid-feature record.
+2. `frameworkParity.betaScope` is `included`;
+3. the component is not a data-grid or grid-feature record.
 
-The inventory intentionally excludes `@vyrnforge/ui-data-grid` and all grid
-features. Multi-framework data-grid work remains outside S10-S15.
+The catalog `package` field records distribution ownership and is not a scope
+selector. The inventory intentionally excludes data-grid and grid-feature
+records; multi-framework data-grid work remains outside this historical
+S10-S15 coverage program.
 
 ## Coverage states
 
