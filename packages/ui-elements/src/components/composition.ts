@@ -11,7 +11,9 @@ export type VyrnForgeAppShellScrollMode = "page" | "content" | "split";
 export type VyrnForgeAppShellHeaderPosition = "static" | "sticky" | "fixed";
 export type VyrnForgeAppShellSidebarPosition = "static" | "sticky" | "fixed";
 export type VyrnForgePageToolbarDensity =
-  "compact" | "standard" | "comfortable";
+  | "compact"
+  | "standard"
+  | "comfortable";
 
 function regionClass(id: VyrnForgeHostAdoptionId, name: string): string {
   const region = findVyrnForgeNamedRegion(
