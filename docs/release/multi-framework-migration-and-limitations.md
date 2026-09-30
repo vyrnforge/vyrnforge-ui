@@ -24,13 +24,18 @@ A prerelease channel describes distribution maturity. Component maturity is stil
 - Angular: `@vyrnforge/ui-angular`
 - Vue: `@vyrnforge/ui-vue`
 
-All four non-grid surfaces share the same VyrnForge design tokens, accessibility expectations, and canonical component contracts.
+All four non-grid surfaces are equal first-class VyrnForge surfaces and share
+the same design tokens, accessibility expectations, canonical component
+contracts, terminology, and support model. Current internal implementation reuse
+does not rank one surface above another.
 
 Use Native HTML deliberately at interoperability boundaries. Do not create a second framework wrapper when the supported VyrnForge package already covers the integration.
 
 ## Current limitations
 
-- The data grid is currently React-only.
+- Data Grid is an advanced VyrnForge module. Its currently shipped package is
+  React-only alpha; this is an implementation/release limitation rather than a
+  fifth surface or a permanent product hierarchy.
 - Angular and Vue support follows the peer ranges declared by their package manifests.
 - Framework form/model adapters translate VyrnForge control contracts; they are not application business-form frameworks.
 - Server-safe imports do not mean browser-only Custom Element internals are server-rendered.
