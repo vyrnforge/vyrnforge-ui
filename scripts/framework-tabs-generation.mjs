@@ -7,7 +7,6 @@ export const FRAMEWORK_TABS_ARTIFACT_PATHS = Object.freeze({
   vue: "tests/consumers/vue/src/generated/VfTabs.generated.ts",
 });
 
-const TASK_ID = "MFD-1114";
 const SHARED_BROWSER_IMPLEMENTATION = "@vyrnforge/ui-elements";
 const REQUIRED_PROPERTIES = Object.freeze([
   "value",
@@ -117,7 +116,6 @@ export function createFrameworkTabsSliceModel(generationModel) {
 
   return Object.freeze({
     schemaVersion: 1,
-    task: TASK_ID,
     component: FRAMEWORK_TABS_COMPONENT_ID,
     sharedBrowserImplementation: SHARED_BROWSER_IMPLEMENTATION,
     surfaces,
@@ -460,7 +458,10 @@ export default VfTabs;
 }
 
 export function buildFrameworkTabsArtifacts(model) {
-  assert(model.task === TASK_ID, "Tabs slice must be owned by MFD-1114");
+  assert(
+    model.component === FRAMEWORK_TABS_COMPONENT_ID,
+    "Tabs artifacts require the canonical tabs slice model",
+  );
   return Object.freeze([
     Object.freeze({
       path: FRAMEWORK_TABS_ARTIFACT_PATHS.native,

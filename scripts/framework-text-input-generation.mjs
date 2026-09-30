@@ -9,7 +9,6 @@ export const FRAMEWORK_TEXT_INPUT_ARTIFACT_PATHS = Object.freeze({
   vue: "tests/consumers/vue/src/generated/VfTextInput.generated.ts",
 });
 
-const TASK_ID = "MFD-1113";
 const SHARED_BROWSER_IMPLEMENTATION = "@vyrnforge/ui-elements";
 const REQUIRED_PROPERTIES = Object.freeze([
   "name",
@@ -128,7 +127,6 @@ export function createFrameworkTextInputSliceModel(generationModel) {
 
   return Object.freeze({
     schemaVersion: 1,
-    task: TASK_ID,
     component: FRAMEWORK_TEXT_INPUT_COMPONENT_ID,
     sharedBrowserImplementation: SHARED_BROWSER_IMPLEMENTATION,
     surfaces,
@@ -467,7 +465,10 @@ export default VfTextInput;
 }
 
 export function buildFrameworkTextInputArtifacts(model) {
-  assert(model.task === TASK_ID, "TextInput slice must be owned by MFD-1113");
+  assert(
+    model.component === FRAMEWORK_TEXT_INPUT_COMPONENT_ID,
+    "TextInput artifacts require the canonical text-input slice model",
+  );
   return Object.freeze([
     Object.freeze({
       path: FRAMEWORK_TEXT_INPUT_ARTIFACT_PATHS.native,

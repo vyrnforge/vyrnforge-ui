@@ -7,7 +7,6 @@ export const FRAMEWORK_DIALOG_ARTIFACT_PATHS = Object.freeze({
   vue: "tests/consumers/vue/src/generated/VfDialog.generated.ts",
 });
 
-const TASK_ID = "MFD-1115";
 const SHARED_BROWSER_IMPLEMENTATION = "@vyrnforge/ui-elements";
 const REQUIRED_PROPERTIES = Object.freeze([
   "open",
@@ -144,7 +143,6 @@ export function createFrameworkDialogSliceModel(generationModel) {
 
   return Object.freeze({
     schemaVersion: 1,
-    task: TASK_ID,
     component: FRAMEWORK_DIALOG_COMPONENT_ID,
     sharedBrowserImplementation: SHARED_BROWSER_IMPLEMENTATION,
     surfaces,
@@ -628,7 +626,10 @@ export default VfDialog;
 }
 
 export function buildFrameworkDialogArtifacts(model) {
-  assert(model.task === TASK_ID, "Dialog slice must be owned by MFD-1115");
+  assert(
+    model.component === FRAMEWORK_DIALOG_COMPONENT_ID,
+    "Dialog artifacts require the canonical dialog slice model",
+  );
   return Object.freeze([
     Object.freeze({
       path: FRAMEWORK_DIALOG_ARTIFACT_PATHS.native,

@@ -182,7 +182,6 @@ export function createFrameworkButtonSliceModel(generationModel) {
 
   return {
     schemaVersion: 1,
-    task: "MFD-1112",
     component: FRAMEWORK_BUTTON_COMPONENT_ID,
     sharedBrowserImplementation: "@vyrnforge/ui-elements",
     surfaces,
