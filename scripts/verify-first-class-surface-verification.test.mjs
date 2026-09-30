@@ -114,7 +114,9 @@ test("rejects an unreasoned coverage-equivalent claim", () =>
       );
       assert(
         failures.some((failure) =>
-          failure.includes("angular coverage-equivalent mode requires evidence"),
+          failure.includes(
+            "angular coverage-equivalent mode requires evidence",
+          ),
         ),
       );
     },
