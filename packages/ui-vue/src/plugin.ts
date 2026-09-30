@@ -40,8 +40,7 @@ export function installVyrnForgeVue<TApp>(
 ): TApp {
   const vueApp = asVueApp(app);
   registerVyrnForgeElements(options.elementRegistry);
-  const toastService =
-    options.toastService ?? createVyrnForgeToastService();
+  const toastService = options.toastService ?? createVyrnForgeToastService();
   vueApp.provide(vyrnForgeToastKey, toastService);
 
   const appWithUnmount = vueApp as App & {
