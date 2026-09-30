@@ -8,11 +8,7 @@ import {
 } from "@vyrnforge/ui-behaviors";
 
 export type VyrnForgeToastServiceTone =
-  | "neutral"
-  | "info"
-  | "success"
-  | "warning"
-  | "error";
+  "neutral" | "info" | "success" | "warning" | "error";
 
 export interface VyrnForgeToastServicePayload {
   readonly title?: string;
@@ -21,8 +17,10 @@ export interface VyrnForgeToastServicePayload {
   readonly actionLabel?: string;
 }
 
-export interface VyrnForgeToastServiceOptions
-  extends Omit<ToastServiceOptions<VyrnForgeToastServicePayload>, "createId"> {
+export interface VyrnForgeToastServiceOptions extends Omit<
+  ToastServiceOptions<VyrnForgeToastServicePayload>,
+  "createId"
+> {
   readonly createId?: () => string;
 }
 
@@ -50,10 +48,7 @@ export interface VyrnForgeToastService {
   error(record: VyrnForgeToastShortcutRecord): string;
   warning(record: VyrnForgeToastShortcutRecord): string;
   info(record: VyrnForgeToastShortcutRecord): string;
-  update(
-    id: string,
-    record: Partial<VyrnForgeToastServiceRecord>,
-  ): boolean;
+  update(id: string, record: Partial<VyrnForgeToastServiceRecord>): boolean;
   dismiss(id: string, reason?: ToastDismissReason): boolean;
   dismissAll(): boolean;
   pause(id: string, reason?: ToastPauseReason): boolean;
