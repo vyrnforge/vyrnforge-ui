@@ -22,7 +22,7 @@
       "MFD-1112"
     ]
   },
-  "sourceSchemaVersion": 2,
+  "sourceSchemaVersion": 3,
   "exceptionPolicy": {
     "defaultPolicy": "generated-or-generic",
     "records": [
@@ -295,14 +295,14 @@
         "current": 62,
         "target": 1,
         "migration": 0,
-        "exception": 0
+        "exception": 0,
+        "firstClass": 63
       },
       "components": [
         {
           "id": "alert",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-inline-message",
           "properties": [
@@ -384,13 +384,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "app-shell",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-app-shell",
           "properties": [
@@ -597,13 +598,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "autocomplete",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-autocomplete",
           "properties": [
@@ -1084,13 +1086,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "badge",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-badge",
           "properties": [
@@ -1188,13 +1191,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "breadcrumbs",
           "category": "navigation",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-breadcrumbs",
           "properties": [
@@ -1315,13 +1319,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "button",
           "category": "action",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-button",
           "properties": [
@@ -1576,13 +1581,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "button-group",
           "category": "action",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-button-group",
           "properties": [
@@ -1680,13 +1686,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "caption",
           "category": "primitive",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-caption",
           "properties": [
@@ -1754,13 +1761,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "card",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-card",
           "properties": [
@@ -1843,13 +1851,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "checkbox",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-checkbox",
           "properties": [
@@ -2179,13 +2188,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "code-text",
           "category": "primitive",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-code-text",
           "properties": [
@@ -2253,13 +2263,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "confirm-dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-confirm-dialog",
           "properties": [
@@ -2493,13 +2504,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "date-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-date-input",
           "properties": [
@@ -2810,13 +2822,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "datetime-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-datetime-input",
           "properties": [
@@ -3127,13 +3140,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "description-list",
           "category": "data-display",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-description-list",
           "properties": [],
@@ -3186,13 +3200,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-dialog",
           "properties": [
@@ -3465,13 +3480,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "drawer",
           "category": "overlay",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-drawer",
           "properties": [
@@ -3759,13 +3775,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "dropdown",
           "category": "overlay",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-popover",
           "properties": [
@@ -3884,13 +3901,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "empty-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-empty-state",
           "properties": [],
@@ -3942,13 +3960,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "error-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-error-state",
           "properties": [
@@ -4016,13 +4035,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "field",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-field",
           "properties": [
@@ -4205,13 +4225,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "heading",
           "category": "primitive",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-heading",
           "properties": [
@@ -4309,13 +4330,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "icon",
           "category": "primitive",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-icon",
           "properties": [
@@ -4418,13 +4440,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "icon-button",
           "category": "action",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-icon-button",
           "properties": [
@@ -4619,13 +4642,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "inline",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-inline",
           "properties": [
@@ -4737,13 +4761,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "inline-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-inline-message",
           "properties": [
@@ -4825,13 +4850,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "label",
           "category": "primitive",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-label",
           "properties": [
@@ -4929,13 +4955,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "loading-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-loading-state",
           "properties": [],
@@ -4987,13 +5014,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "menu",
           "category": "overlay",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-menu",
           "properties": [
@@ -5166,13 +5194,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "multi-select",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-multi-select",
           "properties": [
@@ -5477,13 +5506,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "number-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-number-input",
           "properties": [
@@ -5854,13 +5884,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "page",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-page",
           "properties": [
@@ -5943,13 +5974,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "page-header",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-page-header",
           "properties": [
@@ -6069,13 +6101,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "page-toolbar",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-page-toolbar",
           "properties": [
@@ -6180,13 +6213,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "panel",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-panel",
           "properties": [],
@@ -6238,13 +6272,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "popover",
           "category": "overlay",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-popover",
           "properties": [
@@ -6485,13 +6520,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "progress",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "target",
           "export": null,
           "tag": "vf-progress",
           "properties": [
@@ -6566,13 +6602,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "property-table",
           "category": "data-display",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-property-table",
           "properties": [],
@@ -6627,13 +6664,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "radio",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-radio",
           "properties": [
@@ -6949,13 +6987,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "radio-group",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-radio-group",
           "properties": [
@@ -7095,13 +7134,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "rating",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-rating",
           "properties": [
@@ -7369,13 +7409,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "search-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-search-input",
           "properties": [
@@ -7686,13 +7727,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "section",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-section",
           "properties": [],
@@ -7744,13 +7786,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "segmented-control",
           "category": "action",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-segmented-control",
           "properties": [
@@ -7881,13 +7924,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "select",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-select",
           "properties": [
@@ -8164,13 +8208,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "side-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-side-nav",
           "properties": [
@@ -8301,13 +8346,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "skeleton",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-skeleton",
           "properties": [
@@ -8407,13 +8453,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "slider",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-slider",
           "properties": [
@@ -8702,13 +8749,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "stack",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-stack",
           "properties": [
@@ -8806,13 +8854,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "switch",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-switch",
           "properties": [
@@ -9128,13 +9177,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "tabs",
           "category": "navigation",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-tabs",
           "properties": [
@@ -9322,13 +9372,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "text",
           "category": "primitive",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-text",
           "properties": [
@@ -9411,13 +9462,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "text-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-text-input",
           "properties": [
@@ -9728,13 +9780,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "textarea",
           "category": "form-control",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-textarea",
           "properties": [
@@ -10045,13 +10098,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "timeline",
           "category": "data-display",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-timeline",
           "properties": [],
@@ -10106,13 +10160,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "toast",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-toast",
           "properties": [
@@ -10295,13 +10350,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "toggle-button",
           "category": "action",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-toggle-button",
           "properties": [
@@ -10537,13 +10593,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "toggle-button-group",
           "category": "action",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-toggle-button-group",
           "properties": [
@@ -10684,13 +10741,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "toolbar-button",
           "category": "action",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-toolbar-button",
           "properties": [
@@ -10940,13 +10998,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "tooltip",
           "category": "overlay",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-tooltip",
           "properties": [
@@ -11113,13 +11172,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "top-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-top-nav",
           "properties": [],
@@ -11196,13 +11256,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "transfer-list",
           "category": "composite",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-transfer-list",
           "properties": [
@@ -11540,13 +11601,14 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "validation-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "export": null,
           "tag": "vf-validation-message",
           "properties": [
@@ -11615,7 +11677,9 @@
           "adapter": {
             "kind": "canonical-native",
             "canonicalRenderer": "@vyrnforge/ui-elements"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         }
       ]
     },
@@ -11627,14 +11691,14 @@
         "target": 2,
         "migration": 59,
         "exception": 0,
-        "controlled": 29
+        "controlled": 29,
+        "firstClass": 63
       },
       "components": [
         {
           "id": "alert",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Alert",
           "tag": null,
           "properties": [
@@ -11725,13 +11789,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "app-shell",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "AppShell",
           "tag": null,
           "properties": [
@@ -11947,13 +12012,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "autocomplete",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Autocomplete",
           "tag": null,
           "properties": [
@@ -12457,13 +12523,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "badge",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Badge",
           "tag": null,
           "properties": [
@@ -12570,13 +12637,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "breadcrumbs",
           "category": "navigation",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Breadcrumbs",
           "tag": null,
           "properties": [
@@ -12706,13 +12774,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "button",
           "category": "action",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Button",
           "tag": null,
           "properties": [
@@ -12976,13 +13045,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "button-group",
           "category": "action",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ButtonGroup",
           "tag": null,
           "properties": [
@@ -13089,13 +13159,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "caption",
           "category": "primitive",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Caption",
           "tag": null,
           "properties": [
@@ -13172,13 +13243,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "card",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Card",
           "tag": null,
           "properties": [
@@ -13270,13 +13342,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "checkbox",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Checkbox",
           "tag": null,
           "properties": [
@@ -13629,13 +13702,14 @@
               "publicEvent": "onCheckedChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "code-text",
           "category": "primitive",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "CodeText",
           "tag": null,
           "properties": [
@@ -13712,13 +13786,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "confirm-dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ConfirmDialog",
           "tag": null,
           "properties": [
@@ -13975,13 +14050,14 @@
               "publicEvent": "onOpenChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "date-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "DateInput",
           "tag": null,
           "properties": [
@@ -14315,13 +14391,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "datetime-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "DateTimeInput",
           "tag": null,
           "properties": [
@@ -14655,13 +14732,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "description-list",
           "category": "data-display",
           "package": "@vyrnforge/ui-components",
-          "status": "target",
           "export": "DescriptionList",
           "tag": null,
           "properties": [],
@@ -14723,13 +14801,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Dialog",
           "tag": null,
           "properties": [
@@ -15025,13 +15104,14 @@
               "publicEvent": "onOpenChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "drawer",
           "category": "overlay",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Drawer",
           "tag": null,
           "properties": [
@@ -15342,13 +15422,14 @@
               "publicEvent": "onOpenChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "dropdown",
           "category": "overlay",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Dropdown",
           "tag": null,
           "properties": [
@@ -15490,13 +15571,14 @@
               "publicEvent": "onOpenChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "empty-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "EmptyState",
           "tag": null,
           "properties": [],
@@ -15557,13 +15639,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "error-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ErrorState",
           "tag": null,
           "properties": [
@@ -15640,13 +15723,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "field",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Field",
           "tag": null,
           "properties": [
@@ -15838,13 +15922,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "heading",
           "category": "primitive",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Heading",
           "tag": null,
           "properties": [
@@ -15951,13 +16036,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "icon",
           "category": "primitive",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Icon",
           "tag": null,
           "properties": [
@@ -16069,13 +16155,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "icon-button",
           "category": "action",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "IconButton",
           "tag": null,
           "properties": [
@@ -16279,13 +16366,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "inline",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Inline",
           "tag": null,
           "properties": [
@@ -16406,13 +16494,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "inline-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "InlineMessage",
           "tag": null,
           "properties": [
@@ -16503,13 +16592,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "label",
           "category": "primitive",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Label",
           "tag": null,
           "properties": [
@@ -16616,13 +16706,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "loading-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "LoadingState",
           "tag": null,
           "properties": [],
@@ -16683,13 +16774,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "menu",
           "category": "overlay",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Menu",
           "tag": null,
           "properties": [
@@ -16885,13 +16977,14 @@
               "publicEvent": "onOpenChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "multi-select",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "MultiSelect",
           "tag": null,
           "properties": [
@@ -17220,13 +17313,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "number-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "NumberInput",
           "tag": null,
           "properties": [
@@ -17620,13 +17714,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "page",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Page",
           "tag": null,
           "properties": [
@@ -17718,13 +17813,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "page-header",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "PageHeader",
           "tag": null,
           "properties": [
@@ -17853,13 +17949,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "page-toolbar",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "PageToolbar",
           "tag": null,
           "properties": [
@@ -17973,13 +18070,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "panel",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Panel",
           "tag": null,
           "properties": [],
@@ -18040,13 +18138,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "popover",
           "category": "overlay",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Popover",
           "tag": null,
           "properties": [
@@ -18310,13 +18409,14 @@
               "publicEvent": "onOpenChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "progress",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "target",
           "export": "Progress",
           "tag": null,
           "properties": [
@@ -18400,13 +18500,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "property-table",
           "category": "data-display",
           "package": "@vyrnforge/ui-components",
-          "status": "current",
           "export": "PropertyTable",
           "tag": null,
           "properties": [],
@@ -18470,13 +18571,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "radio",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Radio",
           "tag": null,
           "properties": [
@@ -18815,13 +18917,14 @@
               "publicEvent": "onCheckedChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "radio-group",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "RadioGroup",
           "tag": null,
           "properties": [
@@ -18984,13 +19087,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "rating",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Rating",
           "tag": null,
           "properties": [
@@ -19281,13 +19385,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "search-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "SearchInput",
           "tag": null,
           "properties": [
@@ -19621,13 +19726,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "section",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Section",
           "tag": null,
           "properties": [],
@@ -19688,13 +19794,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "segmented-control",
           "category": "action",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "SegmentedControl",
           "tag": null,
           "properties": [
@@ -19848,13 +19955,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "select",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Select",
           "tag": null,
           "properties": [
@@ -20154,13 +20262,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "side-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "SideNav",
           "tag": null,
           "properties": [
@@ -20314,13 +20423,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "skeleton",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Skeleton",
           "tag": null,
           "properties": [
@@ -20429,13 +20539,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "slider",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Slider",
           "tag": null,
           "properties": [
@@ -20747,13 +20858,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "stack",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Stack",
           "tag": null,
           "properties": [
@@ -20860,13 +20972,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "switch",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Switch",
           "tag": null,
           "properties": [
@@ -21205,13 +21318,14 @@
               "publicEvent": "onCheckedChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "tabs",
           "category": "navigation",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Tabs",
           "tag": null,
           "properties": [
@@ -21422,13 +21536,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "text",
           "category": "primitive",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Text",
           "tag": null,
           "properties": [
@@ -21520,13 +21635,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "text-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "TextInput",
           "tag": null,
           "properties": [
@@ -21860,13 +21976,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "textarea",
           "category": "form-control",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Textarea",
           "tag": null,
           "properties": [
@@ -22200,13 +22317,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "timeline",
           "category": "data-display",
           "package": "@vyrnforge/ui-components",
-          "status": "current",
           "export": "Timeline",
           "tag": null,
           "properties": [],
@@ -22270,13 +22388,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "toast",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Toast",
           "tag": null,
           "properties": [
@@ -22468,13 +22587,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "toggle-button",
           "category": "action",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ToggleButton",
           "tag": null,
           "properties": [
@@ -22733,13 +22853,14 @@
               "publicEvent": "onPressedChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "toggle-button-group",
           "category": "action",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ToggleButtonGroup",
           "tag": null,
           "properties": [
@@ -22904,13 +23025,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "toolbar-button",
           "category": "action",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ToolbarButton",
           "tag": null,
           "properties": [
@@ -23183,13 +23305,14 @@
               "publicEvent": "onPressedChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "tooltip",
           "category": "overlay",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Tooltip",
           "tag": null,
           "properties": [
@@ -23365,13 +23488,14 @@
               "publicEvent": "onOpenChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "top-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "TopNav",
           "tag": null,
           "properties": [],
@@ -23457,13 +23581,14 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "transfer-list",
           "category": "composite",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "TransferList",
           "tag": null,
           "properties": [
@@ -23825,13 +23950,14 @@
               "publicEvent": "onValueChange"
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         {
           "id": "validation-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ValidationMessage",
           "tag": null,
           "properties": [
@@ -23909,7 +24035,9 @@
               "publicEvent": null
             },
             "refMode": "forwarded-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         }
       ]
     },
@@ -23921,14 +24049,14 @@
         "target": 61,
         "migration": 0,
         "exception": 0,
-        "forms": 15
+        "forms": 15,
+        "firstClass": 63
       },
       "components": [
         {
           "id": "alert",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfAlert",
           "tag": null,
           "properties": [
@@ -24014,13 +24142,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "app-shell",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfAppShell",
           "tag": null,
           "properties": [
@@ -24231,13 +24360,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "autocomplete",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfAutocomplete",
           "tag": null,
           "properties": [
@@ -24764,13 +24894,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "badge",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfBadge",
           "tag": null,
           "properties": [
@@ -24872,13 +25003,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "breadcrumbs",
           "category": "navigation",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfBreadcrumbs",
           "tag": null,
           "properties": [
@@ -25003,13 +25135,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "button",
           "category": "action",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfButton",
           "tag": null,
           "properties": [
@@ -25268,13 +25401,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "button-group",
           "category": "action",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfButtonGroup",
           "tag": null,
           "properties": [
@@ -25376,13 +25510,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "caption",
           "category": "primitive",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCaption",
           "tag": null,
           "properties": [
@@ -25454,13 +25589,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "card",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCard",
           "tag": null,
           "properties": [
@@ -25547,13 +25683,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "checkbox",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCheckbox",
           "tag": null,
           "properties": [
@@ -25929,13 +26066,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "code-text",
           "category": "primitive",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCodeText",
           "tag": null,
           "properties": [
@@ -26007,13 +26145,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "confirm-dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfConfirmDialog",
           "tag": null,
           "properties": [
@@ -26265,13 +26404,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "date-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDateInput",
           "tag": null,
           "properties": [
@@ -26628,13 +26768,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "datetime-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDateTimeInput",
           "tag": null,
           "properties": [
@@ -26991,13 +27132,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "description-list",
           "category": "data-display",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDescriptionList",
           "tag": null,
           "properties": [],
@@ -27054,13 +27196,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDialog",
           "tag": null,
           "properties": [
@@ -27351,13 +27494,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "drawer",
           "category": "overlay",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDrawer",
           "tag": null,
           "properties": [
@@ -27663,13 +27807,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "dropdown",
           "category": "overlay",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDropdown",
           "tag": null,
           "properties": [
@@ -27806,13 +27951,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "empty-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfEmptyState",
           "tag": null,
           "properties": [],
@@ -27868,13 +28014,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "error-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfErrorState",
           "tag": null,
           "properties": [
@@ -27946,13 +28093,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "field",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfField",
           "tag": null,
           "properties": [
@@ -28139,13 +28287,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "heading",
           "category": "primitive",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfHeading",
           "tag": null,
           "properties": [
@@ -28247,13 +28396,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "icon",
           "category": "primitive",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfIcon",
           "tag": null,
           "properties": [
@@ -28360,13 +28510,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "icon-button",
           "category": "action",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfIconButton",
           "tag": null,
           "properties": [
@@ -28565,13 +28716,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "inline",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfInline",
           "tag": null,
           "properties": [
@@ -28687,13 +28839,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "inline-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfInlineMessage",
           "tag": null,
           "properties": [
@@ -28779,13 +28932,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "label",
           "category": "primitive",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfLabel",
           "tag": null,
           "properties": [
@@ -28887,13 +29041,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "loading-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfLoadingState",
           "tag": null,
           "properties": [],
@@ -28949,13 +29104,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "menu",
           "category": "overlay",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfMenu",
           "tag": null,
           "properties": [
@@ -29146,13 +29302,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "multi-select",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfMultiSelect",
           "tag": null,
           "properties": [
@@ -29504,13 +29661,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "number-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfNumberInput",
           "tag": null,
           "properties": [
@@ -29927,13 +30085,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "page",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPage",
           "tag": null,
           "properties": [
@@ -30020,13 +30179,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "page-header",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPageHeader",
           "tag": null,
           "properties": [
@@ -30150,13 +30310,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "page-toolbar",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPageToolbar",
           "tag": null,
           "properties": [
@@ -30265,13 +30426,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "panel",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPanel",
           "tag": null,
           "properties": [],
@@ -30327,13 +30489,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "popover",
           "category": "overlay",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPopover",
           "tag": null,
           "properties": [
@@ -30592,13 +30755,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "progress",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfProgress",
           "tag": null,
           "properties": [
@@ -30677,13 +30841,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "property-table",
           "category": "data-display",
           "package": "@vyrnforge/ui-angular",
-          "status": "current",
           "export": "VfPropertyTable",
           "tag": null,
           "properties": [],
@@ -30742,13 +30907,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "radio",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfRadio",
           "tag": null,
           "properties": [
@@ -31110,13 +31276,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "radio-group",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfRadioGroup",
           "tag": null,
           "properties": [
@@ -31274,13 +31441,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "rating",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfRating",
           "tag": null,
           "properties": [
@@ -31594,13 +31762,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "search-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSearchInput",
           "tag": null,
           "properties": [
@@ -31957,13 +32126,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "section",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSection",
           "tag": null,
           "properties": [],
@@ -32019,13 +32189,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "segmented-control",
           "category": "action",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSegmentedControl",
           "tag": null,
           "properties": [
@@ -32174,13 +32345,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "select",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSelect",
           "tag": null,
           "properties": [
@@ -32503,13 +32675,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "side-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSideNav",
           "tag": null,
           "properties": [
@@ -32658,13 +32831,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "skeleton",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSkeleton",
           "tag": null,
           "properties": [
@@ -32768,13 +32942,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "slider",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSlider",
           "tag": null,
           "properties": [
@@ -33109,13 +33284,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "stack",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfStack",
           "tag": null,
           "properties": [
@@ -33217,13 +33393,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "switch",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSwitch",
           "tag": null,
           "properties": [
@@ -33585,13 +33762,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "tabs",
           "category": "navigation",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTabs",
           "tag": null,
           "properties": [
@@ -33797,13 +33975,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "text",
           "category": "primitive",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfText",
           "tag": null,
           "properties": [
@@ -33890,13 +34069,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "text-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTextInput",
           "tag": null,
           "properties": [
@@ -34253,13 +34433,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "textarea",
           "category": "form-control",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTextarea",
           "tag": null,
           "properties": [
@@ -34616,13 +34797,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "timeline",
           "category": "data-display",
           "package": "@vyrnforge/ui-angular",
-          "status": "current",
           "export": "VfTimeline",
           "tag": null,
           "properties": [],
@@ -34681,13 +34863,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "toast",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToast",
           "tag": null,
           "properties": [
@@ -34874,13 +35057,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "toggle-button",
           "category": "action",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToggleButton",
           "tag": null,
           "properties": [
@@ -35134,13 +35318,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "toggle-button-group",
           "category": "action",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToggleButtonGroup",
           "tag": null,
           "properties": [
@@ -35300,13 +35485,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "toolbar-button",
           "category": "action",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToolbarButton",
           "tag": null,
           "properties": [
@@ -35574,13 +35760,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "tooltip",
           "category": "overlay",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTooltip",
           "tag": null,
           "properties": [
@@ -35751,13 +35938,14 @@
               "mode": "two-way"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "top-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTopNav",
           "tag": null,
           "properties": [],
@@ -35838,13 +36026,14 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "transfer-list",
           "category": "composite",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTransferList",
           "tag": null,
           "properties": [
@@ -36229,13 +36418,14 @@
               }
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "validation-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfValidationMessage",
           "tag": null,
           "properties": [
@@ -36308,7 +36498,9 @@
               "mode": "none"
             },
             "refMode": "view-child"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       ]
     },
@@ -36320,14 +36512,14 @@
         "target": 61,
         "migration": 0,
         "exception": 0,
-        "vModel": 29
+        "vModel": 29,
+        "firstClass": 63
       },
       "components": [
         {
           "id": "alert",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfAlert",
           "tag": null,
           "properties": [
@@ -36412,13 +36604,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "app-shell",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfAppShell",
           "tag": null,
           "properties": [
@@ -36628,13 +36821,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "autocomplete",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfAutocomplete",
           "tag": null,
           "properties": [
@@ -37138,13 +37332,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "badge",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfBadge",
           "tag": null,
           "properties": [
@@ -37245,13 +37440,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "breadcrumbs",
           "category": "navigation",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfBreadcrumbs",
           "tag": null,
           "properties": [
@@ -37375,13 +37571,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "button",
           "category": "action",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfButton",
           "tag": null,
           "properties": [
@@ -37639,13 +37836,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "button-group",
           "category": "action",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfButtonGroup",
           "tag": null,
           "properties": [
@@ -37746,13 +37944,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "caption",
           "category": "primitive",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCaption",
           "tag": null,
           "properties": [
@@ -37823,13 +38022,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "card",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCard",
           "tag": null,
           "properties": [
@@ -37915,13 +38115,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "checkbox",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCheckbox",
           "tag": null,
           "properties": [
@@ -38274,13 +38475,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "code-text",
           "category": "primitive",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCodeText",
           "tag": null,
           "properties": [
@@ -38351,13 +38553,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "confirm-dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfConfirmDialog",
           "tag": null,
           "properties": [
@@ -38614,13 +38817,14 @@
               "publicEvent": "update:open"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "date-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDateInput",
           "tag": null,
           "properties": [
@@ -38954,13 +39158,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "datetime-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDateTimeInput",
           "tag": null,
           "properties": [
@@ -39294,13 +39499,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "description-list",
           "category": "data-display",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDescriptionList",
           "tag": null,
           "properties": [],
@@ -39356,13 +39562,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "dialog",
           "category": "overlay",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDialog",
           "tag": null,
           "properties": [
@@ -39658,13 +39865,14 @@
               "publicEvent": "update:open"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "drawer",
           "category": "overlay",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDrawer",
           "tag": null,
           "properties": [
@@ -39975,13 +40183,14 @@
               "publicEvent": "update:open"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "dropdown",
           "category": "overlay",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDropdown",
           "tag": null,
           "properties": [
@@ -40123,13 +40332,14 @@
               "publicEvent": "update:open"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "empty-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfEmptyState",
           "tag": null,
           "properties": [],
@@ -40184,13 +40394,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "error-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfErrorState",
           "tag": null,
           "properties": [
@@ -40261,13 +40472,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "field",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfField",
           "tag": null,
           "properties": [
@@ -40453,13 +40665,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "heading",
           "category": "primitive",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfHeading",
           "tag": null,
           "properties": [
@@ -40560,13 +40773,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "icon",
           "category": "primitive",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfIcon",
           "tag": null,
           "properties": [
@@ -40672,13 +40886,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "icon-button",
           "category": "action",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfIconButton",
           "tag": null,
           "properties": [
@@ -40876,13 +41091,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "inline",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfInline",
           "tag": null,
           "properties": [
@@ -40997,13 +41213,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "inline-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfInlineMessage",
           "tag": null,
           "properties": [
@@ -41088,13 +41305,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "label",
           "category": "primitive",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfLabel",
           "tag": null,
           "properties": [
@@ -41195,13 +41413,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "loading-state",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfLoadingState",
           "tag": null,
           "properties": [],
@@ -41256,13 +41475,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "menu",
           "category": "overlay",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfMenu",
           "tag": null,
           "properties": [
@@ -41458,13 +41678,14 @@
               "publicEvent": "update:open"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "multi-select",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfMultiSelect",
           "tag": null,
           "properties": [
@@ -41793,13 +42014,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "number-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfNumberInput",
           "tag": null,
           "properties": [
@@ -42193,13 +42415,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "page",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPage",
           "tag": null,
           "properties": [
@@ -42285,13 +42508,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "page-header",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPageHeader",
           "tag": null,
           "properties": [
@@ -42414,13 +42638,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "page-toolbar",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPageToolbar",
           "tag": null,
           "properties": [
@@ -42528,13 +42753,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "panel",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPanel",
           "tag": null,
           "properties": [],
@@ -42589,13 +42815,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "popover",
           "category": "overlay",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPopover",
           "tag": null,
           "properties": [
@@ -42859,13 +43086,14 @@
               "publicEvent": "update:open"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "progress",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfProgress",
           "tag": null,
           "properties": [
@@ -42943,13 +43171,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "property-table",
           "category": "data-display",
           "package": "@vyrnforge/ui-vue",
-          "status": "current",
           "export": "VfPropertyTable",
           "tag": null,
           "properties": [],
@@ -43007,13 +43236,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "radio",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfRadio",
           "tag": null,
           "properties": [
@@ -43352,13 +43582,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "radio-group",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfRadioGroup",
           "tag": null,
           "properties": [
@@ -43521,13 +43752,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "rating",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfRating",
           "tag": null,
           "properties": [
@@ -43818,13 +44050,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "search-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSearchInput",
           "tag": null,
           "properties": [
@@ -44158,13 +44391,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "section",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSection",
           "tag": null,
           "properties": [],
@@ -44219,13 +44453,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "segmented-control",
           "category": "action",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSegmentedControl",
           "tag": null,
           "properties": [
@@ -44379,13 +44614,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "select",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSelect",
           "tag": null,
           "properties": [
@@ -44685,13 +44921,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "side-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSideNav",
           "tag": null,
           "properties": [
@@ -44845,13 +45082,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "skeleton",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSkeleton",
           "tag": null,
           "properties": [
@@ -44954,13 +45192,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "slider",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSlider",
           "tag": null,
           "properties": [
@@ -45272,13 +45511,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "stack",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfStack",
           "tag": null,
           "properties": [
@@ -45379,13 +45619,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "switch",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSwitch",
           "tag": null,
           "properties": [
@@ -45724,13 +45965,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "tabs",
           "category": "navigation",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTabs",
           "tag": null,
           "properties": [
@@ -45941,13 +46183,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "text",
           "category": "primitive",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfText",
           "tag": null,
           "properties": [
@@ -46033,13 +46276,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "text-input",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTextInput",
           "tag": null,
           "properties": [
@@ -46373,13 +46617,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "textarea",
           "category": "form-control",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTextarea",
           "tag": null,
           "properties": [
@@ -46713,13 +46958,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "timeline",
           "category": "data-display",
           "package": "@vyrnforge/ui-vue",
-          "status": "current",
           "export": "VfTimeline",
           "tag": null,
           "properties": [],
@@ -46777,13 +47023,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         {
           "id": "toast",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToast",
           "tag": null,
           "properties": [
@@ -46969,13 +47216,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "toggle-button",
           "category": "action",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToggleButton",
           "tag": null,
           "properties": [
@@ -47234,13 +47482,14 @@
               "publicEvent": "update:pressed"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "toggle-button-group",
           "category": "action",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToggleButtonGroup",
           "tag": null,
           "properties": [
@@ -47405,13 +47654,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "toolbar-button",
           "category": "action",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToolbarButton",
           "tag": null,
           "properties": [
@@ -47684,13 +47934,14 @@
               "publicEvent": "update:pressed"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "tooltip",
           "category": "overlay",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTooltip",
           "tag": null,
           "properties": [
@@ -47866,13 +48117,14 @@
               "publicEvent": "update:open"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "top-nav",
           "category": "navigation",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTopNav",
           "tag": null,
           "properties": [],
@@ -47952,13 +48204,14 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "transfer-list",
           "category": "composite",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTransferList",
           "tag": null,
           "properties": [
@@ -48320,13 +48573,14 @@
               "publicEvent": "update:modelValue"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         {
           "id": "validation-message",
           "category": "feedback",
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfValidationMessage",
           "tag": null,
           "properties": [
@@ -48398,7 +48652,9 @@
               "mode": "none"
             },
             "refMode": "template-ref"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       ]
     }

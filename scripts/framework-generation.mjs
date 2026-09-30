@@ -199,7 +199,8 @@ function createBaseRecord(component, framework, eventByName) {
     id: component.id,
     category: component.category,
     package: mapping.package,
-    status: mapping.status,
+    supportLevel: mapping.supportLevel,
+    implementationState: mapping.implementationState,
     export: mapping.export ?? null,
     tag: mapping.tag ?? null,
     properties: propertyRecords(component, mapping),
@@ -366,7 +367,7 @@ export function deriveCanonicalNativeTags(contracts) {
   const tags = new Set();
   for (const component of contracts.components) {
     const mapping = component.frameworkMappings.native;
-    if (mapping?.status !== "current") continue;
+    if (mapping?.implementationState !== "current") continue;
     const tag = requireValue(
       mapping.tag,
       `${component.id}: current native mapping requires a canonical tag`,
@@ -426,10 +427,20 @@ function packageForSurface(framework, records) {
 function summarizeSurface(framework, records) {
   const summary = {
     componentCount: records.length,
-    current: records.filter((record) => record.status === "current").length,
-    target: records.filter((record) => record.status === "target").length,
-    migration: records.filter((record) => record.status === "migration").length,
-    exception: records.filter((record) => record.status === "exception").length,
+    firstClass: records.filter(
+      (record) => record.supportLevel === "first-class",
+    ).length,
+    current: records.filter(
+      (record) => record.implementationState === "current",
+    ).length,
+    target: records.filter((record) => record.implementationState === "target")
+      .length,
+    migration: records.filter(
+      (record) => record.implementationState === "migration",
+    ).length,
+    exception: records.filter(
+      (record) => record.implementationState === "exception",
+    ).length,
   };
   if (framework === "angular") {
     summary.forms = records.filter(

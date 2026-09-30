@@ -44,10 +44,21 @@ test("builds a deterministic generation plan for every canonical component", () 
   const model = createFrameworkGenerationModel(contracts);
 
   for (const framework of FRAMEWORK_SURFACES) {
-    const ids = model.surfaces[framework].components.map((record) => record.id);
+    const surface = model.surfaces[framework];
+    const ids = surface.components.map((record) => record.id);
     assert.equal(ids.length, contracts.components.length);
     assert.deepEqual(ids, [...ids].sort());
     assert.equal(new Set(ids).size, ids.length);
+    assert.equal(surface.summary.firstClass, contracts.components.length);
+    for (const record of surface.components) {
+      assert.equal(record.supportLevel, "first-class");
+      assert(
+        ["current", "target", "migration", "exception"].includes(
+          record.implementationState,
+        ),
+      );
+      assert.equal(Object.hasOwn(record, "status"), false);
+    }
   }
 
   const reversed = {

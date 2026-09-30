@@ -221,7 +221,7 @@ function canonicalNativeIndex(contracts) {
   const byTag = new Map();
   for (const component of contracts.components) {
     const mapping = component.frameworkMappings.native;
-    if (mapping?.status !== "current") continue;
+    if (mapping?.implementationState !== "current") continue;
     const tagName = mapping.tag;
     if (typeof tagName !== "string" || !TAG_PATTERN.test(tagName)) {
       throw new NativeElementGenerationError(

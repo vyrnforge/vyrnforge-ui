@@ -400,8 +400,8 @@ function verifyComponentContracts(failures, contracts) {
     );
   }
 
-  if (contracts.schemaVersion !== 2) {
-    addFailure(failures, "component contracts must use schema version 2");
+  if (contracts.schemaVersion !== 3) {
+    addFailure(failures, "component contracts must use schema version 3");
   }
 
   const eventNames = new Set();
@@ -477,25 +477,33 @@ function verifyComponentContracts(failures, contracts) {
     if (contract.representative === true) representativeIds.add(contract.id);
     const mappings = contract.frameworkMappings ?? {};
 
-    const mappingStatuses = ["native", "react", "angular", "vue"].map(
-      (framework) => mappings[framework]?.status,
+    const implementationStates = ["native", "react", "angular", "vue"].map(
+      (framework) => mappings[framework]?.implementationState,
     );
-    const targetContract = mappingStatuses.every(
-      (status) => status === "target",
+    for (const framework of ["native", "react", "angular", "vue"]) {
+      if (mappings[framework]?.supportLevel !== "first-class") {
+        addFailure(
+          failures,
+          `${contract.id} ${framework} support level must be first-class`,
+        );
+      }
+    }
+    const targetContract = implementationStates.every(
+      (state) => state === "target",
     );
-    const stagedContract = mappingStatuses.every((status) =>
-      ["current", "target"].includes(status),
+    const stagedContract = implementationStates.every((state) =>
+      ["current", "target"].includes(state),
     );
 
     const react = mappings.react;
-    const validReactStatus = targetContract
-      ? react?.status === "target"
+    const validReactState = targetContract
+      ? react?.implementationState === "target"
       : stagedContract
-        ? ["current", "target"].includes(react?.status)
-        : ["current", "migration"].includes(react?.status);
+        ? ["current", "target"].includes(react?.implementationState)
+        : ["current", "migration"].includes(react?.implementationState);
     if (
       react?.package !== "@vyrnforge/ui-components" ||
-      !validReactStatus ||
+      !validReactState ||
       typeof react?.export !== "string" ||
       react.export.length === 0
     ) {
@@ -506,14 +514,14 @@ function verifyComponentContracts(failures, contracts) {
     }
 
     const native = mappings.native;
-    const validNativeStatus = targetContract
-      ? native?.status === "target"
+    const validNativeState = targetContract
+      ? native?.implementationState === "target"
       : stagedContract
-        ? ["current", "target"].includes(native?.status)
-        : native?.status === "current";
+        ? ["current", "target"].includes(native?.implementationState)
+        : native?.implementationState === "current";
     if (
       native?.package !== "@vyrnforge/ui-elements" ||
-      !validNativeStatus ||
+      !validNativeState ||
       !/^vf-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(native?.tag ?? "")
     ) {
       addFailure(

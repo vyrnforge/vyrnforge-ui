@@ -54,7 +54,7 @@ test("public non-grid beta scope is package-independent", () => {
 test("loads the full canonical catalog through one normalized loader", () => {
   const loaded = loadCanonicalComponentContracts({ root: repositoryRoot });
 
-  assert.equal(loaded.schemaVersion, 2);
+  assert.equal(loaded.schemaVersion, 3);
   assert.equal(loaded.sourceOfTruth.canonical, true);
   assert.equal(
     loaded.components.length,
@@ -75,7 +75,7 @@ test("rejects an unsupported schema version deterministically", () => {
   );
   assert.deepEqual(failures, [...failures].sort());
   assert.match(failures.join("\n"), /schemaVersion/);
-  assert.match(failures.join("\n"), /supported version 2/);
+  assert.match(failures.join("\n"), /supported version 3/);
 });
 
 test("rejects missing canonical source ownership", () => {
@@ -105,13 +105,17 @@ test("rejects unknown fields using the canonical schema", () => {
 
 test("rejects malformed nested framework mapping fields", () => {
   const malformed = clone(canonicalDocument);
-  malformed.componentContracts[0].frameworkMappings.native.status = "maybe";
+  malformed.componentContracts[0].frameworkMappings.native.implementationState =
+    "maybe";
 
   const failures = validateCanonicalComponentContracts(
     malformed,
     canonicalSchema,
   );
-  assert.match(failures.join("\n"), /frameworkMappings\.native\.status/);
+  assert.match(
+    failures.join("\n"),
+    /frameworkMappings\.native\.implementationState/,
+  );
 });
 
 test("rejects component events that are absent from the canonical vocabulary", () => {
@@ -191,9 +195,15 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
       rule.includes("native description-list semantics"),
     ),
   );
-  assert.equal(contract.frameworkMappings.native.status, "current");
+  assert.equal(
+    contract.frameworkMappings.native.implementationState,
+    "current",
+  );
   for (const framework of ["react", "angular", "vue"]) {
-    assert.equal(contract.frameworkMappings[framework].status, "target");
+    assert.equal(
+      contract.frameworkMappings[framework].implementationState,
+      "target",
+    );
   }
 });
 
@@ -218,7 +228,10 @@ test("PropertyTable keeps a semantic, state-free cross-framework contract", () =
     ),
   );
   for (const framework of ["native", "react", "angular", "vue"]) {
-    assert.equal(contract.frameworkMappings[framework].status, "current");
+    assert.equal(
+      contract.frameworkMappings[framework].implementationState,
+      "current",
+    );
   }
 });
 
@@ -259,7 +272,10 @@ test("Timeline keeps a semantic, state-free chronological contract", () => {
     ),
   );
   for (const framework of ["native", "react", "angular", "vue"]) {
-    assert.equal(contract.frameworkMappings[framework].status, "current");
+    assert.equal(
+      contract.frameworkMappings[framework].implementationState,
+      "current",
+    );
   }
 });
 
@@ -311,8 +327,14 @@ test("Progress keeps a semantic, state-free cross-framework contract", () => {
       rule.includes("determinate and indeterminate"),
     ),
   );
-  assert.equal(contract.frameworkMappings.native.status, "current");
+  assert.equal(
+    contract.frameworkMappings.native.implementationState,
+    "current",
+  );
   for (const framework of ["react", "angular", "vue"]) {
-    assert.equal(contract.frameworkMappings[framework].status, "target");
+    assert.equal(
+      contract.frameworkMappings[framework].implementationState,
+      "target",
+    );
   }
 });

@@ -178,8 +178,8 @@ export function createVueTypeModel(generationModel) {
   const components = generationModel.surfaces.vue.components
     .filter(
       (record) =>
-        ["current", "target"].includes(record.status) &&
-        nativeById.get(record.id)?.status === "current",
+        ["current", "target"].includes(record.implementationState) &&
+        nativeById.get(record.id)?.implementationState === "current",
     )
     .map((record) => {
       const native = nativeById.get(record.id);
