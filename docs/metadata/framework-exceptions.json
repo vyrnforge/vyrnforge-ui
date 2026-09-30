@@ -190,7 +190,7 @@
       "framework": "native",
       "scope": "toast-viewport",
       "exceptionClass": "migration-compatibility",
-      "reason": "The registered vf-toast-viewport native orchestration element has no standalone schema v2 component contract; the current canonical catalog models toast facade semantics while the native viewport also owns record collection and imperative toast lifecycle methods.",
+      "reason": "SC-2103 delivered the shared toast service/viewport lifecycle, but vf-toast-viewport remains a registered Native orchestration element without its own canonical component-contract mapping. Native manifest generation still requires this narrow exception to authorize that public registration.",
       "owner": "UI Platform",
       "sourcePaths": [
         "packages/ui-elements/src/components/feedback.ts"
@@ -198,10 +198,12 @@
       "evidence": [
         "packages/ui-elements/src/registry.ts registers vf-toast-viewport with VyrnForgeToastViewportElement.",
         "tests/browser/native-parity.spec.ts protects the shipped native parity surface that includes the toast viewport.",
-        "SC-2103 shared toast viewport/service lifecycle owns native imperative orchestration and cross-framework service bindings; protected CI #2299 passed."
+        "SC-2103 shared toast viewport/service lifecycle owns native imperative orchestration and cross-framework service bindings; protected CI #2299 passed.",
+        "SC-2103 protected CI #2299 proves shared toast lifecycle/service semantics and four-surface adapters.",
+        "SC-2108 CI #2360 exposed the residual metadata gap: native manifest generation rejects vf-toast-viewport when this exception is closed because no canonical component contract maps the registration."
       ],
-      "exitCriteria": "Add a framework-neutral toast viewport/service contract that owns the native registration and imperative lifecycle, or remove the standalone public native registration.",
-      "state": "closed",
+      "exitCriteria": "Add canonical metadata mapping for the public vf-toast-viewport registration to the delivered shared toast viewport/service capability, then prove native manifest generation and packed four-surface consumers without exception backing.",
+      "state": "active",
       "reviewMilestone": "S21 SC-2108 reconciliation"
     },
     {
