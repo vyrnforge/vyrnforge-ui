@@ -15,8 +15,10 @@ export const assuranceWorkflowPath = ".github/workflows/assurance.yml";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8").replaceAll(
-    "\r\n",
-    "\n",
+    "\r
+",
+    "
+",
   );
 }
 
@@ -171,7 +173,8 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   if (
     manifest.releasePreflight?.successfulCurrentMainCiRequired !== true ||
     manifest.releasePreflight?.releaseArtifactVerificationRequired !== true ||
-    manifest.releasePreflight?.releaseLineSizeBudgetVerificationRequired !==\n      true
+    manifest.releasePreflight?.releaseLineSizeBudgetVerificationRequired !==
+      true
   ) {
     failures.push(
       "security contract release boundary must trust current-main CI and verify retained release artifacts",
