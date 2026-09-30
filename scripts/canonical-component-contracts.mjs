@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-export const CANONICAL_COMPONENT_CONTRACT_SCHEMA_VERSION = 2;
+export const CANONICAL_COMPONENT_CONTRACT_SCHEMA_VERSION = 3;
 export const CANONICAL_COMPONENT_CONTRACT_PATH =
   "docs/metadata/component-contracts.json";
 export const CANONICAL_COMPONENT_CONTRACT_SCHEMA_PATH =
