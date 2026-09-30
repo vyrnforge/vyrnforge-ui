@@ -13,19 +13,13 @@
     "dependencyAudit": {
       "workflow": ".github/workflows/assurance.yml",
       "command": "npm audit --omit=dev --audit-level=high",
-      "events": [
-        "schedule",
-        "workflow_dispatch"
-      ]
+      "events": ["schedule", "workflow_dispatch"]
     },
     "codeql": {
       "workflow": ".github/workflows/assurance.yml",
       "language": "javascript-typescript",
       "buildMode": "none",
-      "events": [
-        "schedule",
-        "workflow_dispatch"
-      ]
+      "events": ["schedule", "workflow_dispatch"]
     },
     "workflowLint": {
       "workflows": [
@@ -38,10 +32,7 @@
     },
     "immutableActions": true,
     "longLivedTokensForbidden": true,
-    "mandatoryAggregates": [
-      "ci-gate",
-      "assurance-gate"
-    ]
+    "mandatoryAggregates": ["ci-gate", "assurance-gate"]
   },
   "protectedGate": {
     "workflow": ".github/workflows/ci.yml",
@@ -57,9 +48,7 @@
   },
   "releasePreflight": {
     "workflow": ".github/workflows/release.yml",
-    "requiredJobs": [
-      "verify-release"
-    ],
+    "requiredJobs": ["verify-release"],
     "releaseLineSizeBudgetVerificationRequired": true,
     "successfulCurrentMainCiRequired": true,
     "releaseArtifactVerificationRequired": true
