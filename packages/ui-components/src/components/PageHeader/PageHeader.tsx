@@ -1,5 +1,10 @@
-import { joinClassNames } from "../../utils/classNames";
+import {
+  adoptedRegionClassName,
+  resolveAdoptedHostClassName,
+} from "../../internal/hostAdoption";
 import type { PageHeaderProps } from "./PageHeader.types";
+
+const region = (name: string) => adoptedRegionClassName("page-header", name);
 
 export function PageHeader({
   actions,
@@ -13,25 +18,26 @@ export function PageHeader({
   ...props
 }: PageHeaderProps) {
   return (
-    <header className={joinClassNames("vf-page-header", className)} {...props}>
+    <header
+      className={resolveAdoptedHostClassName("page-header", {}, className)}
+      {...props}
+    >
       {breadcrumbs && (
-        <div className="vf-page-header__breadcrumbs">{breadcrumbs}</div>
+        <div className={region("breadcrumbs")}>{breadcrumbs}</div>
       )}
-      <div className="vf-page-header__row">
-        <div className="vf-page-header__main">
-          {eyebrow && <div className="vf-page-header__eyebrow">{eyebrow}</div>}
-          <div className="vf-page-header__title-row">
-            <h1 className="vf-page-header__title">{title}</h1>
-            {status && <div className="vf-page-header__status">{status}</div>}
+      <div className={region("row")}>
+        <div className={region("main")}>
+          {eyebrow && <div className={region("eyebrow")}>{eyebrow}</div>}
+          <div className={region("title-row")}>
+            <h1 className={region("title")}>{title}</h1>
+            {status && <div className={region("status")}>{status}</div>}
           </div>
           {description && (
-            <div className="vf-page-header__description">{description}</div>
+            <div className={region("description")}>{description}</div>
           )}
-          {metadata && (
-            <div className="vf-page-header__metadata">{metadata}</div>
-          )}
+          {metadata && <div className={region("metadata")}>{metadata}</div>}
         </div>
-        {actions && <div className="vf-page-header__actions">{actions}</div>}
+        {actions && <div className={region("actions")}>{actions}</div>}
       </div>
     </header>
   );
