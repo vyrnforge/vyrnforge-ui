@@ -15,7 +15,7 @@ validated consumer evidence remain authoritative for shipped behavior.
 
 ## Product architecture
 
-~~~text
+```text
                          VyrnForge UI
                              |
           +------------------+------------------+
@@ -29,7 +29,7 @@ validated consumer evidence remain authoritative for shipped behavior.
           +-----------+-----------+-----------+-----------+
           |           |           |           |
         Native       React       Angular       Vue
-~~~
+```
 
 This is the product model. The four surfaces are peers.
 
@@ -39,7 +39,7 @@ The current non-grid implementation reuses browser-native Custom Elements where
 that reduces duplicated DOM, form, accessibility, focus, styling, and event
 logic while preserving idiomatic framework APIs.
 
-~~~text
+```text
 canonical contracts + metadata
             |
      shared foundations
@@ -52,7 +52,7 @@ canonical contracts + metadata
    |        |        |        |        |
  Native   React    Angular    Vue
  surface  surface   surface   surface
-~~~
+```
 
 This graph explains code reuse only. It does **not** rank Native above React,
 Angular, or Vue. A future implementation may change the internal renderer
@@ -114,7 +114,7 @@ needed, not a framework-ranking mechanism.
 Advanced capabilities are optional VyrnForge modules beneath the common UI
 system:
 
-~~~text
+```text
 VyrnForge UI
 |
 +-- Common UI
@@ -129,7 +129,7 @@ VyrnForge UI
     +-- visualization
     +-- workflow / diagram UI
     `-- other reusable complex UI
-~~~
+```
 
 Advanced modules reuse VyrnForge design, accessibility, terminology, metadata,
 and contract concepts while remaining dependency-isolated.
@@ -154,7 +154,7 @@ See [ADR-008: Framework Exception Policy](adr-008-framework-exception-policy.md)
 
 ## State and ownership separation
 
-~~~text
+```text
 VyrnForge contract
   product semantics
   accessibility obligations
@@ -175,7 +175,7 @@ consuming application
   routing
   authorization
   persistence
-~~~
+```
 
 ## Core principles
 

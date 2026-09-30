@@ -23,7 +23,7 @@ implementation foundation where practical.
 
 This is an **implementation reuse decision**, not a product hierarchy.
 
-~~~text
+```text
                    VyrnForge canonical contracts
                               |
                      shared foundations
@@ -35,7 +35,7 @@ This is an **implementation reuse decision**, not a product hierarchy.
              |        |       |        |       |
            Native   React   Angular    Vue
            surface  surface  surface   surface
-~~~
+```
 
 Native, React, Angular, and Vue remain peers at the product level. A future
 implementation may replace or reorganize the shared browser layer without
