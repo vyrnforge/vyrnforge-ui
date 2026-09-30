@@ -200,7 +200,7 @@ export function createAngularCatalogModel(
     ]),
   );
   const nativeSupported = generationModel.surfaces.native.components
-    .filter((record) => record.status === "current")
+    .filter((record) => record.implementationState === "current")
     .sort((left, right) => compareText(left.id, right.id));
 
   assert(
@@ -226,7 +226,7 @@ export function createAngularCatalogModel(
       nativeRecord.id,
     );
 
-    if (angularRecord.status === "exception") {
+    if (angularRecord.implementationState === "exception") {
       assert(
         exception,
         `${nativeRecord.id}: exception mapping requires an active framework exception record`,
@@ -243,8 +243,8 @@ export function createAngularCatalogModel(
     }
 
     assert(
-      SUPPORTED_STATUSES.has(angularRecord.status),
-      `${nativeRecord.id}: unsupported Angular status ${angularRecord.status}; use generated/current/target or an approved exception`,
+      SUPPORTED_STATUSES.has(angularRecord.implementationState),
+      `${nativeRecord.id}: unsupported Angular status ${angularRecord.implementationState}; use generated/current/target or an approved exception`,
     );
     components.push(
       normalizeGeneratedComponent(angularRecord, nativeRecord, canonicalRecord),
