@@ -183,7 +183,9 @@ test("rejects a Native contract tag missing from the public manifest", () => {
 
     assert(
       verifyNativeElementFoundations({ root }).some((failure) =>
-        failure.includes("vf-button: missing Custom Elements Manifest declaration"),
+        failure.includes(
+          "vf-button: missing Custom Elements Manifest declaration",
+        ),
       ),
     );
   } finally {
