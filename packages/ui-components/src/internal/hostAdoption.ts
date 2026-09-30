@@ -1,9 +1,12 @@
 import {
+  findVyrnForgeItemRegion,
   findVyrnForgeNamedRegion,
   resolveVyrnForgeHostClasses,
   resolveVyrnForgeHostTag,
   vyrnForgeHostAdoptionContracts,
+  vyrnForgeItemCompositionContracts,
   type VyrnForgeHostAdoptionId,
+  type VyrnForgeItemCompositionId,
 } from "@vyrnforge/ui-elements";
 import { joinClassNames } from "../utils/classNames";
 
@@ -38,6 +41,20 @@ export function adoptedRegionClassName(
   );
   if (!resolved) {
     throw new Error(`Unknown ${id} adoption region ${region}.`);
+  }
+  return resolved.className;
+}
+
+export function adoptedItemRegionClassName(
+  id: VyrnForgeItemCompositionId,
+  region: string,
+): string {
+  const resolved = findVyrnForgeItemRegion(
+    vyrnForgeItemCompositionContracts[id],
+    region,
+  );
+  if (!resolved) {
+    throw new Error(`Unknown ${id} item composition region ${region}.`);
   }
   return resolved.className;
 }
