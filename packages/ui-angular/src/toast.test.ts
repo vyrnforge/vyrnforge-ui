@@ -4,9 +4,7 @@ import { VyrnForgeToastService } from "./toast";
 
 describe("VyrnForgeToastService", () => {
   it("adapts the shared browser toast service without owning state", () => {
-    const service = Object.create(
-      VyrnForgeToastService.prototype,
-    ) as VyrnForgeToastService;
+    const service = new VyrnForgeToastService();
     const id = service.success({
       description: "Saved",
       duration: null,
