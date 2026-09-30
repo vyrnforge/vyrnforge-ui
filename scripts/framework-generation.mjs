@@ -427,11 +427,21 @@ function packageForSurface(framework, records) {
 function summarizeSurface(framework, records) {
   const summary = {
     componentCount: records.length,
-    firstClass: records.filter((record) => record.supportLevel === "first-class").length,
-    current: records.filter((record) => record.implementationState === "current").length,
-    target: records.filter((record) => record.implementationState === "target").length,
-    migration: records.filter((record) => record.implementationState === "migration").length,
-    exception: records.filter((record) => record.implementationState === "exception").length,
+    firstClass: records.filter(
+      (record) => record.supportLevel === "first-class",
+    ).length,
+    current: records.filter(
+      (record) => record.implementationState === "current",
+    ).length,
+    target: records.filter(
+      (record) => record.implementationState === "target",
+    ).length,
+    migration: records.filter(
+      (record) => record.implementationState === "migration",
+    ).length,
+    exception: records.filter(
+      (record) => record.implementationState === "exception",
+    ).length,
   };
   if (framework === "angular") {
     summary.forms = records.filter(
