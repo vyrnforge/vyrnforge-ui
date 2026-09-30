@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "62f50c122e2a1b737ebde79a0758e6178fbbf8b0",
+      "sha1": "9a5a837af8dc6db18af29633004fc11e21f4e4b5",
       "covers": [
         "component props and types",
         "callbacks",
@@ -192,6 +192,11 @@
       "task": "PA-2005",
       "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
       "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
+    },
+    {
+      "task": "SC-2106",
+      "reason": "React Tabs, Breadcrumbs, SideNav, SegmentedControl, Menu, MultiSelect, and TransferList now consume shared framework-neutral rich item-region descriptors while retaining their documented ReactNode composition, DOM, keyboard/focus, filtering, callback, overlay, and repeated-form behavior. The implementation-tree fingerprint is intentionally recaptured with rich navigation adoption and Batch-4 advanced collection parity evidence.",
+      "evidence": "packages/ui-components/src/__tests__/host-adoption.test.tsx; packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx"
     },
     {
       "task": "SC-2104",
