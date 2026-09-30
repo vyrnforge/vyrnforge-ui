@@ -146,6 +146,155 @@ export interface OverlayPositionAdapter<
   }): OverlayResolvedPosition;
 }
 
+export type OverlayCompositionKind =
+  | "dialog"
+  | "drawer"
+  | "popover"
+  | "tooltip"
+  | "toast"
+  | "confirm-dialog"
+  | "autocomplete";
+
+export interface OverlayCompositionRegion {
+  readonly name: string;
+  readonly multiplicity?: "single" | "multiple";
+  readonly required?: boolean;
+}
+
+export interface OverlayCompositionContract {
+  readonly kind: OverlayCompositionKind;
+  readonly regions: readonly OverlayCompositionRegion[];
+  readonly capabilities: readonly string[];
+}
+
+export const overlayCompositionContracts: Readonly<
+  Record<OverlayCompositionKind, OverlayCompositionContract>
+> = Object.freeze({
+  dialog: Object.freeze({
+    kind: "dialog",
+    regions: Object.freeze([
+      { name: "trigger" },
+      { name: "title" },
+      { name: "description" },
+      { name: "content", required: true },
+      { name: "footer" },
+    ]),
+    capabilities: Object.freeze([
+      "controlled-open",
+      "portal",
+      "focus-containment",
+      "focus-restoration",
+      "dismissal",
+    ]),
+  }),
+  drawer: Object.freeze({
+    kind: "drawer",
+    regions: Object.freeze([
+      { name: "trigger" },
+      { name: "title" },
+      { name: "description" },
+      { name: "content", required: true },
+      { name: "footer" },
+    ]),
+    capabilities: Object.freeze([
+      "controlled-open",
+      "portal",
+      "focus-containment",
+      "focus-restoration",
+      "dismissal",
+    ]),
+  }),
+  popover: Object.freeze({
+    kind: "popover",
+    regions: Object.freeze([
+      { name: "trigger", required: true },
+      { name: "content", required: true },
+    ]),
+    capabilities: Object.freeze([
+      "controlled-open",
+      "portal",
+      "anchored-placement",
+      "focus-restoration",
+      "dismissal",
+    ]),
+  }),
+  tooltip: Object.freeze({
+    kind: "tooltip",
+    regions: Object.freeze([
+      { name: "trigger", required: true },
+      { name: "content", required: true },
+    ]),
+    capabilities: Object.freeze([
+      "controlled-open",
+      "portal",
+      "anchored-placement",
+      "focus-hover-trigger",
+      "dismissal",
+    ]),
+  }),
+  toast: Object.freeze({
+    kind: "toast",
+    regions: Object.freeze([
+      { name: "title" },
+      { name: "description" },
+      { name: "action" },
+    ]),
+    capabilities: Object.freeze([
+      "service-lifecycle",
+      "portal",
+      "dismissal",
+      "pause-resume",
+    ]),
+  }),
+  "confirm-dialog": Object.freeze({
+    kind: "confirm-dialog",
+    regions: Object.freeze([
+      { name: "trigger" },
+      { name: "title" },
+      { name: "description" },
+      { name: "content" },
+      { name: "cancel-action" },
+      { name: "confirm-action" },
+    ]),
+    capabilities: Object.freeze([
+      "controlled-open",
+      "portal",
+      "focus-containment",
+      "focus-restoration",
+      "dismissal",
+      "async-action",
+    ]),
+  }),
+  autocomplete: Object.freeze({
+    kind: "autocomplete",
+    regions: Object.freeze([
+      { name: "trigger", required: true },
+      { name: "option", multiplicity: "multiple", required: true },
+      { name: "loading" },
+      { name: "empty" },
+    ]),
+    capabilities: Object.freeze([
+      "controlled-value",
+      "controlled-input",
+      "controlled-open",
+      "custom-filter",
+      "custom-option",
+      "anchored-placement",
+      "portal",
+      "roving-focus",
+    ]),
+  }),
+});
+
+export function findOverlayCompositionRegion(
+  kind: OverlayCompositionKind,
+  name: string,
+): OverlayCompositionRegion | undefined {
+  return overlayCompositionContracts[kind].regions.find(
+    (region) => region.name === name,
+  );
+}
+
 function createLifecycleSnapshot(
   open: boolean,
   isControlled: boolean,
