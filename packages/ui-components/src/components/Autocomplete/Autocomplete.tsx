@@ -352,10 +352,7 @@ export function Autocomplete({
                       selected={selected}
                     >
                       <div
-                        className={adoptedOverlayRegionClassName(
-                          "autocomplete",
-                          "option",
-                        )}
+                        className={adoptedOverlayRegionClassName("autocomplete", "option")}
                         ref={active ? activeOptionRef : undefined}
                       >
                         {renderOption ? (
