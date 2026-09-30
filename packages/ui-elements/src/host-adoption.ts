@@ -1,3 +1,11 @@
+export {
+  findOverlayCompositionRegion,
+  overlayCompositionContracts,
+  type OverlayCompositionContract,
+  type OverlayCompositionKind,
+  type OverlayCompositionRegion,
+} from "@vyrnforge/ui-behaviors";
+
 export type VyrnForgeHostValue = boolean | number | string;
 
 export interface VyrnForgeHostModifier {
