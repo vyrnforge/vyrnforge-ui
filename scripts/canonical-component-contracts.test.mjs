@@ -4,6 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createCoverageReport } from "./report-non-grid-contract-coverage.mjs";
+import { getPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 import {
   CANONICAL_COMPONENT_CONTRACT_PATH,
   CANONICAL_COMPONENT_CONTRACT_SCHEMA_PATH,
@@ -30,6 +31,25 @@ function clone(value) {
 
 const canonicalDocument = readJson(CANONICAL_COMPONENT_CONTRACT_PATH);
 const canonicalSchema = readJson(CANONICAL_COMPONENT_CONTRACT_SCHEMA_PATH);
+
+test("public non-grid beta scope is package-independent", () => {
+  const catalog = readJson("docs/metadata/components.json");
+  const baselineIds = getPublicNonGridBetaComponentIds(catalog);
+
+  assert.equal(baselineIds.length, 71);
+
+  const redistributed = clone(catalog);
+  for (const component of redistributed.components ?? []) {
+    if (baselineIds.includes(component.id)) {
+      component.package = "@vyrnforge/alternate-distribution";
+    }
+  }
+
+  assert.deepEqual(
+    getPublicNonGridBetaComponentIds(redistributed),
+    baselineIds,
+  );
+});
 
 test("loads the full canonical catalog through one normalized loader", () => {
   const loaded = loadCanonicalComponentContracts({ root: repositoryRoot });
