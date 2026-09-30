@@ -15,11 +15,7 @@ export function CodeText({
 
   return (
     <Component
-      className={resolveAdoptedHostClassName(
-        "code-text",
-        { tone },
-        className,
-      )}
+      className={resolveAdoptedHostClassName("code-text", { tone }, className)}
       {...props}
     />
   );
