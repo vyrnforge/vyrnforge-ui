@@ -13,10 +13,7 @@ export function resolveAdoptedHostClassName(
   className?: string,
 ): string {
   return joinClassNames(
-    ...resolveVyrnForgeHostClasses(
-      vyrnForgeHostAdoptionContracts[id],
-      values,
-    ),
+    ...resolveVyrnForgeHostClasses(vyrnForgeHostAdoptionContracts[id], values),
     className,
   );
 }
