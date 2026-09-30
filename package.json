@@ -103,8 +103,6 @@
     "test:cross-framework-accessibility": "node --test scripts/verify-cross-framework-accessibility.test.mjs",
     "verify:cross-framework-accessibility:runtime": "node scripts/verify-consumer-foundations-runtime.mjs --matrix-report test-results/cross-framework-matrix/report.json --trace-dir test-results/cross-framework-matrix/traces --accessibility-report test-results/cross-framework-matrix/accessibility-report.json",
     "review:cross-framework-accessibility": "node scripts/serve-cross-framework-accessibility-review.mjs",
-    "verify:multi-framework-migration-guide": "node scripts/verify-multi-framework-migration-guide.mjs",
-    "test:multi-framework-migration-guide": "node --test scripts/verify-multi-framework-migration-guide.test.mjs",
     "generate:beta-scope": "node scripts/generate-beta-scope.mjs",
     "verify:beta-scope": "node scripts/verify-beta-scope.mjs",
     "verify:release-groups": "node scripts/verify-release-groups.mjs",
