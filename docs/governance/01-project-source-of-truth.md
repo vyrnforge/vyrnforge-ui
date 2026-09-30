@@ -58,15 +58,26 @@ surface secondary.
 Current package names describe technical/distribution boundaries, not product
 ownership.
 
-| Package                    | Current implementation role                                                                                                      | Release track     |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, typography, density, motion, layers, utilities, and shared styling foundations.                | Non-grid beta     |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral reusable behavior, state transitions, collections, navigation, overlays, forms, and reasoned events.           | Non-grid beta     |
-| `@vyrnforge/ui-elements`   | Native HTML / Custom Elements surface and reusable browser implementation used where appropriate by other surfaces.              | Non-grid beta     |
-| `@vyrnforge/ui-components` | **Current React package name.** It owns the React-facing API; it does not own VyrnForge's canonical component system.            | Non-grid beta     |
-| `@vyrnforge/ui-angular`    | Angular-facing API, generated bindings, setup, Forms integration, composition, and references.                                   | Non-grid beta     |
-| `@vyrnforge/ui-vue`        | Vue-facing API, generated components, props/emits, `v-model`, slots, refs, and setup.                                            | Non-grid beta     |
-| `@vyrnforge/ui-data-grid`  | Current package for the optional Data Grid advanced module; the presently shipped implementation is React-alpha only.            | Independent alpha |
+- `@vyrnforge/ui-core` — framework-neutral tokens, themes, typography, density,
+  motion, layers, utilities, and shared styling foundations. Current release
+  track: non-grid beta.
+- `@vyrnforge/ui-behaviors` — framework-neutral reusable behavior, state
+  transitions, collections, navigation, overlays, forms, and reasoned events.
+  Current release track: non-grid beta.
+- `@vyrnforge/ui-elements` — Native HTML / Custom Elements surface and reusable
+  browser implementation used where appropriate by other surfaces. Current
+  release track: non-grid beta.
+- `@vyrnforge/ui-components` — **current React package name**. It owns the
+  React-facing API; it does not own VyrnForge's canonical component system.
+  Current release track: non-grid beta.
+- `@vyrnforge/ui-angular` — Angular-facing API, generated bindings, setup,
+  Forms integration, composition, and references. Current release track:
+  non-grid beta.
+- `@vyrnforge/ui-vue` — Vue-facing API, generated components, props/emits,
+  `v-model`, slots, refs, and setup. Current release track: non-grid beta.
+- `@vyrnforge/ui-data-grid` — current package for the optional Data Grid
+  advanced module; the presently shipped implementation is React-alpha only.
+  Current release track: independent alpha.
 
 The `ui-components` package name is historical/current compatibility surface
 naming. It must not be used as evidence that React is the main VyrnForge product
@@ -193,17 +204,22 @@ same design system rather than introducing independent styling systems.
 
 Use one source for each type of truth:
 
-| Question                                               | Canonical source                                                                                             |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| Product identity and durable scope                     | This document                                                                                                |
-| Documentation navigation                               | [`../README.md`](../README.md)                                                                               |
-| Implementation/package dependency rules                | [`../architecture/01-package-boundaries.md`](../architecture/01-package-boundaries.md) and package manifests |
-| Component catalog and maturity                         | [`../metadata/components.json`](../metadata/components.json)                                                 |
-| Canonical component semantics                          | [`../metadata/component-contracts.json`](../metadata/component-contracts.json)                               |
-| Package/release classification                         | [`../metadata/release-groups.json`](../metadata/release-groups.json)                                         |
-| Current limitations                                    | [`../quality/03-known-limitations.md`](../quality/03-known-limitations.md)                                   |
-| Active execution, task status, dependencies, and gates | Google Drive spreadsheet **VyrnForge Progress Tracker — Live Status**                                        |
-| Agent repository rules                                 | [`../../AGENTS.md`](../../AGENTS.md)                                                                         |
+- **Product identity and durable scope:** this document.
+- **Documentation navigation:** [`../README.md`](../README.md).
+- **Implementation/package dependency rules:**
+  [`../architecture/01-package-boundaries.md`](../architecture/01-package-boundaries.md)
+  and package manifests.
+- **Component catalog and maturity:**
+  [`../metadata/components.json`](../metadata/components.json).
+- **Canonical component semantics:**
+  [`../metadata/component-contracts.json`](../metadata/component-contracts.json).
+- **Package/release classification:**
+  [`../metadata/release-groups.json`](../metadata/release-groups.json).
+- **Current limitations:**
+  [`../quality/03-known-limitations.md`](../quality/03-known-limitations.md).
+- **Active execution, task status, dependencies, and gates:** Google Drive
+  spreadsheet **VyrnForge Progress Tracker — Live Status**.
+- **Agent repository rules:** [`../../AGENTS.md`](../../AGENTS.md).
 
 Generated references and AI context must derive from canonical metadata.
 Historical task narratives or audit reports do not override current sources.
