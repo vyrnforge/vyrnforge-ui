@@ -1,10 +1,10 @@
 # VyrnForge UI
 
-VyrnForge UI is a native-owned, dependency-minimal, general-purpose UI system
-with enterprise-grade depth. It provides one contract-driven design, behavior,
-and accessibility foundation across supported web frameworks while keeping
-framework runtimes, application state, and business logic outside the shared
-core.
+VyrnForge UI is a dependency-minimal, general-purpose, enterprise-grade UI
+library and UI foundation. VyrnForge itself is the product: Native HTML / Custom
+Elements, React, Angular, and Vue are equal first-class consumption surfaces
+over one contract-driven design, behavior, accessibility, styling, and component
+foundation.
 
 The long-term product direction spans lightweight primitives, application
 components, reusable patterns, and optional advanced UI capabilities. Capability
@@ -19,8 +19,10 @@ HTML / Custom Elements, Angular, and Vue. Angular and Vue are package-owned
 facades over the same canonical Custom Element implementation rather than
 separate VyrnForge component libraries.
 
-The data grid is one optional specialized React capability on an independent
-alpha track, not the definition of the library.
+Data Grid is one optional advanced VyrnForge UI module, not a fifth framework
+surface and not the definition of the library. Its currently shipped package is
+React-only alpha; that is a present implementation limitation rather than the
+target product hierarchy.
 
 ## Maturity and release channels
 
@@ -43,19 +45,20 @@ Choose a first-class surface package for normal application work. Shared
 foundation packages are dependencies of those surfaces and are primarily useful
 when consuming framework-neutral VyrnForge APIs directly.
 
-| Package                    | Responsibility                                                                                                           |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `@vyrnforge/ui-components` | First-class React package over shared VyrnForge foundations.                                                             |
-| `@vyrnforge/ui-elements`   | First-class browser-native Custom Elements package over shared VyrnForge foundations.                                    |
-| `@vyrnforge/ui-angular`    | First-class Angular facade over canonical VyrnForge Custom Elements.                                                     |
-| `@vyrnforge/ui-vue`        | First-class Vue facade over canonical VyrnForge Custom Elements.                                                         |
-| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations. |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.     |
-| `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                    |
+| Package                    | Responsibility                                                                                                                                |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-components` | Current React package name and first-class React-facing API over shared VyrnForge foundations; it does not own canonical component semantics. |
+| `@vyrnforge/ui-elements`   | First-class browser-native Custom Elements package over shared VyrnForge foundations.                                                         |
+| `@vyrnforge/ui-angular`    | First-class Angular facade over canonical VyrnForge Custom Elements.                                                                          |
+| `@vyrnforge/ui-vue`        | First-class Vue facade over canonical VyrnForge Custom Elements.                                                                              |
+| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations.                      |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.                          |
+| `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                                         |
 
-Native HTML, React, Angular, and Vue are first-class web surfaces. They share
-canonical component, behavior, accessibility, styling, and terminology
-contracts while remaining idiomatic to each framework. Future framework support
+Native HTML, React, Angular, and Vue are equal first-class web surfaces. They
+share canonical component, behavior, accessibility, styling, and terminology
+contracts while remaining idiomatic to each framework. Internal package reuse
+or renderer strategy does not rank one surface above another. Future framework support
 must follow the framework admission and evidence model rather than creating an
 independent VyrnForge component library.
 
@@ -90,9 +93,9 @@ npm install @vyrnforge/ui-vue@beta vue
 ```
 
 Applications that intentionally consume framework-neutral behavior APIs can
-install `@vyrnforge/ui-behaviors@beta` directly. React applications that need
-the specialized data grid add `@vyrnforge/ui-data-grid@alpha` alongside the
-normal React surface.
+install `@vyrnforge/ui-behaviors@beta` directly. Applications that need the currently shipped Data Grid add
+`@vyrnforge/ui-data-grid@alpha`. The current package exposes a React surface;
+future grid surfaces remain a separate advanced-module evolution decision.
 
 See [Import and Setup](docs/api/import-and-setup.md) for registration,
 framework Forms/model integration, CSS behavior, SSR, peers, and escape-hatch
