@@ -374,7 +374,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     failures,
     read(root, "tests/browser/native-parity.spec.ts"),
     "tests/browser/native-parity.spec.ts",
-    ["deterministic 58-tag catalog", "native toast service mappings"],
+    ["deterministic 62-tag catalog", "native toast service mappings"],
   );
 
   const coreMetadata = readJson(
@@ -459,6 +459,6 @@ if (
 ) {
   assertNativeElementFoundations();
   console.log(
-    "Native element foundations passed: EL-6001 through EL-6018 and the 60-tag native renderer catalog (59 canonical + 1 post-GMF3 extension) are complete.",
+    "Native element foundations passed: the current 62-tag first-class Native surface is contract-mapped or explicitly exception-backed.",
   );
 }
