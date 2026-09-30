@@ -71,9 +71,7 @@ export function Dialog({
                 role="dialog"
                 tabIndex={-1}
               >
-                <div
-                  className={adoptedOverlayRegionClassName("dialog", "header")}
-                >
+                <div className={adoptedOverlayRegionClassName("dialog", "header")}>
                   <div className="vf-dialog__heading">
                     {title && (
                       <h2 className="vf-dialog__title" id={titleId}>
@@ -93,12 +91,16 @@ export function Dialog({
                   />
                 </div>
                 {children && (
-                  <div className={adoptedOverlayRegionClassName("dialog", "body")}>
+                  <div
+                    className={adoptedOverlayRegionClassName("dialog", "body")}
+                  >
                     {children}
                   </div>
                 )}
                 {footer && (
-                  <div className={adoptedOverlayRegionClassName("dialog", "footer")}>
+                  <div
+                    className={adoptedOverlayRegionClassName("dialog", "footer")}
+                  >
                     {footer}
                   </div>
                 )}
