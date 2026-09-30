@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   createOverlayLayerRegistry,
-  findOverlayCompositionRegion,
   createOverlayLifecycleController,
-  resolveOverlayPosition,
+  findOverlayCompositionRegion,
   overlayCompositionContracts,
+  resolveOverlayPosition,
 } from "./overlay";
 
 const anchor = {
@@ -101,9 +101,9 @@ describe("overlay lifecycle behavior", () => {
         "roving-focus",
       ]),
     );
-    expect(findOverlayCompositionRegion("confirm-dialog", "confirm-action")).toEqual(
-      expect.objectContaining({ name: "confirm-action" }),
-    );
+    expect(
+      findOverlayCompositionRegion("confirm-dialog", "confirm-action"),
+    ).toEqual(expect.objectContaining({ name: "confirm-action" }));
     expect(findOverlayCompositionRegion("autocomplete", "option")).toEqual(
       expect.objectContaining({ multiplicity: "multiple", required: true }),
     );
