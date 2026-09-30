@@ -8,7 +8,7 @@ export const FRAMEWORK_DIALOG_ARTIFACT_PATHS = Object.freeze({
 });
 
 const TASK_ID = "MFD-1115";
-const CANONICAL_RENDERER = "@vyrnforge/ui-elements";
+const SHARED_BROWSER_IMPLEMENTATION = "@vyrnforge/ui-elements";
 const REQUIRED_PROPERTIES = Object.freeze([
   "open",
   "modal",
@@ -59,8 +59,8 @@ function assertRecord(record, framework) {
     `${framework}: expected dialog record`,
   );
   assert(
-    record.adapter.canonicalRenderer === CANONICAL_RENDERER,
-    `${framework}: Dialog must keep ${CANONICAL_RENDERER} as canonical renderer`,
+    record.adapter.sharedBrowserImplementation === SHARED_BROWSER_IMPLEMENTATION,
+    `${framework}: Dialog must keep ${SHARED_BROWSER_IMPLEMENTATION} as shared browser implementation`,
   );
   if (framework === "native") {
     assert(record.tag === "vf-dialog", "native: Dialog must target vf-dialog");
@@ -145,7 +145,7 @@ export function createFrameworkDialogSliceModel(generationModel) {
     schemaVersion: 1,
     task: TASK_ID,
     component: FRAMEWORK_DIALOG_COMPONENT_ID,
-    canonicalRenderer: CANONICAL_RENDERER,
+    sharedBrowserImplementation: SHARED_BROWSER_IMPLEMENTATION,
     surfaces,
   });
 }
