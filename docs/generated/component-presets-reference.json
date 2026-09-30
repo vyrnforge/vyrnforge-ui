@@ -1,0 +1,383 @@
+{
+  "generated": {
+    "editable": false,
+    "generator": "scripts/generate-component-presets-reference.mjs",
+    "command": "npm run generate:component-presets-reference",
+    "sources": [
+      "docs/metadata/component-contracts.json",
+      "docs/metadata/component-presets.json"
+    ],
+    "task": "SC-2102"
+  },
+  "schemaVersion": 1,
+  "source": "docs/metadata/component-presets.json",
+  "records": [
+    {
+      "id": "clear-button",
+      "baseComponent": "icon-button",
+      "kind": "preset",
+      "publicInputs": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "semanticRole": "accessible-name"
+        }
+      ],
+      "baseDefaults": {
+        "variant": "ghost"
+      },
+      "semanticDefaults": {
+        "accessibleName": "Clear",
+        "tooltip": "Clear",
+        "icon": "Close"
+      },
+      "transforms": [],
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
+      "surfaceBindings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "ClearButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
+      }
+    },
+    {
+      "id": "close-button",
+      "baseComponent": "icon-button",
+      "kind": "preset",
+      "publicInputs": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "semanticRole": "accessible-name"
+        }
+      ],
+      "baseDefaults": {
+        "variant": "ghost"
+      },
+      "semanticDefaults": {
+        "accessibleName": "Close",
+        "tooltip": "Close",
+        "icon": "Close"
+      },
+      "transforms": [],
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
+      "surfaceBindings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "CloseButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
+      }
+    },
+    {
+      "id": "more-button",
+      "baseComponent": "icon-button",
+      "kind": "preset",
+      "publicInputs": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "semanticRole": "accessible-name"
+        }
+      ],
+      "baseDefaults": {
+        "variant": "ghost"
+      },
+      "semanticDefaults": {
+        "accessibleName": "More actions",
+        "tooltip": "More actions",
+        "icon": "MoreHorizontal"
+      },
+      "transforms": [],
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
+      "surfaceBindings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "MoreButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
+      }
+    },
+    {
+      "id": "refresh-button",
+      "baseComponent": "icon-button",
+      "kind": "preset",
+      "publicInputs": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "semanticRole": "accessible-name"
+        }
+      ],
+      "baseDefaults": {
+        "variant": "subtle"
+      },
+      "semanticDefaults": {
+        "accessibleName": "Refresh",
+        "tooltip": "Refresh",
+        "icon": "Refresh"
+      },
+      "transforms": [],
+      "content": {
+        "mode": "none",
+        "sourceOrder": []
+      },
+      "surfaceBindings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "icon-button",
+          "publicName": "RefreshButton"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "icon-button",
+          "publicName": null
+        }
+      }
+    },
+    {
+      "id": "status-badge",
+      "baseComponent": "badge",
+      "kind": "transform",
+      "publicInputs": [
+        {
+          "name": "status",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "variantMap",
+          "type": "record",
+          "required": false
+        }
+      ],
+      "baseDefaults": {},
+      "semanticDefaults": {},
+      "transforms": [
+        {
+          "input": "status",
+          "overrideInput": "variantMap",
+          "outputProperty": "variant",
+          "map": {
+            "active": "success",
+            "success": "success",
+            "inactive": "neutral",
+            "neutral": "neutral",
+            "pending": "warning",
+            "warning": "warning",
+            "danger": "danger",
+            "error": "danger",
+            "info": "info"
+          },
+          "fallback": "neutral"
+        }
+      ],
+      "content": {
+        "mode": "default-region",
+        "sourceOrder": [
+          "default",
+          "label",
+          "status"
+        ]
+      },
+      "surfaceBindings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "badge",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "badge",
+          "publicName": "StatusBadge"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "badge",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "base-component",
+          "target": "badge",
+          "publicName": null
+        }
+      }
+    },
+    {
+      "id": "toast-action",
+      "baseComponent": "button",
+      "kind": "composition",
+      "publicInputs": [
+        {
+          "name": "altText",
+          "type": "string",
+          "required": true,
+          "semanticRole": "accessible-name"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "baseDefaults": {
+        "size": "sm",
+        "variant": "subtle"
+      },
+      "semanticDefaults": {
+        "accessibleNameInput": "altText"
+      },
+      "transforms": [],
+      "content": {
+        "mode": "default-region",
+        "sourceOrder": [
+          "default"
+        ]
+      },
+      "surfaceBindings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "mode": "composition-helper",
+          "target": "button",
+          "publicName": null
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "mode": "named-export",
+          "target": "button",
+          "publicName": "ToastAction"
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "mode": "composition-helper",
+          "target": "button",
+          "publicName": null
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "mode": "composition-helper",
+          "target": "button",
+          "publicName": null
+        }
+      }
+    }
+  ]
+}

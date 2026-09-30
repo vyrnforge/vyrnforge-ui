@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vyrnforge.dev/schemas/component-presets.schema.json",
+  "title": "VyrnForge Framework-Neutral Component Presets",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceOfTruth", "presets"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "sourceOfTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical", "scope", "documentation"],
+      "properties": {
+        "canonical": { "const": true },
+        "scope": { "type": "string", "minLength": 1 },
+        "documentation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "presets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "baseComponent",
+          "kind",
+          "description",
+          "publicInputs",
+          "baseDefaults",
+          "semanticDefaults",
+          "transforms",
+          "content",
+          "surfaceBindings"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "baseComponent": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "kind": {
+            "enum": ["preset", "transform", "composition"]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "publicInputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "type", "required"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1 },
+                "type": { "type": "string", "minLength": 1 },
+                "required": { "type": "boolean" },
+                "semanticRole": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "baseDefaults": { "type": "object" },
+          "semanticDefaults": { "type": "object" },
+          "transforms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["input", "outputProperty", "map", "fallback"],
+              "properties": {
+                "input": { "type": "string", "minLength": 1 },
+                "overrideInput": {
+                  "type": ["string", "null"]
+                },
+                "outputProperty": { "type": "string", "minLength": 1 },
+                "map": { "type": "object" },
+                "fallback": {}
+              }
+            }
+          },
+          "content": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mode", "sourceOrder"],
+            "properties": {
+              "mode": {
+                "enum": ["none", "default-region"]
+              },
+              "sourceOrder": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "surfaceBindings": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["native", "react", "angular", "vue"],
+            "properties": {
+              "native": { "$ref": "#/$defs/surfaceBinding" },
+              "react": { "$ref": "#/$defs/surfaceBinding" },
+              "angular": { "$ref": "#/$defs/surfaceBinding" },
+              "vue": { "$ref": "#/$defs/surfaceBinding" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "surfaceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package", "supportLevel", "mode", "target"],
+      "properties": {
+        "package": { "type": "string", "minLength": 1 },
+        "supportLevel": { "const": "first-class" },
+        "mode": {
+          "enum": ["base-component", "named-export", "composition-helper"]
+        },
+        "target": { "type": "string", "minLength": 1 },
+        "publicName": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}
