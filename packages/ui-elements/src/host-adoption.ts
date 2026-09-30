@@ -105,7 +105,11 @@ export const vyrnForgeItemCompositionContracts = Object.freeze({
     capabilities: ["roving-focus", "selection"],
     regions: [
       { name: "icon", className: "vf-segmented-control__icon" },
-      { name: "label", className: "vf-segmented-control__label", required: true },
+      {
+        name: "label",
+        className: "vf-segmented-control__label",
+        required: true,
+      },
     ],
   }),
   menu: itemCompositionContract({
