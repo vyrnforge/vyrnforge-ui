@@ -30,6 +30,7 @@ export function findMissingMarkers(text, markers) {
 
 export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   const failures = [];
+
   for (const requiredFile of [
     securityManifestPath,
     securityDocumentationPath,
@@ -40,7 +41,9 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "scripts/write-ci-summary.mjs",
   ]) {
     if (!existsSync(path.join(root, requiredFile))) {
-      failures.push(\n        `security workflow required file is missing: ${requiredFile}`,\n      );
+      failures.push(
+        `security workflow required file is missing: ${requiredFile}`,
+      );
     }
   }
   if (failures.length) return failures;
@@ -53,7 +56,9 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     manifest.sourceOfTruth?.canonical !== true ||
     manifest.sourceOfTruth?.documentation !== securityDocumentationPath
   ) {
-    failures.push(\n      "security workflow metadata must point to canonical documentation",\n    );
+    failures.push(
+      "security workflow metadata must point to canonical documentation",
+    );
   }
 
   const ci = read(root, ciWorkflowPath);
@@ -70,10 +75,14 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "if: needs.plan.outputs.security == 'true'",
     "name: ci-gate",
   ]) {
-    if (!ci.includes(marker))\n      failures.push(`${ciWorkflowPath}: missing ${marker}`);
+    if (!ci.includes(marker)) {
+      failures.push(`${ciWorkflowPath}: missing ${marker}`);
+    }
   }
   if (ci.includes("integration/**")) {
-    failures.push(\n      "CI must not reintroduce obsolete persistent integration-lane PR targets",\n    );
+    failures.push(
+      "CI must not reintroduce obsolete persistent integration-lane PR targets",
+    );
   }
   if (/continue-on-error:\s*true/u.test(ci)) {
     failures.push("CI security checks must not conceal mandatory failures");
@@ -85,7 +94,9 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "SECURITY_RESULT",
     "scripts/write-ci-summary.mjs",
   ]) {
-    if (!ciGate.includes(marker))\n      failures.push(`ci-gate must evaluate ${marker}`);
+    if (!ciGate.includes(marker)) {
+      failures.push(`ci-gate must evaluate ${marker}`);
+    }
   }
 
   const assurance = read(root, assuranceWorkflowPath);
@@ -110,10 +121,16 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   const release = read(root, ".github/workflows/release.yml");
   const verifyReleaseStart = release.indexOf("  verify-release:");
   const publishPackagesStart = release.indexOf("  publish-packages:");
+
   if (verifyReleaseStart < 0 || publishPackagesStart <= verifyReleaseStart) {
-    failures.push(\n      "release.yml is missing the canonical verify-release boundary",\n    );
+    failures.push(
+      "release.yml is missing the canonical verify-release boundary",
+    );
   } else {
-    const section = release.slice(verifyReleaseStart, publishPackagesStart);
+    const verifyReleaseSection = release.slice(
+      verifyReleaseStart,
+      publishPackagesStart,
+    );
     for (const marker of [
       "Resolve successful current-main CI run",
       "actions/workflows/ci.yml/runs",
@@ -121,7 +138,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
       "npm run verify:release-artifact",
       "npm run verify:release-size-budgets",
     ]) {
-      if (!section.includes(marker)) {
+      if (!verifyReleaseSection.includes(marker)) {
         failures.push(
           `release.yml verify-release is missing current-main release control: ${marker}`,
         );
