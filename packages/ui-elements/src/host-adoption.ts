@@ -337,7 +337,7 @@ export function resolveVyrnForgeHostClasses(
     const value =
       values[modifier.property] ?? adoption.defaults?.[modifier.property];
     if (modifier.truthyClass) {
-      if (Boolean(value)) classes.push(modifier.truthyClass);
+      if (value) classes.push(modifier.truthyClass);
       continue;
     }
     if (
