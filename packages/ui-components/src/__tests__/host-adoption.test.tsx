@@ -19,15 +19,11 @@ import {
 } from "../index";
 
 describe("shared native-host adoption", () => {
-  it("preserves React typography semantic native tags and native attributes", () => {
+  it("preserves React typography tags and native attributes", () => {
     const markup = renderToStaticMarkup(
       <>
-        <Text as="span" data-contract="text">
-          Text
-        </Text>
-        <Heading level={4} data-contract="heading">
-          Heading
-        </Heading>
+        <Text as="span" data-contract="text">Text</Text>
+        <Heading level={4} data-contract="heading">Heading</Heading>
         <Label htmlFor="field">Label</Label>
         <Caption as="p">Caption</Caption>
         <CodeText as="span">Code</CodeText>
@@ -48,15 +44,9 @@ describe("shared native-host adoption", () => {
   it("preserves native div roots and layout modifier classes", () => {
     const markup = renderToStaticMarkup(
       <>
-        <Card padding="lg" variant="elevated">
-          Card
-        </Card>
-        <Stack align="center" gap="sm" justify="between">
-          Stack
-        </Stack>
-        <Inline gap="md" justify="end" wrap>
-          Inline
-        </Inline>
+        <Card padding="lg" variant="elevated">Card</Card>
+        <Stack align="center" gap="sm" justify="between">Stack</Stack>
+        <Inline gap="md" justify="end" wrap>Inline</Inline>
       </>,
     );
 
