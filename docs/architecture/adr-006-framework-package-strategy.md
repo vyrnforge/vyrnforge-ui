@@ -6,8 +6,10 @@
 
 ## Context
 
-VyrnForge supports React, Native HTML / Custom Elements, Angular, and Vue as
-first-class non-grid web surfaces. Each consumer should have one obvious
+VyrnForge supports Native HTML / Custom Elements, React, Angular, and Vue as
+equal first-class non-grid web surfaces. VyrnForge itself owns the component
+model; these packages are distribution/integration surfaces rather than separate
+component systems. Each consumer should have one obvious
 framework package and should not need to copy VyrnForge adapters, forms bridges,
 registration helpers, or event-forwarding implementation into the application.
 
@@ -26,8 +28,7 @@ VyrnForge uses **one canonical public install package per supported web surface*
 | Angular     | `@vyrnforge/ui-angular`    | First-class Angular facade package.     |
 | Vue         | `@vyrnforge/ui-vue`        | First-class Vue facade package.         |
 
-Normal framework consumers install their framework package as the obvious
-VyrnForge component entrypoint:
+Normal consumers install the package for their chosen VyrnForge surface:
 
 ```text
 React       -> @vyrnforge/ui-components
@@ -36,9 +37,10 @@ Angular     -> @vyrnforge/ui-angular
 Vue         -> @vyrnforge/ui-vue
 ```
 
-A facade package may depend on required VyrnForge implementation packages.
+A surface package may depend on required VyrnForge implementation packages.
 Consumers should not need to understand the internal renderer topology for
-standard component use.
+standard component use, and internal dependency direction must not be interpreted
+as support rank.
 
 `@vyrnforge/ui-core` and `@vyrnforge/ui-behaviors` remain valid deliberate direct
 dependencies for framework-neutral or advanced use cases; they are not extra
@@ -46,7 +48,9 @@ manual assembly steps for ordinary framework component consumption.
 
 ## React compatibility
 
-`@vyrnforge/ui-components` remains the canonical React package. VyrnForge does
+`@vyrnforge/ui-components` remains the current canonical **React distribution
+package**. The package name is compatibility history; it does not make React the
+canonical VyrnForge component system. VyrnForge does
 not add `@vyrnforge/ui-react` merely for naming symmetry. React implementation
 may reuse the canonical native/DOM implementation under ADR-005 without changing
 this public package identity.
@@ -55,8 +59,8 @@ A future package rename requires a separate compatibility and migration decision
 
 ## Native HTML compatibility
 
-`@vyrnforge/ui-elements` remains the canonical Native HTML / Custom Elements
-package and retains typed registration, DOM APIs, CSS, and Custom Elements
+`@vyrnforge/ui-elements` remains the current Native HTML / Custom Elements
+distribution package and retains typed registration, DOM APIs, CSS, and Custom Elements
 Manifest entrypoints. VyrnForge does not publish a duplicate
 `@vyrnforge/ui-native` alias by default.
 

@@ -1,6 +1,9 @@
 # External Consumer Verification
 
-External consumer verification proves that VyrnForge UI packages can be consumed from packed artifacts by a minimal application outside the monorepo workspace graph.
+External consumer verification proves that VyrnForge UI packages can be consumed
+from packed artifacts outside the monorepo workspace graph. Native HTML, React,
+Angular, and Vue are equal first-class product surfaces; individual fixtures may
+exercise different package paths without implying a support hierarchy.
 
 Run:
 

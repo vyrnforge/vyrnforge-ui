@@ -130,7 +130,9 @@ A framework package should not become the semantic source of truth for an advanc
 
 ## Framework distribution
 
-React, Native HTML, Angular, and Vue remain the currently approved first-class framework tracks. Advanced capabilities should follow the same principle as common UI: define reusable semantics once and expose idiomatic framework experiences.
+Native HTML, React, Angular, and Vue are the currently approved **equal
+first-class framework surfaces**. An advanced module is not itself another
+framework track. Advanced capabilities should follow the same principle as common UI: define reusable semantics once and expose idiomatic framework experiences.
 
 A concrete advanced module must define before first-class release:
 
@@ -312,11 +314,20 @@ Before implementation creates a new package boundary, the proposal must demonstr
 
 The proposal should become a dedicated architecture decision for the concrete capability when these details materially affect public architecture.
 
-## Current data-grid relationship
+## Current Data Grid relationship
 
-`@vyrnforge/ui-data-grid` is the repository's existing specialized advanced capability and currently has its own React alpha track and package boundaries.
+Data Grid is an optional advanced VyrnForge UI module for complex data-table and
+data-management experiences. It sits beneath the common VyrnForge UI system; it
+is not a fifth framework surface.
 
-This ADR does not retroactively rewrite that package or declare its current architecture to be the template for every future module. It provides the standard against which future grid evolution and other advanced capabilities should be evaluated when they are explicitly reprioritized.
+`@vyrnforge/ui-data-grid` is the repository's current Data Grid package and
+currently ships only a React alpha surface. That is a current implementation and
+release limitation, not the target product hierarchy.
+
+Future Data Grid evolution should define reusable framework-neutral grid
+contracts, algorithms, state, accessibility, styling, and extension points first,
+then expose explicitly supported Native, React, Angular, and Vue surfaces. This
+ADR does not claim those additional grid surfaces exist today.
 
 ## S10-S15 relationship
 
