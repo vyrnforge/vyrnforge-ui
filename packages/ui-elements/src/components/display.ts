@@ -18,7 +18,7 @@ export interface VyrnForgeDisplayElementConfig {
   readonly defaults?: Readonly<Record<string, boolean | number | string>>;
   readonly modifiers?: readonly {
     readonly property: string;
-    readonly prefix: string;
+    readonly prefix?: string;
     readonly omitValue?: boolean | number | string;
     readonly truthyClass?: string;
   }[];
@@ -152,7 +152,7 @@ export abstract class VyrnForgeDisplayElement extends VyrnForgeDomElement {
         value !== "" &&
         value !== null
       ) {
-        classes.push(`${modifier.prefix}${String(value)}`);
+        classes.push(`${modifier.prefix ?? ""}${String(value)}`);
       }
     }
     this.applyManagedClasses(classes);
