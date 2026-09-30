@@ -7,10 +7,7 @@
       "@vyrnforge/ui-behaviors",
       "@vyrnforge/ui-elements"
     ],
-    "runtimeDependencies": [
-      "@vyrnforge/ui-core",
-      "@vyrnforge/ui-behaviors"
-    ],
+    "runtimeDependencies": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
     "frameworkDependencies": [],
     "registration": "explicit",
     "domMode": "light-dom",
