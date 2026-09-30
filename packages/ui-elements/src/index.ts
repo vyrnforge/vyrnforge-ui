@@ -70,3 +70,4 @@ export {
 export * from "./components";
 export * from "./toast-service";
 export * from "./host-adoption";
+export * from "./overlay-adoption";
