@@ -351,7 +351,11 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
     const input = (event.target as Element).closest<HTMLInputElement>(
       "input[type=radio]",
     );
-    if (input?.checked && this.allowClear && Number(input.value) === this.value) {
+    if (
+      input?.checked &&
+      this.allowClear &&
+      Number(input.value) === this.value
+    ) {
       event.preventDefault();
       this.commit(Number(input.value), "pointer");
     }
