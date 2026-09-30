@@ -10,14 +10,17 @@ import {
 
 describe("host adoption contracts", () => {
   it("preserves supported semantic native typography tags", () => {
-    expect(resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts.text, "span")).toBe(
-      "span",
-    );
+    expect(
+      resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts.text, "span"),
+    ).toBe("span");
     expect(
       resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts.caption, "p"),
     ).toBe("p");
     expect(
-      resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts["code-text"], "span"),
+      resolveVyrnForgeHostTag(
+        vyrnForgeHostAdoptionContracts["code-text"],
+        "span",
+      ),
     ).toBe("span");
     expect(
       resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts.heading, "h5"),
@@ -25,9 +28,9 @@ describe("host adoption contracts", () => {
   });
 
   it("falls back to the canonical default tag for unsupported hosts", () => {
-    expect(resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts.text, "button")).toBe(
-      "p",
-    );
+    expect(
+      resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts.text, "button"),
+    ).toBe("p");
     expect(
       resolveVyrnForgeHostTag(vyrnForgeHostAdoptionContracts.card, "section"),
     ).toBe("div");
