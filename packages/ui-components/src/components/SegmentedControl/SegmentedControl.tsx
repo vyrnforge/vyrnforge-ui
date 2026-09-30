@@ -54,9 +54,23 @@ export function SegmentedControl({
             type="button"
           >
             {option.icon && (
-              <span className={adoptedItemRegionClassName("segmented-control", "icon")}>{option.icon}</span>
+              <span
+                className={adoptedItemRegionClassName(
+                  "segmented-control",
+                  "icon",
+                )}
+              >
+                {option.icon}
+              </span>
             )}
-            <span className={adoptedItemRegionClassName("segmented-control", "label")}>{option.label}</span>
+            <span
+              className={adoptedItemRegionClassName(
+                "segmented-control",
+                "label",
+              )}
+            >
+              {option.label}
+            </span>
           </button>
         );
       })}
