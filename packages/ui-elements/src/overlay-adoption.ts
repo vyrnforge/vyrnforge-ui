@@ -65,7 +65,13 @@ export const vyrnForgeOverlayAdoptionContracts = Object.freeze({
   }),
   drawer: contract({
     id: "drawer",
-    capabilities: ["controlled-open", "focus-containment", "focus-restoration", "portal-target", "rich-content"],
+    capabilities: [
+      "controlled-open",
+      "focus-containment",
+      "focus-restoration",
+      "portal-target",
+      "rich-content",
+    ],
     regions: [
       { name: "content", className: "vf-drawer__content", required: true },
       { name: "header", className: "vf-drawer__header" },
