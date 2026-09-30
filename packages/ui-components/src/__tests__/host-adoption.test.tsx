@@ -165,7 +165,11 @@ describe("shared native-host adoption", () => {
           aria-label="View"
           onChange={() => undefined}
           options={[
-            { value: "grid", label: <strong>Grid</strong>, icon: <span>G</span> },
+            {
+              value: "grid",
+              label: <strong>Grid</strong>,
+              icon: <span>G</span>,
+            },
           ]}
           value="grid"
         />
