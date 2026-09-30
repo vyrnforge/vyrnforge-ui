@@ -1,5 +1,6 @@
 import { useId, useMemo, useRef, type KeyboardEvent } from "react";
 import { useTabsBehavior } from "../../internal/behaviors";
+import { adoptedItemRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type { TabItem, TabsProps } from "./Tabs.types";
 
@@ -103,9 +104,9 @@ export function Tabs({
               tabIndex={selected ? 0 : -1}
               type="button"
             >
-              <span className="vf-tabs__label">{item.label}</span>
+              <span className={adoptedItemRegionClassName("tabs", "label")}>{item.label}</span>
               {item.badge && (
-                <span className="vf-tabs__badge">{item.badge}</span>
+                <span className={adoptedItemRegionClassName("tabs", "badge")}>{item.badge}</span>
               )}
             </button>
           );
@@ -115,7 +116,7 @@ export function Tabs({
         (selectedItem?.content && (
           <div
             aria-labelledby={`${baseId}-tab-${selectedItem.id}`}
-            className="vf-tabs__panel"
+            className={adoptedItemRegionClassName("tabs", "content")}
             id={`${baseId}-panel-${selectedItem.id}`}
             role="tabpanel"
           >
