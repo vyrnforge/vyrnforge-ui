@@ -104,9 +104,13 @@ export function Tabs({
               tabIndex={selected ? 0 : -1}
               type="button"
             >
-              <span className={adoptedItemRegionClassName("tabs", "label")}>{item.label}</span>
+              <span className={adoptedItemRegionClassName("tabs", "label")}>
+                {item.label}
+              </span>
               {item.badge && (
-                <span className={adoptedItemRegionClassName("tabs", "badge")}>{item.badge}</span>
+                <span className={adoptedItemRegionClassName("tabs", "badge")}>
+                  {item.badge}
+                </span>
               )}
             </button>
           );
