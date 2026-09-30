@@ -49,7 +49,13 @@ function contract(
 export const vyrnForgeOverlayAdoptionContracts = Object.freeze({
   dialog: contract({
     id: "dialog",
-    capabilities: ["controlled-open", "focus-containment", "focus-restoration", "portal-target", "rich-content"],
+    capabilities: [
+      "controlled-open",
+      "focus-containment",
+      "focus-restoration",
+      "portal-target",
+      "rich-content",
+    ],
     regions: [
       { name: "content", className: "vf-dialog__content", required: true },
       { name: "header", className: "vf-dialog__header" },
@@ -69,13 +75,28 @@ export const vyrnForgeOverlayAdoptionContracts = Object.freeze({
   }),
   popover: contract({
     id: "popover",
-    capabilities: ["anchored-placement", "controlled-open", "focus-restoration", "portal-target", "rich-content", "trigger-ownership"],
+    capabilities: [
+      "anchored-placement",
+      "controlled-open",
+      "focus-restoration",
+      "portal-target",
+      "rich-content",
+      "trigger-ownership",
+    ],
     defaultPlacement: "bottom-start",
-    regions: [{ name: "content", className: "vf-popover__content", required: true }],
+    regions: [
+      { name: "content", className: "vf-popover__content", required: true },
+    ],
   }),
   tooltip: contract({
     id: "tooltip",
-    capabilities: ["anchored-placement", "controlled-open", "portal-target", "rich-content", "trigger-ownership"],
+    capabilities: [
+      "anchored-placement",
+      "controlled-open",
+      "portal-target",
+      "rich-content",
+      "trigger-ownership",
+    ],
     defaultPlacement: "top",
     regions: [{ name: "content", className: "vf-tooltip", required: true }],
   }),
@@ -99,14 +120,29 @@ export const vyrnForgeOverlayAdoptionContracts = Object.freeze({
   }),
   autocomplete: contract({
     id: "autocomplete",
-    capabilities: ["anchored-placement", "controlled-open", "custom-filter", "custom-render", "focus-restoration", "portal-target", "rich-content"],
+    capabilities: [
+      "anchored-placement",
+      "controlled-open",
+      "custom-filter",
+      "custom-render",
+      "focus-restoration",
+      "portal-target",
+      "rich-content",
+    ],
     defaultPlacement: "bottom-start",
     regions: [
       { name: "control", className: "vf-autocomplete__control", required: true },
       { name: "layer", className: "vf-autocomplete__layer", required: true },
-      { name: "option", className: "vf-autocomplete__option-main", required: true },
+      {
+        name: "option",
+        className: "vf-autocomplete__option-main",
+        required: true,
+      },
       { name: "label", className: "vf-autocomplete__option-label" },
-      { name: "description", className: "vf-autocomplete__option-description" },
+      {
+        name: "description",
+        className: "vf-autocomplete__option-description",
+      },
       { name: "status", className: "vf-autocomplete__status" },
     ],
   }),
