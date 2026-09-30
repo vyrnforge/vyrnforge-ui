@@ -414,7 +414,7 @@ export function verifyNativeElementFoundations({ root = repositoryRoot } = {}) {
     multiFrameworkFoundation.status !== "complete" ||
     multiFrameworkFoundation.metadata !==
       "docs/metadata/native-element-foundations.json" ||
-    multiFrameworkFoundation.registeredPublicTags !== 58 ||
+    multiFrameworkFoundation.registeredPublicTags !== 62 ||
     multiFrameworkFoundation.foundationStage !== "native-parity-current"
   ) {
     failures.push(
