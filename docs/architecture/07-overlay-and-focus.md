@@ -80,3 +80,12 @@ dependency.
 
 Framework packages own only their lifecycle/DI/composable integration. They do
 not own a separate toast store, timer scheduler, or application-state contract.
+
+
+## Shared overlay adoption contract
+
+SC-2107 records overlay composition capabilities in `@vyrnforge/ui-elements` without moving framework content into the shared layer. Dialog, Drawer, Popover, Tooltip, Toast, ConfirmDialog, and Autocomplete share canonical region identities plus capability metadata for controlled open state, portal targeting, anchored placement, trigger ownership, focus containment/restoration, rich content, and lifecycle behavior.
+
+The contract is an adoption seam rather than a framework renderer. React continues to own ReactNode values and its portal/focus adapters; Angular templates, Vue slots, and Native DOM remain idiomatic to their surfaces. Reusable lifecycle, dismissal, positioning, focus, toast, filtering, and selection semantics remain in shared behavior/browser foundations.
+
+Advanced Autocomplete uses the same model: custom filtering and rendering are explicit shared capabilities, while framework adapters retain their content value types. Adoption must preserve the existing controlled value/input/open channels, placement and trigger-width behavior, portal target, rich loading/empty/option states, keyboard and focus behavior, and form submission contract.
