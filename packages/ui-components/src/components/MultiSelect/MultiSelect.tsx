@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useRef, type KeyboardEvent } from "react";
 import { useMultiSelectBehavior } from "../../internal/behaviors";
+import { adoptedItemRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type { MultiSelectOption, MultiSelectProps } from "./MultiSelect.types";
 
@@ -265,11 +266,11 @@ export function MultiSelect({
                       {selected ? "✓" : ""}
                     </span>
                     <span className="vf-multi-select__option-main">
-                      <span className="vf-multi-select__option-label">
+                      <span className={adoptedItemRegionClassName("multi-select", "label")}>
                         {option.label}
                       </span>
                       {option.description && (
-                        <span className="vf-multi-select__option-description">
+                        <span className={adoptedItemRegionClassName("multi-select", "description")}>
                           {option.description}
                         </span>
                       )}
