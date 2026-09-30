@@ -33,4 +33,45 @@ describe("VyrnForge browser toast service", () => {
 
     service.destroy();
   });
+
+  it("covers neutral/default ids, shortcuts, updates, bulk dismissal, and scheduler lifecycle", () => {
+    const service = createVyrnForgeToastService({ defaultDuration: null });
+
+    const neutralId = service.toast({
+      actionLabel: "Undo",
+      description: "Neutral",
+      dismissible: false,
+      title: "Notice",
+    });
+    const errorId = service.error({ description: "Error" });
+    service.warning({ description: "Warning" });
+    service.info({ description: "Info" });
+
+    expect(neutralId).toMatch(/^vf-toast-/);
+    expect(service.getSnapshot().records.map((record) => record.payload.tone)).toEqual([
+      "neutral",
+      "error",
+      "warning",
+      "info",
+    ]);
+    expect(
+      service.update(neutralId, {
+        actionLabel: "Retry",
+        createdAt: 10,
+        dismissible: true,
+        duration: 500,
+        title: "Updated",
+        tone: "success",
+      }),
+    ).toBe(true);
+    expect(service.update("missing", { title: "Ignored" })).toBe(false);
+    expect(service.dismiss(errorId, "programmatic")).toBe(true);
+
+    service.start();
+    service.stop();
+    expect(service.dismissAll()).toBe(true);
+    expect(service.getSnapshot().records).toHaveLength(0);
+
+    service.destroy();
+  });
 });
