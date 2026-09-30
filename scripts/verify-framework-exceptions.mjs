@@ -13,10 +13,6 @@ const forbiddenReactDuplicateSuffixes = [
   ".temporary.tsx",
 ];
 
-function scopesOf(entry) {
-  return Array.isArray(entry.scope) ? entry.scope : [entry.scope];
-}
-
 function collectFiles(directory) {
   const files = [];
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -49,10 +45,12 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   const live = registry.exceptions.filter(({ state }) =>
     ["active", "retiring"].includes(state),
   );
-  assert.ok(
-    live.length > 0,
-    "at least one live framework exception is expected",
+  assert.equal(
+    live.length,
+    1,
+    "SC-2108 reconciliation expects only the narrow native toast viewport mapping gap to remain live",
   );
+  assert.equal(live[0]?.id, "MFD-EX-NATIVE-TOAST-VIEWPORT");
 
   for (const entry of live) {
     for (const field of registry.requiredFields) {
@@ -86,30 +84,23 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
     );
   }
 
-  const liveReact = live.filter(({ framework }) => framework === "react");
-  const byId = new Map(liveReact.map((entry) => [entry.id, entry]));
-  for (const requiredId of [
-    "MFD-EX-REACT-TOAST-PROVIDER",
-    "MFD-EX-REACT-USE-TOAST",
-    "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
-  ]) {
+  const closed = registry.exceptions.filter(({ state }) => state === "closed");
+  assert.equal(
+    closed.length,
+    registry.exceptions.length - 1,
+    "SC-2108 expects every evidence-satisfied original exception to be closed",
+  );
+  for (const entry of closed) {
+    assert.equal(
+      entry.reviewMilestone,
+      "S21 SC-2108 reconciliation",
+      entry.id + " must record the S21 reconciliation milestone",
+    );
     assert.ok(
-      byId.has(requiredId),
-      requiredId + " must remain a live exception",
+      entry.evidence.some((item) => /SC-210[2-7]/.test(item)),
+      entry.id + " must cite delivered S21 capability evidence",
     );
   }
-  assert.deepEqual(
-    scopesOf(byId.get("MFD-EX-REACT-OVERLAY-COMPOSITION")).sort(),
-    ["confirm-dialog", "dialog", "drawer", "popover", "toast", "tooltip"],
-  );
-  assert.deepEqual(
-    scopesOf(byId.get("MFD-EX-REACT-LAYOUT-NATIVE-HOST")).sort(),
-    ["card", "inline", "stack"],
-  );
-  assert.deepEqual(
-    scopesOf(byId.get("MFD-EX-REACT-LAYOUT-RICH-COMPOSITION")).sort(),
-    ["app-shell", "page", "page-header", "page-toolbar", "panel", "section"],
-  );
 
   const reactSourceRoot = path.join(
     repositoryRoot,
