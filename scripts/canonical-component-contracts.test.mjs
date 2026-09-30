@@ -75,7 +75,7 @@ test("rejects an unsupported schema version deterministically", () => {
   );
   assert.deepEqual(failures, [...failures].sort());
   assert.match(failures.join("\n"), /schemaVersion/);
-  assert.match(failures.join("\n"), /supported version 2/);
+  assert.match(failures.join("\n"), /supported version 3/);
 });
 
 test("rejects missing canonical source ownership", () => {
