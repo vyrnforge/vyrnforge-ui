@@ -1,7 +1,4 @@
-import {
-  createToastService,
-  type ToastService,
-} from "@vyrnforge/ui-behaviors";
+import { createToastService, type ToastService } from "@vyrnforge/ui-behaviors";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type {
   ToastController,
@@ -19,7 +16,9 @@ type ToastPayload = Omit<
 >;
 
 function toToastRecord(
-  record: ReturnType<ToastService<ToastPayload>["getSnapshot"]>["records"][number],
+  record: ReturnType<
+    ToastService<ToastPayload>["getSnapshot"]
+  >["records"][number],
 ): ToastRecord {
   return {
     ...record.payload,
