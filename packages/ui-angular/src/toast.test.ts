@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 type ToastModule = typeof import("./toast.js");
-type ToastService = ToastModule["VyrnForgeToastService"];
+type ToastService = InstanceType<ToastModule["VyrnForgeToastService"]>;
 type RequiredMethod =
   | "dismiss"
   | "dismissAll"
