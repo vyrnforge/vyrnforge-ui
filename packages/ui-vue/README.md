@@ -26,7 +26,7 @@ import App from "./App.vue";
 createApp(App).use(VyrnForgeVue).mount("#app");
 ```
 
-The plugin registers VyrnForge's canonical custom elements and the public `Vf*` Vue facade components. Consumers using those facade components do not need to copy `@vyrnforge/ui-elements/register` imports or configure Vue's template compiler to recognize `vf-*` tags.
+The plugin registers VyrnForge's shared custom elements and the public `Vf*` Vue components. Consumers using those facade components do not need to copy `@vyrnforge/ui-elements/register` imports or configure Vue's template compiler to recognize `vf-*` tags.
 
 For advanced hosts that provide a custom element registry, use `createVyrnForgeVue({ elementRegistry })` or `installVyrnForgeVue(app, { elementRegistry })`.
 
