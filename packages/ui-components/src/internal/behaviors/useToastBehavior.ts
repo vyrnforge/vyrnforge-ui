@@ -1,7 +1,4 @@
-import {
-  createToastController,
-  type ToastBehaviorController,
-} from "@vyrnforge/ui-behaviors";
+import { createToastService, type ToastService } from "@vyrnforge/ui-behaviors";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type {
   ToastController,
@@ -20,7 +17,7 @@ type ToastPayload = Omit<
 
 function toToastRecord(
   record: ReturnType<
-    ToastBehaviorController<ToastPayload>["getSnapshot"]
+    ToastService<ToastPayload>["getSnapshot"]
   >["records"][number],
 ): ToastRecord {
   return {
@@ -41,58 +38,60 @@ export function useToastBehavior({
   maxVisible: number;
   newestOnTop: boolean;
 }) {
-  const controllerRef = useRef<ToastBehaviorController<ToastPayload> | null>(
-    null,
-  );
+  const serviceRef = useRef<ToastService<ToastPayload> | null>(null);
 
-  if (controllerRef.current === null) {
-    controllerRef.current = createToastController<ToastPayload>({
+  if (serviceRef.current === null) {
+    serviceRef.current = createToastService<ToastPayload>({
+      createId: createToastId,
       defaultDuration,
       maxVisible,
       newestOnTop,
     });
   }
 
-  const behavior = controllerRef.current;
-  const snapshot = useBehaviorSnapshot(behavior);
+  const service = serviceRef.current;
+  const snapshot = useBehaviorSnapshot(service);
 
   useEffect(() => {
-    behavior.setMaxVisible(maxVisible);
-  }, [behavior, maxVisible]);
+    service.setMaxVisible(maxVisible);
+  }, [maxVisible, service]);
 
   useEffect(() => {
-    behavior.setNewestOnTop(newestOnTop);
-  }, [behavior, newestOnTop]);
+    service.setNewestOnTop(newestOnTop);
+  }, [newestOnTop, service]);
+
+  useEffect(() => {
+    service.start();
+    return () => service.stop();
+  }, [service]);
 
   const dismiss = useCallback(
     (id: string) => {
-      behavior.dismiss(id, "programmatic");
+      service.dismiss(id, "programmatic");
     },
-    [behavior],
+    [service],
   );
   const dismissAll = useCallback(() => {
-    behavior.dismissAll();
-  }, [behavior]);
+    service.dismissAll();
+  }, [service]);
   const toast = useCallback(
     (options: ToastOptions) => {
-      const id = options.id ?? createToastId();
       const {
-        createdAt = Date.now(),
+        createdAt,
         dismissible = true,
         duration,
-        id: _id,
+        id,
         ...payload
       } = options;
-      behavior.add({
+      return service.add({
         id,
         payload,
         createdAt,
         dismissible,
         duration,
       });
-      return id;
     },
-    [behavior],
+    [service],
   );
   const shortcut = useCallback(
     (tone: ToastTone, options: ToastShortcutOptions) =>
@@ -101,7 +100,7 @@ export function useToastBehavior({
   );
   const update = useCallback(
     (id: string, options: Partial<ToastOptions>) => {
-      const current = behavior
+      const current = service
         .getSnapshot()
         .records.find((record) => record.id === id);
       if (!current) return;
@@ -111,7 +110,6 @@ export function useToastBehavior({
         ...currentRecord,
         ...options,
         id,
-        createdAt: Date.now(),
       };
       const {
         createdAt,
@@ -120,29 +118,29 @@ export function useToastBehavior({
         id: _id,
         ...payload
       } = nextRecord;
-      behavior.update(id, {
+      service.update(id, {
         payload,
         createdAt,
         dismissible,
         duration,
       });
     },
-    [behavior],
+    [service],
   );
   const pause = useCallback(
-    (id: string, reason: "hover" | "focus") => behavior.pause(id, reason),
-    [behavior],
+    (id: string, reason: "hover" | "focus") => service.pause(id, reason),
+    [service],
   );
   const resume = useCallback(
-    (id: string, reason: "hover" | "focus") => behavior.resume(id, reason),
-    [behavior],
+    (id: string, reason: "hover" | "focus") => service.resume(id, reason),
+    [service],
   );
   const isPaused = useCallback(
     (id: string) =>
-      behavior
+      service
         .getSnapshot()
         .records.some((record) => record.id === id && record.paused),
-    [behavior],
+    [service],
   );
 
   const controller = useMemo<ToastController>(
@@ -166,6 +164,7 @@ export function useToastBehavior({
     isPaused,
     pause,
     resume,
+    service,
     visibleToasts: snapshot.visibleRecords.map(toToastRecord),
   };
 }

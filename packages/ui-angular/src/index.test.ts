@@ -15,6 +15,7 @@ type CatalogExport = Assert<HasExport<"vyrnForgeAngularCatalog">>;
 type DirectivesExport = Assert<
   HasExport<"vyrnForgeAngularGeneratedDirectives">
 >;
+type ToastServiceExport = Assert<HasExport<"VyrnForgeToastService">>;
 
 const publicSurfaceIsTyped: [
   ButtonExport,
@@ -24,11 +25,13 @@ const publicSurfaceIsTyped: [
   SetupExport,
   CatalogExport,
   DirectivesExport,
-] = [true, true, true, true, true, true, true];
+  ToastServiceExport,
+] = [true, true, true, true, true, true, true, true];
 
 describe("@vyrnforge/ui-angular public surface", () => {
   it("type-checks generated directives, catalog metadata, and app setup exports", () => {
     expect(publicSurfaceIsTyped).toEqual([
+      true,
       true,
       true,
       true,

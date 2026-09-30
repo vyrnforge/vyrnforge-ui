@@ -24,3 +24,5 @@ export type {
   VyrnForgeElementForTagName,
   VyrnForgeTabItem,
 } from "@vyrnforge/ui-elements";
+
+export { VyrnForgeToastService } from "./toast.js";

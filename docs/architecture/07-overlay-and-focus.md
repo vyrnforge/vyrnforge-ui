@@ -63,3 +63,20 @@ The active internal overlay stack adds a runtime ordering value so nested portal
 ## Future Autocomplete
 
 Autocomplete must reuse the shared portal, dismissable layer, anchored positioning, and focus rules. It must not introduce a separate portal root, outside-click handler, or positioning engine. Its future combobox/listbox semantics are distinct from Menu and must be implemented as a dedicated accessibility task.
+
+## Toast service lifecycle
+
+Toast orchestration is shared below framework adapters. `@vyrnforge/ui-behaviors`
+owns the timer-aware toast service, queue visibility, pause/resume remaining-time
+semantics, dismissal reasons, and lifecycle snapshots. The service has no DOM or
+framework dependency and exposes reconnectable `start()` / `stop()` lifecycle
+hooks so renderers can suspend timers without discarding toast state.
+
+`@vyrnforge/ui-elements` exposes the browser-facing service facade and binds the
+Native toast viewport to it. React binds its existing context/provider and hook
+API to the same service. Angular exposes an injectable service and Vue exposes
+an app-provided composable through their existing `@vyrnforge/ui-elements`
+dependency.
+
+Framework packages own only their lifecycle/DI/composable integration. They do
+not own a separate toast store, timer scheduler, or application-state contract.
