@@ -1,16 +1,8 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceOfTruth": {
     "canonical": true,
-    "task": "BT-8006",
     "documentation": "docs/release/security-workflow-hardening.md"
-  },
-  "task": {
-    "id": "BT-8006",
-    "title": "Complete security and workflow hardening",
-    "status": "done",
-    "dependsOn": ["BT-8003"],
-    "unlocksAfterMerge": ["BT-8007", "BT-8008"]
   },
   "controls": {
     "dependencyReview": {
@@ -21,13 +13,19 @@
     "dependencyAudit": {
       "workflow": ".github/workflows/assurance.yml",
       "command": "npm audit --omit=dev --audit-level=high",
-      "events": ["schedule", "workflow_dispatch"]
+      "events": [
+        "schedule",
+        "workflow_dispatch"
+      ]
     },
     "codeql": {
       "workflow": ".github/workflows/assurance.yml",
       "language": "javascript-typescript",
       "buildMode": "none",
-      "events": ["schedule", "workflow_dispatch"]
+      "events": [
+        "schedule",
+        "workflow_dispatch"
+      ]
     },
     "workflowLint": {
       "workflows": [
@@ -40,26 +38,38 @@
     },
     "immutableActions": true,
     "longLivedTokensForbidden": true,
-    "mandatoryAggregates": ["ci-gate", "assurance-gate"]
+    "mandatoryAggregates": [
+      "ci-gate",
+      "assurance-gate"
+    ]
   },
   "protectedGate": {
     "workflow": ".github/workflows/ci.yml",
+    "branch": "main",
     "requiredCheck": "ci-gate",
-    "requiredJobs": ["quality-checks", "integration-checks", "security-checks"],
+    "requiredJobs": [
+      "quality-checks",
+      "integration-checks",
+      "security-checks"
+    ],
     "continueOnErrorForbidden": true,
     "unexpectedSkipsFail": true
   },
   "releasePreflight": {
     "workflow": ".github/workflows/release.yml",
-    "requiredJobs": ["verify-release"],
+    "requiredJobs": [
+      "verify-release"
+    ],
     "releaseLineSizeBudgetVerificationRequired": true,
     "successfulCurrentMainCiRequired": true,
     "releaseArtifactVerificationRequired": true
   },
   "verification": {
     "command": "npm run verify:security-workflow-hardening",
-    "testCommand": "npm run test:security-workflow-hardening",
-    "workflows": [".github/workflows/ci.yml", ".github/workflows/assurance.yml"]
+    "workflows": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/assurance.yml"
+    ]
   },
   "releaseReadiness": "not-ready"
 }
