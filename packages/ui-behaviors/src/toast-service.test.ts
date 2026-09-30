@@ -116,8 +116,16 @@ describe("toast service", () => {
     expect(clock.scheduled.size).toBe(1);
 
     unsubscribe();
+    service.stop();
+    expect(clock.scheduled.size).toBe(0);
+    expect(service.getSnapshot().records).toHaveLength(1);
+
+    service.start();
+    expect(clock.scheduled.size).toBe(1);
+
     service.destroy();
     service.destroy();
+    service.start();
     expect(clock.scheduled.size).toBe(0);
   });
 
