@@ -59,7 +59,8 @@ function assertRecord(record, framework) {
     `${framework}: expected dialog record`,
   );
   assert(
-    record.adapter.sharedBrowserImplementation === SHARED_BROWSER_IMPLEMENTATION,
+    record.adapter.sharedBrowserImplementation ===
+      SHARED_BROWSER_IMPLEMENTATION,
     `${framework}: Dialog must keep ${SHARED_BROWSER_IMPLEMENTATION} as shared browser implementation`,
   );
   if (framework === "native") {
