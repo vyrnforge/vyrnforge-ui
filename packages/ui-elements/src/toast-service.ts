@@ -100,11 +100,11 @@ export function createVyrnForgeToastService(
     behavior,
     getSnapshot: () => behavior.getSnapshot(),
     toast,
-    success: (record) => shortcut("success", record),
-    error: (record) => shortcut("error", record),
-    warning: (record) => shortcut("warning", record),
-    info: (record) => shortcut("info", record),
-    update(id, record) {
+    success: (record: VyrnForgeToastShortcutRecord) => shortcut("success", record),
+    error: (record: VyrnForgeToastShortcutRecord) => shortcut("error", record),
+    warning: (record: VyrnForgeToastShortcutRecord) => shortcut("warning", record),
+    info: (record: VyrnForgeToastShortcutRecord) => shortcut("info", record),
+    update(id: string, record: Partial<VyrnForgeToastServiceRecord>) {
       const current = behavior
         .getSnapshot()
         .records.find((item) => item.id === id);
@@ -126,11 +126,14 @@ export function createVyrnForgeToastService(
         duration: record.duration,
       });
     },
-    dismiss: (id, reason) => behavior.dismiss(id, reason),
+    dismiss: (id: string, reason?: ToastDismissReason) =>
+      behavior.dismiss(id, reason),
     dismissAll: () => behavior.dismissAll(),
-    pause: (id, reason) => behavior.pause(id, reason),
-    resume: (id, reason) => behavior.resume(id, reason),
-    triggerAction: (id) => behavior.triggerAction(id),
+    pause: (id: string, reason?: ToastPauseReason) =>
+      behavior.pause(id, reason),
+    resume: (id: string, reason?: ToastPauseReason) =>
+      behavior.resume(id, reason),
+    triggerAction: (id: string) => behavior.triggerAction(id),
     start: () => behavior.start(),
     stop: () => behavior.stop(),
     destroy: () => behavior.destroy(),
