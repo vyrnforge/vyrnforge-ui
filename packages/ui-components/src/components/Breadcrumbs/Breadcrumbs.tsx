@@ -50,7 +50,13 @@ export function Breadcrumbs({
           return (
             <li className="vf-breadcrumbs__item" key={itemKey(item, index)}>
               {index > 0 && (
-                <span aria-hidden="true" className={adoptedItemRegionClassName("breadcrumbs", "separator")}>
+                <span
+                  aria-hidden="true"
+                  className={adoptedItemRegionClassName(
+                    "breadcrumbs",
+                    "separator",
+                  )}
+                >
                   {separator}
                 </span>
               )}
