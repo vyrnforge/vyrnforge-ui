@@ -13,10 +13,6 @@ const forbiddenReactDuplicateSuffixes = [
   ".temporary.tsx",
 ];
 
-function scopesOf(entry) {
-  return Array.isArray(entry.scope) ? entry.scope : [entry.scope];
-}
-
 function collectFiles(directory) {
   const files = [];
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
