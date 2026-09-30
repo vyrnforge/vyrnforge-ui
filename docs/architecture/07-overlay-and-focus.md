@@ -80,4 +80,3 @@ dependency.
 
 Framework packages own only their lifecycle/DI/composable integration. They do
 not own a separate toast store, timer scheduler, or application-state contract.
-
