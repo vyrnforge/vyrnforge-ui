@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sourceOfTruth": {
     "canonical": true,
-    "scope": "equal first-class Native HTML, React, Angular, and Vue support; current package topology; shared implementation strategy; consumer-fixture policy",
+    "scope": "multi-framework web support, package topology, renderer status, and consumer-fixture policy",
     "documentation": "docs/architecture/00-system-overview.md"
   },
   "packages": [
@@ -29,9 +29,7 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "framework-neutral",
-      "dependsOn": [
-        "@vyrnforge/ui-core"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core"],
       "owns": [
         "controlled and uncontrolled state transitions",
         "collection models",
@@ -48,12 +46,9 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "custom-elements",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-behaviors"
-      ],
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-behaviors"],
       "owns": [
-        "reusable browser-native Custom Element renderers",
+        "canonical native Custom Element renderers",
         "property and attribute reflection",
         "typed DOM events",
         "form-associated element integration",
@@ -80,9 +75,7 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "angular",
-      "dependsOn": [
-        "@vyrnforge/ui-elements"
-      ],
+      "dependsOn": ["@vyrnforge/ui-elements"],
       "owns": [
         "Angular generated facade bindings",
         "Angular package setup and registration",
@@ -98,9 +91,7 @@
       "status": "current",
       "betaIncluded": true,
       "runtime": "vue",
-      "dependsOn": [
-        "@vyrnforge/ui-elements"
-      ],
+      "dependsOn": ["@vyrnforge/ui-elements"],
       "owns": [
         "Vue component facades",
         "v-model translations",
@@ -117,11 +108,8 @@
       "status": "react-alpha-deferred",
       "betaIncluded": false,
       "runtime": "react",
-      "dependsOn": [
-        "@vyrnforge/ui-core",
-        "@vyrnforge/ui-components"
-      ],
-      "notes": "Optional advanced Data Grid module. The currently shipped package is React-only alpha; this is an implementation/release limitation and does not make Data Grid a peer framework surface or permanently React-owned."
+      "dependsOn": ["@vyrnforge/ui-core", "@vyrnforge/ui-components"],
+      "notes": "Grid implementation, decomposition, performance work, and multi-framework rendering remain outside the non-grid beta critical path."
     }
   ],
   "frameworks": [
@@ -164,7 +152,7 @@
     "defaultBrowserImplementation": "@vyrnforge/ui-elements",
     "facadePolicy": "generated-or-generic-canonical-backed",
     "exceptionPolicy": "docs/architecture/adr-008-framework-exception-policy.md",
-    "supportRule": "Native HTML, React, Angular, and Vue are equal first-class product surfaces. Internal renderer/package reuse does not establish support rank."
+    "supportRule": "First-class support status is independent from whether a surface owns a dedicated renderer or adapts the canonical native implementation."
   },
   "styling": {
     "defaultDomMode": "light-dom",
