@@ -118,7 +118,13 @@ export const vyrnForgeOverlayAdoptionContracts = Object.freeze({
   }),
   "confirm-dialog": contract({
     id: "confirm-dialog",
-    capabilities: ["controlled-open", "focus-containment", "focus-restoration", "portal-target", "rich-content"],
+    capabilities: [
+      "controlled-open",
+      "focus-containment",
+      "focus-restoration",
+      "portal-target",
+      "rich-content",
+    ],
     regions: [
       { name: "body", className: "vf-confirm-dialog__body", required: true },
       { name: "actions", className: "vf-confirm-dialog__actions", required: true },
