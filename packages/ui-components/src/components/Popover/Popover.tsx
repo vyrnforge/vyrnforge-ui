@@ -14,6 +14,7 @@ import {
   Portal,
   useAnchoredPosition,
 } from "../../internal/overlay";
+import { adoptedOverlayRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import type { PopoverProps } from "./Popover.types";
 
@@ -109,7 +110,7 @@ export function Popover({
           <DismissableLayer
             branches={[{ current: triggerElement }]}
             className={joinClassNames(
-              "vf-popover__content",
+              adoptedOverlayRegionClassName("popover", "content"),
               modal && "vf-popover__content--modal",
             )}
             dismissOnEscape={closeOnEscape}
