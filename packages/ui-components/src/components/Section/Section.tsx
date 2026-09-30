@@ -1,5 +1,10 @@
-import { joinClassNames } from "../../utils/classNames";
+import {
+  adoptedRegionClassName,
+  resolveAdoptedHostClassName,
+} from "../../internal/hostAdoption";
 import type { SectionProps } from "./Section.types";
+
+const region = (name: string) => adoptedRegionClassName("section", name);
 
 export function Section({
   actions,
@@ -10,16 +15,19 @@ export function Section({
   ...props
 }: SectionProps) {
   return (
-    <section className={joinClassNames("vf-section", className)} {...props}>
+    <section
+      className={resolveAdoptedHostClassName("section", {}, className)}
+      {...props}
+    >
       {(title || description || actions) && (
-        <div className="vf-section__header">
+        <div className={region("header")}>
           <div>
-            {title && <h2 className="vf-section__title">{title}</h2>}
+            {title && <h2 className={region("title")}>{title}</h2>}
             {description && (
-              <p className="vf-section__description">{description}</p>
+              <p className={region("description")}>{description}</p>
             )}
           </div>
-          {actions && <div className="vf-section__actions">{actions}</div>}
+          {actions && <div className={region("actions")}>{actions}</div>}
         </div>
       )}
       {children}

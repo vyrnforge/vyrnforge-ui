@@ -1,5 +1,8 @@
 import type { CSSProperties } from "react";
-import { joinClassNames } from "../../utils/classNames";
+import {
+  adoptedRegionClassName,
+  resolveAdoptedHostClassName,
+} from "../../internal/hostAdoption";
 import type { AppShellProps } from "./AppShell.types";
 
 function toCssSize(value: number | string | undefined) {
@@ -9,6 +12,8 @@ function toCssSize(value: number | string | undefined) {
 
   return value;
 }
+
+const region = (name: string) => adoptedRegionClassName("app-shell", name);
 
 export function AppShell({
   children,
@@ -42,33 +47,35 @@ export function AppShell({
 
   return (
     <div
-      className={joinClassNames(
-        "vf-app-shell",
-        hasSidebar && "vf-app-shell--with-sidebar",
-        hasHeader && "vf-app-shell--with-header",
-        hasFooter && "vf-app-shell--with-footer",
-        fullHeight && "vf-app-shell--full-height",
-        `vf-app-shell--scroll-${scrollMode}`,
-        `vf-app-shell--header-${headerPosition}`,
-        `vf-app-shell--sidebar-${sidebarPosition}`,
-        sidebarCollapsed && "vf-app-shell--sidebar-collapsed",
+      className={resolveAdoptedHostClassName(
+        "app-shell",
+        {
+          fullHeight,
+          hasFooter,
+          hasHeader,
+          hasSidebar,
+          headerPosition,
+          scrollMode,
+          sidebarCollapsed,
+          sidebarPosition,
+        },
         className,
       )}
       style={shellStyle}
       {...props}
     >
-      {header && <header className="vf-app-shell__header">{header}</header>}
-      <div className="vf-app-shell__body">
+      {header && <header className={region("header")}>{header}</header>}
+      <div className={region("body")}>
         {sidebar && (
-          <aside className="vf-app-shell__sidebar">
-            <div className="vf-app-shell__sidebar-scroll">{sidebar}</div>
+          <aside className={region("sidebar")}>
+            <div className={region("sidebar-scroll")}>{sidebar}</div>
           </aside>
         )}
-        <div className="vf-app-shell__main">
-          <div className="vf-app-shell__content">{children}</div>
+        <div className={region("main")}>
+          <div className={region("content")}>{children}</div>
         </div>
       </div>
-      {footer && <footer className="vf-app-shell__footer">{footer}</footer>}
+      {footer && <footer className={region("footer")}>{footer}</footer>}
     </div>
   );
 }

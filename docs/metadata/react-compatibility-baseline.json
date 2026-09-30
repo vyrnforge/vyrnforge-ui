@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "63369afca7399b08d611fb729f1f9c29969b1da3",
+      "sha1": "62f50c122e2a1b737ebde79a0758e6178fbbf8b0",
       "covers": [
         "component props and types",
         "callbacks",
@@ -192,6 +192,11 @@
       "task": "PA-2005",
       "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
       "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
+    },
+    {
+      "task": "SC-2104",
+      "reason": "React Text, Caption, CodeText, layout, and rich-region surfaces adopt the shared framework-neutral host-adoption contract while preserving documented tags, classes, props, refs, rendering behavior, and the first-class React surface. The combined SC-2103 + SC-2104 implementation-tree fingerprint is intentionally recaptured with host-adoption parity evidence.",
+      "evidence": "packages/ui-components/src/__tests__/host-adoption.test.tsx"
     },
     {
       "task": "SC-2103",

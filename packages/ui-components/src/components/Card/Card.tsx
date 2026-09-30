@@ -1,4 +1,4 @@
-import { joinClassNames } from "../../utils/classNames";
+import { resolveAdoptedHostClassName } from "../../internal/hostAdoption";
 import type { CardProps } from "./Card.types";
 
 export function Card({
@@ -9,10 +9,9 @@ export function Card({
 }: CardProps) {
   return (
     <div
-      className={joinClassNames(
-        "vf-card",
-        `vf-card--${variant}`,
-        `vf-card--padding-${padding}`,
+      className={resolveAdoptedHostClassName(
+        "card",
+        { padding, variant },
         className,
       )}
       {...props}

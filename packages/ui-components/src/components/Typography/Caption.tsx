@@ -1,5 +1,8 @@
 import type { ElementType } from "react";
-import { joinClassNames } from "../../utils/classNames";
+import {
+  resolveAdoptedHostClassName,
+  resolveAdoptedHostTag,
+} from "../../internal/hostAdoption";
 import type { CaptionProps } from "./Typography.types";
 
 export function Caption({
@@ -8,15 +11,11 @@ export function Caption({
   tone = "muted",
   ...props
 }: CaptionProps) {
-  const Component = as as ElementType;
+  const Component = resolveAdoptedHostTag("caption", as) as ElementType;
 
   return (
     <Component
-      className={joinClassNames(
-        "vf-caption",
-        tone !== "default" && `vf-text--${tone}`,
-        className,
-      )}
+      className={resolveAdoptedHostClassName("caption", { tone }, className)}
       {...props}
     />
   );

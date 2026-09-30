@@ -1,5 +1,8 @@
 import type { ElementType } from "react";
-import { joinClassNames } from "../../utils/classNames";
+import {
+  resolveAdoptedHostClassName,
+  resolveAdoptedHostTag,
+} from "../../internal/hostAdoption";
 import type { TextProps } from "./Typography.types";
 
 export function Text({
@@ -9,16 +12,11 @@ export function Text({
   tone = "default",
   ...props
 }: TextProps) {
-  const Component = as as ElementType;
+  const Component = resolveAdoptedHostTag("text", as) as ElementType;
 
   return (
     <Component
-      className={joinClassNames(
-        "vf-text",
-        `vf-text--${size}`,
-        tone !== "default" && `vf-text--${tone}`,
-        className,
-      )}
+      className={resolveAdoptedHostClassName("text", { size, tone }, className)}
       {...props}
     />
   );

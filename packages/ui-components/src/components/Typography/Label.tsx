@@ -1,4 +1,4 @@
-import { joinClassNames } from "../../utils/classNames";
+import { resolveAdoptedHostClassName } from "../../internal/hostAdoption";
 import type { LabelProps } from "./Typography.types";
 
 export function Label({
@@ -9,10 +9,9 @@ export function Label({
 }: LabelProps) {
   return (
     <label
-      className={joinClassNames(
-        "vf-label",
-        `vf-label--${size}`,
-        tone !== "default" && `vf-text--${tone}`,
+      className={resolveAdoptedHostClassName(
+        "label",
+        { size, tone },
         className,
       )}
       {...props}

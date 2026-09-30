@@ -1,4 +1,8 @@
 import type { VyrnForgePropertyDeclarations } from "../base/VyrnForgeElement";
+import {
+  type VyrnForgeHostAdoptionContract,
+  vyrnForgeHostAdoptionContracts,
+} from "../host-adoption";
 import { VyrnForgeDomElement } from "./dom";
 
 export type VyrnForgeTextTone =
@@ -9,11 +13,12 @@ export type VyrnForgeLayoutAlign = "stretch" | "start" | "center" | "end";
 export type VyrnForgeLayoutJustify = "start" | "center" | "end" | "between";
 
 export interface VyrnForgeDisplayElementConfig {
+  readonly adoption?: VyrnForgeHostAdoptionContract;
   readonly baseClass: string;
   readonly defaults?: Readonly<Record<string, boolean | number | string>>;
   readonly modifiers?: readonly {
     readonly property: string;
-    readonly prefix: string;
+    readonly prefix?: string;
     readonly omitValue?: boolean | number | string;
     readonly truthyClass?: string;
   }[];
@@ -147,7 +152,7 @@ export abstract class VyrnForgeDisplayElement extends VyrnForgeDomElement {
         value !== "" &&
         value !== null
       ) {
-        classes.push(`${modifier.prefix}${String(value)}`);
+        classes.push(`${modifier.prefix ?? ""}${String(value)}`);
       }
     }
     this.applyManagedClasses(classes);
@@ -189,6 +194,19 @@ export interface VyrnForgeDisplayElementConstructor {
   readonly elementConfig: VyrnForgeDisplayElementConfig;
 }
 
+function displayConfig(
+  adoption: VyrnForgeHostAdoptionContract,
+  overrides: Partial<VyrnForgeDisplayElementConfig> = {},
+): VyrnForgeDisplayElementConfig {
+  return {
+    adoption,
+    baseClass: adoption.baseClass,
+    defaults: adoption.defaults,
+    modifiers: adoption.modifiers,
+    ...overrides,
+  };
+}
+
 export function createVyrnForgeDisplayElement(
   config: VyrnForgeDisplayElementConfig,
 ): VyrnForgeDisplayElementConstructor {
@@ -197,42 +215,27 @@ export function createVyrnForgeDisplayElement(
   };
 }
 
-export const VyrnForgeTextElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-text",
-  defaults: { size: "md", tone: "default" },
-  modifiers: [
-    { property: "size", prefix: "vf-text--" },
-    { property: "tone", prefix: "vf-text--", omitValue: "default" },
-  ],
-});
-export const VyrnForgeHeadingElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-heading",
-  defaults: { level: 2, size: "md", tone: "strong" },
-  heading: true,
-  modifiers: [
-    { property: "size", prefix: "vf-heading--" },
-    { property: "tone", prefix: "vf-text--", omitValue: "default" },
-  ],
-});
-export const VyrnForgeCaptionElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-caption",
-  defaults: { tone: "muted" },
-  modifiers: [{ property: "tone", prefix: "vf-text--", omitValue: "default" }],
-});
-export const VyrnForgeLabelElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-label",
-  defaults: { size: "md", tone: "default" },
-  labelProxy: true,
-  modifiers: [
-    { property: "size", prefix: "vf-label--" },
-    { property: "tone", prefix: "vf-text--", omitValue: "default" },
-  ],
-});
-export const VyrnForgeCodeTextElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-code-text",
-  defaults: { tone: "default" },
-  modifiers: [{ property: "tone", prefix: "vf-text--", omitValue: "default" }],
-});
+export const VyrnForgeTextElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.text),
+);
+export const VyrnForgeHeadingElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.heading, {
+    defaults: { level: 2, ...vyrnForgeHostAdoptionContracts.heading.defaults },
+    heading: true,
+  }),
+);
+export const VyrnForgeCaptionElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.caption),
+);
+export const VyrnForgeLabelElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.label, {
+    defaults: { size: "md", tone: "default" },
+    labelProxy: true,
+  }),
+);
+export const VyrnForgeCodeTextElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts["code-text"]),
+);
 export const VyrnForgeBadgeElement = createVyrnForgeDisplayElement({
   baseClass: "vf-badge",
   defaults: { size: "md", tone: "subtle", variant: "neutral" },
@@ -242,50 +245,24 @@ export const VyrnForgeBadgeElement = createVyrnForgeDisplayElement({
     { property: "tone", prefix: "vf-badge--" },
   ],
 });
-export const VyrnForgeCardElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-card",
-  defaults: { padding: "md", variant: "bordered" },
-  modifiers: [
-    { property: "variant", prefix: "vf-card--" },
-    { property: "padding", prefix: "vf-card--padding-" },
-  ],
-});
-export const VyrnForgePanelElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-panel",
-  role: "region",
-});
-export const VyrnForgeStackElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-stack",
-  defaults: { align: "stretch", gap: "md", justify: "start" },
-  modifiers: [
-    { property: "gap", prefix: "vf-stack--gap-" },
-    { property: "align", prefix: "vf-stack--align-" },
-    { property: "justify", prefix: "vf-stack--justify-" },
-  ],
-});
-export const VyrnForgeInlineElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-inline",
-  defaults: { align: "center", gap: "sm", justify: "start", wrap: true },
-  modifiers: [
-    { property: "gap", prefix: "vf-inline--gap-" },
-    { property: "align", prefix: "vf-inline--align-" },
-    { property: "justify", prefix: "vf-inline--justify-" },
-    { property: "wrap", prefix: "", truthyClass: "vf-inline--wrap" },
-  ],
-});
-export const VyrnForgePageElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-page",
-  defaults: { density: "standard", maxWidth: "lg" },
-  role: "main",
-  modifiers: [
-    { property: "maxWidth", prefix: "vf-page--max-" },
-    { property: "density", prefix: "vf-page--" },
-  ],
-});
-export const VyrnForgeSectionElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-section",
-  role: "region",
-});
+export const VyrnForgeCardElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.card),
+);
+export const VyrnForgePanelElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.panel, { role: "region" }),
+);
+export const VyrnForgeStackElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.stack),
+);
+export const VyrnForgeInlineElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.inline),
+);
+export const VyrnForgePageElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.page, { role: "main" }),
+);
+export const VyrnForgeSectionElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.section, { role: "region" }),
+);
 export const VyrnForgeEmptyStateElement = createVyrnForgeDisplayElement({
   baseClass: "vf-empty-state",
   role: "status",

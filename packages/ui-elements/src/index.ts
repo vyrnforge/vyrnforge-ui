@@ -69,3 +69,4 @@ export {
 } from "./registry";
 export * from "./components";
 export * from "./toast-service";
+export * from "./host-adoption";

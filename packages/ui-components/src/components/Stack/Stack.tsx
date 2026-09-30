@@ -1,4 +1,4 @@
-import { joinClassNames } from "../../utils/classNames";
+import { resolveAdoptedHostClassName } from "../../internal/hostAdoption";
 import type { StackProps } from "./Stack.types";
 
 export function Stack({
@@ -10,11 +10,9 @@ export function Stack({
 }: StackProps) {
   return (
     <div
-      className={joinClassNames(
-        "vf-stack",
-        `vf-stack--gap-${gap}`,
-        `vf-stack--align-${align}`,
-        `vf-stack--justify-${justify}`,
+      className={resolveAdoptedHostClassName(
+        "stack",
+        { align, gap, justify },
         className,
       )}
       {...props}
