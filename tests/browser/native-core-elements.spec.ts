@@ -146,7 +146,6 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
     );
   });
 
-
   test("supports shared focus and multi-value form semantics", async ({
     page,
   }) => {
