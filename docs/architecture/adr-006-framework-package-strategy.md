@@ -52,7 +52,7 @@ manual assembly steps for ordinary framework component consumption.
 package**. The package name is compatibility history; it does not make React the
 canonical VyrnForge component system. VyrnForge does
 not add `@vyrnforge/ui-react` merely for naming symmetry. React implementation
-may reuse the canonical native/DOM implementation under ADR-005 without changing
+may reuse the shared browser/DOM implementation under ADR-005 without changing
 this public package identity.
 
 A future package rename requires a separate compatibility and migration decision.
