@@ -45,15 +45,15 @@ Choose a first-class surface package for normal application work. Shared
 foundation packages are dependencies of those surfaces and are primarily useful
 when consuming framework-neutral VyrnForge APIs directly.
 
-| Package                    | Responsibility                                                                                                           |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `@vyrnforge/ui-components` | Current React package name and first-class React-facing API over shared VyrnForge foundations; it does not own canonical component semantics.         |
-| `@vyrnforge/ui-elements`   | First-class browser-native Custom Elements package over shared VyrnForge foundations.                                    |
-| `@vyrnforge/ui-angular`    | First-class Angular facade over canonical VyrnForge Custom Elements.                                                     |
-| `@vyrnforge/ui-vue`        | First-class Vue facade over canonical VyrnForge Custom Elements.                                                         |
-| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations. |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.     |
-| `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                    |
+| Package                    | Responsibility                                                                                                                                |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@vyrnforge/ui-components` | Current React package name and first-class React-facing API over shared VyrnForge foundations; it does not own canonical component semantics. |
+| `@vyrnforge/ui-elements`   | First-class browser-native Custom Elements package over shared VyrnForge foundations.                                                         |
+| `@vyrnforge/ui-angular`    | First-class Angular facade over canonical VyrnForge Custom Elements.                                                                          |
+| `@vyrnforge/ui-vue`        | First-class Vue facade over canonical VyrnForge Custom Elements.                                                                              |
+| `@vyrnforge/ui-core`       | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations.                      |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral state, collections, selection, navigation, overlays, form behavior, feedback, and reasoned events.                          |
+| `@vyrnforge/ui-data-grid`  | Specialized React data-management grid on an independent alpha track.                                                                         |
 
 Native HTML, React, Angular, and Vue are equal first-class web surfaces. They
 share canonical component, behavior, accessibility, styling, and terminology
