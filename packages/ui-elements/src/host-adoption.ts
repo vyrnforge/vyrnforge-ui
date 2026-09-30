@@ -180,6 +180,26 @@ const contracts = {
     baseClass: "vf-app-shell",
     defaultTag: "div",
     allowedTags: ["div"],
+    defaults: {
+      fullHeight: true,
+      headerPosition: "sticky",
+      scrollMode: "content",
+      sidebarCollapsed: false,
+      sidebarPosition: "sticky",
+    },
+    modifiers: [
+      { property: "hasSidebar", truthyClass: "vf-app-shell--with-sidebar" },
+      { property: "hasHeader", truthyClass: "vf-app-shell--with-header" },
+      { property: "hasFooter", truthyClass: "vf-app-shell--with-footer" },
+      { property: "fullHeight", truthyClass: "vf-app-shell--full-height" },
+      { property: "scrollMode", prefix: "vf-app-shell--scroll-" },
+      { property: "headerPosition", prefix: "vf-app-shell--header-" },
+      { property: "sidebarPosition", prefix: "vf-app-shell--sidebar-" },
+      {
+        property: "sidebarCollapsed",
+        truthyClass: "vf-app-shell--sidebar-collapsed",
+      },
+    ],
     regions: [
       { name: "header", className: "vf-app-shell__header", semanticTag: "header" },
       { name: "body", className: "vf-app-shell__body", semanticTag: "div" },
@@ -199,6 +219,11 @@ const contracts = {
     baseClass: "vf-page",
     defaultTag: "main",
     allowedTags: ["main"],
+    defaults: { density: "standard", maxWidth: "lg" },
+    modifiers: [
+      { property: "maxWidth", prefix: "vf-page--max-" },
+      { property: "density", prefix: "vf-page--" },
+    ],
     regions: [
       { name: "toolbar", className: "vf-page__toolbar", semanticTag: "div" },
       { name: "body", className: "vf-page__body", semanticTag: "div" },
