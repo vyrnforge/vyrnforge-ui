@@ -1,9 +1,9 @@
 {
   "$schema": "./component-contract.schema.json",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceOfTruth": {
     "canonical": true,
-    "scope": "framework-neutral properties, attributes, events, slots, methods, form semantics, value/model state, refs, accessibility, and framework facade mappings",
+    "scope": "framework-neutral properties, attributes, events, slots, methods, form semantics, value/model state, refs, accessibility, first-class framework support, implementation state, and framework facade mappings",
     "documentation": "docs/architecture/09-component-contracts-and-events.md"
   },
   "eventVocabulary": [
@@ -426,10 +426,23 @@
     }
   ],
   "formAssociation": {
-    "modes": ["none", "value", "submitter"],
-    "requiredProperties": ["name", "disabled"],
-    "valueModeProperties": ["value", "required"],
-    "requiredMethods": ["checkValidity", "reportValidity"],
+    "modes": [
+      "none",
+      "value",
+      "submitter"
+    ],
+    "requiredProperties": [
+      "name",
+      "disabled"
+    ],
+    "valueModeProperties": [
+      "value",
+      "required"
+    ],
+    "requiredMethods": [
+      "checkValidity",
+      "reportValidity"
+    ],
     "requiredCallbacks": [
       "formAssociatedCallback",
       "formDisabledCallback",
@@ -487,7 +500,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-description-list",
           "properties": [],
           "events": [],
@@ -507,11 +519,14 @@
             "mode": "element",
             "type": "VyrnForgeDescriptionListElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "target",
           "export": "DescriptionList",
           "properties": [],
           "events": [],
@@ -530,11 +545,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "DescriptionListRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDescriptionList",
           "properties": [],
           "events": [],
@@ -553,11 +569,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfDescriptionList"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDescriptionList",
           "properties": [],
           "events": [],
@@ -576,7 +593,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfDescriptionListExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -629,7 +648,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-property-table",
           "properties": [],
           "events": [],
@@ -649,11 +667,14 @@
             "mode": "element",
             "type": "VyrnForgePropertyTableElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "current",
           "export": "PropertyTable",
           "properties": [],
           "events": [],
@@ -672,11 +693,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "PropertyTableRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "current",
           "export": "VfPropertyTable",
           "properties": [],
           "events": [],
@@ -695,11 +717,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfPropertyTable"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "current",
           "export": "VfPropertyTable",
           "properties": [],
           "events": [],
@@ -718,7 +741,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfPropertyTableExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         }
       }
     },
@@ -771,7 +796,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-timeline",
           "properties": [],
           "events": [],
@@ -791,11 +815,14 @@
             "mode": "element",
             "type": "VyrnForgeTimelineElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "current",
           "export": "Timeline",
           "properties": [],
           "events": [],
@@ -814,11 +841,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TimelineRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "current",
           "export": "VfTimeline",
           "properties": [],
           "events": [],
@@ -837,11 +865,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfTimeline"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "current",
           "export": "VfTimeline",
           "properties": [],
           "events": [],
@@ -860,7 +889,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTimelineExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "current"
         }
       }
     },
@@ -946,7 +977,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-card",
           "properties": [
             {
@@ -977,11 +1007,14 @@
             "mode": "element",
             "type": "VyrnForgeCardElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Card",
           "properties": [
             {
@@ -1011,11 +1044,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "CardRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCard",
           "properties": [
             {
@@ -1045,11 +1079,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfCard"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCard",
           "properties": [
             {
@@ -1079,7 +1114,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfCardExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -1198,7 +1235,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-inline",
           "properties": [
             {
@@ -1239,11 +1275,14 @@
             "mode": "element",
             "type": "VyrnForgeInlineElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Inline",
           "properties": [
             {
@@ -1283,11 +1322,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "InlineRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfInline",
           "properties": [
             {
@@ -1327,11 +1367,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfInline"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfInline",
           "properties": [
             {
@@ -1371,7 +1412,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfInlineExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -1451,11 +1494,12 @@
         "methods": [],
         "elementType": "VyrnForgePageElement"
       },
-      "accessibility": ["main landmark semantics"],
+      "accessibility": [
+        "main landmark semantics"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-page",
           "properties": [
             {
@@ -1486,11 +1530,14 @@
             "mode": "element",
             "type": "VyrnForgePageElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Page",
           "properties": [
             {
@@ -1520,11 +1567,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "PageRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPage",
           "properties": [
             {
@@ -1554,11 +1602,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfPage"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPage",
           "properties": [
             {
@@ -1588,7 +1637,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfPageExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -1707,7 +1758,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-page-header",
           "properties": [
             {
@@ -1758,11 +1808,14 @@
             "mode": "element",
             "type": "VyrnForgePageHeaderElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "PageHeader",
           "properties": [
             {
@@ -1812,11 +1865,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "PageHeaderRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPageHeader",
           "properties": [
             {
@@ -1866,11 +1920,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfPageHeader"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPageHeader",
           "properties": [
             {
@@ -1920,7 +1975,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfPageHeaderExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -2021,11 +2078,13 @@
         "methods": [],
         "elementType": "VyrnForgePageToolbarElement"
       },
-      "accessibility": ["toolbar role", "accessible toolbar label"],
+      "accessibility": [
+        "toolbar role",
+        "accessible toolbar label"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-page-toolbar",
           "properties": [
             {
@@ -2066,11 +2125,14 @@
             "mode": "element",
             "type": "VyrnForgePageToolbarElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "PageToolbar",
           "properties": [
             {
@@ -2110,11 +2172,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "PageToolbarRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPageToolbar",
           "properties": [
             {
@@ -2154,11 +2217,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfPageToolbar"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPageToolbar",
           "properties": [
             {
@@ -2198,7 +2262,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfPageToolbarExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -2242,11 +2308,12 @@
         "methods": [],
         "elementType": "VyrnForgePanelElement"
       },
-      "accessibility": ["region semantics"],
+      "accessibility": [
+        "region semantics"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-panel",
           "properties": [],
           "events": [],
@@ -2266,11 +2333,14 @@
             "mode": "element",
             "type": "VyrnForgePanelElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Panel",
           "properties": [],
           "events": [],
@@ -2289,11 +2359,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "PanelRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPanel",
           "properties": [],
           "events": [],
@@ -2312,11 +2383,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfPanel"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPanel",
           "properties": [],
           "events": [],
@@ -2335,7 +2407,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfPanelExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -2379,11 +2453,12 @@
         "methods": [],
         "elementType": "VyrnForgeSectionElement"
       },
-      "accessibility": ["region semantics"],
+      "accessibility": [
+        "region semantics"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-section",
           "properties": [],
           "events": [],
@@ -2403,11 +2478,14 @@
             "mode": "element",
             "type": "VyrnForgeSectionElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Section",
           "properties": [],
           "events": [],
@@ -2426,11 +2504,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SectionRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSection",
           "properties": [],
           "events": [],
@@ -2449,11 +2528,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSection"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSection",
           "properties": [],
           "events": [],
@@ -2472,7 +2552,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSectionExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -2575,7 +2657,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-stack",
           "properties": [
             {
@@ -2611,11 +2692,14 @@
             "mode": "element",
             "type": "VyrnForgeStackElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Stack",
           "properties": [
             {
@@ -2650,11 +2734,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "StackRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfStack",
           "properties": [
             {
@@ -2689,11 +2774,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfStack"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfStack",
           "properties": [
             {
@@ -2728,7 +2814,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfStackExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -2807,11 +2895,12 @@
         "methods": [],
         "elementType": "VyrnForgeInlineMessageElement"
       },
-      "accessibility": ["status or alert role follows severity"],
+      "accessibility": [
+        "status or alert role follows severity"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-inline-message",
           "properties": [
             {
@@ -2842,11 +2931,14 @@
             "mode": "element",
             "type": "VyrnForgeInlineMessageElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Alert",
           "properties": [
             {
@@ -2876,11 +2968,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "AlertRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfAlert",
           "properties": [
             {
@@ -2910,11 +3003,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfAlert"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfAlert",
           "properties": [
             {
@@ -2944,7 +3038,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfAlertExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -3041,11 +3137,12 @@
         "methods": [],
         "elementType": "VyrnForgeBadgeElement"
       },
-      "accessibility": ["text remains available to assistive technology"],
+      "accessibility": [
+        "text remains available to assistive technology"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-badge",
           "properties": [
             {
@@ -3081,11 +3178,14 @@
             "mode": "element",
             "type": "VyrnForgeBadgeElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Badge",
           "properties": [
             {
@@ -3120,11 +3220,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "BadgeRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfBadge",
           "properties": [
             {
@@ -3159,11 +3260,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfBadge"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfBadge",
           "properties": [
             {
@@ -3198,7 +3300,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfBadgeExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -3242,11 +3346,12 @@
         "methods": [],
         "elementType": "VyrnForgeEmptyStateElement"
       },
-      "accessibility": ["status role"],
+      "accessibility": [
+        "status role"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-empty-state",
           "properties": [],
           "events": [],
@@ -3266,11 +3371,14 @@
             "mode": "element",
             "type": "VyrnForgeEmptyStateElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "EmptyState",
           "properties": [],
           "events": [],
@@ -3289,11 +3397,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "EmptyStateRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfEmptyState",
           "properties": [],
           "events": [],
@@ -3312,11 +3421,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfEmptyState"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfEmptyState",
           "properties": [],
           "events": [],
@@ -3335,7 +3445,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfEmptyStateExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -3398,11 +3510,12 @@
         "methods": [],
         "elementType": "VyrnForgeErrorStateElement"
       },
-      "accessibility": ["alert role for error state"],
+      "accessibility": [
+        "alert role for error state"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-error-state",
           "properties": [
             {
@@ -3428,11 +3541,14 @@
             "mode": "element",
             "type": "VyrnForgeErrorStateElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ErrorState",
           "properties": [
             {
@@ -3457,11 +3573,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ErrorStateRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfErrorState",
           "properties": [
             {
@@ -3486,11 +3603,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfErrorState"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfErrorState",
           "properties": [
             {
@@ -3515,7 +3633,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfErrorStateExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -3594,11 +3714,12 @@
         "methods": [],
         "elementType": "VyrnForgeInlineMessageElement"
       },
-      "accessibility": ["status or alert role follows severity"],
+      "accessibility": [
+        "status or alert role follows severity"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-inline-message",
           "properties": [
             {
@@ -3629,11 +3750,14 @@
             "mode": "element",
             "type": "VyrnForgeInlineMessageElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "InlineMessage",
           "properties": [
             {
@@ -3663,11 +3787,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "InlineMessageRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfInlineMessage",
           "properties": [
             {
@@ -3697,11 +3822,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfInlineMessage"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfInlineMessage",
           "properties": [
             {
@@ -3731,7 +3857,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfInlineMessageExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -3775,11 +3903,12 @@
         "methods": [],
         "elementType": "VyrnForgeLoadingStateElement"
       },
-      "accessibility": ["status role"],
+      "accessibility": [
+        "status role"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-loading-state",
           "properties": [],
           "events": [],
@@ -3799,11 +3928,14 @@
             "mode": "element",
             "type": "VyrnForgeLoadingStateElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "LoadingState",
           "properties": [],
           "events": [],
@@ -3822,11 +3954,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "LoadingStateRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfLoadingState",
           "properties": [],
           "events": [],
@@ -3845,11 +3978,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfLoadingState"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfLoadingState",
           "properties": [],
           "events": [],
@@ -3868,7 +4002,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfLoadingStateExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -3950,7 +4086,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-progress",
           "properties": [
             {
@@ -3975,11 +4110,14 @@
             "mode": "element",
             "type": "VyrnForgeProgressElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "target",
           "export": "Progress",
           "properties": [
             {
@@ -4003,11 +4141,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ProgressRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfProgress",
           "properties": [
             {
@@ -4031,11 +4170,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfProgress"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfProgress",
           "properties": [
             {
@@ -4059,7 +4199,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfProgressExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -4162,11 +4304,12 @@
         "methods": [],
         "elementType": "VyrnForgeSkeletonElement"
       },
-      "accessibility": ["decorative skeleton is aria-hidden"],
+      "accessibility": [
+        "decorative skeleton is aria-hidden"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-skeleton",
           "properties": [
             {
@@ -4201,11 +4344,14 @@
             "mode": "element",
             "type": "VyrnForgeSkeletonElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Skeleton",
           "properties": [
             {
@@ -4239,11 +4385,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SkeletonRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSkeleton",
           "properties": [
             {
@@ -4277,11 +4424,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSkeleton"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSkeleton",
           "properties": [
             {
@@ -4315,7 +4463,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSkeletonExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -4467,7 +4617,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-toast",
           "properties": [
             {
@@ -4525,11 +4674,14 @@
             "mode": "element",
             "type": "VyrnForgeToastElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Toast",
           "properties": [
             {
@@ -4586,11 +4738,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ToastRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToast",
           "properties": [
             {
@@ -4647,11 +4800,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfToast"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToast",
           "properties": [
             {
@@ -4708,7 +4862,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfToastExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -4967,13 +5123,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -5005,7 +5166,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-text-input",
           "properties": [
             {
@@ -5089,11 +5249,14 @@
             "mode": "element",
             "type": "VyrnForgeTextInputElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "TextInput",
           "properties": [
             {
@@ -5181,11 +5344,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TextInputRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTextInput",
           "properties": [
             {
@@ -5273,11 +5437,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfTextInput"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTextInput",
           "properties": [
             {
@@ -5365,7 +5530,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTextInputExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -5624,13 +5791,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -5662,7 +5834,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-textarea",
           "properties": [
             {
@@ -5746,11 +5917,14 @@
             "mode": "element",
             "type": "VyrnForgeTextareaElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Textarea",
           "properties": [
             {
@@ -5838,11 +6012,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TextareaRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTextarea",
           "properties": [
             {
@@ -5930,11 +6105,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfTextarea"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTextarea",
           "properties": [
             {
@@ -6022,7 +6198,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTextareaExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -6281,13 +6459,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -6319,7 +6502,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-search-input",
           "properties": [
             {
@@ -6403,11 +6585,14 @@
             "mode": "element",
             "type": "VyrnForgeSearchInputElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "SearchInput",
           "properties": [
             {
@@ -6495,11 +6680,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SearchInputRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSearchInput",
           "properties": [
             {
@@ -6587,11 +6773,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSearchInput"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSearchInput",
           "properties": [
             {
@@ -6679,7 +6866,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSearchInputExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -6938,13 +7127,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -6976,7 +7170,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-date-input",
           "properties": [
             {
@@ -7060,11 +7253,14 @@
             "mode": "element",
             "type": "VyrnForgeDateInputElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "DateInput",
           "properties": [
             {
@@ -7152,11 +7348,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "DateInputRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDateInput",
           "properties": [
             {
@@ -7244,11 +7441,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfDateInput"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDateInput",
           "properties": [
             {
@@ -7336,7 +7534,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfDateInputExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -7595,13 +7795,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -7633,7 +7838,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-datetime-input",
           "properties": [
             {
@@ -7717,11 +7921,14 @@
             "mode": "element",
             "type": "VyrnForgeDateTimeInputElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "DateTimeInput",
           "properties": [
             {
@@ -7809,11 +8016,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "DateTimeInputRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDateTimeInput",
           "properties": [
             {
@@ -7901,11 +8109,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfDateTimeInput"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDateTimeInput",
           "properties": [
             {
@@ -7993,7 +8202,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfDateTimeInputExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -8331,13 +8542,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -8369,7 +8585,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-number-input",
           "properties": [
             {
@@ -8473,11 +8688,14 @@
             "mode": "element",
             "type": "VyrnForgeNumberInputElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "NumberInput",
           "properties": [
             {
@@ -8585,11 +8803,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "NumberInputRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfNumberInput",
           "properties": [
             {
@@ -8697,11 +8916,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfNumberInput"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfNumberInput",
           "properties": [
             {
@@ -8809,7 +9029,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfNumberInputExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -9063,13 +9285,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["checked"]
+          "restores": [
+            "checked"
+          ]
         }
       },
       "model": {
@@ -9100,7 +9327,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-checkbox",
           "properties": [
             {
@@ -9190,11 +9416,14 @@
             "mode": "element",
             "type": "VyrnForgeCheckboxElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Checkbox",
           "properties": [
             {
@@ -9288,11 +9517,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "CheckboxRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCheckbox",
           "properties": [
             {
@@ -9386,11 +9616,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfCheckbox"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCheckbox",
           "properties": [
             {
@@ -9484,7 +9715,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfCheckboxExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -9722,13 +9955,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["checked"]
+          "restores": [
+            "checked"
+          ]
         }
       },
       "model": {
@@ -9759,7 +9997,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-radio",
           "properties": [
             {
@@ -9844,11 +10081,14 @@
             "mode": "element",
             "type": "VyrnForgeRadioElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Radio",
           "properties": [
             {
@@ -9937,11 +10177,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "RadioRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfRadio",
           "properties": [
             {
@@ -10030,11 +10271,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfRadio"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfRadio",
           "properties": [
             {
@@ -10123,7 +10365,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfRadioExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -10361,13 +10605,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["checked"]
+          "restores": [
+            "checked"
+          ]
         }
       },
       "model": {
@@ -10398,7 +10647,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-switch",
           "properties": [
             {
@@ -10483,11 +10731,14 @@
             "mode": "element",
             "type": "VyrnForgeSwitchElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Switch",
           "properties": [
             {
@@ -10576,11 +10827,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SwitchRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSwitch",
           "properties": [
             {
@@ -10669,11 +10921,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSwitch"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSwitch",
           "properties": [
             {
@@ -10762,7 +11015,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSwitchExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -10974,13 +11229,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -11011,7 +11271,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-select",
           "properties": [
             {
@@ -11085,11 +11344,14 @@
             "mode": "element",
             "type": "VyrnForgeSelectElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Select",
           "properties": [
             {
@@ -11167,11 +11429,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SelectRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSelect",
           "properties": [
             {
@@ -11249,11 +11512,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSelect"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSelect",
           "properties": [
             {
@@ -11331,7 +11595,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSelectExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -11467,7 +11733,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-radio-group",
           "properties": [
             {
@@ -11515,11 +11780,14 @@
             "mode": "element",
             "type": "VyrnForgeRadioGroupElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "RadioGroup",
           "properties": [
             {
@@ -11571,11 +11839,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "RadioGroupRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfRadioGroup",
           "properties": [
             {
@@ -11627,11 +11896,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfRadioGroup"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfRadioGroup",
           "properties": [
             {
@@ -11683,7 +11953,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfRadioGroupExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -11916,13 +12188,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -11953,7 +12230,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-slider",
           "properties": [
             {
@@ -12032,11 +12308,14 @@
             "mode": "element",
             "type": "VyrnForgeSliderElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Slider",
           "properties": [
             {
@@ -12119,11 +12398,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SliderRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSlider",
           "properties": [
             {
@@ -12206,11 +12486,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSlider"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSlider",
           "properties": [
             {
@@ -12293,7 +12574,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSliderExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -12501,13 +12784,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -12521,7 +12809,11 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["checkValidity", "reportValidity", "setCustomValidity"],
+        "methods": [
+          "checkValidity",
+          "reportValidity",
+          "setCustomValidity"
+        ],
         "elementType": "VyrnForgeRatingElement"
       },
       "accessibility": [
@@ -12533,7 +12825,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-rating",
           "properties": [
             {
@@ -12607,11 +12898,14 @@
             "mode": "element",
             "type": "VyrnForgeRatingElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Rating",
           "properties": [
             {
@@ -12689,11 +12983,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "RatingRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfRating",
           "properties": [
             {
@@ -12771,11 +13066,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfRating"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfRating",
           "properties": [
             {
@@ -12853,7 +13149,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfRatingExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -13238,13 +13536,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -13278,7 +13581,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-autocomplete",
           "properties": [
             {
@@ -13435,11 +13737,14 @@
             "mode": "element",
             "type": "VyrnForgeAutocompleteElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Autocomplete",
           "properties": [
             {
@@ -13600,11 +13905,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "AutocompleteRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfAutocomplete",
           "properties": [
             {
@@ -13765,11 +14071,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfAutocomplete"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfAutocomplete",
           "properties": [
             {
@@ -13930,7 +14237,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfAutocompleteExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -14169,13 +14478,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -14206,7 +14520,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-multi-select",
           "properties": [
             {
@@ -14290,11 +14603,14 @@
             "mode": "element",
             "type": "VyrnForgeMultiSelectElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "MultiSelect",
           "properties": [
             {
@@ -14382,11 +14698,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "MultiSelectRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfMultiSelect",
           "properties": [
             {
@@ -14474,11 +14791,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfMultiSelect"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfMultiSelect",
           "properties": [
             {
@@ -14566,7 +14884,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfMultiSelectExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -14815,13 +15135,18 @@
         "requiredProperty": "required",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
           "supported": true,
           "event": "vf-reset",
-          "restores": ["value"]
+          "restores": [
+            "value"
+          ]
         }
       },
       "model": {
@@ -14835,7 +15160,11 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["checkValidity", "reportValidity", "setCustomValidity"],
+        "methods": [
+          "checkValidity",
+          "reportValidity",
+          "setCustomValidity"
+        ],
         "elementType": "VyrnForgeTransferListElement"
       },
       "accessibility": [
@@ -14847,7 +15176,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-transfer-list",
           "properties": [
             {
@@ -14942,11 +15270,14 @@
             "mode": "element",
             "type": "VyrnForgeTransferListElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "TransferList",
           "properties": [
             {
@@ -15045,11 +15376,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TransferListRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTransferList",
           "properties": [
             {
@@ -15148,11 +15480,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfTransferList"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTransferList",
           "properties": [
             {
@@ -15251,7 +15584,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTransferListExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -15451,7 +15786,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-field",
           "properties": [
             {
@@ -15517,11 +15851,14 @@
             "mode": "element",
             "type": "VyrnForgeFieldElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Field",
           "properties": [
             {
@@ -15586,11 +15923,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "FieldRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfField",
           "properties": [
             {
@@ -15655,11 +15993,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfField"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfField",
           "properties": [
             {
@@ -15724,7 +16063,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfFieldExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -15794,7 +16135,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-validation-message",
           "properties": [
             {
@@ -15820,11 +16160,14 @@
             "mode": "element",
             "type": "VyrnForgeValidationMessageElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ValidationMessage",
           "properties": [
             {
@@ -15849,11 +16192,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ValidationMessageRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfValidationMessage",
           "properties": [
             {
@@ -15878,11 +16222,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfValidationMessage"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfValidationMessage",
           "properties": [
             {
@@ -15907,7 +16252,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfValidationMessageExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -16001,7 +16348,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-breadcrumbs",
           "properties": [
             {
@@ -16038,11 +16384,14 @@
             "mode": "element",
             "type": "VyrnForgeBreadcrumbsElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Breadcrumbs",
           "properties": [
             {
@@ -16078,11 +16427,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "BreadcrumbsRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfBreadcrumbs",
           "properties": [
             {
@@ -16118,11 +16468,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfBreadcrumbs"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfBreadcrumbs",
           "properties": [
             {
@@ -16158,7 +16509,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfBreadcrumbsExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -16280,7 +16633,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-side-nav",
           "properties": [
             {
@@ -16322,11 +16674,14 @@
             "mode": "element",
             "type": "VyrnForgeSideNavElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "SideNav",
           "properties": [
             {
@@ -16372,11 +16727,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SideNavRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSideNav",
           "properties": [
             {
@@ -16422,11 +16778,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSideNav"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSideNav",
           "properties": [
             {
@@ -16472,7 +16829,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSideNavExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -16649,7 +17008,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-tabs",
           "properties": [
             {
@@ -16712,11 +17070,14 @@
             "mode": "element",
             "type": "VyrnForgeTabsElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Tabs",
           "properties": [
             {
@@ -16783,11 +17144,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TabsRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTabs",
           "properties": [
             {
@@ -16854,11 +17216,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfTabs"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTabs",
           "properties": [
             {
@@ -16925,7 +17288,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTabsExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -17143,7 +17508,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-app-shell",
           "properties": [
             {
@@ -17224,11 +17588,14 @@
             "mode": "element",
             "type": "VyrnForgeAppShellElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "AppShell",
           "properties": [
             {
@@ -17308,11 +17675,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "AppShellRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfAppShell",
           "properties": [
             {
@@ -17392,11 +17760,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfAppShell"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfAppShell",
           "properties": [
             {
@@ -17476,7 +17845,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfAppShellExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -17545,7 +17916,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-top-nav",
           "properties": [],
           "events": [],
@@ -17580,11 +17950,14 @@
             "mode": "element",
             "type": "VyrnForgeTopNavElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "TopNav",
           "properties": [],
           "events": [],
@@ -17618,11 +17991,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TopNavRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTopNav",
           "properties": [],
           "events": [],
@@ -17656,11 +18030,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfTopNav"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTopNav",
           "properties": [],
           "events": [],
@@ -17694,7 +18069,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTopNavExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -17938,7 +18315,11 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["show", "close", "focus"],
+        "methods": [
+          "show",
+          "close",
+          "focus"
+        ],
         "elementType": "VyrnForgeDialogElement"
       },
       "accessibility": [
@@ -17952,7 +18333,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-dialog",
           "properties": [
             {
@@ -18046,11 +18426,14 @@
             "mode": "element",
             "type": "VyrnForgeDialogElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Dialog",
           "properties": [
             {
@@ -18148,11 +18531,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "DialogRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDialog",
           "properties": [
             {
@@ -18250,11 +18634,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfDialog"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDialog",
           "properties": [
             {
@@ -18352,7 +18737,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfDialogExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -18613,7 +19000,11 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["show", "close", "focus"],
+        "methods": [
+          "show",
+          "close",
+          "focus"
+        ],
         "elementType": "VyrnForgeDrawerElement"
       },
       "accessibility": [
@@ -18626,7 +19017,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-drawer",
           "properties": [
             {
@@ -18725,11 +19115,14 @@
             "mode": "element",
             "type": "VyrnForgeDrawerElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Drawer",
           "properties": [
             {
@@ -18832,11 +19225,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "DrawerRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDrawer",
           "properties": [
             {
@@ -18939,11 +19333,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfDrawer"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDrawer",
           "properties": [
             {
@@ -19046,7 +19441,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfDrawerExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -19285,7 +19682,11 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["show", "close", "toggle"],
+        "methods": [
+          "show",
+          "close",
+          "toggle"
+        ],
         "elementType": "VyrnForgePopoverElement"
       },
       "accessibility": [
@@ -19296,7 +19697,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-popover",
           "properties": [
             {
@@ -19374,11 +19774,14 @@
             "mode": "element",
             "type": "VyrnForgePopoverElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Popover",
           "properties": [
             {
@@ -19460,11 +19863,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "PopoverRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfPopover",
           "properties": [
             {
@@ -19546,11 +19950,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfPopover"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfPopover",
           "properties": [
             {
@@ -19632,7 +20037,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfPopoverExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -19741,7 +20148,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-popover",
           "properties": [
             {
@@ -19784,11 +20190,14 @@
             "mode": "element",
             "type": "VyrnForgePopoverElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Dropdown",
           "properties": [
             {
@@ -19835,11 +20244,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "DropdownRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfDropdown",
           "properties": [
             {
@@ -19886,11 +20296,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfDropdown"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfDropdown",
           "properties": [
             {
@@ -19937,7 +20348,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfDropdownExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -20072,7 +20485,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-menu",
           "properties": [
             {
@@ -20126,11 +20538,14 @@
             "mode": "element",
             "type": "VyrnForgeMenuElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Menu",
           "properties": [
             {
@@ -20188,11 +20603,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "MenuRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfMenu",
           "properties": [
             {
@@ -20250,11 +20666,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfMenu"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfMenu",
           "properties": [
             {
@@ -20312,7 +20729,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfMenuExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -20469,7 +20888,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-tooltip",
           "properties": [
             {
@@ -20527,11 +20945,14 @@
             "mode": "element",
             "type": "VyrnForgeTooltipElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Tooltip",
           "properties": [
             {
@@ -20588,11 +21009,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TooltipRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfTooltip",
           "properties": [
             {
@@ -20649,11 +21071,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfTooltip"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfTooltip",
           "properties": [
             {
@@ -20710,7 +21133,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTooltipExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -20918,7 +21343,10 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["cancel", "confirm"],
+        "methods": [
+          "cancel",
+          "confirm"
+        ],
         "elementType": "VyrnForgeConfirmDialogElement"
       },
       "accessibility": [
@@ -20929,7 +21357,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-confirm-dialog",
           "properties": [
             {
@@ -21003,11 +21430,14 @@
             "mode": "element",
             "type": "VyrnForgeConfirmDialogElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ConfirmDialog",
           "properties": [
             {
@@ -21085,11 +21515,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ConfirmDialogRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfConfirmDialog",
           "properties": [
             {
@@ -21167,11 +21598,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfConfirmDialog"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfConfirmDialog",
           "properties": [
             {
@@ -21249,7 +21681,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfConfirmDialogExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -21461,7 +21895,10 @@
         "disabledProperty": "disabled",
         "validity": {
           "supported": true,
-          "methods": ["checkValidity", "reportValidity"],
+          "methods": [
+            "checkValidity",
+            "reportValidity"
+          ],
           "invalidEvent": "vf-invalid"
         },
         "reset": {
@@ -21479,7 +21916,10 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["focus", "click"],
+        "methods": [
+          "focus",
+          "click"
+        ],
         "elementType": "VyrnForgeButtonElement"
       },
       "accessibility": [
@@ -21491,7 +21931,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-button",
           "properties": [
             {
@@ -21574,11 +22013,14 @@
             "mode": "element",
             "type": "VyrnForgeButtonElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Button",
           "properties": [
             {
@@ -21660,11 +22102,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ButtonRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfButton",
           "properties": [
             {
@@ -21746,11 +22189,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfButton"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfButton",
           "properties": [
             {
@@ -21832,7 +22276,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfButtonExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -21928,11 +22374,13 @@
         "methods": [],
         "elementType": "VyrnForgeButtonGroupElement"
       },
-      "accessibility": ["group role", "aria-orientation"],
+      "accessibility": [
+        "group role",
+        "aria-orientation"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-button-group",
           "properties": [
             {
@@ -21968,11 +22416,14 @@
             "mode": "element",
             "type": "VyrnForgeButtonGroupElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ButtonGroup",
           "properties": [
             {
@@ -22007,11 +22458,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ButtonGroupRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfButtonGroup",
           "properties": [
             {
@@ -22046,11 +22498,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfButtonGroup"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfButtonGroup",
           "properties": [
             {
@@ -22085,7 +22538,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfButtonGroupExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -22148,11 +22603,12 @@
         "methods": [],
         "elementType": "VyrnForgeCaptionElement"
       },
-      "accessibility": ["text content remains semantic"],
+      "accessibility": [
+        "text content remains semantic"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-caption",
           "properties": [
             {
@@ -22178,11 +22634,14 @@
             "mode": "element",
             "type": "VyrnForgeCaptionElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Caption",
           "properties": [
             {
@@ -22207,11 +22666,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "CaptionRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCaption",
           "properties": [
             {
@@ -22236,11 +22696,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfCaption"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCaption",
           "properties": [
             {
@@ -22265,7 +22726,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfCaptionExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -22328,11 +22791,12 @@
         "methods": [],
         "elementType": "VyrnForgeCodeTextElement"
       },
-      "accessibility": ["code text remains readable by assistive technology"],
+      "accessibility": [
+        "code text remains readable by assistive technology"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-code-text",
           "properties": [
             {
@@ -22358,11 +22822,14 @@
             "mode": "element",
             "type": "VyrnForgeCodeTextElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "CodeText",
           "properties": [
             {
@@ -22387,11 +22854,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "CodeTextRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfCodeText",
           "properties": [
             {
@@ -22416,11 +22884,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfCodeText"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfCodeText",
           "properties": [
             {
@@ -22445,7 +22914,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfCodeTextExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -22541,11 +23012,13 @@
         "methods": [],
         "elementType": "VyrnForgeHeadingElement"
       },
-      "accessibility": ["heading role", "aria-level tracks level"],
+      "accessibility": [
+        "heading role",
+        "aria-level tracks level"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-heading",
           "properties": [
             {
@@ -22581,11 +23054,14 @@
             "mode": "element",
             "type": "VyrnForgeHeadingElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Heading",
           "properties": [
             {
@@ -22620,11 +23096,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "HeadingRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfHeading",
           "properties": [
             {
@@ -22659,11 +23136,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfHeading"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfHeading",
           "properties": [
             {
@@ -22698,7 +23176,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfHeadingExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -22810,7 +23290,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-icon",
           "properties": [
             {
@@ -22845,11 +23324,14 @@
             "mode": "element",
             "type": "VyrnForgeIconElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Icon",
           "properties": [
             {
@@ -22883,11 +23365,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "IconRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfIcon",
           "properties": [
             {
@@ -22921,11 +23404,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfIcon"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfIcon",
           "properties": [
             {
@@ -22959,7 +23443,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfIconExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -23131,7 +23617,9 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["focus"],
+        "methods": [
+          "focus"
+        ],
         "elementType": "VyrnForgeIconButtonElement"
       },
       "accessibility": [
@@ -23141,7 +23629,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-icon-button",
           "properties": [
             {
@@ -23204,11 +23691,14 @@
             "mode": "element",
             "type": "VyrnForgeIconButtonElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "IconButton",
           "properties": [
             {
@@ -23270,11 +23760,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "IconButtonRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfIconButton",
           "properties": [
             {
@@ -23336,11 +23827,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfIconButton"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfIconButton",
           "properties": [
             {
@@ -23402,7 +23894,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfIconButtonExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -23498,11 +23992,13 @@
         "methods": [],
         "elementType": "VyrnForgeLabelElement"
       },
-      "accessibility": ["click-to-focus label proxy", "visible label text"],
+      "accessibility": [
+        "click-to-focus label proxy",
+        "visible label text"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-label",
           "properties": [
             {
@@ -23538,11 +24034,14 @@
             "mode": "element",
             "type": "VyrnForgeLabelElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Label",
           "properties": [
             {
@@ -23577,11 +24076,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "LabelRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfLabel",
           "properties": [
             {
@@ -23616,11 +24116,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfLabel"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfLabel",
           "properties": [
             {
@@ -23655,7 +24156,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfLabelExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -23777,7 +24280,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-segmented-control",
           "properties": [
             {
@@ -23819,11 +24321,14 @@
             "mode": "element",
             "type": "VyrnForgeSegmentedControlElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "SegmentedControl",
           "properties": [
             {
@@ -23869,11 +24374,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "SegmentedControlRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfSegmentedControl",
           "properties": [
             {
@@ -23919,11 +24425,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfSegmentedControl"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfSegmentedControl",
           "properties": [
             {
@@ -23969,7 +24476,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfSegmentedControlExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -24049,11 +24558,12 @@
         "methods": [],
         "elementType": "VyrnForgeTextElement"
       },
-      "accessibility": ["text content remains semantic"],
+      "accessibility": [
+        "text content remains semantic"
+      ],
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-text",
           "properties": [
             {
@@ -24084,11 +24594,14 @@
             "mode": "element",
             "type": "VyrnForgeTextElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "Text",
           "properties": [
             {
@@ -24118,11 +24631,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "TextRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfText",
           "properties": [
             {
@@ -24152,11 +24666,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfText"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfText",
           "properties": [
             {
@@ -24186,7 +24701,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfTextExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -24389,7 +24906,9 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["focus"],
+        "methods": [
+          "focus"
+        ],
         "elementType": "VyrnForgeToggleButtonElement"
       },
       "accessibility": [
@@ -24400,7 +24919,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-toggle-button",
           "properties": [
             {
@@ -24474,11 +24992,14 @@
             "mode": "element",
             "type": "VyrnForgeToggleButtonElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ToggleButton",
           "properties": [
             {
@@ -24556,11 +25077,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ToggleButtonRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToggleButton",
           "properties": [
             {
@@ -24638,11 +25160,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfToggleButton"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToggleButton",
           "properties": [
             {
@@ -24720,7 +25243,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfToggleButtonExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -24851,7 +25376,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-toggle-button-group",
           "properties": [
             {
@@ -24899,11 +25423,14 @@
             "mode": "element",
             "type": "VyrnForgeToggleButtonGroupElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ToggleButtonGroup",
           "properties": [
             {
@@ -24955,11 +25482,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ToggleButtonGroupRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToggleButtonGroup",
           "properties": [
             {
@@ -25011,11 +25539,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfToggleButtonGroup"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToggleButtonGroup",
           "properties": [
             {
@@ -25067,7 +25596,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfToggleButtonGroupExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     },
@@ -25286,7 +25817,9 @@
       },
       "ref": {
         "exposure": "element",
-        "methods": ["focus"],
+        "methods": [
+          "focus"
+        ],
         "elementType": "VyrnForgeToolbarButtonElement"
       },
       "accessibility": [
@@ -25297,7 +25830,6 @@
       "frameworkMappings": {
         "native": {
           "package": "@vyrnforge/ui-elements",
-          "status": "current",
           "tag": "vf-toolbar-button",
           "properties": [
             {
@@ -25376,11 +25908,14 @@
             "mode": "element",
             "type": "VyrnForgeToolbarButtonElement"
           },
-          "setup": ["register custom element"]
+          "setup": [
+            "register custom element"
+          ],
+          "supportLevel": "first-class",
+          "implementationState": "current"
         },
         "react": {
           "package": "@vyrnforge/ui-components",
-          "status": "migration",
           "export": "ToolbarButton",
           "properties": [
             {
@@ -25463,11 +25998,12 @@
           "ref": {
             "mode": "forwarded-ref",
             "type": "ToolbarButtonRef"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "migration"
         },
         "angular": {
           "package": "@vyrnforge/ui-angular",
-          "status": "target",
           "export": "VfToolbarButton",
           "properties": [
             {
@@ -25550,11 +26086,12 @@
           "ref": {
             "mode": "view-child",
             "type": "VfToolbarButton"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
-          "status": "target",
           "export": "VfToolbarButton",
           "properties": [
             {
@@ -25637,7 +26174,9 @@
           "ref": {
             "mode": "template-ref",
             "type": "VfToolbarButtonExposed"
-          }
+          },
+          "supportLevel": "first-class",
+          "implementationState": "target"
         }
       }
     }
