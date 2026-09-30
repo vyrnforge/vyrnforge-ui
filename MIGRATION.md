@@ -6,7 +6,7 @@ Consumers should pin exact versions during beta adoption and review the changelo
 
 ## Canonical migration guidance
 
-For React, Native HTML, Angular, and Vue migration guidance, supported integration boundaries, and current limitations, use:
+For Native HTML / Custom Elements, React, Angular, and Vue migration guidance, supported integration boundaries, and current limitations, use:
 
 ```text
 docs/release/multi-framework-migration-and-limitations.md
@@ -26,6 +26,8 @@ docs/release/versioning-policy.md
 
 ## Architecture constraints
 
-Migrations must preserve VyrnForge's shared design system and framework-independent foundations. React and native HTML are first-class web targets; Angular and Vue consume the verified Custom Element foundation unless a future accepted architecture decision introduces a first-class framework package.
+Native HTML / Custom Elements, React, Angular, and Vue are equal first-class VyrnForge surfaces over the same design system, canonical component contracts, shared behavior and accessibility model, styling foundation, terminology, and support expectations. Internal reuse of the Custom Element implementation does not make Angular or Vue secondary surfaces.
+
+Migrations should preserve framework-idiomatic public APIs while reusing shared VyrnForge foundations wherever practical. Prefer existing VyrnForge packages, contracts, behaviors, generators, and extension points over application-owned wrappers.
 
 VyrnForge remains dependency-minimal and store-agnostic. Do not introduce application state-management or heavyweight UI-framework dependencies into shared packages as part of a migration.

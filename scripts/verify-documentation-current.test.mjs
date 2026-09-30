@@ -56,6 +56,24 @@ function fixture(mutator, callback) {
 test("accepts current reader-facing documentation", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
 
+test("rejects obsolete secondary-framework wording in the root migration guide", () =>
+  fixture(
+    (root) => {
+      const relativePath = "MIGRATION.md";
+      write(
+        root,
+        relativePath,
+        `${read(root, relativePath)}\nAngular and Vue consume the verified Custom Element foundation unless a future decision changes that.\n`,
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("stale secondary-framework migration wording"),
+        ),
+      ),
+  ));
+
 test("rejects an incorrect package install channel", () =>
   fixture(
     (root) => {

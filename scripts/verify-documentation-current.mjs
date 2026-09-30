@@ -12,6 +12,7 @@ const repositoryRoot = path.resolve(
 
 export const documentationCurrentPaths = [
   "README.md",
+  "MIGRATION.md",
   "docs/README.md",
   "docs/api/README.md",
   "docs/api/import-and-setup.md",
@@ -69,6 +70,7 @@ export const documentationInstallGuidancePaths = [
 
 export const documentationTaskFreePaths = [
   "README.md",
+  "MIGRATION.md",
   "docs/README.md",
   "docs/api/README.md",
   "docs/api/import-and-setup.md",
@@ -107,6 +109,10 @@ export const deprecatedAiMirrorPaths = [
 ];
 
 const stalePatterns = [
+  [
+    /Angular and Vue consume the verified Custom Element foundation unless/iu,
+    "stale secondary-framework migration wording",
+  ],
   [/early alpha/iu, "stale early-alpha wording"],
   [/\bpre-alpha\b/iu, "stale pre-alpha wording"],
   [/planned native renderer/iu, "stale planned-native-renderer wording"],
