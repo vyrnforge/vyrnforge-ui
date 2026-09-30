@@ -366,17 +366,21 @@ export function Autocomplete({
                           })
                         ) : (
                           <>
-                            <span className={adoptedOverlayRegionClassName(
+                            <span
+                              className={adoptedOverlayRegionClassName(
                                 "autocomplete",
                                 "label",
-                              )}>
+                              )}
+                            >
                               {option.label}
                             </span>
                             {option.description && (
-                              <span className={adoptedOverlayRegionClassName(
+                              <span
+                                className={adoptedOverlayRegionClassName(
                                   "autocomplete",
                                   "description",
-                                )}>
+                                )}
+                              >
                                 {option.description}
                               </span>
                             )}
