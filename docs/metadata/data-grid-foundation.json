@@ -1,6 +1,5 @@
 {
   "schemaVersion": 1,
-  "task": "PA-2008",
   "package": "@vyrnforge/ui-data-grid",
   "status": "internal-foundation-seam",
   "purpose": "Separate reusable Data Grid contracts, state primitives, algorithms, keyboard navigation, and theme contracts from React-specific rendering without changing the current React alpha public package.",

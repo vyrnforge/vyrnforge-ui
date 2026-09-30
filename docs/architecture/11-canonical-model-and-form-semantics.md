@@ -1,8 +1,6 @@
 # Canonical Model And Form Semantics
 
-- Task: MFD-1006
-- Status: Accepted target contract
-- Depends on: MFD-1005
+- Status: Accepted contract
 - Machine-readable source: `docs/metadata/component-contracts.json`
 
 ## Purpose
@@ -93,7 +91,7 @@ When reset is supported, metadata declares what canonical properties are restore
 
 ## Exceptional cases
 
-A component that cannot fit these generic rules must be recorded through the MFD-1009 framework-exception mechanism. The exception must identify the affected framework and semantic area rather than adding an undocumented component-name conditional to a generator.
+A component that cannot fit these generic rules must be recorded in the framework-exception registry under [ADR-008](adr-008-framework-exception-policy.md). The exception must identify the affected framework and semantic area rather than adding an undocumented component-name conditional to a generator.
 
 ## Acceptance mapping
 

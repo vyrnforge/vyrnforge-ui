@@ -93,7 +93,7 @@ that existed solely for the exception.
 
 ## Review rule
 
-S16 and later cleanup must not preserve an exception merely because an old
-migration required it. Every surviving exception must still protect a current
+Cleanup must not preserve an exception merely because an old migration required
+it. Every surviving exception must still protect a current
 compatibility, developer-experience, SSR, accessibility, performance, or
 framework-correctness guarantee and must remain tested.
