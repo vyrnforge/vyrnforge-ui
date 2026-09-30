@@ -337,7 +337,10 @@ export function Autocomplete({
                   return (
                     <AutocompleteOption
                       active={active}
-                      data-vf-region={adoptedOverlayRegion("autocomplete", "option")}
+                      data-vf-region={adoptedOverlayRegion(
+                        "autocomplete",
+                        "option",
+                      )}
                       id={optionId(listboxId, option)}
                       key={option.value}
                       onClick={() => selectOption(option)}
