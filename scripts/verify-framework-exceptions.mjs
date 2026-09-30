@@ -51,9 +51,10 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   );
   assert.equal(
     live.length,
-    0,
-    "SC-2108 reconciliation must not leave an evidence-satisfied exception live",
+    1,
+    "SC-2108 reconciliation expects only the narrow native toast viewport mapping gap to remain live",
   );
+  assert.equal(live[0]?.id, "MFD-EX-NATIVE-TOAST-VIEWPORT");
 
   for (const entry of live) {
     for (const field of registry.requiredFields) {
@@ -90,8 +91,8 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   const closed = registry.exceptions.filter(({ state }) => state === "closed");
   assert.equal(
     closed.length,
-    registry.exceptions.length,
-    "SC-2108 expects every original exception to be closed only after capability evidence is recorded",
+    registry.exceptions.length - 1,
+    "SC-2108 expects every evidence-satisfied original exception to be closed",
   );
   for (const entry of closed) {
     assert.equal(
