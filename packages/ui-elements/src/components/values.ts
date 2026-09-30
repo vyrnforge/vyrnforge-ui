@@ -297,6 +297,7 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
       input.className = "vf-rating__input";
       input.name = this.name || "vf-rating";
       input.value = String(candidate);
+      input.dataset.value = String(candidate);
       input.checked = candidate === this.value;
       input.disabled = this.effectiveDisabled || this.readOnly;
       input.required = this.required && this.value === 0 && candidate === 1;
