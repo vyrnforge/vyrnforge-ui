@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type {
   DataGridDensity,
   DataGridGroupingState,
+  DataGridPersistKey,
   DataGridPersistedState,
   DataGridPersistenceAdapter,
   DataGridQueryChange,
