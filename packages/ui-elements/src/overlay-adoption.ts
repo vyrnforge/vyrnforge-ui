@@ -127,7 +127,11 @@ export const vyrnForgeOverlayAdoptionContracts = Object.freeze({
     ],
     regions: [
       { name: "body", className: "vf-confirm-dialog__body", required: true },
-      { name: "actions", className: "vf-confirm-dialog__actions", required: true },
+      {
+        name: "actions",
+        className: "vf-confirm-dialog__actions",
+        required: true,
+      },
     ],
   }),
   autocomplete: contract({
@@ -143,7 +147,11 @@ export const vyrnForgeOverlayAdoptionContracts = Object.freeze({
     ],
     defaultPlacement: "bottom-start",
     regions: [
-      { name: "control", className: "vf-autocomplete__control", required: true },
+      {
+        name: "control",
+        className: "vf-autocomplete__control",
+        required: true,
+      },
       { name: "layer", className: "vf-autocomplete__layer", required: true },
       {
         name: "option",
