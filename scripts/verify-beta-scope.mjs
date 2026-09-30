@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildBetaScope } from "./generate-beta-scope.mjs";
+import { getPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -74,6 +75,10 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
     failures.push("beta scope release group must not include ui-data-grid");
   }
 
+  const catalog = readJson(root, "docs/metadata/components.json");
+  const expectedComponentIds = new Set(
+    getPublicNonGridBetaComponentIds(catalog),
+  );
   const components = actual.components ?? [];
   if (components.length !== actual.summary?.publicNonGridComponents) {
     failures.push(
@@ -110,9 +115,9 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
         `${component.id}: public non-grid component must be included`,
       );
     }
-    if (component.package !== "@vyrnforge/ui-components") {
+    if (!expectedComponentIds.has(component.id)) {
       failures.push(
-        `${component.id}: beta component must come from ui-components`,
+        `${component.id}: beta component is outside the framework-neutral public non-grid scope`,
       );
     }
     if (component.react?.status !== "current") {
@@ -150,6 +155,14 @@ export function verifyBetaScope({ root = repositoryRoot } = {}) {
       !existsSync(path.join(root, docsPath))
     ) {
       failures.push(`${component.id}: canonical documentation path is missing`);
+    }
+  }
+
+  for (const componentId of expectedComponentIds) {
+    if (!ids.has(componentId)) {
+      failures.push(
+        `${componentId}: framework-neutral public non-grid component is missing from beta scope`,
+      );
     }
   }
 
