@@ -114,7 +114,9 @@ export function verifyNativeSurfaceCompleteness(root) {
   }
   if (
     ssr?.packageImports?.registrationEntryServerSafe !== true ||
-    !(ssr?.bundlerMatrix ?? []).some((entry) => entry.consumer === "native-html")
+    !(ssr?.bundlerMatrix ?? []).some(
+      (entry) => entry.consumer === "native-html",
+    )
   ) {
     failures.push("Native HTML SSR/server-safe-import evidence is incomplete");
   }
