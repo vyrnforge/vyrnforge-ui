@@ -33,6 +33,15 @@ export const documentationCurrentPaths = [
   "docs/architecture/08-semantic-token-contract.md",
   "docs/architecture/adr-004-multi-framework-web-support.md",
   "docs/architecture/09-component-contracts-and-events.md",
+  "docs/architecture/11-canonical-model-and-form-semantics.md",
+  "docs/architecture/12-composition-mapping-contract.md",
+  "docs/architecture/13-event-ref-mapping-contract.md",
+  "docs/architecture/14-non-grid-contract-coverage.md",
+  "docs/architecture/15-component-presets-and-aliases.md",
+  "docs/architecture/adr-005-canonical-web-implementation.md",
+  "docs/architecture/adr-006-framework-package-strategy.md",
+  "docs/architecture/adr-008-framework-exception-policy.md",
+  "docs/architecture/adr-009-react-canonical-convergence.md",
   "docs/architecture/10-custom-elements-and-form-association.md",
   "docs/quality/00-quality-gates.md",
   "docs/quality/03-known-limitations.md",
@@ -84,6 +93,15 @@ export const documentationTaskFreePaths = [
   "docs/architecture/02-state-and-adapter-ownership.md",
   "docs/architecture/08-semantic-token-contract.md",
   "docs/architecture/09-component-contracts-and-events.md",
+  "docs/architecture/11-canonical-model-and-form-semantics.md",
+  "docs/architecture/12-composition-mapping-contract.md",
+  "docs/architecture/13-event-ref-mapping-contract.md",
+  "docs/architecture/14-non-grid-contract-coverage.md",
+  "docs/architecture/15-component-presets-and-aliases.md",
+  "docs/architecture/adr-005-canonical-web-implementation.md",
+  "docs/architecture/adr-006-framework-package-strategy.md",
+  "docs/architecture/adr-008-framework-exception-policy.md",
+  "docs/architecture/adr-009-react-canonical-convergence.md",
   "docs/quality/00-quality-gates.md",
   "docs/quality/03-known-limitations.md",
   "docs/testing/browser-testing.md",
@@ -452,7 +470,7 @@ export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
   }
 
   const historicalIdPattern =
-    /\b(?:CF|MF|EL|BT)-\d{4}\b|\bGMF[1-4]\b|\bS[0-8]\b/gu;
+    /\b(?:CF|MF|EL|BT|MFD|SC|PA)-\d{4}\b|\bGMF[1-4]\b|\bG(?:1\d|2[0-2])\b|\bS(?:\d|1\d|2[01])\b/gu;
   for (const relativePath of documentationTaskFreePaths) {
     const content = read(root, relativePath);
     const match = content.match(historicalIdPattern);
