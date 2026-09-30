@@ -157,8 +157,13 @@ export {
 } from "./navigation";
 export {
   createOverlayLayerRegistry,
+  findOverlayCompositionRegion,
   createOverlayLifecycleController,
   resolveOverlayPosition,
+  overlayCompositionContracts,
+  type OverlayCompositionContract,
+  type OverlayCompositionKind,
+  type OverlayCompositionRegion,
   type OverlayDismissReason,
   type OverlayFocusAdapter,
   type OverlayFocusIntent,
