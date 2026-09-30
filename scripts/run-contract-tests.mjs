@@ -33,6 +33,7 @@ export const contractTestFiles = [
   "scripts/release-artifact.test.mjs",
   "scripts/release-dry-run.test.mjs",
   "scripts/verify-multi-framework-architecture.test.mjs",
+  "scripts/verify-first-class-surface-verification.test.mjs",
   "scripts/verify-component-maturity.test.mjs",
   "scripts/verify-design-token-contract.test.mjs",
   "scripts/verify-semantic-token-adoption.test.mjs",
