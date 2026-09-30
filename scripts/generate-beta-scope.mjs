@@ -2,6 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { getPublicNonGridBetaComponents } from "./non-grid-component-scope.mjs";
 import { getReleaseGroup, readReleaseGroups } from "./release-groups.mjs";
 
 const repositoryRoot = path.resolve(
@@ -38,7 +39,7 @@ function betaComponent(component) {
     maturity: component.maturity,
     decision: "included",
     decisionRationale:
-      "Public non-grid React export with a current native-renderer mapping and verified Angular/Vue consumption.",
+      "Public VyrnForge non-grid component explicitly included in the shared beta scope.",
     react: {
       package: component.frameworkParity.react.package,
       export: component.frameworkParity.react.export,
@@ -127,13 +128,7 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
   );
 
   const components = catalog.components ?? [];
-  const publicNonGrid = components
-    .filter(
-      (component) =>
-        component.package === "@vyrnforge/ui-components" &&
-        component.publicExport === true,
-    )
-    .sort((left, right) => left.id.localeCompare(right.id));
+  const publicNonGrid = getPublicNonGridBetaComponents(catalog);
   const publicGrid = components
     .filter(
       (component) =>
@@ -217,9 +212,9 @@ export function buildBetaScope({ root = repositoryRoot } = {}) {
     },
     scopePolicy: {
       componentDefinition:
-        "Every package-root public export classified in docs/metadata/components.json under @vyrnforge/ui-components.",
+        "Every public VyrnForge component record in docs/metadata/components.json explicitly marked frameworkParity.betaScope=included and not classified as data-grid or grid-feature.",
       inclusionRule:
-        "Include every public non-grid React component/API that has current frameworkParity metadata for React and the native renderer.",
+        "Include every public non-grid VyrnForge component explicitly marked frameworkParity.betaScope=included; distribution package ownership is not canonical scope authority.",
       maturityRule:
         "Scope inclusion does not promote component maturity. Canonical maturity remains owned by docs/metadata/components.json and its maturity evidence policy.",
       angularVueRule:
