@@ -433,9 +433,8 @@ function summarizeSurface(framework, records) {
     current: records.filter(
       (record) => record.implementationState === "current",
     ).length,
-    target: records.filter(
-      (record) => record.implementationState === "target",
-    ).length,
+    target: records.filter((record) => record.implementationState === "target")
+      .length,
     migration: records.filter(
       (record) => record.implementationState === "migration",
     ).length,
