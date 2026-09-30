@@ -293,7 +293,7 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
       options: { attribute: false },
       placeholder: { reflect: true, type: "string" },
       size: { reflect: true, type: "string" },
-      value: { reflect: true, type: "string" },
+      value: { attribute: false },
     });
 
   #select: HTMLSelectElement | null = null;
@@ -388,13 +388,17 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
     select.required = this.required;
     select.multiple = this.multiple;
     const values = Array.isArray(this.value) ? this.value : [this.value];
-    for (const option of select.options) option.selected = values.includes(option.value);
+    for (const option of select.options) {
+      option.selected = values.includes(option.value);
+    }
     select.setAttribute("aria-invalid", String(this.invalid));
 
     const selectedValues = this.selectedValues(select);
     const missing = this.required && selectedValues.length === 0;
     this.setFormValue(
-      this.multiple ? this.createFormData(selectedValues) : (selectedValues[0] ?? ""),
+      this.multiple
+        ? this.createFormData(selectedValues)
+        : (selectedValues[0] ?? ""),
       this.serializeState(this.value),
     );
     this.setValidity(
@@ -461,7 +465,9 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
     if (!state) return this.multiple ? Object.freeze([]) : "";
     try {
       const values = JSON.parse(state) as string[];
-      return this.multiple ? Object.freeze(values.map(String)) : String(values[0] ?? "");
+      return this.multiple
+        ? Object.freeze(values.map(String))
+        : String(values[0] ?? "");
     } catch {
       return this.multiple ? Object.freeze([state]) : state;
     }
@@ -476,7 +482,9 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
 
   private readonly handleChange = (event: Event) => {
     const select = event.currentTarget as HTMLSelectElement;
-    const value = this.multiple ? Object.freeze(this.selectedValues(select)) : select.value;
+    const value = this.multiple
+      ? Object.freeze(this.selectedValues(select))
+      : select.value;
     const previousValue = this.value;
     if (JSON.stringify(value) === JSON.stringify(previousValue)) return;
     this.value = value;
