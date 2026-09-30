@@ -117,6 +117,25 @@ test("rejects hardcoded prerelease versions in primary guidance", () =>
       ),
   ));
 
+test("rejects closed-program identifiers in active architecture contracts", () =>
+  fixture(
+    (root) => {
+      const relativePath =
+        "docs/architecture/15-component-presets-and-aliases.md";
+      write(
+        root,
+        relativePath,
+        `${read(root, relativePath)}\nClosed execution owner: SC-2102.\n`,
+      );
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("historical task/gate identifier SC-2102"),
+        ),
+      ),
+  ));
+
 test("rejects historical task identifiers in current guidance", () =>
   fixture(
     (root) => {
