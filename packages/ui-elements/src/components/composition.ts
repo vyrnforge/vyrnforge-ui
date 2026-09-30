@@ -11,9 +11,7 @@ export type VyrnForgeAppShellScrollMode = "page" | "content" | "split";
 export type VyrnForgeAppShellHeaderPosition = "static" | "sticky" | "fixed";
 export type VyrnForgeAppShellSidebarPosition = "static" | "sticky" | "fixed";
 export type VyrnForgePageToolbarDensity =
-  | "compact"
-  | "standard"
-  | "comfortable";
+  "compact" | "standard" | "comfortable";
 
 function regionClass(id: VyrnForgeHostAdoptionId, name: string): string {
   const region = findVyrnForgeNamedRegion(
@@ -166,19 +164,16 @@ export class VyrnForgeAppShellElement extends VyrnForgeDomElement {
     }
 
     this.applyManagedClasses(
-      resolveVyrnForgeHostClasses(
-        vyrnForgeHostAdoptionContracts["app-shell"],
-        {
-          fullHeight: this.fullHeight,
-          hasFooter: footerNodes.length > 0,
-          hasHeader: headerNodes.length > 0,
-          hasSidebar: sidebarNodes.length > 0,
-          headerPosition: this.headerPosition,
-          scrollMode: this.scrollMode,
-          sidebarCollapsed: this.sidebarCollapsed,
-          sidebarPosition: this.sidebarPosition,
-        },
-      ),
+      resolveVyrnForgeHostClasses(vyrnForgeHostAdoptionContracts["app-shell"], {
+        fullHeight: this.fullHeight,
+        hasFooter: footerNodes.length > 0,
+        hasHeader: headerNodes.length > 0,
+        hasSidebar: sidebarNodes.length > 0,
+        headerPosition: this.headerPosition,
+        scrollMode: this.scrollMode,
+        sidebarCollapsed: this.sidebarCollapsed,
+        sidebarPosition: this.sidebarPosition,
+      }),
     );
     this.style.setProperty("--vf-app-shell-header-height", this.headerHeight);
     this.style.setProperty("--vf-app-shell-sidebar-width", this.sidebarWidth);
