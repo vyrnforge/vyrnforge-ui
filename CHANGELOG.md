@@ -1,5 +1,3 @@
-- Completed MF-5015 and MF-5016: audited every public React component, migrated IconButton action availability to the shared behavior resolver, added React adoption verification, and closed GMF2 with a canonical evidence gate.
-
 # Changelog
 
 Noteworthy public changes to VyrnForge UI will be documented here.
@@ -13,6 +11,7 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 
 ### Added
 
+- Completed MF-5015 and MF-5016: audited every public React component, migrated IconButton action availability to the shared behavior resolver, added React adoption verification, and closed GMF2 with a canonical evidence gate.
 - Added EL-6001 and EL-6002 native registration, per-element registration factory, observed-attribute, property reflection, pre-definition upgrade, reconnect-safe lifecycle, and microtask update foundations.
 - Added EL-6003 and EL-6004 typed `vf-*` event dispatchers, canonical event detail contracts, ElementInternals form association, validity, disabled, reset, restoration, and real-form browser evidence.
 - MF-5005 through MF-5007 framework-neutral action, toggle, choice, numeric, and Tabs controllers.
@@ -20,8 +19,6 @@ Release readiness, versioning, publication, and migration policy live in [docs/r
 - MF-5008 through MF-5010 framework-neutral Autocomplete, MultiSelect, and Transfer List controllers with React parity adoption.
 - MF-5011 and MF-5012 framework-neutral Menu/SideNav navigation and overlay lifecycle, layer, and positioning foundations with React adapter adoption.
 - MF-5013 and MF-5014 component-specific Dialog, Drawer, Popover, Tooltip, Toast, and ConfirmDialog controllers with React parity adoption.
-
-### Added
 
 - Added MF-5001 through MF-5004 framework-neutral behavior foundations for
   controllable state, deterministic collections and active-item navigation,
