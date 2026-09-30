@@ -1,8 +1,5 @@
 import type { BehaviorListener } from "./controller";
-import type {
-  BehaviorEventListener,
-  BehaviorUnsubscribe,
-} from "./events";
+import type { BehaviorEventListener, BehaviorUnsubscribe } from "./events";
 import {
   createToastController,
   type ToastBehaviorAddOptions,
@@ -21,14 +18,17 @@ export interface ToastServiceScheduler {
   clearTimeout(handle: unknown): void;
 }
 
-export interface ToastServiceOptions<TPayload = unknown>
-  extends ToastBehaviorControllerOptions<TPayload> {
+export interface ToastServiceOptions<
+  TPayload = unknown,
+> extends ToastBehaviorControllerOptions<TPayload> {
   readonly createId?: () => string;
   readonly scheduler?: ToastServiceScheduler;
 }
 
-export interface ToastServiceAddOptions<TPayload = unknown>
-  extends Omit<ToastBehaviorAddOptions<TPayload>, "id"> {
+export interface ToastServiceAddOptions<TPayload = unknown> extends Omit<
+  ToastBehaviorAddOptions<TPayload>,
+  "id"
+> {
   readonly id?: string;
 }
 
@@ -106,10 +106,7 @@ export function createToastService<TPayload = unknown>(
   }
 
   function remainingForTimer(timer: TimerState): number {
-    return Math.max(
-      0,
-      timer.remaining - (scheduler.now() - timer.startedAt),
-    );
+    return Math.max(0, timer.remaining - (scheduler.now() - timer.startedAt));
   }
 
   function schedule(id: string, remaining: number): void {
