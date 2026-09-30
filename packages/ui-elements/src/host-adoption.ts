@@ -24,6 +24,132 @@ export interface VyrnForgeHostAdoptionContract {
   readonly regions?: readonly VyrnForgeNamedRegionContract[];
 }
 
+export type VyrnForgeItemCompositionCapability =
+  | "filter"
+  | "hierarchy"
+  | "multiple-selection"
+  | "repeated-form-value"
+  | "roving-focus"
+  | "selection";
+
+export interface VyrnForgeItemRegionContract {
+  readonly name: string;
+  readonly className: string;
+  readonly required?: boolean;
+  readonly multiplicity?: "single" | "multiple";
+}
+
+export interface VyrnForgeItemCompositionContract {
+  readonly id: string;
+  readonly identityProperty: string;
+  readonly valueProperty?: string;
+  readonly disabledProperty?: string;
+  readonly capabilities: readonly VyrnForgeItemCompositionCapability[];
+  readonly regions: readonly VyrnForgeItemRegionContract[];
+}
+
+function itemCompositionContract(
+  value: VyrnForgeItemCompositionContract,
+): VyrnForgeItemCompositionContract {
+  return Object.freeze({
+    ...value,
+    capabilities: Object.freeze([...value.capabilities]),
+    regions: Object.freeze(
+      value.regions.map((region) => Object.freeze({ ...region })),
+    ),
+  });
+}
+
+export const vyrnForgeItemCompositionContracts = Object.freeze({
+  tabs: itemCompositionContract({
+    id: "tabs",
+    identityProperty: "id",
+    disabledProperty: "disabled",
+    capabilities: ["roving-focus", "selection"],
+    regions: [
+      { name: "label", className: "vf-tabs__label", required: true },
+      { name: "badge", className: "vf-tabs__badge" },
+      { name: "content", className: "vf-tabs__panel" },
+    ],
+  }),
+  breadcrumbs: itemCompositionContract({
+    id: "breadcrumbs",
+    identityProperty: "id",
+    capabilities: [],
+    regions: [
+      { name: "label", className: "vf-breadcrumbs__label", required: true },
+      { name: "separator", className: "vf-breadcrumbs__separator" },
+    ],
+  }),
+  "side-nav": itemCompositionContract({
+    id: "side-nav",
+    identityProperty: "id",
+    disabledProperty: "disabled",
+    capabilities: ["hierarchy", "roving-focus", "selection"],
+    regions: [
+      { name: "icon", className: "vf-side-nav__icon" },
+      { name: "label", className: "vf-side-nav__label", required: true },
+      { name: "badge", className: "vf-side-nav__badge" },
+      { name: "children", className: "vf-side-nav__children", multiplicity: "multiple" },
+    ],
+  }),
+  "segmented-control": itemCompositionContract({
+    id: "segmented-control",
+    identityProperty: "value",
+    valueProperty: "value",
+    disabledProperty: "disabled",
+    capabilities: ["roving-focus", "selection"],
+    regions: [
+      { name: "icon", className: "vf-segmented-control__icon" },
+      { name: "label", className: "vf-segmented-control__label", required: true },
+    ],
+  }),
+  menu: itemCompositionContract({
+    id: "menu",
+    identityProperty: "id",
+    disabledProperty: "disabled",
+    capabilities: ["roving-focus", "selection"],
+    regions: [
+      { name: "label", className: "vf-menu-item__label", required: true },
+      { name: "description", className: "vf-menu-item__description" },
+      { name: "shortcut", className: "vf-menu-item__shortcut" },
+    ],
+  }),
+  "multi-select": itemCompositionContract({
+    id: "multi-select",
+    identityProperty: "value",
+    valueProperty: "value",
+    disabledProperty: "disabled",
+    capabilities: ["filter", "multiple-selection", "repeated-form-value", "roving-focus"],
+    regions: [
+      { name: "label", className: "vf-multi-select__option-label", required: true },
+      { name: "description", className: "vf-multi-select__option-description" },
+    ],
+  }),
+  "transfer-list": itemCompositionContract({
+    id: "transfer-list",
+    identityProperty: "value",
+    valueProperty: "value",
+    disabledProperty: "disabled",
+    capabilities: ["filter", "multiple-selection", "repeated-form-value", "roving-focus"],
+    regions: [
+      { name: "label", className: "vf-transfer-list__option-label", required: true },
+      { name: "description", className: "vf-transfer-list__option-description" },
+      { name: "option", className: "vf-transfer-list__option-content" },
+    ],
+  }),
+});
+
+export type VyrnForgeItemCompositionId =
+  keyof typeof vyrnForgeItemCompositionContracts;
+
+export function findVyrnForgeItemRegion(
+  composition: VyrnForgeItemCompositionContract,
+  name: string,
+): VyrnForgeItemRegionContract | undefined {
+  return composition.regions.find((region) => region.name === name);
+}
+
 export interface VyrnForgeResolvedHostAdoption {
   readonly tagName: string;
   readonly classNames: readonly string[];
