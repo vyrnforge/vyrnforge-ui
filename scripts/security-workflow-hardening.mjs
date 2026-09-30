@@ -40,7 +40,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "scripts/write-ci-summary.mjs",
   ]) {
     if (!existsSync(path.join(root, requiredFile))) {
-      failures.push(`security workflow required file is missing: ${requiredFile}`);
+      failures.push(\n        `security workflow required file is missing: ${requiredFile}`,\n      );
     }
   }
   if (failures.length) return failures;
@@ -53,7 +53,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     manifest.sourceOfTruth?.canonical !== true ||
     manifest.sourceOfTruth?.documentation !== securityDocumentationPath
   ) {
-    failures.push("security workflow metadata must point to canonical documentation");
+    failures.push(\n      "security workflow metadata must point to canonical documentation",\n    );
   }
 
   const ci = read(root, ciWorkflowPath);
@@ -70,10 +70,10 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "if: needs.plan.outputs.security == 'true'",
     "name: ci-gate",
   ]) {
-    if (!ci.includes(marker)) failures.push(`${ciWorkflowPath}: missing ${marker}`);
+    if (!ci.includes(marker))\n      failures.push(`${ciWorkflowPath}: missing ${marker}`);
   }
   if (ci.includes("integration/**")) {
-    failures.push("CI must not reintroduce obsolete persistent integration-lane PR targets");
+    failures.push(\n      "CI must not reintroduce obsolete persistent integration-lane PR targets",\n    );
   }
   if (/continue-on-error:\s*true/u.test(ci)) {
     failures.push("CI security checks must not conceal mandatory failures");
@@ -85,7 +85,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
     "SECURITY_RESULT",
     "scripts/write-ci-summary.mjs",
   ]) {
-    if (!ciGate.includes(marker)) failures.push(`ci-gate must evaluate ${marker}`);
+    if (!ciGate.includes(marker))\n      failures.push(`ci-gate must evaluate ${marker}`);
   }
 
   const assurance = read(root, assuranceWorkflowPath);
@@ -111,7 +111,7 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   const verifyReleaseStart = release.indexOf("  verify-release:");
   const publishPackagesStart = release.indexOf("  publish-packages:");
   if (verifyReleaseStart < 0 || publishPackagesStart <= verifyReleaseStart) {
-    failures.push("release.yml is missing the canonical verify-release boundary");
+    failures.push(\n      "release.yml is missing the canonical verify-release boundary",\n    );
   } else {
     const section = release.slice(verifyReleaseStart, publishPackagesStart);
     for (const marker of [
