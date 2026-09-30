@@ -626,6 +626,10 @@ export default VfDialog;
 }
 
 export function buildFrameworkDialogArtifacts(model) {
+  assert(
+    model.component === FRAMEWORK_DIALOG_COMPONENT_ID,
+    "Dialog artifacts require the canonical dialog slice model",
+  );
   return Object.freeze([
     Object.freeze({
       path: FRAMEWORK_DIALOG_ARTIFACT_PATHS.native,
