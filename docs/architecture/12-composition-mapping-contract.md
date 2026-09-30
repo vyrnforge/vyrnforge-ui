@@ -93,7 +93,6 @@ The descriptors intentionally do not carry framework content values. React keeps
 
 For Tabs, Breadcrumbs, SideNav, SegmentedControl, Menu, MultiSelect, and TransferList, adapter adoption must preserve the existing public DOM, accessibility, keyboard/focus, filtering, callback, and form-submission contracts. Shared item-region metadata is therefore an adoption seam, not permission to replace consumer-owned rich content with strings.
 
-
 ## Overlay and advanced Autocomplete adoption
 
 SC-2107 extends shared composition metadata to Dialog, Drawer, Popover, Tooltip, Toast, ConfirmDialog, and Autocomplete. The shared overlay contract records canonical rich regions and reusable capabilities such as controlled lifecycle, portals, anchored placement, focus containment/restoration, dismissal, service lifecycle, async confirmation, custom filtering, custom option rendering, and roving focus.
