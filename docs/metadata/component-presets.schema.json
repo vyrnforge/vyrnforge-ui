@@ -38,7 +38,9 @@
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
           "baseComponent": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-          "kind": { "enum": ["preset", "transform", "composition"] },
+          "kind": {
+            "enum": ["preset", "transform", "composition"]
+          },
           "description": { "type": "string", "minLength": 1 },
           "publicInputs": {
             "type": "array",
@@ -64,7 +66,9 @@
               "required": ["input", "outputProperty", "map", "fallback"],
               "properties": {
                 "input": { "type": "string", "minLength": 1 },
-                "overrideInput": { "type": ["string", "null"] },
+                "overrideInput": {
+                  "type": ["string", "null"]
+                },
                 "outputProperty": { "type": "string", "minLength": 1 },
                 "map": { "type": "object" },
                 "fallback": {}
@@ -76,7 +80,9 @@
             "additionalProperties": false,
             "required": ["mode", "sourceOrder"],
             "properties": {
-              "mode": { "enum": ["none", "default-region"] },
+              "mode": {
+                "enum": ["none", "default-region"]
+              },
               "sourceOrder": {
                 "type": "array",
                 "items": { "type": "string", "minLength": 1 }
@@ -106,9 +112,13 @@
       "properties": {
         "package": { "type": "string", "minLength": 1 },
         "supportLevel": { "const": "first-class" },
-        "mode": { "enum": ["base-component", "named-export", "composition-helper"] },
+        "mode": {
+          "enum": ["base-component", "named-export", "composition-helper"]
+        },
         "target": { "type": "string", "minLength": 1 },
-        "publicName": { "type": ["string", "null"] }
+        "publicName": {
+          "type": ["string", "null"]
+        }
       }
     }
   }
