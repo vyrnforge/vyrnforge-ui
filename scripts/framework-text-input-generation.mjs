@@ -465,6 +465,10 @@ export default VfTextInput;
 }
 
 export function buildFrameworkTextInputArtifacts(model) {
+  assert(
+    model.component === FRAMEWORK_TEXT_INPUT_COMPONENT_ID,
+    "TextInput artifacts require the canonical text-input slice model",
+  );
   return Object.freeze([
     Object.freeze({
       path: FRAMEWORK_TEXT_INPUT_ARTIFACT_PATHS.native,
