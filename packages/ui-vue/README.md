@@ -1,8 +1,8 @@
 # @vyrnforge/ui-vue
 
-First-class Vue facade package for VyrnForge.
+First-class Vue integration package for VyrnForge UI.
 
-`@vyrnforge/ui-vue` is a thin Vue adapter over the canonical native implementation in `@vyrnforge/ui-elements`. It owns Vue-facing component definitions, typing, `v-model` mappings, slots, refs, events, and setup helpers while rendering, accessibility behavior, forms, styling, and shared state semantics remain in VyrnForge's framework-agnostic/native foundations.
+`@vyrnforge/ui-vue` is a thin Vue adapter over the shared browser implementation in `@vyrnforge/ui-elements`. It owns Vue-facing component definitions, typing, `v-model` mappings, slots, refs, events, and setup helpers while reusable rendering behavior, accessibility behavior, forms, styling, and shared state semantics remain in VyrnForge's framework-independent foundations.
 
 The supported Vue peer range is `>=3.4 <4`. Vue is not bundled into the package.
 
@@ -26,7 +26,7 @@ import App from "./App.vue";
 createApp(App).use(VyrnForgeVue).mount("#app");
 ```
 
-The plugin registers VyrnForge's canonical custom elements and the public `Vf*` Vue facade components. Consumers using those facade components do not need to copy `@vyrnforge/ui-elements/register` imports or configure Vue's template compiler to recognize `vf-*` tags.
+The plugin registers VyrnForge's shared custom elements and the public `Vf*` Vue components. Consumers using those facade components do not need to copy `@vyrnforge/ui-elements/register` imports or configure Vue's template compiler to recognize `vf-*` tags.
 
 For advanced hosts that provide a custom element registry, use `createVyrnForgeVue({ elementRegistry })` or `installVyrnForgeVue(app, { elementRegistry })`.
 

@@ -23,7 +23,7 @@
     {
       "path": "packages/ui-components/package.json",
       "kind": "blob",
-      "sha1": "b2967ecca241b1df8f8b1b590a0fdad6089fdf28",
+      "sha1": "07900f801833eda2cea59cbc7e35cb1a2e11e7b4",
       "covers": [
         "package exports",
         "CSS entrypoints",
@@ -64,7 +64,7 @@
     {
       "path": "packages/ui-components/README.md",
       "kind": "blob",
-      "sha1": "74488982a2c520273476d780d5dad788013c1156",
+      "sha1": "0f8277e4a6bddfa0a35dc3367001b6e529de2f91",
       "covers": ["React package ownership and public consumption contract"]
     },
     {
@@ -187,6 +187,11 @@
       "task": "#647",
       "reason": "React package documentation ownership was clarified by removing a hand-maintained exhaustive component/maturity catalog and linking the canonical generated component reference, component metadata, and React public API guidance instead. Public exports, props, callbacks, refs, runtime behavior, CSS contracts, package setup, and compatibility policy are unchanged; only the reviewed package-README fingerprint is intentionally recaptured.",
       "evidence": "scripts/verify-documentation-current.mjs"
+    },
+    {
+      "task": "PA-2005",
+      "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
+      "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

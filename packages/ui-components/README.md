@@ -1,6 +1,12 @@
 # @vyrnforge/ui-components
 
-Native-first VyrnForge UI component primitives built with React, TypeScript, and CSS variables.
+First-class React components and primitives for VyrnForge UI, built with React,
+TypeScript, shared VyrnForge contracts, and CSS variables.
+
+The historical package name `@vyrnforge/ui-components` is retained for
+compatibility. It identifies the React-facing distribution package; it does not
+define canonical product scope or make React the owner of shared component
+semantics.
 
 ## Install
 

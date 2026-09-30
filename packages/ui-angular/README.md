@@ -1,8 +1,8 @@
 # @vyrnforge/ui-angular
 
-Angular facade workspace for VyrnForge canonical custom elements.
+First-class Angular integration package for VyrnForge UI.
 
-This workspace promotes Angular bindings generated from the same canonical VyrnForge component contracts used by the other framework surfaces. The directives adapt canonical `@vyrnforge/ui-elements` elements; they do not reimplement component behavior or styling.
+This package provides Angular bindings generated from the same shared VyrnForge component contracts used by the other first-class framework surfaces. The directives adapt the shared browser implementation in `@vyrnforge/ui-elements`; they do not reimplement component behavior or styling.
 
 ## Current surface
 
@@ -10,7 +10,7 @@ The package exposes the full supported 59-contract non-grid Angular facade catal
 
 Generated directives provide canonical selectors, typed input/output contracts, typed native-element references and method proxies, plus slot composition metadata/helpers. When a canonical property and output intentionally share the same Angular public name, the property remains a native Custom Element host binding while the directive owns the output alias; generated catalog metadata records those host-bound inputs.
 
-Angular Forms integration is available from the dedicated `@vyrnforge/ui-angular/forms` entrypoint. `VyrnForgeFormControlDirective` is a generic `ControlValueAccessor` and validator bridge for the supported form-associated VyrnForge controls. It delegates value, checked, disabled, touched, and validity behavior to the canonical Custom Elements rather than duplicating control behavior in Angular.
+Angular Forms integration is available from the dedicated `@vyrnforge/ui-angular/forms` entrypoint. `VyrnForgeFormControlDirective` is a generic `ControlValueAccessor` and validator bridge for the supported form-associated VyrnForge controls. It delegates value, checked, disabled, touched, and validity behavior to the shared VyrnForge Custom Elements rather than duplicating control behavior in Angular.
 
 The package is a publishable first-class artifact in the canonical non-grid beta release group. This README owns Angular package setup, Forms, events, composition, typed-reference, SSR, migration, limitation, and escape-hatch guidance. Generated per-component framework API details live in [`../../docs/generated/component-reference.json`](../../docs/generated/component-reference.json).
 

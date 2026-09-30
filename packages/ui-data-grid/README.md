@@ -1,6 +1,10 @@
 # @vyrnforge/ui-data-grid
 
-Lightweight native-first React + TypeScript Universal Data Grid package foundation.
+React + TypeScript enterprise data-management grid for VyrnForge UI.
+
+The current published grid surface is React-specific. Reusable grid contracts,
+state, algorithms, adapters, and styling foundations are being separated from
+that framework surface without claiming Native, Angular, or Vue grid parity.
 
 This package exposes generic contracts, pure core helpers, controlled/uncontrolled state hooks, native table rendering, column management, optional view-state persistence, and base CSS variables. Redux, MUI, TanStack, exporter engines, and domain-specific UI are intentionally not part of the package.
 
