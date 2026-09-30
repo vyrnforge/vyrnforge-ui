@@ -90,7 +90,7 @@ export function verifyMarkdownStructure({
       headingAncestors[level - 1] = title;
     }
 
-    for (let index = 0; index < lines.length; ) {
+    for (let index = 0; index < lines.length;) {
       if (!isPipeRow(lines[index])) {
         index += 1;
         continue;
