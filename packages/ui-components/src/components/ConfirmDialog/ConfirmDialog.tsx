@@ -33,7 +33,12 @@ export function ConfirmDialog({
       closeOnOverlayClick={!loading}
       description={description}
       footer={
-        <div className={adoptedOverlayRegionClassName("confirm-dialog", "actions")}>
+        <div
+          className={adoptedOverlayRegionClassName(
+            "confirm-dialog",
+            "actions",
+          )}
+        >
           <Button
             disabled={!behavior.canCancel}
             onClick={behavior.cancel}
