@@ -297,7 +297,7 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
       const input = document.createElement("input");
       input.type = "radio";
       input.className = "vf-rating__input";
-      input.name = this.name || "vf-rating";
+      input.name = "vf-rating";
       input.value = String(candidate);
       input.dataset.value = String(candidate);
       input.checked = candidate === this.value;
