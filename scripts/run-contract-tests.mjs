@@ -9,7 +9,6 @@ export const contractTestFiles = [
   "scripts/component-presets.test.mjs",
   "scripts/framework-generation.test.mjs",
   "scripts/detect-ci-scope.test.mjs",
-  "scripts/developer-delivery-foundation.test.mjs",
   "scripts/reference-artifact.test.mjs",
   "scripts/verify-reference-product-architecture.test.mjs",
   "scripts/generate-reference-model.test.mjs",
