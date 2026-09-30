@@ -105,7 +105,7 @@ export function createCoverageReport() {
     unknownExceptionScopes: [...unknownExceptionScopes].sort(),
     duplicateContractIds: [...new Set(duplicateContractIds)].sort(),
     ambiguous,
-    g10Ready:
+    contractReady:
       needsContractData.length === 0 &&
       unknownContractIds.length === 0 &&
       unknownExceptionScopes.size === 0 &&
@@ -120,7 +120,7 @@ if (
 ) {
   const report = createCoverageReport();
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-  if (process.argv.includes("--require-g10-ready") && !report.g10Ready) {
+  if (process.argv.includes("--require-contract-ready") && !report.contractReady) {
     process.exitCode = 1;
   }
 }
