@@ -142,15 +142,21 @@ export function Menu({
             type="button"
           >
             <span className="vf-menu-item__main">
-              <span className={adoptedItemRegionClassName("menu", "label")}>{item.label}</span>
+              <span className={adoptedItemRegionClassName("menu", "label")}>
+                {item.label}
+              </span>
               {item.description && (
-                <span className={adoptedItemRegionClassName("menu", "description")}>
+                <span
+                  className={adoptedItemRegionClassName("menu", "description")}
+                >
                   {item.description}
                 </span>
               )}
             </span>
             {item.shortcut && (
-              <span className={adoptedItemRegionClassName("menu", "shortcut")}>{item.shortcut}</span>
+              <span className={adoptedItemRegionClassName("menu", "shortcut")}>
+                {item.shortcut}
+              </span>
             )}
           </button>
         ))}
