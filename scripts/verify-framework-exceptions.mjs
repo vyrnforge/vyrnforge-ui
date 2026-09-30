@@ -49,9 +49,10 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   const live = registry.exceptions.filter(({ state }) =>
     ["active", "retiring"].includes(state),
   );
-  assert.ok(
-    live.length > 0,
-    "at least one live framework exception is expected",
+  assert.equal(
+    live.length,
+    0,
+    "SC-2108 reconciliation must not leave an evidence-satisfied exception live",
   );
 
   for (const entry of live) {
