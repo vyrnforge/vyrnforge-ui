@@ -10,6 +10,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { isPublicNonGridBetaComponent } from "./non-grid-component-scope.mjs";
 import { verifyBetaScope } from "./verify-beta-scope.mjs";
 
 const repositoryRoot = path.resolve(
@@ -77,8 +78,7 @@ test("rejects a regressed Angular component support claim", () =>
     (root) => {
       mutateJson(root, "docs/metadata/components.json", (value) => {
         const component = value.components.find(
-          (entry) =>
-            entry.package === "@vyrnforge/ui-components" && entry.publicExport,
+          (entry) => isPublicNonGridBetaComponent(entry),
         );
         component.frameworkParity.angular.status = "planned-gmf4";
       });
@@ -99,8 +99,7 @@ test("rejects a missing canonical component document", () =>
     (root) => {
       mutateJson(root, "docs/metadata/components.json", (value) => {
         const component = value.components.find(
-          (entry) =>
-            entry.package === "@vyrnforge/ui-components" && entry.publicExport,
+          (entry) => isPublicNonGridBetaComponent(entry),
         );
         component.docsPath = "docs/api/does-not-exist.md";
       });
