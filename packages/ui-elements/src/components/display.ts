@@ -228,7 +228,10 @@ export const VyrnForgeCaptionElement = createVyrnForgeDisplayElement(
   displayConfig(vyrnForgeHostAdoptionContracts.caption),
 );
 export const VyrnForgeLabelElement = createVyrnForgeDisplayElement(
-  displayConfig(vyrnForgeHostAdoptionContracts.label, { labelProxy: true }),
+  displayConfig(vyrnForgeHostAdoptionContracts.label, {
+    defaults: { size: "md", tone: "default" },
+    labelProxy: true,
+  }),
 );
 export const VyrnForgeCodeTextElement = createVyrnForgeDisplayElement(
   displayConfig(vyrnForgeHostAdoptionContracts["code-text"]),
