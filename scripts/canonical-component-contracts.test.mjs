@@ -327,7 +327,10 @@ test("Progress keeps a semantic, state-free cross-framework contract", () => {
       rule.includes("determinate and indeterminate"),
     ),
   );
-  assert.equal(contract.frameworkMappings.native.implementationState, "current");
+  assert.equal(
+    contract.frameworkMappings.native.implementationState,
+    "current",
+  );
   for (const framework of ["react", "angular", "vue"]) {
     assert.equal(
       contract.frameworkMappings[framework].implementationState,
