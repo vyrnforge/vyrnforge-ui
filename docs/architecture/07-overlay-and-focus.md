@@ -81,7 +81,6 @@ dependency.
 Framework packages own only their lifecycle/DI/composable integration. They do
 not own a separate toast store, timer scheduler, or application-state contract.
 
-
 ## Shared overlay adoption contract
 
 SC-2107 records overlay composition capabilities in `@vyrnforge/ui-elements` without moving framework content into the shared layer. Dialog, Drawer, Popover, Tooltip, Toast, ConfirmDialog, and Autocomplete share canonical region identities plus capability metadata for controlled open state, portal targeting, anchored placement, trigger ownership, focus containment/restoration, rich content, and lifecycle behavior.
