@@ -147,7 +147,9 @@ test.describe("EL-6005 through EL-6011 native core elements", () => {
   });
 
 
-  test("supports shared focus and multi-value form semantics", async ({ page }) => {
+  test("supports shared focus and multi-value form semantics", async ({
+    page,
+  }) => {
     await page.evaluate(() => {
       const form = document.createElement("form");
       form.id = "sc-2105-form";
