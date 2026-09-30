@@ -50,6 +50,8 @@ export interface ToastService<TPayload = unknown> {
   triggerAction(id: string): boolean;
   setMaxVisible(maxVisible: number): boolean;
   setNewestOnTop(newestOnTop: boolean): boolean;
+  start(): void;
+  stop(): void;
   destroy(): void;
 }
 
@@ -88,6 +90,7 @@ export function createToastService<TPayload = unknown>(
   });
   const timers = new Map<string, TimerState>();
   const pausedRemaining = new Map<string, number>();
+  let active = true;
   let destroyed = false;
 
   function clearTimer(id: string): void {
@@ -122,7 +125,7 @@ export function createToastService<TPayload = unknown>(
   }
 
   function reconcileTimers(snapshot: ToastBehaviorSnapshot<TPayload>): void {
-    if (destroyed) return;
+    if (destroyed || !active) return;
     const visibleIds = new Set(
       snapshot.visibleRecords.map((record) => record.id),
     );
@@ -221,11 +224,21 @@ export function createToastService<TPayload = unknown>(
       if (changed) reconcileTimers(controller.getSnapshot());
       return changed;
     },
+    start() {
+      if (destroyed || active) return;
+      active = true;
+      reconcileTimers(controller.getSnapshot());
+    },
+    stop() {
+      if (destroyed || !active) return;
+      active = false;
+      for (const id of timers.keys()) clearTimer(id);
+    },
     destroy() {
       if (destroyed) return;
+      service.stop();
       destroyed = true;
       unsubscribeSnapshot();
-      for (const id of timers.keys()) clearTimer(id);
       pausedRemaining.clear();
     },
   };
