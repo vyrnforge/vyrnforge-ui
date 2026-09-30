@@ -15,11 +15,7 @@ export function Caption({
 
   return (
     <Component
-      className={resolveAdoptedHostClassName(
-        "caption",
-        { tone },
-        className,
-      )}
+      className={resolveAdoptedHostClassName("caption", { tone }, className)}
       {...props}
     />
   );
