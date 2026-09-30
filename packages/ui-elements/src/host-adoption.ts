@@ -90,7 +90,11 @@ export const vyrnForgeItemCompositionContracts = Object.freeze({
       { name: "icon", className: "vf-side-nav__icon" },
       { name: "label", className: "vf-side-nav__label", required: true },
       { name: "badge", className: "vf-side-nav__badge" },
-      { name: "children", className: "vf-side-nav__children", multiplicity: "multiple" },
+      {
+        name: "children",
+        className: "vf-side-nav__children",
+        multiplicity: "multiple",
+      },
     ],
   }),
   "segmented-control": itemCompositionContract({
@@ -120,10 +124,22 @@ export const vyrnForgeItemCompositionContracts = Object.freeze({
     identityProperty: "value",
     valueProperty: "value",
     disabledProperty: "disabled",
-    capabilities: ["filter", "multiple-selection", "repeated-form-value", "roving-focus"],
+    capabilities: [
+      "filter",
+      "multiple-selection",
+      "repeated-form-value",
+      "roving-focus",
+    ],
     regions: [
-      { name: "label", className: "vf-multi-select__option-label", required: true },
-      { name: "description", className: "vf-multi-select__option-description" },
+      {
+        name: "label",
+        className: "vf-multi-select__option-label",
+        required: true,
+      },
+      {
+        name: "description",
+        className: "vf-multi-select__option-description",
+      },
     ],
   }),
   "transfer-list": itemCompositionContract({
@@ -131,10 +147,22 @@ export const vyrnForgeItemCompositionContracts = Object.freeze({
     identityProperty: "value",
     valueProperty: "value",
     disabledProperty: "disabled",
-    capabilities: ["filter", "multiple-selection", "repeated-form-value", "roving-focus"],
+    capabilities: [
+      "filter",
+      "multiple-selection",
+      "repeated-form-value",
+      "roving-focus",
+    ],
     regions: [
-      { name: "label", className: "vf-transfer-list__option-label", required: true },
-      { name: "description", className: "vf-transfer-list__option-description" },
+      {
+        name: "label",
+        className: "vf-transfer-list__option-label",
+        required: true,
+      },
+      {
+        name: "description",
+        className: "vf-transfer-list__option-description",
+      },
       { name: "option", className: "vf-transfer-list__option-content" },
     ],
   }),
