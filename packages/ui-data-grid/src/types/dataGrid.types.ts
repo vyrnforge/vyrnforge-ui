@@ -1,58 +1,36 @@
 import type { CSSProperties, ReactNode } from "react";
 import type {
-  DataGridColumnDef,
-  DataGridColumnSizingState,
-  DataGridColumnVisibilityState,
-} from "./column.types";
-import type { DataGridFilter, DataGridSort } from "./filter.types";
+  DataGridDensity,
+  DataGridGroupingState,
+  DataGridPersistedState,
+  DataGridPersistenceAdapter,
+  DataGridQueryChange,
+  DataGridRowId,
+  DataGridSelectionMode,
+  DataGridSelectionScope,
+  DataGridState,
+} from "../foundation/types";
+export type {
+  DataGridDensity,
+  DataGridGroupingState,
+  DataGridPaginationState,
+  DataGridPersistKey,
+  DataGridPersistedState,
+  DataGridPersistenceAdapter,
+  DataGridQueryChange,
+  DataGridRowId,
+  DataGridSelectionMode,
+  DataGridSelectionScope,
+  DataGridState,
+} from "../foundation/types";
+import type { DataGridColumnDef } from "./column.types";
 import type { DataGridThemeVars } from "../theme/dataGridTheme.types";
-
-export type DataGridDensity = "compact" | "standard" | "comfortable";
-
-export type DataGridPersistKey =
-  | "search"
-  | "filters"
-  | "sort"
-  | "pagination"
-  | "columnVisibility"
-  | "columnOrder"
-  | "columnSizing"
-  | "grouping"
-  | "density";
-
-export type DataGridRowId = string | number;
-
-export type DataGridSelectionMode = "none" | "single" | "multiple";
-
-export type DataGridSelectionScope = "page" | "filtered" | "allMatchingQuery";
-
-export type DataGridPaginationState = {
-  pageIndex: number;
-  pageSize: number;
-};
-
-export type DataGridGroupingState = string[];
 
 export type DataGridDefaultExpandedGroups = "none" | "all" | string[];
 
 export type DataGridGroupPathItem = {
   columnId: string;
   value: unknown;
-};
-
-export type DataGridState = {
-  search: string;
-  filters: DataGridFilter[];
-  sort: DataGridSort[];
-  sorting?: DataGridSort[];
-  grouping: DataGridGroupingState;
-  expandedGroupIds: string[];
-  pagination: DataGridPaginationState;
-  columnVisibility: DataGridColumnVisibilityState;
-  columnOrder: string[];
-  columnSizing: DataGridColumnSizingState;
-  selectedRowIds: DataGridRowId[];
-  density: DataGridDensity;
 };
 
 export type DataGridBulkActionVariant = "default" | "primary" | "danger";
@@ -128,41 +106,10 @@ export type DataGridBulkAction<
 
 export type DataGridStateChangeHandler = (nextState: DataGridState) => void;
 
-export type DataGridQueryChange = Pick<
-  DataGridState,
-  "search" | "filters" | "sort" | "grouping" | "pagination"
->;
-
 export type DataGridTheme =
   "light" | "dark" | "system" | "enterprise" | (string & {});
 
 export type DataGridVariant = "plain" | "card" | "bordered";
-
-export type DataGridPersistedState = Partial<
-  Pick<
-    DataGridState,
-    | "search"
-    | "filters"
-    | "sort"
-    | "pagination"
-    | "columnVisibility"
-    | "columnOrder"
-    | "columnSizing"
-    | "grouping"
-    | "density"
-  >
->;
-
-export type DataGridPersistenceAdapter = {
-  load: (
-    tableId: string,
-  ) => DataGridPersistedState | null | Promise<DataGridPersistedState | null>;
-  save: (
-    tableId: string,
-    state: DataGridPersistedState,
-  ) => void | Promise<void>;
-  clear?: (tableId: string) => void | Promise<void>;
-};
 
 export type UniversalDataGridProps<
   RowData extends Record<string, unknown> = Record<string, unknown>,

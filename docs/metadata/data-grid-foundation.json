@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "task": "PA-2008",
+  "package": "@vyrnforge/ui-data-grid",
+  "status": "internal-foundation-seam",
+  "purpose": "Separate reusable Data Grid contracts, state primitives, algorithms, keyboard navigation, and theme contracts from React-specific rendering without changing the current React alpha public package.",
+  "neutralZones": [
+    "packages/ui-data-grid/src/foundation",
+    "packages/ui-data-grid/src/state"
+  ],
+  "reactAdapterZones": [
+    "packages/ui-data-grid/src/components",
+    "packages/ui-data-grid/src/hooks",
+    "packages/ui-data-grid/src/theme/dataGridTheme.types.ts"
+  ],
+  "extractedConcerns": [
+    "filters",
+    "sorting",
+    "search",
+    "pagination",
+    "row-selection",
+    "keyboard-navigation",
+    "column-contracts",
+    "grid-state-contracts",
+    "persistence-contracts",
+    "theme-contracts"
+  ],
+  "boundaryPolicy": {
+    "forbiddenImports": [
+      "react",
+      "react-dom",
+      "vue",
+      "@angular/*",
+      "@vyrnforge/ui-components"
+    ],
+    "verifier": "scripts/verify-package-boundaries.mjs"
+  },
+  "compatibility": {
+    "publicPackageUnchanged": true,
+    "reactAlphaApiPreserved": true,
+    "publicSubpathAdded": false
+  },
+  "frameworkClaims": {
+    "react": "current-alpha-surface",
+    "native-html": "not-claimed",
+    "angular": "not-claimed",
+    "vue": "not-claimed"
+  },
+  "exclusions": [
+    "Bulk Action feature work",
+    "Filter Drawer feature work",
+    "Saved View feature work",
+    "Export Preview feature work",
+    "framework-specific grid adapters"
+  ]
+}

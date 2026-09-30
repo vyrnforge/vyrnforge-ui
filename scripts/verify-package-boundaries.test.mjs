@@ -133,6 +133,17 @@ test("checks CSS imports and ignores test fixtures", () => {
   );
 });
 
+test("keeps the Data Grid foundation framework-neutral", () => {
+  const failures = verifyFixture("invalid");
+  assert(
+    failures.some((failure) =>
+      failure.includes(
+        "ui-data-grid/src/foundation/react-leak.ts: Data Grid neutral foundation must not import framework runtime or React distribution react",
+      ),
+    ),
+  );
+});
+
 test("rejects DOM globals from framework-neutral behaviors", () => {
   const failures = verifyFixture("invalid");
   assert(
