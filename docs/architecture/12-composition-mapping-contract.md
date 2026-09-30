@@ -67,3 +67,32 @@ If a framework cannot preserve a canonical region through the declared generic m
 ## Acceptance mapping
 
 This contract defines deterministic native slot, React children/prop, Angular projection/template, and Vue slot mappings for representative action, form, navigation, collection, and overlay patterns. Handwritten component-specific mapping remains an explicit exception rather than a default.
+
+## Native-host and named-region adoption
+
+Canonical composition does not require replacing a framework's documented
+native root with a Custom Element host. When tag identity, native attributes,
+event currentTarget behavior, or framework ref typing are part of the public
+surface, an adapter may adopt the shared browser contract onto that native host.
+
+`@vyrnforge/ui-elements` owns framework-neutral host-adoption descriptors for
+the affected typography and layout surfaces. A descriptor records:
+
+- the canonical VyrnForge base class and modifier rules;
+- the allowed/default native host tag policy where tag selection is public;
+- named semantic regions and their shared class names;
+- no ReactNode, Vue VNode, Angular TemplateRef, or framework lifecycle type.
+
+React native-host adapters consume those descriptors while continuing to render
+their documented native tags. Custom Elements consume the same class and
+named-region descriptors on their own hosts and internal Light DOM. Adapter
+defaults may remain surface-specific when an existing public contract differs;
+the shared descriptor must not silently change a surface merely for symmetry.
+
+Named regions standardize meaning and styling identity, not one mandatory DOM
+wrapper tag. A surface may preserve an existing semantic wrapper when changing
+that wrapper would alter a public DOM or accessibility contract.
+
+This adoption model is the reusable foundation for SC-2104 and a prerequisite
+for richer collection and overlay adoption in SC-2106 and SC-2107.
+
