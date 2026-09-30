@@ -1,8 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   createOverlayLayerRegistry,
+  findOverlayCompositionRegion,
   createOverlayLifecycleController,
   resolveOverlayPosition,
+  overlayCompositionContracts,
 } from "./overlay";
 
 const anchor = {
@@ -75,6 +77,36 @@ describe("overlay lifecycle behavior", () => {
     controller.dispatch({ type: "sync", open: true });
 
     expect(controller.getSnapshot().open).toBe(true);
+  });
+
+  it("describes rich overlay and autocomplete composition without framework values", () => {
+    expect(overlayCompositionContracts.dialog.capabilities).toContain(
+      "focus-restoration",
+    );
+    expect(overlayCompositionContracts.popover.capabilities).toContain(
+      "anchored-placement",
+    );
+    expect(overlayCompositionContracts.toast.capabilities).toContain(
+      "service-lifecycle",
+    );
+    expect(overlayCompositionContracts.autocomplete.capabilities).toEqual(
+      expect.arrayContaining([
+        "controlled-value",
+        "controlled-input",
+        "controlled-open",
+        "custom-filter",
+        "custom-option",
+        "anchored-placement",
+        "portal",
+        "roving-focus",
+      ]),
+    );
+    expect(findOverlayCompositionRegion("confirm-dialog", "confirm-action")).toEqual(
+      expect.objectContaining({ name: "confirm-action" }),
+    );
+    expect(findOverlayCompositionRegion("autocomplete", "option")).toEqual(
+      expect.objectContaining({ multiplicity: "multiple", required: true }),
+    );
   });
 });
 
