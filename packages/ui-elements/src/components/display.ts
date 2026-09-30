@@ -257,15 +257,9 @@ export const VyrnForgeStackElement = createVyrnForgeDisplayElement(
 export const VyrnForgeInlineElement = createVyrnForgeDisplayElement(
   displayConfig(vyrnForgeHostAdoptionContracts.inline),
 );
-export const VyrnForgePageElement = createVyrnForgeDisplayElement({
-  baseClass: "vf-page",
-  defaults: { density: "standard", maxWidth: "lg" },
-  role: "main",
-  modifiers: [
-    { property: "maxWidth", prefix: "vf-page--max-" },
-    { property: "density", prefix: "vf-page--" },
-  ],
-});
+export const VyrnForgePageElement = createVyrnForgeDisplayElement(
+  displayConfig(vyrnForgeHostAdoptionContracts.page, { role: "main" }),
+);
 export const VyrnForgeSectionElement = createVyrnForgeDisplayElement(
   displayConfig(vyrnForgeHostAdoptionContracts.section, { role: "region" }),
 );
