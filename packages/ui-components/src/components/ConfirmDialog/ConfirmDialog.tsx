@@ -1,4 +1,5 @@
 import { useConfirmDialogBehavior } from "../../internal/behaviors";
+import { adoptedOverlayRegionClassName } from "../../internal/hostAdoption";
 import { Button } from "../Button";
 import { Dialog } from "../Dialog";
 import type { ConfirmDialogProps } from "./ConfirmDialog.types";
@@ -32,7 +33,7 @@ export function ConfirmDialog({
       closeOnOverlayClick={!loading}
       description={description}
       footer={
-        <div className="vf-confirm-dialog__actions">
+        <div className={adoptedOverlayRegionClassName("confirm-dialog", "actions")}>
           <Button
             disabled={!behavior.canCancel}
             onClick={behavior.cancel}
