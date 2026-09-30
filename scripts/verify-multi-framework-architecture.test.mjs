@@ -114,14 +114,37 @@ test("allows staged current/target renderer mappings", () => {
   assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
 });
 
-test("rejects an unsupported renderer status during staged rollout", () => {
+test("rejects support rank drift independently from implementation state", () => {
   withRepositoryFixture(
     (root) => {
       mutateJson(root, "docs/metadata/component-contracts.json", (value) => {
         const descriptionList = value.componentContracts.find(
           (contract) => contract.id === "description-list",
         );
-        descriptionList.frameworkMappings.react.status = "planned";
+        descriptionList.frameworkMappings.vue.supportLevel = "secondary";
+      });
+    },
+    (root) => {
+      const failures = verifyMultiFrameworkArchitecture({ root });
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "description-list vue support level must be first-class",
+          ),
+        ),
+      );
+    },
+  );
+});
+
+test("rejects an unsupported implementation state during staged rollout", () => {
+  withRepositoryFixture(
+    (root) => {
+      mutateJson(root, "docs/metadata/component-contracts.json", (value) => {
+        const descriptionList = value.componentContracts.find(
+          (contract) => contract.id === "description-list",
+        );
+        descriptionList.frameworkMappings.react.implementationState = "planned";
       });
     },
     (root) => {
