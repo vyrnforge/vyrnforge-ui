@@ -1,31 +1,24 @@
 # Non-Grid Canonical Contract Coverage
 
-- Task: MFD-1010
-- Depends on: MFD-1005, MFD-1006, MFD-1007, MFD-1008
+- Status: Accepted coverage contract
 - Canonical catalog: `docs/metadata/components.json`
 - Canonical contract source: `docs/metadata/component-contracts.json`
 - Exception source: `docs/metadata/framework-exceptions.json`
 
 ## Purpose
 
-> **Historical program note:** this S11 inventory used the then-established
-> React package export catalog as its bounded migration scope. That package
-> filter is not the VyrnForge product model and must not be interpreted as React
-> owning canonical component semantics. Current product scope is defined by the
-> framework-neutral catalog/contracts and the equal Native/React/Angular/Vue
-> surface model in Project Source of Truth.
-
-S11 generation must not discover public component semantics by reading React,
-Angular, Vue, or Custom Element implementation source. Before generation begins,
-every supported public non-grid component therefore needs an explicit coverage
-classification against the schema-v2 canonical contract model.
+Framework generation and integration must not discover public component
+semantics by reading React, Angular, Vue, or Custom Element implementation
+source. Every supported public non-grid component therefore needs an explicit
+coverage classification against the canonical component contract model.
 
 The inventory is **derived from canonical sources**, not maintained as another
-handwritten component list.
+handwritten component list. Package ownership is a distribution concern and
+does not define VyrnForge product semantics or rank framework surfaces.
 
 ## Inventory scope
 
-A component is in MFD-1010 scope when all of the following are true in
+A component is in scope when all of the following are true in
 `docs/metadata/components.json`:
 
 1. `publicExport` is `true`;
@@ -34,8 +27,8 @@ A component is in MFD-1010 scope when all of the following are true in
 
 The catalog `package` field records distribution ownership and is not a scope
 selector. The inventory intentionally excludes data-grid and grid-feature
-records; multi-framework data-grid work remains outside this historical
-S10-S15 coverage program.
+records because Data Grid is an optional advanced module with its own current
+implementation and release scope.
 
 ## Coverage states
 
@@ -43,10 +36,10 @@ Each in-scope component resolves to exactly one state:
 
 ### `contract-complete`
 
-A schema-v2 record exists in `component-contracts.json` and contains the
-canonical property, attribute, event, composition, method, form/model, ref,
-accessibility, and four-surface framework-mapping structures required by
-MFD-1005 through MFD-1008.
+A canonical record exists in `component-contracts.json` and contains the
+property, attribute, event, composition, method, form/model, ref,
+accessibility, and four-surface framework-mapping structures required by the
+current contract schema.
 
 ### `exception-required`
 
@@ -55,24 +48,24 @@ contract/generator path and has a matching active or retiring record in
 `framework-exceptions.json` whose scope names that component.
 
 This is not a shortcut for incomplete contract work. The exception must satisfy
-ADR-008 and have technical evidence, ownership, tests/evidence, and exit
-criteria.
+[ADR-008](adr-008-framework-exception-policy.md) and have technical evidence,
+ownership, tests/evidence, and exit criteria.
 
 ### `needs-contract-data`
 
 The component is part of the supported public non-grid catalog but does not yet
-have a complete schema-v2 record and is not covered by an allowed framework
+have a complete canonical record and is not covered by an allowed framework
 exception.
 
-This state is valid for the inventory while S10 is being completed, but **G10
-cannot close while any component remains in this state**.
+This is a valid transient inventory state, but repository readiness cannot treat
+the component as contract-complete while it remains unresolved.
 
 ## Deterministic classification
 
 For each scoped component id:
 
 1. find the same id in `componentContracts`;
-2. if a complete schema-v2 record exists, classify `contract-complete`;
+2. if a complete current-schema record exists, classify `contract-complete`;
 3. otherwise find active/retiring exception records whose declared scope covers
    the component;
 4. if such an exception exists, classify `exception-required`;
@@ -80,22 +73,21 @@ For each scoped component id:
 
 Canonical contract records may be authored before a catalog component becomes
 public so shared semantics can be resolved before framework fan-out. Such
-contract-first records are valid when their id exists in the canonical component
-catalog; they do not enter G10 coverage totals until the component enters the
-public beta-included scope.
+contract-first records are valid when their id exists in the canonical
+component catalog; they do not enter public coverage totals until the component
+enters the public beta-included scope.
 
 Contract ids that do not refer to any canonical catalog component, and exception
 scopes that do not refer to a scoped catalog component, are verifier failures.
-Duplicate component ids are verifier failures.
-A component may not be both contract-complete and exception-required unless the
-exception scope is narrower than the whole component and explicitly identifies
-that narrower surface.
+Duplicate component ids are verifier failures. A component may not be both
+contract-complete and exception-required unless the exception scope is narrower
+than the whole component and explicitly identifies that narrower surface.
 
 ## Completeness rule
 
-MFD-1010 is inventory-complete when every scoped catalog record can be
-classified deterministically. **G10 contract readiness is stricter:** every
-scoped record must resolve to `contract-complete` or to a valid, narrowly scoped
+The inventory is complete when every scoped catalog record can be classified
+deterministically. Repository readiness is stricter: every scoped record must
+resolve to `contract-complete` or to a valid, narrowly scoped
 `exception-required` state.
 
 This distinction prevents missing components from disappearing from reports
@@ -124,10 +116,9 @@ maintained metadata array. The catalog owns component existence and support
 scope; canonical contracts own semantics; the exception registry owns approved
 technical divergence. Coverage is their deterministic join.
 
-## Acceptance mapping
+## Readiness mapping
 
-MFD-1010 requires a complete non-grid contract coverage inventory. This
-contract defines the entire supported non-grid catalog as the inventory domain,
+This contract defines the supported non-grid catalog as the coverage domain,
 assigns every record a deterministic coverage state, rejects unknown or
-ambiguous records, and makes zero unresolved contract-data entries a G10
-readiness requirement.
+ambiguous records, and requires zero unresolved contract-data entries for full
+contract readiness.
