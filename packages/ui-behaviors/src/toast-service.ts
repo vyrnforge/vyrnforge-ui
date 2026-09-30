@@ -1,6 +1,6 @@
+import type { BehaviorListener } from "./controller";
 import type {
   BehaviorEventListener,
-  BehaviorListener,
   BehaviorUnsubscribe,
 } from "./events";
 import {
@@ -62,11 +62,17 @@ interface TimerState {
 }
 
 function createDefaultScheduler(): ToastServiceScheduler {
+  const runtime = globalThis as unknown as {
+    setTimeout?: (callback: () => void, delay: number) => unknown;
+    clearTimeout?: (handle: unknown) => void;
+  };
+  if (!runtime.setTimeout || !runtime.clearTimeout) {
+    throw new Error("Toast service requires timer scheduling support.");
+  }
   return {
     now: () => Date.now(),
-    setTimeout: (callback, delay) => setTimeout(callback, delay),
-    clearTimeout: (handle) =>
-      clearTimeout(handle as ReturnType<typeof setTimeout>),
+    setTimeout: runtime.setTimeout.bind(globalThis),
+    clearTimeout: runtime.clearTimeout.bind(globalThis),
   };
 }
 
