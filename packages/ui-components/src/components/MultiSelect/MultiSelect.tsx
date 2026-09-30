@@ -266,11 +266,21 @@ export function MultiSelect({
                       {selected ? "✓" : ""}
                     </span>
                     <span className="vf-multi-select__option-main">
-                      <span className={adoptedItemRegionClassName("multi-select", "label")}>
+                      <span
+                        className={adoptedItemRegionClassName(
+                          "multi-select",
+                          "label",
+                        )}
+                      >
                         {option.label}
                       </span>
                       {option.description && (
-                        <span className={adoptedItemRegionClassName("multi-select", "description")}>
+                        <span
+                          className={adoptedItemRegionClassName(
+                            "multi-select",
+                            "description",
+                          )}
+                        >
                           {option.description}
                         </span>
                       )}
