@@ -269,7 +269,7 @@ export const overlayCompositionContracts: Readonly<
     kind: "autocomplete",
     regions: Object.freeze([
       { name: "trigger", required: true },
-      { name: "option", multiplicity: "multiple", required: true },
+      { name: "option", multiplicity: "multiple" as const, required: true },
       { name: "loading" },
       { name: "empty" },
     ]),
