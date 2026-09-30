@@ -430,10 +430,12 @@ function summarizeSurface(framework, records) {
     firstClass: records.filter(
       (record) => record.supportLevel === "first-class",
     ).length,
-    current: records.filter((record) => record.implementationState === "current")
-      .length,
-    target: records.filter((record) => record.implementationState === "target")
-      .length,
+    current: records.filter(
+      (record) => record.implementationState === "current",
+    ).length,
+    target: records.filter(
+      (record) => record.implementationState === "target",
+    ).length,
     migration: records.filter(
       (record) => record.implementationState === "migration",
     ).length,
