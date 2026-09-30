@@ -21,7 +21,7 @@ const repositoryRoot = path.resolve(
 function fixture(mutator, callback) {
   const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-first-class-"));
   try {
-    for (const entry of ["docs", "packages", "tests"]) {
+    for (const entry of ["docs", "packages", "tests", "scripts"]) {
       cpSync(path.join(repositoryRoot, entry), path.join(root, entry), {
         recursive: true,
       });
@@ -30,17 +30,6 @@ function fixture(mutator, callback) {
       path.join(repositoryRoot, "package.json"),
       path.join(root, "package.json"),
     );
-    for (const script of [
-      "verify-angular-catalog-coverage.mjs",
-      "verify-angular-peer-policy.mjs",
-      "verify-vue-catalog-coverage.mjs",
-      "verify-vue-model-matrix.mjs",
-      "verify-vue-ssr.mjs",
-    ]) {
-      const source = path.join(repositoryRoot, "scripts", script);
-      const target = path.join(root, "scripts", script);
-      cpSync(source, target, { recursive: true });
-    }
     mutator?.(root);
     callback(verifyFirstClassSurfaceVerification({ root }));
   } finally {
