@@ -248,15 +248,23 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
     this.setPropertyValue("value", this.#controller.normalize(Number(value)));
   }
 
+  override focus(options?: FocusOptions): void {
+    const radios = [
+      ...this.querySelectorAll<HTMLInputElement>("input[type=radio]"),
+    ];
+    const target = radios.find((radio) => radio.checked) ?? radios[0];
+    target?.focus(options);
+  }
+
   protected override connected(): void {
     this.captureInitialFormState(String(this.value));
+    this.addEventListener("change", this.handleChange);
     this.addEventListener("click", this.handleClick);
-    this.addEventListener("keydown", this.handleKeyDown);
   }
 
   protected override disconnected(): void {
+    this.removeEventListener("change", this.handleChange);
     this.removeEventListener("click", this.handleClick);
-    this.removeEventListener("keydown", this.handleKeyDown);
   }
 
   protected override resetFormState(state: string | undefined): void {
@@ -278,21 +286,32 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
     this.setAttribute("aria-label", this.label);
     this.replaceChildren();
     for (let candidate = 1; candidate <= this.max; candidate += 1) {
-      const button = document.createElement("button");
-      button.className = [
+      const label = document.createElement("label");
+      label.className = [
         "vf-rating__item",
         candidate <= this.value && "vf-rating__item--selected",
       ]
         .filter(Boolean)
         .join(" ");
-      button.type = "button";
-      button.dataset.value = String(candidate);
-      button.disabled = this.effectiveDisabled || this.readOnly;
-      button.setAttribute("role", "radio");
-      button.setAttribute("aria-checked", String(candidate === this.value));
-      button.setAttribute("aria-label", `${candidate} of ${this.max}`);
-      button.textContent = candidate <= this.value ? "★" : "☆";
-      this.append(button);
+
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.className = "vf-rating__input";
+      input.name = "";
+      input.value = String(candidate);
+      input.dataset.value = String(candidate);
+      input.checked = candidate === this.value;
+      input.disabled = this.effectiveDisabled || this.readOnly;
+      input.required = this.required && this.value === 0 && candidate === 1;
+      input.setAttribute("aria-label", `${candidate} of ${this.max} stars`);
+
+      const icon = document.createElement("span");
+      icon.className = "vf-rating__icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = candidate <= this.value ? "★" : "☆";
+
+      label.append(input, icon);
+      this.append(label);
     }
     this.setFormValue(
       this.value > 0 ? String(this.value) : null,
@@ -306,7 +325,7 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
     this.setAttribute("data-vf-element", "");
   }
 
-  private commit(value: number, reason: "keyboard" | "pointer"): void {
+  private commit(value: number, reason: "pointer"): void {
     if (this.effectiveDisabled || this.readOnly) return;
     const previousValue = this.value;
     const nextValue = this.allowClear && value === previousValue ? 0 : value;
@@ -321,17 +340,25 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
     );
   }
 
-  private readonly handleClick = (event: Event) => {
-    const button = (event.target as Element).closest<HTMLButtonElement>(
-      "[data-value]",
-    );
-    if (button) this.commit(Number(button.dataset.value), "pointer");
+  private readonly handleChange = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    if (input.matches("input[type=radio]") && input.checked) {
+      this.commit(Number(input.value), "pointer");
+    }
   };
 
-  private readonly handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-    event.preventDefault();
-    this.commit(this.value + (event.key === "ArrowRight" ? 1 : -1), "keyboard");
+  private readonly handleClick = (event: Event) => {
+    const input = (event.target as Element).closest<HTMLInputElement>(
+      "input[type=radio]",
+    );
+    if (
+      input?.checked &&
+      this.allowClear &&
+      Number(input.value) === this.value
+    ) {
+      event.preventDefault();
+      this.commit(Number(input.value), "pointer");
+    }
   };
 }
 

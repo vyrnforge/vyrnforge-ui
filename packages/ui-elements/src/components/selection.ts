@@ -283,14 +283,17 @@ export interface VyrnForgeSelectOption {
   readonly value: string;
 }
 
+export type VyrnForgeSelectValue = readonly string[] | string;
+
 export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<string> {
   static override readonly properties: VyrnForgePropertyDeclarations =
     Object.freeze({
       invalid: { reflect: true, type: "boolean" },
+      multiple: { reflect: true, type: "boolean" },
       options: { attribute: false },
       placeholder: { reflect: true, type: "string" },
       size: { reflect: true, type: "string" },
-      value: { reflect: true, type: "string" },
+      value: { attribute: false },
     });
 
   #select: HTMLSelectElement | null = null;
@@ -300,6 +303,13 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
   }
   set invalid(value: boolean) {
     this.setPropertyValue("invalid", Boolean(value));
+  }
+
+  get multiple(): boolean {
+    return this.getPropertyValue("multiple", false);
+  }
+  set multiple(value: boolean) {
+    this.setPropertyValue("multiple", Boolean(value));
   }
 
   get options(): readonly VyrnForgeSelectOption[] {
@@ -326,11 +336,17 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
     this.setPropertyValue("size", value);
   }
 
-  get value(): string {
-    return this.getPropertyValue("value", "");
+  get value(): VyrnForgeSelectValue {
+    return this.getPropertyValue<VyrnForgeSelectValue>(
+      "value",
+      this.multiple ? Object.freeze([]) : "",
+    );
   }
-  set value(value: string) {
-    this.setPropertyValue("value", value);
+  set value(value: VyrnForgeSelectValue) {
+    this.setPropertyValue(
+      "value",
+      Array.isArray(value) ? Object.freeze(value.map(String)) : String(value),
+    );
   }
 
   override focus(options?: FocusOptions): void {
@@ -338,7 +354,7 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
   }
 
   protected override connected(): void {
-    this.captureInitialFormState(this.value);
+    this.captureInitialFormState(this.serializeState(this.value));
     this.ensureSelect();
   }
 
@@ -347,14 +363,14 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
   }
 
   protected override resetFormState(state: string | undefined): void {
-    this.value = state ?? "";
+    this.value = this.deserializeState(state);
   }
 
   protected override restoreFormState(
     state: string,
     _mode: VyrnForgeFormStateRestoreMode,
   ): void {
-    this.value = state;
+    this.value = this.deserializeState(state);
   }
 
   protected override update(): void {
@@ -370,17 +386,27 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
       .join(" ");
     select.disabled = this.effectiveDisabled;
     select.required = this.required;
-    select.value = this.value;
+    select.multiple = this.multiple;
+    const values = Array.isArray(this.value) ? this.value : [this.value];
+    for (const option of select.options) {
+      option.selected = values.includes(option.value);
+    }
     select.setAttribute("aria-invalid", String(this.invalid));
 
-    const missing = this.required && this.value.length === 0;
-    this.setFormValue(this.value, this.value);
+    const selectedValues = this.selectedValues(select);
+    const missing = this.required && selectedValues.length === 0;
+    this.setFormValue(
+      this.multiple
+        ? this.createFormData(selectedValues)
+        : (selectedValues[0] ?? ""),
+      this.serializeState(this.value),
+    );
     this.setValidity(
       missing ? { valueMissing: true } : {},
       missing ? "Select a value." : "",
       select,
     );
-    this.dataset.value = this.value;
+    this.dataset.value = selectedValues.join(",");
     this.setAttribute("data-vf-element", "");
   }
 
@@ -427,10 +453,40 @@ export class VyrnForgeSelectElement extends VyrnForgeFormAssociatedElement<strin
     }
   }
 
+  private selectedValues(select: HTMLSelectElement): string[] {
+    return [...select.selectedOptions].map((option) => option.value);
+  }
+
+  private serializeState(value: VyrnForgeSelectValue): string {
+    return JSON.stringify(Array.isArray(value) ? value : [value]);
+  }
+
+  private deserializeState(state: string | undefined): VyrnForgeSelectValue {
+    if (!state) return this.multiple ? Object.freeze([]) : "";
+    try {
+      const values = JSON.parse(state) as string[];
+      return this.multiple
+        ? Object.freeze(values.map(String))
+        : String(values[0] ?? "");
+    } catch {
+      return this.multiple ? Object.freeze([state]) : state;
+    }
+  }
+
+  private createFormData(values: readonly string[]): FormData | null {
+    if (!this.name) return null;
+    const data = new FormData();
+    for (const value of values) data.append(this.name, value);
+    return data;
+  }
+
   private readonly handleChange = (event: Event) => {
-    const value = (event.currentTarget as HTMLSelectElement).value;
+    const select = event.currentTarget as HTMLSelectElement;
+    const value = this.multiple
+      ? Object.freeze(this.selectedValues(select))
+      : select.value;
     const previousValue = this.value;
-    if (value === previousValue) return;
+    if (JSON.stringify(value) === JSON.stringify(previousValue)) return;
     this.value = value;
     this.dispatchEvent(
       new CustomEvent("vf-value-change", {
@@ -477,6 +533,12 @@ export class VyrnForgeRadioGroupElement extends VyrnForgeDomElement {
   }
   set value(value: string) {
     this.setPropertyValue("value", value);
+  }
+
+  override focus(options?: FocusOptions): void {
+    const enabled = this.radios.filter((radio) => !radio.disabled);
+    const target = enabled.find((radio) => radio.checked) ?? enabled[0];
+    target?.focus(options);
   }
 
   protected override connected(): void {

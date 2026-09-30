@@ -80,6 +80,7 @@ export {
   type VyrnForgeChoiceControlElementConstructor,
   type VyrnForgeChoiceControlKind,
   type VyrnForgeSelectOption,
+  type VyrnForgeSelectValue,
 } from "./selection";
 export {
   VyrnForgeRatingElement,

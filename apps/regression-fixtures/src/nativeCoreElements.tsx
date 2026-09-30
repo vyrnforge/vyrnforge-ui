@@ -128,6 +128,19 @@ export function NativeCoreElementsFixture() {
     ]);
     select.dataset.vfFixtureControl = "native-select";
 
+    const multiSelect = document.createElement("vf-select") as ElementInstance<
+      typeof VyrnForgeSelectElement
+    >;
+    multiSelect.name = "scope";
+    multiSelect.multiple = true;
+    multiSelect.value = Object.freeze(["read", "write"]);
+    multiSelect.options = Object.freeze([
+      { label: "Read", value: "read" },
+      { label: "Write", value: "write" },
+      { label: "Admin", value: "admin" },
+    ]);
+    multiSelect.dataset.vfFixtureControl = "native-multi-select";
+
     const slider = document.createElement("vf-slider") as ElementInstance<
       typeof VyrnForgeSliderElement
     >;
@@ -163,7 +176,16 @@ export function NativeCoreElementsFixture() {
         .join(", ");
       formOutput.textContent = entries || "No native form value";
     });
-    form.append(field, checkbox, select, slider, rating, submit, formOutput);
+    form.append(
+      field,
+      checkbox,
+      select,
+      multiSelect,
+      slider,
+      rating,
+      submit,
+      formOutput,
+    );
 
     const segmentedOutput = createOutput(
       document,
