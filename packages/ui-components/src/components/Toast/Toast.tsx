@@ -57,12 +57,24 @@ export function Toast({
         <Icon name={toneIconMap[resolvedTone]} />
       </span>
       <span className={adoptedOverlayRegionClassName("toast", "content")}>
-        {title && <strong className={adoptedOverlayRegionClassName("toast", "title")}>{title}</strong>}
+        {title && (
+          <strong className={adoptedOverlayRegionClassName("toast", "title")}>
+            {title}
+          </strong>
+        )}
         {description && (
-          <span className={adoptedOverlayRegionClassName("toast", "description")}>{description}</span>
+          <span
+            className={adoptedOverlayRegionClassName("toast", "description")}
+          >
+            {description}
+          </span>
         )}
       </span>
-      {action && <span className={adoptedOverlayRegionClassName("toast", "action")}>{action}</span>}
+      {action && (
+        <span className={adoptedOverlayRegionClassName("toast", "action")}>
+          {action}
+        </span>
+      )}
       {dismissible && (
         <IconButton
           aria-label="Dismiss notification"
