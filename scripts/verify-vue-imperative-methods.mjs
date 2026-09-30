@@ -12,7 +12,8 @@ const model = createFrameworkGenerationModel(
 );
 const records = model.surfaces.vue.components.filter(
   (record) =>
-    ["current", "target"].includes(record.implementationState) && record.methods.length > 0,
+    ["current", "target"].includes(record.implementationState) &&
+    record.methods.length > 0,
 );
 if (records.length !== 23) {
   throw new Error(
