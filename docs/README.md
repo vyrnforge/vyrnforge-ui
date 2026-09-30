@@ -22,7 +22,7 @@ reuse between packages does not create a product hierarchy.
 6. Use [Releases and Migration](release/multi-framework-migration-and-limitations.md)
    when upgrading or choosing framework integration.
 
-## First-class surfaces
+## Framework surfaces
 
 - Native HTML / Custom Elements: `@vyrnforge/ui-elements`
 - React: `@vyrnforge/ui-components`
@@ -33,7 +33,7 @@ These package names are current distribution details. They do not assign product
 ownership. In particular, `@vyrnforge/ui-components` is the current React
 package name; the canonical VyrnForge component model is framework-neutral.
 
-## Advanced UI modules
+## Data grid
 
 Advanced capabilities are VyrnForge modules below the common UI system, not
 additional framework surfaces.
