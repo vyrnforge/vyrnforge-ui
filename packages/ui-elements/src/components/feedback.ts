@@ -1,8 +1,8 @@
 import {
   createConfirmDialogController,
-  createToastController,
+  createToastService,
   type ConfirmDialogController,
-  type ToastBehaviorController,
+  type ToastService,
 } from "@vyrnforge/ui-behaviors";
 import type { VyrnForgePropertyDeclarations } from "../base/VyrnForgeElement";
 import { VyrnForgeDomElement } from "./dom";
@@ -182,8 +182,7 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
       records: { attribute: false },
     });
 
-  #controller: ToastBehaviorController<ToastPayload> = this.createController();
-  readonly #timers = new Map<string, ReturnType<typeof setTimeout>>();
+  readonly #service: ToastService<ToastPayload> = this.createService();
 
   get defaultDuration(): number {
     return this.getPropertyValue("defaultDuration", 5000);
@@ -202,7 +201,7 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
   }
   set maxVisible(value: number) {
     const normalized = Math.max(0, Math.trunc(Number(value)));
-    this.#controller.setMaxVisible(normalized);
+    this.#service.setMaxVisible(normalized);
     this.setPropertyValue("maxVisible", normalized);
   }
   get newestOnTop(): boolean {
@@ -210,7 +209,7 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
   }
   set newestOnTop(value: boolean) {
     const normalized = Boolean(value);
-    this.#controller.setNewestOnTop(normalized);
+    this.#service.setNewestOnTop(normalized);
     this.setPropertyValue("newestOnTop", normalized);
   }
   get position(): VyrnForgeToastPosition {
@@ -224,16 +223,14 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
   }
   set records(value: readonly VyrnForgeToastRecord[]) {
     const normalized = Object.freeze([...(value ?? [])]);
-    this.#controller.dismissAll();
+    this.#service.dismissAll();
     for (const record of normalized) this.add(record);
     this.setPropertyValue("records", normalized);
   }
 
   add(record: VyrnForgeToastRecord): string {
-    const id =
-      record.id || `toast-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    this.#controller.add({
-      id,
+    const id = this.#service.add({
+      id: record.id || undefined,
       payload: {
         actionLabel: record.actionLabel,
         description: record.description,
@@ -244,15 +241,13 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
       dismissible: record.dismissible,
       createdAt: record.createdAt,
     });
-    this.scheduleDismiss(id);
     this.syncRecords();
     this.dispatchTypedEvent("vf-toast-change", { action: "add", id });
     return id;
   }
 
   dismiss(id: string, reason = "programmatic"): boolean {
-    this.clearTimer(id);
-    const changed = this.#controller.dismiss(id, reason as "programmatic");
+    const changed = this.#service.dismiss(id, reason as "programmatic");
     if (!changed) return false;
     this.syncRecords();
     this.dispatchTypedEvent("vf-dismiss", { id, reason });
@@ -260,19 +255,18 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
   }
 
   dismissAll(): void {
-    for (const id of this.#timers.keys()) this.clearTimer(id);
-    if (this.#controller.dismissAll()) {
+    if (this.#service.dismissAll()) {
       this.syncRecords();
       this.dispatchTypedEvent("vf-toast-change", { action: "dismiss-all" });
     }
   }
 
   updateToast(id: string, update: Partial<VyrnForgeToastRecord>): boolean {
-    const current = this.#controller
+    const current = this.#service
       .getSnapshot()
       .records.find((record) => record.id === id);
     if (!current) return false;
-    const changed = this.#controller.update(id, {
+    const changed = this.#service.update(id, {
       payload: {
         ...current.payload,
         ...(update.actionLabel === undefined
@@ -289,20 +283,23 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
       createdAt: update.createdAt,
     });
     if (changed) {
-      this.scheduleDismiss(id);
       this.syncRecords();
       this.dispatchTypedEvent("vf-toast-change", { action: "update", id });
     }
     return changed;
   }
 
+  protected override connected(): void {
+    this.#service.start();
+  }
+
   protected override disconnected(): void {
-    for (const id of this.#timers.keys()) this.clearTimer(id);
+    this.#service.stop();
   }
 
   protected override update(): void {
-    this.#controller.setMaxVisible(this.maxVisible);
-    this.#controller.setNewestOnTop(this.newestOnTop);
+    this.#service.setMaxVisible(this.maxVisible);
+    this.#service.setNewestOnTop(this.newestOnTop);
     this.applyManagedClasses([
       "vf-toast-viewport",
       `vf-toast-viewport--${this.position}`,
@@ -310,72 +307,57 @@ export class VyrnForgeToastViewportElement extends VyrnForgeDomElement {
     this.setAttribute("aria-label", this.label);
     const document = this.resolveDocument();
     if (!document) return;
-    const nodes = this.#controller
-      .getSnapshot()
-      .visibleRecords.map((record) => {
-        const toast = document.createElement(
-          "vf-toast",
-        ) as VyrnForgeToastElement;
-        toast.toastId = record.id;
-        toast.title = record.payload.title ?? "";
-        toast.description = record.payload.description ?? "";
-        toast.tone = record.payload.tone;
-        toast.actionLabel = record.payload.actionLabel ?? "";
-        toast.dismissible = record.dismissible;
-        toast.addEventListener("vf-dismiss", () =>
-          this.dismiss(record.id, "close-button"),
-        );
-        toast.addEventListener("vf-action", () => {
-          this.#controller.triggerAction(record.id);
-          this.dispatchTypedEvent("vf-action", {
-            action: "toast-action",
-            id: record.id,
-          });
+    const nodes = this.#service.getSnapshot().visibleRecords.map((record) => {
+      const toast = document.createElement("vf-toast") as VyrnForgeToastElement;
+      toast.toastId = record.id;
+      toast.title = record.payload.title ?? "";
+      toast.description = record.payload.description ?? "";
+      toast.tone = record.payload.tone;
+      toast.actionLabel = record.payload.actionLabel ?? "";
+      toast.dismissible = record.dismissible;
+      toast.addEventListener("vf-dismiss", () =>
+        this.dismiss(record.id, "close-button"),
+      );
+      toast.addEventListener("vf-action", () => {
+        this.#service.triggerAction(record.id);
+        this.dispatchTypedEvent("vf-action", {
+          action: "toast-action",
+          id: record.id,
         });
-        toast.addEventListener("mouseenter", () => {
-          this.clearTimer(record.id);
-          this.#controller.pause(record.id, "hover");
-        });
-        toast.addEventListener("mouseleave", () => {
-          this.#controller.resume(record.id, "hover");
-          this.scheduleDismiss(record.id);
-        });
-        return toast;
       });
+      toast.addEventListener("mouseenter", () => {
+        this.#service.pause(record.id, "hover");
+      });
+      toast.addEventListener("mouseleave", () => {
+        this.#service.resume(record.id, "hover");
+      });
+      return toast;
+    });
     this.replaceChildren(...nodes);
     this.hidden = nodes.length === 0;
     this.setAttribute("data-vf-element", "");
   }
 
-  private createController(): ToastBehaviorController<ToastPayload> {
-    return createToastController<ToastPayload>({
+  private createService(): ToastService<ToastPayload> {
+    const service = createToastService<ToastPayload>({
       defaultDuration: this.defaultDuration,
       maxVisible: this.maxVisible,
       newestOnTop: this.newestOnTop,
     });
-  }
-
-  private scheduleDismiss(id: string): void {
-    this.clearTimer(id);
-    const record = this.#controller
-      .getSnapshot()
-      .records.find((item) => item.id === id);
-    if (!record || record.duration === null || record.paused) return;
-    this.#timers.set(
-      id,
-      setTimeout(() => this.dismiss(id, "timeout"), record.duration),
-    );
-  }
-
-  private clearTimer(id: string): void {
-    const timer = this.#timers.get(id);
-    if (timer) clearTimeout(timer);
-    this.#timers.delete(id);
+    service.subscribe(() => this.syncRecords());
+    service.subscribeEvent((event) => {
+      if (event.type !== "dismiss" || event.reason !== "timeout") return;
+      this.dispatchTypedEvent("vf-dismiss", {
+        id: event.detail.record.id,
+        reason: "timeout",
+      });
+    });
+    return service;
   }
 
   private syncRecords(): void {
     const records = Object.freeze(
-      this.#controller.getSnapshot().records.map((record) =>
+      this.#service.getSnapshot().records.map((record) =>
         Object.freeze({
           id: record.id,
           ...record.payload,

@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "b8efa1b568635cd6d37b127579fdf00424a00453",
+      "sha1": "63369afca7399b08d611fb729f1f9c29969b1da3",
       "covers": [
         "component props and types",
         "callbacks",
@@ -192,6 +192,11 @@
       "task": "PA-2005",
       "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
       "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
+    },
+    {
+      "task": "SC-2103",
+      "reason": "React Toast keeps its existing provider/hook API and renderer composition while delegating lifecycle state, timers, pause/resume, dismissal, and action orchestration to the shared VyrnForge toast service. Existing React toast browser/parity coverage and the shared service tests protect the compatibility surface during this implementation-tree recapture.",
+      "evidence": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx; packages/ui-behaviors/src/toast-service.test.ts; packages/ui-elements/src/toast-service.test.ts"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

@@ -19,3 +19,9 @@ export type {
 } from "./generated/VfDialog.generated";
 export type { VfTabsElement } from "./generated/VfTabs.generated";
 export type { VfTextInputElement } from "./generated/VfTextInput.generated";
+
+export {
+  createVyrnForgeVueToastService,
+  useVyrnForgeToast,
+  vyrnForgeToastKey,
+} from "./toast";

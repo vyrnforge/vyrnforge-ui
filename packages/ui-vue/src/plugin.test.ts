@@ -25,9 +25,17 @@ function createRegistry(): VyrnForgeElementRegistry {
 }
 
 function createAppStub(registrations: Map<string, Component>): App {
+  const provisions = new Map<unknown, unknown>();
   return {
     component(name: string, component?: Component) {
       if (component) registrations.set(name, component);
+      return this;
+    },
+    provide(key: unknown, value: unknown) {
+      provisions.set(key, value);
+      return this;
+    },
+    onUnmount() {
       return this;
     },
   } as unknown as App;
