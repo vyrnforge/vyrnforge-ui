@@ -96,16 +96,24 @@ describe("host adoption contracts", () => {
       capabilities: ["roving-focus", "selection"],
     });
     expect(
-      findVyrnForgeItemRegion(vyrnForgeItemCompositionContracts["side-nav"], "children"),
+      findVyrnForgeItemRegion(
+        vyrnForgeItemCompositionContracts["side-nav"],
+        "children",
+      ),
     ).toMatchObject({ multiplicity: "multiple" });
-    expect(vyrnForgeItemCompositionContracts["multi-select"].capabilities).toEqual([
+    expect(
+      vyrnForgeItemCompositionContracts["multi-select"].capabilities,
+    ).toEqual([
       "filter",
       "multiple-selection",
       "repeated-form-value",
       "roving-focus",
     ]);
     expect(
-      findVyrnForgeItemRegion(vyrnForgeItemCompositionContracts["transfer-list"], "option"),
+      findVyrnForgeItemRegion(
+        vyrnForgeItemCompositionContracts["transfer-list"],
+        "option",
+      ),
     ).toMatchObject({ className: "vf-transfer-list__option-content" });
   });
 
