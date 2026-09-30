@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "019b50f626fd4f0a8e59e6a77a5227ad258e5",
+      "sha1": "019b50f626fd4f0a8e59e6a77a5227ad258e52a3",
       "covers": [
         "component props and types",
         "callbacks",
