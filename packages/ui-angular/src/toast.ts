@@ -6,7 +6,6 @@ import {
   type VyrnForgeToastShortcutRecord,
 } from "@vyrnforge/ui-elements";
 
-@Injectable({ providedIn: "root" })
 export class VyrnForgeToastService implements OnDestroy {
   readonly #service: BrowserToastService = createVyrnForgeToastService();
 
@@ -62,3 +61,5 @@ export class VyrnForgeToastService implements OnDestroy {
     this.#service.destroy();
   }
 }
+
+Injectable({ providedIn: "root" })(VyrnForgeToastService);
