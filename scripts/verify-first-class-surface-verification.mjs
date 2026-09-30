@@ -180,9 +180,7 @@ export function verifyFirstClassSurfaceVerification({
 
     const coverage = surface.coverage ?? {};
     if (coverage.mode === "instrumented") {
-      if (
-        typeof packageJson.scripts?.[coverage.script] !== "string"
-      ) {
+      if (typeof packageJson.scripts?.[coverage.script] !== "string") {
         addFailure(
           failures,
           `${surfaceId} instrumented coverage script ${String(coverage.script)} is missing`,
