@@ -1,4 +1,8 @@
-import { joinClassNames } from "../../utils/classNames";
+import type { ElementType } from "react";
+import {
+  resolveAdoptedHostClassName,
+  resolveAdoptedHostTag,
+} from "../../internal/hostAdoption";
 import type { HeadingProps } from "./Typography.types";
 
 export function Heading({
@@ -8,14 +12,16 @@ export function Heading({
   tone = "strong",
   ...props
 }: HeadingProps) {
-  const Component = `h${level}` as const;
+  const Component = resolveAdoptedHostTag(
+    "heading",
+    `h${level}`,
+  ) as ElementType;
 
   return (
     <Component
-      className={joinClassNames(
-        "vf-heading",
-        `vf-heading--${size}`,
-        tone !== "default" && `vf-text--${tone}`,
+      className={resolveAdoptedHostClassName(
+        "heading",
+        { size, tone },
         className,
       )}
       {...props}
