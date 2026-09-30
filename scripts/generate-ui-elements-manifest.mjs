@@ -37,7 +37,7 @@ function componentDescriptions(metadata) {
     const native = component.frameworkParity?.native;
     const target = native?.target;
     if (
-      native?.status !== "current" ||
+      native?.implementationState !== "current" ||
       native?.strategy !== "direct-element" ||
       typeof target !== "string" ||
       !target.startsWith("vf-") ||
