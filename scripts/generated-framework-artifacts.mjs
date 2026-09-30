@@ -35,8 +35,6 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-export const GENERATED_FRAMEWORK_ARTIFACT_TASK = "MFD-1111";
-
 export class GeneratedFrameworkArtifactsError extends Error {
   constructor(failures) {
     super(
