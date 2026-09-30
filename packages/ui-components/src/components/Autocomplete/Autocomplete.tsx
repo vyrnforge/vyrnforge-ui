@@ -12,6 +12,7 @@ import {
   Portal,
   useAnchoredPosition,
 } from "../../internal/overlay";
+import { adoptedOverlayRegionClassName } from "../../internal/hostAdoption";
 import { joinClassNames } from "../../utils/classNames";
 import { Icon } from "../Icon";
 import { IconButton } from "../IconButton";
@@ -224,7 +225,7 @@ export function Autocomplete({
       ref={rootRef}
       style={style}
     >
-      <div className="vf-autocomplete__control" ref={setControlElement}>
+      <div className={adoptedOverlayRegionClassName("autocomplete", "control")} ref={setControlElement}>
         <AutocompleteInput
           activeDescendantId={
             isOpen && activeOption
@@ -307,7 +308,7 @@ export function Autocomplete({
         <Portal container={portalContainer}>
           <DismissableLayer
             branches={[rootRef]}
-            className="vf-autocomplete__layer"
+            className={adoptedOverlayRegionClassName("autocomplete", "layer")}
             dismissOnOutsideFocus
             onDismiss={() => closeList(true)}
             onEscapeKeyDown={(event) => {
@@ -345,7 +346,7 @@ export function Autocomplete({
                       selected={selected}
                     >
                       <div
-                        className="vf-autocomplete__option-main"
+                        className={adoptedOverlayRegionClassName("autocomplete", "option")}
                         ref={active ? activeOptionRef : undefined}
                       >
                         {renderOption ? (
@@ -356,11 +357,11 @@ export function Autocomplete({
                           })
                         ) : (
                           <>
-                            <span className="vf-autocomplete__option-label">
+                            <span className={adoptedOverlayRegionClassName("autocomplete", "label")}>
                               {option.label}
                             </span>
                             {option.description && (
-                              <span className="vf-autocomplete__option-description">
+                              <span className={adoptedOverlayRegionClassName("autocomplete", "description")}>
                                 {option.description}
                               </span>
                             )}
@@ -376,7 +377,7 @@ export function Autocomplete({
               ) : (
                 <div
                   aria-live="polite"
-                  className="vf-autocomplete__status"
+                  className={adoptedOverlayRegionClassName("autocomplete", "status")}
                   role="status"
                 >
                   {loading ? loadingText : noOptionsText}
