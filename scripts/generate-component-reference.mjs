@@ -8,6 +8,7 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import { getPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -298,14 +299,7 @@ export function buildComponentReference({ root = repositoryRoot } = {}) {
   const context = loadContext(root);
   const knowledge = buildConsumerKnowledge({ root });
   const includedIds = new Set(
-    (context.catalog.components ?? [])
-      .filter(
-        (component) =>
-          component.publicExport &&
-          component.frameworkParity?.betaScope === "included" &&
-          component.maturity !== "internal",
-      )
-      .map((component) => component.id),
+    getPublicNonGridBetaComponentIds(context.catalog),
   );
   const components = knowledge.components.filter((component) =>
     includedIds.has(component.id),
