@@ -266,7 +266,11 @@ export class VyrnForgePageHeaderElement extends VyrnForgeDomElement {
     for (const node of nodes) {
       if (node instanceof Element) node.removeAttribute("slot");
     }
-    this.applyManagedClasses(\n      resolveVyrnForgeHostClasses(vyrnForgeHostAdoptionContracts["page-header"]),\n    );
+    this.applyManagedClasses(
+      resolveVyrnForgeHostClasses(
+        vyrnForgeHostAdoptionContracts["page-header"],
+      ),
+    );
     const output: Node[] = [];
     if (breadcrumbs.length > 0) {
       const region = document.createElement("div");
