@@ -14,12 +14,16 @@ import { VyrnForgeDomElement } from "./dom";
 
 let tabsSequence = 0;
 
-function itemRegionClass(id: VyrnForgeItemCompositionId, name: string): string {
+function itemRegionClass(
+  id: VyrnForgeItemCompositionId,
+  name: string,
+): string {
   const region = findVyrnForgeItemRegion(
     vyrnForgeItemCompositionContracts[id],
     name,
   );
-  if (!region) throw new Error(`Unknown ${id} item composition region ${name}.`);
+  if (!region)
+    throw new Error(`Unknown ${id} item composition region ${name}.`);
   return region.className;
 }
 
