@@ -16,5 +16,7 @@ export function getPublicNonGridBetaComponents(catalog) {
 }
 
 export function getPublicNonGridBetaComponentIds(catalog) {
-  return getPublicNonGridBetaComponents(catalog).map((component) => component.id);
+  return getPublicNonGridBetaComponents(catalog).map(
+    (component) => component.id,
+  );
 }
