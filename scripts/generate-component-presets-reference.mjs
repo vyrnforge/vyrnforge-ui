@@ -47,7 +47,11 @@ export function writeComponentPresetReference({ root = repositoryRoot } = {}) {
   const outputPath = path.join(root, COMPONENT_PRESET_REFERENCE_PATH);
   const reference = buildComponentPresetReference({ root });
   mkdirSync(path.dirname(outputPath), { recursive: true });
-  writeFileSync(outputPath, serializeComponentPresetReference(reference), "utf8");
+  writeFileSync(
+    outputPath,
+    serializeComponentPresetReference(reference),
+    "utf8",
+  );
   return reference;
 }
 
