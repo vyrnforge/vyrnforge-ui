@@ -5,9 +5,8 @@ components. The machine-readable source is
 `docs/metadata/component-contracts.json`, validated by
 `docs/metadata/component-contract.schema.json`.
 
-MFD-1005 expands the contract from representative string lists into structured
-metadata that can drive framework generation without reading React, Angular, or
-Vue implementation source.
+The structured contract is designed to drive framework generation without
+reading React, Angular, Vue, or Custom Element implementation source.
 
 ## Contract ownership
 
@@ -127,9 +126,8 @@ Each component additionally records its own form mapping:
 - validity support, methods, and invalid event;
 - reset support, reset event, and restored state.
 
-MFD-1006 builds the detailed cross-framework forms/model contract on top of this
-representation. MFD-1005 only ensures the schema can express the required data
-without framework-source inference.
+The detailed cross-framework forms/model contract builds on this representation.
+The schema must express the required data without framework-source inference.
 
 ## Value and model semantics
 
@@ -200,33 +198,29 @@ determine its public facade shape from canonical metadata and generator rules.
 It must not inspect React/Angular/Vue component implementation source to discover
 missing props, events, slot names, form behavior, or ref semantics.
 
-During S10, MFD-1010 inventories the full supported non-grid catalog and marks
-each component `contract-complete`, `needs-data`, or `exception-required`.
+The non-grid coverage contract classifies the full supported catalog as
+`contract-complete`, `needs-contract-data`, or `exception-required`.
 Unknown fields must be surfaced explicitly rather than guessed from source.
 
 ## Current representative records
 
-Schema v2 is populated first for representative action, navigation, form, and
-overlay components:
+Representative action, navigation, form, and overlay records include Button,
+Tabs, Autocomplete, and Dialog.
 
-- Button;
-- Tabs;
-- Autocomplete;
-- Dialog.
-
-These records prove that the schema can represent properties, attributes,
+These records demonstrate that the schema can represent properties, attributes,
 events, composition, methods, forms, model state, refs, accessibility, and all
-four framework mappings in one canonical structure. Full catalog population is
-MFD-1010 after MFD-1006 through MFD-1008 define the detailed semantic mapping
-rules.
+four framework mappings in one canonical structure. Full catalog coverage is
+governed by [Non-Grid Canonical Contract Coverage](14-non-grid-contract-coverage.md)
+together with the detailed model/form, composition, and event/ref mapping
+contracts.
 
 ## Compatibility and migration
 
-The schema describes both implemented and target states. Native mappings are
-currently implemented; React mappings may be marked as migration while S14
-converges them; Angular and Vue mappings may be target-state until their
-first-class packages are implemented.
+The schema may describe current, migration, target, or explicit exception
+states for a mapping, but those implementation-status fields do not rank the
+four supported non-grid surfaces. Native HTML / Custom Elements, React, Angular,
+and Vue are equal first-class VyrnForge surfaces.
 
-Metadata status must never be used to claim a target package is already shipped.
-Current package manifests and release metadata remain authoritative for the
-implemented distribution state.
+Metadata status must never be used to claim an unshipped package or capability
+is already released. Current package manifests and release metadata remain
+authoritative for implemented distribution state.
