@@ -1,6 +1,5 @@
 # Component Presets And Aliases
 
-- Task: SC-2102
 - Status: Accepted capability contract
 - Machine-readable source: `docs/metadata/component-presets.json`
 
@@ -30,9 +29,9 @@ Preset metadata may preserve a historical convenience API, but it may not
 silently narrow the base component contract or override application-owned
 business semantics.
 
-## Initial capability set
+## Current capability set
 
-SC-2102 records:
+The current preset contract records:
 
 - `StatusBadge` as a status-to-`Badge.variant` transform;
 - Clear, Close, More, and Refresh helpers as named `IconButton` presets;
