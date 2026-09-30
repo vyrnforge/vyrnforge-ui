@@ -46,7 +46,9 @@ function deepFreeze(value) {
 
 export function validateComponentPresets(document, contracts) {
   const failures = [];
-  if (!isObject(document)) return ["Component preset metadata must be an object."];
+  if (!isObject(document)) {
+    return ["Component preset metadata must be an object."];
+  }
   if (document.schemaVersion !== COMPONENT_PRESET_SCHEMA_VERSION) {
     failures.push(
       `Unsupported component preset schemaVersion ${String(document.schemaVersion)}.`,
@@ -61,7 +63,9 @@ export function validateComponentPresets(document, contracts) {
   }
 
   const ids = new Set();
-  const canonicalIds = new Set(contracts.components.map((component) => component.id));
+  const canonicalIds = new Set(
+    contracts.components.map((component) => component.id),
+  );
   const canonicalById = contracts.componentById;
   for (const [index, preset] of document.presets.entries()) {
     const context = `presets[${index}]`;
@@ -153,7 +157,9 @@ export function normalizeComponentPresets(document) {
 
 export function loadComponentPresets({ root, contracts } = {}) {
   if (!root) throw new Error("loadComponentPresets requires a repository root");
-  if (!contracts) throw new Error("loadComponentPresets requires canonical contracts");
+  if (!contracts) {
+    throw new Error("loadComponentPresets requires canonical contracts");
+  }
   const document = JSON.parse(
     readFileSync(path.join(root, COMPONENT_PRESET_PATH), "utf8"),
   );
