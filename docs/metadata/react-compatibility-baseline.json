@@ -40,7 +40,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "b8efa1b568635cd6d37b127579fdf00424a00453",
+      "sha1": "e1e22da83d8c9b236722f065367c535032523cb0",
       "covers": [
         "component props and types",
         "callbacks",
@@ -187,6 +187,11 @@
       "task": "#647",
       "reason": "React package documentation ownership was clarified by removing a hand-maintained exhaustive component/maturity catalog and linking the canonical generated component reference, component metadata, and React public API guidance instead. Public exports, props, callbacks, refs, runtime behavior, CSS contracts, package setup, and compatibility policy are unchanged; only the reviewed package-README fingerprint is intentionally recaptured.",
       "evidence": "scripts/verify-documentation-current.mjs"
+    },
+    {
+      "task": "SC-2104",
+      "reason": "React Text, Caption, and CodeText adopt the shared framework-neutral host-adoption contract while preserving their documented tags, classes, props, refs, rendering behavior, and first-class React surface. The implementation-tree fingerprint is intentionally recaptured with host-adoption parity tests.",
+      "evidence": "packages/ui-components/src/__tests__/host-adoption.test.tsx"
     },
     {
       "task": "PA-2005",
