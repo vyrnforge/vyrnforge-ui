@@ -31,7 +31,7 @@ VyrnForge owns the reusable UI system:
 
 The supported framework surfaces are peers:
 
-~~~text
+```text
                          VyrnForge UI
                              |
           +------------------+------------------+
@@ -45,7 +45,7 @@ The supported framework surfaces are peers:
           +-----------+-----------+-----------+-----------+
           |           |           |           |
         Native       React       Angular       Vue
-~~~
+```
 
 The diagram is a product model, not an implementation graph. A framework
 surface may reuse another package's browser implementation internally when that
@@ -58,15 +58,15 @@ surface secondary.
 Current package names describe technical/distribution boundaries, not product
 ownership.
 
-| Package                    | Current implementation role                                                                                                      | Release track |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, typography, density, motion, layers, utilities, and shared styling foundations.                 | Non-grid beta |
-| `@vyrnforge/ui-behaviors`  | Framework-neutral reusable behavior, state transitions, collections, navigation, overlays, forms, and reasoned events.           | Non-grid beta |
-| `@vyrnforge/ui-elements`   | Native HTML / Custom Elements surface and reusable browser implementation used where appropriate by other surfaces.               | Non-grid beta |
-| `@vyrnforge/ui-components` | **Current React package name.** It owns the React-facing API; it does not own VyrnForge's canonical component system.              | Non-grid beta |
-| `@vyrnforge/ui-angular`    | Angular-facing API, generated bindings, setup, Forms integration, composition, and references.                                   | Non-grid beta |
-| `@vyrnforge/ui-vue`        | Vue-facing API, generated components, props/emits, `v-model`, slots, refs, and setup.                                            | Non-grid beta |
-| `@vyrnforge/ui-data-grid`  | Current package for the optional Data Grid advanced module; the presently shipped implementation is React-alpha only.             | Independent alpha |
+| Package                    | Current implementation role                                                                                                      | Release track     |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `@vyrnforge/ui-core`       | Framework-neutral tokens, themes, typography, density, motion, layers, utilities, and shared styling foundations.                | Non-grid beta     |
+| `@vyrnforge/ui-behaviors`  | Framework-neutral reusable behavior, state transitions, collections, navigation, overlays, forms, and reasoned events.           | Non-grid beta     |
+| `@vyrnforge/ui-elements`   | Native HTML / Custom Elements surface and reusable browser implementation used where appropriate by other surfaces.              | Non-grid beta     |
+| `@vyrnforge/ui-components` | **Current React package name.** It owns the React-facing API; it does not own VyrnForge's canonical component system.            | Non-grid beta     |
+| `@vyrnforge/ui-angular`    | Angular-facing API, generated bindings, setup, Forms integration, composition, and references.                                   | Non-grid beta     |
+| `@vyrnforge/ui-vue`        | Vue-facing API, generated components, props/emits, `v-model`, slots, refs, and setup.                                            | Non-grid beta     |
+| `@vyrnforge/ui-data-grid`  | Current package for the optional Data Grid advanced module; the presently shipped implementation is React-alpha only.            | Independent alpha |
 
 The `ui-components` package name is historical/current compatibility surface
 naming. It must not be used as evidence that React is the main VyrnForge product
@@ -104,7 +104,7 @@ tested.
 A reusable component should be designed from the VyrnForge product model
 outward:
 
-~~~text
+```text
 reusable UI requirement
         |
 reuse / extension check
@@ -124,7 +124,7 @@ cross-surface verification
 docs / examples / AI context
         |
 release evidence
-~~~
+```
 
 A component must not be defined first as a React component and later copied to
 other frameworks unless an explicit framework-specific exception requires that
@@ -137,7 +137,7 @@ beside framework surfaces.
 
 Conceptually:
 
-~~~text
+```text
 VyrnForge UI
 |
 +-- Common UI component system
@@ -153,7 +153,7 @@ VyrnForge UI
     +-- workflow / diagram UI
     +-- advanced form or editor systems
     `-- future reusable UI capabilities
-~~~
+```
 
 Each advanced module should define shared, framework-neutral semantics first and
 then expose the supported VyrnForge surfaces. A module may initially ship on a
