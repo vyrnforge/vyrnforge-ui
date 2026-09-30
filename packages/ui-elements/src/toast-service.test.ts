@@ -35,7 +35,7 @@ describe("VyrnForge browser toast service", () => {
   });
 
   it("covers facade variants and scheduler lifecycle", () => {
-    const service = createVyrnForgeToastService({ defaultDuration: null });
+    const service = createVyrnForgeToastService({ defaultDuration: 1000 });
 
     const neutralId = service.toast({
       actionLabel: "Undo",
