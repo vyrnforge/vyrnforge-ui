@@ -169,3 +169,24 @@ test("rejects native parity metadata that diverges from current renderer evidenc
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("rejects a Native contract tag missing from the public manifest", () => {
+  const root = createFixture();
+  try {
+    const file = path.join(root, "packages/ui-elements/custom-elements.json");
+    const value = JSON.parse(readFileSync(file, "utf8"));
+    const declarations = value.modules[0].declarations;
+    value.modules[0].declarations = declarations.filter(
+      (entry) => entry.tagName !== "vf-button",
+    );
+    writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
+
+    assert(
+      verifyNativeElementFoundations({ root }).some((failure) =>
+        failure.includes("vf-button: missing Custom Elements Manifest declaration"),
+      ),
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
