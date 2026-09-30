@@ -1,8 +1,9 @@
 # Getting Started
 
-Choose the VyrnForge surface for your application. Shared implementation
-dependencies are installed transitively; normal consumers should not reproduce
-or coordinate the internal package graph.
+Choose the VyrnForge surface for your application. Native HTML / Custom
+Elements, React, Angular, and Vue are equal first-class surfaces over the same
+VyrnForge UI system. Shared implementation dependencies are installed
+transitively; their internal direction does not indicate product priority.
 
 Current package names, public entrypoints, peer requirements, and release
 classification are owned by package manifests and canonical metadata. The
@@ -95,9 +96,10 @@ Then use the public `Vf*` components, generated `v-model` mappings, slots,
 emits, and typed refs. See [Vue package guidance](../../packages/ui-vue/README.md) for the
 current peer and facade contract.
 
-## Data grid
+## Data Grid advanced module
 
-The optional specialized data grid currently uses the React surface:
+Data Grid is an optional advanced VyrnForge UI module, not another framework
+surface. The currently shipped package exposes a React-only alpha surface:
 
 ```bash
 npm install @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
@@ -107,8 +109,9 @@ npm install @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
 
-The data grid has its own release classification and does not imply Native,
-Angular, or Vue grid renderers. Verify its current release state in canonical
+This current package does not imply that Native, Angular, or Vue grid renderers
+already exist. Future grid surface support requires shared grid contracts and
+explicit implementation/evidence. Verify the current release state in canonical
 release metadata before adoption.
 
 ## Styling
