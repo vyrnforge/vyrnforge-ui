@@ -1,4 +1,4 @@
-import { joinClassNames } from "../../utils/classNames";
+import { resolveAdoptedHostClassName } from "../../internal/hostAdoption";
 import type { InlineProps } from "./Inline.types";
 
 export function Inline({
@@ -11,12 +11,9 @@ export function Inline({
 }: InlineProps) {
   return (
     <div
-      className={joinClassNames(
-        "vf-inline",
-        `vf-inline--gap-${gap}`,
-        `vf-inline--align-${align}`,
-        `vf-inline--justify-${justify}`,
-        wrap && "vf-inline--wrap",
+      className={resolveAdoptedHostClassName(
+        "inline",
+        { align, gap, justify, wrap },
         className,
       )}
       {...props}
