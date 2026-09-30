@@ -303,7 +303,7 @@ export class VyrnForgeRatingElement extends VyrnForgeFormAssociatedElement<strin
       input.checked = candidate === this.value;
       input.disabled = this.effectiveDisabled || this.readOnly;
       input.required = this.required && this.value === 0 && candidate === 1;
-      input.setAttribute("aria-label", `${candidate} of ${this.max}`);
+      input.setAttribute("aria-label", `${candidate} of ${this.max} stars`);
 
       const icon = document.createElement("span");
       icon.className = "vf-rating__icon";
