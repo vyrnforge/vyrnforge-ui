@@ -177,13 +177,17 @@ export function validateFrameworkExceptions(document, { root } = {}) {
       FRAMEWORK_EXCEPTION_OVERRIDE_STATES.includes(exception.state) &&
       !nonEmptyString(exception.reviewTrigger)
     ) {
-      failures.push(`${context}.reviewTrigger must be non-empty for live exceptions.`);
+      failures.push(
+        `${context}.reviewTrigger must be non-empty for live exceptions.`,
+      );
     }
     if (
       exception.state === "closed" &&
       !nonEmptyString(exception.reviewMilestone)
     ) {
-      failures.push(`${context}.reviewMilestone must retain closure provenance.`);
+      failures.push(
+        `${context}.reviewMilestone must retain closure provenance.`,
+      );
     }
     if (!document.states?.includes(exception.state)) {
       failures.push(`${context}.state is not declared.`);
@@ -284,8 +288,7 @@ export function createFrameworkExceptionReference(registry) {
       exceptionClass: exception.exceptionClass,
       state: exception.state,
       sourcePaths: [...exception.sourcePaths],
-      reviewMilestone:
-        exception.reviewMilestone ?? exception.reviewTrigger,
+      reviewMilestone: exception.reviewMilestone ?? exception.reviewTrigger,
     })),
   };
 }
