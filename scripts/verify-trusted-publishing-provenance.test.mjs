@@ -40,7 +40,7 @@ function clone(value) {
   return structuredClone(value);
 }
 
-test("accepts the BT-8007 trusted-publishing repository contract", () => {
+test("accepts the trusted-publishing repository contract", () => {
   assert.deepEqual(verifyTrustedPublishingProvenanceContract(), []);
 });
 test("accepts CRLF release workflow content", () => {
@@ -88,16 +88,20 @@ test("rejects a trusted publisher bound to the wrong workflow", () => {
 test("does not allow verified status without complete external evidence", () => {
   const contract = clone(readTrustedPublishingContract());
   contract.externalEvidence.status = "verified";
-  contract.task.status = "done";
+  contract.verification.status = "verified";
   contract.releaseReadiness = "ready";
   const failures = verifyTrustedPublishingProvenanceContract({ contract });
-  assert(failures.includes("BT-8007 verified evidence index is incomplete"));
+  assert(
+    failures.includes(
+      "trusted-publishing verified evidence index is incomplete",
+    ),
+  );
 });
 
 test("accepts reviewed external evidence only when every required record exists", () => {
   const contract = clone(readTrustedPublishingContract());
   contract.externalEvidence.status = "verified";
-  contract.task.status = "done";
+  contract.verification.status = "verified";
   contract.releaseReadiness = "ready";
   const capture = "docs/release/evidence/BT-8007/README.md";
   const evidence = {
