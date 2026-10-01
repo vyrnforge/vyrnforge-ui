@@ -80,8 +80,6 @@ npm run test:contracts
   reports, and trace evidence.
 - `cross-framework-accessibility-review.json` records automated and manual
   cross-framework accessibility evidence.
-- `multi-framework-migration-guide.json` records migration and limitations guide
-  verification evidence.
 
 Closed S11-S15 execution gates are not current metadata. Their reusable
 invariants are owned by current quality, compatibility, accessibility,
@@ -115,7 +113,6 @@ remain thin translation layers over shared VyrnForge rendering, accessibility,
 validation, event, and form-association contracts.
 
 ```bash
-npm run test:multi-framework
 npm run verify:multi-framework
 npm run test:consumer-foundations
 npm run verify:consumer-foundations
