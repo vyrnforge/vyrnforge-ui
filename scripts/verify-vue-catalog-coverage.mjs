@@ -2,11 +2,28 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import { loadPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 import { buildVueCatalogArtifact } from "./vue-catalog-generation.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const artifact = buildVueCatalogArtifact({ root });
+const contracts = loadCanonicalComponentContracts({ root });
+const publicComponentIds = new Set(loadPublicNonGridBetaComponentIds({ root }));
 const outputPath = path.join(root, artifact.path);
+
+const stagedPublicMappings = contracts.components
+  .filter(
+    (component) =>
+      publicComponentIds.has(component.id) &&
+      component.frameworkMappings.vue.implementationState !== "current",
+  )
+  .map((component) => component.id);
+if (stagedPublicMappings.length > 0) {
+  throw new Error(
+    `Vue public catalog mappings must be current: ${stagedPublicMappings.join(", ")}`,
+  );
+}
 
 if (!existsSync(outputPath)) {
   throw new Error(`${artifact.path} is missing`);
