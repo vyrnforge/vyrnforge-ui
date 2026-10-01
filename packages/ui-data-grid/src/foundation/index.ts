@@ -3,6 +3,15 @@ export { applyPagination } from "./applyPagination";
 export { applySearch } from "./applySearch";
 export { applySorting } from "./applySorting";
 export {
+  applyDataGridFilterDraft,
+  cancelDataGridFilterDraft,
+  clearDataGridFilterDraft,
+  createDataGridFilterDraftSession,
+  resetDataGridFilterDraft,
+  setDataGridFilterDraft,
+} from "./filterDraft";
+export type { DataGridFilterDraftSession } from "./filterDraft";
+export {
   getDataGridFilterOperators,
   getDataGridFilterOperatorsForColumn,
   isDataGridFilterOperatorSupported,
