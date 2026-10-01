@@ -29,23 +29,19 @@ export function verifySsrBundlerCompatibility({ root = repositoryRoot } = {}) {
   const failures = [];
   for (const file of requiredFiles)
     if (!existsSync(path.join(root, file)))
-      fail(failures, `required CF-7007 file is missing: ${file}`);
+      fail(failures, `required SSR/bundler file is missing: ${file}`);
   if (failures.length) return failures.sort();
   const metadata = json(root, "docs/metadata/ssr-bundler-compatibility.json");
-  if (metadata.program?.task !== "CF-7007" || metadata.program?.sprint !== "S7")
-    fail(failures, "SSR/bundler program must be S7 / CF-7007");
-  if (metadata.program?.storyPoints !== 5)
-    fail(failures, "CF-7007 story points must be 5");
-  if (metadata.program?.status !== "evidence-complete")
-    fail(failures, "CF-7007 status must be evidence-complete");
+  if (metadata.verification?.status !== "verified")
+    fail(failures, "SSR/bundler verification status must be verified");
   if (metadata.supportClaim !== "ssr-bundler-verified")
-    fail(failures, "CF-7007 support claim must be ssr-bundler-verified");
+    fail(failures, "SSR/bundler support claim must remain verified");
   const consumers = new Set(
     (metadata.bundlerMatrix ?? []).map((entry) => entry.consumer),
   );
   for (const consumer of ["native-html", "react", "angular", "vue"])
     if (!consumers.has(consumer))
-      fail(failures, `CF-7007 bundler matrix is missing ${consumer}`);
+      fail(failures, `SSR/bundler matrix is missing ${consumer}`);
   const react = (metadata.bundlerMatrix ?? []).find(
     (entry) => entry.consumer === "react",
   );
