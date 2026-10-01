@@ -32,7 +32,6 @@ const REQUIRED_EXCEPTION_FIELDS = Object.freeze([
   "evidence",
   "exitCriteria",
   "state",
-  "reviewMilestone",
 ]);
 const SCOPE_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 
@@ -169,15 +168,22 @@ export function validateFrameworkExceptions(document, { root } = {}) {
     if (!document.exceptionClasses?.includes(exception.exceptionClass)) {
       failures.push(`${context}.exceptionClass is not declared.`);
     }
-    for (const field of [
-      "reason",
-      "owner",
-      "exitCriteria",
-      "reviewMilestone",
-    ]) {
+    for (const field of ["reason", "owner", "exitCriteria"]) {
       if (!nonEmptyString(exception[field])) {
         failures.push(`${context}.${field} must be non-empty.`);
       }
+    }
+    if (
+      FRAMEWORK_EXCEPTION_OVERRIDE_STATES.includes(exception.state) &&
+      !nonEmptyString(exception.reviewTrigger)
+    ) {
+      failures.push(`${context}.reviewTrigger must be non-empty for live exceptions.`);
+    }
+    if (
+      exception.state === "closed" &&
+      !nonEmptyString(exception.reviewMilestone)
+    ) {
+      failures.push(`${context}.reviewMilestone must retain closure provenance.`);
     }
     if (!document.states?.includes(exception.state)) {
       failures.push(`${context}.state is not declared.`);
@@ -278,7 +284,8 @@ export function createFrameworkExceptionReference(registry) {
       exceptionClass: exception.exceptionClass,
       state: exception.state,
       sourcePaths: [...exception.sourcePaths],
-      reviewMilestone: exception.reviewMilestone,
+      reviewMilestone:
+        exception.reviewMilestone ?? exception.reviewTrigger,
     })),
   };
 }
