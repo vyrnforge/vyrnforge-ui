@@ -129,7 +129,9 @@ export function verifyCrossFrameworkAccessibility({
     ".github/workflows/_integration.yml",
   ]) {
     if (!existsSync(path.join(root, file))) {
-      failures.push(`required cross-framework accessibility file is missing: ${file}`);
+      failures.push(
+        `required cross-framework accessibility file is missing: ${file}`,
+      );
     }
   }
   if (failures.length > 0) return failures.sort();
@@ -162,10 +164,14 @@ export function verifyCrossFrameworkAccessibility({
   );
   for (const consumer of ["native-html", "react", "angular", "vue"]) {
     if (!(metadata.consumers ?? []).includes(consumer)) {
-      failures.push(`cross-framework accessibility metadata is missing ${consumer}`);
+      failures.push(
+        `cross-framework accessibility metadata is missing ${consumer}`,
+      );
     }
     if (!manifestConsumers.has(consumer)) {
-      failures.push(`cross-framework accessibility consumer manifest is missing ${consumer}`);
+      failures.push(
+        `cross-framework accessibility consumer manifest is missing ${consumer}`,
+      );
     }
   }
   if ((metadata.automatedReview?.scenarios ?? []).length < 4) {
