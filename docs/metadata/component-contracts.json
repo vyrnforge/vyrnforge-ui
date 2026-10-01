@@ -5002,12 +5002,7 @@
       },
       "ref": {
         "exposure": "facade-handle",
-        "methods": [
-          "add",
-          "dismiss",
-          "dismissAll",
-          "updateToast"
-        ],
+        "methods": ["add", "dismiss", "dismissAll", "updateToast"],
         "elementType": "VyrnForgeToastViewportElement"
       },
       "accessibility": [
@@ -5083,9 +5078,7 @@
             "mode": "element",
             "type": "VyrnForgeToastViewportElement"
           },
-          "setup": [
-            "register custom element"
-          ]
+          "setup": ["register custom element"]
         },
         "react": {
           "package": "@vyrnforge/ui-components",
@@ -5151,9 +5144,7 @@
             "mode": "facade-handle",
             "type": "VyrnForgeToastService"
           },
-          "setup": [
-            "inject VyrnForgeToastService"
-          ]
+          "setup": ["inject VyrnForgeToastService"]
         },
         "vue": {
           "package": "@vyrnforge/ui-vue",
