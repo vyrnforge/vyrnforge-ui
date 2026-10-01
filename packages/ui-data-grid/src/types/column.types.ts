@@ -1,19 +1,10 @@
 import type { ReactNode } from "react";
 import type { DataGridFoundationColumnDef } from "../foundation/types";
 export type {
+  DataGridColumnDataType,
   DataGridColumnSizingState,
   DataGridColumnVisibilityState,
 } from "../foundation/types";
-
-export type DataGridColumnDataType =
-  | "string"
-  | "number"
-  | "date"
-  | "datetime"
-  | "boolean"
-  | "enum"
-  | "status"
-  | "custom";
 
 export type DataGridAggregationType =
   "count" | "sum" | "avg" | "min" | "max" | "custom";
@@ -51,11 +42,9 @@ export type DataGridColumnDef<
   maxWidth?: number;
   resizable?: boolean;
   sortable?: boolean;
-  filterable?: boolean;
   hideable?: boolean;
   hidden?: boolean;
   visible?: boolean;
   align?: "left" | "center" | "right";
-  dataType?: DataGridColumnDataType;
   meta?: Record<string, unknown>;
 };
