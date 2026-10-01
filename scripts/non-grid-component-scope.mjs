@@ -24,7 +24,9 @@ export function getPublicNonGridBetaComponentIds(catalog) {
 
 export function loadPublicNonGridBetaComponentIds({ root } = {}) {
   if (!root) {
-    throw new Error("loadPublicNonGridBetaComponentIds requires a repository root");
+    throw new Error(
+      "loadPublicNonGridBetaComponentIds requires a repository root",
+    );
   }
   const catalog = JSON.parse(
     readFileSync(path.join(root, "docs/metadata/components.json"), "utf8"),
