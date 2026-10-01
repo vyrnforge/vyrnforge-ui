@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S5",
-    "task": "MF-5015",
-    "status": "evidence-complete",
+  "verification": {
+    "status": "verified",
     "package": "@vyrnforge/ui-components",
-    "baseCommit": "c0125debb083181bdc340878e6cae3138ea49fb5"
+    "baseCommit": "c0125debb083181bdc340878e6cae3138ea49fb5",
+    "provenance": {
+      "workItem": "MF-5015",
+      "iteration": "S5"
+    }
   },
   "sourceOfTruth": {
     "publicEntry": "packages/ui-components/src/index.ts",
@@ -298,11 +300,10 @@
   ],
   "unresolvedBehaviorDuplication": [],
   "requiredCommands": [
-    "npm run test:react-behavior-adoption",
     "npm run verify:react-behavior-adoption",
     "npm run test:coverage --workspace @vyrnforge/ui-components",
     "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run verify:consumer",
-    "npm run quality"
+    "npm run check"
   ]
 }
