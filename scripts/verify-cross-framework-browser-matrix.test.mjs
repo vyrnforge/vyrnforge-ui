@@ -10,7 +10,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { verifyCrossFrameworkBrowserMatrix } from "./verify-cross-framework-browser-matrix.mjs";
+import {
+  verifyCrossFrameworkBrowserMatrix,
+} from "./verify-cross-framework-browser-matrix.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -50,7 +52,10 @@ test("rejects a missing Vue consumer", () =>
       );
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
-    (failures) => assert(failures.includes("cross-framework browser matrix is missing vue")),
+    (failures) =>
+      assert(
+        failures.includes("cross-framework browser matrix is missing vue"),
+      ),
   ));
 
 test("rejects a runtime without trace support", () =>
