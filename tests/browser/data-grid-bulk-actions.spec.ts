@@ -13,7 +13,7 @@ test.describe("data-grid bulk action bar", () => {
   test("preserves visible, hidden, disabled, invoked, and clear-selection behavior", async ({
     page,
   }) => {
-    const bulkStatus = page.getByRole("status");
+    const bulkStatus = page.locator(".udg-bulk-action-bar");
     await expect(bulkStatus).toContainText("1 row selected");
 
     const flagSelected = page.getByRole("button", { name: "Flag selected" });
