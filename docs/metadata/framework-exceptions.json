@@ -173,7 +173,7 @@
       "state": "closed",
       "reviewMilestone": "S21 SC-2108 reconciliation"
     },
-        {
+    {
       "id": "MFD-EX-NATIVE-TOAST-VIEWPORT",
       "framework": "native",
       "scope": "toast-viewport",
