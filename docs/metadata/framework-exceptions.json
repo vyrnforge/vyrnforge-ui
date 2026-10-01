@@ -186,11 +186,12 @@
         "tests/browser/native-parity.spec.ts protects the shipped native parity surface that includes the toast viewport.",
         "SC-2103 shared toast viewport/service lifecycle owns native imperative orchestration and cross-framework service bindings; protected CI #2299 passed.",
         "SC-2103 protected CI #2299 proves shared toast lifecycle/service semantics and four-surface adapters.",
-        "SC-2108 CI #2360 exposed the residual metadata gap: native manifest generation rejects vf-toast-viewport when this exception is closed because no canonical component contract maps the registration."
+        "SC-2108 CI #2360 exposed the residual metadata gap: native manifest generation rejects vf-toast-viewport when this exception is closed because no canonical component contract maps the registration.",
+        "The canonical toast-viewport contract maps vf-toast-viewport to the delivered shared React, Angular, and Vue toast orchestration surfaces without introducing a new public framework component."
       ],
       "exitCriteria": "Add canonical metadata mapping for the public vf-toast-viewport registration to the delivered shared toast viewport/service capability, then prove native manifest generation and packed four-surface consumers without exception backing.",
-      "state": "active",
-      "reviewTrigger": "Re-review when canonical component metadata maps the public vf-toast-viewport registration, or when the public registration/service contract changes."
+      "state": "closed",
+      "reviewMilestone": "Canonical toast viewport contract closure"
     },
     {
       "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",

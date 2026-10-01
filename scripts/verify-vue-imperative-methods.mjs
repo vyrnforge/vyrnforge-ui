@@ -5,14 +5,17 @@ import { loadCanonicalComponentContracts } from "./canonical-component-contracts
 import { createFrameworkGenerationModel } from "./framework-generation.mjs";
 import { buildVueCatalogArtifact } from "./vue-catalog-generation.mjs";
 import { buildVueTypedCatalogArtifact } from "./vue-type-generation.mjs";
+import { loadPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const model = createFrameworkGenerationModel(
   loadCanonicalComponentContracts({ root }),
 );
+const publicComponentIds = new Set(loadPublicNonGridBetaComponentIds({ root }));
 const records = model.surfaces.vue.components.filter(
   (record) =>
     ["current", "target"].includes(record.implementationState) &&
+    publicComponentIds.has(record.id) &&
     record.methods.length > 0,
 );
 if (records.length !== 23) {

@@ -1,5 +1,6 @@
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
 import { createFrameworkGenerationModel } from "./framework-generation.mjs";
+import { loadPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 export const VUE_CATALOG_ARTIFACT_PATH =
   "packages/ui-vue/src/generated/catalog.generated.ts";
@@ -51,7 +52,10 @@ function createModelRecord(record) {
   });
 }
 
-export function createVueCatalogModel(generationModel) {
+export function createVueCatalogModel(
+  generationModel,
+  publicComponentIds = null,
+) {
   const vue = generationModel.surfaces.vue.components;
   const nativeById = new Map(
     generationModel.surfaces.native.components.map((record) => [
@@ -63,7 +67,8 @@ export function createVueCatalogModel(generationModel) {
     .filter(
       (record) =>
         ["current", "target"].includes(record.implementationState) &&
-        nativeById.get(record.id)?.implementationState === "current",
+        nativeById.get(record.id)?.implementationState === "current" &&
+        (publicComponentIds === null || publicComponentIds.has(record.id)),
     )
     .map((record) => {
       const native = nativeById.get(record.id);
@@ -96,7 +101,9 @@ export function createVueCatalogModel(generationModel) {
     .sort((left, right) => compareText(left.id, right.id));
 
   const currentNativeCount = generationModel.surfaces.native.components.filter(
-    (record) => record.implementationState === "current",
+    (record) =>
+      record.implementationState === "current" &&
+      (publicComponentIds === null || publicComponentIds.has(record.id)),
   ).length;
   assert(
     components.length === currentNativeCount,
@@ -239,7 +246,10 @@ ${registryLines}
 export function buildVueCatalogArtifact({ root } = {}) {
   const contracts = loadCanonicalComponentContracts({ root });
   const model = createFrameworkGenerationModel(contracts);
-  const components = createVueCatalogModel(model);
+  const publicComponentIds = new Set(
+    loadPublicNonGridBetaComponentIds({ root }),
+  );
+  const components = createVueCatalogModel(model, publicComponentIds);
   return Object.freeze({
     path: VUE_CATALOG_ARTIFACT_PATH,
     sourceRecords: ["component:*", "framework:vue:*", "framework:native:*"],

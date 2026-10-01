@@ -47,10 +47,9 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   );
   assert.equal(
     live.length,
-    1,
-    "only the narrow native toast viewport mapping gap should remain live",
+    0,
+    "all framework exceptions should be closed once canonical support exists",
   );
-  assert.equal(live[0]?.id, "MFD-EX-NATIVE-TOAST-VIEWPORT");
 
   for (const entry of live) {
     for (const field of registry.requiredFields) {
@@ -87,8 +86,8 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   const closed = registry.exceptions.filter(({ state }) => state === "closed");
   assert.equal(
     closed.length,
-    registry.exceptions.length - 1,
-    "all evidence-satisfied original exceptions should remain closed",
+    registry.exceptions.length,
+    "all framework exceptions should remain closed after canonical convergence",
   );
   for (const entry of live) {
     assert.ok(

@@ -4,6 +4,7 @@ import {
   loadFrameworkExceptions,
 } from "./framework-exceptions.mjs";
 import { createFrameworkGenerationModel } from "./framework-generation.mjs";
+import { loadPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 export const ANGULAR_CATALOG_ARTIFACT_PATH =
   "packages/ui-angular/src/generated/catalog.generated.ts";
@@ -192,6 +193,7 @@ export function createAngularCatalogModel(
   generationModel,
   exceptionRegistry,
   canonicalById,
+  publicComponentIds = null,
 ) {
   const angularById = new Map(
     generationModel.surfaces.angular.components.map((record) => [
@@ -200,7 +202,11 @@ export function createAngularCatalogModel(
     ]),
   );
   const nativeSupported = generationModel.surfaces.native.components
-    .filter((record) => record.implementationState === "current")
+    .filter(
+      (record) =>
+        record.implementationState === "current" &&
+        (publicComponentIds === null || publicComponentIds.has(record.id)),
+    )
     .sort((left, right) => compareText(left.id, right.id));
 
   assert(
@@ -462,10 +468,14 @@ export function buildAngularCatalogArtifact({ root } = {}) {
   const canonicalById = new Map(
     contracts.components.map((component) => [component.id, component]),
   );
+  const publicComponentIds = new Set(
+    loadPublicNonGridBetaComponentIds({ root }),
+  );
   const model = createAngularCatalogModel(
     generationModel,
     exceptionRegistry,
     canonicalById,
+    publicComponentIds,
   );
   return Object.freeze({
     path: ANGULAR_CATALOG_ARTIFACT_PATH,

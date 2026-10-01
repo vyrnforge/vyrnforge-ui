@@ -4793,6 +4793,383 @@
       }
     },
     {
+      "id": "toast-viewport",
+      "category": "feedback-orchestration",
+      "properties": [
+        {
+          "name": "defaultDuration",
+          "type": {
+            "kind": "number"
+          },
+          "required": false,
+          "mutable": true,
+          "default": 5000
+        },
+        {
+          "name": "label",
+          "type": {
+            "kind": "string"
+          },
+          "required": false,
+          "mutable": true,
+          "default": "Notifications"
+        },
+        {
+          "name": "maxVisible",
+          "type": {
+            "kind": "number"
+          },
+          "required": false,
+          "mutable": true,
+          "default": 5
+        },
+        {
+          "name": "newestOnTop",
+          "type": {
+            "kind": "boolean"
+          },
+          "required": false,
+          "mutable": true,
+          "default": false
+        },
+        {
+          "name": "position",
+          "type": {
+            "kind": "string",
+            "typeName": "ToastPosition"
+          },
+          "required": false,
+          "mutable": true,
+          "default": "bottom-end"
+        },
+        {
+          "name": "records",
+          "type": {
+            "kind": "array",
+            "itemType": "VyrnForgeToastRecord"
+          },
+          "required": false,
+          "mutable": true,
+          "default": []
+        }
+      ],
+      "attributes": [
+        {
+          "name": "default-duration",
+          "property": "defaultDuration",
+          "valueKind": "number",
+          "reflection": "two-way",
+          "removal": "restore-default"
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "valueKind": "string",
+          "reflection": "two-way",
+          "removal": "restore-default"
+        },
+        {
+          "name": "max-visible",
+          "property": "maxVisible",
+          "valueKind": "number",
+          "reflection": "two-way",
+          "removal": "restore-default"
+        },
+        {
+          "name": "newest-on-top",
+          "property": "newestOnTop",
+          "valueKind": "boolean",
+          "reflection": "two-way",
+          "removal": "set-false"
+        },
+        {
+          "name": "position",
+          "property": "position",
+          "valueKind": "enum",
+          "reflection": "two-way",
+          "removal": "restore-default"
+        }
+      ],
+      "events": [
+        {
+          "name": "vf-action",
+          "source": "user-action"
+        },
+        {
+          "name": "vf-dismiss",
+          "source": "controller"
+        },
+        {
+          "name": "vf-toast-change",
+          "source": "controller"
+        }
+      ],
+      "slots": [],
+      "methods": [
+        {
+          "name": "add",
+          "parameters": [
+            {
+              "name": "record",
+              "type": {
+                "kind": "object",
+                "typeName": "VyrnForgeToastRecord"
+              },
+              "required": true
+            }
+          ],
+          "returns": {
+            "kind": "string"
+          },
+          "async": false
+        },
+        {
+          "name": "dismiss",
+          "parameters": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "string"
+              },
+              "required": true
+            },
+            {
+              "name": "reason",
+              "type": {
+                "kind": "string"
+              },
+              "required": false
+            }
+          ],
+          "returns": {
+            "kind": "boolean"
+          },
+          "async": false
+        },
+        {
+          "name": "dismissAll",
+          "parameters": [],
+          "returns": {
+            "kind": "unknown",
+            "typeName": "void"
+          },
+          "async": false
+        },
+        {
+          "name": "updateToast",
+          "parameters": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "string"
+              },
+              "required": true
+            },
+            {
+              "name": "update",
+              "type": {
+                "kind": "object",
+                "typeName": "Partial<VyrnForgeToastRecord>"
+              },
+              "required": true
+            }
+          ],
+          "returns": {
+            "kind": "boolean"
+          },
+          "async": false
+        }
+      ],
+      "form": {
+        "association": "none",
+        "disabledProperty": null,
+        "validity": {
+          "supported": false,
+          "methods": []
+        },
+        "reset": {
+          "supported": false
+        }
+      },
+      "model": {
+        "kind": "none",
+        "controlled": false,
+        "stateProperty": null,
+        "defaultProperty": null,
+        "changeEvent": null,
+        "disabledProperty": null,
+        "touchedSemantics": "none"
+      },
+      "ref": {
+        "exposure": "facade-handle",
+        "methods": ["add", "dismiss", "dismissAll", "updateToast"],
+        "elementType": "VyrnForgeToastViewportElement"
+      },
+      "accessibility": [
+        "viewport exposes a configurable accessible label",
+        "rendered toast records own polite or assertive live-region semantics through the canonical toast contract",
+        "orchestration does not move focus automatically"
+      ],
+      "frameworkMappings": {
+        "native": {
+          "package": "@vyrnforge/ui-elements",
+          "supportLevel": "first-class",
+          "implementationState": "current",
+          "tag": "vf-toast-viewport",
+          "properties": [
+            {
+              "canonical": "defaultDuration",
+              "public": "defaultDuration",
+              "binding": "property"
+            },
+            {
+              "canonical": "label",
+              "public": "label",
+              "binding": "property"
+            },
+            {
+              "canonical": "maxVisible",
+              "public": "maxVisible",
+              "binding": "property"
+            },
+            {
+              "canonical": "newestOnTop",
+              "public": "newestOnTop",
+              "binding": "property"
+            },
+            {
+              "canonical": "position",
+              "public": "position",
+              "binding": "property"
+            },
+            {
+              "canonical": "records",
+              "public": "records",
+              "binding": "property"
+            }
+          ],
+          "events": [
+            {
+              "canonical": "vf-action",
+              "public": "vf-action",
+              "mode": "dom-event",
+              "detail": "event"
+            },
+            {
+              "canonical": "vf-dismiss",
+              "public": "vf-dismiss",
+              "mode": "dom-event",
+              "detail": "event"
+            },
+            {
+              "canonical": "vf-toast-change",
+              "public": "vf-toast-change",
+              "mode": "dom-event",
+              "detail": "event"
+            }
+          ],
+          "slots": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "element",
+            "type": "VyrnForgeToastViewportElement"
+          },
+          "setup": ["register custom element"]
+        },
+        "react": {
+          "package": "@vyrnforge/ui-components",
+          "supportLevel": "first-class",
+          "implementationState": "current",
+          "export": "ToastProvider",
+          "properties": [
+            {
+              "canonical": "defaultDuration",
+              "public": "defaultDuration",
+              "binding": "prop"
+            },
+            {
+              "canonical": "label",
+              "public": "viewportLabel",
+              "binding": "prop"
+            },
+            {
+              "canonical": "maxVisible",
+              "public": "maxVisible",
+              "binding": "prop"
+            },
+            {
+              "canonical": "newestOnTop",
+              "public": "newestOnTop",
+              "binding": "prop"
+            },
+            {
+              "canonical": "position",
+              "public": "position",
+              "binding": "prop"
+            }
+          ],
+          "events": [],
+          "slots": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "facade-handle",
+            "type": "ToastController"
+          },
+          "setup": [
+            "wrap the consumer subtree in ToastProvider and access the controller with useToast"
+          ]
+        },
+        "angular": {
+          "package": "@vyrnforge/ui-angular",
+          "supportLevel": "first-class",
+          "implementationState": "current",
+          "export": "VyrnForgeToastService",
+          "properties": [],
+          "events": [],
+          "slots": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "facade-handle",
+            "type": "VyrnForgeToastService"
+          },
+          "setup": ["inject VyrnForgeToastService"]
+        },
+        "vue": {
+          "package": "@vyrnforge/ui-vue",
+          "supportLevel": "first-class",
+          "implementationState": "current",
+          "export": "useVyrnForgeToast",
+          "properties": [],
+          "events": [],
+          "slots": [],
+          "model": {
+            "mode": "none",
+            "property": null,
+            "event": null
+          },
+          "ref": {
+            "mode": "facade-handle",
+            "type": "VyrnForgeToastService"
+          },
+          "setup": [
+            "install the VyrnForge Vue plugin and access the service with useVyrnForgeToast"
+          ]
+        }
+      }
+    },
+    {
       "id": "text-input",
       "category": "form-control",
       "properties": [

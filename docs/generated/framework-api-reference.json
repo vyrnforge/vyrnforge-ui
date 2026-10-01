@@ -18,11 +18,11 @@
         "framework": "native",
         "scope": "toast-viewport",
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-elements/src/components/feedback.ts"
         ],
-        "reviewMilestone": "S14 framework convergence"
+        "reviewMilestone": "Canonical toast viewport contract closure"
       },
       {
         "id": "MFD-EX-REACT-ACTION-ALIASES",
@@ -34,24 +34,24 @@
           "refresh-button"
         ],
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/IconButton/ActionButtons.tsx"
         ],
-        "reviewMilestone": "S14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-AUTOCOMPLETE-ADVANCED-CONTRACT",
         "framework": "react",
         "scope": "autocomplete",
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Autocomplete/Autocomplete.tsx",
           "packages/ui-components/src/components/Autocomplete/Autocomplete.types.ts",
           "packages/ui-elements/src/components/collections.ts"
         ],
-        "reviewMilestone": "G14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-COLLECTION-RICH-COMPOSITION",
@@ -61,7 +61,7 @@
           "transfer-list"
         ],
         "exceptionClass": "composition",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/MultiSelect/MultiSelect.tsx",
           "packages/ui-components/src/components/MultiSelect/MultiSelect.types.ts",
@@ -69,7 +69,7 @@
           "packages/ui-components/src/components/TransferList/TransferList.types.ts",
           "packages/ui-elements/src/components/collections.ts"
         ],
-        "reviewMilestone": "G14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-LAYOUT-NATIVE-HOST",
@@ -80,14 +80,14 @@
           "stack"
         ],
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Card/Card.tsx",
           "packages/ui-components/src/components/Inline/Inline.tsx",
           "packages/ui-components/src/components/Stack/Stack.tsx",
           "packages/ui-elements/src/components/display.ts"
         ],
-        "reviewMilestone": "S16 baseline hardening"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-LAYOUT-RICH-COMPOSITION",
@@ -101,7 +101,7 @@
           "section"
         ],
         "exceptionClass": "composition",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/AppShell/AppShell.tsx",
           "packages/ui-components/src/components/Page/Page.tsx",
@@ -111,7 +111,7 @@
           "packages/ui-components/src/components/Section/Section.tsx",
           "packages/ui-elements/src/components/display.ts"
         ],
-        "reviewMilestone": "S16 baseline hardening"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",
@@ -124,7 +124,7 @@
           "tabs"
         ],
         "exceptionClass": "composition",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Breadcrumbs/Breadcrumbs.tsx",
           "packages/ui-components/src/components/Menu/Menu.tsx",
@@ -135,7 +135,7 @@
           "packages/ui-elements/src/components/overlays.ts",
           "packages/ui-elements/src/components/values.ts"
         ],
-        "reviewMilestone": "G14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-OVERLAY-COMPOSITION",
@@ -149,7 +149,7 @@
           "tooltip"
         ],
         "exceptionClass": "composition",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/ConfirmDialog/ConfirmDialog.tsx",
           "packages/ui-components/src/components/Dialog/Dialog.tsx",
@@ -161,82 +161,82 @@
           "packages/ui-elements/src/components/feedback.ts",
           "packages/ui-elements/src/components/overlays.ts"
         ],
-        "reviewMilestone": "S16 baseline hardening"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-RADIO-GROUP-FOCUS",
         "framework": "react",
         "scope": "radio-group",
         "exceptionClass": "accessibility-focus-form",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Radio/Radio.tsx",
           "packages/ui-components/src/components/RadioGroup/RadioGroup.tsx",
           "packages/ui-elements/src/components/selection.ts"
         ],
-        "reviewMilestone": "G14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-RATING-RADIO-SEMANTICS",
         "framework": "react",
         "scope": "rating",
         "exceptionClass": "accessibility-focus-form",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Rating/Rating.tsx",
           "packages/ui-components/src/components/Rating/Rating.types.ts",
           "packages/ui-elements/src/components/values.ts"
         ],
-        "reviewMilestone": "G14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-SELECT-MULTIPLE",
         "framework": "react",
         "scope": "select-multiple",
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Select/Select.tsx",
           "packages/ui-components/src/components/Select/Select.types.ts",
           "packages/ui-elements/src/components/selection.ts"
         ],
-        "reviewMilestone": "G14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-STATUS-BADGE",
         "framework": "react",
         "scope": "status-badge",
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Badge/Badge.types.ts",
           "packages/ui-components/src/components/Badge/StatusBadge.tsx"
         ],
-        "reviewMilestone": "S14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-TOAST-ACTION",
         "framework": "react",
         "scope": "toast-action",
         "exceptionClass": "composition",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Toast/Toast.types.ts",
           "packages/ui-components/src/components/Toast/ToastAction.tsx"
         ],
-        "reviewMilestone": "S14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-TOAST-PROVIDER",
         "framework": "react",
         "scope": "toast-provider",
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Toast/ToastProvider.tsx",
           "packages/ui-components/src/components/Toast/useToast.ts"
         ],
-        "reviewMilestone": "S14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
@@ -249,7 +249,7 @@
           "text"
         ],
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Typography/Caption.tsx",
           "packages/ui-components/src/components/Typography/CodeText.tsx",
@@ -258,19 +258,19 @@
           "packages/ui-components/src/components/Typography/Text.tsx",
           "packages/ui-components/src/components/Typography/Typography.types.ts"
         ],
-        "reviewMilestone": "G14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       },
       {
         "id": "MFD-EX-REACT-USE-TOAST",
         "framework": "react",
         "scope": "use-toast",
         "exceptionClass": "migration-compatibility",
-        "state": "active",
+        "state": "closed",
         "sourcePaths": [
           "packages/ui-components/src/components/Toast/Toast.types.ts",
           "packages/ui-components/src/components/Toast/useToast.ts"
         ],
-        "reviewMilestone": "S14 React convergence"
+        "reviewMilestone": "S21 SC-2108 reconciliation"
       }
     ]
   },

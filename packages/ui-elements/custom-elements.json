@@ -733,9 +733,9 @@
         "exceptions": "docs/metadata/framework-exceptions.json",
         "descriptions": "docs/metadata/components.json"
       },
-      "canonicalTagCount": 61,
-      "canonicalMappedRegistrationCount": 61,
-      "exceptionBackedRegistrationCount": 1
+      "canonicalTagCount": 62,
+      "canonicalMappedRegistrationCount": 62,
+      "exceptionBackedRegistrationCount": 0
     },
     "typeDeclarations": {
       "tagNameMap": "VyrnForgeHTMLElementTagNameMap",

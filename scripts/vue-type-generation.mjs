@@ -1,5 +1,6 @@
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
 import { createFrameworkGenerationModel } from "./framework-generation.mjs";
+import { loadPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 export const VUE_TYPED_CATALOG_ARTIFACT_PATH =
   "packages/ui-vue/src/generated/typed-catalog.generated.ts";
@@ -168,7 +169,7 @@ function serializeComponent(component) {
   ].join("\n\n");
 }
 
-export function createVueTypeModel(generationModel) {
+export function createVueTypeModel(generationModel, publicComponentIds = null) {
   const nativeById = new Map(
     generationModel.surfaces.native.components.map((record) => [
       record.id,
@@ -179,7 +180,8 @@ export function createVueTypeModel(generationModel) {
     .filter(
       (record) =>
         ["current", "target"].includes(record.implementationState) &&
-        nativeById.get(record.id)?.implementationState === "current",
+        nativeById.get(record.id)?.implementationState === "current" &&
+        (publicComponentIds === null || publicComponentIds.has(record.id)),
     )
     .map((record) => {
       const native = nativeById.get(record.id);
@@ -240,7 +242,10 @@ ${blocks}
 export function buildVueTypedCatalogArtifact({ root } = {}) {
   const contracts = loadCanonicalComponentContracts({ root });
   const model = createFrameworkGenerationModel(contracts);
-  const components = createVueTypeModel(model);
+  const publicComponentIds = new Set(
+    loadPublicNonGridBetaComponentIds({ root }),
+  );
+  const components = createVueTypeModel(model, publicComponentIds);
   return Object.freeze({
     path: VUE_TYPED_CATALOG_ARTIFACT_PATH,
     sourceRecords: ["component:*", "framework:vue:*", "framework:native:*"],
