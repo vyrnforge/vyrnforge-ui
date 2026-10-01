@@ -10,9 +10,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import {
-  verifyCrossFrameworkBrowserMatrix,
-} from "./verify-cross-framework-browser-matrix.mjs";
+import { verifyCrossFrameworkBrowserMatrix } from "./verify-cross-framework-browser-matrix.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
