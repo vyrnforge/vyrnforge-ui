@@ -49,6 +49,34 @@ Add a clear note identifying the replacement and why the historical copy is reta
 
 Archived documents are historical evidence, not alternate current guidance.
 
+## Evidence placement
+
+Retained evidence should live with the current contract that consumes it rather
+than in a generic archive:
+
+- `docs/testing/` owns durable verification contracts and testing guidance;
+- `docs/quality/` owns current quality policy, review records, and results that
+  continue to support active claims;
+- `docs/release/evidence/` owns immutable release-specific or external evidence;
+- accepted ADRs own architectural decision history;
+- Git and merged pull-request history remain the default archive for ordinary
+  superseded task/program material.
+
+A file should not be moved merely to make a directory look cleaner. Move or
+retain evidence only when the destination makes its current owner and lifecycle
+clearer.
+
+## Generated material
+
+Checked-in generated artifacts are not disposable merely because they can be
+regenerated. Retain them when a current package, Reference surface, consumer,
+test, or verification contract consumes the committed output.
+
+A generated artifact may be removed only after its current consumer is retired
+or changed and the generator/verification contract is updated accordingly.
+Generated ownership follows
+[Generated Source Ownership](generated-source-ownership.md).
+
 ## Stable documentation checklist
 
 A stable document must:
