@@ -2,11 +2,11 @@ import { verifyCompatibilityMatrixContract } from "./compatibility-release-matri
 
 const failures = verifyCompatibilityMatrixContract();
 if (failures.length) {
-  console.error("BT-8005 compatibility release matrix verification failed:");
+  console.error("Compatibility release matrix verification failed:");
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
-  console.log("BT-8005 compatibility release matrix contract passed.");
+  console.log("Compatibility release matrix contract passed.");
 }
 
 export { verifyCompatibilityMatrixContract };
