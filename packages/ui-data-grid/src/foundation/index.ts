@@ -2,6 +2,10 @@ export { applyFilters } from "./applyFilters";
 export { applyPagination } from "./applyPagination";
 export { applySearch } from "./applySearch";
 export { applySorting } from "./applySorting";
+export {
+  getDataGridFilterOperators,
+  getDataGridFilterOperatorsForColumn,
+} from "./filterOperators";
 export { resolveGridNavigationTarget } from "./gridKeyboardNavigation";
 export {
   clearSelection,
@@ -16,6 +20,7 @@ export {
   toggleRowSelection,
 } from "./rowSelection";
 export type {
+  DataGridColumnDataType,
   DataGridColumnSizingState,
   DataGridColumnVisibilityState,
   DataGridDensity,
