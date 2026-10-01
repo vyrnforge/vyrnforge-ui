@@ -40,7 +40,9 @@ export function DataGridBulkActionBar<
         <Badge size="sm" variant="info">
           {selectedCount}
         </Badge>
-        <span>row{selectedCount === 1 ? "" : "s"} selected</span>
+        <span>
+          row{selectedCount === 1 ? "" : "s"} selected
+        </span>
       </div>
       <div className="udg-bulk-action-bar__actions">
         {visibleActions.map((action) => {
