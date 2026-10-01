@@ -14,13 +14,20 @@
     "version": "0.2.0-beta.2",
     "manifest": "packages/ui-components/package.json",
     "publicEntry": "packages/ui-components/src/index.ts",
-    "cssEntrypoints": ["./style.css", "./index.css", "./styles/index.css"],
+    "cssEntrypoints": [
+      "./style.css",
+      "./index.css",
+      "./styles/index.css"
+    ],
     "peerDependencies": {
       "react": ">=18 <20",
       "react-dom": ">=18 <20"
     }
   },
-  "testedReactVersions": ["18.3.1", "19.2.7"],
+  "testedReactVersions": [
+    "18.3.1",
+    "19.2.7"
+  ],
   "fingerprints": [
     {
       "path": "packages/ui-components/package.json",
@@ -37,7 +44,10 @@
       "path": "packages/ui-components/src/index.ts",
       "kind": "blob",
       "sha1": "7a650c126f51169cf91141848bb28878942aa98f",
-      "covers": ["public value exports", "public type exports"]
+      "covers": [
+        "public value exports",
+        "public type exports"
+      ]
     },
     {
       "path": "packages/ui-components/src/components",
@@ -55,24 +65,30 @@
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
       "sha1": "4a052e9b0350944b813bd0d27806d5fb7f458544",
-      "covers": ["React renderer CSS implementation"]
+      "covers": [
+        "React renderer CSS implementation"
+      ]
     },
     {
       "path": "docs/api/ui-components-api.md",
       "kind": "blob",
       "sha1": "62a2df843d0ed4ee808b9eb9b266c1b7a841a15b",
-      "covers": ["documented React public API and usage contracts"]
+      "covers": [
+        "documented React public API and usage contracts"
+      ]
     },
     {
       "path": "packages/ui-components/README.md",
       "kind": "blob",
       "sha1": "0f8277e4a6bddfa0a35dc3367001b6e529de2f91",
-      "covers": ["React package ownership and public consumption contract"]
+      "covers": [
+        "React package ownership and public consumption contract"
+      ]
     },
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "7633403d0f3222434d9b9fee4047ffabb918669b",
+      "sha1": "e1448b54ec98d795cbc9104798793d9d16a352d9",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -83,7 +99,10 @@
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
       "sha1": "f95919a980e055452eebb197e7e5f00c7546e37a",
-      "covers": ["tested React versions", "packed consumer compatibility cases"]
+      "covers": [
+        "tested React versions",
+        "packed consumer compatibility cases"
+      ]
     }
   ],
   "runtimeEvidence": [
@@ -219,6 +238,11 @@
       "changeId": "#686",
       "reason": "Documentation quality hardening repairs duplicate component rows and headings, restores one valid Feedback table, and corrects Markdown table structure in the React API guide without changing public React exports, props, callbacks, refs, runtime behavior, CSS contracts, or compatibility policy. Only the reviewed API-documentation fingerprint is intentionally recaptured.",
       "evidence": "scripts/verify-markdown-structure.mjs"
+    },
+    {
+      "changeId": "#697",
+      "reason": "React behavior-adoption evidence was reframed from closed S5/MF execution state to current verification status plus retained provenance. Public React exports, props, callbacks, refs, runtime behavior, CSS contracts, behavior adoption classifications, compatibility invariants, and parity evidence remain unchanged; only the reviewed metadata fingerprint is intentionally recaptured.",
+      "evidence": "scripts/verify-react-behavior-adoption.mjs"
     }
   ],
   "changePolicy": "A fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
