@@ -180,9 +180,7 @@
       "exceptionClass": "migration-compatibility",
       "reason": "SC-2103 delivered the shared toast service/viewport lifecycle, but vf-toast-viewport remains a registered Native orchestration element without its own canonical component-contract mapping. Native manifest generation still requires this narrow exception to authorize that public registration.",
       "owner": "UI Platform",
-      "sourcePaths": [
-        "packages/ui-elements/src/components/feedback.ts"
-      ],
+      "sourcePaths": ["packages/ui-elements/src/components/feedback.ts"],
       "evidence": [
         "packages/ui-elements/src/registry.ts registers vf-toast-viewport with VyrnForgeToastViewportElement.",
         "tests/browser/native-parity.spec.ts protects the shipped native parity surface that includes the toast viewport.",
