@@ -24,10 +24,14 @@ type BaselineFingerprint = {
 
 type ReactCompatibilityBaseline = {
   schemaVersion: number;
-  task: {
-    sprint: string;
-    id: string;
+  capture: {
     status: string;
+    baseCommit: string;
+    provenance: {
+      sprint: string;
+      id: string;
+      title: string;
+    };
   };
   package: {
     name: string;
@@ -111,7 +115,7 @@ function fingerprint(relativePath: string, kind: "blob" | "tree"): string {
     : gitBlobHash(absolutePath);
 }
 
-describe("MFD-1401 React compatibility baseline", () => {
+describe("React compatibility baseline", () => {
   const baseline = readJson<ReactCompatibilityBaseline>(baselinePath);
   const packageJson = readJson<{
     name: string;
@@ -126,12 +130,14 @@ describe("MFD-1401 React compatibility baseline", () => {
     compatibilityInvariants: string[];
   }>("docs/metadata/react-behavior-adoption.json");
 
-  it("records the S14 React package contract", () => {
-    expect(baseline.schemaVersion).toBe(1);
-    expect(baseline.task).toMatchObject({
-      sprint: "S14",
-      id: "MFD-1401",
+  it("records the captured React package contract", () => {
+    expect(baseline.schemaVersion).toBe(2);
+    expect(baseline.capture).toMatchObject({
       status: "captured",
+      provenance: {
+        sprint: "S14",
+        id: "MFD-1401",
+      },
     });
     expect(packageJson.name).toBe(baseline.package.name);
     expect(packageJson.version).toBe(baseline.package.version);
@@ -165,7 +171,7 @@ describe("MFD-1401 React compatibility baseline", () => {
       ).toBe(true);
       expect(
         fingerprint(record.path, record.kind),
-        `${record.path} changed; review and intentionally recapture the MFD-1401 baseline with matching parity evidence`,
+        `${record.path} changed; review and intentionally recapture the React compatibility baseline with matching parity evidence`,
       ).toBe(record.sha1);
     }
   });

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "status": "current",
-  "purpose": "Generate one consumer-knowledge model and one canonical framework API projection for human reference surfaces and task-scoped AI context retrieval without duplicating canonical component, contract, pattern, package, or framework truth.",
+  "purpose": "Generate the shared consumer-knowledge model and canonical framework API projections for human Reference surfaces and scoped AI context retrieval without duplicating canonical component, contract, pattern, package, or framework truth.",
   "sourceOfTruth": [
     "docs/metadata/components.json",
     "docs/metadata/component-contracts.json",
@@ -31,12 +31,12 @@
     "componentDeepLinksAreStable": true
   },
   "requiredCommands": [
-    "npm run generate:consumer-knowledge",
-    "npm run verify:consumer-knowledge",
-    "npm run test:consumer-knowledge",
+    "npm run generate:component-reference",
+    "npm run verify:component-reference",
+    "npm run generate:framework-api-reference",
     "npm run verify:framework-api-reference",
-    "npm run build:docs",
-    "npm run build:playground"
+    "npm run verify:docs-quality",
+    "npm run build:docs"
   ],
   "evidence": [
     "docs/testing/generated-component-reference.md",

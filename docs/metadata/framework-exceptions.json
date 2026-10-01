@@ -26,8 +26,7 @@
     "sourcePaths",
     "evidence",
     "exitCriteria",
-    "state",
-    "reviewMilestone"
+    "state"
   ],
   "exceptions": [
     {
@@ -191,7 +190,7 @@
       ],
       "exitCriteria": "Add canonical metadata mapping for the public vf-toast-viewport registration to the delivered shared toast viewport/service capability, then prove native manifest generation and packed four-surface consumers without exception backing.",
       "state": "active",
-      "reviewMilestone": "S21 SC-2108 reconciliation"
+      "reviewTrigger": "Re-review when canonical component metadata maps the public vf-toast-viewport registration, or when the public registration/service contract changes."
     },
     {
       "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",

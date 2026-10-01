@@ -16,7 +16,7 @@ const repositoryRoot = path.resolve(
 const generatedPath = "docs/generated/component-reference.json";
 const knowledgePath = "docs/generated/consumer-knowledge.json";
 const aiRoot = "docs/generated/ai-context";
-const programMetadataPath = "docs/metadata/component-reference-program.json";
+const configMetadataPath = "docs/metadata/component-reference-config.json";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -48,13 +48,15 @@ function filesRecursively(root, relativeDir) {
 
 export function verifyComponentReference({ root = repositoryRoot } = {}) {
   const failures = [];
-  if (!existsSync(path.join(root, programMetadataPath))) {
-    return [`consumer knowledge metadata is missing: ${programMetadataPath}`];
+  if (!existsSync(path.join(root, configMetadataPath))) {
+    return [
+      `component reference configuration is missing: ${configMetadataPath}`,
+    ];
   }
   failures.push(...verifyPlaygroundReferenceCoverage({ root }));
-  const program = json(root, programMetadataPath);
-  if (program.status !== "current") {
-    failures.push("consumer knowledge pipeline status must be current");
+  const config = json(root, configMetadataPath);
+  if (config.status !== "current") {
+    failures.push("component reference configuration status must be current");
   }
   for (const requiredSource of [
     "docs/metadata/components.json",
@@ -63,7 +65,7 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     "docs/metadata/packages.json",
     "docs/metadata/multi-framework.json",
   ]) {
-    if (!(program.sourceOfTruth ?? []).includes(requiredSource)) {
+    if (!(config.sourceOfTruth ?? []).includes(requiredSource)) {
       failures.push(
         `consumer knowledge metadata is missing source ${requiredSource}`,
       );
@@ -258,7 +260,7 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   }
 
   const rolloutResidueFiles = [
-    "docs/metadata/component-reference-program.json",
+    "docs/metadata/component-reference-config.json",
     "docs/testing/generated-component-reference.md",
     "scripts/generate-component-reference.mjs",
     "scripts/verify-component-reference.test.mjs",
@@ -267,7 +269,7 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   for (const file of rolloutResidueFiles) {
     if (rolloutPattern.test(read(root, file))) {
       failures.push(
-        `${file}: retired rollout/task language remains in the current consumer knowledge pipeline`,
+        `${file}: retired rollout/task language remains in the current component reference pipeline`,
       );
     }
   }

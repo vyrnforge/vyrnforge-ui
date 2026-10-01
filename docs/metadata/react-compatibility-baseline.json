@@ -1,11 +1,13 @@
 {
-  "schemaVersion": 1,
-  "task": {
-    "sprint": "S14",
-    "id": "MFD-1401",
-    "title": "Capture React public API and behavior baseline",
+  "schemaVersion": 2,
+  "capture": {
     "status": "captured",
-    "baseCommit": "674ee012f204a10f42ed608c6d650e385053aed3"
+    "baseCommit": "674ee012f204a10f42ed608c6d650e385053aed3",
+    "provenance": {
+      "sprint": "S14",
+      "id": "MFD-1401",
+      "title": "Capture React public API and behavior baseline"
+    }
   },
   "package": {
     "name": "@vyrnforge/ui-components",
@@ -104,120 +106,120 @@
   ],
   "recaptures": [
     {
-      "task": "MFD-1409",
+      "changeId": "MFD-1409",
       "reason": "Button and IconButton moved to canonical Light-DOM action facades while preserving the documented React API, native HTMLButtonElement refs, native event surface, SSR output, CSS hooks, and accessibility behavior.",
       "evidence": "packages/ui-components/src/__tests__/react-batch-1-actions.test.tsx"
     },
     {
-      "task": "MFD-1410",
+      "changeId": "MFD-1410",
       "reason": "Simple form controls moved to canonical Light-DOM ownership while preserving public React props and callbacks, native control refs and form semantics, accessibility behavior, SSR output, and documented CSS hooks.",
       "evidence": "packages/ui-components/src/__tests__/react-batch-2-forms.test.tsx"
     },
     {
-      "task": "MFD-1411",
+      "changeId": "MFD-1411",
       "reason": "Canonical-ready React navigation and selection surfaces moved to vf-* Light-DOM hosts while preserving native control refs, controlled and uncontrolled state callbacks, keyboard focus, SSR composition, multiple-select compatibility, and documented CSS hooks. Surfaces with unresolved canonical composition or accessibility gaps remain explicit framework exceptions.",
       "evidence": "packages/ui-components/src/__tests__/react-batch-3-navigation.test.tsx"
     },
     {
-      "task": "workflow-surface-consolidation",
+      "changeId": "workflow-surface-consolidation",
       "reason": "Compatibility matrix orchestration moved from the retired reusable _compatibility.yml workflow to assurance.yml without changing tested React versions or compatibility cases.",
       "evidence": "docs/metadata/compatibility-release-matrix.json"
     },
     {
-      "task": "S13-vue-main-reconciliation",
+      "changeId": "S13-vue-main-reconciliation",
       "reason": "The shared compatibility release matrix gained first-class Vue support and Vue 3.5 compatibility cases during S13 reconciliation. React support policy, tested React versions, public API, runtime behavior, and React compatibility cases remain unchanged; only the shared metadata blob fingerprint is intentionally recaptured.",
       "evidence": "docs/metadata/compatibility-release-matrix.json"
     },
     {
-      "task": "BC-1604-formatting-cleanup",
+      "changeId": "BC-1604-formatting-cleanup",
       "reason": "The repository-wide Prettier cleanup changed formatting-only bytes within the React component implementation tree. Public entrypoints, package metadata, styles, documented API, compatibility invariants, contract tests, and runtime evidence remain unchanged; only the implementation-tree fingerprint is intentionally recaptured.",
       "evidence": "packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts"
     },
     {
-      "task": "S16-react-warning-cleanup",
+      "changeId": "S16-react-warning-cleanup",
       "reason": "React test-noise cleanup made controlled native inputs explicitly acknowledge React change semantics while preserving VyrnForge's existing public callback and canonical value-change ownership. Slider keeps its canonical value-change path, SearchInput continues forwarding its public callback through the input-capture bridge, and Autocomplete/TransferList hidden form controls remain current serialized values. React 18 and React 19 compatibility cases passed before this intentional implementation-tree recapture.",
       "evidence": "packages/ui-components/src/components/__tests__/behavior-parity.test.tsx"
     },
     {
-      "task": "description-list-react-renderer",
+      "changeId": "description-list-react-renderer",
       "reason": "DescriptionList adds the planned stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves native dl/dt/dd relationships, introduces no stateful model or callback contract, reuses VyrnForge token-driven layout styling, and is covered by React semantic, accessibility, and packed-consumer evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     },
     {
-      "task": "progress-react-renderer",
+      "changeId": "progress-react-renderer",
       "reason": "Progress adds the planned stateless React renderer as a public @vyrnforge/ui-components export. It preserves native progress semantics for determinate and indeterminate states, introduces no controller or callback contract, uses VyrnForge token-driven feedback styling, and is covered by React semantic, accessibility, compatibility, and packed-consumer evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     },
     {
-      "task": "data-display-description-list-density-rationalization",
+      "changeId": "data-display-description-list-density-rationalization",
       "reason": "DescriptionList replaces legacy fixed spacing aliases with the shared VyrnForge component-gap density contract while preserving the existing semantic dl/dt/dd renderer, public React API, CSS class surface, responsive structure, and mirrored Native HTML styling. Compact and spacious presentation now flow through the same framework-neutral density tokens without adding a React-only prop or behavior.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     },
     {
-      "task": "#573",
+      "changeId": "#573",
       "reason": "PropertyTable adds the accepted stateless semantic React renderer as a public @vyrnforge/ui-components export. The implementation preserves one native table as the semantic authority, introduces no application state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     },
     {
-      "task": "#575",
+      "changeId": "#575",
       "reason": "Timeline adds the accepted stateless chronological React renderer as a public @vyrnforge/ui-components export. The implementation preserves native ordered-list and list-item semantics, introduces no activity state controller or callback model, uses shared VyrnForge styling, and is covered by semantic, accessibility, packed-consumer, and React compatibility evidence.",
       "evidence": "packages/ui-components/src/components/__tests__/primitives.test.tsx"
     },
     {
-      "task": "#617",
+      "changeId": "#617",
       "reason": "Package-specific setup and usage ownership moved from the duplicate docs/packages/ui-components.md guide to the package-local packages/ui-components/README.md. The React public API, runtime behavior, CSS contracts, compatibility matrix, and package manifest are unchanged; only the documentation ownership fingerprint is intentionally recaptured.",
       "evidence": "packages/ui-components/README.md"
     },
     {
-      "task": "#605",
+      "changeId": "#605",
       "reason": "Development-only React test and accessibility tooling pins changed in packages/ui-components/package.json. Public exports, CSS entrypoints, React peer ranges, runtime dependencies, component behavior, and compatibility policy remain unchanged; only the package-manifest fingerprint is intentionally recaptured.",
       "evidence": "packages/ui-components/package.json"
     },
     {
-      "task": "#639",
+      "changeId": "#639",
       "reason": "TextInput keyboard documentation now explicitly states the existing browser-native keyboard behavior of its underlying native input element. The React public API, runtime implementation, callback/ref behavior, CSS surface, and compatibility policy are unchanged; only the reviewed API documentation fingerprint is intentionally recaptured.",
       "evidence": "docs/metadata/assistive-technology-reviews.json"
     },
     {
-      "task": "#633",
+      "changeId": "#633",
       "reason": "Post-G20 accessibility evidence closure adds explicit keyboard and focus documentation for the remaining SearchInput, native choice/input, SideNav, Breadcrumbs, Dropdown, and ConfirmDialog surfaces. Runtime implementation, React props/callbacks/refs, exports, CSS contracts, and compatibility policy are unchanged; only the reviewed API documentation fingerprint is intentionally recaptured.",
       "evidence": "docs/metadata/assistive-technology-reviews.json"
     },
     {
-      "task": "#647",
+      "changeId": "#647",
       "reason": "React package documentation ownership was clarified by removing a hand-maintained exhaustive component/maturity catalog and linking the canonical generated component reference, component metadata, and React public API guidance instead. Public exports, props, callbacks, refs, runtime behavior, CSS contracts, package setup, and compatibility policy are unchanged; only the reviewed package-README fingerprint is intentionally recaptured.",
       "evidence": "scripts/verify-documentation-current.mjs"
     },
     {
-      "task": "PA-2005",
+      "changeId": "PA-2005",
       "reason": "S20 package-identity alignment removes migration-era Native-first/canonical-owner wording and explicitly frames @vyrnforge/ui-components as the first-class React-facing compatibility distribution. Public exports, peer ranges, runtime dependencies, React props/callbacks/refs, component behavior, CSS contracts, maturity, and release identity remain unchanged; only reviewed package manifest and README identity metadata are intentionally recaptured.",
       "evidence": "packages/ui-components/package.json; packages/ui-components/README.md"
     },
     {
-      "task": "SC-2107",
+      "changeId": "SC-2107",
       "reason": "React Autocomplete now consumes the shared framework-neutral overlay composition contract for trigger, option, loading, and empty regions while retaining independent controlled value/input/open channels, ReactNode states, custom filtering/rendering, portal placement, keyboard behavior, and form semantics. Overlay components continue using the shared lifecycle, positioning, focus, toast, and confirmation controllers.",
       "evidence": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx; tests/browser/autocomplete.spec.ts"
     },
     {
-      "task": "SC-2106",
+      "changeId": "SC-2106",
       "reason": "React Tabs, Breadcrumbs, SideNav, SegmentedControl, Menu, MultiSelect, and TransferList now consume shared framework-neutral rich item-region descriptors while retaining their documented ReactNode composition, DOM, keyboard/focus, filtering, callback, overlay, and repeated-form behavior. The implementation-tree fingerprint is intentionally recaptured with rich navigation adoption and Batch-4 advanced collection parity evidence.",
       "evidence": "packages/ui-components/src/__tests__/host-adoption.test.tsx; packages/ui-components/src/__tests__/react-batch-4-advanced-collections.test.tsx"
     },
     {
-      "task": "SC-2104",
+      "changeId": "SC-2104",
       "reason": "React Text, Caption, CodeText, layout, and rich-region surfaces adopt the shared framework-neutral host-adoption contract while preserving documented tags, classes, props, refs, rendering behavior, and the first-class React surface. The combined SC-2103 + SC-2104 implementation-tree fingerprint is intentionally recaptured with host-adoption parity evidence.",
       "evidence": "packages/ui-components/src/__tests__/host-adoption.test.tsx"
     },
     {
-      "task": "SC-2103",
+      "changeId": "SC-2103",
       "reason": "React Toast keeps its existing provider/hook API and renderer composition while delegating lifecycle state, timers, pause/resume, dismissal, and action orchestration to the shared VyrnForge toast service. Existing React toast browser/parity coverage and the shared service tests protect the compatibility surface during this implementation-tree recapture.",
       "evidence": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx; packages/ui-behaviors/src/toast-service.test.ts; packages/ui-elements/src/toast-service.test.ts"
     },
     {
-      "task": "#686",
+      "changeId": "#686",
       "reason": "Documentation quality hardening repairs duplicate component rows and headings, restores one valid Feedback table, and corrects Markdown table structure in the React API guide without changing public React exports, props, callbacks, refs, runtime behavior, CSS contracts, or compatibility policy. Only the reviewed API-documentation fingerprint is intentionally recaptured.",
       "evidence": "scripts/verify-markdown-structure.mjs"
     }
   ],
-  "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
+  "changePolicy": "A fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
 }
