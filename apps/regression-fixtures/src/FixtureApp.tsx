@@ -1011,21 +1011,53 @@ function DataGridSelectionFixture({
   const [selectedRowIds, setSelectedRowIds] = useState<(string | number)[]>([
     "case-100",
   ]);
+  const [lastBulkAction, setLastBulkAction] = useState("none");
 
   return (
-    <UniversalDataGrid
-      columns={fixtureColumns}
-      density={density}
-      getRowId={(row) => row.id}
-      onSelectedRowIdsChange={setSelectedRowIds}
-      rows={fixtureRows}
-      selectedRowIds={selectedRowIds}
-      selectable
-      tableId="vf-regression-grid-selection"
-      theme={theme}
-      title="Fixture cases"
-      variant="bordered"
-    />
+    <div className="vf-fixture__stack">
+      <UniversalDataGrid
+        bulkActions={[
+          {
+            id: "flag",
+            label: "Flag selected",
+            variant: "primary",
+            onClick: (context) =>
+              setLastBulkAction(
+                `Flagged: ${context.selectedRowIds.join(", ") || "none"}`,
+              ),
+          },
+          {
+            id: "disabled",
+            label: "Disabled selection action",
+            disabled: true,
+            onClick: () => setLastBulkAction("disabled-action-ran"),
+          },
+          {
+            id: "hidden",
+            label: "Hidden selection action",
+            hidden: true,
+            onClick: () => setLastBulkAction("hidden-action-ran"),
+          },
+        ]}
+        columns={fixtureColumns}
+        density={density}
+        getRowId={(row) => row.id}
+        onSelectedRowIdsChange={setSelectedRowIds}
+        rows={fixtureRows}
+        selectedRowIds={selectedRowIds}
+        selectable
+        tableId="vf-regression-grid-selection"
+        theme={theme}
+        title="Fixture cases"
+        variant="bordered"
+      />
+      <output data-vf-fixture-region="grid-selection-state">
+        Selected rows: {selectedRowIds.join(", ") || "none"}
+      </output>
+      <output data-vf-fixture-region="grid-bulk-action-result">
+        Bulk action: {lastBulkAction}
+      </output>
+    </div>
   );
 }
 
