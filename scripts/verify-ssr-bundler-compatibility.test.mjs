@@ -34,7 +34,7 @@ function fixture(mutator, callback) {
     rmSync(root, { force: true, recursive: true });
   }
 }
-test("accepts the CF-7007 verified matrix", () =>
+test("accepts the verified SSR and bundler matrix", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
 test("rejects missing React packed renderer", () =>
   fixture(
