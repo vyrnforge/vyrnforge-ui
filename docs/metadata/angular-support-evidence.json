@@ -1,10 +1,5 @@
 {
   "schemaVersion": 1,
-  "task": {
-    "id": "MFD-1214",
-    "status": "evidence-complete",
-    "title": "Add Angular compatibility and accessibility evidence"
-  },
   "framework": "Angular",
   "supportClaim": "angular-compatibility-accessibility-verified",
   "package": {
@@ -88,6 +83,10 @@
     "angular-forms"
   ],
   "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItem": "MFD-1214"
+    },
     "compatibilityCommand": "npm run verify:compatibility-release-matrix",
     "compatibilityWorkflow": ".github/workflows/assurance.yml",
     "packedWorkflow": ".github/workflows/ci.yml"

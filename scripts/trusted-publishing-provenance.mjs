@@ -58,40 +58,40 @@ export function verifyTrustedPublishingExternalEvidence({
 } = {}) {
   const failures = [];
   const evidenceStatus = contract?.externalEvidence?.status;
-  const taskStatus = contract?.task?.status;
+  const verificationStatus = contract?.verification?.status;
   const releaseReadiness = contract?.releaseReadiness;
 
   addFailure(
     failures,
     Array.isArray(contract?.externalEvidence?.required) &&
       contract.externalEvidence.required.length >= 5,
-    "BT-8007 external evidence requirements are incomplete",
+    "trusted-publishing external evidence requirements are incomplete",
   );
 
   if (evidenceStatus === "pending") {
     addFailure(
       failures,
-      taskStatus === "in-review" &&
+      verificationStatus === "pending-external-evidence" &&
         releaseReadiness === "not-ready" &&
         evidence?.schemaVersion === 1 &&
         evidence?.task === "BT-8007" &&
         evidence?.status === "pending",
-      "BT-8007 pending evidence must keep the task in-review and release readiness not-ready",
+      "pending trusted-publishing evidence must keep verification pending and release readiness not-ready",
     );
     return failures;
   }
 
   if (evidenceStatus !== "verified") {
     failures.push(
-      `BT-8007 external evidence status must be pending or verified, received ${String(evidenceStatus)}`,
+      `trusted-publishing external evidence status must be pending or verified, received ${String(evidenceStatus)}`,
     );
     return failures;
   }
 
   addFailure(
     failures,
-    taskStatus === "done" && releaseReadiness === "ready",
-    "BT-8007 verified evidence must mark the task done and release readiness ready",
+    verificationStatus === "verified" && releaseReadiness === "ready",
+    "verified trusted-publishing evidence must mark verification and release readiness ready",
   );
   addFailure(
     failures,
@@ -102,7 +102,7 @@ export function verifyTrustedPublishingExternalEvidence({
       !Number.isNaN(Date.parse(evidence?.reviewedAt ?? "")) &&
       isNonEmptyString(evidence?.workflowRun) &&
       isNonEmptyString(evidence?.dryRunArtifact),
-    "BT-8007 verified evidence index is incomplete",
+    "trusted-publishing verified evidence index is incomplete",
   );
 
   const expectedPackageNames = (contract?.packages ?? []).map(
@@ -120,13 +120,13 @@ export function verifyTrustedPublishingExternalEvidence({
           isNonEmptyString(entry.capture) &&
           existsSync(path.join(root, entry.capture)),
       ),
-    "BT-8007 verified evidence must include a retained capture for every publishable package",
+    "trusted-publishing verified evidence must include a retained capture for every publishable package",
   );
   addFailure(
     failures,
     isNonEmptyString(evidence?.environmentProtection?.capture) &&
       existsSync(path.join(root, evidence.environmentProtection.capture)),
-    "BT-8007 verified evidence must include the protected npm-release environment capture",
+    "trusted-publishing verified evidence must include the protected npm-release environment capture",
   );
 
   return failures;
@@ -171,18 +171,16 @@ export function verifyTrustedPublishingProvenanceContract({
   addFailure(
     failures,
     contract.sourceOfTruth?.canonical === true &&
-      contract.sourceOfTruth?.task === "BT-8007" &&
       contract.sourceOfTruth?.documentation ===
         "docs/release/trusted-publishing-provenance.md",
-    "BT-8007 source-of-truth metadata is invalid",
+    "trusted-publishing source-of-truth metadata is invalid",
   );
   addFailure(
     failures,
-    contract.task?.id === "BT-8007" &&
-      contract.task?.title === "Verify trusted publishing and provenance" &&
-      exactMembers(contract.task?.dependsOn, ["BT-8003", "BT-8006"]) &&
-      exactMembers(contract.task?.unlocksAfterMerge, ["BT-8008", "BT-8013"]),
-    "BT-8007 task graph is invalid",
+    ["pending-external-evidence", "verified"].includes(
+      contract.verification?.status,
+    ),
+    "trusted-publishing verification status must be pending-external-evidence or verified",
   );
   addFailure(
     failures,

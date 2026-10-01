@@ -2,15 +2,7 @@
   "schemaVersion": 1,
   "sourceOfTruth": {
     "canonical": true,
-    "task": "BT-8007",
     "documentation": "docs/release/trusted-publishing-provenance.md"
-  },
-  "task": {
-    "id": "BT-8007",
-    "title": "Verify trusted publishing and provenance",
-    "status": "in-review",
-    "dependsOn": ["BT-8003", "BT-8006"],
-    "unlocksAfterMerge": ["BT-8008", "BT-8013"]
   },
   "repository": {
     "owner": "vyrnforge",
@@ -121,6 +113,10 @@
     "evidenceIndex": "docs/release/evidence/BT-8007/evidence.json"
   },
   "verification": {
+    "status": "pending-external-evidence",
+    "provenance": {
+      "workItem": "BT-8007"
+    },
     "contractCommand": "npm run verify:trusted-publishing-provenance",
     "testCommand": "npm run test:trusted-publishing-provenance",
     "dryRunTestCommand": "npm run test:trusted-publishing-dry-run"

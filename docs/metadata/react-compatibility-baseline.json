@@ -82,7 +82,7 @@
     {
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
-      "sha1": "f95919a980e055452eebb197e7e5f00c7546e37a",
+      "sha1": "7cac7347d43fca7b803a689462491db0ac12d5af",
       "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
@@ -224,6 +224,11 @@
       "changeId": "#697",
       "reason": "React behavior-adoption evidence was reframed from closed S5/MF execution state to current verification status plus retained provenance. Public React exports, props, callbacks, refs, runtime behavior, CSS contracts, behavior adoption classifications, compatibility invariants, and parity evidence remain unchanged; only the reviewed metadata fingerprint is intentionally recaptured.",
       "evidence": "scripts/verify-react-behavior-adoption.mjs"
+    },
+    {
+      "changeId": "#698",
+      "reason": "The shared compatibility release matrix was reframed from closed BT task/dependency state to current verified contract metadata while preserving the React support policy, tested React versions, compatibility cases, packed consumer behavior, public API, and runtime guarantees. Only the reviewed shared metadata fingerprint is intentionally recaptured.",
+      "evidence": "scripts/compatibility-release-matrix.mjs"
     }
   ],
   "changePolicy": "A fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

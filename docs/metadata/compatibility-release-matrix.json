@@ -2,15 +2,7 @@
   "schemaVersion": 1,
   "sourceOfTruth": {
     "canonical": true,
-    "task": "BT-8005",
     "documentation": "docs/testing/compatibility-release-matrix.md"
-  },
-  "task": {
-    "id": "BT-8005",
-    "title": "Run compatibility release matrix",
-    "status": "done",
-    "dependsOn": ["CF-7014", "BT-8003"],
-    "unlocksAfterMerge": ["BT-8009", "BT-8010"]
   },
   "releaseGroup": "non-grid-beta",
   "supportPolicy": {
@@ -138,6 +130,10 @@
     "browser-smoke"
   ],
   "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItem": "BT-8005"
+    },
     "contractCommand": "npm run verify:compatibility-release-matrix",
     "testCommand": "npm run test:compatibility-release-matrix",
     "caseCommand": "npm run verify:compatibility-release-case -- --case <case-id>",

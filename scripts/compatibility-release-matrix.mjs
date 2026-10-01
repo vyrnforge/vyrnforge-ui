@@ -48,26 +48,25 @@ export function verifyCompatibilityMatrixContract({
     compatibilityWorkflowPath,
   ]) {
     if (!existsSync(path.join(root, requiredFile))) {
-      failures.push(`BT-8005 required file is missing: ${requiredFile}`);
+      failures.push(
+        `compatibility matrix required file is missing: ${requiredFile}`,
+      );
     }
   }
   if (failures.length) return failures;
 
   const matrix = readCompatibilityMatrix({ root });
-  if (matrix.task?.id !== "BT-8005" || matrix.task?.status !== "done") {
-    failures.push("compatibility matrix must record BT-8005 as done");
+  if (matrix.schemaVersion !== 1) {
+    failures.push("compatibility matrix schemaVersion must be 1");
   }
   if (
-    JSON.stringify(matrix.task?.dependsOn) !==
-    JSON.stringify(["CF-7014", "BT-8003"])
+    matrix.sourceOfTruth?.canonical !== true ||
+    matrix.sourceOfTruth?.documentation !== compatibilityDocumentationPath
   ) {
-    failures.push("BT-8005 must depend on CF-7014 and BT-8003");
+    failures.push("compatibility matrix source-of-truth metadata is invalid");
   }
-  if (
-    JSON.stringify(matrix.task?.unlocksAfterMerge) !==
-    JSON.stringify(["BT-8009", "BT-8010"])
-  ) {
-    failures.push("BT-8005 must unlock BT-8009 and BT-8010 after merge");
+  if (matrix.verification?.status !== "verified") {
+    failures.push("compatibility matrix verification status must be verified");
   }
   const cases = matrix.cases ?? [];
   const ids = cases.map(({ id }) => id);
