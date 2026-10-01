@@ -1,14 +1,12 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S7",
-    "task": "CF-7007",
-    "title": "Verify SSR and bundler compatibility",
-    "storyPoints": 5,
-    "status": "evidence-complete",
-    "gate": "GMF4",
-    "gateStatus": "passed",
-    "predecessors": ["CF-7001", "CF-7002", "CF-7003", "CF-7005"]
+  "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItem": "CF-7007",
+      "iteration": "S7",
+      "milestone": "GMF4"
+    }
   },
   "supportClaim": "ssr-bundler-verified",
   "packageImports": {
@@ -67,7 +65,7 @@
     "npm run test:ssr-bundler",
     "npm run verify:ssr-bundler",
     "npm run verify:ssr-bundler:runtime",
-    "npm run quality"
+    "npm run check"
   ],
   "pendingRuntimeEvidence": [],
   "unresolvedBlockers": [],

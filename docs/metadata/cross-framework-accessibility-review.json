@@ -1,15 +1,14 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "task": "CF-7010",
-    "sprint": "S7",
-    "storyPoints": 8,
-    "gate": "GMF4",
-    "status": "evidence-complete",
-    "gateStatus": "passed"
+  "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItem": "CF-7010",
+      "iteration": "S7",
+      "milestone": "GMF4"
+    }
   },
   "supportClaim": "cross-framework-accessibility-verified",
-  "predecessors": ["CF-7009"],
   "consumers": ["native-html", "react", "angular", "vue"],
   "representativeComponents": ["button", "tabs", "text-input"],
   "automatedReview": {
@@ -49,7 +48,7 @@
     "npm run test:cross-framework-accessibility",
     "npm run verify:cross-framework-accessibility:runtime",
     "npm run review:cross-framework-accessibility",
-    "npm run quality"
+    "npm run check"
   ],
   "evidence": [
     "docs/testing/cross-framework-accessibility-review.md",

@@ -25,7 +25,9 @@ export function verifyCrossFrameworkBrowserMatrix({
   const failures = [];
   for (const file of requiredFiles) {
     if (!existsSync(path.join(root, file))) {
-      failures.push(`required CF-7009 file is missing: ${file}`);
+      failures.push(
+        `required cross-framework browser matrix file is missing: ${file}`,
+      );
     }
   }
   if (failures.length > 0) return failures.sort();
@@ -34,38 +36,25 @@ export function verifyCrossFrameworkBrowserMatrix({
     read(root, "docs/metadata/cross-framework-browser-matrix.json"),
   );
 
-  if (
-    metadata.program?.task !== "CF-7009" ||
-    metadata.program?.sprint !== "S7"
-  ) {
+  if (metadata.verification?.status !== "verified") {
+    failures.push("cross-framework browser matrix status must be verified");
+  }
+
+  if (metadata.supportClaim !== "cross-framework-browser-matrix-verified") {
     failures.push(
-      "cross-framework browser matrix program must be S7 / CF-7009",
+      "cross-framework browser matrix support claim must remain verified",
     );
-  }
-
-  if (
-    !["runtime-ready", "evidence-complete"].includes(metadata.program?.status)
-  ) {
-    failures.push("CF-7009 status must be runtime-ready or evidence-complete");
-  }
-
-  const expectedClaim =
-    metadata.program?.status === "evidence-complete"
-      ? "cross-framework-browser-matrix-verified"
-      : "cross-framework-browser-matrix-runtime-ready";
-  if (metadata.supportClaim !== expectedClaim) {
-    failures.push(`CF-7009 support claim must be ${expectedClaim}`);
   }
 
   for (const consumer of ["native-html", "react", "angular", "vue"]) {
     if (!(metadata.consumers ?? []).includes(consumer)) {
-      failures.push(`CF-7009 matrix is missing ${consumer}`);
+      failures.push(`cross-framework browser matrix is missing ${consumer}`);
     }
   }
 
   if ((metadata.sharedScenarios ?? []).length < 3) {
     failures.push(
-      "CF-7009 must define at least three shared browser scenarios",
+      "cross-framework browser matrix must define at least three shared browser scenarios",
     );
   }
 

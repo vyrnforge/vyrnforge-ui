@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "task": "CF-7009",
-    "sprint": "S7",
-    "storyPoints": 8,
-    "gate": "GMF4",
-    "status": "evidence-complete",
-    "gateStatus": "passed"
+  "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItem": "CF-7009",
+      "iteration": "S7",
+      "milestone": "GMF4"
+    }
   },
   "supportClaim": "cross-framework-browser-matrix-verified",
   "consumers": ["native-html", "react", "angular", "vue"],
@@ -31,7 +31,6 @@
     "ciWorkflow": ".github/workflows/_integration.yml",
     "artifactName": "cross-framework-browser-matrix"
   },
-  "predecessors": ["CF-7004", "CF-7006", "CF-7007", "CF-7008"],
   "evidence": [
     "docs/testing/cross-framework-browser-matrix.md",
     "scripts/verify-consumer-foundations-runtime.mjs",

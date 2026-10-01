@@ -11,11 +11,7 @@ const metadataPath = "docs/metadata/cross-framework-accessibility-review.json";
 const consumerManifestPath = "tests/consumers/manifest.json";
 const runtimePath = "scripts/verify-consumer-foundations-runtime.mjs";
 const manualEvidenceDirectory = "docs/quality/assistive-technology-results/";
-const supportedStatuses = new Set([
-  "manual-review-required",
-  "evidence-complete",
-  "blocked",
-]);
+const supportedStatuses = new Set(["review-required", "verified", "blocked"]);
 const supportedOutcomes = new Set(["passed", "failed", "blocked"]);
 
 function read(root, relativePath) {
@@ -133,36 +129,33 @@ export function verifyCrossFrameworkAccessibility({
     ".github/workflows/_integration.yml",
   ]) {
     if (!existsSync(path.join(root, file))) {
-      failures.push(`required CF-7010 file is missing: ${file}`);
+      failures.push(
+        `required cross-framework accessibility file is missing: ${file}`,
+      );
     }
   }
   if (failures.length > 0) return failures.sort();
 
   const metadata = readJson(root, metadataPath);
-  if (
-    metadata.schemaVersion !== 1 ||
-    metadata.program?.task !== "CF-7010" ||
-    metadata.program?.sprint !== "S7" ||
-    metadata.program?.gate !== "GMF4"
-  ) {
-    failures.push(
-      "cross-framework accessibility program must be S7 / CF-7010 / GMF4",
-    );
+  if (metadata.schemaVersion !== 1) {
+    failures.push("cross-framework accessibility schemaVersion must be 1");
   }
-  if (!supportedStatuses.has(metadata.program?.status)) {
+  if (!supportedStatuses.has(metadata.verification?.status)) {
     failures.push(
-      "CF-7010 status must be manual-review-required, evidence-complete, or blocked",
+      "cross-framework accessibility status must be review-required, verified, or blocked",
     );
   }
 
   const expectedClaim =
-    metadata.program?.status === "evidence-complete"
+    metadata.verification?.status === "verified"
       ? "cross-framework-accessibility-verified"
-      : metadata.program?.status === "blocked"
+      : metadata.verification?.status === "blocked"
         ? "cross-framework-accessibility-blocked"
         : "cross-framework-accessibility-review-ready";
   if (metadata.supportClaim !== expectedClaim) {
-    failures.push(`CF-7010 support claim must be ${expectedClaim}`);
+    failures.push(
+      `cross-framework accessibility support claim must be ${expectedClaim}`,
+    );
   }
 
   const manifest = readJson(root, consumerManifestPath);
@@ -171,22 +164,30 @@ export function verifyCrossFrameworkAccessibility({
   );
   for (const consumer of ["native-html", "react", "angular", "vue"]) {
     if (!(metadata.consumers ?? []).includes(consumer)) {
-      failures.push(`CF-7010 metadata is missing ${consumer}`);
+      failures.push(
+        `cross-framework accessibility metadata is missing ${consumer}`,
+      );
     }
     if (!manifestConsumers.has(consumer)) {
-      failures.push(`CF-7010 consumer manifest is missing ${consumer}`);
+      failures.push(
+        `cross-framework accessibility consumer manifest is missing ${consumer}`,
+      );
     }
   }
   if ((metadata.automatedReview?.scenarios ?? []).length < 4) {
     failures.push(
-      "CF-7010 must define Axe and representative keyboard scenarios",
+      "cross-framework accessibility must define Axe and representative keyboard scenarios",
     );
   }
   if (metadata.manualReview?.required !== true) {
-    failures.push("CF-7010 must require a manual assistive-technology review");
+    failures.push(
+      "cross-framework accessibility must require a manual assistive-technology review",
+    );
   }
   if (metadata.manualReview?.assistiveTechnology !== "NVDA") {
-    failures.push("CF-7010 manual review must require NVDA evidence");
+    failures.push(
+      "cross-framework accessibility manual review must require NVDA evidence",
+    );
   }
 
   const runtime = read(root, runtimePath);
@@ -287,25 +288,25 @@ export function verifyCrossFrameworkAccessibility({
   const workflow = read(root, ".github/workflows/_integration.yml");
   if (!workflow.includes("accessibility-report.json")) {
     failures.push(
-      "integration CI workflow must verify the CF-7010 accessibility report",
+      "integration CI workflow must verify the cross-framework accessibility report",
     );
   }
 
-  if (metadata.program?.status === "evidence-complete") {
+  if (metadata.verification?.status === "verified") {
     if (metadata.manualReview?.status !== "complete") {
       failures.push(
-        "CF-7010 evidence-complete requires manualReview.status complete",
+        "verified cross-framework accessibility requires manualReview.status complete",
       );
     }
     if ((metadata.unresolvedBlockers ?? []).length !== 0) {
       failures.push(
-        "CF-7010 evidence-complete cannot retain unresolved blockers",
+        "verified cross-framework accessibility cannot retain unresolved blockers",
       );
     }
     validateCompletedManualEvidence(root, metadata, failures);
   } else if ((metadata.unresolvedBlockers ?? []).length === 0) {
     failures.push(
-      "incomplete CF-7010 metadata must preserve an explicit blocker",
+      "incomplete cross-framework accessibility metadata must preserve an explicit blocker",
     );
   }
 

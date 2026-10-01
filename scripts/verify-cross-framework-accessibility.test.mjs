@@ -57,7 +57,7 @@ function fixture(mutator, callback) {
   }
 }
 
-test("accepts honest CF-7010 manual-review-required metadata", () =>
+test("accepts verified cross-framework accessibility metadata", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
 
 test("rejects removal of the NVDA requirement", () =>
@@ -111,7 +111,7 @@ test("evidence-complete requires a real manual evidence file", () =>
         "docs/metadata/cross-framework-accessibility-review.json",
       );
       const value = JSON.parse(readFileSync(file, "utf8"));
-      value.program.status = "evidence-complete";
+      value.verification.status = "verified";
       value.supportClaim = "cross-framework-accessibility-verified";
       value.manualReview.status = "complete";
       value.unresolvedBlockers = [];
