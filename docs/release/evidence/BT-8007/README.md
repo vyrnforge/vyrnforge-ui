@@ -13,7 +13,6 @@ Populate [`evidence.json`](evidence.json) and retain the referenced redacted cap
 
 Repository-controlled validation alone is not sufficient to close BT-8007.
 
-
 ## Capture checklist
 
 Retain redacted captures for all seven publishable packages:
