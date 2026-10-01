@@ -49,7 +49,9 @@ function filesRecursively(root, relativeDir) {
 export function verifyComponentReference({ root = repositoryRoot } = {}) {
   const failures = [];
   if (!existsSync(path.join(root, configMetadataPath))) {
-    return [`component reference configuration is missing: ${configMetadataPath}`];
+    return [
+      `component reference configuration is missing: ${configMetadataPath}`,
+    ];
   }
   failures.push(...verifyPlaygroundReferenceCoverage({ root }));
   const config = json(root, configMetadataPath);
