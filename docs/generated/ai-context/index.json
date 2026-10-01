@@ -465,7 +465,7 @@
       "id": "data-grid-bulk-action-bar",
       "name": "DataGridBulkActionBar",
       "category": "grid-feature",
-      "availability": "planned",
+      "availability": "available",
       "context": "ai-context/components/data-grid-bulk-action-bar.json"
     },
     {
