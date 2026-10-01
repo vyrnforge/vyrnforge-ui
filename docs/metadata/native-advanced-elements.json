@@ -3,7 +3,14 @@
   "verification": {
     "status": "verified",
     "provenance": {
-      "workItems": ["EL-6012", "EL-6013", "EL-6014", "EL-6015", "EL-6016", "EL-6017"],
+      "workItems": [
+        "EL-6012",
+        "EL-6013",
+        "EL-6014",
+        "EL-6015",
+        "EL-6016",
+        "EL-6017"
+      ],
       "iteration": "S6",
       "milestone": "GMF3"
     }
