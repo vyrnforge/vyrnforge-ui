@@ -8,7 +8,6 @@ import {
   type InputHTMLAttributes,
 } from "react";
 import {
-  Badge,
   Button,
   Checkbox,
   Icon,
@@ -74,6 +73,7 @@ import type {
   UniversalDataGridProps,
 } from "../types/dataGrid.types";
 import type { DataGridSort } from "../types/filter.types";
+import { DataGridBulkActionBar } from "./DataGridBulkActionBar";
 import { DataGridColumnMenu } from "./DataGridColumnMenu";
 import { DataGridEmptyState } from "./DataGridEmptyState";
 import { DataGridErrorState } from "./DataGridErrorState";
@@ -388,18 +388,6 @@ export function UniversalDataGrid<
       state: gridStateWithSelection,
     }),
     [gridStateWithSelection, resolvedSelectedRowIds, selectedRows, tableId],
-  );
-  const visibleBulkActions = useMemo(
-    () =>
-      bulkActions.filter((action) => {
-        const hidden =
-          typeof action.hidden === "function"
-            ? action.hidden(bulkActionContext)
-            : action.hidden;
-
-        return !hidden;
-      }),
-    [bulkActionContext, bulkActions],
   );
   const rootClassName = ["udg", className].filter(Boolean).join(" ");
   const resolvedDensity = density ?? gridState.density;
@@ -1062,55 +1050,12 @@ export function UniversalDataGrid<
         </div>
       )}
 
-      {selectionEnabled && resolvedSelectedRowIds.length > 0 && (
-        <div className="udg-bulk-action-bar" role="status">
-          <div className="udg-bulk-action-bar__summary">
-            <Badge size="sm" variant="info">
-              {resolvedSelectedRowIds.length}
-            </Badge>
-            <span>
-              row{resolvedSelectedRowIds.length === 1 ? "" : "s"} selected
-            </span>
-          </div>
-          <div className="udg-bulk-action-bar__actions">
-            {visibleBulkActions.map((action) => {
-              const disabled =
-                typeof action.disabled === "function"
-                  ? action.disabled(bulkActionContext)
-                  : action.disabled;
-
-              return (
-                <Button
-                  className={[
-                    "udg-bulk-action",
-                    action.variant ? `udg-bulk-action--${action.variant}` : "",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                  disabled={disabled}
-                  key={action.id}
-                  size="sm"
-                  type="button"
-                  variant={action.variant ?? "default"}
-                  onClick={() => action.onClick(bulkActionContext)}
-                >
-                  {action.label}
-                </Button>
-              );
-            })}
-            <IconButton
-              aria-label="Clear selected rows"
-              className="udg-bulk-action udg-bulk-action--clear"
-              size="sm"
-              tooltip="Clear selection"
-              type="button"
-              variant="subtle"
-              onClick={clearSelectedRows}
-            >
-              <Icon name="Close" size="xs" />
-            </IconButton>
-          </div>
-        </div>
+      {selectionEnabled && (
+        <DataGridBulkActionBar
+          actions={bulkActions}
+          context={bulkActionContext}
+          onClearSelection={clearSelectedRows}
+        />
       )}
 
       <div className="udg-table-wrap" data-udg-region="scroll-container">
