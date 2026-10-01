@@ -52,7 +52,10 @@ function createModelRecord(record) {
   });
 }
 
-export function createVueCatalogModel(generationModel, publicComponentIds = null) {
+export function createVueCatalogModel(
+  generationModel,
+  publicComponentIds = null,
+) {
   const vue = generationModel.surfaces.vue.components;
   const nativeById = new Map(
     generationModel.surfaces.native.components.map((record) => [
