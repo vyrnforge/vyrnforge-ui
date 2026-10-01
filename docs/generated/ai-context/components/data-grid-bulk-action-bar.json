@@ -4,33 +4,37 @@
   "name": "DataGridBulkActionBar",
   "package": "@vyrnforge/ui-data-grid",
   "category": "grid-feature",
-  "maturity": "planned",
-  "availability": "planned",
-  "purpose": "Dedicated public bulk-action bar component.",
+  "maturity": "experimental",
+  "availability": "available",
+  "purpose": "Reusable grid-specific action bar for the current row selection.",
   "guidance": {
-    "useWhen": "Use later if exported publicly.",
-    "avoidWhen": "Do not import today; bulk actions are configured through UniversalDataGrid props.",
-    "aiUsageNotes": "Do not invent a public DataGridBulkActionBar import until it exists.",
+    "useWhen": "Use when a grid workflow needs a selected-row summary plus contextual actions using the existing DataGridBulkAction contracts.",
+    "avoidWhen": "Avoid for generic page actions or application business workflows that are not scoped to the current grid selection.",
+    "aiUsageNotes": "Use the existing DataGridBulkAction and DataGridBulkActionContext contracts. Keep permissions, mutations, backend calls, and application workflow state outside this component.",
     "relatedComponents": [
-      "UniversalDataGrid"
+      "UniversalDataGrid",
+      "DataGridToolbar"
     ]
   },
   "accessibility": [
-    "Bulk actions should describe selected row scope."
+    "The selected-row summary uses status semantics and each action remains a normal VyrnForge button in the Tab order. The bar adds no custom keyboard model."
   ],
   "knownLimitations": [
-    "Do not import today; bulk actions are configured through UniversalDataGrid props."
+    "Presentation and action-dispatch surface only; selection state, permissions, mutations, and backend workflows remain controlled by UniversalDataGrid or the consuming application."
   ],
   "styling": {
     "classes": [
-      "udg-bulk-actions"
+      "udg-bulk-action-bar",
+      "udg-bulk-action"
     ],
     "variables": []
   },
   "frameworks": {
     "react": {
-      "status": "not-supported",
-      "package": "@vyrnforge/ui-data-grid"
+      "status": "react-alpha-deferred",
+      "package": "@vyrnforge/ui-data-grid",
+      "setup": "import { DataGridBulkActionBar } from \"@vyrnforge/ui-data-grid\";",
+      "example": "<DataGridBulkActionBar actions={bulkActions} context={bulkActionContext} onClearSelection={clearSelection} />"
     },
     "native-html": {
       "status": "not-supported",

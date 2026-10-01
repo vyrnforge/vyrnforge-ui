@@ -213,6 +213,27 @@ body cells scroll into the nearest visible horizontal and vertical position.
 
 ## Selection And Bulk Actions
 
+`DataGridBulkActionBar` is the public grid-specific selected-row action
+surface. `UniversalDataGrid` composes it automatically, while custom grid
+shells may import it directly from the package root.
+
+It receives existing `DataGridBulkAction` definitions, a
+`DataGridBulkActionContext`, and an explicit clear-selection callback:
+
+```tsx
+<DataGridBulkActionBar
+  actions={bulkActions}
+  context={bulkActionContext}
+  onClearSelection={clearSelectedRows}
+/>
+```
+
+The component renders nothing when the context has no selected rows. Action
+`hidden`, `disabled`, and `onClick` callbacks receive the same context used
+by `UniversalDataGrid`. The selected-row summary uses status semantics and the
+actions remain standard VyrnForge buttons in normal Tab order; the bar adds no
+custom keyboard model.
+
 Public selection helpers include:
 
 - `selectRows`

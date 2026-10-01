@@ -2,6 +2,8 @@ import "./styles/index.css";
 
 export { UniversalDataGrid } from "./components/UniversalDataGrid";
 export { DataGridToolbar } from "./components/DataGridToolbar";
+export { DataGridBulkActionBar } from "./components/DataGridBulkActionBar";
+export type { DataGridBulkActionBarProps } from "./components/DataGridBulkActionBar";
 export { DataGridSearch } from "./components/DataGridSearch";
 export { DataGridFilterBar } from "./components/DataGridFilterBar";
 export { DataGridColumnMenu } from "./components/DataGridColumnMenu";

@@ -82,7 +82,7 @@
     "publicNonGridComponents": 71,
     "includedComponents": 71,
     "deferredNonGridComponents": 0,
-    "publicGridComponentsDeferred": 10,
+    "publicGridComponentsDeferred": 11,
     "plannedNonPublicComponentsExcluded": 0,
     "internalNonPublicComponentsExcluded": 1,
     "nativeCustomElementTags": 62,
@@ -3033,6 +3033,16 @@
   ],
   "exclusions": {
     "publicGridComponents": [
+      {
+        "id": "data-grid-bulk-action-bar",
+        "displayName": "DataGridBulkActionBar",
+        "package": "@vyrnforge/ui-data-grid",
+        "category": "grid-feature",
+        "maturity": "experimental",
+        "publicExport": true,
+        "decision": "deferred",
+        "reason": "Deferred with @vyrnforge/ui-data-grid on the independent React alpha release track."
+      },
       {
         "id": "data-grid-column-menu",
         "displayName": "DataGridColumnMenu",

@@ -15,9 +15,9 @@
       "id": "data-grid-bulk-action-bar",
       "name": "DataGridBulkActionBar",
       "package": "@vyrnforge/ui-data-grid",
-      "maturity": "planned",
-      "availability": "planned",
-      "purpose": "Dedicated public bulk-action bar component.",
+      "maturity": "experimental",
+      "availability": "available",
+      "purpose": "Reusable grid-specific action bar for the current row selection.",
       "context": "ai-context/components/data-grid-bulk-action-bar.json"
     },
     {
