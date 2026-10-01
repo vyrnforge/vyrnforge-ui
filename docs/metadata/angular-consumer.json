@@ -1,14 +1,13 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S7",
-    "task": "CF-7003",
-    "title": "Verify Angular consumer",
-    "storyPoints": 8,
-    "status": "historical-evidence-complete",
-    "gate": "GMF4",
-    "gateStatus": "passed",
-    "baseCommit": "9edddc68e403da770c9c435a3a626bc3ea595052"
+  "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItem": "CF-7003",
+      "iteration": "S7",
+      "milestone": "GMF4",
+      "baseCommit": "9edddc68e403da770c9c435a3a626bc3ea595052"
+    }
   },
   "framework": {
     "name": "Angular",
@@ -56,7 +55,7 @@
     "npm run test:angular-consumer",
     "npm run verify:angular-consumer",
     "npm run verify:angular-consumer:runtime",
-    "npm run quality"
+    "npm run check"
   ],
   "deferred": ["data-grid multi-framework work"],
   "unresolvedBlockers": [],
@@ -66,8 +65,8 @@
     "https://angular.dev/tools/cli/build-system-migration"
   ],
   "formsAdapter": {
-    "task": "CF-7004",
     "status": "current",
+    "provenance": "CF-7004",
     "supportClaim": "angular-forms-adapter-verified",
     "metadata": "docs/metadata/angular-forms-adapter.json",
     "directive": "packages/ui-angular/src/forms.ts",
