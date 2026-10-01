@@ -199,10 +199,7 @@ test("DescriptionList keeps a semantic, state-free cross-framework contract", ()
     contract.frameworkMappings.native.implementationState,
     "current",
   );
-  assert.equal(
-    contract.frameworkMappings.react.implementationState,
-    "target",
-  );
+  assert.equal(contract.frameworkMappings.react.implementationState, "target");
   for (const framework of ["angular", "vue"]) {
     assert.equal(
       contract.frameworkMappings[framework].implementationState,
@@ -335,10 +332,7 @@ test("Progress keeps a semantic, state-free cross-framework contract", () => {
     contract.frameworkMappings.native.implementationState,
     "current",
   );
-  assert.equal(
-    contract.frameworkMappings.react.implementationState,
-    "target",
-  );
+  assert.equal(contract.frameworkMappings.react.implementationState, "target");
   for (const framework of ["angular", "vue"]) {
     assert.equal(
       contract.frameworkMappings[framework].implementationState,
