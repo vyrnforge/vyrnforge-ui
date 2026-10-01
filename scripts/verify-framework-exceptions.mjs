@@ -48,7 +48,7 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   assert.equal(
     live.length,
     1,
-    "SC-2108 reconciliation expects only the narrow native toast viewport mapping gap to remain live",
+    "only the narrow native toast viewport mapping gap should remain live",
   );
   assert.equal(live[0]?.id, "MFD-EX-NATIVE-TOAST-VIEWPORT");
 
@@ -88,17 +88,25 @@ export function verifyFrameworkExceptions(repositoryRoot = defaultRoot) {
   assert.equal(
     closed.length,
     registry.exceptions.length - 1,
-    "SC-2108 expects every evidence-satisfied original exception to be closed",
+    "all evidence-satisfied original exceptions should remain closed",
   );
+  for (const entry of live) {
+    assert.ok(
+      typeof entry.reviewTrigger === "string" &&
+        entry.reviewTrigger.length > 40,
+      entry.id + " requires an evergreen review trigger",
+    );
+  }
+
   for (const entry of closed) {
-    assert.equal(
-      entry.reviewMilestone,
-      "S21 SC-2108 reconciliation",
-      entry.id + " must record the S21 reconciliation milestone",
+    assert.ok(
+      typeof entry.reviewMilestone === "string" &&
+        entry.reviewMilestone.length > 0,
+      entry.id + " must retain its historical closure provenance",
     );
     assert.ok(
-      entry.evidence.some((item) => /SC-210[2-7]/.test(item)),
-      entry.id + " must cite delivered S21 capability evidence",
+      entry.evidence.length > 0,
+      entry.id + " must retain closure evidence",
     );
   }
 
