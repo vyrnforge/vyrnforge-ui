@@ -14,7 +14,7 @@ test.describe("data-grid bulk action bar", () => {
     page,
   }) => {
     const bulkStatus = page.locator(".udg-bulk-action-bar");
-    await expect(bulkStatus).toContainText("1 row selected");
+    await expect(bulkStatus).toContainText(/1\s*row selected/);
 
     const flagSelected = page.getByRole("button", { name: "Flag selected" });
     const disabledAction = page.getByRole("button", {
