@@ -5,6 +5,9 @@ export { applySorting } from "./applySorting";
 export {
   getDataGridFilterOperators,
   getDataGridFilterOperatorsForColumn,
+  isDataGridFilterOperatorSupported,
+  normalizeDataGridFilterOperator,
+  sanitizeDataGridFilters,
 } from "./filterOperators";
 export { resolveGridNavigationTarget } from "./gridKeyboardNavigation";
 export {

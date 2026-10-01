@@ -1,5 +1,6 @@
 import type {
   DataGridColumnDataType,
+  DataGridFilter,
   DataGridFilterOperator,
   DataGridFoundationColumnDef,
 } from "./types";
@@ -59,4 +60,54 @@ export function getDataGridFilterOperatorsForColumn(
   }
 
   return getDataGridFilterOperators(column.dataType);
+}
+
+export function normalizeDataGridFilterOperator(
+  operator: DataGridFilterOperator,
+): DataGridFilterOperator {
+  switch (operator) {
+    case "greaterThan":
+      return "gt";
+    case "greaterThanOrEqual":
+      return "gte";
+    case "lessThan":
+      return "lt";
+    case "lessThanOrEqual":
+      return "lte";
+    default:
+      return operator;
+  }
+}
+
+export function isDataGridFilterOperatorSupported(
+  column: Pick<DataGridFoundationColumnDef, "dataType" | "filterable">,
+  operator: DataGridFilterOperator,
+): boolean {
+  const normalizedOperator = normalizeDataGridFilterOperator(operator);
+  return getDataGridFilterOperatorsForColumn(column).includes(
+    normalizedOperator,
+  );
+}
+
+export function sanitizeDataGridFilters<
+  RowData extends Record<string, unknown> = Record<string, unknown>,
+>(
+  columns: DataGridFoundationColumnDef<RowData>[],
+  filters: DataGridFilter[],
+): DataGridFilter[] {
+  const columnsById = new Map(columns.map((column) => [column.id, column]));
+
+  return filters.flatMap((filter) => {
+    const column = columnsById.get(filter.columnId);
+    if (!column) {
+      return [];
+    }
+
+    const operator = normalizeDataGridFilterOperator(filter.operator);
+    if (!isDataGridFilterOperatorSupported(column, operator)) {
+      return [];
+    }
+
+    return [{ ...filter, operator }];
+  });
 }
