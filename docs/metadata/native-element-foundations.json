@@ -8,7 +8,16 @@
     "definitionCatalog": "vyrnForgeElementDefinitions",
     "tagPrefix": "vf-",
     "duplicatePolicy": "idempotent-no-op",
-    "importSideEffectEntryPoint": "@vyrnforge/ui-elements/register"
+    "importSideEffectEntryPoint": "@vyrnforge/ui-elements/register",
+    "canonicalCapabilityMappings": [
+      {
+        "tagName": "vf-toast-viewport",
+        "capability": "toast-service-viewport-lifecycle",
+        "contractSource": "packages/ui-behaviors/src/toast-service.ts",
+        "nativeAdapter": "packages/ui-elements/src/components/feedback.ts",
+        "browserEvidence": "tests/browser/native-parity.spec.ts"
+      }
+    ]
   },
   "baseElement": {
     "class": "VyrnForgeElement",
@@ -18,7 +27,11 @@
       "disconnectedCallback",
       "attributeChangedCallback"
     ],
-    "attributeTypes": ["boolean", "number", "string"],
+    "attributeTypes": [
+      "boolean",
+      "number",
+      "string"
+    ],
     "propertyFeatures": [
       "pre-definition-upgrade",
       "primitive-attribute-parsing",
@@ -118,7 +131,10 @@
     "class": "VyrnForgeFormAssociatedElement",
     "implementation": "ElementInternals",
     "formAssociated": true,
-    "modes": ["value", "submitter"],
+    "modes": [
+      "value",
+      "submitter"
+    ],
     "properties": [
       "name",
       "disabled",
@@ -129,7 +145,11 @@
       "validationMessage",
       "willValidate"
     ],
-    "methods": ["checkValidity", "reportValidity", "setCustomValidity"],
+    "methods": [
+      "checkValidity",
+      "reportValidity",
+      "setCustomValidity"
+    ],
     "callbacks": [
       "formAssociatedCallback",
       "formDisabledCallback",
@@ -198,8 +218,15 @@
         "vf-toggle-button-group",
         "vf-segmented-control"
       ],
-      "field-validation": ["vf-field", "vf-validation-message"],
-      "navigation": ["vf-tabs", "vf-breadcrumbs", "vf-side-nav"]
+      "field-validation": [
+        "vf-field",
+        "vf-validation-message"
+      ],
+      "navigation": [
+        "vf-tabs",
+        "vf-breadcrumbs",
+        "vf-side-nav"
+      ]
     },
     "browserEvidence": "tests/browser/native-core-elements.spec.ts",
     "fixture": "apps/regression-fixtures/src/nativeCoreElements.tsx",
