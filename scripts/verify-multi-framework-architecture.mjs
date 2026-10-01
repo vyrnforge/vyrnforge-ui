@@ -530,6 +530,26 @@ function verifyComponentContracts(failures, contracts) {
       );
     }
 
+    if (native?.implementationState === "current") {
+      for (const [framework, packageName] of [
+        ["angular", "@vyrnforge/ui-angular"],
+        ["vue", "@vyrnforge/ui-vue"],
+      ]) {
+        const mapping = mappings[framework];
+        if (
+          mapping?.package !== packageName ||
+          mapping?.implementationState !== "current" ||
+          typeof mapping?.export !== "string" ||
+          mapping.export.length === 0
+        ) {
+          addFailure(
+            failures,
+            `${contract.id} ${framework} mapping must be current when the canonical Native implementation is current`,
+          );
+        }
+      }
+    }
+
     for (const event of contract.events ?? []) {
       const eventName = event?.name;
       if (!eventNames.has(eventName)) {
