@@ -44,6 +44,7 @@ export const contractTestFiles = [
   "scripts/verify-assistive-technology-evidence.test.mjs",
   "scripts/verify-repository-templates.test.mjs",
   "scripts/verify-documentation-current.test.mjs",
+  "scripts/verify-script-reachability.test.mjs",
   "scripts/verify-markdown-structure.test.mjs",
   "scripts/verify-public-doc-links.test.mjs",
   "scripts/validation-model.test.mjs",
