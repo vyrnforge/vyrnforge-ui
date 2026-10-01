@@ -171,36 +171,23 @@ test("framework API reference records generated ownership and all four surfaces"
   assert(reference.exceptionPolicy.records.length > 0);
 });
 
-test("framework exceptions gate narrow handwritten override hooks", () => {
+test("closed framework exceptions cannot power handwritten override hooks", () => {
   const registry = loadFrameworkExceptions({ root: repositoryRoot });
   const nativeException = registry.byId.get("MFD-EX-NATIVE-TOAST-VIEWPORT");
   assert(nativeException);
   assert.equal(nativeException.framework, "native");
   assert.equal(nativeException.scope, "toast-viewport");
-  assert.equal(nativeException.state, "active");
+  assert.equal(nativeException.state, "closed");
 
-  const hooks = createFrameworkOverrideHooks({
-    registry,
-    overrides: {
-      "MFD-EX-NATIVE-TOAST-VIEWPORT": (context) => ({
-        ...context,
-        handledBy: "declared-exception",
+  assert.throws(
+    () =>
+      createFrameworkOverrideHooks({
+        registry,
+        overrides: {
+          "MFD-EX-NATIVE-TOAST-VIEWPORT": () => null,
+        },
       }),
-    },
-  });
-  assert.equal(hooks.has("MFD-EX-NATIVE-TOAST-VIEWPORT"), true);
-  assert.deepEqual(
-    hooks.apply("MFD-EX-NATIVE-TOAST-VIEWPORT", {
-      framework: "native",
-      scope: "toast-viewport",
-      tagName: "vf-toast-viewport",
-    }),
-    {
-      framework: "native",
-      scope: "toast-viewport",
-      tagName: "vf-toast-viewport",
-      handledBy: "declared-exception",
-    },
+    /cannot use exception state closed/u,
   );
   assert.throws(
     () =>
@@ -209,14 +196,6 @@ test("framework exceptions gate narrow handwritten override hooks", () => {
         overrides: { "MFD-EX-UNDECLARED": () => null },
       }),
     /has no declared exception/u,
-  );
-  assert.throws(
-    () =>
-      hooks.apply("MFD-EX-NATIVE-TOAST-VIEWPORT", {
-        framework: "react",
-        scope: "toast-viewport",
-      }),
-    /cannot run for framework/u,
   );
 });
 
@@ -237,13 +216,13 @@ test("native generation reconciles canonical contracts with AST registration evi
     model.summary.canonicalTagCount,
     deriveCanonicalNativeTags(contracts).length,
   );
-  assert(model.summary.exceptionBackedRegistrationCount > 0);
+  assert.equal(model.summary.exceptionBackedRegistrationCount, 0);
   const toastViewport = model.entries.find(
     (entry) => entry.tagName === "vf-toast-viewport",
   );
   assert(toastViewport);
-  assert.deepEqual(toastViewport.canonicalComponentIds, []);
-  assert(toastViewport.exceptionIds.includes("MFD-EX-NATIVE-TOAST-VIEWPORT"));
+  assert.deepEqual(toastViewport.canonicalComponentIds, ["toast-viewport"]);
+  assert.deepEqual(toastViewport.exceptionIds, []);
 
   const evidenceSource = readFileSync(
     path.join(repositoryRoot, "scripts/native-element-generation.mjs"),
