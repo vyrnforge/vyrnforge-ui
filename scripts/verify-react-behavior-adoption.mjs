@@ -47,7 +47,9 @@ export function verifyReactBehaviorAdoption({ root = repositoryRoot } = {}) {
   if (metadata.schemaVersion !== 1)
     failures.push("React behavior adoption schemaVersion must be 1");
   if (metadata.verification?.status !== "verified") {
-    failures.push("React behavior adoption verification status must be verified");
+    failures.push(
+      "React behavior adoption verification status must be verified",
+    );
   }
 
   const indexPath = metadata.sourceOfTruth?.publicEntry;
