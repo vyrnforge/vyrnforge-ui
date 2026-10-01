@@ -26,7 +26,7 @@ function createFixture(tagName: string, register: () => void) {
   });
 }
 
-describe("MFD-1408 React SSR and hydration contract", () => {
+describe("React SSR and hydration contract", () => {
   it("server renders without executing browser lifecycle side effects", () => {
     const tagName = "vf-react-ssr-test";
     const register = vi.fn();

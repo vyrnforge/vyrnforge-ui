@@ -72,7 +72,7 @@
     {
       "path": "docs/metadata/react-behavior-adoption.json",
       "kind": "blob",
-      "sha1": "7633403d0f3222434d9b9fee4047ffabb918669b",
+      "sha1": "e1448b54ec98d795cbc9104798793d9d16a352d9",
       "covers": [
         "behavior ownership",
         "public value export audit",
@@ -219,6 +219,11 @@
       "changeId": "#686",
       "reason": "Documentation quality hardening repairs duplicate component rows and headings, restores one valid Feedback table, and corrects Markdown table structure in the React API guide without changing public React exports, props, callbacks, refs, runtime behavior, CSS contracts, or compatibility policy. Only the reviewed API-documentation fingerprint is intentionally recaptured.",
       "evidence": "scripts/verify-markdown-structure.mjs"
+    },
+    {
+      "changeId": "#697",
+      "reason": "React behavior-adoption evidence was reframed from closed S5/MF execution state to current verification status plus retained provenance. Public React exports, props, callbacks, refs, runtime behavior, CSS contracts, behavior adoption classifications, compatibility invariants, and parity evidence remain unchanged; only the reviewed metadata fingerprint is intentionally recaptured.",
+      "evidence": "scripts/verify-react-behavior-adoption.mjs"
     }
   ],
   "changePolicy": "A fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

@@ -48,15 +48,15 @@ test("repository native core elements are internally complete", () => {
   assert.deepEqual(verifyNativeCoreElements(), []);
 });
 
-test("rejects an incomplete EL-6011 task", () => {
+test("rejects an unverified native core contract", () => {
   const root = createFixture();
   try {
     mutateJson(root, "docs/metadata/native-core-elements.json", (value) => {
-      value.tasks.find((task) => task.id === "EL-6011").status = "planned";
+      value.verification.status = "pending";
     });
     assert(
       verifyNativeCoreElements({ root }).some((failure) =>
-        failure.includes("EL-6011 must be done"),
+        failure.includes("verification status must be verified"),
       ),
     );
   } finally {

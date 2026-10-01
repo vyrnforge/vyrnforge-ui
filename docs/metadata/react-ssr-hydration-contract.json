@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
-  "task": {
-    "sprint": "S14",
-    "id": "MFD-1408",
-    "title": "Verify SSR and hydration behavior",
-    "status": "contract-implemented"
+  "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItem": "MFD-1408",
+      "iteration": "S14"
+    }
   },
   "package": "@vyrnforge/ui-components",
   "bridge": "packages/ui-components/src/internal/react-native-bridge.ts",

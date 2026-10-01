@@ -46,15 +46,9 @@ export function verifyReactBehaviorAdoption({ root = repositoryRoot } = {}) {
 
   if (metadata.schemaVersion !== 1)
     failures.push("React behavior adoption schemaVersion must be 1");
-  if (
-    metadata.program?.sprint !== "S5" ||
-    metadata.program?.task !== "MF-5015"
-  ) {
-    failures.push("React behavior adoption must describe S5 / MF-5015");
-  }
-  if (metadata.program?.status !== "evidence-complete") {
+  if (metadata.verification?.status !== "verified") {
     failures.push(
-      "MF-5015 React behavior adoption audit must be evidence-complete",
+      "React behavior adoption verification status must be verified",
     );
   }
 
@@ -70,7 +64,7 @@ export function verifyReactBehaviorAdoption({ root = repositoryRoot } = {}) {
   const declaredExports = new Set(metadata.publicValueExports ?? []);
   if (!sameMembers(actualExports, declaredExports)) {
     failures.push(
-      "React public value exports changed without updating the MF-5015 compatibility audit",
+      "React public value exports changed without updating the behavior adoption evidence",
     );
   }
 
@@ -131,18 +125,17 @@ export function verifyReactBehaviorAdoption({ root = repositoryRoot } = {}) {
     metadata.unresolvedBehaviorDuplication.length !== 0
   ) {
     failures.push(
-      "MF-5015 unresolvedBehaviorDuplication must be an empty array",
+      "React behavior adoption unresolvedBehaviorDuplication must be an empty array",
     );
   }
 
   const requiredCommands = new Set(metadata.requiredCommands ?? []);
   for (const command of [
-    "npm run test:react-behavior-adoption",
     "npm run verify:react-behavior-adoption",
     "npm run test:coverage --workspace @vyrnforge/ui-components",
     "npm run typecheck --workspace @vyrnforge/ui-components",
     "npm run verify:consumer",
-    "npm run quality",
+    "npm run check",
   ]) {
     if (!requiredCommands.has(command))
       failures.push(`React behavior adoption metadata is missing ${command}`);

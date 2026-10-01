@@ -48,15 +48,15 @@ test("repository native advanced elements are internally complete", () => {
   assert.deepEqual(verifyNativeAdvancedElements(), []);
 });
 
-test("rejects an incomplete EL-6017 task", () => {
+test("rejects an unverified native advanced contract", () => {
   const root = createFixture();
   try {
     mutateJson(root, "docs/metadata/native-advanced-elements.json", (value) => {
-      value.tasks.find((task) => task.id === "EL-6017").status = "planned";
+      value.verification.status = "pending";
     });
     assert(
       verifyNativeAdvancedElements({ root }).some((failure) =>
-        failure.includes("EL-6017 must be done"),
+        failure.includes("verification status must be verified"),
       ),
     );
   } finally {

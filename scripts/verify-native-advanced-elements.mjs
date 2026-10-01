@@ -7,14 +7,6 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-const expectedTasks = [
-  "EL-6012",
-  "EL-6013",
-  "EL-6014",
-  "EL-6015",
-  "EL-6016",
-  "EL-6017",
-];
 const expectedTags = [
   "vf-autocomplete",
   "vf-multi-select",
@@ -82,22 +74,9 @@ export function verifyNativeAdvancedElements({ root = repositoryRoot } = {}) {
   if (metadata.schemaVersion !== 1) {
     failures.push("native advanced element schemaVersion must be 1");
   }
-  if (metadata.program?.batch !== "EL-6012-EL-6017") {
-    failures.push("native advanced element batch must be EL-6012-EL-6017");
-  }
-  if (metadata.program?.gate !== "GMF3") {
-    failures.push("native advanced element gate must be GMF3");
-  }
-
-  const tasks = new Map(
-    (metadata.tasks ?? []).map((task) => [task.id, task.status]),
-  );
-  for (const taskId of expectedTasks) {
-    if (tasks.get(taskId) !== "done") failures.push(`${taskId} must be done`);
-  }
-  if (tasks.size !== expectedTasks.length) {
+  if (metadata.verification?.status !== "verified") {
     failures.push(
-      "native advanced task inventory must contain exactly EL-6012 through EL-6017",
+      "native advanced element verification status must be verified",
     );
   }
 

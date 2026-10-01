@@ -1,38 +1,20 @@
 {
   "schemaVersion": 1,
-  "program": {
-    "sprint": "S6",
-    "batch": "EL-6012-EL-6017",
-    "status": "implemented",
-    "gate": "GMF3",
-    "gateStatus": "passed"
-  },
-  "tasks": [
-    {
-      "id": "EL-6012",
-      "status": "done"
-    },
-    {
-      "id": "EL-6013",
-      "status": "done"
-    },
-    {
-      "id": "EL-6014",
-      "status": "done"
-    },
-    {
-      "id": "EL-6015",
-      "status": "done"
-    },
-    {
-      "id": "EL-6016",
-      "status": "done"
-    },
-    {
-      "id": "EL-6017",
-      "status": "done"
+  "verification": {
+    "status": "verified",
+    "provenance": {
+      "workItems": [
+        "EL-6012",
+        "EL-6013",
+        "EL-6014",
+        "EL-6015",
+        "EL-6016",
+        "EL-6017"
+      ],
+      "iteration": "S6",
+      "milestone": "GMF3"
     }
-  ],
+  },
   "package": "@vyrnforge/ui-elements",
   "registration": {
     "previousCount": 40,
@@ -92,6 +74,5 @@
     "verifierTests": "scripts/verify-native-advanced-elements.test.mjs",
     "styles": "packages/ui-elements/src/styles/index.css"
   },
-  "remainingGateWork": [],
-  "gmf3Closure": "docs/metadata/gmf3-closure.json"
+  "unresolvedBlockers": []
 }
