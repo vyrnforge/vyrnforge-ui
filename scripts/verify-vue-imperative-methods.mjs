@@ -11,9 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const model = createFrameworkGenerationModel(
   loadCanonicalComponentContracts({ root }),
 );
-const publicComponentIds = new Set(
-  loadPublicNonGridBetaComponentIds({ root }),
-);
+const publicComponentIds = new Set(loadPublicNonGridBetaComponentIds({ root }));
 const records = model.surfaces.vue.components.filter(
   (record) =>
     ["current", "target"].includes(record.implementationState) &&
