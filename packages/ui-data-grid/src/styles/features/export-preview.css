@@ -1,0 +1,99 @@
+.udg-export-preview {
+  display: grid;
+  gap: var(--udg-space-4);
+  border: 1px solid var(--udg-border);
+  border-radius: var(--udg-radius-md);
+  padding: var(--udg-space-4);
+  color: var(--udg-text);
+  background: var(--udg-surface);
+}
+
+.udg-export-preview__header,
+.udg-export-preview__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--udg-space-3);
+}
+
+.udg-export-preview__title,
+.udg-export-preview__section h4 {
+  margin: 0;
+  color: var(--udg-text-strong);
+}
+
+.udg-export-preview__title {
+  font-size: var(--udg-font-size-lg);
+}
+
+.udg-export-preview__description,
+.udg-export-preview__meta,
+.udg-export-preview__empty {
+  margin: var(--udg-space-1) 0 0;
+  color: var(--udg-text-muted);
+  font-size: var(--udg-font-size-sm);
+}
+
+.udg-export-preview__format {
+  border-radius: var(--udg-radius-sm);
+  padding: var(--udg-space-1) var(--udg-space-2);
+  color: var(--udg-primary);
+  background: var(--udg-primary-soft);
+  font-size: var(--udg-font-size-sm);
+}
+
+.udg-export-preview__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: var(--udg-space-3);
+  margin: 0;
+}
+
+.udg-export-preview__summary > div {
+  min-width: 0;
+}
+
+.udg-export-preview__summary dt {
+  color: var(--udg-text-muted);
+  font-size: var(--udg-font-size-xs);
+  font-weight: var(--udg-font-weight-medium);
+}
+
+.udg-export-preview__summary dd {
+  margin: var(--udg-space-1) 0 0;
+  color: var(--udg-text-strong);
+  font-size: var(--udg-font-size-sm);
+}
+
+.udg-export-preview__section {
+  display: grid;
+  gap: var(--udg-space-2);
+}
+
+.udg-export-preview__section h4 {
+  font-size: var(--udg-font-size-md);
+}
+
+.udg-export-preview__columns,
+.udg-export-preview__query {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--udg-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.udg-export-preview__columns li,
+.udg-export-preview__query li {
+  border: 1px solid var(--udg-border);
+  border-radius: var(--udg-radius-sm);
+  padding: var(--udg-space-1) var(--udg-space-2);
+  color: var(--udg-text);
+  background: var(--udg-surface-muted);
+  font-size: var(--udg-font-size-sm);
+}
+
+.udg-export-preview__actions {
+  justify-content: flex-end;
+}
