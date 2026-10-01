@@ -279,8 +279,8 @@
       "package": "@vyrnforge/ui-elements",
       "summary": {
         "componentCount": 63,
-        "current": 62,
-        "target": 1,
+        "current": 63,
+        "target": 0,
         "migration": 0,
         "exception": 0,
         "firstClass": 63
@@ -6591,7 +6591,7 @@
             "canonicalRenderer": "@vyrnforge/ui-elements"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "property-table",
@@ -24032,8 +24032,8 @@
       "package": "@vyrnforge/ui-angular",
       "summary": {
         "componentCount": 63,
-        "current": 2,
-        "target": 61,
+        "current": 63,
+        "target": 0,
         "migration": 0,
         "exception": 0,
         "forms": 15,
@@ -24131,7 +24131,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "app-shell",
@@ -24349,7 +24349,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "autocomplete",
@@ -24883,7 +24883,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "badge",
@@ -24992,7 +24992,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "breadcrumbs",
@@ -25124,7 +25124,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "button",
@@ -25390,7 +25390,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "button-group",
@@ -25499,7 +25499,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "caption",
@@ -25578,7 +25578,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "card",
@@ -25672,7 +25672,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "checkbox",
@@ -26055,7 +26055,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "code-text",
@@ -26134,7 +26134,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "confirm-dialog",
@@ -26393,7 +26393,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "date-input",
@@ -26757,7 +26757,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "datetime-input",
@@ -27121,7 +27121,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "description-list",
@@ -27185,7 +27185,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "dialog",
@@ -27483,7 +27483,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "drawer",
@@ -27796,7 +27796,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "dropdown",
@@ -27940,7 +27940,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "empty-state",
@@ -28003,7 +28003,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "error-state",
@@ -28082,7 +28082,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "field",
@@ -28276,7 +28276,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "heading",
@@ -28385,7 +28385,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "icon",
@@ -28499,7 +28499,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "icon-button",
@@ -28705,7 +28705,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "inline",
@@ -28828,7 +28828,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "inline-message",
@@ -28921,7 +28921,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "label",
@@ -29030,7 +29030,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "loading-state",
@@ -29093,7 +29093,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "menu",
@@ -29291,7 +29291,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "multi-select",
@@ -29650,7 +29650,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "number-input",
@@ -30074,7 +30074,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "page",
@@ -30168,7 +30168,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "page-header",
@@ -30299,7 +30299,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "page-toolbar",
@@ -30415,7 +30415,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "panel",
@@ -30478,7 +30478,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "popover",
@@ -30744,7 +30744,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "progress",
@@ -30830,7 +30830,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "property-table",
@@ -31265,7 +31265,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "radio-group",
@@ -31430,7 +31430,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "rating",
@@ -31751,7 +31751,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "search-input",
@@ -32115,7 +32115,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "section",
@@ -32178,7 +32178,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "segmented-control",
@@ -32334,7 +32334,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "select",
@@ -32664,7 +32664,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "side-nav",
@@ -32820,7 +32820,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "skeleton",
@@ -32931,7 +32931,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "slider",
@@ -33273,7 +33273,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "stack",
@@ -33382,7 +33382,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "switch",
@@ -33751,7 +33751,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "tabs",
@@ -33964,7 +33964,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "text",
@@ -34058,7 +34058,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "text-input",
@@ -34422,7 +34422,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "textarea",
@@ -34786,7 +34786,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "timeline",
@@ -35046,7 +35046,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "toggle-button",
@@ -35307,7 +35307,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "toggle-button-group",
@@ -35474,7 +35474,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "toolbar-button",
@@ -35749,7 +35749,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "tooltip",
@@ -35927,7 +35927,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "top-nav",
@@ -36015,7 +36015,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "transfer-list",
@@ -36407,7 +36407,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "validation-message",
@@ -36487,7 +36487,7 @@
             "refMode": "view-child"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         }
       ]
     },
@@ -36495,8 +36495,8 @@
       "package": "@vyrnforge/ui-vue",
       "summary": {
         "componentCount": 63,
-        "current": 2,
-        "target": 61,
+        "current": 63,
+        "target": 0,
         "migration": 0,
         "exception": 0,
         "vModel": 29,
@@ -36593,7 +36593,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "app-shell",
@@ -36810,7 +36810,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "autocomplete",
@@ -37321,7 +37321,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "badge",
@@ -37429,7 +37429,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "breadcrumbs",
@@ -37560,7 +37560,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "button",
@@ -37825,7 +37825,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "button-group",
@@ -37933,7 +37933,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "caption",
@@ -38011,7 +38011,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "card",
@@ -38104,7 +38104,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "checkbox",
@@ -38464,7 +38464,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "code-text",
@@ -38542,7 +38542,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "confirm-dialog",
@@ -38806,7 +38806,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "date-input",
@@ -39147,7 +39147,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "datetime-input",
@@ -39488,7 +39488,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "description-list",
@@ -39551,7 +39551,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "dialog",
@@ -39854,7 +39854,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "drawer",
@@ -40172,7 +40172,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "dropdown",
@@ -40321,7 +40321,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "empty-state",
@@ -40383,7 +40383,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "error-state",
@@ -40461,7 +40461,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "field",
@@ -40654,7 +40654,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "heading",
@@ -40762,7 +40762,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "icon",
@@ -40875,7 +40875,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "icon-button",
@@ -41080,7 +41080,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "inline",
@@ -41202,7 +41202,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "inline-message",
@@ -41294,7 +41294,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "label",
@@ -41402,7 +41402,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "loading-state",
@@ -41464,7 +41464,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "menu",
@@ -41667,7 +41667,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "multi-select",
@@ -42003,7 +42003,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "number-input",
@@ -42404,7 +42404,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "page",
@@ -42497,7 +42497,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "page-header",
@@ -42627,7 +42627,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "page-toolbar",
@@ -42742,7 +42742,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "panel",
@@ -42804,7 +42804,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "popover",
@@ -43075,7 +43075,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "progress",
@@ -43160,7 +43160,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "property-table",
@@ -43571,7 +43571,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "radio-group",
@@ -43741,7 +43741,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "rating",
@@ -44039,7 +44039,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "search-input",
@@ -44380,7 +44380,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "section",
@@ -44442,7 +44442,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "segmented-control",
@@ -44603,7 +44603,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "select",
@@ -44910,7 +44910,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "side-nav",
@@ -45071,7 +45071,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "skeleton",
@@ -45181,7 +45181,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "slider",
@@ -45500,7 +45500,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "stack",
@@ -45608,7 +45608,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "switch",
@@ -45954,7 +45954,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "tabs",
@@ -46172,7 +46172,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "text",
@@ -46265,7 +46265,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "text-input",
@@ -46606,7 +46606,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "textarea",
@@ -46947,7 +46947,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "timeline",
@@ -47205,7 +47205,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "toggle-button",
@@ -47471,7 +47471,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "toggle-button-group",
@@ -47643,7 +47643,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "toolbar-button",
@@ -47923,7 +47923,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "tooltip",
@@ -48106,7 +48106,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "top-nav",
@@ -48193,7 +48193,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "transfer-list",
@@ -48562,7 +48562,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         },
         {
           "id": "validation-message",
@@ -48641,7 +48641,7 @@
             "refMode": "template-ref"
           },
           "supportLevel": "first-class",
-          "implementationState": "target"
+          "implementationState": "current"
         }
       ]
     }
