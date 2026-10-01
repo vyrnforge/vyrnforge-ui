@@ -83,7 +83,7 @@ every declared environment has a reviewed result. Components whose
 `complete` unless the canonical scenario is complete and all recorded results
 pass.
 
-For the current post-G20 queue, execute AT-010 through AT-014 in both
+For the current manual review queue, execute AT-010 through AT-014 in both
 `windows-nvda-chrome` and `windows-nvda-firefox`. Do not infer a result from
 automated browser coverage or from another component's manual review.
 
