@@ -25,7 +25,9 @@ export function verifyCrossFrameworkBrowserMatrix({
   const failures = [];
   for (const file of requiredFiles) {
     if (!existsSync(path.join(root, file))) {
-      failures.push(`required cross-framework browser matrix file is missing: ${file}`);
+      failures.push(
+        `required cross-framework browser matrix file is missing: ${file}`,
+      );
     }
   }
   if (failures.length > 0) return failures.sort();
