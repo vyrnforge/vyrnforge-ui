@@ -110,8 +110,37 @@ test("rejects missing consumer fixture examples", () => {
   );
 });
 
-test("allows staged current/target renderer mappings", () => {
+test("requires current Angular and Vue mappings for current Native contracts", () => {
   assert.deepEqual(verifyMultiFrameworkArchitecture(), []);
+
+  withRepositoryFixture(
+    (root) => {
+      mutateJson(root, "docs/metadata/component-contracts.json", (value) => {
+        const descriptionList = value.componentContracts.find(
+          (contract) => contract.id === "description-list",
+        );
+        descriptionList.frameworkMappings.angular.implementationState = "target";
+        descriptionList.frameworkMappings.vue.implementationState = "target";
+      });
+    },
+    (root) => {
+      const failures = verifyMultiFrameworkArchitecture({ root });
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "description-list angular mapping must be current when the canonical Native implementation is current",
+          ),
+        ),
+      );
+      assert(
+        failures.some((failure) =>
+          failure.includes(
+            "description-list vue mapping must be current when the canonical Native implementation is current",
+          ),
+        ),
+      );
+    },
+  );
 });
 
 test("rejects support rank drift independently from implementation state", () => {
