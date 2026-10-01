@@ -48,6 +48,8 @@ export function verifyAngularConsumer({ root = repositoryRoot } = {}) {
   if (failures.length > 0) return failures.sort();
 
   const metadata = readJson(root, "docs/metadata/angular-consumer.json");
+  if (metadata.verification?.status !== "verified")
+    fail(failures, "Angular consumer verification status must be verified");
   const framework = metadata.framework ?? {};
   if (framework.name !== "Angular" || framework.version !== angularVersion)
     fail(failures, `Angular framework version must be ${angularVersion}`);
