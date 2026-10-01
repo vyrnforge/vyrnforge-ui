@@ -1,7 +1,4 @@
-import type {
-  DataGridFilter,
-  DataGridFoundationColumnDef,
-} from "./types";
+import type { DataGridFilter, DataGridFoundationColumnDef } from "./types";
 import { sanitizeDataGridFilters } from "./filterOperators";
 
 export type DataGridFilterDraftSession = {
@@ -70,10 +67,7 @@ export function applyDataGridFilterDraft<
   session: DataGridFilterDraftSession,
   columns: DataGridFoundationColumnDef<RowData>[],
 ): DataGridFilterDraftSession {
-  const appliedFilters = sanitizeDataGridFilters(
-    columns,
-    session.draftFilters,
-  );
+  const appliedFilters = sanitizeDataGridFilters(columns, session.draftFilters);
 
   return {
     appliedFilters: cloneFilters(appliedFilters),
