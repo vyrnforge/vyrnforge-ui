@@ -51,7 +51,6 @@ The fixture must not use TypeScript path aliases, workspace linking, `npm link`,
 
 This verification does not publish packages to npm and does not prove public registry availability. CV-006 remains the separate real-application validation step.
 
-
 ## CV-006 real-application validation
 
 CV-006 is intentionally different from the packed consumer fixture above. It
