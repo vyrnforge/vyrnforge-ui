@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 2,
+  "status": "current",
+  "purpose": "Generate the shared consumer-knowledge model and canonical framework API projections for human Reference surfaces and scoped AI context retrieval without duplicating canonical component, contract, pattern, package, or framework truth.",
+  "sourceOfTruth": [
+    "docs/metadata/components.json",
+    "docs/metadata/component-contracts.json",
+    "docs/metadata/patterns.json",
+    "docs/metadata/packages.json",
+    "docs/metadata/multi-framework.json",
+    "packages/ui-elements/custom-elements.json"
+  ],
+  "generatedArtifacts": {
+    "consumerKnowledge": "docs/generated/consumer-knowledge.json",
+    "componentReference": "docs/generated/component-reference.json",
+    "frameworkApiReference": "docs/generated/framework-api-reference.json",
+    "aiIndex": "docs/generated/ai-context/index.json",
+    "aiCategories": "docs/generated/ai-context/categories/*.json",
+    "aiComponents": "docs/generated/ai-context/components/*.json",
+    "aiPatterns": "docs/generated/ai-context/patterns/*.json"
+  },
+  "frameworkSurfaces": [
+    "react",
+    "native-html",
+    "angular",
+    "vue"
+  ],
+  "policy": {
+    "canonicalMetadataWins": true,
+    "inventMissingContracts": false,
+    "inventFrameworkSupport": false,
+    "generatedAiContextIsTaskScoped": true,
+    "playgroundStatusIsGenerated": true,
+    "humanExamplesMayRemainHandAuthoredWhenVerifiedAgainstPublicApis": true,
+    "readerFacingApiFactsUseGeneratedFrameworkReference": true,
+    "componentDeepLinksAreStable": true
+  },
+  "requiredCommands": [
+    "npm run generate:component-reference",
+    "npm run verify:component-reference",
+    "npm run generate:framework-api-reference",
+    "npm run verify:framework-api-reference",
+    "npm run verify:docs-quality",
+    "npm run build:docs"
+  ],
+  "evidence": [
+    "docs/testing/generated-component-reference.md",
+    "docs/generated/consumer-knowledge.json",
+    "docs/generated/framework-api-reference.json",
+    "docs/generated/ai-context/index.json",
+    "apps/docs/src/AiContextIndexPage.tsx",
+    "apps/docs/src/ComponentReferencePage.tsx",
+    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
+    "scripts/generate-component-reference.mjs",
+    "scripts/generate-framework-api-reference.mjs",
+    "scripts/verify-component-reference.mjs"
+  ]
+}
