@@ -1393,6 +1393,22 @@
           "status": "complete",
           "reference": "docs/api/ui-components-api.md"
         }
+      },
+      "data-grid-bulk-action-bar": {
+        "maturityState": "experimental",
+        "category": "grid-feature",
+        "owner": {
+          "status": "complete",
+          "reference": "docs/metadata/components.json"
+        },
+        "implementationLocation": {
+          "status": "complete",
+          "reference": "packages/ui-data-grid/src/components/DataGridBulkActionBar.tsx"
+        },
+        "documentationLocation": {
+          "status": "complete",
+          "reference": "docs/api/ui-data-grid-api.md"
+        }
       }
     }
   },
@@ -4369,37 +4385,37 @@
       "displayName": "DataGridBulkActionBar",
       "package": "@vyrnforge/ui-data-grid",
       "category": "grid-feature",
-      "maturity": "planned",
+      "maturity": "experimental",
       "owner": "Data Grid Team",
-      "sourcePath": "not-applicable",
-      "publicExport": false,
-      "since": "not-applicable",
+      "sourcePath": "packages/ui-data-grid/src/components/DataGridBulkActionBar.tsx",
+      "publicExport": true,
+      "since": "0.1.0-alpha.2",
       "docsPath": "docs/api/ui-data-grid-api.md",
       "playgroundPath": "not-applicable",
       "evidence": {
         "maturityEvidenceKey": "data-grid-bulk-action-bar",
-        "status": "requires-verification"
+        "status": "pending"
       },
       "accessibility": {
         "documentationPath": "docs/api/ui-data-grid-api.md",
-        "keyboardDocumentation": "requires-verification"
+        "keyboardDocumentation": "not-applicable"
       },
       "knownLimitations": [
-        "Do not import today; bulk actions are configured through UniversalDataGrid props."
+        "Presentation and action-dispatch surface only; selection state, permissions, mutations, and backend workflows remain controlled by UniversalDataGrid or the consuming application."
       ],
       "deprecation": {
         "status": "not-applicable"
       },
-      "purpose": "Dedicated public bulk-action bar component.",
-      "useWhen": "Use later if exported publicly.",
-      "avoidWhen": "Do not import today; bulk actions are configured through UniversalDataGrid props.",
-      "relatedComponents": ["UniversalDataGrid"],
-      "cssClasses": ["udg-bulk-actions"],
+      "purpose": "Reusable grid-specific action bar for the current row selection.",
+      "useWhen": "Use when a grid workflow needs a visible selected-row summary plus contextual actions using the existing DataGridBulkAction contracts.",
+      "avoidWhen": "Avoid for generic page actions or application business workflows that are not scoped to the current grid selection.",
+      "relatedComponents": ["UniversalDataGrid", "DataGridToolbar"],
+      "cssClasses": ["udg-bulk-action-bar", "udg-bulk-action"],
       "cssVariables": [],
-      "importExample": "Not publicly exported today.",
-      "basicUsageExample": "<UniversalDataGrid bulkActions={bulkActions} />",
-      "accessibilityNotes": "Bulk actions should describe selected row scope.",
-      "aiUsageNotes": "Do not invent a public DataGridBulkActionBar import until it exists."
+      "importExample": "import { DataGridBulkActionBar } from \"@vyrnforge/ui-data-grid\";",
+      "basicUsageExample": "<DataGridBulkActionBar tableId=\"users\" selectedRowIds={selectedRowIds} selectedRows={selectedRows} state={gridState} actions={bulkActions} onClearSelection={clearSelection} />",
+      "accessibilityNotes": "The bar reports the selected-row count with status semantics and keeps each action as a normal VyrnForge button in the Tab order. It adds no custom keyboard model; child controls own keyboard behavior.",
+      "aiUsageNotes": "Use the existing DataGridBulkAction and DataGridBulkActionContext contracts. Keep permission checks, mutations, backend calls, and application workflow state outside the component."
     },
     {
       "id": "app-shell",
