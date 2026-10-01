@@ -34,7 +34,7 @@ function fixture(mutator, callback) {
   }
 }
 
-test("accepts the CF-7009 runtime-ready matrix", () =>
+test("accepts the verified cross-framework browser matrix", () =>
   fixture(null, (failures) => assert.deepEqual(failures, [])));
 
 test("rejects a missing Vue consumer", () =>
@@ -50,7 +50,7 @@ test("rejects a missing Vue consumer", () =>
       );
       writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
     },
-    (failures) => assert(failures.includes("CF-7009 matrix is missing vue")),
+    (failures) => assert(failures.includes("cross-framework browser matrix is missing vue")),
   ));
 
 test("rejects a runtime without trace support", () =>
