@@ -19,12 +19,7 @@
     "aiComponents": "docs/generated/ai-context/components/*.json",
     "aiPatterns": "docs/generated/ai-context/patterns/*.json"
   },
-  "frameworkSurfaces": [
-    "react",
-    "native-html",
-    "angular",
-    "vue"
-  ],
+  "frameworkSurfaces": ["react", "native-html", "angular", "vue"],
   "policy": {
     "canonicalMetadataWins": true,
     "inventMissingContracts": false,
