@@ -56,6 +56,45 @@ pointer, and layout evidence, but they do not prove complete WCAG conformance.
 Manual assistive-technology execution is tracked by
 `docs/metadata/assistive-technology-reviews.json`.
 
+### Recording manual assistive-technology evidence
+
+The metadata file is the canonical index; reviewed observations live under
+`docs/quality/assistive-technology-results/`. Pending scenarios must remain
+`pending` with an empty `results` array until a named reviewer actually
+executes the declared fixtures in every required environment.
+
+For each review environment, record:
+
+- the exact repository commit under test;
+- environment ID plus operating system, browser, and assistive-technology
+  versions;
+- reviewer and review date;
+- every executed scenario and fixture;
+- outcome (`passed`, `failed`, or `conditional`);
+- observed announcements;
+- focus and keyboard behavior;
+- limitations or defects.
+
+After the result document exists, add the matching
+`environmentId`, `outcome`, `reviewer`, `testedAt`, `reference`, and
+`notes` entry to the scenario. A scenario may become `complete` only when
+every declared environment has a reviewed result. Components whose
+`keyboardDocumentation` is `requires-verification` must not be changed to
+`complete` unless the canonical scenario is complete and all recorded results
+pass.
+
+For the current post-G20 queue, execute AT-010 through AT-014 in both
+`windows-nvda-chrome` and `windows-nvda-firefox`. Do not infer a result from
+automated browser coverage or from another component's manual review.
+
+Validate the recorded evidence with:
+
+```bash
+npm run verify:assistive-technology
+npm run verify:component-maturity
+npm run verify:maturity-closure
+```
+
 ## Repository validation
 
 Use the repository's current aggregate commands rather than reconstructing an
