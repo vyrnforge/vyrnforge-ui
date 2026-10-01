@@ -58,7 +58,7 @@
     {
       "path": "docs/api/ui-components-api.md",
       "kind": "blob",
-      "sha1": "f9f30e2a8c84ff2db6789e0efa0bc0aa9719cc3b",
+      "sha1": "62a2df843d0ed4ee808b9eb9b266c1b7a841a15b",
       "covers": ["documented React public API and usage contracts"]
     },
     {
@@ -212,6 +212,11 @@
       "task": "SC-2103",
       "reason": "React Toast keeps its existing provider/hook API and renderer composition while delegating lifecycle state, timers, pause/resume, dismissal, and action orchestration to the shared VyrnForge toast service. Existing React toast browser/parity coverage and the shared service tests protect the compatibility surface during this implementation-tree recapture.",
       "evidence": "packages/ui-components/src/components/__tests__/overlay-feedback-parity.test.tsx; packages/ui-behaviors/src/toast-service.test.ts; packages/ui-elements/src/toast-service.test.ts"
+    },
+    {
+      "task": "#686",
+      "reason": "Documentation quality hardening repairs duplicate component rows and headings, restores one valid Feedback table, and corrects Markdown table structure in the React API guide without changing public React exports, props, callbacks, refs, runtime behavior, CSS contracts, or compatibility policy. Only the reviewed API-documentation fingerprint is intentionally recaptured.",
+      "evidence": "scripts/verify-markdown-structure.mjs"
     }
   ],
   "changePolicy": "During S14 convergence, a fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."

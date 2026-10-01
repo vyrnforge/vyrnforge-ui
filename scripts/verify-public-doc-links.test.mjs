@@ -67,3 +67,18 @@ test("ignores links inside fenced code examples", () =>
         [],
       ),
   ));
+
+test("default discovery validates links outside the curated current-doc shortlist", () =>
+  fixture(
+    {
+      "README.md": "# Root\n",
+      "docs/architecture/accessibility.md": "[Missing](missing.md)\n",
+      "packages/ui-core/README.md": "# Package\n",
+    },
+    (root) => {
+      const failures = verifyPublicDocumentationLinks({ root });
+      assert.deepEqual(failures, [
+        "docs/architecture/accessibility.md: broken relative documentation link: missing.md",
+      ]);
+    },
+  ));

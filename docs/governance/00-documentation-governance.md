@@ -97,6 +97,14 @@ they must not become a second architecture manual or component catalog.
 `npm run verify:documentation-current` checks primary guidance for stale release
 channels, obsolete project-state language, and reader-entrypoint structure.
 
+`npm run verify:markdown-structure` automatically discovers active Markdown
+across root guidance, `.ai/`, `docs/`, and package READMEs and checks document
+titles, duplicate headings, malformed tables, duplicate table identities, and
+orphaned pipe-row blocks. `npm run verify:public-doc-links` uses the same
+active-Markdown discovery source for local links. `npm run verify:docs-quality`
+composes those checks with generated component-reference and Reference-product
+drift verification.
+
 Documentation changes must also preserve the docs build because `apps/docs`
 imports repository documentation directly. Generated documentation and AI context
 must pass their currentness verifiers.
