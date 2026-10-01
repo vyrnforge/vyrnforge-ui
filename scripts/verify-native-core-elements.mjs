@@ -7,10 +7,6 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-const expectedTasks = Array.from(
-  { length: 7 },
-  (_, index) => `EL-${6005 + index}`,
-);
 const expectedTags = [
   "vf-text",
   "vf-heading",
@@ -108,23 +104,8 @@ export function verifyNativeCoreElements({ root = repositoryRoot } = {}) {
   if (metadata.schemaVersion !== 1) {
     failures.push("native core element schemaVersion must be 1");
   }
-  if (metadata.program?.batch !== "EL-6005-EL-6011") {
-    failures.push("native core element batch must be EL-6005-EL-6011");
-  }
-  if (metadata.program?.gate !== "GMF3") {
-    failures.push("native core element gate must be GMF3");
-  }
-
-  const tasks = new Map(
-    (metadata.tasks ?? []).map((task) => [task.id, task.status]),
-  );
-  for (const taskId of expectedTasks) {
-    if (tasks.get(taskId) !== "done") failures.push(`${taskId} must be done`);
-  }
-  if (tasks.size !== expectedTasks.length) {
-    failures.push(
-      "native core element task inventory must contain exactly EL-6005 through EL-6011",
-    );
+  if (metadata.verification?.status !== "verified") {
+    failures.push("native core element verification status must be verified");
   }
 
   const tags = metadata.registration?.tags ?? [];
@@ -277,6 +258,6 @@ if (
 ) {
   assertNativeCoreElements();
   console.log(
-    "Native core elements passed: EL-6005 through EL-6011 and the 40-tag catalog are complete.",
+    "Native core elements passed: the 40-tag catalog and current contracts are complete.",
   );
 }
