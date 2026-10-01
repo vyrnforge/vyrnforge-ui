@@ -1,7 +1,11 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
+  DataGridBulkActionBar,
+  createGridState,
   useDataGridState,
+  type DataGridBulkActionBarProps,
+  type DataGridBulkActionContext,
   type UseDataGridStateOptions,
   type UseDataGridStateResult,
 } from "../index";
@@ -14,7 +18,53 @@ function StateSnapshot(options: UseDataGridStateOptions) {
   );
 }
 
-describe("public data-grid hook exports", () => {
+describe("public data-grid exports", () => {
+  it("exposes DataGridBulkActionBar and its public props contract", () => {
+    type Row = { id: number; name: string };
+    const context: DataGridBulkActionContext<Row> = {
+      tableId: "users",
+      selectedRowIds: [1],
+      selectedRows: [{ id: 1, name: "Ada" }],
+      selectionScope: "page",
+      state: createGridState({ selectedRowIds: [1] }),
+    };
+    const props: DataGridBulkActionBarProps<Row> = {
+      actions: [
+        {
+          id: "review",
+          label: "Flag review",
+          onClick: () => undefined,
+        },
+      ],
+      context,
+      onClearSelection: () => undefined,
+    };
+
+    const markup = renderToStaticMarkup(<DataGridBulkActionBar {...props} />);
+
+    expect(markup).toContain("1");
+    expect(markup).toContain("row selected");
+    expect(markup).toContain("Flag review");
+    expect(markup).toContain('aria-label="Clear selected rows"');
+  });
+
+  it("keeps the public bulk action bar empty when no rows are selected", () => {
+    expect(
+      renderToStaticMarkup(
+        <DataGridBulkActionBar
+          actions={[]}
+          context={{
+            tableId: "users",
+            selectedRowIds: [],
+            selectedRows: [],
+            selectionScope: "page",
+            state: createGridState(),
+          }}
+          onClearSelection={() => undefined}
+        />,
+      ),
+    ).toBe("");
+  });
   it("exposes the experimental hook through the package root with normalized uncontrolled state", () => {
     expect(
       renderToStaticMarkup(
