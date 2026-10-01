@@ -14,11 +14,7 @@ type DataGridBulkActionBarProps<
 
 export function DataGridBulkActionBar<
   RowData extends Record<string, unknown> = Record<string, unknown>,
->({
-  actions,
-  context,
-  onClearSelection,
-}: DataGridBulkActionBarProps<RowData>) {
+>({ actions, context, onClearSelection }: DataGridBulkActionBarProps<RowData>) {
   const selectedCount = context.selectedRowIds.length;
 
   if (selectedCount === 0) {
@@ -40,9 +36,7 @@ export function DataGridBulkActionBar<
         <Badge size="sm" variant="info">
           {selectedCount}
         </Badge>
-        <span>
-          row{selectedCount === 1 ? "" : "s"} selected
-        </span>
+        <span>row{selectedCount === 1 ? "" : "s"} selected</span>
       </div>
       <div className="udg-bulk-action-bar__actions">
         {visibleActions.map((action) => {
