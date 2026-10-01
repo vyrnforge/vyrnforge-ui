@@ -15,6 +15,16 @@ export type DataGridFilterOperator =
   | "lessThan"
   | "lessThanOrEqual";
 
+export type DataGridColumnDataType =
+  | "string"
+  | "number"
+  | "date"
+  | "datetime"
+  | "boolean"
+  | "enum"
+  | "status"
+  | "custom";
+
 export type DataGridFilter = {
   id: string;
   columnId: string;
@@ -45,6 +55,8 @@ export type DataGridFoundationColumnDef<
   accessorKey?: keyof RowData;
   accessorFn?: (row: RowData) => unknown;
   searchable?: boolean;
+  filterable?: boolean;
+  dataType?: DataGridColumnDataType;
 };
 
 export type DataGridColumnVisibilityState = Record<string, boolean>;
