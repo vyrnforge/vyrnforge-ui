@@ -1,4 +1,9 @@
-import { Children, isValidElement, type ReactElement, type ReactNode } from "react";
+import {
+  Children,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import type { DataGridExportPreview } from "../core/exportPreview";
@@ -114,9 +119,7 @@ describe("ExportPreviewPanel", () => {
     expect(markup).toContain("No visible columns");
     expect(markup).toContain("0 hidden columns");
     expect(markup).toContain("0 selected rows");
-    expect(markup).toContain(
-      "No active search, filters, sorting, or grouping",
-    );
+    expect(markup).toContain("No active search, filters, sorting, or grouping");
   });
 
   it("forwards confirm and cancel as presentation callbacks only", () => {
