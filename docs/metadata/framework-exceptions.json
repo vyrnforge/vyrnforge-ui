@@ -6,12 +6,7 @@
     "documentation": "docs/architecture/adr-008-framework-exception-policy.md"
   },
   "defaultPolicy": "generated-or-generic",
-  "states": [
-    "proposed",
-    "active",
-    "retiring",
-    "closed"
-  ],
+  "states": ["proposed", "active", "retiring", "closed"],
   "exceptionClasses": [
     "ssr-hydration",
     "performance",
@@ -136,13 +131,7 @@
     {
       "id": "MFD-EX-REACT-TYPOGRAPHY-SEMANTICS",
       "framework": "react",
-      "scope": [
-        "text",
-        "heading",
-        "label",
-        "caption",
-        "code-text"
-      ],
+      "scope": ["text", "heading", "label", "caption", "code-text"],
       "exceptionClass": "migration-compatibility",
       "reason": "The documented React typography API renders consumer-selected semantic native elements (including p/span/div, h1-h6, label, small, and code) and accepts their native attribute contracts. The current canonical vf-* display elements are fixed Custom Element hosts and do not yet expose a semantic native-element adoption contract that can preserve those DOM semantics.",
       "owner": "UI Platform",
@@ -191,9 +180,7 @@
       "exceptionClass": "migration-compatibility",
       "reason": "SC-2103 delivered the shared toast service/viewport lifecycle, but vf-toast-viewport remains a registered Native orchestration element without its own canonical component-contract mapping. Native manifest generation still requires this narrow exception to authorize that public registration.",
       "owner": "UI Platform",
-      "sourcePaths": [
-        "packages/ui-elements/src/components/feedback.ts"
-      ],
+      "sourcePaths": ["packages/ui-elements/src/components/feedback.ts"],
       "evidence": [
         "packages/ui-elements/src/registry.ts registers vf-toast-viewport with VyrnForgeToastViewportElement.",
         "tests/browser/native-parity.spec.ts protects the shipped native parity surface that includes the toast viewport.",
@@ -208,13 +195,7 @@
     {
       "id": "MFD-EX-REACT-NAV-RICH-COMPOSITION",
       "framework": "react",
-      "scope": [
-        "tabs",
-        "breadcrumbs",
-        "side-nav",
-        "segmented-control",
-        "menu"
-      ],
+      "scope": ["tabs", "breadcrumbs", "side-nav", "segmented-control", "menu"],
       "exceptionClass": "composition",
       "reason": "The current React surfaces accept ReactNode labels, content, icons, badges, separators, descriptions, or overlay composition, while the corresponding canonical elements reconstruct their Light DOM from string-oriented item models. Direct facade conversion would erase React-owned nodes or change the captured DOM/accessibility contract.",
       "owner": "UI Platform",
@@ -302,10 +283,7 @@
     {
       "id": "MFD-EX-REACT-COLLECTION-RICH-COMPOSITION",
       "framework": "react",
-      "scope": [
-        "multi-select",
-        "transfer-list"
-      ],
+      "scope": ["multi-select", "transfer-list"],
       "exceptionClass": "composition",
       "reason": "React MultiSelect accepts ReactNode option labels/descriptions and owns searchable roving-focus option controls, while React TransferList accepts ReactNode titles/descriptions/empty states plus renderOption, custom panel filtering, selection callbacks, and repeated hidden form values. The current canonical elements rebuild their Light DOM from string-oriented item models and do not adopt React-owned composition or preserve the full keyboard/form extension surface.",
       "owner": "UI Platform",
@@ -362,11 +340,7 @@
     {
       "id": "MFD-EX-REACT-LAYOUT-NATIVE-HOST",
       "framework": "react",
-      "scope": [
-        "card",
-        "stack",
-        "inline"
-      ],
+      "scope": ["card", "stack", "inline"],
       "exceptionClass": "migration-compatibility",
       "reason": "React Card, Stack, and Inline expose native div roots and HTMLAttributes contracts. Replacing those roots with Custom Elements would change tag identity, event currentTarget typing, ref semantics, and consumer DOM expectations even though visual properties are already represented canonically.",
       "owner": "UI Platform",
