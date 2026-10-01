@@ -308,6 +308,11 @@ Row selection is opt-in and works in controlled or uncontrolled mode:
 
 Use `selectedRowIds` and `onSelectedRowIdsChange` for controlled selection. Header selection applies only to selectable rows on the current displayed page. Selection is not persisted by the built-in persistence helper, and reset view clears selected rows back to `defaultSelectedRowIds` or an empty selection.
 
+`DataGridBulkActionBar` is also exported for custom grid composition. It reuses
+the same `DataGridBulkAction` and `DataGridBulkActionContext` contracts as
+`UniversalDataGrid`, renders only when rows are selected, and keeps application
+mutations, permission checks, and backend workflows outside the grid package.
+
 ## Row Grouping
 
 Grouping is opt-in with `enableGrouping`. It is client-side in this phase:
