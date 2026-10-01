@@ -4,7 +4,7 @@ import type {
   DataGridBulkActionContext,
 } from "../types/dataGrid.types";
 
-type DataGridBulkActionBarProps<
+export type DataGridBulkActionBarProps<
   RowData extends Record<string, unknown> = Record<string, unknown>,
 > = {
   actions: DataGridBulkAction<RowData>[];
