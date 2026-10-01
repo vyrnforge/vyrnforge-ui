@@ -87,7 +87,10 @@ export function ExportPreviewPanel({
         )}
       </section>
 
-      <section aria-label="Export query" className="udg-export-preview__section">
+      <section
+        aria-label="Export query"
+        className="udg-export-preview__section"
+      >
         <h4>Query</h4>
         {queryActive ? (
           <ul className="udg-export-preview__query">
