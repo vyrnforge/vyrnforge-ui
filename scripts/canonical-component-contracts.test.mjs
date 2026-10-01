@@ -235,7 +235,7 @@ test("PropertyTable keeps a semantic, state-free cross-framework contract", () =
   }
 });
 
-test("promoted semantic contracts are complete in G10 coverage", () => {
+test("promoted semantic contracts are complete in canonical coverage", () => {
   const report = createCoverageReport();
 
   for (const id of ["property-table", "timeline"]) {
