@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   filterVersionsForFramework,
@@ -7,6 +10,12 @@ import {
   isDocumentationReadyStatus,
   resolveFrameworkSwitch,
 } from "../docs/reference/documentationAvailability.ts";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+function json(relativePath) {
+  return JSON.parse(readFileSync(path.join(root, relativePath), "utf8"));
+}
 
 const versions = [
   {
@@ -63,4 +72,47 @@ test("framework switching preserves version identity instead of silently substit
     status: "unavailable",
     alternatives: ["v3.2"],
   });
+});
+
+test("generated registry carries truthful release-line and document availability", () => {
+  const registry = json("docs/generated/documentation-registry.json");
+  assert.equal(registry.schemaVersion, 2);
+
+  const nonGrid = registry.releaseLines.find(
+    (releaseLine) => releaseLine.id === "non-grid-beta",
+  );
+  const dataGrid = registry.releaseLines.find(
+    (releaseLine) => releaseLine.id === "data-grid-alpha",
+  );
+  assert(nonGrid);
+  assert(dataGrid);
+  assert.equal(nonGrid.versioningMode, "synchronized");
+  assert.equal(dataGrid.versioningMode, "independent");
+  assert.equal(dataGrid.readiness.react, "preview");
+  assert.equal(dataGrid.readiness.vue, "unavailable");
+
+  const gridPage = registry.pages.find((page) => page.id === "data-grid");
+  assert(gridPage);
+  assert.equal(gridPage.releaseLine, "data-grid-alpha");
+  assert.deepEqual(
+    Object.fromEntries(
+      gridPage.availability.map((entry) => [entry.framework, entry.status]),
+    ),
+    {
+      react: "preview",
+      "native-html": "unavailable",
+      angular: "unavailable",
+      vue: "unavailable",
+    },
+  );
+
+  const overview = registry.pages.find((page) => page.id === "overview");
+  assert(overview);
+  assert.equal(overview.releaseLine, "non-grid-beta");
+  assert(
+    overview.availability.every(
+      (entry) =>
+        entry.version === nonGrid.version && entry.status === "preview",
+    ),
+  );
 });
