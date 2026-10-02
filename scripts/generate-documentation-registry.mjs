@@ -14,7 +14,8 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-export const DOCUMENTATION_PAGES_PATH = "docs/metadata/documentation-pages.json";
+export const DOCUMENTATION_PAGES_PATH =
+  "docs/metadata/documentation-pages.json";
 export const DOCUMENTATION_REGISTRY_PATH =
   "docs/generated/documentation-registry.json";
 
@@ -123,7 +124,8 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
   );
   const sections = [...metadata.sections].sort((a, b) => a.order - b.order);
   const pages = [...metadata.pages].sort((a, b) => {
-    const sectionDelta = sectionOrder.get(a.section) - sectionOrder.get(b.section);
+    const sectionDelta =
+      sectionOrder.get(a.section) - sectionOrder.get(b.section);
     return sectionDelta || a.order - b.order || a.id.localeCompare(b.id);
   });
 
