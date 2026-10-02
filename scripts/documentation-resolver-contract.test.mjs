@@ -38,26 +38,26 @@ const page = {
 };
 
 test("composes documentation layers in precedence order", () => {
-    const result = resolver.resolveDocumentationPage(page, {
-      frameworkId: "react",
-      releaseLine: "non-grid-beta",
-      version: "3.2.0",
-      versionId: "3.2",
-    });
-    assert.equal(result.kind, "resolved");
-    assert.equal(result.document.title, "Button");
-    assert.equal(result.document.sourcePath, "docs/button-3.2.md");
-    assert.equal(result.document.description, "React 3.2 usage");
+  const result = resolver.resolveDocumentationPage(page, {
+    frameworkId: "react",
+    releaseLine: "non-grid-beta",
+    version: "3.2.0",
+    versionId: "3.2",
+  });
+  assert.equal(result.kind, "resolved");
+  assert.equal(result.document.title, "Button");
+  assert.equal(result.document.sourcePath, "docs/button-3.2.md");
+  assert.equal(result.document.description, "React 3.2 usage");
 });
 
 test("does not fall back across frameworks", () => {
-    const result = resolver.resolveDocumentationPage(page, {
-      frameworkId: "vue",
-      releaseLine: "non-grid-beta",
-      version: "3.2.0",
-      versionId: "3.2",
-    });
-    assert.equal(result.kind, "unavailable");
+  const result = resolver.resolveDocumentationPage(page, {
+    frameworkId: "vue",
+    releaseLine: "non-grid-beta",
+    version: "3.2.0",
+    versionId: "3.2",
+  });
+  assert.equal(result.kind, "unavailable");
   assert.equal(result.status, "unavailable");
   const frameworks = result.alternatives.map((entry) => entry.framework);
   assert.deepEqual(frameworks, ["react"]);
