@@ -12,7 +12,13 @@ test("Documentation Registry is generated from canonical page and Reference meta
   assert.equal(registry.schemaVersion, 2);
   assert(registry.pages.length > 20);
   assert(registry.sections.length >= 7);
-  assert(registry.recordDomains.some((domain) => domain.id === "components"));
+  assert(
+    registry.recordDomains.some(
+      (domain) =>
+        domain.id === "components" &&
+        domain.documentId === "component-reference",
+    ),
+  );
   assert(registry.recordDomains.some((domain) => domain.id === "packages"));
   assert(registry.recordDomains.some((domain) => domain.id === "tokens"));
   assert(registry.recordDomains.some((domain) => domain.id === "patterns"));
