@@ -5,7 +5,9 @@ import {
   type DocumentationAvailabilityEntry,
   type DocumentationContentLayers,
 } from "../../../docs/reference/documentationResolver";
-import type {\n  ReferenceFrameworkId,\n} from "../../../docs/reference/referenceRuntime";
+import type {
+  ReferenceFrameworkId,
+} from "../../../docs/reference/referenceRuntime";
 
 export type DocsRouteKind =
   | "overview"
@@ -118,7 +120,8 @@ function routeFromRegistryPage(page: RegistryPage): DocsRoute {
   };
 }
 
-export const docsRoutes: DocsRoute[] =\n  registry.pages.map(routeFromRegistryPage);
+export const docsRoutes: DocsRoute[] =
+  registry.pages.map(routeFromRegistryPage);
 
 export const publicDocsSections: PublicDocsSection[] = registry.sections.map(
   (section) => ({
