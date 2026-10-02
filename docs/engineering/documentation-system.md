@@ -107,11 +107,12 @@ path-based.
 The transitional runtime registries have been retired. Docs discovers authored
 Markdown, metadata, and generated sources directly, composes generated reader
 entries from `docs/generated/reference-model.json`, and binds curated executable
-pages to canonical component and example identities. The generated model owns
-the domain taxonomy and stable identities; `apps/docs/src/referenceRoutes.ts`
-owns only the curated reader-facing page grouping and authored-page bindings. Those bindings do not own
-component labels, package identity, framework API facts, accessibility contracts,
-or stable component routes.
+pages to canonical component and example identities. Canonical public page
+registration and record-domain bindings live in
+`docs/metadata/documentation-pages.json` and are compiled into
+`docs/generated/documentation-registry.json`. The Docs application consumes
+those generated bindings; `apps/docs/src/referenceRoutes.ts` is an adapter, not
+a page or record-route authority.
 
 Derivable navigation and catalog facts therefore come from the generated
 Reference model, canonical metadata, or repository source discovery. Curated
