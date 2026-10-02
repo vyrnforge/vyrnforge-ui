@@ -124,14 +124,33 @@ export function verifyPlaygroundReferenceCoverage({
     "apps/docs/src/examples/MigratedExamplePage.tsx",
   );
   for (const marker of [
-    "ThemeModesPage",
-    "DensityPage",
-    "BasicGridPage",
-    "SettingsPage",
+    "resolveDocumentationExample",
+    "import.meta.glob",
+    "implementation.sourcePath",
     "vf-docs-example-stage",
   ]) {
     if (!migratedExamples.includes(marker)) {
-      failures.push(`migrated Docs examples are missing ${marker}`);
+      failures.push(`migrated Docs example resolver is missing ${marker}`);
+    }
+  }
+
+  const registeredExampleSources = new Set(
+    (documentationRegistry.examples ?? []).flatMap((example) =>
+      (example.implementations ?? []).map(
+        (implementation) => implementation.sourcePath,
+      ),
+    ),
+  );
+  for (const sourcePath of [
+    "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
+    "apps/docs/src/examples/pages/core/DensityPage.tsx",
+    "apps/docs/src/examples/pages/data-grid/BasicGridPage.tsx",
+    "apps/docs/src/examples/pages/patterns/SettingsPage.tsx",
+  ]) {
+    if (!registeredExampleSources.has(sourcePath)) {
+      failures.push(
+        `generated Documentation Registry is missing migrated example source ${sourcePath}`,
+      );
     }
   }
 
