@@ -49,7 +49,18 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert(registry.pages.some((page) => page.id === "token-reference"));
   assert(registry.pages.some((page) => page.id === "pattern-reference"));
   assert(registry.pages.some((page) => page.id === "package-reference"));
-  assert(registry.recordDomains.some((domain) => domain.id === "components"));
+  assert(
+    registry.recordDomains.some(
+      (domain) =>
+        domain.id === "components" &&
+        domain.documentId === "component-reference",
+    ),
+  );
+  assert(
+    registry.recordDomains.some(
+      (domain) => domain.id === "tokens" && domain.documentId === "token-reference",
+    ),
+  );
   assert(registry.searchRecords.some((record) => record.kind === "api-member"));
   assert(registry.indexes.bySection.length > 0);
   assert(registry.indexes.byType.length > 0);
@@ -70,6 +81,12 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.doesNotMatch(routes, /id: "token-reference"/u);
   assert.doesNotMatch(routes, /id: "pattern-reference"/u);
   assert.doesNotMatch(routes, /id: "package-reference"/u);
+
+  const app = read("apps/docs/src/App.tsx");
+  assert.match(app, /documentationRecordRoutes/u);
+  assert.doesNotMatch(app, /const recordRoutes/u);
+  assert.doesNotMatch(app, /routeId: "component-reference"/u);
+  assert.doesNotMatch(app, /routeId: "token-reference"/u);
 
   const nav = read("apps/docs/src/DocsNav.tsx");
   assert.match(nav, /docsRoutes/);
