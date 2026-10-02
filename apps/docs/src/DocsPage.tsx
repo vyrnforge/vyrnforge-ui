@@ -53,7 +53,8 @@ export function DocsPage({
         />
       ) : route.kind === "executable-examples" ? (
         <ExecutableExamplesPage frameworkId={frameworkId} />
-      ) : route.kind === "discovery-reference" ? (
+      ) : route.kind === "discovery-reference" &&
+        (route.id === "token-reference" || route.id === "pattern-reference") ? (
         <DiscoveryReferencePage
           referenceRecord={referenceRecord}
           routeId={route.id}
