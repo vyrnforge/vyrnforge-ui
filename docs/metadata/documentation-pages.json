@@ -9,7 +9,9 @@
     {
       "id": "component",
       "label": "Component reference",
-      "documentTypes": ["component"],
+      "documentTypes": [
+        "component"
+      ],
       "sections": [
         "summary",
         "usage",
@@ -24,7 +26,9 @@
     {
       "id": "foundation",
       "label": "Foundation / concept",
-      "documentTypes": ["foundation"],
+      "documentTypes": [
+        "foundation"
+      ],
       "sections": [
         "summary",
         "concepts",
@@ -37,13 +41,23 @@
     {
       "id": "guide",
       "label": "Guide / framework integration",
-      "documentTypes": ["guide"],
-      "sections": ["summary", "setup", "usage", "accessibility", "related"]
+      "documentTypes": [
+        "guide"
+      ],
+      "sections": [
+        "summary",
+        "setup",
+        "usage",
+        "accessibility",
+        "related"
+      ]
     },
     {
       "id": "pattern",
       "label": "Pattern",
-      "documentTypes": ["pattern"],
+      "documentTypes": [
+        "pattern"
+      ],
       "sections": [
         "summary",
         "use-when",
@@ -56,7 +70,9 @@
     {
       "id": "package",
       "label": "Package / API reference",
-      "documentTypes": ["package"],
+      "documentTypes": [
+        "package"
+      ],
       "sections": [
         "summary",
         "installation",
@@ -69,7 +85,9 @@
     {
       "id": "advanced-module",
       "label": "Advanced module",
-      "documentTypes": ["advanced-module"],
+      "documentTypes": [
+        "advanced-module"
+      ],
       "sections": [
         "summary",
         "usage",
@@ -83,7 +101,9 @@
     {
       "id": "release",
       "label": "Migration / release reference",
-      "documentTypes": ["release"],
+      "documentTypes": [
+        "release"
+      ],
       "sections": [
         "summary",
         "changes",
@@ -95,8 +115,15 @@
     {
       "id": "example",
       "label": "Example",
-      "documentTypes": ["example"],
-      "sections": ["summary", "preview", "code", "related"]
+      "documentTypes": [
+        "example"
+      ],
+      "sections": [
+        "summary",
+        "preview",
+        "code",
+        "related"
+      ]
     }
   ],
   "sections": [
@@ -148,7 +175,10 @@
       "description": "What VyrnForge is and how to navigate the documentation.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/README.md",
-      "tags": ["overview", "start"]
+      "tags": [
+        "overview",
+        "start"
+      ]
     },
     {
       "id": "getting-started",
@@ -161,7 +191,11 @@
       "description": "Install VyrnForge and choose the Native HTML, React, Angular, or Vue surface.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/api/import-and-setup.md",
-      "tags": ["install", "setup", "frameworks"]
+      "tags": [
+        "install",
+        "setup",
+        "frameworks"
+      ]
     },
     {
       "id": "executable-examples",
@@ -176,7 +210,13 @@
       "sourcePath": "tests/consumers/manifest.json",
       "exampleId": "framework-consumer",
       "exampleCategory": "basic",
-      "tags": ["examples", "native", "react", "angular", "vue"]
+      "tags": [
+        "examples",
+        "native",
+        "react",
+        "angular",
+        "vue"
+      ]
     },
     {
       "id": "component-reference",
@@ -189,7 +229,11 @@
       "description": "Browse component usage, framework variants, API, accessibility, styling, and related guidance.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/generated/consumer-knowledge.json",
-      "tags": ["components", "api"]
+      "recordDomain": "components",
+      "tags": [
+        "components",
+        "api"
+      ]
     },
     {
       "id": "theming",
@@ -202,7 +246,11 @@
       "description": "Customize VyrnForge with shared semantic tokens, themes, density, and CSS.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/architecture/03-theming-and-styling.md",
-      "tags": ["theming", "tokens", "css"]
+      "tags": [
+        "theming",
+        "tokens",
+        "css"
+      ]
     },
     {
       "id": "token-reference",
@@ -215,7 +263,11 @@
       "description": "Browse shared VyrnForge token categories and styling roles.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/design-tokens.json",
-      "tags": ["tokens", "design-system"]
+      "recordDomain": "tokens",
+      "tags": [
+        "tokens",
+        "design-system"
+      ]
     },
     {
       "id": "theme-tokens",
@@ -284,7 +336,11 @@
       "description": "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/architecture/05-accessibility-standards.md",
-      "tags": ["accessibility", "keyboard", "focus"]
+      "tags": [
+        "accessibility",
+        "keyboard",
+        "focus"
+      ]
     },
     {
       "id": "pattern-reference",
@@ -297,7 +353,11 @@
       "description": "Browse reusable VyrnForge composition patterns.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/patterns.json",
-      "tags": ["patterns", "composition"]
+      "recordDomain": "patterns",
+      "tags": [
+        "patterns",
+        "composition"
+      ]
     },
     {
       "id": "pattern-resource-list",
@@ -436,7 +496,11 @@
       "description": "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
       "releaseLine": "data-grid-alpha",
       "sourcePath": "packages/ui-data-grid/README.md",
-      "tags": ["data", "grid", "react"]
+      "tags": [
+        "data",
+        "grid",
+        "react"
+      ]
     },
     {
       "id": "grid-basic",
@@ -575,7 +639,11 @@
       "description": "Understand package responsibilities, public entrypoints, and release tracks.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/packages.json",
-      "tags": ["packages", "api"]
+      "recordDomain": "packages",
+      "tags": [
+        "packages",
+        "api"
+      ]
     },
     {
       "id": "releases",
@@ -588,7 +656,11 @@
       "description": "Understand release channels, framework support, limitations, and upgrade guidance.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/release/multi-framework-migration-and-limitations.md",
-      "tags": ["release", "migration", "compatibility"]
+      "tags": [
+        "release",
+        "migration",
+        "compatibility"
+      ]
     }
   ]
 }
