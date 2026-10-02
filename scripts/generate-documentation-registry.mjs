@@ -59,6 +59,46 @@ function assertUnique(entries, field, label) {
   }
 }
 
+function buildDocumentationTemplateByType(metadata) {
+  if (!Array.isArray(metadata.templates) || metadata.templates.length === 0) {
+    throw new Error("Documentation pages metadata requires templates.");
+  }
+
+  assertUnique(metadata.templates, "id", "documentation template");
+
+  const templateByType = new Map();
+  for (const template of metadata.templates) {
+    if (
+      !Array.isArray(template.documentTypes) ||
+      template.documentTypes.length === 0 ||
+      !Array.isArray(template.sections) ||
+      template.sections.length === 0
+    ) {
+      throw new Error(
+        `Documentation template ${template.id} requires documentTypes and sections.`,
+      );
+    }
+
+    if (new Set(template.sections).size !== template.sections.length) {
+      throw new Error(
+        `Documentation template ${template.id} has duplicate section identities.`,
+      );
+    }
+
+    for (const documentType of template.documentTypes) {
+      const existing = templateByType.get(documentType);
+      if (existing) {
+        throw new Error(
+          `Documentation type ${documentType} is assigned to both ${existing.id} and ${template.id} templates.`,
+        );
+      }
+      templateByType.set(documentType, template);
+    }
+  }
+
+  return templateByType;
+}
+
 export function validateDocumentationPagesMetadata(
   metadata,
   { root = repositoryRoot } = {},
@@ -75,6 +115,7 @@ export function validateDocumentationPagesMetadata(
 
   assertUnique(metadata.sections, "id", "documentation section");
   assertUnique(metadata.pages, "id", "documentation page");
+  const templateByType = buildDocumentationTemplateByType(metadata);
 
   const sectionIds = new Set(metadata.sections.map((section) => section.id));
   const orderKeys = new Set();
@@ -93,6 +134,11 @@ export function validateDocumentationPagesMetadata(
     if (!page.type || !page.sourcePath || !page.releaseLine) {
       throw new Error(
         `Documentation page ${page.id} requires type, sourcePath, and releaseLine.`,
+      );
+    }
+    if (!templateByType.has(page.type)) {
+      throw new Error(
+        `Documentation page ${page.id} has no template for type ${page.type}.`,
       );
     }
     if (!existsSync(path.join(root, page.sourcePath))) {
@@ -123,6 +169,7 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
     readJson(root, DOCUMENTATION_PAGES_PATH),
     { root },
   );
+  const templateByType = buildDocumentationTemplateByType(metadata);
   const referenceModel = buildReferenceModel({ root });
   const releaseGroups = readJson(root, RELEASE_GROUPS_PATH);
   const multiFramework = readJson(root, MULTI_FRAMEWORK_PATH);
@@ -210,11 +257,13 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
     documentationReadinessStates: [...documentationReadinessStates],
     releaseLines,
     documentTypes,
+    templates: metadata.templates,
     sections,
     pages: pages.map((page) => {
       const releaseLine = releaseLineById.get(page.releaseLine);
       return {
         ...page,
+        template: templateByType.get(page.type).id,
         route: `/${page.id}`,
         availability: frameworkIds.map((framework) => ({
           framework,
