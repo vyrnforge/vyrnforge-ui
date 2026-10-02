@@ -492,6 +492,8 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
       MULTI_FRAMEWORK_PATH,
       EXECUTABLE_EXAMPLES_PATH,
       "docs/generated/reference-model.json",
+      "docs/metadata/component-contracts.json",
+      "docs/metadata/framework-exceptions.json",
     ],
     documentationReadinessStates: [...documentationReadinessStates],
     exampleCategories: [...documentationExampleCategories],
