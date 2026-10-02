@@ -16,6 +16,7 @@ export const contractTestFiles = [
   "scripts/reference-shell-contract.test.mjs",
   "scripts/reference-route-context.test.mjs",
   "scripts/documentation-readiness-contract.test.mjs",
+  "scripts/documentation-resolver.test.mjs",
   "scripts/reference-pages-contract.test.mjs",
   "scripts/reference-examples-contract.test.mjs",
   "scripts/reference-discovery-contract.test.mjs",
