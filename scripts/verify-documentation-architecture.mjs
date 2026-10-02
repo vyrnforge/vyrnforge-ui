@@ -164,9 +164,7 @@ export function validateDocumentationArchitecture({
       );
     }
     if (!typeIndexes.get(page.type)?.has(page.id)) {
-      failures.push(
-        `${page.id}: generated type index is missing the document`,
-      );
+      failures.push(`${page.id}: generated type index is missing the document`);
     }
     if (!relatedIds.has(page.id)) {
       failures.push(`${page.id}: related-content input is missing`);
