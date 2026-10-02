@@ -81,10 +81,7 @@ export type DocumentationDocumentSearchRecord = {
 };
 
 export type DocumentationApiMemberKind =
-  | "property"
-  | "event"
-  | "slot"
-  | "method";
+  "property" | "event" | "slot" | "method";
 
 export type DocumentationApiMemberSearchRecord = {
   id: string;
@@ -102,8 +99,7 @@ export type DocumentationApiMemberSearchRecord = {
 };
 
 export type DocumentationSearchRecord =
-  | DocumentationDocumentSearchRecord
-  | DocumentationApiMemberSearchRecord;
+  DocumentationDocumentSearchRecord | DocumentationApiMemberSearchRecord;
 
 const readyStatuses = new Set<DocumentationDiscoveryStatus>([
   "stable",
@@ -196,14 +192,12 @@ export function getDocumentationIndexes(
         .filter((page) => page.type === type)
         .map((page) => page.id),
     })),
-    bySection: getDocumentationNavigation(
-      registry,
-      frameworkId,
-      version,
-    ).map((section) => ({
-      id: section.id,
-      documentIds: section.documentIds,
-    })),
+    bySection: getDocumentationNavigation(registry, frameworkId, version).map(
+      (section) => ({
+        id: section.id,
+        documentIds: section.documentIds,
+      }),
+    ),
     recordDomains: [...(registry.recordDomains ?? [])],
   };
 }
@@ -301,9 +295,7 @@ export function getDocumentationSearchRecords(
     }),
   );
 
-  const componentPage = pages.find(
-    (page) => page.id === "component-reference",
-  );
+  const componentPage = pages.find((page) => page.id === "component-reference");
   const framework = frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
@@ -397,9 +389,7 @@ export function getDocumentationDeepLinks(
       context.version,
     )
       .filter(
-        (
-          record,
-        ): record is DocumentationApiMemberSearchRecord =>
+        (record): record is DocumentationApiMemberSearchRecord =>
           record.kind === "api-member",
       )
       .map((record) => ({
