@@ -1,4 +1,7 @@
-import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
+import {
+  getReferenceLocationHref,
+  getReferenceRecordRoute,
+} from "../../../docs/reference/referenceRuntime";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 
 export type ComponentApiMemberKind = "property" | "event" | "slot" | "method";
@@ -18,14 +21,13 @@ export function componentReferenceTargetHref(
   frameworkId: DocsFrameworkId,
   targetId: string,
 ) {
-  const query = new URLSearchParams({
-    [referenceModel.frameworkContext.queryParameter]: frameworkId,
+  return getReferenceLocationHref(referenceModel, {
+    frameworkId,
+    pathname: getReferenceRecordRoute(
+      referenceModel,
+      "components",
+      componentId,
+    ),
     member: targetId,
   });
-  const route = getReferenceRecordRoute(
-    referenceModel,
-    "components",
-    componentId,
-  );
-  return `?${query.toString()}#${route}`;
 }

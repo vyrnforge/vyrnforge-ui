@@ -3,6 +3,7 @@ import multiFrameworkRaw from "../../../docs/metadata/multi-framework.json?raw";
 import referenceModelRaw from "../../../docs/generated/reference-model.json?raw";
 import {
   getReferenceFramework,
+  getReferenceLocationHref,
   parseReferenceModel,
   type ReferenceFrameworkId,
 } from "../../../docs/reference/referenceRuntime";
@@ -246,12 +247,16 @@ export async function loadDocsVersions() {
 export function getVersionHref(
   version: DocsVersion,
   frameworkId: DocsFrameworkId,
+  pathname: string,
+  member: string | null,
 ) {
   const root = getRepositoryPagesRoot();
   const versionPath =
     version.id === "next" ? "" : version.path.replace(/^\//, "");
-  const query = new URLSearchParams({
-    [referenceModel.frameworkContext.queryParameter]: frameworkId,
+  const contextHref = getReferenceLocationHref(referenceModel, {
+    frameworkId,
+    pathname,
+    member,
   });
-  return `${root}${versionPath}?${query.toString()}${window.location.hash}`;
+  return `${root}${versionPath}${contextHref}`;
 }
