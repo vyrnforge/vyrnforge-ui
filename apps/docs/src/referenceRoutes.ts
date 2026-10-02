@@ -7,6 +7,46 @@ import {
 } from "../../../docs/reference/documentationResolver";
 import type { ReferenceFrameworkId } from "../../../docs/reference/referenceRuntime";
 
+export type DocsExampleCategory =
+  | "basic"
+  | "appearance"
+  | "state"
+  | "composition"
+  | "advanced";
+
+export type DocsExampleImplementation = {
+  framework: ReferenceFrameworkId;
+  version: string;
+  status: DocumentationAvailabilityEntry["status"];
+  language: string;
+  sourcePath: string;
+  runnable: boolean;
+  renderable: boolean;
+  fixtureId?: string;
+  verification: string[];
+};
+
+export type DocsExampleRecord = {
+  id: string;
+  documentId: string;
+  title: string;
+  category: DocsExampleCategory;
+  order: number;
+  implementations: DocsExampleImplementation[];
+};
+
+export type DocsExampleResolution =
+  | {
+      available: true;
+      implementation: DocsExampleImplementation;
+      alternatives: DocsExampleImplementation[];
+    }
+  | {
+      available: false;
+      implementation: null;
+      alternatives: DocsExampleImplementation[];
+    };
+
 export type DocsTemplateId =
   | "component"
   | "foundation"
@@ -57,12 +97,20 @@ export type DocsRouteResolution =
       status: DocumentationAvailabilityEntry["status"];
       route: DocsRoute;
       alternatives: DocumentationAlternative[];
+      context: {
+        frameworkId: ReferenceFrameworkId;
+        version: string;
+      };
     }
   | {
       available: false;
       status: DocumentationAvailabilityEntry["status"];
       route: DocsRoute;
       alternatives: DocumentationAlternative[];
+      context: {
+        frameworkId: ReferenceFrameworkId;
+        version: string;
+      };
     };
 
 export type PublicDocsSection = {
@@ -77,6 +125,8 @@ type RegistryPage = Omit<DocsRoute, "kind" | "content"> & {
 
 type DocumentationRegistry = {
   schemaVersion: 2;
+  exampleCategories: DocsExampleCategory[];
+  examples: DocsExampleRecord[];
   templates: DocsTemplateDefinition[];
   sections: Array<{
     id: string;
@@ -142,7 +192,57 @@ export const docsRoutes: DocsRoute[] = registry.pages.map(
   routeFromRegistryPage,
 );
 
+export const documentationExamples = registry.examples;
+export const documentationExampleCategories = registry.exampleCategories;
 export const documentationTemplates = registry.templates;
+
+function isExampleImplementationReady(
+  implementation: DocsExampleImplementation,
+) {
+  return (
+    implementation.status !== "unavailable" &&
+    implementation.status !== "internal-not-ready"
+  );
+}
+
+export function resolveDocumentationExample(
+  exampleId: string,
+  frameworkId: ReferenceFrameworkId,
+  version: string,
+): DocsExampleResolution {
+  const example = documentationExamples.find(
+    (candidate) => candidate.id === exampleId,
+  );
+  if (!example) {
+    return {
+      available: false,
+      implementation: null,
+      alternatives: [],
+    };
+  }
+
+  const alternatives = example.implementations.filter(
+    isExampleImplementationReady,
+  );
+  const implementation = example.implementations.find(
+    (candidate) =>
+      candidate.framework === frameworkId && candidate.version === version,
+  );
+
+  if (!implementation || !isExampleImplementationReady(implementation)) {
+    return {
+      available: false,
+      implementation: null,
+      alternatives,
+    };
+  }
+
+  return {
+    available: true,
+    implementation,
+    alternatives,
+  };
+}
 
 export function getDocumentationTemplate(templateId: DocsTemplateId) {
   const template = documentationTemplates.find(
@@ -194,6 +294,10 @@ export function resolveDocsRoute(
       status: resolution.status,
       route,
       alternatives: resolution.alternatives,
+      context: {
+        frameworkId,
+        version,
+      },
     };
   }
 
@@ -203,6 +307,10 @@ export function resolveDocsRoute(
     available: true,
     status: resolution.status,
     alternatives: resolution.alternatives,
+    context: {
+      frameworkId,
+      version,
+    },
     route: {
       ...route,
       title: document.title,
