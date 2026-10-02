@@ -81,9 +81,7 @@ function registryFixture() {
       },
     ],
     indexes: {
-      bySection: [
-        { id: "start", label: "Start", documentIds: ["overview"] },
-      ],
+      bySection: [{ id: "start", label: "Start", documentIds: ["overview"] }],
       byType: [{ type: "guide", documentIds: ["overview"] }],
     },
     sitemap: availability.map((entry) => ({
