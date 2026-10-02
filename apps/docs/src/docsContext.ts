@@ -2,6 +2,12 @@ import releaseGroupsRaw from "../../../docs/metadata/release-groups.json?raw";
 import multiFrameworkRaw from "../../../docs/metadata/multi-framework.json?raw";
 import referenceModelRaw from "../../../docs/generated/reference-model.json?raw";
 import {
+  filterVersionsForFramework,
+  getFrameworkReadiness,
+  isDocumentationReadyStatus,
+  type DocumentationReadinessStatus,
+} from "../../../docs/reference/documentationAvailability";
+import {
   getReferenceFramework,
   getReferenceLocationHref,
   parseReferenceModel,
@@ -9,13 +15,6 @@ import {
 } from "../../../docs/reference/referenceRuntime";
 
 export type DocsFrameworkId = ReferenceFrameworkId;
-export type DocumentationReadinessStatus =
-  | "stable"
-  | "preview"
-  | "maintenance"
-  | "deprecated"
-  | "unavailable"
-  | "internal-not-ready";
 
 export type DocsFramework = {
   id: DocsFrameworkId;
@@ -214,22 +213,20 @@ export function getDocumentationReadiness(
   version: DocsVersion,
   frameworkId: DocsFrameworkId,
 ) {
-  return version.frameworkReadiness[frameworkId] ?? "internal-not-ready";
+  return getFrameworkReadiness(version, frameworkId);
 }
 
 export function isDocumentationReady(
   status: DocumentationReadinessStatus,
 ) {
-  return status !== "unavailable" && status !== "internal-not-ready";
+  return isDocumentationReadyStatus(status);
 }
 
 export function getDocsVersionsForFramework(
   frameworkId: DocsFrameworkId,
   versions = docsVersions,
 ) {
-  return versions.filter((version) =>
-    isDocumentationReady(getDocumentationReadiness(version, frameworkId)),
-  );
+  return filterVersionsForFramework(versions, frameworkId) as DocsVersion[];
 }
 
 export function getCurrentDocsVersionId() {
