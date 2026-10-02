@@ -45,7 +45,9 @@ test("public Docs navigation owns the complete reader-facing information archite
   const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
   const registry = json("docs/generated/documentation-registry.json");
 
-  assert.match(docsNav, /publicDocsSections/u);
+  assert.match(docsNav, /getDocsNavigation/u);
+  assert.match(docsNav, /getDocsSearchRecords/u);
+  assert.doesNotMatch(docsNav, /publicDocsSections/u);
   assert.match(docsNav, /SearchInput/u);
   assert.match(docsNav, /SideNav/u);
   assert.match(docsNav, /VyrnForge documentation/u);
