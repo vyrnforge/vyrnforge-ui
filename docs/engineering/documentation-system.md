@@ -246,6 +246,7 @@ When changing Reference content or presentation:
 ## Related sources
 
 - [Documentation index](../README.md)
+- [Documentation authoring](documentation-authoring.md)
 - [Metadata ownership](../metadata/README.md)
 - [`reference-portal.json`](../metadata/reference-portal.json)
 - [Documentation governance](../governance/00-documentation-governance.md)
