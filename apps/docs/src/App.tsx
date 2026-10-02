@@ -5,6 +5,7 @@ import {
   getReferenceLocationHref,
   matchReferenceRecordRoute,
   type ReferenceLocationContext,
+  type ReferenceRecordDomain,
 } from "../../../docs/reference/referenceRuntime";
 import {
   docsVersions as initialDocsVersions,
@@ -17,10 +18,10 @@ import {
   type DocsVersion,
 } from "./docsContext";
 import { DocsShell } from "./DocsShell";
-import { getRouteById } from "./referenceRoutes";
+import { getRouteById, getRouteByPath } from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
-  domain: "components" | "packages" | "tokens" | "patterns";
+  domain: ReferenceRecordDomain;
   id: string;
   member: string | null;
 };
@@ -36,41 +37,34 @@ type DocsLocationState = {
   docsLocation: DocsLocation;
 };
 
-const recordRoutes: Array<{
-  domain: ReferenceRecordSelection["domain"];
-  routeId: string;
-}> = [
-  { domain: "components", routeId: "component-reference" },
-  { domain: "packages", routeId: "package-reference" },
-  { domain: "tokens", routeId: "token-reference" },
-  { domain: "patterns", routeId: "pattern-reference" },
-];
-
 function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
   const { pathname, member } = context;
 
-  for (const recordRoute of recordRoutes) {
+  for (const document of referenceModel.documentRegistry.documents) {
+    if (!document.recordDomain) continue;
+
     const id = matchReferenceRecordRoute(
       referenceModel,
-      recordRoute.domain,
+      document.recordDomain,
       pathname,
     );
     if (id) {
       return {
         pathname,
-        routeId: recordRoute.routeId,
+        routeId: document.id,
         referenceRecord: {
-          domain: recordRoute.domain,
+          domain: document.recordDomain,
           id,
-          member: recordRoute.domain === "components" ? member : null,
+          member: document.recordDomain === "components" ? member : null,
         },
       };
     }
   }
 
+  const route = getRouteByPath(pathname) ?? getRouteById("overview");
   return {
-    pathname,
-    routeId: pathname.replace(/^\//, "") || "overview",
+    pathname: route?.path ?? "/overview",
+    routeId: route?.id ?? "overview",
     referenceRecord: null,
   };
 }
@@ -176,9 +170,10 @@ export default function App() {
   };
 
   const handleRouteChange = (routeId: string) => {
+    const route = getRouteById(routeId);
     navigate({
       frameworkId,
-      pathname: `/${routeId}`,
+      pathname: route?.path ?? "/overview",
       member: null,
     });
   };
