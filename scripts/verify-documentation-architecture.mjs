@@ -20,7 +20,10 @@ const readyStatuses = new Set([
 ]);
 
 function read(root, relativePath) {
-  return readFileSync(path.join(root, relativePath), "utf8").replace(/\r\n?/gu, "\n");
+  return readFileSync(path.join(root, relativePath), "utf8").replace(
+    /\r\n?/gu,
+    "\n",
+  );
 }
 
 function json(root, relativePath) {
@@ -49,7 +52,9 @@ export function validateDocumentationArchitecture({
     return ["Documentation Registry schemaVersion must be 2."];
   }
 
-  for (const duplicate of duplicates((registry.pages ?? []).map((page) => page.id))) {
+  for (const duplicate of duplicates(
+    (registry.pages ?? []).map((page) => page.id),
+  )) {
     failures.push(`duplicate documentation page identity: ${duplicate}`);
   }
   for (const duplicate of duplicates(
@@ -114,7 +119,9 @@ export function validateDocumentationArchitecture({
     const actualFrameworks = (page.availability ?? [])
       .map((entry) => entry.framework)
       .sort();
-    if (JSON.stringify(actualFrameworks) !== JSON.stringify(expectedFrameworks)) {
+    if (
+      JSON.stringify(actualFrameworks) !== JSON.stringify(expectedFrameworks)
+    ) {
       failures.push(
         `${page.id}: framework/version availability does not cover the canonical release-line readiness set`,
       );
@@ -147,13 +154,19 @@ export function validateDocumentationArchitecture({
 
     const searchRecord = pageSearch.get(page.id);
     if (!searchRecord || searchRecord.route !== page.route) {
-      failures.push(`${page.id}: generated page search record is missing or stale`);
+      failures.push(
+        `${page.id}: generated page search record is missing or stale`,
+      );
     }
     if (!sectionIndexes.get(page.section)?.has(page.id)) {
-      failures.push(`${page.id}: generated section index is missing the document`);
+      failures.push(
+        `${page.id}: generated section index is missing the document`,
+      );
     }
     if (!typeIndexes.get(page.type)?.has(page.id)) {
-      failures.push(`${page.id}: generated type index is missing the document`);
+      failures.push(
+        `${page.id}: generated type index is missing the document`,
+      );
     }
     if (!relatedIds.has(page.id)) {
       failures.push(`${page.id}: related-content input is missing`);
@@ -203,7 +216,9 @@ export function validateDocumentationArchitecture({
       );
     }
     if (!record.member || !record.route?.startsWith("/")) {
-      failures.push(`${record.id}: API search record has a broken canonical deep link`);
+      failures.push(
+        `${record.id}: API search record has a broken canonical deep link`,
+      );
     }
     const sitemapEntry = (registry.sitemap ?? []).find(
       (entry) =>
@@ -217,7 +232,14 @@ export function validateDocumentationArchitecture({
     }
   }
 
-  for (const domain of ["components", "packages", "tokens", "patterns", "examples", "accessibility"]) {
+  for (const domain of [
+    "components",
+    "packages",
+    "tokens",
+    "patterns",
+    "examples",
+    "accessibility",
+  ]) {
     if (!(registry.recordDomains ?? []).some((entry) => entry.id === domain)) {
       failures.push(
         `generated Documentation Registry is missing public capability domain ${domain}`,
@@ -255,7 +277,9 @@ export function validateDocumentationArchitecture({
     "routeIsAvailable",
   ]) {
     if (!navSource.includes(required)) {
-      failures.push(`DocsNav.tsx is missing registry-driven navigation marker ${required}`);
+      failures.push(
+        `DocsNav.tsx is missing registry-driven navigation marker ${required}`,
+      );
     }
   }
 
