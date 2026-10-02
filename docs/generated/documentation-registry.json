@@ -50,6 +50,127 @@
     "pattern",
     "release"
   ],
+  "templates": [
+    {
+      "id": "component",
+      "label": "Component reference",
+      "documentTypes": [
+        "component"
+      ],
+      "sections": [
+        "summary",
+        "usage",
+        "configuration",
+        "behavior",
+        "accessibility",
+        "api",
+        "styling",
+        "related"
+      ]
+    },
+    {
+      "id": "foundation",
+      "label": "Foundation / concept",
+      "documentTypes": [
+        "foundation"
+      ],
+      "sections": [
+        "summary",
+        "concepts",
+        "usage",
+        "accessibility",
+        "styling",
+        "related"
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "Guide / framework integration",
+      "documentTypes": [
+        "guide"
+      ],
+      "sections": [
+        "summary",
+        "setup",
+        "usage",
+        "accessibility",
+        "related"
+      ]
+    },
+    {
+      "id": "pattern",
+      "label": "Pattern",
+      "documentTypes": [
+        "pattern"
+      ],
+      "sections": [
+        "summary",
+        "use-when",
+        "composition",
+        "behavior",
+        "accessibility",
+        "related"
+      ]
+    },
+    {
+      "id": "package",
+      "label": "Package / API reference",
+      "documentTypes": [
+        "package"
+      ],
+      "sections": [
+        "summary",
+        "installation",
+        "exports",
+        "api",
+        "compatibility",
+        "related"
+      ]
+    },
+    {
+      "id": "advanced-module",
+      "label": "Advanced module",
+      "documentTypes": [
+        "advanced-module"
+      ],
+      "sections": [
+        "summary",
+        "usage",
+        "configuration",
+        "behavior",
+        "accessibility",
+        "api",
+        "related"
+      ]
+    },
+    {
+      "id": "release",
+      "label": "Migration / release reference",
+      "documentTypes": [
+        "release"
+      ],
+      "sections": [
+        "summary",
+        "changes",
+        "migration",
+        "compatibility",
+        "related"
+      ]
+    },
+    {
+      "id": "example",
+      "label": "Example",
+      "documentTypes": [
+        "example"
+      ],
+      "sections": [
+        "summary",
+        "preview",
+        "code",
+        "related"
+      ]
+    }
+  ],
   "sections": [
     {
       "id": "start",
@@ -103,6 +224,7 @@
         "overview",
         "start"
       ],
+      "template": "guide",
       "route": "/overview",
       "availability": [
         {
@@ -147,6 +269,7 @@
         "setup",
         "frameworks"
       ],
+      "template": "guide",
       "route": "/getting-started",
       "availability": [
         {
@@ -193,6 +316,7 @@
         "angular",
         "vue"
       ],
+      "template": "example",
       "route": "/executable-examples",
       "availability": [
         {
@@ -236,6 +360,7 @@
         "components",
         "api"
       ],
+      "template": "component",
       "route": "/component-reference",
       "availability": [
         {
@@ -280,6 +405,7 @@
         "tokens",
         "css"
       ],
+      "template": "foundation",
       "route": "/theming",
       "availability": [
         {
@@ -323,6 +449,7 @@
         "tokens",
         "design-system"
       ],
+      "template": "foundation",
       "route": "/token-reference",
       "availability": [
         {
@@ -363,6 +490,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
       "exampleId": "theme-tokens",
+      "template": "foundation",
       "route": "/theme-tokens",
       "availability": [
         {
@@ -403,6 +531,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
       "exampleId": "theme-modes",
+      "template": "foundation",
       "route": "/theme-modes",
       "availability": [
         {
@@ -443,6 +572,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/DensityPage.tsx",
       "exampleId": "density",
+      "template": "foundation",
       "route": "/density",
       "availability": [
         {
@@ -483,6 +613,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
       "exampleId": "css-overrides",
+      "template": "foundation",
       "route": "/css-overrides",
       "availability": [
         {
@@ -527,6 +658,7 @@
         "keyboard",
         "focus"
       ],
+      "template": "foundation",
       "route": "/accessibility",
       "availability": [
         {
@@ -570,6 +702,7 @@
         "patterns",
         "composition"
       ],
+      "template": "pattern",
       "route": "/pattern-reference",
       "availability": [
         {
@@ -610,6 +743,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-resource-list",
+      "template": "pattern",
       "route": "/pattern-resource-list",
       "availability": [
         {
@@ -650,6 +784,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-detail",
+      "template": "pattern",
       "route": "/pattern-detail",
       "availability": [
         {
@@ -690,6 +825,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-settings",
+      "template": "pattern",
       "route": "/pattern-settings",
       "availability": [
         {
@@ -730,6 +866,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-form",
+      "template": "pattern",
       "route": "/pattern-form",
       "availability": [
         {
@@ -770,6 +907,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-filter-form",
+      "template": "pattern",
       "route": "/pattern-filter-form",
       "availability": [
         {
@@ -810,6 +948,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-assignments",
+      "template": "pattern",
       "route": "/pattern-assignments",
       "availability": [
         {
@@ -850,6 +989,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-feedback-states",
+      "template": "pattern",
       "route": "/pattern-feedback-states",
       "availability": [
         {
@@ -890,6 +1030,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-admin-shell",
+      "template": "pattern",
       "route": "/pattern-admin-shell",
       "availability": [
         {
@@ -930,6 +1071,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-customer-portal",
+      "template": "pattern",
       "route": "/pattern-customer-portal",
       "availability": [
         {
@@ -974,6 +1116,7 @@
         "grid",
         "react"
       ],
+      "template": "advanced-module",
       "route": "/data-grid",
       "availability": [
         {
@@ -1014,6 +1157,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-basic",
+      "template": "advanced-module",
       "route": "/grid-basic",
       "availability": [
         {
@@ -1054,6 +1198,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-columns",
+      "template": "advanced-module",
       "route": "/grid-columns",
       "availability": [
         {
@@ -1094,6 +1239,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-filtering",
+      "template": "advanced-module",
       "route": "/grid-filtering",
       "availability": [
         {
@@ -1134,6 +1280,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-selection",
+      "template": "advanced-module",
       "route": "/grid-selection",
       "availability": [
         {
@@ -1174,6 +1321,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-grouping",
+      "template": "advanced-module",
       "route": "/grid-grouping",
       "availability": [
         {
@@ -1214,6 +1362,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-resizing",
+      "template": "advanced-module",
       "route": "/grid-resizing",
       "availability": [
         {
@@ -1254,6 +1403,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-themes",
+      "template": "advanced-module",
       "route": "/grid-themes",
       "availability": [
         {
@@ -1294,6 +1444,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-states",
+      "template": "advanced-module",
       "route": "/grid-states",
       "availability": [
         {
@@ -1334,6 +1485,7 @@
       "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-stress",
+      "template": "advanced-module",
       "route": "/grid-stress",
       "availability": [
         {
@@ -1377,6 +1529,7 @@
         "packages",
         "api"
       ],
+      "template": "package",
       "route": "/package-reference",
       "availability": [
         {
@@ -1421,6 +1574,7 @@
         "migration",
         "compatibility"
       ],
+      "template": "release",
       "route": "/releases",
       "availability": [
         {
