@@ -118,7 +118,9 @@ function routeFromRegistryPage(page: RegistryPage): DocsRoute {
   };
 }
 
-export const docsRoutes: DocsRoute[] = registry.pages.map(routeFromRegistryPage);
+export const docsRoutes: DocsRoute[] = registry.pages.map(
+  routeFromRegistryPage,
+);
 
 export const publicDocsSections: PublicDocsSection[] = registry.sections.map(
   (section) => ({
