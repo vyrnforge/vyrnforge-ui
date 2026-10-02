@@ -20,7 +20,7 @@ import {
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
 import { docsLinks } from "./deploymentLinks";
-import type { DocsRoute } from "./referenceRoutes";
+import type { DocsRoute, DocsRouteResolution } from "./referenceRoutes";
 
 type DocsShellProps = {
   activeRoute: DocsRoute;
@@ -31,6 +31,7 @@ type DocsShellProps = {
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
+  routeResolution: DocsRouteResolution;
   routeMember: string | null;
   routePath: string;
 };
@@ -44,6 +45,7 @@ export function DocsShell({
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
+  routeResolution,
   routeMember,
   routePath,
 }: DocsShellProps) {
@@ -155,6 +157,7 @@ export function DocsShell({
         onRouteChange={onRouteChange}
         referenceRecord={referenceRecord}
         route={activeRoute}
+        routeResolution={routeResolution}
       />
     </AppShell>
   );
