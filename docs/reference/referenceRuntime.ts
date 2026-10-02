@@ -39,6 +39,62 @@ export type ReferenceDomain = {
   recordSource: ReferenceRecordSource | null;
 };
 
+export type ReferenceRecordDomain =
+  | "components"
+  | "packages"
+  | "tokens"
+  | "patterns";
+
+export type ReferenceDocumentType =
+  | "guide"
+  | "component"
+  | "foundation"
+  | "pattern"
+  | "advanced-module"
+  | "package"
+  | "migration"
+  | "example";
+
+export type ReferenceDocumentRenderer =
+  | "overview"
+  | "markdown"
+  | "component-reference"
+  | "token-reference"
+  | "pattern-reference"
+  | "package-reference"
+  | "example"
+  | "executable-examples";
+
+export type ReferenceDocumentCategory = {
+  id: string;
+  label: string;
+  order: number;
+};
+
+export type ReferenceDocument = {
+  id: string;
+  slug: string;
+  path: string;
+  title: string;
+  type: ReferenceDocumentType;
+  domain: string;
+  category: string;
+  order: number;
+  description: string;
+  sourcePath: string;
+  renderer: ReferenceDocumentRenderer;
+  exampleId: string | null;
+  recordDomain: ReferenceRecordDomain | null;
+  tags: string[];
+};
+
+export type ReferenceDocumentRegistry = {
+  schemaVersion: 1;
+  source: string;
+  categories: ReferenceDocumentCategory[];
+  documents: ReferenceDocument[];
+};
+
 export type ReferenceExample = {
   id: string;
   framework: ReferenceFrameworkId;
@@ -57,6 +113,7 @@ type GeneratedReferenceModel = {
   };
   navigation: ReferenceNavigationSection[];
   domains: ReferenceDomain[];
+  documentRegistry: ReferenceDocumentRegistry;
   frameworks: ReferenceFramework[];
   examples: ReferenceExample[];
   versionContext: {
@@ -138,6 +195,16 @@ export function parseReferenceModel(raw: string): ReferenceModel {
 
   if (!Array.isArray(generated.domains)) {
     throw new Error("VyrnForge Reference domains are incomplete.");
+  }
+
+  if (
+    generated.documentRegistry?.schemaVersion !== 1 ||
+    !Array.isArray(generated.documentRegistry.categories) ||
+    generated.documentRegistry.categories.length === 0 ||
+    !Array.isArray(generated.documentRegistry.documents) ||
+    generated.documentRegistry.documents.length === 0
+  ) {
+    throw new Error("VyrnForge Reference document registry is incomplete.");
   }
 
   if (
@@ -230,6 +297,35 @@ export function getReferenceLocationHref(
   if (context.member) query.set("member", context.member);
 
   return `?${query.toString()}#${normalizeReferencePathname(context.pathname)}`;
+}
+
+export function getReferenceDocuments(model: ReferenceModel) {
+  return [...model.documentRegistry.documents];
+}
+
+export function getReferenceDocument(
+  model: ReferenceModel,
+  documentId: string,
+) {
+  return model.documentRegistry.documents.find(
+    (document) => document.id === documentId,
+  );
+}
+
+export function getReferenceDocumentByPath(
+  model: ReferenceModel,
+  pathname: string,
+) {
+  const normalized = normalizeReferencePathname(pathname);
+  return model.documentRegistry.documents.find(
+    (document) => document.path === normalized,
+  );
+}
+
+export function getReferenceDocumentCategories(model: ReferenceModel) {
+  return [...model.documentRegistry.categories].sort(
+    (left, right) => left.order - right.order,
+  );
 }
 
 export function getReferenceNavigation(model: ReferenceModel) {
