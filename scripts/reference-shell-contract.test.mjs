@@ -165,15 +165,21 @@ test("Docs filter discovers selected-framework API members without restoring a s
   const app = read("apps/docs/src/App.tsx");
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsShell = read("apps/docs/src/DocsShell.tsx");
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+  const discovery = read("docs/reference/documentationDiscovery.ts");
   const memberTarget = read("apps/docs/src/componentApiMember.ts");
 
-  assert.match(docsNav, /generated\/framework-api-reference\.json\?raw/u);
-  assert.match(docsNav, /buildApiMemberEntries/u);
+  assert.match(routes, /generated\/framework-api-reference\.json\?raw/u);
+  assert.match(routes, /getDocumentationSearchRecords/u);
+  assert.match(discovery, /apiMemberRecords/u);
+  assert.match(docsNav, /getDocsSearchRecords/u);
   assert.match(docsNav, /section\.id === "components"/u);
   assert.match(docsNav, /\.slice\(0, 30\)/u);
   assert.match(docsNav, /componentReferenceTargetHref/u);
   assert.match(docsNav, /frameworkId/u);
+  assert.match(docsNav, /version/u);
   assert.match(docsShell, /frameworkId=\{framework\.id\}/u);
+  assert.match(docsShell, /version=\{docsVersion\.version\}/u);
 
   assert.match(memberTarget, /componentApiMemberAnchor/u);
   assert.match(memberTarget, /componentReferenceTargetHref/u);
