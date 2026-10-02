@@ -64,6 +64,36 @@ test("rejects malformed schema metadata", () =>
       ),
   ));
 
+
+test("rejects incomplete framework documentation readiness", () =>
+  fixture(
+    (root) =>
+      mutateJson(root, "docs/metadata/release-groups.json", (value) => {
+        delete value.releaseLines["non-grid-beta"].documentation.readiness.vue;
+      }),
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("documentation readiness for vue is invalid"),
+        ),
+      ),
+  ));
+
+test("rejects unknown documentation readiness states", () =>
+  fixture(
+    (root) =>
+      mutateJson(root, "docs/metadata/release-groups.json", (value) => {
+        value.releaseLines["non-grid-beta"].documentation.readiness.react =
+          "published";
+      }),
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("documentation readiness for react is invalid"),
+        ),
+      ),
+  ));
+
 test("rejects duplicate package classification", () =>
   fixture(
     (root) =>
