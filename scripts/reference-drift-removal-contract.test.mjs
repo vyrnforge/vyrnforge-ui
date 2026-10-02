@@ -33,25 +33,46 @@ test("Reference transitional authorities remain retired", () => {
   }
 });
 
-test("Docs routes are curated without duplicating generated public facts", () => {
+test("Docs routes are derived from the generated public document registry", () => {
   const source = read("apps/docs/src/referenceRoutes.ts");
-  assert.match(source, /publicDocsSections/u);
-  assert.match(source, /uniqueRoutes/u);
-  assert.match(source, /component-reference/u);
-  assert.match(source, /token-reference/u);
-  assert.match(source, /pattern-reference/u);
-  assert.match(source, /package-reference/u);
-  assert.doesNotMatch(source, /accessibility-reference/u);
-  assert.doesNotMatch(source, /import\.meta\.glob/u);
+  const model = json("docs/generated/reference-model.json");
+
+  assert.match(source, /referenceModel\.documentRegistry\.documents/u);
+  assert.match(source, /referenceModel\.documentRegistry\.categories/u);
+  assert.match(source, /publicDocumentMarkdownById/u);
+  assert.doesNotMatch(source, /const docs: DocsRoute\[\]/u);
+  assert.doesNotMatch(source, /uniqueRoutes/u);
   assert.doesNotMatch(source, /generated\/ai-context/u);
-  assert.doesNotMatch(source, /referenceModel\.domains\.flatMap/u);
+
+  for (const id of [
+    "component-reference",
+    "token-reference",
+    "pattern-reference",
+    "package-reference",
+  ]) {
+    assert(model.documentRegistry.documents.some((document) => document.id === id));
+  }
 });
 
 test("Docs owns generated component facts after Playground retirement", () => {
-  const routes = read("apps/docs/src/referenceRoutes.ts");
-  assert.match(routes, /component-reference/u);
-  assert.match(routes, /kind: "example"/u);
-  assert.match(routes, /kind: "executable-examples"/u);
+  const model = json("docs/generated/reference-model.json");
+  assert(
+    model.documentRegistry.documents.some(
+      (document) =>
+        document.id === "component-reference" &&
+        document.renderer === "component-reference",
+    ),
+  );
+  assert(
+    model.documentRegistry.documents.some(
+      (document) => document.renderer === "example",
+    ),
+  );
+  assert(
+    model.documentRegistry.documents.some(
+      (document) => document.renderer === "executable-examples",
+    ),
+  );
 
   const reader = read("apps/docs/src/ComponentReferencePage.tsx");
   assert.match(reader, /frameworkApiReferenceRaw/u);
