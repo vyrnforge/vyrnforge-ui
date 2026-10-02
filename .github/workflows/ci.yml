@@ -226,6 +226,9 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
+      - name: Verify generated Reference inputs for Pages
+        if: env.RUN_PAGES_ARTIFACT == 'true'
+        run: npm run verify:reference
       - name: Build documentation application for Pages
         if: env.RUN_PAGES_ARTIFACT == 'true'
         run: npm run build --workspace @vyrnforge/ui-docs

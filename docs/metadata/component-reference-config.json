@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "status": "current",
-  "purpose": "Generate the shared consumer-knowledge model and canonical framework API projections for human Reference surfaces and scoped AI context retrieval without duplicating canonical component, contract, pattern, package, or framework truth.",
+  "purpose": "Own the deterministic generated Reference facts consumed by the VyrnForge Docs product and scoped AI context, without duplicating canonical component, contract, pattern, package, framework, or routing truth.",
   "sourceOfTruth": [
     "docs/metadata/components.json",
     "docs/metadata/component-contracts.json",
@@ -17,37 +17,43 @@
     "aiIndex": "docs/generated/ai-context/index.json",
     "aiCategories": "docs/generated/ai-context/categories/*.json",
     "aiComponents": "docs/generated/ai-context/components/*.json",
-    "aiPatterns": "docs/generated/ai-context/patterns/*.json"
+    "aiPatterns": "docs/generated/ai-context/patterns/*.json",
+    "referenceModel": "docs/generated/reference-model.json"
   },
-  "frameworkSurfaces": ["react", "native-html", "angular", "vue"],
+  "frameworkSurfaces": [
+    "react",
+    "native-html",
+    "angular",
+    "vue"
+  ],
   "policy": {
     "canonicalMetadataWins": true,
     "inventMissingContracts": false,
     "inventFrameworkSupport": false,
     "generatedAiContextIsTaskScoped": true,
-    "playgroundStatusIsGenerated": true,
     "humanExamplesMayRemainHandAuthoredWhenVerifiedAgainstPublicApis": true,
     "readerFacingApiFactsUseGeneratedFrameworkReference": true,
-    "componentDeepLinksAreStable": true
+    "componentDeepLinksAreStable": true,
+    "referencePresentationConsumesGeneratedFacts": true
   },
   "requiredCommands": [
-    "npm run generate:component-reference",
-    "npm run verify:component-reference",
-    "npm run generate:framework-api-reference",
-    "npm run verify:framework-api-reference",
+    "npm run generate:reference",
+    "npm run verify:reference",
     "npm run verify:docs-quality",
     "npm run build:docs"
   ],
   "evidence": [
     "docs/testing/generated-component-reference.md",
     "docs/generated/consumer-knowledge.json",
+    "docs/generated/component-reference.json",
     "docs/generated/framework-api-reference.json",
+    "docs/generated/reference-model.json",
     "docs/generated/ai-context/index.json",
-    "apps/docs/src/AiContextIndexPage.tsx",
+    "apps/docs/src/referenceData.ts",
+    "apps/docs/src/docsContext.ts",
     "apps/docs/src/ComponentReferencePage.tsx",
-    "examples/basic-playground/src/components/ComponentDemoPage.tsx",
     "scripts/generate-component-reference.mjs",
-    "scripts/generate-framework-api-reference.mjs",
+    "scripts/generate-reference-model.mjs",
     "scripts/verify-component-reference.mjs"
   ]
 }

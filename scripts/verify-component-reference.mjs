@@ -58,6 +58,30 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   if (config.status !== "current") {
     failures.push("component reference configuration status must be current");
   }
+  for (const command of [
+    "npm run generate:reference",
+    "npm run verify:reference",
+    "npm run verify:docs-quality",
+    "npm run build:docs",
+  ]) {
+    if (!(config.requiredCommands ?? []).includes(command)) {
+      failures.push(
+        `component reference configuration is missing required command ${command}`,
+      );
+    }
+  }
+  if (config.policy?.playgroundStatusIsGenerated !== undefined) {
+    failures.push(
+      "component reference configuration retains retired Playground policy",
+    );
+  }
+  for (const evidencePath of config.evidence ?? []) {
+    if (!existsSync(path.join(root, evidencePath))) {
+      failures.push(
+        `component reference configuration points at missing evidence: ${evidencePath}`,
+      );
+    }
+  }
   for (const requiredSource of [
     "docs/metadata/components.json",
     "docs/metadata/component-contracts.json",

@@ -83,7 +83,7 @@
         "path": "docs/generated/consumer-knowledge.json",
         "collection": "components",
         "identityField": "id",
-        "labelField": "name"
+        "labelField": "displayName"
       }
     },
     {
@@ -171,7 +171,7 @@
         "path": "docs/generated/consumer-knowledge.json",
         "collection": "components",
         "identityField": "id",
-        "labelField": "name",
+        "labelField": "displayName",
         "projection": "accessibility"
       }
     },
@@ -313,7 +313,7 @@
           "path": "docs/generated/consumer-knowledge.json",
           "collection": "components",
           "identityField": "id",
-          "labelField": "name"
+          "labelField": "displayName"
         }
       },
       {
@@ -378,7 +378,7 @@
           "path": "docs/generated/consumer-knowledge.json",
           "collection": "components",
           "identityField": "id",
-          "labelField": "name",
+          "labelField": "displayName",
           "projection": "accessibility"
         }
       }

@@ -63,6 +63,15 @@ test("builds the committed deterministic Reference model", () => {
   assert.deepEqual(verifyReferenceModel(), model);
 });
 
+test("uses the generated component displayName as the component and accessibility label", () => {
+  const model = buildReferenceModel();
+  for (const domainId of ["components", "accessibility"]) {
+    const domain = model.domains.find((candidate) => candidate.id === domainId);
+    assert.equal(domain?.recordSource?.identityField, "id");
+    assert.equal(domain?.recordSource?.labelField, "displayName");
+  }
+});
+
 test("keeps detailed API facts in the generated framework API authority", () => {
   const model = buildReferenceModel();
   assert.equal(
