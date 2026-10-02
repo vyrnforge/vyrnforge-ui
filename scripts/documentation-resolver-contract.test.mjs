@@ -1,9 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
-  resolveDocumentationPage,
-} from "../docs/reference/documentationResolver.ts";
+import * as resolver from "../docs/reference/documentationResolver.ts";
 
 const page = {
   id: "button",
@@ -39,10 +37,8 @@ const page = {
   },
 };
 
-test(
-  "resolver composes base, framework, version, and framework-version layers in order",
-  () => {
-    const result = resolveDocumentationPage(page, {
+test("composes documentation layers in precedence order", () => {
+    const result = resolver.resolveDocumentationPage(page, {
       frameworkId: "react",
       releaseLine: "non-grid-beta",
       version: "3.2.0",
@@ -52,26 +48,20 @@ test(
     assert.equal(result.document.title, "Button");
     assert.equal(result.document.sourcePath, "docs/button-3.2.md");
     assert.equal(result.document.description, "React 3.2 usage");
-  },
-);
+});
 
-test(
-  "resolver never falls back to another framework when selected content is unavailable",
-  () => {
-    const result = resolveDocumentationPage(page, {
+test("does not fall back across frameworks", () => {
+    const result = resolver.resolveDocumentationPage(page, {
       frameworkId: "vue",
       releaseLine: "non-grid-beta",
       version: "3.2.0",
       versionId: "3.2",
     });
     assert.equal(result.kind, "unavailable");
-    assert.equal(result.status, "unavailable");
-    assert.deepEqual(
-      result.alternatives.map((entry) => entry.framework),
-      ["react"],
-    );
-  },
-);
+  assert.equal(result.status, "unavailable");
+  const frameworks = result.alternatives.map((entry) => entry.framework);
+  assert.deepEqual(frameworks, ["react"]);
+});
 
 test("next resolves against the document's own current release line", () => {
   const grid = {
@@ -87,7 +77,7 @@ test("next resolves against the document's own current release line", () => {
       },
     ],
   };
-  const result = resolveDocumentationPage(grid, {
+  const result = resolver.resolveDocumentationPage(grid, {
     frameworkId: "react",
     releaseLine: "non-grid-beta",
     version: "0.2.0-beta.2",
