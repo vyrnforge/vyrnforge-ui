@@ -4,7 +4,11 @@ export type DocumentationApiFrameworkId =
   | "angular"
   | "vue";
 
-export type DocumentationApiSurfaceId = "native" | "react" | "angular" | "vue";
+export type DocumentationApiSurfaceId =
+  | "native"
+  | "react"
+  | "angular"
+  | "vue";
 
 export type DocumentationApiComponent = {
   id: string;
@@ -71,9 +75,7 @@ export function resolveDocumentationApi(
   context: DocumentationApiContext,
 ): DocumentationApiResolution {
   if (!context.version.trim()) {
-    throw new Error(
-      "Documentation API resolution requires a concrete version.",
-    );
+    throw new Error("Documentation API resolution requires a concrete version.");
   }
 
   const surfaceId = apiSurfaceByFramework[context.frameworkId];
