@@ -83,6 +83,7 @@ export type DocsRoute = {
   kind: DocsRouteKind;
   content?: string;
   exampleId?: string;
+  recordDomain?: string;
   availability: DocumentationAvailabilityEntry[];
   contentLayers?: DocumentationContentLayers;
 };
@@ -168,6 +169,10 @@ type DocumentationRegistry = {
     section: string;
     tags: string[];
   }>;
+  recordDomains: Array<{
+    id: string;
+    documentId: string | null;
+  }>;
 };
 
 const registry = JSON.parse(documentationRegistryRaw) as DocumentationRegistry;
@@ -217,6 +222,7 @@ function routeFromRegistryPage(page: RegistryPage): DocsRoute {
     kind: page.renderer,
     content: markdownContent(page.sourcePath, page.renderer),
     exampleId: page.exampleId,
+    recordDomain: page.recordDomain,
     availability: page.availability,
     contentLayers: page.contentLayers,
   };
@@ -233,6 +239,12 @@ export const documentationSearchRecords = registry.searchRecords;
 export const documentationIndexes = registry.indexes;
 export const documentationSitemap = registry.sitemap;
 export const documentationRelatedContentInputs = registry.relatedContentInputs;
+export const documentationRecordRoutes = registry.recordDomains.flatMap(
+  (domain) =>
+    domain.documentId
+      ? [{ domain: domain.id, routeId: domain.documentId }]
+      : [],
+);
 
 function isExampleImplementationReady(
   implementation: DocsExampleImplementation,
@@ -358,6 +370,7 @@ export function resolveDocsRoute(
       kind,
       content: markdownContent(document.sourcePath, kind),
       exampleId: document.exampleId,
+      recordDomain: route.recordDomain,
     },
   };
 }

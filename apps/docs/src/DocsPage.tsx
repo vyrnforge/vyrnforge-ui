@@ -81,10 +81,10 @@ export function DocsPage({
         version={routeResolution.context.version}
       />
     ) : route.kind === "discovery-reference" &&
-      (route.id === "token-reference" || route.id === "pattern-reference") ? (
+      (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
       <DiscoveryReferencePage
+        recordDomain={route.recordDomain}
         referenceRecord={referenceRecord}
-        routeId={route.id}
       />
     ) : route.kind === "component-reference" ? (
       <ComponentReferencePage

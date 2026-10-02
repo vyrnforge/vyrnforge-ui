@@ -189,6 +189,7 @@
       "description": "Browse component usage, framework variants, API, accessibility, styling, and related guidance.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/generated/consumer-knowledge.json",
+      "recordDomain": "components",
       "tags": ["components", "api"]
     },
     {
@@ -215,6 +216,7 @@
       "description": "Browse shared VyrnForge token categories and styling roles.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/design-tokens.json",
+      "recordDomain": "tokens",
       "tags": ["tokens", "design-system"]
     },
     {
@@ -297,6 +299,7 @@
       "description": "Browse reusable VyrnForge composition patterns.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/patterns.json",
+      "recordDomain": "patterns",
       "tags": ["patterns", "composition"]
     },
     {
@@ -575,6 +578,7 @@
       "description": "Understand package responsibilities, public entrypoints, and release tracks.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/packages.json",
+      "recordDomain": "packages",
       "tags": ["packages", "api"]
     },
     {

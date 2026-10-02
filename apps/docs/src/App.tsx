@@ -17,10 +17,14 @@ import {
   type DocsVersion,
 } from "./docsContext";
 import { DocsShell } from "./DocsShell";
-import { getRouteById, resolveDocsRoute } from "./referenceRoutes";
+import {
+  documentationRecordRoutes,
+  getRouteById,
+  resolveDocsRoute,
+} from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
-  domain: "components" | "packages" | "tokens" | "patterns";
+  domain: string;
   id: string;
   member: string | null;
 };
@@ -36,20 +40,10 @@ type DocsLocationState = {
   docsLocation: DocsLocation;
 };
 
-const recordRoutes: Array<{
-  domain: ReferenceRecordSelection["domain"];
-  routeId: string;
-}> = [
-  { domain: "components", routeId: "component-reference" },
-  { domain: "packages", routeId: "package-reference" },
-  { domain: "tokens", routeId: "token-reference" },
-  { domain: "patterns", routeId: "pattern-reference" },
-];
-
 function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
   const { pathname, member } = context;
 
-  for (const recordRoute of recordRoutes) {
+  for (const recordRoute of documentationRecordRoutes) {
     const id = matchReferenceRecordRoute(
       referenceModel,
       recordRoute.domain,

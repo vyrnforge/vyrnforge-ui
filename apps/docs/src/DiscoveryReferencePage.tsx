@@ -187,13 +187,13 @@ function MissingRecord({ label, id }: { label: string; id: string }) {
 }
 
 export function DiscoveryReferencePage({
-  routeId,
+  recordDomain,
   referenceRecord,
 }: {
-  routeId: "token-reference" | "pattern-reference";
+  recordDomain: "tokens" | "patterns";
   referenceRecord: ReferenceRecordSelection | null;
 }) {
-  if (routeId === "token-reference") {
+  if (recordDomain === "tokens") {
     return (
       <TokenReference
         id={referenceRecord?.domain === "tokens" ? referenceRecord.id : null}

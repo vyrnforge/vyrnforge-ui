@@ -50,10 +50,23 @@ test("reference detail routes and package facts stay generated and canonical", (
   assert.match(runtime, /matchReferenceRecordRoute/);
   assert.match(runtime, /domain\.routeTemplate/);
 
+  const registry = json("docs/generated/documentation-registry.json");
+  assert.equal(
+    registry.recordDomains.find((domain) => domain.id === "components")
+      ?.documentId,
+    "component-reference",
+  );
+  assert.equal(
+    registry.recordDomains.find((domain) => domain.id === "packages")
+      ?.documentId,
+    "package-reference",
+  );
+
   const app = read("apps/docs/src/App.tsx");
   assert.match(app, /matchReferenceRecordRoute/);
-  assert.match(app, /routeId: "component-reference"/);
-  assert.match(app, /routeId: "package-reference"/);
+  assert.match(app, /documentationRecordRoutes/);
+  assert.doesNotMatch(app, /routeId: "component-reference"/);
+  assert.doesNotMatch(app, /routeId: "package-reference"/);
 
   const referenceData = read("apps/docs/src/referenceData.ts");
   assert.match(referenceData, /consumer-knowledge\.json\?raw/);
