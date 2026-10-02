@@ -6,11 +6,9 @@ What changed, why is it needed, and why does it belong in VyrnForge?
 
 **Tracker or bounded objective:**
 
-**Target lane:** `integration/foundation` / `integration/native` / `integration/react` / `integration/angular` / `integration/vue` / `integration/data-grid` / `integration/docs` / `integration/platform` / `main` promotion or hotfix
+**Base:** `main`
 
 **Dependency:** None / stacked on prerequisite (describe)
-
-**Promotion PR:** No / `integration/<lane>` -> `main`
 
 ## Impact
 
@@ -33,12 +31,13 @@ What changed, why is it needed, and why does it belong in VyrnForge?
 - [ ] Docs/metadata impact was handled where relevant.
 - [ ] Playground/example impact was handled where relevant.
 - [ ] New or changed publishable workspaces have an explicit release lifecycle classification.
-- [ ] The PR targets the owning integration lane, or is an explicit lane-to-`main` promotion/hotfix.
+- [ ] The PR targets protected `main` from a short-lived branch and does not reintroduce a persistent integration lane.
 
 <!--
-CI determines required technical scope from changed paths and the workspace
-VyrnForge dependency graph through scripts/detect-ci-scope.mjs. Task PRs into
-integration lanes use affected-scope CI. Promotions into main use full CI.
+Pull requests to main use full protected CI and the required ci-gate.
+scripts/detect-ci-scope.mjs remains the source of truth for technical
+classification from changed paths and the VyrnForge dependency graph.
+The exact main push performs delivery-only work after the merge suite passes.
 See docs/governance/05-trunk-delivery.md.
 -->
 

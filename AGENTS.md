@@ -9,7 +9,7 @@ Use the smallest authoritative source needed for the task:
 
 1. `docs/governance/01-project-source-of-truth.md` for product identity and scope;
 2. `docs/README.md` for documentation navigation;
-3. `docs/governance/05-trunk-delivery.md` for branch, lane, CI, promotion, and synchronization flow;
+3. `docs/governance/05-trunk-delivery.md` for protected-main branching, CI, merge, and delivery flow;
 4. `docs/architecture/01-package-boundaries.md` and package manifests for dependency boundaries;
 5. `docs/metadata/components.json` for component catalog and maturity;
 6. `docs/metadata/packages.json` plus release metadata for package/framework status;
@@ -22,39 +22,32 @@ Do not recreate those facts in this file or another hand-maintained mirror.
 
 ## Agent branch and delivery contract
 
-Persistent lanes are peers. Route work by ownership:
-
-- `integration/foundation` — shared foundations, contracts, tokens, metadata, generators, and framework-neutral logic;
-- `integration/native` — Native HTML / Custom Elements and DOM-specific work;
-- `integration/react` — React facade/package work;
-- `integration/angular` — Angular facade/package work, including `@vyrnforge/ui-angular`;
-- `integration/vue` — Vue facade/package work, including `@vyrnforge/ui-vue`;
-- `integration/data-grid` — data-grid and optional data-management work;
-- `integration/docs` — documentation application, guides, examples, and reader-facing documentation infrastructure;
-- `integration/platform` — CI/CD, release tooling, repository automation, and developer tooling.
+`main` is the protected integration and release branch. Persistent
+`integration/*` lanes are retired and must not be recreated without a new
+architectural decision.
 
 For normal implementation work:
 
-1. start the short-lived task branch from the owning `integration/<lane>`;
-2. open the task PR back to that same owning lane;
-3. require selected CI responsibilities and `ci-gate` to pass;
-4. promote completed lane work through an `integration/<lane>` -> `main` promotion PR;
-5. require full repository validation and a green `ci-gate` before merging the promotion;
-6. after shared changes land on `main`, synchronize affected consuming lanes before dependent work continues.
+1. update remote references and start a short-lived task branch from current
+   `main`;
+2. keep the branch scoped to one task or one coherent task group;
+3. open the pull request directly to protected `main`;
+4. require full repository validation and a green `ci-gate` before merge;
+5. merge only through the protected pull-request path, then remove the completed
+   short-lived branch or worktree as appropriate.
 
-Do not create a normal task branch from `main`. Direct-to-`main` work is reserved
-for an explicit emergency hotfix and still requires the full gate. Do not use
-direct persistent-lane ref moves or force-pushes to bypass the documented task-PR
-and promotion flow.
+Do not push normal work directly to `main`, force-push protected history, or use
+direct ref moves to bypass the pull-request boundary. Repository-side agent
+behavior must follow this contract even when a host-level protection setting is
+temporarily missing. Never use a missing protection rule as permission to bypass
+the documented protected-main flow.
 
-Repository-side agent behavior must follow this contract even when a host-level
-protection setting is temporarily missing. Never use a missing protection rule
-as permission to bypass the documented lane flow.
-
-Framework lanes are equal first-class peers. React, Angular, Vue, and Native work
-may proceed in parallel after shared prerequisites are satisfied. Serialize only
-for a real technical or tracker dependency. When work spans lanes, keep reusable
-shared work in its owning shared lane instead of hiding it in a framework branch.
+Native HTML / Custom Elements, React, Angular, and Vue are equal first-class
+framework tracks. Independent work may proceed in parallel after shared
+prerequisites are satisfied. Serialize only for a real technical or tracker
+dependency. When work depends on another unmerged branch, record that dependency
+explicitly and update the dependent short-lived branch from current `main` once
+the prerequisite lands.
 
 ## Implementation rules
 
@@ -91,8 +84,8 @@ npm run build
 npm run ci
 ```
 
-When CI fails, inspect and fix the cause. Do not mark a task, promotion, or gate
-complete until its acceptance criteria and required evidence pass.
+When CI fails, inspect and fix the cause. Do not mark a task, maturity promotion,
+or gate complete until its acceptance criteria and required evidence pass.
 
 If public behavior changes, update canonical metadata/API/package documentation
 and generated outputs as required. Before deleting or moving reader-facing

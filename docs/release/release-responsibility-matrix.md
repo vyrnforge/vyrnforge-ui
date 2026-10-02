@@ -83,10 +83,10 @@ checkboxes and contributor estimates are not a second CI planner.
 ### Pull requests
 
 - `ci-gate` is the stable required aggregate.
-- Task PRs target their owning `integration/*` lane and run affected-scope CI.
-- Promotion or emergency hotfix PRs targeting `main` run the full repository
-  boundary.
-- Integration-lane push synchronization does not rerun CI.
+- Normal work uses short-lived branches and pull requests to protected `main`.
+- Pull requests to `main` run the full repository validation boundary.
+- The exact `main` push performs delivery-only work and does not repeat the
+  already-passed merge suite.
 - Pull-request workflows may not publish packages, deploy Pages, create tags,
   or create releases.
 

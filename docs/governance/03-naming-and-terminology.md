@@ -38,7 +38,8 @@ The precise compatibility and ownership rules for CSS prefixes are defined by
 - **Adapter**: Explicit integration boundary between shared VyrnForge foundations and a framework, platform, persistence, server, export, or other external concern.
 - **View state**: Reusable UI state such as filters, sort, pagination, density, or column setup.
 - **Business state**: Application-owned state such as authentication, API data, permissions, tenant context, or product workflows.
-- **Integration lane**: Persistent protected engineering branch for an architectural ownership area; not an alternate release trunk.
+- **Short-lived task branch**: Bounded branch created from current protected `main` and merged through a reviewed pull request back to `main`.
+- **Persistent integration lane (retired)**: Historical `integration/*` delivery branch model; not part of the current repository topology and not to be recreated without a new architectural decision.
 - **Pattern**: Reusable composition of VyrnForge capabilities; not automatically a distinct component or state model.
 
 ## Avoid terms

@@ -162,9 +162,7 @@ export function planDeliveryScope() {
     affected_packages: [],
     affected_packages_csv: "",
     changed_files: [],
-    reasons: [
-      "exact-main delivery rebuild after full promotion or hotfix validation",
-    ],
+    reasons: ["exact-main delivery rebuild after protected-main validation"],
   };
 }
 
@@ -227,7 +225,7 @@ export function planCiScope(files, { forceFull = false } = {}) {
     markFull(scope, selectedPackages);
     reasons.add(
       forceFull
-        ? "manual or promotion full validation"
+        ? "manual or protected-main full validation"
         : "no diff available; safe full fallback",
     );
     return finalize(scope, selectedPackages, changedFiles, reasons);
