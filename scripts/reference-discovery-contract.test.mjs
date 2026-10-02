@@ -49,9 +49,7 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert(registry.pages.some((page) => page.id === "token-reference"));
   assert(registry.pages.some((page) => page.id === "pattern-reference"));
   assert(registry.pages.some((page) => page.id === "package-reference"));
-  assert(
-    registry.recordDomains.some((domain) => domain.id === "components"),
-  );
+  assert(registry.recordDomains.some((domain) => domain.id === "components"));
 
   const adapter = read("apps/docs/src/discoveryData.ts");
   for (const marker of ["design-tokens.json?raw", "patterns.json?raw"]) {
