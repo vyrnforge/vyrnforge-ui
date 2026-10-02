@@ -46,24 +46,22 @@ function mutate(root, relativePath, transform) {
   writeFileSync(file, content, "utf8");
 }
 
-test("accepts the integration-lane contributor and agent contracts", () => {
+test("accepts the protected-main contributor and agent contracts", () => {
   assert.deepEqual(verifyRepositoryTemplates(), []);
 });
 
-test("rejects agent guidance that drops the owning-lane task branch rule", () => {
+test("rejects agent guidance that drops the short-lived main-based branch rule", () => {
   const root = createFixture();
   try {
     mutate(root, "AGENTS.md", (content) =>
       content.replace(
-        "start the short-lived task branch from the owning `integration/<lane>`",
-        "start a short-lived task branch",
+        "start a short-lived task branch from current",
+        "start a task branch from anywhere",
       ),
     );
     assert(
       verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes(
-          "start the short-lived task branch from the owning `integration/<lane>`",
-        ),
+        failure.includes("start a short-lived task branch from current"),
       ),
     );
   } finally {
@@ -71,37 +69,18 @@ test("rejects agent guidance that drops the owning-lane task branch rule", () =>
   }
 });
 
-test("rejects agent guidance that permits normal direct-to-main task work", () => {
+test("rejects agent guidance that drops the protected-main PR target", () => {
   const root = createFixture();
   try {
     mutate(root, "AGENTS.md", (content) =>
       content.replace(
-        "Do not create a normal task branch from `main`",
-        "Normal task branches may start from `main`",
+        "open the pull request directly to protected `main`",
+        "open the pull request to any branch",
       ),
     );
     assert(
       verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("Do not create a normal task branch from `main`"),
-      ),
-    );
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
-
-test("rejects agent guidance that drops lane-to-main promotion", () => {
-  const root = createFixture();
-  try {
-    mutate(root, "AGENTS.md", (content) =>
-      content.replace(
-        "`integration/<lane>` -> `main` promotion PR",
-        "promotion PR",
-      ),
-    );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("`integration/<lane>` -> `main` promotion PR"),
+        failure.includes("open the pull request directly to protected `main`"),
       ),
     );
   } finally {
@@ -144,31 +123,18 @@ test("rejects repository setup that drops npm ci", () => {
   }
 });
 
-test("rejects contributor guidance that drops persistent lane routing", () => {
+test("rejects contributor guidance that drops the protected-main target", () => {
   const root = createFixture();
   try {
     mutate(root, "CONTRIBUTING.md", (content) =>
-      content.replace("integration/vue", "vue work branch"),
-    );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("integration/vue"),
+      content.replace(
+        "Open the pull request against protected `main`.",
+        "Open the pull request against any branch.",
       ),
     );
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
-
-test("rejects contributor guidance that drops lane promotion", () => {
-  const root = createFixture();
-  try {
-    mutate(root, "CONTRIBUTING.md", (content) =>
-      content.replace("lane promotion", "normal merge"),
-    );
     assert(
       verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("lane promotion"),
+        failure.includes("Open the pull request against protected `main`."),
       ),
     );
   } finally {
@@ -212,15 +178,15 @@ test("rejects a PR template that drops publishable-workspace lifecycle impact", 
   }
 });
 
-test("rejects a PR template that stops identifying promotion PRs", () => {
+test("rejects a PR template that stops targeting main", () => {
   const root = createFixture();
   try {
     mutate(root, ".github/pull_request_template.md", (content) =>
-      content.replace("**Promotion PR:**", "**Merge type:**"),
+      content.replace("**Base:** `main`", "**Base:** feature"),
     );
     assert(
       verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("**Promotion PR:**"),
+        failure.includes("**Base:** `main`"),
       ),
     );
   } finally {

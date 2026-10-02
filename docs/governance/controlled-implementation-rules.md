@@ -2,7 +2,7 @@
 title: VyrnForge UI Controlled Implementation Rules
 status: Stable
 owner: Documentation
-last_reviewed: 2026-09-27
+last_reviewed: 2026-10-02
 canonical: true
 ---
 
@@ -24,8 +24,8 @@ Before starting a task, use the source that owns the fact being checked:
 
 - **Product identity, durable scope, and source-authority map**:
   [Project Source Of Truth](01-project-source-of-truth.md).
-- **Branch topology, task-branch targets, lane synchronization, promotion, and CI lifecycle**:
-  [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md).
+- **Branch topology, protected-main pull-request flow, and CI lifecycle**:
+  [Trunk Delivery Governance](05-trunk-delivery.md).
 - **Package dependency rules**:
   [Package Boundaries](../architecture/01-package-boundaries.md) and package manifests.
 - **Component catalog and maturity**:
@@ -49,8 +49,8 @@ Before implementation:
 1. confirm the repository, current branch, and clean working tree;
 2. update remote references;
 3. read the tracker item and verify its predecessors and gates;
-4. identify the owning integration lane from
-   [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md);
+4. create the short-lived task branch from current protected `main` as defined by
+   [Trunk Delivery Governance](05-trunk-delivery.md);
 5. record permitted files, explicit out-of-scope areas, accountable owner,
    reviewer, acceptance criteria, and required evidence in the change manifest;
 6. inspect existing VyrnForge components, primitives, behaviors, contracts,
@@ -82,8 +82,8 @@ for dependency state, ownership, scope, review, and evidence requirements.
   layer before duplicating behavior in framework packages.
 - Documentation, tests, configuration, and framework work may proceed
   independently only when their ownership and file scopes do not conflict.
-- When a prerequisite is promoted, synchronize the owning integration lane as
-  required by the delivery governance before continuing dependent work.
+- When a prerequisite merges, update the dependent short-lived branch from
+  current `main` before continuing dependent work.
 
 ## Scope-control rules
 
@@ -160,15 +160,14 @@ evidence.
 
 ## Merge and post-merge procedure
 
-Use the branch target, synchronization path, validation boundary, and promotion
-procedure defined by
-[Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md). This
-checklist intentionally does not duplicate branch names or merge topology.
+Use the protected-main branch target, validation boundary, and merge procedure
+defined by [Trunk Delivery Governance](05-trunk-delivery.md). This checklist
+intentionally does not duplicate branch names or merge topology.
 
 After merge:
 
 - remove completed short-lived task branches/worktrees as appropriate;
-- synchronize affected integration lanes when required;
+- update dependent short-lived branches from current `main` when required;
 - update the live tracker and gate evidence when the task changes execution
   state;
 - update canonical metadata or generated evidence when the task changes the
@@ -195,7 +194,7 @@ maturity, release readiness, architecture ownership, or gate status.
 ## Related canonical documents
 
 - [Project Source Of Truth](01-project-source-of-truth.md)
-- [Trunk and Integration-Lane Delivery Governance](05-trunk-delivery.md)
+- [Trunk Delivery Governance](05-trunk-delivery.md)
 - [Repository Inventory](repository-inventory.md)
 - [Ownership and Review Model](ownership-and-review-model.md)
 - [Component Maturity Model](component-maturity-model.md)

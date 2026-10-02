@@ -143,7 +143,7 @@ assert(
   !/push:\s*[\s\S]*integration\/\*\*/.test(
     ci.slice(0, ci.indexOf("pull_request:")),
   ),
-  "ci.yml must not run on integration-lane pushes",
+  "ci.yml push trigger must remain limited to main",
 );
 assert(
   ci.includes("if: needs.plan.outputs.quality == 'true'") &&

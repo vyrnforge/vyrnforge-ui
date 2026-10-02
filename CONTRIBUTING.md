@@ -8,36 +8,21 @@ The repository is source-available under the
 [VyrnForge Source License 1.0](LICENSE). Do not describe it as open source or
 broaden the rights granted by the license.
 
-## Integration-lane contribution path
+## Trunk contribution path
 
-`main` is the canonical integrated product branch. Normal implementation work
-is integrated through persistent architectural lanes:
+`main` is the protected integration and release branch. Normal implementation
+work uses a short-lived branch created from current `main` and a reviewed pull
+request directly back to `main`.
 
-- `integration/foundation`
-- `integration/native`
-- `integration/react`
-- `integration/angular`
-- `integration/vue`
-- `integration/data-grid`
-- `integration/docs`
-- `integration/platform`
+Persistent `integration/*` lanes are not part of the current delivery model.
+Do not recreate lane synchronization or promotion chains without a new
+architectural decision. Only stack work on another unmerged branch when there is
+a real technical or tracker dependency; record that dependency in the pull
+request and update the dependent branch from current `main` after the
+prerequisite lands.
 
-Create a short-lived tracker or bounded-objective branch from the owning lane.
-Open the task PR back to that lane. Changes reach `main` through a lane promotion
-PR (`integration/<lane>` -> `main`), which always receives full repository
-validation. Direct task PRs to `main` are reserved for explicit emergency
-hotfixes and receive the same full gate.
-
-Persistent lanes are peers, not a framework dependency chain. Shared work goes
-through the appropriate shared lane, is promoted to `main`, and is then consumed
-by React, Angular, Vue, Native, data-grid, docs, or platform lanes as needed.
-
-Only stack work on another unmerged branch when there is a real technical or
-tracker dependency. Record the dependency in the PR and return the work to its
-owning lane after the prerequisite is promoted.
-
-The complete branch, lane synchronization, promotion, change-impact,
-documentation, playground, and deployment contract is documented in
+The complete branch, protected-main, change-impact, documentation, and delivery
+contract is documented in
 [`docs/governance/05-trunk-delivery.md`](docs/governance/05-trunk-delivery.md).
 
 Repository development uses the Node.js and npm versions pinned by `.nvmrc`,
@@ -48,32 +33,27 @@ git clone https://github.com/vyrnforge/vyrnforge-ui.git
 cd vyrnforge-ui
 npm ci
 
-# switch to the owning integration lane, sync it with main, then create the
-# short-lived tracker branch
+git switch main
+git pull --ff-only origin main
+git switch -c <short-lived-branch>
 
 npm run check
 npm test
 npm run build
 ```
 
-Open the task pull request against the owning `integration/<lane>`. Open a
-promotion pull request from that lane to `main` when the lane changes are ready
-for product-wide integration.
+Open the pull request against protected `main`. Pull requests to `main` use
+full repository validation and must pass the required `ci-gate`.
+`scripts/detect-ci-scope.mjs` remains authoritative for technical
+classification from changed paths and the actual workspace dependency graph;
+contributors do not maintain a duplicated package matrix in the pull request.
 
-Those are the normal contributor commands. CI determines required technical
-scope from changed paths and the actual workspace dependency graph with
-`scripts/detect-ci-scope.mjs`; contributors do not maintain a duplicated package
-matrix in the PR description.
-
-Task PRs use affected-scope CI. Promotion and emergency-hotfix PRs into `main`
-use full validation. Accepted integration-lane merges and routine lane
-synchronization do not start a duplicate CI run. After a successful main-boundary
-PR merges, the exact `main` push runs only the delivery scope required to build
-commit-bound deployment artifacts; it does not repeat the full promotion suite.
+After a successful protected-main pull request merges, the exact `main` push
+runs only the delivery scope required to build commit-bound deployment artifacts;
+it does not repeat the already-passed merge suite.
 
 `npm run ci` is available for complete local repository validation when a
-maintainer, infrastructure change, promotion preparation, or unusually broad
-change needs it.
+maintainer, infrastructure change, or unusually broad change needs it.
 
 ## Before changing UI
 
@@ -120,11 +100,11 @@ explicitly track.
 
 The default pull-request template is the normal path. Describe:
 
-- the owning integration lane and tracker/bounded objective;
+- the tracker or bounded objective and any real branch dependency;
 - what changed and why;
 - public API, CSS, behavior, accessibility, documentation, playground/example,
   release, or migration impact;
-- whether the PR is a task PR or lane-to-`main` promotion;
+- confirmation that the PR targets protected `main` from a short-lived branch;
 - the validation you ran;
 - relevant screenshots, limitations, dependencies, or follow-up work.
 
