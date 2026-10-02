@@ -84,8 +84,8 @@ npm run build
 npm run ci
 ```
 
-When CI fails, inspect and fix the cause. Do not mark a task, promotion, or gate
-complete until its acceptance criteria and required evidence pass.
+When CI fails, inspect and fix the cause. Do not mark a task, maturity promotion,
+or gate complete until its acceptance criteria and required evidence pass.
 
 If public behavior changes, update canonical metadata/API/package documentation
 and generated outputs as required. Before deleting or moving reader-facing

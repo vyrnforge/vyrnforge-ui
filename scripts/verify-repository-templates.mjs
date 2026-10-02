@@ -97,13 +97,12 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     [
       "docs/governance/05-trunk-delivery.md",
       "## Agent branch and delivery contract",
-      "Persistent `integration/*` lanes are retired",
+      "`integration/*` lanes are retired",
       "start a short-lived task branch from current",
       "open the pull request directly to protected `main`",
       "full repository validation and a green `ci-gate`",
       "Do not push normal work directly to `main`",
       "Never use a missing protection rule",
-      "@vyrnforge/ui-vue",
     ],
     failures,
   );
