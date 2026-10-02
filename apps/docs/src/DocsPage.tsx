@@ -70,10 +70,14 @@ export function DocsPage({
     ) : route.kind === "example" && route.exampleId ? (
       <MigratedExamplePage
         exampleId={route.exampleId}
-        sourcePath={route.sourcePath}
+        frameworkId={frameworkId}
+        version={routeResolution.context.version}
       />
     ) : route.kind === "executable-examples" ? (
-      <ExecutableExamplesPage frameworkId={frameworkId} />
+      <ExecutableExamplesPage
+        frameworkId={frameworkId}
+        version={routeResolution.context.version}
+      />
     ) : route.kind === "discovery-reference" &&
       (route.id === "token-reference" || route.id === "pattern-reference") ? (
       <DiscoveryReferencePage
