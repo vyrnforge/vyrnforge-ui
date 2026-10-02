@@ -18,7 +18,10 @@ test("generated documentation templates cover every registered public page type"
 
   for (const page of registry.pages) {
     const template = templates.get(page.template);
-    assert(template, `Missing generated template ${page.template} for ${page.id}`);
+    assert(
+      template,
+      `Missing generated template ${page.template} for ${page.id}`,
+    );
     assert(
       template.documentTypes.includes(page.type),
       `Template ${page.template} does not own document type ${page.type}`,
@@ -58,8 +61,5 @@ test("Docs rendering selects the page template from generated registry metadata"
   assert.match(docsPage, /getDocumentationTemplate\(route\.template\)/u);
   assert.match(docsPage, /<DocumentationPageTemplate/u);
   assert.match(routes, /template: page\.template/u);
-  assert.doesNotMatch(
-    docsPage,
-    /route\.type\s*===\s*["']component["']/u,
-  );
+  assert.doesNotMatch(docsPage, /route\.type\s*===\s*["']component["']/u);
 });
