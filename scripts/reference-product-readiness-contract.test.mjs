@@ -68,7 +68,7 @@ test("G18 discovery, context, deep links, and examples stay canonical", () => {
   const registry = json("docs/generated/documentation-registry.json");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   assert.match(docsApp, /matchReferenceRecordRoute/u);
-  assert.match(docsApp, /getRouteById/u);
+  assert.match(docsApp, /getResolvedRouteById/u);
   assert(
     registry.pages.some(
       (page) =>
