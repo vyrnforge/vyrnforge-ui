@@ -21,17 +21,19 @@ test("Docs consumes the generated Reference context as the single public reader"
   assert.match(docsContext, /referenceModel\.versionContext\.catalog/u);
 });
 
-test("Docs preserves shared framework context in location and deep links", () => {
-  for (const relativePath of [
-    "apps/docs/src/App.tsx",
-    "apps/docs/src/componentApiMember.ts",
-  ]) {
-    assert.match(
-      read(relativePath),
-      /referenceModel\.frameworkContext\.queryParameter/u,
-      `${relativePath} must use the shared framework query contract`,
-    );
-  }
+test("Docs preserves shared framework and document context through one route authority", () => {
+  const runtime = read("docs/reference/referenceRuntime.ts");
+  const app = read("apps/docs/src/App.tsx");
+  const memberTarget = read("apps/docs/src/componentApiMember.ts");
+  const docsContext = read("apps/docs/src/docsContext.ts");
+
+  assert.match(runtime, /getReferenceLocationContext/u);
+  assert.match(runtime, /getReferenceLocationHref/u);
+  assert.match(runtime, /frameworkContext\.queryParameter/u);
+  assert.match(app, /getReferenceLocationContext/u);
+  assert.match(app, /getReferenceLocationHref/u);
+  assert.match(memberTarget, /getReferenceLocationHref/u);
+  assert.match(docsContext, /getReferenceLocationHref/u);
 });
 
 test("public Docs navigation owns the complete reader-facing information architecture", () => {
@@ -154,18 +156,12 @@ test("Docs filter discovers selected-framework API members without restoring a s
 
   assert.match(memberTarget, /componentApiMemberAnchor/u);
   assert.match(memberTarget, /componentReferenceTargetHref/u);
-  assert.match(
-    memberTarget,
-    /referenceModel\.frameworkContext\.queryParameter/u,
-  );
+  assert.match(memberTarget, /getReferenceLocationHref/u);
   assert.match(memberTarget, /getReferenceRecordRoute/u);
 
-  assert.match(
-    app,
-    /new URLSearchParams\(window\.location\.search\)\.get\("member"\)/u,
-  );
+  assert.match(app, /getReferenceLocationContext/u);
   assert.match(app, /document\.getElementById\(member\)\?\.scrollIntoView/u);
-  assert.match(app, /query\.delete\("member"\)/u);
+  assert.match(app, /member: null/u);
 
   assert(
     retiredReferencePaths.includes("apps/docs/src/ReferenceSearchPage.tsx"),
