@@ -188,9 +188,8 @@ function routeFromRegistryPage(page: RegistryPage): DocsRoute {
   };
 }
 
-export const docsRoutes: DocsRoute[] = registry.pages.map(
-  routeFromRegistryPage,
-);
+export const docsRoutes: DocsRoute[] =
+  registry.pages.map(routeFromRegistryPage);
 
 export const documentationExamples = registry.examples;
 export const documentationExampleCategories = registry.exampleCategories;
