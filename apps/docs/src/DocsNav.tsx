@@ -24,6 +24,11 @@ type DocsNavProps = {
   onRouteChange: (routeId: string) => void;
 };
 
+type ApiMemberSearchRecord = Extract<
+  (typeof documentationSearchRecords)[number],
+  { kind: "api-member" }
+>;
+
 function matchesQuery(route: DocsRoute, query: string) {
   return [route.title, route.description, route.group, ...(route.tags ?? [])]
     .filter(Boolean)
@@ -66,7 +71,7 @@ export function DocsNav({
   const apiMembers = useMemo(
     () =>
       documentationSearchRecords.filter(
-        (record) =>
+        (record): record is ApiMemberSearchRecord =>
           record.kind === "api-member" &&
           record.framework === frameworkId &&
           record.version === version &&
