@@ -44,9 +44,7 @@ type DocumentationRegistry = {
   pages: RegistryPage[];
 };
 
-const registry = JSON.parse(
-  documentationRegistryRaw,
-) as DocumentationRegistry;
+const registry = JSON.parse(documentationRegistryRaw) as DocumentationRegistry;
 
 if (registry.schemaVersion !== 1) {
   throw new Error("Unsupported generated Documentation Registry version.");
