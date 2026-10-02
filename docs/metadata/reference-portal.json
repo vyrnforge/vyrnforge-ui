@@ -42,22 +42,33 @@
       {
         "id": "start",
         "label": "Start",
-        "contentDomains": ["guides", "packages"]
+        "contentDomains": [
+          "guides",
+          "packages"
+        ]
       },
       {
         "id": "components",
         "label": "Components",
-        "contentDomains": ["components", "accessibility"]
+        "contentDomains": [
+          "components",
+          "accessibility"
+        ]
       },
       {
         "id": "foundations",
         "label": "Foundations",
-        "contentDomains": ["tokens", "patterns"]
+        "contentDomains": [
+          "tokens",
+          "patterns"
+        ]
       },
       {
         "id": "examples",
         "label": "Examples",
-        "contentDomains": ["examples"]
+        "contentDomains": [
+          "examples"
+        ]
       }
     ],
     "sharedVocabulary": true,
@@ -66,7 +77,9 @@
   "contentOwnership": {
     "guides": {
       "mode": "curated",
-      "canonicalSources": ["docs/**/*.md"],
+      "canonicalSources": [
+        "docs/**/*.md"
+      ],
       "policy": "Human guidance owns explanation and recommendations but must link to canonical structured facts instead of repeating API truth."
     },
     "components": {
@@ -103,7 +116,9 @@
     },
     "patterns": {
       "mode": "canonical-metadata-plus-curated-guidance",
-      "canonicalSources": ["docs/metadata/patterns.json"],
+      "canonicalSources": [
+        "docs/metadata/patterns.json"
+      ],
       "policy": "Pattern identity and relationships come from canonical pattern metadata while longer workflow guidance remains curated documentation."
     },
     "examples": {
@@ -155,16 +170,22 @@
     "identity": "stable-id",
     "transport": "hash",
     "stableDeepLinks": true,
-    "preserveContext": ["framework", "version"],
+    "preserveContext": [
+      "framework",
+      "version"
+    ],
     "transitionalRegistries": [],
-    "policy": "Derivable route and catalog facts come from the generated Reference model, canonical metadata, or source discovery. Surface files may bind authored page implementations, but they do not own component, package, token, framework, version, or API facts."
+    "policy": "Derivable route and catalog facts come from the generated Reference model and canonical metadata. The public document manifest owns only curated page identity, presentation category, ordering, renderer binding, and source paths; it does not own component, package, token, framework, version, or API facts.",
+    "documentManifest": "docs/metadata/public-documents.json"
   },
   "deployment": {
     "assemblyContract": "scripts/reference-artifact.mjs",
     "artifactManifest": "reference-artifact.json",
     "productionSourceBranch": "main",
     "immutable": true,
-    "surfaces": ["docs"],
+    "surfaces": [
+      "docs"
+    ],
     "policy": "Preview and production artifacts deploy the single Docs product while retaining exact commit and CI lineage."
   },
   "versionCatalog": "vyrnforge-versions.json"
