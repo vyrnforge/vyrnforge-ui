@@ -28,6 +28,8 @@ type DocsShellProps = {
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
+  routeMember: string | null;
+  routePath: string;
 };
 
 export function DocsShell({
@@ -39,6 +41,8 @@ export function DocsShell({
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
+  routeMember,
+  routePath,
 }: DocsShellProps) {
   return (
     <AppShell
@@ -66,7 +70,12 @@ export function DocsShell({
                   );
                   if (version && version.id !== docsVersion.id) {
                     window.location.assign(
-                      getVersionHref(version, framework.id),
+                      getVersionHref(
+                        version,
+                        framework.id,
+                        routePath,
+                        routeMember,
+                      ),
                     );
                   }
                 }}
