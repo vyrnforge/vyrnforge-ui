@@ -9,7 +9,7 @@ import {
 test("Documentation Registry is generated from canonical page and Reference metadata", () => {
   const registry = buildDocumentationRegistry();
 
-  assert.equal(registry.schemaVersion, 1);
+  assert.equal(registry.schemaVersion, 2);
   assert(registry.pages.length > 20);
   assert(registry.sections.length >= 7);
   assert(registry.recordDomains.some((domain) => domain.id === "components"));
