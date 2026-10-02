@@ -1,6 +1,7 @@
 import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
+import { resolveDocumentationApi } from "../../../docs/reference/documentationApiResolver";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import {
   componentApiMemberAnchor,
@@ -430,12 +431,6 @@ function FrameworkApiPanel({
   );
 }
 
-function apiComponent(componentId: string, apiId: FrameworkApiId) {
-  return apiReference.surfaces[apiId].components.find(
-    (component) => component.id === componentId,
-  );
-}
-
 function componentHref(componentId: string) {
   return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
 }
@@ -574,8 +569,14 @@ function ComponentDetail({
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
-  const apiId = framework?.apiSurface as FrameworkApiId | undefined;
-  const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
+  const apiResolution = resolveDocumentationApi(apiReference, {
+    componentId: component.id,
+    frameworkId,
+    version,
+  });
+  const contextualApi = apiResolution.available
+    ? (apiResolution.component as FrameworkApiComponent)
+    : undefined;
 
   return (
     <div className="vf-docs-reference-layout">
@@ -639,7 +640,8 @@ function ComponentDetail({
           </Heading>
           <Text tone="muted">
             Generated API facts for {framework?.label ?? frameworkId}{" "}
-            documentation version {version}.
+            documentation version {version}. Source:{" "}
+            <code>{apiResolution.provenance.generator}</code>.
           </Text>
           {contextualApi ? (
             <FrameworkApiPanel
