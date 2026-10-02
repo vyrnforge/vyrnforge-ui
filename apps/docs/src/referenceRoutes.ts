@@ -35,7 +35,7 @@ type RegistryPage = Omit<DocsRoute, "kind" | "content"> & {
 };
 
 type DocumentationRegistry = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   sections: Array<{
     id: string;
     label: string;
@@ -46,7 +46,7 @@ type DocumentationRegistry = {
 
 const registry = JSON.parse(documentationRegistryRaw) as DocumentationRegistry;
 
-if (registry.schemaVersion !== 1) {
+if (registry.schemaVersion !== 2) {
   throw new Error("Unsupported generated Documentation Registry version.");
 }
 
