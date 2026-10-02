@@ -96,7 +96,7 @@ export function scaffoldDocumentationRegistration({
     type,
     section,
     releaseLine,
-    sourcePath,
+    sourcePath: normalizedSourcePath,
   })) {
     if (!value) throw new Error(`Documentation scaffold requires ${name}.`);
   }
@@ -126,7 +126,18 @@ export function scaffoldDocumentationRegistration({
     throw new Error(`Unknown documentation release line: ${releaseLine}`);
   }
 
-  const absoluteSourcePath = path.join(root, sourcePath);
+  const normalizedSourcePath = sourcePath.replace(/\\/gu, "/");
+  if (
+    path.isAbsolute(sourcePath) ||
+    normalizedSourcePath.startsWith("../") ||
+    !normalizedSourcePath.startsWith("docs/")
+  ) {
+    throw new Error(
+      "Documentation scaffold source must be a repository-relative path under docs/.",
+    );
+  }
+
+  const absoluteSourcePath = path.join(root, normalizedSourcePath);
   if (existsSync(absoluteSourcePath)) {
     throw new Error(`Documentation source already exists: ${sourcePath}`);
   }
@@ -181,7 +192,7 @@ export function scaffoldDocumentationRegistration({
   return {
     page,
     template: template.id,
-    sourcePath,
+    sourcePath: normalizedSourcePath,
     metadataPath: DOCUMENTATION_PAGES_PATH,
   };
 }
