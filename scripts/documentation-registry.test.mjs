@@ -27,6 +27,14 @@ test("Documentation page metadata rejects duplicate page identities", () => {
   const metadata = {
     schemaVersion: 1,
     sections: [{ id: "start", label: "Start", order: 0 }],
+    templates: [
+      {
+        id: "guide",
+        label: "Guide",
+        documentTypes: ["guide"],
+        sections: ["summary"],
+      },
+    ],
     pages: [
       {
         id: "duplicate",
@@ -61,6 +69,14 @@ test("Documentation page metadata rejects unknown sections", () => {
   const metadata = {
     schemaVersion: 1,
     sections: [{ id: "start", label: "Start", order: 0 }],
+    templates: [
+      {
+        id: "guide",
+        label: "Guide",
+        documentTypes: ["guide"],
+        sections: ["summary"],
+      },
+    ],
     pages: [
       {
         id: "broken",

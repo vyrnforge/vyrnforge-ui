@@ -2,9 +2,103 @@
   "schemaVersion": 1,
   "sourceOfTruth": {
     "canonical": true,
-    "scope": "public documentation page identity, grouping, renderer binding, ordering, source ownership, and release-line ownership",
+    "scope": "public documentation page identity, grouping, renderer binding, template anatomy, ordering, source ownership, and release-line ownership",
     "policy": "Public page registration is authored here and compiled into the generated Documentation Registry. Generated component, package, token, pattern, example, and accessibility records remain owned by their canonical VyrnForge sources."
   },
+  "templates": [
+    {
+      "id": "component",
+      "label": "Component reference",
+      "documentTypes": ["component"],
+      "sections": [
+        "summary",
+        "usage",
+        "configuration",
+        "behavior",
+        "accessibility",
+        "api",
+        "styling",
+        "related"
+      ]
+    },
+    {
+      "id": "foundation",
+      "label": "Foundation / concept",
+      "documentTypes": ["foundation"],
+      "sections": [
+        "summary",
+        "concepts",
+        "usage",
+        "accessibility",
+        "styling",
+        "related"
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "Guide / framework integration",
+      "documentTypes": ["guide"],
+      "sections": ["summary", "setup", "usage", "accessibility", "related"]
+    },
+    {
+      "id": "pattern",
+      "label": "Pattern",
+      "documentTypes": ["pattern"],
+      "sections": [
+        "summary",
+        "use-when",
+        "composition",
+        "behavior",
+        "accessibility",
+        "related"
+      ]
+    },
+    {
+      "id": "package",
+      "label": "Package / API reference",
+      "documentTypes": ["package"],
+      "sections": [
+        "summary",
+        "installation",
+        "exports",
+        "api",
+        "compatibility",
+        "related"
+      ]
+    },
+    {
+      "id": "advanced-module",
+      "label": "Advanced module",
+      "documentTypes": ["advanced-module"],
+      "sections": [
+        "summary",
+        "usage",
+        "configuration",
+        "behavior",
+        "accessibility",
+        "api",
+        "related"
+      ]
+    },
+    {
+      "id": "release",
+      "label": "Migration / release reference",
+      "documentTypes": ["release"],
+      "sections": [
+        "summary",
+        "changes",
+        "migration",
+        "compatibility",
+        "related"
+      ]
+    },
+    {
+      "id": "example",
+      "label": "Example",
+      "documentTypes": ["example"],
+      "sections": ["summary", "preview", "code", "related"]
+    }
+  ],
   "sections": [
     {
       "id": "start",
