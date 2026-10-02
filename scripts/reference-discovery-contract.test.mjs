@@ -16,6 +16,7 @@ function json(relativePath) {
 
 test("Reference discovery stays derived from canonical VyrnForge sources", () => {
   const model = json("docs/generated/reference-model.json");
+  const registry = json("docs/generated/documentation-registry.json");
   const tokens = json("docs/metadata/design-tokens.json");
   const patterns = json("docs/metadata/patterns.json");
   const knowledge = json("docs/generated/consumer-knowledge.json");
@@ -44,47 +45,32 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert(knowledge.components.length > 0);
   assert.equal(model.examples.length, 4);
 
+  assert(registry.pages.some((page) => page.id === "component-reference"));
+  assert(registry.pages.some((page) => page.id === "token-reference"));
+  assert(registry.pages.some((page) => page.id === "pattern-reference"));
+  assert(registry.pages.some((page) => page.id === "package-reference"));
+  assert(
+    registry.recordDomains.some((domain) => domain.id === "components"),
+  );
+
   const adapter = read("apps/docs/src/discoveryData.ts");
   for (const marker of ["design-tokens.json?raw", "patterns.json?raw"]) {
-    assert.match(
-      adapter,
-      new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-    );
+    assert(adapter.includes(marker));
   }
 
   const routes = read("apps/docs/src/referenceRoutes.ts");
-  for (const marker of [
-    "component-reference",
-    "token-reference",
-    "pattern-reference",
-    "package-reference",
-    "accessibility",
-  ]) {
-    assert.match(routes, new RegExp(marker, "u"));
-  }
-  assert.match(routes, /publicDocsSections/u);
-  assert.doesNotMatch(routes, /referenceModel\.domains\.flatMap/u);
-  assert.doesNotMatch(routes, /import\.meta\.glob/u);
-
-  const app = read("apps/docs/src/App.tsx");
-  for (const domainId of ["tokens", "patterns"]) {
-    assert(app.includes(`domain: "${domainId}"`));
-  }
-  assert.doesNotMatch(app, /domain: "accessibility"/u);
-  assert.match(app, /matchReferenceRecordRoute/);
-  assert.match(app, /getRouteById/);
-  assert.doesNotMatch(app, /getDiscoveryRouteById/);
+  assert.match(routes, /generated\/documentation-registry\.json\?raw/u);
+  assert.match(routes, /registry\.pages\.map/u);
+  assert.match(routes, /registry\.sections\.map/u);
+  assert.match(routes, /import\.meta\.glob/u);
+  assert.doesNotMatch(routes, /id: "component-reference"/u);
+  assert.doesNotMatch(routes, /id: "token-reference"/u);
+  assert.doesNotMatch(routes, /id: "pattern-reference"/u);
+  assert.doesNotMatch(routes, /id: "package-reference"/u);
 
   const nav = read("apps/docs/src/DocsNav.tsx");
   assert.match(nav, /docsRoutes/);
-  assert.doesNotMatch(nav, /discoveryRoutes/);
+  assert.match(nav, /publicDocsSections/);
   assert.match(nav, /VyrnForge documentation/);
   assert.match(nav, /Filter docs/u);
-
-  const page = read("apps/docs/src/DiscoveryReferencePage.tsx");
-  assert.match(page, /getReferenceRecordRoute/);
-  assert.match(page, /Canonical design-token explorer/);
-  assert.match(page, /Reusable application patterns/);
-  assert.doesNotMatch(page, /Accessibility and keyboard discovery/u);
-  assert.doesNotMatch(page, /accessibilityReferenceRecords/u);
 });

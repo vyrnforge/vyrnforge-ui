@@ -25,7 +25,7 @@ export function DocsPage({
   onRouteChange,
   referenceRecord,
 }: DocsPageProps) {
-  if (route.id === "overview") {
+  if (route.kind === "overview") {
     return (
       <main className="vf-docs-page vf-docs-page--overview">
         <OverviewPage
@@ -53,7 +53,7 @@ export function DocsPage({
         />
       ) : route.kind === "executable-examples" ? (
         <ExecutableExamplesPage frameworkId={frameworkId} />
-      ) : route.id === "token-reference" || route.id === "pattern-reference" ? (
+      ) : route.kind === "discovery-reference" ? (
         <DiscoveryReferencePage
           referenceRecord={referenceRecord}
           routeId={route.id}

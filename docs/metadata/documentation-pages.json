@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "public documentation page identity, grouping, renderer binding, ordering, and source ownership",
+    "policy": "Public page registration is authored here and compiled into the generated Documentation Registry. Generated component, package, token, pattern, example, and accessibility records remain owned by their canonical VyrnForge sources."
+  },
+  "sections": [
+    {
+      "id": "start",
+      "label": "Getting Started",
+      "order": 0
+    },
+    {
+      "id": "components",
+      "label": "Components",
+      "order": 1
+    },
+    {
+      "id": "foundations",
+      "label": "Foundations",
+      "order": 2
+    },
+    {
+      "id": "patterns",
+      "label": "Patterns",
+      "order": 3
+    },
+    {
+      "id": "data-grid",
+      "label": "Data & Grid",
+      "order": 4
+    },
+    {
+      "id": "api",
+      "label": "API / Packages",
+      "order": 5
+    },
+    {
+      "id": "releases",
+      "label": "Releases / Migration",
+      "order": 6
+    }
+  ],
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Overview",
+      "section": "start",
+      "group": "Getting Started",
+      "order": 0,
+      "type": "guide",
+      "renderer": "overview",
+      "description": "What VyrnForge is and how to navigate the documentation.",
+      "sourcePath": "docs/README.md",
+      "tags": [
+        "overview",
+        "start"
+      ]
+    },
+    {
+      "id": "getting-started",
+      "title": "Getting Started",
+      "section": "start",
+      "group": "Getting Started",
+      "order": 1,
+      "type": "guide",
+      "renderer": "markdown",
+      "description": "Install VyrnForge and choose the Native HTML, React, Angular, or Vue surface.",
+      "sourcePath": "docs/api/import-and-setup.md",
+      "tags": [
+        "install",
+        "setup",
+        "frameworks"
+      ]
+    },
+    {
+      "id": "executable-examples",
+      "title": "Framework Examples",
+      "section": "start",
+      "group": "Getting Started",
+      "order": 2,
+      "type": "example",
+      "renderer": "executable-examples",
+      "description": "Inspect the verified packed-consumer example for the selected framework.",
+      "sourcePath": "tests/consumers/manifest.json",
+      "tags": [
+        "examples",
+        "native",
+        "react",
+        "angular",
+        "vue"
+      ]
+    },
+    {
+      "id": "component-reference",
+      "title": "Components",
+      "section": "components",
+      "group": "Components",
+      "order": 0,
+      "type": "component",
+      "renderer": "component-reference",
+      "description": "Browse component usage, framework variants, API, accessibility, styling, and related guidance.",
+      "sourcePath": "docs/generated/consumer-knowledge.json",
+      "tags": [
+        "components",
+        "api"
+      ]
+    },
+    {
+      "id": "theming",
+      "title": "Theming & Styling",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 0,
+      "type": "foundation",
+      "renderer": "markdown",
+      "description": "Customize VyrnForge with shared semantic tokens, themes, density, and CSS.",
+      "sourcePath": "docs/architecture/03-theming-and-styling.md",
+      "tags": [
+        "theming",
+        "tokens",
+        "css"
+      ]
+    },
+    {
+      "id": "token-reference",
+      "title": "Design Tokens",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 1,
+      "type": "foundation",
+      "renderer": "discovery-reference",
+      "description": "Browse shared VyrnForge token categories and styling roles.",
+      "sourcePath": "docs/metadata/design-tokens.json",
+      "tags": [
+        "tokens",
+        "design-system"
+      ]
+    },
+    {
+      "id": "theme-tokens",
+      "title": "Theme Tokens",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 2,
+      "type": "foundation",
+      "renderer": "example",
+      "description": "Interactive token catalog with canonical categories, values, and theme-scoped swatches.",
+      "sourcePath": "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
+      "exampleId": "theme-tokens"
+    },
+    {
+      "id": "theme-modes",
+      "title": "Theme Modes",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 3,
+      "type": "foundation",
+      "renderer": "example",
+      "description": "Interactive light, dark, enterprise, and system theme behavior.",
+      "sourcePath": "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
+      "exampleId": "theme-modes"
+    },
+    {
+      "id": "density",
+      "title": "Density",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 4,
+      "type": "foundation",
+      "renderer": "example",
+      "description": "Interactive compact, standard, and comfortable density examples.",
+      "sourcePath": "apps/docs/src/examples/pages/core/DensityPage.tsx",
+      "exampleId": "density"
+    },
+    {
+      "id": "css-overrides",
+      "title": "CSS Overrides",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 5,
+      "type": "foundation",
+      "renderer": "example",
+      "description": "Global VyrnForge overrides, local scopes, and grid-specific overrides.",
+      "sourcePath": "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
+      "exampleId": "css-overrides"
+    },
+    {
+      "id": "accessibility",
+      "title": "Accessibility",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 6,
+      "type": "foundation",
+      "renderer": "markdown",
+      "description": "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
+      "sourcePath": "docs/architecture/05-accessibility-standards.md",
+      "tags": [
+        "accessibility",
+        "keyboard",
+        "focus"
+      ]
+    },
+    {
+      "id": "pattern-reference",
+      "title": "Pattern Catalog",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 0,
+      "type": "pattern",
+      "renderer": "discovery-reference",
+      "description": "Browse reusable VyrnForge composition patterns.",
+      "sourcePath": "docs/metadata/patterns.json",
+      "tags": [
+        "patterns",
+        "composition"
+      ]
+    },
+    {
+      "id": "pattern-resource-list",
+      "title": "Resource List",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 1,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Compact resource lists with metadata and actions.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-resource-list"
+    },
+    {
+      "id": "pattern-detail",
+      "title": "Detail Page",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 2,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Entity detail composition.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-detail"
+    },
+    {
+      "id": "pattern-settings",
+      "title": "Settings",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 3,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Sectioned settings composition.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-settings"
+    },
+    {
+      "id": "pattern-form",
+      "title": "Form",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 4,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "General application form composition.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-form"
+    },
+    {
+      "id": "pattern-filter-form",
+      "title": "Filter Form",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 5,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Operational filter composition.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-filter-form"
+    },
+    {
+      "id": "pattern-assignments",
+      "title": "Assignment Patterns",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 6,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Bounded assignment flows.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-assignments"
+    },
+    {
+      "id": "pattern-feedback-states",
+      "title": "Empty, Error & Loading",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 7,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Route-level feedback states.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-feedback-states"
+    },
+    {
+      "id": "pattern-admin-shell",
+      "title": "Admin Shell",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 8,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Admin workspace composition.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-admin-shell"
+    },
+    {
+      "id": "pattern-customer-portal",
+      "title": "Customer Portal Shell",
+      "section": "patterns",
+      "group": "Patterns",
+      "order": 9,
+      "type": "pattern",
+      "renderer": "example",
+      "description": "Customer portal composition.",
+      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "exampleId": "pattern-customer-portal"
+    },
+    {
+      "id": "data-grid",
+      "title": "Data Grid Guide",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 0,
+      "type": "advanced-module",
+      "renderer": "markdown",
+      "description": "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
+      "sourcePath": "packages/ui-data-grid/README.md",
+      "tags": [
+        "data",
+        "grid",
+        "react"
+      ]
+    },
+    {
+      "id": "grid-basic",
+      "title": "Basic Grid",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 1,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Rows, columns, search, sort, and pagination.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-basic"
+    },
+    {
+      "id": "grid-columns",
+      "title": "Column Management",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 2,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Visibility, order, density, and reset behavior.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-columns"
+    },
+    {
+      "id": "grid-filtering",
+      "title": "Filtering",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 3,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Search and filter state examples.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-filtering"
+    },
+    {
+      "id": "grid-selection",
+      "title": "Selection",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 4,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Selectable rows, disabled rows, and bulk actions.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-selection"
+    },
+    {
+      "id": "grid-grouping",
+      "title": "Grouping",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 5,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Client-side grouping examples.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-grouping"
+    },
+    {
+      "id": "grid-resizing",
+      "title": "Column Resizing",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 6,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Resizable columns and horizontal overflow.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-resizing"
+    },
+    {
+      "id": "grid-themes",
+      "title": "Grid Themes",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 7,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Theme and shared-token alignment.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-themes"
+    },
+    {
+      "id": "grid-states",
+      "title": "Grid States",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 8,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Empty, error, and loading states.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-states"
+    },
+    {
+      "id": "grid-stress",
+      "title": "Stress Grid",
+      "section": "data-grid",
+      "group": "Data & Grid",
+      "order": 9,
+      "type": "advanced-module",
+      "renderer": "example",
+      "description": "Many rows and columns without virtualization.",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "exampleId": "grid-stress"
+    },
+    {
+      "id": "package-reference",
+      "title": "Packages & API",
+      "section": "api",
+      "group": "API / Packages",
+      "order": 0,
+      "type": "package",
+      "renderer": "package-reference",
+      "description": "Understand package responsibilities, public entrypoints, and release tracks.",
+      "sourcePath": "docs/metadata/packages.json",
+      "tags": [
+        "packages",
+        "api"
+      ]
+    },
+    {
+      "id": "releases",
+      "title": "Releases & Migration",
+      "section": "releases",
+      "group": "Releases / Migration",
+      "order": 0,
+      "type": "release",
+      "renderer": "markdown",
+      "description": "Understand release channels, framework support, limitations, and upgrade guidance.",
+      "sourcePath": "docs/release/multi-framework-migration-and-limitations.md",
+      "tags": [
+        "release",
+        "migration",
+        "compatibility"
+      ]
+    }
+  ]
+}
