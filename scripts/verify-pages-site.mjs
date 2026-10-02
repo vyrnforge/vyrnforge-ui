@@ -34,7 +34,7 @@ const catalog = readJson("vyrnforge-versions.json");
 const legacyDocsManifest = readJson("docs-versions.json");
 
 assert(
-  catalog.schemaVersion === 2,
+  catalog.schemaVersion === 3,
   "Unsupported VyrnForge version catalog schema.",
 );
 assert(
@@ -54,6 +54,18 @@ assert(
   Array.isArray(catalog.releases) && catalog.releases.length > 0,
   "Version catalog must expose at least one tagged release.",
 );
+for (const releaseLine of catalog.releaseLines) {
+  assert(
+    releaseLine.frameworkReadiness &&
+      typeof releaseLine.frameworkReadiness === "object",
+    `Release line ${releaseLine.id} must expose framework readiness.`,
+  );
+}
+assert(
+  catalog.current.frameworkReadiness &&
+    typeof catalog.current.frameworkReadiness === "object",
+  "Version catalog current entry must expose framework readiness.",
+);
 assert(
   legacyDocsManifest.schemaVersion === 1,
   "Legacy docs version manifest must remain schema version 1 while apps/docs consumes it.",
@@ -66,6 +78,11 @@ for (const release of catalog.releases) {
   );
   assert(release.tag, `Release ${release.version} must identify its Git tag.`);
   assert(release.docsPath, `Release ${release.version} must expose docsPath.`);
+  assert(
+    release.frameworkReadiness &&
+      typeof release.frameworkReadiness === "object",
+    `Release ${release.version} must expose framework readiness.`,
+  );
   requireFile(path.join(relativeSitePath(release.docsPath), "index.html"));
 }
 

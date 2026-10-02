@@ -39,7 +39,7 @@ test("Docs public routes are registry-driven instead of hand-registered", () => 
   const source = read("apps/docs/src/referenceRoutes.ts");
 
   assert.equal(metadata.sourceOfTruth.canonical, true);
-  assert.equal(registry.schemaVersion, 1);
+  assert.equal(registry.schemaVersion, 2);
   assert(registry.pages.length > 20);
   assert.match(source, /generated\/documentation-registry\.json\?raw/u);
   assert.match(source, /registry\.pages\.map/u);

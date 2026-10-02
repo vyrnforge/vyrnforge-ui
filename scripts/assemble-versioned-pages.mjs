@@ -79,6 +79,31 @@ function compareVersions(left, right) {
   });
 }
 
+const frameworkIds = ["native-html", "react", "angular", "vue"];
+
+function unavailableReadiness() {
+  return Object.fromEntries(
+    frameworkIds.map((frameworkId) => [frameworkId, "internal-not-ready"]),
+  );
+}
+
+function readTaggedDocumentationReadiness(tag, releaseLineId) {
+  try {
+    const source = execFileSync(
+      "git",
+      ["show", `${tag}:docs/metadata/release-groups.json`],
+      { cwd: repositoryRoot, encoding: "utf8" },
+    );
+    const metadata = JSON.parse(source);
+    return (
+      metadata.releaseLines?.[releaseLineId]?.documentation?.readiness ??
+      unavailableReadiness()
+    );
+  } catch {
+    return unavailableReadiness();
+  }
+}
+
 function channelForVersion(version) {
   const prerelease = parseSemver(version)?.prerelease ?? "";
   if (prerelease.startsWith("alpha")) return "alpha";
@@ -117,6 +142,9 @@ function discoverDocumentationReleases() {
       releaseLine,
       version,
       channel: channelForVersion(version),
+      frameworkReadiness: canonical
+        ? readTaggedDocumentationReadiness(tag, releaseLine)
+        : unavailableReadiness(),
       tag,
       path: `/versions/v${version}/`,
       docsPath: `/versions/v${version}/`,
@@ -205,6 +233,8 @@ const current = {
   path: "/",
   docsPath: "/",
   commit: currentCommit,
+  frameworkReadiness:
+    primaryRelease.documentation?.readiness ?? unavailableReadiness(),
 };
 const releaseLines = releaseLineEntries.map(([id, releaseLine]) => ({
   id,
@@ -214,12 +244,14 @@ const releaseLines = releaseLineEntries.map(([id, releaseLine]) => ({
   distTag: releaseLine.distTag,
   publishable: Boolean(releaseLine.publication?.publishable),
   publishTogether: Boolean(releaseLine.publication?.publishTogether),
+  frameworkReadiness:
+    releaseLine.documentation?.readiness ?? unavailableReadiness(),
   packages: (releaseLine.packages ?? []).map(
     (packageEntry) => packageEntry.name,
   ),
 }));
 const versionCatalog = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   generatedFrom: "docs/metadata/release-groups.json + Git release tags",
   current,
   releaseLines,

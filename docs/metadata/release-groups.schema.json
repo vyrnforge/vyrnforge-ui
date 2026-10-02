@@ -38,6 +38,7 @@
         "distTag",
         "versioning",
         "publication",
+        "documentation",
         "tagIdentity",
         "validation",
         "releaseDependencies",
@@ -63,6 +64,24 @@
           "properties": {
             "publishable": { "type": "boolean" },
             "publishTogether": { "type": "boolean" }
+          }
+        },
+        "documentation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["readiness"],
+          "properties": {
+            "readiness": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["native-html", "react", "angular", "vue"],
+              "properties": {
+                "native-html": { "$ref": "#/$defs/documentationReadiness" },
+                "react": { "$ref": "#/$defs/documentationReadiness" },
+                "angular": { "$ref": "#/$defs/documentationReadiness" },
+                "vue": { "$ref": "#/$defs/documentationReadiness" }
+              }
+            }
           }
         },
         "tagIdentity": {
@@ -113,6 +132,16 @@
           "items": { "$ref": "#/$defs/package" }
         }
       }
+    },
+    "documentationReadiness": {
+      "enum": [
+        "stable",
+        "preview",
+        "maintenance",
+        "deprecated",
+        "unavailable",
+        "internal-not-ready"
+      ]
     },
     "package": {
       "type": "object",

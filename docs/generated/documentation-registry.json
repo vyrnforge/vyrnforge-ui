@@ -1,8 +1,44 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "generatedFrom": [
     "docs/metadata/documentation-pages.json",
+    "docs/metadata/release-groups.json",
+    "docs/metadata/multi-framework.json",
     "docs/generated/reference-model.json"
+  ],
+  "documentationReadinessStates": [
+    "stable",
+    "preview",
+    "maintenance",
+    "deprecated",
+    "unavailable",
+    "internal-not-ready"
+  ],
+  "releaseLines": [
+    {
+      "id": "non-grid-beta",
+      "version": "0.2.0-beta.2",
+      "channel": "beta",
+      "versioningMode": "synchronized",
+      "readiness": {
+        "native-html": "preview",
+        "react": "preview",
+        "angular": "preview",
+        "vue": "preview"
+      }
+    },
+    {
+      "id": "data-grid-alpha",
+      "version": "0.1.0-alpha.2",
+      "channel": "alpha",
+      "versioningMode": "independent",
+      "readiness": {
+        "native-html": "unavailable",
+        "react": "preview",
+        "angular": "unavailable",
+        "vue": "unavailable"
+      }
+    }
   ],
   "documentTypes": [
     "advanced-module",
@@ -61,12 +97,39 @@
       "type": "guide",
       "renderer": "overview",
       "description": "What VyrnForge is and how to navigate the documentation.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/README.md",
       "tags": [
         "overview",
         "start"
       ],
-      "route": "/overview"
+      "route": "/overview",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "getting-started",
@@ -77,13 +140,40 @@
       "type": "guide",
       "renderer": "markdown",
       "description": "Install VyrnForge and choose the Native HTML, React, Angular, or Vue surface.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/api/import-and-setup.md",
       "tags": [
         "install",
         "setup",
         "frameworks"
       ],
-      "route": "/getting-started"
+      "route": "/getting-started",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "executable-examples",
@@ -94,6 +184,7 @@
       "type": "example",
       "renderer": "executable-examples",
       "description": "Inspect the verified packed-consumer example for the selected framework.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "tests/consumers/manifest.json",
       "tags": [
         "examples",
@@ -102,7 +193,33 @@
         "angular",
         "vue"
       ],
-      "route": "/executable-examples"
+      "route": "/executable-examples",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "component-reference",
@@ -113,12 +230,39 @@
       "type": "component",
       "renderer": "component-reference",
       "description": "Browse component usage, framework variants, API, accessibility, styling, and related guidance.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/generated/consumer-knowledge.json",
       "tags": [
         "components",
         "api"
       ],
-      "route": "/component-reference"
+      "route": "/component-reference",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "theming",
@@ -129,13 +273,40 @@
       "type": "foundation",
       "renderer": "markdown",
       "description": "Customize VyrnForge with shared semantic tokens, themes, density, and CSS.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/architecture/03-theming-and-styling.md",
       "tags": [
         "theming",
         "tokens",
         "css"
       ],
-      "route": "/theming"
+      "route": "/theming",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "token-reference",
@@ -146,12 +317,39 @@
       "type": "foundation",
       "renderer": "discovery-reference",
       "description": "Browse shared VyrnForge token categories and styling roles.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/design-tokens.json",
       "tags": [
         "tokens",
         "design-system"
       ],
-      "route": "/token-reference"
+      "route": "/token-reference",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "theme-tokens",
@@ -162,9 +360,36 @@
       "type": "foundation",
       "renderer": "example",
       "description": "Interactive token catalog with canonical categories, values, and theme-scoped swatches.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
       "exampleId": "theme-tokens",
-      "route": "/theme-tokens"
+      "route": "/theme-tokens",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "theme-modes",
@@ -175,9 +400,36 @@
       "type": "foundation",
       "renderer": "example",
       "description": "Interactive light, dark, enterprise, and system theme behavior.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
       "exampleId": "theme-modes",
-      "route": "/theme-modes"
+      "route": "/theme-modes",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "density",
@@ -188,9 +440,36 @@
       "type": "foundation",
       "renderer": "example",
       "description": "Interactive compact, standard, and comfortable density examples.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/DensityPage.tsx",
       "exampleId": "density",
-      "route": "/density"
+      "route": "/density",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "css-overrides",
@@ -201,9 +480,36 @@
       "type": "foundation",
       "renderer": "example",
       "description": "Global VyrnForge overrides, local scopes, and grid-specific overrides.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
       "exampleId": "css-overrides",
-      "route": "/css-overrides"
+      "route": "/css-overrides",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "accessibility",
@@ -214,13 +520,40 @@
       "type": "foundation",
       "renderer": "markdown",
       "description": "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/architecture/05-accessibility-standards.md",
       "tags": [
         "accessibility",
         "keyboard",
         "focus"
       ],
-      "route": "/accessibility"
+      "route": "/accessibility",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-reference",
@@ -231,12 +564,39 @@
       "type": "pattern",
       "renderer": "discovery-reference",
       "description": "Browse reusable VyrnForge composition patterns.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/patterns.json",
       "tags": [
         "patterns",
         "composition"
       ],
-      "route": "/pattern-reference"
+      "route": "/pattern-reference",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-resource-list",
@@ -247,9 +607,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Compact resource lists with metadata and actions.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-resource-list",
-      "route": "/pattern-resource-list"
+      "route": "/pattern-resource-list",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-detail",
@@ -260,9 +647,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Entity detail composition.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-detail",
-      "route": "/pattern-detail"
+      "route": "/pattern-detail",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-settings",
@@ -273,9 +687,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Sectioned settings composition.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-settings",
-      "route": "/pattern-settings"
+      "route": "/pattern-settings",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-form",
@@ -286,9 +727,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "General application form composition.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-form",
-      "route": "/pattern-form"
+      "route": "/pattern-form",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-filter-form",
@@ -299,9 +767,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Operational filter composition.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-filter-form",
-      "route": "/pattern-filter-form"
+      "route": "/pattern-filter-form",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-assignments",
@@ -312,9 +807,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Bounded assignment flows.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-assignments",
-      "route": "/pattern-assignments"
+      "route": "/pattern-assignments",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-feedback-states",
@@ -325,9 +847,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Route-level feedback states.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-feedback-states",
-      "route": "/pattern-feedback-states"
+      "route": "/pattern-feedback-states",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-admin-shell",
@@ -338,9 +887,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Admin workspace composition.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-admin-shell",
-      "route": "/pattern-admin-shell"
+      "route": "/pattern-admin-shell",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "pattern-customer-portal",
@@ -351,9 +927,36 @@
       "type": "pattern",
       "renderer": "example",
       "description": "Customer portal composition.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
       "exampleId": "pattern-customer-portal",
-      "route": "/pattern-customer-portal"
+      "route": "/pattern-customer-portal",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "data-grid",
@@ -364,13 +967,40 @@
       "type": "advanced-module",
       "renderer": "markdown",
       "description": "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "packages/ui-data-grid/README.md",
       "tags": [
         "data",
         "grid",
         "react"
       ],
-      "route": "/data-grid"
+      "route": "/data-grid",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-basic",
@@ -381,9 +1011,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Rows, columns, search, sort, and pagination.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-basic",
-      "route": "/grid-basic"
+      "route": "/grid-basic",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-columns",
@@ -394,9 +1051,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Visibility, order, density, and reset behavior.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-columns",
-      "route": "/grid-columns"
+      "route": "/grid-columns",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-filtering",
@@ -407,9 +1091,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Search and filter state examples.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-filtering",
-      "route": "/grid-filtering"
+      "route": "/grid-filtering",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-selection",
@@ -420,9 +1131,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Selectable rows, disabled rows, and bulk actions.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-selection",
-      "route": "/grid-selection"
+      "route": "/grid-selection",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-grouping",
@@ -433,9 +1171,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Client-side grouping examples.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-grouping",
-      "route": "/grid-grouping"
+      "route": "/grid-grouping",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-resizing",
@@ -446,9 +1211,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Resizable columns and horizontal overflow.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-resizing",
-      "route": "/grid-resizing"
+      "route": "/grid-resizing",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-themes",
@@ -459,9 +1251,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Theme and shared-token alignment.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-themes",
-      "route": "/grid-themes"
+      "route": "/grid-themes",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-states",
@@ -472,9 +1291,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Empty, error, and loading states.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-states",
-      "route": "/grid-states"
+      "route": "/grid-states",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "grid-stress",
@@ -485,9 +1331,36 @@
       "type": "advanced-module",
       "renderer": "example",
       "description": "Many rows and columns without virtualization.",
+      "releaseLine": "data-grid-alpha",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
       "exampleId": "grid-stress",
-      "route": "/grid-stress"
+      "route": "/grid-stress",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "data-grid-alpha",
+          "version": "0.1.0-alpha.2",
+          "status": "unavailable"
+        }
+      ]
     },
     {
       "id": "package-reference",
@@ -498,12 +1371,39 @@
       "type": "package",
       "renderer": "package-reference",
       "description": "Understand package responsibilities, public entrypoints, and release tracks.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/metadata/packages.json",
       "tags": [
         "packages",
         "api"
       ],
-      "route": "/package-reference"
+      "route": "/package-reference",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     },
     {
       "id": "releases",
@@ -514,13 +1414,40 @@
       "type": "release",
       "renderer": "markdown",
       "description": "Understand release channels, framework support, limitations, and upgrade guidance.",
+      "releaseLine": "non-grid-beta",
       "sourcePath": "docs/release/multi-framework-migration-and-limitations.md",
       "tags": [
         "release",
         "migration",
         "compatibility"
       ],
-      "route": "/releases"
+      "route": "/releases",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
     }
   ],
   "recordDomains": [

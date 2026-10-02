@@ -26,6 +26,14 @@ function releaseLine({
       tagTemplate: "{releaseLineId}/v{version}",
       releaseNameTemplate: "{releaseLineId} v{version}",
     },
+    documentation: {
+      readiness: {
+        "native-html": "internal-not-ready",
+        react: "internal-not-ready",
+        angular: "internal-not-ready",
+        vue: "internal-not-ready",
+      },
+    },
     validation: {
       artifacts: true,
       provenance: true,

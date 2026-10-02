@@ -19,6 +19,14 @@
         "publishable": true,
         "publishTogether": true
       },
+      "documentation": {
+        "readiness": {
+          "native-html": "preview",
+          "react": "preview",
+          "angular": "preview",
+          "vue": "preview"
+        }
+      },
       "tagIdentity": {
         "scope": "release-line",
         "legacyPolicy": "preserve-only",
@@ -179,6 +187,14 @@
       "publication": {
         "publishable": true,
         "publishTogether": false
+      },
+      "documentation": {
+        "readiness": {
+          "native-html": "unavailable",
+          "react": "preview",
+          "angular": "unavailable",
+          "vue": "unavailable"
+        }
       },
       "tagIdentity": {
         "scope": "release-line",

@@ -2,6 +2,12 @@ import releaseGroupsRaw from "../../../docs/metadata/release-groups.json?raw";
 import multiFrameworkRaw from "../../../docs/metadata/multi-framework.json?raw";
 import referenceModelRaw from "../../../docs/generated/reference-model.json?raw";
 import {
+  filterVersionsForFramework,
+  getFrameworkReadiness,
+  isDocumentationReadyStatus,
+  type DocumentationReadinessStatus,
+} from "../../../docs/reference/documentationAvailability";
+import {
   getReferenceFramework,
   getReferenceLocationHref,
   parseReferenceModel,
@@ -27,12 +33,14 @@ export type DocsVersion = {
   path: string;
   tag?: string;
   legacy?: boolean;
+  frameworkReadiness: Record<DocsFrameworkId, DocumentationReadinessStatus>;
 };
 
 export type ReleaseLineVersion = {
   id: string;
   channel: string;
   version: string;
+  frameworkReadiness: Record<DocsFrameworkId, DocumentationReadinessStatus>;
 };
 
 type ReleaseGroupsMetadata = {
@@ -41,6 +49,9 @@ type ReleaseGroupsMetadata = {
     {
       channel: string;
       version: string;
+      documentation: {
+        readiness: Record<DocsFrameworkId, DocumentationReadinessStatus>;
+      };
     }
   >;
 };
@@ -61,6 +72,7 @@ type VersionCatalogEntry = {
   docsPath: string;
   tag?: string;
   legacy?: boolean;
+  frameworkReadiness: Record<DocsFrameworkId, DocumentationReadinessStatus>;
 };
 
 type DocsVersionManifest = {
@@ -102,6 +114,7 @@ export const releaseLineVersions: ReleaseLineVersion[] = Object.entries(
   id,
   channel: releaseLine.channel,
   version: releaseLine.version,
+  frameworkReadiness: releaseLine.documentation.readiness,
 }));
 
 const primaryReleaseLine =
@@ -126,6 +139,7 @@ const nextDocsVersion: DocsVersion = {
   channel: "next",
   version: primaryReleaseLine.version,
   path: "/",
+  frameworkReadiness: primaryReleaseLine.frameworkReadiness,
 };
 
 function configuredDocsVersion(): DocsVersion | null {
@@ -143,12 +157,18 @@ function configuredDocsVersion(): DocsVersion | null {
     primaryReleaseLine.channel;
   const path =
     import.meta.env.BASE_URL || `/versions/${releaseLine}/v${version}/`;
+  const configuredReleaseLine = releaseLineVersions.find(
+    (candidate) => candidate.id === releaseLine,
+  );
   const configured = {
     id,
     releaseLine,
     channel,
     version,
     path,
+    frameworkReadiness:
+      configuredReleaseLine?.frameworkReadiness ??
+      primaryReleaseLine.frameworkReadiness,
   };
 
   return {
@@ -183,6 +203,24 @@ export function getDocsVersion(
   );
 }
 
+export function getDocumentationReadiness(
+  version: DocsVersion,
+  frameworkId: DocsFrameworkId,
+) {
+  return getFrameworkReadiness(version, frameworkId);
+}
+
+export function isDocumentationReady(status: DocumentationReadinessStatus) {
+  return isDocumentationReadyStatus(status);
+}
+
+export function getDocsVersionsForFramework(
+  frameworkId: DocsFrameworkId,
+  versions = docsVersions,
+) {
+  return filterVersionsForFramework(versions, frameworkId) as DocsVersion[];
+}
+
 export function getCurrentDocsVersionId() {
   const configuredVersionId = import.meta.env.VITE_DOCS_VERSION_ID as
     string | undefined;
@@ -214,7 +252,7 @@ export async function loadDocsVersions() {
 
     const manifest = (await response.json()) as DocsVersionManifest;
     if (
-      manifest.schemaVersion !== 2 ||
+      manifest.schemaVersion !== 3 ||
       !manifest.current?.docsPath ||
       !Array.isArray(manifest.releases)
     ) {
@@ -229,6 +267,7 @@ export async function loadDocsVersions() {
       path: entry.docsPath,
       tag: entry.tag,
       legacy: entry.legacy,
+      frameworkReadiness: entry.frameworkReadiness,
     }));
     const unique = new Map<string, DocsVersion>();
     for (const version of entries) {

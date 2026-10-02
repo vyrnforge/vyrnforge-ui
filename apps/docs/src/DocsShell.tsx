@@ -9,6 +9,9 @@ import {
 import type { ReferenceRecordSelection } from "./App";
 import {
   docsFrameworks,
+  getDocumentationReadiness,
+  getDocsVersionsForFramework,
+  isDocumentationReady,
   getVersionHref,
   type DocsFramework,
   type DocsFrameworkId,
@@ -44,6 +47,23 @@ export function DocsShell({
   routeMember,
   routePath,
 }: DocsShellProps) {
+  const frameworkVersions = getDocsVersionsForFramework(
+    framework.id,
+    docsVersions,
+  );
+  const currentReadiness = getDocumentationReadiness(docsVersion, framework.id);
+  const versionOptions = isDocumentationReady(currentReadiness)
+    ? frameworkVersions
+    : [
+        {
+          ...docsVersion,
+          label: `${docsVersion.label} · ${currentReadiness}`,
+        },
+        ...frameworkVersions.filter(
+          (candidate) => candidate.id !== docsVersion.id,
+        ),
+      ];
+
   return (
     <AppShell
       className="vf-docs-shell"
@@ -63,30 +83,6 @@ export function DocsShell({
           actions={
             <div className="vf-docs-header__nav">
               <Select
-                aria-label="Documentation version"
-                onChange={(event) => {
-                  const version = docsVersions.find(
-                    (candidate) => candidate.id === event.currentTarget.value,
-                  );
-                  if (version && version.id !== docsVersion.id) {
-                    window.location.assign(
-                      getVersionHref(
-                        version,
-                        framework.id,
-                        routePath,
-                        routeMember,
-                      ),
-                    );
-                  }
-                }}
-                options={docsVersions.map((version) => ({
-                  label: version.label,
-                  value: version.id,
-                }))}
-                size="sm"
-                value={docsVersion.id}
-              />
-              <Select
                 aria-label="Framework"
                 onChange={(event) =>
                   onFrameworkChange(
@@ -99,6 +95,36 @@ export function DocsShell({
                 }))}
                 size="sm"
                 value={framework.id}
+              />
+              <Select
+                aria-label="Documentation version"
+                onChange={(event) => {
+                  const version = versionOptions.find(
+                    (candidate) => candidate.id === event.currentTarget.value,
+                  );
+                  if (
+                    version &&
+                    version.id !== docsVersion.id &&
+                    isDocumentationReady(
+                      getDocumentationReadiness(version, framework.id),
+                    )
+                  ) {
+                    window.location.assign(
+                      getVersionHref(
+                        version,
+                        framework.id,
+                        routePath,
+                        routeMember,
+                      ),
+                    );
+                  }
+                }}
+                options={versionOptions.map((version) => ({
+                  label: version.label,
+                  value: version.id,
+                }))}
+                size="sm"
+                value={docsVersion.id}
               />
               <a className="vf-docs-top-link" href="#/executable-examples">
                 Examples
