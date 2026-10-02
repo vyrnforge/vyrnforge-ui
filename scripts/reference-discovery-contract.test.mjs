@@ -50,6 +50,11 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert(registry.pages.some((page) => page.id === "pattern-reference"));
   assert(registry.pages.some((page) => page.id === "package-reference"));
   assert(registry.recordDomains.some((domain) => domain.id === "components"));
+  assert(registry.searchRecords.some((record) => record.kind === "api-member"));
+  assert(registry.indexes.bySection.length > 0);
+  assert(registry.indexes.byType.length > 0);
+  assert(registry.sitemap.length > 0);
+  assert(registry.relatedContentInputs.length === registry.pages.length);
 
   const adapter = read("apps/docs/src/discoveryData.ts");
   for (const marker of ["design-tokens.json?raw", "patterns.json?raw"]) {
@@ -69,6 +74,11 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   const nav = read("apps/docs/src/DocsNav.tsx");
   assert.match(nav, /docsRoutes/);
   assert.match(nav, /publicDocsSections/);
+  assert.match(nav, /documentationSearchRecords/);
+  assert.match(nav, /routeIsAvailable/);
+  assert.match(nav, /version/);
   assert.match(nav, /VyrnForge documentation/);
   assert.match(nav, /Filter docs/u);
+  assert.doesNotMatch(nav, /framework-api-reference\.json\?raw/u);
+  assert.doesNotMatch(nav, /componentReferenceRecords/u);
 });
