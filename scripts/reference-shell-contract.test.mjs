@@ -143,7 +143,8 @@ test("component pages bind generated API to the selected framework and version",
   const docsStyles = read("apps/docs/src/styles/docs.css");
 
   assert.match(componentReference, /frameworkApiReferenceRaw/u);
-  assert.match(componentReference, /framework\?\.apiSurface/u);
+  assert.match(componentReference, /resolveDocumentationApi/u);
+  assert.match(componentReference, /apiResolution/u);
   assert.match(componentReference, /contextualApi/u);
   assert.match(componentReference, /version: string/u);
   assert.doesNotMatch(componentReference, /frameworkTabs/u);
