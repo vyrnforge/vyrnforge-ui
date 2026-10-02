@@ -51,10 +51,7 @@ export function DocsShell({
     framework.id,
     docsVersions,
   );
-  const currentReadiness = getDocumentationReadiness(
-    docsVersion,
-    framework.id,
-  );
+  const currentReadiness = getDocumentationReadiness(docsVersion, framework.id);
   const versionOptions = isDocumentationReady(currentReadiness)
     ? frameworkVersions
     : [
