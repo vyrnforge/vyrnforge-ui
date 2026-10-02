@@ -21,10 +21,7 @@ test("Documentation Registry is generated from canonical page and Reference meta
   assert(registry.indexes.bySection.length === registry.sections.length);
   assert(registry.indexes.byType.length === registry.documentTypes.length);
   assert(registry.sitemap.length > registry.pages.length);
-  assert.equal(
-    registry.relatedContentInputs.length,
-    registry.pages.length,
-  );
+  assert.equal(registry.relatedContentInputs.length, registry.pages.length);
 
   const ids = registry.pages.map((page) => page.id);
   assert.equal(new Set(ids).size, ids.length);
@@ -105,7 +102,6 @@ test("Documentation page metadata rejects unknown sections", () => {
     /references unknown section missing/u,
   );
 });
-
 
 test("Documentation Registry discovery records stay framework/version scoped", () => {
   const registry = buildDocumentationRegistry();
