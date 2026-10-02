@@ -1,65 +1,90 @@
+import type { ComponentType } from "react";
 import { Card, Heading, Text } from "@vyrnforge/ui-components";
-import { CssOverridePage } from "./pages/core/CssOverridePage";
-import { DensityPage } from "./pages/core/DensityPage";
-import { ThemeModesPage } from "./pages/core/ThemeModesPage";
-import { ThemeTokensPage } from "./pages/core/ThemeTokensPage";
-import { BasicGridPage } from "./pages/data-grid/BasicGridPage";
-import { ColumnsPage } from "./pages/data-grid/ColumnsPage";
-import { FilteringPage } from "./pages/data-grid/FilteringPage";
-import { GridStatesPage } from "./pages/data-grid/GridStatesPage";
-import { GroupingPage } from "./pages/data-grid/GroupingPage";
-import { ResizingPage } from "./pages/data-grid/ResizingPage";
-import { SelectionPage } from "./pages/data-grid/SelectionPage";
-import { StressGridPage } from "./pages/data-grid/StressGridPage";
-import { ThemesGridPage } from "./pages/data-grid/ThemesGridPage";
-import { AdminShellPage } from "./pages/patterns/AdminShellPage";
-import { AssignmentPatternsPage } from "./pages/patterns/AssignmentPatternsPage";
-import { CustomerPortalShellPage } from "./pages/patterns/CustomerPortalShellPage";
-import { DetailPage } from "./pages/patterns/DetailPage";
-import { EmptyErrorLoadingPage } from "./pages/patterns/EmptyErrorLoadingPage";
-import { FilterFormPage } from "./pages/patterns/FilterFormPage";
-import { FormPage } from "./pages/patterns/FormPage";
-import { ResourceListPage } from "./pages/patterns/ResourceListPage";
-import { SettingsPage } from "./pages/patterns/SettingsPage";
+import type { DocsFrameworkId } from "../docsContext";
+import { resolveDocumentationExample } from "../referenceRoutes";
+import { CodeBlock } from "./components/CodeBlock";
 
-const examples = {
-  "theme-tokens": ThemeTokensPage,
-  "theme-modes": ThemeModesPage,
-  density: DensityPage,
-  "css-overrides": CssOverridePage,
-  "grid-basic": BasicGridPage,
-  "grid-columns": ColumnsPage,
-  "grid-filtering": FilteringPage,
-  "grid-selection": SelectionPage,
-  "grid-grouping": GroupingPage,
-  "grid-resizing": ResizingPage,
-  "grid-themes": ThemesGridPage,
-  "grid-states": GridStatesPage,
-  "grid-stress": StressGridPage,
-  "pattern-resource-list": ResourceListPage,
-  "pattern-detail": DetailPage,
-  "pattern-settings": SettingsPage,
-  "pattern-form": FormPage,
-  "pattern-filter-form": FilterFormPage,
-  "pattern-assignments": AssignmentPatternsPage,
-  "pattern-feedback-states": EmptyErrorLoadingPage,
-  "pattern-admin-shell": AdminShellPage,
-  "pattern-customer-portal": CustomerPortalShellPage,
-} as const;
+const exampleModules = import.meta.glob("./pages/**/*.tsx", {
+  eager: true,
+}) as Record<string, Record<string, unknown>>;
+
+const exampleSources = import.meta.glob("./pages/**/*.tsx", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+function exampleModuleKey(sourcePath: string) {
+  const prefix = "apps/docs/src/examples/";
+  if (!sourcePath.startsWith(prefix)) {
+    throw new Error(
+      `Documentation example source is outside the Docs example tree: ${sourcePath}`,
+    );
+  }
+  return `./${sourcePath.slice(prefix.length)}`;
+}
+
+function exampleComponent(sourcePath: string) {
+  const moduleKey = exampleModuleKey(sourcePath);
+  const module = exampleModules[moduleKey];
+  if (!module) {
+    throw new Error(
+      `Generated documentation example module is missing: ${sourcePath}`,
+    );
+  }
+
+  const candidates = Object.entries(module).filter(
+    ([name, value]) => name.endsWith("Page") && typeof value === "function",
+  );
+  if (candidates.length !== 1) {
+    throw new Error(
+      `Documentation example ${sourcePath} must export exactly one *Page component.`,
+    );
+  }
+  return candidates[0][1] as ComponentType;
+}
 
 export type MigratedExamplePageProps = {
   exampleId: string;
-  sourcePath: string;
+  frameworkId: DocsFrameworkId;
+  version: string;
 };
 
 export function MigratedExamplePage({
   exampleId,
-  sourcePath,
+  frameworkId,
+  version,
 }: MigratedExamplePageProps) {
-  const Example = examples[exampleId as keyof typeof examples];
+  const resolution = resolveDocumentationExample(
+    exampleId,
+    frameworkId,
+    version,
+  );
 
-  if (!Example) {
-    return <Text tone="muted">This documentation example is unavailable.</Text>;
+  if (!resolution.available) {
+    const alternatives = resolution.alternatives
+      .map(
+        (implementation) =>
+          `${implementation.framework} ${implementation.version}`,
+      )
+      .join(", ");
+
+    return (
+      <Text tone="muted">
+        This example is unavailable for {frameworkId} {version}.
+        {alternatives ? ` Available implementations: ${alternatives}.` : ""}
+      </Text>
+    );
+  }
+
+  const { implementation } = resolution;
+  const Example = exampleComponent(implementation.sourcePath);
+  const moduleKey = exampleModuleKey(implementation.sourcePath);
+  const source = exampleSources[moduleKey];
+  if (typeof source !== "string") {
+    throw new Error(
+      `Generated documentation example source text is missing: ${implementation.sourcePath}`,
+    );
   }
 
   return (
@@ -74,9 +99,8 @@ export function MigratedExamplePage({
             Interactive example
           </Heading>
           <Text tone="muted">
-            This example runs directly inside the VyrnForge documentation app
-            and shares the same navigation, framework context, theme, and
-            runtime as the rest of the documentation.
+            This example is resolved from the generated Documentation Registry
+            for the selected framework and documentation version.
           </Text>
           <div className="vf-docs-example-stage">
             <Example />
@@ -91,11 +115,10 @@ export function MigratedExamplePage({
           <Heading level={3} size="md">
             Source
           </Heading>
-          <Text tone="muted">
-            The example is maintained with the documentation source rather than
-            in a separate Playground application.
+          <Text size="sm" tone="muted">
+            <code>{implementation.sourcePath}</code>
           </Text>
-          <code>{sourcePath}</code>
+          <CodeBlock code={source} />
         </Card>
       </div>
 
