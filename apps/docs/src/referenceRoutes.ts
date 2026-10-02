@@ -68,11 +68,11 @@ const markdownSources = {
 function markdownContent(page: RegistryPage) {
   if (page.renderer !== "markdown") return undefined;
 
-  const importKey = \`../../../\${page.sourcePath}\`;
+  const importKey = `../../../${page.sourcePath}`;
   const content = markdownSources[importKey];
   if (typeof content !== "string") {
     throw new Error(
-      \`Generated documentation page \${page.id} is missing markdown source \${page.sourcePath}.\`,
+      `Generated documentation page ${page.id} is missing markdown source ${page.sourcePath}.`,
     );
   }
   return content;
