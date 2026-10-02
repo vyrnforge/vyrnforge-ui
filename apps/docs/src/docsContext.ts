@@ -40,10 +40,7 @@ export type ReleaseLineVersion = {
   id: string;
   channel: string;
   version: string;
-  frameworkReadiness: Record<
-    DocsFrameworkId,
-    DocumentationReadinessStatus
-  >;
+  frameworkReadiness: Record<DocsFrameworkId, DocumentationReadinessStatus>;
 };
 
 type ReleaseGroupsMetadata = {
@@ -53,10 +50,7 @@ type ReleaseGroupsMetadata = {
       channel: string;
       version: string;
       documentation: {
-        readiness: Record<
-          DocsFrameworkId,
-          DocumentationReadinessStatus
-        >;
+        readiness: Record<DocsFrameworkId, DocumentationReadinessStatus>;
       };
     }
   >;
@@ -216,9 +210,7 @@ export function getDocumentationReadiness(
   return getFrameworkReadiness(version, frameworkId);
 }
 
-export function isDocumentationReady(
-  status: DocumentationReadinessStatus,
-) {
+export function isDocumentationReady(status: DocumentationReadinessStatus) {
   return isDocumentationReadyStatus(status);
 }
 
