@@ -66,9 +66,53 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.doesNotMatch(routes, /id: "pattern-reference"/u);
   assert.doesNotMatch(routes, /id: "package-reference"/u);
 
+  const discovery = read("docs/reference/documentationDiscovery.ts");
+  for (const marker of [
+    "getDocumentationNavigation",
+    "getDocumentationIndexes",
+    "getDocumentationSearchRecords",
+    "getDocumentationRelatedContent",
+    "getDocumentationSitemap",
+    "getDocumentationDeepLinks",
+  ]) {
+    assert(
+      discovery.includes(marker),
+      `shared documentation discovery is missing ${marker}`,
+    );
+  }
+  assert.match(discovery, /entry\.framework === frameworkId/u);
+  assert.match(discovery, /entry\.version === version/u);
+  assert.match(discovery, /recordDomain: "components"/u);
+  assert.match(discovery, /api-member/u);
+
+  assert.match(routes, /getDocumentationNavigation/u);
+  assert.match(routes, /getDocumentationSearchRecords/u);
+  assert.match(routes, /documentationSitemap/u);
+  assert.match(routes, /documentationDeepLinks/u);
+
   const nav = read("apps/docs/src/DocsNav.tsx");
-  assert.match(nav, /docsRoutes/);
-  assert.match(nav, /publicDocsSections/);
+  assert.match(nav, /getDocsNavigation\(frameworkId, version\)/u);
+  assert.match(nav, /getDocsSearchRecords\(frameworkId, version\)/u);
+  assert.match(nav, /componentReferenceTargetHref/u);
+  assert.doesNotMatch(nav, /framework-api-reference\.json\?raw/u);
+  assert.doesNotMatch(nav, /componentReferenceRecords/u);
+  assert.doesNotMatch(nav, /publicDocsSections/u);
   assert.match(nav, /VyrnForge documentation/);
   assert.match(nav, /Filter docs/u);
+
+  const shell = read("apps/docs/src/DocsShell.tsx");
+  assert.match(shell, /version=\{docsVersion\.version\}/u);
+
+  const gridPage = registry.pages.find((page) => page.id === "data-grid");
+  assert(gridPage);
+  assert(
+    gridPage.availability.some(
+      (entry) => entry.framework === "react" && entry.status === "preview",
+    ),
+  );
+  assert(
+    gridPage.availability.some(
+      (entry) => entry.framework === "vue" && entry.status === "unavailable",
+    ),
+  );
 });
