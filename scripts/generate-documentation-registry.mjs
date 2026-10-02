@@ -47,7 +47,7 @@ function assertUnique(entries, field, label) {
   for (const entry of entries) {
     const value = entry[field];
     if (seen.has(value)) {
-      throw new Error(\`Duplicate \${label} \${field}: \${value}\`);
+      throw new Error(`Duplicate ${label} ${field}: ${value}`);
     }
     seen.add(value);
   }
@@ -76,34 +76,34 @@ export function validateDocumentationPagesMetadata(
   for (const page of metadata.pages) {
     if (!sectionIds.has(page.section)) {
       throw new Error(
-        \`Documentation page \${page.id} references unknown section \${page.section}.\`,
+        `Documentation page ${page.id} references unknown section ${page.section}.`,
       );
     }
     if (!allowedRenderers.has(page.renderer)) {
       throw new Error(
-        \`Documentation page \${page.id} has unsupported renderer \${page.renderer}.\`,
+        `Documentation page ${page.id} has unsupported renderer ${page.renderer}.`,
       );
     }
     if (!page.type || !page.sourcePath) {
       throw new Error(
-        \`Documentation page \${page.id} requires type and sourcePath.\`,
+        `Documentation page ${page.id} requires type and sourcePath.`,
       );
     }
     if (!existsSync(path.join(root, page.sourcePath))) {
       throw new Error(
-        \`Documentation page \${page.id} source is missing: \${page.sourcePath}\`,
+        `Documentation page ${page.id} source is missing: ${page.sourcePath}`,
       );
     }
     if (page.renderer === "example" && !page.exampleId) {
       throw new Error(
-        \`Documentation example page \${page.id} requires exampleId.\`,
+        `Documentation example page ${page.id} requires exampleId.`,
       );
     }
 
-    const orderKey = \`\${page.section}:\${page.order}\`;
+    const orderKey = `${page.section}:${page.order}`;
     if (orderKeys.has(orderKey)) {
       throw new Error(
-        \`Duplicate documentation order \${page.order} in section \${page.section}.\`,
+        `Duplicate documentation order ${page.order} in section ${page.section}.`,
       );
     }
     orderKeys.add(orderKey);
@@ -160,14 +160,14 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
     sections,
     pages: pages.map((page) => ({
       ...page,
-      route: \`/\${page.id}\`,
+      route: `/${page.id}`,
     })),
     recordDomains,
   };
 }
 
 export function serializeDocumentationRegistry(registry) {
-  return \`\${JSON.stringify(registry, null, 2)}\n\`;
+  return `${JSON.stringify(registry, null, 2)}\n`;
 }
 
 export function writeDocumentationRegistry({ root = repositoryRoot } = {}) {
@@ -187,7 +187,7 @@ export function verifyDocumentationRegistry({ root = repositoryRoot } = {}) {
   const outputPath = path.join(root, DOCUMENTATION_REGISTRY_PATH);
   if (!existsSync(outputPath)) {
     throw new Error(
-      \`\${DOCUMENTATION_REGISTRY_PATH} is missing; run node scripts/generate-documentation-registry.mjs.\`,
+      `${DOCUMENTATION_REGISTRY_PATH} is missing; run node scripts/generate-documentation-registry.mjs.`,
     );
   }
 
@@ -198,7 +198,7 @@ export function verifyDocumentationRegistry({ root = repositoryRoot } = {}) {
   );
   if (actual !== expected) {
     throw new Error(
-      \`\${DOCUMENTATION_REGISTRY_PATH} is stale; run node scripts/generate-documentation-registry.mjs.\`,
+      `${DOCUMENTATION_REGISTRY_PATH} is stale; run node scripts/generate-documentation-registry.mjs.`,
     );
   }
   return registry;
@@ -210,6 +210,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     ? verifyDocumentationRegistry()
     : writeDocumentationRegistry();
   console.log(
-    \`\${DOCUMENTATION_REGISTRY_PATH} \${checkOnly ? "is current" : "generated"} with \${registry.pages.length} pages, \${registry.recordDomains.length} record domains, and \${registry.sections.length} navigation sections.\`,
+    `${DOCUMENTATION_REGISTRY_PATH} ${checkOnly ? "is current" : "generated"} with ${registry.pages.length} pages, ${registry.recordDomains.length} record domains, and ${registry.sections.length} navigation sections.`,
   );
 }
