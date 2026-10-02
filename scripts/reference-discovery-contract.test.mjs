@@ -58,7 +58,8 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   );
   assert(
     registry.recordDomains.some(
-      (domain) => domain.id === "tokens" && domain.documentId === "token-reference",
+      (domain) =>
+        domain.id === "tokens" && domain.documentId === "token-reference",
     ),
   );
   assert(registry.searchRecords.some((record) => record.kind === "api-member"));
