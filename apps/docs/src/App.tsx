@@ -17,7 +17,7 @@ import {
   type DocsVersion,
 } from "./docsContext";
 import { DocsShell } from "./DocsShell";
-import { getRouteById } from "./referenceRoutes";
+import { getRouteById, resolveDocsRoute } from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
   domain: "components" | "packages" | "tokens" | "patterns";
@@ -147,7 +147,7 @@ export default function App() {
     };
   }, []);
 
-  const activeRoute = useMemo(
+  const baseRoute = useMemo(
     () => getRouteById(docsLocation.routeId),
     [docsLocation.routeId],
   );
@@ -156,6 +156,11 @@ export default function App() {
     () => getDocsVersion(getCurrentDocsVersionId(), docsVersions),
     [docsVersions],
   );
+  const routeResolution = useMemo(
+    () => resolveDocsRoute(baseRoute, frameworkId, docsVersion.version),
+    [baseRoute, docsVersion.version, frameworkId],
+  );
+  const activeRoute = routeResolution.route;
 
   const navigate = (context: ReferenceLocationContext) => {
     const nextDocsLocation = getDocsLocation(context);
@@ -214,6 +219,7 @@ export default function App() {
         onFrameworkChange={handleFrameworkChange}
         onRouteChange={handleRouteChange}
         referenceRecord={docsLocation.referenceRecord}
+        routeResolution={routeResolution}
         routeMember={docsLocation.referenceRecord?.member ?? null}
         routePath={docsLocation.pathname}
       />
