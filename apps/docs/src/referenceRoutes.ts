@@ -1,11 +1,29 @@
+import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
 import documentationRegistryRaw from "../../../docs/generated/documentation-registry.json?raw";
+import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
+import referenceModelRaw from "../../../docs/generated/reference-model.json?raw";
+import {
+  getDocumentationDeepLinks,
+  getDocumentationIndexes,
+  getDocumentationNavigation,
+  getDocumentationRelatedContent,
+  getDocumentationSearchRecords,
+  getDocumentationSitemap,
+  type DocumentationConsumerKnowledge,
+  type DocumentationDiscoveryFramework,
+  type DocumentationDiscoveryRegistry,
+  type DocumentationFrameworkApiReference,
+} from "../../../docs/reference/documentationDiscovery";
 import {
   resolveDocumentationDocument,
   type DocumentationAlternative,
   type DocumentationAvailabilityEntry,
   type DocumentationContentLayers,
 } from "../../../docs/reference/documentationResolver";
-import type { ReferenceFrameworkId } from "../../../docs/reference/referenceRuntime";
+import {
+  parseReferenceModel,
+  type ReferenceFrameworkId,
+} from "../../../docs/reference/referenceRuntime";
 
 export type DocsExampleCategory =
   "basic" | "appearance" | "state" | "composition" | "advanced";
@@ -117,6 +135,7 @@ export type PublicDocsSection = {
 
 type RegistryPage = Omit<DocsRoute, "kind" | "content"> & {
   renderer: DocsRouteKind;
+  route: string;
 };
 
 type DocumentationRegistry = {
@@ -130,9 +149,25 @@ type DocumentationRegistry = {
     order: number;
   }>;
   pages: RegistryPage[];
+  recordDomains: Array<{
+    id: string;
+    type: string;
+    routeTemplate: string;
+  }>;
 };
 
 const registry = JSON.parse(documentationRegistryRaw) as DocumentationRegistry;
+const discoveryRegistry = registry as DocumentationRegistry &
+  DocumentationDiscoveryRegistry;
+const discoveryReferenceModel = parseReferenceModel(referenceModelRaw);
+const discoveryFrameworks =
+  discoveryReferenceModel.frameworks as DocumentationDiscoveryFramework[];
+const discoveryFrameworkApi = JSON.parse(
+  frameworkApiReferenceRaw,
+) as DocumentationFrameworkApiReference;
+const discoveryConsumerKnowledge = JSON.parse(
+  consumerKnowledgeRaw,
+) as DocumentationConsumerKnowledge;
 
 if (registry.schemaVersion !== 2) {
   throw new Error("Unsupported generated Documentation Registry version.");
@@ -191,6 +226,55 @@ export const docsRoutes: DocsRoute[] = registry.pages.map(
 export const documentationExamples = registry.examples;
 export const documentationExampleCategories = registry.exampleCategories;
 export const documentationTemplates = registry.templates;
+
+export function getDocsNavigation(
+  frameworkId: ReferenceFrameworkId,
+  version: string,
+) {
+  return getDocumentationNavigation(discoveryRegistry, frameworkId, version);
+}
+
+export function getDocsIndexes(
+  frameworkId: ReferenceFrameworkId,
+  version: string,
+) {
+  return getDocumentationIndexes(discoveryRegistry, frameworkId, version);
+}
+
+export function getDocsSearchRecords(
+  frameworkId: ReferenceFrameworkId,
+  version: string,
+) {
+  return getDocumentationSearchRecords(
+    discoveryRegistry,
+    discoveryFrameworks,
+    discoveryFrameworkApi,
+    discoveryConsumerKnowledge,
+    frameworkId,
+    version,
+  );
+}
+
+export function getDocsRelatedContent(
+  frameworkId: ReferenceFrameworkId,
+  version: string,
+) {
+  return getDocumentationRelatedContent(
+    discoveryRegistry,
+    frameworkId,
+    version,
+  );
+}
+
+export const documentationSitemap =
+  getDocumentationSitemap(discoveryRegistry);
+
+export const documentationDeepLinks = getDocumentationDeepLinks(
+  discoveryRegistry,
+  discoveryFrameworks,
+  discoveryFrameworkApi,
+  discoveryConsumerKnowledge,
+);
 
 function isExampleImplementationReady(
   implementation: DocsExampleImplementation,
