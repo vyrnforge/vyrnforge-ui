@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveDocumentationPage } from "../docs/reference/documentationResolver.ts";
+import {\n  resolveDocumentationPage,\n} from "../docs/reference/documentationResolver.ts";
 
 const page = {
   id: "button",
@@ -59,7 +59,7 @@ test("resolver never falls back to another framework when selected content is un
   });
   assert.equal(result.kind, "unavailable");
   assert.equal(result.status, "unavailable");
-  assert.deepEqual(result.alternatives.map((entry) => entry.framework), ["react"]);
+  assert.deepEqual(\n    result.alternatives.map((entry) => entry.framework),\n    ["react"],\n  );
 });
 
 test("next resolves against the document's own current release line", () => {
