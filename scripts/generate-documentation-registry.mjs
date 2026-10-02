@@ -15,6 +15,23 @@ export const DOCUMENTATION_REGISTRY_PATH =
   "docs/generated/documentation-registry.json";
 export const RELEASE_GROUPS_PATH = "docs/metadata/release-groups.json";
 export const MULTI_FRAMEWORK_PATH = "docs/metadata/multi-framework.json";
+export const EXECUTABLE_EXAMPLES_PATH =
+  "docs/metadata/executable-examples.json";
+
+const documentationExampleCategories = new Set([
+  "basic",
+  "appearance",
+  "state",
+  "composition",
+  "advanced",
+]);
+
+const documentationExampleLanguage = {
+  "native-html": "html-typescript",
+  react: "tsx",
+  angular: "angular-typescript-template",
+  vue: "vue-sfc-typescript",
+};
 
 const documentationReadinessStates = new Set([
   "stable",
@@ -146,9 +163,14 @@ export function validateDocumentationPagesMetadata(
         `Documentation page ${page.id} source is missing: ${page.sourcePath}`,
       );
     }
-    if (page.renderer === "example" && !page.exampleId) {
+    if (
+      (page.renderer === "example" ||
+        page.renderer === "executable-examples") &&
+      (!page.exampleId ||
+        !documentationExampleCategories.has(page.exampleCategory))
+    ) {
       throw new Error(
-        `Documentation example page ${page.id} requires exampleId.`,
+        `Documentation example page ${page.id} requires exampleId and a valid exampleCategory.`,
       );
     }
 
@@ -173,6 +195,7 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
   const referenceModel = buildReferenceModel({ root });
   const releaseGroups = readJson(root, RELEASE_GROUPS_PATH);
   const multiFramework = readJson(root, MULTI_FRAMEWORK_PATH);
+  const executableExamples = readJson(root, EXECUTABLE_EXAMPLES_PATH);
   const frameworkIds = (multiFramework.frameworks ?? []).map(
     (framework) => framework.id,
   );
@@ -239,6 +262,62 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
       },
     }));
 
+  const documentationExamples = pages
+    .filter((page) => page.exampleId)
+    .map((page) => {
+      const releaseLine = releaseLineById.get(page.releaseLine);
+      const implementations =
+        page.renderer === "executable-examples"
+          ? frameworkIds.map((framework) => {
+              const evidence = executableExamples.frameworks?.[framework];
+              if (!evidence) {
+                throw new Error(
+                  `Executable documentation example ${page.exampleId} is missing ${framework} evidence.`,
+                );
+              }
+              const sourcePath = `${evidence.directory}/${evidence.entrypoint}`;
+              if (!existsSync(path.join(root, sourcePath))) {
+                throw new Error(
+                  `Executable documentation example ${page.exampleId} source is missing: ${sourcePath}`,
+                );
+              }
+              return {
+                framework,
+                version: releaseLine.version,
+                status: releaseLine.readiness[framework],
+                language: documentationExampleLanguage[framework],
+                sourcePath,
+                runnable: true,
+                renderable: true,
+                fixtureId: evidence.fixtureId,
+                verification: evidence.verification,
+              };
+            })
+          : [
+              {
+                framework: "react",
+                version: releaseLine.version,
+                status: releaseLine.readiness.react,
+                language: documentationExampleLanguage.react,
+                sourcePath: page.sourcePath,
+                runnable: true,
+                renderable: true,
+                verification: ["docs-host"],
+              },
+            ];
+
+      return {
+        id: page.exampleId,
+        documentId: page.id,
+        title: page.title,
+        category: page.exampleCategory,
+        order: page.order,
+        implementations,
+      };
+    });
+
+  assertUnique(documentationExamples, "id", "documentation example");
+
   const documentTypes = [
     ...new Set([
       ...pages.map((page) => page.type),
@@ -252,13 +331,16 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
       DOCUMENTATION_PAGES_PATH,
       RELEASE_GROUPS_PATH,
       MULTI_FRAMEWORK_PATH,
+      EXECUTABLE_EXAMPLES_PATH,
       "docs/generated/reference-model.json",
     ],
     documentationReadinessStates: [...documentationReadinessStates],
+    exampleCategories: [...documentationExampleCategories],
     releaseLines,
     documentTypes,
     templates: metadata.templates,
     sections,
+    examples: documentationExamples,
     pages: pages.map((page) => {
       const releaseLine = releaseLineById.get(page.releaseLine);
       return {

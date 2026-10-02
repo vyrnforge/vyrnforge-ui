@@ -4,6 +4,7 @@
     "docs/metadata/documentation-pages.json",
     "docs/metadata/release-groups.json",
     "docs/metadata/multi-framework.json",
+    "docs/metadata/executable-examples.json",
     "docs/generated/reference-model.json"
   ],
   "documentationReadinessStates": [
@@ -13,6 +14,13 @@
     "deprecated",
     "unavailable",
     "internal-not-ready"
+  ],
+  "exampleCategories": [
+    "basic",
+    "appearance",
+    "state",
+    "composition",
+    "advanced"
   ],
   "releaseLines": [
     {
@@ -208,6 +216,539 @@
       "order": 6
     }
   ],
+  "examples": [
+    {
+      "id": "framework-consumer",
+      "documentId": "executable-examples",
+      "title": "Framework Examples",
+      "category": "basic",
+      "order": 2,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "tests/consumers/react/src/main.tsx",
+          "runnable": true,
+          "renderable": true,
+          "fixtureId": "react",
+          "verification": [
+            "typecheck",
+            "build",
+            "runtime"
+          ]
+        },
+        {
+          "framework": "native-html",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "html-typescript",
+          "sourcePath": "tests/consumers/native-html/src/main.ts",
+          "runnable": true,
+          "renderable": true,
+          "fixtureId": "native-html",
+          "verification": [
+            "typecheck",
+            "build",
+            "runtime"
+          ]
+        },
+        {
+          "framework": "angular",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "angular-typescript-template",
+          "sourcePath": "tests/consumers/angular/src/app/app.component.html",
+          "runnable": true,
+          "renderable": true,
+          "fixtureId": "angular",
+          "verification": [
+            "typecheck",
+            "build",
+            "runtime"
+          ]
+        },
+        {
+          "framework": "vue",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "vue-sfc-typescript",
+          "sourcePath": "tests/consumers/vue/src/App.vue",
+          "runnable": true,
+          "renderable": true,
+          "fixtureId": "vue",
+          "verification": [
+            "typecheck",
+            "build",
+            "runtime"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theme-tokens",
+      "documentId": "theme-tokens",
+      "title": "Theme Tokens",
+      "category": "appearance",
+      "order": 2,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theme-modes",
+      "documentId": "theme-modes",
+      "title": "Theme Modes",
+      "category": "appearance",
+      "order": 3,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "density",
+      "documentId": "density",
+      "title": "Density",
+      "category": "appearance",
+      "order": 4,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/core/DensityPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "css-overrides",
+      "documentId": "css-overrides",
+      "title": "CSS Overrides",
+      "category": "appearance",
+      "order": 5,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-resource-list",
+      "documentId": "pattern-resource-list",
+      "title": "Resource List",
+      "category": "composition",
+      "order": 1,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/ResourceListPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-detail",
+      "documentId": "pattern-detail",
+      "title": "Detail Page",
+      "category": "composition",
+      "order": 2,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/DetailPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-settings",
+      "documentId": "pattern-settings",
+      "title": "Settings",
+      "category": "composition",
+      "order": 3,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/SettingsPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-form",
+      "documentId": "pattern-form",
+      "title": "Form",
+      "category": "composition",
+      "order": 4,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/FormPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-filter-form",
+      "documentId": "pattern-filter-form",
+      "title": "Filter Form",
+      "category": "composition",
+      "order": 5,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/FilterFormPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-assignments",
+      "documentId": "pattern-assignments",
+      "title": "Assignment Patterns",
+      "category": "composition",
+      "order": 6,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/AssignmentPatternsPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-feedback-states",
+      "documentId": "pattern-feedback-states",
+      "title": "Empty, Error & Loading",
+      "category": "state",
+      "order": 7,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/EmptyErrorLoadingPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-admin-shell",
+      "documentId": "pattern-admin-shell",
+      "title": "Admin Shell",
+      "category": "composition",
+      "order": 8,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/AdminShellPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern-customer-portal",
+      "documentId": "pattern-customer-portal",
+      "title": "Customer Portal Shell",
+      "category": "composition",
+      "order": 9,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.2.0-beta.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/patterns/CustomerPortalShellPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-basic",
+      "documentId": "grid-basic",
+      "title": "Basic Grid",
+      "category": "basic",
+      "order": 1,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/BasicGridPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-columns",
+      "documentId": "grid-columns",
+      "title": "Column Management",
+      "category": "advanced",
+      "order": 2,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/ColumnsPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-filtering",
+      "documentId": "grid-filtering",
+      "title": "Filtering",
+      "category": "state",
+      "order": 3,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/FilteringPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-selection",
+      "documentId": "grid-selection",
+      "title": "Selection",
+      "category": "state",
+      "order": 4,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/SelectionPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-grouping",
+      "documentId": "grid-grouping",
+      "title": "Grouping",
+      "category": "advanced",
+      "order": 5,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/GroupingPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-resizing",
+      "documentId": "grid-resizing",
+      "title": "Column Resizing",
+      "category": "advanced",
+      "order": 6,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/ResizingPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-themes",
+      "documentId": "grid-themes",
+      "title": "Grid Themes",
+      "category": "appearance",
+      "order": 7,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/ThemesGridPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-states",
+      "documentId": "grid-states",
+      "title": "Grid States",
+      "category": "state",
+      "order": 8,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/GridStatesPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grid-stress",
+      "documentId": "grid-stress",
+      "title": "Stress Grid",
+      "category": "advanced",
+      "order": 9,
+      "implementations": [
+        {
+          "framework": "react",
+          "version": "0.1.0-alpha.2",
+          "status": "preview",
+          "language": "tsx",
+          "sourcePath": "apps/docs/src/examples/pages/data-grid/StressGridPage.tsx",
+          "runnable": true,
+          "renderable": true,
+          "verification": [
+            "docs-host"
+          ]
+        }
+      ]
+    }
+  ],
   "pages": [
     {
       "id": "overview",
@@ -309,6 +850,8 @@
       "description": "Inspect the verified packed-consumer example for the selected framework.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "tests/consumers/manifest.json",
+      "exampleId": "framework-consumer",
+      "exampleCategory": "basic",
       "tags": [
         "examples",
         "native",
@@ -490,6 +1033,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
       "exampleId": "theme-tokens",
+      "exampleCategory": "appearance",
       "template": "foundation",
       "route": "/theme-tokens",
       "availability": [
@@ -531,6 +1075,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
       "exampleId": "theme-modes",
+      "exampleCategory": "appearance",
       "template": "foundation",
       "route": "/theme-modes",
       "availability": [
@@ -572,6 +1117,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/DensityPage.tsx",
       "exampleId": "density",
+      "exampleCategory": "appearance",
       "template": "foundation",
       "route": "/density",
       "availability": [
@@ -613,6 +1159,7 @@
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
       "exampleId": "css-overrides",
+      "exampleCategory": "appearance",
       "template": "foundation",
       "route": "/css-overrides",
       "availability": [
@@ -741,8 +1288,9 @@
       "renderer": "example",
       "description": "Compact resource lists with metadata and actions.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/ResourceListPage.tsx",
       "exampleId": "pattern-resource-list",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-resource-list",
       "availability": [
@@ -782,8 +1330,9 @@
       "renderer": "example",
       "description": "Entity detail composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/DetailPage.tsx",
       "exampleId": "pattern-detail",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-detail",
       "availability": [
@@ -823,8 +1372,9 @@
       "renderer": "example",
       "description": "Sectioned settings composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/SettingsPage.tsx",
       "exampleId": "pattern-settings",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-settings",
       "availability": [
@@ -864,8 +1414,9 @@
       "renderer": "example",
       "description": "General application form composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/FormPage.tsx",
       "exampleId": "pattern-form",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-form",
       "availability": [
@@ -905,8 +1456,9 @@
       "renderer": "example",
       "description": "Operational filter composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/FilterFormPage.tsx",
       "exampleId": "pattern-filter-form",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-filter-form",
       "availability": [
@@ -946,8 +1498,9 @@
       "renderer": "example",
       "description": "Bounded assignment flows.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/AssignmentPatternsPage.tsx",
       "exampleId": "pattern-assignments",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-assignments",
       "availability": [
@@ -987,8 +1540,9 @@
       "renderer": "example",
       "description": "Route-level feedback states.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/EmptyErrorLoadingPage.tsx",
       "exampleId": "pattern-feedback-states",
+      "exampleCategory": "state",
       "template": "pattern",
       "route": "/pattern-feedback-states",
       "availability": [
@@ -1028,8 +1582,9 @@
       "renderer": "example",
       "description": "Admin workspace composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/AdminShellPage.tsx",
       "exampleId": "pattern-admin-shell",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-admin-shell",
       "availability": [
@@ -1069,8 +1624,9 @@
       "renderer": "example",
       "description": "Customer portal composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
+      "sourcePath": "apps/docs/src/examples/pages/patterns/CustomerPortalShellPage.tsx",
       "exampleId": "pattern-customer-portal",
+      "exampleCategory": "composition",
       "template": "pattern",
       "route": "/pattern-customer-portal",
       "availability": [
@@ -1155,8 +1711,9 @@
       "renderer": "example",
       "description": "Rows, columns, search, sort, and pagination.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/BasicGridPage.tsx",
       "exampleId": "grid-basic",
+      "exampleCategory": "basic",
       "template": "advanced-module",
       "route": "/grid-basic",
       "availability": [
@@ -1196,8 +1753,9 @@
       "renderer": "example",
       "description": "Visibility, order, density, and reset behavior.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/ColumnsPage.tsx",
       "exampleId": "grid-columns",
+      "exampleCategory": "advanced",
       "template": "advanced-module",
       "route": "/grid-columns",
       "availability": [
@@ -1237,8 +1795,9 @@
       "renderer": "example",
       "description": "Search and filter state examples.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/FilteringPage.tsx",
       "exampleId": "grid-filtering",
+      "exampleCategory": "state",
       "template": "advanced-module",
       "route": "/grid-filtering",
       "availability": [
@@ -1278,8 +1837,9 @@
       "renderer": "example",
       "description": "Selectable rows, disabled rows, and bulk actions.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/SelectionPage.tsx",
       "exampleId": "grid-selection",
+      "exampleCategory": "state",
       "template": "advanced-module",
       "route": "/grid-selection",
       "availability": [
@@ -1319,8 +1879,9 @@
       "renderer": "example",
       "description": "Client-side grouping examples.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/GroupingPage.tsx",
       "exampleId": "grid-grouping",
+      "exampleCategory": "advanced",
       "template": "advanced-module",
       "route": "/grid-grouping",
       "availability": [
@@ -1360,8 +1921,9 @@
       "renderer": "example",
       "description": "Resizable columns and horizontal overflow.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/ResizingPage.tsx",
       "exampleId": "grid-resizing",
+      "exampleCategory": "advanced",
       "template": "advanced-module",
       "route": "/grid-resizing",
       "availability": [
@@ -1401,8 +1963,9 @@
       "renderer": "example",
       "description": "Theme and shared-token alignment.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/ThemesGridPage.tsx",
       "exampleId": "grid-themes",
+      "exampleCategory": "appearance",
       "template": "advanced-module",
       "route": "/grid-themes",
       "availability": [
@@ -1442,8 +2005,9 @@
       "renderer": "example",
       "description": "Empty, error, and loading states.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/GridStatesPage.tsx",
       "exampleId": "grid-states",
+      "exampleCategory": "state",
       "template": "advanced-module",
       "route": "/grid-states",
       "availability": [
@@ -1483,8 +2047,9 @@
       "renderer": "example",
       "description": "Many rows and columns without virtualization.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/StressGridPage.tsx",
       "exampleId": "grid-stress",
+      "exampleCategory": "advanced",
       "template": "advanced-module",
       "route": "/grid-stress",
       "availability": [

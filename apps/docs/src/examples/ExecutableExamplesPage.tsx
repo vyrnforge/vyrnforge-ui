@@ -1,14 +1,36 @@
 import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
+import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
 import { getExecutableExampleRecord } from "./data/executableExampleContract";
 
 export function ExecutableExamplesPage({
   frameworkId,
+  version,
 }: {
   frameworkId: DocsFrameworkId;
+  version: string;
 }) {
+  const resolution = resolveDocumentationExample(
+    "framework-consumer",
+    frameworkId,
+    version,
+  );
+
+  if (!resolution.available) {
+    return (
+      <Text tone="muted">
+        The packed consumer example is unavailable for {frameworkId} {version}.
+      </Text>
+    );
+  }
+
   const example = getExecutableExampleRecord(frameworkId);
+  if (example.sourcePath !== resolution.implementation.sourcePath) {
+    throw new Error(
+      `Generated example registry source for ${frameworkId} has drifted from packed consumer evidence.`,
+    );
+  }
 
   return (
     <div className="vf-docs-reference-layout">
@@ -30,7 +52,7 @@ export function ExecutableExamplesPage({
             Executable source
           </Heading>
           <Text size="sm" tone="muted">
-            <code>{example.sourcePath}</code>
+            <code>{resolution.implementation.sourcePath}</code>
           </Text>
           <CodeBlock code={example.source} />
         </Card>
