@@ -8,7 +8,7 @@ import { MigratedExamplePage } from "./examples/MigratedExamplePage";
 import { MarkdownView } from "./MarkdownView";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
-import type { DocsRoute } from "./referenceRoutes";
+import type { DocsRoute, DocsRouteResolution } from "./referenceRoutes";
 
 type DocsPageProps = {
   route: DocsRoute;
@@ -16,6 +16,7 @@ type DocsPageProps = {
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
+  routeResolution: DocsRouteResolution;
 };
 
 export function DocsPage({
@@ -24,7 +25,36 @@ export function DocsPage({
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
+  routeResolution,
 }: DocsPageProps) {
+  if (!routeResolution.available) {
+    const alternatives = routeResolution.alternatives
+      .map(
+        (alternative) =>
+          `${alternative.frameworkId} ${alternative.version} (${alternative.status})`,
+      )
+      .join(", ");
+
+    return (
+      <main className="vf-docs-page">
+        <div className="vf-docs-page__intro">
+          <PageHeader
+            description="This document is not available for the selected framework and documentation version."
+            title={route.title}
+          />
+        </div>
+        <p>
+          Availability: <strong>{routeResolution.status}</strong>
+        </p>
+        {alternatives ? (
+          <p>Available alternatives: {alternatives}.</p>
+        ) : (
+          <p>No published documentation alternative is currently available.</p>
+        )}
+      </main>
+    );
+  }
+
   if (route.kind === "overview") {
     return (
       <main className="vf-docs-page vf-docs-page--overview">
