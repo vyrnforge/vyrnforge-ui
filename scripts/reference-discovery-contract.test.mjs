@@ -53,6 +53,11 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   }
 
   const routes = read("apps/docs/src/referenceRoutes.ts");
+  assert.match(routes, /referenceModel\.documentRegistry\.documents/u);
+  assert.match(routes, /referenceModel\.documentRegistry\.categories/u);
+  assert.match(routes, /publicDocumentMarkdownById/u);
+
+  const publicDocuments = model.documentRegistry.documents;
   for (const marker of [
     "component-reference",
     "token-reference",
@@ -60,20 +65,17 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
     "package-reference",
     "accessibility",
   ]) {
-    assert.match(routes, new RegExp(marker, "u"));
+    assert(publicDocuments.some((document) => document.id === marker));
   }
-  assert.match(routes, /publicDocsSections/u);
-  assert.doesNotMatch(routes, /referenceModel\.domains\.flatMap/u);
-  assert.doesNotMatch(routes, /import\.meta\.glob/u);
 
   const app = read("apps/docs/src/App.tsx");
-  for (const domainId of ["tokens", "patterns"]) {
-    assert(app.includes(`domain: "${domainId}"`));
-  }
-  assert.doesNotMatch(app, /domain: "accessibility"/u);
-  assert.match(app, /matchReferenceRecordRoute/);
-  assert.match(app, /getRouteById/);
-  assert.doesNotMatch(app, /getDiscoveryRouteById/);
+  assert.match(app, /referenceModel\.documentRegistry\.documents/u);
+  assert.match(app, /document\.recordDomain/u);
+  assert.match(app, /matchReferenceRecordRoute/u);
+  assert.match(app, /getRouteById/u);
+  assert.match(app, /getRouteByPath/u);
+  assert.doesNotMatch(app, /const recordRoutes/u);
+  assert.doesNotMatch(app, /getDiscoveryRouteById/u);
 
   const nav = read("apps/docs/src/DocsNav.tsx");
   assert.match(nav, /docsRoutes/);
