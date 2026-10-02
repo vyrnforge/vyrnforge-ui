@@ -80,6 +80,17 @@ export type ReferenceModel = GeneratedReferenceModel & {
   };
 };
 
+export type ReferenceLocationLike = {
+  search: string;
+  hash: string;
+};
+
+export type ReferenceLocationContext = {
+  frameworkId: ReferenceFrameworkId;
+  pathname: string;
+  member: string | null;
+};
+
 const frameworkIds: ReferenceFrameworkId[] = [
   "native-html",
   "react",
@@ -182,6 +193,43 @@ export function getReferenceFramework(
     ) ??
     model.frameworks[0]
   );
+}
+
+export function normalizeReferencePathname(
+  hashOrPath: string | null | undefined,
+) {
+  const pathname = (hashOrPath ?? "").replace(/^#/u, "").trim();
+  if (!pathname) return "/overview";
+  return pathname.startsWith("/") ? pathname : `/${pathname}`;
+}
+
+export function getReferenceLocationContext(
+  model: ReferenceModel,
+  location: ReferenceLocationLike,
+): ReferenceLocationContext {
+  const query = new URLSearchParams(location.search);
+  const frameworkId = getReferenceFramework(
+    model,
+    query.get(model.frameworkContext.queryParameter),
+  ).id;
+
+  return {
+    frameworkId,
+    pathname: normalizeReferencePathname(location.hash),
+    member: query.get("member"),
+  };
+}
+
+export function getReferenceLocationHref(
+  model: ReferenceModel,
+  context: ReferenceLocationContext,
+) {
+  const query = new URLSearchParams({
+    [model.frameworkContext.queryParameter]: context.frameworkId,
+  });
+  if (context.member) query.set("member", context.member);
+
+  return `?${query.toString()}#${normalizeReferencePathname(context.pathname)}`;
 }
 
 export function getReferenceNavigation(model: ReferenceModel) {
