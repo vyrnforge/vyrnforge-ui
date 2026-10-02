@@ -13,6 +13,7 @@ export const contractTestFiles = [
   "scripts/verify-reference-product-architecture.test.mjs",
   "scripts/generate-reference-model.test.mjs",
   "scripts/documentation-registry.test.mjs",
+  "scripts/scaffold-documentation.test.mjs",
   "scripts/reference-shell-contract.test.mjs",
   "scripts/reference-route-context.test.mjs",
   "scripts/documentation-readiness-contract.test.mjs",

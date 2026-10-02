@@ -123,7 +123,8 @@
     "verify:first-class-surfaces": "node scripts/verify-first-class-surface-verification.mjs",
     "verify:markdown-structure": "node scripts/verify-markdown-structure.mjs",
     "generate:reference": "npm run generate:framework-artifacts && npm run generate:component-presets-reference && npm run generate:component-reference && node scripts/generate-reference-model.mjs && node scripts/generate-documentation-registry.mjs",
-    "verify:reference": "npm run verify:generated-framework-artifacts && npm run verify:component-presets-reference && npm run verify:component-reference && node scripts/generate-reference-model.mjs --check && node scripts/generate-documentation-registry.mjs --check"
+    "verify:reference": "npm run verify:generated-framework-artifacts && npm run verify:component-presets-reference && npm run verify:component-reference && node scripts/generate-reference-model.mjs --check && node scripts/generate-documentation-registry.mjs --check",
+    "scaffold:documentation": "node scripts/scaffold-documentation.mjs"
   },
   "packageManager": "npm@11.16.0",
   "engines": {
