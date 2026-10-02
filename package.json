@@ -59,7 +59,7 @@
     "verify:script-reachability": "node scripts/verify-script-reachability.mjs",
     "verify:documentation-current": "node scripts/verify-documentation-current.mjs",
     "verify:public-doc-links": "node scripts/verify-public-doc-links.mjs",
-    "verify:docs-quality": "npm run verify:documentation-current && npm run verify:markdown-structure && npm run verify:public-doc-links && npm run verify:reference && node --test scripts/reference-shell-contract.test.mjs scripts/reference-discovery-contract.test.mjs scripts/reference-drift-removal-contract.test.mjs scripts/verify-markdown-structure.test.mjs scripts/verify-public-doc-links.test.mjs",
+    "verify:docs-quality": "npm run verify:documentation-current && npm run verify:markdown-structure && npm run verify:public-doc-links && npm run verify:reference && npm run verify:documentation-architecture && node --test scripts/reference-shell-contract.test.mjs scripts/reference-discovery-contract.test.mjs scripts/reference-drift-removal-contract.test.mjs scripts/verify-documentation-architecture.test.mjs scripts/verify-markdown-structure.test.mjs scripts/verify-public-doc-links.test.mjs",
     "fixtures:serve": "npm run build:packages && npm run dev --workspace @vyrnforge/ui-regression-fixtures -- --host 127.0.0.1 --port 4173 --strictPort",
     "test:browser": "playwright test",
     "test:browser:headed": "playwright test --headed",
@@ -123,7 +123,8 @@
     "verify:first-class-surfaces": "node scripts/verify-first-class-surface-verification.mjs",
     "verify:markdown-structure": "node scripts/verify-markdown-structure.mjs",
     "generate:reference": "npm run generate:framework-artifacts && npm run generate:component-presets-reference && npm run generate:component-reference && node scripts/generate-reference-model.mjs && node scripts/generate-documentation-registry.mjs",
-    "verify:reference": "npm run verify:generated-framework-artifacts && npm run verify:component-presets-reference && npm run verify:component-reference && node scripts/generate-reference-model.mjs --check && node scripts/generate-documentation-registry.mjs --check"
+    "verify:reference": "npm run verify:generated-framework-artifacts && npm run verify:component-presets-reference && npm run verify:component-reference && node scripts/generate-reference-model.mjs --check && node scripts/generate-documentation-registry.mjs --check",
+    "verify:documentation-architecture": "node scripts/verify-documentation-architecture.mjs"
   },
   "packageManager": "npm@11.16.0",
   "engines": {
