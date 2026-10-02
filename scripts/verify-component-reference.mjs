@@ -247,7 +247,8 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     failures.push("generated component route composition is missing");
   }
   for (const marker of [
-    "framework?.apiSurface",
+    "resolveDocumentationApi",
+    "apiResolution",
     "contextualApi",
     "version: string",
   ]) {
