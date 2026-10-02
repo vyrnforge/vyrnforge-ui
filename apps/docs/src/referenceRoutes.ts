@@ -266,8 +266,7 @@ export function getDocsRelatedContent(
   );
 }
 
-export const documentationSitemap =
-  getDocumentationSitemap(discoveryRegistry);
+export const documentationSitemap = getDocumentationSitemap(discoveryRegistry);
 
 export const documentationDeepLinks = getDocumentationDeepLinks(
   discoveryRegistry,
