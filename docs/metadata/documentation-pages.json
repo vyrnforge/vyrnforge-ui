@@ -174,6 +174,8 @@
       "description": "Inspect the verified packed-consumer example for the selected framework.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "tests/consumers/manifest.json",
+      "exampleId": "framework-consumer",
+      "exampleCategory": "basic",
       "tags": ["examples", "native", "react", "angular", "vue"]
     },
     {
@@ -226,7 +228,8 @@
       "description": "Interactive token catalog with canonical categories, values, and theme-scoped swatches.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
-      "exampleId": "theme-tokens"
+      "exampleId": "theme-tokens",
+      "exampleCategory": "appearance"
     },
     {
       "id": "theme-modes",
@@ -239,7 +242,8 @@
       "description": "Interactive light, dark, enterprise, and system theme behavior.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
-      "exampleId": "theme-modes"
+      "exampleId": "theme-modes",
+      "exampleCategory": "appearance"
     },
     {
       "id": "density",
@@ -252,7 +256,8 @@
       "description": "Interactive compact, standard, and comfortable density examples.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/DensityPage.tsx",
-      "exampleId": "density"
+      "exampleId": "density",
+      "exampleCategory": "appearance"
     },
     {
       "id": "css-overrides",
@@ -265,7 +270,8 @@
       "description": "Global VyrnForge overrides, local scopes, and grid-specific overrides.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
-      "exampleId": "css-overrides"
+      "exampleId": "css-overrides",
+      "exampleCategory": "appearance"
     },
     {
       "id": "accessibility",
@@ -303,8 +309,9 @@
       "renderer": "example",
       "description": "Compact resource lists with metadata and actions.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-resource-list"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/ResourceListPage.tsx",
+      "exampleId": "pattern-resource-list",
+      "exampleCategory": "composition"
     },
     {
       "id": "pattern-detail",
@@ -316,8 +323,9 @@
       "renderer": "example",
       "description": "Entity detail composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-detail"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/DetailPage.tsx",
+      "exampleId": "pattern-detail",
+      "exampleCategory": "composition"
     },
     {
       "id": "pattern-settings",
@@ -329,8 +337,9 @@
       "renderer": "example",
       "description": "Sectioned settings composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-settings"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/SettingsPage.tsx",
+      "exampleId": "pattern-settings",
+      "exampleCategory": "composition"
     },
     {
       "id": "pattern-form",
@@ -342,8 +351,9 @@
       "renderer": "example",
       "description": "General application form composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-form"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/FormPage.tsx",
+      "exampleId": "pattern-form",
+      "exampleCategory": "composition"
     },
     {
       "id": "pattern-filter-form",
@@ -355,8 +365,9 @@
       "renderer": "example",
       "description": "Operational filter composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-filter-form"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/FilterFormPage.tsx",
+      "exampleId": "pattern-filter-form",
+      "exampleCategory": "composition"
     },
     {
       "id": "pattern-assignments",
@@ -368,8 +379,9 @@
       "renderer": "example",
       "description": "Bounded assignment flows.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-assignments"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/AssignmentPatternsPage.tsx",
+      "exampleId": "pattern-assignments",
+      "exampleCategory": "composition"
     },
     {
       "id": "pattern-feedback-states",
@@ -381,8 +393,9 @@
       "renderer": "example",
       "description": "Route-level feedback states.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-feedback-states"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/EmptyErrorLoadingPage.tsx",
+      "exampleId": "pattern-feedback-states",
+      "exampleCategory": "state"
     },
     {
       "id": "pattern-admin-shell",
@@ -394,8 +407,9 @@
       "renderer": "example",
       "description": "Admin workspace composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-admin-shell"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/AdminShellPage.tsx",
+      "exampleId": "pattern-admin-shell",
+      "exampleCategory": "composition"
     },
     {
       "id": "pattern-customer-portal",
@@ -407,8 +421,9 @@
       "renderer": "example",
       "description": "Customer portal composition.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-customer-portal"
+      "sourcePath": "apps/docs/src/examples/pages/patterns/CustomerPortalShellPage.tsx",
+      "exampleId": "pattern-customer-portal",
+      "exampleCategory": "composition"
     },
     {
       "id": "data-grid",
@@ -433,8 +448,9 @@
       "renderer": "example",
       "description": "Rows, columns, search, sort, and pagination.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-basic"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/BasicGridPage.tsx",
+      "exampleId": "grid-basic",
+      "exampleCategory": "basic"
     },
     {
       "id": "grid-columns",
@@ -446,8 +462,9 @@
       "renderer": "example",
       "description": "Visibility, order, density, and reset behavior.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-columns"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/ColumnsPage.tsx",
+      "exampleId": "grid-columns",
+      "exampleCategory": "advanced"
     },
     {
       "id": "grid-filtering",
@@ -459,8 +476,9 @@
       "renderer": "example",
       "description": "Search and filter state examples.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-filtering"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/FilteringPage.tsx",
+      "exampleId": "grid-filtering",
+      "exampleCategory": "state"
     },
     {
       "id": "grid-selection",
@@ -472,8 +490,9 @@
       "renderer": "example",
       "description": "Selectable rows, disabled rows, and bulk actions.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-selection"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/SelectionPage.tsx",
+      "exampleId": "grid-selection",
+      "exampleCategory": "state"
     },
     {
       "id": "grid-grouping",
@@ -485,8 +504,9 @@
       "renderer": "example",
       "description": "Client-side grouping examples.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-grouping"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/GroupingPage.tsx",
+      "exampleId": "grid-grouping",
+      "exampleCategory": "advanced"
     },
     {
       "id": "grid-resizing",
@@ -498,8 +518,9 @@
       "renderer": "example",
       "description": "Resizable columns and horizontal overflow.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-resizing"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/ResizingPage.tsx",
+      "exampleId": "grid-resizing",
+      "exampleCategory": "advanced"
     },
     {
       "id": "grid-themes",
@@ -511,8 +532,9 @@
       "renderer": "example",
       "description": "Theme and shared-token alignment.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-themes"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/ThemesGridPage.tsx",
+      "exampleId": "grid-themes",
+      "exampleCategory": "appearance"
     },
     {
       "id": "grid-states",
@@ -524,8 +546,9 @@
       "renderer": "example",
       "description": "Empty, error, and loading states.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-states"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/GridStatesPage.tsx",
+      "exampleId": "grid-states",
+      "exampleCategory": "state"
     },
     {
       "id": "grid-stress",
@@ -537,8 +560,9 @@
       "renderer": "example",
       "description": "Many rows and columns without virtualization.",
       "releaseLine": "data-grid-alpha",
-      "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-stress"
+      "sourcePath": "apps/docs/src/examples/pages/data-grid/StressGridPage.tsx",
+      "exampleId": "grid-stress",
+      "exampleCategory": "advanced"
     },
     {
       "id": "package-reference",
