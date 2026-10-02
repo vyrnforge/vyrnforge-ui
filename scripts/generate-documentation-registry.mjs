@@ -214,6 +214,7 @@ export function validateDocumentationPagesMetadata(
   const templateByType = buildDocumentationTemplateByType(metadata);
 
   const sectionIds = new Set(metadata.sections.map((section) => section.id));
+  const recordDomains = new Set();
   const orderKeys = new Set();
 
   for (const page of metadata.pages) {
@@ -241,6 +242,14 @@ export function validateDocumentationPagesMetadata(
       throw new Error(
         `Documentation page ${page.id} source is missing: ${page.sourcePath}`,
       );
+    }
+    if (page.recordDomain) {
+      if (recordDomains.has(page.recordDomain)) {
+        throw new Error(
+          `Documentation record domain ${page.recordDomain} is bound to more than one page.`,
+        );
+      }
+      recordDomains.add(page.recordDomain);
     }
     if (
       (page.renderer === "example" ||
@@ -328,11 +337,28 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
     return sectionDelta || a.order - b.order || a.id.localeCompare(b.id);
   });
 
+  const pageByRecordDomain = new Map(
+    pages
+      .filter((page) => page.recordDomain)
+      .map((page) => [page.recordDomain, page]),
+  );
+  for (const domainId of pageByRecordDomain.keys()) {
+    const domain = referenceModel.domains.find(
+      (candidate) => candidate.id === domainId,
+    );
+    if (!domain?.recordSource) {
+      throw new Error(
+        `Documentation page recordDomain ${domainId} does not identify a record-backed Reference domain.`,
+      );
+    }
+  }
+
   const recordDomains = referenceModel.domains
     .filter((domain) => domain.recordSource)
     .map((domain) => ({
       id: domain.id,
       type: domainDocumentTypes[domain.id] ?? "reference",
+      documentId: pageByRecordDomain.get(domain.id)?.id ?? null,
       routeTemplate: domain.routeTemplate,
       recordSource: domain.recordSource,
       sourceOwnership: {
