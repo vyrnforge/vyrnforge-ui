@@ -13,6 +13,17 @@ export const DOCUMENTATION_PAGES_PATH =
   "docs/metadata/documentation-pages.json";
 export const DOCUMENTATION_REGISTRY_PATH =
   "docs/generated/documentation-registry.json";
+export const RELEASE_GROUPS_PATH = "docs/metadata/release-groups.json";
+export const MULTI_FRAMEWORK_PATH = "docs/metadata/multi-framework.json";
+
+const documentationReadinessStates = new Set([
+  "stable",
+  "preview",
+  "maintenance",
+  "deprecated",
+  "unavailable",
+  "internal-not-ready",
+]);
 
 const allowedRenderers = new Set([
   "overview",
@@ -79,9 +90,9 @@ export function validateDocumentationPagesMetadata(
         `Documentation page ${page.id} has unsupported renderer ${page.renderer}.`,
       );
     }
-    if (!page.type || !page.sourcePath) {
+    if (!page.type || !page.sourcePath || !page.releaseLine) {
       throw new Error(
-        `Documentation page ${page.id} requires type and sourcePath.`,
+        `Documentation page ${page.id} requires type, sourcePath, and releaseLine.`,
       );
     }
     if (!existsSync(path.join(root, page.sourcePath))) {
@@ -113,11 +124,54 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
     { root },
   );
   const referenceModel = buildReferenceModel({ root });
+  const releaseGroups = readJson(root, RELEASE_GROUPS_PATH);
+  const multiFramework = readJson(root, MULTI_FRAMEWORK_PATH);
+  const frameworkIds = (multiFramework.frameworks ?? []).map(
+    (framework) => framework.id,
+  );
+  const releaseLines = Object.entries(releaseGroups.releaseLines ?? {}).map(
+    ([id, releaseLine]) => {
+      const readiness = releaseLine.documentation?.readiness ?? {};
+      for (const frameworkId of frameworkIds) {
+        if (!documentationReadinessStates.has(readiness[frameworkId])) {
+          throw new Error(
+            `Release line ${id} requires valid documentation readiness for ${frameworkId}.`,
+          );
+        }
+      }
+      for (const frameworkId of Object.keys(readiness)) {
+        if (!frameworkIds.includes(frameworkId)) {
+          throw new Error(
+            `Release line ${id} declares documentation readiness for unknown framework ${frameworkId}.`,
+          );
+        }
+      }
+
+      return {
+        id,
+        version: releaseLine.version,
+        channel: releaseLine.channel,
+        versioningMode: releaseLine.versioning?.mode,
+        readiness,
+      };
+    },
+  );
+  const releaseLineById = new Map(
+    releaseLines.map((releaseLine) => [releaseLine.id, releaseLine]),
+  );
 
   const sectionOrder = new Map(
     metadata.sections.map((section) => [section.id, section.order]),
   );
   const sections = [...metadata.sections].sort((a, b) => a.order - b.order);
+  for (const page of metadata.pages) {
+    if (!releaseLineById.has(page.releaseLine)) {
+      throw new Error(
+        `Documentation page ${page.id} references unknown release line ${page.releaseLine}.`,
+      );
+    }
+  }
+
   const pages = [...metadata.pages].sort((a, b) => {
     const sectionDelta =
       sectionOrder.get(a.section) - sectionOrder.get(b.section);
@@ -146,17 +200,30 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
   ].sort();
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedFrom: [
       DOCUMENTATION_PAGES_PATH,
+      RELEASE_GROUPS_PATH,
+      MULTI_FRAMEWORK_PATH,
       "docs/generated/reference-model.json",
     ],
+    documentationReadinessStates: [...documentationReadinessStates],
+    releaseLines,
     documentTypes,
     sections,
-    pages: pages.map((page) => ({
-      ...page,
-      route: `/${page.id}`,
-    })),
+    pages: pages.map((page) => {
+      const releaseLine = releaseLineById.get(page.releaseLine);
+      return {
+        ...page,
+        route: `/${page.id}`,
+        availability: frameworkIds.map((framework) => ({
+          framework,
+          releaseLine: releaseLine.id,
+          version: releaseLine.version,
+          status: releaseLine.readiness[framework],
+        })),
+      };
+    }),
     recordDomains,
   };
 }
