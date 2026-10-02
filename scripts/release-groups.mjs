@@ -12,6 +12,21 @@ export const releaseGroupsSchemaPath =
   "docs/metadata/release-groups.schema.json";
 export const releaseGroupsSchemaVersion = 2;
 
+export const documentationFrameworkIds = [
+  "native-html",
+  "react",
+  "angular",
+  "vue",
+];
+export const documentationReadinessStates = [
+  "stable",
+  "preview",
+  "maintenance",
+  "deprecated",
+  "unavailable",
+  "internal-not-ready",
+];
+
 function createLegacyReleaseGroupsView(manifest) {
   return Object.fromEntries(
     Object.entries(manifest.releaseLines ?? {}).map(
@@ -235,6 +250,27 @@ export function validateReleaseGroupsV2(manifest) {
     if (!Array.isArray(releaseLine.releaseDependencies)) {
       failures.push(`${releaseLineId}: releaseDependencies must be an array`);
     }
+    const readiness = releaseLine.documentation?.readiness;
+    if (!isRecord(readiness)) {
+      failures.push(
+        `${releaseLineId}: documentation.readiness must be declared`,
+      );
+    } else {
+      for (const frameworkId of documentationFrameworkIds) {
+        if (!documentationReadinessStates.includes(readiness[frameworkId])) {
+          failures.push(
+            `${releaseLineId}: documentation readiness for ${frameworkId} is invalid`,
+          );
+        }
+      }
+      for (const frameworkId of Object.keys(readiness)) {
+        if (!documentationFrameworkIds.includes(frameworkId)) {
+          failures.push(
+            `${releaseLineId}: documentation readiness declares unknown framework ${frameworkId}`,
+          );
+        }
+      }
+    }
     if (
       !Array.isArray(releaseLine.packages) ||
       releaseLine.packages.length === 0
@@ -446,6 +482,15 @@ export function migrateReleaseGroupsV1(
         legacyPolicy: policy.legacyPolicy ?? "preserve-only",
         tagTemplate: policy.tagTemplate,
         releaseNameTemplate: policy.releaseNameTemplate,
+      },
+      documentation: {
+        readiness: {
+          "native-html": "internal-not-ready",
+          react: "internal-not-ready",
+          angular: "internal-not-ready",
+          vue: "internal-not-ready",
+          ...(policy.documentation?.readiness ?? {}),
+        },
       },
       validation: {
         artifacts: true,
