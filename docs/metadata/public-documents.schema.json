@@ -157,6 +157,14 @@
               "minLength": 1
             },
             "uniqueItems": true
+          },
+          "recordDomain": {
+            "enum": [
+              "components",
+              "packages",
+              "tokens",
+              "patterns"
+            ]
           }
         }
       }
