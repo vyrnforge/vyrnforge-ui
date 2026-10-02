@@ -7,6 +7,23 @@ import {
 } from "../../../docs/reference/documentationResolver";
 import type { ReferenceFrameworkId } from "../../../docs/reference/referenceRuntime";
 
+export type DocsTemplateId =
+  | "component"
+  | "foundation"
+  | "guide"
+  | "pattern"
+  | "package"
+  | "advanced-module"
+  | "release"
+  | "example";
+
+export type DocsTemplateDefinition = {
+  id: DocsTemplateId;
+  label: string;
+  documentTypes: string[];
+  sections: string[];
+};
+
 export type DocsRouteKind =
   | "overview"
   | "markdown"
@@ -23,6 +40,7 @@ export type DocsRoute = {
   group: string;
   order: number;
   type: string;
+  template: DocsTemplateId;
   description?: string;
   sourcePath: string;
   tags?: string[];
@@ -59,6 +77,7 @@ type RegistryPage = Omit<DocsRoute, "kind" | "content"> & {
 
 type DocumentationRegistry = {
   schemaVersion: 2;
+  templates: DocsTemplateDefinition[];
   sections: Array<{
     id: string;
     label: string;
@@ -107,6 +126,7 @@ function routeFromRegistryPage(page: RegistryPage): DocsRoute {
     group: page.group,
     order: page.order,
     type: page.type,
+    template: page.template,
     description: page.description,
     sourcePath: page.sourcePath,
     tags: page.tags,
@@ -121,6 +141,18 @@ function routeFromRegistryPage(page: RegistryPage): DocsRoute {
 export const docsRoutes: DocsRoute[] = registry.pages.map(
   routeFromRegistryPage,
 );
+
+export const documentationTemplates = registry.templates;
+
+export function getDocumentationTemplate(templateId: DocsTemplateId) {
+  const template = documentationTemplates.find(
+    (candidate) => candidate.id === templateId,
+  );
+  if (!template) {
+    throw new Error(`Missing generated documentation template ${templateId}.`);
+  }
+  return template;
+}
 
 export const publicDocsSections: PublicDocsSection[] = registry.sections.map(
   (section) => ({
