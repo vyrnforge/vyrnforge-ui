@@ -134,14 +134,22 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.match(docsStyles, /tbody tr:target/u);
 });
 
-test("component pages keep generated framework API while examples are native Docs routes", () => {
+test("component pages bind generated API to the selected framework and version", () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
+  const docsShell = read("apps/docs/src/DocsShell.tsx");
   const routes = read("apps/docs/src/referenceRoutes.ts");
   const registry = json("docs/generated/documentation-registry.json");
   const docsStyles = read("apps/docs/src/styles/docs.css");
 
-  assert.match(componentReference, /frameworkTabs\(component\.id\)/u);
+  assert.match(componentReference, /frameworkApiReferenceRaw/u);
+  assert.match(componentReference, /framework\?\.apiSurface/u);
+  assert.match(componentReference, /contextualApi/u);
+  assert.match(componentReference, /version: string/u);
+  assert.doesNotMatch(componentReference, /frameworkTabs/u);
+  assert.doesNotMatch(componentReference, /<Tabs/u);
+  assert.match(docsPage, /version=\{version\}/u);
+  assert.match(docsShell, /version=\{docsVersion\.version\}/u);
   assert.match(componentReference, /FrameworkApiPanel/u);
   assert.match(docsPage, /MigratedExamplePage/u);
   assert(registry.pages.some((page) => page.renderer === "example"));

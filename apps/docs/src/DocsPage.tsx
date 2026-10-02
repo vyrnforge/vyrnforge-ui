@@ -21,6 +21,7 @@ type DocsPageProps = {
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
   routeResolution: DocsRouteResolution;
+  version: string;
 };
 
 export function DocsPage({
@@ -30,6 +31,7 @@ export function DocsPage({
   onRouteChange,
   referenceRecord,
   routeResolution,
+  version,
 }: DocsPageProps) {
   const template = getDocumentationTemplate(route.template);
 
@@ -88,7 +90,7 @@ export function DocsPage({
       <ComponentReferencePage
         componentId={componentId}
         frameworkId={frameworkId}
-        onFrameworkChange={onFrameworkChange}
+        version={version}
       />
     ) : route.kind === "package-reference" ? (
       <PackageReferencePage

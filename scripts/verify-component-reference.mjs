@@ -246,6 +246,20 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   ) {
     failures.push("generated component route composition is missing");
   }
+  for (const marker of [
+    "framework?.apiSurface",
+    "contextualApi",
+    "version: string",
+  ]) {
+    if (!docsPage.includes(marker)) {
+      failures.push(`component API context binding is missing ${marker}`);
+    }
+  }
+  if (docsPage.includes("frameworkTabs") || docsPage.includes("<Tabs")) {
+    failures.push(
+      "component API must render only the selected framework context instead of a parallel framework tab set",
+    );
+  }
 
   const referenceData = read(root, "apps/docs/src/referenceData.ts");
   for (const marker of [

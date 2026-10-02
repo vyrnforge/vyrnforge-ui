@@ -1,11 +1,4 @@
-import {
-  Badge,
-  Card,
-  Heading,
-  Tabs,
-  Text,
-  type TabItem,
-} from "@vyrnforge/ui-components";
+import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
@@ -96,7 +89,7 @@ type FrameworkApiReference = {
 type ComponentReferencePageProps = {
   componentId?: string | null;
   frameworkId: DocsFrameworkId;
-  onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
+  version: string;
 };
 
 const apiReference = JSON.parse(
@@ -443,24 +436,6 @@ function apiComponent(componentId: string, apiId: FrameworkApiId) {
   );
 }
 
-function frameworkTabs(componentId: string): TabItem[] {
-  return referenceModel.frameworks.map((framework) => {
-    const apiId = framework.apiSurface as FrameworkApiId;
-    const component = apiComponent(componentId, apiId);
-    return {
-      id: framework.id,
-      label: framework.label,
-      content: component ? (
-        <FrameworkApiPanel component={component} frameworkId={framework.id} />
-      ) : (
-        <Text size="sm" tone="muted">
-          This component is not available on this framework surface.
-        </Text>
-      ),
-    };
-  });
-}
-
 function componentHref(componentId: string) {
   return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
 }
@@ -586,16 +561,21 @@ function ComponentOutline({
 function ComponentDetail({
   component,
   frameworkId,
-  onFrameworkChange,
+  version,
 }: {
   component: ComponentReferenceRecord;
   frameworkId: DocsFrameworkId;
-  onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
+  version: string;
 }) {
   const maturity = getComponentMaturityPresentation(component);
   const relatedPatterns = getRelatedPatterns(component.id);
   const showLimitations =
     component.knownLimitations.length > 0 || relatedPatterns.length > 0;
+  const framework = referenceModel.frameworks.find(
+    (candidate) => candidate.id === frameworkId,
+  );
+  const apiId = framework?.apiSurface as FrameworkApiId | undefined;
+  const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
 
   return (
     <div className="vf-docs-reference-layout">
@@ -658,19 +638,20 @@ function ComponentDetail({
             API
           </Heading>
           <Text tone="muted">
-            Select a framework to see its public setup, properties, events,
-            slots, and methods.
+            Generated API facts for {framework?.label ?? frameworkId}{" "}
+            documentation version {version}.
           </Text>
-          <Tabs
-            aria-label={`${component.displayName} framework API`}
-            className="vf-docs-framework-tabs"
-            items={frameworkTabs(component.id)}
-            onValueChange={(value) =>
-              onFrameworkChange(value as DocsFrameworkId)
-            }
-            size="sm"
-            value={frameworkId}
-          />
+          {contextualApi ? (
+            <FrameworkApiPanel
+              component={contextualApi}
+              frameworkId={frameworkId}
+            />
+          ) : (
+            <Text size="sm" tone="muted">
+              This component has no generated API surface for the selected
+              framework and documentation version.
+            </Text>
+          )}
         </Card>
 
         <Card
@@ -740,7 +721,7 @@ const componentAreas = Object.entries(
 export function ComponentReferencePage({
   componentId,
   frameworkId,
-  onFrameworkChange,
+  version,
 }: ComponentReferencePageProps) {
   if (componentId) {
     const component = getComponentReferenceRecord(componentId);
@@ -763,7 +744,7 @@ export function ComponentReferencePage({
       <ComponentDetail
         component={component}
         frameworkId={frameworkId}
-        onFrameworkChange={onFrameworkChange}
+        version={version}
       />
     );
   }

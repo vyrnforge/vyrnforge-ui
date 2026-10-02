@@ -158,6 +158,7 @@ export function DocsShell({
         referenceRecord={referenceRecord}
         route={activeRoute}
         routeResolution={routeResolution}
+        version={docsVersion.version}
       />
     </AppShell>
   );
