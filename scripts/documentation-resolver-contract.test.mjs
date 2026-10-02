@@ -39,33 +39,39 @@ const page = {
   },
 };
 
-test("resolver composes base, framework, version, and framework-version layers in order", () => {
-  const result = resolveDocumentationPage(page, {
-    frameworkId: "react",
-    releaseLine: "non-grid-beta",
-    version: "3.2.0",
-    versionId: "3.2",
-  });
-  assert.equal(result.kind, "resolved");
-  assert.equal(result.document.title, "Button");
-  assert.equal(result.document.sourcePath, "docs/button-3.2.md");
-  assert.equal(result.document.description, "React 3.2 usage");
-});
+test(
+  "resolver composes base, framework, version, and framework-version layers in order",
+  () => {
+    const result = resolveDocumentationPage(page, {
+      frameworkId: "react",
+      releaseLine: "non-grid-beta",
+      version: "3.2.0",
+      versionId: "3.2",
+    });
+    assert.equal(result.kind, "resolved");
+    assert.equal(result.document.title, "Button");
+    assert.equal(result.document.sourcePath, "docs/button-3.2.md");
+    assert.equal(result.document.description, "React 3.2 usage");
+  },
+);
 
-test("resolver never falls back to another framework when selected content is unavailable", () => {
-  const result = resolveDocumentationPage(page, {
-    frameworkId: "vue",
-    releaseLine: "non-grid-beta",
-    version: "3.2.0",
-    versionId: "3.2",
-  });
-  assert.equal(result.kind, "unavailable");
-  assert.equal(result.status, "unavailable");
-  assert.deepEqual(
-    result.alternatives.map((entry) => entry.framework),
-    ["react"],
-  );
-});
+test(
+  "resolver never falls back to another framework when selected content is unavailable",
+  () => {
+    const result = resolveDocumentationPage(page, {
+      frameworkId: "vue",
+      releaseLine: "non-grid-beta",
+      version: "3.2.0",
+      versionId: "3.2",
+    });
+    assert.equal(result.kind, "unavailable");
+    assert.equal(result.status, "unavailable");
+    assert.deepEqual(
+      result.alternatives.map((entry) => entry.framework),
+      ["react"],
+    );
+  },
+);
 
 test("next resolves against the document's own current release line", () => {
   const grid = {
