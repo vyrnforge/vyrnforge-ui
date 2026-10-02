@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@vyrnforge/ui-components";
-import { matchReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
+import {
+  getReferenceLocationContext,
+  getReferenceLocationHref,
+  matchReferenceRecordRoute,
+  type ReferenceLocationContext,
+} from "../../../docs/reference/referenceRuntime";
 import {
   docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
@@ -21,8 +26,14 @@ export type ReferenceRecordSelection = {
 };
 
 type DocsLocation = {
+  pathname: string;
   routeId: string;
   referenceRecord: ReferenceRecordSelection | null;
+};
+
+type DocsLocationState = {
+  context: ReferenceLocationContext;
+  docsLocation: DocsLocation;
 };
 
 const recordRoutes: Array<{
@@ -35,18 +46,18 @@ const recordRoutes: Array<{
   { domain: "patterns", routeId: "pattern-reference" },
 ];
 
-function getHashLocation(): DocsLocation {
-  const path = window.location.hash.replace(/^#/, "") || "/overview";
-  const member = new URLSearchParams(window.location.search).get("member");
+function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
+  const { pathname, member } = context;
 
   for (const recordRoute of recordRoutes) {
     const id = matchReferenceRecordRoute(
       referenceModel,
       recordRoute.domain,
-      path,
+      pathname,
     );
     if (id) {
       return {
+        pathname,
         routeId: recordRoute.routeId,
         referenceRecord: {
           domain: recordRoute.domain,
@@ -58,32 +69,62 @@ function getHashLocation(): DocsLocation {
   }
 
   return {
-    routeId: path.replace(/^\//, "") || "overview",
+    pathname,
+    routeId: pathname.replace(/^\//, "") || "overview",
     referenceRecord: null,
   };
 }
 
-function getFrameworkFromLocation() {
-  const framework = new URLSearchParams(window.location.search).get(
-    referenceModel.frameworkContext.queryParameter,
-  );
-  return getFramework(framework).id;
+function readDocsLocationState(): DocsLocationState {
+  const context = getReferenceLocationContext(referenceModel, window.location);
+  return {
+    context,
+    docsLocation: getDocsLocation(context),
+  };
+}
+
+function canonicalContext(state: DocsLocationState): ReferenceLocationContext {
+  return {
+    frameworkId: state.context.frameworkId,
+    pathname: state.docsLocation.pathname,
+    member: state.docsLocation.referenceRecord?.member ?? null,
+  };
 }
 
 export default function App() {
-  const [docsLocation, setDocsLocation] = useState(getHashLocation);
-  const [frameworkId, setFrameworkId] = useState<DocsFrameworkId>(
-    getFrameworkFromLocation,
+  const [locationState, setLocationState] = useState<DocsLocationState>(
+    readDocsLocationState,
   );
   const [docsVersions, setDocsVersions] =
     useState<DocsVersion[]>(initialDocsVersions);
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  useEffect(() => {
-    const handleHashChange = () => setDocsLocation(getHashLocation());
+  const { docsLocation } = locationState;
+  const frameworkId = locationState.context.frameworkId;
 
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
+  useEffect(() => {
+    const syncFromBrowser = () => setLocationState(readDocsLocationState());
+
+    const initialState = readDocsLocationState();
+    const canonicalHref = getReferenceLocationHref(
+      referenceModel,
+      canonicalContext(initialState),
+    );
+    const currentHref = `${window.location.search}${window.location.hash}`;
+    if (currentHref !== canonicalHref) {
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${canonicalHref}`,
+      );
+    }
+
+    window.addEventListener("popstate", syncFromBrowser);
+    window.addEventListener("hashchange", syncFromBrowser);
+    return () => {
+      window.removeEventListener("popstate", syncFromBrowser);
+      window.removeEventListener("hashchange", syncFromBrowser);
+    };
   }, []);
 
   useEffect(() => {
@@ -116,28 +157,38 @@ export default function App() {
     [docsVersions],
   );
 
-  const handleRouteChange = (routeId: string) => {
-    const query = new URLSearchParams(window.location.search);
-    query.delete("member");
-    const search = query.toString();
-    window.history.replaceState(
-      null,
-      "",
-      `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`,
+  const navigate = (context: ReferenceLocationContext) => {
+    const nextDocsLocation = getDocsLocation(context);
+    const nextState: DocsLocationState = {
+      context: {
+        ...context,
+        member: nextDocsLocation.referenceRecord?.member ?? null,
+      },
+      docsLocation: nextDocsLocation,
+    };
+    const href = getReferenceLocationHref(
+      referenceModel,
+      canonicalContext(nextState),
     );
-    window.location.hash = `/${routeId}`;
-    setDocsLocation({ routeId, referenceRecord: null });
+
+    window.history.pushState(null, "", `${window.location.pathname}${href}`);
+    setLocationState(nextState);
+  };
+
+  const handleRouteChange = (routeId: string) => {
+    navigate({
+      frameworkId,
+      pathname: `/${routeId}`,
+      member: null,
+    });
   };
 
   const handleFrameworkChange = (nextFrameworkId: DocsFrameworkId) => {
-    const query = new URLSearchParams(window.location.search);
-    query.set(referenceModel.frameworkContext.queryParameter, nextFrameworkId);
-    window.history.replaceState(
-      null,
-      "",
-      `${window.location.pathname}?${query.toString()}${window.location.hash}`,
-    );
-    setFrameworkId(nextFrameworkId);
+    navigate({
+      frameworkId: nextFrameworkId,
+      pathname: docsLocation.pathname,
+      member: docsLocation.referenceRecord?.member ?? null,
+    });
   };
 
   return (
@@ -163,6 +214,8 @@ export default function App() {
         onFrameworkChange={handleFrameworkChange}
         onRouteChange={handleRouteChange}
         referenceRecord={docsLocation.referenceRecord}
+        routeMember={docsLocation.referenceRecord?.member ?? null}
+        routePath={docsLocation.pathname}
       />
     </div>
   );
