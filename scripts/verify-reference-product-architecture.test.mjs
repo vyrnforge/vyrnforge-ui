@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   documentationSystemPath,
+  publicDocumentManifestPath,
   referencePortalPath,
   repositoryRoot,
   verifyReferenceProductArchitecture,
@@ -25,7 +26,11 @@ const repo = path.resolve(scriptDirectory, "..");
 function fixture(mutator, callback) {
   const root = mkdtempSync(path.join(tmpdir(), "vyrnforge-reference-product-"));
   try {
-    for (const relativePath of [referencePortalPath, documentationSystemPath]) {
+    for (const relativePath of [
+      referencePortalPath,
+      publicDocumentManifestPath,
+      documentationSystemPath,
+    ]) {
       const source = path.join(repo, relativePath);
       const destination = path.join(root, relativePath);
       mkdirSync(path.dirname(destination), { recursive: true });
@@ -85,6 +90,22 @@ test("rejects search becoming a canonical fact owner", () =>
       assert(
         failures.some((failure) =>
           failure.includes("search must explicitly own no canonical facts"),
+        ),
+      ),
+  ));
+
+test("rejects a reference portal that bypasses the canonical public document manifest", () =>
+  fixture(
+    (root) => {
+      const file = path.join(root, referencePortalPath);
+      const portal = JSON.parse(readFileSync(file, "utf8"));
+      portal.routing.documentManifest = "apps/docs/src/referenceRoutes.ts";
+      writeFileSync(file, `${JSON.stringify(portal, null, 2)}\n`);
+    },
+    (failures) =>
+      assert(
+        failures.some((failure) =>
+          failure.includes("canonical public document manifest"),
         ),
       ),
   ));
