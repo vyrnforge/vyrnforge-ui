@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sourceOfTruth": {
     "canonical": true,
-    "scope": "public documentation page identity, grouping, renderer binding, ordering, and source ownership",
+    "scope": "public documentation page identity, grouping, renderer binding, ordering, and source ownership, and release-line ownership",
     "policy": "Public page registration is authored here and compiled into the generated Documentation Registry. Generated component, package, token, pattern, example, and accessibility records remain owned by their canonical VyrnForge sources."
   },
   "sections": [
@@ -53,7 +53,11 @@
       "renderer": "overview",
       "description": "What VyrnForge is and how to navigate the documentation.",
       "sourcePath": "docs/README.md",
-      "tags": ["overview", "start"]
+      "tags": [
+        "overview",
+        "start"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "getting-started",
@@ -65,7 +69,12 @@
       "renderer": "markdown",
       "description": "Install VyrnForge and choose the Native HTML, React, Angular, or Vue surface.",
       "sourcePath": "docs/api/import-and-setup.md",
-      "tags": ["install", "setup", "frameworks"]
+      "tags": [
+        "install",
+        "setup",
+        "frameworks"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "executable-examples",
@@ -77,7 +86,14 @@
       "renderer": "executable-examples",
       "description": "Inspect the verified packed-consumer example for the selected framework.",
       "sourcePath": "tests/consumers/manifest.json",
-      "tags": ["examples", "native", "react", "angular", "vue"]
+      "tags": [
+        "examples",
+        "native",
+        "react",
+        "angular",
+        "vue"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "component-reference",
@@ -89,7 +105,11 @@
       "renderer": "component-reference",
       "description": "Browse component usage, framework variants, API, accessibility, styling, and related guidance.",
       "sourcePath": "docs/generated/consumer-knowledge.json",
-      "tags": ["components", "api"]
+      "tags": [
+        "components",
+        "api"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "theming",
@@ -101,7 +121,12 @@
       "renderer": "markdown",
       "description": "Customize VyrnForge with shared semantic tokens, themes, density, and CSS.",
       "sourcePath": "docs/architecture/03-theming-and-styling.md",
-      "tags": ["theming", "tokens", "css"]
+      "tags": [
+        "theming",
+        "tokens",
+        "css"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "token-reference",
@@ -113,7 +138,11 @@
       "renderer": "discovery-reference",
       "description": "Browse shared VyrnForge token categories and styling roles.",
       "sourcePath": "docs/metadata/design-tokens.json",
-      "tags": ["tokens", "design-system"]
+      "tags": [
+        "tokens",
+        "design-system"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "theme-tokens",
@@ -125,7 +154,8 @@
       "renderer": "example",
       "description": "Interactive token catalog with canonical categories, values, and theme-scoped swatches.",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeTokensPage.tsx",
-      "exampleId": "theme-tokens"
+      "exampleId": "theme-tokens",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "theme-modes",
@@ -137,7 +167,8 @@
       "renderer": "example",
       "description": "Interactive light, dark, enterprise, and system theme behavior.",
       "sourcePath": "apps/docs/src/examples/pages/core/ThemeModesPage.tsx",
-      "exampleId": "theme-modes"
+      "exampleId": "theme-modes",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "density",
@@ -149,7 +180,8 @@
       "renderer": "example",
       "description": "Interactive compact, standard, and comfortable density examples.",
       "sourcePath": "apps/docs/src/examples/pages/core/DensityPage.tsx",
-      "exampleId": "density"
+      "exampleId": "density",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "css-overrides",
@@ -161,7 +193,8 @@
       "renderer": "example",
       "description": "Global VyrnForge overrides, local scopes, and grid-specific overrides.",
       "sourcePath": "apps/docs/src/examples/pages/core/CssOverridePage.tsx",
-      "exampleId": "css-overrides"
+      "exampleId": "css-overrides",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "accessibility",
@@ -173,7 +206,12 @@
       "renderer": "markdown",
       "description": "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
       "sourcePath": "docs/architecture/05-accessibility-standards.md",
-      "tags": ["accessibility", "keyboard", "focus"]
+      "tags": [
+        "accessibility",
+        "keyboard",
+        "focus"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-reference",
@@ -185,7 +223,11 @@
       "renderer": "discovery-reference",
       "description": "Browse reusable VyrnForge composition patterns.",
       "sourcePath": "docs/metadata/patterns.json",
-      "tags": ["patterns", "composition"]
+      "tags": [
+        "patterns",
+        "composition"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-resource-list",
@@ -197,7 +239,8 @@
       "renderer": "example",
       "description": "Compact resource lists with metadata and actions.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-resource-list"
+      "exampleId": "pattern-resource-list",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-detail",
@@ -209,7 +252,8 @@
       "renderer": "example",
       "description": "Entity detail composition.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-detail"
+      "exampleId": "pattern-detail",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-settings",
@@ -221,7 +265,8 @@
       "renderer": "example",
       "description": "Sectioned settings composition.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-settings"
+      "exampleId": "pattern-settings",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-form",
@@ -233,7 +278,8 @@
       "renderer": "example",
       "description": "General application form composition.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-form"
+      "exampleId": "pattern-form",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-filter-form",
@@ -245,7 +291,8 @@
       "renderer": "example",
       "description": "Operational filter composition.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-filter-form"
+      "exampleId": "pattern-filter-form",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-assignments",
@@ -257,7 +304,8 @@
       "renderer": "example",
       "description": "Bounded assignment flows.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-assignments"
+      "exampleId": "pattern-assignments",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-feedback-states",
@@ -269,7 +317,8 @@
       "renderer": "example",
       "description": "Route-level feedback states.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-feedback-states"
+      "exampleId": "pattern-feedback-states",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-admin-shell",
@@ -281,7 +330,8 @@
       "renderer": "example",
       "description": "Admin workspace composition.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-admin-shell"
+      "exampleId": "pattern-admin-shell",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "pattern-customer-portal",
@@ -293,7 +343,8 @@
       "renderer": "example",
       "description": "Customer portal composition.",
       "sourcePath": "apps/docs/src/examples/pages/patterns",
-      "exampleId": "pattern-customer-portal"
+      "exampleId": "pattern-customer-portal",
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "data-grid",
@@ -305,7 +356,12 @@
       "renderer": "markdown",
       "description": "Use the specialized React data-grid package without treating it as the whole VyrnForge library.",
       "sourcePath": "packages/ui-data-grid/README.md",
-      "tags": ["data", "grid", "react"]
+      "tags": [
+        "data",
+        "grid",
+        "react"
+      ],
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-basic",
@@ -317,7 +373,8 @@
       "renderer": "example",
       "description": "Rows, columns, search, sort, and pagination.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-basic"
+      "exampleId": "grid-basic",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-columns",
@@ -329,7 +386,8 @@
       "renderer": "example",
       "description": "Visibility, order, density, and reset behavior.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-columns"
+      "exampleId": "grid-columns",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-filtering",
@@ -341,7 +399,8 @@
       "renderer": "example",
       "description": "Search and filter state examples.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-filtering"
+      "exampleId": "grid-filtering",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-selection",
@@ -353,7 +412,8 @@
       "renderer": "example",
       "description": "Selectable rows, disabled rows, and bulk actions.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-selection"
+      "exampleId": "grid-selection",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-grouping",
@@ -365,7 +425,8 @@
       "renderer": "example",
       "description": "Client-side grouping examples.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-grouping"
+      "exampleId": "grid-grouping",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-resizing",
@@ -377,7 +438,8 @@
       "renderer": "example",
       "description": "Resizable columns and horizontal overflow.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-resizing"
+      "exampleId": "grid-resizing",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-themes",
@@ -389,7 +451,8 @@
       "renderer": "example",
       "description": "Theme and shared-token alignment.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-themes"
+      "exampleId": "grid-themes",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-states",
@@ -401,7 +464,8 @@
       "renderer": "example",
       "description": "Empty, error, and loading states.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-states"
+      "exampleId": "grid-states",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "grid-stress",
@@ -413,7 +477,8 @@
       "renderer": "example",
       "description": "Many rows and columns without virtualization.",
       "sourcePath": "apps/docs/src/examples/pages/data-grid",
-      "exampleId": "grid-stress"
+      "exampleId": "grid-stress",
+      "releaseLine": "data-grid-alpha"
     },
     {
       "id": "package-reference",
@@ -425,7 +490,11 @@
       "renderer": "package-reference",
       "description": "Understand package responsibilities, public entrypoints, and release tracks.",
       "sourcePath": "docs/metadata/packages.json",
-      "tags": ["packages", "api"]
+      "tags": [
+        "packages",
+        "api"
+      ],
+      "releaseLine": "non-grid-beta"
     },
     {
       "id": "releases",
@@ -437,7 +506,12 @@
       "renderer": "markdown",
       "description": "Understand release channels, framework support, limitations, and upgrade guidance.",
       "sourcePath": "docs/release/multi-framework-migration-and-limitations.md",
-      "tags": ["release", "migration", "compatibility"]
+      "tags": [
+        "release",
+        "migration",
+        "compatibility"
+      ],
+      "releaseLine": "non-grid-beta"
     }
   ]
 }
