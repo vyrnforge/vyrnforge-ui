@@ -84,7 +84,13 @@
       "id": "release",
       "label": "Migration / release reference",
       "documentTypes": ["release"],
-      "sections": ["summary", "changes", "migration", "compatibility", "related"]
+      "sections": [
+        "summary",
+        "changes",
+        "migration",
+        "compatibility",
+        "related"
+      ]
     },
     {
       "id": "example",
