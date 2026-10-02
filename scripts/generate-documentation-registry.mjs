@@ -14,8 +14,7 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
-export const DOCUMENTATION_PAGES_PATH =
-  "docs/metadata/documentation-pages.json";
+export const DOCUMENTATION_PAGES_PATH = "docs/metadata/documentation-pages.json";
 export const DOCUMENTATION_REGISTRY_PATH =
   "docs/generated/documentation-registry.json";
 
@@ -124,8 +123,7 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
   );
   const sections = [...metadata.sections].sort((a, b) => a.order - b.order);
   const pages = [...metadata.pages].sort((a, b) => {
-    const sectionDelta =
-      sectionOrder.get(a.section) - sectionOrder.get(b.section);
+    const sectionDelta = sectionOrder.get(a.section) - sectionOrder.get(b.section);
     return sectionDelta || a.order - b.order || a.id.localeCompare(b.id);
   });
 
@@ -174,11 +172,7 @@ export function writeDocumentationRegistry({ root = repositoryRoot } = {}) {
   const registry = buildDocumentationRegistry({ root });
   const outputPath = path.join(root, DOCUMENTATION_REGISTRY_PATH);
   mkdirSync(path.dirname(outputPath), { recursive: true });
-  writeFileSync(
-    outputPath,
-    serializeDocumentationRegistry(registry),
-    "utf8",
-  );
+  writeFileSync(outputPath, serializeDocumentationRegistry(registry), "utf8");
   return registry;
 }
 
