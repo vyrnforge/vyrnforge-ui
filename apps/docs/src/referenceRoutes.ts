@@ -115,6 +115,32 @@ export type PublicDocsSection = {
   routeIds: string[];
 };
 
+export type DocsSearchRecord =
+  | {
+      id: string;
+      kind: "page";
+      documentId: string;
+      label: string;
+      route: string;
+      section: string;
+      type: string;
+      keywords: string[];
+      availability: DocumentationAvailabilityEntry[];
+    }
+  | {
+      id: string;
+      kind: "api-member";
+      documentId: string;
+      label: string;
+      route: string;
+      member: string;
+      framework: ReferenceFrameworkId;
+      version: string;
+      status: DocumentationAvailabilityEntry["status"];
+      memberKind: "property" | "event" | "slot" | "method";
+      keywords: string[];
+    };
+
 type RegistryPage = Omit<DocsRoute, "kind" | "content"> & {
   renderer: DocsRouteKind;
 };
@@ -130,6 +156,18 @@ type DocumentationRegistry = {
     order: number;
   }>;
   pages: RegistryPage[];
+  searchRecords: DocsSearchRecord[];
+  indexes: {
+    bySection: Array<{ id: string; label: string; documentIds: string[] }>;
+    byType: Array<{ type: string; documentIds: string[] }>;
+  };
+  sitemap: Array<Record<string, unknown>>;
+  relatedContentInputs: Array<{
+    documentId: string;
+    type: string;
+    section: string;
+    tags: string[];
+  }>;
 };
 
 const registry = JSON.parse(documentationRegistryRaw) as DocumentationRegistry;
@@ -191,6 +229,10 @@ export const docsRoutes: DocsRoute[] = registry.pages.map(
 export const documentationExamples = registry.examples;
 export const documentationExampleCategories = registry.exampleCategories;
 export const documentationTemplates = registry.templates;
+export const documentationSearchRecords = registry.searchRecords;
+export const documentationIndexes = registry.indexes;
+export const documentationSitemap = registry.sitemap;
+export const documentationRelatedContentInputs = registry.relatedContentInputs;
 
 function isExampleImplementationReady(
   implementation: DocsExampleImplementation,
