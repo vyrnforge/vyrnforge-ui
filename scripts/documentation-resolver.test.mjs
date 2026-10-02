@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveDocumentationDocument } from\n  "../docs/reference/documentationResolver.ts";
+import { resolveDocumentationDocument } from "../docs/reference/documentationResolver.ts";
 
 const basePage = {
   id: "button",
