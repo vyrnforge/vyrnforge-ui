@@ -210,7 +210,9 @@ export function validateDocumentationArchitecture({
   return failures.sort();
 }
 
-export function verifyDocumentationArchitecture({ root = repositoryRoot } = {}) {
+export function verifyDocumentationArchitecture({
+  root = repositoryRoot,
+} = {}) {
   const failures = [];
 
   try {
@@ -221,7 +223,9 @@ export function verifyDocumentationArchitecture({ root = repositoryRoot } = {}) 
     );
   }
 
-  if (!existsSync(path.join(root, "docs/generated/documentation-registry.json"))) {
+  if (
+    !existsSync(path.join(root, "docs/generated/documentation-registry.json"))
+  ) {
     return failures.sort();
   }
 
