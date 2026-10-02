@@ -4,16 +4,15 @@ import {
   SideNav,
   type SideNavItem,
 } from "@vyrnforge/ui-components";
-import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
+import { getReferenceLocationHref } from "../../../docs/reference/referenceRuntime";
 import {
-  componentApiMemberAnchor,
-  componentReferenceTargetHref,
-  type ComponentApiMemberKind,
-} from "./componentApiMember";
-import { referenceModel, type DocsFrameworkId } from "./docsContext";
-import { componentReferenceRecords } from "./referenceData";
+  isDocumentationReady,
+  referenceModel,
+  type DocsFrameworkId,
+} from "./docsContext";
 import {
   docsRoutes,
+  documentationSearchRecords,
   publicDocsSections,
   type DocsRoute,
 } from "./referenceRoutes";
@@ -21,40 +20,14 @@ import {
 type DocsNavProps = {
   activeRouteId: string;
   frameworkId: DocsFrameworkId;
+  version: string;
   onRouteChange: (routeId: string) => void;
 };
 
-type SearchApiComponent = {
-  id: string;
-  properties: Array<{ public: string; binding: string; type: string }>;
-  events: Array<{ public: string; mode: string; detail: string }>;
-  slots: Array<{ public: string; mode: string; content: string }>;
-  methods: Array<{
-    name: string;
-    returns: string;
-    parameters: Array<{ name: string; type: string }>;
-  }>;
-};
-
-type SearchApiReference = {
-  surfaces: Record<string, { components: SearchApiComponent[] }>;
-};
-
-type ApiMemberSearchEntry = {
-  id: string;
-  label: string;
-  kind: ComponentApiMemberKind;
-  keywords: string[];
-  href: string;
-};
-
-const apiReference = JSON.parse(frameworkApiReferenceRaw) as SearchApiReference;
-const componentNameById = new Map(
-  componentReferenceRecords.map((component) => [
-    component.id,
-    component.displayName,
-  ]),
-);
+type ApiMemberSearchRecord = Extract<
+  (typeof documentationSearchRecords)[number],
+  { kind: "api-member" }
+>;
 
 function matchesQuery(route: DocsRoute, query: string) {
   return [route.title, route.description, route.group, ...(route.tags ?? [])]
@@ -62,97 +35,21 @@ function matchesQuery(route: DocsRoute, query: string) {
     .some((value) => value!.toLowerCase().includes(query));
 }
 
-function apiMemberEntry(
-  componentId: string,
+function routeIsAvailable(
+  route: DocsRoute,
   frameworkId: DocsFrameworkId,
-  frameworkLabel: string,
-  kind: ComponentApiMemberKind,
-  name: string,
-  keywords: string[],
-): ApiMemberSearchEntry {
-  const componentName = componentNameById.get(componentId) ?? componentId;
-  const member = componentApiMemberAnchor(kind, name);
-  return {
-    id: `api:${frameworkId}:${componentId}:${kind}:${name}`,
-    label: `${componentName}.${name}`,
-    kind,
-    keywords: [
-      componentId,
-      componentName,
-      frameworkId,
-      frameworkLabel,
-      kind,
-      name,
-      ...keywords,
-    ].map((keyword) => keyword.toLowerCase()),
-    href: componentReferenceTargetHref(componentId, frameworkId, member),
-  };
-}
-
-function buildApiMemberEntries(frameworkId: DocsFrameworkId) {
-  const framework = referenceModel.frameworks.find(
-    (candidate) => candidate.id === frameworkId,
+  version: string,
+) {
+  const availability = route.availability.find(
+    (entry) =>
+      entry.framework === frameworkId &&
+      entry.version === version &&
+      isDocumentationReady(entry.status),
   );
-  if (!framework) return [];
-
-  const surface = apiReference.surfaces[framework.apiSurface];
-  if (!surface) return [];
-
-  return surface.components.flatMap<ApiMemberSearchEntry>((component) => [
-    ...component.properties.map((property) =>
-      apiMemberEntry(
-        component.id,
-        frameworkId,
-        framework.label,
-        "property",
-        property.public,
-        [property.binding, property.type, "input"],
-      ),
-    ),
-    ...component.events.map((event) =>
-      apiMemberEntry(
-        component.id,
-        frameworkId,
-        framework.label,
-        "event",
-        event.public,
-        [event.mode, event.detail, "output", "emit"],
-      ),
-    ),
-    ...component.slots.map((slot) =>
-      apiMemberEntry(
-        component.id,
-        frameworkId,
-        framework.label,
-        "slot",
-        slot.public,
-        [slot.mode, slot.content, "template"],
-      ),
-    ),
-    ...component.methods.map((method) =>
-      apiMemberEntry(
-        component.id,
-        frameworkId,
-        framework.label,
-        "method",
-        method.name,
-        [
-          method.returns,
-          ...method.parameters.flatMap((parameter) => [
-            parameter.name,
-            parameter.type,
-          ]),
-        ],
-      ),
-    ),
-  ]);
+  return Boolean(availability);
 }
 
-function matchesApiMember(entry: ApiMemberSearchEntry, query: string) {
-  return entry.keywords.some((keyword) => keyword.includes(query));
-}
-
-function memberKindLabel(kind: ComponentApiMemberKind) {
+function memberKindLabel(kind: "property" | "event" | "slot" | "method") {
   return kind === "property"
     ? "Property"
     : kind === "event"
@@ -165,13 +62,22 @@ function memberKindLabel(kind: ComponentApiMemberKind) {
 export function DocsNav({
   activeRouteId,
   frameworkId,
+  version,
   onRouteChange,
 }: DocsNavProps) {
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
+
   const apiMembers = useMemo(
-    () => buildApiMemberEntries(frameworkId),
-    [frameworkId],
+    () =>
+      documentationSearchRecords.filter(
+        (record): record is ApiMemberSearchRecord =>
+          record.kind === "api-member" &&
+          record.framework === frameworkId &&
+          record.version === version &&
+          isDocumentationReady(record.status),
+      ),
+    [frameworkId, version],
   );
 
   const items = useMemo(
@@ -180,6 +86,7 @@ export function DocsNav({
         const routes = section.routeIds
           .map((routeId) => docsRoutes.find((route) => route.id === routeId))
           .filter((route): route is DocsRoute => Boolean(route))
+          .filter((route) => routeIsAvailable(route, frameworkId, version))
           .filter(
             (route) => !normalizedQuery || matchesQuery(route, normalizedQuery),
           )
@@ -193,13 +100,21 @@ export function DocsNav({
         const memberResults =
           section.id === "components" && normalizedQuery
             ? apiMembers
-                .filter((entry) => matchesApiMember(entry, normalizedQuery))
+                .filter((entry) =>
+                  entry.keywords.some((keyword) =>
+                    keyword.includes(normalizedQuery),
+                  ),
+                )
                 .slice(0, 30)
                 .map<SideNavItem>((entry) => ({
                   id: entry.id,
                   label: entry.label,
-                  badge: memberKindLabel(entry.kind),
-                  href: entry.href,
+                  badge: memberKindLabel(entry.memberKind),
+                  href: getReferenceLocationHref(referenceModel, {
+                    frameworkId,
+                    pathname: entry.route,
+                    member: entry.member,
+                  }),
                 }))
             : [];
 
@@ -216,7 +131,14 @@ export function DocsNav({
               },
             ];
       }),
-    [activeRouteId, apiMembers, normalizedQuery, onRouteChange],
+    [
+      activeRouteId,
+      apiMembers,
+      frameworkId,
+      normalizedQuery,
+      onRouteChange,
+      version,
+    ],
   );
 
   return (
