@@ -111,7 +111,8 @@
       "tags": [
         "components",
         "api"
-      ]
+      ],
+      "recordDomain": "components"
     },
     {
       "id": "theming",
@@ -144,7 +145,8 @@
       "tags": [
         "tokens",
         "design-system"
-      ]
+      ],
+      "recordDomain": "tokens"
     },
     {
       "id": "theme-tokens",
@@ -229,7 +231,8 @@
       "tags": [
         "patterns",
         "composition"
-      ]
+      ],
+      "recordDomain": "patterns"
     },
     {
       "id": "pattern-resource-list",
@@ -496,7 +499,8 @@
       "tags": [
         "packages",
         "api"
-      ]
+      ],
+      "recordDomain": "packages"
     },
     {
       "id": "releases",
