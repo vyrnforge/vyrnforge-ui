@@ -64,7 +64,6 @@ test("rejects malformed schema metadata", () =>
       ),
   ));
 
-
 test("rejects incomplete framework documentation readiness", () =>
   fixture(
     (root) =>
