@@ -1,4 +1,11 @@
 import documentationRegistryRaw from "../../../docs/generated/documentation-registry.json?raw";
+import {
+  resolveDocumentationPage,
+  type DocumentationAvailability,
+  type DocumentationLayer,
+  type DocumentationResolutionContext,
+} from "../../../docs/reference/documentationResolver";
+import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
 
 export type DocsRouteKind =
   | "overview"
@@ -22,6 +29,10 @@ export type DocsRoute = {
   kind: DocsRouteKind;
   content?: string;
   exampleId?: string;
+  releaseLine: string;
+  availability: DocumentationAvailability[];
+  unavailableStatus?: DocumentationReadinessStatus;
+  unavailableAlternatives?: DocumentationAvailability[];
 };
 
 export type PublicDocsSection = {
@@ -30,8 +41,16 @@ export type PublicDocsSection = {
   routeIds: string[];
 };
 
-type RegistryPage = Omit<DocsRoute, "kind" | "content"> & {
+type RegistryPage = Omit<
+  DocsRoute,
+  "kind" | "content" | "unavailableStatus" | "unavailableAlternatives"
+> & {
   renderer: DocsRouteKind;
+  layers?: {
+    frameworks?: Record<string, DocumentationLayer>;
+    versions?: Record<string, DocumentationLayer>;
+    frameworkVersions?: Record<string, DocumentationLayer>;
+  };
 };
 
 type DocumentationRegistry = {
@@ -76,20 +95,26 @@ function markdownContent(page: RegistryPage) {
   return content;
 }
 
-export const docsRoutes: DocsRoute[] = registry.pages.map((page) => ({
-  id: page.id,
-  title: page.title,
-  section: page.section,
-  group: page.group,
-  order: page.order,
-  type: page.type,
-  description: page.description,
-  sourcePath: page.sourcePath,
-  tags: page.tags,
-  kind: page.renderer,
-  content: markdownContent(page),
-  exampleId: page.exampleId,
-}));
+function routeFromPage(page: RegistryPage): DocsRoute {
+  return {
+    id: page.id,
+    title: page.title,
+    section: page.section,
+    group: page.group,
+    order: page.order,
+    type: page.type,
+    description: page.description,
+    sourcePath: page.sourcePath,
+    tags: page.tags,
+    kind: page.renderer,
+    content: markdownContent(page),
+    exampleId: page.exampleId,
+    releaseLine: page.releaseLine,
+    availability: page.availability,
+  };
+}
+
+export const docsRoutes: DocsRoute[] = registry.pages.map(routeFromPage);
 
 export const publicDocsSections: PublicDocsSection[] = registry.sections.map(
   (section) => ({
@@ -101,10 +126,34 @@ export const publicDocsSections: PublicDocsSection[] = registry.sections.map(
   }),
 );
 
-export function getRouteById(id: string) {
+function getRegistryPageById(id: string) {
   return (
-    docsRoutes.find((route) => route.id === id) ??
-    docsRoutes.find((route) => route.id === "overview") ??
-    docsRoutes[0]
+    registry.pages.find((page) => page.id === id) ??
+    registry.pages.find((page) => page.id === "overview") ??
+    registry.pages[0]
   );
+}
+
+export function getRouteById(id: string) {
+  const page = getRegistryPageById(id);
+  return page ? routeFromPage(page) : undefined;
+}
+
+export function getResolvedRouteById(
+  id: string,
+  context: DocumentationResolutionContext,
+) {
+  const page = getRegistryPageById(id);
+  if (!page) return undefined;
+
+  const resolution = resolveDocumentationPage(page, context);
+  if (resolution.kind === "unavailable") {
+    return {
+      ...routeFromPage(page),
+      unavailableStatus: resolution.status,
+      unavailableAlternatives: resolution.alternatives,
+    };
+  }
+
+  return routeFromPage(resolution.document as RegistryPage);
 }

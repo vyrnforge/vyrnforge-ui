@@ -25,6 +25,43 @@ export function DocsPage({
   onRouteChange,
   referenceRecord,
 }: DocsPageProps) {
+  if (route.unavailableStatus) {
+    const alternatives = route.unavailableAlternatives ?? [];
+    return (
+      <main className="vf-docs-page">
+        <div className="vf-docs-page__intro">
+          <PageHeader
+            description={`This document is ${route.unavailableStatus} for the selected framework and documentation version.`}
+            title={route.title}
+          />
+        </div>
+        <section aria-labelledby="vf-docs-unavailable-heading">
+          <h2 id="vf-docs-unavailable-heading">Documentation unavailable</h2>
+          <p>
+            VyrnForge will not substitute content from another framework or
+            version. Choose a compatible framework/version combination to view
+            this document.
+          </p>
+          {alternatives.length > 0 ? (
+            <>
+              <h3>Available alternatives</h3>
+              <ul>
+                {alternatives.map((alternative) => (
+                  <li
+                    key={`${alternative.framework}:${alternative.releaseLine}:${alternative.version}`}
+                  >
+                    {alternative.framework} · {alternative.releaseLine} ·{" "}
+                    {alternative.version} ({alternative.status})
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
+        </section>
+      </main>
+    );
+  }
+
   if (route.kind === "overview") {
     return (
       <main className="vf-docs-page vf-docs-page--overview">

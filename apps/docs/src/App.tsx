@@ -17,7 +17,7 @@ import {
   type DocsVersion,
 } from "./docsContext";
 import { DocsShell } from "./DocsShell";
-import { getRouteById } from "./referenceRoutes";
+import { getResolvedRouteById } from "./referenceRoutes";
 
 export type ReferenceRecordSelection = {
   domain: "components" | "packages" | "tokens" | "patterns";
@@ -147,14 +147,26 @@ export default function App() {
     };
   }, []);
 
-  const activeRoute = useMemo(
-    () => getRouteById(docsLocation.routeId),
-    [docsLocation.routeId],
-  );
   const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);
   const docsVersion = useMemo(
     () => getDocsVersion(getCurrentDocsVersionId(), docsVersions),
     [docsVersions],
+  );
+  const activeRoute = useMemo(
+    () =>
+      getResolvedRouteById(docsLocation.routeId, {
+        frameworkId,
+        releaseLine: docsVersion.releaseLine,
+        version: docsVersion.version,
+        versionId: docsVersion.id,
+      }),
+    [
+      docsLocation.routeId,
+      docsVersion.id,
+      docsVersion.releaseLine,
+      docsVersion.version,
+      frameworkId,
+    ],
   );
 
   const navigate = (context: ReferenceLocationContext) => {
@@ -194,7 +206,7 @@ export default function App() {
   return (
     <div className="vf-docs-app" data-theme={theme}>
       <DocsShell
-        activeRoute={activeRoute}
+        activeRoute={activeRoute!}
         docsVersion={docsVersion}
         docsVersions={docsVersions}
         framework={framework}
