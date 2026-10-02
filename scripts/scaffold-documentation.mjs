@@ -96,7 +96,7 @@ export function scaffoldDocumentationRegistration({
     type,
     section,
     releaseLine,
-    sourcePath: normalizedSourcePath,
+    sourcePath,
   })) {
     if (!value) throw new Error(`Documentation scaffold requires ${name}.`);
   }
