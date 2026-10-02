@@ -20,6 +20,7 @@ export const contractTestFiles = [
   "scripts/documentation-resolver.test.mjs",
   "scripts/documentation-template-contract.test.mjs",
   "scripts/documentation-example-registry.test.mjs",
+  "scripts/documentation-authoring-contract.test.mjs",
   "scripts/verify-documentation-architecture.test.mjs",
   "scripts/reference-pages-contract.test.mjs",
   "scripts/reference-examples-contract.test.mjs",
