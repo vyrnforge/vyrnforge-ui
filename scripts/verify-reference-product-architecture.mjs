@@ -8,6 +8,8 @@ export const repositoryRoot = path.resolve(
 );
 
 export const referencePortalPath = "docs/metadata/reference-portal.json";
+export const publicDocumentManifestPath =
+  "docs/metadata/public-documents.json";
 export const documentationSystemPath =
   "docs/engineering/documentation-system.md";
 
@@ -46,7 +48,11 @@ export function verifyReferenceProductArchitecture({
 } = {}) {
   const failures = [];
 
-  for (const relativePath of [referencePortalPath, documentationSystemPath]) {
+  for (const relativePath of [
+    referencePortalPath,
+    publicDocumentManifestPath,
+    documentationSystemPath,
+  ]) {
     if (!existsSync(path.join(root, relativePath))) {
       failures.push(`reference product architecture requires ${relativePath}`);
     }
@@ -54,6 +60,7 @@ export function verifyReferenceProductArchitecture({
   if (failures.length) return failures.sort();
 
   const portal = readJson(root, referencePortalPath);
+  const publicDocuments = readJson(root, publicDocumentManifestPath);
   const documentationSystem = read(root, documentationSystemPath);
 
   if (portal.schemaVersion !== 1) {
@@ -113,6 +120,21 @@ export function verifyReferenceProductArchitecture({
   if (portal.versionCatalog !== "vyrnforge-versions.json") {
     failures.push("reference portal must use vyrnforge-versions.json");
   }
+  if (portal.routing?.documentManifest !== publicDocumentManifestPath) {
+    failures.push(
+      "reference routing must use the canonical public document manifest",
+    );
+  }
+  if (
+    publicDocuments.schemaVersion !== 1 ||
+    publicDocuments.sourceOfTruth?.canonical !== true ||
+    !Array.isArray(publicDocuments.categories) ||
+    !Array.isArray(publicDocuments.documents)
+  ) {
+    failures.push(
+      "public document presentation metadata must remain canonical schemaVersion 1",
+    );
+  }
 
   if (
     portal.routing?.identity !== "stable-id" ||
@@ -171,6 +193,8 @@ export function verifyReferenceProductArchitecture({
     "framework-neutral",
     "content-domain navigation taxonomy",
     "transitional runtime registries have been retired",
+    "docs/metadata/public-documents.json",
+    "documentRegistry",
     "apps/docs/src/referenceRoutes.ts",
     "docs/generated/reference-model.json",
     "reference-artifact.mjs",
