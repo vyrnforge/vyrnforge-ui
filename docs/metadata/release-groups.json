@@ -166,7 +166,15 @@
             }
           }
         }
-      ]
+      ],
+      "documentation": {
+        "readiness": {
+          "native-html": "preview",
+          "react": "preview",
+          "angular": "preview",
+          "vue": "preview"
+        }
+      }
     },
     "data-grid-alpha": {
       "intent": "independently versioned specialized data-grid prerelease",
@@ -212,7 +220,15 @@
             "versionExport": null
           }
         }
-      ]
+      ],
+      "documentation": {
+        "readiness": {
+          "native-html": "unavailable",
+          "react": "preview",
+          "angular": "unavailable",
+          "vue": "unavailable"
+        }
+      }
     }
   }
 }
