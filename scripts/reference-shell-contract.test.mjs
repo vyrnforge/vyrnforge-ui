@@ -174,7 +174,10 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.match(docsNav, /getReferenceLocationHref/u);
   assert.match(docsNav, /frameworkId/u);
   assert.match(docsNav, /version/u);
-  assert.doesNotMatch(docsNav, /generated\/framework-api-reference\.json\?raw/u);
+  assert.doesNotMatch(
+    docsNav,
+    /generated\/framework-api-reference\.json\?raw/u,
+  );
   assert.doesNotMatch(docsNav, /componentReferenceRecords/u);
   assert.match(docsShell, /frameworkId=\{framework\.id\}/u);
 
