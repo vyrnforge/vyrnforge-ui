@@ -145,6 +145,7 @@ export function DocsShell({
         <DocsNav
           activeRouteId={activeRoute.id}
           frameworkId={framework.id}
+          version={docsVersion.version}
           onRouteChange={onRouteChange}
         />
       }
