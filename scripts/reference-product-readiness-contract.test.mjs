@@ -69,8 +69,17 @@ test("G18 discovery, context, deep links, and examples stay canonical", () => {
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   assert.match(docsApp, /matchReferenceRecordRoute/u);
   assert.match(docsApp, /getRouteById/u);
-  assert.match(routes, /id: "executable-examples"/u);
-  assert.match(routes, /kind: "example"/u);
+  assert.match(routes, /referenceModel\.documentRegistry\.documents/u);
+  assert(
+    model.documentRegistry.documents.some(
+      (document) => document.id === "executable-examples",
+    ),
+  );
+  assert(
+    model.documentRegistry.documents.some(
+      (document) => document.renderer === "example",
+    ),
+  );
   assert.match(docsPage, /MigratedExamplePage/u);
   assert.match(docsPage, /ExecutableExamplesPage/u);
 });
