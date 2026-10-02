@@ -67,6 +67,25 @@ Generated component facts exist in
 canonical sources into a shared reference model rather than introducing a new
 hand-maintained API authority.
 
+### Reference generation pipeline
+
+The repository exposes one ordered regeneration path:
+
+```bash
+npm run generate:reference
+```
+
+It regenerates framework/native artifacts first, then preset and consumer
+knowledge projections, then the shared `reference-model.json`. Use
+`npm run verify:reference` to prove all checked-in generated Reference inputs
+are current without modifying them.
+
+`npm run build:docs` verifies that generated chain before building the direct
+VyrnForge runtime dependencies used by Docs and then the Docs application.
+Exact-main CI repeats the verification before creating the production Pages
+artifact. Pages itself only deploys the verified commit-bound artifact and never
+regenerates or rebuilds source.
+
 ### Framework and version context
 
 Framework context uses the shared framework IDs declared by
@@ -218,10 +237,10 @@ When changing Reference content or presentation:
    verification when example behavior changes.
 7. Keep curated prose and executable demos authored only where they add value
    beyond generated facts.
-8. Run `npm run verify:docs-quality` so documentation currentness, Markdown
-   structure, local links, generated component reference, and Reference-product
-   drift checks all pass.
-9. Run the affected Docs build.
+8. Run `npm run verify:reference` and `npm run verify:docs-quality` so generated
+   Reference inputs, documentation currentness, Markdown structure, local links,
+   and Reference-product drift checks all pass.
+9. Run `npm run build:docs` for the complete local Docs dependency/build path.
 
 ## Related sources
 

@@ -180,6 +180,8 @@ for (const marker of [
   "npm run verify:consumer",
   "npm run test:browser",
   "npm run verify:repository-inventory",
+  "Verify generated Reference inputs for Pages",
+  "npm run verify:reference",
   "node scripts/assemble-versioned-pages.mjs",
   "node scripts/verify-pages-site.mjs",
   "pages-site-${{ github.sha }}",

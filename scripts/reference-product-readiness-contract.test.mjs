@@ -98,6 +98,26 @@ test("G18 Docs shell retains responsive and accessible navigation foundations", 
   );
 });
 
+test("Reference generation and local Docs builds use one complete ordered contract", () => {
+  const rootPackage = json("package.json");
+  const scripts = rootPackage.scripts;
+
+  assert.equal(
+    scripts["generate:reference"],
+    "npm run generate:framework-artifacts && npm run generate:component-presets-reference && npm run generate:component-reference && node scripts/generate-reference-model.mjs",
+  );
+  assert.equal(
+    scripts["verify:reference"],
+    "npm run verify:generated-framework-artifacts && npm run verify:component-presets-reference && npm run verify:component-reference && node scripts/generate-reference-model.mjs --check",
+  );
+  for (const command of ["build:docs", "dev:docs"]) {
+    assert.match(scripts[command], /npm run verify:reference/u);
+    assert.match(scripts[command], /@vyrnforge\/ui-data-grid/u);
+    assert.match(scripts[command], /@vyrnforge\/ui-docs/u);
+  }
+  assert.match(scripts["verify:docs-quality"], /npm run verify:reference/u);
+});
+
 test("G18 CI and Pages deliver the single Docs product from exact main", () => {
   const ci = read(".github/workflows/ci.yml");
   const pages = read(".github/workflows/deploy-pages.yml");
@@ -108,6 +128,8 @@ test("G18 CI and Pages deliver the single Docs product from exact main", () => {
     "cross-framework-matrix/accessibility-report.json",
     "Build documentation application for reference preview",
     "Assemble immutable reference preview",
+    "Verify generated Reference inputs for Pages",
+    "npm run verify:reference",
     "Build documentation application for Pages",
     "Bind production reference artifact lineage",
     "Verify versioned Pages reference",

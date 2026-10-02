@@ -60,7 +60,7 @@ function generatedRecordSource(domainId) {
       path: sourcePaths.consumerKnowledge,
       collection: "components",
       identityField: "id",
-      labelField: "name",
+      labelField: "displayName",
     },
     packages: {
       path: sourcePaths.consumerKnowledge,
@@ -90,7 +90,7 @@ function generatedRecordSource(domainId) {
       path: sourcePaths.consumerKnowledge,
       collection: "components",
       identityField: "id",
-      labelField: "name",
+      labelField: "displayName",
       projection: "accessibility",
     },
   };

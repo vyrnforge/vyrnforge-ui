@@ -16,7 +16,6 @@ export const activeMetadataVerifiers = [
   "verify:multi-framework",
   "verify:first-class-surfaces",
   "verify:consumer-foundations",
-  "verify:component-reference",
 ];
 
 export function extractRootScriptDependencies(command) {
