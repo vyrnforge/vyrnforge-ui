@@ -405,16 +405,21 @@ function verifyPackageReadmeOwnership({ root, failures }) {
 }
 
 export function getReaderFacingMarkdownPaths({ root = repositoryRoot } = {}) {
-  const routesSource = read(root, "apps/docs/src/referenceRoutes.ts");
-  const paths = [];
-
-  for (const block of routesSource.split(/\n {2}\},\n/gu)) {
-    if (!block.includes('kind: "markdown"')) continue;
-    const match = block.match(/sourcePath:\s*"([^"]+\.md)"/u);
-    if (match) paths.push(match[1]);
-  }
-
-  return [...new Set(paths)].sort();
+  const registry = JSON.parse(
+    read(root, "docs/generated/documentation-registry.json"),
+  );
+  return [
+    ...new Set(
+      (registry.pages ?? [])
+        .filter(
+          (page) =>
+            page.renderer === "markdown" &&
+            typeof page.sourcePath === "string" &&
+            page.sourcePath.endsWith(".md"),
+        )
+        .map((page) => page.sourcePath),
+    ),
+  ].sort();
 }
 
 function verifyReaderFacingMarkdownCoverage({ root, failures }) {

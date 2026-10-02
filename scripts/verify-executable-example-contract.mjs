@@ -9,6 +9,7 @@ const repositoryRoot = path.resolve(
 
 const metadataPath = "docs/metadata/executable-examples.json";
 const consumerManifestPath = "tests/consumers/manifest.json";
+const documentationRegistryPath = "docs/generated/documentation-registry.json";
 const frameworkIds = ["native-html", "react", "angular", "vue"];
 
 function read(root, relativePath) {
@@ -31,7 +32,11 @@ export function verifyExecutableExampleContract({
   root = repositoryRoot,
 } = {}) {
   const failures = [];
-  for (const required of [metadataPath, consumerManifestPath]) {
+  for (const required of [
+    metadataPath,
+    consumerManifestPath,
+    documentationRegistryPath,
+  ]) {
     if (!existsSync(path.join(root, required))) {
       failures.push(
         `executable example contract required file is missing: ${required}`,
@@ -117,10 +122,9 @@ export function verifyExecutableExampleContract({
 
   const adapterPath =
     "apps/docs/src/examples/data/executableExampleContract.ts";
-  const routePath = "apps/docs/src/referenceRoutes.ts";
   const pagePath = "apps/docs/src/examples/ExecutableExamplesPage.tsx";
   const docsPagePath = "apps/docs/src/DocsPage.tsx";
-  for (const required of [adapterPath, routePath, pagePath, docsPagePath]) {
+  for (const required of [adapterPath, pagePath, docsPagePath]) {
     if (!existsSync(path.join(root, required))) {
       failures.push(`executable example reader file is missing: ${required}`);
     }
@@ -141,16 +145,26 @@ export function verifyExecutableExampleContract({
     ],
     failures,
   );
-  requireMarkers(
-    read(root, routePath),
-    routePath,
-    [
-      'id: "executable-examples"',
-      'kind: "executable-examples"',
-      'sourcePath: "tests/consumers/manifest.json"',
-    ],
-    failures,
+  const registry = readJson(root, documentationRegistryPath);
+  const route = (registry.pages ?? []).find(
+    (page) => page.id === "executable-examples",
   );
+  if (!route) {
+    failures.push(
+      `${documentationRegistryPath}: missing executable-examples page`,
+    );
+  } else {
+    if (route.renderer !== "executable-examples") {
+      failures.push(
+        `${documentationRegistryPath}: executable-examples renderer must be executable-examples`,
+      );
+    }
+    if (route.sourcePath !== consumerManifestPath) {
+      failures.push(
+        `${documentationRegistryPath}: executable-examples sourcePath must be ${consumerManifestPath}`,
+      );
+    }
+  }
   requireMarkers(
     read(root, pagePath),
     pagePath,

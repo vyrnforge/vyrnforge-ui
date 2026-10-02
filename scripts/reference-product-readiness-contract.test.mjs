@@ -65,12 +65,18 @@ test("G18 discovery, context, deep links, and examples stay canonical", () => {
   );
 
   const docsApp = read("apps/docs/src/App.tsx");
-  const routes = read("apps/docs/src/referenceRoutes.ts");
+  const registry = json("docs/generated/documentation-registry.json");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   assert.match(docsApp, /matchReferenceRecordRoute/u);
   assert.match(docsApp, /getRouteById/u);
-  assert.match(routes, /id: "executable-examples"/u);
-  assert.match(routes, /kind: "example"/u);
+  assert(
+    registry.pages.some(
+      (page) =>
+        page.id === "executable-examples" &&
+        page.renderer === "executable-examples",
+    ),
+  );
+  assert(registry.pages.some((page) => page.renderer === "example"));
   assert.match(docsPage, /MigratedExamplePage/u);
   assert.match(docsPage, /ExecutableExamplesPage/u);
 });
@@ -104,11 +110,11 @@ test("Reference generation and local Docs builds use one complete ordered contra
 
   assert.equal(
     scripts["generate:reference"],
-    "npm run generate:framework-artifacts && npm run generate:component-presets-reference && npm run generate:component-reference && node scripts/generate-reference-model.mjs",
+    "npm run generate:framework-artifacts && npm run generate:component-presets-reference && npm run generate:component-reference && node scripts/generate-reference-model.mjs && node scripts/generate-documentation-registry.mjs",
   );
   assert.equal(
     scripts["verify:reference"],
-    "npm run verify:generated-framework-artifacts && npm run verify:component-presets-reference && npm run verify:component-reference && node scripts/generate-reference-model.mjs --check",
+    "npm run verify:generated-framework-artifacts && npm run verify:component-presets-reference && npm run verify:component-reference && node scripts/generate-reference-model.mjs --check && node scripts/generate-documentation-registry.mjs --check",
   );
   for (const command of ["build:docs", "dev:docs"]) {
     assert.match(scripts[command], /npm run verify:reference/u);

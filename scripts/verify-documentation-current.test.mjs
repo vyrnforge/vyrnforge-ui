@@ -37,7 +37,7 @@ function fixture(mutator, callback) {
   try {
     const paths = [
       ...documentationCurrentPaths,
-      "apps/docs/src/referenceRoutes.ts",
+      "docs/generated/documentation-registry.json",
       "docs/metadata/release-groups.json",
     ];
     for (const relativePath of new Set(paths)) {
@@ -292,15 +292,16 @@ test("rejects a duplicate package-owned component catalog", () =>
 test("rejects reader-facing Markdown routes omitted from docs verification", () =>
   fixture(
     (root) => {
-      const relativePath = "apps/docs/src/referenceRoutes.ts";
-      write(
-        root,
-        relativePath,
-        read(root, relativePath).replace(
-          'sourcePath: "docs/architecture/03-theming-and-styling.md",',
-          'sourcePath: "docs/architecture/unverified-public-page.md",',
-        ),
+      const relativePath = "docs/generated/documentation-registry.json";
+      const registry = JSON.parse(read(root, relativePath));
+      const page = registry.pages.find(
+        (candidate) =>
+          candidate.sourcePath ===
+          "docs/architecture/03-theming-and-styling.md",
       );
+      assert(page);
+      page.sourcePath = "docs/architecture/unverified-public-page.md";
+      write(root, relativePath, `${JSON.stringify(registry, null, 2)}\n`);
     },
     (failures) =>
       assert(

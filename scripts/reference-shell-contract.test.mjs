@@ -12,6 +12,10 @@ function read(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
+function json(relativePath) {
+  return JSON.parse(read(relativePath));
+}
+
 test("Docs consumes the generated Reference context as the single public reader", () => {
   const docsContext = read("apps/docs/src/docsContext.ts");
   assert.match(docsContext, /generated\/reference-model\.json\?raw/u);
@@ -39,6 +43,8 @@ test("Docs preserves shared framework and document context through one route aut
 test("public Docs navigation owns the complete reader-facing information architecture", () => {
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
+  const registry = json("docs/generated/documentation-registry.json");
+
   assert.match(docsNav, /publicDocsSections/u);
   assert.match(docsNav, /SearchInput/u);
   assert.match(docsNav, /SideNav/u);
@@ -54,9 +60,12 @@ test("public Docs navigation owns the complete reader-facing information archite
     "API / Packages",
     "Releases / Migration",
   ]) {
-    assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
+    assert(registry.sections.some((entry) => entry.label === section));
   }
-  assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
+
+  assert.match(docsRoutes, /generated\/documentation-registry\.json\?raw/u);
+  assert.match(docsRoutes, /registry\.sections\.map/u);
+  assert.match(docsRoutes, /registry\.pages\.map/u);
   assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
   assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
   assert.doesNotMatch(docsRoutes, /accessibility-reference/u);
@@ -129,13 +138,17 @@ test("component pages keep generated framework API while examples are native Doc
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const routes = read("apps/docs/src/referenceRoutes.ts");
+  const registry = json("docs/generated/documentation-registry.json");
   const docsStyles = read("apps/docs/src/styles/docs.css");
 
   assert.match(componentReference, /frameworkTabs\(component\.id\)/u);
   assert.match(componentReference, /FrameworkApiPanel/u);
   assert.match(docsPage, /MigratedExamplePage/u);
-  assert.match(routes, /kind: "example"/u);
-  assert.match(routes, /kind: "executable-examples"/u);
+  assert(registry.pages.some((page) => page.renderer === "example"));
+  assert(
+    registry.pages.some((page) => page.renderer === "executable-examples"),
+  );
+  assert.match(routes, /kind: page\.renderer/u);
   assert.match(docsStyles, /\.vf-docs-example-stage/u);
   assert.doesNotMatch(docsStyles, /\.vf-docs-api-advanced/u);
 });

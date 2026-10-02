@@ -23,6 +23,7 @@ function fixtureRepository() {
   );
   for (const relativePath of [
     "docs/metadata/executable-examples.json",
+    "docs/generated/documentation-registry.json",
     "tests/consumers",
     "apps/docs/src",
   ]) {

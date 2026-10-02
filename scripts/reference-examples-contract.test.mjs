@@ -69,10 +69,13 @@ test("Docs executable examples stay bound to verified consumer fixtures", () => 
     );
   }
 
-  const routes = read("apps/docs/src/referenceRoutes.ts");
-  assert.match(routes, /id: "executable-examples"/u);
-  assert.match(routes, /sourcePath: "tests\/consumers\/manifest\.json"/u);
-  assert.match(routes, /kind: "executable-examples"/u);
+  const registry = json("docs/generated/documentation-registry.json");
+  const executableExamples = registry.pages.find(
+    (page) => page.id === "executable-examples",
+  );
+  assert(executableExamples);
+  assert.equal(executableExamples.sourcePath, "tests/consumers/manifest.json");
+  assert.equal(executableExamples.renderer, "executable-examples");
 
   const page = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
   for (const marker of [

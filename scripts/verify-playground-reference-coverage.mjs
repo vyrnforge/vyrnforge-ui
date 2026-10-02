@@ -94,16 +94,28 @@ export function verifyPlaygroundReferenceCoverage({
     failures.push("generated component route template is not /components/{id}");
   }
 
-  const docsRoutes = read(root, "apps/docs/src/referenceRoutes.ts");
-  for (const marker of [
-    'kind: "example"',
-    'kind: "executable-examples"',
-    'label: "Foundations"',
-    'label: "Patterns"',
-    'label: "Data & Grid"',
-  ]) {
-    if (!docsRoutes.includes(marker)) {
-      failures.push(`unified Docs routes are missing ${marker}`);
+  const documentationRegistry = json(
+    root,
+    "docs/generated/documentation-registry.json",
+  );
+  const registeredRenderers = new Set(
+    (documentationRegistry.pages ?? []).map((page) => page.renderer),
+  );
+  for (const renderer of ["example", "executable-examples"]) {
+    if (!registeredRenderers.has(renderer)) {
+      failures.push(
+        `generated Documentation Registry is missing renderer ${renderer}`,
+      );
+    }
+  }
+  const registeredSectionLabels = new Set(
+    (documentationRegistry.sections ?? []).map((section) => section.label),
+  );
+  for (const label of ["Foundations", "Patterns", "Data & Grid"]) {
+    if (!registeredSectionLabels.has(label)) {
+      failures.push(
+        `generated Documentation Registry is missing section ${label}`,
+      );
     }
   }
 
