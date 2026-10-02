@@ -1,9 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
-  resolveDocumentationDocument,
-} from "../docs/reference/documentationResolver.ts";
+import { resolveDocumentationDocument } from "../docs/reference/documentationResolver.ts";
 
 const basePage = {
   id: "button",
@@ -64,15 +62,15 @@ const basePage = {
 
 test("documentation resolver applies layers in deterministic precedence order", () => {
   const resolution = resolveDocumentationDocument(basePage, {
-      frameworkId: "react",
-      version: "3.2.0",
-    });
+    frameworkId: "react",
+    version: "3.2.0",
+  });
 
-    assert.equal(resolution.available, true);
-    assert.equal(resolution.status, "stable");
-    assert.equal(resolution.document.title, "Button 3.2");
-    assert.equal(resolution.document.description, "React 3.2 description");
-    assert.equal(resolution.document.sourcePath, "docs/react-3.2.md");
+  assert.equal(resolution.available, true);
+  assert.equal(resolution.status, "stable");
+  assert.equal(resolution.document.title, "Button 3.2");
+  assert.equal(resolution.document.description, "React 3.2 description");
+  assert.equal(resolution.document.sourcePath, "docs/react-3.2.md");
   assert.deepEqual(resolution.document.resolution.appliedLayers, [
     "base",
     "shared",
@@ -101,40 +99,35 @@ test("documentation resolver never substitutes another framework layer", () => {
 
 test("documentation resolver returns an explicit unavailable state for an invalid pair", () => {
   const resolution = resolveDocumentationDocument(basePage, {
-      frameworkId: "angular",
-      version: "3.2.0",
-    });
+    frameworkId: "angular",
+    version: "3.2.0",
+  });
 
-    assert.equal(resolution.available, false);
-    assert.equal(resolution.status, "internal-not-ready");
-    assert.equal(resolution.document, null);
+  assert.equal(resolution.available, false);
+  assert.equal(resolution.status, "internal-not-ready");
+  assert.equal(resolution.document, null);
   assert.deepEqual(
     resolution.alternatives.map(
       (alternative) =>
         `${alternative.frameworkId}@${alternative.version}:${alternative.status}`,
     ),
-    [
-      "react@3.2.0:stable",
-      "vue@3.2.0:preview",
-      "react@3.1.0:maintenance",
-    ],
+    ["react@3.2.0:stable", "vue@3.2.0:preview", "react@3.1.0:maintenance"],
   );
 });
 
 test("documentation resolver does not silently fall back to another version", () => {
   const resolution = resolveDocumentationDocument(basePage, {
-      frameworkId: "react",
-      version: "4.0.0",
-    });
+    frameworkId: "react",
+    version: "4.0.0",
+  });
 
-    assert.equal(resolution.available, false);
-    assert.equal(resolution.status, "internal-not-ready");
-    assert.equal(resolution.document, null);
+  assert.equal(resolution.available, false);
+  assert.equal(resolution.status, "internal-not-ready");
+  assert.equal(resolution.document, null);
   assert(
     resolution.alternatives.some(
       (alternative) =>
-        alternative.frameworkId === "react" &&
-        alternative.version === "3.2.0",
+        alternative.frameworkId === "react" && alternative.version === "3.2.0",
     ),
   );
 });
