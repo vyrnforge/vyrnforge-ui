@@ -63,9 +63,13 @@ Reference content follows these ownership rules:
 
 Generated component facts exist in
 `docs/generated/consumer-knowledge.json` and
-`docs/generated/framework-api-reference.json`. Reference generation composes
-canonical sources into a shared reference model rather than introducing a new
-hand-maintained API authority.
+`docs/generated/framework-api-reference.json`. Curated public page identity,
+presentation category, ordering, renderer binding, and source path live in
+`docs/metadata/public-documents.json`; that manifest does not own component,
+package, token, framework, release, or API facts. Reference generation composes
+these canonical sources into the shared `reference-model.json`, including its
+generated `documentRegistry`, rather than introducing an application-owned API
+or route authority.
 
 ### Reference generation pipeline
 
@@ -104,14 +108,25 @@ identities through hash routes so GitHub Pages does not require server-side
 rewrite rules. Framework context is query-based and version context is
 path-based.
 
-The transitional runtime registries have been retired. Docs discovers authored
-Markdown, metadata, and generated sources directly, composes generated reader
-entries from `docs/generated/reference-model.json`, and binds curated executable
-pages to canonical component and example identities. The generated model owns
-the domain taxonomy and stable identities; `apps/docs/src/referenceRoutes.ts`
-owns only the curated reader-facing page grouping and authored-page bindings. Those bindings do not own
-component labels, package identity, framework API facts, accessibility contracts,
-or stable component routes.
+The transitional runtime registries have been retired. Curated route-level
+presentation metadata is declared in
+`docs/metadata/public-documents.json` and validated during Reference
+generation. The generated `docs/generated/reference-model.json`
+`documentRegistry` then owns the runtime public page registry and navigation
+category membership. Markdown import bindings are generated alongside it in
+`apps/docs/src/generatedDocumentSources.ts`.
+
+`apps/docs/src/referenceRoutes.ts` is therefore only a renderer adapter over
+generated registry data; it does not hand-register pages, navigation sections,
+or record-domain routes. Adding a valid public document changes canonical
+metadata/content and regenerates Reference output rather than editing the Docs
+application route table.
+
+The generated model still keeps the content-domain navigation taxonomy distinct
+from curated reader-facing presentation categories. Component labels, package
+identity, framework API facts, accessibility contracts, stable record routes,
+tokens, patterns, framework support, and release facts remain owned by their
+existing canonical sources.
 
 Derivable navigation and catalog facts therefore come from the generated
 Reference model, canonical metadata, or repository source discovery. Curated
@@ -231,16 +246,19 @@ When changing Reference content or presentation:
    it.
 4. Keep framework/version context and stable route identities aligned across
    all reader-facing Docs routes.
-5. Derive route and catalog facts from the shared Reference model, canonical
+5. Register curated public page identity and presentation metadata in
+   `docs/metadata/public-documents.json`; never hand-register a page or
+   navigation section in the Docs application.
+6. Derive route and catalog facts from the shared Reference model, canonical
    metadata, or repository source discovery rather than application registries.
-6. Preserve executable-example registry identities and cross-framework
+7. Preserve executable-example registry identities and cross-framework
    verification when example behavior changes.
-7. Keep curated prose and executable demos authored only where they add value
+8. Keep curated prose and executable demos authored only where they add value
    beyond generated facts.
-8. Run `npm run verify:reference` and `npm run verify:docs-quality` so generated
+9. Run `npm run verify:reference` and `npm run verify:docs-quality` so generated
    Reference inputs, documentation currentness, Markdown structure, local links,
    and Reference-product drift checks all pass.
-9. Run `npm run build:docs` for the complete local Docs dependency/build path.
+10. Run `npm run build:docs` for the complete local Docs dependency/build path.
 
 ## Related sources
 
