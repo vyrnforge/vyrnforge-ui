@@ -162,9 +162,7 @@ export function planDeliveryScope() {
     affected_packages: [],
     affected_packages_csv: "",
     changed_files: [],
-    reasons: [
-      "exact-main delivery rebuild after protected-main validation",
-    ],
+    reasons: ["exact-main delivery rebuild after protected-main validation"],
   };
 }
 
