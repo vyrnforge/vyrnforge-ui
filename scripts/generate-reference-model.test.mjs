@@ -14,7 +14,9 @@ import { fileURLToPath } from "node:url";
 
 import {
   buildReferenceModel,
+  DOCUMENT_SOURCE_BINDINGS_PATH,
   REFERENCE_MODEL_PATH,
+  serializeDocumentSourceBindings,
   serializeReferenceModel,
   verifyReferenceModel,
 } from "./generate-reference-model.mjs";
@@ -24,8 +26,16 @@ const repositoryRoot = path.resolve(
   "..",
 );
 
+const publicDocumentManifestPath =
+  "docs/metadata/public-documents.json";
+const publicDocumentManifest = JSON.parse(
+  readFileSync(path.join(repositoryRoot, publicDocumentManifestPath), "utf8"),
+);
+
 const requiredFixturePaths = [
   "docs/metadata/reference-portal.json",
+  publicDocumentManifestPath,
+  "docs/metadata/public-documents.schema.json",
   "docs/generated/consumer-knowledge.json",
   "docs/generated/framework-api-reference.json",
   "docs/metadata/packages.json",
@@ -34,6 +44,10 @@ const requiredFixturePaths = [
   "docs/metadata/executable-examples.json",
   "tests/consumers/manifest.json",
   REFERENCE_MODEL_PATH,
+  DOCUMENT_SOURCE_BINDINGS_PATH,
+  ...new Set(
+    publicDocumentManifest.documents.map((document) => document.sourcePath),
+  ),
 ];
 
 function fixture(mutator, callback) {
@@ -71,6 +85,87 @@ test("uses the generated component displayName as the component and accessibilit
     assert.equal(domain?.recordSource?.labelField, "displayName");
   }
 });
+
+test("builds the public document registry from canonical presentation metadata", () => {
+  const model = buildReferenceModel();
+  assert.equal(
+    model.documentRegistry.source,
+    "docs/metadata/public-documents.json",
+  );
+  assert.deepEqual(
+    model.documentRegistry.categories.map((category) => category.id),
+    [
+      "getting-started",
+      "components",
+      "foundations",
+      "patterns",
+      "data-grid",
+      "api",
+      "releases",
+    ],
+  );
+  assert(model.documentRegistry.documents.length > 0);
+  assert(
+    model.documentRegistry.documents.every((document) =>
+      document.path.startsWith("/"),
+    ),
+  );
+  assert.deepEqual(
+    Object.fromEntries(
+      model.documentRegistry.documents
+        .filter((document) => document.recordDomain)
+        .map((document) => [document.id, document.recordDomain]),
+    ),
+    {
+      "component-reference": "components",
+      "token-reference": "tokens",
+      "pattern-reference": "patterns",
+      "package-reference": "packages",
+    },
+  );
+});
+
+test("generates deterministic Markdown source bindings from document metadata", () => {
+  const model = buildReferenceModel();
+  const expected = serializeDocumentSourceBindings(model);
+  assert.equal(
+    readFileSync(path.join(repositoryRoot, DOCUMENT_SOURCE_BINDINGS_PATH), "utf8"),
+    expected,
+  );
+  assert.match(expected, /docs\/api\/import-and-setup\.md\?raw/u);
+  assert.match(expected, /packages\/ui-data-grid\/README\.md\?raw/u);
+});
+
+test("rejects duplicate public document identities and slugs", () =>
+  fixture(
+    (root) => {
+      const file = path.join(root, publicDocumentManifestPath);
+      const manifest = JSON.parse(readFileSync(file, "utf8"));
+      manifest.documents[1].id = manifest.documents[0].id;
+      manifest.documents[1].slug = manifest.documents[0].slug;
+      writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`);
+    },
+    (root) =>
+      assert.throws(
+        () => buildReferenceModel({ root }),
+        /duplicate public document (?:id|slug)/u,
+      ),
+  ));
+
+test("rejects duplicate public document categories", () =>
+  fixture(
+    (root) => {
+      const file = path.join(root, publicDocumentManifestPath);
+      const manifest = JSON.parse(readFileSync(file, "utf8"));
+      manifest.categories[1].id = manifest.categories[0].id;
+      writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`);
+    },
+    (root) =>
+      assert.throws(
+        () => buildReferenceModel({ root }),
+        /duplicate public document category id/u,
+      ),
+  ));
 
 test("keeps detailed API facts in the generated framework API authority", () => {
   const model = buildReferenceModel();
@@ -141,7 +236,14 @@ test("rejects stale generated reference output", () =>
   ));
 
 test("regeneration is byte-deterministic", () => {
-  const first = serializeReferenceModel(buildReferenceModel());
-  const second = serializeReferenceModel(buildReferenceModel());
-  assert.equal(first, second);
+  const firstModel = buildReferenceModel();
+  const secondModel = buildReferenceModel();
+  assert.equal(
+    serializeReferenceModel(firstModel),
+    serializeReferenceModel(secondModel),
+  );
+  assert.equal(
+    serializeDocumentSourceBindings(firstModel),
+    serializeDocumentSourceBindings(secondModel),
+  );
 });
