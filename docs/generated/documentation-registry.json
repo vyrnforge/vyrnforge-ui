@@ -5,7 +5,9 @@
     "docs/metadata/release-groups.json",
     "docs/metadata/multi-framework.json",
     "docs/metadata/executable-examples.json",
-    "docs/generated/reference-model.json"
+    "docs/generated/reference-model.json",
+    "docs/metadata/framework-exceptions.json",
+    "docs/metadata/component-contracts.json"
   ],
   "documentationReadinessStates": [
     "stable",
