@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { buildFrameworkApiReference } from "./generate-framework-api-reference.mjs";
 import { buildReferenceModel } from "./generate-reference-model.mjs";
 
 const repositoryRoot = path.resolve(
@@ -63,6 +64,80 @@ const domainDocumentTypes = {
 
 function readJson(root, relativePath) {
   return JSON.parse(readFileSync(path.join(root, relativePath), "utf8"));
+}
+
+function memberAnchor(kind, name) {
+  return `api-${kind}-${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gu, "-")
+    .replace(/^-|-$/gu, "")}`;
+}
+
+function apiSearchRecords(referenceModel, frameworkApiReference, componentPage) {
+  if (!componentPage) return [];
+
+  const releaseAvailability = new Map(
+    componentPage.availability.map((entry) => [entry.framework, entry]),
+  );
+
+  return referenceModel.frameworks.flatMap((framework) => {
+    const surface = frameworkApiReference.surfaces[framework.apiSurface];
+    if (!surface) return [];
+    const availability = releaseAvailability.get(framework.id);
+    if (!availability) return [];
+
+    return surface.components.flatMap((component) => {
+      const members = [
+        ...component.properties.map((member) => ({
+          kind: "property",
+          name: member.public,
+          keywords: [member.binding, member.type, "input"],
+        })),
+        ...component.events.map((member) => ({
+          kind: "event",
+          name: member.public,
+          keywords: [member.mode, member.detail, "output", "emit"],
+        })),
+        ...component.slots.map((member) => ({
+          kind: "slot",
+          name: member.public,
+          keywords: [member.mode, member.content, "template"],
+        })),
+        ...component.methods.map((member) => ({
+          kind: "method",
+          name: member.name,
+          keywords: [
+            member.returns,
+            ...member.parameters.flatMap((parameter) => [
+              parameter.name,
+              parameter.type,
+            ]),
+          ],
+        })),
+      ];
+
+      return members.map((member) => ({
+        id: `api:${framework.id}:${component.id}:${member.kind}:${member.name}`,
+        kind: "api-member",
+        documentId: componentPage.id,
+        label: `${component.id}.${member.name}`,
+        route: `/components/${encodeURIComponent(component.id)}`,
+        member: memberAnchor(member.kind, member.name),
+        framework: framework.id,
+        version: availability.version,
+        status: availability.status,
+        memberKind: member.kind,
+        keywords: [
+          component.id,
+          framework.id,
+          framework.label,
+          member.kind,
+          member.name,
+          ...member.keywords,
+        ].map((keyword) => keyword.toLowerCase()),
+      }));
+    });
+  });
 }
 
 function assertUnique(entries, field, label) {
@@ -196,6 +271,7 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
   const releaseGroups = readJson(root, RELEASE_GROUPS_PATH);
   const multiFramework = readJson(root, MULTI_FRAMEWORK_PATH);
   const executableExamples = readJson(root, EXECUTABLE_EXAMPLES_PATH);
+  const frameworkApiReference = buildFrameworkApiReference({ root });
   const frameworkIds = (multiFramework.frameworks ?? []).map(
     (framework) => framework.id,
   );
@@ -325,6 +401,89 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
     ]),
   ].sort();
 
+  const generatedPages = pages.map((page) => {
+    const releaseLine = releaseLineById.get(page.releaseLine);
+    return {
+      ...page,
+      template: templateByType.get(page.type).id,
+      route: `/${page.id}`,
+      availability: frameworkIds.map((framework) => ({
+        framework,
+        releaseLine: releaseLine.id,
+        version: releaseLine.version,
+        status: releaseLine.readiness[framework],
+      })),
+    };
+  });
+  const componentPage = generatedPages.find(
+    (page) => page.id === "component-reference",
+  );
+  const searchRecords = [
+    ...generatedPages.map((page) => ({
+      id: `page:${page.id}`,
+      kind: "page",
+      documentId: page.id,
+      label: page.title,
+      route: page.route,
+      section: page.section,
+      type: page.type,
+      keywords: [
+        page.title,
+        page.description ?? "",
+        page.group,
+        ...(page.tags ?? []),
+      ]
+        .filter(Boolean)
+        .map((keyword) => keyword.toLowerCase()),
+      availability: page.availability,
+    })),
+    ...apiSearchRecords(referenceModel, frameworkApiReference, componentPage),
+  ];
+  const indexes = {
+    bySection: sections.map((section) => ({
+      id: section.id,
+      label: section.label,
+      documentIds: generatedPages
+        .filter((page) => page.section === section.id)
+        .map((page) => page.id),
+    })),
+    byType: documentTypes.map((type) => ({
+      type,
+      documentIds: generatedPages
+        .filter((page) => page.type === type)
+        .map((page) => page.id),
+    })),
+  };
+  const sitemap = [
+    ...generatedPages.flatMap((page) =>
+      page.availability.map((availability) => ({
+        id: `page:${availability.framework}:${availability.version}:${page.id}`,
+        documentId: page.id,
+        route: page.route,
+        framework: availability.framework,
+        version: availability.version,
+        status: availability.status,
+      })),
+    ),
+    ...searchRecords
+      .filter((record) => record.kind === "api-member")
+      .map((record) => ({
+        id: record.id,
+        documentId: record.documentId,
+        route: record.route,
+        member: record.member,
+        framework: record.framework,
+        version: record.version,
+        status: record.status,
+      })),
+  ];
+  const relatedContentInputs = generatedPages.map((page) => ({
+    documentId: page.id,
+    type: page.type,
+    section: page.section,
+    tags: page.tags ?? [],
+  }));
+
   return {
     schemaVersion: 2,
     generatedFrom: [
@@ -341,21 +500,12 @@ export function buildDocumentationRegistry({ root = repositoryRoot } = {}) {
     templates: metadata.templates,
     sections,
     examples: documentationExamples,
-    pages: pages.map((page) => {
-      const releaseLine = releaseLineById.get(page.releaseLine);
-      return {
-        ...page,
-        template: templateByType.get(page.type).id,
-        route: `/${page.id}`,
-        availability: frameworkIds.map((framework) => ({
-          framework,
-          releaseLine: releaseLine.id,
-          version: releaseLine.version,
-          status: releaseLine.readiness[framework],
-        })),
-      };
-    }),
+    pages: generatedPages,
     recordDomains,
+    searchRecords,
+    indexes,
+    sitemap,
+    relatedContentInputs,
   };
 }
 
