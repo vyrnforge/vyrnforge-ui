@@ -36,29 +36,32 @@ test("Docs preserves shared framework and document context through one route aut
   assert.match(docsContext, /getReferenceLocationHref/u);
 });
 
-test("public Docs navigation owns the complete reader-facing information architecture", () => {
+test("public Docs navigation is derived from the generated reader-facing information architecture", () => {
   const docsNav = read("apps/docs/src/DocsNav.tsx");
   const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
+  const model = JSON.parse(read("docs/generated/reference-model.json"));
+
   assert.match(docsNav, /publicDocsSections/u);
   assert.match(docsNav, /SearchInput/u);
   assert.match(docsNav, /SideNav/u);
   assert.match(docsNav, /VyrnForge documentation/u);
   assert.doesNotMatch(docsNav, /getReferenceNavigation/u);
 
-  for (const section of [
-    "Getting Started",
-    "Components",
-    "Foundations",
-    "Patterns",
-    "Data & Grid",
-    "API / Packages",
-    "Releases / Migration",
-  ]) {
-    assert.match(docsRoutes, new RegExp(`label: "${section}"`, "u"));
-  }
-  assert.doesNotMatch(docsRoutes, /import\.meta\.glob/u);
+  assert.deepEqual(
+    model.documentRegistry.categories.map((category) => category.label),
+    [
+      "Getting Started",
+      "Components",
+      "Foundations",
+      "Patterns",
+      "Data & Grid",
+      "API / Packages",
+      "Releases / Migration",
+    ],
+  );
+  assert.match(docsRoutes, /referenceModel\.documentRegistry/u);
+  assert.match(docsRoutes, /publicDocumentMarkdownById/u);
   assert.doesNotMatch(docsRoutes, /generated\/ai-context/u);
-  assert.doesNotMatch(docsRoutes, /docs\/metadata\/\*\.json/u);
   assert.doesNotMatch(docsRoutes, /accessibility-reference/u);
 });
 
@@ -128,14 +131,22 @@ test("component Reference exposes structured, linkable member API navigation", (
 test("component pages keep generated framework API while examples are native Docs routes", () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
-  const routes = read("apps/docs/src/referenceRoutes.ts");
+  const model = JSON.parse(read("docs/generated/reference-model.json"));
   const docsStyles = read("apps/docs/src/styles/docs.css");
 
   assert.match(componentReference, /frameworkTabs\(component\.id\)/u);
   assert.match(componentReference, /FrameworkApiPanel/u);
   assert.match(docsPage, /MigratedExamplePage/u);
-  assert.match(routes, /kind: "example"/u);
-  assert.match(routes, /kind: "executable-examples"/u);
+  assert(
+    model.documentRegistry.documents.some(
+      (document) => document.renderer === "example",
+    ),
+  );
+  assert(
+    model.documentRegistry.documents.some(
+      (document) => document.renderer === "executable-examples",
+    ),
+  );
   assert.match(docsStyles, /\.vf-docs-example-stage/u);
   assert.doesNotMatch(docsStyles, /\.vf-docs-api-advanced/u);
 });
