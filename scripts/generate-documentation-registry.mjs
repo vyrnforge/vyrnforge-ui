@@ -73,7 +73,11 @@ function memberAnchor(kind, name) {
     .replace(/^-|-$/gu, "")}`;
 }
 
-function apiSearchRecords(referenceModel, frameworkApiReference, componentPage) {
+function apiSearchRecords(
+  referenceModel,
+  frameworkApiReference,
+  componentPage,
+) {
   if (!componentPage) return [];
 
   const releaseAvailability = new Map(
