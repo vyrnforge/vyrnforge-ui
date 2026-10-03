@@ -627,3 +627,59 @@
   max-width: 44rem;
   margin: 0;
 }
+
+.vf-reference-shell__main,
+.vf-docs-page,
+.vf-docs-markdown,
+.vf-docs-reference {
+  min-width: 0;
+}
+
+.vf-docs-markdown p,
+.vf-docs-markdown li,
+.vf-docs-reference p {
+  overflow-wrap: anywhere;
+}
+
+.vf-reference-shell__sidebar {
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 720px) {
+  .vf-reference-shell__brand,
+  .vf-reference-shell__controls .vf-button,
+  .vf-reference-shell__controls .vf-select,
+  .vf-reference-shell__controls .vf-select select {
+    min-block-size: 44px;
+  }
+
+  .vf-reference-shell__controls {
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .vf-reference-shell__header-inner {
+    width: calc(100% - var(--vf-space-4, 16px));
+  }
+
+  .vf-reference-shell__controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .vf-reference-shell__controls .vf-select {
+    width: 100%;
+  }
+
+  .vf-reference-shell__menu-button {
+    justify-self: stretch;
+  }
+}
+
+@media (forced-colors: active) {
+  .vf-reference-shell__brand:focus-visible,
+  .vf-reference-shell__link:focus-visible {
+    outline-color: Highlight;
+  }
+}
