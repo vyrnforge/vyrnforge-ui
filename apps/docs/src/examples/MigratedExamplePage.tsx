@@ -105,7 +105,10 @@ export function MigratedExamplePage({
             <div className="vf-docs-example-stage">
               <Example />
             </div>
-            <div className="vf-docs-example-workbench__source" id="example-source">
+            <div
+              className="vf-docs-example-workbench__source"
+              id="example-source"
+            >
               <Heading level={3} size="md">
                 Source
               </Heading>
