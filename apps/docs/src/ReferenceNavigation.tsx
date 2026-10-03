@@ -61,7 +61,6 @@ function memberKindLabel(kind: "property" | "event" | "slot" | "method") {
         : "Method";
 }
 
-
 export function ReferencePrimaryNavigation({
   activeRouteId,
   frameworkId,
