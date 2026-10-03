@@ -122,12 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-runNpm(["exec", "prettier", "--", "--write", "apps/docs/src/styles/guide.css"]);
-execFileSync("git", ["diff", "--", "apps/docs/src/styles/guide.css"], {
-  cwd: root,
-  stdio: "inherit",
-});
-
 for (const command of [
   "format:check",
   "lint",
