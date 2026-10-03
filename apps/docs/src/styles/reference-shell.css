@@ -502,6 +502,11 @@
   overflow-wrap: anywhere;
 }
 
+.vf-docs-api-table-scroll,
+.vf-docs-code-block__pre {
+  overscroll-behavior-inline: contain;
+}
+
 @media (forced-colors: active) {
   .vf-reference-shell__brand:focus-visible,
   .vf-reference-shell__link:focus-visible,
