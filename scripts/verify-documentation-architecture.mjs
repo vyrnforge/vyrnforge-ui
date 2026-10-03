@@ -333,7 +333,7 @@ export function verifyDocumentationArchitecture({
     ...validateDocumentationArchitecture({
       registry,
       routeSource: read(root, "apps/docs/src/referenceRoutes.ts"),
-      navSource: read(root, "apps/docs/src/DocsNav.tsx"),
+      navSource: read(root, "apps/docs/src/ReferenceNavigation.tsx"),
       fileExists: (relativePath) => existsSync(path.join(root, relativePath)),
     }),
   );
