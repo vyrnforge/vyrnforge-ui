@@ -1,5 +1,7 @@
 type MarkdownViewProps = {
+  className?: string;
   markdown: string;
+  surface?: "card" | "bare";
 };
 
 type MarkdownBlock =
@@ -171,11 +173,22 @@ function renderTable(lines: string[], index: number) {
   );
 }
 
-export function MarkdownView({ markdown }: MarkdownViewProps) {
+export function MarkdownView({
+  className,
+  markdown,
+  surface = "card",
+}: MarkdownViewProps) {
   const blocks = splitBlocks(markdown);
+  const classes = [
+    "vf-docs-markdown",
+    surface === "bare" ? "vf-docs-markdown--bare" : null,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <article className="vf-docs-markdown">
+    <article className={classes}>
       {blocks.map((block, index) => {
         if (block.type === "code") {
           return (
