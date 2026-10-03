@@ -122,25 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-runNpm([
-  "exec",
-  "--",
-  "prettier",
-  "--write",
-  "apps/docs/src/GuidePage.tsx",
-  "apps/docs/src/styles/guide-page.css",
-]);
-execFileSync(
-  "git",
-  [
-    "diff",
-    "--",
-    "apps/docs/src/GuidePage.tsx",
-    "apps/docs/src/styles/guide-page.css",
-  ],
-  { cwd: root, stdio: "inherit" },
-);
-
 for (const command of [
   "format:check",
   "lint",
