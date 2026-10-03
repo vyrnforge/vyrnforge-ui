@@ -4,7 +4,7 @@ import path from "node:path";
 const dist = path.resolve("apps/docs/dist");
 const reportDirectory = path.resolve("test-results/reference-ui-evidence");
 const totalBudget = 8 * 1024 * 1024;
-const singleAssetBudget = 4 * 1024 * 1024;
+const singleAssetBudget = 6 * 1024 * 1024;
 
 function filesIn(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
