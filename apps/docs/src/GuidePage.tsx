@@ -5,7 +5,9 @@ import {
   Stack,
   Text,
 } from "@vyrnforge/ui-components";
-import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
+import type {
+  DocumentationReadinessStatus,
+} from "../../../docs/reference/documentationAvailability";
 import {
   docsFrameworks,
   getFramework,
@@ -26,17 +28,20 @@ const overviewLinks = [
   {
     routeId: "getting-started",
     label: "Install and start",
-    description: "Choose a framework surface and add VyrnForge to an application.",
+    description:
+      "Choose a framework surface and add VyrnForge to an application.",
   },
   {
     routeId: "component-reference",
     label: "Browse components",
-    description: "Explore usage, API, accessibility, and framework-specific examples.",
+    description:
+      "Explore usage, API, accessibility, and framework-specific examples.",
   },
   {
     routeId: "theming",
     label: "Customize the system",
-    description: "Use shared tokens, themes, density, and portable CSS contracts.",
+    description:
+      "Use shared tokens, themes, density, and portable CSS contracts.",
   },
 ] as const;
 
@@ -44,17 +49,20 @@ const principles = [
   {
     title: "One product model",
     description:
-      "Components, behaviors, accessibility, styling, and terminology stay aligned across every framework surface.",
+      "Components, behaviors, accessibility, styling, and terminology stay " +
+      "aligned across every framework surface.",
   },
   {
     title: "Framework-idiomatic surfaces",
     description:
-      "Native HTML, React, Angular, and Vue share VyrnForge contracts without forcing one framework's programming model onto another.",
+      "Native HTML, React, Angular, and Vue share VyrnForge contracts without " +
+      "forcing one framework's programming model onto another.",
   },
   {
     title: "Built for real applications",
     description:
-      "The foundation is modular, themeable, accessible, testable, and designed to scale from small interfaces to enterprise products.",
+      "The foundation is modular, themeable, accessible, testable, and designed " +
+      "to scale from small interfaces to enterprise products.",
   },
 ] as const;
 
@@ -214,7 +222,10 @@ export function GuidePage({
         <div className="vf-docs-guide__hero-copy">
           <div className="vf-docs-guide__meta">
             <span className="vf-docs-guide__eyebrow">VyrnForge guide</span>
-            <span aria-label={`Documentation status: ${status}`} className="vf-docs-guide__status">
+            <span
+              aria-label={`Documentation status: ${status}`}
+              className="vf-docs-guide__status"
+            >
               {status}
             </span>
           </div>
@@ -225,7 +236,9 @@ export function GuidePage({
           </Heading>
           <Text className="vf-docs-guide__lede" size="lg" tone="muted">
             {isOverview
-              ? "Build consistent web applications with shared VyrnForge components, tokens, behavior contracts, accessibility, and developer concepts across Native HTML, React, Angular, and Vue."
+              ? "Build consistent web applications with shared VyrnForge " +
+                "components, tokens, behavior contracts, accessibility, and " +
+                "developer concepts across Native HTML, React, Angular, and Vue."
               : route.description}
           </Text>
           {isOverview ? (
