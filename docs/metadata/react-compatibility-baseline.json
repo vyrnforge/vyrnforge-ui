@@ -20,12 +20,12 @@
       "react-dom": ">=18 <20"
     }
   },
-  "testedReactVersions": ["18.3.1", "19.2.7"],
+  "testedReactVersions": ["18.3.1", "19.3.0"],
   "fingerprints": [
     {
       "path": "packages/ui-components/package.json",
       "kind": "blob",
-      "sha1": "07900f801833eda2cea59cbc7e35cb1a2e11e7b4",
+      "sha1": "7da84b110327e55ed94467865afb4c3484dc21aa",
       "covers": [
         "package exports",
         "CSS entrypoints",
@@ -82,7 +82,7 @@
     {
       "path": "docs/metadata/compatibility-release-matrix.json",
       "kind": "blob",
-      "sha1": "7cac7347d43fca7b803a689462491db0ac12d5af",
+      "sha1": "bbcee3e7873e44dab091b0b358cde2c0dd0e29ce",
       "covers": ["tested React versions", "packed consumer compatibility cases"]
     }
   ],
@@ -229,6 +229,11 @@
       "changeId": "#698",
       "reason": "The shared compatibility release matrix was reframed from closed BT task/dependency state to current verified contract metadata while preserving the React support policy, tested React versions, compatibility cases, packed consumer behavior, public API, and runtime guarantees. Only the reviewed shared metadata fingerprint is intentionally recaptured.",
       "evidence": "scripts/compatibility-release-matrix.mjs"
+    },
+    {
+      "changeId": "dependency-refresh-react-19.3-redent-4",
+      "reason": "Development and compatibility evidence moves the current React 19 line from 19.2.7/19.2.8 to 19.3.0 while retaining the public >=18 <20 peer contract, and updates the development-only redent helper to 4.0.0. Public exports, props, callbacks, refs, CSS entrypoints, runtime dependencies, and first-class framework boundaries are unchanged; the package-manifest and compatibility-matrix fingerprints are intentionally recaptured with protected CI and packed-consumer evidence.",
+      "evidence": "tests/consumers/react/package.json; docs/metadata/compatibility-release-matrix.json; packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts"
     }
   ],
   "changePolicy": "A fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
