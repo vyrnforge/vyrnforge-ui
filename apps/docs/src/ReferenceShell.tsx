@@ -1,9 +1,5 @@
 import { useState, type ReactNode } from "react";
-import {
-  Button,
-  Drawer,
-  Select,
-} from "@vyrnforge/ui-components";
+import { Button, Drawer, Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import {
   docsFrameworks,
