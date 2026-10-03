@@ -253,7 +253,9 @@ export function GuidePage({
           onRouteChange={onRouteChange}
         />
       ) : (
-        <div className="vf-docs-guide__content">\n          <MarkdownView markdown={markdown} />\n        </div>
+        <div className="vf-docs-guide__content">
+          <MarkdownView markdown={markdown} />
+        </div>
       )}
     </main>
   );
