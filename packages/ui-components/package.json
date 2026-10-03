@@ -69,7 +69,7 @@
     "jsdom": "^29.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "redent": "3.0.0",
+    "redent": "4.0.0",
     "tsup": "latest",
     "typescript": "7.0.2",
     "vitest": "latest"
