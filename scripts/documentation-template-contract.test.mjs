@@ -75,6 +75,14 @@ test("guide template owns the public guide experience", () => {
     path.join(root, "apps/docs/src/GuidePage.tsx"),
     "utf8",
   );
+  const guideShell = readFileSync(
+    path.join(root, "apps/docs/src/GuideShell.tsx"),
+    "utf8",
+  );
+  const docsShell = readFileSync(
+    path.join(root, "apps/docs/src/DocsShell.tsx"),
+    "utf8",
+  );
   const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
 
   assert.equal(docsPage.includes('route.template === "guide"'), true);
@@ -87,6 +95,12 @@ test("guide template owns the public guide experience", () => {
   assert.match(guidePage, /className="vf-docs-guide__outline"/u);
   assert.match(guidePage, /splitGuideSections/u);
   assert.match(guidePage, /vf-docs-guide__hero-context/u);
+  assert.match(guidePage, /vf-docs-guide__prose/u);
+  assert.match(docsShell, /activeRoute\.template === "guide"/u);
+  assert.match(docsShell, /<GuideShell/u);
+  assert.match(guideShell, /className="vf-docs-guide-shell"/u);
+  assert.doesNotMatch(guideShell, /<AppShell/u);
+  assert.doesNotMatch(guideShell, /<DocsNav/u);
   assert.equal(main.includes("styles/guide.css"), true);
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);

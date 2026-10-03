@@ -19,6 +19,7 @@ import {
 } from "./docsContext";
 import { DocsNav } from "./DocsNav";
 import { DocsPage } from "./DocsPage";
+import { GuideShell } from "./GuideShell";
 import { docsLinks } from "./deploymentLinks";
 import type { DocsRoute, DocsRouteResolution } from "./referenceRoutes";
 
@@ -65,6 +66,24 @@ export function DocsShell({
           (candidate) => candidate.id !== docsVersion.id,
         ),
       ];
+
+  if (activeRoute.template === "guide") {
+    return (
+      <GuideShell
+        activeRoute={activeRoute}
+        docsVersion={docsVersion}
+        docsVersions={docsVersions}
+        framework={framework}
+        headerAction={headerAction}
+        onFrameworkChange={onFrameworkChange}
+        onRouteChange={onRouteChange}
+        referenceRecord={referenceRecord}
+        routeMember={routeMember}
+        routePath={routePath}
+        routeResolution={routeResolution}
+      />
+    );
+  }
 
   return (
     <AppShell
