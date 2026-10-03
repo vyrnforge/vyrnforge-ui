@@ -55,14 +55,14 @@ const principles = [
   {
     title: "Framework-idiomatic surfaces",
     description:
-      "Native HTML, React, Angular, and Vue share VyrnForge contracts without " +
-      "forcing one framework's programming model onto another.",
+      "Native HTML, React, Angular, and Vue share VyrnForge contracts " +
+      "without forcing one framework's programming model onto another.",
   },
   {
     title: "Built for real applications",
     description:
-      "The foundation is modular, themeable, accessible, testable, and designed " +
-      "to scale from small interfaces to enterprise products.",
+      "The foundation is modular, themeable, accessible, testable, and " +
+      "designed to scale from small interfaces to enterprise products.",
   },
 ] as const;
 
@@ -153,7 +153,10 @@ function OverviewGuide({
         </div>
         <div className="vf-docs-guide__principle-grid">
           {principles.map((principle) => (
-            <article className="vf-docs-guide__principle" key={principle.title}>
+            <article
+              className="vf-docs-guide__principle"
+              key={principle.title}
+            >
               <Heading level={4} size="sm">
                 {principle.title}
               </Heading>
@@ -238,7 +241,8 @@ export function GuidePage({
             {isOverview
               ? "Build consistent web applications with shared VyrnForge " +
                 "components, tokens, behavior contracts, accessibility, and " +
-                "developer concepts across Native HTML, React, Angular, and Vue."
+                "developer concepts across Native HTML, React, Angular, and " +
+                "Vue."
               : route.description}
           </Text>
           {isOverview ? (
