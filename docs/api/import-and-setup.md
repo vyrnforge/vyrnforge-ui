@@ -6,12 +6,12 @@ VyrnForge is one UI foundation with four first-class framework surfaces. Start w
 
 Use the public package that matches the host application. Do not build against internal package paths or treat one framework adapter as the canonical implementation for the others.
 
-| Surface | Public package | Primary authoring model |
-| --- | --- | --- |
-| Native HTML / Custom Elements | `@vyrnforge/ui-elements` | HTML + TypeScript |
-| React | `@vyrnforge/ui-components` | TSX |
-| Angular | `@vyrnforge/ui-angular` | Angular templates + TypeScript |
-| Vue | `@vyrnforge/ui-vue` | Vue SFC + TypeScript |
+| Surface                       | Public package             | Primary authoring model        |
+| ----------------------------- | -------------------------- | ------------------------------ |
+| Native HTML / Custom Elements | `@vyrnforge/ui-elements`   | HTML + TypeScript              |
+| React                         | `@vyrnforge/ui-components` | TSX                            |
+| Angular                       | `@vyrnforge/ui-angular`    | Angular templates + TypeScript |
+| Vue                           | `@vyrnforge/ui-vue`        | Vue SFC + TypeScript           |
 
 ## Install and initialize
 
