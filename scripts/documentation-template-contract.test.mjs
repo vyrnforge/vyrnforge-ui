@@ -81,9 +81,12 @@ test("guide template owns the public guide experience", () => {
   assert.match(docsPage, /<GuidePage/u);
   assert.match(guidePage, /data-document-template="guide"/u);
   assert.match(guidePage, /Framework surface/u);
-  assert.match(guidePage, /One UI foundation for every framework surface/u);
+  assert.match(guidePage, /Build once\. Stay native to every framework\./u);
+  assert.match(guidePage, /Selected framework surface/u);
+  assert.match(guidePage, /Run framework examples/u);
   assert.match(guidePage, /className="vf-docs-guide__outline"/u);
   assert.match(guidePage, /splitGuideSections/u);
+  assert.match(guidePage, /vf-docs-guide__hero-context/u);
   assert.equal(main.includes("styles/guide.css"), true);
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);

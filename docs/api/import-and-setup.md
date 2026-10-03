@@ -1,18 +1,27 @@
 # Getting Started
 
-Start with the framework your application already uses. Native HTML / Custom Elements, React, Angular, and Vue are equal first-class VyrnForge surfaces over the same tokens, accessibility model, behavior contracts, and component terminology.
+VyrnForge is one UI foundation with four first-class framework surfaces. Start with the surface your application already uses; the design tokens, accessibility model, behavior contracts, and component terminology stay shared.
 
-Use public package entrypoints only. Shared implementation dependencies can be installed transitively, but applications should depend on the framework-facing package that matches their runtime.
+## Choose your framework surface
 
-## Native HTML / Custom Elements
+Use the public package that matches the host application. Do not build against internal package paths or treat one framework adapter as the canonical implementation for the others.
 
-Install the native surface:
+| Surface                       | Public package             | Primary authoring model        |
+| ----------------------------- | -------------------------- | ------------------------------ |
+| Native HTML / Custom Elements | `@vyrnforge/ui-elements`   | HTML + TypeScript              |
+| React                         | `@vyrnforge/ui-components` | TSX                            |
+| Angular                       | `@vyrnforge/ui-angular`    | Angular templates + TypeScript |
+| Vue                           | `@vyrnforge/ui-vue`        | Vue SFC + TypeScript           |
+
+## Install and initialize
+
+### Native HTML / Custom Elements
 
 ```bash
 npm install @vyrnforge/ui-elements@beta
 ```
 
-Register VyrnForge once at the browser boundary:
+Register the native surface once at the browser boundary:
 
 ```ts
 import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
@@ -20,17 +29,15 @@ import { registerVyrnForgeElements } from "@vyrnforge/ui-elements";
 registerVyrnForgeElements();
 ```
 
-Then use the public custom elements:
+Then author public elements directly:
 
 ```html
 <vf-button variant="primary">Save changes</vf-button>
 ```
 
-Use the public `@vyrnforge/ui-elements/register` entrypoint when side-effect registration better matches the host. Assign object and array APIs as DOM properties rather than serializing complex values into attributes.
+Use `@vyrnforge/ui-elements/register` when side-effect registration better matches the host. Assign object and array APIs as DOM properties rather than serializing complex values into attributes.
 
-## React
-
-Install the first-class React surface:
+### React
 
 ```bash
 npm install @vyrnforge/ui-components@beta
@@ -46,11 +53,9 @@ export function SaveButton() {
 }
 ```
 
-Import from public package entrypoints, never internal `src` paths. React props, callbacks, refs, styling, accessibility, and behavior stay aligned with the shared VyrnForge contracts.
+Use public exports only. Props, callbacks, refs, styling, accessibility, and behavior remain aligned with the shared VyrnForge contracts.
 
-## Angular
-
-Install the first-class Angular surface:
+### Angular
 
 ```bash
 npm install @vyrnforge/ui-angular@beta
@@ -68,11 +73,9 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-Use `@vyrnforge/ui-angular/forms` only when Angular Forms integration is needed. Keep application state management outside the library.
+Use `@vyrnforge/ui-angular/forms` only when Angular Forms integration is needed. Application state management remains owned by the consuming app.
 
-## Vue
-
-Install the first-class Vue surface:
+### Vue
 
 ```bash
 npm install @vyrnforge/ui-vue@beta vue
@@ -88,19 +91,31 @@ import App from "./App.vue";
 createApp(App).use(VyrnForgeVue).mount("#app");
 ```
 
-Use the public `Vf*` components, generated `v-model` mappings, slots, emits, and typed refs. Vue remains an adapter over the shared VyrnForge foundations rather than a separate component system.
+Use public `Vf*` components, generated `v-model` mappings, slots, emits, and typed refs.
 
-## Styling
+## Style with shared tokens
 
-Framework packages load the styling required by their public surface. Hosts that intentionally control stylesheet loading can use documented style entrypoints such as:
+Framework packages expose the same VyrnForge styling foundation. Hosts that intentionally control stylesheet loading can use documented style entrypoints such as:
 
 ```ts
 import "@vyrnforge/ui-components/styles/index.css";
 ```
 
-Use shared `--vf-*` custom properties for theme, density, spacing, typography, colors, borders, elevation, motion, responsive behavior, and accessibility states. Prefer tokens over hard-coded values.
+Customize through shared `--vf-*` custom properties for theme, density, spacing, typography, color, borders, elevation, motion, responsive behavior, and accessibility states. Prefer VyrnForge tokens over framework-specific hard-coded values.
 
-## Data Grid advanced module
+## Verify the integration
+
+Before building application-specific wrappers, confirm the selected surface works directly:
+
+1. render one public VyrnForge component;
+2. verify keyboard and focus behavior;
+3. switch the documentation framework selector and compare the equivalent surface;
+4. run the verified framework example from **Framework Examples**;
+5. use the component reference for public props, events, slots, methods, and styling contracts.
+
+If a reusable capability is missing, extend the shared VyrnForge foundation before creating a one-off application component.
+
+## Add advanced modules only when needed
 
 Data Grid is an optional advanced VyrnForge module, not a separate UI foundation. The currently shipped package exposes a React alpha surface:
 
@@ -112,12 +127,12 @@ npm install @vyrnforge/ui-components@beta @vyrnforge/ui-data-grid@alpha
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 ```
 
-Do not infer Native HTML, Angular, or Vue grid support from the React package. Additional framework surfaces require explicit shared grid contracts, implementation, and verification.
+Do not infer Native HTML, Angular, or Vue grid support from the React package. Additional surfaces require explicit shared grid contracts, implementation, and verification.
 
-## Version and release selection
+## Choose a release intentionally
 
-Package versions, prerelease tags, peer ranges, framework readiness, and compatibility evidence are release metadata rather than guide-page constants. Use the documentation version selector and canonical release metadata when choosing a version.
+Versions, prerelease tags, peer ranges, framework readiness, and compatibility evidence come from release metadata rather than hard-coded guide assumptions. Use the documentation version selector and the canonical release metadata when selecting a version.
 
-## Next
+## Continue from here
 
-Continue with Components for public APIs and framework-specific usage, Framework Examples for verified packed-consumer examples, Theming & Styling for token-driven customization, Accessibility for keyboard and semantic expectations, and Releases & Migration before upgrading framework integrations.
+Use **Components** for public APIs and framework-specific usage, **Framework Examples** for verified packed-consumer examples, **Theming & Styling** for shared customization, **Accessibility** for keyboard and semantic expectations, and **Releases & Migration** before upgrading framework integrations.
