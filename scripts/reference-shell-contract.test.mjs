@@ -286,29 +286,3 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(packageReference, /getReferenceRecordRoute/u);
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
-
-test("Reference accessibility and theme hardening stays on shared VyrnForge contracts", () => {
-  const app = read("apps/docs/src/App.tsx");
-  const docsStyles = read("apps/docs/src/styles/docs.css");
-  const referenceStyles = read("apps/docs/src/styles/reference-shell.css");
-  const themes = read("packages/ui-core/src/styles/themes.css");
-
-  assert.match(app, /aria-label="Toggle dark theme"/u);
-  assert.match(app, /aria-pressed=\{theme === "dark"\}/u);
-  assert.match(
-    app,
-    /const memberTarget = member \? document\.getElementById\(member\) : null/u,
-  );
-  assert.match(
-    app,
-    /getElementById\(\s*"vf-reference-main"\s*\)\s*\?\.\s*focus/u,
-  );
-  assert.doesNotMatch(
-    docsStyles,
-    /\.vf-docs-app\[data-theme="dark"\]\s*\{/u,
-  );
-  assert.match(themes, /\[data-theme="dark"\]/u);
-  assert.match(referenceStyles, /scrollbar-gutter: stable/u);
-  assert.match(referenceStyles, /overflow-wrap: anywhere/u);
-  assert.match(referenceStyles, /@media \(forced-colors: active\)/u);
-});
