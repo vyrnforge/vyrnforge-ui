@@ -199,6 +199,7 @@ test("Docs filter discovers selected-framework API members without restoring a s
 test("all public routes use one unified Reference shell with controlled layouts", () => {
   const app = read("apps/docs/src/App.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
   const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
