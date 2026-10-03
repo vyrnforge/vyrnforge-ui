@@ -16,7 +16,7 @@ import {
   type DocsFrameworkId,
   type DocsVersion,
 } from "./docsContext";
-import { DocsShell } from "./DocsShell";
+import { ReferenceShell } from "./ReferenceShell";
 import {
   documentationRecordRoutes,
   getRouteById,
@@ -192,7 +192,7 @@ export default function App() {
 
   return (
     <div className="vf-docs-app" data-theme={theme}>
-      <DocsShell
+      <ReferenceShell
         activeRoute={activeRoute}
         docsVersion={docsVersion}
         docsVersions={docsVersions}

@@ -72,7 +72,7 @@ test("public Docs navigation owns the complete reader-facing information archite
 });
 
 test("Docs is the single reader-facing product and renders examples in-process", () => {
-  const docsShell = read("apps/docs/src/DocsShell.tsx");
+  const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const migratedExamples = read(
     "apps/docs/src/examples/MigratedExamplePage.tsx",
@@ -81,8 +81,8 @@ test("Docs is the single reader-facing product and renders examples in-process",
     "apps/docs/src/examples/ExecutableExamplesPage.tsx",
   );
 
-  assert.match(docsShell, />\s*VyrnForge\s*</u);
-  assert.doesNotMatch(docsShell, /referenceModel\.product\.label/u);
+  assert.match(referenceShell, />\s*VyrnForge\s*</u);
+  assert.doesNotMatch(referenceShell, /referenceModel\.product\.label/u);
   assert.match(docsPage, /MigratedExamplePage/u);
   assert.match(docsPage, /ExecutableExamplesPage/u);
   assert.doesNotMatch(docsPage, /ReferencePreview/u);
@@ -137,7 +137,7 @@ test("component Reference exposes structured, linkable member API navigation", (
 test("component pages bind generated API to the selected framework and version", () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
-  const docsShell = read("apps/docs/src/DocsShell.tsx");
+  const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
   const routes = read("apps/docs/src/referenceRoutes.ts");
   const registry = json("docs/generated/documentation-registry.json");
   const docsStyles = read("apps/docs/src/styles/docs.css");
@@ -149,7 +149,7 @@ test("component pages bind generated API to the selected framework and version",
   assert.doesNotMatch(componentReference, /frameworkTabs/u);
   assert.doesNotMatch(componentReference, /<Tabs/u);
   assert.match(docsPage, /version=\{version\}/u);
-  assert.match(docsShell, /version=\{docsVersion\.version\}/u);
+  assert.match(referenceShell, /version=\{docsVersion\.version\}/u);
   assert.match(componentReference, /FrameworkApiPanel/u);
   assert.match(docsPage, /MigratedExamplePage/u);
   assert(registry.pages.some((page) => page.renderer === "example"));
@@ -164,7 +164,7 @@ test("component pages bind generated API to the selected framework and version",
 test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
   const app = read("apps/docs/src/App.tsx");
   const docsNav = read("apps/docs/src/DocsNav.tsx");
-  const docsShell = read("apps/docs/src/DocsShell.tsx");
+  const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
   const memberTarget = read("apps/docs/src/componentApiMember.ts");
 
   assert.match(docsNav, /documentationSearchRecords/u);
@@ -179,7 +179,7 @@ test("Docs filter discovers selected-framework API members without restoring a s
     /generated\/framework-api-reference\.json\?raw/u,
   );
   assert.doesNotMatch(docsNav, /componentReferenceRecords/u);
-  assert.match(docsShell, /frameworkId=\{framework\.id\}/u);
+  assert.match(referenceShell, /frameworkId=\{framework\.id\}/u);
 
   assert.match(memberTarget, /componentApiMemberAnchor/u);
   assert.match(memberTarget, /componentReferenceTargetHref/u);
@@ -194,4 +194,32 @@ test("Docs filter discovers selected-framework API members without restoring a s
     retiredReferencePaths.includes("apps/docs/src/ReferenceSearchPage.tsx"),
   );
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
+});
+
+
+test("all public routes use one unified Reference shell with controlled layouts", () => {
+  const app = read("apps/docs/src/App.tsx");
+  const shell = read("apps/docs/src/ReferenceShell.tsx");
+  const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
+  const styles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
+  assert.match(app, /<ReferenceShell/u);
+  assert.doesNotMatch(app, /DocsShell/u);
+
+  assert.doesNotMatch(shell, /GuideShell/u);
+  assert.doesNotMatch(shell, /DocsNav/u);
+  assert.match(shell, /ReferenceNavigation/u);
+  assert.match(shell, /Drawer/u);
+  assert.match(shell, /Skip to content/u);
+  assert.match(shell, /data-reference-layout=\{layoutMode\}/u);
+
+  for (const mode of ["reading", "reference", "catalog", "example", "wide"]) {
+    assert.match(shell, new RegExp(`"${mode}"`, "u"));
+    assert.match(styles, new RegExp(`data-reference-layout="${mode}"`, "u"));
+  }
+
+  assert.match(navigation, /documentationSearchRecords/u);
+  assert.match(navigation, /publicDocsSections/u);
+  assert.match(navigation, /getReferenceLocationHref/u);
 });
