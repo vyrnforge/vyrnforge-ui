@@ -724,7 +724,9 @@ export function ComponentReferencePage({
               No generated component record exists for <code>{componentId}</code>.
             </>
           }
-          action={<a href="#/component-reference">Return to component reference</a>}
+          action={
+            <a href="#/component-reference">Return to component reference</a>
+          }
         />
       );
     }
