@@ -126,6 +126,7 @@ test.describe("VyrnForge Reference product", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openReference(page, "overview");
     await expect(page.locator(".vf-reference-shell__sidebar")).toBeHidden();
+    await expectNoPageOverflow(page);
 
     const browse = page.getByRole("button", { name: "Browse", exact: true });
     await expect(browse).toBeVisible();
