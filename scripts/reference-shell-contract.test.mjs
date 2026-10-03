@@ -258,3 +258,17 @@ test("reading templates use the unified main landmark and source-driven deep lin
     /\.vf-docs-markdown,\s*\.vf-docs-reference\s*\{[^}]*border:/su,
   );
 });
+
+
+test("component reference is scan-first without generic Card section wrappers", () => {
+  const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
+  const styles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.doesNotMatch(componentReference, /\bCard\b/u);
+  assert.match(componentReference, /vf-docs-component-index/u);
+  assert.match(componentReference, /vf-docs-component-row/u);
+  assert.match(componentReference, /vf-docs-api-table/u);
+  assert.match(componentReference, /componentApiMemberAnchor/u);
+  assert.match(styles, /\.vf-docs-component-row/u);
+  assert.match(styles, /\.vf-docs-api-table thead th/u);
+});
