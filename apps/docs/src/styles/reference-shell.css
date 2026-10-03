@@ -293,7 +293,10 @@
 }
 
 .vf-reference-shell__link:hover {
-  background: var(--vf-interactive-neutral-hover, var(--vf-surface-muted, #f8fafc));
+  background: var(
+    --vf-interactive-neutral-hover,
+    var(--vf-surface-muted, #f8fafc)
+  );
   color: var(--vf-text-link-hover, var(--vf-primary, #2563eb));
 }
 
