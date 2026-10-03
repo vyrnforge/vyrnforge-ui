@@ -1,4 +1,4 @@
-import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import type { ReferenceRecordSelection } from "./App";
 import { referenceModel } from "./docsContext";
@@ -27,7 +27,7 @@ function TokenReference({ id }: { id?: string | null }) {
     return (
       <div className="vf-docs-reference">
         <ReferenceBack href="#/token-reference" label="Design tokens" />
-        <Card className="vf-docs-reference__section" padding="lg">
+        <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             {category.id}
           </Heading>
@@ -48,14 +48,14 @@ function TokenReference({ id }: { id?: string | null }) {
               </div>
             ))}
           </div>
-        </Card>
+        </section>
       </div>
     );
   }
 
   return (
     <div className="vf-docs-reference">
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Canonical design-token explorer
         </Heading>
@@ -65,10 +65,10 @@ function TokenReference({ id }: { id?: string | null }) {
           {designTokenSource.implementation}; typed ownership remains{" "}
           {designTokenSource.typedExport}.
         </Text>
-      </Card>
+      </article>
       <div className="vf-docs-discovery-grid">
         {designTokenCategories.map((category) => (
-          <Card key={category.id} padding="lg">
+          <article className="vf-docs-discovery-row-card" key={category.id}>
             <Heading level={3} size="md">
               <a href={recordHref("tokens", category.id)}>{category.id}</a>
             </Heading>
@@ -76,7 +76,7 @@ function TokenReference({ id }: { id?: string | null }) {
             <Badge tone="subtle" variant="neutral">
               {category.tokens.length} tokens
             </Badge>
-          </Card>
+          </section>
         ))}
       </div>
     </div>
@@ -91,7 +91,7 @@ function PatternReference({ id }: { id?: string | null }) {
     return (
       <div className="vf-docs-reference">
         <ReferenceBack href="#/pattern-reference" label="Patterns" />
-        <Card className="vf-docs-reference__section" padding="lg">
+        <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             {pattern.displayName}
           </Heading>
@@ -114,8 +114,8 @@ function PatternReference({ id }: { id?: string | null }) {
               <span>{pattern.frameworkNeutral ? "Yes" : "No"}</span>
             </div>
           </div>
-        </Card>
-        <Card className="vf-docs-reference__section" padding="lg">
+        </section>
+        <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             Reusable VyrnForge building blocks
           </Heading>
@@ -130,14 +130,14 @@ function PatternReference({ id }: { id?: string | null }) {
             Curated example route: {pattern.playgroundRoute} · example
             framework: {pattern.exampleFramework}
           </Text>
-        </Card>
+        </article>
       </div>
     );
   }
 
   return (
     <div className="vf-docs-reference">
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Reusable application patterns
         </Heading>
@@ -145,10 +145,10 @@ function PatternReference({ id }: { id?: string | null }) {
           Pattern guidance comes from canonical pattern metadata. The curated
           example documentation remains {patternDocumentation}.
         </Text>
-      </Card>
+      </section>
       <div className="vf-docs-discovery-grid">
         {patternReferenceRecords.map((pattern) => (
-          <Card key={pattern.id} padding="lg">
+          <article className="vf-docs-discovery-row-card" key={pattern.id}>
             <Heading level={3} size="md">
               <a href={recordHref("patterns", pattern.id)}>
                 {pattern.displayName}
@@ -158,7 +158,7 @@ function PatternReference({ id }: { id?: string | null }) {
             <Badge tone="subtle" variant="neutral">
               {pattern.category}
             </Badge>
-          </Card>
+          </section>
         ))}
       </div>
     </div>
@@ -167,22 +167,22 @@ function PatternReference({ id }: { id?: string | null }) {
 
 function ReferenceBack({ href, label }: { href: string; label: string }) {
   return (
-    <Card className="vf-docs-reference__section" padding="lg">
+    <section className="vf-docs-reference__section">
       <Text size="sm">
         <a href={href}>← {label}</a>
       </Text>
-    </Card>
+    </section>
   );
 }
 
 function MissingRecord({ label, id }: { label: string; id: string }) {
   return (
-    <Card className="vf-docs-reference__section" padding="lg">
+    <section className="vf-docs-reference__section">
       <Heading level={3} size="md">
         {label} not found
       </Heading>
       <Text tone="muted">No generated reader record exists for {id}.</Text>
-    </Card>
+    </section>
   );
 }
 
