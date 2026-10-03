@@ -65,7 +65,7 @@ function TokenReference({ id }: { id?: string | null }) {
           {designTokenSource.implementation}; typed ownership remains{" "}
           {designTokenSource.typedExport}.
         </Text>
-      </article>
+      </section>
       <div className="vf-docs-discovery-grid">
         {designTokenCategories.map((category) => (
           <article className="vf-docs-discovery-row-card" key={category.id}>
@@ -76,7 +76,7 @@ function TokenReference({ id }: { id?: string | null }) {
             <Badge tone="subtle" variant="neutral">
               {category.tokens.length} tokens
             </Badge>
-          </section>
+          </article>
         ))}
       </div>
     </div>
@@ -130,7 +130,7 @@ function PatternReference({ id }: { id?: string | null }) {
             Curated example route: {pattern.playgroundRoute} · example
             framework: {pattern.exampleFramework}
           </Text>
-        </article>
+        </section>
       </div>
     );
   }
@@ -158,7 +158,7 @@ function PatternReference({ id }: { id?: string | null }) {
             <Badge tone="subtle" variant="neutral">
               {pattern.category}
             </Badge>
-          </section>
+          </article>
         ))}
       </div>
     </div>
