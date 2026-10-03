@@ -6,6 +6,7 @@ import App from "./App";
 import "./styles/docs.css";
 import "./styles/docs-overview.css";
 import "./styles/examples.css";
+import "./styles/guide-page.css";
 import "./styles/reference-shell.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
