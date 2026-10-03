@@ -1,4 +1,10 @@
-import { Badge, CodeText, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Badge,
+  CodeText,
+  EmptyState,
+  Heading,
+  Text,
+} from "@vyrnforge/ui-components";
 
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
