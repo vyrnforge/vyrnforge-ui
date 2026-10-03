@@ -178,6 +178,8 @@ export function ReferenceShell({
             </a>
             {headerAction}
             <Button
+              aria-expanded={mobileNavigationOpen}
+              aria-haspopup="dialog"
               className="vf-reference-shell__menu-button"
               onClick={() => setMobileNavigationOpen(true)}
               size="sm"
